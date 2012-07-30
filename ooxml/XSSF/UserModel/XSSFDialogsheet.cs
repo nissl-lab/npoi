@@ -116,6 +116,600 @@ namespace NPOI.XSSF.UserModel
         {
             return true;
         }
+
+        IRow ISheet.CreateRow(int rownum)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.RemoveRow(IRow row)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IRow ISheet.GetRow(int rownum)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int ISheet.PhysicalNumberOfRows
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        int ISheet.FirstRowNum
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        int ISheet.LastRowNum
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        bool ISheet.ForceFormulaRecalculation
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        void ISheet.SetColumnHidden(int columnIndex, bool hidden)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.IsColumnHidden(int columnIndex)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetColumnWidth(int columnIndex, int width)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int ISheet.GetColumnWidth(int columnIndex)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int ISheet.DefaultColumnWidth
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        int ISheet.DefaultRowHeight
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        float ISheet.DefaultRowHeightInPoints
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        ICellStyle ISheet.GetColumnStyle(int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int ISheet.AddMergedRegion(SS.Util.CellRangeAddress region)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.HorizontallyCenter
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.VerticallyCenter
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        void ISheet.RemoveMergedRegion(int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int ISheet.NumMergedRegions
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        SS.Util.CellRangeAddress ISheet.GetMergedRegion(int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        System.Collections.IEnumerator ISheet.GetRowEnumerator()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        System.Collections.IEnumerator ISheet.GetEnumerator()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.DisplayZeros
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.Autobreaks
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.DisplayGuts
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.FitToPage
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.RowSumsBelow
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.RowSumsRight
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.IsPrintGridlines
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        IPrintSetup ISheet.PrintSetup
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        IHeader ISheet.Header
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        IFooter ISheet.Footer
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        double ISheet.GetMargin(MarginType margin)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetMargin(MarginType margin, double size)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.Protect
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        void ISheet.ProtectSheet(string password)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.ScenarioProtect
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        short ISheet.TabColorIndex
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        IDrawing ISheet.DrawingPatriarch
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        void ISheet.SetZoom(int numerator, int denominator)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        short ISheet.TopRow
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        short ISheet.LeftCol
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        void ISheet.ShowInPane(short toprow, short leftcol)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.ShiftRows(int startRow, int endRow, int n)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool resetOriginalRowHeight)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.CreateFreezePane(int colSplit, int rowSplit, int leftmostColumn, int topRow)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.CreateFreezePane(int colSplit, int rowSplit)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, PanePosition activePane)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        SS.Util.PaneInformation ISheet.PaneInformation
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        bool ISheet.DisplayGridlines
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.DisplayFormulas
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.DisplayRowColHeadings
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.IsActive
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        bool ISheet.IsRowBroken(int row)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.RemoveRowBreak(int row)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int[] ISheet.RowBreaks
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        int[] ISheet.ColumnBreaks
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        void ISheet.SetActiveCell(int row, int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetActiveCellRange(System.Collections.Generic.List<SS.Util.CellRangeAddress8Bit> cellranges, int activeRange, int activeRow, int activeColumn)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetColumnBreak(int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetRowBreak(int row)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.IsColumnBroken(int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.RemoveColumnBreak(int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetColumnGroupCollapsed(int columnNumber, bool collapsed)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.GroupColumn(int fromColumn, int toColumn)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.UngroupColumn(int fromColumn, int toColumn)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.GroupRow(int fromRow, int toRow)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.UngroupRow(int fromRow, int toRow)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetRowGroupCollapsed(int row, bool collapse)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.SetDefaultColumnStyle(int column, ICellStyle style)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.AutoSizeColumn(int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.AutoSizeColumn(int column, bool useMergedCells)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IComment ISheet.GetCellComment(int row, int column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IDrawing ISheet.CreateDrawingPatriarch()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IWorkbook ISheet.Workbook
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        string ISheet.SheetName
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        bool ISheet.IsSelected
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        void ISheet.SetActive(bool sel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        ICellRange<ICell> ISheet.SetArrayFormula(string formula, SS.Util.CellRangeAddress range)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        ICellRange<ICell> ISheet.RemoveArrayFormula(ICell cell)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ISheet.IsMergedRegion(SS.Util.CellRangeAddress mergedRegion)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IDataValidationHelper ISheet.GetDataValidationHelper()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void ISheet.AddValidationData(IDataValidation dataValidation)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IAutoFilter ISheet.SetAutoFilter(SS.Util.CellRangeAddress range)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        ISheetConditionalFormatting ISheet.SheetConditionalFormatting
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        bool IsRightToLeft
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
     }
 }
 

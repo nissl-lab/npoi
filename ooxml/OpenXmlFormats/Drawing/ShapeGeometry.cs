@@ -1696,7 +1696,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void AddNewAvLst()
         {
-            this.avLstField = new List<CT_GeomGuide>();
+            //this.avLstField = new List<CT_GeomGuide>();
         }
 
 

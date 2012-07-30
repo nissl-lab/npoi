@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
@@ -112,12 +113,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             this.nvGraphicFramePr = new CT_GraphicalObjectFrameNonVisual();
             return this.nvGraphicFramePr;
         }
-
+        [XmlElement]
         public CT_GraphicalObjectFrameNonVisual nvGraphicFramePr
         {
             get { return nvGraphicFramePrField; }
             set { nvGraphicFramePrField = value; }
         }
+        [XmlElement]
         public CT_Transform2D xfrm
         {
             get { return xfrmField; }
@@ -130,12 +132,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { macroField = value; }
         }
         [XmlAttribute]
+        [DefaultValue(false)]
         public bool fPublished
         {
             get { return fPublishedField; }
             set { fPublishedField = value; }
         }
-
+        [XmlElement]
         public CT_GraphicalObject graphic
         {
             get { return graphicField; }
@@ -667,7 +670,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         //}
 
         [XmlElement]
-        public CT_GraphicalObjectFrame graphicalObject
+        public CT_GraphicalObjectFrame graphicFrame
         {
             get { return graphicalObjectField; }
             set { graphicalObjectField = value; }
@@ -694,7 +697,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         //    set { connectorSpecifiedField = value; }
         //}
 
-        [XmlElement]
+        [XmlElement("pic")]
         public CT_Picture picture
         {
             get { return pictureField; }

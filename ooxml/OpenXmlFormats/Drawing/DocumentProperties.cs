@@ -824,7 +824,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GraphicalObjectFrameLocking()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
+            //this.extLstField = new CT_OfficeArtExtensionList();
             this.noGrpField = false;
             this.noDrilldownField = false;
             this.noSelectField = false;
@@ -1329,8 +1329,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_NonVisualGraphicFrameProperties()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.graphicFrameLocksField = new CT_GraphicalObjectFrameLocking();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.graphicFrameLocksField = new CT_GraphicalObjectFrameLocking();
         }
 
         [XmlElement(Order = 0)]

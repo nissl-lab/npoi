@@ -1422,6 +1422,10 @@ namespace NPOI.XSSF.UserModel
                 CellReference cellReference = new CellReference(cellRef);
                 return (short)cellReference.Row;
             }
+            set 
+            {
+                throw new NotImplementedException();
+            }
         }
 
         /**
@@ -3718,16 +3722,18 @@ namespace NPOI.XSSF.UserModel
                 throw new NotImplementedException();
             }
         }
-
-        short ISheet.TopRow
+        
+        public bool IsRightToLeft
         {
             get
             {
-                throw new NotImplementedException();
+                CT_SheetView view = this.GetDefaultSheetView();
+                return view == null ? false : view.rightToLeft;
             }
             set
             {
-                throw new NotImplementedException();
+                CT_SheetView view = this.GetDefaultSheetView();
+                view.rightToLeft = value;
             }
         }
 

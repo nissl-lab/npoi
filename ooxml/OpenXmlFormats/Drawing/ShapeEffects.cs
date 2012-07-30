@@ -24,8 +24,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_Blip()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.itemsField = new List<object>();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.itemsField = new List<object>();
             this.embedField = "";
             this.linkField = "";
             this.cstateField = ST_BlipCompression.none;
@@ -2163,10 +2163,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_StretchInfoProperties stretchField = null;
 
-        private uint? dpiField = null;
+        private uint dpiField;
         private bool dpiFieldSpecified;
 
-        private bool? rotWithShapeField = null;
+        private bool rotWithShapeField;
 
         private bool rotWithShapeFieldSpecified;
 
@@ -2251,7 +2251,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null != this.dpiField;
+                return dpiFieldSpecified;
             }
             set
             {
@@ -2277,7 +2277,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null != this.rotWithShapeField;
+                return rotWithShapeFieldSpecified;
             }
             set
             {
