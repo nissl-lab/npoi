@@ -108,7 +108,7 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             POIXMLProperties props = doc.GetProperties();
             Assert.IsNotNull(props);
-            Assert.AreEqual("Apache POI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
+            Assert.AreEqual("NPOI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
         }
 
         [Test]

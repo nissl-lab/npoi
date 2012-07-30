@@ -14,162 +14,169 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.extractor
+namespace NPOI.XWPF.Extractor
 {
     using System;
+    using NPOI.XWPF.Model;
+    using NPOI.XWPF.UserModel;
+    using NPOI.OpenXml4Net.OPC;
+    using System.Text;
+    using System.Collections.Generic;
+    using NPOI.OpenXmlFormats.Wordprocessing;
+    using System.IO;
+    using System.Xml;
 
-
-
-
-using org.apache.poi;
-using org.apache.poi;
-using org.apache.poi;
-using NPOI.Openxml4j.exceptions;
-using NPOI.Openxml4j.opc;
-using NPOI.XWPF.Model;
-using NPOI.XWPF.Model;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using NPOI.XWPF.UserModel;
-using org.apache.xmlbeans;
-using org.Openxmlformats.schemas.wordProcessingml.x2006.main;
-
-/**
- * Helper class to extract text from an OOXML Word file
- */
-public class XWPFWordExtractor : POIXMLTextExtractor {
-   public static XWPFRelation[] SUPPORTED_TYPES = new XWPFRelation[] {
+    /**
+     * Helper class to extract text from an OOXML Word file
+     */
+    public class XWPFWordExtractor : POIXMLTextExtractor
+    {
+        public static XWPFRelation[] SUPPORTED_TYPES = new XWPFRelation[] {
       XWPFRelation.DOCUMENT, XWPFRelation.TEMPLATE,
       XWPFRelation.MACRO_DOCUMENT, 
       XWPFRelation.MACRO_TEMPLATE_DOCUMENT
    };
-   
-	private XWPFDocument document;
-	private bool fetchHyperlinks = false;
-	
-	public XWPFWordExtractor(OPCPackage Container) throws XmlException, OpenXML4JException, IOException {
-		this(new XWPFDocument(Container));
-	}
-	public XWPFWordExtractor(XWPFDocument document) {
-		base(document);
-		this.document = document;
-	}
 
-	/**
-	 * Should we also fetch the hyperlinks, when fetching 
-	 *  the text content? Default is to only output the
-	 *  hyperlink label, and not the contents
-	 */
-	public void SetFetchHyperlinks(bool fetch) {
-		fetchHyperlinks = fetch;
-	}
-	
-	public static void main(String[] args)  {
-		if(args.Length < 1) {
-			System.err.Println("Use:");
-			System.err.Println("  HXFWordExtractor <filename.docx>");
-			System.Exit(1);
-		}
-		POIXMLTextExtractor extractor = 
-			new XWPFWordExtractor(POIXMLDocument.OpenPackage(
-					args[0]
-			));
-		System.out.Println(extractor.Text);
-	}
-	
-	public String GetText() {
-		StringBuilder text = new StringBuilder();
-		XWPFHeaderFooterPolicy hfPolicy = document.HeaderFooterPolicy;
+        private XWPFDocument document;
+        private bool fetchHyperlinks = false;
 
-		// Start out with all headers
-		extractHeaders(text, hfPolicy);
-		
-		// First up, all our paragraph based text
-		Iterator<XWPFParagraph> i = document.ParagraphsIterator;
-		while(i.HasNext()) {
-			XWPFParagraph paragraph = i.Next();
+        public XWPFWordExtractor(OPCPackage Container):this(new XWPFDocument(Container))
+        {
+            
+        }
+        public XWPFWordExtractor(XWPFDocument document):base(document)
+        {
+            
+            this.document = document;
+        }
 
-			try {
-				CTSectPr ctSectPr = null;
-				if (paragraph.CTP.PPr!=null) {
-					ctSectPr = paragraph.CTP.PPr.SectPr;
-				}
+        /**
+         * Should we also fetch the hyperlinks, when fetching 
+         *  the text content? Default is to only output the
+         *  hyperlink label, and not the contents
+         */
+        public void SetFetchHyperlinks(bool fetch)
+        {
+            fetchHyperlinks = fetch;
+        }
 
-				XWPFHeaderFooterPolicy headerFooterPolicy = null;
 
-				if (ctSectPr!=null) {
-					headerFooterPolicy = new XWPFHeaderFooterPolicy(document, ctSectPr);
-					extractHeaders(text, headerFooterPolicy);
-				}
+        public override String Text
+        {
+            get
+            {
+                StringBuilder text = new StringBuilder();
+                XWPFHeaderFooterPolicy hfPolicy = document.GetHeaderFooterPolicy();
 
-				// Do the paragraph text
-				foreach(XWPFRun run in paragraph.Runs) {
-				   text.Append(Run.ToString());
-				   if(run is XWPFHyperlinkRun && fetchHyperlinks) {
-				      XWPFHyperlink link = ((XWPFHyperlinkRun)Run).GetHyperlink(document);
-				      if(link != null)
-				         text.Append(" <" + link.URL + ">");
-				   }
-				}
+                // Start out with all headers
+                extractHeaders(text, hfPolicy);
 
-				// Add comments
-				XWPFCommentsDecorator decorator = new XWPFCommentsDecorator(paragraph, null);
-				text.Append(decorator.CommentText).Append('\n');
-				
-				// Do endnotes and footnotes
-				String footnameText = paragraph.FootnoteText;
-			   if(footnameText != null && footnameText.Length() > 0) {
-			      text.Append(footnameText + "\n");
-			   }
+                // First up, all our paragraph based text
+                IEnumerator<XWPFParagraph> i = document.GetParagraphsEnumerator();
+                while (i.MoveNext())
+                {
+                    XWPFParagraph paragraph = i.Current;
 
-				if (ctSectPr!=null) {
-					extractFooters(text, headerFooterPolicy);
-				}
-			} catch (IOException e) {
-				throw new POIXMLException(e);
-			} catch (XmlException e) {
-				throw new POIXMLException(e);
-			}
-		}
+                    try
+                    {
+                        CT_SectPr ctSectPr = null;
+                        if (paragraph.GetCTP().pPr != null)
+                        {
+                            ctSectPr = paragraph.GetCTP().pPr.sectPr;
+                        }
 
-		// Then our table based text
-		Iterator<XWPFTable> j = document.TablesIterator;
-		while(j.HasNext()) {
-			text.Append(j.Next().Text).Append('\n');
-		}
-		
-		// Finish up with all the footers
-		extractFooters(text, hfPolicy);
-		
-		return text.ToString();
-	}
+                        XWPFHeaderFooterPolicy headerFooterPolicy = null;
 
-	private void extractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy) {
-		if(hfPolicy.FirstPageFooter != null) {
-			text.Append( hfPolicy.FirstPageFooter.Text );
-		}
-		if(hfPolicy.EvenPageFooter != null) {
-			text.Append( hfPolicy.EvenPageFooter.Text );
-		}
-		if(hfPolicy.DefaultFooter != null) {
-			text.Append( hfPolicy.DefaultFooter.Text );
-		}
-	}
+                        if (ctSectPr != null)
+                        {
+                            headerFooterPolicy = new XWPFHeaderFooterPolicy(document, ctSectPr);
+                            extractHeaders(text, headerFooterPolicy);
+                        }
 
-	private void extractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy) {
-		if(hfPolicy.FirstPageHeader != null) {
-			text.Append( hfPolicy.FirstPageHeader.Text );
-		}
-		if(hfPolicy.EvenPageHeader != null) {
-			text.Append( hfPolicy.EvenPageHeader.Text );
-		}
-		if(hfPolicy.DefaultHeader != null) {
-			text.Append( hfPolicy.DefaultHeader.Text );
-		}
-	}
+                        // Do the paragraph text
+                        foreach (XWPFRun run in paragraph.GetRuns())
+                        {
+                            text.Append(run.ToString());
+                            if (run is XWPFHyperlinkRun && fetchHyperlinks)
+                            {
+                                XWPFHyperlink link = ((XWPFHyperlinkRun)run).GetHyperlink(document);
+                                if (link != null)
+                                    text.Append(" <" + link.URL + ">");
+                            }
+                        }
+
+                        // Add comments
+                        XWPFCommentsDecorator decorator = new XWPFCommentsDecorator(paragraph, null);
+                        text.Append(decorator.GetCommentText()).Append('\n');
+
+                        // Do endnotes and footnotes
+                        String footnameText = paragraph.GetFootnoteText();
+                        if (footnameText != null && footnameText.Length > 0)
+                        {
+                            text.Append(footnameText + "\n");
+                        }
+
+                        if (ctSectPr != null)
+                        {
+                            extractFooters(text, headerFooterPolicy);
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        throw new POIXMLException(e);
+                    }
+                    catch (XmlException e)
+                    {
+                        throw new POIXMLException(e);
+                    }
+
+                }
+
+                // Then our table based text
+                IEnumerator<XWPFTable> j = document.GetTablesEnumerator();
+                while (j.MoveNext())
+                {
+                    text.Append(((XWPFTable)j.Current).GetText()).Append('\n');
+                }
+
+                // Finish up with all the footers
+                extractFooters(text, hfPolicy);
+
+                return text.ToString();
+            }
+        }
+
+        private void extractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
+        {
+            if (hfPolicy.GetFirstPageFooter() != null)
+            {
+                text.Append(hfPolicy.GetFirstPageFooter().GetText());
+            }
+            if (hfPolicy.GetEvenPageFooter() != null)
+            {
+                text.Append(hfPolicy.GetEvenPageFooter().GetText());
+            }
+            if (hfPolicy.GetDefaultFooter() != null)
+            {
+                text.Append(hfPolicy.GetDefaultFooter().GetText());
+            }
+        }
+
+        private void extractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
+        {
+            if (hfPolicy.GetFirstPageHeader() != null)
+            {
+                text.Append(hfPolicy.GetFirstPageHeader().GetText());
+            }
+            if (hfPolicy.GetEvenPageHeader() != null)
+            {
+                text.Append(hfPolicy.GetEvenPageHeader().GetText());
+            }
+            if (hfPolicy.GetDefaultHeader() != null)
+            {
+                text.Append(hfPolicy.GetDefaultHeader().GetText());
+            }
+        }
+    }
+
 }
-

@@ -264,17 +264,17 @@ namespace NPOI.XSSF.UserModel
             POIXMLProperties props = workbook.GetProperties();
             Assert.IsNotNull(props);
             //the Application property must be set for new workbooks, see Bugzilla #47559
-            Assert.AreEqual("Apache POI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
+            Assert.AreEqual("NPOI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
 
             PackagePropertiesPart opcProps = props.GetCoreProperties().GetUnderlyingProperties();
             Assert.IsNotNull(opcProps);
 
             opcProps.SetTitleProperty("Testing Bugzilla #47460");
-            Assert.AreEqual("Apache POI", opcProps.GetCreatorProperty());
+            Assert.AreEqual("NPOI", opcProps.GetCreatorProperty());
             opcProps.SetCreatorProperty("poi-dev@poi.apache.org");
 
             workbook = (XSSFWorkbook) XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            Assert.AreEqual("Apache POI", workbook.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Application);
+            Assert.AreEqual("NPOI", workbook.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Application);
             opcProps = workbook.GetProperties().GetCoreProperties().GetUnderlyingProperties();
             Assert.AreEqual("Testing Bugzilla #47460", opcProps.GetTitleProperty());
             Assert.AreEqual("poi-dev@poi.apache.org", opcProps.GetCreatorProperty());
