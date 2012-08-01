@@ -86,6 +86,41 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
+            foreach (XWPFRun run in Runs)
+            {
+                CT_R r = run.GetCTR();
+                if (document != null)
+                {
+                    foreach (object o in r.Items)
+                    {
+                        if (o is CT_FtnEdnRef)
+                        {
+                            CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
+                            footnoteText.Append("[").Append(ftn.id).Append(": ");
+                            
+                            XWPFFootnote footnote = document.GetFootnoteByID(int.Parse(ftn.id));
+                            if (footnote == null)
+                                footnote = document.GetEndnoteByID(int.Parse(ftn.id));
+                               //ftn.DomNode.LocalName.Equals("footnoteReference") ?
+                               //      document.GetFootnoteByID(ftn.Id.IntValue()) :
+                               //      document.GetEndnoteByID(ftn.Id.IntValue());
+
+                            bool first = true;
+                            foreach (XWPFParagraph p in footnote.Paragraphs)
+                            {
+                                if (!first)
+                                {
+                                    footnoteText.Append("\n");
+                                    first = false;
+                                }
+                                footnoteText.Append(p.GetText());
+                            }
+
+                            footnoteText.Append("]");
+                        }
+                    }
+                }
+            }
 
             // Get all our child nodes in order, and process them
             //  into XWPFRuns where we can

@@ -83,7 +83,7 @@ namespace NPOI.XWPF.Extractor
             char euro = '\u20ac';
             //		System.err.Println("'"+text.Substring(text.Length() - 40) + "'");
 
-            // Check contents
+            //Check contents
             Assert.IsTrue(text.StartsWith(
                     "  \n(V) ILLUSTRATIVE CASES\n\n"
             ));

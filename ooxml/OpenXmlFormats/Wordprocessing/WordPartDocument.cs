@@ -30,6 +30,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
             return new DocumentDocument(obj);
         }
+
         public DocumentDocument(CT_Document document)
         {
             this.document = document;

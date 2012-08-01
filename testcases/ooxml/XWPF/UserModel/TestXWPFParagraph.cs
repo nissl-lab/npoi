@@ -337,7 +337,7 @@ namespace NPOI.XWPF.UserModel
             //Is there a bug about XmlSerializer? it can not Deserialize the tag which inner text is only one whitespace
             //e.g. <w:t> </w:t> to CT_Text;
             //TODO 
-            //Assert.AreEqual(" ", r.ToString());
+            Assert.AreEqual(" ", r.ToString());
             Assert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
             // Final spacer
