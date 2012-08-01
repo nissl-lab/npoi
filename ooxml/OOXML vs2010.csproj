@@ -160,6 +160,7 @@
     <Compile Include="XSSF\Util\CTColComparator.cs" />
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />
+    <Compile Include="XWPF\Extractor\XWPFWordExtractor.cs" />
     <Compile Include="XWPF\Model\XMLParagraph.cs" />
     <Compile Include="XWPF\Model\XWPFCommentsDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />

@@ -8,7 +8,7 @@
     <ProjectGuid>{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ooxml.Testcases</RootNamespace>
+    <RootNamespace>NPOI.OOXML.Testcases</RootNamespace>
     <AssemblyName>NPOI.OOXML.Testcases</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -123,6 +123,7 @@
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
     <Compile Include="XSSF\XSSFITestDataProvider.cs" />
     <Compile Include="XSSF\XSSFTestDataSamples.cs" />
+    <Compile Include="XWPF\Extractor\TestXWPFWordExtractor.cs" />
     <Compile Include="XWPF\Model\TestXWPFDecorators.cs" />
     <Compile Include="XWPF\Model\TestXWPFHeaderFooterPolicy.cs" />
     <Compile Include="XWPF\TestDocumentProtection.cs" />

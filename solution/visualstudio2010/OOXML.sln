@@ -16,8 +16,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOXML.Testcases vs2010", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main vs10", "..\..\main\main vs10.csproj", "{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "basetestlib vs10", "..\..\testcases\main\basetestlib vs10.csproj", "{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}"
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OOXML.vsmdi
@@ -58,12 +56,6 @@ Global
 		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.NPOI.Tools|Any CPU.Build.0 = Release|Any CPU
 		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}.NPOI.Tools|Any CPU.ActiveCfg = NPOI.Tools|Any CPU
-		{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}.NPOI.Tools|Any CPU.Build.0 = NPOI.Tools|Any CPU
-		{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7927D62A-E403-4209-B2A6-8BED1FBDBE5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
