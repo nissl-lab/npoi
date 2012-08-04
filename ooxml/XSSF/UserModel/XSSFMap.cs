@@ -27,7 +27,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * This class : the Map element (Open Office XML Part 4:
      * chapter 3.16.2)
-     * <p/>
+     * 
      * This element Contains all of the properties related to the XML map,
      * and the behaviors expected during data refresh operations.
      *
@@ -66,13 +66,12 @@ namespace NPOI.XSSF.UserModel
 
         public XmlNode GetSchema()
         {
-            throw new NotImplementedException();
-            //XmlNode xmlSchema = null;
+            XmlNode xmlSchema = null;
 
-            //CT_Schema schema = GetCTSchema();
-            //xmlSchema = schema.GetDomNode().GetFirstChild();
+            CT_Schema schema = GetCTSchema();
+            xmlSchema = schema.Any;
 
-            //return xmlSchema;
+            return xmlSchema;
         }
 
         /**

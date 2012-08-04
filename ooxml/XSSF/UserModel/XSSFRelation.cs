@@ -121,7 +121,7 @@ namespace NPOI.XSSF.UserModel
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.tableSingleCells+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableSingleCells",
                 "/xl/tables/tableSingleCells#.xml",
-             null//    typeof(SingleXmlCells)
+                typeof(SingleXmlCells)
         );
 
         public static XSSFRelation TABLE = new XSSFRelation(

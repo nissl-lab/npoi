@@ -14,36 +14,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Extractor
+
+using TestCases.SS.Formula;
+using NUnit.Framework;
+namespace NPOI.XSSF.UserModel
 {
-    using System;
 
     /**
-     * Common interface for Excel text extractors, covering
-     *  HSSF and XSSF
+     * Tests Setting and Evaluating user-defined functions in HSSF
      */
-    public interface ExcelExtractor
+    [TestFixture]
+    public class TestXSSFExternalFunctions : BaseTestExternalFunctions
     {
-        /**
-         * Should sheet names be included? Default is true
-         */
-        void SetIncludeSheetNames(bool includeSheetNames);
 
-        /**
-         * Should we return the formula itself, and not
-         *  the result it produces? Default is false
-         */
-        void SetFormulasNotResults(bool formulasNotResults);
-
-        /**
-         * Should cell comments be included? Default is false
-         */
-        void SetIncludeCellComments(bool includeCellComments);
-
-        /**
-         * Retreives the text contents of the file
-         */
-        String Text { get; }
+        public TestXSSFExternalFunctions():base(XSSFITestDataProvider.instance)
+        {
+            
+        }
+        [Test]
+        public void TestATP()
+        {
+            BaseTestInvokeATP("atp.xlsx");
+        }
     }
+
 
 }

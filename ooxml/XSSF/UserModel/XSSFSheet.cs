@@ -2635,67 +2635,8 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
         {
-            //for (IEnumerator it = this._rows.GetEnumerator(); it.MoveNext(); )
-            //{
-            //    XSSFRow row = (XSSFRow)it.Current;
-            //    int rownum = row.RowNum;
-            //    if (rownum < startRow) continue;
-
-            //    if (!copyRowHeight)
-            //    {
-            //        row.Height = (short)-1;
-            //    }
-
-            //    if (RemoveRow(startRow, endRow, n, rownum))
-            //    {
-            //        // remove row from worksheet.GetSheetData row array
-            //        int idx = HeadMap(_rows, row.RowNum).Count;
-            //        worksheet.sheetData.RemoveRow(idx);
-            //        // remove row from _rows
-            //        throw new NotImplementedException();
-            //        //it.Remove();
-            //    }
-            //    else if (rownum >= startRow && rownum <= endRow)
-            //    {
-            //        row.Shift(n);
-            //    }
-
-            //    if (sheetComments != null)
-            //    {
-            //        //TODO shift Note's anchor in the associated /xl/drawing/vmlDrawings#.vml
-            //        CT_CommentList lst = sheetComments.GetCTComments().commentList;
-            //        foreach (CT_Comment comment in lst.comment)
-            //        {
-            //            CellReference ref1 = new CellReference(comment.@ref);
-            //            if (ref1.Row == rownum)
-            //            {
-            //                ref1 = new CellReference(rownum + n, ref1.Col);
-            //                comment.@ref = ref1.FormatAsString();
-            //            }
-            //        }
-            //    }
-            //}
-            //XSSFRowShifter rowShifter = new XSSFRowShifter(this);
-
-            //int sheetIndex = Workbook.GetSheetIndex(this);
-            //FormulaShifter Shifter = FormulaShifter.CreateForRowShift(sheetIndex, startRow, endRow, n);
-
-            //rowShifter.UpdateNamedRanges(Shifter);
-            //rowShifter.UpdateFormulas(Shifter);
-            //rowShifter.ShiftMerged(startRow, endRow, n);
-            //rowShifter.UpdateConditionalFormatting(Shifter);
-
-            ////rebuild the _rows map
-            //SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
-            //foreach (XSSFRow r in _rows.Values)
-            //{
-            //    map.Add(r.RowNum, r);
-            //}
-            //_rows = map;
-
-            // works for positive shift, but not the negative way 8-( - above is the original code
             var rowsToRemove = new List<int>();
-            foreach (var rowDict in _rows)
+            foreach (KeyValuePair<int,XSSFRow> rowDict in _rows)
             {
                 var row = rowDict.Value;
                 int rownum = row.RowNum;

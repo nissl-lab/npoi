@@ -154,10 +154,10 @@ namespace NPOI.XSSF.UserModel
                     case CellType.BLANK:
                         return false;
                     case CellType.BOOLEAN:
-                        return _cell.isSetV() && TRUE_AS_STRING.Equals(_cell.v);
+                        return _cell.IsSetV() && TRUE_AS_STRING.Equals(_cell.v);
                     case CellType.FORMULA:
                         //YK: should throw an exception if requesting bool value from a non-bool formula
-                        return _cell.isSetV() && TRUE_AS_STRING.Equals(_cell.v);
+                        return _cell.IsSetV() && TRUE_AS_STRING.Equals(_cell.v);
                     default:
                         throw TypeMismatch(CellType.BOOLEAN, cellType, false);
                 }
@@ -199,7 +199,7 @@ namespace NPOI.XSSF.UserModel
                         return 0.0;
                     case CellType.FORMULA:
                     case CellType.NUMERIC:
-                        if (_cell.isSetV())
+                        if (_cell.IsSetV())
                         {
                             try
                             {
@@ -290,12 +290,12 @@ namespace NPOI.XSSF.UserModel
                     case CellType.STRING:
                         if (_cell.t == ST_CellType.inlineStr)
                         {
-                            if (_cell.isSetIs())
+                            if (_cell.IsSetIs())
                             {
                                 //string is expressed directly in the cell defInition instead of implementing the shared string table.
                                 rt = new XSSFRichTextString(_cell.@is);
                             }
-                            else if (_cell.isSetV())
+                            else if (_cell.IsSetV())
                             {
                                 //cached result of a formula
                                 rt = new XSSFRichTextString(_cell.v);
@@ -308,11 +308,11 @@ namespace NPOI.XSSF.UserModel
                         else if (_cell.t == ST_CellType.str)
                         {
                             //cached formula value
-                            rt = new XSSFRichTextString(_cell.isSetV() ? _cell.v : "");
+                            rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
                         }
                         else
                         {
-                            if (_cell.isSetV())
+                            if (_cell.IsSetV())
                             {
                                 int idx = Int32.Parse(_cell.v);
                                 rt = new XSSFRichTextString(_sharedStringSource.GetEntryAt(idx));
@@ -325,7 +325,7 @@ namespace NPOI.XSSF.UserModel
                         break;
                     case CellType.FORMULA:
                         CheckFormulaCachedValueType(CellType.STRING, GetBaseCellType(false));
-                        rt = new XSSFRichTextString(_cell.isSetV() ? _cell.v : "");
+                        rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
                         break;
                     default:
                         throw TypeMismatch(CellType.STRING, cellType, false);
@@ -495,7 +495,7 @@ namespace NPOI.XSSF.UserModel
             if (formula == null)
             {
                 ((XSSFWorkbook)wb).OnDeleteFormula(this);
-                if (_cell.isSetF()) _cell.unsetF();
+                if (_cell.IsSetF()) _cell.unsetF();
                 return;
             }
 
@@ -506,7 +506,7 @@ namespace NPOI.XSSF.UserModel
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;
             _cell.f= (f);
-            if (_cell.isSetV()) _cell.unsetV();
+            if (_cell.IsSetV()) _cell.unsetV();
         }
 
         /**
@@ -557,7 +557,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFCellStyle style = null;
                 if ((null != _stylesSource) && (_stylesSource.GetNumCellStyles() > 0))
                 {
-                    long idx = _cell.isSetS() ? _cell.s : 0;
+                    long idx = _cell.IsSetS() ? _cell.s : 0;
                     style = _stylesSource.GetStyleAt((int)idx);
                 }
                 return style;
@@ -566,7 +566,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (value == null)
                 {
-                    if (_cell.isSetS()) _cell.unsetS();
+                    if (_cell.IsSetS()) _cell.unsetS();
                 }
                 else
                 {
@@ -632,7 +632,7 @@ namespace NPOI.XSSF.UserModel
                 case ST_CellType.b:
                     return CellType.BOOLEAN;
                 case ST_CellType.n:
-                    if (!_cell.isSetV() && blankCells)
+                    if (!_cell.IsSetV() && blankCells)
                     {
                         // ooxml does have a separate cell type of 'blank'.  A blank cell Gets encoded as
                         // (either not present or) a numeric cell with no value Set.
@@ -769,7 +769,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cell blank = new CT_Cell();
             blank.r = (_cell.r);
-            if (_cell.isSetS()) blank.s=(_cell.s);
+            if (_cell.IsSetS()) blank.s=(_cell.s);
             _cell.Set(blank);
         }
 
@@ -837,7 +837,7 @@ namespace NPOI.XSSF.UserModel
                     _cell.t= (ST_CellType.s);
                     break;
                 case CellType.FORMULA:
-                    if (!_cell.isSetF())
+                    if (!_cell.IsSetF())
                     {
                         CT_CellFormula f = new CT_CellFormula();
                         f.Value = "0";
@@ -848,7 +848,7 @@ namespace NPOI.XSSF.UserModel
                 default:
                     throw new ArgumentException("Illegal cell type: " + cellType);
             }
-            if (cellType != CellType.FORMULA && _cell.isSetF())
+            if (cellType != CellType.FORMULA && _cell.IsSetF())
             {
                 _cell.unsetF();
             }

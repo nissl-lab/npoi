@@ -290,11 +290,31 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Color c1 = ctFont.GetColorArray(0);
                 CT_Color c2 = pr.AddNewColor();
-                if (c1.IsSetAuto()) c2.auto = (c1.auto);
-                if (c1.IsSetIndexed()) c2.indexed = (c1.indexed);
-                if (c1.IsSetRgb()) c2.SetRgb(c1.rgb);
-                if (c1.IsSetTheme()) c2.theme = (c1.theme);
-                if (c1.IsSetTint()) c2.tint = (c1.tint);
+                if (c1.IsSetAuto())
+                {
+                    c2.auto = (c1.auto);
+                    c2.autoSpecified = true;
+                }
+                if (c1.IsSetIndexed())
+                {
+                    c2.indexed = (c1.indexed);
+                    c2.indexedSpecified = true;
+                }
+                if (c1.IsSetRgb())
+                {
+                    c2.SetRgb(c1.rgb);
+                    c2.rgbSpecified = true;
+                }
+                if (c1.IsSetTheme())
+                {
+                    c2.theme = (c1.theme);
+                    c2.themeSpecified = true;
+                }
+                if (c1.IsSetTint())
+                {
+                    c2.tint = (c1.tint);
+                    c2.tintSpecified = true;
+                }
             }
 
             if (ctFont.sizeOfSzArray() > 0) pr.AddNewSz().val = (ctFont.GetSzArray(0).val);
@@ -490,11 +510,31 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Color c1 = pr.GetColorArray(0);
                 CT_Color c2 = ctFont.AddNewColor();
-                if (c1.IsSetAuto()) c2.auto = (c1.auto);
-                if (c1.IsSetIndexed()) c2.indexed = (c1.indexed);
-                if (c1.IsSetRgb()) c2.SetRgb(c1.GetRgb());
-                if (c1.IsSetTheme()) c2.theme = (c1.theme);
-                if (c1.IsSetTint()) c2.tint = (c1.tint);
+                if (c1.IsSetAuto())
+                {
+                    c2.auto = (c1.auto);
+                    c2.autoSpecified = true;
+                }
+                if (c1.IsSetIndexed())
+                {
+                    c2.indexed = (c1.indexed);
+                    c2.indexedSpecified = true;
+                }
+                if (c1.IsSetRgb())
+                {
+                    c2.SetRgb(c1.GetRgb());
+                    c2.rgbSpecified = true;
+                }
+                if (c1.IsSetTheme())
+                {
+                    c2.theme = (c1.theme);
+                    c2.themeSpecified = true;
+                }
+                if (c1.IsSetTint())
+                {
+                    c2.tint = (c1.tint);
+                    c2.tintSpecified = true;
+                }
             }
  
             if (pr.sizeOfSzArray() > 0) ctFont.AddNewSz().val = (pr.GetSzArray(0).val);

@@ -306,7 +306,7 @@ namespace NPOI.HSSF.Extractor
         /// </summary>
         /// <param name="hf">The header or footer</param>
         /// <returns></returns>
-        private String ExtractHeaderFooter(NPOI.SS.UserModel.IHeaderFooter hf)
+        public static String ExtractHeaderFooter(NPOI.SS.UserModel.IHeaderFooter hf)
         {
             StringBuilder text = new StringBuilder();
 

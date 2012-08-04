@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             return SingleXmlCell.xmlCellPr.xmlPr.mapId;
         }
 
-        public Enum GetXmlDataType()
+        public ST_XmlDataType GetXmlDataType()
         {
             CT_XmlCellPr xmlCellPr = SingleXmlCell.xmlCellPr;
             CT_XmlPr xmlPr = xmlCellPr.xmlPr;

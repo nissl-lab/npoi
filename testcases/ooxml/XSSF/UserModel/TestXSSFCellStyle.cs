@@ -298,7 +298,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.BLUE_GREY.Index, cellStyle.BottomBorderColor);
             clr = cellStyle.GetBottomBorderXSSFColor();
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
-            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.GetIndexed());
+            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.Indexed);
             //a new border was Added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
 
@@ -339,7 +339,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.BLUE_GREY.Index, cellStyle.TopBorderColor);
             clr = cellStyle.GetTopBorderXSSFColor();
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
-            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.GetIndexed());
+            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.Indexed);
             //a new border was added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
 
@@ -380,7 +380,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.BLUE_GREY.Index, cellStyle.LeftBorderColor);
             clr = cellStyle.GetLeftBorderXSSFColor();
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
-            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.GetIndexed());
+            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.Indexed);
             //a new border was Added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
 
@@ -421,7 +421,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.BLUE_GREY.Index, cellStyle.RightBorderColor);
             clr = cellStyle.GetRightBorderXSSFColor();
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
-            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.GetIndexed());
+            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, clr.Indexed);
             //a new border was Added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetBorders().Count);
 
@@ -463,7 +463,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.RED.Index, cellStyle.FillBackgroundColor);
             clr = (XSSFColor)cellStyle.FillBackgroundColorColor;
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
-            Assert.AreEqual(IndexedColors.RED.Index, clr.GetIndexed());
+            Assert.AreEqual(IndexedColors.RED.Index, clr.Indexed);
             //a new fill was Added to the styles table
             Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
 

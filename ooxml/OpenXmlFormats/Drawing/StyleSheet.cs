@@ -366,8 +366,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.nameField = "";
         }
 
-        //[XmlElement(Order = 0)]
-        [XmlIgnore] // TODO
+        [XmlElement]
         public CT_BaseStyles themeElements
         {
             get
@@ -380,8 +379,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        //[XmlElement(Order = 1)]
-        [XmlIgnore] // TODO
+        [XmlElement]
         public CT_ObjectStyleDefaults objectDefaults
         {
             get
@@ -394,9 +392,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        //[XmlArray(Order = 2)]
-        //[XmlArrayItem("extraClrScheme", IsNullable = false)]
-        [XmlIgnore] // TODO
+        [XmlElement] 
         public List<CT_ColorSchemeAndMapping> extraClrSchemeLst
         {
             get
@@ -409,9 +405,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        //[XmlArray(Order = 3)]
-        //[XmlArrayItem("custClr", IsNullable = false)]
-        [XmlIgnore] // TODO
+        [XmlElement]
         public List<CT_CustomColor> custClrLst
         {
             get
@@ -424,8 +418,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        //[XmlElement(Order = 4)]
-        [XmlIgnore] // TODO
+        [XmlElement]
         public CT_OfficeArtExtensionList extLst
         {
             get

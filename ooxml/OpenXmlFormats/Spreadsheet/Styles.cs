@@ -1539,15 +1539,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Color
     {
         // all attributes are optional
-        private bool? autoField = null;
+        private bool autoField;
 
-        private uint? indexedField = null; // type of xsd:unsignedInt // TODO change all the uses theme to use uint instead of signed integer variants
+        private uint indexedField;
 
-        private byte[] rgbField = null; // type ST_UnsignedIntHex is xsd:hexBinary restricted to length 4 (octets!? - see http://www.grokdoc.net/index.php/EOOXML_Objections_Clearinghouse)
+        private byte[] rgbField; // type ST_UnsignedIntHex is xsd:hexBinary restricted to length 4 (octets!? - see http://www.grokdoc.net/index.php/EOOXML_Objections_Clearinghouse)
 
-        private uint? themeField = null; // TODO change all the uses theme to use uint instead of signed integer variants
+        private uint themeField; // TODO change all the uses theme to use uint instead of signed integer variants
 
-        private double? tintField = null;
+        private double tintField;
 
         #region auto
         [XmlAttribute]
@@ -1562,15 +1562,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.autoField = value;
             }
         }
+        bool autoSpecifiedField = false;
         [XmlIgnore]
         // do not remove this field or change the name, because it is automatically used by the XmlSerializer to decide if the auto attribute should be printed or not.
         public bool autoSpecified
         {
-            get { return (null != autoField); }
+            get { return autoSpecifiedField; }
+            set { autoSpecifiedField = value; }
         }
         public bool IsSetAuto()
         {
-            return autoSpecified;
+            return autoSpecifiedField;
         }
 
         #endregion auto
@@ -1588,11 +1590,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.indexedField = value;
             }
         }
-
+        bool indexedSpecifiedField = false;
         [XmlIgnore]
         public bool indexedSpecified
         {
-            get { return (null != indexedField); }
+            get { return indexedSpecifiedField; }
+            set { indexedSpecifiedField = value; }
         }
         public bool IsSetIndexed()
         {
@@ -1614,10 +1617,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rgbField = value;
             }
         }
+        bool rgbSpecifiedField = false;
         [XmlIgnore]
         public bool rgbSpecified
         {
-            get { return (null != rgbField); }
+            get { return rgbSpecifiedField; }
+            set { rgbSpecifiedField = value; }
         }
         public void SetRgb(byte R, byte G, byte B)
         {
@@ -1626,9 +1631,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rgbField[1] = R;
             this.rgbField[2] = G;
             this.rgbField[3] = B;
-            //this.rgbField[0] = R;
-            //this.rgbField[1] = G;
-            //this.rgbField[2] = B;
+            rgbSpecified = true;
         }
         public bool IsSetRgb()
         {
@@ -1638,6 +1641,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             rgbField = new byte[rgb.Length];
             Array.Copy(rgb, this.rgbField, rgb.Length);
+            this.rgbSpecified = true;
         }
         public byte[] GetRgb()
         {
@@ -1657,11 +1661,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.themeField = value;
             }
-        }        
+        }
+        bool themeSpecifiedField;
         [XmlIgnore]
         public bool themeSpecified
         {
-            get { return (null != themeField); }
+            get { return themeSpecifiedField; }
+            set { themeSpecifiedField = value; }
 
         }
         public bool IsSetTheme()
@@ -1677,17 +1683,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == tintField) ? 0.0D : (double)this.tintField;
+                return this.tintField;
             }
             set
             {
                 this.tintField = value;
             }
         }
+        bool tintSpecifiedField = false;
         [XmlIgnore]
         public bool tintSpecified
         {
-            get { return (null != tintField); }
+            get { return tintSpecifiedField; }
+            set { tintSpecifiedField = value; }
 
         }
         public bool IsSetTint()

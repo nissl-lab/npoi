@@ -62,37 +62,39 @@ namespace NPOI.XSSF.UserModel
             ctColor.SetRgb(rgb);
         }
 
-        /**
-         * A bool value indicating the ctColor is automatic and system ctColor dependent.
-         */
-        public bool IsAuto()
+        /// <summary>
+        ///A bool value indicating the ctColor is automatic and system ctColor dependent.
+        /// </summary>
+        public bool IsAuto
         {
-            return ctColor.auto;
+            get
+            {
+                return ctColor.auto;
+            }
+            set 
+            {
+                ctColor.auto = value;
+                ctColor.autoSpecified = true;
+            }
         }
 
-        /**
-         * A bool value indicating the ctColor is automatic and system ctColor dependent.
-         */
-        public void SetAuto(bool auto)
-        {
-            ctColor.auto = auto ;
-        }
-
-        /**
-         * Indexed ctColor value. Only used for backwards compatibility. References a ctColor in indexedColors.
-         */
-        public short GetIndexed()
-        {
-            return ctColor.indexedSpecified ? (short)ctColor.indexed : (short)0;
-        }
 
         /**
          * Indexed ctColor value. Only used for backwards compatibility. References a ctColor in indexedColors.
          */
-        public void SetIndexed(long indexed)
+        public short Indexed
         {
-            ctColor.indexed = (uint)indexed;
+            get
+            {
+                return ctColor.indexedSpecified ? (short)ctColor.indexed : (short)0;
+            }
+            set 
+            {
+                ctColor.indexed = (uint)value;
+                ctColor.indexedSpecified = true;
+            }
         }
+
 
         /**
         * For RGB colours, but not ARGB (we think...)
@@ -331,9 +333,17 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the tint value
          */
-        public double GetTint()
+        public double Tint
         {
-            return ctColor.tint;
+            get
+            {
+                return ctColor.tint;
+            }
+            set 
+            {
+                ctColor.tint = value;
+                ctColor.tintSpecified = true;
+            }
         }
 
         /**
@@ -377,10 +387,6 @@ namespace NPOI.XSSF.UserModel
          *
          * @param tint the tint value
          */
-        public void SetTint(double tint)
-        {
-            ctColor.tint = tint;
-        }
 
         /**
          * Returns the underlying XML bean

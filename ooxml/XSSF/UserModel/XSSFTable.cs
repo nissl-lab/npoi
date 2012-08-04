@@ -149,7 +149,7 @@ namespace NPOI.XSSF.UserModel
                     {
                         String xpath = column.xmlColumnPr.xpath;
                         String[] tokens = xpath.Split(new char[] { '/' });
-                        if (commonTokens.Length == 0)
+                        if (commonTokens==null)
                         {
                             commonTokens = tokens;
                         }

@@ -23,6 +23,7 @@ namespace NPOI.XSSF.Model
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.OpenXmlFormats.Dml;
     using System;
+    using System.Collections.Generic;
 
     /**
      * Class that represents theme of XLSX document. The theme includes specific
@@ -50,36 +51,46 @@ namespace NPOI.XSSF.Model
         {
             CT_ColorScheme colorScheme = theme.GetTheme().themeElements.clrScheme;
             NPOI.OpenXmlFormats.Dml.CT_Color ctColor = null;
-            throw new NotImplementedException();
-            int cnt = 0;
             
-            //TODO:: iterate ctcolors in colorschema
-            //foreach (XmlElement obj in colorScheme.SelectPath("./*"))
-            //{
-            //    if (obj is CT_Color)
-            //    {
-            //        if (cnt == idx)
-            //        {
-            //            ctColor = (NPOI.OpenXmlFormats.Dml.CT_Color)obj;
+            int cnt = 0;
+            List<NPOI.OpenXmlFormats.Dml.CT_Color> colors = new List<NPOI.OpenXmlFormats.Dml.CT_Color>();
+            colors.Add(colorScheme.dk1);
+            colors.Add(colorScheme.lt1);
+            colors.Add(colorScheme.dk2);
+            colors.Add(colorScheme.lt2);
+            colors.Add(colorScheme.accent1);
+            colors.Add(colorScheme.accent2);
+            colors.Add(colorScheme.accent3);
+            colors.Add(colorScheme.accent4);
+            colors.Add(colorScheme.accent5);
+            colors.Add(colorScheme.accent6);
+            colors.Add(colorScheme.hlink);
+            colors.Add(colorScheme.folHlink);
 
-            //            byte[] rgb = null;
-            //            if (ctColor.srgbClr != null)
-            //            {
-            //                // Colour is a regular one 
-            //                rgb = ctColor.srgbClr.val;
-            //            }
-            //            else if (ctColor.sysClr != null)
-            //            {
-            //                // Colour is a tint of white or black
-            //                rgb = ctColor.sysClr.lastClr;
-            //            }
+            //iterate ctcolors in colorschema
+            foreach (NPOI.OpenXmlFormats.Dml.CT_Color color in colors)
+            {
+                    if (cnt == idx)
+                    {
+                        ctColor = color;
 
-            //            return new XSSFColor(rgb);
-            //        }
-            //        cnt++;
-            //    }
-            //}
-            //return null;
+                        byte[] rgb = null;
+                        if (ctColor.srgbClr != null)
+                        {
+                            // Colour is a regular one 
+                            rgb = ctColor.srgbClr.val;
+                        }
+                        else if (ctColor.sysClr != null)
+                        {
+                            // Colour is a tint of white or black
+                            rgb = ctColor.sysClr.lastClr;
+                        }
+
+                        return new XSSFColor(rgb);
+                    }
+                    cnt++;
+            }
+            return null;
         }
 
         /**

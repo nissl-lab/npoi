@@ -171,15 +171,18 @@ namespace NPOI.XSSF.UserModel
                     case (short)FontColor.NORMAL:
                         
                             ctColor.indexed = (uint)(XSSFFont.DEFAULT_FONT_COLOR);
+                            ctColor.indexedSpecified = true;
                             break;
                         
                     case (short)FontColor.RED:
 
                             ctColor.indexed = (uint)(IndexedColors.RED.Index);
+                            ctColor.indexedSpecified = true;
                             break;
                         
                     default:
                             ctColor.indexed = (uint)(value);
+                            ctColor.indexedSpecified = true;
                         break;
                 }
             }

@@ -14,36 +14,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Extractor
+
+using TestCases.SS.UserModel;
+using NUnit.Framework;
+namespace NPOI.XSSF.UserModel
 {
-    using System;
 
     /**
-     * Common interface for Excel text extractors, covering
-     *  HSSF and XSSF
+     * @author Yegor Kozlov
      */
-    public interface ExcelExtractor
+    [TestFixture]
+    public class TestXSSFSheetShiftRows : BaseTestSheetShiftRows
     {
-        /**
-         * Should sheet names be included? Default is true
-         */
-        void SetIncludeSheetNames(bool includeSheetNames);
 
-        /**
-         * Should we return the formula itself, and not
-         *  the result it produces? Default is false
-         */
-        void SetFormulasNotResults(bool formulasNotResults);
+        public TestXSSFSheetShiftRows()
+            : base(XSSFITestDataProvider.instance)
+        {
 
-        /**
-         * Should cell comments be included? Default is false
-         */
-        void SetIncludeCellComments(bool includeCellComments);
-
-        /**
-         * Retreives the text contents of the file
-         */
-        String Text { get; }
+        }
+        [Test]
+        public new void TestShiftRows()
+        {
+            base.TestShiftRows();
+        }
     }
-
 }
+

@@ -32,7 +32,8 @@ namespace NPOI.XSSF.UserModel.Extensions
             CT_Color bgColor = ctPatternFill.AddNewBgColor();
             Assert.IsNotNull(cellFill.GetFillBackgroundColor());
             bgColor.indexed = 2;
-            Assert.AreEqual(2, cellFill.GetFillBackgroundColor().GetIndexed());
+            bgColor.indexedSpecified = true;
+            Assert.AreEqual(2, cellFill.GetFillBackgroundColor().Indexed);
         }
         [Test]
         public void TestGetFillForegroundColor()
@@ -43,7 +44,8 @@ namespace NPOI.XSSF.UserModel.Extensions
             CT_Color fgColor = ctPatternFill.AddNewFgColor();
             Assert.IsNotNull(cellFill.GetFillForegroundColor());
             fgColor.indexed = 8;
-            Assert.AreEqual(8, cellFill.GetFillForegroundColor().GetIndexed());
+            fgColor.indexedSpecified = true;
+            Assert.AreEqual(8, cellFill.GetFillForegroundColor().Indexed);
         }
         [Test]
         public void TestGetSetPatternType()
@@ -52,7 +54,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             XSSFCellFill cellFill = new XSSFCellFill(ctFill);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             ctPatternFill.patternType = (ST_PatternType.solid);
-            //Assert.AreEqual(FillPatternType.SOLID_FOREGROUND.ordinal(), cellFill.GetPatternType().ordinal());
+            Assert.AreEqual(ST_PatternType.solid, cellFill.GetPatternType());
         }
         [Test]
         public void TestGetNotModifies()
@@ -71,13 +73,13 @@ namespace NPOI.XSSF.UserModel.Extensions
             //color RGB will be extracted from theme
             XSSFColor foregroundColor = (XSSFColor)((XSSFCellStyle)cellWithThemeColor.CellStyle).FillForegroundColorColor;
             byte[] rgb = foregroundColor.GetRgb();
+            Assert.AreEqual(rgb[0], 238);
+            Assert.AreEqual(rgb[1], 236);
+            Assert.AreEqual(rgb[2], 225);
             byte[] rgbWithTint = foregroundColor.GetRgbWithTint();
-            Assert.AreEqual(rgb[0], -18);
-            Assert.AreEqual(rgb[1], -20);
-            Assert.AreEqual(rgb[2], -31);
-            Assert.AreEqual(rgbWithTint[0], -12);
-            Assert.AreEqual(rgbWithTint[1], -13);
-            Assert.AreEqual(rgbWithTint[2], -20);
+            Assert.AreEqual(rgbWithTint[0], 244);
+            Assert.AreEqual(rgbWithTint[1], 243);
+            Assert.AreEqual(rgbWithTint[2], 236);
         }
     }
 

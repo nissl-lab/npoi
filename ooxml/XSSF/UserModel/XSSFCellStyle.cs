@@ -363,12 +363,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = GetBottomBorderXSSFColor();
-                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.BLACK.Index : clr.Indexed;
             }
             set 
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = value;
                 SetBottomBorderColor(clr);
             }
         }
@@ -432,12 +432,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = (XSSFColor)this.FillBackgroundColorColor;
-                return clr == null ? IndexedColors.AUTOMATIC.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.AUTOMATIC.Index : clr.Indexed;
             }
             set 
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = (value);
                 SetFillBackgroundColor(clr);
             }
         }
@@ -483,12 +483,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = (XSSFColor)this.FillForegroundColorColor;
-                return clr == null ? IndexedColors.AUTOMATIC.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.AUTOMATIC.Index : clr.Indexed;
             }
             set 
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = (value);
                 SetFillForegroundColor(clr);
             }
         }
@@ -638,12 +638,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = GetLeftBorderXSSFColor();
-                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.BLACK.Index : clr.Indexed;
             }
             set 
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = (value);
                 SetLeftBorderColor(clr);
             }
         }
@@ -709,12 +709,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = GetRightBorderXSSFColor();
-                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.BLACK.Index : clr.Indexed;
             }
             set 
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = (value);
                 SetRightBorderColor(clr);
             }
         }
@@ -771,12 +771,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = GetTopBorderXSSFColor();
-                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.BLACK.Index : clr.Indexed;
             }
             set 
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = (value);
                 SetTopBorderColor(clr);
             }
         }
@@ -1252,12 +1252,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFColor clr = GetDiagonalBorderXSSFColor();
-                return clr == null ? IndexedColors.BLACK.Index : clr.GetIndexed();
+                return clr == null ? IndexedColors.BLACK.Index : clr.Indexed;
             }
             set
             {
                 XSSFColor clr = new XSSFColor();
-                clr.SetIndexed(value);
+                clr.Indexed = (value);
                 SetDiagonalBorderColor(clr);
             }
         }

@@ -68,8 +68,10 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetFillBackgroundColor(int index)
         {
             CT_PatternFill ptrn = EnsureCTPatternFill();
-            CT_Color CT_Color = ptrn.IsSetBgColor() ? ptrn.bgColor : ptrn.AddNewBgColor();
-            CT_Color.indexed = (uint)index;
+            CT_Color ctColor = ptrn.IsSetBgColor() ? ptrn.bgColor : ptrn.AddNewBgColor();
+            ctColor.indexed = (uint)index;
+            ctColor.indexedSpecified = true;
+
         }
 
         /**
@@ -93,8 +95,8 @@ namespace NPOI.XSSF.UserModel.Extensions
             CT_PatternFill ptrn = _fill.GetPatternFill();
             if (ptrn == null) return null;
 
-            CT_Color CT_Color = ptrn.fgColor;
-            return CT_Color == null ? null : new XSSFColor(CT_Color);
+            CT_Color ctColor = ptrn.fgColor;
+            return ctColor == null ? null : new XSSFColor(ctColor);
         }
 
         /**

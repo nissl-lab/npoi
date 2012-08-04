@@ -40,13 +40,13 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        [Ignore]
-        //TODO column styles are not yet supported by XSSF
-        public override void TestDefaultColumnStyle()
-        {
-            Assert.Fail("column styles are not yet supported by XSSF");
-            //super.testDefaultColumnStyle();
-        }
+        //[Ignore]
+        ////TODO column styles are not yet supported by XSSF
+        //public override void TestDefaultColumnStyle()
+        //{
+        //    Assert.Fail("column styles are not yet supported by XSSF");
+        //    //super.testDefaultColumnStyle();
+        //}
         [Test]
         public void TestTestGetSetMargin()
         {

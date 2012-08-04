@@ -86,6 +86,8 @@
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
     <Compile Include="Util\Units.cs" />
+    <Compile Include="XSSF\Extractor\XSSFExcelExtractor.cs" />
+    <Compile Include="XSSF\Extractor\XSSFExportToXml.cs" />
     <Compile Include="XSSF\Model\CalculationChain.cs" />
     <Compile Include="XSSF\Model\CommentsTable.cs" />
     <Compile Include="XSSF\Model\IndexedUDFFinder.cs" />

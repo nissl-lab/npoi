@@ -46,6 +46,7 @@ namespace NPOI.XSSF.UserModel
                 _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
                 CT_Color bgColor = new CT_Color();
                 bgColor.indexed = (uint)value;
+                bgColor.indexedSpecified = true;
                 ptrn.bgColor = (bgColor);
             }
         }
@@ -64,6 +65,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
                 CT_Color fgColor = new CT_Color();
                 fgColor.indexed = (uint)(value);
+                fgColor.indexedSpecified = true;
                 ptrn.fgColor = (fgColor);
             }
         }

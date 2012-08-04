@@ -3998,19 +3998,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return tField != ST_CellType.n;
         }
-        public bool isSetS()
+        public bool IsSetS()
         {
             return sField != 0;
         }
-        public bool isSetF()
+        public bool IsSetF()
         {
             return fField != null;
         }
-        public bool isSetV()
+        public bool IsSetV()
         {
             return vField != null;
         }
-        public bool isSetIs()
+        public bool IsSetIs()
         {
             return isField != null;
         }

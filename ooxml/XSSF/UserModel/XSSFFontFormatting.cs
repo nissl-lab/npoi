@@ -83,6 +83,7 @@ namespace NPOI.XSSF.UserModel
                 if (value != -1)
                 {
                     _font.AddNewColor().indexed = (uint)(value);
+                    _font.AddNewColor().indexedSpecified = true;
                 }
             }
         }

@@ -931,10 +931,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_BaseStyles()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.fmtSchemeField = new CT_StyleMatrix();
-            this.fontSchemeField = new CT_FontScheme();
-            this.clrSchemeField = new CT_ColorScheme();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.fmtSchemeField = new CT_StyleMatrix();
+            //this.fontSchemeField = new CT_FontScheme();
+            //this.clrSchemeField = new CT_ColorScheme();
         }
 
         [XmlElement(Order = 0)]

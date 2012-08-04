@@ -588,7 +588,7 @@ namespace NPOI.XSSF.UserModel
             int rownum = RowNum + n;
             CalculationChain calcChain = ((XSSFWorkbook)_sheet.Workbook).GetCalculationChain();
             int sheetId = (int)_sheet.sheet.sheetId;
-            String msg = "Row[rownum=" + RowNum + "] Contains cell(s) included in a multi-cell array formula. " +
+            String msg = "Row[rownum=" + RowNum + "] contains cell(s) included in a multi-cell array formula. " +
                     "You cannot change part of an array.";
             foreach (ICell c in this)
             {
@@ -612,7 +612,13 @@ namespace NPOI.XSSF.UserModel
 
         public List<ICell> Cells
         {
-            get { throw new NotImplementedException(); }
+            get {
+                List<ICell> cells = new List<ICell>();
+                foreach (ICell cell in _cells.Values)
+                {
+                    cells.Add(cell);
+                }
+                return cells; }
         }
 
         public void MoveCell(ICell cell, int newColumn)

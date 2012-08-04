@@ -154,6 +154,7 @@ namespace NPOI.XSSF.UserModel
 
                 CT_Color ctColor = new CT_Color();
                 ctColor.indexed = (uint)value;
+                ctColor.indexedSpecified = true;
                 pr.color = (ctColor);
             }
         }
@@ -173,6 +174,7 @@ namespace NPOI.XSSF.UserModel
 
                 CT_Color ctColor = new CT_Color();
                 ctColor.indexed = (uint)value;
+                ctColor.indexedSpecified = true;
                 pr.color = (ctColor);
             }
         }
@@ -192,6 +194,7 @@ namespace NPOI.XSSF.UserModel
 
                 CT_Color ctColor = new CT_Color();
                 ctColor.indexed = (uint)value;
+                ctColor.indexedSpecified = true;
                 pr.color = (ctColor);
             }
         }
@@ -211,6 +214,7 @@ namespace NPOI.XSSF.UserModel
 
                 CT_Color ctColor = new CT_Color();
                 ctColor.indexed = (uint)(value);
+                ctColor.indexedSpecified = true;
                 pr.color = (ctColor);
             }
         }
@@ -230,6 +234,7 @@ namespace NPOI.XSSF.UserModel
 
                 CT_Color ctColor = new CT_Color();
                 ctColor.indexed = (uint)(value);
+                ctColor.indexedSpecified = true;
                 pr.color = (ctColor);
             }
         }

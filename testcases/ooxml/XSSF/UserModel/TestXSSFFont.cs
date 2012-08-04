@@ -217,8 +217,7 @@ namespace NPOI.XSSF.UserModel
             CT_Font ctFont = new CT_Font();
             CT_Color color = ctFont.AddNewColor();
 
-            //color.SetRgb(255, 255, 255);
-            color.SetRgb(Encoding.ASCII.GetBytes("ffffff"));
+            color.SetRgb(255, 255, 255);
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
@@ -238,6 +237,7 @@ namespace NPOI.XSSF.UserModel
             CT_Font ctFont = new CT_Font();
             CT_Color color = ctFont.AddNewColor();
             color.theme = (1);
+            color.themeSpecified = true;
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);

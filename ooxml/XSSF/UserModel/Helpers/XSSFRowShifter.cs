@@ -155,7 +155,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 XSSFCell cell = (XSSFCell)c;
 
                 CT_Cell ctCell = cell.GetCTCell();
-                if (ctCell.isSetF())
+                if (ctCell.IsSetF())
                 {
                     CT_CellFormula f = ctCell.f;
                     String formula = f.Value;
