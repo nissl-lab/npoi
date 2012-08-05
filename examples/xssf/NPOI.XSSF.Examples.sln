@@ -25,6 +25,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCommentInXlsx", "Crea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectSheetInXlsx", "ProtectSheetInXlsx\ProtectSheetInXlsx.csproj", "{72A01500-36B4-4CAD-9A87-F6D696C9F978}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsertPicturesInXlsx", "InsertPicturesInXlsx\InsertPicturesInXlsx.csproj", "{4A81D589-4CE6-474D-AEC9-1AA3ABC2F8B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddHyperlinkInXlsx", "AddHyperlinkInXlsx\AddHyperlinkInXlsx.csproj", "{36AEA430-A127-4510-BE7B-2F616F67B10F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplyFontInXlsx", "ApplyFontInXlsx\ApplyFontInXlsx.csproj", "{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeringCellsInXlsx", "MeringCellsInXlsx\MeringCellsInXlsx.csproj", "{E370B5B7-8679-4FBA-BB7B-EDD035245F03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageSetupInXlsx", "PageSetupInXlsx\PageSetupInXlsx.csproj", "{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -79,6 +89,26 @@ Global
 		{72A01500-36B4-4CAD-9A87-F6D696C9F978}.Debug|x86.Build.0 = Debug|x86
 		{72A01500-36B4-4CAD-9A87-F6D696C9F978}.Release|x86.ActiveCfg = Release|x86
 		{72A01500-36B4-4CAD-9A87-F6D696C9F978}.Release|x86.Build.0 = Release|x86
+		{4A81D589-4CE6-474D-AEC9-1AA3ABC2F8B2}.Debug|x86.ActiveCfg = Debug|x86
+		{4A81D589-4CE6-474D-AEC9-1AA3ABC2F8B2}.Debug|x86.Build.0 = Debug|x86
+		{4A81D589-4CE6-474D-AEC9-1AA3ABC2F8B2}.Release|x86.ActiveCfg = Release|x86
+		{4A81D589-4CE6-474D-AEC9-1AA3ABC2F8B2}.Release|x86.Build.0 = Release|x86
+		{36AEA430-A127-4510-BE7B-2F616F67B10F}.Debug|x86.ActiveCfg = Debug|x86
+		{36AEA430-A127-4510-BE7B-2F616F67B10F}.Debug|x86.Build.0 = Debug|x86
+		{36AEA430-A127-4510-BE7B-2F616F67B10F}.Release|x86.ActiveCfg = Release|x86
+		{36AEA430-A127-4510-BE7B-2F616F67B10F}.Release|x86.Build.0 = Release|x86
+		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Debug|x86.ActiveCfg = Debug|x86
+		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Debug|x86.Build.0 = Debug|x86
+		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Release|x86.ActiveCfg = Release|x86
+		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Release|x86.Build.0 = Release|x86
+		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|x86.ActiveCfg = Debug|x86
+		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|x86.Build.0 = Debug|x86
+		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|x86.ActiveCfg = Release|x86
+		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|x86.Build.0 = Release|x86
+		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Debug|x86.ActiveCfg = Debug|x86
+		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Debug|x86.Build.0 = Debug|x86
+		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Release|x86.ActiveCfg = Release|x86
+		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
