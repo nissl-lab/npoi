@@ -988,6 +988,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // Bump down by one, so still points at the same sheet
                     ct.localSheetId = (ct.localSheetId - 1);
+                    ct.localSheetIdSpecified = true;
                 }
             }
             foreach (XSSFName nm in toRemoveNamedRanges)
@@ -1233,6 +1234,7 @@ namespace NPOI.XSSF.UserModel
             CT_DefinedName nameRecord = names.AddNewDefinedName();
             nameRecord.name = (builtInName);
             nameRecord.localSheetId = (uint)sheetNumber;
+            nameRecord.localSheetIdSpecified = true;
 
             XSSFName name = new XSSFName(nameRecord, this);
             foreach (XSSFName nr in namedRanges)

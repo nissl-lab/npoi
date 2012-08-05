@@ -224,6 +224,7 @@ namespace NPOI.XSSF.UserModel
                 else
                 {
                     _ctName.localSheetId = (uint)value;
+                    _ctName.localSheetIdSpecified = true;
                 }
             }
         }
@@ -346,7 +347,7 @@ namespace NPOI.XSSF.UserModel
             if (!(o is XSSFName)) return false;
 
             XSSFName cf = (XSSFName)o;
-            return _ctName.ToString().Equals(cf.GetCTName().ToString());
+            return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId;
         }
 
         private static void validateName(String name)

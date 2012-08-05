@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFHyperlink : IHyperlink
     {
-        private int _type;
+        private HyperlinkType _type;
         private PackageRelationship _externalRel;
         private CT_Hyperlink _ctHyperlink;
         private String _location;
@@ -40,7 +40,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param type - the type of hyperlink to create
          */
-        public XSSFHyperlink(int type)
+        public XSSFHyperlink(HyperlinkType type)
         {
             _type = type;
             _ctHyperlink = new CT_Hyperlink();
@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
             // If it has a location, it's internal
             if (ctHyperlink.location != null)
             {
-                _type = (int)HyperlinkType.DOCUMENT;
+                _type = HyperlinkType.DOCUMENT;
                 _location = ctHyperlink.location;
             }
             else
@@ -86,15 +86,15 @@ namespace NPOI.XSSF.UserModel
                 if (_location.StartsWith("http://") || _location.StartsWith("https://")
                         || _location.StartsWith("ftp://"))
                 {
-                    _type = (int)HyperlinkType.URL;
+                    _type = HyperlinkType.URL;
                 }
                 else if (_location.StartsWith("mailto:"))
                 {
-                    _type = (int)HyperlinkType.EMAIL;
+                    _type = HyperlinkType.EMAIL;
                 }
                 else
                 {
-                    _type = (int)HyperlinkType.FILE;
+                    _type = HyperlinkType.FILE;
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool NeedsRelationToo()
         {
-            return (_type != (int)HyperlinkType.DOCUMENT);
+            return (_type != HyperlinkType.DOCUMENT);
         }
 
         /**
@@ -169,7 +169,7 @@ namespace NPOI.XSSF.UserModel
             {
                 _location = value;
                 //we must Set location for internal hyperlinks
-                if (_type == (int)HyperlinkType.DOCUMENT)
+                if (_type == HyperlinkType.DOCUMENT)
                 {
                     this.Location= value;
                 }

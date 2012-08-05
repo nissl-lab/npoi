@@ -1770,7 +1770,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string statusBarField;
 
-        private uint? localSheetIdField;
+        private uint localSheetIdField;
 
         private bool localSheetIdFieldSpecified;
 
@@ -1878,18 +1878,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetLocalSheetId()
         {
-            return localSheetIdField != null;
+            return localSheetIdFieldSpecified;
         }
         public void UnsetLocalSheetId()
         {
-            localSheetIdField = null;
+            localSheetIdFieldSpecified = false;
         }
         [XmlAttribute]
         public uint localSheetId
         {
             get
             {
-                return localSheetIdField==null? 0u : (uint)this.localSheetIdField;
+                return localSheetIdField;
             }
             set
             {
@@ -1961,7 +1961,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xlmField = value;
             }
         }
-
+        [XmlAttribute]
         public uint functionGroupId
         {
             get
@@ -1986,7 +1986,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.functionGroupIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public string shortcutKey
         {
             get
@@ -1998,7 +1998,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.shortcutKeyField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool publishToServer
         {
@@ -2011,7 +2011,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.publishToServerField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool workbookParameter
         {
@@ -2025,7 +2025,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [XmlText]
         public string Value
         {
             get

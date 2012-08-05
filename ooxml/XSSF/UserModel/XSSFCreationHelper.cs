@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel
 
         public IHyperlink CreateHyperlink(HyperlinkType type)
         {
-            return new XSSFHyperlink((int)type);
+            return new XSSFHyperlink(type);
         }
 
         /**
