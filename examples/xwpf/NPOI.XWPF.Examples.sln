@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTable", "SimpleTable\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateBullet", "CreateBullet\CreateBullet.csproj", "{4F2F31B7-5D96-4088-A8CE-D2D37A9C3926}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateEmbeddedDoc", "UpdateEmbeddedDoc\UpdateEmbeddedDoc.csproj", "{FAE96B67-F494-4032-8628-46BC27EFB88E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -31,6 +33,10 @@ Global
 		{4F2F31B7-5D96-4088-A8CE-D2D37A9C3926}.Debug|x86.Build.0 = Debug|x86
 		{4F2F31B7-5D96-4088-A8CE-D2D37A9C3926}.Release|x86.ActiveCfg = Release|x86
 		{4F2F31B7-5D96-4088-A8CE-D2D37A9C3926}.Release|x86.Build.0 = Release|x86
+		{FAE96B67-F494-4032-8628-46BC27EFB88E}.Debug|x86.ActiveCfg = Debug|x86
+		{FAE96B67-F494-4032-8628-46BC27EFB88E}.Debug|x86.Build.0 = Debug|x86
+		{FAE96B67-F494-4032-8628-46BC27EFB88E}.Release|x86.ActiveCfg = Release|x86
+		{FAE96B67-F494-4032-8628-46BC27EFB88E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
