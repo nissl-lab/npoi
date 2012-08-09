@@ -1124,14 +1124,31 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Legend()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.spPrField = new CT_ShapeProperties();
-            this.overlayField = new CT_Boolean();
-            this.layoutField = new CT_Layout();
-            this.legendEntryField = new List<CT_LegendEntry>();
-            this.legendPosField = new CT_LegendPos();
+            //this.extLstField = new List<CT_Extension>();
+            //this.spPrField = new CT_ShapeProperties();
+            //this.overlayField = new CT_Boolean();
+            //this.layoutField = new CT_Layout();
+            //this.legendEntryField = new List<CT_LegendEntry>();
+            //this.legendPosField = new CT_LegendPos();
+        }
+        public bool IsSetLegendPos()
+        {
+            return legendPosSpecifiedField;
+        }
+        public CT_LegendPos AddNewLegendPos()
+        {
+            if (this.legendPosField != null)
+                this.legendPosField = new CT_LegendPos();
+            return this.legendPosField;
         }
 
+        private bool legendPosSpecifiedField;
+        [XmlIgnore]
+        public bool legendPosSpecified
+        {
+            get { return legendPosSpecifiedField; }
+            set { legendPosSpecifiedField = value; }
+        }
         [XmlElement(Order = 0)]
         public CT_LegendPos legendPos
         {
@@ -1157,7 +1174,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.legendEntryField = value;
             }
         }
-
+        public bool IsSetLayout()
+        {
+            return layoutSpecifiedField;
+        }
+        private bool layoutSpecifiedField;
+        [XmlIgnore]
+        public bool layoutSpecified
+        {
+            get { return layoutSpecifiedField; }
+            set { layoutSpecifiedField = value; }
+        }
         [XmlElement(Order = 2)]
         public CT_Layout layout
         {
@@ -1240,10 +1267,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Layout()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.manualLayoutField = new CT_ManualLayout();
+            //this.extLstField = new List<CT_Extension>();
+            //this.manualLayoutField = new CT_ManualLayout();
         }
-
+        public bool IsSetManualLayout()
+        {
+            return this.manualLayout!=null;
+        }
         [XmlElement(Order = 0)]
         public CT_ManualLayout manualLayout
         {
@@ -1303,18 +1333,87 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_ManualLayout()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.hField = new CT_Double();
-            this.wField = new CT_Double();
-            this.yField = new CT_Double();
-            this.xField = new CT_Double();
-            this.hModeField = new CT_LayoutMode();
-            this.wModeField = new CT_LayoutMode();
-            this.yModeField = new CT_LayoutMode();
-            this.xModeField = new CT_LayoutMode();
-            this.layoutTargetField = new CT_LayoutTarget();
+            //this.extLstField = new List<CT_Extension>();
+            //this.hField = new CT_Double();
+            //this.wField = new CT_Double();
+            //this.yField = new CT_Double();
+            //this.xField = new CT_Double();
+            //this.hModeField = new CT_LayoutMode();
+            //this.wModeField = new CT_LayoutMode();
+            //this.yModeField = new CT_LayoutMode();
+            //this.xModeField = new CT_LayoutMode();
+            //this.layoutTargetField = new CT_LayoutTarget();
         }
 
+        public bool IsSetY()
+        {
+            return this.yField != null;
+        }
+        public bool IsSetX()
+        {
+            return this.xField != null;
+        }
+        public bool IsSetW()
+        {
+            return this.wField != null;
+        }
+        public bool IsSetH()
+        {
+            return this.hField != null;
+        }
+        public bool IsSetXMode()
+        {
+            return this.xModeField != null;
+        }
+        public bool IsSetYMode()
+        {
+            return this.yModeField != null;
+        }
+        public bool IsSetWMode()
+        {
+            return this.wModeField != null;
+        }
+        public bool IsSetHMode()
+        {
+            return this.hModeField != null;
+        }
+
+        public CT_LayoutMode AddNewHMode()
+        {
+            if(this.hModeField == null)
+                this.hModeField = new CT_LayoutMode();
+            return hModeField;
+        }
+        public CT_LayoutMode AddNewWMode()
+        {
+            if (this.wModeField == null)
+                this.wModeField = new CT_LayoutMode();
+            return wModeField;
+        }
+        public CT_Double AddNewW()
+        {
+            if (this.wField == null)
+                this.wField = new CT_Double();
+            return wField;
+        }
+        public CT_Double AddNewH()
+        {
+            if (this.hField == null)
+                this.hField = new CT_Double();
+            return hField;
+        }
+        public CT_Double AddNewY()
+        {
+            if (this.yField == null)
+                this.yField = new CT_Double();
+            return yField;
+        }
+        public CT_Double AddNewX()
+        {
+            if (this.xField == null)
+                this.xField = new CT_Double();
+            return xField;
+        }        
         [XmlElement(Order = 0)]
         public CT_LayoutTarget layoutTarget
         {
@@ -2007,11 +2106,21 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Scaling()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.minField = new CT_Double();
-            this.maxField = new CT_Double();
-            this.orientationField = new CT_Orientation();
-            this.logBaseField = new CT_LogBase();
+            //this.extLstField = new List<CT_Extension>();
+            //this.minField = new CT_Double();
+            //this.maxField = new CT_Double();
+            //this.orientationField = new CT_Orientation();
+            //this.logBaseField = new CT_LogBase();
+        }
+
+        public bool IsSetMax()
+        {
+            return maxField != null;
+        }
+
+        public bool IsSetMin()
+        {
+            return minField != null;
         }
 
         [XmlElement(Order = 0)]
@@ -11297,19 +11406,33 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Chart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.showDLblsOverMaxField = new CT_Boolean();
-            this.dispBlanksAsField = new CT_DispBlanksAs();
-            this.plotVisOnlyField = new CT_Boolean();
-            this.legendField = new CT_Legend();
-            this.plotAreaField = new CT_PlotArea();
-            this.backWallField = new CT_Surface();
-            this.sideWallField = new CT_Surface();
-            this.floorField = new CT_Surface();
-            this.view3DField = new CT_View3D();
-            this.pivotFmtsField = new List<CT_PivotFmt>();
-            this.autoTitleDeletedField = new CT_Boolean();
-            this.titleField = new CT_Title();
+            //this.extLstField = new List<CT_Extension>();
+            //this.showDLblsOverMaxField = new CT_Boolean();
+            //this.dispBlanksAsField = new CT_DispBlanksAs();
+            //this.plotVisOnlyField = new CT_Boolean();
+            //this.legendField = new CT_Legend();
+            //this.plotAreaField = new CT_PlotArea();
+            //this.backWallField = new CT_Surface();
+            //this.sideWallField = new CT_Surface();
+            //this.floorField = new CT_Surface();
+            //this.view3DField = new CT_View3D();
+            //this.pivotFmtsField = new List<CT_PivotFmt>();
+            //this.autoTitleDeletedField = new CT_Boolean();
+            //this.titleField = new CT_Title();
+        }
+        public bool IsSetLegend()
+        {
+            return legendField != null;
+        }
+        public void unsetLegend()
+        {
+            legendField = null;
+        }
+        public CT_Legend AddNewLegend()
+        {
+            if(this.legendField==null)
+                this.legendField = new CT_Legend();
+            return this.legendField;
         }
 
         [XmlElement(Order = 0)]
