@@ -57,7 +57,7 @@ Time Zone: GMT+8
 Main Contribution: NPOI 1.2 Chinese Tutorial
 
 --------------------------------------------------------------------------------
-NPOI 1.2.3 above
+NPOI 1.2.3 - NPOI 1.2.5
 --------------------------------------------------------------------------------
 Antony - developer
 ------------------------------
@@ -82,6 +82,26 @@ Leon Wang - developer
 From: Xi'an, China
 Time Zone: GMT+8
 Main contribution: NPOIFS/POIFS
+
+NPOI 2.0
+--------------------------------------------------------------------------------
+Tony Qu - developer
+-------------------------------
+From: Shanghai, China
+Time Zone: GMT+8
+Main Contribution: OpenXml4Net, OpenXmlFormats, NPOI.XSSF implementation
+
+Antony - developer
+------------------------------
+From: Guangzhou, China
+Time Zone: GMT+8
+Main Contribution: XWPF implementation, OpenXmlFormats
+
+Christian Leutloff - developer
+------------------------------
+From: Germany
+Time Zone: GMT+1
+Main Contribution: OpenXmlFormats, Excel 2007 comment read
 
 ==================
 * How to join us *
