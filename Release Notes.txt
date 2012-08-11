@@ -1,9 +1,19 @@
+2.0 Alpha (August, 2012)
+New features
+a. Implement OpenXml4Net (same as System.Packaging from Microsoft). It supports both .NET 2.0 and .NET 4.0
+b. Excel 2007 read/write library (NPOI.XSSF)
+c. Word 2007 read/write library(NPOI.XWPF)
+d. NPOI.SS namespace becomes the interface shared between XSSF and HSSF
+e. Load xlsx template and save as new xlsx file (partially supported)
+f. Diagonal line in cell both in xls and xlsx
+g. Support isRightToLeft and setRightToLeft on the common spreadsheet Sheet interface, as per existing HSSF support(poi-developers)
+h. New examples for NPOI.OpenXml4Net(2 examples), NPOI.XSSF (15 examples) and NPOI.XWPF (5 examples)
+
 1.2.5 (April,2012)
 In this release, we fixed most of the bugs found in POI 3.8 beta 4. 
 
 POI Bug Fixes
 51535 - correct signed vs unsigned short reading in NDocumentInputStream(poi-developers)
-Support isRightToLeft and setRightToLeft on the common spreadsheet Sheet interface, as per existing HSSF support(poi-developers)
 50209 - Fixed evaluation of Subtotals to ignore nested subtotals(poi-developers)
 50401 - fixed EscherProperty to return property name instead of 'unknown' for complex properties (poi-developers)
 51481 - Fixed autofilters in HSSF to avoid warnings in Excel 2007(poi-developers)
@@ -26,14 +36,10 @@ Support isRightToLeft and setRightToLeft on the common spreadsheet Sheet interfa
 51273 - Formula Value Cache fix for repeated evaluations(poi-developers)
 51171 - Improved performance of SharedValueManager (poi-developers)
 51171 - Improved performance of opening large .xls files(poi-developers)
-NPOIFS Mini Streams now support extending the underlying big block stream to fit more data(poi-developers)
 51153 - Correct sizing of LbsDataSubRecord with unused padding fields(poi-developers)
 51143 - NameCommentRecord correction for writing non ASCII strings(poi-developers)
 51115 - Handle DataFormatter escaping of "." in the same way as "-" and "/"(poi-developers)
 51100 - Fix IOUtils issue for NPOIFS reading from an InputStream where every block is full(poi-developers)
-Tweak the logic for sizing the HSSFCells array on a HSSFRow to reduce memory over allocation in many use cases(poi-developers)
-Fixed NPOIFS handling of new and empty Document Nodes(poi-developers)
-Fixed NPOIFS access to Document Nodes not in the top level directory(poi-developers)
 50841 - Improved SpreadSheet DataFormatter to handle scientific notation, invalid dates and format spacers(poi-developers)
 50939 - ChartEndObjectRecord is supposed to have 6 bytes at the end, but handle it not(poi-developers)
 50912 - fixed setting named styles to HSSFCells(poi-developers)
@@ -55,7 +61,6 @@ fixed HSSFWorkbook.createCellStyle to throw exception if the maximum number of c
 49761 - Tolerate Double.NaN when reading .xls files(poi-developers)
 50211 - Use cached formula result when auto-sizing formula cells(poi-developers)
 50118 - OLE2 does allow a directory with an empty name, so support this in POIFS(poi-developers)
-Support for appending images to existing drawings in HSSF(poi-developers)
 
 NPOI Bug fixes
 a. CloneSheet with images throws exception
