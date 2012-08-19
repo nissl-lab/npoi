@@ -998,7 +998,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void SetPArray(CT_TextParagraph[] array)
         {
-            throw new NotImplementedException();
+            pField = new List<CT_TextParagraph>(array);
         }
         public CT_TextParagraph AddNewP()
         {

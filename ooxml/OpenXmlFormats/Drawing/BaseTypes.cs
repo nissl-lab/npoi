@@ -980,7 +980,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_PositiveFixedPercentage AddNewShade()
         {
-            throw new NotImplementedException();
+            
+            CT_PositiveFixedPercentage obj = new CT_PositiveFixedPercentage();
+            this.itemsElementNameField.Add(EG_ColorTransform.shade);
+            this.itemsField.Add(obj);
+            return obj;
         }
         [XmlElement("alpha", typeof(CT_PositiveFixedPercentage), Order = 0)]
         [XmlElement("alphaMod", typeof(CT_PositivePercentage), Order = 0)]

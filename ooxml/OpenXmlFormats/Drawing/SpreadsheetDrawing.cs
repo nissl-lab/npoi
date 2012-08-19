@@ -162,7 +162,15 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public void Set(CT_Shape obj)
         {
+            this.macroField = obj.macro;
+            this.textlinkField = obj.textlink;
+            this.fLocksTextField = obj.fLocksText;
+            this.fPublishedField = obj.fPublished;
 
+            this.nvSpPrField = obj.nvSpPr;
+            this.spPrField = obj.spPr;
+            this.styleField = obj.style;
+            this.txBodyField = obj.txBody;
         }
 
         public CT_ShapeNonVisual AddNewNvSpPr()
@@ -312,7 +320,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public void Set(CT_GroupShape groupShape)
         {
-            throw new NotImplementedException();
+            this.grpSpPrField = groupShape.grpSpPr;
+            this.nvGrpSpPrField = groupShape.nvGrpSpPr;
         }
 
         public CT_GroupShapeProperties AddNewGrpSpPr()
@@ -737,7 +746,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
         public void Set(CT_Connector obj)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            this.macroField = obj.macro;
+            this.fPublishField = obj.fPublished;
+            this.spPrField = obj.spPr;
+            this.styleField = obj.style;
+            this.nvCxnSpPrField = obj.nvCxnSpPr;
         }
         public CT_ConnectorNonVisual AddNewNvCxnSpPr()
         {

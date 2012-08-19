@@ -966,7 +966,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TextFont AddNewLatin()
         {
-            throw new NotImplementedException();
+            this.latinField = new CT_TextFont();
+            return this.latinField;
         }
     }
 
