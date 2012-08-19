@@ -239,7 +239,7 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.Filter = "Word|*.docx";
+            this.openFileDialog.Filter = "Word|*.docx|Excel|*.xlsx|PowerPoint|*.pptx";
             // 
             // MainForm
             // 

@@ -455,10 +455,21 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                return this.FillBackgroundXSSFColor;
+            }
+            set
+            {
+                this.FillBackgroundXSSFColor = (XSSFColor)value;
+            }
+        }
+        public XSSFColor FillBackgroundXSSFColor
+        {
+            get
+            {
                 if (!_cellXf.applyFill) return null;
 
-                int FillIndex = (int)_cellXf.fillId;
-                XSSFCellFill fg = _stylesSource.GetFillAt(FillIndex);
+                int fillIndex = (int)_cellXf.fillId;
+                XSSFCellFill fg = _stylesSource.GetFillAt(fillIndex);
 
                 XSSFColor fillBackgroundColor = fg.GetFillBackgroundColor();
                 if (fillBackgroundColor != null && _theme != null)
@@ -467,8 +478,26 @@ namespace NPOI.XSSF.UserModel
                 }
                 return fillBackgroundColor;
             }
-        }
+            set
+            {
+                CT_Fill ct = GetCTFill();
+                CT_PatternFill ptrn = ct.patternFill;
+                if (value == null)
+                {
+                    if (ptrn != null) ptrn.unsetBgColor();
+                }
+                else
+                {
+                    if (ptrn == null) ptrn = ct.AddNewPatternFill();
+                    ptrn.bgColor = (value.GetCTColor());
+                }
 
+                int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
+
+                _cellXf.fillId = (uint)(idx);
+                _cellXf.applyFill = (true);
+            }
+        }
         /**
          * Get the foreground fill color.
          * <p>
@@ -501,10 +530,27 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                return this.FillForegroundXSSFColor;
+            }
+            set
+            {
+                this.FillForegroundXSSFColor = (XSSFColor)value;
+            }
+        }
+
+        /**
+         * Get the foreground fill color.
+         *
+         * @return XSSFColor - fill color or <code>null</code> if not set
+         */
+        public XSSFColor FillForegroundXSSFColor
+        {
+            get
+            {
                 if (!_cellXf.applyFill) return null;
 
-                int FillIndex = (int)_cellXf.fillId;
-                XSSFCellFill fg = _stylesSource.GetFillAt(FillIndex);
+                int fillIndex = (int)_cellXf.fillId;
+                XSSFCellFill fg = _stylesSource.GetFillAt(fillIndex);
 
                 XSSFColor fillForegroundColor = fg.GetFillForegroundColor();
                 if (fillForegroundColor != null && _theme != null)
@@ -513,9 +559,27 @@ namespace NPOI.XSSF.UserModel
                 }
                 return fillForegroundColor;
             }
+            set
+            {
+                CT_Fill ct = GetCTFill();
+
+                CT_PatternFill ptrn = ct.patternFill;
+                if (value == null)
+                {
+                    if (ptrn != null) ptrn.unsetFgColor();
+                }
+                else
+                {
+                    if (ptrn == null) ptrn = ct.AddNewPatternFill();
+                    ptrn.fgColor = (value.GetCTColor());
+                }
+
+                int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
+
+                _cellXf.fillId = (uint)(idx);
+                _cellXf.applyFill = (true);
+            }
         }
-
-
         public FillPatternType FillPattern
         {
             get

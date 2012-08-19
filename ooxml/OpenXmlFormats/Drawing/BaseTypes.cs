@@ -2215,7 +2215,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.schemeClrField = new CT_SchemeColor();
             this.sysClrField = new CT_SystemColor();
             this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
+            //this.srgbClrField = new CT_SRgbColor();
             this.scrgbClrField = new CT_ScRgbColor();
         }
 

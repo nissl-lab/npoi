@@ -72,7 +72,7 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50299.xlsx");
 
             // Check the CTColor is as expected
-            XSSFColor rgb3 = (XSSFColor)((XSSFCellStyle)wb.GetCellStyleAt((short)25)).FillBackgroundColorColor;
+            XSSFColor rgb3 = (XSSFColor)((XSSFCellStyle)wb.GetCellStyleAt((short)25)).FillForegroundXSSFColor;
             Assert.AreEqual(false, rgb3.GetCTColor().IsSetIndexed());
             Assert.AreEqual(0, rgb3.GetCTColor().indexed);
             Assert.AreEqual(true, rgb3.GetCTColor().IsSetTint());
