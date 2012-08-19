@@ -217,7 +217,8 @@ namespace NPOI.XSSF.UserModel
             CT_Font ctFont = new CT_Font();
             CT_Color color = ctFont.AddNewColor();
 
-            color.SetRgb(255, 255, 255);
+            //Integer.toHexString(0xFFFFFF).getBytes() = [102, 102, 102, 102, 102, 102]
+            color.SetRgb(Encoding.ASCII.GetBytes("ffffff"));
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
@@ -226,7 +227,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().GetRgb()[2]);
             Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().GetRgb()[3]);
 
-            color.SetRgb(0xF1, 0xF1, 0xF1);
+            //Integer.toHexString(0xF1F1F1).getBytes() = [102, 49, 102, 49, 102, 49]
+            color.SetRgb(Encoding.ASCII.GetBytes("f1f1f1"));
             XSSFColor newColor = new XSSFColor(color);
             xssfFont.SetColor(newColor);
             Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.GetRgb()[2]);
