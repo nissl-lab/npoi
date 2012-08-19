@@ -23,6 +23,7 @@ namespace NPOI.SS.Format
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using TestCases.SS.Format;
+    using System.Globalization;
 
 
 
@@ -147,7 +148,7 @@ namespace NPOI.SS.Format
                 if (part != null)
                     sb.Append(part);
             }
-            return double.Parse(sb.ToString());
+            return double.Parse(sb.ToString(), CultureInfo.InvariantCulture);
         }
     }
 }

@@ -73,13 +73,12 @@ namespace NPOI.Tools.POIFSBrowser
             }
             else if (record is PageSettingsBlock)
             {
-                IEnumerator recordenum = ((PageSettingsBlock)record).GetEnumerator();
-                while (recordenum.MoveNext())
+                PageSettingsBlock psb = (PageSettingsBlock)record;
+                MockRecordVisitor rv = new MockRecordVisitor();
+                psb.VisitContainedRecords(rv);
+                foreach (Record rec in rv.Records)
                 {
-                    if (recordenum.Current is Record)
-                    {
-                        this.Nodes.Add(new RecordTreeNode((Record)recordenum.Current));
-                    }
+                    this.Nodes.Add(new RecordTreeNode(rec));
                 }
             }
             else if (record is MergedCellsTable)

@@ -18,6 +18,7 @@ namespace NPOI.SS.Format
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
 
 
 
@@ -140,7 +141,7 @@ namespace NPOI.SS.Format
                 throw new ArgumentException("Unknown test: " + opString);
             int test = TESTS[(opString)];
 
-            double c = Double.Parse(constStr);
+            double c = Double.Parse(constStr, CultureInfo.InvariantCulture);
 
             switch (test)
             {

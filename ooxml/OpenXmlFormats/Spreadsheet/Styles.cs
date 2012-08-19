@@ -1907,7 +1907,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetBArray(CT_BooleanProperty[] array)
         {
-            this.bField = new List<CT_BooleanProperty>(array);
+            if (array == null)
+                this.bField = null;
+            else
+                this.bField = new List<CT_BooleanProperty>(array);
         }
         public CT_BooleanProperty GetBArray(int index)
         {

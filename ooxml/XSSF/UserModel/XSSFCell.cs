@@ -25,6 +25,7 @@ using NPOI.SS.Formula;
 using NPOI.SS;
 using NPOI.Util;
 using NPOI.SS.Formula.Eval;
+using System.Globalization;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -203,7 +204,7 @@ namespace NPOI.XSSF.UserModel
                         {
                             try
                             {
-                                return Double.Parse(_cell.v);
+                                return Double.Parse(_cell.v, CultureInfo.InvariantCulture);
                             }
                             catch (FormatException)
                             {
@@ -1047,7 +1048,7 @@ namespace NPOI.XSSF.UserModel
                     String text = rt.String;
                     return Boolean.Parse(text);
                 case CellType.NUMERIC:
-                    return Double.Parse(_cell.v) != 0;
+                    return Double.Parse(_cell.v, CultureInfo.InvariantCulture) != 0;
 
                 case CellType.ERROR:
                 case CellType.BLANK:
