@@ -11,7 +11,7 @@ namespace NPOI.OpenXmlFormats
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_ExtendedProperties));
         internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"),
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"),
             new XmlQualifiedName("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")
         });
 

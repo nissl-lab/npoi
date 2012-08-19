@@ -18,12 +18,9 @@
 namespace NPOI.XWPF
 {
     using System;
-
-
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NPOI.XWPF.UserModel;
     using NPOI.OpenXmlFormats;
+    using NUnit.Framework;
 
     /**
      * Tests if the {@link CoreProperties#getKeywords()} method. This test has been
@@ -38,10 +35,10 @@ namespace NPOI.XWPF
      * @author Antoni Mylka
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestAllExtendedProperties
     {
-        [TestMethod]
+        [Test]
         public void TestGetAllExtendedProperties()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestPoiXMLDocumentCorePropertiesGetKeywords.docx");
@@ -56,14 +53,11 @@ namespace NPOI.XWPF
             //Assert.IsNotNull(ctProps.DomNode);
 
             CT_VectorVariant vec = ctProps.HeadingPairs;
-            //Assert.AreEqual(2, vec.Vector.SizeOfVariantArray());
-            //Assert.AreEqual("Title", vec.Vector.GetVariantArray(0).Lpstr);
-            //Assert.AreEqual(1, vec.Vector.GetVariantArray(1).I4);
-            Assert.AreEqual(2, vec.vector.Items.Length);
-            Assert.AreEqual("Title", vec.vector.Items[0].ToString());
-            Assert.AreEqual("1", vec.vector.Items[1].ToString());
+            Assert.AreEqual(2, vec.vector.SizeOfVariantArray());
+            Assert.AreEqual("Title", vec.vector.GetVariantArray(0).lpstr);
+            Assert.AreEqual(1, vec.vector.GetVariantArray(1).i4);
 
-            //Assert.IsFalse(ctProps.IsSetHiddenSlides());
+            Assert.IsFalse(ctProps.IsSetHiddenSlides());
             Assert.AreEqual(0, ctProps.HiddenSlides);
             Assert.IsFalse(ctProps.IsSetHLinks());
             Assert.IsNull(ctProps.HLinks);
@@ -90,8 +84,8 @@ namespace NPOI.XWPF
             Assert.AreEqual("Normal.dotm", ctProps.Template);
 
             CT_VectorLpstr vec2 = ctProps.TitlesOfParts;
-            Assert.AreEqual(1, vec2.Vector.SizeOfLpstrArray());
-            Assert.AreEqual("Example Word 2010 Document", vec2.Vector.GetLpstrArray(0));
+            Assert.AreEqual(1, vec2.vector.SizeOfLpstrArray());
+            Assert.AreEqual("Example Word 2010 Document", vec2.vector.GetLpstrArray(0));
 
             Assert.AreEqual(3, ctProps.TotalTime);
             Assert.AreEqual(10, ctProps.Words);

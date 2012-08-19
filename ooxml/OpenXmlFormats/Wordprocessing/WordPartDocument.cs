@@ -24,11 +24,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public static DocumentDocument Parse(Stream stream)
         {
-            XmlTextReader xmlReader = new XmlTextReader(stream);
-            xmlReader.WhitespaceHandling = WhitespaceHandling.All;
-            CT_Document obj = (CT_Document)serializer.Deserialize(xmlReader);
+            XmlReaderSettings xmlrs = new XmlReaderSettings();
+            xmlrs.IgnoreWhitespace = false;
+            using (XmlReader xmlr = XmlReader.Create(stream, xmlrs))
+            {
+                CT_Document obj = (CT_Document)serializer.Deserialize(xmlr);
+                return new DocumentDocument(obj);
+            }
+            //XmlTextReader xmlReader = new XmlTextReader(stream);
+            //xmlReader.WhitespaceHandling = WhitespaceHandling.All;
+            
 
-            return new DocumentDocument(obj);
+            
         }
 
         public DocumentDocument(CT_Document document)

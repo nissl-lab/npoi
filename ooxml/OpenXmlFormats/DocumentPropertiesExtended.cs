@@ -304,6 +304,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.slidesField = value;
+                this.slidesFieldSpecified = true;
             }
         }
 
@@ -331,6 +332,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.notesField = value;
+                this.notesFieldSpecified = true;
             }
         }
 
@@ -385,6 +387,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.hiddenSlidesField = value;
+                this.hiddenSlidesFieldSpecified = true;
             }
         }
 
@@ -412,6 +415,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.mMClipsField = value;
+                this.mMClipsFieldSpecified = true;
             }
         }
 
@@ -438,6 +442,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.scaleCropField = value;
+                this.scaleCropFieldSpecified = true;
             }
         }
 
@@ -455,18 +460,18 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-        //[XmlElement]
-        //public CT_VectorVariant HeadingPairs
-        //{
-        //    get
-        //    {
-        //        return this.headingPairsField;
-        //    }
-        //    set
-        //    {
-        //        this.headingPairsField = value;
-        //    }
-        //}
+        [XmlElement]
+        public CT_VectorVariant HeadingPairs
+        {
+            get
+            {
+                return this.headingPairsField;
+            }
+            set
+            {
+                this.headingPairsField = value;
+            }
+        }
 
         [XmlElement]
         public CT_VectorLpstr TitlesOfParts
@@ -491,6 +496,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.linksUpToDateField = value;
+                this.linksUpToDateFieldSpecified = true;
             }
         }
 
@@ -545,6 +551,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.sharedDocField = value;
+                this.sharedDocFieldSpecified = true;
             }
         }
 
@@ -598,6 +605,7 @@ namespace NPOI.OpenXmlFormats
             set
             {
                 this.hyperlinksChangedField = value;
+                this.hyperlinksChangedFieldSpecified = true;
             }
         }
     
@@ -721,6 +729,56 @@ namespace NPOI.OpenXmlFormats
             prop.wordsField = this.wordsField;
             return prop;
         }
+
+        public CT_VectorVariant GetHeadingPairs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetHiddenSlides()
+        {
+            return this.hiddenSlidesFieldSpecified;
+        }
+
+        public bool IsSetHLinks()
+        {
+            return this.hLinksField != null;
+        }
+
+        public bool IsSetHyperlinksChanged()
+        {
+            return this.hyperlinksChangedFieldSpecified;
+        }
+
+        public bool IsSetLinksUpToDate()
+        {
+            return this.linksUpToDateFieldSpecified;
+        }
+
+        public bool IsSetMMClips()
+        {
+            return this.mMClipsFieldSpecified;
+        }
+
+        public bool IsSetNotes()
+        {
+            return this.notesFieldSpecified;
+        }
+
+        public bool IsSetScaleCrop()
+        {
+            return this.scaleCropFieldSpecified;
+        }
+
+        public bool IsSetSharedDoc()
+        {
+            return this.sharedDocFieldSpecified;
+        }
+
+        public bool IsSetSlides()
+        {
+            return this.slidesFieldSpecified;
+        }
     }
 
     [Serializable]
@@ -737,7 +795,8 @@ namespace NPOI.OpenXmlFormats
         {
             //this.vectorField = new CT_Vector();
         }
-        [XmlElement]
+
+        [XmlElement(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes", Order = 0)]
         public CT_Vector vector
         {
             get
