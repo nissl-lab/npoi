@@ -228,15 +228,6 @@ namespace NPOI.OpenXmlFormats
 
             return true;
         }
-        public override int GetHashCode()
-        {
-            return this.fmtidField.GetHashCode() ^
-                this.itemField.GetHashCode() ^
-                this.itemElementNameField.GetHashCode() ^
-                this.linkTargetField.GetHashCode() ^
-                this.nameField.GetHashCode() ^
-                this.pidField.GetHashCode();
-        }
     }
 
 
