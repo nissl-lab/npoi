@@ -175,18 +175,23 @@ namespace NPOI.Tools.POIFSBrowser
                         streamTabControl.TabPages.Remove(tabPageBinary);
                     }
                 }
-
+                if (!streamTabControl.TabPages.ContainsKey("tabPageProperties"))
+                {
+                    streamTabControl.TabPages.Add(tabPageProperties);
+                }    
                 propertiesListView.Items.AddRange(node.GetPropertyList());
-
-                //if (!streamTabControl.TabPages.ContainsKey("tabPageProperties"))
-                //{
-                //    streamTabControl.TabPages.Add(tabPageProperties);
-                //}
 
                 if (!streamTabControl.TabPages.ContainsKey("tabPageBinary"))
                 {
                     streamTabControl.TabPages.Add(tabPageBinary);
                 }
+            }
+            else
+            {
+                if (!streamTabControl.TabPages.ContainsKey("tabPageProperties"))
+                {
+                    streamTabControl.TabPages.Add(tabPageProperties);
+                }            
             }
 
         }
