@@ -433,11 +433,11 @@ namespace NPOI.DDF
                 AddProp(GEOMETRY__LINEOK, GetData("geometry.lineok"));
                 AddProp(GEOMETRY__GEOTEXTOK, GetData("geometry.geotextok"));
                 AddProp(GEOMETRY__FILLSHADESHAPEOK, GetData("geometry.fillshadeshapeok"));
-                AddProp(GEOMETRY__FILLOK, GetData("geometry.Fillok", EscherPropertyMetaData.TYPE_bool));
-                AddProp(FILL__FILLTYPE, GetData("fill.Filltype"));
-                AddProp(FILL__FILLCOLOR, GetData("fill.Fillcolor", EscherPropertyMetaData.TYPE_RGB));
-                AddProp(FILL__FILLOPACITY, GetData("fill.Fillopacity"));
-                AddProp(FILL__FILLBACKCOLOR, GetData("fill.Fillbackcolor", EscherPropertyMetaData.TYPE_RGB));
+                AddProp(GEOMETRY__FILLOK, GetData("geometry.fillok", EscherPropertyMetaData.TYPE_bool));
+                AddProp(FILL__FILLTYPE, GetData("fill.filltype"));
+                AddProp(FILL__FILLCOLOR, GetData("fill.fillcolor", EscherPropertyMetaData.TYPE_RGB));
+                AddProp(FILL__FILLOPACITY, GetData("fill.fillopacity"));
+                AddProp(FILL__FILLBACKCOLOR, GetData("fill.fillbackcolor", EscherPropertyMetaData.TYPE_RGB));
                 AddProp(FILL__BACKOPACITY, GetData("fill.backopacity"));
                 AddProp(FILL__CRMOD, GetData("fill.crmod"));
                 AddProp(FILL__PATTERNTEXTURE, GetData("fill.patterntexture"));
@@ -463,7 +463,7 @@ namespace NPOI.DDF
                 AddProp(FILL__SHAPEORIGINX, GetData("fill.shapeoriginx"));
                 AddProp(FILL__SHAPEORIGINY, GetData("fill.shapeoriginy"));
                 AddProp(FILL__SHADETYPE, GetData("fill.shadetype"));
-                AddProp(FILL__FILLED, GetData("fill.Filled"));
+                AddProp(FILL__FILLED, GetData("fill.filled"));
                 AddProp(FILL__HITTESTFILL, GetData("fill.hittestfill"));
                 AddProp(FILL__SHAPE, GetData("fill.shape"));
                 AddProp(FILL__USERECT, GetData("fill.userect"));
