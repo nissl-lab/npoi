@@ -416,6 +416,10 @@ namespace NPOI.SS.UserModel
             // Otherwise, Check it's only made up, in any case, of:
             //  y m d h s - / , . :
             // optionally followed by AM/PM
+
+            // Delete any string literals.
+            fs = Regex.Replace(fs, @"""[^""\\]*(?:\\.[^""\\]*)*""", "");
+
             if (Regex.IsMatch(fs, @"^[\[\]yYmMdDhHsS\-/,. :\""\\]+0*[ampAMP/]*$"))
             {
                 return true;
