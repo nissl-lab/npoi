@@ -248,7 +248,7 @@ using System.Globalization;
                 string matchedstring = match.Value;
                 int beginpos = matchedstring.IndexOf('$') + 1;
                 int endpos = matchedstring.IndexOf('-');
-                String symbol = matchedstring.Substring(beginpos, endpos - beginpos + 1);
+                String symbol = matchedstring.Substring(beginpos, endpos - beginpos);
 
                 if (symbol.IndexOf('$') > -1)
                 {
