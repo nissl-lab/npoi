@@ -485,6 +485,7 @@
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationSheet.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationWorkbook.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluator.cs" />
+    <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />

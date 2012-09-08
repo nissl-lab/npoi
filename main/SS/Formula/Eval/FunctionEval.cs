@@ -213,7 +213,7 @@ namespace NPOI.SS.Formula.Eval
             retval[123] = new NotImplementedFunction(); // DIRECTORY
             retval[124] = TextFunction.FIND; // Find
             retval[125] = new NotImplementedFunction(); // CELL
-            retval[126] = new NotImplementedFunction(); // IsERR
+            retval[126] = LogicalFunction.ISERR; // IsERR
             retval[127] = LogicalFunction.ISTEXT; // IsTEXT
             retval[128] = LogicalFunction.ISNUMBER; // IsNUMBER
             retval[129] = LogicalFunction.ISBLANK; // IsBLANK
