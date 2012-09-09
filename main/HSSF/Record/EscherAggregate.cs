@@ -78,209 +78,209 @@ namespace NPOI.HSSF.Record
         public const short sid = 9876;
         private static POILogger log = POILogFactory.GetLogger(typeof(EscherAggregate));
 
-        public static short ST_MIN = (short)0;
-        public static short ST_NOT_PRIMATIVE = ST_MIN;
-        public static short ST_RECTANGLE = (short)1;
-        public static short ST_ROUNDRECTANGLE = (short)2;
-        public static short ST_ELLIPSE = (short)3;
-        public static short ST_DIAMOND = (short)4;
-        public static short ST_ISOCELESTRIANGLE = (short)5;
-        public static short ST_RIGHTTRIANGLE = (short)6;
-        public static short ST_PARALLELOGRAM = (short)7;
-        public static short ST_TRAPEZOID = (short)8;
-        public static short ST_HEXAGON = (short)9;
-        public static short ST_OCTAGON = (short)10;
-        public static short ST_PLUS = (short)11;
-        public static short ST_STAR = (short)12;
-        public static short ST_ARROW = (short)13;
-        public static short ST_THICKARROW = (short)14;
-        public static short ST_HOMEPLATE = (short)15;
-        public static short ST_CUBE = (short)16;
-        public static short ST_BALLOON = (short)17;
-        public static short ST_SEAL = (short)18;
-        public static short ST_ARC = (short)19;
-        public static short ST_LINE = (short)20;
-        public static short ST_PLAQUE = (short)21;
-        public static short ST_CAN = (short)22;
-        public static short ST_DONUT = (short)23;
-        public static short ST_TEXTSIMPLE = (short)24;
-        public static short ST_TEXTOCTAGON = (short)25;
-        public static short ST_TEXTHEXAGON = (short)26;
-        public static short ST_TEXTCURVE = (short)27;
-        public static short ST_TEXTWAVE = (short)28;
-        public static short ST_TEXTRING = (short)29;
-        public static short ST_TEXTONCURVE = (short)30;
-        public static short ST_TEXTONRING = (short)31;
-        public static short ST_STRAIGHTCONNECTOR1 = (short)32;
-        public static short ST_BENTCONNECTOR2 = (short)33;
-        public static short ST_BENTCONNECTOR3 = (short)34;
-        public static short ST_BENTCONNECTOR4 = (short)35;
-        public static short ST_BENTCONNECTOR5 = (short)36;
-        public static short ST_CURVEDCONNECTOR2 = (short)37;
-        public static short ST_CURVEDCONNECTOR3 = (short)38;
-        public static short ST_CURVEDCONNECTOR4 = (short)39;
-        public static short ST_CURVEDCONNECTOR5 = (short)40;
-        public static short ST_CALLOUT1 = (short)41;
-        public static short ST_CALLOUT2 = (short)42;
-        public static short ST_CALLOUT3 = (short)43;
-        public static short ST_ACCENTCALLOUT1 = (short)44;
-        public static short ST_ACCENTCALLOUT2 = (short)45;
-        public static short ST_ACCENTCALLOUT3 = (short)46;
-        public static short ST_BORDERCALLOUT1 = (short)47;
-        public static short ST_BORDERCALLOUT2 = (short)48;
-        public static short ST_BORDERCALLOUT3 = (short)49;
-        public static short ST_ACCENTBORDERCALLOUT1 = (short)50;
-        public static short ST_ACCENTBORDERCALLOUT2 = (short)51;
-        public static short ST_ACCENTBORDERCALLOUT3 = (short)52;
-        public static short ST_RIBBON = (short)53;
-        public static short ST_RIBBON2 = (short)54;
-        public static short ST_CHEVRON = (short)55;
-        public static short ST_PENTAGON = (short)56;
-        public static short ST_NOSMOKING = (short)57;
-        public static short ST_SEAL8 = (short)58;
-        public static short ST_SEAL16 = (short)59;
-        public static short ST_SEAL32 = (short)60;
-        public static short ST_WEDGERECTCALLOUT = (short)61;
-        public static short ST_WEDGERRECTCALLOUT = (short)62;
-        public static short ST_WEDGEELLIPSECALLOUT = (short)63;
-        public static short ST_WAVE = (short)64;
-        public static short ST_FOLDEDCORNER = (short)65;
-        public static short ST_LEFTARROW = (short)66;
-        public static short ST_DOWNARROW = (short)67;
-        public static short ST_UPARROW = (short)68;
-        public static short ST_LEFTRIGHTARROW = (short)69;
-        public static short ST_UPDOWNARROW = (short)70;
-        public static short ST_IRREGULARSEAL1 = (short)71;
-        public static short ST_IRREGULARSEAL2 = (short)72;
-        public static short ST_LIGHTNINGBOLT = (short)73;
-        public static short ST_HEART = (short)74;
+        public const short ST_MIN = (short)0;
+        public const short ST_NOT_PRIMATIVE = ST_MIN;
+        public const short ST_RECTANGLE = (short)1;
+        public const short ST_ROUNDRECTANGLE = (short)2;
+        public const short ST_ELLIPSE = (short)3;
+        public const short ST_DIAMOND = (short)4;
+        public const short ST_ISOCELESTRIANGLE = (short)5;
+        public const short ST_RIGHTTRIANGLE = (short)6;
+        public const short ST_PARALLELOGRAM = (short)7;
+        public const short ST_TRAPEZOID = (short)8;
+        public const short ST_HEXAGON = (short)9;
+        public const short ST_OCTAGON = (short)10;
+        public const short ST_PLUS = (short)11;
+        public const short ST_STAR = (short)12;
+        public const short ST_ARROW = (short)13;
+        public const short ST_THICKARROW = (short)14;
+        public const short ST_HOMEPLATE = (short)15;
+        public const short ST_CUBE = (short)16;
+        public const short ST_BALLOON = (short)17;
+        public const short ST_SEAL = (short)18;
+        public const short ST_ARC = (short)19;
+        public const short ST_LINE = (short)20;
+        public const short ST_PLAQUE = (short)21;
+        public const short ST_CAN = (short)22;
+        public const short ST_DONUT = (short)23;
+        public const short ST_TEXTSIMPLE = (short)24;
+        public const short ST_TEXTOCTAGON = (short)25;
+        public const short ST_TEXTHEXAGON = (short)26;
+        public const short ST_TEXTCURVE = (short)27;
+        public const short ST_TEXTWAVE = (short)28;
+        public const short ST_TEXTRING = (short)29;
+        public const short ST_TEXTONCURVE = (short)30;
+        public const short ST_TEXTONRING = (short)31;
+        public const short ST_STRAIGHTCONNECTOR1 = (short)32;
+        public const short ST_BENTCONNECTOR2 = (short)33;
+        public const short ST_BENTCONNECTOR3 = (short)34;
+        public const short ST_BENTCONNECTOR4 = (short)35;
+        public const short ST_BENTCONNECTOR5 = (short)36;
+        public const short ST_CURVEDCONNECTOR2 = (short)37;
+        public const short ST_CURVEDCONNECTOR3 = (short)38;
+        public const short ST_CURVEDCONNECTOR4 = (short)39;
+        public const short ST_CURVEDCONNECTOR5 = (short)40;
+        public const short ST_CALLOUT1 = (short)41;
+        public const short ST_CALLOUT2 = (short)42;
+        public const short ST_CALLOUT3 = (short)43;
+        public const short ST_ACCENTCALLOUT1 = (short)44;
+        public const short ST_ACCENTCALLOUT2 = (short)45;
+        public const short ST_ACCENTCALLOUT3 = (short)46;
+        public const short ST_BORDERCALLOUT1 = (short)47;
+        public const short ST_BORDERCALLOUT2 = (short)48;
+        public const short ST_BORDERCALLOUT3 = (short)49;
+        public const short ST_ACCENTBORDERCALLOUT1 = (short)50;
+        public const short ST_ACCENTBORDERCALLOUT2 = (short)51;
+        public const short ST_ACCENTBORDERCALLOUT3 = (short)52;
+        public const short ST_RIBBON = (short)53;
+        public const short ST_RIBBON2 = (short)54;
+        public const short ST_CHEVRON = (short)55;
+        public const short ST_PENTAGON = (short)56;
+        public const short ST_NOSMOKING = (short)57;
+        public const short ST_SEAL8 = (short)58;
+        public const short ST_SEAL16 = (short)59;
+        public const short ST_SEAL32 = (short)60;
+        public const short ST_WEDGERECTCALLOUT = (short)61;
+        public const short ST_WEDGERRECTCALLOUT = (short)62;
+        public const short ST_WEDGEELLIPSECALLOUT = (short)63;
+        public const short ST_WAVE = (short)64;
+        public const short ST_FOLDEDCORNER = (short)65;
+        public const short ST_LEFTARROW = (short)66;
+        public const short ST_DOWNARROW = (short)67;
+        public const short ST_UPARROW = (short)68;
+        public const short ST_LEFTRIGHTARROW = (short)69;
+        public const short ST_UPDOWNARROW = (short)70;
+        public const short ST_IRREGULARSEAL1 = (short)71;
+        public const short ST_IRREGULARSEAL2 = (short)72;
+        public const short ST_LIGHTNINGBOLT = (short)73;
+        public const short ST_HEART = (short)74;
         public const short ST_PICTUREFRAME = (short)75;
-        public static short ST_QUADARROW = (short)76;
-        public static short ST_LEFTARROWCALLOUT = (short)77;
-        public static short ST_RIGHTARROWCALLOUT = (short)78;
-        public static short ST_UPARROWCALLOUT = (short)79;
-        public static short ST_DOWNARROWCALLOUT = (short)80;
-        public static short ST_LEFTRIGHTARROWCALLOUT = (short)81;
-        public static short ST_UPDOWNARROWCALLOUT = (short)82;
-        public static short ST_QUADARROWCALLOUT = (short)83;
-        public static short ST_BEVEL = (short)84;
-        public static short ST_LEFTBRACKET = (short)85;
-        public static short ST_RIGHTBRACKET = (short)86;
-        public static short ST_LEFTBRACE = (short)87;
-        public static short ST_RIGHTBRACE = (short)88;
-        public static short ST_LEFTUPARROW = (short)89;
-        public static short ST_BENTUPARROW = (short)90;
-        public static short ST_BENTARROW = (short)91;
-        public static short ST_SEAL24 = (short)92;
-        public static short ST_STRIPEDRIGHTARROW = (short)93;
-        public static short ST_NOTCHEDRIGHTARROW = (short)94;
-        public static short ST_BLOCKARC = (short)95;
-        public static short ST_SMILEYFACE = (short)96;
-        public static short ST_VERTICALSCROLL = (short)97;
-        public static short ST_HORIZONTALSCROLL = (short)98;
-        public static short ST_CIRCULARARROW = (short)99;
-        public static short ST_NOTCHEDCIRCULARARROW = (short)100;
-        public static short ST_UTURNARROW = (short)101;
-        public static short ST_CURVEDRIGHTARROW = (short)102;
-        public static short ST_CURVEDLEFTARROW = (short)103;
-        public static short ST_CURVEDUPARROW = (short)104;
-        public static short ST_CURVEDDOWNARROW = (short)105;
-        public static short ST_CLOUDCALLOUT = (short)106;
-        public static short ST_ELLIPSERIBBON = (short)107;
-        public static short ST_ELLIPSERIBBON2 = (short)108;
-        public static short ST_FLOWCHARTProcess = (short)109;
-        public static short ST_FLOWCHARTDECISION = (short)110;
-        public static short ST_FLOWCHARTINPUTOUTPUT = (short)111;
-        public static short ST_FLOWCHARTPREDEFINEDProcess = (short)112;
-        public static short ST_FLOWCHARTINTERNALSTORAGE = (short)113;
-        public static short ST_FLOWCHARTDOCUMENT = (short)114;
-        public static short ST_FLOWCHARTMULTIDOCUMENT = (short)115;
-        public static short ST_FLOWCHARTTERMINATOR = (short)116;
-        public static short ST_FLOWCHARTPREPARATION = (short)117;
-        public static short ST_FLOWCHARTMANUALINPUT = (short)118;
-        public static short ST_FLOWCHARTMANUALOPERATION = (short)119;
-        public static short ST_FLOWCHARTCONNECTOR = (short)120;
-        public static short ST_FLOWCHARTPUNCHEDCARD = (short)121;
-        public static short ST_FLOWCHARTPUNCHEDTAPE = (short)122;
-        public static short ST_FLOWCHARTSUMMINGJUNCTION = (short)123;
-        public static short ST_FLOWCHARTOR = (short)124;
-        public static short ST_FLOWCHARTCOLLATE = (short)125;
-        public static short ST_FLOWCHARTSORT = (short)126;
-        public static short ST_FLOWCHARTEXTRACT = (short)127;
-        public static short ST_FLOWCHARTMERGE = (short)128;
-        public static short ST_FLOWCHARTOFFLINESTORAGE = (short)129;
-        public static short ST_FLOWCHARTONLINESTORAGE = (short)130;
-        public static short ST_FLOWCHARTMAGNETICTAPE = (short)131;
-        public static short ST_FLOWCHARTMAGNETICDISK = (short)132;
-        public static short ST_FLOWCHARTMAGNETICDRUM = (short)133;
-        public static short ST_FLOWCHARTDISPLAY = (short)134;
-        public static short ST_FLOWCHARTDELAY = (short)135;
-        public static short ST_TEXTPLAINTEXT = (short)136;
-        public static short ST_TEXTSTOP = (short)137;
-        public static short ST_TEXTTRIANGLE = (short)138;
-        public static short ST_TEXTTRIANGLEINVERTED = (short)139;
-        public static short ST_TEXTCHEVRON = (short)140;
-        public static short ST_TEXTCHEVRONINVERTED = (short)141;
-        public static short ST_TEXTRINGINSIDE = (short)142;
-        public static short ST_TEXTRINGOUTSIDE = (short)143;
-        public static short ST_TEXTARCHUPCURVE = (short)144;
-        public static short ST_TEXTARCHDOWNCURVE = (short)145;
-        public static short ST_TEXTCIRCLECURVE = (short)146;
-        public static short ST_TEXTBUTTONCURVE = (short)147;
-        public static short ST_TEXTARCHUPPOUR = (short)148;
-        public static short ST_TEXTARCHDOWNPOUR = (short)149;
-        public static short ST_TEXTCIRCLEPOUR = (short)150;
-        public static short ST_TEXTBUTTONPOUR = (short)151;
-        public static short ST_TEXTCURVEUP = (short)152;
-        public static short ST_TEXTCURVEDOWN = (short)153;
-        public static short ST_TEXTCASCADEUP = (short)154;
-        public static short ST_TEXTCASCADEDOWN = (short)155;
-        public static short ST_TEXTWAVE1 = (short)156;
-        public static short ST_TEXTWAVE2 = (short)157;
-        public static short ST_TEXTWAVE3 = (short)158;
-        public static short ST_TEXTWAVE4 = (short)159;
-        public static short ST_TEXTINFLATE = (short)160;
-        public static short ST_TEXTDEFLATE = (short)161;
-        public static short ST_TEXTINFLATEBOTTOM = (short)162;
-        public static short ST_TEXTDEFLATEBOTTOM = (short)163;
-        public static short ST_TEXTINFLATETOP = (short)164;
-        public static short ST_TEXTDEFLATETOP = (short)165;
-        public static short ST_TEXTDEFLATEINFLATE = (short)166;
-        public static short ST_TEXTDEFLATEINFLATEDEFLATE = (short)167;
-        public static short ST_TEXTFADERIGHT = (short)168;
-        public static short ST_TEXTFADELEFT = (short)169;
-        public static short ST_TEXTFADEUP = (short)170;
-        public static short ST_TEXTFADEDOWN = (short)171;
-        public static short ST_TEXTSLANTUP = (short)172;
-        public static short ST_TEXTSLANTDOWN = (short)173;
-        public static short ST_TEXTCANUP = (short)174;
-        public static short ST_TEXTCANDOWN = (short)175;
-        public static short ST_FLOWCHARTALTERNATEProcess = (short)176;
-        public static short ST_FLOWCHARTOFFPAGECONNECTOR = (short)177;
-        public static short ST_CALLOUT90 = (short)178;
-        public static short ST_ACCENTCALLOUT90 = (short)179;
-        public static short ST_BORDERCALLOUT90 = (short)180;
-        public static short ST_ACCENTBORDERCALLOUT90 = (short)181;
-        public static short ST_LEFTRIGHTUPARROW = (short)182;
-        public static short ST_SUN = (short)183;
-        public static short ST_MOON = (short)184;
-        public static short ST_BRACKETPAIR = (short)185;
-        public static short ST_BRACEPAIR = (short)186;
-        public static short ST_SEAL4 = (short)187;
-        public static short ST_DOUBLEWAVE = (short)188;
-        public static short ST_ACTIONBUTTONBLANK = (short)189;
-        public static short ST_ACTIONBUTTONHOME = (short)190;
-        public static short ST_ACTIONBUTTONHELP = (short)191;
-        public static short ST_ACTIONBUTTONINFORMATION = (short)192;
-        public static short ST_ACTIONBUTTONFORWARDNEXT = (short)193;
-        public static short ST_ACTIONBUTTONBACKPREVIOUS = (short)194;
-        public static short ST_ACTIONBUTTONEND = (short)195;
-        public static short ST_ACTIONBUTTONBEGINNING = (short)196;
-        public static short ST_ACTIONBUTTONRETURN = (short)197;
-        public static short ST_ACTIONBUTTONDOCUMENT = (short)198;
-        public static short ST_ACTIONBUTTONSOUND = (short)199;
-        public static short ST_ACTIONBUTTONMOVIE = (short)200;
-        public static short ST_HOSTCONTROL = (short)201;
+        public const short ST_QUADARROW = (short)76;
+        public const short ST_LEFTARROWCALLOUT = (short)77;
+        public const short ST_RIGHTARROWCALLOUT = (short)78;
+        public const short ST_UPARROWCALLOUT = (short)79;
+        public const short ST_DOWNARROWCALLOUT = (short)80;
+        public const short ST_LEFTRIGHTARROWCALLOUT = (short)81;
+        public const short ST_UPDOWNARROWCALLOUT = (short)82;
+        public const short ST_QUADARROWCALLOUT = (short)83;
+        public const short ST_BEVEL = (short)84;
+        public const short ST_LEFTBRACKET = (short)85;
+        public const short ST_RIGHTBRACKET = (short)86;
+        public const short ST_LEFTBRACE = (short)87;
+        public const short ST_RIGHTBRACE = (short)88;
+        public const short ST_LEFTUPARROW = (short)89;
+        public const short ST_BENTUPARROW = (short)90;
+        public const short ST_BENTARROW = (short)91;
+        public const short ST_SEAL24 = (short)92;
+        public const short ST_STRIPEDRIGHTARROW = (short)93;
+        public const short ST_NOTCHEDRIGHTARROW = (short)94;
+        public const short ST_BLOCKARC = (short)95;
+        public const short ST_SMILEYFACE = (short)96;
+        public const short ST_VERTICALSCROLL = (short)97;
+        public const short ST_HORIZONTALSCROLL = (short)98;
+        public const short ST_CIRCULARARROW = (short)99;
+        public const short ST_NOTCHEDCIRCULARARROW = (short)100;
+        public const short ST_UTURNARROW = (short)101;
+        public const short ST_CURVEDRIGHTARROW = (short)102;
+        public const short ST_CURVEDLEFTARROW = (short)103;
+        public const short ST_CURVEDUPARROW = (short)104;
+        public const short ST_CURVEDDOWNARROW = (short)105;
+        public const short ST_CLOUDCALLOUT = (short)106;
+        public const short ST_ELLIPSERIBBON = (short)107;
+        public const short ST_ELLIPSERIBBON2 = (short)108;
+        public const short ST_FLOWCHARTProcess = (short)109;
+        public const short ST_FLOWCHARTDECISION = (short)110;
+        public const short ST_FLOWCHARTINPUTOUTPUT = (short)111;
+        public const short ST_FLOWCHARTPREDEFINEDProcess = (short)112;
+        public const short ST_FLOWCHARTINTERNALSTORAGE = (short)113;
+        public const short ST_FLOWCHARTDOCUMENT = (short)114;
+        public const short ST_FLOWCHARTMULTIDOCUMENT = (short)115;
+        public const short ST_FLOWCHARTTERMINATOR = (short)116;
+        public const short ST_FLOWCHARTPREPARATION = (short)117;
+        public const short ST_FLOWCHARTMANUALINPUT = (short)118;
+        public const short ST_FLOWCHARTMANUALOPERATION = (short)119;
+        public const short ST_FLOWCHARTCONNECTOR = (short)120;
+        public const short ST_FLOWCHARTPUNCHEDCARD = (short)121;
+        public const short ST_FLOWCHARTPUNCHEDTAPE = (short)122;
+        public const short ST_FLOWCHARTSUMMINGJUNCTION = (short)123;
+        public const short ST_FLOWCHARTOR = (short)124;
+        public const short ST_FLOWCHARTCOLLATE = (short)125;
+        public const short ST_FLOWCHARTSORT = (short)126;
+        public const short ST_FLOWCHARTEXTRACT = (short)127;
+        public const short ST_FLOWCHARTMERGE = (short)128;
+        public const short ST_FLOWCHARTOFFLINESTORAGE = (short)129;
+        public const short ST_FLOWCHARTONLINESTORAGE = (short)130;
+        public const short ST_FLOWCHARTMAGNETICTAPE = (short)131;
+        public const short ST_FLOWCHARTMAGNETICDISK = (short)132;
+        public const short ST_FLOWCHARTMAGNETICDRUM = (short)133;
+        public const short ST_FLOWCHARTDISPLAY = (short)134;
+        public const short ST_FLOWCHARTDELAY = (short)135;
+        public const short ST_TEXTPLAINTEXT = (short)136;
+        public const short ST_TEXTSTOP = (short)137;
+        public const short ST_TEXTTRIANGLE = (short)138;
+        public const short ST_TEXTTRIANGLEINVERTED = (short)139;
+        public const short ST_TEXTCHEVRON = (short)140;
+        public const short ST_TEXTCHEVRONINVERTED = (short)141;
+        public const short ST_TEXTRINGINSIDE = (short)142;
+        public const short ST_TEXTRINGOUTSIDE = (short)143;
+        public const short ST_TEXTARCHUPCURVE = (short)144;
+        public const short ST_TEXTARCHDOWNCURVE = (short)145;
+        public const short ST_TEXTCIRCLECURVE = (short)146;
+        public const short ST_TEXTBUTTONCURVE = (short)147;
+        public const short ST_TEXTARCHUPPOUR = (short)148;
+        public const short ST_TEXTARCHDOWNPOUR = (short)149;
+        public const short ST_TEXTCIRCLEPOUR = (short)150;
+        public const short ST_TEXTBUTTONPOUR = (short)151;
+        public const short ST_TEXTCURVEUP = (short)152;
+        public const short ST_TEXTCURVEDOWN = (short)153;
+        public const short ST_TEXTCASCADEUP = (short)154;
+        public const short ST_TEXTCASCADEDOWN = (short)155;
+        public const short ST_TEXTWAVE1 = (short)156;
+        public const short ST_TEXTWAVE2 = (short)157;
+        public const short ST_TEXTWAVE3 = (short)158;
+        public const short ST_TEXTWAVE4 = (short)159;
+        public const short ST_TEXTINFLATE = (short)160;
+        public const short ST_TEXTDEFLATE = (short)161;
+        public const short ST_TEXTINFLATEBOTTOM = (short)162;
+        public const short ST_TEXTDEFLATEBOTTOM = (short)163;
+        public const short ST_TEXTINFLATETOP = (short)164;
+        public const short ST_TEXTDEFLATETOP = (short)165;
+        public const short ST_TEXTDEFLATEINFLATE = (short)166;
+        public const short ST_TEXTDEFLATEINFLATEDEFLATE = (short)167;
+        public const short ST_TEXTFADERIGHT = (short)168;
+        public const short ST_TEXTFADELEFT = (short)169;
+        public const short ST_TEXTFADEUP = (short)170;
+        public const short ST_TEXTFADEDOWN = (short)171;
+        public const short ST_TEXTSLANTUP = (short)172;
+        public const short ST_TEXTSLANTDOWN = (short)173;
+        public const short ST_TEXTCANUP = (short)174;
+        public const short ST_TEXTCANDOWN = (short)175;
+        public const short ST_FLOWCHARTALTERNATEProcess = (short)176;
+        public const short ST_FLOWCHARTOFFPAGECONNECTOR = (short)177;
+        public const short ST_CALLOUT90 = (short)178;
+        public const short ST_ACCENTCALLOUT90 = (short)179;
+        public const short ST_BORDERCALLOUT90 = (short)180;
+        public const short ST_ACCENTBORDERCALLOUT90 = (short)181;
+        public const short ST_LEFTRIGHTUPARROW = (short)182;
+        public const short ST_SUN = (short)183;
+        public const short ST_MOON = (short)184;
+        public const short ST_BRACKETPAIR = (short)185;
+        public const short ST_BRACEPAIR = (short)186;
+        public const short ST_SEAL4 = (short)187;
+        public const short ST_DOUBLEWAVE = (short)188;
+        public const short ST_ACTIONBUTTONBLANK = (short)189;
+        public const short ST_ACTIONBUTTONHOME = (short)190;
+        public const short ST_ACTIONBUTTONHELP = (short)191;
+        public const short ST_ACTIONBUTTONINFORMATION = (short)192;
+        public const short ST_ACTIONBUTTONFORWARDNEXT = (short)193;
+        public const short ST_ACTIONBUTTONBACKPREVIOUS = (short)194;
+        public const short ST_ACTIONBUTTONEND = (short)195;
+        public const short ST_ACTIONBUTTONBEGINNING = (short)196;
+        public const short ST_ACTIONBUTTONRETURN = (short)197;
+        public const short ST_ACTIONBUTTONDOCUMENT = (short)198;
+        public const short ST_ACTIONBUTTONSOUND = (short)199;
+        public const short ST_ACTIONBUTTONMOVIE = (short)200;
+        public const short ST_HOSTCONTROL = (short)201;
         public const short ST_TEXTBOX = (short)202;
         public const short ST_NIL = (short)0x0FFF;
 
@@ -294,7 +294,7 @@ namespace NPOI.HSSF.Record
         /**
          * list of "tail" records that need to be Serialized after all drawing Group records
          */
-        private IList tailRec = new ArrayList();
+        internal List<Record> tailRec = new List<Record>();
 
         public EscherAggregate(DrawingManager2 drawingManager)
         {
@@ -332,7 +332,11 @@ namespace NPOI.HSSF.Record
             for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord escherRecord = (EscherRecord)iterator.Current;
-                result.Append(escherRecord.ToString());
+                result.Append(escherRecord.ToString() + nl);
+            }
+            foreach (StandardRecord record in this.tailRec)
+            {
+                result.Append(record.ToString() + nl);
             }
             result.Append("[/").Append(RecordName).Append(']' + nl);
 
@@ -417,7 +421,14 @@ namespace NPOI.HSSF.Record
                 agg.shapeToObj[shapeRecords[shapeIndex++]]= objRecord;
                 loc += 2;
             }
-
+            //put noterecord into tailsRec
+            for (int i = locFirstDrawingRecord + 1; i < records.Count; i++)
+            {
+                if (records[i] is NoteRecord)
+                {
+                    agg.tailRec.Add((NoteRecord)records[i]);
+                }
+            }
             return agg;
 
         }
@@ -633,11 +644,41 @@ namespace NPOI.HSSF.Record
                     switch (type)
                     {
                         case ST_TEXTBOX:
-                            // TextBox
-                            HSSFTextbox box =
-                                new HSSFTextbox(null, new HSSFClientAnchor());
-                            patriarch.Children.Add(box);
+                            HSSFSimpleShape box;
 
+                            TextObjectRecord textrec = (TextObjectRecord)shapeToObj[GetEscherChild(shapeContainer, EscherTextboxRecord.RECORD_ID)];
+                             EscherClientAnchorRecord anchorRecord1 = (EscherClientAnchorRecord)GetEscherChild(shapeContainer, EscherClientAnchorRecord.RECORD_ID);
+                                HSSFClientAnchor anchor1 = new HSSFClientAnchor();
+                                anchor1.Col1 = anchorRecord1.Col1;
+                                anchor1.Col2 = anchorRecord1.Col2;
+                                anchor1.Dx1 = anchorRecord1.Dx1;
+                                anchor1.Dx2 = anchorRecord1.Dx2;
+                                anchor1.Dy1 = anchorRecord1.Dy1;
+                                anchor1.Dy2 = anchorRecord1.Dy2;
+                                anchor1.Row1 = anchorRecord1.Row1;
+                                anchor1.Row2 = anchorRecord1.Row2;
+                            if (tailRec.Count>=i && tailRec[i-1] is NoteRecord)
+                            {
+                                NoteRecord noterec=(NoteRecord)tailRec[i - 1];
+                                
+                                // comment
+                                box =
+                                    new HSSFComment(null, anchor1);
+                                HSSFComment comment=(HSSFComment)box;
+                                comment.Author = noterec.Author;
+                                comment.Row = noterec.Row;
+                                comment.Column = noterec.Column;
+                                comment.Visible = (noterec.Flags == NoteRecord.NOTE_VISIBLE);
+                                comment.String = textrec.Str;                                
+                            }
+                            else
+                            {
+                                // TextBox
+                                box =
+                                    new HSSFTextbox(null, anchor1);
+                                ((HSSFTextbox)box).String = textrec.Str;  
+                            }
+                            patriarch.AddShape(box);
                             ConvertRecordsToUserModel(shapeContainer, box);
                             break;
                         case ST_PICTUREFRAME:

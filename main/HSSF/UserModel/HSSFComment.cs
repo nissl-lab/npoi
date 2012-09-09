@@ -37,9 +37,9 @@ namespace NPOI.HSSF.UserModel
         private int col, row;
         private String author;
 
-        [NonSerialized]
+        
         private NoteRecord note = null;
-        [NonSerialized]
+        
         private TextObjectRecord txo = null;
 
         /// <summary>
@@ -66,8 +66,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="note">The note.</param>
         /// <param name="txo">The txo.</param>
         public HSSFComment(NoteRecord note, TextObjectRecord txo):this((HSSFShape)null, (HSSFAnchor)null)
-        {
-            
+        {          
             this.txo = txo;
             this.note = note;
         }
@@ -161,7 +160,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the note record.
         /// </summary>
         /// <value>the underlying Note record.</value>
-        public NoteRecord NoteRecord
+        internal NoteRecord NoteRecord
         {
             get { return note; }
         }
@@ -169,7 +168,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the text object record.
         /// </summary>
         /// <value>the underlying Text record</value>
-        public TextObjectRecord TextObjectRecord
+        internal TextObjectRecord TextObjectRecord
         {
             get { return txo; }
         }

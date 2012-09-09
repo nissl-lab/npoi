@@ -1958,7 +1958,7 @@ namespace NPOI.HSSF.Model
             }
             else
             {
-                IList records = Records;
+                List<RecordBase> records = Records;
                 EscherAggregate r = EscherAggregate.CreateAggregate(records, loc, drawingManager);
                 int startloc = loc;
                 while (loc + 1 < records.Count
@@ -1970,13 +1970,16 @@ namespace NPOI.HSSF.Model
                     loc += 2;
                     if (records[loc] is NoteRecord) loc ++;
                 }
-                int endloc = loc - 1;
-                for (int i = 0; i < (endloc - startloc + 1); i++)
+                while (records[loc] is NoteRecord)
                 {
-                    records.RemoveAt(startloc);
+                    loc++;
                 }
+                int endloc = loc - 1;
+
+                records.RemoveRange(startloc,endloc - startloc + 1);
                 records.Insert(startloc, r);
 
+                
                 return startloc;
             }
         }
