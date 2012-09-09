@@ -14,6 +14,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.ComponentModel;
     using System.Xml.Schema;
     using System.Diagnostics;
+    using System.Xml;
 
     public enum ST_SmartTagShow
     {
@@ -9204,7 +9205,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot("chartsheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Chartsheet
     {
-
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chartsheet));
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         private CT_ChartsheetPr sheetPrField;
 
         private CT_ChartsheetViews sheetViewsField;
@@ -9249,7 +9252,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            throw new NotImplementedException();
+            serializer.Serialize(stream, this, namespaces);
         }
         [XmlElement]
         public CT_ChartsheetPr sheetPr
