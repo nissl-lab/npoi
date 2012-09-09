@@ -79,7 +79,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             serializer.Serialize(stream, font, namespaces);
         }
-
+        public override string ToString()
+        {
+            using (StringWriter stream = new StringWriter())
+            {
+                serializer.Serialize(stream, this, namespaces);
+                return stream.ToString();
+            }
+        }
 
         public bool IsSetFontId()
         {
