@@ -162,6 +162,8 @@ namespace NPOI.XSSF.UserModel
 
             if (validationType != ValidationType.ANY && validationType != ValidationType.LIST)
             {
+                newDataValidation.@operator = ST_DataValidationOperator.between;
+                if(XSSFDataValidation.operatorTypeMappings.ContainsKey(constraint.Operator))
                 newDataValidation.@operator = XSSFDataValidation.operatorTypeMappings[constraint.Operator];
                 if (constraint.Formula1 != null)
                 {
@@ -180,7 +182,7 @@ namespace NPOI.XSSF.UserModel
                 CellRangeAddress cellRangeAddress = cellRangeAddresses[i];
                 sqref.Add(cellRangeAddress.FormatAsString());
             }
-            newDataValidation.sqref = (sqref);
+            newDataValidation.sqref = sqref;
 
             return new XSSFDataValidation(dataValidationConstraint, cellRangeAddressList, newDataValidation);
         }

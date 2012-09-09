@@ -7716,6 +7716,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_DataValidations
     {
 
@@ -7740,20 +7741,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.dataValidationField = new List<CT_DataValidation>();
             this.disablePromptsField = false;
         }
-
-        public List<CT_DataValidation> dataValidation
+        [XmlElement("dataValidation", Order = 0)]
+        public CT_DataValidation[] dataValidation
         {
             get
             {
-                return this.dataValidationField;
+                return this.dataValidationField.ToArray();
             }
             set
             {
-                this.dataValidationField = value;
+                if (value != null && value.Length > 0)
+                    this.dataValidationField = new List<CT_DataValidation>(value);
+                else
+                    this.dataValidationField = new List<CT_DataValidation>(value);
             }
         }
 
         [DefaultValue(false)]
+        [XmlAttribute]
         public bool disablePrompts
         {
             get
@@ -7765,7 +7770,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.disablePromptsField = value;
             }
         }
-
+        [XmlAttribute]
         public uint xWindow
         {
             get
@@ -7790,7 +7795,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xWindowFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint yWindow
         {
             get
@@ -7815,7 +7820,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.yWindowFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint count
         {
             get
@@ -7848,12 +7853,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             CT_DataValidation dv = new CT_DataValidation();
             this.dataValidationField.Add(dv);
+            this.countField++;
             return dv;
         }
     }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public class CT_DataValidation
     {
 
@@ -7917,7 +7924,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             promptField = obj.promptField;
             sqrefField = obj.sqrefField;
         }
-        [XmlAttribute]
+        [XmlElement(Order = 0)]
         public string formula1
         {
             get
@@ -7929,7 +7936,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formula1Field = value;
             }
         }
-        [XmlAttribute]
+        [XmlElement(Order = 1)]
         public string formula2
         {
             get
@@ -8093,7 +8100,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.promptField = value;
             }
         }
-
+        [XmlAttribute]
         public List<string> sqref
         {
             get

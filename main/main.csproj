@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -291,6 +291,7 @@
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="SS\Formula\Atp\EDate.cs" />
+    <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
