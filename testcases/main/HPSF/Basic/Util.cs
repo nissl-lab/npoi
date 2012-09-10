@@ -222,7 +222,7 @@ namespace TestCases.HPSF.Basic
                 }
                 catch (Exception ex)
                 {
-                    throw new RuntimeException(ex.Message);
+                    throw new RuntimeException(ex);
                 }
             }
 
