@@ -4,6 +4,7 @@ using System.Text;
 using NPOI.SS.Formula.Eval;
 using System.Text.RegularExpressions;
 using NPOI.SS.Util;
+using System.Globalization;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -35,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 //TODO: simulate DecimalFormat class in java.
                 FormatBase formatter = new DecimalFormat(s1);
-                return new StringEval(formatter.Format(s0));
+                return new StringEval(formatter.Format(s0, CultureInfo.CurrentCulture));
             }
             else if (s1.IndexOf("/", StringComparison.Ordinal) == s1.LastIndexOf("/", StringComparison.Ordinal) && s1.IndexOf("/", StringComparison.Ordinal) >= 0 && !s1.Contains("-"))
             {
@@ -78,12 +79,12 @@ namespace NPOI.SS.Formula.Functions
                     if (parts.Length == 2)
                     {
                         FormatBase wholeFormatter = new DecimalFormat(parts[0]);
-                        String result = wholeFormatter.Format(wholePart) + " " + neumFormatter.Format(currNeum) + "/" + denomFormatter.Format(currDenom);
+                        String result = wholeFormatter.Format(wholePart, CultureInfo.CurrentCulture) + " " + neumFormatter.Format(currNeum, CultureInfo.CurrentCulture) + "/" + denomFormatter.Format(currDenom, CultureInfo.CurrentCulture);
                         return new StringEval(result);
                     }
                     else
                     {
-                        String result = neumFormatter.Format(currNeum + (currDenom * wholePart)) + "/" + denomFormatter.Format(currDenom);
+                        String result = neumFormatter.Format(currNeum + (currDenom * wholePart), CultureInfo.CurrentCulture) + "/" + denomFormatter.Format(currDenom, CultureInfo.CurrentCulture);
                         return new StringEval(result);
                     }
                 }
@@ -107,7 +108,7 @@ namespace NPOI.SS.Formula.Functions
                 dt = dt.AddDays((int)Math.Floor(s0));
                 double dayFraction = s0 - Math.Floor(s0);
                 dt = dt.AddMilliseconds((int)Math.Round(dayFraction * 24 * 60 * 60 * 1000));
-                return new StringEval(dateFormatter.Format(dt));
+                return new StringEval(dateFormatter.Format(dt, CultureInfo.CurrentCulture));
             }
             catch (Exception)
             {

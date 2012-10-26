@@ -763,7 +763,7 @@ namespace NPOI.HSSF.Model
             //}
             DimensionsRecord d = _dimensions;
 
-            if (col.Column > d.LastCol)
+            if (col.Column >= d.LastCol)
             {
                 d.LastCol = ((short)(col.Column + 1));
             }

@@ -28,6 +28,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
+    using System.Globalization;
 
     /**
      * Unit Tests for HSSFDataFormatter.java
@@ -233,7 +234,7 @@ namespace TestCases.HSSF.UserModel
                 //assert the correct month form, as in the original Excel format
                 String monthPtrn = fmt.IndexOf("mmmm") != -1 ? "MMMM" : "MMM";
                 // this line is intended to compute how "July" would look like in the current locale
-                String jul = new SimpleDateFormat(monthPtrn).Format(new DateTime(2010, 7, 15));
+                String jul = new SimpleDateFormat(monthPtrn).Format(new DateTime(2010, 7, 15), CultureInfo.CurrentCulture);
                 // special case for MMMMM = 1st letter of month name
                 if (fmt.IndexOf("mmmmm") > -1)
                 {

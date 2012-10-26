@@ -111,7 +111,7 @@ using System.Globalization;
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
-
+        private CultureInfo currentCulture;
         /*
          * A map to cache formats.
          *  Map<String,FormatBase> Formats
@@ -130,7 +130,7 @@ using System.Globalization;
          */
         public DataFormatter(CultureInfo culture)
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            this.currentCulture = culture;
             formats = new Hashtable();
 
             // init built-in Formats
@@ -603,7 +603,7 @@ using System.Globalization;
             DateTime d = cell.DateCellValue;
             if (dateFormat != null)
             {
-                return dateFormat.Format(d);
+                return dateFormat.Format(d, currentCulture);
             }
             return d.ToString();
         }
@@ -624,9 +624,9 @@ using System.Globalization;
             double d = cell.NumericCellValue;
             if (numberFormat == null)
             {
-                return d.ToString(CultureInfo.InvariantCulture);
+                return d.ToString(currentCulture);
             }
-            return numberFormat.Format(d);
+            return numberFormat.Format(d, currentCulture);
         }
 
         /**
@@ -646,7 +646,7 @@ using System.Globalization;
         {
             if (dateFormat != null)
             {
-                return dateFormat.Format(d);
+                return dateFormat.Format(d, currentCulture);
             }
             return d.ToString();
         }
@@ -663,7 +663,7 @@ using System.Globalization;
                 if (DateUtil.IsValidExcelDate(value))
                 {
                     FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
-                    //TODO: port class ExcelStyleDateFormatter
+
                     if (dateFormat is ExcelStyleDateFormatter)
                     {
                         // Hint about the raw excel value
@@ -684,10 +684,10 @@ using System.Globalization;
             FormatBase numberFormat = GetFormat(value, formatIndex, formatString);
             if (numberFormat == null)
             {
-                return value.ToString(CultureInfo.CurrentCulture);
+                return value.ToString(currentCulture);
             }
             // RK: This hack handles scientific notation by adding the missing + back.
-            String result = numberFormat.Format(value);
+            String result = numberFormat.Format(value, currentCulture);
             if (result.Contains("E") && !result.Contains("E-"))
             {
                 result = result.Replace("E", "E+");

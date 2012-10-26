@@ -15,11 +15,11 @@ namespace NPOI.SS.Util
         
         }
 
-        public virtual string Format(Object obj)
+        public virtual string Format(Object obj, CultureInfo culture)
         {
             return obj.ToString();
         }
-        public abstract StringBuilder Format(Object obj, StringBuilder toAppendTo);
+        public abstract StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture);
 
         //public abstract Object Parse(string source);
         public abstract Object ParseObject(string source, int pos);
@@ -42,9 +42,9 @@ namespace NPOI.SS.Util
         }
 
         /** Format a number as an SSN */
-        public override String Format(object obj)
+        public override String Format(object obj, CultureInfo culture)
         {
-            String result = ((double)obj).ToString(df, CultureInfo.InvariantCulture);
+            String result = ((double)obj).ToString(df, culture);
             StringBuilder sb = new StringBuilder();
             sb.Append(result.Substring(0, 3)).Append('-');
             sb.Append(result.Substring(3, 2)).Append('-');
@@ -52,9 +52,9 @@ namespace NPOI.SS.Util
             return sb.ToString();
         }
 
-        public override StringBuilder Format(Object obj,StringBuilder toAppendTo)
+        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format((long)obj));
+            return toAppendTo.Append(Format((long)obj, culture));
         }
 
         public override Object ParseObject(String source, int pos)
@@ -79,18 +79,18 @@ namespace NPOI.SS.Util
         }
 
         /** Format a number as Zip + 4 */
-        public override String Format(object obj)
+        public override String Format(object obj, CultureInfo culture)
         {
-            String result = ((double)obj).ToString(df, CultureInfo.InvariantCulture);
+            String result = ((double)obj).ToString(df, culture);
             StringBuilder sb = new StringBuilder();
             sb.Append(result.Substring(0, 5)).Append('-');
             sb.Append(result.Substring(5, 4));
             return sb.ToString();
         }
 
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo)
+        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format(obj));
+            return toAppendTo.Append(Format(obj, culture));
         }
 
         public override Object ParseObject(String source, int pos)
@@ -115,9 +115,9 @@ namespace NPOI.SS.Util
         }
 
         /** Format a number as a phone number */
-        public override String Format(object obj)
+        public override String Format(object obj, CultureInfo culture)
         {
-            String result = ((double)obj).ToString(df, CultureInfo.InvariantCulture);
+            String result = ((double)obj).ToString(df, culture);
             StringBuilder sb = new StringBuilder();
             String seg1, seg2, seg3;
             int len = result.Length;
@@ -144,9 +144,9 @@ namespace NPOI.SS.Util
             return sb.ToString();
         }
 
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo)
+        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format(obj));
+            return toAppendTo.Append(Format(obj, culture));
         }
 
         public override Object ParseObject(String source, int pos)
@@ -178,23 +178,23 @@ namespace NPOI.SS.Util
                 return pattern;
             }
         }
-        public override string Format(object obj)
+        public override string Format(object obj, CultureInfo culture)
         {
             if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
             {
                 //return ((double)obj).ToString();
-                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(CultureInfo.CurrentCulture);
+                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(culture);
             }
             else
             {
-                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(pattern, CultureInfo.CurrentCulture);
+                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(pattern, culture);
                 //return ((double)obj).ToString(pattern) ;
             }
         }
 
-        public override StringBuilder Format(object obj, StringBuilder toAppendTo)
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format((double)obj));
+            return toAppendTo.Append(Format((double)obj, culture));
         }
 
         public override object ParseObject(string source, int pos)
@@ -224,15 +224,15 @@ namespace NPOI.SS.Util
             this.pattern = pattern;
         }
 
-        public override string Format(object obj)
+        public override string Format(object obj, CultureInfo culture)
         {
-            String result = ((DateTime)obj).ToString(pattern, DateTimeFormatInfo.InvariantInfo);
+            String result = ((DateTime)obj).ToString(pattern,culture); //DateTimeFormatInfo.InvariantInfo
             return result;
         }
 
-        public override StringBuilder Format(object obj, StringBuilder toAppendTo)
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(this.Format((DateTime)obj));
+            return toAppendTo.Append(this.Format((DateTime)obj, culture));
         }
 
         public override object ParseObject(string source, int pos)
@@ -255,11 +255,11 @@ namespace NPOI.SS.Util
         public ConstantStringFormat(String s) {
             str = s;
         }
-        public override string Format(object obj)
+        public override string Format(object obj, CultureInfo culture)
         {
             return str;
         }
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo)
+        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(str);
         }

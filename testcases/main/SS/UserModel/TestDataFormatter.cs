@@ -40,13 +40,12 @@ namespace TestCases.SS.UserModel
         public void TestLocale()
         {
             DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
-
-            Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
-
             DataFormatter dfFR = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("fr-FR"));
 
+            Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
             Assert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
+            
+            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));            
             Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
         }
 

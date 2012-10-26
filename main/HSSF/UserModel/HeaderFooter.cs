@@ -415,23 +415,23 @@ namespace NPOI.HSSF.UserModel
         }
 
         // this abstract class does not initialize the static field that are required for the the StripFields method.
-        public static Field SHEET_NAME_FIELD { get { return Fields.Instance.SHEET_NAME_FIELD; } }
-        public static Field DATE_FIELD { get { return Fields.Instance.DATE_FIELD; } }
-        public static Field FILE_FIELD { get { return Fields.Instance.FILE_FIELD; } }
+        internal static Field SHEET_NAME_FIELD { get { return Fields.Instance.SHEET_NAME_FIELD; } }
+        internal static Field DATE_FIELD { get { return Fields.Instance.DATE_FIELD; } }
+        internal static Field FILE_FIELD { get { return Fields.Instance.FILE_FIELD; } }
         public static Field FULL_FILE_FIELD { get { return Fields.Instance.FULL_FILE_FIELD; } }
-        public static Field PAGE_FIELD { get { return Fields.Instance.PAGE_FIELD; } }
-        public static Field TIME_FIELD { get { return Fields.Instance.TIME_FIELD; } }
-        public static Field NUM_PAGES_FIELD { get { return Fields.Instance.NUM_PAGES_FIELD; } }
+        internal static Field PAGE_FIELD { get { return Fields.Instance.PAGE_FIELD; } }
+        internal static Field TIME_FIELD { get { return Fields.Instance.TIME_FIELD; } }
+        internal static Field NUM_PAGES_FIELD { get { return Fields.Instance.NUM_PAGES_FIELD; } }
 
         public static Field PICTURE_FIELD { get { return Fields.Instance.PICTURE_FIELD; } }
 
-        public static PairField BOLD_FIELD { get { return Fields.Instance.BOLD_FIELD; } }
+        internal static PairField BOLD_FIELD { get { return Fields.Instance.BOLD_FIELD; } }
         public static PairField ITALIC_FIELD { get { return Fields.Instance.ITALIC_FIELD; } }
         public static PairField STRIKETHROUGH_FIELD { get { return Fields.Instance.STRIKETHROUGH_FIELD; } }
         public static PairField SUBSCRIPT_FIELD { get { return Fields.Instance.SUBSCRIPT_FIELD; } }
         public static PairField SUPERSCRIPT_FIELD { get { return Fields.Instance.SUPERSCRIPT_FIELD; } }
-        public static PairField UNDERLINE_FIELD { get { return Fields.Instance.UNDERLINE_FIELD; } }
-        public static PairField DOUBLE_UNDERLINE_FIELD { get { return Fields.Instance.DOUBLE_UNDERLINE_FIELD; } }
+        internal static PairField UNDERLINE_FIELD { get { return Fields.Instance.UNDERLINE_FIELD; } }
+        internal static PairField DOUBLE_UNDERLINE_FIELD { get { return Fields.Instance.DOUBLE_UNDERLINE_FIELD; } }
 
 
         /// <summary>

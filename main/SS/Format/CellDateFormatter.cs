@@ -19,6 +19,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Text;
 using NPOI.SS.Util;
+using System.Globalization;
 
 namespace NPOI.SS.Format
 {
@@ -176,7 +177,7 @@ namespace NPOI.SS.Format
                 else
                     value = new DateTime((long)(EXCEL_EPOCH_TIME.Ticks + v));
             }
-            dateFmt.Format(value, toAppendTo);
+            dateFmt.Format(value, toAppendTo, CultureInfo.CurrentCulture);
 
             //throw new NotImplementedException();
             //AttributedCharacterIterator it = dateFmt.FormatToCharacterIterator(

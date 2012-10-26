@@ -326,7 +326,7 @@ namespace NPOI.HSSF.Extractor
                         // Format as a date
                         DateTime d = NPOI.SS.UserModel.DateUtil.GetJavaDate(value, false);
                         SimpleDateFormat df = new SimpleDateFormat(formatString);
-                        return df.Format(d);
+                        return df.Format(d, CultureInfo.CurrentCulture);
                     }
                     else
                     {
@@ -338,7 +338,7 @@ namespace NPOI.HSSF.Extractor
 
                         // Format as a number
                         DecimalFormat df = new DecimalFormat(formatString);
-                        return df.Format(value);
+                        return df.Format(value, CultureInfo.CurrentCulture);
                     }
                 }
             }

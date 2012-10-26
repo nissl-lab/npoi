@@ -118,18 +118,18 @@ namespace NPOI.SS.UserModel
         {
             this.dateToBeFormatted = date;
         }
-        public override string Format(object obj)
+        public override string Format(object obj, CultureInfo culture)
         {
-            return this.Format((DateTime)obj, new StringBuilder()).ToString();
+            return this.Format((DateTime)obj, new StringBuilder(), culture).ToString();
         }
 
-        public StringBuilder Format(DateTime date, StringBuilder paramStringBuilder)
+        public StringBuilder Format(DateTime date, StringBuilder paramStringBuilder, CultureInfo culture)
         {
             // Do the normal format
             string s = string.Empty;
             if (Regex.IsMatch(pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
             {
-                s = date.ToString(pattern, DateTimeFormatInfo.InvariantInfo);
+                s = date.ToString(pattern, culture);
             }
             else
                 s = pattern;
@@ -153,11 +153,11 @@ namespace NPOI.SS.UserModel
                 hours = Math.Floor(hours);
                 s = s.Replace(
                         (H_BRACKET_SYMBOL).ToString(),
-                        format1digit.Format(hours)
+                        format1digit.Format(hours, culture)
                 );
                 s = s.Replace(
                         (HH_BRACKET_SYMBOL).ToString(),
-                        format2digits.Format(hours)
+                        format2digits.Format(hours, culture)
                 );
             }
 
@@ -168,11 +168,11 @@ namespace NPOI.SS.UserModel
                 minutes = Math.Floor(minutes);
                 s = s.Replace(
                         (M_BRACKET_SYMBOL).ToString(),
-                        format1digit.Format(minutes)
+                        format1digit.Format(minutes, culture)
                 );
                 s = s.Replace(
                         (MM_BRACKET_SYMBOL).ToString(),
-                        format2digits.Format(minutes)
+                        format2digits.Format(minutes, culture)
                 );
             }
             if (s.IndexOf(S_BRACKET_SYMBOL) != -1 ||
@@ -181,11 +181,11 @@ namespace NPOI.SS.UserModel
                 double seconds = (dateToBeFormatted * 24.0 * 60.0 * 60.0) + 0.01;
                 s = s.Replace(
                         (S_BRACKET_SYMBOL).ToString(),
-                        format1digit.Format(seconds)
+                        format1digit.Format(seconds, culture)
                 );
                 s = s.Replace(
                         (SS_BRACKET_SYMBOL).ToString(),
-                        format2digits.Format(seconds)
+                        format2digits.Format(seconds, culture)
                 );
             }
 
@@ -196,11 +196,11 @@ namespace NPOI.SS.UserModel
                 float millis = (millisTemp - (int)millisTemp);
                 s = s.Replace(
                         (L_BRACKET_SYMBOL).ToString(),
-                        format3digit.Format(millis * 10)
+                        format3digit.Format(millis * 10, culture)
                 );
                 s = s.Replace(
                         (LL_BRACKET_SYMBOL).ToString(),
-                        format4digits.Format(millis * 100)
+                        format4digits.Format(millis * 100, culture)
                 );
             }
 

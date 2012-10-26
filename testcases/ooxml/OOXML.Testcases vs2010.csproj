@@ -49,7 +49,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\solution\Lib\Release.net4\</OutputPath>
+    <OutputPath>..\..\solution\Lib\OOXML\.net4\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -177,7 +177,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Shadow Include="Test References\NPOI.OpenXmlFormats.accessor" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\main\npoi.snk">
