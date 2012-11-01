@@ -52,13 +52,13 @@ namespace ExportXlsToDownload
 
             InitializeWorkbook();
             GenerateData();            
-            Response.BinaryWrite(WriteToStream().GetBuffer());
+            GetExcelStream().WriteTo(Response.OutputStream);
             Response.End();
         }
 
         HSSFWorkbook hssfworkbook;
 
-        MemoryStream WriteToStream()
+        MemoryStream GetExcelStream()
         { 
             //Write the stream data of workbook to the root directory
             MemoryStream file = new MemoryStream();
