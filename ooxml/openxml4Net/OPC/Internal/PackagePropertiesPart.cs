@@ -5,6 +5,7 @@ using System.IO;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.SS.Util;
+using System.Globalization;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -561,7 +562,7 @@ public class PackagePropertiesPart:PackagePart,PackageProperties
 		else {
 			SimpleDateFormat df = new SimpleDateFormat(
 					"yyyy-MM-dd'T'HH:mm:ss'Z'");
-			return df.Format(d.Value);
+            return df.Format(d.Value, CultureInfo.CurrentCulture);
 		}
 	}
 
