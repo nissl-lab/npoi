@@ -319,7 +319,7 @@ namespace NPOI.HSSF.Model
             switch (sid)
             {
                 case WindowTwoRecord.sid:
-                case UnknownRecord.SCL_00A0:
+                case SCLRecord.sid:
                 case PaneRecord.sid:
                 case SelectionRecord.sid:
                 case UnknownRecord.STANDARDWIDTH_0099:

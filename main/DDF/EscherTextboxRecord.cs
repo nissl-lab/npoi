@@ -56,7 +56,7 @@ namespace NPOI.DDF
          * @param recordFactory May be null since this is not a container record.
          * @return The number of bytes Read from the byte array.
          */
-        public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
+        public override int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory)
         {
             int bytesRemaining = ReadHeader(data, offset);
 

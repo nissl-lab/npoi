@@ -61,7 +61,7 @@ namespace NPOI.DDF
         /// <returns>
         /// The number of bytes Read from the byte array.
         /// </returns>
-        public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
+        public override int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory)
         {
             int bytesAfterHeader = ReadHeader(data, offset);
             int pos = offset + HEADER_SIZE;

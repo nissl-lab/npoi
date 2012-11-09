@@ -59,7 +59,7 @@ namespace NPOI.DDF
         /// <param name="offset">The offset into the byte array.</param>
         /// <param name="recordFactory">A factory for creating new escher records</param>
         /// <returns>The number of bytes written.</returns>  
-        public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
+        public override int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory)
         {
             int bytesRemaining = ReadHeader(data, offset);
             int pos = offset + 8;

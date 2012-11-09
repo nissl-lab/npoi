@@ -42,7 +42,7 @@ using System.Configuration;
         [Test]
         public void TestFillFields()
         {
-            EscherRecordFactory f = new DefaultEscherRecordFactory();
+            IEscherRecordFactory f = new DefaultEscherRecordFactory();
             byte[] data = HexRead.ReadFromString("0F 02 11 F1 00 00 00 00");
             EscherRecord r = f.CreateRecord(data, 0);
             r.FillFields(data, 0, f);
@@ -142,7 +142,7 @@ using System.Configuration;
         private class DummyEscherRecord : EscherRecord
         {
             public DummyEscherRecord() { }
-            public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
+            public override int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory)
             { return 0; }
             public override int Serialize(int offset, byte[] data, EscherSerializationListener listener)
             { return 0; }

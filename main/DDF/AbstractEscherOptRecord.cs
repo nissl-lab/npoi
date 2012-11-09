@@ -41,7 +41,7 @@ namespace NPOI.DDF
         }
 
         public override int FillFields(byte[] data, int offset,
-                EscherRecordFactory recordFactory)
+                IEscherRecordFactory recordFactory)
         {
             int bytesRemaining = ReadHeader(data, offset);
             int pos = offset + 8;

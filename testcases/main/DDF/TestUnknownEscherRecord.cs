@@ -39,7 +39,7 @@ namespace TestCases.DDF
                     "00 00 00 00";      // remaining bytes
 
             UnknownEscherRecord r = new UnknownEscherRecord();
-            EscherRecordFactory factory = new DefaultEscherRecordFactory();
+            IEscherRecordFactory factory = new DefaultEscherRecordFactory();
             r.FillFields(HexRead.ReadFromString(TestData), factory);
 
             Assert.AreEqual(0x020F, r.Options);

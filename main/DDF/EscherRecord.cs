@@ -47,7 +47,7 @@ namespace NPOI.DDF
         /// <param name="data">The data.</param>
         /// <param name="f">The f.</param>
         /// <returns></returns>
-        public int FillFields(byte[] data, EscherRecordFactory f)
+        public int FillFields(byte[] data, IEscherRecordFactory f)
         {
             return FillFields(data, 0, f);
         }
@@ -61,7 +61,7 @@ namespace NPOI.DDF
         /// <param name="offset">The offset into the byte array.</param>
         /// <param name="recordFactory">A factory for creating new escher records.</param>
         /// <returns>The number of bytes written.</returns>       
-        public abstract int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory);
+        public abstract int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory);
 
         /// <summary>
         /// Reads the 8 byte header information and populates the 

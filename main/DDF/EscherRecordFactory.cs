@@ -24,7 +24,7 @@ namespace NPOI.DDF
     /// records from a pointer into a data array.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public interface EscherRecordFactory
+    public interface IEscherRecordFactory
     {
         /// <summary>
         /// Create a new escher record from the data provided.  Does not attempt

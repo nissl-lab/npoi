@@ -44,7 +44,7 @@ namespace NPOI.DDF
         /// <param name="offset">The starting offset into </param>
         /// <param name="recordFactory">May be null since this is not a container record.</param>
         /// <returns>The number of bytes Read from the byte array.</returns>
-        public override int FillFields(byte[] data, int offset, EscherRecordFactory recordFactory)
+        public override int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory)
         {
             int bytesAfterHeader = ReadHeader(data, offset);
             int pos = offset + HEADER_SIZE;

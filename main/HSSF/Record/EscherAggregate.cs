@@ -370,7 +370,7 @@ namespace NPOI.HSSF.Record
             // Keep track of any shape records Created so we can match them back to the object id's.
             // Textbox objects are also treated as shape objects.
             IList shapeRecords = new ArrayList();
-            EscherRecordFactory recordFactory = new CustomEscherRecordFactory(ref shapeRecords);
+            IEscherRecordFactory recordFactory = new CustomEscherRecordFactory(ref shapeRecords);
 
             // Calculate the size of the buffer
             EscherAggregate agg = new EscherAggregate(drawingManager);
