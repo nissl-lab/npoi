@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      *
      * @author Shawn Laubach (slaubach at apache dot org)
      */
-    public interface Margin
+    public interface IMargin
     {
         /**
          * Get the margin field for the Margin.

@@ -10,7 +10,7 @@ namespace NPOI.HSSF.Record
 
     public class PrintSizeRecord:StandardRecord
     {
-        public static short sid = 0x33;
+        public const short sid = 0x33;
 
         private short printSize;
 

@@ -13,7 +13,7 @@ namespace NPOI.HSSF.Record.Chart
         MDKTH = 0x0003,
         MDCHART = 0x0004
     }
-    [Obsolete]
+    //[Obsolete]
     public class PosRecord : StandardRecord
     {
 

@@ -258,7 +258,7 @@ namespace NPOI.HSSF.Record
                 typeof(AxisParentRecord),
                 typeof(AxisRecord),
                 typeof(Chart3DBarShapeRecord),
-                //typeof(CrtLinkRecord),
+                typeof(CrtLinkRecord),
                 typeof(AxisUsedRecord),
                 typeof(BarRecord),
                 typeof(CategorySeriesAxisRecord),
@@ -275,7 +275,7 @@ namespace NPOI.HSSF.Record
                 typeof(ObjectLinkRecord),
                 typeof(PlotAreaRecord),
                 typeof(PlotGrowthRecord),
-                //typeof(PosRecord),
+                typeof(PosRecord),
                 typeof(SCLRecord),
                 //typeof(SeriesChartGroupIndexRecord),
                 //typeof(SeriesIndexRecord),
@@ -286,6 +286,14 @@ namespace NPOI.HSSF.Record
                 typeof(TextRecord),
                 typeof(TickRecord),
                 typeof(UnitsRecord),
+                //antony liu
+                typeof(CrtLayout12Record),
+                typeof(Chart3dRecord),
+                typeof(PieRecord),
+                typeof(PieFormatRecord),
+                typeof(CrtLayout12ARecord),
+                typeof(MarkerFormatRecord),
+                //end
 
           		// pivot table records
 		        typeof(DataItemRecord),

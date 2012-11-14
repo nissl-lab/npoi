@@ -404,7 +404,13 @@
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />
+    <Compile Include="HSSF\Record\Chart\TestCrtLayout12ARecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestMarkerFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestChart3dRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestChartFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestCrtLayout12Record.cs" />
+    <Compile Include="HSSF\Record\Chart\TestPieFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestPieRecord.cs" />
     <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
     <Compile Include="HSSF\Record\Crypto\TestBiff8DecryptingStream.cs">
       <SubType>Code</SubType>

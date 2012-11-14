@@ -99,7 +99,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 case UnknownRecord.PLS_004D:
                 case PrintSetupRecord.sid:
                 case UnknownRecord.BITMAP_00E9:
-                case UnknownRecord.PRINTSIZE_0033:
+                //case UnknownRecord.PRINTSIZE_0033:
+                case PrintSizeRecord.sid:
                 case HeaderFooterRecord.sid: // extra header/footer settings supported by Excel 2007
                     return true;
             }
@@ -161,7 +162,7 @@ namespace NPOI.HSSF.Record.Aggregates
                     CheckNotPresent(_bitmap);
                     _bitmap = rs.GetNext();
                     break;
-                case UnknownRecord.PRINTSIZE_0033:
+                case PrintSizeRecord.sid:
                     CheckNotPresent(_printSize);
                     _printSize = rs.GetNext();
                     break;
@@ -381,7 +382,7 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
 
-        private Margin GetMarginRec(MarginType margin)
+        private IMargin GetMarginRec(MarginType margin)
         {
             switch (margin)
             {
@@ -402,7 +403,7 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public double GetMargin(MarginType margin)
         {
-            Margin m = GetMarginRec(margin);
+            IMargin m = GetMarginRec(margin);
             if (m != null)
             {
                 return m.Margin;
@@ -431,7 +432,7 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public void SetMargin(MarginType margin, double size)
         {
-            Margin m = GetMarginRec(margin);
+            IMargin m = GetMarginRec(margin);
             if (m == null)
             {
                 switch (margin)

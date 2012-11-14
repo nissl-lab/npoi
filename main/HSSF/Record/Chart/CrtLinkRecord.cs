@@ -6,9 +6,10 @@ using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Chart
 {
-    [Obsolete("This class was not found in poi")]
+    //[Obsolete("This class was not found in poi")]
     public class CrtLinkRecord:StandardRecord
     {
+        //0x1022
         public const short sid = 4130;
 
         public CrtLinkRecord()

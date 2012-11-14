@@ -29,6 +29,10 @@ namespace NPOI.HSSF.Record.Chart
      * 
      * @author Patrick Cheng
      */
+    //
+    /// <summary>
+    /// The ChartFrtInfo record specifies the versions of the application that originally created and last saved the file.
+    /// </summary>
     public class ChartFRTInfoRecord : StandardRecord
     {
         public static short sid = 0x850;
@@ -39,12 +43,17 @@ namespace NPOI.HSSF.Record.Chart
         private byte verWriter;
         private CFRTID[] rgCFRTID;
 
-        private class CFRTID
+        private class CFRTID : ICloneable
         {
             public static int ENCODED_SIZE = 4;
             private int rtFirst;
             private int rtLast;
 
+            public CFRTID(int first, int last)
+            {
+                rtFirst = first;
+                rtLast = last;
+            }
             public CFRTID(RecordInputStream in1)
             {
                 rtFirst = in1.ReadShort();
@@ -56,6 +65,29 @@ namespace NPOI.HSSF.Record.Chart
                 out1.WriteShort(rtFirst);
                 out1.WriteShort(rtLast);
             }
+
+            #region ICloneable ≥…‘±
+
+            public object Clone()
+            {
+                return new CFRTID(this.rtFirst, this.rtLast);
+            }
+
+            #endregion
+        }
+
+        public ChartFRTInfoRecord()
+        {
+            rt = 0x850;
+            grbitFrt = 0;
+            //created by excel 2003
+            verOriginator = (byte)0xA;
+            //writen by excel 2003
+            verWriter = (byte)0xA;
+            rgCFRTID = new CFRTID[3];
+            rgCFRTID[0] = new CFRTID(0x0850, 0x085A);
+            rgCFRTID[1] = new CFRTID(0x0861, 0x0861);
+            rgCFRTID[2] = new CFRTID(0x086A, 0x086B);
         }
 
         public ChartFRTInfoRecord(RecordInputStream in1)
@@ -106,6 +138,22 @@ namespace NPOI.HSSF.Record.Chart
             {
                 rgCFRTID[i].Serialize(out1);
             }
+        }
+
+        public override object Clone()
+        {
+            ChartFRTInfoRecord record = new ChartFRTInfoRecord();
+
+            record.grbitFrt = this.grbitFrt;
+            record.rgCFRTID = new CFRTID[this.rgCFRTID.Length];
+            record.rt = this.rt;
+            record.verOriginator = this.verOriginator;
+            record.verWriter = verWriter;
+
+            for (int i = 0; i < this.rgCFRTID.Length; i++)
+                record.rgCFRTID[i] = (CFRTID)this.rgCFRTID[i].Clone();
+
+            return record;
         }
 
         public override String ToString()

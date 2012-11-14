@@ -83,7 +83,7 @@ namespace NPOI.HPSF
         /// {@link #Put(CustomProperty)}.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="customProperty">The custom property.</param>
+        /// <param name="cp">The custom property.</param>
         /// <returns></returns>
         public CustomProperty Put(string name, CustomProperty cp)
         {

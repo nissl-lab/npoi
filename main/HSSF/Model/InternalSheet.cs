@@ -79,7 +79,7 @@ namespace NPOI.HSSF.Model
         protected RowRecordsAggregate _rowsAggregate;
         [NonSerialized]
         private PageSettingsBlock _psBlock;
-        protected Margin[] margins = null;
+        protected IMargin[] margins = null;
         //protected IList mergedRecords = new ArrayList();
 
         [NonSerialized]

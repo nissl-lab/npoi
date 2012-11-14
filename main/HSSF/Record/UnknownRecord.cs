@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record
 
     public class UnknownRecord : StandardRecord
     {
-        public const int PRINTSIZE_0033       = 0x0033;
+        //public const int PRINTSIZE_0033       = 0x0033;
         /*
      * Some Record IDs used by POI as 'milestones' in the record stream
      */
@@ -45,7 +45,7 @@ namespace NPOI.HSSF.Record
         public const int SHEETPR_0081 = 0x0081;
         public const int SORT_0090            = 0x0090;
         public const int STANDARDWIDTH_0099 = 0x0099;
-        public const int SCL_00A0 = 0x00A0;
+        //public const int SCL_00A0 = 0x00A0;
         public const int BITMAP_00E9 = 0x00E9;
         public const int PHONETICPR_00EF = 0x00EF;
         public const int LABELRANGES_015F = 0x015F;
@@ -146,7 +146,7 @@ namespace NPOI.HSSF.Record
             // this method any time a new Record subclass is created.
             switch (sid)
             {
-                case PRINTSIZE_0033: return "PRINTSIZE";
+                //case PRINTSIZE_0033: return "PRINTSIZE";
                 case PLS_004D: return "PLS";
                 case 0x0050: return "DCON"; // Data Consolidation Information
                 case 0x007F: return "IMDATA";
@@ -155,7 +155,7 @@ namespace NPOI.HSSF.Record
                 case 0x0094: return "LHRECORD"; // .WK? File Conversion Information
                 case STANDARDWIDTH_0099: return "STANDARDWIDTH"; //Standard Column Width
                 case 0x009D: return "AUTOFILTERINFO"; // Drop-Down Arrow Count
-                case SCL_00A0: return "SCL"; // Window Zoom Magnification
+                //case SCL_00A0: return "SCL"; // Window Zoom Magnification
                 case 0x00AE: return "SCENMAN"; // Scenario Output Data
 
                 case 0x00B2: return "SXVI";        // (pivot table) View Item
@@ -213,14 +213,20 @@ namespace NPOI.HSSF.Record
 
                 case 0x08C8: return "PLV{Mac Excel}";
 
-
+                case 0x100C: return "AttachedLabel";
+                case 0x1018: return "Bar";
+                case 0x101B: return "Scatter";
             }
             if (IsObservedButUnknown(sid))
             {
                 return "UNKNOWN-" + StringUtil.ToHexString(sid).ToUpper();
             }
+            else
+            {
+                return "BIFF Record-" + StringUtil.ToHexString(sid).ToUpper();
+            }
 
-            return null;
+            //return null;
         }
         /**
  * @return <c>true</c> if the unknown record id has been observed in POI unit tests
@@ -240,38 +246,38 @@ namespace NPOI.HSSF.Record
                 // Written by Excel 2007
                 // rawData is multiple of 12 bytes long
                 // appears after last cell value record and before WINDOW2 or drawing records
-                case 0x089D:
+                //case 0x089D:
                 case 0x089E:
-                case 0x08A7:
+                //case 0x08A7:
 
-                case 0x1001:
-                case 0x1006:
-                case 0x1007:
-                case 0x1009:
-                case 0x100A:
-                case 0x100B:
-                case 0x100C:
-                case 0x1014:
-                case 0x1017:
-                case 0x1018:
-                case 0x1019:
-                case 0x101A:
-                case 0x101B:
-                case 0x101D:
-                case 0x101E:
-                case 0x101F:
-                case 0x1020:
-                case 0x1021:
-                case 0x1022:
-                case 0x1024:
-                case 0x1025:
-                case 0x1026:
-                case 0x1027:
-                case 0x1032:
+                //case 0x1001:
+                //case 0x1006:
+                //case 0x1007:
+                //case 0x1009:
+                //case 0x100A:
+                //case 0x100B:
+                //case 0x100C:  //AttachedLabel
+                //case 0x1014:  //ChartFormat
+                //case 0x1017:
+                //case 0x1018:   //Bar
+                //case 0x1019:
+                //case 0x101A:
+                //case 0x101B:  //Scatter
+                //case 0x101D:
+                //case 0x101E:
+                //case 0x101F:
+                case 0x1020:// "CatSerRange";
+                case 0x1021:// "AxisLine";
+                case 0x1022:// "CrtLink";
+                case 0x1024:// "DefaultText";
+                //case 0x1025:
+                case 0x1026:// "FontX";
+                //case 0x1027:
+                //case 0x1032:
                 case 0x1033:
                 case 0x1034:
                 case 0x1035:
-                case 0x103A:
+                //case 0x103A:
                 case 0x1041:
                 case 0x1043:
                 case 0x1044:
@@ -285,7 +291,7 @@ namespace NPOI.HSSF.Record
                 case 0x105C:
                 case 0x105D:
                 case 0x105F:
-                case 0x1060:
+                //case 0x1060:
                 case 0x1062:
                 case 0x1063:
                 case 0x1064:

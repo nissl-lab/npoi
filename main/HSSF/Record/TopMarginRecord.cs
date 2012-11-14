@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record
      *
      * @author Shawn Laubach (slaubach at apache dot org)
      */
-    public class TopMarginRecord : StandardRecord, Margin
+    public class TopMarginRecord : StandardRecord, IMargin
     {
         public const short sid = 0x28;
         private double field_1_margin;

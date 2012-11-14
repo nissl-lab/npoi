@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -64,13 +80,27 @@ namespace NPOI.HSSF.Record.Chart
         {
             get { return sid; }
         }
-
+        /// <summary>
+        /// the shape of the base of the data points in a bar or column chart group. 
+        /// MUST be a value from the following table
+        /// 0x00      The base of the data point is a rectangle.
+        /// 0x01      The base of the data point is an ellipse.
+        /// </summary>
         public byte Riser
         {
             get { return field_1_riser; }
             set { field_1_riser = value; }
         }
 
+        /// <summary>
+        /// how the data points in a bar or column chart group taper from base to tip. 
+        /// MUST be a value from the following
+        /// 0x00    The data points of the bar or column chart group do not taper. 
+        ///         The shape at the maximum value of the data point is the same as the shape at the base.:
+        /// 0x01    The data points of the bar or column chart group taper to a point at the maximum value of each data point.
+        /// 0x02    The data points of the bar or column chart group taper towards a projected point at the position of 
+        ///         the maximum value of all of the data points in the chart group, but are clipped at the value of each data point.
+        /// </summary>
         public byte Taper
         {
             get { return field_2_taper; }

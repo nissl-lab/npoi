@@ -25,14 +25,39 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
 
 
-
+    public enum AxisLineType
+    {
+        /// <summary>
+        /// The axis (section 2.2.3.6) line itself.
+        /// </summary>
+        AxisLine,
+        /// <summary>
+        /// The major gridlines along the axis
+        /// </summary>
+        MajorGridLine,
+        /// <summary>
+        /// The minor gridlines along the axis
+        /// </summary>
+        MinorGridLine,
+        /// <summary>
+        /// The walls or floor of a 3-D chart
+        /// </summary>
+        WallsOrFloorOf3D,
+    }
     /**
      * The axis line format record defines the axis type details.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.
 
      * @author Glen Stampoultzis (glens at apache.org)
-     */
+     *///
+    
+    /// <summary>
+    /// The AxisLine record specifies which part of the axis (section 2.2.3.6) is 
+    /// specified by the LineFormat record (section 2.4.156) that follows.
+    /// 
+    /// Excel Binary File Format (.xls) Structure Specification 
+    /// </summary>
     public class AxisLineFormatRecord
        : StandardRecord
     {
@@ -112,7 +137,11 @@ namespace NPOI.HSSF.Record.Chart
          *        AXIS_TYPE_MAJOR_GRID_LINE
          *        AXIS_TYPE_MINOR_GRID_LINE
          *        AXIS_TYPE_WALLS_OR_FLOOR
-         */
+         *///
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public short AxisType
         {
             get { return field_1_axisType; }

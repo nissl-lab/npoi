@@ -20,13 +20,10 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
-    using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NPOI.SS.Formula;
-    using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Util;
 
 
     public enum HSSFChartType : int
@@ -56,10 +53,6 @@ namespace NPOI.HSSF.UserModel
         private HSSFChartType type = HSSFChartType.Unknown;
 
         private List<HSSFSeries> series = new List<HSSFSeries>();
-
-
-
-
 
 
         private HSSFChart(HSSFSheet sheet, ChartRecord chartRecord)
@@ -316,14 +309,14 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-	/**
-	 * Set value range (basic Axis Options) 
-	 * @param axisIndex 0 - primary axis, 1 - secondary axis
-	 * @param minimum minimum value; Double.NaN - automatic; null - no change
-	 * @param maximum maximum value; Double.NaN - automatic; null - no change
-	 * @param majorUnit major unit value; Double.NaN - automatic; null - no change
-	 * @param minorUnit minor unit value; Double.NaN - automatic; null - no change
-	 */
+        /**
+         * Set value range (basic Axis Options) 
+         * @param axisIndex 0 - primary axis, 1 - secondary axis
+         * @param minimum minimum value; Double.NaN - automatic; null - no change
+         * @param maximum maximum value; Double.NaN - automatic; null - no change
+         * @param majorUnit major unit value; Double.NaN - automatic; null - no change
+         * @param minorUnit minor unit value; Double.NaN - automatic; null - no change
+         */
         public void SetValueRange(int axisIndex, Double? minimum, Double? maximum, Double? majorUnit, Double? minorUnit)
         {
             ValueRangeRecord valueRange = (ValueRangeRecord)valueRanges[axisIndex];
@@ -438,8 +431,10 @@ namespace NPOI.HSSF.UserModel
         private UnknownRecord CreateOBJRecord()
         {
             byte[] data = {
-			(byte) 0x15, (byte) 0x00, (byte) 0x12, (byte) 0x00, (byte) 0x05, (byte) 0x00, (byte) 0x02, (byte) 0x00, (byte) 0x11, (byte) 0x60, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xB8, (byte) 0x03,
-			(byte) 0x87, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+			(byte)0x15, (byte)0x00, (byte)0x12, (byte)0x00, (byte)0x05, (byte)0x00, (byte)0x02, (byte)0x00, 
+            (byte)0x11, (byte)0x60, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0xB8, (byte)0x03,
+			(byte)0x87, (byte)0x03, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, 
+            (byte)0x00, (byte)0x00,
 		};
 
             return new UnknownRecord((short)0x005D, data);
@@ -451,18 +446,30 @@ namespace NPOI.HSSF.UserModel
             // form for the moment.
 
             byte[] data = {
-			    (byte)0x0F, (byte)0x00, (byte)0x02, (byte)0xF0, (byte)0xC0, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0x00, (byte)0x08, (byte)0xF0, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x02, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x02, (byte)0x04, (byte)0x00, (byte)0x00, (byte)0x0F, (byte)0x00, (byte)0x03, (byte)0xF0, (byte)0xA8, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x0F, (byte)0x00, (byte)0x04, (byte)0xF0, (byte)0x28, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x01, (byte)0x00, (byte)0x09, (byte)0xF0, (byte)0x10, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x02, (byte)0x00, (byte)0x0A, (byte)0xF0, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x04, (byte)0x00, (byte)0x00, (byte)0x05, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x0F, (byte)0x00, (byte)0x04, (byte)0xF0, (byte)0x70, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x92, (byte)0x0C, (byte)0x0A, (byte)0xF0, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x02, (byte)0x04, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x0A, (byte)0x00, (byte)0x00, (byte)0x93, (byte)0x00, (byte)0x0B, (byte)0xF0, (byte)0x36, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x7F, (byte)0x00, (byte)0x04, (byte)0x01, (byte)0x04, (byte)0x01, (byte)0xBF, (byte)0x00, (byte)0x08, (byte)0x00, (byte)0x08, (byte)0x00, (byte)0x81, (byte)0x01, (byte)0x4E, (byte)0x00,
-			    (byte)0x00, (byte)0x08, (byte)0x83, (byte)0x01, (byte)0x4D, (byte)0x00, (byte)0x00, (byte)0x08, (byte)0xBF, (byte)0x01, (byte)0x10, (byte)0x00, (byte)0x11, (byte)0x00, (byte)0xC0, (byte)0x01,
-			    (byte)0x4D, (byte)0x00, (byte)0x00, (byte)0x08, (byte)0xFF, (byte)0x01, (byte)0x08, (byte)0x00, (byte)0x08, (byte)0x00, (byte)0x3F, (byte)0x02, (byte)0x00, (byte)0x00, (byte)0x02, (byte)0x00,
-			    (byte)0xBF, (byte)0x03, (byte)0x00, (byte)0x00, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0xF0, (byte)0x12, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-			    (byte)0x04, (byte)0x00, (byte)0xC0, (byte)0x02, (byte)0x0A, (byte)0x00, (byte)0xF4, (byte)0x00, (byte)0x0E, (byte)0x00, (byte)0x66, (byte)0x01, (byte)0x20, (byte)0x00, (byte)0xE9, (byte)0x00,
+			    (byte)0x0F, (byte)0x00, (byte)0x02, (byte)0xF0, (byte)0xC0, (byte)0x00, (byte)0x00, (byte)0x00, 
+                (byte)0x10, (byte)0x00, (byte)0x08, (byte)0xF0, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x02, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x02, (byte)0x04, (byte)0x00, (byte)0x00, 
+                (byte)0x0F, (byte)0x00, (byte)0x03, (byte)0xF0, (byte)0xA8, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x0F, (byte)0x00, (byte)0x04, (byte)0xF0, (byte)0x28, (byte)0x00, (byte)0x00, (byte)0x00, 
+                (byte)0x01, (byte)0x00, (byte)0x09, (byte)0xF0, (byte)0x10, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, 
+                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x02, (byte)0x00, (byte)0x0A, (byte)0xF0, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00, 
+                (byte)0x00, (byte)0x04, (byte)0x00, (byte)0x00, (byte)0x05, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x0F, (byte)0x00, (byte)0x04, (byte)0xF0, (byte)0x70, (byte)0x00, (byte)0x00, (byte)0x00, 
+                (byte)0x92, (byte)0x0C, (byte)0x0A, (byte)0xF0, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x02, (byte)0x04, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x0A, (byte)0x00, (byte)0x00, 
+                (byte)0x93, (byte)0x00, (byte)0x0B, (byte)0xF0, (byte)0x36, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x7F, (byte)0x00, (byte)0x04, (byte)0x01, (byte)0x04, (byte)0x01, (byte)0xBF, (byte)0x00, 
+                (byte)0x08, (byte)0x00, (byte)0x08, (byte)0x00, (byte)0x81, (byte)0x01, (byte)0x4E, (byte)0x00,
+			    (byte)0x00, (byte)0x08, (byte)0x83, (byte)0x01, (byte)0x4D, (byte)0x00, (byte)0x00, (byte)0x08, 
+                (byte)0xBF, (byte)0x01, (byte)0x10, (byte)0x00, (byte)0x11, (byte)0x00, (byte)0xC0, (byte)0x01,
+			    (byte)0x4D, (byte)0x00, (byte)0x00, (byte)0x08, (byte)0xFF, (byte)0x01, (byte)0x08, (byte)0x00,
+                (byte)0x08, (byte)0x00, (byte)0x3F, (byte)0x02, (byte)0x00, (byte)0x00, (byte)0x02, (byte)0x00,
+			    (byte)0xBF, (byte)0x03, (byte)0x00, (byte)0x00, (byte)0x08, (byte)0x00, (byte)0x00, (byte)0x00,
+                (byte)0x10, (byte)0xF0, (byte)0x12, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+			    (byte)0x04, (byte)0x00, (byte)0xC0, (byte)0x02, (byte)0x0A, (byte)0x00, (byte)0xF4, (byte)0x00,
+                (byte)0x0E, (byte)0x00, (byte)0x66, (byte)0x01, (byte)0x20, (byte)0x00, (byte)0xE9, (byte)0x00,
 			    (byte)0x00, (byte)0x00, (byte)0x11, (byte)0xF0, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
 		    };
 
@@ -775,22 +782,22 @@ namespace NPOI.HSSF.UserModel
             r.IsAutoGeneratedText = (true);
             r.IsGenerated = (true);
             r.IsAutoLabelDeleted = (false);
-            r.IsAutoBackground=(true);
-            r.Rotation=((short)0);
-            r.ShowCategoryLabelAsPercentage=(false);
-            r.ShowValueAsPercentage=(false);
-            r.ShowBubbleSizes=(false);
-            r.ShowLabel=(false);
-            r.IndexOfColorValue=((short)77);
-            r.DataLabelPlacement=((short)11088);
-            r.TextRotation=((short)0);
+            r.IsAutoBackground = (true);
+            r.Rotation = ((short)0);
+            r.ShowCategoryLabelAsPercentage = (false);
+            r.ShowValueAsPercentage = (false);
+            r.ShowBubbleSizes = (false);
+            r.ShowLabel = (false);
+            r.IndexOfColorValue = ((short)77);
+            r.DataLabelPlacement = ((short)11088);
+            r.TextRotation = ((short)0);
             return r;
         }
 
         private DefaultDataLabelTextPropertiesRecord CreateDefaultTextRecord(short categoryDataType)
         {
             DefaultDataLabelTextPropertiesRecord r = new DefaultDataLabelTextPropertiesRecord();
-            r.CategoryDataType=(CategoryDataType)(categoryDataType);
+            r.CategoryDataType = (CategoryDataType)(categoryDataType);
             return r;
         }
 
@@ -1442,7 +1449,3 @@ namespace NPOI.HSSF.UserModel
         }
     }
 }
-
-
-
-

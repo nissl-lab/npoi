@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
     /**
      * Record for the right margin. * NOTE: This source was automatically generated. * @author Shawn Laubach (slaubach at apache dot org)
      */
-    public class RightMarginRecord : StandardRecord, Margin
+    public class RightMarginRecord : StandardRecord, IMargin
     {
         public const short sid = 0x27;
         private double field_1_margin;
