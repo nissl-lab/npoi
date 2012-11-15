@@ -38,6 +38,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Record.Aggregates;
 using NPOI.SS.Util;
 using NPOI.DDF;
+using NPOI.HSSF.Record.Chart;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -180,9 +181,27 @@ namespace NPOI.Tools.POIFSBrowser
                         HSSFSheet hssfsheet=((HSSFSheet)hssfworkbook.GetSheetAt(i));
                         EscherAggregate ea = hssfsheet.DrawingEscherAggregate;
                         IEnumerator iterator1 = hssfsheet.Sheet.Records.GetEnumerator();
+                        int chartIndex = 1;
                         while (iterator1.MoveNext())
                         {
-                            if (iterator1.Current is Record)
+                            if (iterator1.Current is BOFRecord)
+                            {
+                                BOFRecord bof = (BOFRecord)iterator1.Current;
+                                if (bof.Type == BOFRecord.TYPE_CHART)
+                                {
+                                    string chartTitle = string.Format("Chart {0}" , chartIndex);
+                                    TreeNode chartnode = sheetnode.Nodes.Add(chartTitle, chartTitle, "Folder", "Folder");
+                                    chartnode.Nodes.Add(new RecordTreeNode(bof));
+                                    while (iterator1.MoveNext())
+                                    {
+                                        chartnode.Nodes.Add(new RecordTreeNode((Record)iterator1.Current));
+                                        if (iterator1.Current is EOFRecord)
+                                            break;
+                                    }
+                                    chartIndex++;
+                                }
+                            }
+                            else if (iterator1.Current is Record)
                             {
                                 Record record = (Record)iterator1.Current;
                                 sheetnode.Nodes.Add(new RecordTreeNode(record));
