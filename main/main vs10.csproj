@@ -82,17 +82,28 @@
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs" />
     <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\Chart3dRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CrtLayout12ARecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Chart\CrtLayout12Record.cs" />
+    <Compile Include="HSSF\Record\Chart\CrtMlFrtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\GelFrameRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\MarkerFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\PieFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\PieRecord.cs" />
     <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
     <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
     <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
     <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
-    <Compile Include="HSSF\Record\UnicodeString.cs" />
+    <Compile Include="HSSF\Record\Common\UnicodeString.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
     <Compile Include="HSSF\Record\SheetExtRecord.cs" />
+    <Compile Include="HSSF\Structure.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
