@@ -53,12 +53,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\solution\Lib\Release.net4\</OutputPath>
+    <OutputPath>..\solution\Lib\OOXML\.net4\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\solution\Lib\Release.net4\NPOI.OOXML.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -96,6 +97,27 @@
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartDataFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartLegend.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFNumberCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFScatterChartData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFValueAxis.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellAlignment.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellFill.cs" />
@@ -111,6 +133,7 @@
     <Compile Include="XSSF\UserModel\XSSFBorderFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFCellStyle.cs" />
+    <Compile Include="XSSF\UserModel\XSSFChart.cs" />
     <Compile Include="XSSF\UserModel\XSSFChartSheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFChildAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFClientAnchor.cs" />

@@ -17,24 +17,21 @@
 
 namespace NPOI.SS.UserModel.Charts
 {
-
-    /**
-     * High level representation of chart legend.
-     *
-     * @author Roman Kashitsyn
-     */
-    public interface ChartLegend : ManuallyPositionable
+    /// <summary>
+    /// High level representation of chart legend.
+    /// </summary>
+    /// <remarks>@author Roman Kashitsyn</remarks>
+    public interface IChartLegend : ManuallyPositionable
     {
-
-        /**
-         * @return legend position
-         */
-        LegendPosition GetPosition();
-
-        /**
-         * @param position new legend position
-         */
-        void SetPosition(LegendPosition position);
+        /// <summary>
+        /// legend position
+        /// </summary>
+        /// <returns></returns>
+        LegendPosition Position
+        {
+            get;
+            set;
+        }
     }
 
 

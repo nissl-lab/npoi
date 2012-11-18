@@ -17,22 +17,21 @@
 
 namespace NPOI.SS.UserModel.Charts
 {
-
-    /**
-     *  Specifies the possible ways to store a chart element's position.
-     * @author Roman Kashitsyn
-     */
+    /// <summary>
+    /// Specifies the possible ways to store a chart element's position.
+    /// </summary>
+    /// <remarks>
+    /// @author Roman Kashitsyn
+    /// </remarks>
     public enum LayoutMode
     {
-        /**
-         * Specifies that the Width or Height shall be interpreted as the
-         * Right or Bottom of the chart element.
-         */
+        /// <summary>
+        /// Specifies that the Width or Height shall be interpreted as the Right or Bottom of the chart element.
+        /// </summary>
         EDGE,
-        /**
-         * Specifies that the Width or Height shall be interpreted as the
-         * Width or Height of the chart element.
-         */
+        /// <summary>
+        /// Specifies that the Width or Height shall be interpreted as the width or Height of the chart element.
+        /// </summary>
         FACTOR
     }
 

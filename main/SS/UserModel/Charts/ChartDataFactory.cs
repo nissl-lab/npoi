@@ -17,19 +17,19 @@
 
 namespace NPOI.SS.UserModel.Charts
 {
-
-    /**
-     * A factory for different chart data types.
-     *
-     * @author Roman Kashitsyn
-     */
-    public interface ChartDataFactory
+    /// <summary>
+    /// A factory for different chart data types.
+    /// </summary>
+    /// <remarks>
+    /// @author Roman Kashitsyn
+    /// </remarks>
+    public interface IChartDataFactory
     {
-
-        /**
-         * @return an appropriate ScatterChartData instance
-         */
-        ScatterChartData CreateScatterChartData();
+        /// <summary>
+        /// returns an appropriate ScatterChartData instance
+        /// </summary>
+        /// <returns></returns>
+        IScatterChartData CreateScatterChartData();
 
     }
 

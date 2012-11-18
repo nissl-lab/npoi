@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawing\ChartDrawing.cs" />
+    <Compile Include="Drawing\ChartSpaceDocument.cs" />
     <Compile Include="Drawing\DiagramColorTransform.cs" />
     <Compile Include="Drawing\DiagramDataModel.cs" />
     <Compile Include="Drawing\DiagramDefinition.cs" />

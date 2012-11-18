@@ -24,19 +24,19 @@ namespace NPOI.SS.UserModel.Charts
     /**
      * @author Roman Kashitsyn
      */
-    public interface ScatterChartData : ChartData
+    public interface IScatterChartData : IChartData
     {
         /**
          * @param xMarker data marker to be used for X value range
          * @param yMarker data marker to be used for Y value range
          * @return a new scatter chart serie
          */
-        ScatterChartSerie AddSerie(DataMarker xMarker, DataMarker yMarker);
+        IScatterChartSerie AddSerie(DataMarker xMarker, DataMarker yMarker);
 
         /**
          * @return list of all series
          */
-        List<ScatterChartSerie> GetSeries();
+        List<IScatterChartSerie> GetSeries();
     }
 
 

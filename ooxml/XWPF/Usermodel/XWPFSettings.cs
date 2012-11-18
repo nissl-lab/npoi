@@ -73,16 +73,15 @@ using System.Xml.Serialization;
             return long.Parse(zoom.percent);
         }
 
-        /**
-         * Set zoom.<br/>
-         * In the zoom tag inside Settings.xml file <br/>
-         * it Sets the value of zoom
-         * <br/>
-         * sample snippet from Settings.xml 
-         * <pre>
-         *    &lt;w:zoom w:percent="50" /&gt; 
-         * <pre>
-         */
+        /// <summary>
+        /// Set zoom. In the zoom tag inside settings.xml file it sets the value of zoom
+        /// </summary>
+        /// <param name="zoomPercent"></param>
+        /// <example>
+        /// sample snippet from Settings.xml 
+        /// 
+        /// &lt;w:zoom w:percent="50" /&gt;
+        /// </example>
         public void SetZoomPercent(long zoomPercent)
         {
             //if (!ctSettings.IsSetZoom())

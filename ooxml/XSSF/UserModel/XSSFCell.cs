@@ -397,12 +397,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Return a formula for the cell, for example, <code>SUM(C4:E4)</code>
-         *
-         * @return a formula for the cell
-         * @throws InvalidOperationException if the cell type returned by {@link #CellType} is not CellType.FORMULA
-         */
+        /// <summary>
+        /// Return a formula for the cell,  for example, <code>SUM(C4:E4)</code>
+        /// </summary>
         public String CellFormula
         {
             get
@@ -429,12 +426,11 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Creates a non shared formula from the shared formula counterpart
-         *
-         * @param si Shared Group Index
-         * @return non shared formula Created for the given shared formula and this cell
-         */
+        /// <summary>
+        /// Creates a non shared formula from the shared formula counterpart
+        /// </summary>
+        /// <param name="si">Shared Group Index</param>
+        /// <returns>non shared formula created for the given shared formula and this cell</returns>
         private String ConvertSharedFormula(int si)
         {
             XSSFSheet sheet = (XSSFSheet)Sheet;
@@ -481,7 +477,6 @@ namespace NPOI.XSSF.UserModel
             SetFormula(formula, (int)FormulaType.CELL);
         }
 
-        /* namespace */
         internal void SetCellArrayFormula(String formula, CellRangeAddress range)
         {
             SetFormula(formula, FormulaType.ARRAY);
@@ -510,11 +505,9 @@ namespace NPOI.XSSF.UserModel
             if (_cell.IsSetV()) _cell.unsetV();
         }
 
-        /**
-         * Returns column index of this cell
-         *
-         * @return zero-based column index of a column in a sheet.
-         */
+        /// <summary>
+        /// Returns zero-based column index of this cell
+        /// </summary>
         public int ColumnIndex
         {
             get
@@ -523,11 +516,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Returns row index of a row in the sheet that Contains this cell
-         *
-         * @return zero-based row index of a row in the sheet that Contains this cell
-         */
+        /// <summary>
+        /// Returns zero-based row index of a row in the sheet that contains this cell
+        /// </summary>
         public int RowIndex
         {
             get
@@ -535,22 +526,18 @@ namespace NPOI.XSSF.UserModel
                 return _row.RowNum;
             }
         }
-
-        /**
-         * Returns an A1 style reference to the location of this cell
-         *
-         * @return A1 style reference to the location of this cell
-         */
+        /// <summary>
+        /// Returns an A1 style reference to the location of this cell
+        /// </summary>
+        /// <returns>A1 style reference to the location of this cell</returns>
         public String GetReference()
         {
             return _cell.r;
         }
 
-        /**
-         * Return the cell's style.
-         *
-         * @return the cell's style.</code>
-         */
+        /// <summary>
+        /// Return the cell's style.
+        /// </summary>
         public ICellStyle CellStyle
         {
             get
@@ -579,17 +566,9 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-        /**
-         * Return the cell type.
-         *
-         * @return the cell type
-         * @see Cell#CellType.BLANK
-         * @see Cell#CellType.NUMERIC
-         * @see Cell#CellType.STRING
-         * @see Cell#CellType.FORMULA
-         * @see Cell#CellType.BOOLEAN
-         * @see Cell#CellType.ERROR
-         */
+        /// <summary>
+        /// Return the cell type.
+        /// </summary>
         public CellType CellType
         {
             get
@@ -603,13 +582,9 @@ namespace NPOI.XSSF.UserModel
                 return GetBaseCellType(true);
             }
         }
-
-        /**
-         * Only valid for formula cells
-         * @return one of ({@link #CellType.NUMERIC}, {@link #CellType.STRING},
-         *     {@link #CellType.BOOLEAN}, {@link #CellType.ERROR}) depending
-         * on the cached value of the formula
-         */
+        /// <summary>
+        /// Only valid for formula cells
+        /// </summary>
         public CellType CachedFormulaResultType
         {
             get
@@ -623,9 +598,11 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Detect cell type based on the "t" attribute of the CT_Cell bean
-         */
+        /// <summary>
+        /// Detect cell type based on the "t" attribute of the CT_Cell bean
+        /// </summary>
+        /// <param name="blankCells"></param>
+        /// <returns></returns>
         private CellType GetBaseCellType(bool blankCells)
         {
             switch (_cell.t)
@@ -654,16 +631,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Get the value of the cell as a date.
-         * <p>
-         * For strings we throw an exception. For blank cells we return a null.
-         * </p>
-         * @return the value of the cell as a date
-         * @throws InvalidOperationException if the cell type returned by {@link #CellType} is CellType.STRING
-         * @exception NumberFormatException if the cell value isn't a parsable <code>double</code>.
-         * @see DataFormatter for formatting  this date into a string similar to how excel does.
-         */
+        /// <summary>
+        /// Get the value of the cell as a date.
+        /// </summary>
         public DateTime DateCellValue
         {
             get
@@ -680,27 +650,19 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as
-         * a date.
-         *
-         * @param value  the date value to Set this cell to.  For formulas we'll Set the
-         *        precalculated value, for numerics we'll Set its value. For other types we
-         *        will change the cell to a numeric cell and Set its value.
-         */
+        /// <summary>
+        ///  Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as a date.
+        /// </summary>
+        /// <param name="value">the date value to Set this cell to.  For formulas we'll set the precalculated value, 
+        /// for numerics we'll Set its value. For other types we will change the cell to a numeric cell and Set its value. </param>
         public void SetCellValue(DateTime value)
         {
             bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
-
-        /**
-         * Returns the error message, such as #VALUE!
-         *
-         * @return the error message such as #VALUE!
-         * @throws InvalidOperationException if the cell type returned by {@link #CellType} isn't CellType.ERROR
-         * @see FormulaError
-         */
+        /// <summary>
+        /// Returns the error message, such as #VALUE!
+        /// </summary>
         public String ErrorCellString
         {
             get
@@ -711,17 +673,12 @@ namespace NPOI.XSSF.UserModel
                 return _cell.v;
             }
         }
-        /**
-         * Get the value of the cell as an error code.
-         * <p>
-         * For strings, numbers, and bools, we throw an exception.
-         * For blank cells we return a 0.
-         * </p>
-         *
-         * @return the value of the cell as an error code
-         * @throws InvalidOperationException if the cell type returned by {@link #CellType} isn't CellType.ERROR
-         * @see FormulaError
-         */
+
+        /// <summary>
+        /// Get the value of the cell as an error code.
+        /// For strings, numbers, and bools, we throw an exception.
+        /// For blank cells we return a 0.
+        /// </summary>
         public byte ErrorCellValue
         {
             get
@@ -740,32 +697,31 @@ namespace NPOI.XSSF.UserModel
             FormulaError error = FormulaError.ForInt(errorCode);
             SetCellErrorValue(error);
         }
-        /**
-         * Set a error value for the cell
-         *
-         * @param error the error value to Set this cell to.  For formulas we'll Set the
-         *        precalculated value , for errors we'll Set
-         *        its value. For other types we will change the cell to an error
-         *        cell and Set its value.
-         */
+        /// <summary>
+        /// Set a error value for the cell
+        /// </summary>
+        /// <param name="error">the error value to Set this cell to. 
+        /// For formulas we'll Set the precalculated value , for errors we'll set
+        /// its value. For other types we will change the cell to an error cell and Set its value.
+        /// </param>
         public void SetCellErrorValue(FormulaError error)
         {
             _cell.t = (ST_CellType.e);
             _cell.v = (error.String);
         }
 
-        /**
-         * Sets this cell as the active cell for the worksheet.
-         */
+        /// <summary>
+        /// Sets this cell as the active cell for the worksheet.
+        /// </summary>
         public void SetAsActiveCell()
         {
             ((XSSFSheet)Sheet).SetActiveCell(_cell.r);
         }
 
-        /**
-         * Blanks this cell. Blank cells have no formula or value but may have styling.
-         * This method erases all the data previously associated with this cell.
-         */
+        /// <summary>
+        /// Blanks this cell. Blank cells have no formula or value but may have styling.
+        /// This method erases all the data previously associated with this cell.
+        /// </summary>
         private void SetBlank()
         {
             CT_Cell blank = new CT_Cell();
@@ -774,29 +730,21 @@ namespace NPOI.XSSF.UserModel
             _cell.Set(blank);
         }
 
-        /**
-         * Sets column index of this cell
-         *
-         * @param num column index of this cell
-         */
-        internal void SetCellNum(int num) {
-        CheckBounds(num);
-        _cellNum = num;
-        String ref1 = new CellReference(RowIndex, ColumnIndex).FormatAsString();
-        _cell.r = (ref1);
-    }
-
-        /**
-         * Set the cells type (numeric, formula or string)
-         *
-         * @throws ArgumentException if the specified cell type is invalid
-         * @see #CellType.NUMERIC
-         * @see #CellType.STRING
-         * @see #CellType.FORMULA
-         * @see #CellType.BLANK
-         * @see #CellType.BOOLEAN
-         * @see #CellType.ERROR
-         */
+        /// <summary>
+        /// Sets column index of this cell
+        /// </summary>
+        /// <param name="num"></param>
+        internal void SetCellNum(int num)
+        {
+            CheckBounds(num);
+            _cellNum = num;
+            String ref1 = new CellReference(RowIndex, ColumnIndex).FormatAsString();
+            _cell.r = (ref1);
+        }
+        /// <summary>
+        /// Set the cells type (numeric, formula or string)
+        /// </summary>
+        /// <param name="cellType"></param>
         public void SetCellType(CellType cellType)
         {
             CellType prevType = CellType;
@@ -854,15 +802,13 @@ namespace NPOI.XSSF.UserModel
                 _cell.unsetF();
             }
         }
-
-        /**
-         * Returns a string representation of the cell
-         * <p>
-         * Formula cells return the formula string, rather than the formula result.
-         * Dates are displayed in dd-MMM-yyyy format
-         * Errors are displayed as #ERR&lt;errIdx&gt;
-         * </p>
-         */
+        /// <summary>
+        /// Returns a string representation of the cell
+        /// </summary>
+        /// <returns>Formula cells return the formula string, rather than the formula result.
+        /// Dates are displayed in dd-MMM-yyyy format
+        /// Errors are displayed as #ERR&lt;errIdx&gt;
+        /// </returns>
         public override String ToString()
         {
             switch (CellType)
@@ -906,9 +852,11 @@ namespace NPOI.XSSF.UserModel
             return _cell.v;
         }
 
-        /**
-         * Used to help format error messages
-         */
+        /// <summary>
+        /// Used to help format error messages
+        /// </summary>
+        /// <param name="cellTypeCode"></param>
+        /// <returns></returns>
         private static String GetCellTypeName(CellType cellTypeCode)
         {
             switch (cellTypeCode)
@@ -949,11 +897,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Returns cell comment associated with this cell
-         *
-         * @return the cell comment associated with this cell or <code>null</code>
-         */
+        /// <summary>
+        ///  Returns cell comment associated with this cell
+        /// </summary>
         public IComment CellComment
         {
             get
@@ -973,9 +919,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Removes the comment for this cell, if there is one.
-        */
+        /// <summary>
+        /// Removes the comment for this cell, if there is one.
+        /// </summary>
         public void RemoveCellComment() {
             IComment comment = this.CellComment;
             if (comment != null)
@@ -987,11 +933,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Returns hyperlink associated with this cell
-         *
-         * @return hyperlink associated with this cell or <code>null</code> if not found
-         */
+        /// <summary>
+        /// Returns hyperlink associated with this cell
+        /// </summary>
         public IHyperlink Hyperlink
         {
             get
@@ -1016,7 +960,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the xml bean containing information about this cell
          */
-        public CT_Cell GetCTCell()
+        internal CT_Cell GetCTCell()
         {
             return _cell;
         }

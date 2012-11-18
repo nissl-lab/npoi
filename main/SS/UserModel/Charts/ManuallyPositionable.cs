@@ -31,7 +31,7 @@ namespace NPOI.SS.UserModel.Charts
          * Returns manual layout for the chart element.
          * @return manual layout for the chart element.
          */
-        ManualLayout GetManualLayout();
+        IManualLayout GetManualLayout();
     }
 
 

@@ -141,13 +141,13 @@ namespace NPOI.XSSF.UserModel
         /**
          * Assign a DrawingML chart to the graphic frame.
          */
-        //protected void SetChart(XSSFChart chart, String relId)
-        //{
-        //    CT_GraphicalObjectData data = graphicFrame.graphic.AddNewGraphicData();
-        //    AppendChartElement(data, relId);
-        //    chart.SetGraphicFrame(this);
-        //    return;
-        //}
+        internal void SetChart(XSSFChart chart, String relId)
+        {
+            CT_GraphicalObjectData data = graphicFrame.graphic.AddNewGraphicData();
+            AppendChartElement(data, relId);
+            chart.SetGraphicFrame(this);
+            return;
+        }
 
         /**
          * Gets the frame id.
@@ -163,24 +163,20 @@ namespace NPOI.XSSF.UserModel
         public void SetId(long id)
         {
             graphicFrame.nvGraphicFramePr.cNvPr.id = (uint)id;
-        }
-
-        /**
-         * The low level code to insert {@code <c:chart>} tag into
-         * {@code<a:graphicData>}.
-         *
-         * Here is the schema (ECMA-376):
-         * <pre>
-         * {@code
-         * <complexType name="CT_GraphicalObjectData">
-         *   <sequence>
-         *     <any minOccurs="0" maxOccurs="unbounded" ProcessContents="strict"/>
-         *   </sequence>
-         *   <attribute name="uri" type="xsd:token"/>
-         * </complexType>
-         * }
-         * </pre>
-         */
+        }    
+        /// <summary>
+        /// The low level code to insert <code><c:chart></code> tag into <code><a:graphicData></code>
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="id"></param>
+        /// <example>
+         /// <complexType name="CT_GraphicalObjectData">
+         ///   <sequence>
+         ///     <any minOccurs="0" maxOccurs="unbounded" ProcessContents="strict"/>
+         ///   </sequence>
+         ///   <attribute name="uri" type="xsd:token"/>
+         /// </complexType>
+        /// </example>
         private void AppendChartElement(CT_GraphicalObjectData data, String id)
         {
             String r_namespaceUri = ST_RelationshipId.NamespaceURI;
@@ -191,6 +187,7 @@ namespace NPOI.XSSF.UserModel
             //cursor.insertAttributeWithValue(new QName(r_namespaceUri, "id", "r"), id);
             //cursor.dispose();
             //data.SetUri(c_namespaceUri);
+            throw new NotImplementedException();
         }
 
     }

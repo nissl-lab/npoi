@@ -21,7 +21,7 @@ namespace NPOI.SS.UserModel.Charts
     /**
      * @author Roman Kashitsyn
      */
-    public interface ValueAxis : ChartAxis
+    public interface IValueAxis : IChartAxis
     {
 
         /**

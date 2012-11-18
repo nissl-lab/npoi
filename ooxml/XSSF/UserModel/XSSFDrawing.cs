@@ -164,28 +164,24 @@ namespace NPOI.XSSF.UserModel
         {
             return CreatePicture((XSSFClientAnchor)anchor, pictureIndex);
         }
-
-        /**
-         * Creates a chart.
-         * @param anchor the client anchor describes how this chart is attached to
-         *               the sheet.
-         * @return the newly Created chart
-         * @see NPOI.xssf.usermodel.XSSFDrawing#CreateChart(ClientAnchor)
-         */
+        /// <summary>
+        /// Creates a chart.
+        /// </summary>
+        /// <param name="anchor">the client anchor describes how this chart is attached to</param>
+        /// <returns>the newly created chart</returns>
         public IChart CreateChart(IClientAnchor anchor)
         {
-            //int chartNumber = GetPackagePart().Package.
-            //    GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
+            int chartNumber = GetPackagePart().Package.
+                GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
-            throw new NotImplementedException();
-        //    XSSFChart chart = (XSSFChart)CreateRelationship(
-        //            XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
-        //    String chartRelId = chart.GetPackageRelationship().GetId();
+            XSSFChart chart = (XSSFChart)CreateRelationship(
+                    XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
+            String chartRelId = chart.GetPackageRelationship().Id;
 
-        //    XSSFGraphicFrame frame = CreateGraphicFrame(anchor);
-        //    frame.SetChart(chart, chartRelId);
+            XSSFGraphicFrame frame = CreateGraphicFrame((XSSFClientAnchor)anchor);
+            frame.SetChart(chart, chartRelId);
 
-        //    return chart;
+            return chart;
         }
 
         //public XSSFChart CreateChart(IClientAnchor anchor)

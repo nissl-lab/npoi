@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel.Charts
      *
      * @author Roman Kashitsyn
      */
-    public interface ChartAxis
+    public interface IChartAxis
     {
 
         /**
@@ -122,7 +122,7 @@ namespace NPOI.SS.UserModel.Charts
          * Declare this axis cross another axis.
          * @param axis that this axis should cross
          */
-        void CrossAxis(ChartAxis axis);
+        void CrossAxis(IChartAxis axis);
     }
 
 

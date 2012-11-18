@@ -18,14 +18,9 @@ using System;
 using System.Collections.Generic;
 namespace NPOI.Util
 {
-    /**
-     * <p>
-     * 24.08.2009<br>
-     * </p>
-     * 
-     * @author Stefan Stern<br>
-     */
-
+    /// <summary>
+    /// 24.08.2009 @author Stefan Stern
+    /// </summary>
     public class IdentifierManager
     {
 

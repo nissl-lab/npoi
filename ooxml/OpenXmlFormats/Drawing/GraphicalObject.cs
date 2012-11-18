@@ -10,7 +10,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GraphicalObjectData
+    public class CT_GraphicalObjectData
     {
 
         private List<System.Xml.XmlElement> anyField = new List<System.Xml.XmlElement>();
@@ -58,9 +58,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GraphicalObject
+    public class CT_GraphicalObject
     {
-
+        public CT_GraphicalObjectData AddNewGraphicData()
+        {
+            this.graphicDataField = new CT_GraphicalObjectData();
+            return this.graphicDataField;
+        }
         private CT_GraphicalObjectData graphicDataField;
 
         [XmlElement(Order = 0)]

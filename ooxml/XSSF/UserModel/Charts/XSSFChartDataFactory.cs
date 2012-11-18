@@ -15,23 +15,44 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.UserModel.Charts
+using NPOI.SS.UserModel.Charts;
+namespace NPOI.XSSF.UserModel.Charts
 {
 
-    ///<summary>
-    ///Enumeration of all possible chart legend positions.
-    ///</summary>
-    /// <remarks>
-    /// @author Roman Kashitsyn
-    /// </remarks>
-    public enum LegendPosition
+    /**
+     * @author Roman Kashitsyn
+     */
+    public class XSSFChartDataFactory : IChartDataFactory
     {
-        BOTTOM,
-        LEFT,
-        RIGHT,
-        TOP,
-        TOP_RIGHT
-    }
 
+        private static XSSFChartDataFactory instance;
+
+        private XSSFChartDataFactory()
+            : base()
+        {
+
+        }
+
+        /**
+         * @return new scatter chart data instance
+         */
+        public IScatterChartData CreateScatterChartData()
+        {
+            return new XSSFScatterChartData();
+        }
+
+        /**
+         * @return factory instance
+         */
+        public static XSSFChartDataFactory GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new XSSFChartDataFactory();
+            }
+            return instance;
+        }
+
+    }
 
 }

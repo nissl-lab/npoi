@@ -23,7 +23,7 @@ namespace NPOI.SS.UserModel.Charts
      *
      * @author Roman Kashitsyn
      */
-    public interface ManualLayout
+    public interface IManualLayout
     {
 
         /**

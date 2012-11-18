@@ -16,17 +16,17 @@ namespace NPOI.SS.UserModel
         /**
          * @return an appropriate ChartDataFactory implementation
          */
-        ChartDataFactory GetChartDataFactory();
+        IChartDataFactory GetChartDataFactory();
 
         /**
          * @return an appropriate ChartAxisFactory implementation
          */
-        ChartAxisFactory GetChartAxisFactory();
+        IChartAxisFactory GetChartAxisFactory();
 
         /**
          * @return chart legend instance
          */
-        ChartLegend GetOrCreateLegend();
+        IChartLegend GetOrCreateLegend();
 
         /**
          * Delete current chart legend.
@@ -36,13 +36,13 @@ namespace NPOI.SS.UserModel
         /**
          * @return list of all chart axis
          */
-        List<ChartAxis> GetAxis();
+        List<IChartAxis> GetAxis();
 
         /**
          * Plots specified data on the chart.
          *
          * @param data a data to plot
          */
-        void Plot(ChartData data, params ChartAxis[] axis);
+        void Plot(IChartData data, params IChartAxis[] axis);
     }
 }

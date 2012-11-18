@@ -340,11 +340,10 @@ namespace NPOI.XWPF.UserModel
             return footnoteText.ToString();
         }
 
-        /**
-         * Appends a new run to this paragraph
-         *
-         * @return a new text run
-         */
+        /// <summary>
+        /// Appends a new run to this paragraph
+        /// </summary>
+        /// <returns>a new text run</returns>
         public XWPFRun CreateRun()
         {
             XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
@@ -355,8 +354,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Returns the paragraph alignment which shall be applied to text in this
          * paragraph.
-         * <p/>
-         * <p/>
+         * <p>
          * If this element is not Set on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -375,8 +373,8 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the paragraph alignment which shall be applied to text in this
          * paragraph.
-         * <p/>
-         * <p/>
+         * <p>
+         * <p>
          * If this element is not Set on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -396,12 +394,12 @@ namespace NPOI.XWPF.UserModel
         /**
          * Returns the text vertical alignment which shall be applied to text in
          * this paragraph.
-         * <p/>
+         * <p>
          * If the line height (before any Added spacing) is larger than one or more
          * characters on the line, all characters will be aligned to each other as
          * specified by this element.
          * </p>
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -421,12 +419,12 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the text vertical alignment which shall be applied to text in
          * this paragraph.
-         * <p/>
+         * <p>
          * If the line height (before any Added spacing) is larger than one or more
          * characters on the line, all characters will be aligned to each other as
          * specified by this element.
          * </p>
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -450,8 +448,8 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the border which shall be displayed above a Set of paragraphs
          * which have the same Set of paragraph border Settings.
-         * <p/>
-         * <p/>
+         * <p>
+         * <p>
          * To determine if any two adjoining paragraphs shall have an individual top
          * and bottom border or a between border, the Set of borders on the two
          * adjoining paragraphs are Compared. If the border information on those two
@@ -462,7 +460,7 @@ namespace NPOI.XWPF.UserModel
          * determines the space above the text (ignoring any spacing above) which
          * should be left before this border is Drawn, specified in points.
          * </p>
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -506,32 +504,36 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
-         * Specifies the border which shall be displayed below a Set of paragraphs
-         * which have the same Set of paragraph border Settings.
-         * <p/>
-         * To determine if any two adjoining paragraphs shall have an individual top
-         * and bottom border or a between border, the Set of borders on the two
-         * adjoining paragraphs are Compared. If the border information on those two
-         * paragraphs is identical for all possible paragraphs borders, then the
-         * between border is displayed. Otherwise, the paragraph shall use its
-         * bottom border and the following paragraph shall use its top border,
-         * respectively. If this border specifies a space attribute, that value
-         * determines the space After the bottom of the text (ignoring any space
-         * below) which should be left before this border is Drawn, specified in
-         * points.
-         * </p>
-         * <p/>
-         * If this element is omitted on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no between border shall be applied
-         * below identical paragraphs.
-         * </p>
-         * <b>This border can only be a line border.</b>
-         *
-         * @param border
-         * @see Borders a list of all types of borders
-         */
+ * 
+ * <p>
+
+ * </p>
+ * <p>
+ * If this element is omitted on a given paragraph, its value is determined
+ * by the Setting previously Set at any level of the style hierarchy (i.e.
+ * that previous Setting remains unChanged). If this Setting is never
+ * specified in the style hierarchy, then no between border shall be applied
+ * below identical paragraphs.
+ * </p>
+ * <b>This border can only be a line border.</b>
+ */
+        /// <summary>
+        /// Specifies the border which shall be displayed below a Set of paragraphs
+        /// which have the same Set of paragraph border Settings.
+        /// </summary>
+        /// <param name="border">a list of all types of borders</param>
+        /// <remarks>
+        ///  To determine if any two adjoining paragraphs shall have an individual top
+        /// and bottom border or a between border, the Set of borders on the two
+        /// adjoining paragraphs are Compared. If the border information on those two
+        /// paragraphs is identical for all possible paragraphs borders, then the
+        /// between border is displayed. Otherwise, the paragraph shall use its
+        /// bottom border and the following paragraph shall use its top border,
+        /// respectively. If this border specifies a space attribute, that value
+        /// determines the space After the bottom of the text (ignoring any space
+        /// below) which should be left before this border is Drawn, specified in
+        /// points.
+        /// </remarks>
         public void SetBorderBottom(Borders border)
         {
             CT_PBdr ct = GetCTPBrd(true);
@@ -542,14 +544,11 @@ namespace NPOI.XWPF.UserModel
                 pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
         }
 
-        /**
-         * Specifies the border which shall be displayed below a Set of
-         * paragraphs which have the same Set of paragraph border Settings.
-         *
-         * @return paragraphBorder - the bottom border for the paragraph
-         * @see #setBorderBottom(Borders)
-         * @see Borders a list of all types of borders
-         */
+        /// <summary>
+        ///Specifies the border which shall be displayed below a Set of
+        /// paragraphs which have the same Set of paragraph border Settings.
+        /// </summary>
+        /// <returns>the bottom border for the paragraph</returns>
         public Borders GetBorderBottom()
         {
             CT_PBdr border = GetCTPBrd(false);
@@ -566,7 +565,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the border which shall be displayed on the left side of the
          * page around the specified paragraph.
-         * <p/>
+         * <p>
          * To determine if any two adjoining paragraphs should have a left border
          * which spans the full line height or not, the left border shall be Drawn
          * between the top border or between border at the top (whichever would be
@@ -574,7 +573,7 @@ namespace NPOI.XWPF.UserModel
          * border at the bottom (whichever would be rendered for the current
          * paragraph).
          * </p>
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -596,14 +595,11 @@ namespace NPOI.XWPF.UserModel
 
         }
 
-        /**
-         * Specifies the border which shall be displayed on the left side of the
-         * page around the specified paragraph.
-         *
-         * @return ParagraphBorder - the left border for the paragraph
-         * @see #setBorderLeft(Borders)
-         * @see Borders for a list of all possible borders
-         */
+        /// <summary>
+        /// Specifies the border which shall be displayed on the left side of the
+        /// page around the specified paragraph.
+        /// </summary>
+        /// <returns>the left border for the paragraph</returns>
         public Borders GetBorderLeft()
         {
             CT_PBdr border = GetCTPBrd(false);
@@ -619,7 +615,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the border which shall be displayed on the right side of the
          * page around the specified paragraph.
-         * <p/>
+         * <p>
          * To determine if any two adjoining paragraphs should have a right border
          * which spans the full line height or not, the right border shall be Drawn
          * between the top border or between border at the top (whichever would be
@@ -627,7 +623,7 @@ namespace NPOI.XWPF.UserModel
          * border at the bottom (whichever would be rendered for the current
          * paragraph).
          * </p>
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -671,7 +667,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the border which shall be displayed between each paragraph in a
          * Set of paragraphs which have the same Set of paragraph border Settings.
-         * <p/>
+         * <p>
          * To determine if any two adjoining paragraphs should have a between border
          * or an individual top and bottom border, the Set of borders on the two
          * adjoining paragraphs are Compared. If the border information on those two
@@ -682,7 +678,7 @@ namespace NPOI.XWPF.UserModel
          * bottom of each paragraph with an identical following paragraph, taking
          * into account any space After the line pitch.
          * </p>
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph, its value is determined
          * by the Setting previously Set at any level of the style hierarchy (i.e.
          * that previous Setting remains unChanged). If this Setting is never
@@ -728,7 +724,7 @@ namespace NPOI.XWPF.UserModel
          * Specifies that when rendering this document in a paginated
          * view, the contents of this paragraph are rendered on the start of a new
          * page in the document.
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph,
          * its value is determined by the Setting previously Set at any level of the
          * style hierarchy (i.e. that previous Setting remains unChanged). If this
@@ -755,7 +751,7 @@ namespace NPOI.XWPF.UserModel
          * Specifies that when rendering this document in a paginated
          * view, the contents of this paragraph are rendered on the start of a new
          * page in the document.
-         * <p/>
+         * <p>
          * If this element is omitted on a given paragraph,
          * its value is determined by the Setting previously Set at any level of the
          * style hierarchy (i.e. that previous Setting remains unChanged). If this
@@ -782,7 +778,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the spacing that should be Added After the last line in this
          * paragraph in the document in absolute units.
-         * <p/>
+         * <p>
          * If the AfterLines attribute or the AfterAutoSpacing attribute is also
          * specified, then this attribute value is ignored.
          * </p>
@@ -819,7 +815,7 @@ namespace NPOI.XWPF.UserModel
          * <b>The value of this attribute is
          * specified in one hundredths of a line.
          * </b>
-         * <p/>
+         * <p>
          * If the AfterAutoSpacing attribute
          * is also specified, then this attribute value is ignored. If this Setting
          * is never specified in the style hierarchy, then its value shall be zero
@@ -855,7 +851,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies the spacing that should be Added above the first line in this
          * paragraph in the document in absolute units.
-         * <p/>
+         * <p>
          * If the beforeLines attribute or the beforeAutoSpacing attribute is also
          * specified, then this attribute value is ignored.
          * </p>
@@ -886,7 +882,7 @@ namespace NPOI.XWPF.UserModel
          * Specifies the spacing that should be Added before the first line in this
          * paragraph in the document in line units. <b> The value of this attribute
          * is specified in one hundredths of a line. </b>
-         * <p/>
+         * <p>
          * If the beforeAutoSpacing attribute is also specified, then this attribute
          * value is ignored. If this Setting is never specified in the style
          * hierarchy, then its value shall be zero.
@@ -952,7 +948,7 @@ namespace NPOI.XWPF.UserModel
          * margin for this paragraph and the left edge of that paragraph's content
          * in a left to right paragraph, and the right text margin and the right
          * edge of that paragraph's text in a right to left paragraph
-         * <p/>
+         * <p>
          * If this attribute is omitted, its value shall be assumed to be zero.
          * Negative values are defined such that the text is Moved past the text margin,
          * positive values Move the text inside the text margin.
@@ -972,7 +968,7 @@ namespace NPOI.XWPF.UserModel
          * margin for this paragraph and the left edge of that paragraph's content
          * in a left to right paragraph, and the right text margin and the right
          * edge of that paragraph's text in a right to left paragraph
-         * <p/>
+         * <p>
          * If this attribute is omitted, its value shall be assumed to be zero.
          * Negative values are defined such that the text is Moved past the text margin,
          * positive values Move the text inside the text margin.
@@ -992,7 +988,7 @@ namespace NPOI.XWPF.UserModel
          * margin for this paragraph and the right edge of that paragraph's content
          * in a left to right paragraph, and the right text margin and the right
          * edge of that paragraph's text in a right to left paragraph
-         * <p/>
+         * <p>
          * If this attribute is omitted, its value shall be assumed to be zero.
          * Negative values are defined such that the text is Moved past the text margin,
          * positive values Move the text inside the text margin.
@@ -1012,7 +1008,7 @@ namespace NPOI.XWPF.UserModel
          * margin for this paragraph and the right edge of that paragraph's content
          * in a left to right paragraph, and the right text margin and the right
          * edge of that paragraph's text in a right to left paragraph
-         * <p/>
+         * <p>
          * If this attribute is omitted, its value shall be assumed to be zero.
          * Negative values are defined such that the text is Moved past the text margin,
          * positive values Move the text inside the text margin.
@@ -1034,7 +1030,7 @@ namespace NPOI.XWPF.UserModel
          * towards the beginning of the direction of text flow.
          * This indentation is specified relative to the paragraph indentation which is specified for
          * all other lines in the parent paragraph.
-         * <p/>
+         * <p>
          * The firstLine and hanging attributes are mutually exclusive, if both are specified, then the
          * firstLine value is ignored.
          * </p>
