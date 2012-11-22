@@ -77,6 +77,9 @@
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HSSF\Converter\ExcelToHtmlConverter.cs" />
+    <Compile Include="HSSF\Converter\ExcelToHtmlUtils.cs" />
+    <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />

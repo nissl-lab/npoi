@@ -1048,9 +1048,9 @@ namespace NPOI.XSSF.UserModel
         //    sheet.ProtectSheet(password);
         //    pr = sheet.GetCTWorksheet().sheetProtection;
         //    Assert.IsNotNull(pr, "CTSheetProtection should be not null");
-        //    Assert.IsTrue(pr.IsSetSheet(), "sheet protection should be on");
-        //    Assert.IsTrue(pr.IsSetObjects(), "object protection should be on");
-        //    Assert.IsTrue(pr.IsSetScenarios(), "scenario protection should be on");
+        //    Assert.IsTrue(pr.sheet, "sheet protection should be on");
+        //    Assert.IsTrue(pr.objects, "object protection should be on");
+        //    Assert.IsTrue(pr.scenarios, "scenario protection should be on");
         //    String hash = HexDump.ShortToHex(PasswordRecord.HashPassword(password)).ToString().Substring(2);
         //    Assert.AreEqual(hash, pr.xgetPassword().StringValue, "well known value for top secret hash should be " + hash);
 
