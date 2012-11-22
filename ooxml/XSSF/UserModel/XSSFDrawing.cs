@@ -21,6 +21,7 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet; // http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
+using System.Collections.Generic;
 
 
 namespace NPOI.XSSF.UserModel
@@ -306,27 +307,27 @@ namespace NPOI.XSSF.UserModel
 
             long frameId = numOfGraphicFrames++;
             XSSFGraphicFrame graphicFrame = new XSSFGraphicFrame(this, ctGraphicFrame);
-            graphicFrame.SetAnchor(anchor);
-            graphicFrame.SetId(frameId);
-            graphicFrame.SetName("Diagramm" + frameId);
+            graphicFrame.Anchor = anchor;
+            graphicFrame.Id = frameId;
+            graphicFrame.Name = "Diagramm" + frameId;
             return graphicFrame;
         }
 
         /**
          * Returns all charts in this Drawing.
          */
-        //public List<XSSFChart> GetCharts()
-        //{
-        //    List<XSSFChart> charts = new List<XSSFChart>();
-        //    foreach (POIXMLDocumentPart part in GetRelations())
-        //    {
-        //        if (part is XSSFChart)
-        //        {
-        //            charts.Add((XSSFChart)part);
-        //        }
-        //    }
-        //    return charts;
-        //}
+        public List<XSSFChart> GetCharts()
+        {
+            List<XSSFChart> charts = new List<XSSFChart>();
+            foreach (POIXMLDocumentPart part in GetRelations())
+            {
+                if (part is XSSFChart)
+                {
+                    charts.Add((XSSFChart)part);
+                }
+            }
+            return charts;
+        }
 
         /**
          * Create and Initialize a CT_TwoCellAnchor that anchors a shape against top-left and bottom-right cells.

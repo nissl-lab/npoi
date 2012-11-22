@@ -75,16 +75,19 @@ namespace NPOI.XSSF.UserModel.Charts
          * them might be empty.
          * @return total count of points in cache
          */
-        long GetPointCount()
+        public long PointCount
         {
-            CT_UnsignedInt pointCount = ctNumData.ptCount;
-            if (pointCount != null)
+            get
             {
-                return pointCount.val;
-            }
-            else
-            {
-                return 0L;
+                CT_UnsignedInt pointCount = ctNumData.ptCount;
+                if (pointCount != null)
+                {
+                    return pointCount.val;
+                }
+                else
+                {
+                    return 0L;
+                }
             }
         }
 
@@ -93,7 +96,7 @@ namespace NPOI.XSSF.UserModel.Charts
          * @param index index of the point in cache
          * @return point value
          */
-        double GetValueAt(int index)
+        public double GetValueAt(int index)
         {
             /* TODO: consider more effective algorithm. Left as is since
              * this method should be invoked mostly in Tests. */

@@ -96,6 +96,12 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFManualLayout.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFScatterChartData.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFValueAxis.cs" />
     <Compile Include="XSSF\UserModel\TestSheetShiftRows.cs" />
     <Compile Include="XSSF\UserModel\Extensions\TestXSSFBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\TestXSSFCellFill.cs" />
@@ -205,8 +211,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

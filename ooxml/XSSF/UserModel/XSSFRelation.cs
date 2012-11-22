@@ -107,7 +107,7 @@ namespace NPOI.XSSF.UserModel
                 "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
                 "/xl/charts/chart#.xml",
-                null //typeof(XSSFChart)
+                typeof(XSSFChart)
         );
 
         public static XSSFRelation CUSTOM_XML_MAPPINGS = new XSSFRelation(

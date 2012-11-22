@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create a new SpreadsheetML chart
          */
-        protected XSSFChart()
+        public XSSFChart()
             : base()
         {
 

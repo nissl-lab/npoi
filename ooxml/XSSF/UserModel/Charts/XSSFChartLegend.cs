@@ -78,6 +78,7 @@ namespace NPOI.XSSF.UserModel.Charts
                     legend.AddNewLegendPos();
                 }
                 legend.legendPos.val = FromLegendPosition(value);
+                legend.legendPosSpecified = true;
             }
         }
 

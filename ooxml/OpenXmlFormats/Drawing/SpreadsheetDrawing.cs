@@ -94,7 +94,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public void Set(CT_GraphicalObjectFrame obj)
         {
-            throw new NotImplementedException();
+            this.xfrmField = obj.xfrmField;
+            this.graphicField = obj.graphicField;
+            this.nvGraphicFramePrField = obj.nvGraphicFramePrField;
+            this.macroField = obj.macroField;
+            this.fPublishedField = obj.fPublishedField;
         }
 
         public CT_Transform2D AddNewXfrm()

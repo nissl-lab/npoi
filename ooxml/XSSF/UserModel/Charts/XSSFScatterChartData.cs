@@ -83,22 +83,25 @@ namespace NPOI.XSSF.UserModel.Charts
                 this.useCache = useCache;
             }
 
-            /**
-             * Returns last calculated number cache for X axis.
-             * @return last calculated number cache for X axis.
-             */
-            XSSFNumberCache GetLastCaculatedXCache()
+            /// <summary>
+            /// Returns last calculated number cache for X axis.
+            /// </summary>
+            internal XSSFNumberCache LastCaculatedXCache
             {
-                return lastCaclulatedXCache;
+                get
+                {
+                    return lastCaclulatedXCache;
+                }
             }
-
-            /**
-             * Returns last calculated number cache for Y axis.
-             * @return last calculated number cache for Y axis.
-             */
-            XSSFNumberCache GetLastCalculatedYCache()
+            /// <summary>
+            /// Returns last calculated number cache for Y axis.
+            /// </summary>
+            internal XSSFNumberCache LastCalculatedYCache
             {
-                return lastCalculatedYCache;
+                get
+                {
+                    return lastCalculatedYCache;
+                }
             }
 
             internal void AddToChart(CT_ScatterChart ctScatterChart)

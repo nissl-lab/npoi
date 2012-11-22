@@ -2,6 +2,7 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -13,30 +14,26 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_GraphicalObjectData
     {
 
-        private List<System.Xml.XmlElement> anyField = new List<System.Xml.XmlElement>();
+        private List<XmlElement> anyField = new List<XmlElement>();
 
         private string uriField;
         
-        public void AddPicElement(System.Xml.XmlElement el)
+        public void AddPicElement(XmlElement el)
         {
             anyField.Add(el);
         }
         [XmlAnyElement()]
-        public System.Xml.XmlElement[] Any
+        public List<XmlElement> Any
         {
             get
             {
-                return this.anyField.ToArray();
+                return this.anyField;
             }
             set
             {
-                if (value == null)
-                    this.anyField = new List<System.Xml.XmlElement>();
-                else
-                    this.anyField = new List<System.Xml.XmlElement>(value);
+                this.anyField = value;
             }
         }
-
 
         [XmlAttribute(DataType = "token")]
         public string uri

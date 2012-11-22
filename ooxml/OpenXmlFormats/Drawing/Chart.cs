@@ -1166,12 +1166,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
         public CT_LegendPos AddNewLegendPos()
         {
-            if (this.legendPosField != null)
+            if (this.legendPosField == null)
                 this.legendPosField = new CT_LegendPos();
             return this.legendPosField;
         }
 
-        private bool legendPosSpecifiedField;
+        private bool legendPosSpecifiedField=false;
         [XmlIgnore]
         public bool legendPosSpecified
         {
@@ -5367,18 +5367,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_UnsignedInt idxField;
 
-        private List<object> itemsField;
-
-        private List<ItemsChoiceType7> itemsElementNameField;
-
         private List<CT_Extension> extLstField;
 
         public CT_DLbl()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.itemsElementNameField = new List<ItemsChoiceType7>();
-            this.itemsField = new List<object>();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.itemsElementNameField = new List<ItemsChoiceType7>();
+            //this.itemsField = new List<object>();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -5394,46 +5390,46 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement("dLblPos", typeof(CT_DLblPos), Order = 1)]
-        [XmlElement("delete", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("layout", typeof(CT_Layout), Order = 1)]
-        [XmlElement("numFmt", typeof(CT_NumFmt), Order = 1)]
-        [XmlElement("separator", typeof(string), Order = 1)]
-        [XmlElement("showBubbleSize", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showCatName", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showLegendKey", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showPercent", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showSerName", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showVal", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("spPr", typeof(CT_ShapeProperties), Order = 1)]
-        [XmlElement("tx", typeof(CT_Tx), Order = 1)]
-        [XmlElement("txPr", typeof(CT_TextBody), Order = 1)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
-        {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
-        }
+        //[XmlElement("dLblPos", typeof(CT_DLblPos), Order = 1)]
+        //[XmlElement("delete", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("layout", typeof(CT_Layout), Order = 1)]
+        //[XmlElement("numFmt", typeof(CT_NumFmt), Order = 1)]
+        //[XmlElement("separator", typeof(string), Order = 1)]
+        //[XmlElement("showBubbleSize", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("showCatName", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("showLegendKey", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("showPercent", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("showSerName", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("showVal", typeof(CT_Boolean), Order = 1)]
+        //[XmlElement("spPr", typeof(CT_ShapeProperties), Order = 1)]
+        //[XmlElement("tx", typeof(CT_Tx), Order = 1)]
+        //[XmlElement("txPr", typeof(CT_TextBody), Order = 1)]
+        //[System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        //public List<object> Items
+        //{
+        //    get
+        //    {
+        //        return this.itemsField;
+        //    }
+        //    set
+        //    {
+        //        this.itemsField = value;
+        //    }
+        //}
 
-        [XmlElement("ItemsElementName", Order = 2)]
-        [XmlIgnore]
-        public List<ItemsChoiceType7> ItemsElementName
-        {
-            get
-            {
-                return this.itemsElementNameField;
-            }
-            set
-            {
-                this.itemsElementNameField = value;
-            }
-        }
+        //[XmlElement("ItemsElementName", Order = 2)]
+        //[XmlIgnore]
+        //public List<ItemsChoiceType7> ItemsElementName
+        //{
+        //    get
+        //    {
+        //        return this.itemsElementNameField;
+        //    }
+        //    set
+        //    {
+        //        this.itemsElementNameField = value;
+        //    }
+        //}
 
         [XmlArray(Order = 3)]
         [XmlArrayItem("ext", IsNullable = false)]

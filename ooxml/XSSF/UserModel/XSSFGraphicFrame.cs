@@ -21,6 +21,7 @@ using System;
 using NPOI.OpenXmlFormats;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -36,7 +37,7 @@ namespace NPOI.XSSF.UserModel
         private static CT_GraphicalObjectFrame prototype = null;
 
         private CT_GraphicalObjectFrame graphicFrame;
-        private XSSFDrawing Drawing;
+        private XSSFDrawing drawing;
         private XSSFClientAnchor anchor;
 
         /**
@@ -47,12 +48,12 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFGraphicFrame(XSSFDrawing Drawing, CT_GraphicalObjectFrame ctGraphicFrame)
         {
-            this.Drawing = Drawing;
+            this.drawing = Drawing;
             this.graphicFrame = ctGraphicFrame;
         }
 
 
-        public CT_GraphicalObjectFrame GetCTGraphicalObjectFrame()
+        internal CT_GraphicalObjectFrame GetCTGraphicalObjectFrame()
         {
             return graphicFrame;
         }
@@ -99,20 +100,19 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Sets the frame name.
-         */
-        public void SetName(String name)
-        {
-            GetNonVisualProperties().name = (name);
-        }
-
-        /**
          * Returns the frame name.
          * @return name of the frame
          */
-        public String GetName()
+        public String Name
         {
-            return GetNonVisualProperties().name;
+            get
+            {
+                return GetNonVisualProperties().name;
+            }
+            set 
+            {
+                GetNonVisualProperties().name = value;
+            }
         }
 
         private CT_NonVisualDrawingProps GetNonVisualProperties()
@@ -122,20 +122,19 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Attaches frame to an anchor.
-         */
-        public void SetAnchor(XSSFClientAnchor anchor)
-        {
-            this.anchor = anchor;
-        }
-
-        /**
          * Returns the frame anchor.
          * @return the anchor this frame is attached to
          */
-        public XSSFClientAnchor GetAnchor()
+        public XSSFClientAnchor Anchor
         {
-            return anchor;
+            get
+            {
+                return anchor;
+            }
+            set 
+            {
+                this.anchor = value;
+            }
         }
 
         /**
@@ -152,18 +151,17 @@ namespace NPOI.XSSF.UserModel
         /**
          * Gets the frame id.
          */
-        public long GetId()
+        public long Id
         {
-            return graphicFrame.nvGraphicFramePr.cNvPr.id;
-        }
-
-        /**
-         * Sets the frame id.
-         */
-        public void SetId(long id)
-        {
-            graphicFrame.nvGraphicFramePr.cNvPr.id = (uint)id;
-        }    
+            get
+            {
+                return graphicFrame.nvGraphicFramePr.cNvPr.id;
+            }
+            set 
+            {
+                graphicFrame.nvGraphicFramePr.cNvPr.id = (uint)value;
+            }
+        } 
         /// <summary>
         /// The low level code to insert <code><c:chart></code> tag into <code><a:graphicData></code>
         /// </summary>
@@ -181,13 +179,15 @@ namespace NPOI.XSSF.UserModel
         {
             String r_namespaceUri = ST_RelationshipId.NamespaceURI;
             String c_namespaceUri = XSSFDrawing.NAMESPACE_C;
+
+            //TODO: AppendChartElement
             //XmlCursor cursor = data.newCursor();
             //cursor.ToNextToken();
             //cursor.beginElement(new QName(c_namespaceUri, "chart", "c"));
             //cursor.insertAttributeWithValue(new QName(r_namespaceUri, "id", "r"), id);
             //cursor.dispose();
             //data.SetUri(c_namespaceUri);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
     }
