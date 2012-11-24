@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestSheetPropertiesRecord
+    public class TestShtPropsRecord
     {
         byte[] data = new byte[] {
         (byte)0x0A,(byte)0x00,
@@ -42,21 +42,21 @@ namespace TestCases.HSSF.Record.Chart
         (byte)0x00       // not sure where that last byte comes from
         };
 
-        public TestSheetPropertiesRecord()
+        public TestShtPropsRecord()
         {
 
         }
         [Test]
         public void TestLoad()
         {
-            SheetPropertiesRecord record = new SheetPropertiesRecord(TestcaseRecordInputStream.Create(0x1044, data));
+            ShtPropsRecord record = new ShtPropsRecord(TestcaseRecordInputStream.Create(0x1044, data));
             Assert.AreEqual(10, record.Flags);
-            Assert.AreEqual(false, record.IsChartTypeManuallyFormatted);
+            Assert.AreEqual(false, record.IsManSerAlloc);
             Assert.AreEqual(true, record.IsPlotVisibleOnly);
-            Assert.AreEqual(false, record.IsDoNotSizeWithWindow);
-            Assert.AreEqual(true, record.IsDefaultPlotDimensions);
-            Assert.AreEqual(false, record.IsAutoPlotArea);
-            Assert.AreEqual(0, record.Empty);
+            Assert.AreEqual(false, record.IsNotSizeWithWindow);
+            Assert.AreEqual(true, record.IsManPlotArea);
+            Assert.AreEqual(false, record.IsAlwaysAutoPlotArea);
+            Assert.AreEqual(0, record.Blank);
 
 
             Assert.AreEqual(8, record.RecordSize);
@@ -64,13 +64,13 @@ namespace TestCases.HSSF.Record.Chart
         [Test]
         public void TestStore()
         {
-            SheetPropertiesRecord record = new SheetPropertiesRecord();
-            record.IsChartTypeManuallyFormatted=(false);
+            ShtPropsRecord record = new ShtPropsRecord();
+            record.IsManSerAlloc=(false);
             record.IsPlotVisibleOnly=(true);
-            record.IsDoNotSizeWithWindow=(false);
-            record.IsDefaultPlotDimensions=(true);
-            record.IsAutoPlotArea=(false);
-            record.Empty=0;
+            record.IsNotSizeWithWindow=(false);
+            record.IsManPlotArea=(true);
+            record.IsAlwaysAutoPlotArea=(false);
+            record.Blank=0;
 
 
             byte[] recordBytes = record.Serialize();

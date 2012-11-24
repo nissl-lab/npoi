@@ -52,6 +52,7 @@
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
+    <Compile Include="HSSF\Model\InternalChart.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs">
@@ -272,7 +273,7 @@
     <Compile Include="HSSF\Record\Chart\SeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesToChartGroupRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\SheetPropertiesRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ShtPropsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TickRecord.cs" />
     <Compile Include="HSSF\Record\Chart\UnitsRecord.cs" />

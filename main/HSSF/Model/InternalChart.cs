@@ -11,7 +11,7 @@ namespace NPOI.HSSF.Model
 {
 
     [Serializable]
-    public class ChartSheet
+    public class InternalChart
     {
         private HeaderRecord header;
         private FooterRecord footer;
@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Model
         private ProtectRecord _protect;
         private ChartFRTInfoRecord _chartFrtInfo;
         protected List<RecordBase> records = null;
-        public ChartSheet(RecordStream rs)
+        public InternalChart(RecordStream rs)
         {
             _plsRecords = new List<PLSAggregate>();
             records = new List<RecordBase>(128);
@@ -159,7 +159,7 @@ namespace NPOI.HSSF.Model
                         + StringUtil.ToHexString(rec.Sid) + ")");
             }
         }
-        private ChartSheet()
+        private InternalChart()
         {
         }
         List<Record.Record> recores = null;
@@ -244,9 +244,9 @@ namespace NPOI.HSSF.Model
 
         #region Creation Method for creating a new chart
 
-        private static ChartSheet CreateChartSheet()
+        private static InternalChart CreateChartSheet()
         {
-            ChartSheet retval = new ChartSheet();
+            InternalChart retval = new InternalChart();
             List<Record.Record> records = new List<Record.Record>(30);
             retval.recores = records;
 
@@ -271,7 +271,9 @@ namespace NPOI.HSSF.Model
             //records.Add(CreateDrawingRecord());
             records.Add(new UnitsRecord());
 
-            //CHARTFOMATS
+            //CHARTFOMATS = Chart Begin *2FONTLIST Scl PlotGrowth [FRAME] *SERIESFORMAT *SS 
+            //ShtProps *2DFTTEXT AxesUsed 1*2AXISPARENT [CrtLayout12A] [DAT] *ATTACHEDLABEL 
+            //[CRTMLFRT] *([DataLabExt StartObject] ATTACHEDLABEL [EndObject]) [TEXTPROPS] *2CRTMLFRT End
             records.Add(CreateChartRecord(0, 0, 32341968, 14745600));
             records.Add(new BeginRecord());
             records.Add(CreateSCLRecord(1, 1));
@@ -282,7 +284,32 @@ namespace NPOI.HSSF.Model
             records.Add(CreateLineFormatRecord(true));
             records.Add(CreateAreaFormatRecord1());
             records.Add(new EndRecord());
-            /* an empty chart has no Series Records.
+
+            //an empty chart has no SERIESFORMAT
+            //CreateSERIESFORMAT(records);
+            //an empty chart has no SS
+            //CreateSS(records);
+
+            records.Add(CreateShtPropsRecord());
+
+            //add 
+            records.Add(new EOFRecord());
+            return retval;
+        }
+        private static ShtPropsRecord CreateShtPropsRecord()
+        {
+            ShtPropsRecord r = new ShtPropsRecord();
+            r.Flags = 2;  //set bit fPlotVisOnly 1
+            return r;
+        }
+
+        #region SERIESFORMAT
+
+        //SERIESFORMAT = Series Begin 4AI *SS (SerToCrt / (SerParent (SerAuxTrend / SerAuxErrBar))) 
+        //*(LegendException [Begin ATTACHEDLABEL [TEXTPROPS] End]) End
+        private static void CreateSERIESFORMAT(List<Record.Record> records)
+        {
+            
             //Series
             records.Add(CreateSeriesRecord());
             records.Add(new BeginRecord());
@@ -295,11 +322,6 @@ namespace NPOI.HSSF.Model
             records.Add(new EndRecord()); //end dataformat
 
             records.Add(new EndRecord());  //end series
-            */
-
-            //add 
-            records.Add(new EOFRecord());
-            return retval;
         }
         private static SeriesRecord CreateSeriesRecord()
         {
@@ -322,6 +344,18 @@ namespace NPOI.HSSF.Model
             r.UseExcel4Colors = (false);
             return r;
         }
+        #region SS
+        //SS = DataFormat Begin [Chart3DBarShape] [LineFormat AreaFormat PieFormat] [SerFmt] 
+        //[GELFRAME] [MarkerFormat] [AttachedLabel] *2SHAPEPROPS [CRTMLFRT] End
+        private static void CreateSS(List<NPOI.HSSF.Record.Record> records)
+        {
+            records.Add(CreateDataFormatRecord());
+            records.Add(new BeginRecord());
+            //Chart3DBarShape
+            records.Add(CreateChart3DBarShapeRecord());
+
+            records.Add(new EndRecord());
+        }
 
         private static Chart3DBarShapeRecord CreateChart3DBarShapeRecord()
         {
@@ -330,6 +364,10 @@ namespace NPOI.HSSF.Model
             r.Taper = 0;
             return r;
         }
+        #endregion
+        #endregion
+        
+        
         private static DrawingRecord CreateDrawingRecord()
         {
             //throw new NotImplementedException();

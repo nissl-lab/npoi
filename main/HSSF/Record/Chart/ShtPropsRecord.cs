@@ -31,17 +31,20 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class SheetPropertiesRecord
+    /// <summary>
+    /// specifies properties of a chart as defined by the Chart Sheet Substream ABNF
+    /// </summary>
+    public class ShtPropsRecord
        : StandardRecord
     {
         public static short sid = 0x1044;
         private short field_1_flags;
-        private BitField chartTypeManuallyFormatted = BitFieldFactory.GetInstance(0x1);
+        private BitField manSerAlloc = BitFieldFactory.GetInstance(0x1);
         private BitField plotVisibleOnly = BitFieldFactory.GetInstance(0x2);
         private BitField doNotSizeWithWindow = BitFieldFactory.GetInstance(0x4);
-        private BitField defaultPlotDimensions = BitFieldFactory.GetInstance(0x8);
-        private BitField autoPlotArea = BitFieldFactory.GetInstance(0x10);
-        private byte field_2_empty;
+        private BitField manPlotArea = BitFieldFactory.GetInstance(0x8);
+        private BitField alwaysAutoPlotArea = BitFieldFactory.GetInstance(0x10);
+        private byte field_2_mdBlank;
         private byte field_3_reserved;
 
         public static byte EMPTY_NOT_PLOTTED = 0;
@@ -49,7 +52,7 @@ namespace NPOI.HSSF.Record.Chart
         public static byte EMPTY_INTERPOLATED = 2;
 
 
-        public SheetPropertiesRecord()
+        public ShtPropsRecord()
         {
 
         }
@@ -60,11 +63,11 @@ namespace NPOI.HSSF.Record.Chart
          * @param in the RecordInputstream to Read the record from
          */
 
-        public SheetPropertiesRecord(RecordInputStream in1)
+        public ShtPropsRecord(RecordInputStream in1)
         {
 
             field_1_flags = in1.ReadShort();
-            field_2_empty = (byte)in1.ReadByte();
+            field_2_mdBlank = (byte)in1.ReadByte();
             field_3_reserved = (byte)in1.ReadByte();
         }
 
@@ -77,14 +80,14 @@ namespace NPOI.HSSF.Record.Chart
                 .Append("0x").Append(HexDump.ToHex(Flags))
                 .Append(" (").Append(Flags).Append(" )");
             buffer.Append(Environment.NewLine);
-            buffer.Append("         .chartTypeManuallyFormatted     = ").Append(IsChartTypeManuallyFormatted).Append('\n');
+            buffer.Append("         .chartTypeManuallyFormatted     = ").Append(IsManSerAlloc).Append('\n');
             buffer.Append("         .plotVisibleOnly          = ").Append(IsPlotVisibleOnly).Append('\n');
-            buffer.Append("         .doNotSizeWithWindow      = ").Append(IsDoNotSizeWithWindow).Append('\n');
-            buffer.Append("         .defaultPlotDimensions     = ").Append(IsDefaultPlotDimensions).Append('\n');
-            buffer.Append("         .autoPlotArea             = ").Append(IsAutoPlotArea).Append('\n');
+            buffer.Append("         .doNotSizeWithWindow      = ").Append(IsNotSizeWithWindow).Append('\n');
+            buffer.Append("         .defaultPlotDimensions     = ").Append(IsManPlotArea).Append('\n');
+            buffer.Append("         .autoPlotArea             = ").Append(IsAlwaysAutoPlotArea).Append('\n');
             buffer.Append("    .empty                = ")
-                .Append("0x").Append(HexDump.ToHex(Empty))
-                .Append(" (").Append(Empty).Append(" )");
+                .Append("0x").Append(HexDump.ToHex(Blank))
+                .Append(" (").Append(Blank).Append(" )");
             buffer.Append(Environment.NewLine);
 
             buffer.Append("[/SHTPROPS]\n");
@@ -94,7 +97,7 @@ namespace NPOI.HSSF.Record.Chart
         public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_flags);
-            out1.WriteByte(field_2_empty);
+            out1.WriteByte(field_2_mdBlank);
             out1.WriteByte(0);  //reserved field
         }
 
@@ -113,10 +116,10 @@ namespace NPOI.HSSF.Record.Chart
 
         public override Object Clone()
         {
-            SheetPropertiesRecord rec = new SheetPropertiesRecord();
+            ShtPropsRecord rec = new ShtPropsRecord();
 
             rec.field_1_flags = field_1_flags;
-            rec.field_2_empty = field_2_empty;
+            rec.field_2_mdBlank = field_2_mdBlank;
             rec.field_3_reserved = field_3_reserved;
             return rec;
         }
@@ -142,68 +145,76 @@ namespace NPOI.HSSF.Record.Chart
          *        EMPTY_ZERO
          *        EMPTY_INTERPOLATED
          */
-        public byte Empty
+        /// <summary>
+        /// specifies how the empty cells are plotted be a value from the following table:
+        /// 0x00   Empty cells are not plotted.
+        /// 0x01   Empty cells are plotted as zero.
+        /// 0x02   Empty cells are plotted as interpolated.
+        /// </summary>
+        public byte Blank
         {
-            get { return field_2_empty; }
-            set { this.field_2_empty = value; }
+            get { return field_2_mdBlank; }
+            set { this.field_2_mdBlank = value; }
         }
 
 
-        /**
-         * Has the chart type been manually formatted?
-         * @return  the chart type manually formatted field value.
-         */
-        public bool IsChartTypeManuallyFormatted
+        /// <summary>
+        /// whether series are automatically allocated for the chart.
+        /// </summary>
+        public bool IsManSerAlloc
         {
-            get { return chartTypeManuallyFormatted.IsSet(field_1_flags); }
-            set { field_1_flags = chartTypeManuallyFormatted.SetShortBoolean(field_1_flags, value); }
+            get { return manSerAlloc.IsSet(field_1_flags); }
+            set { field_1_flags = manSerAlloc.SetShortBoolean(field_1_flags, value); }
         }
 
-        /**
-         * Only show visible cells on the chart.
-         * @return  the plot visible only field value.
-         */
+        /// <summary>
+        /// whether to plot visible cells only.
+        /// </summary>
         public bool IsPlotVisibleOnly
         {
             get { return plotVisibleOnly.IsSet(field_1_flags); }
             set { field_1_flags = plotVisibleOnly.SetShortBoolean(field_1_flags, value); }
         }
 
-        /**
-         * Do not size the chart when the window Changes size
-         * @return  the do not size with window field value.
-         */
-        public bool IsDoNotSizeWithWindow
+        /// <summary>
+        /// whether to size the chart with the window.
+        /// </summary>
+        public bool IsNotSizeWithWindow
         {
             get { return doNotSizeWithWindow.IsSet(field_1_flags); }
             set { field_1_flags = doNotSizeWithWindow.SetShortBoolean(field_1_flags, value); }
         }
 
-        /**
-         * Indicates that the default area dimensions should be used.
-         * @return  the default plot dimensions field value.
-         */
-        public bool IsDefaultPlotDimensions
+        /// <summary>
+        /// If fAlwaysAutoPlotArea is 1, then this field MUST be 1. 
+        /// If fAlwaysAutoPlotArea is 0, then this field MUST be ignored.
+        /// </summary>
+        public bool IsManPlotArea
         {
             get
             {
-                return defaultPlotDimensions.IsSet(field_1_flags);
+                return manPlotArea.IsSet(field_1_flags);
             }
-            set { field_1_flags = defaultPlotDimensions.SetShortBoolean(field_1_flags, value); }
+            set { field_1_flags = manPlotArea.SetShortBoolean(field_1_flags, value); }
         }
 
-        /**
-         * ??
-         * @return  the auto plot area field value.
-         */
-        public bool IsAutoPlotArea
+        /// <summary>
+        /// specifies whether the default plot area dimension (2) is used.
+        /// 0  Use the default plot area dimension (2) regardless of the Pos record information.
+        /// 1  Use the plot area dimension (2) of the Pos record; and fManPlotArea MUST be 1.
+        /// </summary>
+        public bool IsAlwaysAutoPlotArea
         {
             get
             {
-                return autoPlotArea.IsSet(field_1_flags);
+                return alwaysAutoPlotArea.IsSet(field_1_flags);
             }
             set
-            { field_1_flags = autoPlotArea.SetShortBoolean(field_1_flags, value); }
+            {
+                field_1_flags = alwaysAutoPlotArea.SetShortBoolean(field_1_flags, value);
+                if (value)
+                    IsManPlotArea = value;
+            }
         }
 
 

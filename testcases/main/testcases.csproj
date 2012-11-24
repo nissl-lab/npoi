@@ -309,7 +309,7 @@
     <Compile Include="HSSF\Record\Chart\TestSeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesToChartGroupRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestSheetPropertiesRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestShtPropsRecord.cs" />
     <Compile Include="HSSF\Record\TestSSTDeserializer.cs" />
     <Compile Include="HSSF\Record\TestSSTRecordSizeCalculator.cs">
       <SubType>Code</SubType>

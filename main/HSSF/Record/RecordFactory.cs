@@ -281,7 +281,7 @@ namespace NPOI.HSSF.Record
                 typeof(SeriesLabelsRecord),
                 typeof(SeriesListRecord),
 		        typeof(SeriesToChartGroupRecord),
-                typeof(SheetPropertiesRecord),
+                typeof(ShtPropsRecord),
                 typeof(TextRecord),
                 typeof(TickRecord),
                 typeof(UnitsRecord),

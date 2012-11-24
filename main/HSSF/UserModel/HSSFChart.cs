@@ -801,14 +801,14 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private SheetPropertiesRecord CreateSheetPropsRecord()
+        private ShtPropsRecord CreateSheetPropsRecord()
         {
-            SheetPropertiesRecord r = new SheetPropertiesRecord();
-            r.IsChartTypeManuallyFormatted = (false);
+            ShtPropsRecord r = new ShtPropsRecord();
+            r.IsManSerAlloc = (false);
             r.IsPlotVisibleOnly = (true);
-            r.IsDoNotSizeWithWindow = (false);
-            r.IsDefaultPlotDimensions = (true);
-            r.IsAutoPlotArea = (false);
+            r.IsNotSizeWithWindow = (false);
+            r.IsManPlotArea = (true);
+            r.IsAlwaysAutoPlotArea = (false);
             return r;
         }
 
