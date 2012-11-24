@@ -6,11 +6,13 @@ using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Chart
 {
-    //[Obsolete("This class was not found in poi")]
+    /// <summary>
+    /// The CrtLink record is written but unused.
+    /// </summary>
     public class CrtLinkRecord:StandardRecord
     {
         //0x1022
-        public const short sid = 4130;
+        public const short sid = 0x1022;
 
         public CrtLinkRecord()
         { 
@@ -39,7 +41,10 @@ namespace NPOI.HSSF.Record.Chart
         {
             get { return sid; }
         }
-
+        public override object Clone()
+        {
+            return new CrtLinkRecord();
+        }
         public override string ToString()
         {
             return "[CrtLink]Unused[/CrtLink]";

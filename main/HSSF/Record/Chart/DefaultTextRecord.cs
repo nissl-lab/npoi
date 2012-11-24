@@ -25,13 +25,28 @@ namespace NPOI.HSSF.Record.Chart
 
     using NPOI.Util;
 
-
-    public enum CategoryDataType:short
+    /// <summary>
+    /// specifies the text elements that are formatted using the position and appearance information 
+    /// specified by the Text record immediately following this record.
+    /// </summary>
+    public enum TextFormatInfo:short
     {
-        SHOW_LABELS_CHARACTERISTIC = 0,
-        VALUE_AND_PERCENTAGE_CHARACTERISTIC =1,
-        ALL_TEXT_CHARACTERISTIC0 =2,
-        ALL_TEXT_CHARACTERISTIC1 =3
+        /// <summary>
+        /// Format all Text records in the chart group where fShowPercent is equal to 0 or fShowValue is equal to 0.
+        /// </summary>
+        ShowPercentOrValueNotSet = 0,
+        /// <summary>
+        /// Format all Text records in the chart group where fShowPercent is equal to 1 or fShowValue is equal to 1.
+        /// </summary>
+        ShowPercentOrValueSet =1,
+        /// <summary>
+        /// Format all Text records in the chart where the value of fScaled of the associated FontInfo structure is equal to 0.
+        /// </summary>
+        FontScaleNotSet =2,
+        /// <summary>
+        /// Format all Text records in the chart where the value of fScaled of the associated FontInfo structure is equal to 1.
+        /// </summary>
+        FontScaleSet =3
     }
 
     /**
@@ -41,13 +56,18 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class DefaultDataLabelTextPropertiesRecord
+    //
+    /// <summary>
+    /// specifies the text elements that are formatted using the information specified by
+    /// the Text record immediately following this record.
+    /// </summary>
+    public class DefaultTextRecord
        : StandardRecord
     {
         public const short sid = 0x1024;
         private short field_1_categoryDataType;
 
-        public DefaultDataLabelTextPropertiesRecord()
+        public DefaultTextRecord()
         {
 
         }
@@ -58,7 +78,7 @@ namespace NPOI.HSSF.Record.Chart
          * @param in the RecordInputstream to Read the record from
          */
 
-        public DefaultDataLabelTextPropertiesRecord(RecordInputStream in1)
+        public DefaultTextRecord(RecordInputStream in1)
         {
             field_1_categoryDataType = in1.ReadShort();
 
@@ -70,8 +90,8 @@ namespace NPOI.HSSF.Record.Chart
 
             buffer.Append("[DEFAULTTEXT]\n");
             buffer.Append("    .categoryDataType     = ")
-                .Append("0x").Append(HexDump.ToHex((short)CategoryDataType))
-                .Append(" (").Append(CategoryDataType).Append(" )");
+                .Append("0x").Append(HexDump.ToHex((short)FormatType))
+                .Append(" (").Append(FormatType).Append(" )");
             buffer.Append(Environment.NewLine);
 
             buffer.Append("[/DEFAULTTEXT]\n");
@@ -98,7 +118,7 @@ namespace NPOI.HSSF.Record.Chart
 
         public override Object Clone()
         {
-            DefaultDataLabelTextPropertiesRecord rec = new DefaultDataLabelTextPropertiesRecord();
+            DefaultTextRecord rec = new DefaultTextRecord();
 
             rec.field_1_categoryDataType = field_1_categoryDataType;
             return rec;
@@ -115,11 +135,16 @@ namespace NPOI.HSSF.Record.Chart
          *        CATEGORY_DATA_TYPE_VALUE_AND_PERCENTAGE_CharISTIC
          *        CATEGORY_DATA_TYPE_ALL_TEXT_CharISTIC
          */
-        public CategoryDataType CategoryDataType
+        //
+        /// <summary>
+        /// specifies the text elements that are formatted using the position and appearance 
+        /// information specified by the Text record immediately following this record.
+        /// </summary>
+        public TextFormatInfo FormatType
         {
             get
             {
-                return (CategoryDataType)field_1_categoryDataType;
+                return (TextFormatInfo)field_1_categoryDataType;
             }
             set 
             {

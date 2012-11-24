@@ -188,7 +188,9 @@
     <Compile Include="HPSF\Basic\Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="HPSF\data\Test0313rur.adm" />
     <None Include="HPSF\data\TestBug44375.xls" />
     <None Include="HPSF\data\TestChineseProperties.doc" />
@@ -249,30 +251,30 @@
     <Compile Include="HSSF\Record\Chart\TestAreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestAxisOptionsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestBarRecord.cs" />
     <Compile Include="HSSF\Record\TestBOFRecord.cs" />
     <Compile Include="HSSF\Record\TestBoundSheetRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestCategorySeriesAxisRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestCatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestChartRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestChartTitleFormatRecord.cs" />
     <Compile Include="HSSF\Record\TestCommonObjectDataSubRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDataFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestDefaultDataLabelTextPropertiesRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestDefaultTextRecord.cs" />
     <Compile Include="HSSF\Record\TestDVALRecord.cs" />
     <Compile Include="HSSF\Record\TestEmbeddedObjectRefSubRecord.cs" />
     <Compile Include="HSSF\Record\TestEndSubRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestFontBasisRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestFontIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFontXRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestFrameRecord.cs" />
     <Compile Include="HSSF\Record\TestLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestLegendRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestLineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestLinkedDataRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestBRAIRecord.cs" />
     <Compile Include="HSSF\Record\TestMergeCellsRecord.cs" />
     <Compile Include="HSSF\Record\TestNoteRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestNumberFormatIndexRecord.cs" />
@@ -404,13 +406,7 @@
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />
-    <Compile Include="HSSF\Record\Chart\TestCrtLayout12ARecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestMarkerFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestChart3dRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestChartFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestCrtLayout12Record.cs" />
-    <Compile Include="HSSF\Record\Chart\TestPieFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestPieRecord.cs" />
     <Compile Include="HSSF\Record\Common\TestUnicodeString.cs" />
     <Compile Include="HSSF\Record\Crypto\TestBiff8DecryptingStream.cs">
       <SubType>Code</SubType>

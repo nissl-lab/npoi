@@ -34,7 +34,7 @@ namespace TestCases.HSSF.Record.Chart
      * @author Andrew C. Oliver(acoliver at apache.org)
      */
     [TestFixture]
-    public class TestAxisOptionsRecord
+    public class TestAxcExtRecord
     {
         byte[] data = new byte[] {        
         (byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x01,
@@ -43,31 +43,31 @@ namespace TestCases.HSSF.Record.Chart
         (byte)0x00,(byte)0xEF,(byte)0x00
     };
 
-        public TestAxisOptionsRecord()
+        public TestAxcExtRecord()
         {
 
         }
         [Test]
         public void TestLoad()
         {
-            AxisOptionsRecord record = new AxisOptionsRecord(TestcaseRecordInputStream.Create((short)0x1062, data));
-            Assert.AreEqual(0, record.MinimumCategory);
-            Assert.AreEqual(0, record.MaximumCategory);
-            Assert.AreEqual(1, record.MajorUnitValue);
+            AxcExtRecord record = new AxcExtRecord(TestcaseRecordInputStream.Create((short)0x1062, data));
+            Assert.AreEqual(0, record.MinimumDate);
+            Assert.AreEqual(0, record.MaximumDate);
+            Assert.AreEqual(1, record.MajorInterval);
             Assert.AreEqual(0, record.MajorUnit);
-            Assert.AreEqual(1, record.MinorUnitValue);
+            Assert.AreEqual(1, record.MinorInterval);
             Assert.AreEqual(0, record.MinorUnit);
             Assert.AreEqual(0, record.BaseUnit);
-            Assert.AreEqual(0, record.CrossingPoint);
+            Assert.AreEqual(0, record.CrossDate);
             Assert.AreEqual(239, record.Options);
-            Assert.AreEqual(true, record.IsDefaultMinimum);
-            Assert.AreEqual(true, record.IsDefaultMaximum);
-            Assert.AreEqual(true, record.IsDefaultMajor);
-            Assert.AreEqual(true, record.IsDefaultMinorUnit);
-            Assert.AreEqual(false, record.IsDate);
-            Assert.AreEqual(true, record.IsDefaultBase);
-            Assert.AreEqual(true, record.IsDefaultCross);
-            Assert.AreEqual(true, record.IsDefaultDateSettings);
+            Assert.AreEqual(true, record.IsAutoMin);
+            Assert.AreEqual(true, record.IsAutoMax);
+            Assert.AreEqual(true, record.IsAutoMajor);
+            Assert.AreEqual(true, record.IsAutoMinor);
+            Assert.AreEqual(false, record.IsDateAxis);
+            Assert.AreEqual(true, record.IsAutoBase);
+            Assert.AreEqual(true, record.IsAutoCross);
+            Assert.AreEqual(true, record.IsAutoDate);
 
 
             Assert.AreEqual(22, record.RecordSize);
@@ -75,24 +75,24 @@ namespace TestCases.HSSF.Record.Chart
         [Test]
         public void TestStore()
         {
-            AxisOptionsRecord record = new AxisOptionsRecord();
-            record.MinimumCategory = ((short)0);
-            record.MaximumCategory = ((short)0);
-            record.MajorUnitValue = ((short)1);
+            AxcExtRecord record = new AxcExtRecord();
+            record.MinimumDate = ((short)0);
+            record.MaximumDate = ((short)0);
+            record.MajorInterval = ((short)1);
             record.MajorUnit = ((short)0);
-            record.MinorUnitValue = ((short)1);
+            record.MinorInterval = ((short)1);
             record.MinorUnit = ((short)0);
             record.BaseUnit = ((short)0);
-            record.CrossingPoint = ((short)0);
+            record.CrossDate = ((short)0);
             record.Options = ((short)239);
-            record.IsDefaultMinimum = (true);
-            record.IsDefaultMaximum = (true);
-            record.IsDefaultMajor = (true);
-            record.IsDefaultMinorUnit = (true);
-            record.IsDate = (false);
-            record.IsDefaultBase = (true);
-            record.IsDefaultCross = (true);
-            record.IsDefaultDateSettings = (true);
+            record.IsAutoMin = (true);
+            record.IsAutoMax = (true);
+            record.IsAutoMajor = (true);
+            record.IsAutoMinor = (true);
+            record.IsDateAxis = (false);
+            record.IsAutoBase = (true);
+            record.IsAutoCross = (true);
+            record.IsAutoDate = (true);
 
 
             byte[] recordBytes = record.Serialize();

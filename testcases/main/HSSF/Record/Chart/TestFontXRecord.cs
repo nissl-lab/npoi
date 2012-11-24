@@ -26,7 +26,7 @@ namespace TestCases.HSSF.Record.Chart
     using NUnit.Framework;
 
     /**
-     * Tests the serialization and deserialization of the DefaultDataLabelTextPropertiesRecord
+     * Tests the serialization and deserialization of the FontIndexRecord
      * class works correctly.  Test data taken directly from a real
      * Excel file.
      *
@@ -34,13 +34,13 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestDefaultDataLabelTextPropertiesRecord
+    public class TestFontXRecord
     {
         byte[] data = new byte[] {
-        (byte)0x02,(byte)0x00
+        (byte)0x05,(byte)0x00
     };
 
-        public TestDefaultDataLabelTextPropertiesRecord()
+        public TestFontXRecord()
         {
 
         }
@@ -48,15 +48,17 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
 
-            DefaultDataLabelTextPropertiesRecord record = new DefaultDataLabelTextPropertiesRecord(TestcaseRecordInputStream.Create((short)0x1024, data));
-            Assert.AreEqual(2, (int)record.CategoryDataType);
+            FontXRecord record = new FontXRecord(TestcaseRecordInputStream.Create((short)0x1026, data));
+            Assert.AreEqual(5, record.FontIndex);
+
+
             Assert.AreEqual(6, record.RecordSize);
         }
         [Test]
         public void TestStore()
         {
-            DefaultDataLabelTextPropertiesRecord record = new DefaultDataLabelTextPropertiesRecord();
-            record.CategoryDataType = (CategoryDataType)2;
+            FontXRecord record = new FontXRecord();
+            record.FontIndex = ((short)5);
 
 
             byte[] recordBytes = record.Serialize();

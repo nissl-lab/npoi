@@ -36,7 +36,7 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestLinkedDataRecord
+    public class TestBRAIRecord
     {
 
         /*
@@ -162,7 +162,7 @@ namespace TestCases.HSSF.Record.Chart
         (byte)0x00,(byte)0x00,          // index to last column and relative flags
     };
 
-        public TestLinkedDataRecord()
+        public TestBRAIRecord()
         {
 
         }
@@ -170,9 +170,9 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
 
-            LinkedDataRecord record = new LinkedDataRecord(TestcaseRecordInputStream.Create((short)0x1051, data));
-            Assert.AreEqual(LinkedDataRecord.LINK_TYPE_VALUES, record.LinkType);
-            Assert.AreEqual(LinkedDataRecord.REFERENCE_TYPE_WORKSHEET, record.ReferenceType);
+            BRAIRecord record = new BRAIRecord(TestcaseRecordInputStream.Create((short)0x1051, data));
+            Assert.AreEqual(BRAIRecord.LINK_TYPE_VALUES, record.LinkType);
+            Assert.AreEqual(BRAIRecord.REFERENCE_TYPE_WORKSHEET, record.ReferenceType);
             Assert.AreEqual(0, record.Options);
             Assert.AreEqual(false, record.IsCustomNumberFormat);
             Assert.AreEqual(0, record.IndexNumberFmtRecord);
@@ -188,9 +188,9 @@ namespace TestCases.HSSF.Record.Chart
         [Test]
         public void TestStore()
         {
-            LinkedDataRecord record = new LinkedDataRecord();
-            record.LinkType=(LinkedDataRecord.LINK_TYPE_VALUES);
-            record.ReferenceType=(LinkedDataRecord.REFERENCE_TYPE_WORKSHEET);
+            BRAIRecord record = new BRAIRecord();
+            record.LinkType=(BRAIRecord.LINK_TYPE_VALUES);
+            record.ReferenceType=(BRAIRecord.REFERENCE_TYPE_WORKSHEET);
             record.Options=((short)0);
             record.IsCustomNumberFormat=(false);
             record.IndexNumberFmtRecord=((short)0);

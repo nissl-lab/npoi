@@ -31,14 +31,19 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class FontIndexRecord
+    //
+    /// <summary>
+    /// The FontX record specifies the font for a given text element. 
+    /// The Font record referenced by iFont can exist in this chart sheet substream or the workbook.
+    /// </summary>
+    public class FontXRecord
        : StandardRecord
     {
         public const short sid = 0x1026;
         private short field_1_fontIndex;
 
 
-        public FontIndexRecord()
+        public FontXRecord()
         {
 
         }
@@ -49,7 +54,7 @@ namespace NPOI.HSSF.Record.Chart
          * @param in the RecordInputstream to Read the record from
          */
 
-        public FontIndexRecord(RecordInputStream in1)
+        public FontXRecord(RecordInputStream in1)
         {
             field_1_fontIndex = in1.ReadShort();
         }
@@ -89,18 +94,23 @@ namespace NPOI.HSSF.Record.Chart
 
         public override Object Clone()
         {
-            FontIndexRecord rec = new FontIndexRecord();
+            FontXRecord rec = new FontXRecord();
 
             rec.field_1_fontIndex = field_1_fontIndex;
             return rec;
         }
 
 
-
-
-        /**
-         * Get the font index field for the FontIndex record.
-         */
+        /// <summary>
+        /// specifies the font to use for subsequent records.
+        /// This font can either be the default font of the chart, part of the collection of Font records following 
+        /// the FrtFontList record, or part of the collection of Font records in the globals substream. 
+        /// If iFont is 0x0000, this record specifies the default font of the chart. 
+        /// If iFont is less than or equal to the number of Font records in the globals substream, 
+        ///     iFont is a one-based index to a Font record in the globals substream. 
+        /// Otherwise iFont is a one-based index into the collection of Font records in this chart sheet substream 
+        ///     where the index is equal to iFont ¨C n, where n is the number of Font records in the globals substream.
+        /// </summary>
         public short FontIndex
         {
             get { return field_1_fontIndex; }
@@ -111,5 +121,3 @@ namespace NPOI.HSSF.Record.Chart
 
     }
 }
-
-

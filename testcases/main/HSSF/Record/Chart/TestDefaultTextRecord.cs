@@ -26,7 +26,7 @@ namespace TestCases.HSSF.Record.Chart
     using NUnit.Framework;
 
     /**
-     * Tests the serialization and deserialization of the CategorySeriesAxisRecord
+     * Tests the serialization and deserialization of the DefaultDataLabelTextPropertiesRecord
      * class works correctly.  Test data taken directly from a real
      * Excel file.
      *
@@ -34,16 +34,13 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestCategorySeriesAxisRecord
+    public class TestDefaultTextRecord
     {
         byte[] data = new byte[] {
-        (byte)0x01,(byte)0x00,    // crossing point
-        (byte)0x01,(byte)0x00,    // label frequency
-        (byte)0x01,(byte)0x00,    // tick mark frequency
-        (byte)0x01,(byte)0x00     // options
+        (byte)0x02,(byte)0x00
     };
 
-        public TestCategorySeriesAxisRecord()
+        public TestDefaultTextRecord()
         {
 
         }
@@ -51,28 +48,15 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
 
-            CategorySeriesAxisRecord record = new CategorySeriesAxisRecord(TestcaseRecordInputStream.Create((short)0x1020, data));
-            Assert.AreEqual(1, record.CrossingPoint);
-            Assert.AreEqual(1, record.LabelFrequency);
-            Assert.AreEqual(1, record.TickMarkFrequency);
-            Assert.AreEqual(1, record.Options);
-            Assert.AreEqual(true, record.IsValueAxisCrossing);
-            Assert.AreEqual(false, record.IsCrossesFarRight);
-            Assert.AreEqual(false, record.IsReversed);
-
-
-            Assert.AreEqual(4 + 8, record.RecordSize);
+            DefaultTextRecord record = new DefaultTextRecord(TestcaseRecordInputStream.Create((short)0x1024, data));
+            Assert.AreEqual(2, (int)record.FormatType);
+            Assert.AreEqual(6, record.RecordSize);
         }
         [Test]
         public void TestStore()
         {
-            CategorySeriesAxisRecord record = new CategorySeriesAxisRecord();
-            record.CrossingPoint = ((short)1);
-            record.LabelFrequency = ((short)1);
-            record.TickMarkFrequency = ((short)1);
-            record.IsValueAxisCrossing = (true);
-            record.IsCrossesFarRight = (false);
-            record.IsReversed = (false);
+            DefaultTextRecord record = new DefaultTextRecord();
+            record.FormatType = (TextFormatInfo)2;
 
 
             byte[] recordBytes = record.Serialize();

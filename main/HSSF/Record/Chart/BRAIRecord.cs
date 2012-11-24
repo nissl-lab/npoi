@@ -33,7 +33,12 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class LinkedDataRecord : StandardRecord
+    //
+    /// <summary>
+    /// The BRAI record specifies a reference to data in a sheet (1) that is used by a part of a series, 
+    /// legend entry, trendline or error bars.
+    /// </summary>
+    public class BRAIRecord : StandardRecord
     {
         private BitField customNumberFormat = BitFieldFactory.GetInstance(0x1);
 
@@ -51,10 +56,14 @@ namespace NPOI.HSSF.Record.Chart
         public const byte REFERENCE_TYPE_ERROR_REPORTED = 4;
         private short field_3_options;
         private short field_4_indexNumberFmtRecord;
+
+        /// <summary>
+        /// A ChartParsedFormula structure that specifies the formula (section 2.2.2) that specifies the reference.
+        /// </summary>
         private Formula field_5_formulaOfLink;
 
 
-        public LinkedDataRecord()
+        public BRAIRecord()
         {
 
         }
@@ -65,7 +74,7 @@ namespace NPOI.HSSF.Record.Chart
          * @param in the RecordInputstream to Read the record from
          */
 
-        public LinkedDataRecord(RecordInputStream in1)
+        public BRAIRecord(RecordInputStream in1)
         {
             field_1_linkType = (byte)in1.ReadByte();
             field_2_referenceType = (byte)in1.ReadByte();
@@ -133,7 +142,7 @@ namespace NPOI.HSSF.Record.Chart
 
         public override Object Clone()
         {
-            LinkedDataRecord rec = new LinkedDataRecord();
+            BRAIRecord rec = new BRAIRecord();
 
             rec.field_1_linkType = field_1_linkType;
             rec.field_2_referenceType = field_2_referenceType;
@@ -154,6 +163,10 @@ namespace NPOI.HSSF.Record.Chart
          *        LINK_TYPE_VALUES
          *        LINK_TYPE_CATEGORIES
          */
+        //
+        /// <summary>
+        /// specifies the part of the series, trendline, or error bars the referenced data specifies.
+        /// </summary>
         public byte LinkType
         {
             get
@@ -200,6 +213,11 @@ namespace NPOI.HSSF.Record.Chart
         /**
          * Get the index number fmt record field for the LinkedData record.
          */
+
+        //
+        /// <summary>
+        /// specifies the number format to use for the data.
+        /// </summary>
         public short IndexNumberFmtRecord
         {
             get

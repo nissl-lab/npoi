@@ -27,6 +27,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
     using System.Collections.Generic;
+    using NPOI.HSSF.Record.Chart;
 
     /**
      *
@@ -173,7 +174,15 @@ namespace NPOI.HSSF.Record.Aggregates
 
                 if (!(rec is CellValueRecordInterface))
                 {
+                    //TODO: correct it, SeriesIndexRecord will appear in a separate chart sheet that contains a single chart
+                    // rule SERIESDATA = Dimensions 3(SIIndex *(Number / BoolErr / Blank / Label))
+                    if (rec.Sid == SeriesIndexRecord.sid)
+                    {
+                        AddUnknownRecord(rec);
+                        continue;
+                    }
                     throw new InvalidOperationException("Unexpected record type (" + rec.GetType().Name + ")");
+
                 }
                 _valuesAgg.Construct((CellValueRecordInterface)rec, rs, svm);
             }

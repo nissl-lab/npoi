@@ -26,7 +26,7 @@ namespace TestCases.HSSF.Record.Chart
     using NUnit.Framework;
 
     /**
-     * Tests the serialization and deserialization of the FontIndexRecord
+     * Tests the serialization and deserialization of the CategorySeriesAxisRecord
      * class works correctly.  Test data taken directly from a real
      * Excel file.
      *
@@ -34,13 +34,16 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestFontIndexRecord
+    public class TestCatSerRangeRecord
     {
         byte[] data = new byte[] {
-        (byte)0x05,(byte)0x00
+        (byte)0x01,(byte)0x00,    // crossing point
+        (byte)0x01,(byte)0x00,    // label frequency
+        (byte)0x01,(byte)0x00,    // tick mark frequency
+        (byte)0x01,(byte)0x00     // options
     };
 
-        public TestFontIndexRecord()
+        public TestCatSerRangeRecord()
         {
 
         }
@@ -48,17 +51,28 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
 
-            FontIndexRecord record = new FontIndexRecord(TestcaseRecordInputStream.Create((short)0x1026, data));
-            Assert.AreEqual(5, record.FontIndex);
+            CatSerRangeRecord record = new CatSerRangeRecord(TestcaseRecordInputStream.Create((short)0x1020, data));
+            Assert.AreEqual(1, record.CrossPoint);
+            Assert.AreEqual(1, record.LabelInterval);
+            Assert.AreEqual(1, record.MarkInterval);
+            Assert.AreEqual(1, record.Options);
+            Assert.AreEqual(true, record.IsBetween);
+            Assert.AreEqual(false, record.IsMaxCross);
+            Assert.AreEqual(false, record.IsReverse);
 
 
-            Assert.AreEqual(6, record.RecordSize);
+            Assert.AreEqual(4 + 8, record.RecordSize);
         }
         [Test]
         public void TestStore()
         {
-            FontIndexRecord record = new FontIndexRecord();
-            record.FontIndex = ((short)5);
+            CatSerRangeRecord record = new CatSerRangeRecord();
+            record.CrossPoint = ((short)1);
+            record.LabelInterval = ((short)1);
+            record.MarkInterval = ((short)1);
+            record.IsBetween = (true);
+            record.IsMaxCross = (false);
+            record.IsReverse = (false);
 
 
             byte[] recordBytes = record.Serialize();

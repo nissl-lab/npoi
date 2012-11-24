@@ -98,6 +98,19 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(field6_icrt);
         }
 
+
+        public override object Clone()
+        {
+            ChartFormatRecord r = new ChartFormatRecord();
+            r.Height = this.Height;
+            r.Icrt = this.Icrt;
+            r.VaryDisplayPattern = this.VaryDisplayPattern;
+            r.Width = this.Width;
+            r.XPosition = this.XPosition;
+            r.YPosition = this.YPosition;
+            return r;
+        }
+
         protected override int DataSize
         {
             get { return 20; }

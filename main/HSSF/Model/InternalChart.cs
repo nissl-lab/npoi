@@ -44,7 +44,6 @@ namespace NPOI.HSSF.Model
             BOFRecord bof = (BOFRecord)rs.GetNext();
             if (bof.Type != BOFRecord.TYPE_CHART)
             {
-                // TODO - fix junit tests throw new RuntimeException("Bad BOF record type");
                 throw new RuntimeException("Bad BOF record type");
             }
 
@@ -292,10 +291,339 @@ namespace NPOI.HSSF.Model
 
             records.Add(CreateShtPropsRecord());
 
-            //add 
+            //*2 DFTTEXT
+            CreateRuleDFTTEXT(records);
+            CreateRuleDFTTEXT(records);
+
+            records.Add(CreateAxisUsedRecord(1));
+
+            // 1*2AXISPARENT
+            CreateRuleAXISPARENT(records);
+            //SERIESDATA
+            CreateRuleSERIESDATA(records);
+
             records.Add(new EOFRecord());
             return retval;
         }
+        private static AxisUsedRecord CreateAxisUsedRecord(short numAxis)
+        {
+            AxisUsedRecord r = new AxisUsedRecord();
+            r.NumAxis = (numAxis);
+            return r;
+        }
+        #region SERIESDATA
+        /// <summary>
+        /// SERIESDATA = Dimensions 3(SIIndex *(Number / BoolErr / Blank / Label))
+        /// </summary>
+        /// <param name="records"></param>
+        private static void CreateRuleSERIESDATA(List<Record.Record> records)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+        #region AXES
+        /// <summary>
+        /// AXES = [IVAXIS DVAXIS [SERIESAXIS] / DVAXIS DVAXIS] *3ATTACHEDLABEL [PlotArea FRAME]
+        /// </summary>
+        private static void CreateRuleAXES()
+        {
+        }
+        #endregion
+        #region AXISPARENT
+        /// <summary>
+        /// AXISPARENT = AxisParent Begin Pos [AXES] 1*4CRT End
+        /// CRT = ChartFormat Begin (Bar / Line / (BopPop [BopPopCustom]) / Pie / Area / Scatter / Radar / RadarArea / Surf) 
+        ///      CrtLink [SeriesList] [Chart3d] [LD] [2DROPBAR] *4(CrtLine LineFormat) *2DFTTEXT [DataLabExtContents] [SS] *4SHAPEPROPS End
+        /// LD = Legend Begin Pos ATTACHEDLABEL [FRAME] [CrtLayout12] [TEXTPROPS] [CRTMLFRT] End
+        /// </summary>
+        /// <param name="records"></param>
+        private static void CreateRuleAXISPARENT(List<Record.Record> records)
+        {
+            records.Add(CreateAxisParentRecord());
+            records.Add(new BeginRecord());
+            records.Add(CreateAxisRecord(AxisRecord.AXIS_TYPE_CATEGORY_OR_X_AXIS));
+            records.Add(new BeginRecord());
+            records.Add(CreateCatSerRangeRecord());
+            records.Add(CreateAxcExtRecord());
+            records.Add(CreateTickRecord1());
+            records.Add(new EndRecord());
+            records.Add(CreateAxisRecord(AxisRecord.AXIS_TYPE_VALUE_AXIS));
+            records.Add(new BeginRecord());
+            records.Add(CreateValueRangeRecord());
+            records.Add(CreateTickRecord2());
+            records.Add(CreateAxisLineFormatRecord(AxisLineFormatRecord.AXIS_TYPE_MAJOR_GRID_LINE));
+            records.Add(CreateLineFormatRecord(false));
+            records.Add(new EndRecord());
+            records.Add(CreatePlotAreaRecord());
+            records.Add(CreateFrameRecord2());
+            records.Add(new BeginRecord());
+            records.Add(CreateLineFormatRecord2());
+            records.Add(CreateAreaFormatRecord2());
+            records.Add(new EndRecord());
+            records.Add(CreateChartFormatRecord());
+            records.Add(new BeginRecord());
+            records.Add(CreateBarRecord());
+            records.Add(new CrtLinkRecord());
+            records.Add(CreateLegendRecord());
+            records.Add(new BeginRecord());
+            records.Add(CreatePosRecord());
+            records.Add(CreateTextRecord());
+            records.Add(new BeginRecord());
+            records.Add(CreatePosRecord());
+            records.Add(CreateBRAIRecord());
+            records.Add(new EndRecord());
+            records.Add(new EndRecord());
+            records.Add(new EndRecord());
+            records.Add(new EndRecord());
+        }
+        private static AxisParentRecord CreateAxisParentRecord()
+        {
+            AxisParentRecord r = new AxisParentRecord();
+            r.AxisType = (AxisParentRecord.AXIS_TYPE_MAIN);
+            r.X = (479);
+            r.Y = (221);
+            r.Width = (2995);
+            r.Height = (2902);
+            return r;
+        }
+        private static AxisRecord CreateAxisRecord(short axisType)
+        {
+            AxisRecord r = new AxisRecord();
+            r.AxisType = (axisType);
+            return r;
+        }
+
+        private static AxisLineFormatRecord CreateAxisLineFormatRecord(short format)
+        {
+            AxisLineFormatRecord r = new AxisLineFormatRecord();
+            r.AxisType = (format);
+            return r;
+        }
+
+        private static ValueRangeRecord CreateValueRangeRecord()
+        {
+            ValueRangeRecord r = new ValueRangeRecord();
+            r.MinimumAxisValue = (0.0);
+            r.MaximumAxisValue = (0.0);
+            r.MajorIncrement = (0);
+            r.MinorIncrement = (0);
+            r.CategoryAxisCross = (0);
+            r.IsAutomaticMinimum = (true);
+            r.IsAutomaticMaximum = (true);
+            r.IsAutomaticMajor = (true);
+            r.IsAutomaticMinor = (true);
+            r.IsAutomaticCategoryCrossing = (true);
+            r.IsLogarithmicScale = (false);
+            r.IsValuesInReverse = (false);
+            r.IsCrossCategoryAxisAtMaximum = (false);
+            r.IsReserved = (true);	// what's this do??
+            return r;
+        }
+
+        private static TickRecord CreateTickRecord1()
+        {
+            TickRecord r = new TickRecord();
+            r.MajorTickType = ((byte)2);
+            r.MinorTickType = ((byte)0);
+            r.LabelPosition = ((byte)3);
+            r.Background = ((byte)1);
+            r.LabelColorRgb = (0);
+            r.Zero1 = ((short)0);
+            r.Zero2 = ((short)0);
+            r.Zero3 = ((short)45);
+            r.IsAutorotate = (true);
+            r.IsAutoTextBackground = (true);
+            r.Rotation = ((short)0);
+            r.IsAutorotate = (true);
+            r.TickColor = ((short)77);
+            return r;
+        }
+
+        private static TickRecord CreateTickRecord2()
+        {
+            TickRecord r = CreateTickRecord1();
+            r.Zero3 = ((short)0);
+            return r;
+        }
+
+        private static AxcExtRecord CreateAxcExtRecord()
+        {
+            AxcExtRecord r = new AxcExtRecord();
+            r.MinimumDate = 0;
+            r.MaximumDate = 0;
+            r.MajorInterval = 1;
+            r.MajorUnit = DateUnit.DUDAYS;
+            r.MinorInterval = 1;
+            r.MinorUnit = DateUnit.DUDAYS;
+            r.BaseUnit = DateUnit.DUDAYS;
+            r.CrossDate = 0;
+            r.IsAutoMin = (true);
+            r.IsAutoMax = (true);
+            r.IsAutoMajor = (true);
+            r.IsAutoMinor = (true);
+            r.IsDateAxis = (false);
+            r.IsAutoBase = (true);
+            r.IsAutoCross = (true);
+            r.IsAutoDate = (true);
+            return r;
+        }
+
+        private static CatSerRangeRecord CreateCatSerRangeRecord()
+        {
+            CatSerRangeRecord r = new CatSerRangeRecord();
+            r.CrossPoint = ((short)1);
+            r.LabelInterval = ((short)1);
+            r.MarkInterval = ((short)1);
+            r.IsBetween = (true);
+            r.IsMaxCross = (false);
+            r.IsReverse = (false);
+            return r;
+        }
+
+
+        private static LegendRecord CreateLegendRecord()
+        {
+            LegendRecord r = new LegendRecord();
+            r.XAxisUpperLeft = (3542);
+            r.YAxisUpperLeft = (1566);
+            r.XSize = (437);
+            r.YSize = (213);
+            r.Type = (LegendRecord.TYPE_RIGHT);
+            r.Spacing = (LegendRecord.SPACING_MEDIUM);
+            r.IsAutoPosition = (true);
+            r.IsAutoSeries = (true);
+            r.IsAutoXPositioning = (true);
+            r.IsAutoYPositioning = (true);
+            r.IsVertical = (true);
+            r.IsDataTable = (false);
+            return r;
+        }
+
+        private static BarRecord CreateBarRecord()
+        {
+            BarRecord r = new BarRecord();
+            r.BarSpace = ((short)0);
+            r.CategorySpace = ((short)150);
+            r.IsHorizontal = (false);
+            r.IsStacked = (false);
+            r.IsDisplayAsPercentage = (false);
+            r.IsShadow = (false);
+            return r;
+        }
+
+        private static ChartFormatRecord CreateChartFormatRecord()
+        {
+            ChartFormatRecord r = new ChartFormatRecord();
+            r.XPosition = (0);
+            r.YPosition = (0);
+            r.Width = (0);
+            r.Height = (0);
+            r.VaryDisplayPattern = (false);
+            return r;
+        }
+
+        private static PlotAreaRecord CreatePlotAreaRecord()
+        {
+            PlotAreaRecord r = new PlotAreaRecord();
+            return r;
+        }
+
+        #endregion
+
+        #region DFTTEXT
+        /// <summary>
+        /// DFTTEXT = [DataLabExt StartObject] DefaultText ATTACHEDLABEL [EndObject]
+        /// </summary>
+        /// <param name="records"></param>
+        private static void CreateRuleDFTTEXT(List<Record.Record> records)
+        {
+            //[DataLabExt StartObject]
+
+            records.Add(CreateDefaultTextRecord());
+            //ATTACHEDLABEL
+            CreateRuleATTACHEDLABEL(records);
+            //[EndObject]
+        }
+        private static DefaultTextRecord CreateDefaultTextRecord()
+        {
+            DefaultTextRecord r = new DefaultTextRecord();
+            r.FormatType = TextFormatInfo.FontScaleNotSet;
+            return r;
+        }
+        
+        #endregion
+
+        #region ATTACHEDLABEL
+        /// <summary>
+        /// ATTACHEDLABEL = Text Begin Pos [FontX] [AlRuns] AI [FRAME] [ObjectLink] [DataLabExtContents] [CrtLayout12] [TEXTPROPS] [CRTMLFRT] End
+        /// </summary>
+        private static void CreateRuleATTACHEDLABEL(List<Record.Record> records)
+        {
+            records.Add(CreateTextRecord());
+            records.Add(new BeginRecord());
+            records.Add(CreatePosRecord());
+            records.Add(CreateFontXRecord(7));
+            records.Add(CreateBRAIRecord());
+            records.Add(new EndRecord());
+        }
+
+        private static BRAIRecord CreateBRAIRecord()
+        {
+            BRAIRecord r = new BRAIRecord();
+            r.LinkType = 0;
+            r.ReferenceType = 1;
+            r.IsCustomNumberFormat = (false);
+            r.IndexNumberFmtRecord = ((short)0);
+            r.FormulaOfLink = (null);
+            return r;
+        }
+
+        private static TextRecord CreateTextRecord()
+        {
+            TextRecord r = new TextRecord();
+            r.HorizontalAlignment = (TextRecord.HORIZONTAL_ALIGNMENT_CENTER);
+            r.VerticalAlignment = (TextRecord.VERTICAL_ALIGNMENT_CENTER);
+            r.DisplayMode = ((short)1);
+            r.RgbColor = (0x00000000);
+            r.X = (-37);
+            r.Y = (-60);
+            r.Width = (0);
+            r.Height = (0);
+            r.IsAutoColor = (true);
+            r.ShowKey = (false);
+            r.ShowValue = (false);
+            //r.IsVertical = (false);
+            r.IsAutoGeneratedText = (true);
+            r.IsGenerated = (true);
+            r.IsAutoLabelDeleted = (false);
+            r.IsAutoBackground = (true);
+            //r.Rotation = ((short)0);
+            r.ShowCategoryLabelAsPercentage = (false);
+            r.ShowValueAsPercentage = (false);
+            r.ShowBubbleSizes = (false);
+            r.ShowLabel = (false);
+            r.IndexOfColorValue = ((short)77);
+            r.DataLabelPlacement = ((short)0);
+            r.TextRotation = ((short)0);
+            return r;
+        }
+
+        private static PosRecord CreatePosRecord()
+        {
+            PosRecord r = new PosRecord();
+            r.MDTopLt = PositionMode.MDPARENT;
+            r.MdBotRt = PositionMode.MDPARENT;
+
+            return r;
+        }
+        private static FontXRecord CreateFontXRecord(int index)
+        {
+            FontXRecord r = new FontXRecord();
+            r.FontIndex = ((short)index);
+            return r;
+        }
+        #endregion
+        
         private static ShtPropsRecord CreateShtPropsRecord()
         {
             ShtPropsRecord r = new ShtPropsRecord();
@@ -307,7 +635,7 @@ namespace NPOI.HSSF.Model
 
         //SERIESFORMAT = Series Begin 4AI *SS (SerToCrt / (SerParent (SerAuxTrend / SerAuxErrBar))) 
         //*(LegendException [Begin ATTACHEDLABEL [TEXTPROPS] End]) End
-        private static void CreateSERIESFORMAT(List<Record.Record> records)
+        private static void CreateRuleSERIESFORMAT(List<Record.Record> records)
         {
             
             //Series
@@ -347,7 +675,7 @@ namespace NPOI.HSSF.Model
         #region SS
         //SS = DataFormat Begin [Chart3DBarShape] [LineFormat AreaFormat PieFormat] [SerFmt] 
         //[GELFRAME] [MarkerFormat] [AttachedLabel] *2SHAPEPROPS [CRTMLFRT] End
-        private static void CreateSS(List<NPOI.HSSF.Record.Record> records)
+        private static void CreateRuleSS(List<NPOI.HSSF.Record.Record> records)
         {
             records.Add(CreateDataFormatRecord());
             records.Add(new BeginRecord());
