@@ -79,6 +79,12 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HSSF\Converter\ExcelToHtmlConverter.cs" />
     <Compile Include="HSSF\Converter\ExcelToHtmlUtils.cs" />
+    <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DefaultTextRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\FontXRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ShtPropsRecord.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
@@ -91,7 +97,6 @@
     </Compile>
     <Compile Include="HSSF\Record\Chart\CrtLayout12Record.cs" />
     <Compile Include="HSSF\Record\Chart\CrtMlFrtRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\GelFrameRecord.cs" />
     <Compile Include="HSSF\Record\Chart\MarkerFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PieFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PieRecord.cs" />
@@ -258,13 +263,11 @@
     <Compile Include="HSSF\Record\Chart\AreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisLineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisOptionsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BarRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BeginRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\CategorySeriesAxisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatLabRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Chart3DBarShape.cs" />
     <Compile Include="HSSF\Record\Chart\ChartEndBlockRecord.cs" />
@@ -279,14 +282,11 @@
     <Compile Include="HSSF\Record\Chart\DataFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataLabelExtensionRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\DefaultDataLabelTextPropertiesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\EndRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FontBasisRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\FontIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FrameRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LegendRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\LinkedDataRecord.cs" />
     <Compile Include="HSSF\Record\Chart\NumberFormatIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectLinkRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PlotAreaRecord.cs" />
@@ -299,7 +299,6 @@
     <Compile Include="HSSF\Record\Chart\SeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesToChartGroupRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\SheetPropertiesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TickRecord.cs" />
     <Compile Include="HSSF\Record\Chart\UnitsRecord.cs" />
