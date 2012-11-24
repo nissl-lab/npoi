@@ -55,7 +55,7 @@ namespace NPOI.HSSF.Record.Chart
         private short field_4_format;
         private BitField auto = BitFieldFactory.GetInstance(0x1);
         private BitField drawTicks = BitFieldFactory.GetInstance(0x4);
-        private BitField Unknown = BitFieldFactory.GetInstance(0x4);
+        private BitField Unknown = BitFieldFactory.GetInstance(0x8);
         private short field_5_colourPaletteIndex;
 
 
@@ -186,12 +186,17 @@ namespace NPOI.HSSF.Record.Chart
             set 
             {
                 this.field_2_linePattern = value;
+                if (value == LINE_PATTERN_NONE)
+                {
+                    field_3_weight = (short)-1;
+                    field_5_colourPaletteIndex = 0x004D;
+                }
             }
         }
 
         /**
          * Get the weight field for the LineFormat record.
-         *
+         * specifies the thickness of the line.
          * @return  One of 
          *        WEIGHT_HAIRLINE
          *        WEIGHT_NARROW

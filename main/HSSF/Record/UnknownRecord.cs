@@ -213,9 +213,6 @@ namespace NPOI.HSSF.Record
 
                 case 0x08C8: return "PLV{Mac Excel}";
 
-                case 0x100C: return "AttachedLabel";
-                case 0x1018: return "Bar";
-                case 0x101B: return "Scatter";
             }
             if (IsObservedButUnknown(sid))
             {
@@ -256,47 +253,51 @@ namespace NPOI.HSSF.Record
                 //case 0x1009:
                 //case 0x100A:
                 //case 0x100B:
-                //case 0x100C:  //AttachedLabel
+                case 0x100C:  //AttachedLabel
                 //case 0x1014:  //ChartFormat
-                //case 0x1017:
-                //case 0x1018:   //Bar
-                //case 0x1019:
-                //case 0x101A:
-                //case 0x101B:  //Scatter
-                //case 0x101D:
-                //case 0x101E:
-                //case 0x101F:
+                //case 0x1017:  //Bar
+                case 0x1018:  //Line
+                //case 0x1019:  //Pie
+                //case 0x101A:  //Area
+                case 0x101B:  //Scatter
+                //case 0x101D:  //Axis
+                //case 0x101E:  //Tick
+                //case 0x101F:  //ValueRange
                 case 0x1020:// "CatSerRange";
                 case 0x1021:// "AxisLine";
                 case 0x1022:// "CrtLink";
                 case 0x1024:// "DefaultText";
-                //case 0x1025:
+                //case 0x1025:  //Text
                 case 0x1026:// "FontX";
-                //case 0x1027:
-                //case 0x1032:
-                case 0x1033:
-                case 0x1034:
-                case 0x1035:
-                //case 0x103A:
-                case 0x1041:
-                case 0x1043:
-                case 0x1044:
-                case 0x1045:
-                case 0x1046:
-                case 0x104A:
-                case 0x104B:
-                case 0x104E:
-                case 0x104F:
-                case 0x1051:
-                case 0x105C:
-                case 0x105D:
-                case 0x105F:
-                //case 0x1060:
-                case 0x1062:
-                case 0x1063:
-                case 0x1064:
-                case 0x1065:
-                case 0x1066:
+                //case 0x1027:  //ObjectLink
+                //case 0x1032:  //Frame
+                case 0x1033:  //Begin
+                case 0x1034:  //End
+                case 0x1035:  //PlotArea
+                //case 0x103A: //Chart3d
+                case 0x1041: //AxisParent
+                case 0x1043: //LegendException
+                case 0x1044: //ShtProps
+                case 0x1045:  //SerToCrt
+                case 0x1046: //AxesUsed
+                case 0x104A: //SerParent
+                case 0x104B: //SerAuxTrend
+                case 0x104E:  //IFmtRecord
+                case 0x104F:  //Pos
+                case 0x1051:  //BRAI
+                case 0x105C:  //ClrtClient
+                case 0x105D:  //SerFmt
+                case 0x105F:  //Chart3DBarShape
+                //case 0x1060:  //Fbi
+                case 0x1062:  //AxcExt
+                case 0x1063:  //Dat
+                case 0x1064:  //PlotGrowth
+                //case 0x1065:  //SIIndex
+                case 0x1066:  //GelFrame
+                case 4200:    //Fbi2
+                case 4199:  //BopPopCustom
+                case 4193://BopPop
+                case 4176: //AlRuns
                     return true;
             }
             return false;

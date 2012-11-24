@@ -244,7 +244,6 @@ namespace NPOI.HSSF.Record
 		        typeof(ChartFRTInfoRecord),
 		        typeof(ChartStartBlockRecord),
 		        typeof(ChartEndBlockRecord),
-                //TODO typeof(ChartFormatRecord),
 		        typeof(ChartStartObjectRecord),
 		        typeof(ChartEndObjectRecord),
                 typeof(CatLabRecord),
@@ -293,6 +292,8 @@ namespace NPOI.HSSF.Record
                 typeof(PieFormatRecord),
                 typeof(CrtLayout12ARecord),
                 typeof(MarkerFormatRecord),
+                typeof(ChartFormatRecord),
+                typeof(SeriesIndexRecord),
                 //end
 
           		// pivot table records

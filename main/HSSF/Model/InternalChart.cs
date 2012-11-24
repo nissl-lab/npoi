@@ -104,7 +104,12 @@ namespace NPOI.HSSF.Model
                 }
                 else if (recSid == UnknownRecord.PLS_004D) // PLS
                 {
-                    _plsRecords.Add(new PLSAggregate(rs));
+                    PLSAggregate pls = new PLSAggregate(rs);
+                    PLSAggregateVisitor rv = new PLSAggregateVisitor(records);
+                    pls.VisitContainedRecords(rv);
+                    _plsRecords.Add(pls);
+
+                    continue;
                 }
                 else if (recSid == PrintSetupRecord.sid)
                 {
@@ -130,7 +135,22 @@ namespace NPOI.HSSF.Model
             }
             
         }
+        private class PLSAggregateVisitor : RecordVisitor
+        {
+            private List<RecordBase> container;
+            public PLSAggregateVisitor(List<RecordBase> container)
+            {
+                this.container = container;
+            }
+            #region RecordVisitor 成员
 
+            public void VisitRecord(NPOI.HSSF.Record.Record r)
+            {
+                container.Add((RecordBase)r);
+            }
+
+            #endregion
+        }
         private void CheckNotPresent(Record.Record rec)
         {
             if (rec != null)
@@ -222,6 +242,8 @@ namespace NPOI.HSSF.Model
             m.Margin = size;
         }
 
+        #region Creation Method for creating a new chart
+
         private static ChartSheet CreateChartSheet()
         {
             ChartSheet retval = new ChartSheet();
@@ -238,16 +260,76 @@ namespace NPOI.HSSF.Model
             records.Add((RightMarginRecord)CreateMarginRecord(MarginType.RightMargin, 0.7));
             records.Add((TopMarginRecord)CreateMarginRecord(MarginType.TopMargin, 0.7));
             records.Add((BottomMarginRecord)CreateMarginRecord(MarginType.BottomMargin, 0.7));
+            //ignore pls
+            
             records.Add(CreatePrintSetupRecord());
             records.Add(CreatePrintSizeRecord());
+            records.Add(CreateFontBasisRecord1());
+            records.Add(CreateFontBasisRecord2());
             //records.Add(CreateHeaderFooterRecord()); //ignore this record
             records.Add(new ProtectRecord(false));
-            records.Add(CreateDrawingRecord());
+            //records.Add(CreateDrawingRecord());
             records.Add(new UnitsRecord());
 
+            //CHARTFOMATS
+            records.Add(CreateChartRecord(0, 0, 32341968, 14745600));
+            records.Add(new BeginRecord());
+            records.Add(CreateSCLRecord(1, 1));
+            records.Add(CreatePlotGrowthRecord(65536, 65536));
+            //Frame
+            records.Add(CreateFrameRecord1());
+            records.Add(new BeginRecord());
+            records.Add(CreateLineFormatRecord(true));
+            records.Add(CreateAreaFormatRecord1());
+            records.Add(new EndRecord());
+            /* an empty chart has no Series Records.
+            //Series
+            records.Add(CreateSeriesRecord());
+            records.Add(new BeginRecord());
+            //  4AI
+
+            //  DataFormat
+            records.Add(CreateDataFormatRecord());
+            records.Add(new BeginRecord());
+            records.Add(CreateChart3DBarShapeRecord());
+            records.Add(new EndRecord()); //end dataformat
+
+            records.Add(new EndRecord());  //end series
+            */
+
+            //add 
+            records.Add(new EOFRecord());
             return retval;
         }
+        private static SeriesRecord CreateSeriesRecord()
+        {
+            SeriesRecord r = new SeriesRecord();
+            r.CategoryDataType = (SeriesRecord.CATEGORY_DATA_TYPE_NUMERIC);
+            r.ValuesDataType = (SeriesRecord.VALUES_DATA_TYPE_NUMERIC);
+            r.NumCategories = ((short)32);
+            r.NumValues = ((short)31);
+            r.BubbleSeriesType = (SeriesRecord.BUBBLE_SERIES_TYPE_NUMERIC);
+            r.NumBubbleValues = ((short)0);
+            return r;
+        }
 
+        private static DataFormatRecord CreateDataFormatRecord()
+        {
+            DataFormatRecord r = new DataFormatRecord();
+            r.PointNumber = ((short)-1);
+            r.SeriesIndex = ((short)0);
+            r.SeriesNumber = ((short)0);
+            r.UseExcel4Colors = (false);
+            return r;
+        }
+
+        private static Chart3DBarShapeRecord CreateChart3DBarShapeRecord()
+        {
+            Chart3DBarShapeRecord r = new Chart3DBarShapeRecord();
+            r.Riser = 0;
+            r.Taper = 0;
+            return r;
+        }
         private static DrawingRecord CreateDrawingRecord()
         {
             //throw new NotImplementedException();
@@ -350,11 +432,122 @@ namespace NPOI.HSSF.Model
             return r;
         }
 
-        private class CHARTFOMATS
+        
+        private static FontBasisRecord CreateFontBasisRecord1()
         {
-            public CHARTFOMATS(RecordStream rs)
-            {
-            }
+            FontBasisRecord r = new FontBasisRecord();
+            r.XBasis = ((short)9720);
+            r.YBasis = ((short)4350);
+            r.HeightBasis = ((short)240);
+            r.Scale = ((short)0);
+            r.IndexToFontTable = ((short)24);
+            return r;
         }
+
+        private static FontBasisRecord CreateFontBasisRecord2()
+        {
+            FontBasisRecord r = CreateFontBasisRecord1();
+            r.Scale = 1;
+            r.IndexToFontTable = ((short)25);
+            return r;
+        }
+
+        //CHARTFORMATS
+
+        private static ChartRecord CreateChartRecord(int x, int y, int width, int height)
+        {
+            ChartRecord r = new ChartRecord();
+            r.X = (x);
+            r.Y = (y);
+            r.Width = (width);
+            r.Height = (height);
+            return r;
+        }
+
+        private static PlotGrowthRecord CreatePlotGrowthRecord(int horizScale, int vertScale)
+        {
+            PlotGrowthRecord r = new PlotGrowthRecord();
+            r.HorizontalScale = (horizScale);
+            r.VerticalScale = (vertScale);
+            return r;
+        }
+
+        private static SCLRecord CreateSCLRecord(short numerator, short denominator)
+        {
+            SCLRecord r = new SCLRecord();
+            r.Denominator = (denominator);
+            r.Numerator = (numerator);
+            return r;
+        }
+
+        private static FrameRecord CreateFrameRecord1()
+        {
+            FrameRecord r = new FrameRecord();
+            r.BorderType = (FrameRecord.BORDER_TYPE_REGULAR);
+            r.IsAutoSize = (false);
+            r.IsAutoPosition = (true);
+            return r;
+        }
+
+        private static FrameRecord CreateFrameRecord2()
+        {
+            FrameRecord r = new FrameRecord();
+            r.BorderType = (FrameRecord.BORDER_TYPE_REGULAR);
+            r.IsAutoSize = (true);
+            r.IsAutoPosition = (true);
+            return r;
+        }
+
+        private static AreaFormatRecord CreateAreaFormatRecord1()
+        {
+            AreaFormatRecord r = new AreaFormatRecord();
+            r.ForegroundColor = (16777215);	 // RGB Color
+            r.BackgroundColor = (0);			// RGB Color
+            r.Pattern = ((short)1);			 // TODO: Add Pattern constants to record
+            r.IsAutomatic = (true);
+            r.IsInvert = (false);
+            r.ForecolorIndex = ((short)78);
+            r.BackcolorIndex = ((short)77);
+            return r;
+        }
+
+        private static AreaFormatRecord CreateAreaFormatRecord2()
+        {
+            AreaFormatRecord r = new AreaFormatRecord();
+            r.ForegroundColor = (0x00c0c0c0);
+            r.BackgroundColor = (0x00000000);
+            r.Pattern = ((short)1);
+            r.IsAutomatic = (false);
+            r.IsInvert = (false);
+            r.ForecolorIndex = ((short)22);
+            r.BackcolorIndex = ((short)79);
+            return r;
+        }
+
+        private static LineFormatRecord CreateLineFormatRecord(bool drawTicks)
+        {
+            LineFormatRecord r = new LineFormatRecord();
+            r.LineColor = (0);
+            r.LinePattern = (LineFormatRecord.LINE_PATTERN_SOLID);
+            r.Weight = ((short)-1);
+            r.IsAuto = (true);
+            r.IsDrawTicks = (drawTicks);
+            r.ColourPaletteIndex = ((short)77);  // what colour is this?
+            return r;
+        }
+
+        private static LineFormatRecord CreateLineFormatRecord2()
+        {
+            LineFormatRecord r = new LineFormatRecord();
+            r.LineColor = (0x00808080);
+            r.LinePattern = LineFormatRecord.LINE_PATTERN_SOLID;
+            r.Weight = ((short)0);
+            r.IsAuto = (false);
+            r.IsDrawTicks = (false);
+            r.IsUnknown = (false);
+            r.ColourPaletteIndex = ((short)23);
+            return r;
+        }
+        #endregion
     }
 }

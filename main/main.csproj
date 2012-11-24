@@ -73,7 +73,7 @@
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
     <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
     <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
-    <Compile Include="HSSF\Record\UnicodeString.cs" />
+    <Compile Include="HSSF\Record\Common\UnicodeString.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
