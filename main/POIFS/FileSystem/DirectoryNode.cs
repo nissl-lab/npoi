@@ -149,8 +149,7 @@ namespace NPOI.POIFS.FileSystem
         /// <summary>
         /// Create a new DocumentEntry; the data will be provided later
         /// </summary>
-        /// <param name="name">the name of the new DocumentEntry</param>
-        /// <param name="size">the size of the new DocumentEntry</param>
+        /// <param name="document">the name of the new documentEntry</param>
         /// <returns>the new DocumentEntry</returns>
         public DocumentEntry CreateDocument(POIFSDocument document)
         {

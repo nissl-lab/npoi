@@ -31,7 +31,6 @@ namespace NPOI.DDF
     /// @author Glen Stampoultzis
     /// @author Nick Burch   (nick at torchbox . com)
     /// </summary>
-    /// <see cref="EscherRecordFactory"/>
     public class DefaultEscherRecordFactory : IEscherRecordFactory
     {
         private static Type[] escherRecordClasses = {

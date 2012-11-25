@@ -138,6 +138,70 @@ namespace NPOI.HSSF.UserModel
             sheet.Sheet.AddValueRecord(RowNum, ((HSSFCell)cell).CellValueRecord);
             return cell;
         }
+        public ICell CopyCell(int sourceIndex, int targetIndex)
+        {
+            // Grab a copy of the old/new cell
+            ICell oldCell = this.GetCell(sourceIndex);
+
+            // If the old cell is null jump to next cell
+            if (oldCell == null)
+            {
+                return null;
+            }
+
+            ICell newCell = this.GetCell(targetIndex);
+            if (newCell == null) //not exist
+            {
+                newCell = this.CreateCell(targetIndex);
+            }
+            else
+            {
+                //TODO:shift cells                
+            }
+            // Copy style from old cell and apply to new cell
+            if (oldCell.CellStyle != null)
+            {
+                newCell.CellStyle = oldCell.CellStyle;
+            }
+            // If there is a cell comment, copy
+            if (oldCell.CellComment != null)
+            {
+                newCell.CellComment = oldCell.CellComment;
+            }
+
+            // If there is a cell hyperlink, copy
+            if (oldCell.Hyperlink != null)
+            {
+                newCell.Hyperlink = oldCell.Hyperlink;
+            }
+
+            // Set the cell data type
+            newCell.SetCellType(oldCell.CellType);
+
+            // Set the cell data value
+            switch (oldCell.CellType)
+            {
+                case CellType.BLANK:
+                    newCell.SetCellValue(oldCell.StringCellValue);
+                    break;
+                case CellType.BOOLEAN:
+                    newCell.SetCellValue(oldCell.BooleanCellValue);
+                    break;
+                case CellType.ERROR:
+                    newCell.SetCellErrorValue(oldCell.ErrorCellValue);
+                    break;
+                case CellType.FORMULA:
+                    newCell.SetCellFormula(oldCell.CellFormula);
+                    break;
+                case CellType.NUMERIC:
+                    newCell.SetCellValue(oldCell.NumericCellValue);
+                    break;
+                case CellType.STRING:
+                    newCell.SetCellValue(oldCell.RichStringCellValue);
+                    break;
+            }
+            return newCell;
+        }
         /// <summary>
         /// Remove the Cell from this row.
         /// </summary>
@@ -687,7 +751,7 @@ namespace NPOI.HSSF.UserModel
         [Obsolete]
         private short FindFirstCell(int firstcell)
         {
-            short cellnum = (short)(firstcell + 1);
+            int cellnum = firstcell + 1;
             ICell r = GetCell(cellnum);
 
             while (r == null && cellnum <= LastCellNum)
@@ -696,11 +760,11 @@ namespace NPOI.HSSF.UserModel
             }
             if (cellnum > LastCellNum)
                 return -1;
-            return cellnum;
+            return (short)cellnum;
         }
 
         /// <summary>
-        /// Get cells in the row
+        /// Get cells in the row (existing cells only, no blanks)
         /// </summary>
         public List<ICell> Cells
         {

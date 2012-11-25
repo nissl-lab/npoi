@@ -722,13 +722,13 @@ namespace NPOI.HSSF.UserModel
             ValidateSheetIndex(sheetIndex);
             HSSFSheet srcSheet = (HSSFSheet)_sheets[sheetIndex];
             String srcName = workbook.GetSheetName(sheetIndex);
-            HSSFSheet clonedSheet = srcSheet.CloneSheet(this);
+            ISheet clonedSheet = srcSheet.CloneSheet(this);
             clonedSheet.IsSelected = (false);
             clonedSheet.IsActive = (false);
 
             String name = GetUniqueSheetName(srcName);
             int newSheetIndex = _sheets.Count;
-            _sheets.Add(clonedSheet);
+            _sheets.Add((HSSFSheet)clonedSheet);
             workbook.SetSheetName(newSheetIndex, name);
 
             // Check this sheet has an autofilter, (which has a built-in NameRecord at workbook level)
@@ -740,7 +740,7 @@ namespace NPOI.HSSF.UserModel
                 names.Add(newName);
             }
             // TODO - maybe same logic required for other/all built-in name records
-            workbook.CloneDrawings(clonedSheet.Sheet);
+            workbook.CloneDrawings(((HSSFSheet)clonedSheet).Sheet);
             return clonedSheet;
         }
         /// <summary>

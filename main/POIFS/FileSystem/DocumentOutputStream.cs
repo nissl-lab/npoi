@@ -78,39 +78,26 @@ namespace NPOI.POIFS.FileSystem
             Write(b, 0, b.Length);
         }
 
-        /**
-         * Writes len bytes from the specified byte array starting at
-         * offset off to this output stream.  The general contract for
-         * Write(b, off, len) is that some of the bytes in the array b are
-         * written to the output stream in order; element b[off] is the
-         * first byte written and b[off+len-1] is the last byte written by
-         * this operation.<p>
-         * If b is null, a NullPointerException is thrown.<p>
-         * If off is negative, or len is negative, or off+len is greater
-         * than the length of the array b, then an
-         * IndexOutOfBoundsException is thrown.
-         *
-         * @param b the data.
-         * @param off the start offset in the data.
-         * @param len the number of bytes to Write.
-         * @exception IOException if an I/O error occurs. In particular,
-         *                        an IOException</code> is thrown if the
-         *                        output stream is closed or if the Writer
-         *                        tries to write too many bytes.
-         */
+        /// <summary>
+        ///  Writes len bytes from the specified byte array starting at
+        /// offset off to this output stream.  The general contract for
+        /// Write(b, off, len) is that some of the bytes in the array b are
+        /// written to the output stream in order; element b[off] is the
+        /// first byte written and b[off+len-1] is the last byte written by
+        /// this operation.
+        /// </summary>
+        /// <param name="b">the data.</param>
+        /// <param name="off">the start offset in the data.</param>
+        /// <param name="len">the number of bytes to Write.</param>
         public override void Write(byte[] b, int off, int len)
         {
             LimitCheck(len);
             _stream.Write(b, off, len);
         }
-
-        /**
-         * Flushes this output stream and forces any buffered output bytes
-         * to be written out1.
-         *
-         * @exception IOException if an I/O error occurs.
-         */
-        public void flush()
+       /// <summary>
+        /// Flushes this output stream and forces any buffered output bytes to be written out
+       /// </summary>
+        public override void Flush()
         {
             _stream.Flush();
         }

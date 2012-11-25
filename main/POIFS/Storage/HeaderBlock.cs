@@ -217,8 +217,8 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// Alerts the short read.
         /// </summary>
-        /// <param name="Read">The read.</param>
-//        private static void AlertShortRead(int read,int expectedReadSize)
+        /// <param name="read">The read.</param>
+        /// <param name="expectedReadSize">The expected size.</param>
         private static IOException AlertShortRead(int read, int expectedReadSize)
         {
             if (read < 0)
