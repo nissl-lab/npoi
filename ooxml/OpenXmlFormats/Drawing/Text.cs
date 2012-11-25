@@ -389,593 +389,725 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
     public partial class CT_TextNoAutofit {
     }
-    
+
 
     [Serializable]
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
-    [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextBodyProperties {
-        
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public partial class CT_TextBodyProperties
+    {
+
         private CT_PresetTextShape prstTxWarpField;
-        
+
         private CT_TextNoAutofit noAutofitField;
-        
+
         private CT_TextNormalAutofit normAutofitField;
-        
+
         private CT_TextShapeAutofit spAutoFitField;
-        
+
         private CT_Scene3D scene3dField;
-        
+
         private CT_Shape3D sp3dField;
-        
+
         private CT_FlatText flatTxField;
-        
+
         private CT_OfficeArtExtensionList extLstField;
-        
+
         private int rotField;
-        
+
         private bool rotFieldSpecified;
-        
+
         private bool spcFirstLastParaField;
-        
+
         private bool spcFirstLastParaFieldSpecified;
-        
+
         private ST_TextVertOverflowType vertOverflowField;
-        
+
         private bool vertOverflowFieldSpecified;
-        
+
         private ST_TextHorzOverflowType horzOverflowField;
-        
+
         private bool horzOverflowFieldSpecified;
-        
+
         private ST_TextVerticalType vertField;
-        
+
         private bool vertFieldSpecified;
-        
+
         private ST_TextWrappingType wrapField;
-        
+
         private bool wrapFieldSpecified;
-        
+
         private int lInsField;
-        
+
         private bool lInsFieldSpecified;
-        
+
         private int tInsField;
-        
+
         private bool tInsFieldSpecified;
-        
+
         private int rInsField;
-        
+
         private bool rInsFieldSpecified;
-        
+
         private int bInsField;
-        
+
         private bool bInsFieldSpecified;
-        
+
         private int numColField;
-        
+
         private bool numColFieldSpecified;
-        
+
         private int spcColField;
-        
+
         private bool spcColFieldSpecified;
-        
+
         private bool rtlColField;
-        
+
         private bool rtlColFieldSpecified;
-        
+
         private bool fromWordArtField;
-        
+
         private bool fromWordArtFieldSpecified;
-        
+
         private ST_TextAnchoringType anchorField;
-        
+
         private bool anchorFieldSpecified;
-        
+
         private bool anchorCtrField;
-        
+
         private bool anchorCtrFieldSpecified;
-        
+
         private bool forceAAField;
-        
+
         private bool forceAAFieldSpecified;
-        
+
         private bool uprightField;
-        
+
         private bool compatLnSpcField;
-        
+
         private bool compatLnSpcFieldSpecified;
-        
-        public CT_TextBodyProperties() {
+
+        public CT_TextBodyProperties()
+        {
             this.uprightField = false;
         }
-        
-    
-        public CT_PresetTextShape prstTxWarp {
-            get {
+
+        public CT_PresetTextShape prstTxWarp
+        {
+            get
+            {
                 return this.prstTxWarpField;
             }
-            set {
+            set
+            {
                 this.prstTxWarpField = value;
             }
         }
-        
-    
-        public CT_TextNoAutofit noAutofit {
-            get {
+
+        public CT_TextNoAutofit noAutofit
+        {
+            get
+            {
                 return this.noAutofitField;
             }
-            set {
+            set
+            {
                 this.noAutofitField = value;
             }
         }
-        
-    
-        public CT_TextNormalAutofit normAutofit {
-            get {
+
+        public CT_TextNormalAutofit normAutofit
+        {
+            get
+            {
                 return this.normAutofitField;
             }
-            set {
+            set
+            {
                 this.normAutofitField = value;
             }
         }
-        
-    
-        public CT_TextShapeAutofit spAutoFit {
-            get {
+        public CT_TextShapeAutofit spAutoFit
+        {
+            get
+            {
                 return this.spAutoFitField;
             }
-            set {
+            set
+            {
                 this.spAutoFitField = value;
             }
         }
-        
-    
-        public CT_Scene3D scene3d {
-            get {
+
+
+        public CT_Scene3D scene3d
+        {
+            get
+            {
                 return this.scene3dField;
             }
-            set {
+            set
+            {
                 this.scene3dField = value;
             }
         }
-        
-    
-        public CT_Shape3D sp3d {
-            get {
+
+
+        public CT_Shape3D sp3d
+        {
+            get
+            {
                 return this.sp3dField;
             }
-            set {
+            set
+            {
                 this.sp3dField = value;
             }
         }
-        
-    
-        public CT_FlatText flatTx {
-            get {
+
+
+        public CT_FlatText flatTx
+        {
+            get
+            {
                 return this.flatTxField;
             }
-            set {
+            set
+            {
                 this.flatTxField = value;
             }
         }
-        
-    
-        public CT_OfficeArtExtensionList extLst {
-            get {
+
+
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
                 return this.extLstField;
             }
-            set {
+            set
+            {
                 this.extLstField = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int rot {
-            get {
+        public int rot
+        {
+            get
+            {
                 return this.rotField;
             }
-            set {
+            set
+            {
                 this.rotField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool rotSpecified {
-            get {
+        public bool rotSpecified
+        {
+            get
+            {
                 return this.rotFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rotFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public bool spcFirstLastPara {
-            get {
+        public bool spcFirstLastPara
+        {
+            get
+            {
                 return this.spcFirstLastParaField;
             }
-            set {
+            set
+            {
                 this.spcFirstLastParaField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool spcFirstLastParaSpecified {
-            get {
+        public bool spcFirstLastParaSpecified
+        {
+            get
+            {
                 return this.spcFirstLastParaFieldSpecified;
             }
-            set {
+            set
+            {
                 this.spcFirstLastParaFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public ST_TextVertOverflowType vertOverflow {
-            get {
+        public ST_TextVertOverflowType vertOverflow
+        {
+            get
+            {
                 return this.vertOverflowField;
             }
-            set {
+            set
+            {
                 this.vertOverflowField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool vertOverflowSpecified {
-            get {
+        public bool vertOverflowSpecified
+        {
+            get
+            {
                 return this.vertOverflowFieldSpecified;
             }
-            set {
+            set
+            {
                 this.vertOverflowFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public ST_TextHorzOverflowType horzOverflow {
-            get {
+        public ST_TextHorzOverflowType horzOverflow
+        {
+            get
+            {
                 return this.horzOverflowField;
             }
-            set {
+            set
+            {
                 this.horzOverflowField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool horzOverflowSpecified {
-            get {
+        public bool horzOverflowSpecified
+        {
+            get
+            {
                 return this.horzOverflowFieldSpecified;
             }
-            set {
+            set
+            {
                 this.horzOverflowFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public ST_TextVerticalType vert {
-            get {
+        public ST_TextVerticalType vert
+        {
+            get
+            {
                 return this.vertField;
             }
-            set {
+            set
+            {
                 this.vertField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool vertSpecified {
-            get {
+        public bool vertSpecified
+        {
+            get
+            {
                 return this.vertFieldSpecified;
             }
-            set {
+            set
+            {
                 this.vertFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public ST_TextWrappingType wrap {
-            get {
+        public ST_TextWrappingType wrap
+        {
+            get
+            {
                 return this.wrapField;
             }
-            set {
+            set
+            {
                 this.wrapField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool wrapSpecified {
-            get {
+        public bool wrapSpecified
+        {
+            get
+            {
                 return this.wrapFieldSpecified;
             }
-            set {
+            set
+            {
                 this.wrapFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int lIns {
-            get {
+        public int lIns
+        {
+            get
+            {
                 return this.lInsField;
             }
-            set {
+            set
+            {
                 this.lInsField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool lInsSpecified {
-            get {
+        public bool lInsSpecified
+        {
+            get
+            {
                 return this.lInsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.lInsFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int tIns {
-            get {
+        public int tIns
+        {
+            get
+            {
                 return this.tInsField;
             }
-            set {
+            set
+            {
                 this.tInsField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool tInsSpecified {
-            get {
+        public bool tInsSpecified
+        {
+            get
+            {
                 return this.tInsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.tInsFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int rIns {
-            get {
+        public int rIns
+        {
+            get
+            {
                 return this.rInsField;
             }
-            set {
+            set
+            {
                 this.rInsField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool rInsSpecified {
-            get {
+        public bool rInsSpecified
+        {
+            get
+            {
                 return this.rInsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rInsFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int bIns {
-            get {
+        public int bIns
+        {
+            get
+            {
                 return this.bInsField;
             }
-            set {
+            set
+            {
                 this.bInsField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool bInsSpecified {
-            get {
+        public bool bInsSpecified
+        {
+            get
+            {
                 return this.bInsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.bInsFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int numCol {
-            get {
+        public int numCol
+        {
+            get
+            {
                 return this.numColField;
             }
-            set {
+            set
+            {
                 this.numColField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool numColSpecified {
-            get {
+        public bool numColSpecified
+        {
+            get
+            {
                 return this.numColFieldSpecified;
             }
-            set {
+            set
+            {
                 this.numColFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public int spcCol {
-            get {
+        public int spcCol
+        {
+            get
+            {
                 return this.spcColField;
             }
-            set {
+            set
+            {
                 this.spcColField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool spcColSpecified {
-            get {
+        public bool spcColSpecified
+        {
+            get
+            {
                 return this.spcColFieldSpecified;
             }
-            set {
+            set
+            {
                 this.spcColFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public bool rtlCol {
-            get {
+        public bool rtlCol
+        {
+            get
+            {
                 return this.rtlColField;
             }
-            set {
+            set
+            {
                 this.rtlColField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool rtlColSpecified {
-            get {
+        public bool rtlColSpecified
+        {
+            get
+            {
                 return this.rtlColFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rtlColFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public bool fromWordArt {
-            get {
+        public bool fromWordArt
+        {
+            get
+            {
                 return this.fromWordArtField;
             }
-            set {
+            set
+            {
                 this.fromWordArtField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool fromWordArtSpecified {
-            get {
+        public bool fromWordArtSpecified
+        {
+            get
+            {
                 return this.fromWordArtFieldSpecified;
             }
-            set {
+            set
+            {
                 this.fromWordArtFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public ST_TextAnchoringType anchor {
-            get {
+        public ST_TextAnchoringType anchor
+        {
+            get
+            {
                 return this.anchorField;
             }
-            set {
+            set
+            {
                 this.anchorField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool anchorSpecified {
-            get {
+        public bool anchorSpecified
+        {
+            get
+            {
                 return this.anchorFieldSpecified;
             }
-            set {
+            set
+            {
                 this.anchorFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public bool anchorCtr {
-            get {
+        public bool anchorCtr
+        {
+            get
+            {
                 return this.anchorCtrField;
             }
-            set {
+            set
+            {
                 this.anchorCtrField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool anchorCtrSpecified {
-            get {
+        public bool anchorCtrSpecified
+        {
+            get
+            {
                 return this.anchorCtrFieldSpecified;
             }
-            set {
+            set
+            {
                 this.anchorCtrFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public bool forceAA {
-            get {
+        public bool forceAA
+        {
+            get
+            {
                 return this.forceAAField;
             }
-            set {
+            set
+            {
                 this.forceAAField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool forceAASpecified {
-            get {
+        public bool forceAASpecified
+        {
+            get
+            {
                 return this.forceAAFieldSpecified;
             }
-            set {
+            set
+            {
                 this.forceAAFieldSpecified = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
         [DefaultValue(false)]
-        public bool upright {
-            get {
+        public bool upright
+        {
+            get
+            {
                 return this.uprightField;
             }
-            set {
+            set
+            {
                 this.uprightField = value;
             }
         }
-        
-    
+
+
         [XmlAttribute]
-        public bool compatLnSpc {
-            get {
+        public bool compatLnSpc
+        {
+            get
+            {
                 return this.compatLnSpcField;
             }
-            set {
+            set
+            {
                 this.compatLnSpcField = value;
             }
         }
-        
-    
+
+
         [XmlIgnore]
-        public bool compatLnSpcSpecified {
-            get {
+        public bool compatLnSpcSpecified
+        {
+            get
+            {
                 return this.compatLnSpcFieldSpecified;
             }
-            set {
+            set
+            {
                 this.compatLnSpcFieldSpecified = value;
             }
         }

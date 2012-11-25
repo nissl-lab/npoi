@@ -95,7 +95,7 @@ namespace NPOI.XSSF.UserModel
             CT_PlotArea plotArea = chart.AddNewPlotArea();
 
             plotArea.AddNewLayout();
-            chart.AddNewPlotVisOnly().val = true;
+            chart.AddNewPlotVisOnly().val = 1;
 
             CT_PrintSettings printSettings = chartSpace.AddNewPrintSettings();
             printSettings.AddNewHeaderFooter();
@@ -115,7 +115,7 @@ namespace NPOI.XSSF.UserModel
          * @return the underlying CTChartSpace bean
          */
 
-        protected CT_ChartSpace GetCTChartSpace()
+        internal CT_ChartSpace GetCTChartSpace()
         {
             return chartSpace;
         }
@@ -150,7 +150,7 @@ namespace NPOI.XSSF.UserModel
 
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
-            chart.Save(out1, namespaces);
+            chartSpace.Save(out1, namespaces);
             out1.Close();
         }
 
@@ -220,7 +220,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool IsPlotOnlyVisibleCells()
         {
-            return chart.plotVisOnly.val;
+            return chart.plotVisOnly.val==1?true:false;
         }
 
         /**
@@ -229,7 +229,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetPlotOnlyVisibleCells(bool plotVisOnly)
         {
-            chart.plotVisOnly.val = plotVisOnly;
+            chart.plotVisOnly.val = plotVisOnly?1:0;
         }
 
         /**

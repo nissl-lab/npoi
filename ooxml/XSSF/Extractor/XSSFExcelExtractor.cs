@@ -20,7 +20,7 @@ using NPOI.OpenXml4Net.OPC;
 using System.Text;
 using NPOI.SS.UserModel;
 using System.Collections;
-namespace NPOI.xssf.extractor
+namespace NPOI.XSSF.Extractor
 {
     /**
      * Helper class to extract text from an OOXML Excel file

@@ -1517,12 +1517,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_FillOverlayEffect()
         {
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
+            //this.grpFillField = new CT_GroupFillProperties();
+            //this.pattFillField = new CT_PatternFillProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.gradFillField = new CT_GradientFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
+            //this.noFillField = new CT_NoFillProperties();
         }
 
         [XmlElement(Order = 0)]
@@ -1757,10 +1757,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GradientFillProperties()
         {
-            this.tileRectField = new CT_RelativeRect();
-            this.pathField = new CT_PathShadeProperties();
-            this.linField = new CT_LinearShadeProperties();
-            this.gsLstField = new List<CT_GradientStop>();
+            //this.tileRectField = new CT_RelativeRect();
+            //this.pathField = new CT_PathShadeProperties();
+            //this.linField = new CT_LinearShadeProperties();
+            //this.gsLstField = new List<CT_GradientStop>();
         }
 
         [XmlArray(Order = 0)]
@@ -1891,12 +1891,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GradientStop()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
         }
 
         [XmlElement(Order = 0)]

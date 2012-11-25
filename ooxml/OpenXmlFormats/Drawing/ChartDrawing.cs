@@ -546,7 +546,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_GraphicFrame
+    public class CT_GraphicFrame
     {
 
         private CT_GraphicFrameNonVisual nvGraphicFramePrField;

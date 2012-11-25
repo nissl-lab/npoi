@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using System;
-using NPOI.xssf.extractor;
 using NUnit.Framework;
 using NPOI.HSSF.Extractor;
 using TestCases.HSSF;

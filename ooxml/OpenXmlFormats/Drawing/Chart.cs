@@ -71,6 +71,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             //this.langField = new CT_TextLanguageID();
             //this.date1904Field = new CT_Boolean();
         }
+        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_ChartSpace));
+        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        {
+            serializer.Serialize(stream, this, namespaces);
+        }
+
         public CT_Chart AddNewChart()
         {
             this.chartField=new CT_Chart();
@@ -271,7 +277,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Boolean
+    public class CT_Boolean
     {
 
         private bool valField;
@@ -282,16 +288,15 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlAttribute]
-        [DefaultValue(true)]
-        public bool val
+        public int val
         {
             get
             {
-                return this.valField;
+                return this.valField?1:0;
             }
             set
             {
-                this.valField = value;
+                this.valField = value==1?true:false;
             }
         }
     }
@@ -302,7 +307,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot("chart", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = false)]
-    public partial class CT_RelId
+    public class CT_RelId
     {
 
         private string idField;
@@ -327,7 +332,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PageSetup
+    public class CT_PageSetup
     {
 
         private uint paperSizeField;
@@ -510,7 +515,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PageMargins
+    public class CT_PageMargins
     {
 
         private double lField;
@@ -610,7 +615,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_HeaderFooter
+    public class CT_HeaderFooter
     {
 
         private string oddHeaderField;
@@ -856,7 +861,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ExternalData
+    public class CT_ExternalData
     {
 
         private CT_Boolean autoUpdateField;
@@ -901,7 +906,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DispBlanksAs
+    public class CT_DispBlanksAs
     {
 
         private ST_DispBlanksAs valField;
@@ -948,7 +953,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LegendEntry
+    public class CT_LegendEntry
     {
 
         private CT_UnsignedInt idxField;
@@ -1011,7 +1016,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_UnsignedInt
+    public class CT_UnsignedInt
     {
 
         private uint valField;
@@ -1036,7 +1041,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Extension
+    public class CT_Extension
     {
 
         private System.Xml.XmlElement anyField;
@@ -1076,7 +1081,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LegendPos
+    public class CT_LegendPos
     {
 
         private ST_LegendPos valField;
@@ -1129,7 +1134,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Legend
+    public class CT_Legend
     {
 
         private CT_LegendPos legendPosField;
@@ -1287,7 +1292,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Layout
+    public class CT_Layout
     {
 
         private CT_ManualLayout manualLayoutField;
@@ -1321,8 +1326,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 1)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 1)]
         public List<CT_Extension> extLst
         {
             get
@@ -1342,7 +1346,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ManualLayout
+    public class CT_ManualLayout
     {
 
         private CT_LayoutTarget layoutTargetField;
@@ -1584,8 +1588,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 9)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 9)]
         public List<CT_Extension> extLst
         {
             get
@@ -1605,7 +1608,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LayoutTarget
+    public class CT_LayoutTarget
     {
 
         private ST_LayoutTarget valField;
@@ -1649,7 +1652,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LayoutMode
+    public class CT_LayoutMode
     {
 
         private ST_LayoutMode valField;
@@ -1693,7 +1696,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Double
+    public class CT_Double
     {
 
         private double valField;
@@ -1718,7 +1721,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DTable
+    public class CT_DTable
     {
 
         private CT_Boolean showHorzBorderField;
@@ -1822,8 +1825,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 6)]
         public List<CT_Extension> extLst
         {
             get
@@ -1843,7 +1845,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SerAx
+    public class CT_SerAx
     {
 
         private CT_UnsignedInt axIdField;
@@ -1874,7 +1876,6 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_UnsignedInt crossAxField;
 
-        private object itemField;
 
         private CT_Skip tickLblSkipField;
 
@@ -1884,21 +1885,21 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_SerAx()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.tickMarkSkipField = new CT_Skip();
-            this.tickLblSkipField = new CT_Skip();
-            this.crossAxField = new CT_UnsignedInt();
-            this.tickLblPosField = new CT_TickLblPos();
-            this.minorTickMarkField = new CT_TickMark();
-            this.majorTickMarkField = new CT_TickMark();
-            this.numFmtField = new CT_NumFmt();
-            this.titleField = new CT_Title();
-            this.minorGridlinesField = new CT_ChartLines();
-            this.majorGridlinesField = new CT_ChartLines();
-            this.axPosField = new CT_AxPos();
-            this.deleteField = new CT_Boolean();
-            this.scalingField = new CT_Scaling();
-            this.axIdField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.tickMarkSkipField = new CT_Skip();
+            //this.tickLblSkipField = new CT_Skip();
+            //this.crossAxField = new CT_UnsignedInt();
+            //this.tickLblPosField = new CT_TickLblPos();
+            //this.minorTickMarkField = new CT_TickMark();
+            //this.majorTickMarkField = new CT_TickMark();
+            //this.numFmtField = new CT_NumFmt();
+            //this.titleField = new CT_Title();
+            //this.minorGridlinesField = new CT_ChartLines();
+            //this.majorGridlinesField = new CT_ChartLines();
+            //this.axPosField = new CT_AxPos();
+            //this.deleteField = new CT_Boolean();
+            //this.scalingField = new CT_Scaling();
+            //this.axIdField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -2082,22 +2083,34 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.crossAxField = value;
             }
         }
-
-        [XmlElement("crosses", typeof(CT_Crosses), Order = 14)]
-        [XmlElement("crossesAt", typeof(CT_Double), Order = 14)]
-        public object Item
+        CT_Crosses crossesField;
+        [XmlElement(Order = 14)]
+        public CT_Crosses crosses
         {
             get
             {
-                return this.itemField;
+                return this.crossesField;
             }
             set
             {
-                this.itemField = value;
+                this.crossesField = value;
+            }
+        }
+        CT_Double crossesAtField;
+        [XmlElement(Order = 15)]
+        public CT_Double crossesAt
+        {
+            get
+            {
+                return this.crossesAtField;
+            }
+            set
+            {
+                this.crossesAtField = value;
             }
         }
 
-        [XmlElement(Order = 15)]
+        [XmlElement(Order = 16)]
         public CT_Skip tickLblSkip
         {
             get
@@ -2110,7 +2123,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement(Order = 16)]
+        [XmlElement(Order = 17)]
         public CT_Skip tickMarkSkip
         {
             get
@@ -2123,8 +2136,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 17)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 18)]
         public List<CT_Extension> extLst
         {
             get
@@ -2253,8 +2265,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 4)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 4)]
         public List<CT_Extension> extLst
         {
             get
@@ -2274,7 +2285,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LogBase
+    public class CT_LogBase
     {
 
         private double valField;
@@ -2299,7 +2310,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Orientation
+    public class CT_Orientation
     {
 
         private ST_Orientation valField;
@@ -2343,7 +2354,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_AxPos
+    public class CT_AxPos
     {
 
         private ST_AxPos valField;
@@ -2387,7 +2398,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ChartLines
+    public class CT_ChartLines
     {
 
         private CT_ShapeProperties spPrField;
@@ -2412,7 +2423,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Title
+    public class CT_Title
     {
 
         private CT_Tx txField;
@@ -2500,8 +2511,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 5)]
         public List<CT_Extension> extLst
         {
             get
@@ -2521,7 +2531,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Tx
+    public class CT_Tx
     {
 
         private object itemField;
@@ -2547,7 +2557,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_StrRef
+    public class CT_StrRef
     {
 
         private string fField;
@@ -2587,9 +2597,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.strCacheField = value;
             }
         }
-
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -2609,7 +2617,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_StrData
+    public class CT_StrData
     {
 
         private CT_UnsignedInt ptCountField;
@@ -2651,8 +2659,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -2672,7 +2679,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_StrVal
+    public class CT_StrVal
     {
 
         private string vField;
@@ -2712,7 +2719,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_NumFmt
+    public class CT_NumFmt
     {
 
         private string formatCodeField;
@@ -2767,7 +2774,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_TickMark
+    public class CT_TickMark
     {
 
         private ST_TickMark valField;
@@ -2817,7 +2824,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_TickLblPos
+    public class CT_TickLblPos
     {
 
         private ST_TickLblPos valField;
@@ -2867,7 +2874,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Crosses
+    public class CT_Crosses
     {
 
         private ST_Crosses valField;
@@ -2908,7 +2915,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Skip
+    public class CT_Skip
     {
 
         private ushort valField;
@@ -2933,7 +2940,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_TimeUnit
+    public class CT_TimeUnit
     {
 
         private ST_TimeUnit valField;
@@ -2980,7 +2987,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DateAx
+    public class CT_DateAx
     {
 
         private CT_UnsignedInt axIdField;
@@ -3031,26 +3038,26 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_DateAx()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.minorTimeUnitField = new CT_TimeUnit();
-            this.minorUnitField = new CT_AxisUnit();
-            this.majorTimeUnitField = new CT_TimeUnit();
-            this.majorUnitField = new CT_AxisUnit();
-            this.baseTimeUnitField = new CT_TimeUnit();
-            this.lblOffsetField = new CT_LblOffset();
-            this.autoField = new CT_Boolean();
-            this.crossAxField = new CT_UnsignedInt();
-            this.tickLblPosField = new CT_TickLblPos();
-            this.minorTickMarkField = new CT_TickMark();
-            this.majorTickMarkField = new CT_TickMark();
-            this.numFmtField = new CT_NumFmt();
-            this.titleField = new CT_Title();
-            this.minorGridlinesField = new CT_ChartLines();
-            this.majorGridlinesField = new CT_ChartLines();
-            this.axPosField = new CT_AxPos();
-            this.deleteField = new CT_Boolean();
-            this.scalingField = new CT_Scaling();
-            this.axIdField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.minorTimeUnitField = new CT_TimeUnit();
+            //this.minorUnitField = new CT_AxisUnit();
+            //this.majorTimeUnitField = new CT_TimeUnit();
+            //this.majorUnitField = new CT_AxisUnit();
+            //this.baseTimeUnitField = new CT_TimeUnit();
+            //this.lblOffsetField = new CT_LblOffset();
+            //this.autoField = new CT_Boolean();
+            //this.crossAxField = new CT_UnsignedInt();
+            //this.tickLblPosField = new CT_TickLblPos();
+            //this.minorTickMarkField = new CT_TickMark();
+            //this.majorTickMarkField = new CT_TickMark();
+            //this.numFmtField = new CT_NumFmt();
+            //this.titleField = new CT_Title();
+            //this.minorGridlinesField = new CT_ChartLines();
+            //this.majorGridlinesField = new CT_ChartLines();
+            //this.axPosField = new CT_AxPos();
+            //this.deleteField = new CT_Boolean();
+            //this.scalingField = new CT_Scaling();
+            //this.axIdField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -3340,8 +3347,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 22)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 22)]
         public List<CT_Extension> extLst
         {
             get
@@ -3361,7 +3367,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LblOffset
+    public class CT_LblOffset
     {
 
         private ushort valField;
@@ -3392,7 +3398,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_AxisUnit
+    public class CT_AxisUnit
     {
 
         private double valField;
@@ -3417,7 +3423,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LblAlgn
+    public class CT_LblAlgn
     {
 
         private ST_LblAlgn valField;
@@ -3458,7 +3464,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_CatAx
+    public class CT_CatAx
     {
 
         private CT_UnsignedInt axIdField;
@@ -3507,25 +3513,25 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_CatAx()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.noMultiLvlLblField = new CT_Boolean();
-            this.tickMarkSkipField = new CT_Skip();
-            this.tickLblSkipField = new CT_Skip();
-            this.lblOffsetField = new CT_LblOffset();
-            this.lblAlgnField = new CT_LblAlgn();
-            this.autoField = new CT_Boolean();
-            this.crossAxField = new CT_UnsignedInt();
-            this.tickLblPosField = new CT_TickLblPos();
-            this.minorTickMarkField = new CT_TickMark();
-            this.majorTickMarkField = new CT_TickMark();
-            this.numFmtField = new CT_NumFmt();
-            this.titleField = new CT_Title();
-            this.minorGridlinesField = new CT_ChartLines();
-            this.majorGridlinesField = new CT_ChartLines();
-            this.axPosField = new CT_AxPos();
-            this.deleteField = new CT_Boolean();
-            this.scalingField = new CT_Scaling();
-            this.axIdField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.noMultiLvlLblField = new CT_Boolean();
+            //this.tickMarkSkipField = new CT_Skip();
+            //this.tickLblSkipField = new CT_Skip();
+            //this.lblOffsetField = new CT_LblOffset();
+            //this.lblAlgnField = new CT_LblAlgn();
+            //this.autoField = new CT_Boolean();
+            //this.crossAxField = new CT_UnsignedInt();
+            //this.tickLblPosField = new CT_TickLblPos();
+            //this.minorTickMarkField = new CT_TickMark();
+            //this.majorTickMarkField = new CT_TickMark();
+            //this.numFmtField = new CT_NumFmt();
+            //this.titleField = new CT_Title();
+            //this.minorGridlinesField = new CT_ChartLines();
+            //this.majorGridlinesField = new CT_ChartLines();
+            //this.axPosField = new CT_AxPos();
+            //this.deleteField = new CT_Boolean();
+            //this.scalingField = new CT_Scaling();
+            //this.axIdField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -3802,8 +3808,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 21)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 21)]
         public List<CT_Extension> extLst
         {
             get
@@ -3823,7 +3828,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DispUnitsLbl
+    public class CT_DispUnitsLbl
     {
 
         private CT_Layout layoutField;
@@ -3899,7 +3904,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BuiltInUnit
+    public class CT_BuiltInUnit
     {
 
         private ST_BuiltInUnit valField;
@@ -3964,7 +3969,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DispUnits
+    public class CT_DispUnits
     {
 
         private object itemField;
@@ -4006,8 +4011,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -4027,7 +4031,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_CrossBetween
+    public class CT_CrossBetween
     {
 
         private ST_CrossBetween valField;
@@ -4065,7 +4069,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ValAx
+    public class CT_ValAx
     {
 
         private CT_UnsignedInt axIdField;
@@ -4367,7 +4371,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             } 
         }
         CT_Double crossesAtField;
-        [XmlElement(Order = 14)]
+        [XmlElement(Order = 15)]
         public CT_Double crossesAt
         {
             get
@@ -4380,7 +4384,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement(Order = 15)]
+        [XmlElement(Order = 16)]
         public CT_CrossBetween crossBetween
         {
             get
@@ -4393,7 +4397,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement(Order = 16)]
+        [XmlElement(Order = 17)]
         public CT_AxisUnit majorUnit
         {
             get
@@ -4406,7 +4410,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement(Order = 17)]
+        [XmlElement(Order = 18)]
         public CT_AxisUnit minorUnit
         {
             get
@@ -4419,7 +4423,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement(Order = 18)]
+        [XmlElement(Order = 19)]
         public CT_DispUnits dispUnits
         {
             get
@@ -4432,8 +4436,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 19)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 20)]
         public List<CT_Extension> extLst
         {
             get
@@ -4453,7 +4456,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SizeRepresents
+    public class CT_SizeRepresents
     {
 
         private ST_SizeRepresents valField;
@@ -4497,7 +4500,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BubbleScale
+    public class CT_BubbleScale
     {
 
         private uint valField;
@@ -4528,7 +4531,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BubbleSer
+    public class CT_BubbleSer
     {
 
         private CT_UnsignedInt idxField;
@@ -4561,19 +4564,19 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_BubbleSer()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.bubble3DField = new CT_Boolean();
-            this.bubbleSizeField = new CT_NumDataSource();
-            this.yValField = new CT_NumDataSource();
-            this.xValField = new CT_AxDataSource();
-            this.errBarsField = new List<CT_ErrBars>();
-            this.trendlineField = new List<CT_Trendline>();
-            this.dLblsField = new CT_DLbls();
-            this.dPtField = new List<CT_DPt>();
-            this.invertIfNegativeField = new CT_Boolean();
-            this.txField = new CT_SerTx();
-            this.orderField = new CT_UnsignedInt();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.bubble3DField = new CT_Boolean();
+            //this.bubbleSizeField = new CT_NumDataSource();
+            //this.yValField = new CT_NumDataSource();
+            //this.xValField = new CT_AxDataSource();
+            //this.errBarsField = new List<CT_ErrBars>();
+            //this.trendlineField = new List<CT_Trendline>();
+            //this.dLblsField = new CT_DLbls();
+            //this.dPtField = new List<CT_DPt>();
+            //this.invertIfNegativeField = new CT_Boolean();
+            //this.txField = new CT_SerTx();
+            //this.orderField = new CT_UnsignedInt();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -4745,8 +4748,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 13)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 13)]
         public List<CT_Extension> extLst
         {
             get
@@ -4766,7 +4768,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SerTx
+    public class CT_SerTx
     {
 
         private object itemField;
@@ -4792,7 +4794,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DPt
+    public class CT_DPt
     {
 
         private CT_UnsignedInt idxField;
@@ -4813,13 +4815,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_DPt()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.pictureOptionsField = new CT_PictureOptions();
-            this.explosionField = new CT_UnsignedInt();
-            this.bubble3DField = new CT_Boolean();
-            this.markerField = new CT_Marker();
-            this.invertIfNegativeField = new CT_Boolean();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.pictureOptionsField = new CT_PictureOptions();
+            //this.explosionField = new CT_UnsignedInt();
+            //this.bubble3DField = new CT_Boolean();
+            //this.markerField = new CT_Marker();
+            //this.invertIfNegativeField = new CT_Boolean();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -4913,8 +4915,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 7)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 7)]
         public List<CT_Extension> extLst
         {
             get
@@ -4934,7 +4935,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Marker
+    public class CT_Marker
     {
 
         private CT_MarkerStyle symbolField;
@@ -4991,8 +4992,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 3)]
         public List<CT_Extension> extLst
         {
             get
@@ -5012,7 +5012,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_MarkerStyle
+    public class CT_MarkerStyle
     {
 
         private ST_MarkerStyle valField;
@@ -5077,7 +5077,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_MarkerSize
+    public class CT_MarkerSize
     {
 
         private byte valField;
@@ -5108,7 +5108,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PictureOptions
+    public class CT_PictureOptions
     {
 
         private CT_Boolean applyToFrontField;
@@ -5123,11 +5123,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_PictureOptions()
         {
-            this.pictureStackUnitField = new CT_PictureStackUnit();
-            this.pictureFormatField = new CT_PictureFormat();
-            this.applyToEndField = new CT_Boolean();
-            this.applyToSidesField = new CT_Boolean();
-            this.applyToFrontField = new CT_Boolean();
+            //this.pictureStackUnitField = new CT_PictureStackUnit();
+            //this.pictureFormatField = new CT_PictureFormat();
+            //this.applyToEndField = new CT_Boolean();
+            //this.applyToSidesField = new CT_Boolean();
+            //this.applyToFrontField = new CT_Boolean();
         }
 
         [XmlElement(Order = 0)]
@@ -5202,7 +5202,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PictureFormat
+    public class CT_PictureFormat
     {
 
         private ST_PictureFormat valField;
@@ -5243,7 +5243,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PictureStackUnit
+    public class CT_PictureStackUnit
     {
 
         private double valField;
@@ -5268,23 +5268,28 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DLbls
+    public class CT_DLbls
     {
 
         private List<CT_DLbl> dLblField;
 
-        private List<object> itemsField;
-
-        private List<ItemsChoiceType8> itemsElementNameField;
+        private string separatorField;
+        private CT_NumFmt numFmtField;
+        private CT_Boolean showBubbleSizeField;
+        private CT_Boolean showCatNameField;
+        private CT_Boolean showLeaderLinesField;
+        private CT_Boolean showLegendKeyField;
+        private CT_Boolean showPercentField;
+        private CT_Boolean showSerNameField;
+        private CT_Boolean showValField;
+        private CT_Boolean deleteField;
+        private CT_DLblPos dLblPosField;
 
         private List<CT_Extension> extLstField;
 
         public CT_DLbls()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.itemsElementNameField = new List<ItemsChoiceType8>();
-            this.itemsField = new List<object>();
-            this.dLblField = new List<CT_DLbl>();
+            //this.dLblField = new List<CT_DLbl>();
         }
 
         [XmlElement("dLbl", Order = 0)]
@@ -5299,50 +5304,169 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.dLblField = value;
             }
         }
-
-        [XmlElement("dLblPos", typeof(CT_DLblPos), Order = 1)]
-        [XmlElement("delete", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("leaderLines", typeof(CT_ChartLines), Order = 1)]
-        [XmlElement("numFmt", typeof(CT_NumFmt), Order = 1)]
-        [XmlElement("separator", typeof(string), Order = 1)]
-        [XmlElement("showBubbleSize", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showCatName", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showLeaderLines", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showLegendKey", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showPercent", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showSerName", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("showVal", typeof(CT_Boolean), Order = 1)]
-        [XmlElement("spPr", typeof(CT_ShapeProperties), Order = 1)]
-        [XmlElement("txPr", typeof(CT_TextBody), Order = 1)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public List<object> Items
+        [XmlElement(Order = 1)]
+        public CT_DLblPos dLblPos
         {
             get
             {
-                return this.itemsField;
+                return this.dLblPosField;
             }
             set
             {
-                this.itemsField = value;
+                this.dLblPosField = value;
             }
         }
-
-        [XmlElement("ItemsElementName", Order = 2)]
-        [XmlIgnore]
-        public List<ItemsChoiceType8> ItemsElementName
+        [XmlElement(Order = 2)]
+        public CT_NumFmt numFmt
         {
             get
             {
-                return this.itemsElementNameField;
+                return this.numFmtField;
             }
             set
             {
-                this.itemsElementNameField = value;
+                this.numFmtField = value;
+            }
+        }       
+        CT_ShapeProperties spPrField;
+        [XmlElement(Order = 4)]
+        public CT_ShapeProperties spPr
+        {
+            get
+            {
+                return this.spPrField;
+            }
+            set
+            {
+                this.spPrField = value;
+            }
+        }
+        CT_TextBody txPrField;
+        [XmlElement(Order = 5)]
+        public CT_TextBody txPr
+        {
+            get
+            {
+                return this.txPrField;
+            }
+            set
+            {
+                this.txPrField = value;
+            }
+        }
+        [XmlElement(Order = 8)]
+        public CT_Boolean showBubbleSize
+        {
+            get
+            {
+                return this.showBubbleSizeField;
+            }
+            set
+            {
+                this.showBubbleSizeField = value;
+            }
+        }
+        [XmlElement(Order = 9)]
+        public CT_Boolean showCatName
+        {
+            get
+            {
+                return this.showCatNameField;
+            }
+            set
+            {
+                this.showCatNameField = value;
             }
         }
 
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 11)]
+        public CT_Boolean showLegendKey
+        {
+            get
+            {
+                return this.showLegendKeyField;
+            }
+            set
+            {
+                this.showLegendKeyField = value;
+            }
+        }
+        [XmlElement(Order = 12)]
+        public CT_Boolean showPercent
+        {
+            get
+            {
+                return this.showPercentField;
+            }
+            set
+            {
+                this.showPercentField = value;
+            }
+        }
+        [XmlElement(Order = 13)]
+        public CT_Boolean showSerName
+        {
+            get
+            {
+                return this.showSerNameField;
+            }
+            set
+            {
+                this.showSerNameField = value;
+            }
+        }
+        [XmlElement(Order = 14)]
+        public CT_Boolean showVal
+        {
+            get
+            {
+                return this.showValField;
+            }
+            set
+            {
+                this.showValField = value;
+            }
+        }
+        [XmlElement(Order = 15)]
+        public CT_Boolean delete
+        {
+            get
+            {
+                return this.deleteField;
+            }
+            set
+            {
+                this.deleteField = value;
+            }
+        }
+        [XmlElement(Order = 16)]
+        public string separator
+        {
+            get
+            {
+                return this.separatorField;
+            }
+            set
+            {
+                this.separatorField = value;
+            }
+        }
+        
+        //[XmlElement("leaderLines", typeof(CT_ChartLines), Order = 1)]
+        [XmlElement(Order = 17)]
+        public CT_Boolean showLeaderLines
+        {
+            get
+            {
+                return this.showLeaderLinesField;
+            }
+            set
+            {
+                this.showLeaderLinesField = value;
+            }
+        }
+
+        [XmlElement(Order = 18)]
         public List<CT_Extension> extLst
         {
             get
@@ -5362,18 +5486,25 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DLbl
+    public class CT_DLbl
     {
 
         private CT_UnsignedInt idxField;
-
+        private string separatorField;
+        private CT_NumFmt numFmtField;
+        private CT_Boolean showBubbleSizeField;
+        private CT_Boolean showCatNameField;
+        private CT_Boolean showLegendKeyField;
+        private CT_Boolean showPercentField;
+        private CT_Boolean showSerNameField;
+        private CT_Boolean showValField;
+        private CT_Boolean deleteField;
+        private CT_DLblPos dLblPosField;
+        private CT_Layout layoutField;
         private List<CT_Extension> extLstField;
 
         public CT_DLbl()
         {
-            //this.extLstField = new List<CT_Extension>();
-            //this.itemsElementNameField = new List<ItemsChoiceType7>();
-            //this.itemsField = new List<object>();
             //this.idxField = new CT_UnsignedInt();
         }
 
@@ -5389,50 +5520,171 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.idxField = value;
             }
         }
+        [XmlElement(Order = 1)]
+        public CT_Layout layout
+        {
+            get
+            {
+                return this.layoutField;
+            }
+            set
+            {
+                this.layoutField = value;
+            }
+        }
+        [XmlElement(Order = 2)]
+        public CT_DLblPos dLblPos
+        {
+            get
+            {
+                return this.dLblPosField;
+            }
+            set
+            {
+                this.dLblPosField = value;
+            }
+        }
+        [XmlElement(Order = 3)]
+        public CT_NumFmt numFmt
+        {
+            get
+            {
+                return this.numFmtField;
+            }
+            set
+            {
+                this.numFmtField = value;
+            }
+        }
 
-        //[XmlElement("dLblPos", typeof(CT_DLblPos), Order = 1)]
-        //[XmlElement("delete", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("layout", typeof(CT_Layout), Order = 1)]
-        //[XmlElement("numFmt", typeof(CT_NumFmt), Order = 1)]
-        //[XmlElement("separator", typeof(string), Order = 1)]
-        //[XmlElement("showBubbleSize", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("showCatName", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("showLegendKey", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("showPercent", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("showSerName", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("showVal", typeof(CT_Boolean), Order = 1)]
-        //[XmlElement("spPr", typeof(CT_ShapeProperties), Order = 1)]
+        CT_ShapeProperties spPrField;
+        [XmlElement(Order = 4)]
+        public CT_ShapeProperties spPr
+        {
+            get
+            {
+                return this.spPrField;
+            }
+            set
+            {
+                this.spPrField = value;
+            }
+        }
+        CT_TextBody txPrField;
+        [XmlElement(Order = 5)]
+        public CT_TextBody txPr
+        {
+            get
+            {
+                return this.txPrField;
+            }
+            set
+            {
+                this.txPrField = value;
+            }
+        }
+        
+        [XmlElement(Order = 8)]
+        public CT_Boolean delete
+        {
+            get
+            {
+                return this.deleteField;
+            }
+            set
+            {
+                this.deleteField = value;
+            }
+        }
+        [XmlElement(Order = 9)]
+        public CT_Boolean showBubbleSize
+        {
+            get
+            {
+                return this.showBubbleSizeField;
+            }
+            set
+            {
+                this.showBubbleSizeField = value;
+            }
+        }
+        [XmlElement(Order = 10)]
+        public CT_Boolean showCatName
+        {
+            get
+            {
+                return this.showCatNameField;
+            }
+            set
+            {
+                this.showCatNameField = value;
+            }
+        }
+        [XmlElement(Order =11)]
+        public CT_Boolean showLegendKey
+        {
+            get
+            {
+                return this.showLegendKeyField;
+            }
+            set
+            {
+                this.showLegendKeyField = value;
+            }
+        }
+        [XmlElement(Order = 12)]
+        public CT_Boolean showPercent
+        {
+            get
+            {
+                return this.showPercentField;
+            }
+            set
+            {
+                this.showPercentField = value;
+            }
+        }
+        [XmlElement(Order = 13)]
+        public CT_Boolean showSerName
+        {
+            get
+            {
+                return this.showSerNameField;
+            }
+            set
+            {
+                this.showSerNameField = value;
+            }
+        }
+        [XmlElement(Order = 14)]
+        public CT_Boolean showVal
+        {
+            get
+            {
+                return this.showValField;
+            }
+            set
+            {
+                this.showValField = value;
+            }
+        }
+        [XmlElement(Order = 15)]
+        public string separator
+        {
+            get
+            {
+                return this.separatorField;
+            }
+            set
+            {
+                this.separatorField = value;
+            }
+        }
+
+        
         //[XmlElement("tx", typeof(CT_Tx), Order = 1)]
-        //[XmlElement("txPr", typeof(CT_TextBody), Order = 1)]
-        //[System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        //public List<object> Items
-        //{
-        //    get
-        //    {
-        //        return this.itemsField;
-        //    }
-        //    set
-        //    {
-        //        this.itemsField = value;
-        //    }
-        //}
 
-        //[XmlElement("ItemsElementName", Order = 2)]
-        //[XmlIgnore]
-        //public List<ItemsChoiceType7> ItemsElementName
-        //{
-        //    get
-        //    {
-        //        return this.itemsElementNameField;
-        //    }
-        //    set
-        //    {
-        //        this.itemsElementNameField = value;
-        //    }
-        //}
-
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 18)]
         public List<CT_Extension> extLst
         {
             get
@@ -5452,7 +5704,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DLblPos
+    public class CT_DLblPos
     {
 
         private ST_DLblPos valField;
@@ -5505,111 +5757,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         t,
     }
 
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IncludeInSchema = false)]
-    public enum ItemsChoiceType7
-    {
-
-        /// <remarks/>
-        dLblPos,
-
-        /// <remarks/>
-        delete,
-
-        /// <remarks/>
-        layout,
-
-        /// <remarks/>
-        numFmt,
-
-        /// <remarks/>
-        separator,
-
-        /// <remarks/>
-        showBubbleSize,
-
-        /// <remarks/>
-        showCatName,
-
-        /// <remarks/>
-        showLegendKey,
-
-        /// <remarks/>
-        showPercent,
-
-        /// <remarks/>
-        showSerName,
-
-        /// <remarks/>
-        showVal,
-
-        /// <remarks/>
-        spPr,
-
-        /// <remarks/>
-        tx,
-
-        /// <remarks/>
-        txPr,
-    }
-
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IncludeInSchema = false)]
-    public enum ItemsChoiceType8
-    {
-
-        /// <remarks/>
-        dLblPos,
-
-        /// <remarks/>
-        delete,
-
-        /// <remarks/>
-        leaderLines,
-
-        /// <remarks/>
-        numFmt,
-
-        /// <remarks/>
-        separator,
-
-        /// <remarks/>
-        showBubbleSize,
-
-        /// <remarks/>
-        showCatName,
-
-        /// <remarks/>
-        showLeaderLines,
-
-        /// <remarks/>
-        showLegendKey,
-
-        /// <remarks/>
-        showPercent,
-
-        /// <remarks/>
-        showSerName,
-
-        /// <remarks/>
-        showVal,
-
-        /// <remarks/>
-        spPr,
-
-        /// <remarks/>
-        txPr,
-    }
-
+        
 
     [Serializable]
     [DebuggerStepThrough]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Trendline
+    public class CT_Trendline
     {
 
         private string nameField;
@@ -5638,16 +5793,16 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Trendline()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.trendlineLblField = new CT_TrendlineLbl();
-            this.dispEqField = new CT_Boolean();
-            this.dispRSqrField = new CT_Boolean();
-            this.interceptField = new CT_Double();
-            this.backwardField = new CT_Double();
-            this.forwardField = new CT_Double();
-            this.periodField = new CT_Period();
-            this.orderField = new CT_Order();
-            this.trendlineTypeField = new CT_TrendlineType();
+            //this.extLstField = new List<CT_Extension>();
+            //this.trendlineLblField = new CT_TrendlineLbl();
+            //this.dispEqField = new CT_Boolean();
+            //this.dispRSqrField = new CT_Boolean();
+            //this.interceptField = new CT_Double();
+            //this.backwardField = new CT_Double();
+            //this.forwardField = new CT_Double();
+            //this.periodField = new CT_Period();
+            //this.orderField = new CT_Order();
+            //this.trendlineTypeField = new CT_TrendlineType();
         }
 
         [XmlElement(Order = 0)]
@@ -5793,8 +5948,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 11)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 11)]
         public List<CT_Extension> extLst
         {
             get
@@ -5814,7 +5968,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_TrendlineType
+    public class CT_TrendlineType
     {
 
         private ST_TrendlineType valField;
@@ -5870,7 +6024,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Order
+    public class CT_Order
     {
 
         private byte valField;
@@ -5901,7 +6055,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Period
+    public class CT_Period
     {
 
         private byte valField;
@@ -5932,7 +6086,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_TrendlineLbl
+    public class CT_TrendlineLbl
     {
 
         private CT_Layout layoutField;
@@ -5949,10 +6103,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_TrendlineLbl()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.numFmtField = new CT_NumFmt();
-            this.txField = new CT_Tx();
-            this.layoutField = new CT_Layout();
+            //this.extLstField = new List<CT_Extension>();
+            //this.numFmtField = new CT_NumFmt();
+            //this.txField = new CT_Tx();
+            //this.layoutField = new CT_Layout();
         }
 
         [XmlElement(Order = 0)]
@@ -6020,8 +6174,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 5)]
         public List<CT_Extension> extLst
         {
             get
@@ -6041,7 +6194,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ErrBars
+    public class CT_ErrBars
     {
 
         private CT_ErrDir errDirField;
@@ -6064,14 +6217,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_ErrBars()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.valField = new CT_Double();
-            this.minusField = new CT_NumDataSource();
-            this.plusField = new CT_NumDataSource();
-            this.noEndCapField = new CT_Boolean();
-            this.errValTypeField = new CT_ErrValType();
-            this.errBarTypeField = new CT_ErrBarType();
-            this.errDirField = new CT_ErrDir();
+            //this.extLstField = new List<CT_Extension>();
+            //this.valField = new CT_Double();
+            //this.minusField = new CT_NumDataSource();
+            //this.plusField = new CT_NumDataSource();
+            //this.noEndCapField = new CT_Boolean();
+            //this.errValTypeField = new CT_ErrValType();
+            //this.errBarTypeField = new CT_ErrBarType();
+            //this.errDirField = new CT_ErrDir();
         }
 
         [XmlElement(Order = 0)]
@@ -6178,8 +6331,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 8)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 8)]
         public List<CT_Extension> extLst
         {
             get
@@ -6199,7 +6351,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ErrDir
+    public class CT_ErrDir
     {
 
         private ST_ErrDir valField;
@@ -6237,7 +6389,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ErrBarType
+    public class CT_ErrBarType
     {
 
         private ST_ErrBarType valField;
@@ -6284,7 +6436,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ErrValType
+    public class CT_ErrValType
     {
 
         private ST_ErrValType valField;
@@ -6446,8 +6598,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 3)]
         public List<CT_Extension> extLst
         {
             get
@@ -6467,7 +6618,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_NumVal
+    public class CT_NumVal
     {
 
         private string vField;
@@ -6522,7 +6673,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_NumRef
+    public class CT_NumRef
     {
 
         private string fField;
@@ -6567,8 +6718,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -6682,7 +6832,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_MultiLvlStrRef
+    public class CT_MultiLvlStrRef
     {
 
         private string fField;
@@ -6723,8 +6873,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -6744,7 +6893,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_MultiLvlStrData
+    public class CT_MultiLvlStrData
     {
 
         private CT_UnsignedInt ptCountField;
@@ -6773,8 +6922,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 1)]
-        [XmlArrayItem("pt", typeof(CT_StrVal), IsNullable = false)]
+        [XmlElement(Order = 1)]
         public List<CT_StrVal> lvl
         {
             get
@@ -6787,8 +6935,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -6808,7 +6955,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BubbleChart
+    public class CT_BubbleChart
     {
 
         private CT_Boolean varyColorsField;
@@ -6946,8 +7093,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 8)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 8)]
         public List<CT_Extension> extLst
         {
             get
@@ -6967,7 +7113,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Surface3DChart
+    public class CT_Surface3DChart
     {
 
         private CT_Boolean wireframeField;
@@ -7015,8 +7161,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("bandFmt", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_BandFmt> bandFmts
         {
             get
@@ -7042,8 +7187,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 4)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 4)]
         public List<CT_Extension> extLst
         {
             get
@@ -7063,7 +7207,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SurfaceSer
+    public class CT_SurfaceSer
     {
 
         private CT_UnsignedInt idxField;
@@ -7168,8 +7312,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 6)]
         public List<CT_Extension> extLst
         {
             get
@@ -7189,7 +7332,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BandFmt
+    public class CT_BandFmt
     {
 
         private CT_UnsignedInt idxField;
@@ -7234,7 +7377,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SurfaceChart
+    public class CT_SurfaceChart
     {
 
         private CT_Boolean wireframeField;
@@ -7282,8 +7425,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("bandFmt", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_BandFmt> bandFmts
         {
             get
@@ -7309,8 +7451,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 4)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 4)]
         public List<CT_Extension> extLst
         {
             get
@@ -7330,7 +7471,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SecondPieSize
+    public class CT_SecondPieSize
     {
 
         private ushort valField;
@@ -7361,7 +7502,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_SplitType
+    public class CT_SplitType
     {
 
         private ST_SplitType valField;
@@ -7414,7 +7555,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_OfPieType
+    public class CT_OfPieType
     {
 
         private ST_OfPieType valField;
@@ -7458,7 +7599,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_OfPieChart
+    public class CT_OfPieChart
     {
 
         private CT_OfPieType ofPieTypeField;
@@ -7485,17 +7626,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_OfPieChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.serLinesField = new List<CT_ChartLines>();
-            this.secondPieSizeField = new CT_SecondPieSize();
-            this.custSplitField = new List<CT_UnsignedInt>();
-            this.splitPosField = new CT_Double();
-            this.splitTypeField = new CT_SplitType();
-            this.gapWidthField = new CT_GapAmount();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_PieSer>();
-            this.varyColorsField = new CT_Boolean();
-            this.ofPieTypeField = new CT_OfPieType();
+            //this.extLstField = new List<CT_Extension>();
+            //this.serLinesField = new List<CT_ChartLines>();
+            //this.secondPieSizeField = new CT_SecondPieSize();
+            //this.custSplitField = new List<CT_UnsignedInt>();
+            //this.splitPosField = new CT_Double();
+            //this.splitTypeField = new CT_SplitType();
+            //this.gapWidthField = new CT_GapAmount();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_PieSer>();
+            //this.varyColorsField = new CT_Boolean();
+            //this.ofPieTypeField = new CT_OfPieType();
         }
 
         [XmlElement(Order = 0)]
@@ -7589,8 +7730,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 7)]
-        [XmlArrayItem("secondPiePt", IsNullable = false)]
+        [XmlElement(Order = 7)]
         public List<CT_UnsignedInt> custSplit
         {
             get
@@ -7650,7 +7790,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PieSer
+    public class CT_PieSer
     {
 
         private CT_UnsignedInt idxField;
@@ -7824,7 +7964,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_GapAmount
+    public class CT_GapAmount
     {
 
         private ushort valField;
@@ -7855,7 +7995,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Bar3DChart
+    public class CT_Bar3DChart
     {
 
         private CT_BarDir barDirField;
@@ -8030,7 +8170,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BarDir
+    public class CT_BarDir
     {
 
         private ST_BarDir valField;
@@ -8074,7 +8214,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BarGrouping
+    public class CT_BarGrouping
     {
 
         private ST_BarGrouping valField;
@@ -8124,7 +8264,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BarSer
+    public class CT_BarSer
     {
 
         private CT_UnsignedInt idxField;
@@ -8157,19 +8297,19 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_BarSer()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.shapeField = new CT_Shape();
-            this.valField = new CT_NumDataSource();
-            this.catField = new CT_AxDataSource();
-            this.errBarsField = new CT_ErrBars();
-            this.trendlineField = new List<CT_Trendline>();
-            this.dLblsField = new CT_DLbls();
-            this.dPtField = new List<CT_DPt>();
-            this.pictureOptionsField = new CT_PictureOptions();
-            this.invertIfNegativeField = new CT_Boolean();
-            this.txField = new CT_SerTx();
-            this.orderField = new CT_UnsignedInt();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.shapeField = new CT_Shape();
+            //this.valField = new CT_NumDataSource();
+            //this.catField = new CT_AxDataSource();
+            //this.errBarsField = new CT_ErrBars();
+            //this.trendlineField = new List<CT_Trendline>();
+            //this.dLblsField = new CT_DLbls();
+            //this.dPtField = new List<CT_DPt>();
+            //this.pictureOptionsField = new CT_PictureOptions();
+            //this.invertIfNegativeField = new CT_Boolean();
+            //this.txField = new CT_SerTx();
+            //this.orderField = new CT_UnsignedInt();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -8341,8 +8481,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 13)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 13)]
         public List<CT_Extension> extLst
         {
             get
@@ -8362,7 +8501,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Shape
+    public class CT_Shape
     {
 
         private ST_Shape valField;
@@ -8418,7 +8557,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Overlap
+    public class CT_Overlap
     {
 
         private sbyte valField;
@@ -8449,7 +8588,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BarChart
+    public class CT_BarChart
     {
 
         private CT_BarDir barDirField;
@@ -8624,7 +8763,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_HoleSize
+    public class CT_HoleSize
     {
 
         private byte valField;
@@ -8655,7 +8794,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DoughnutChart
+    public class CT_DoughnutChart
     {
 
         private CT_Boolean varyColorsField;
@@ -8766,7 +8905,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_FirstSliceAng
+    public class CT_FirstSliceAng
     {
 
         private ushort valField;
@@ -8797,7 +8936,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Pie3DChart
+    public class CT_Pie3DChart
     {
 
         private CT_Boolean varyColorsField;
@@ -8810,10 +8949,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Pie3DChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_PieSer>();
-            this.varyColorsField = new CT_Boolean();
+            //this.extLstField = new List<CT_Extension>();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_PieSer>();
+            //this.varyColorsField = new CT_Boolean();
         }
 
         [XmlElement(Order = 0)]
@@ -8855,8 +8994,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 3)]
         public List<CT_Extension> extLst
         {
             get
@@ -8876,7 +9014,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PieChart
+    public class CT_PieChart
     {
 
         private CT_Boolean varyColorsField;
@@ -8891,11 +9029,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_PieChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.firstSliceAngField = new CT_FirstSliceAng();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_PieSer>();
-            this.varyColorsField = new CT_Boolean();
+            //this.extLstField = new List<CT_Extension>();
+            //this.firstSliceAngField = new CT_FirstSliceAng();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_PieSer>();
+            //this.varyColorsField = new CT_Boolean();
         }
 
         [XmlElement(Order = 0)]
@@ -8950,8 +9088,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 4)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 4)]
         public List<CT_Extension> extLst
         {
             get
@@ -8971,7 +9108,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ScatterSer
+    public class CT_ScatterSer
     {
 
         private CT_UnsignedInt idxField;
@@ -9003,15 +9140,15 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         public CT_ScatterSer()
         {
             //this.extLstField = new List<CT_Extension>();
-            this.smoothField = new CT_Boolean();
+            //this.smoothField = new CT_Boolean();
             //this.yValField = new CT_NumDataSource();
             //this.xValField = new CT_AxDataSource();
             //this.errBarsField = new List<CT_ErrBars>();
             //this.trendlineField = new List<CT_Trendline>();
-            this.dLblsField = new CT_DLbls();
+            //this.dLblsField = new CT_DLbls();
             //this.dPtField = new List<CT_DPt>();
-            this.markerField = new CT_Marker();
-            this.txField = new CT_SerTx();
+            //this.markerField = new CT_Marker();
+            //this.txField = new CT_SerTx();
             //this.orderField = new CT_UnsignedInt();
             //this.idxField = new CT_UnsignedInt();
         }
@@ -9194,8 +9331,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 12)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 12)]
         public List<CT_Extension> extLst
         {
             get
@@ -9215,7 +9351,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ScatterStyle
+    public class CT_ScatterStyle
     {
 
         private ST_ScatterStyle valField;
@@ -9378,8 +9514,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 5)]
         public List<CT_Extension> extLst
         {
             get
@@ -9399,7 +9534,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_RadarSer
+    public class CT_RadarSer
     {
 
         private CT_UnsignedInt idxField;
@@ -9424,15 +9559,15 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_RadarSer()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.valField = new CT_NumDataSource();
-            this.catField = new CT_AxDataSource();
-            this.dLblsField = new CT_DLbls();
-            this.dPtField = new List<CT_DPt>();
-            this.markerField = new CT_Marker();
-            this.txField = new CT_SerTx();
-            this.orderField = new CT_UnsignedInt();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.valField = new CT_NumDataSource();
+            //this.catField = new CT_AxDataSource();
+            //this.dLblsField = new CT_DLbls();
+            //this.dPtField = new List<CT_DPt>();
+            //this.markerField = new CT_Marker();
+            //this.txField = new CT_SerTx();
+            //this.orderField = new CT_UnsignedInt();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -9552,8 +9687,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 9)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 9)]
         public List<CT_Extension> extLst
         {
             get
@@ -9573,7 +9707,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_RadarStyle
+    public class CT_RadarStyle
     {
 
         private ST_RadarStyle valField;
@@ -9620,7 +9754,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_RadarChart
+    public class CT_RadarChart
     {
 
         private CT_RadarStyle radarStyleField;
@@ -9637,12 +9771,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_RadarChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.axIdField = new List<CT_UnsignedInt>();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_RadarSer>();
-            this.varyColorsField = new CT_Boolean();
-            this.radarStyleField = new CT_RadarStyle();
+            //this.extLstField = new List<CT_Extension>();
+            //this.axIdField = new List<CT_UnsignedInt>();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_RadarSer>();
+            //this.varyColorsField = new CT_Boolean();
+            //this.radarStyleField = new CT_RadarStyle();
         }
 
         [XmlElement(Order = 0)]
@@ -9710,8 +9844,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 5)]
         public List<CT_Extension> extLst
         {
             get
@@ -9731,7 +9864,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_StockChart
+    public class CT_StockChart
     {
 
         private List<CT_LineSer> serField;
@@ -9750,13 +9883,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_StockChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.axIdField = new List<CT_UnsignedInt>();
-            this.upDownBarsField = new CT_UpDownBars();
-            this.hiLowLinesField = new CT_ChartLines();
-            this.dropLinesField = new CT_ChartLines();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_LineSer>();
+            //this.extLstField = new List<CT_Extension>();
+            //this.axIdField = new List<CT_UnsignedInt>();
+            //this.upDownBarsField = new CT_UpDownBars();
+            //this.hiLowLinesField = new CT_ChartLines();
+            //this.dropLinesField = new CT_ChartLines();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_LineSer>();
         }
 
         [XmlElement("ser", Order = 0)]
@@ -9837,8 +9970,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 6)]
         public List<CT_Extension> extLst
         {
             get
@@ -9858,7 +9990,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LineSer
+    public class CT_LineSer
     {
 
         private CT_UnsignedInt idxField;
@@ -9889,18 +10021,18 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_LineSer()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.smoothField = new CT_Boolean();
-            this.valField = new CT_NumDataSource();
-            this.catField = new CT_AxDataSource();
-            this.errBarsField = new CT_ErrBars();
-            this.trendlineField = new List<CT_Trendline>();
-            this.dLblsField = new CT_DLbls();
-            this.dPtField = new List<CT_DPt>();
-            this.markerField = new CT_Marker();
-            this.txField = new CT_SerTx();
-            this.orderField = new CT_UnsignedInt();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.smoothField = new CT_Boolean();
+            //this.valField = new CT_NumDataSource();
+            //this.catField = new CT_AxDataSource();
+            //this.errBarsField = new CT_ErrBars();
+            //this.trendlineField = new List<CT_Trendline>();
+            //this.dLblsField = new CT_DLbls();
+            //this.dPtField = new List<CT_DPt>();
+            //this.markerField = new CT_Marker();
+            //this.txField = new CT_SerTx();
+            //this.orderField = new CT_UnsignedInt();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -10059,8 +10191,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 12)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 12)]
         public List<CT_Extension> extLst
         {
             get
@@ -10080,7 +10211,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_UpDownBars
+    public class CT_UpDownBars
     {
 
         private CT_GapAmount gapWidthField;
@@ -10093,10 +10224,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_UpDownBars()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.downBarsField = new CT_UpDownBar();
-            this.upBarsField = new CT_UpDownBar();
-            this.gapWidthField = new CT_GapAmount();
+            //this.extLstField = new List<CT_Extension>();
+            //this.downBarsField = new CT_UpDownBar();
+            //this.upBarsField = new CT_UpDownBar();
+            //this.gapWidthField = new CT_GapAmount();
         }
 
         [XmlElement(Order = 0)]
@@ -10138,8 +10269,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 3)]
         public List<CT_Extension> extLst
         {
             get
@@ -10159,7 +10289,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_UpDownBar
+    public class CT_UpDownBar
     {
 
         private CT_ShapeProperties spPrField;
@@ -10184,7 +10314,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Line3DChart
+    public class CT_Line3DChart
     {
 
         private CT_Grouping groupingField;
@@ -10205,14 +10335,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Line3DChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.axIdField = new List<CT_UnsignedInt>();
-            this.gapDepthField = new CT_GapAmount();
-            this.dropLinesField = new CT_ChartLines();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_LineSer>();
-            this.varyColorsField = new CT_Boolean();
-            this.groupingField = new CT_Grouping();
+            //this.extLstField = new List<CT_Extension>();
+            //this.axIdField = new List<CT_UnsignedInt>();
+            //this.gapDepthField = new CT_GapAmount();
+            //this.dropLinesField = new CT_ChartLines();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_LineSer>();
+            //this.varyColorsField = new CT_Boolean();
+            //this.groupingField = new CT_Grouping();
         }
 
         [XmlElement(Order = 0)]
@@ -10306,8 +10436,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 7)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 7)]
         public List<CT_Extension> extLst
         {
             get
@@ -10327,7 +10456,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Grouping
+    public class CT_Grouping
     {
 
         private ST_Grouping valField;
@@ -10374,7 +10503,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_LineChart
+    public class CT_LineChart
     {
 
         private CT_Grouping groupingField;
@@ -10401,17 +10530,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_LineChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.axIdField = new List<CT_UnsignedInt>();
-            this.smoothField = new CT_Boolean();
-            this.markerField = new CT_Boolean();
-            this.upDownBarsField = new CT_UpDownBars();
-            this.hiLowLinesField = new CT_ChartLines();
-            this.dropLinesField = new CT_ChartLines();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_LineSer>();
-            this.varyColorsField = new CT_Boolean();
-            this.groupingField = new CT_Grouping();
+            //this.extLstField = new List<CT_Extension>();
+            //this.axIdField = new List<CT_UnsignedInt>();
+            //this.smoothField = new CT_Boolean();
+            //this.markerField = new CT_Boolean();
+            //this.upDownBarsField = new CT_UpDownBars();
+            //this.hiLowLinesField = new CT_ChartLines();
+            //this.dropLinesField = new CT_ChartLines();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_LineSer>();
+            //this.varyColorsField = new CT_Boolean();
+            //this.groupingField = new CT_Grouping();
         }
 
         [XmlElement(Order = 0)]
@@ -10544,8 +10673,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 10)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 10)]
         public List<CT_Extension> extLst
         {
             get
@@ -10565,7 +10693,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Area3DChart
+    public class CT_Area3DChart
     {
 
         private CT_Grouping groupingField;
@@ -10586,14 +10714,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Area3DChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.axIdField = new List<CT_UnsignedInt>();
-            this.gapDepthField = new CT_GapAmount();
-            this.dropLinesField = new CT_ChartLines();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_AreaSer>();
-            this.varyColorsField = new CT_Boolean();
-            this.groupingField = new CT_Grouping();
+            //this.extLstField = new List<CT_Extension>();
+            //this.axIdField = new List<CT_UnsignedInt>();
+            //this.gapDepthField = new CT_GapAmount();
+            //this.dropLinesField = new CT_ChartLines();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_AreaSer>();
+            //this.varyColorsField = new CT_Boolean();
+            //this.groupingField = new CT_Grouping();
         }
 
         [XmlElement(Order = 0)]
@@ -10687,8 +10815,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 7)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 7)]
         public List<CT_Extension> extLst
         {
             get
@@ -10708,7 +10835,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_AreaSer
+    public class CT_AreaSer
     {
 
         private CT_UnsignedInt idxField;
@@ -10737,17 +10864,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_AreaSer()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.valField = new CT_NumDataSource();
-            this.catField = new CT_AxDataSource();
-            this.errBarsField = new List<CT_ErrBars>();
-            this.trendlineField = new List<CT_Trendline>();
-            this.dLblsField = new CT_DLbls();
-            this.dPtField = new List<CT_DPt>();
-            this.pictureOptionsField = new CT_PictureOptions();
-            this.txField = new CT_SerTx();
-            this.orderField = new CT_UnsignedInt();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.valField = new CT_NumDataSource();
+            //this.catField = new CT_AxDataSource();
+            //this.errBarsField = new List<CT_ErrBars>();
+            //this.trendlineField = new List<CT_Trendline>();
+            //this.dLblsField = new CT_DLbls();
+            //this.dPtField = new List<CT_DPt>();
+            //this.pictureOptionsField = new CT_PictureOptions();
+            //this.txField = new CT_SerTx();
+            //this.orderField = new CT_UnsignedInt();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -10893,8 +11020,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 11)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 11)]
         public List<CT_Extension> extLst
         {
             get
@@ -10914,7 +11040,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_AreaChart
+    public class CT_AreaChart
     {
 
         private CT_Grouping groupingField;
@@ -10933,13 +11059,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_AreaChart()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.axIdField = new List<CT_UnsignedInt>();
-            this.dropLinesField = new CT_ChartLines();
-            this.dLblsField = new CT_DLbls();
-            this.serField = new List<CT_AreaSer>();
-            this.varyColorsField = new CT_Boolean();
-            this.groupingField = new CT_Grouping();
+            //this.extLstField = new List<CT_Extension>();
+            //this.axIdField = new List<CT_UnsignedInt>();
+            //this.dropLinesField = new CT_ChartLines();
+            //this.dLblsField = new CT_DLbls();
+            //this.serField = new List<CT_AreaSer>();
+            //this.varyColorsField = new CT_Boolean();
+            //this.groupingField = new CT_Grouping();
         }
 
         [XmlElement(Order = 0)]
@@ -11020,8 +11146,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 6)]
         public List<CT_Extension> extLst
         {
             get
@@ -11060,14 +11185,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             //this.itemsField = new List<object>();
             //this.layoutField = new CT_Layout();
         }
-        CT_ScatterChart scatterChartField;
-        public CT_ScatterChart AddNewScatterChart()
-        {
-            this.scatterChartField = new CT_ScatterChart();
-            return this.scatterChartField;
-        }
+
         CT_ValAx valAxField;
         CT_SerAx serAxField;
+        CT_CatAx catAxField;
+        CT_DateAx dateAxField;
         public CT_ValAx AddNewValAx()
         {
             this.valAxField = new CT_ValAx();
@@ -11127,24 +11249,93 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         //        this.itemsField = value;
         //    }
         //}
+        CT_Pie3DChart pie3DChartField;
+        public CT_Pie3DChart AddNewPie3DChart()
+        {
+            this.pie3DChartField = new CT_Pie3DChart();
+            return this.pie3DChartField;
+        }
 
-        //[XmlElement("catAx", typeof(CT_CatAx), Order = 2)]
-        //[XmlElement("dateAx", typeof(CT_DateAx), Order = 2)]
-        //[XmlElement("serAx", typeof(CT_SerAx), Order = 2)]
-        //[XmlElement("valAx", typeof(CT_ValAx), Order = 2)]
-        //public List<object> Items1
-        //{
-        //    get
-        //    {
-        //        return this.items1Field;
-        //    }
-        //    set
-        //    {
-        //        this.items1Field = value;
-        //    }
-        //}
+        CT_ScatterChart scatterChartField;
+        public CT_ScatterChart AddNewScatterChart()
+        {
+            this.scatterChartField = new CT_ScatterChart();
+            return this.scatterChartField;
+        }
+        [XmlElement(Order = 10)]
+        public CT_Pie3DChart pie3DChart
+        {
+            get
+            {
+                return this.pie3DChartField;
+            }
+            set
+            {
+                this.pie3DChartField = value;
+            }
+        }
+        [XmlElement(Order = 13)]
+        public CT_ScatterChart scatterChart
+        {
+            get
+            {
+                return this.scatterChartField;
+            }
+            set
+            {
+                this.scatterChartField = value;
+            }
+        }
+        [XmlElement(Order = 21)]
+        public CT_ValAx valAx
+        {
+            get
+            {
+                return this.valAxField;
+            }
+            set
+            {
+                this.valAxField = value;
+            }
+        }
 
-        [XmlElement(Order = 3)]
+        [XmlElement(Order = 22)]
+        public CT_SerAx serAx
+        {
+            get
+            {
+                return this.serAxField;
+            }
+            set
+            {
+                this.serAxField = value;
+            }
+        }
+        [XmlElement(Order = 23)]
+        public CT_DateAx dateAx
+        {
+            get
+            {
+                return this.dateAxField;
+            }
+            set
+            {
+                this.dateAxField = value;
+            }
+        }
+        [XmlElement(Order = 24)]
+        public CT_CatAx catAx
+        {
+            get
+            {
+                return this.catAxField;
+            }
+            set
+            {
+                this.catAxField = value;
+            }
+        }
+        [XmlElement(Order = 25)]
         public CT_DTable dTable
         {
             get
@@ -11157,7 +11348,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement(Order = 4)]
+        [XmlElement(Order = 26)]
         public CT_ShapeProperties spPr
         {
             get
@@ -11170,8 +11361,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 27)]
         public List<CT_Extension> extLst
         {
             get
@@ -11191,7 +11381,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Surface
+    public class CT_Surface
     {
 
         private CT_UnsignedInt thicknessField;
@@ -11204,9 +11394,9 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_Surface()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.pictureOptionsField = new CT_PictureOptions();
-            this.thicknessField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.pictureOptionsField = new CT_PictureOptions();
+            //this.thicknessField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -11248,8 +11438,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 3)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 3)]
         public List<CT_Extension> extLst
         {
             get
@@ -11269,7 +11458,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Perspective
+    public class CT_Perspective
     {
 
         private byte valField;
@@ -11300,7 +11489,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_DepthPercent
+    public class CT_DepthPercent
     {
 
         private ushort valField;
@@ -11331,7 +11520,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_RotY
+    public class CT_RotY
     {
 
         private ushort valField;
@@ -11362,7 +11551,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_HPercent
+    public class CT_HPercent
     {
 
         private ushort valField;
@@ -11393,7 +11582,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_RotX
+    public class CT_RotX
     {
 
         private sbyte valField;
@@ -11424,7 +11613,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_View3D
+    public class CT_View3D
     {
 
         private CT_RotX rotXField;
@@ -11443,13 +11632,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_View3D()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.perspectiveField = new CT_Perspective();
-            this.rAngAxField = new CT_Boolean();
-            this.depthPercentField = new CT_DepthPercent();
-            this.rotYField = new CT_RotY();
-            this.hPercentField = new CT_HPercent();
-            this.rotXField = new CT_RotX();
+            //this.extLstField = new List<CT_Extension>();
+            //this.perspectiveField = new CT_Perspective();
+            //this.rAngAxField = new CT_Boolean();
+            //this.depthPercentField = new CT_DepthPercent();
+            //this.rotYField = new CT_RotY();
+            //this.hPercentField = new CT_HPercent();
+            //this.rotXField = new CT_RotX();
         }
 
         [XmlElement(Order = 0)]
@@ -11530,8 +11719,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 6)]
         public List<CT_Extension> extLst
         {
             get
@@ -11551,7 +11739,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PivotFmt
+    public class CT_PivotFmt
     {
 
         private CT_UnsignedInt idxField;
@@ -11568,10 +11756,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_PivotFmt()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.dLblField = new CT_DLbl();
-            this.markerField = new CT_Marker();
-            this.idxField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.dLblField = new CT_DLbl();
+            //this.markerField = new CT_Marker();
+            //this.idxField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -11639,8 +11827,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 5)]
         public List<CT_Extension> extLst
         {
             get
@@ -11659,10 +11846,9 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [DebuggerStepThrough]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart",ElementName = "chart", IsNullable = true)]
     public class CT_Chart
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chart));
         private CT_Title titleField;
 
         private CT_Boolean autoTitleDeletedField;
@@ -11733,10 +11919,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.legendField = new CT_Legend();
             return this.legendField;
         }
-        public void Save(Stream stream,XmlSerializerNamespaces namespaces)
-        {
-            serializer.Serialize(stream, this, namespaces);
-        }
+
         [XmlElement(Order = 0)]
         public CT_Title title
         {
@@ -11763,8 +11946,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("pivotFmt", IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_PivotFmt> pivotFmts
         {
             get
@@ -11894,8 +12076,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 12)]
-        [XmlArrayItem("ext", IsNullable = false)]
+        [XmlElement(Order = 12)]
         public List<CT_Extension> extLst
         {
             get
@@ -11915,7 +12096,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Protection
+    public class CT_Protection
     {
 
         private CT_Boolean chartObjectField;
@@ -12009,7 +12190,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PivotSource
+    public class CT_PivotSource
     {
 
         private string nameField;
@@ -12020,8 +12201,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_PivotSource()
         {
-            this.extLstField = new List<CT_Extension>();
-            this.fmtIdField = new CT_UnsignedInt();
+            //this.extLstField = new List<CT_Extension>();
+            //this.fmtIdField = new CT_UnsignedInt();
         }
 
         [XmlElement(Order = 0)]
@@ -12050,8 +12231,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlArray(Order = 2)]
-        [XmlArrayItem("ext", typeof(CT_Extension), IsNullable = false)]
+        [XmlElement(Order = 2)]
         public List<CT_Extension> extLst
         {
             get
@@ -12071,7 +12251,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Style
+    public class CT_Style
     {
 
         private byte valField;
@@ -12096,7 +12276,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_TextLanguageID
+    public class CT_TextLanguageID
     {
 
         private string valField;
@@ -12121,14 +12301,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_ExtensionList
+    public class CT_ExtensionList
     {
 
         private List<CT_Extension> extField;
 
         public CT_ExtensionList()
         {
-            this.extField = new List<CT_Extension>();
+            //this.extField = new List<CT_Extension>();
         }
 
         [XmlElement("ext", Order = 0)]
@@ -12151,14 +12331,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_Lvl
+    public class CT_Lvl
     {
 
         private List<CT_StrVal> ptField;
 
         public CT_Lvl()
         {
-            this.ptField = new List<CT_StrVal>();
+            //this.ptField = new List<CT_StrVal>();
         }
 
         [XmlElement("pt", Order = 0)]
@@ -12181,14 +12361,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_CustSplit
+    public class CT_CustSplit
     {
 
         private List<CT_UnsignedInt> secondPiePtField;
 
         public CT_CustSplit()
         {
-            this.secondPiePtField = new List<CT_UnsignedInt>();
+            //this.secondPiePtField = new List<CT_UnsignedInt>();
         }
 
         [XmlElement("secondPiePt", Order = 0)]
@@ -12211,14 +12391,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_BandFmts
+    public class CT_BandFmts
     {
 
         private List<CT_BandFmt> bandFmtField;
 
         public CT_BandFmts()
         {
-            this.bandFmtField = new List<CT_BandFmt>();
+            //this.bandFmtField = new List<CT_BandFmt>();
         }
 
         [XmlElement("bandFmt", Order = 0)]
@@ -12241,14 +12421,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public partial class CT_PivotFmts
+    public class CT_PivotFmts
     {
 
         private List<CT_PivotFmt> pivotFmtField;
 
         public CT_PivotFmts()
         {
-            this.pivotFmtField = new List<CT_PivotFmt>();
+            //this.pivotFmtField = new List<CT_PivotFmt>();
         }
 
         [XmlElement("pivotFmt", Order = 0)]

@@ -333,23 +333,23 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TextParagraphProperties()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.defRPrField = new CT_TextCharacterProperties();
-            this.tabLstField = new List<CT_TextTabStop>();
-            this.buBlipField = new CT_TextBlipBullet();
-            this.buCharField = new CT_TextCharBullet();
-            this.buAutoNumField = new CT_TextAutonumberBullet();
-            this.buNoneField = new CT_TextNoBullet();
-            this.buFontField = new CT_TextFont();
-            this.buFontTxField = new CT_TextBulletTypefaceFollowText();
-            this.buSzPtsField = new CT_TextBulletSizePoint();
-            this.buSzPctField = new CT_TextBulletSizePercent();
-            this.buSzTxField = new CT_TextBulletSizeFollowText();
-            this.buClrField = new CT_Color();
-            this.buClrTxField = new CT_TextBulletColorFollowText();
-            this.spcAftField = new CT_TextSpacing();
-            this.spcBefField = new CT_TextSpacing();
-            this.lnSpcField = new CT_TextSpacing();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.defRPrField = new CT_TextCharacterProperties();
+            //this.tabLstField = new List<CT_TextTabStop>();
+            //this.buBlipField = new CT_TextBlipBullet();
+            //this.buCharField = new CT_TextCharBullet();
+            //this.buAutoNumField = new CT_TextAutonumberBullet();
+            //this.buNoneField = new CT_TextNoBullet();
+            //this.buFontField = new CT_TextFont();
+            //this.buFontTxField = new CT_TextBulletTypefaceFollowText();
+            //this.buSzPtsField = new CT_TextBulletSizePoint();
+            //this.buSzPctField = new CT_TextBulletSizePercent();
+            //this.buSzTxField = new CT_TextBulletSizeFollowText();
+            //this.buClrField = new CT_Color();
+            //this.buClrTxField = new CT_TextBulletColorFollowText();
+            //this.spcAftField = new CT_TextSpacing();
+            //this.spcBefField = new CT_TextSpacing();
+            //this.lnSpcField = new CT_TextSpacing();
         }
 
         [XmlElement(Order = 0)]
@@ -534,8 +534,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlArray(Order = 14)]
-        [XmlArrayItem("tab", IsNullable = false)]
+        [XmlElement(Order = 14)]
         public List<CT_TextTabStop> tabLst
         {
             get

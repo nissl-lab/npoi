@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ooxml.Testcases.Properties {
+namespace NPOI.OOXML.Testcases.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

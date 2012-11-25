@@ -501,8 +501,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlArray(Order = 5)]
-        [XmlArrayItem("ds", IsNullable = false)]
+        [XmlElement(Order = 5)]
         public List<CT_DashStop> custDash
         {
             get
