@@ -143,14 +143,22 @@ namespace NPOI.SS.UserModel
         bool IsColumnHidden(int columnIndex);
 
         /// <summary>
+        /// Copy the source row to the target row. If the target row exists, the new copied row will be inserted before the existing one
+        /// </summary>
+        /// <param name="sourceIndex">source index</param>
+        /// <param name="targetIndex">target index</param>
+        /// <returns>the new copied row object</returns>
+        IRow CopyRow(int sourceIndex, int targetIndex);
+        /// <summary>
         /// Set the width (in units of 1/256th of a character width)
-        /// 
-        /// The maximum column width for an individual cell is 255 characters.
-        /// This value represents the number of characters that can be displayed
-        /// in a cell that is formatted with the standard font.
         /// </summary>
         /// <param name="columnIndex">the column to set (0-based)</param>
         /// <param name="width">the width in units of 1/256th of a character width</param>
+        /// <remarks>
+        /// The maximum column width for an individual cell is 255 characters.
+        /// This value represents the number of characters that can be displayed
+        /// in a cell that is formatted with the standard font.
+        /// </remarks>
         void SetColumnWidth(int columnIndex, int width);
 
         /// <summary>

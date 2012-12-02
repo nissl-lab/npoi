@@ -77,7 +77,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(cell.IsPartOfArrayFormulaGroup);
             try
             {
-                cell.GetArrayFormulaRange(/*getter*/);
+                CellRangeAddress c= cell.ArrayFormulaRange;
                 Assert.Fail("expected exception");
             }
             catch (InvalidOperationException e)
@@ -97,7 +97,7 @@ namespace TestCases.SS.UserModel
 
             Assert.IsTrue(cell.IsPartOfArrayFormulaGroup);
             //retrieve the range and check it is the same
-            Assert.AreEqual(range.FormatAsString(), cell.GetArrayFormulaRange().FormatAsString());
+            Assert.AreEqual(range.FormatAsString(), cell.ArrayFormulaRange.FormatAsString());
             //check the formula
             Assert.AreEqual("SUM(C11:C12*D11:D12)", cell.CellFormula);
         }
@@ -132,7 +132,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(CellType.FORMULA, acell.CellType);
                 Assert.AreEqual("SUM(A1:A3*B1:B3)", acell.CellFormula);
                 //retrieve the range and check it is the same
-                Assert.AreEqual(range.FormatAsString(), acell.GetArrayFormulaRange().FormatAsString());
+                Assert.AreEqual(range.FormatAsString(), acell.ArrayFormulaRange.FormatAsString());
             }
         }
 
@@ -172,7 +172,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(cell.IsPartOfArrayFormulaGroup);
             try
             {
-                cell.GetArrayFormulaRange(/*getter*/);
+                CellRangeAddress c= cell.ArrayFormulaRange;
                 Assert.Fail("expected exception");
             }
             catch (InvalidOperationException e)
@@ -554,7 +554,7 @@ namespace TestCases.SS.UserModel
             CellRangeAddress cra = CellRangeAddress.ValueOf("C2:C4");
             foreach(Cell mcell in mrange){
                 //TODO define Equals and hashcode for CellRangeAddress
-                Assert.AreEqual(cra.FormatAsString(), mcell.GetArrayFormulaRange().formatAsString());
+                Assert.AreEqual(cra.FormatAsString(), mcell.ArrayFormulaRange.formatAsString());
                 Assert.AreEqual("A2:A4*B2:B4", mcell.CellFormula);
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
                 Assert.AreEqual(CellType.FORMULA, mcell.CellType);

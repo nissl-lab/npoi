@@ -28,6 +28,7 @@ namespace NPOI.HSSF.Model
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
+    using System.Security;
 
 
     /**
@@ -1283,7 +1284,7 @@ namespace NPOI.HSSF.Model
             {
                 retval.Username=(Environment.UserName);
             }
-            catch ( AccessViolationException)
+            catch (SecurityException)
             {
                 // AccessControlException can occur in a restricted context
                 // (client applet/jws application or restricted security server)

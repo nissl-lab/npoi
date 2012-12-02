@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
 
             Assert.IsTrue(cell.IsPartOfArrayFormulaGroup);
             //retrieve the range and check it is the same
-            Assert.AreEqual(range.FormatAsString(), cell.GetArrayFormulaRange().FormatAsString());
+            Assert.AreEqual(range.FormatAsString(), cell.ArrayFormulaRange.FormatAsString());
 
             FormulaRecordAggregate agg = (FormulaRecordAggregate)(((HSSFCell)cell).CellValueRecord);
             Assert.AreEqual(range.FormatAsString(), agg.GetArrayFormulaRange().FormatAsString());

@@ -198,7 +198,19 @@ namespace NPOI.SS.UserModel
         /// <param name="cell">The cell to move</param>
         /// <param name="newColumn">The new column number (0 based)</param>
         void MoveCell(ICell cell, int newColumn);
-
+        /// <summary>
+        /// Copy the current row to the target row
+        /// </summary>
+        /// <param name="targetIndex">row index of the target row</param>
+        /// <returns>the new copied row object</returns>
+        IRow CopyRowTo(int targetIndex);
+        /// <summary>
+        /// Copy the source cell to the target cell. If the target cell exists, the new copied cell will be inserted before the existing one
+        /// </summary>
+        /// <param name="sourceIndex">index of the source cell</param>
+        /// <param name="targetIndex">index of the target cell</param>
+        /// <returns>the new copied cell object</returns>
+        ICell CopyCell(int sourceIndex, int targetIndex);
         /// <summary>
         /// Get cells in the row
         /// </summary>

@@ -58,7 +58,7 @@ namespace NPOI.XSSF.UserModel
             XSSFCell firstCell = (XSSFCell)cells.TopLeftCell;
             Assert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
             //retrieve the range and check it is the same
-            Assert.AreEqual(range.FormatAsString(), firstCell.GetArrayFormulaRange().FormatAsString());
+            Assert.AreEqual(range.FormatAsString(), firstCell.ArrayFormulaRange.FormatAsString());
             ConfirmArrayFormulaCell(firstCell, "C3", formula1, "C3");
         }
         [Test]

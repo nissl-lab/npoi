@@ -190,11 +190,9 @@ namespace NPOI.HSSF.UserModel
             }
             throw new Exception("Bad cell value rec (" + cval.GetType().Name + ")");
         }
-
-        /**
-         * Returns the Workbook that this Cell is bound to
-         * @return
-         */
+        /// <summary>
+        /// the Workbook that this Cell is bound to
+        /// </summary>
         public InternalWorkbook BoundWorkbook
         {
             get
@@ -210,11 +208,9 @@ namespace NPOI.HSSF.UserModel
                 return this.sheet;
             }
         }
-        /**
- * Returns the HSSFRow this cell belongs to
- *
- * @return the HSSFRow that owns this cell
- */
+        /// <summary>
+        /// the HSSFRow this cell belongs to
+        /// </summary>
         public IRow Row
         {
             get
@@ -1349,15 +1345,22 @@ namespace NPOI.HSSF.UserModel
             FormulaRecordAggregate agg = (FormulaRecordAggregate)record;
             agg.SetParsedExpression(ptgsForCell);
         }
-        public CellRangeAddress GetArrayFormulaRange()
+        public CellRangeAddress ArrayFormulaRange
         {
-            if (cellType != CellType.FORMULA)
+            get
             {
-                String ref1 = new CellReference(this).FormatAsString();
-                throw new InvalidOperationException("Cell " + ref1
-                    + " is not part of an array formula.");
+                if (cellType != CellType.FORMULA)
+                {
+                    String ref1 = new CellReference(this).FormatAsString();
+                    throw new InvalidOperationException("Cell " + ref1
+                        + " is not part of an array formula.");
+                }
+                return ((FormulaRecordAggregate)record).GetArrayFormulaRange();
             }
-            return ((FormulaRecordAggregate)record).GetArrayFormulaRange();
+        }
+        public ICell CopyCellTo(int targetIndex)
+        {
+            return this.Row.CopyCell(this.ColumnIndex,targetIndex);
         }
         /// <summary>
         /// The purpose of this method is to validate the cell state prior to modification
@@ -1365,7 +1368,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="msg"></param>
         internal void NotifyArrayFormulaChanging(String msg)
         {
-            CellRangeAddress cra = GetArrayFormulaRange();
+            CellRangeAddress cra = this.ArrayFormulaRange;
             if (cra.NumberOfCells > 1)
             {
                 throw new InvalidOperationException(msg);

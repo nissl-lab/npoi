@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
 
         internal override void OnDocumentCreate()
         {
-            worksheet = newSheet();
+            worksheet = NewSheet();
             InitRows(worksheet);
             columnHelper = new ColumnHelper(worksheet);
             hyperlinks = new List<XSSFHyperlink>();
@@ -222,7 +222,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a new instance
          */
-        private static CT_Worksheet newSheet()
+        private static CT_Worksheet NewSheet()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
             CT_SheetFormatPr ctFormat = worksheet.AddNewSheetFormatPr();
@@ -252,7 +252,7 @@ namespace NPOI.XSSF.UserModel
          * @return the CT_Worksheet bean holding this sheet's data
          */
 
-        public CT_Worksheet GetCTWorksheet()
+        internal CT_Worksheet GetCTWorksheet()
         {
             return this.worksheet;
         }
@@ -314,7 +314,7 @@ namespace NPOI.XSSF.UserModel
 
                     if (cell.IsPartOfArrayFormulaGroup)
                     {
-                        CellRangeAddress arrayRange = cell.GetArrayFormulaRange();
+                        CellRangeAddress arrayRange = cell.ArrayFormulaRange;
                         if (arrayRange.NumberOfCells > 1 &&
                                 (arrayRange.IsInRange(region.FirstRow, region.FirstColumn) ||
                                   arrayRange.IsInRange(region.FirstRow, region.FirstColumn)))
@@ -3679,6 +3679,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         #endregion
+
+
+        public IRow CopyRow(int sourceIndex, int targetIndex)
+        {
+            return SheetUtil.CopyRow(this, sourceIndex, targetIndex);
+        }
     }
 
 }

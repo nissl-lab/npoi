@@ -140,6 +140,13 @@ namespace NPOI.SS.UserModel
         void SetCellValue(String value);
 
         /// <summary>
+        /// Copy the cell to the target index. If the target cell exists, a new cell will be inserted before the existing cell.
+        /// </summary>
+        /// <param name="targetIndex">target index</param>
+        /// <returns>the new copied cell object</returns>
+        ICell CopyCellTo(int targetIndex);
+
+        /// <summary>
         /// Return a formula for the cell
         /// </summary>
         /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is not CELL_TYPE_FORMULA </exception>
@@ -220,7 +227,7 @@ namespace NPOI.SS.UserModel
         ///  Only valid for array formula cells
         /// </summary>
         /// <returns>range of the array formula group that the cell belongs to.</returns>
-        CellRangeAddress GetArrayFormulaRange();
+        CellRangeAddress ArrayFormulaRange{ get; }
 
         /// <summary>
         /// if this cell is part of group of cells having a common array formula.

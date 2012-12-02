@@ -626,6 +626,16 @@ namespace NPOI.XSSF.UserModel
             throw new NotImplementedException();
         }
 
+        public IRow CopyRowTo(int targetIndex)
+        {
+            return this.Sheet.CopyRow(this.RowNum, targetIndex);
+        }
+
+        public ICell CopyCell(int sourceIndex, int targetIndex)
+        {
+            return CellUtil.CopyCell(this, sourceIndex, targetIndex);
+        }
+
         #endregion
     }
 

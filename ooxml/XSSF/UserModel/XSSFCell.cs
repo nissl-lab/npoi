@@ -1048,16 +1048,19 @@ namespace NPOI.XSSF.UserModel
             throw new InvalidOperationException("Unexpected formula result type (" + cellType + ")");
         }
 
-        public CellRangeAddress GetArrayFormulaRange()
+        public CellRangeAddress ArrayFormulaRange
         {
-            XSSFCell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
-            if (cell == null)
+            get
             {
-                throw new InvalidOperationException("Cell " + _cell.r
-                        + " is not part of an array formula.");
+                XSSFCell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
+                if (cell == null)
+                {
+                    throw new InvalidOperationException("Cell " + _cell.r
+                            + " is not part of an array formula.");
+                }
+                String formulaRef = cell._cell.f.@ref;
+                return CellRangeAddress.ValueOf(formulaRef);
             }
-            String formulaRef = cell._cell.f.@ref;
-            return CellRangeAddress.ValueOf(formulaRef);
         }
 
         public bool IsPartOfArrayFormulaGroup
@@ -1077,7 +1080,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (IsPartOfArrayFormulaGroup)
             {
-                CellRangeAddress cra = GetArrayFormulaRange();
+                CellRangeAddress cra = this.ArrayFormulaRange;
                 if (cra.NumberOfCells > 1)
                 {
                     throw new InvalidOperationException(msg);
@@ -1118,6 +1121,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         #endregion
+
+
+        public ICell CopyCellTo(int targetIndex)
+        {
+            return CellUtil.CopyCell(this.Row, this.ColumnIndex, targetIndex);
+        }
     }
 
 
