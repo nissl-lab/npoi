@@ -194,7 +194,15 @@ namespace NPOI.Tools.POIFSBrowser
                                     chartnode.Nodes.Add(new RecordTreeNode(bof));
                                     while (iterator1.MoveNext())
                                     {
-                                        chartnode.Nodes.Add(new RecordTreeNode((Record)iterator1.Current));
+                                        if (iterator1.Current is RecordAggregate)
+                                        {
+                                            RecordAggregate record = (RecordAggregate)iterator1.Current;
+                                            chartnode.Nodes.Add(new RecordAggregateTreeNode(record));
+                                        }
+                                        else /*if(iterator1.Current is Record)*/
+                                        {
+                                            chartnode.Nodes.Add(new RecordTreeNode((Record)iterator1.Current));
+                                        }
                                         if (iterator1.Current is EOFRecord)
                                             break;
                                     }
@@ -247,6 +255,23 @@ namespace NPOI.Tools.POIFSBrowser
                 }
 
 
+        }
+
+        private class RecordVisitor1 : RecordVisitor
+        {
+            private TreeNode node;
+            public RecordVisitor1(TreeNode psNode)
+            {
+                node = psNode;
+            }
+            #region RecordVisitor 成员
+
+            public void VisitRecord(Record r)
+            {
+                node.Nodes.Add(new RecordTreeNode(r));
+            }
+
+            #endregion
         }
 
     }
