@@ -71,6 +71,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(true, run.IsBold());
 
             run.SetBold(false);
+            Assert.AreEqual(false, run.IsBold());
             Assert.AreEqual(ST_OnOff.False, rpr.b.val);
         }
 

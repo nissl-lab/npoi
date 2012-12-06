@@ -37,6 +37,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.valField = value;
+                this.valFieldSpecified = true;
             }
         }
 
@@ -61,7 +62,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetVal()
         {
-            return this.valFieldSpecified && this.valField != ST_OnOff.True;
+            return this.valFieldSpecified;// && this.valField != ST_OnOff.True;
         }
     }
     /// <summary>
