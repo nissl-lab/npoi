@@ -54,10 +54,10 @@ namespace TestCases.HSSF.Record.Chart
             Assert.AreEqual(0, record.MinimumDate);
             Assert.AreEqual(0, record.MaximumDate);
             Assert.AreEqual(1, record.MajorInterval);
-            Assert.AreEqual(0, record.MajorUnit);
+            Assert.AreEqual(0, (short)record.MajorUnit);
             Assert.AreEqual(1, record.MinorInterval);
-            Assert.AreEqual(0, record.MinorUnit);
-            Assert.AreEqual(0, record.BaseUnit);
+            Assert.AreEqual(0, (short)record.MinorUnit);
+            Assert.AreEqual(0, (short)record.BaseUnit);
             Assert.AreEqual(0, record.CrossDate);
             Assert.AreEqual(239, record.Options);
             Assert.AreEqual(true, record.IsAutoMin);

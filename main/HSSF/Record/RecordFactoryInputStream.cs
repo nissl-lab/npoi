@@ -23,6 +23,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
     using NPOI.HSSF.Record.Crypto;
     using NPOI.Util;
+    using NPOI.HSSF.Record.Chart;
     /**
      * A stream based way to get at complete records, with
      * as low a memory footprint as possible.
@@ -382,6 +383,10 @@ namespace NPOI.HSSF.Record
                 {
                     ((DrawingRecord)_lastRecord).ProcessContinueRecord(contRec.Data);
                     return null;
+                }
+                if (_lastRecord is CrtMlFrtRecord)
+                {
+                    return record;
                 }
                 if (_lastRecord is UnknownRecord)
                 {

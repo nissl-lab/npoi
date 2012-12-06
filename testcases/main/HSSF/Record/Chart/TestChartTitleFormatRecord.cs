@@ -56,8 +56,8 @@ namespace TestCases.HSSF.Record.Chart
             // Should've found one
             Assert.AreEqual(1, grabber.chartTitleFormatRecords.Count);
             // And it should be of something interesting
-            ChartTitleFormatRecord r =
-                (ChartTitleFormatRecord)grabber.chartTitleFormatRecords[0];
+            AlRunsRecord r =
+                (AlRunsRecord)grabber.chartTitleFormatRecords[0];
             Assert.AreEqual(3, r.GetFormatCount());
         }
 
@@ -72,7 +72,7 @@ namespace TestCases.HSSF.Record.Chart
 
             public void ProcessRecord(Record record)
             {
-                if (record is ChartTitleFormatRecord)
+                if (record is AlRunsRecord)
                 {
                     chartTitleFormatRecords.Add(
                             record
