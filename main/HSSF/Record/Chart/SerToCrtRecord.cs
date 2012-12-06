@@ -24,62 +24,93 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
 
 
-
     /**
-     * The end record defines the end of a block of records for a (Graphing)
-     * data object. This record is matched with a corresponding BeginRecord.
-     *
-     * @see BeginRecord
-     *
+     * The series chart Group index record stores the index to the CHARTFORMAT record (0 based).
+     * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
+     *       Remove the record in src/records/definitions.
+
      * @author Glen Stampoultzis (glens at apache.org)
      */
-
-    public class EndRecord
+    //
+    /// <summary>
+    /// The SerToCrt record specifies the chart group for the current series.
+    /// </summary>
+    public class SerToCrtRecord
        : StandardRecord
     {
-        public const short sid = 0x1034;
-        public static EndRecord instance = new EndRecord();
-        public EndRecord()
+        public static short sid = 0x1045;
+        private short field_1_chartGroupIndex;
+
+
+        public SerToCrtRecord()
         {
+
         }
 
         /**
-         * Constructs a EndRecord record and Sets its fields appropriately.
+         * Constructs a SeriesChartGroupIndex record and Sets its fields appropriately.
+         *
          * @param in the RecordInputstream to Read the record from
          */
 
-        public EndRecord(RecordInputStream in1)
+        public SerToCrtRecord(RecordInputStream in1)
         {
 
+            field_1_chartGroupIndex = in1.ReadShort();
         }
 
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
 
-            buffer.Append("[END]\n");
-            buffer.Append("[/END]\n");
+            buffer.Append("[SERTOCRT]\n");
+            buffer.Append("    .chartGroupIndex      = ")
+                .Append("0x").Append(HexDump.ToHex(ChartGroupIndex))
+                .Append(" (").Append(ChartGroupIndex).Append(" )");
+            buffer.Append(Environment.NewLine);
+
+            buffer.Append("[/SERTOCRT]\n");
             return buffer.ToString();
         }
 
         public override void Serialize(ILittleEndianOutput out1)
         {
+            out1.WriteShort(field_1_chartGroupIndex);
         }
 
+        /**
+         * Size of record (exluding 4 byte header)
+         */
         protected override int DataSize
         {
-            get { return 0; }
+            get
+            {
+                return 2;
+            }
         }
 
         public override short Sid
         {
             get { return sid; }
         }
+
         public override Object Clone()
         {
-            EndRecord er = new EndRecord();
-            // No data so nothing to copy
-            return er;
+            SerToCrtRecord rec = new SerToCrtRecord();
+
+            rec.field_1_chartGroupIndex = field_1_chartGroupIndex;
+            return rec;
         }
+
+
+        /**
+         * Get the chart Group index field for the SeriesChartGroupIndex record.
+         */
+        public short ChartGroupIndex
+        {
+            get { return field_1_chartGroupIndex; }
+            set { this.field_1_chartGroupIndex = value; }
+        }
+
     }
 }

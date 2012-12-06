@@ -250,7 +250,7 @@
     </Compile>
     <Compile Include="HSSF\Record\Chart\TestAreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAreaRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxisLineRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisRecord.cs" />
@@ -260,7 +260,7 @@
     <Compile Include="HSSF\Record\TestBoundSheetRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestCatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestChartRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestChartTitleFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAlRunsRecord.cs" />
     <Compile Include="HSSF\Record\TestCommonObjectDataSubRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDataFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDatRecord.cs" />
@@ -268,7 +268,7 @@
     <Compile Include="HSSF\Record\TestDVALRecord.cs" />
     <Compile Include="HSSF\Record\TestEmbeddedObjectRefSubRecord.cs" />
     <Compile Include="HSSF\Record\TestEndSubRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestFontBasisRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFbiRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestFontXRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestFrameRecord.cs" />
     <Compile Include="HSSF\Record\TestLabelRecord.cs" />
@@ -277,7 +277,7 @@
     <Compile Include="HSSF\Record\Chart\TestBRAIRecord.cs" />
     <Compile Include="HSSF\Record\TestMergeCellsRecord.cs" />
     <Compile Include="HSSF\Record\TestNoteRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestNumberFormatIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestIFmtRecordRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestObjectLinkRecord.cs" />
     <Compile Include="HSSF\Record\TestObjRecord.cs" />
     <Compile Include="HSSF\Record\TestPaneRecord.cs" />
@@ -304,9 +304,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HSSF\Record\Chart\TestPlotGrowthRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestSeriesChartGroupIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestSerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesIndexRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestSeriesLabelsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesListRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSeriesTextRecord.cs" />

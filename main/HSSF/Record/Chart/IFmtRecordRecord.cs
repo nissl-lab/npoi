@@ -16,40 +16,46 @@
    limitations Under the License.
 ==================================================================== */
 
-
 namespace NPOI.HSSF.Record.Chart
 {
+    using System.Collections;
     using System;
     using System.Text;
     using NPOI.Util;
 
 
-
     /**
-     * The end record defines the end of a block of records for a (Graphing)
-     * data object. This record is matched with a corresponding BeginRecord.
-     *
-     * @see BeginRecord
-     *
+     * The number format index record indexes format table.  This applies to an axis.
+     * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
+     *       Remove the record in src/records/definitions.
+
      * @author Glen Stampoultzis (glens at apache.org)
      */
-
-    public class EndRecord
+    //
+    /// <summary>
+    /// The IFmtRecord record specifies the number format to use for the text on an axis.
+    /// </summary>
+    public class IFmtRecordRecord
        : StandardRecord
     {
-        public const short sid = 0x1034;
-        public static EndRecord instance = new EndRecord();
-        public EndRecord()
+        public const short sid = 0x104e;
+        private short field_1_formatIndex;
+
+
+        public IFmtRecordRecord()
         {
+
         }
 
         /**
-         * Constructs a EndRecord record and Sets its fields appropriately.
+         * Constructs a NumberFormatIndex record and Sets its fields appropriately.
+         *
          * @param in the RecordInputstream to Read the record from
          */
 
-        public EndRecord(RecordInputStream in1)
+        public IFmtRecordRecord(RecordInputStream in1)
         {
+            field_1_formatIndex = in1.ReadShort();
 
         }
 
@@ -57,29 +63,57 @@ namespace NPOI.HSSF.Record.Chart
         {
             StringBuilder buffer = new StringBuilder();
 
-            buffer.Append("[END]\n");
-            buffer.Append("[/END]\n");
+            buffer.Append("[IFMT]\n");
+            buffer.Append("    .formatIndex          = ")
+                .Append("0x").Append(HexDump.ToHex(FormatIndex))
+                .Append(" (").Append(FormatIndex).Append(" )");
+            buffer.Append(Environment.NewLine);
+
+            buffer.Append("[/IFMT]\n");
             return buffer.ToString();
         }
 
         public override void Serialize(ILittleEndianOutput out1)
         {
+            out1.WriteShort(field_1_formatIndex);
         }
 
+        /**
+         * Size of record (exluding 4 byte header)
+         */
         protected override int DataSize
         {
-            get { return 0; }
+            get { return 2; }
         }
 
         public override short Sid
         {
             get { return sid; }
         }
+
         public override Object Clone()
         {
-            EndRecord er = new EndRecord();
-            // No data so nothing to copy
-            return er;
+            IFmtRecordRecord rec = new IFmtRecordRecord();
+
+            rec.field_1_formatIndex = field_1_formatIndex;
+            return rec;
         }
+
+
+
+
+        /**
+         * Get the format index field for the NumberFormatIndex record.
+         */
+        public short FormatIndex
+        {
+            get { return field_1_formatIndex; }
+            set { this.field_1_formatIndex = value; }
+        }
+
+
     }
 }
+
+
+

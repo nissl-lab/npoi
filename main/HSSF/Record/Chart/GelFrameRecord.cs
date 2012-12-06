@@ -17,8 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.HSSF.Record.Drawing;
-using NPOI.SS.UserModel.Drawing;
+//using NPOI.HSSF.Record.Drawing;
+//using NPOI.SS.UserModel.Drawing;
 
 namespace NPOI.HSSF.Record.Chart
 {
@@ -28,42 +28,48 @@ namespace NPOI.HSSF.Record.Chart
     /// <remarks>
     /// author: Antony liu (antony.apollo at gmail.com)
     /// </remarks>
-    public class GelFrameRecord : StandardRecord
+    public class GelFrameRecord : RowDataRecord
     {
         
 
-        private OfficeArtFOPT fillOption;
-        private OfficeArtTertiaryFOPT tertiaryFillOption;
+        //private OfficeArtFOPT fillOption;
+        //private OfficeArtTertiaryFOPT tertiaryFillOption;
         public const short sid = 0x1066;
 
         public GelFrameRecord(RecordInputStream ris)
+            :base(ris)
         {
-            fillOption = new OfficeArtFOPT(ris);
-            tertiaryFillOption = new OfficeArtTertiaryFOPT(ris);
+            //fillOption = new OfficeArtFOPT(ris);
+            //tertiaryFillOption = new OfficeArtTertiaryFOPT(ris);
         }
 
         protected override int DataSize
         {
-            get { return fillOption.DataSize + tertiaryFillOption.DataSize; }
+            get 
+            {
+                return base.DataSize;
+                //return fillOption.DataSize + tertiaryFillOption.DataSize; 
+            }
         }
 
         public override void Serialize(NPOI.Util.ILittleEndianOutput out1)
         {
-            fillOption.Serialize(out1);
-            tertiaryFillOption.Serialize(out1);
+            base.Serialize(out1);
+            //fillOption.Serialize(out1);
+            //tertiaryFillOption.Serialize(out1);
         }
 
         public override short Sid
         {
             get { return sid; }
         }
-
+/*
         public MSOFillType FillType
         {
             get;
             set;
         }
-        /*
+        
         public int FillColor
         {
             get;

@@ -61,6 +61,8 @@
     <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Chart3dRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtLayout12ARecord.cs">
       <SubType>Code</SubType>
@@ -68,19 +70,43 @@
     <Compile Include="HSSF\Record\Chart\CrtLayout12Record.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HSSF\Record\Chart\CrtLineRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CrtMlFrtContinueRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CrtMlFrtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DataLabExtContentsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DropBarRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\Fbi2Record.cs" />
+    <Compile Include="HSSF\Record\Chart\FrtFontListRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\GelFrameRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\LegendExceptionRecord.cs" />
     <Compile Include="HSSF\Record\Chart\MarkerFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\PicFRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PieFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PieRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\RadarAreaRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\RadarRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\RichTextStreamRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ScatterRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SerAuxErrBarRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SerAuxTrendRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SerFmtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SerParentRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ShapePropsStreamRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SurfRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TextPropsStreamRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
     <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
     <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
     <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
     <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
     <Compile Include="HSSF\Record\Common\UnicodeString.cs" />
+    <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
+    <Compile Include="HSSF\Record\RowDataRecord.cs" />
     <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\Structure.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
@@ -233,7 +259,7 @@
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
     <Compile Include="HSSF\Record\Chart\AreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AreaRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisLineRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisRecord.cs" />
@@ -242,35 +268,35 @@
     <Compile Include="HSSF\Record\Chart\BeginRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatLabRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\Chart3DBarShape.cs" />
-    <Compile Include="HSSF\Record\Chart\ChartEndBlockRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\Chart3DBarShapeRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\EndBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartEndObjectRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartFRTInfoRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\ChartStartBlockRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\StartBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartStartObjectRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\ChartTitleFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AlRunsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtLinkRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\DataLabelExtensionRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DataLabExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DefaultTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\EndRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\FontBasisRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\FbiRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FontXRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FrameRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LegendRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LineFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\NumberFormatIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\IFmtRecordRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectLinkRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PlotAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PlotGrowthRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PosRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\SeriesChartGroupIndexRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesIndexRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\SeriesLabelsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesListRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesTextRecord.cs" />
@@ -1057,6 +1083,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
+    <Folder Include="HSSF\Record\Aggregates\Chart\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

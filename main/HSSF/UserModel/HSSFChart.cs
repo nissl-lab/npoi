@@ -46,7 +46,7 @@ namespace NPOI.HSSF.UserModel
         private ChartRecord chartRecord;
 
         private LegendRecord legendRecord;
-        private ChartTitleFormatRecord chartTitleFormat;
+        private AlRunsRecord chartTitleFormat;
         private SeriesTextRecord chartTitleText;
         private List<ValueRangeRecord> valueRanges = new List<ValueRangeRecord>();
 
@@ -102,7 +102,7 @@ namespace NPOI.HSSF.UserModel
             //		records.Add(CreateBeginRecord());
             // unknown
             //		records.Add(CreateEndRecord());
-            records.Add(CreateSeriesToChartGroupRecord());
+            records.Add(new SerToCrtRecord());
             records.Add(CreateEndRecord());
             records.Add(CreateSheetPropsRecord());
             records.Add(CreateDefaultTextRecord((short)TextFormatInfo.FontScaleNotSet));
@@ -168,10 +168,10 @@ namespace NPOI.HSSF.UserModel
                     lastChart.series.Add(series);
                     lastSeries = series;
                 }
-                else if (r is ChartTitleFormatRecord)
+                else if (r is AlRunsRecord)
                 {
                     lastChart.chartTitleFormat =
-                        (ChartTitleFormatRecord)r;
+                        (AlRunsRecord)r;
                 }
                 else if (r is SeriesTextRecord)
                 {
@@ -398,9 +398,9 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private FontBasisRecord CreateFontBasisRecord1()
+        private FbiRecord CreateFontBasisRecord1()
         {
-            FontBasisRecord r = new FontBasisRecord();
+            FbiRecord r = new FbiRecord();
             r.XBasis = ((short)9120);
             r.YBasis = ((short)5640);
             r.HeightBasis = ((short)200);
@@ -409,9 +409,9 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private FontBasisRecord CreateFontBasisRecord2()
+        private FbiRecord CreateFontBasisRecord2()
         {
-            FontBasisRecord r = CreateFontBasisRecord1();
+            FbiRecord r = CreateFontBasisRecord1();
             r.IndexToFontTable = ((short)6);
             return r;
         }
@@ -490,7 +490,7 @@ namespace NPOI.HSSF.UserModel
             records.Add(CreateBeginRecord());
             records.Add(CreateValueRangeRecord());
             records.Add(CreateTickRecord2());
-            records.Add(CreateAxisLineFormatRecord(AxisLineFormatRecord.AXIS_TYPE_MAJOR_GRID_LINE));
+            records.Add(CreateAxisLineFormatRecord(AxisLineRecord.AXIS_TYPE_MAJOR_GRID_LINE));
             records.Add(CreateLineFormatRecord(false));
             records.Add(CreateEndRecord());
             records.Add(CreatePlotAreaRecord());
@@ -604,9 +604,9 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private AxisLineFormatRecord CreateAxisLineFormatRecord(short format)
+        private AxisLineRecord CreateAxisLineFormatRecord(short format)
         {
-            AxisLineFormatRecord r = new AxisLineFormatRecord();
+            AxisLineRecord r = new AxisLineRecord();
             r.AxisType = (format);
             return r;
         }
@@ -812,10 +812,10 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private SeriesToChartGroupRecord CreateSeriesToChartGroupRecord()
-        {
-            return new SeriesToChartGroupRecord();
-        }
+        //private SeriesToChartGroupRecord CreateSeriesToChartGroupRecord()
+        //{
+        //    return new SeriesToChartGroupRecord();
+        //}
 
         private DataFormatRecord CreateDataFormatRecord()
         {

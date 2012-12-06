@@ -32,6 +32,8 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
+    //
+    [Obsolete("duplication record, see SerToCrtRecord")]
     public class SeriesToChartGroupRecord
        : StandardRecord
     {

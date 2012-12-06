@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record.Chart
     public class BeginRecord : StandardRecord
     {
         public const short sid = 0x1033;
-
+        public static BeginRecord instance = new BeginRecord();
         public BeginRecord()
         {
         }

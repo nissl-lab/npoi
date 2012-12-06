@@ -351,7 +351,7 @@ namespace NPOI.HSSF.Model
             records.Add(new BeginRecord());
             records.Add(CreateValueRangeRecord());
             records.Add(CreateTickRecord2());
-            records.Add(CreateAxisLineFormatRecord(AxisLineFormatRecord.AXIS_TYPE_MAJOR_GRID_LINE));
+            records.Add(CreateAxisLineFormatRecord(AxisLineRecord.AXIS_TYPE_MAJOR_GRID_LINE));
             records.Add(CreateLineFormatRecord(false));
             records.Add(new EndRecord());
             records.Add(CreatePlotAreaRecord());
@@ -393,9 +393,9 @@ namespace NPOI.HSSF.Model
             return r;
         }
 
-        private static AxisLineFormatRecord CreateAxisLineFormatRecord(short format)
+        private static AxisLineRecord CreateAxisLineFormatRecord(short format)
         {
-            AxisLineFormatRecord r = new AxisLineFormatRecord();
+            AxisLineRecord r = new AxisLineRecord();
             r.AxisType = (format);
             return r;
         }
@@ -799,9 +799,9 @@ namespace NPOI.HSSF.Model
         }
 
         
-        private static FontBasisRecord CreateFontBasisRecord1()
+        private static FbiRecord CreateFontBasisRecord1()
         {
-            FontBasisRecord r = new FontBasisRecord();
+            FbiRecord r = new FbiRecord();
             r.XBasis = ((short)9720);
             r.YBasis = ((short)4350);
             r.HeightBasis = ((short)240);
@@ -810,9 +810,9 @@ namespace NPOI.HSSF.Model
             return r;
         }
 
-        private static FontBasisRecord CreateFontBasisRecord2()
+        private static FbiRecord CreateFontBasisRecord2()
         {
-            FontBasisRecord r = CreateFontBasisRecord1();
+            FbiRecord r = CreateFontBasisRecord1();
             r.Scale = 1;
             r.IndexToFontTable = ((short)25);
             return r;
