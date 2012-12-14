@@ -45,8 +45,9 @@ namespace NPOI.HSSF.Record.Chart
         private byte[] unused;
 
         public EndBlockRecord()
-        { 
-        
+        {
+            rt = sid;
+            grbitFrt = 0;
         }
 
         public EndBlockRecord(RecordInputStream in1)
@@ -100,7 +101,7 @@ namespace NPOI.HSSF.Record.Chart
             buffer.Append("    .rt         =").Append(HexDump.ShortToHex(rt)).Append('\n');
             buffer.Append("    .grbitFrt   =").Append(HexDump.ShortToHex(grbitFrt)).Append('\n');
             buffer.Append("    .iObjectKind=").Append(HexDump.ShortToHex(iObjectKind)).Append('\n');
-            buffer.Append("    .unused     =").Append(HexDump.ToHex(unused)).Append('\n');
+            //buffer.Append("    .unused     =").Append(HexDump.ToHex(unused)).Append('\n');
             buffer.Append("[/ENDBLOCK]\n");
             return buffer.ToString();
         }
@@ -115,6 +116,11 @@ namespace NPOI.HSSF.Record.Chart
 
         }
 
-
+        public static EndBlockRecord CreateEndBlock(short objectKind)
+        {
+            EndBlockRecord record = new EndBlockRecord();
+            record.ObjectKind = objectKind;
+            return record;
+        }
     }
 }

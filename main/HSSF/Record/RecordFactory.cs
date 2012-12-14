@@ -250,7 +250,7 @@ namespace NPOI.HSSF.Record
                 typeof(AxisLineRecord),
                 typeof(AxisParentRecord),
                 typeof(AxisRecord),
-                typeof(AxisUsedRecord),
+                typeof(AxesUsedRecord),
                 typeof(BarRecord),
                 typeof(BeginRecord),
                 typeof(BopPopCustomRecord),

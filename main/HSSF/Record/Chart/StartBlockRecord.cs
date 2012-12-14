@@ -30,6 +30,19 @@ namespace NPOI.HSSF.Record.Chart
      */
     public class StartBlockRecord : StandardRecord
     {
+        public static short ObjectKind_AxisGroup = 0;
+        public static short ObjectKind_AttachedLabelRecord = 0x2;
+        public static short ObjectKind_Axis = 0x4;
+        public static short ObjectKind_ChartGroup = 0x5;
+        public static short ObjectKind_DatRecord = 0x6;
+        public static short ObjectKind_Frame = 0x7;
+        public static short ObjectKind_Legend = 0x9;
+        public static short ObjectKind_LegendException = 0xA;
+        public static short ObjectKind_Series = 0xC;
+        public static short ObjectKind_Sheet = 0xD;
+        public static short ObjectKind_DataFormatRecord = 0xE;
+        public static short ObjectKind_DropBarRecord = 0xF;
+
         public static short sid = 0x0852;
 
         private short rt;
@@ -64,7 +77,10 @@ namespace NPOI.HSSF.Record.Chart
         }
 
         public StartBlockRecord()
-        { }
+        {
+            rt = sid;
+            grbitFrt = 0;
+        }
         
         public StartBlockRecord(RecordInputStream in1)
         {
@@ -129,6 +145,32 @@ namespace NPOI.HSSF.Record.Chart
             record.iObjectInstance2 = iObjectInstance2;
             return record;
         }
+        
+        public static StartBlockRecord CreateStartBlock(short objectKind)
+        {
+            return CreateStartBlock(objectKind, 0, 0, 0);
+        }
 
+        public static StartBlockRecord CreateStartBlock(short objectKind, short objectContext)
+        {
+            return CreateStartBlock(objectKind, objectContext, 0, 0);
+        }
+
+        public static StartBlockRecord CreateStartBlock(short objectKind, short objectContext,
+            short objectInstance1)
+        {
+            return CreateStartBlock(objectKind, objectContext, objectInstance1, 0);
+        }
+
+        public static StartBlockRecord CreateStartBlock(short objectKind, short objectContext,
+            short objectInstance1, short objectInstance2)
+        {
+            StartBlockRecord record = new StartBlockRecord();
+            record.ObjectKind = objectKind;
+            record.ObjectContext = objectContext;
+            record.ObjectInstance1 = objectInstance1;
+            record.ObjectInstance2 = objectInstance2;
+            return record;
+        }
     }
 }

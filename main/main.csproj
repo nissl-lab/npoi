@@ -54,6 +54,31 @@
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Model\InternalChart.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\AttachedLabelAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\AxesAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\AxisParentAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\AXMAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\AXSAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\ChartFormatsAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\ChartRecordAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\ChartSheetAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\CRTAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\CrtMlFrtAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\DatAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\DFTTextAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\DropBarAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\DVAxisAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\FontListAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\FrameAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\GelFrameAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\IVAxisAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\LDAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\SeriesAxisAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\SeriesDataAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\SeriesFormatAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\ShapePropsAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\SSAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\TextPropsAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
     <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs">
       <SubType>Code</SubType>
@@ -263,7 +288,7 @@
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BarRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BeginRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
@@ -1083,7 +1108,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
-    <Folder Include="HSSF\Record\Aggregates\Chart\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

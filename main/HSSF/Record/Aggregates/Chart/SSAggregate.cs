@@ -1,8 +1,25 @@
-﻿using System;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record.Chart;
+using System.Diagnostics;
 
 namespace NPOI.HSSF.Record.Aggregates.Chart
 {
@@ -10,7 +27,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// SS = DataFormat Begin [Chart3DBarShape] [LineFormat AreaFormat PieFormat] [SerFmt] 
     /// [GELFRAME] [MarkerFormat] [AttachedLabel] *2SHAPEPROPS [CRTMLFRT] End
     /// </summary>
-    public class SSAggregate : RecordAggregate
+    public class SSAggregate : ChartRecordAggregate
     {
         private DataFormatRecord dataFormat = null;
         private Chart3DBarShapeRecord chart3DBarShape = null;
@@ -24,40 +41,48 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         private ShapePropsAggregate shapeProps1 = null;
         private ShapePropsAggregate shapeProps2 = null;
         private CrtMlFrtAggregate crtMlFrt = null;
-        public SSAggregate(RecordStream rs)
+
+        public DataFormatRecord DataFormat
+        {
+            get { return dataFormat; }
+        }
+
+        public SSAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_SS, container)
         {
             dataFormat = (DataFormatRecord)rs.GetNext();
             rs.GetNext();
-            if (rs.PeekNextSid() == Chart3DBarShapeRecord.sid)
+            if (rs.PeekNextChartSid() == Chart3DBarShapeRecord.sid)
                 chart3DBarShape = (Chart3DBarShapeRecord)rs.GetNext();
-            if (rs.PeekNextSid() == LineFormatRecord.sid)
+            if (rs.PeekNextChartSid() == LineFormatRecord.sid)
             {
                 lineFormat = (LineFormatRecord)rs.GetNext();
                 areaFormat = (AreaFormatRecord)rs.GetNext();
                 pieFormat = (PieFormatRecord)rs.GetNext();
             }
-            if(rs.PeekNextSid()==SerFmtRecord.sid)
+            if(rs.PeekNextChartSid()==SerFmtRecord.sid)
                 serFmt = (SerFmtRecord)rs.GetNext();
 
-            if (rs.PeekNextSid() == GelFrameRecord.sid)
-                gelFrame = new GelFrameAggregate(rs);
+            if (rs.PeekNextChartSid() == GelFrameRecord.sid)
+                gelFrame = new GelFrameAggregate(rs, this);
 
-            if (rs.PeekNextSid() == MarkerFormatRecord.sid)
+            if (rs.PeekNextChartSid() == MarkerFormatRecord.sid)
                 markerFormat = (MarkerFormatRecord)rs.GetNext();
 
-            if (rs.PeekNextSid() == AttachedLabelRecord.sid)
+            if (rs.PeekNextChartSid() == AttachedLabelRecord.sid)
                 attachedLabel = (AttachedLabelRecord)rs.GetNext();
 
-            if (rs.PeekNextSid() == ShapePropsStreamRecord.sid)
-                shapeProps1 = new ShapePropsAggregate(rs);
+            if (rs.PeekNextChartSid() == ShapePropsStreamRecord.sid)
+                shapeProps1 = new ShapePropsAggregate(rs, this);
 
-            if (rs.PeekNextSid() == ShapePropsStreamRecord.sid)
-                shapeProps2 = new ShapePropsAggregate(rs);
+            if (rs.PeekNextChartSid() == ShapePropsStreamRecord.sid)
+                shapeProps2 = new ShapePropsAggregate(rs, this);
 
-            if (rs.PeekNextSid() == CrtMlFrtRecord.sid)
-                crtMlFrt = new CrtMlFrtAggregate(rs);
+            if (rs.PeekNextChartSid() == CrtMlFrtRecord.sid)
+                crtMlFrt = new CrtMlFrtAggregate(rs, this);
 
-            rs.GetNext();
+            Record r = rs.GetNext();//EndRecord
+            Debug.Assert(r.GetType() == typeof(EndRecord));
         }
 
         public override void VisitContainedRecords(RecordVisitor rv)
@@ -90,6 +115,8 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
                 shapeProps2.VisitContainedRecords(rv);
             if (crtMlFrt != null)
                 crtMlFrt.VisitContainedRecords(rv);
+
+            WriteEndBlock(rv);
             rv.VisitRecord(EndRecord.instance);
         }
     }

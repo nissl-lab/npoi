@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
+    using NPOI.HSSF.Record.Aggregates.Chart;
 
     /// <summary>
     /// Low level model implementation of a Sheet (one workbook Contains many sheets)
@@ -289,6 +290,7 @@ namespace NPOI.HSSF.Model
                 if (recSid == BOFRecord.sid)
                 {
                     ChartSubstreamRecordAggregate chartAgg = new ChartSubstreamRecordAggregate(rs);
+                    //ChartSheetAggregate chartAgg = new ChartSheetAggregate(rs, null);
                     //if (false)
                     //{
                     // TODO - would like to keep the chart aggregate packed, but one unit test needs attention

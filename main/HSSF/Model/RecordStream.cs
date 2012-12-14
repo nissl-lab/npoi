@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Model
     using System;
     using System.Collections;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.Record.Chart;
 
     /// <summary>
     /// Simplifies iteration over a sequence of Record objects.
@@ -99,6 +100,33 @@ namespace NPOI.HSSF.Model
         public int GetCountRead()
         {
             return _countRead;
+        }
+
+        public int PeekNextChartSid()
+        {
+            if (!HasNext())
+            {
+                return -1;
+            }
+
+            while (PeekNextSid() == StartBlockRecord.sid || PeekNextSid() == EndBlockRecord.sid)
+            {
+                GetNext();
+            }
+            return PeekNextSid();
+        }
+        public void FindChartSubStream()
+        {
+            while (PeekNextSid() > -1)
+            {
+                Record r = GetNext();
+                if (r.Sid == BOFRecord.sid && (r as BOFRecord).Type == BOFRecord.TYPE_CHART)
+                {
+                    _nextIndex--;
+                    _countRead--;
+                    break;
+                }
+            }
         }
     }
 }

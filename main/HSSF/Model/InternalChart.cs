@@ -305,9 +305,9 @@ namespace NPOI.HSSF.Model
             records.Add(new EOFRecord());
             return retval;
         }
-        private static AxisUsedRecord CreateAxisUsedRecord(short numAxis)
+        private static AxesUsedRecord CreateAxisUsedRecord(short numAxis)
         {
-            AxisUsedRecord r = new AxisUsedRecord();
+            AxesUsedRecord r = new AxesUsedRecord();
             r.NumAxis = (numAxis);
             return r;
         }

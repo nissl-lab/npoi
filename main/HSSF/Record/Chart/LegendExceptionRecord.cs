@@ -56,5 +56,10 @@ namespace NPOI.HSSF.Record.Chart
         {
             get { return sid; }
         }
+        public short LegendEntry
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
     }
 }

@@ -26,16 +26,17 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// <summary>
     /// CRTMLFRT = CrtMlFrt *CrtMlFrtContinue
     /// </summary>
-    public class CrtMlFrtAggregate : RecordAggregate
+    public class CrtMlFrtAggregate : ChartRecordAggregate
     {
         private CrtMlFrtRecord crtmlFrt = null;
         private List<CrtMlFrtContinueRecord> continues = new List<CrtMlFrtContinueRecord>();
-        public CrtMlFrtAggregate(RecordStream rs)
+        public CrtMlFrtAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_CRTMLFRT, container)
         {
             crtmlFrt = (CrtMlFrtRecord)rs.GetNext();
-            if (rs.PeekNextSid() == CrtMlFrtContinueRecord.sid)
+            if (rs.PeekNextChartSid() == CrtMlFrtContinueRecord.sid)
             {
-                while (rs.PeekNextSid() == CrtMlFrtContinueRecord.sid)
+                while (rs.PeekNextChartSid() == CrtMlFrtContinueRecord.sid)
                 {
                     continues.Add((CrtMlFrtContinueRecord)rs.GetNext());
                 }
@@ -43,6 +44,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         }
         public override void VisitContainedRecords(RecordVisitor rv)
         {
+            WriteStartBlock(rv);
             rv.VisitRecord(crtmlFrt);
             foreach (CrtMlFrtContinueRecord cr in continues)
                 rv.VisitRecord(cr);

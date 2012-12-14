@@ -709,9 +709,9 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private AxisUsedRecord CreateAxisUsedRecord(short numAxis)
+        private AxesUsedRecord CreateAxisUsedRecord(short numAxis)
         {
-            AxisUsedRecord r = new AxisUsedRecord();
+            AxesUsedRecord r = new AxesUsedRecord();
             r.NumAxis = (numAxis);
             return r;
         }

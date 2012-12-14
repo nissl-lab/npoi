@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.HSSF.Model;
@@ -10,7 +26,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// AXS = [IFmtRecord] [Tick] [FontX] *4(AxisLine LineFormat) [AreaFormat] 
     /// [GELFRAME] *4SHAPEPROPS [TextPropsStream *ContinueFrt12]
     /// </summary>
-    public class AXSAggregate : RecordAggregate
+    public class AXSAggregate : ChartRecordAggregate
     {
         private IFmtRecordRecord ifmt = null;
         private TickRecord tick = null;
@@ -23,39 +39,40 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         private TextPropsStreamRecord textProps = null;
         private List<ContinueFrt12Record> continues = new List<ContinueFrt12Record>();
 
-        public AXSAggregate(RecordStream rs)
+        public AXSAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_AXS, container) 
         {
-            if (rs.PeekNextSid() == IFmtRecordRecord.sid)
+            if (rs.PeekNextChartSid() == IFmtRecordRecord.sid)
                 ifmt = (IFmtRecordRecord)rs.GetNext();
-            if (rs.PeekNextSid() == IFmtRecordRecord.sid)
+            if (rs.PeekNextChartSid() == TickRecord.sid)
                 tick = (TickRecord)rs.GetNext();
-            if (rs.PeekNextSid() == FontXRecord.sid)
+            if (rs.PeekNextChartSid() == FontXRecord.sid)
                 fontx = (FontXRecord)rs.GetNext();
-            if (rs.PeekNextSid() == AxisLineRecord.sid)
+            if (rs.PeekNextChartSid() == AxisLineRecord.sid)
             {
-                while (rs.PeekNextSid() == AxisLineRecord.sid)
+                while (rs.PeekNextChartSid() == AxisLineRecord.sid)
                 {
                     axisLines.Add((AxisLineRecord)rs.GetNext());
                     lineFormats.Add((LineFormatRecord)rs.GetNext());
                 }
             }
 
-            if (rs.PeekNextSid() == AreaFormatRecord.sid)
+            if (rs.PeekNextChartSid() == AreaFormatRecord.sid)
                 areaFormat = (AreaFormatRecord)rs.GetNext();
 
-            if (rs.PeekNextSid() == GelFrameRecord.sid)
-                gelFrame = new GelFrameAggregate(rs);
-            if (rs.PeekNextSid() == ShapePropsStreamRecord.sid)
+            if (rs.PeekNextChartSid() == GelFrameRecord.sid)
+                gelFrame = new GelFrameAggregate(rs, this);
+            if (rs.PeekNextChartSid() == ShapePropsStreamRecord.sid)
             {
-                while (rs.PeekNextSid() == ShapePropsStreamRecord.sid)
+                while (rs.PeekNextChartSid() == ShapePropsStreamRecord.sid)
                 {
-                    shapes.Add(new ShapePropsAggregate(rs));
+                    shapes.Add(new ShapePropsAggregate(rs,this));
                 }
             }
-            if (rs.PeekNextSid() == TextPropsStreamRecord.sid)
+            if (rs.PeekNextChartSid() == TextPropsStreamRecord.sid)
             {
                 textProps = (TextPropsStreamRecord)rs.GetNext();
-                while (rs.PeekNextSid() == ContinueFrt12Record.sid)
+                while (rs.PeekNextChartSid() == ContinueFrt12Record.sid)
                 {
                     continues.Add((ContinueFrt12Record)rs.GetNext());
                 }

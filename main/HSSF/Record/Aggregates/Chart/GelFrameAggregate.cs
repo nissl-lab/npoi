@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record.Chart;
+using System.Diagnostics;
 
 namespace NPOI.HSSF.Record.Aggregates.Chart
 {
@@ -26,33 +27,35 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// GELFRAME = 1*2GelFrame *Continue [PICF]
     /// PICF = Begin PicF End
     /// </summary>
-    public class GelFrameAggregate : RecordAggregate
+    public class GelFrameAggregate : ChartRecordAggregate
     {
         private GelFrameRecord gelFrame1;
         private GelFrameRecord gelFrame2;
         private List<ContinueRecord> continues = new List<ContinueRecord>();
         private PicFRecord picF;
-        public GelFrameAggregate(RecordStream rs)
+        public GelFrameAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_GELFRAME, container)
         {
             gelFrame1 = (GelFrameRecord)rs.GetNext();
-            int sid = rs.PeekNextSid();
+            int sid = rs.PeekNextChartSid();
             if (sid == GelFrameRecord.sid)
             {
                 gelFrame2 = (GelFrameRecord)rs.GetNext();
-                sid = rs.PeekNextSid();
+                sid = rs.PeekNextChartSid();
             }
             if (sid == ContinueRecord.sid)
             {
-                while (rs.PeekNextSid() == ContinueRecord.sid)
+                while (rs.PeekNextChartSid() == ContinueRecord.sid)
                 {
                     continues.Add((ContinueRecord)rs.GetNext());
                 }
             }
-            if (rs.PeekNextSid() == BeginRecord.sid)
+            if (rs.PeekNextChartSid() == BeginRecord.sid)
             {
                 rs.GetNext();
                 picF = (PicFRecord)rs.GetNext();
-                rs.GetNext();
+                Record r = rs.GetNext();//EndRecord
+                Debug.Assert(r.GetType() == typeof(EndRecord));
             }
         }
         public override void VisitContainedRecords(RecordVisitor rv)

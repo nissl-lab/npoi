@@ -24,21 +24,22 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// <summary>
     /// TEXTPROPS = (RichTextStream / TextPropsStream) *ContinueFrt12
     /// </summary>
-    public class TextPropsAggregate : RecordAggregate
+    public class TextPropsAggregate : ChartRecordAggregate
     {
         private TextPropsStreamRecord textPropsStream = null;
         private RichTextStreamRecord richTextStream = null;
         private List<ContinueFrt12Record> continues = new List<ContinueFrt12Record>();
-        public TextPropsAggregate(RecordStream rs)
+        public TextPropsAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_TEXTPROPS, container)
         {
-            if (rs.PeekNextSid() == TextPropsStreamRecord.sid)
+            if (rs.PeekNextChartSid() == TextPropsStreamRecord.sid)
                 textPropsStream = (TextPropsStreamRecord)rs.GetNext();
             else
                 richTextStream = (RichTextStreamRecord)rs.GetNext();
 
-            if (rs.PeekNextSid() == ContinueFrt12Record.sid)
+            if (rs.PeekNextChartSid() == ContinueFrt12Record.sid)
             {
-                while (rs.PeekNextSid() == ContinueFrt12Record.sid)
+                while (rs.PeekNextChartSid() == ContinueFrt12Record.sid)
                 {
                     continues.Add((ContinueFrt12Record)rs.GetNext());
                 }
@@ -46,6 +47,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         }
         public override void VisitContainedRecords(RecordVisitor rv)
         {
+            WriteStartBlock(rv);
             if(textPropsStream!=null)
                 rv.VisitRecord(textPropsStream);
             if (richTextStream != null)

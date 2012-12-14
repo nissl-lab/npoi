@@ -254,7 +254,7 @@
     <Compile Include="HSSF\Record\Chart\TestAxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestAxisUsedRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestAxesUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestBarRecord.cs" />
     <Compile Include="HSSF\Record\TestBOFRecord.cs" />
     <Compile Include="HSSF\Record\TestBoundSheetRecord.cs" />
@@ -404,6 +404,7 @@
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
     <Compile Include="HSSF\Model\TestShapes.cs" />
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
+    <Compile Include="HSSF\Record\Aggregates\Chart\TestChartSheetAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />
     <Compile Include="HSSF\Record\Chart\TestChartFormatRecord.cs" />

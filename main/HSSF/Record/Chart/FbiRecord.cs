@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record.Chart
      */
     //public class FontBasisRecord
     /// <summary>
-    /// The Fbi record specifies the font information at the time the scalable font is added to the chart.<79>
+    /// The Fbi record specifies the font information at the time the scalable font is added to the chart.
     /// </summary>
     public class FbiRecord
        : StandardRecord

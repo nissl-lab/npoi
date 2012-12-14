@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.HSSF.Model;
@@ -11,7 +27,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// RadarArea / Surf) CrtLink [SeriesList] [Chart3d] [LD] [2DROPBAR] *4(CrtLine LineFormat) 
     /// *2DFTTEXT [DataLabExtContents] [SS] *4SHAPEPROPS End
     /// </summary>
-    public class CRTAggregate : RecordAggregate
+    public class CRTAggregate : ChartRecordAggregate
     {
         private ChartFormatRecord chartForamt = null;
         private Record chartTypeRecord = null;
@@ -29,46 +45,48 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         private SSAggregate ss = null;
         private List<ShapePropsAggregate> shapeList = new List<ShapePropsAggregate>();
 
-        public CRTAggregate(RecordStream rs)
+        public CRTAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_CRT, container)
         {
+            
             chartForamt = (ChartFormatRecord)rs.GetNext();
             rs.GetNext();
 
             chartTypeRecord = rs.GetNext();
-            if (rs.PeekNextSid() == BopPopCustomRecord.sid)
+            if (rs.PeekNextChartSid() == BopPopCustomRecord.sid)
                 bopPopCustom = (BopPopCustomRecord)rs.GetNext();
             crtLink = (CrtLinkRecord)rs.GetNext();
-            if (rs.PeekNextSid() == SeriesListRecord.sid)
+            if (rs.PeekNextChartSid() == SeriesListRecord.sid)
                 seriesList = (SeriesListRecord)rs.GetNext();
-            if (rs.PeekNextSid() == Chart3dRecord.sid)
+            if (rs.PeekNextChartSid() == Chart3dRecord.sid)
                 chart3d = (Chart3dRecord)rs.GetNext();
-            if (rs.PeekNextSid() == LegendRecord.sid)
-                ld = new LDAggregate(rs);
-            if (rs.PeekNextSid() == DropBarRecord.sid)
+            if (rs.PeekNextChartSid() == LegendRecord.sid)
+                ld = new LDAggregate(rs, this);
+            if (rs.PeekNextChartSid() == DropBarRecord.sid)
             {
-                dropBar1 = new DropBarAggregate(rs);
-                dropBar2 = new DropBarAggregate(rs);
+                dropBar1 = new DropBarAggregate(rs, this);
+                dropBar2 = new DropBarAggregate(rs, this);
             }
 
-            while (rs.PeekNextSid() == CrtLineRecord.sid)
+            while (rs.PeekNextChartSid() == CrtLineRecord.sid)
             {
                 dicLines.Add((CrtLineRecord)rs.GetNext(), (LineFormatRecord)rs.GetNext());
             }
-            if (rs.PeekNextSid() == DataLabExtRecord.sid || rs.PeekNextSid() == DefaultTextRecord.sid)
+            if (rs.PeekNextChartSid() == DataLabExtRecord.sid || rs.PeekNextChartSid() == DefaultTextRecord.sid)
             {
-                dft1 = new DFTTextAggregate(rs);
-                if (rs.PeekNextSid() == DataLabExtRecord.sid || rs.PeekNextSid() == DefaultTextRecord.sid)
+                dft1 = new DFTTextAggregate(rs, this);
+                if (rs.PeekNextChartSid() == DataLabExtRecord.sid || rs.PeekNextChartSid() == DefaultTextRecord.sid)
                 {
-                    dft2 = new DFTTextAggregate(rs);
+                    dft2 = new DFTTextAggregate(rs, this);
                 }
             }
-            if (rs.PeekNextSid() == DataLabExtContentsRecord.sid)
+            if (rs.PeekNextChartSid() == DataLabExtContentsRecord.sid)
                 dataLabExtContents = (DataLabExtContentsRecord)rs.GetNext();
 
-            if (rs.PeekNextSid() == DataFormatRecord.sid)
-                ss = new SSAggregate(rs);
-            while (rs.PeekNextSid() == ShapePropsStreamRecord.sid)
-                shapeList.Add(new ShapePropsAggregate(rs));
+            if (rs.PeekNextChartSid() == DataFormatRecord.sid)
+                ss = new SSAggregate(rs, this);
+            while (rs.PeekNextChartSid() == ShapePropsStreamRecord.sid)
+                shapeList.Add(new ShapePropsAggregate(rs, this));
 
             rs.GetNext();
         }
@@ -111,8 +129,8 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
                 ss.VisitContainedRecords(rv);
             foreach (ShapePropsAggregate shape in shapeList)
                 shape.VisitContainedRecords(rv);
-                
 
+            WriteEndBlock(rv);
             rv.VisitRecord(EndRecord.instance);
         }
     }

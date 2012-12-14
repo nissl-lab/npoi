@@ -1,8 +1,25 @@
-﻿using System;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) Under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You Under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed Under the License is distributed on an "AS Is" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations Under the License.
+==================================================================== */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record.Chart;
+using System.Diagnostics;
 
 namespace NPOI.HSSF.Record.Aggregates.Chart
 {
@@ -10,7 +27,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// ATTACHEDLABEL = Text Begin Pos [FontX] [AlRuns] AI [FRAME] [ObjectLink] [DataLabExtContents] [CrtLayout12] [TEXTPROPS] [CRTMLFRT] End
     /// AI = BRAI [SeriesText]
     /// </summary>
-    public class AttachedLabelAggregate : RecordAggregate
+    public class AttachedLabelAggregate : ChartRecordAggregate
     {
         private TextRecord text = null;
         private PosRecord pos = null;
@@ -24,49 +41,66 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         private CrtLayout12Record crtLayout = null;
         private TextPropsAggregate textProps = null;
         private CrtMlFrtAggregate crtMlFrt = null;
-        public AttachedLabelAggregate(RecordStream rs)
+
+        public bool IsFirst
         {
+            get;
+            set;
+        }
+
+        public ObjectLinkRecord ObjectLink
+        {
+            get { return objectLink; }
+        }
+
+        public AttachedLabelAggregate(RecordStream rs, ChartRecordAggregate container)
+            : base(RuleName_ATTACHEDLABEL, container)
+        {
+            ChartSheetAggregate cs = GetContainer<ChartSheetAggregate>(ChartRecordAggregate.RuleName_CHARTSHEET);
+            IsFirst = cs.AttachLabelCount == 0;
+            cs.AttachLabelCount++;
             text = (TextRecord)rs.GetNext();
             rs.GetNext();//BeginRecord
             pos = (PosRecord)rs.GetNext();
-            if (rs.PeekNextSid() == FontXRecord.sid)
+            if (rs.PeekNextChartSid() == FontXRecord.sid)
             {
                 fontX = (FontXRecord)rs.GetNext();
             }
-            if (rs.PeekNextSid() == AlRunsRecord.sid)
+            if (rs.PeekNextChartSid() == AlRunsRecord.sid)
             {
                 alRuns = (AlRunsRecord)rs.GetNext();
             }
             brai = (BRAIRecord)rs.GetNext();
-            if (rs.PeekNextSid() == SeriesTextRecord.sid)
+            if (rs.PeekNextChartSid() == SeriesTextRecord.sid)
             {
                 seriesText = (SeriesTextRecord)rs.GetNext();
             }
-            if (rs.PeekNextSid() == FrameRecord.sid)
+            if (rs.PeekNextChartSid() == FrameRecord.sid)
             {
-                frame = new FrameAggregate(rs);
+                frame = new FrameAggregate(rs, this);
             }
-            if (rs.PeekNextSid() == ObjectLinkRecord.sid)
+            if (rs.PeekNextChartSid() == ObjectLinkRecord.sid)
             {
                 objectLink = (ObjectLinkRecord)rs.GetNext();
             }
-            if (rs.PeekNextSid() == DataLabExtContentsRecord.sid)
+            if (rs.PeekNextChartSid() == DataLabExtContentsRecord.sid)
             {
                 dataLab = (DataLabExtContentsRecord)rs.GetNext();
             }
-            if (rs.PeekNextSid() == CrtLayout12Record.sid)
+            if (rs.PeekNextChartSid() == CrtLayout12Record.sid)
             {
                 crtLayout = (CrtLayout12Record)rs.GetNext();
             }
-            if (rs.PeekNextSid() == FrameRecord.sid)
+            if (rs.PeekNextChartSid() == TextPropsStreamRecord.sid)
             {
-                textProps = new TextPropsAggregate(rs);
+                textProps = new TextPropsAggregate(rs, this);
             }
-            if (rs.PeekNextSid() == FrameRecord.sid)
+            if (rs.PeekNextChartSid() == CrtMlFrtRecord.sid)
             {
-                crtMlFrt = new CrtMlFrtAggregate(rs);
+                crtMlFrt = new CrtMlFrtAggregate(rs, this);
             }
-            rs.GetNext();//EndRecord
+            Record r = rs.GetNext();//EndRecord
+            Debug.Assert(r.GetType() == typeof(EndRecord));
         }
         public override void VisitContainedRecords(RecordVisitor rv)
         {
@@ -103,6 +137,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             if (crtMlFrt != null)
                 crtMlFrt.VisitContainedRecords(rv);
 
+            WriteEndBlock(rv);
             rv.VisitRecord(EndRecord.instance);
         }
     }

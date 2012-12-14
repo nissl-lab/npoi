@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record.Chart
     /// or text in the attached label. These text properties are a superset of the 
     /// properties stored in the Text, Font, FontX, BRAI, and ObjectLink records based 
     /// on the following table, as specified by the Chart Sheet Substream ABNF. In each 
-    /// case, the associated Font record is specified by the associated FontX record. <108>
+    /// case, the associated Font record is specified by the associated FontX record. 
     /// </summary>
     /// <remarks>
     /// author: Antony liu (antony.apollo at gmail.com)

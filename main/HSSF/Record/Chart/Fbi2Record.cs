@@ -5,7 +5,7 @@ using System.Text;
 namespace NPOI.HSSF.Record.Chart
 {
     /// <summary>
-    /// The Fbi2 record specifies the font information at the time the scalable font is added to the chart.<80>
+    /// The Fbi2 record specifies the font information at the time the scalable font is added to the chart.
     /// </summary>
     /// <remarks>
     /// author: Antony liu (antony.apollo at gmail.com)
