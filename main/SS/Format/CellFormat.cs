@@ -25,13 +25,6 @@ namespace NPOI.SS.Format
     using System.Windows.Forms;
     using System.Drawing;
 
-
-
-
-
-
-
-
     /**
      * Format a value according to the standard Excel behavior.  This "standard" is
      * not explicitly documented by Microsoft, so the behavior is determined by
@@ -80,11 +73,26 @@ namespace NPOI.SS.Format
         private CellFormatPart zeroNumFmt;
         private CellFormatPart negNumFmt;
         private CellFormatPart textFmt;
+        private int formatPartCount;
 
         private static Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
         private static CellFormatPart DEFAULT_TEXT_FORMAT =
                 new CellFormatPart("@");
+
+        /*
+         * Cells that cannot be formatted, e.g. cells that have a date or time
+         * format and have an invalid date or time value, are displayed as 255
+         * pound signs ("#").
+         */
+        private static String INVALID_VALUE_FOR_FORMAT =
+                "###################################################" +
+                "###################################################" +
+                "###################################################" +
+                "###################################################" +
+                "###################################################";
+
+        private static String QUOTE = "\"";
 
         private static CellFormat GENERAL_FORMAT = new GeneralCellFormat();
         /**
@@ -99,20 +107,7 @@ namespace NPOI.SS.Format
             }
             public override CellFormatResult Apply(Object value)
             {
-                String text;
-                if (value == null)
-                {
-                    text = "";
-                }
-                else if (value.GetType().IsPrimitive/* is Number*/)
-                {
-                    throw new NotImplementedException();
-                    //text = CellNumberFormatter.SIMPLE_NUMBER.Format(value);
-                }
-                else
-                {
-                    text = value.ToString();
-                }
+                String text = (new CellGeneralFormatter()).Format(value);
                 return new CellFormatResult(true, text, Color.Empty);
             }
         }
@@ -136,7 +131,7 @@ namespace NPOI.SS.Format
                 fmt = formatCache[format];
             if (fmt == null)
             {
-                if (format.Equals("General"))
+                if (format.Equals("General") || format.Equals("@"))
                     fmt = GENERAL_FORMAT;
                 else
                     fmt = new CellFormat(format);
@@ -157,7 +152,7 @@ namespace NPOI.SS.Format
             List<CellFormatPart> parts = new List<CellFormatPart>();
 
             //while (m.Success)
-            foreach(Match m in mc)
+            foreach (Match m in mc)
             {
                 try
                 {
@@ -176,29 +171,32 @@ namespace NPOI.SS.Format
                     parts.Add(null);
                 }
             }
-
-            switch (parts.Count)
+            formatPartCount = parts.Count;
+            switch (formatPartCount)
             {
                 case 1:
-                    posNumFmt = zeroNumFmt = negNumFmt = parts[(0)];
+                    posNumFmt = parts[(0)];
+                    negNumFmt = null;
+                    zeroNumFmt = null;
                     textFmt = DEFAULT_TEXT_FORMAT;
                     break;
                 case 2:
-                    posNumFmt = zeroNumFmt = parts[0];
+                    posNumFmt = parts[0];
                     negNumFmt = parts[1];
+                    zeroNumFmt = null;
                     textFmt = DEFAULT_TEXT_FORMAT;
                     break;
                 case 3:
                     posNumFmt = parts[0];
-                    zeroNumFmt = parts[1];
-                    negNumFmt = parts[2];
+                    negNumFmt = parts[1];
+                    zeroNumFmt = parts[2];
                     textFmt = DEFAULT_TEXT_FORMAT;
                     break;
                 case 4:
                 default:
                     posNumFmt = parts[0];
-                    zeroNumFmt = parts[1];
-                    negNumFmt = parts[2];
+                    negNumFmt = parts[1];
+                    zeroNumFmt = parts[2];
                     textFmt = parts[3];
                     break;
             }
@@ -215,23 +213,57 @@ namespace NPOI.SS.Format
          */
         public virtual CellFormatResult Apply(Object value)
         {
-            if (value.GetType().IsPrimitive/* is Number*/)
+            double val ;
+            //if (value is Number) {
+            if (double.TryParse(value.ToString(), out val))
             {
-                double num = (double)value;
-                double val = num;
-                if (val > 0)
-                    return posNumFmt.Apply(value);
-                else if (val < 0)
+                if (val < 0 &&
+                    ((formatPartCount == 2
+                            && !posNumFmt.HasCondition && !negNumFmt.HasCondition)
+                    || (formatPartCount == 3 && !negNumFmt.HasCondition)
+                    || (formatPartCount == 4 && !negNumFmt.HasCondition)))
+                {
+                    // The negative number format has the negative formatting required,
+                    // e.g. minus sign or brackets, so pass a positive value so that
+                    // the default leading minus sign is not also output
                     return negNumFmt.Apply(-val);
+                }
                 else
-                    return zeroNumFmt.Apply(value);
+                {
+                    return GetApplicableFormatPart(val).Apply(val);
+                }
+            }
+            else if (value is DateTime)
+            {
+                // Don't know (and can't get) the workbook date windowing (1900 or 1904)
+                // so assume 1900 date windowing
+                Double numericValue = DateUtil.GetExcelDate((DateTime)value);
+                if (DateUtil.IsValidExcelDate(numericValue))
+                {
+                    return GetApplicableFormatPart(numericValue).Apply(value);
+                }
+                else
+                {
+                    throw new ArgumentException("value not a valid Excel date");
+                }
             }
             else
             {
                 return textFmt.Apply(value);
             }
         }
-
+        /**
+         * Returns the result of applying the format to the given date.
+         *
+         * @param date         The date.
+         * @param numericValue The numeric value for the date.
+         *
+         * @return The result, in a {@link CellFormatResult}.
+         */
+        private CellFormatResult Apply(DateTime date, double numericValue)
+        {
+            return GetApplicableFormatPart(numericValue).Apply(date);
+        }
         /**
          * Fetches the appropriate value from the cell, and returns the result of
          * Applying it to the appropriate format.  For formula cells, the computed
@@ -248,9 +280,24 @@ namespace NPOI.SS.Format
                 case CellType.BLANK:
                     return Apply("");
                 case CellType.BOOLEAN:
-                    return Apply(c.BooleanCellValue.ToString());
+                    return Apply(c.BooleanCellValue);
                 case CellType.NUMERIC:
-                    return Apply(c.NumericCellValue);
+                    Double value = c.NumericCellValue;
+                    if (GetApplicableFormatPart(value).CellFormatType == CellFormatType.DATE)
+                    {
+                        if (DateUtil.IsValidExcelDate(value))
+                        {
+                            return Apply(c.DateCellValue, value);
+                        }
+                        else
+                        {
+                            return Apply(INVALID_VALUE_FOR_FORMAT);
+                        }
+                    }
+                    else
+                    {
+                        return Apply(value);
+                    }
                 case CellType.STRING:
                     return Apply(c.StringCellValue);
                 default:
@@ -277,7 +324,26 @@ namespace NPOI.SS.Format
             }
             return result;
         }
-
+        /**
+     * Uses the result of applying this format to the given date, setting the text
+     * and color of a label before returning the result.
+     *
+     * @param label        The label to apply to.
+     * @param date         The date.
+     * @param numericValue The numeric value for the date.
+     *
+     * @return The result, in a {@link CellFormatResult}.
+     */
+        private CellFormatResult Apply(Label label, DateTime date, double numericValue)
+        {
+            CellFormatResult result = Apply(date, numericValue);
+            label.Text = (result.Text);
+            if (result.TextColor != Color.Empty)
+            {
+                label.ForeColor = (result.TextColor);
+            }
+            return result;
+        }
         /**
          * Fetches the appropriate value from the cell, and uses the result, Setting
          * the text and color of a label before returning the result.
@@ -294,16 +360,102 @@ namespace NPOI.SS.Format
                 case CellType.BLANK:
                     return Apply(label, "");
                 case CellType.BOOLEAN:
-                    return Apply(c.BooleanCellValue.ToString());
+                    return Apply(label, c.BooleanCellValue);
                 case CellType.NUMERIC:
-                    return Apply(label, c.NumericCellValue);
+                    Double value = c.NumericCellValue;
+                    if (GetApplicableFormatPart(value).CellFormatType == CellFormatType.DATE)
+                    {
+                        if (DateUtil.IsValidExcelDate(value))
+                        {
+                            return Apply(label, c.DateCellValue, value);
+                        }
+                        else
+                        {
+                            return Apply(label, INVALID_VALUE_FOR_FORMAT);
+                        }
+                    }
+                    else
+                    {
+                        return Apply(label, value);
+                    }
                 case CellType.STRING:
                     return Apply(label, c.StringCellValue);
                 default:
                     return Apply(label, "?");
             }
         }
+        /**
+         * Returns the {@link CellFormatPart} that applies to the value.  Result
+         * depends on how many parts the cell format has, the cell value and any
+         * conditions.  The value must be a {@link Number}.
+         * 
+         * @param value The value.
+         * @return The {@link CellFormatPart} that applies to the value.
+         */
+        private CellFormatPart GetApplicableFormatPart(Object value)
+        {
 
+            double val;
+            //if (value is Number) {
+            if (double.TryParse(value.ToString(), out val))
+            {
+                //double val = ((double)value);
+
+                if (formatPartCount == 1)
+                {
+                    if (!posNumFmt.HasCondition
+                            || (posNumFmt.HasCondition && posNumFmt.Applies(val)))
+                    {
+                        return posNumFmt;
+                    }
+                    else
+                    {
+                        return new CellFormatPart("General");
+                    }
+                }
+                else if (formatPartCount == 2)
+                {
+                    if ((!posNumFmt.HasCondition && val >= 0)
+                            || (posNumFmt.HasCondition && posNumFmt.Applies(val)))
+                    {
+                        return posNumFmt;
+                    }
+                    else if (!negNumFmt.HasCondition
+                            || (negNumFmt.HasCondition && negNumFmt.Applies(val)))
+                    {
+                        return negNumFmt;
+                    }
+                    else
+                    {
+                        // Return ###...### (255 #s) to match Excel 2007 behaviour
+                        return new CellFormatPart(QUOTE + INVALID_VALUE_FOR_FORMAT + QUOTE);
+                    }
+                }
+                else
+                {
+                    if ((!posNumFmt.HasCondition && val > 0)
+                            || (posNumFmt.HasCondition && posNumFmt.Applies(val)))
+                    {
+                        return posNumFmt;
+                    }
+                    else if ((!negNumFmt.HasCondition && val < 0)
+                          || (negNumFmt.HasCondition && negNumFmt.Applies(val)))
+                    {
+                        return negNumFmt;
+                        // Only the first two format parts can have conditions
+                    }
+                    else
+                    {
+                        return zeroNumFmt;
+                    }
+                }
+            }
+            else
+            {
+                throw new ArgumentException("value must be a Number");
+            }
+
+        }
         /**
          * Returns the ultimate cell type, following the results of formulas.  If
          * the cell is a {@link Cell#CELL_TYPE_FORMULA}, this returns the result of

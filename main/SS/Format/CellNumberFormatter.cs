@@ -55,6 +55,16 @@ namespace NPOI.SS.Format
         private bool improperFraction;
         private DecimalFormat decimalFmt;
         private static List<Special> EmptySpecialList = new List<Special>();
+
+        /// <summary>
+        /// The CellNumberFormatter.simpleValue() method uses the SIMPLE_NUMBER
+        /// CellFormatter defined here. The CellFormat.GENERAL_FORMAT CellFormat
+        /// no longer uses the SIMPLE_NUMBER CellFormatter.
+        /// Note that the simpleValue()/SIMPLE_NUMBER CellFormatter format
+        /// ("#" for integer values, and "#.#" for floating-point values) is
+        /// different from the 'General' format for numbers ("#" for integer
+        /// values and "#.#########" for floating-point values).
+        /// </summary>
         private class SimpleNumberCellFormatter : CellFormatter
         {
             public SimpleNumberCellFormatter(string format)
@@ -66,9 +76,11 @@ namespace NPOI.SS.Format
             {
                 if (value == null)
                     return;
-                if (value.GetType().IsPrimitive/* is Number*/)
+                double num;
+                //if (value is Number) {
+                if (double.TryParse(value.ToString(), out num))
                 {
-                    double num = (double)value;
+                    //double num = (double)value;
                     if (num % 1.0 == 0)
                         SIMPLE_INT.FormatValue(toAppendTo, value);
                     else
@@ -668,7 +680,13 @@ namespace NPOI.SS.Format
             double value = ((double)valueObject);
             value *= scale;
 
-            // the '-' sign goes at the front, always, so we pick it out
+            // For negative numbers:
+            // - If the cell format has a negative number format, this method
+            // is called with a positive value and the number format has
+            // the negative formatting required, e.g. minus sign or brackets.
+            // - If the cell format does not have a negative number format,
+            // this method is called with a negative value and the number is
+            // formatted with a minus sign at the start.
             bool negative = value < 0;
             if (negative)
                 value = -value;

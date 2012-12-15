@@ -48,7 +48,7 @@ namespace NPOI.SS.Format
         private Color color;
         private CellFormatCondition condition;
         private CellFormatter format;
-
+        private CellFormatType type;
         private static Dictionary<String, Color> NAMED_COLORS;
         public static IEqualityComparer<String> CASE_INSENSITIVE_ORDER
                                              = new CaseInsensitiveComparator();
@@ -204,6 +204,7 @@ namespace NPOI.SS.Format
             }
             color = GetColor(m);
             condition = GetCondition(m);
+            type = GetCellFormatType(m);
             format = GetFormatter(m);
         }
 
@@ -298,7 +299,19 @@ namespace NPOI.SS.Format
             return CellFormatCondition.GetInstance(m.Groups[(
                     CONDITION_OPERATOR_GROUP)].Value, m.Groups[(CONDITION_VALUE_GROUP)].Value);
         }
-
+        /**
+         * Returns the CellFormatType object implied by the format specification for
+         * the format part.
+         *
+         * @param matcher The matcher for the format part.
+         *
+         * @return The CellFormatType.
+         */
+        private CellFormatType GetCellFormatType(Match matcher)
+        {
+            String fdesc = matcher.Groups[SPECIFICATION_GROUP].Value;
+            return formatType(fdesc);
+        }
         /**
          * Returns the formatter object implied by the format specification for the
          * format part.
@@ -310,7 +323,7 @@ namespace NPOI.SS.Format
         private CellFormatter GetFormatter(Match matcher)
         {
             String fdesc = matcher.Groups[(SPECIFICATION_GROUP)].Value;
-            CellFormatType type = formatType(fdesc);
+            //CellFormatType type = formatType(fdesc);
             return type.Formatter(fdesc);
         }
 
@@ -455,7 +468,32 @@ namespace NPOI.SS.Format
             }
             return result;
         }
+        /**
+         * Returns the CellFormatType object implied by the format specification for
+         * the format part.
+         *
+         * @return The CellFormatType.
+         */
+        internal CellFormatType CellFormatType
+        {
+            get
+            {
+                return type;
+            }
+        }
 
+        /**
+         * Returns <tt>true</tt> if this format part has a condition.
+         *
+         * @return <tt>true</tt> if this format part has a condition.
+         */
+        internal bool HasCondition
+        {
+            get
+            {
+                return condition != null;
+            }
+        }
         public static StringBuilder ParseFormat(String fdesc, CellFormatType type,
                 IPartHandler partHandler)
         {

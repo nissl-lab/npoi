@@ -44,10 +44,11 @@ namespace NPOI.SS.Format
          */
         public override void FormatValue(StringBuilder toAppendTo, Object value)
         {
+            double val ;
             //if (value is Number) {
-            if (value.GetType().IsPrimitive)
+            if (double.TryParse(value.ToString(), out val))
             {
-                double val = ((double)value);
+                //double val = ((double)value);
                 if (val == 0)
                 {
                     toAppendTo.Append('0');
@@ -105,6 +106,9 @@ namespace NPOI.SS.Format
                         toAppendTo.Remove(RemoveFrom, count);
                     }
                 }
+            } 
+            else if (value is Boolean) {
+                toAppendTo.Append(value.ToString().ToUpper());
             }
             else
             {

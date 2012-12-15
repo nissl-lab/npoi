@@ -78,6 +78,10 @@ namespace NPOI.SS.Format
         {
             int start = toAppendTo.Length;
             String text = obj.ToString();
+            if (obj is Boolean)
+            {
+                text = text.ToUpper();
+            }
             toAppendTo.Append(desc);
             for (int i = 0; i < textPos.Length; i++)
             {

@@ -239,6 +239,10 @@ namespace NPOI.SS.Util
         {
             return DateTime.Parse(source.Substring(pos), CultureInfo.InvariantCulture).ToUniversalTime();
         }
+        public DateTime Parse(string source)
+        {
+            return DateTime.Parse(source, CultureInfo.InvariantCulture);
+        }
     }
 
     /**

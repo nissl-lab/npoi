@@ -96,7 +96,11 @@ namespace NPOI.SS.Format
                     case 'M':
                         mStart = pos;
                         mLen = part.Length;
-                        return part.ToUpper();
+                        // For 'm' after 'h', output minutes ('m') not month ('M')
+                        if (hStart >= 0)
+                            return part.ToLower();
+                        else
+                            return part.ToUpper();
 
                     case 'y':
                     case 'Y':
@@ -168,9 +172,11 @@ namespace NPOI.SS.Format
         {
             if (value == null)
                 value = 0.0;
-            if (value.GetType().IsPrimitive/* is Number*/)
+            double num;
+            //if (value is Number) {
+            if (double.TryParse(value.ToString(), out num))
             {
-                double num = (double)value;
+                //double num = (double)value;
                 double v = num;
                 if (v == 0.0)
                     value = EXCEL_EPOCH_DATE;
