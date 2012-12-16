@@ -59,6 +59,7 @@ namespace NPOI.POIFS.Storage
         /// Create a single instance initialized with data.
         /// </summary>
         /// <param name="stream">the InputStream delivering the data.</param>
+        /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         public DocumentBlock(Stream stream, POIFSBigBlockSize bigBlockSize)
             : this(bigBlockSize)
         {
@@ -104,6 +105,7 @@ namespace NPOI.POIFS.Storage
         /// convert a single long array into an array of DocumentBlock
         /// instances
         /// </summary>
+        /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         /// <param name="array">the byte array to be converted</param>
         /// <param name="size">the intended size of the array (which may be smaller)</param>
         /// <returns>an array of DocumentBlock instances, filled from the

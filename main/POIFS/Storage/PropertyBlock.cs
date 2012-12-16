@@ -64,6 +64,7 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// Create a single instance initialized with default values
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="properties">the properties to be inserted</param>
         /// <param name="offset">the offset into the properties array</param>
         protected PropertyBlock(POIFSBigBlockSize bigBlockSize, Property[] properties, int offset) : base(bigBlockSize)
@@ -80,6 +81,7 @@ namespace NPOI.POIFS.Storage
         /// instances, creating empty Property instances to make up any
         /// shortfall
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="properties">the Property instances to be converted into PropertyBlocks, in a java List</param>
         /// <returns>the array of newly created PropertyBlock instances</returns>
         public static BlockWritable [] CreatePropertyBlockArray( POIFSBigBlockSize bigBlockSize,

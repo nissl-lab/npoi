@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record.Chart
         DUMONTHS = 1,
         DUYEARS = 2
     }
-    /**
+    /*
      * The axis options record provides Unit information and other various tidbits about the axis.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.
@@ -70,7 +70,7 @@ namespace NPOI.HSSF.Record.Chart
 
         }
 
-        /**
+        /*
          * Constructs a AxisOptions record and Sets its fields appropriately.
          *
          * @param in the RecordInputstream to Read the record from
@@ -158,7 +158,7 @@ namespace NPOI.HSSF.Record.Chart
             out1.WriteShort(field_9_options);
         }
 
-        /**
+        /*
          * Size of record (exluding 4 byte header)
          */
         protected override int DataSize
@@ -190,7 +190,7 @@ namespace NPOI.HSSF.Record.Chart
 
 
 
-        /**
+        /*
          * Get the minimum category field for the AxisOptions record.
          */
         public short MinimumDate
@@ -205,7 +205,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the maximum category field for the AxisOptions record.
          */
         public short MaximumDate
@@ -220,7 +220,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the major Unit value field for the AxisOptions record.
          */
         //
@@ -240,7 +240,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the major Unit field for the AxisOptions record.
          */
         //
@@ -260,7 +260,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the minor Unit value field for the AxisOptions record.
          */
         //
@@ -280,7 +280,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the minor Unit field for the AxisOptions record.
          */
         public DateUnit MinorUnit
@@ -296,7 +296,7 @@ namespace NPOI.HSSF.Record.Chart
         }
 
 
-        /**
+        /*
          * Get the base Unit field for the AxisOptions record.
          */
         //
@@ -315,7 +315,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the crossing point field for the AxisOptions record.
          */
         //
@@ -335,7 +335,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the options field for the AxisOptions record.
          */
         public short Options
@@ -344,7 +344,7 @@ namespace NPOI.HSSF.Record.Chart
             set { this.field_9_options = value; }
         }
 
-        /**
+        /*
          * use the default minimum category
          * @return  the default minimum field value.
          */
@@ -360,7 +360,7 @@ namespace NPOI.HSSF.Record.Chart
             }
             set { field_9_options = fAutoMin.SetShortBoolean(field_9_options, value); }
         }
-        /**
+        /*
          * use the default maximum category
          * @return  the default maximum field value.
          */
@@ -379,7 +379,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * use the default major Unit
          * @return  the default major field value.
          */
@@ -395,7 +395,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * use the default minor Unit
          * @return  the default minor Unit field value.
          */
@@ -409,7 +409,7 @@ namespace NPOI.HSSF.Record.Chart
         }
 
 
-        /**
+        /*
          * this is a date axis
          * @return  the IsDate field value.
          */
@@ -425,7 +425,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * use the default base Unit
          * @return  the default base field value.
          */
@@ -438,7 +438,7 @@ namespace NPOI.HSSF.Record.Chart
             set { field_9_options = fAutoBase.SetShortBoolean(field_9_options, value); }
         }
 
-        /**
+        /*
          * use the default crossing point
          * @return  the default cross field value.
          */
@@ -453,7 +453,7 @@ namespace NPOI.HSSF.Record.Chart
                 field_9_options = fAutoCross.SetShortBoolean(field_9_options, value);
             }
         }
-        /**
+        /*
          * use default date Setttings for this axis
          * @return  the default date Settings field value.
          */

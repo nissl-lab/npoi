@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record.Chart
         FontScaleSet =3
     }
 
-    /**
+    /*
      * The default data label text properties record identifies the text Charistics of the preceeding text record.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.
@@ -127,7 +127,7 @@ namespace NPOI.HSSF.Record.Chart
 
 
 
-        /**
+        /*
          * Get the category data type field for the DefaultDataLabelTextProperties record.
          *
          * @return  One of 

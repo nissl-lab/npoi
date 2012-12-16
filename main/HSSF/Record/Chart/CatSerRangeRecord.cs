@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.Text;
     using NPOI.Util;
 
-    /**
+    /*
      * This record refers to a category or series axis and is used to specify label/tickmark frequency.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.
@@ -133,7 +133,7 @@ namespace NPOI.HSSF.Record.Chart
 
 
 
-        /**
+        /*
          * Get the crossing point field for the CategorySeriesAxis record.
          */
         //
@@ -161,7 +161,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the label frequency field for the CategorySeriesAxis record.
          */
         //
@@ -181,7 +181,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the tick mark frequency field for the CategorySeriesAxis record.
          */
         
@@ -204,7 +204,7 @@ namespace NPOI.HSSF.Record.Chart
         }
 
 
-        /**
+        /*
          * Get the options field for the CategorySeriesAxis record.
          */
         public short Options
@@ -213,7 +213,7 @@ namespace NPOI.HSSF.Record.Chart
             set { this.field_4_options = value; }
         }
 
-        /**
+        /*
          * Set true to indicate axis crosses between categories and false to cross axis midway
          * @return  the value axis crossing field value.
          */
@@ -235,7 +235,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * axis crosses at the far right
          * @return  the crosses far right field value.
          */
@@ -258,7 +258,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * categories are Displayed in reverse order
          * @return  the reversed field value.
          */

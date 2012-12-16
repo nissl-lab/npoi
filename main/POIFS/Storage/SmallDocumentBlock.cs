@@ -78,6 +78,7 @@ namespace NPOI.POIFS.Storage
         /// convert a single long array into an array of SmallDocumentBlock
         /// instances
         /// </summary>
+        /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         /// <param name="array">the byte array to be converted</param>
         /// <param name="size">the intended size of the array (which may be smaller)</param>
         /// <returns>an array of SmallDocumentBlock instances, filled from
@@ -120,6 +121,7 @@ namespace NPOI.POIFS.Storage
         /// fill out a List of SmallDocumentBlocks so that it fully occupies
         /// a Set of big blocks
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="blocks">the List to be filled out.</param>
         /// <returns>number of big blocks the list encompasses</returns>
         public static int Fill(POIFSBigBlockSize bigBlockSize,IList blocks)
@@ -139,6 +141,7 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// Factory for creating SmallDocumentBlocks from DocumentBlocks
         /// </summary>
+        /// <param name="bigBlocksSize"></param>
         /// <param name="store">the original DocumentBlocks</param>
         /// <param name="size">the total document size</param>
         /// <returns>an array of new SmallDocumentBlocks instances</returns>
@@ -167,6 +170,7 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// create a list of SmallDocumentBlock's from raw data
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="blocks">the raw data containing the SmallDocumentBlock</param>
         /// <returns>a List of SmallDocumentBlock's extracted from the input</returns>
         public static List<SmallDocumentBlock> Extract(POIFSBigBlockSize bigBlockSize, ListManagedBlock [] blocks)

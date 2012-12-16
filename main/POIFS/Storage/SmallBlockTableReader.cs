@@ -45,6 +45,7 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// fetch the small document block list from an existing file
         /// </summary>
+        /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         /// <param name="blockList">the raw data from which the small block table will be extracted</param>
         /// <param name="root">the root property (which contains the start block and small block table size)</param>
         /// <param name="sbatStart">the start block of the SBAT</param>

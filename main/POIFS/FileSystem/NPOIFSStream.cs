@@ -217,7 +217,7 @@ namespace NPOI.POIFS.FileSystem
             this.startBlock = POIFSConstants.END_OF_CHAIN;
         }
 
-        /**
+        /*
          * Class that handles a streaming read of one stream
          */
 

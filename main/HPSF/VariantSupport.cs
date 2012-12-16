@@ -263,7 +263,7 @@ namespace NPOI.HPSF
                     {
                         if (l1 < 0)
                         {
-                            /**
+                            /*
                              *  YK: reading the ClipboardData packet (VT_CF) is not quite correct.
                              *  The size of the data is determined by the first four bytes of the packet
                              *  while the current implementation calculates it in the Section constructor.

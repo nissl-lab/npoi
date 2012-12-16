@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
 
 
-    /**
+    /*
      * The text record is used to define text stored on a chart.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.
@@ -433,7 +433,7 @@ namespace NPOI.HSSF.Record
             set { field_9_options1 = showValue.SetShortBoolean(field_9_options1, value); }
         }
 
-        /**
+        /*
          * Sets the vertical field value.
          * true = text is vertical
          */
@@ -483,7 +483,7 @@ namespace NPOI.HSSF.Record
             set { field_9_options1 = autoBackground.SetShortBoolean(field_9_options1, value); }
         }
 
-        /**
+        /*
          * 
          * @return  the rotation field value.
          */

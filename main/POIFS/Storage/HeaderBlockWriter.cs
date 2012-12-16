@@ -144,6 +144,7 @@ namespace NPOI.POIFS.Storage
         /// For a given number of BAT blocks, calculate how many XBAT
         /// blocks will be needed
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="blockCount">number of BAT blocks</param>
         /// <returns>number of XBAT blocks needed</returns>
         public static int CalculateXBATStorageRequirements(POIFSBigBlockSize bigBlockSize, int blockCount)

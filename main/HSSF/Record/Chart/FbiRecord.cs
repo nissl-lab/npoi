@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record.Chart
     using System.Text;
     using NPOI.Util;
 
-    /**
+    /*
      * The font basis record stores various font metrics.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.

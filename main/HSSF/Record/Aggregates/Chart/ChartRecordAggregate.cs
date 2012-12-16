@@ -100,8 +100,8 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         }
         protected void WriteStartBlock(RecordVisitor rv)
         {
-            ///1
-            ///A StartBlock record MUST not be written if the record is preceded by a StartObject record 
+            //1
+            //A StartBlock record MUST not be written if the record is preceded by a StartObject record 
             //but not preceded by the matching EndObject record. That is, StartBlock and EndBlock pairs 
             //MUST not belong to any collection defined by StartObject and EndObject.
             if (IsInStartObject)
@@ -446,7 +446,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             }
             //If there exists a StartBlock record with iObjectKind equal to 0x0006 without a matching EndBlock, 
             //then a matching EndBlock record MUST exist immediately before the End record of the sequence of records 
-            ///containing the StartBlock and conforming to the DAT rule.
+            //containing the StartBlock and conforming to the DAT rule.
             if (this.RuleName == RuleName_DAT && sbr.ObjectKind == StartBlockRecord.ObjectKind_DatRecord)
             {
                 rv.VisitRecord(EndBlockRecord.CreateEndBlock(StartBlockRecord.ObjectKind_DatRecord));
@@ -455,7 +455,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             }
             //If there exists a StartBlock record with iObjectKind equal to 0x0007 without a matching EndBlock, 
             //then a matching EndBlock record MUST exist immediately before the End record of the sequence of records 
-            ///containing the StartBlock and conforming to the FRAME rule.
+            //containing the StartBlock and conforming to the FRAME rule.
             if (this.RuleName == RuleName_FRAME && sbr.ObjectKind == StartBlockRecord.ObjectKind_Frame)
             {
                 rv.VisitRecord(EndBlockRecord.CreateEndBlock(StartBlockRecord.ObjectKind_Frame));

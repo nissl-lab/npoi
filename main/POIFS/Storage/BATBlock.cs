@@ -107,7 +107,7 @@ namespace NPOI.POIFS.Storage
          *                    to the block
          * @param end_index the index, plus one, of the last entry to be
          *                  written to the block (writing is for all index
-         *                  k, start_index <= k < end_index)
+         *                  k, start_index &lt;= k &lt; end_index)
          */
 
         protected BATBlock(POIFSBigBlockSize bigBlockSize, int[] entries,
@@ -201,6 +201,7 @@ namespace NPOI.POIFS.Storage
         /// Create an array of BATBlocks from an array of int block
         /// allocation table entries
         /// </summary>
+        /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         /// <param name="entries">the array of int entries</param>
         /// <returns>the newly created array of BATBlocks</returns>
         public static BATBlock[] CreateBATBlocks(POIFSBigBlockSize bigBlockSize, int[] entries)
@@ -225,6 +226,7 @@ namespace NPOI.POIFS.Storage
         /// Create an array of XBATBlocks from an array of int block
         /// allocation table entries
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="entries">the array of int entries</param>
         /// <param name="startBlock">the start block of the array of XBAT blocks</param>
         /// <returns>the newly created array of BATBlocks</returns>

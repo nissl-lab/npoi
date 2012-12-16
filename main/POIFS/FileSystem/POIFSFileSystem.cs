@@ -365,11 +365,11 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        /// <summary>
-        /// open a document in the root entry's list of entries
-        /// </summary>
-        /// <param name="documentName">the name of the document to be opened</param>
-        /// <returns>a newly opened POIFSDocumentReader</returns>
+        // <summary>
+        // open a document in the root entry's list of entries
+        // </summary>
+        // <param name="documentName">the name of the document to be opened</param>
+        // <returns>a newly opened POIFSDocumentReader</returns>
         //public DocumentReader CreatePOIFSDocumentReader(
         //        String documentName)
         //{

@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
 
 
-    /**
+    /*
      * Describes a linked data record.  This record referes to the series data or text.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.
@@ -155,7 +155,7 @@ namespace NPOI.HSSF.Record.Chart
 
 
 
-        /**
+        /*
          * Get the link type field for the LinkedData record.
          *
          * @return  One of 
@@ -179,7 +179,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * Get the reference type field for the LinkedData record.
          *
          * @return  One of 
@@ -198,7 +198,7 @@ namespace NPOI.HSSF.Record.Chart
             set { this.field_2_referenceType = value; }
         }
 
-        /**
+        /*
          * Get the options field for the LinkedData record.
          */
         public short Options
@@ -210,7 +210,7 @@ namespace NPOI.HSSF.Record.Chart
             set { this.field_3_options = value; }
         }
 
-        /**
+        /*
          * Get the index number fmt record field for the LinkedData record.
          */
 
@@ -231,7 +231,7 @@ namespace NPOI.HSSF.Record.Chart
         }
 
 
-        /**
+        /*
          * Get the formula of link field for the LinkedData record.
          */
         public Ptg[] FormulaOfLink
@@ -246,7 +246,7 @@ namespace NPOI.HSSF.Record.Chart
             }
         }
 
-        /**
+        /*
          * true if this object has a custom number format
          * @return  the custom number format field value.
          */

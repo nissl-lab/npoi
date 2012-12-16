@@ -53,6 +53,7 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// Initializes a new instance of the <see cref="SmallBlockTableWriter"/> class.
         /// </summary>
+        /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         /// <param name="documents">a IList of POIFSDocument instances</param>
         /// <param name="root">the Filesystem's root property</param>
         public SmallBlockTableWriter(POIFSBigBlockSize bigBlockSize, IList documents,

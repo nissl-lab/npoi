@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
 
 
-    /**
+    /*
      * The series chart Group index record stores the index to the CHARTFORMAT record (0 based).
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.

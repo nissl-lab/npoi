@@ -63,6 +63,7 @@ namespace NPOI.POIFS.Storage
         /// been Removed from the raw block list, and any blocks labeled as
         /// 'unused' in the block allocation table will also have been
         /// Removed from the raw block list. </summary>
+        /// <param name="bigBlockSizse">the poifs bigBlockSize</param>
         /// <param name="block_count">the number of BAT blocks making up the block allocation table</param>
         /// <param name="block_array">the array of BAT block indices from the
         /// filesystem's header</param>
@@ -145,6 +146,7 @@ namespace NPOI.POIFS.Storage
         /// <summary>
         /// create a BlockAllocationTableReader from an array of raw data blocks
         /// </summary>
+        /// <param name="bigBlockSize"></param>
         /// <param name="blocks">the raw data</param>
         /// <param name="raw_block_list">the list holding the managed blocks</param>
         public BlockAllocationTableReader(POIFSBigBlockSize bigBlockSize, ListManagedBlock[] blocks,  

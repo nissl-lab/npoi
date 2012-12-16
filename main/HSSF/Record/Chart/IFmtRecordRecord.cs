@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
 
 
-    /**
+    /*
      * The number format index record indexes format table.  This applies to an axis.
      * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
      *       Remove the record in src/records/definitions.

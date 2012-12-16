@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.Util;
 
 
-    /**
+    /*
      * Describes the formatting runs associated with a chart title.
      */
     //

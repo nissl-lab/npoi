@@ -86,12 +86,12 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>the new DocumentEntry</returns>
         DocumentEntry CreateDocument(String name,
                                             Stream stream);
-        /// <summary>
-        /// Create a new DocumentEntry; the data will be provided later
-        /// </summary>
-        /// <param name="name">the name of the new DocumentEntry</param>
-        /// <param name="size">the size of the new DocumentEntry</param>
-        /// <returns>the new DocumentEntry</returns>
+        // <summary>
+        // Create a new DocumentEntry; the data will be provided later
+        // </summary>
+        // <param name="name">the name of the new DocumentEntry</param>
+        // <param name="size">the size of the new DocumentEntry</param>
+        // <returns>the new DocumentEntry</returns>
         //DocumentEntry CreateDocument(String name, int size);
 
         /// <summary>
