@@ -76,6 +76,21 @@ namespace NPOI.Util
             }
         }
 
+        /// <summary>
+        /// Returns the number of elements between the current position and the limit.
+        /// </summary>
+        /// <returns>The number of elements remaining in this buffer</returns>
+        public int Remaining() {
+            return limit - position;
+        }
+
+        /// <summary>
+        /// Tells whether there are any elements between the current position and the limit.
+        /// </summary>
+        /// <returns>true if, and only if, there is at least one element remaining in this buffer</returns>
+        public bool HasRemaining() {
+            return position < limit;
+        }
 
         //allocate
         public static ByteBuffer CreateBuffer(int capacity)

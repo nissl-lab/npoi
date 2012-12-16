@@ -44,23 +44,33 @@ namespace NPOI.POIFS.FileSystem
         private short flags3;                // some flags? or zero terminators?, sometimes not there
         public static String OLE10_NATIVE = "\x0001Ole10Native";
 
-        /**
-         * Creates an instance of this class from an embedded OLE Object. The OLE Object is expected
-         * to include a stream &quot;{01}Ole10Native&quot; which Contains the actual
-         * data relevant for this class.
-         *
-         * @param poifs POI Filesystem object
-         * @return Returns an instance of this class
-         * @throws IOException on IO error
-         * @throws Ole10NativeException on invalid or unexcepted data format
-         */
+
+        /// <summary>
+        /// Creates an instance of this class from an embedded OLE Object. The OLE Object is expected
+        /// to include a stream &quot;{01}Ole10Native&quot; which Contains the actual
+        /// data relevant for this class.
+        /// </summary>
+        /// <param name="poifs">poifs POI Filesystem object</param>
+        /// <returns>Returns an instance of this class</returns>
         public static Ole10Native CreateFromEmbeddedOleObject(POIFSFileSystem poifs)
+        {
+            return CreateFromEmbeddedOleObject(poifs.Root);
+        }
+
+        /// <summary>
+        /// Creates an instance of this class from an embedded OLE Object. The OLE Object is expected
+        /// to include a stream &quot;{01}Ole10Native&quot; which contains the actual
+        /// data relevant for this class.
+        /// </summary>
+        /// <param name="directory">directory POI Filesystem object</param>
+        /// <returns>Returns an instance of this class</returns>
+        public static Ole10Native CreateFromEmbeddedOleObject(DirectoryNode directory)
         {
             bool plain = false;
 
             try
             {
-                poifs.Root.GetEntry("\x0001Ole10ItemName");             
+                directory.GetEntry("\u0001Ole10ItemName");
                 plain = true;
             }
             catch (FileNotFoundException)
@@ -68,15 +78,14 @@ namespace NPOI.POIFS.FileSystem
                 plain = false;
             }
 
-            DocumentInputStream dis = poifs.CreateDocumentInputStream(OLE10_NATIVE);
-            using (MemoryStream bos = new MemoryStream())
-            {
-                IOUtils.Copy(dis, bos);
-                byte[] data = bos.ToArray();
+            DocumentEntry nativeEntry =
+               (DocumentEntry)directory.GetEntry(OLE10_NATIVE);
+            byte[] data = new byte[nativeEntry.Size];
+            directory.CreateDocumentInputStream(nativeEntry).Read(data);
 
-                return new Ole10Native(data, 0, plain);
-            }
+            return new Ole10Native(data, 0, plain);
         }
+
 
         /**
          * Creates an instance and Fills the fields based on the data in the given buffer.
@@ -133,7 +142,7 @@ namespace NPOI.POIFS.FileSystem
                 ofs += len;
                 flags2 = LittleEndian.GetShort(data, ofs);
                 ofs += LittleEndianConsts.SHORT_SIZE;
-                len = LittleEndian.GetUnsignedByte(data, ofs);
+                len = LittleEndian.GetUByte(data, ofs);
                 unknown1 = new byte[len];
                 ofs += len;
                 len = 3;

@@ -298,7 +298,7 @@ namespace NPOI.POIFS.FileSystem
                 for (int j = 0; j < bigBlockSize.GetXBATEntriesPerBlock(); j++)
                 {
                     int fatAt = xfat.GetValueAt(j);
-                    if (fatAt == POIFSConstants.UNUSED_BLOCK) break;
+                    if (fatAt == POIFSConstants.UNUSED_BLOCK || fatAt == POIFSConstants.END_OF_CHAIN) break;
                     ReadBAT(fatAt, loopDetector);
                 }
             }

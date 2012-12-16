@@ -34,6 +34,8 @@ namespace NPOI.POIFS.Crypt
         private EncryptionInfo _info;
         //private SecretKey _secretKey; 
         private byte[] _secretKey;
+        private long _length = -1;
+
         private static byte[] kVerifierInputBlock =
             new byte[] { (byte)0xfe, (byte)0xa7, (byte)0xd2, (byte)0x76,
                          (byte)0x3b, (byte)0x4b, (byte)0x9e, (byte)0x79 };
@@ -125,11 +127,18 @@ namespace NPOI.POIFS.Crypt
 
         public override Stream GetDataStream(DirectoryNode dir)
         {
-            DocumentInputStream dr = dir.CreateDocumentInputStream("EncryptedPackage");
-            long size = dr.ReadLong();
-            return new ChunkedCipherInputStream(dr, size, this);
+            DocumentInputStream dis = dir.CreateDocumentInputStream("EncryptedPackage");
+            _length = dis.ReadLong();
+            return new ChunkedCipherInputStream(dis, _length, this);
         }
-
+        public override long Length
+        {
+            get
+            {
+                if (_length == -1) throw new InvalidOperationException("EcmaDecryptor.getDataStream() was not called");
+                return _length;
+            }
+        }
 
         public SymmetricAlgorithm GetCipher(int algorithm, int mode, /*SecretKey key,*/ byte[] key, byte[] vec)
         {
@@ -269,6 +278,7 @@ namespace NPOI.POIFS.Crypt
                     }
                 }
                 int count = (int)(4096L - (_pos & 0xfff));
+                count = Math.Min(Available(), Math.Min(count, len));
                 System.Array.Copy(_chunk, (int)(_pos * 0xfff), b, offset, count);
                 offset += count;
                 len -= count;
@@ -314,7 +324,7 @@ namespace NPOI.POIFS.Crypt
         {
             int index = (int)(_pos >> 12);
             byte[] blockKey = new byte[4];
-            LittleEndian.PutInt(blockKey, index);
+            LittleEndian.PutInt(blockKey, 0, index);
 
             byte[] iv = _ag.GenerateIv(_ag.Info.Header.Algorithm,
                                         _ag.Info.Header.KeySalt, blockKey);
@@ -328,7 +338,7 @@ namespace NPOI.POIFS.Crypt
             byte[] block = new byte[Math.Min(_stream.Available(), 4096)];
             _stream.ReadFully(block);
             _lastIndex = index + 1;
-            return _cipher.Key;
+            throw new NotImplementedException();
             //return _cipher.doFinal(block); Leon
         }
 

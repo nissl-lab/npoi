@@ -69,6 +69,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -98,6 +102,8 @@
     <Compile Include="POIFS\EventFileSystem\Listener.cs" />
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\ReaderWriter.cs" />
+    <Compile Include="POIFS\FileSystem\TestEntryUtils.cs" />
+    <Compile Include="POIFS\FileSystem\TestFilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSStream.cs" />

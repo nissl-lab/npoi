@@ -31,9 +31,30 @@ namespace NPOI.POIFS.Crypt
     {
         public static string DEFAULT_PASSWORD = "VelvetSweatshop";
 
+        /// <summary>
+        /// Return a stream with decrypted data.
+        /// Use {@link #getLength()} to get the size of that data that can be safely read from the stream.
+        /// Just reading to the end of the input stream is not sufficient because there are
+        /// normally padding bytes that must be discarded
+        /// </summary>
+        /// <param name="dir">the node to read from</param>
+        /// <returns>decrypted stream</returns>
         public abstract Stream GetDataStream(DirectoryNode dir);
 
         public abstract bool VerifyPassword(string password);
+     
+        /// <summary>
+        /// Returns the length of the encytpted data that can be safely read with
+        /// {@link #getDataStream(org.apache.poi.poifs.filesystem.DirectoryNode)}.
+        /// Just reading to the end of the input stream is not sufficient because there are
+        /// normally padding bytes that must be discarded
+        /// 
+        /// The length variable is initialized in {@link #getDataStream(org.apache.poi.poifs.filesystem.DirectoryNode)},
+        /// an attempt to call getLength() prior to getDataStream() will result in IllegalStateException.
+        /// 
+        /// return length of the encrypted data
+        /// </summary>
+        public abstract long Length { get; }
 
         public static Decryptor GetInstance(EncryptionInfo info)
         {
@@ -97,7 +118,7 @@ namespace NPOI.POIFS.Crypt
             for (int i = 0; i < info.Verifier.SpinCount; i++)
             {
                 //sha1.Clear();
-                LittleEndian.PutInt(iterator, i);
+                LittleEndian.PutInt(iterator, 0, i);
                 //sha1.iterator; //sha1.update(iterator);
                 Array.Copy(iterator, temp, iterator.Length);
                 Array.Copy(hash, 0, temp, iterator.Length, hash.Length);

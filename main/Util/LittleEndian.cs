@@ -403,6 +403,7 @@ namespace NPOI.Util
         /// <param name="data">the byte array.</param>
         /// <param name="offset">a starting offset into the byte array.</param>
         /// <returns>the unsigned value of the byte as a 32 bit integer</returns>
+        [Obsolete]
         public static int GetUnsignedByte(byte[] data, int offset)
         {
             return data[offset] & 0xFF;
@@ -474,10 +475,9 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <returns></returns>
-        [Obsolete]
-        public static byte GetUByte(byte[] data)
+        public static short GetUByte(byte[] data)
         {
-            return GetUByte(data, 0);
+            return (short)(data[0] & 0xFF);
         }
 
         /// <summary>
@@ -486,10 +486,9 @@ namespace NPOI.Util
         /// <param name="data">the byte array</param>
         /// <param name="offset">a starting offset into the byte array</param>
         /// <returns></returns>
-        [Obsolete]
-        public static byte GetUByte(byte[] data, int offset)
+        public static short GetUByte(byte[] data, int offset)
         {
-            return (byte)GetNumber(data, offset, LittleEndianConsts.BYTE_SIZE);
+            return (short)(data[offset] & 0xFF);
         }
         
 

@@ -287,7 +287,7 @@ namespace NPOI
         protected void CopyNodes(POIFSFileSystem source, POIFSFileSystem target,
                                   List<String> excepts)
         {
-            POIUtils.CopyNodes(source, target, excepts);
+            EntryUtils.CopyNodes(source, target, excepts);
         }
         /// <summary>
         /// Copies nodes from one POIFS to the other minus the excepts
@@ -299,7 +299,7 @@ namespace NPOI
         protected void CopyNodes(DirectoryNode sourceRoot,
                 DirectoryNode targetRoot, List<String> excepts)
         {
-            POIUtils.CopyNodes(sourceRoot, targetRoot, excepts);
+            EntryUtils.CopyNodes(sourceRoot, targetRoot, excepts);
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace NPOI
         {
             //System.err.println("copyNodeRecursively called with "+entry.Name+
             //                   ","+target.Name);
-            POIUtils.CopyNodeRecursively(entry, target);
+            EntryUtils.CopyNodeRecursively(entry, target);
         }
     }
 }

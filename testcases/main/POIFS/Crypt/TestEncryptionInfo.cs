@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Crypt;
 
@@ -27,10 +27,10 @@ namespace TestCases.POIFS.Crypt
     /**
      *  @author Maxim Valyanskiy
      */
-    [TestClass]
+    [TestFixture]
     public class TestEncryptionInfo
     {
-        [TestMethod]
+        [Test]
         public void TestEncryptionInfo1()
         {
             POIFSFileSystem fs = new POIFSFileSystem(POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));

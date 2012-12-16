@@ -539,7 +539,7 @@ namespace NPOI.POIFS.FileSystem
 
         public IEnumerator<Entry> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _entries.GetEnumerator();
         }
 
         #endregion
@@ -548,7 +548,7 @@ namespace NPOI.POIFS.FileSystem
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _entries.GetEnumerator();
         }
 
         #endregion

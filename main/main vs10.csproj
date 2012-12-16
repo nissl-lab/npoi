@@ -146,6 +146,11 @@
     <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
+    <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
+    <Compile Include="POIUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
@@ -662,7 +667,6 @@
     <Compile Include="HSSF\Util\HSSFColor.cs" />
     <Compile Include="HSSF\Util\RangeAddress.cs" />
     <Compile Include="HSSF\Util\RKUtil.cs" />
-    <Compile Include="POIUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource11.Designer.cs">
       <AutoGen>True</AutoGen>

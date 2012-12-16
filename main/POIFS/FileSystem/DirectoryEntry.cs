@@ -42,7 +42,7 @@ namespace NPOI.POIFS.FileSystem
     /// managed by a Filesystem instance.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public interface DirectoryEntry : Entry
+    public interface DirectoryEntry : Entry, IEnumerable<Entry>
     {
 
         /// <summary>
@@ -115,5 +115,12 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         /// <value>The storage ClassID.</value>
         ClassID StorageClsid { get; set; }
+
+        /// <summary>
+        /// Checks if entry with specified name present
+        /// </summary>
+        /// <param name="name">entry name</param>
+        /// <returns>true if have</returns>
+        bool HasEntry(String name );
     }
 }

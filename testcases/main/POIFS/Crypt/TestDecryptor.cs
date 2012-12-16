@@ -20,20 +20,20 @@ using System.Collections.Generic;
 using System.Text;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Crypt;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ionic.Zip;
+using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
-
+using NUnit.Framework;
+using NPOI.Util;
 namespace TestCases.POIFS.Crypt
 {
     /**
  *  @author Maxim Valyanskiy
  *  @author Gary King
  */
-    [TestClass]
+    [TestFixture]
     public class TestDecryptor
     {
-        [TestMethod]
+        [Test]
         public void TestPasswordVerification()
         {
             POIFSFileSystem fs = new POIFSFileSystem(POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
@@ -44,7 +44,7 @@ namespace TestCases.POIFS.Crypt
 
             Assert.IsTrue(d.VerifyPassword(Decryptor.DEFAULT_PASSWORD));
         }
-        [TestMethod]
+        [Test]
         public void TestDecrypt()
         {
             POIFSFileSystem fs = new POIFSFileSystem(POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
@@ -57,7 +57,7 @@ namespace TestCases.POIFS.Crypt
 
             ZipOk(fs, d);
         }
-        [TestMethod]
+        [Test]
         public void TestAgile()
         {
             POIFSFileSystem fs = new POIFSFileSystem(POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protected_agile.docx"));
@@ -78,19 +78,52 @@ namespace TestCases.POIFS.Crypt
             ZipInputStream zin = new ZipInputStream(d.GetDataStream(fs));
             while (true)
             {
-                int pos = zin.ReadByte();
-                if (pos == -1)
+                ZipEntry entry = zin.GetNextEntry();
+                if (entry == null)
+                {
                     break;
-            //    ZipEntry entry = zin.GetNextEntry();
-            //    if (entry == null)
-            //    {
-            //        break;
-            //    }
+                }
 
-                //while (zin.available() > 0)
-                //{
-                //    zin.skip(zin.available());
-                //}
+                while (zin.Available > 0)
+                {
+                    zin.Skip(zin.Available);
+                }
+            }
+        }
+        [Test]
+        public void TestDataLength()
+        {
+            POIFSFileSystem fs = new POIFSFileSystem(POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protected_agile.docx"));
+
+            EncryptionInfo info = new EncryptionInfo(fs);
+
+            Decryptor d = Decryptor.GetInstance(info);
+
+            d.VerifyPassword(Decryptor.DEFAULT_PASSWORD);
+
+            Stream is1 = d.GetDataStream(fs);
+
+            long len = d.Length;
+            Assert.AreEqual(12810, len);
+
+            byte[] buf = new byte[(int)len];
+
+            is1.Read(buf, 0, buf.Length);
+
+            ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(buf));
+
+            while (true)
+            {
+                ZipEntry entry = zin.GetNextEntry();
+                if (entry == null)
+                {
+                    break;
+                }
+
+                while (zin.Available > 0)
+                {
+                    zin.Skip(zin.Available);
+                }
             }
         }
     }

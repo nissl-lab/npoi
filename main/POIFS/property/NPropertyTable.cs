@@ -46,7 +46,6 @@ namespace NPOI.POIFS.Properties
             _bigBigBlockSize = headerBlock.BigBlockSize;
         }
 
-//        private static List<Property> BuildProperties(IEnumerator<byte[]> dataSource, POIFSBigBlockSize bigBlockSize)
         private static List<Property> BuildProperties(IEnumerator<ByteBuffer> dataSource, POIFSBigBlockSize bigBlockSize)
         {
             try
@@ -56,7 +55,6 @@ namespace NPOI.POIFS.Properties
                 while(dataSource.MoveNext())
                 {
                     ByteBuffer bb = dataSource.Current;
-                    //byte[] bb = (byte[])dataSource.Current;
 
                     // Turn it into an array
                     byte[] data;
@@ -68,13 +66,17 @@ namespace NPOI.POIFS.Properties
                     else
                     {
                         data = new byte[bigBlockSize.GetBigBlockSize()];
-                        //bb.get(data, 0, data.length);
-                        bb.Read(data, 0, data.Length);
-                    }
-                    //}
+                        int toRead = data.Length;
+                        if (bb.Remaining() < bigBlockSize.GetBigBlockSize())
+                        {
+                            // Looks to be a truncated block
+                            // This isn't allowed, but some third party created files
+                            //  sometimes do this, and we can normally read anyway
 
-                    //data = new byte[bigBlockSize.GetBigBlockSize()];
-                    //System.Array.Copy(bb, data, bb.Length);
+                            toRead = bb.Remaining();
+                        }
+                        bb.Read(data, 0, toRead);
+                    }
 
                     PropertyFactory.ConvertToProperties(data, properties);
                 }

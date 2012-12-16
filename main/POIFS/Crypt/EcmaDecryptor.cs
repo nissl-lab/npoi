@@ -31,7 +31,7 @@ namespace NPOI.POIFS.Crypt
     {
         private EncryptionInfo info;
         private byte[] passwordHash;
-
+        private long _length = -1;
         public EcmaDecryptor(EncryptionInfo info)
         {
             this.info = info;
@@ -46,7 +46,7 @@ namespace NPOI.POIFS.Crypt
                 //sha1.update(passwordHash);
 
                 byte[] blockValue = new byte[4];
-                LittleEndian.PutInt(blockValue, block);
+                LittleEndian.PutInt(blockValue, 0, block);
                 byte[] temp = new byte[blockValue.Length + passwordHash.Length];
                 Array.Copy(passwordHash, temp, passwordHash.Length);
                 Array.Copy(blockValue, 0, temp, passwordHash.Length, blockValue.Length);
@@ -154,10 +154,19 @@ namespace NPOI.POIFS.Crypt
 
         public override Stream GetDataStream(DirectoryNode dir)
         {
-            DocumentInputStream dr = dir.CreateDocumentInputStream("EncryptedPackage");
-            long size = dr.ReadLong();
+            DocumentInputStream dis = dir.CreateDocumentInputStream("EncryptedPackage");
+            _length = dis.ReadLong();
             SymmetricAlgorithm cipher=GetCipher();
-            return new CryptoStream(dr, cipher.CreateDecryptor(cipher.Key, cipher.IV), CryptoStreamMode.Read);
+            return new CryptoStream(dis, cipher.CreateDecryptor(cipher.Key, cipher.IV), CryptoStreamMode.Read);
+        }
+
+        public override long Length
+        {
+            get
+            {
+                if (_length == -1) throw new InvalidOperationException("EcmaDecryptor.getDataStream() was not called");
+                return _length;
+            }
         }
     }
 }
