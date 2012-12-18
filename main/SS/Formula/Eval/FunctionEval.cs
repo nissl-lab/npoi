@@ -147,7 +147,7 @@ namespace NPOI.SS.Formula.Eval
             retval[57] = FinanceFunction.FV; // FV
             retval[58] = FinanceFunction.NPER; // NPER
             retval[59] = FinanceFunction.PMT; // PMT
-            retval[60] = new NotImplementedFunction("RATE"); // RATE
+            retval[60] = new Rate(); // RATE
             retval[61] = new NotImplementedFunction("MIRR"); // MIRR
             retval[62] = new Irr(); // IRR
             retval[63] = new Rand(); // RAND

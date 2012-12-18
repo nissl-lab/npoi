@@ -151,6 +151,7 @@
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Functions\Rate.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />

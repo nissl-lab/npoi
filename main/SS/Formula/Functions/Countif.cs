@@ -148,7 +148,7 @@ namespace NPOI.SS.Formula.Functions
                     case LT: return cmpResult < 0;
                     case LE: return cmpResult <= 0;
                     case GT: return cmpResult > 0;
-                    case GE: return cmpResult <= 0;
+                    case GE: return cmpResult >= 0;
                 }
                 throw new Exception("Cannot call bool Evaluate on non-equality operator '"
                         + _representation + "'");

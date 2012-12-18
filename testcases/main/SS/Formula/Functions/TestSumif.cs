@@ -63,6 +63,13 @@ namespace TestCases.SS.Formula.Functions
             Confirm(60.0, arg0, new NumberEval(30.0));
             Confirm(70.0, arg0, new NumberEval(30.0), arg2);
             Confirm(100.0, arg0, new StringEval(">45"));
+            Confirm(100.0, arg0, new StringEval(">=45"));
+            Confirm(100.0, arg0, new StringEval(">=50.0"));
+            Confirm(140.0, arg0, new StringEval("<45"));
+            Confirm(140.0, arg0, new StringEval("<=45"));
+            Confirm(140.0, arg0, new StringEval("<=40.0"));
+            Confirm(160.0, arg0, new StringEval("<>40.0"));
+            Confirm(80.0, arg0, new StringEval("=40.0"));
 
         }
         private static void Confirm(double expectedResult, params ValueEval[] args)
