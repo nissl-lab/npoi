@@ -48,7 +48,26 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));            
             Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
         }
+        /**
+         * At the moment, we don't decode the locale strings into
+         *  a specific locale, but we should format things as if
+         *  the locale (eg '[$-1010409]') isn't there
+         */
+        [Test]
+        public void TestLocaleBasedFormats()
+        {
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
+            // Standard formats
+            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]General"));
+            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]@"));
+
+            // Regular numeric style formats
+            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]##"));
+            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]00"));
+
+        }
+    
         /**
          * Ensure that colours Get correctly
          *  zapped from within the format strings
@@ -179,12 +198,67 @@ namespace TestCases.SS.UserModel
         }
 
         /**
+         * Test that we correctly handle fractions in the
+         *  format string, eg # #/#
+         */
+        [Test]
+        public void TestFractions()
+        {
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+
+            // Excel often prefers "# #/#"
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#"));
+            Assert.AreEqual("321 26/81", dfUS.FormatRawCellContents(321.321, -1, "# #/##"));
+            Assert.AreEqual("26027/81", dfUS.FormatRawCellContents(321.321, -1, "#/##"));
+
+            // OOo seems to like the "# ?/?" form
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/?"));
+            Assert.AreEqual("321 26/81", dfUS.FormatRawCellContents(321.321, -1, "# ?/??"));
+            Assert.AreEqual("26027/81", dfUS.FormatRawCellContents(321.321, -1, "?/??"));
+
+            // p;n;z;s parts
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#;# ##/#;0;xxx"));
+            Assert.AreEqual("-321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx"));
+            Assert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, "# #/#;# ##/#;0;xxx"));
+            //     Assert.AreEqual("0.0",       dfUS.FormatRawCellContents(0,        -1, "# #/#;# ##/#;#.#;xxx")); // currently hard coded to 0
+
+            // Custom formats with text are not currently supported
+            //     Assert.AreEqual("+ve",       dfUS.FormatRawCellContents(0,        -1, "+ve;-ve;zero;xxx"));
+            //     Assert.AreEqual("-ve",       dfUS.FormatRawCellContents(0,        -1, "-ve;-ve;zero;xxx"));
+            //     Assert.AreEqual("zero",      dfUS.FormatRawCellContents(0,        -1, "zero;-ve;zero;xxx"));
+
+            // Custom formats - check text is stripped, including multiple spaces
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#   #/#"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\"  \" #/#"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\"FRED\" #/#"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\\ #/#"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# \\q#/#"));
+
+            // Cases that were very slow
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "0\" \"?/?;?/?")); // 0" "?/?;?/?     - length of -ve part was used
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "0 \"#\"\\#\\#?/?")); // 0 "#"\#\#?/? - length of text was used
+
+            Assert.AreEqual("321 295/919", dfUS.FormatRawCellContents(321.321, -1, "# #/###"));
+            Assert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/####")); // Code limits to #### as that is as slow as we want to get
+            Assert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/##########"));
+
+            // Not a valid fraction formats (too many #/# or ?/?) - hence the strange expected results
+            Assert.AreEqual("321 / ?/?", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
+            Assert.AreEqual("321 / /", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
+            Assert.AreEqual("321 ?/? ?/?", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
+            Assert.AreEqual("321 ?/? / /", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
+
+            // Where both p and n don't include a fraction, so cannot always be formatted
+            Assert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+        }
+
+        /**
          * Test that _x (blank with the space taken by "x")
          *  and *x (fill to the column width with "x"s) are
          *  correctly ignored by us.
          */
         [Test]
-        public void TestPAddingSpaces()
+        public void TestPaddingSpaces()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
@@ -203,7 +277,7 @@ namespace TestCases.SS.UserModel
          * DataFormatter is the CSV mode preserves spaces
          */
         [Test]
-        public void TestPAddingSpacesCSV()
+        public void TestPaddingSpacesCSV()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
@@ -250,7 +324,23 @@ namespace TestCases.SS.UserModel
                   DateUtil.GetExcelDate(c, false), -1, "YYYY-MMMMM-D h:mm:ss"
             ));
         }
+        /**
+         * Tests that we do AM/PM handling properly
+         */
+        [Test]
+        public void TestAMPM()
+        {
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 
+            Assert.AreEqual("06:00", dfUS.FormatRawCellContents(0.25, -1, "hh:mm"));
+            Assert.AreEqual("18:00", dfUS.FormatRawCellContents(0.75, -1, "hh:mm"));
+
+            Assert.AreEqual("06:00 AM", dfUS.FormatRawCellContents(0.25, -1, "hh:mm AM/PM"));
+            Assert.AreEqual("06:00 PM", dfUS.FormatRawCellContents(0.75, -1, "hh:mm AM/PM"));
+
+            Assert.AreEqual("1904-01-01 06:00:00 AM", dfUS.FormatRawCellContents(0.25, -1, "yyyy-mm-dd hh:mm:ss AM/PM", true));
+            Assert.AreEqual("1904-01-01 06:00:00 PM", dfUS.FormatRawCellContents(0.75, -1, "yyyy-mm-dd hh:mm:ss AM/PM", true));
+        }
         /**
          * Test that we can handle elapsed time,
          *  eg formatting 1 day 4 hours as 28 hours
@@ -337,6 +427,13 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("120", dfUS.FormatRawCellContents(120 * second, -1, "[ss]"));
             Assert.AreEqual("121", dfUS.FormatRawCellContents(121 * second, -1, "[ss]"));
 
+            //boolean jdk_1_5 = System.getProperty("java.vm.version").startsWith("1.5");
+            //if(!jdk_1_5) {
+           // YK: the tests below were written under JDK 1.6 and assume that
+           // the rounding mode in the underlying decimal formatters is HALF_UP
+           // It is not so JDK 1.5 where the default rounding mode is HALV_EVEN and cannot be changed.
+
+
             Assert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[h]:mm:ss"));
             Assert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[h]:mm:ss"));
             Assert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[h]:mm:ss"));
@@ -352,6 +449,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("57:41.76", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.00;@"));
             Assert.AreEqual("57:41.760", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.000;@"));
             Assert.AreEqual("24:00.0", dfUS.FormatRawCellContents(123456.6, -1, "mm:ss.0"));
+
+            //}
         }
         [Test]
         public void TestDateWindowing()
@@ -407,6 +506,24 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual(" -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual(" $-   ", dfUS.FormatRawCellContents(0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+        }
+
+        /**
+         * TODO Fix these so that they work
+         */
+        public void DISABLEDtestCustomFormats()
+        {
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
+            String fmt;
+
+            fmt = "\"At\" H:MM AM/PM \"on\" DDDD MMMM D\",\" YYYY";
+            Assert.AreEqual(
+                  "At 4:20 AM on Thursday May 17, 2007",
+                  dfUS.FormatRawCellContents(39219.1805636921, -1, fmt)
+            );
+
+            fmt = "0 \"dollars and\" .00 \"cents\"";
+            Assert.AreEqual("19 dollars and .99 cents", dfUS.FormatRawCellContents(19.99, -1, fmt));
         }
     }
 

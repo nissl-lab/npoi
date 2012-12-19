@@ -100,6 +100,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestTextWithDateFormatSecondArg()
         {
+            // Test with Java style M=Month
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             ValueEval numArg = new NumberEval(321.321);
             ValueEval formatArg = new StringEval("dd:MM:yyyy hh:mm:ss");
@@ -108,10 +109,27 @@ namespace TestCases.SS.Formula.Functions
             ValueEval testResult = new StringEval("16:11:1900 07:42:14");
             Assert.AreEqual(testResult.ToString(), result.ToString());
 
+            // Excel also supports "m before h is month"
+            formatArg = new StringEval("dd:mm:yyyy hh:mm:ss");
+            args[1] = formatArg;
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval("16:11:1900 07:42:14");
+            //Assert.AreEqual(testResult.ToString(), result.ToString());
+
             // this line is intended to compute how "November" would look like in the current locale
             String november = new SimpleDateFormat("MMMM").Format(new DateTime(2010, 11, 15), CultureInfo.CurrentCulture);
-
+            
+            // Again with Java style
             formatArg = new StringEval("MMMM dd, yyyy");
+            args[1] = formatArg;
+            //fix error in non-en Culture
+            NPOI.SS.Formula.Functions.Text.Formatter = new NPOI.SS.UserModel.DataFormatter(CultureInfo.CurrentCulture);
+            result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            testResult = new StringEval(november + " 16, 1900");
+            Assert.AreEqual(testResult.ToString(), result.ToString());
+
+            // And Excel style
+            formatArg = new StringEval("mmmm dd, yyyy");
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval(november + " 16, 1900");

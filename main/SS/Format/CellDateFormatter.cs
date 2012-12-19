@@ -165,6 +165,12 @@ namespace NPOI.SS.Format
                     CellFormatType.DATE, partHandler);
             partHandler.Finish(descBuf);
             dateFmt = new SimpleDateFormat(descBuf.ToString());
+            
+            //NPOI do not need this
+            // tweak the format pattern to pass tests on JDK 1.7,
+            // See https://issues.apache.org/bugzilla/show_bug.cgi?id=53369
+            //String ptrn = descBuf.toString().replaceAll("((y)(?!y))(?<!yy)", "yy");
+            //dateFmt = new SimpleDateFormat(ptrn, LOCALE);
         }
 
         /** {@inheritDoc} */

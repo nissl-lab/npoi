@@ -23,7 +23,7 @@ namespace NPOI.SS.UserModel
     using System.Text.RegularExpressions;
 
     using NPOI.SS.Util;
-using System.Globalization;
+    using System.Globalization;
 
 
 
@@ -81,9 +81,11 @@ using System.Globalization;
         /** Pattern to find "AM/PM" marker */
         private static string amPmPattern = "((A|P)[M/P]*)";
 
-        /** A regex to find patterns like [$$-1009] and [$�-452]. */
-        private static string specialPatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
-        
+        /** A regex to find patterns like [$$-1009] and [$�-452]. 
+         *  Note that we don't currently process these into locales 
+         */
+        private static string localePatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
+
         /*
      * A regex to match the colour formattings rules.
      * Allowed colours are: Black, Blue, Cyan, Green,
@@ -195,8 +197,47 @@ using System.Globalization;
             return GetFormat(cell.NumericCellValue, formatIndex, formatStr);
         }
 
-        private FormatBase GetFormat(double cellValue, int formatIndex, String formatStr)
+        private FormatBase GetFormat(double cellValue, int formatIndex, String formatStrIn)
         {
+            //      // Might be better to separate out the n p and z formats, falling back to p when n and z are not set.
+            //      // That however would require other code to be re factored.
+            //      String[] formatBits = formatStrIn.split(";");
+            //      int i = cellValue > 0.0 ? 0 : cellValue < 0.0 ? 1 : 2; 
+            //      String formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
+
+            String formatStr = formatStrIn;
+            // Excel supports positive/negative/zero, but java
+            // doesn't, so we need to do it specially
+            int firstAt = formatStr.IndexOf(';');
+            int lastAt = formatStr.LastIndexOf(';');
+            // p and p;n are ok by default. p;n;z and p;n;z;s need to be fixed.
+            if (firstAt != -1 && firstAt != lastAt)
+            {
+                int secondAt = formatStr.IndexOf(';', firstAt + 1);
+                if (secondAt == lastAt)
+                { // p;n;z
+                    if (cellValue == 0.0)
+                    {
+                        formatStr = formatStr.Substring(lastAt + 1);
+                    }
+                    else
+                    {
+                        formatStr = formatStr.Substring(0, lastAt);
+                    }
+                }
+                else
+                {
+                    if (cellValue == 0.0)
+                    { // p;n;z;s
+                        formatStr = formatStr.Substring(secondAt + 1, lastAt - (secondAt + 1));
+                    }
+                    else
+                    {
+                        formatStr = formatStr.Substring(0, secondAt);
+                    }
+                }
+            }
+
             // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
             if (emulateCsv && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
             {
@@ -207,6 +248,7 @@ using System.Globalization;
             {
                 return format;
             }
+            // Is it one of the special built in types, General or @?
             if (formatStr.Equals("General", StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
             {
                 if (DataFormatter.IsWholeNumber(cellValue))
@@ -215,6 +257,8 @@ using System.Globalization;
                 }
                 return generalDecimalNumFormat;
             }
+
+            // Build a formatter, and cache it
             format = CreateFormat(cellValue, formatIndex, formatStr);
             formats[formatStr] = format;
             return format;
@@ -235,14 +279,17 @@ using System.Globalization;
             return CreateFormat(cell.NumericCellValue, formatIndex, formatStr);
         }
 
+        private static readonly Regex RegexDoubleBackslashAny = new Regex("\\\\.");
+        private static readonly Regex RegexContinueWs = new Regex("\\s");
+        private static readonly Regex RegexAnyInDoubleQuote = new Regex("\"[^\"]*\"");
+
         private FormatBase CreateFormat(double cellValue, int formatIndex, String sFormat)
         {
             // remove color Formatting if present
             String formatStr = Regex.Replace(sFormat, colorPattern, "", RegexOptions.IgnoreCase);
 
-            // try to extract special characters like currency
-
-            MatchCollection matches = Regex.Matches(formatStr, specialPatternGroup);
+            // Strip off the locale information, we use an instance-wide locale for everything
+            MatchCollection matches = Regex.Matches(formatStr, localePatternGroup);
             foreach (Match match in matches)
             {
                 string matchedstring = match.Value;
@@ -258,15 +305,25 @@ using System.Globalization;
                     sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length));
                     symbol = sb.ToString();
                 }
-                matchedstring = Regex.Replace(matchedstring, specialPatternGroup, symbol);
+                matchedstring = Regex.Replace(matchedstring, localePatternGroup, symbol);
 
                 formatStr = formatStr.Remove(match.Index, match.Length);
                 formatStr = formatStr.Insert(match.Index, matchedstring);
             }
 
+            // Check for special cases
             if (formatStr == null || formatStr.Trim().Length == 0)
             {
                 return GetDefaultFormat(cellValue);
+            }
+
+            if ("General".Equals(formatStr, StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
+            {
+                if (IsWholeNumber(cellValue))
+                {
+                    return generalWholeNumFormat;
+                }
+                return generalDecimalNumFormat;
             }
 
 
@@ -275,6 +332,33 @@ using System.Globalization;
             {
                 return CreateDateFormat(formatStr, cellValue);
             }
+
+            // Excel supports fractions in format strings, which Java doesn't
+            if (formatStr.IndexOf("#/#") >= 0 || formatStr.IndexOf("?/?") >= 0)
+            {
+                // Strip custom text in quotes and escaped characters for now as it can cause performance problems in fractions.
+                String strippedFormatStr = formatStr.Replace("\\\\ ", " ").Replace("\\\\.", "").Replace("\"[^\"]*\"", " ");
+
+                strippedFormatStr = RegexDoubleBackslashAny.Replace(strippedFormatStr, " ");
+                strippedFormatStr = RegexAnyInDoubleQuote.Replace(strippedFormatStr, " ");
+                strippedFormatStr = RegexContinueWs.Replace(strippedFormatStr, " ");
+                bool ok = true;
+                foreach (String part in strippedFormatStr.Split(";".ToCharArray()))
+                {
+                    int indexOfFraction = IndexOfFraction(part);
+                    if (indexOfFraction == -1 || indexOfFraction != LastIndexOfFraction(part))
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok)
+                {
+                    return new FractionFormat(strippedFormatStr);
+                }
+            }
+
+
             if (Regex.IsMatch(formatStr, numPattern))
             {
                 return CreateNumberFormat(formatStr, cellValue);
@@ -286,7 +370,19 @@ using System.Globalization;
             // TODO - when does this occur?
             return null;
         }
+        private int IndexOfFraction(String format)
+        {
+            int i = format.IndexOf("#/#");
+            int j = format.IndexOf("?/?");
+            return i == -1 ? j : j == -1 ? i : Math.Min(i, j);
+        }
 
+        private int LastIndexOfFraction(String format)
+        {
+            int i = format.LastIndexOf("#/#");
+            int j = format.LastIndexOf("?/?");
+            return i == -1 ? j : j == -1 ? i : Math.Max(i, j);
+        }
         private FormatBase CreateDateFormat(String pformatStr, double cellValue)
         {
             String formatStr = pformatStr;
@@ -658,7 +754,7 @@ using System.Globalization;
         public String FormatRawCellContents(double value, int formatIndex, String formatString, bool use1904Windowing)
         {
             // Is it a date?
-            if (DateUtil.IsADateFormat(formatIndex, formatString) )
+            if (DateUtil.IsADateFormat(formatIndex, formatString))
             {
                 if (DateUtil.IsValidExcelDate(value))
                 {

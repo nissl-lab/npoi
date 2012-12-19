@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace NPOI.SS.Util
 {
@@ -11,8 +12,8 @@ namespace NPOI.SS.Util
     public abstract class FormatBase
     {
         public FormatBase()
-        { 
-        
+        {
+
         }
 
         public virtual string Format(Object obj, CultureInfo culture)
@@ -159,8 +160,8 @@ namespace NPOI.SS.Util
     public class DecimalFormat : FormatBase
     {
         public DecimalFormat()
-        { 
-            
+        {
+
         }
 
         private string pattern;
@@ -178,8 +179,13 @@ namespace NPOI.SS.Util
                 return pattern;
             }
         }
+
+        private static readonly Regex RegexFraction = new Regex("#+/#+");
         public override string Format(object obj, CultureInfo culture)
         {
+            //invalide fraction
+            pattern = RegexFraction.Replace(pattern, "/");
+            
             if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
             {
                 //return ((double)obj).ToString();
@@ -201,20 +207,20 @@ namespace NPOI.SS.Util
         {
             return System.Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
         }
-        private bool _parseIntegerOnly =false;
+        private bool _parseIntegerOnly = false;
         public bool ParseIntegerOnly
         {
-            get{return _parseIntegerOnly;}
-            set{_parseIntegerOnly =value;}
+            get { return _parseIntegerOnly; }
+            set { _parseIntegerOnly = value; }
         }
-        
+
     }
 
     public class SimpleDateFormat : FormatBase
     {
         public SimpleDateFormat()
-        { 
-            
+        {
+
         }
 
         protected string pattern;
@@ -226,7 +232,7 @@ namespace NPOI.SS.Util
 
         public override string Format(object obj, CultureInfo culture)
         {
-            String result = ((DateTime)obj).ToString(pattern,culture); //DateTimeFormatInfo.InvariantInfo
+            String result = ((DateTime)obj).ToString(pattern, culture); //DateTimeFormatInfo.InvariantInfo
             return result;
         }
 
@@ -244,7 +250,129 @@ namespace NPOI.SS.Util
             return DateTime.Parse(source, CultureInfo.InvariantCulture);
         }
     }
+    /**
+     * Format class that handles Excel style fractions, such as "# #/#" and "#/###"
+     */
+    public class FractionFormat : FormatBase
+    {
+        private String formatstr = string.Empty;
+        public FractionFormat(String s)
+        {
+            formatstr = s;
+        }
+        private static Regex regex = new Regex("(#+)([^#]*?)(#+/#+)([^#]*?)");
+        public String Format(double num)
+        {
 
+            double doubleValue = num;
+
+            // Format may be p or p;n or p;n;z (okay we never get a z).
+            // Fall back to p when n or z is not specified.
+            String[] formatBits = formatstr.Split(";".ToCharArray());
+            int f = doubleValue > 0.0 ? 0 : doubleValue < 0.0 ? 1 : 2;
+            String str = (f < formatBits.Length) ? formatBits[f] : formatBits[0];
+
+            double wholePart = Math.Floor(Math.Abs(doubleValue));
+            double decPart = Math.Abs(doubleValue) - wholePart;
+            if (wholePart + decPart == 0)
+            {
+                return "0";
+            }
+            if (doubleValue < 0.0)
+            {
+                wholePart *= -1.0;
+            }
+            //str = regex.Replace(str, ReplaceWS);
+            // Split the format string into decimal and fraction parts
+            String[] parts = str.Replace("  *", " ").Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            String[] fractParts;
+            if (parts.Length == 2)
+            {
+                fractParts = parts[1].Split("/".ToCharArray());
+            }
+            else
+            {
+                fractParts = str.Split("/".ToCharArray());
+            }
+
+            // Excel supports both #/# and ?/?, but Java only the former
+            for (int i = 0; i < fractParts.Length; i++)
+            {
+                fractParts[i] = fractParts[i].Replace('?', '#');
+            }
+
+            if (fractParts.Length == 2)
+            {
+                int fractPart1Length = Math.Min(CountHashes(fractParts[1]), 4); // Any more than 3 and we go around the loops for ever
+                double minVal = 1.0;
+                double currDenom = Math.Pow(10, fractPart1Length) - 1d;
+                double currNeum = 0;
+                for (int i = (int)(Math.Pow(10, fractPart1Length) - 1d); i > 0; i--)
+                {
+                    for (int i2 = (int)(Math.Pow(10, fractPart1Length) - 1d); i2 > 0; i2--)
+                    {
+                        if (minVal >= Math.Abs((double)i2 / (double)i - decPart))
+                        {
+                            currDenom = i;
+                            currNeum = i2;
+                            minVal = Math.Abs((double)i2 / (double)i - decPart);
+                        }
+                    }
+                }
+                DecimalFormat neumFormatter = new DecimalFormat(fractParts[0]);
+                DecimalFormat denomFormatter = new DecimalFormat(fractParts[1]);
+                CultureInfo cul = CultureInfo.CurrentCulture;
+                if (parts.Length == 2)
+                {
+                    DecimalFormat wholeFormatter = new DecimalFormat(parts[0]);
+                    String result = wholeFormatter.Format(wholePart, cul) + " " + neumFormatter.Format(currNeum, cul) + "/" + denomFormatter.Format(currDenom, cul);
+                    return result;
+                }
+                else
+                {
+                    String result = neumFormatter.Format(currNeum + (currDenom * wholePart), cul) + "/" + denomFormatter.Format(currDenom, cul);
+                    return result;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Fraction must have 2 parts, found " + fractParts.Length + " for fraction format " + this.formatstr);
+            }
+        }
+
+        private string ReplaceWS(Match m)
+        // Replace each Regex cc match with the number of the occurrence.
+        {
+            return m.Groups[0].Value + " " + m.Groups[2].Value + m.Groups[3].Value;
+        }
+
+
+        private int CountHashes(String format)
+        {
+            int count = 0;
+            for (int i = format.Length - 1; i >= 0; i--)
+            {
+                if (format[(i)] == '#')
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+        public override string Format(object obj, CultureInfo culture)
+        {
+            return Format((double)obj);
+        }
+        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
+        {
+            return toAppendTo.Append(Format((double)obj));
+        }
+
+        public override Object ParseObject(String source, int pos)
+        {
+            throw new NotImplementedException("Reverse parsing not supported");
+        }
+    }
     /**
      * Format class that does nothing and always returns a constant string.
      *
@@ -253,10 +381,12 @@ namespace NPOI.SS.Util
      *
      * @see DataFormatter#createFormat(double, int, String)
      */
-   public class ConstantStringFormat : FormatBase {
+    public class ConstantStringFormat : FormatBase
+    {
         private static DecimalFormat df = new DecimalFormat("##########");
         private String str;
-        public ConstantStringFormat(String s) {
+        public ConstantStringFormat(String s)
+        {
             str = s;
         }
         public override string Format(object obj, CultureInfo culture)
@@ -268,7 +398,8 @@ namespace NPOI.SS.Util
             return toAppendTo.Append(str);
         }
 
-        public override Object ParseObject(String source, int pos) {
+        public override Object ParseObject(String source, int pos)
+        {
             return df.ParseObject(source, pos);
         }
     }
