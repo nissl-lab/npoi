@@ -282,5 +282,41 @@ namespace NPOI.Util
                              Math.Min(original.Length - from, newLength));
             return copy;
         }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * If the array contains other arrays as elements, they are converted to
+         * strings by the {@link Object#toString} method inherited from
+         * <tt>Object</tt>, which describes their <i>identities</i> rather than
+         * their contents.
+         *
+         * <p>The value returned by this method is equal to the value that would
+         * be returned by <tt>Arrays.asList(a).toString()</tt>, unless <tt>a</tt>
+         * is <tt>null</tt>, in which case <tt>"null"</tt> is returned.</p>
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @see #deepToString(Object[])
+         * @since 1.5
+         */
+        public static String ToString(Object[] a)
+        {
+            if (a == null)
+                return "null";
+
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++)
+            {
+                b.Append(a[i].ToString());
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
     }
 }

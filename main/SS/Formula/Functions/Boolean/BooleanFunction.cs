@@ -85,6 +85,10 @@ namespace NPOI.SS.Formula.Functions
                     ValueEval ve = (ValueEval)arg;
                     tempVe = OperandResolver.CoerceValueToBoolean(ve, false);
                 }
+                else if (arg == MissingArgEval.instance)
+                {
+                    tempVe = null; // you can leave out parameters, they are simply ignored
+                }
                 else
                 {
                     throw new InvalidOperationException("Unexpected eval (" + arg.GetType().Name + ")");

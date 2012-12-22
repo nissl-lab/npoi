@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.ObjectModel;
+
 namespace TestCases.SS.Formula.Eval
 {
 
@@ -26,6 +28,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
     using TestCases.SS.Formula.Functions;
+    using System.Diagnostics;
 
     /**
      * Tests formulas and operators as loaded from a Test data spreadsheet.<p/>
@@ -37,6 +40,7 @@ namespace TestCases.SS.Formula.Eval
      *
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      */
+    [TestFixture]
     public class TestFormulasFromSpreadsheet
     {
 
@@ -142,7 +146,7 @@ namespace TestCases.SS.Formula.Eval
             }
         }
 
-
+        [TestFixtureSetUp]
         protected void SetUp()
         {
             if (workbook == null)
@@ -155,7 +159,7 @@ namespace TestCases.SS.Formula.Eval
             _EvaluationFailureCount = 0;
             _EvaluationSuccessCount = 0;
         }
-
+        [Test]
         public void TestFunctionsFromTestSpreadsheet()
         {
 
@@ -175,11 +179,11 @@ namespace TestCases.SS.Formula.Eval
                 + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
                 throw new AssertionException(msg);
             }
-#if !HIDE_UNREACHABLE_CODE
-		if(false) { // normally no output for successful Tests
-			Console.WriteLine(this.GetType().Name + ": " + successMsg);
-		}
-#endif
+
+
+			Debug.WriteLine(this.GetType().Name + ": " + successMsg);
+
+
         }
 
         /**
@@ -190,7 +194,7 @@ namespace TestCases.SS.Formula.Eval
         private void ProcessFunctionGroup(int startRowIndex, String testFocusFunctionName)
         {
             HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(workbook);
-
+            ReadOnlyCollection<String> funcs = FunctionEval.GetSupportedFunctionNames();
             int rowIndex = startRowIndex;
             while (true)
             {
@@ -225,6 +229,12 @@ namespace TestCases.SS.Formula.Eval
                         default:
                             throw new SystemException("unexpected result");
                         case Result.NO_EVALUATIONS_FOUND: // do nothing
+                            String uname = targetFunctionName.ToUpper();
+                        if(startRowIndex >= SS.START_FUNCTIONS_ROW_INDEX &&
+                                funcs.Contains(uname))
+                        {
+                            Debug.WriteLine(uname + ": function is supported but missing test data", "");
+                        }
                             break;
                     }
                 }

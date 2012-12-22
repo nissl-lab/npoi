@@ -19,20 +19,16 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Text;
     using System.Collections;
-    using System.Text.RegularExpressions;
-
-    using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
-    using NPOI.SS.Formula.Function;
-
-    using NPOI.SS.Util;
-    using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
-    using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Constant;
     using System.Globalization;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula.Constant;
+    using NPOI.SS.Formula.Function;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Util;
 
     /// <summary>
     /// Specific exception thrown when a supplied formula does not Parse properly.
@@ -169,7 +165,9 @@ namespace NPOI.SS.Formula
 
         private ParseNode _rootNode;
 
-        private static char TAB = '\t';
+        private static char TAB = '\t';// HSSF + XSSF
+	    private static char CR = '\r';  // Normally just XSSF
+	    private static char LF = '\n';  // Normally just XSSF
 
         /**
          * Lookahead Character.
@@ -297,7 +295,7 @@ namespace NPOI.SS.Formula
         /** Recognize White Space */
         private static bool IsWhite(char c)
         {
-            return c == ' ' || c == TAB;
+            return c == ' ' || c == TAB || c == CR || c == LF;
         }
 
         /** Skip Over Leading White Space */

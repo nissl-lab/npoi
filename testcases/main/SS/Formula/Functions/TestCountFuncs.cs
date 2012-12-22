@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.SS.Util;
+
 namespace TestCases.SS.Formula.Functions
 {
 
@@ -200,6 +202,29 @@ namespace TestCases.SS.Formula.Functions
         }
 
         /**
+         * String criteria in COUNTIF are case insensitive;
+         * for example, the string "apples" and the string "APPLES" will match the same cells.
+         */
+        [Test]
+        public void TestCaseInsensitiveStringComparison()
+        {
+            AreaEval range;
+            ValueEval[] values;
+
+            values = new ValueEval[] {
+                new StringEval("no"),
+                new StringEval("NO"),
+                new StringEval("No"),
+                new StringEval("Yes")
+        };
+
+            range = EvalFactory.CreateAreaEval("A1:A4", values);
+            ConfirmCountIf(3, range, new StringEval("no"));
+            ConfirmCountIf(3, range, new StringEval("NO"));
+            ConfirmCountIf(3, range, new StringEval("No"));
+        }
+
+        /**
          * special case where the criteria argument is a cell reference
          */
         [Test]
@@ -375,6 +400,58 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(false, mp, ErrorEval.DIV_ZERO);
             ConfirmPredicate(false, mp, ErrorEval.REF_INVALID);
         }
+
+        /**
+        * Bug #51498 - Check that CountIf behaves correctly for GTE, LTE
+        *  and NEQ cases
+        */
+        [Test]
+        public void TestCountifBug51498()
+        {
+            int REF_COL = 4;
+            int EVAL_COL = 3;
+
+            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("51498.xls");
+            IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet sheet = workbook.GetSheetAt(0);
+
+            // numeric criteria
+            for (int i = 0; i < 8; i++)
+            {
+                CellValue expected = evaluator.Evaluate(sheet.GetRow(i).GetCell(REF_COL));
+                CellValue actual = evaluator.Evaluate(sheet.GetRow(i).GetCell(EVAL_COL));
+                Assert.AreEqual(expected.FormatAsString(), actual.FormatAsString());
+            }
+
+            // boolean criteria
+            for (int i = 0; i < 8; i++)
+            {
+                HSSFCell cellFmla = (HSSFCell)sheet.GetRow(i).GetCell(8);
+                HSSFCell cellRef = (HSSFCell)sheet.GetRow(i).GetCell(9);
+
+                double expectedValue = cellRef.NumericCellValue;
+                double actualValue = evaluator.Evaluate(cellFmla).NumberValue;
+
+                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                    "Problem with a formula at " +
+                                new CellReference(cellFmla).FormatAsString() + "[" + cellFmla.CellFormula + "] ");
+            }
+
+            // string criteria
+            for (int i = 1; i < 9; i++)
+            {
+                ICell cellFmla = sheet.GetRow(i).GetCell(13);
+                ICell cellRef = sheet.GetRow(i).GetCell(14);
+
+                double expectedValue = cellRef.NumericCellValue;
+                double actualValue = evaluator.Evaluate(cellFmla).NumberValue;
+
+                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                    "Problem with a formula at " +
+                                new CellReference(cellFmla).FormatAsString() + "[" + cellFmla.CellFormula + "] ");
+            }
+        }
+
         [Test]
         public void TestWildCards()
         {
@@ -450,6 +527,56 @@ namespace TestCases.SS.Formula.Functions
         {
             TestCountFunctionFromSpreadsheet("countifExamples.xls", 1, 2, 3, "countif");
         }
+
+        /**
+         * Two COUNTIF examples taken from
+         * http://office.microsoft.com/en-us/excel-help/countif-function-HP010069840.aspx?CTT=5&origin=HA010277524
+         */
+        [Test]
+        public void TestCountifExamples()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("countifExamples.xls");
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+
+            HSSFSheet sheet1 = (HSSFSheet)wb.GetSheet("MSDN Example 1");
+            for (int rowIx = 7; rowIx <= 12; rowIx++)
+            {
+                HSSFRow row = (HSSFRow)sheet1.GetRow(rowIx - 1);
+                HSSFCell cellA = (HSSFCell)row.GetCell(0);  // cell containing a formula with COUNTIF
+                Assert.AreEqual(CellType.FORMULA, cellA.CellType);
+                HSSFCell cellC = (HSSFCell)row.GetCell(2);  // cell with a reference value
+                Assert.AreEqual(CellType.NUMERIC, cellC.CellType);
+
+                CellValue cv = fe.Evaluate(cellA);
+                double actualValue = cv.NumberValue;
+                double expectedValue = cellC.NumericCellValue;
+                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                    "Problem with a formula at  " + new CellReference(cellA).FormatAsString()
+                                + ": " + cellA.CellFormula + " :"
+                        + "Expected = (" + expectedValue + ") Actual=(" + actualValue + ") ");
+            }
+
+            HSSFSheet sheet2 = (HSSFSheet)wb.GetSheet("MSDN Example 2");
+            for (int rowIx = 9; rowIx <= 14; rowIx++)
+            {
+                HSSFRow row = (HSSFRow)sheet2.GetRow(rowIx - 1);
+                HSSFCell cellA = (HSSFCell)row.GetCell(0);  // cell containing a formula with COUNTIF
+                Assert.AreEqual(CellType.FORMULA, cellA.CellType);
+                HSSFCell cellC = (HSSFCell)row.GetCell(2);  // cell with a reference value
+                Assert.AreEqual(CellType.NUMERIC, cellC.CellType);
+
+                CellValue cv = fe.Evaluate(cellA);
+                double actualValue = cv.NumberValue;
+                double expectedValue = cellC.NumericCellValue;
+
+                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                    "Problem with a formula at " +
+                                new CellReference(cellA).FormatAsString() + "[" + cellA.CellFormula + "]: "
+                                + "Expected = (" + expectedValue + ") Actual=(" + actualValue + ") ");
+
+            }
+        }
+
         [Test]
         public void TestCountBlankFromSpreadsheet()
         {

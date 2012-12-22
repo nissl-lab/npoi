@@ -116,6 +116,14 @@
     <Compile Include="POIFS\Storage\TestHeaderBlockReading.cs" />
     <Compile Include="POIFS\Storage\TestHeaderBlockWriting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SS\Formula\Atp\TestDateParser.cs" />
+    <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Atp\TestWorkdayCalculator.cs" />
+    <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\TestRank.cs" />
+    <Compile Include="SS\Formula\Functions\TestSumifs.cs" />
+    <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
+    <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
     <Compile Include="Util\TestBitField.cs" />
     <Compile Include="Util\TestByteField.cs" />
     <Compile Include="Util\TestHexDump.cs" />

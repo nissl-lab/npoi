@@ -43,5 +43,6 @@ namespace NPOI.SS.Formula
         bool BooleanCellValue { get; }
         int ErrorCellValue { get; }
         Object IdentityKey { get; }
+        CellType CachedFormulaResultType { get; }
     }
 }

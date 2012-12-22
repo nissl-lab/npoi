@@ -87,20 +87,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(1,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(1,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue(1);
-            ICell a5 = sh.CreateRow(4).CreateCell(0);
+            ICell a5 = sh.CreateRow(5).CreateCell(1);
             a5.SetCellValue(7);
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(1,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(1,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(1,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(1);
+            a7.CellFormula = ("SUBTOTAL(1,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -117,20 +117,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(9,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(9,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue(1);
-            ICell a5 = sh.CreateRow(4).CreateCell(0);
+            ICell a5 = sh.CreateRow(5).CreateCell(1);
             a5.SetCellValue(7);
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(9,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(9,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(9,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(0);
+            a7.CellFormula = ("SUBTOTAL(9,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -147,20 +147,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(2,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(2,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue("POI");                  // A4 is string and not counted
-            ICell a5 = sh.CreateRow(4).CreateCell(0); // A5 is blank and not counted
+            ICell a5 = sh.CreateRow(5).CreateCell(1); // A5 is blank and not counted
 
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(2,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(2,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(2,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(1);
+            a7.CellFormula = ("SUBTOTAL(2,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -177,20 +177,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(3,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(3,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue("POI");                  // A4 is string and not counted
-            ICell a5 = sh.CreateRow(4).CreateCell(0); // A5 is blank and not counted
+            ICell a5 = sh.CreateRow(5).CreateCell(1); // A5 is blank and not counted
 
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(3,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(3,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(3,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(1);
+            a7.CellFormula = ("SUBTOTAL(3,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -207,20 +207,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(4,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(4,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue(1);
-            ICell a5 = sh.CreateRow(4).CreateCell(0);
+            ICell a5 = sh.CreateRow(5).CreateCell(1);
             a5.SetCellValue(7);
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(4,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(4,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(4,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(1);
+            a7.CellFormula = ("SUBTOTAL(4,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -237,20 +237,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(5,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(5,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue(1);
-            ICell a5 = sh.CreateRow(4).CreateCell(0);
+            ICell a5 = sh.CreateRow(5).CreateCell(1);
             a5.SetCellValue(7);
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(5,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(5,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(5,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(1);
+            a7.CellFormula = ("SUBTOTAL(5,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -267,20 +267,20 @@ namespace TestCases.SS.Formula.Functions
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
             a2.SetCellValue(3);
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(7,A1:A2)");
-            ICell a4 = sh.CreateRow(3).CreateCell(0);
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(7,B2:B3)");
+            ICell a4 = sh.CreateRow(4).CreateCell(1);
             a4.SetCellValue(1);
-            ICell a5 = sh.CreateRow(4).CreateCell(0);
+            ICell a5 = sh.CreateRow(5).CreateCell(1);
             a5.SetCellValue(7);
-            ICell a6 = sh.CreateRow(5).CreateCell(0);
-            a6.CellFormula = ("SUBTOTAL(7,A1:A5)*2 + 2");
-            ICell a7 = sh.CreateRow(6).CreateCell(0);
-            a7.CellFormula = ("SUBTOTAL(7,A1:A6)");
+            ICell a6 = sh.CreateRow(6).CreateCell(1);
+            a6.CellFormula = ("SUBTOTAL(7,B2:B6)*2 + 2");
+            ICell a7 = sh.CreateRow(7).CreateCell(1);
+            a7.CellFormula = ("SUBTOTAL(7,B2:B7)");
 
             fe.EvaluateAll();
 
@@ -293,12 +293,12 @@ namespace TestCases.SS.Formula.Functions
         {
             IWorkbook wb = new HSSFWorkbook();
             ISheet sh = wb.CreateSheet();
-            ICell a1 = sh.CreateRow(0).CreateCell(0);
+            ICell a1 = sh.CreateRow(1).CreateCell(1);
             a1.SetCellValue(1);
-            ICell a2 = sh.CreateRow(1).CreateCell(0);
-            a2.CellFormula = ("SUBTOTAL(9,A1)");
-            ICell a3 = sh.CreateRow(2).CreateCell(0);
-            a3.CellFormula = ("SUBTOTAL(9,A1:A2)");
+            ICell a2 = sh.CreateRow(2).CreateCell(1);
+            a2.CellFormula = ("SUBTOTAL(9,B2)");
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(9,B2:B3)");
 
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             fe.EvaluateAll();
@@ -321,27 +321,27 @@ namespace TestCases.SS.Formula.Functions
             ISheet sheet = workbook.GetSheetAt(0);
             IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
 
-            Assert.AreEqual(10.0, sheet.GetRow(0).GetCell(0).NumericCellValue, "A1");
-            Assert.AreEqual(20.0, sheet.GetRow(1).GetCell(0).NumericCellValue, "A2");
+            Assert.AreEqual(10.0, sheet.GetRow(1).GetCell(1).NumericCellValue, "B2");
+            Assert.AreEqual(20.0, sheet.GetRow(2).GetCell(1).NumericCellValue, "B3");
 
             //Test simple subtotal over one area
-            ICell cellA3 = sheet.GetRow(2).GetCell(0);
-            ConfirmExpectedResult(evaluator, "A3", cellA3, 30.0);
+            ICell cellA3 = sheet.GetRow(3).GetCell(1);
+            ConfirmExpectedResult(evaluator, "B4", cellA3, 30.0);
 
             //Test existence of the second area
-            Assert.IsNotNull(sheet.GetRow(0).GetCell(1), "B1 must not be null");
-            Assert.AreEqual(7.0, sheet.GetRow(0).GetCell(1).NumericCellValue, "B1");
+            Assert.IsNotNull(sheet.GetRow(1).GetCell(2), "C2 must not be null");
+            Assert.AreEqual(7.0, sheet.GetRow(1).GetCell(2).NumericCellValue, "C2");
 
-            ICell cellC1 = sheet.GetRow(0).GetCell(2);
-            ICell cellC2 = sheet.GetRow(1).GetCell(2);
-            ICell cellC3 = sheet.GetRow(2).GetCell(2);
+            ICell cellC1 = sheet.GetRow(1).GetCell(3);
+            ICell cellC2 = sheet.GetRow(2).GetCell(3);
+            ICell cellC3 = sheet.GetRow(3).GetCell(3);
 
             //Test Functions SUM, COUNT and COUNTA calculation of SUBTOTAL
             //a) areas A and B are used
             //b) first 2 subtotals don't consider the value of nested subtotal in A3
-            ConfirmExpectedResult(evaluator, "SUBTOTAL(SUM;A1:A7;B1:B7)", cellC1, 37.0);
-            ConfirmExpectedResult(evaluator, "SUBTOTAL(COUNT;A1:A7;B1:B7)", cellC2, 3.0);
-            ConfirmExpectedResult(evaluator, "SUBTOTAL(COUNTA;A1:A7;B1:B7)", cellC3, 5.0);
+            ConfirmExpectedResult(evaluator, "SUBTOTAL(SUM;B2:B8;C2:C8)", cellC1, 37.0);
+            ConfirmExpectedResult(evaluator, "SUBTOTAL(COUNT;B2:B8;C2:C8)", cellC2, 3.0);
+            ConfirmExpectedResult(evaluator, "SUBTOTAL(COUNTA;B2:B8;C2:C8)", cellC3, 5.0);
         }
     }
 

@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.SS.UserModel;
+
 namespace NPOI.HSSF.UserModel
 {
     using System;
@@ -123,6 +125,11 @@ namespace NPOI.HSSF.UserModel
         public object IdentityKey
         {
             get { return _cell; }
+        }
+
+        public CellType CachedFormulaResultType
+        {
+            get { return _cell.CachedFormulaResultType; }
         }
     }
 }

@@ -48,13 +48,13 @@ namespace NPOI.SS.Formula.Functions
                 int col = (int)NumericFunction.SingleOperandEvaluate(args[1], srcRowIndex, srcColumnIndex);
 
                 int refType;
-                if (args.Length > 2)
+                if (args.Length > 2 && args[2] != MissingArgEval.instance)
                 {
                     refType = (int)NumericFunction.SingleOperandEvaluate(args[2], srcRowIndex, srcColumnIndex);
                 }
                 else
                 {
-                    refType = REF_ABSOLUTE;
+                    refType = REF_ABSOLUTE; // this is also the default if parameter is not given
                 }
                 switch (refType)
                 {

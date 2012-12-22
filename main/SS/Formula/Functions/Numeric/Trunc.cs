@@ -39,7 +39,11 @@ namespace NPOI.SS.Formula.Functions
                 double d0 = NumericFunction.SingleOperandEvaluate(arg0, srcRowIndex, srcColumnIndex);
                 double d1 = NumericFunction.SingleOperandEvaluate(arg1, srcRowIndex, srcColumnIndex);
                 double multi = Math.Pow(10d, d1);
-                result = Math.Floor(d0 * multi) / multi;
+                if (d0 < 0)
+                    result = -Math.Floor(-d0*multi)/multi;
+                else
+                    result = Math.Floor(d0*multi)/multi;
+                //result = Math.Floor(d0 * multi) / multi;
                 NumericFunction.CheckValue(result);
             }
             catch (EvaluationException e)

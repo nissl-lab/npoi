@@ -151,7 +151,15 @@
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
+    <Compile Include="SS\Formula\Atp\DateParser.cs" />
+    <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
+    <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Rank.cs" />
     <Compile Include="SS\Formula\Functions\Rate.cs" />
+    <Compile Include="SS\Formula\Functions\Sumifs.cs" />
+    <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />

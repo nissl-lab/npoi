@@ -280,6 +280,17 @@ namespace NPOI.SS.Formula.Functions
                     NumberEval ne = (NumberEval)x;
                     testValue = ne.NumberValue;
                 }
+                else if ((x is BlankEval))
+                {
+                    switch (Code)
+                    {
+                        case CmpOp.NE:
+                            // Excel counts blank values in range as not equal to any value. See Bugzilla 51498
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
                 else
                 {
                     return false;
@@ -337,6 +348,28 @@ namespace NPOI.SS.Formula.Functions
                     BoolEval be = (BoolEval)x;
                     testValue = BoolToInt(be.BooleanValue);
                 }
+                else if ((x is BlankEval))
+                {
+                    switch (Code)
+                    {
+                        case CmpOp.NE:
+                            // Excel counts blank values in range as not equal to any value. See Bugzilla 51498
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+                else if ((x is NumberEval))
+                {
+                    switch (Code)
+                {
+                    case CmpOp.NE:
+                        // not-equals comparison of a number to boolean always returnes false
+                        return true;
+                    default:
+                        return false;
+                }
+            }
                 else
                 {
                     return false;
@@ -382,6 +415,10 @@ namespace NPOI.SS.Formula.Functions
                         case CmpOp.NONE:
                         case CmpOp.EQ:
                             return _value.Length == 0;
+                        case CmpOp.NE:
+                            // pred '<>' matches empty string but not blank cell
+                            // pred '<>ABC'  matches blank and 'not ABC'
+                            return _value.Length != 0;
                     }
                     // no other criteria matches a blank cell
                     return false;
@@ -411,7 +448,7 @@ namespace NPOI.SS.Formula.Functions
                     return Evaluate(_pattern.IsMatch(testedValue));
                 }
                 //return Evaluate(testedValue.CompareTo(_value));
-                return Evaluate(string.Compare(testedValue, _value, StringComparison.CurrentCulture));
+                return Evaluate(string.Compare(testedValue, _value, StringComparison.CurrentCultureIgnoreCase));
             }
 
             /// <summary>

@@ -403,5 +403,34 @@ namespace NPOI.HSSF.UserModel
             HSSFFormulaEvaluator.EvaluateAllFormulaCells(workbook, this);
         }
 
+        /**
+         * Whether to ignore missing references to external workbooks and
+         * use cached formula results in the main workbook instead.
+         * <p>
+         * In some cases exetrnal workbooks referenced by formulas in the main workbook are not avaiable.
+         * With this method you can control how POI handles such missing references:
+         * <ul>
+         *     <li>by default ignoreMissingWorkbooks=false and POI throws {@link org.apache.poi.ss.formula.CollaboratingWorkbooksEnvironment.WorkbookNotFoundException}
+         *     if an external reference cannot be resolved</li>
+         *     <li>if ignoreMissingWorkbooks=true then POI uses cached formula result
+         *     that already exists in the main workbook</li>
+         * </ul>
+         *</p>
+         * @param ignore whether to ignore missing references to external workbooks
+         */
+        public bool IgnoreMissingWorkbooks
+        {
+            get { return _bookEvaluator.IgnoreMissingWorkbooks; }
+            set { _bookEvaluator.IgnoreMissingWorkbooks = value; }
+        }
+
+        /** {@inheritDoc} */
+        public bool DebugEvaluationOutputForNextEval
+        {
+            get { return _bookEvaluator.DebugEvaluationOutputForNextEval; }
+            set { _bookEvaluator.DebugEvaluationOutputForNextEval = value; }
+            
+        }
+
     }
 }

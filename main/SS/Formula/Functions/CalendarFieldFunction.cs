@@ -25,6 +25,9 @@ namespace NPOI.SS.Formula.Functions
      * Implementation of Excel functions Date parsing functions:
      *  Date - DAY, MONTH and YEAR
      *  Time - HOUR, MINUTE and SECOND
+     *  
+     * @author Others (not mentioned in code)
+     * @author Thies Wellpott
      */
     public class CalendarFieldFunction : Fixed1ArgFunction
     {
@@ -82,7 +85,11 @@ namespace NPOI.SS.Formula.Functions
                 }
                 //throw new InvalidOperationException("bad date field " + _dateFieldId);
             }
-            DateTime d = DateUtil.GetJavaDate(serialDate, false); // TODO fix 1900/1904 problem
+            // TODO Figure out if we're in 1900 or 1904
+            // EXCEL functions round up nearly a half second (probably to prevent floating point
+            // rounding issues); use UTC here to prevent daylight saving issues for HOUR
+            //DateTime d = DateUtil.GetJavaDate(serialDate, false);
+            DateTime d = DateUtil.GetJavaCalendarUTC(serialDate + 0.4995 / DateUtil.SECONDS_PER_DAY, false);
 
             //Calendar c = new GregorianCalendar();
             //c.setTime(d);

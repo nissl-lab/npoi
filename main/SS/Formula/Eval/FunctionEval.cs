@@ -18,6 +18,9 @@
  * Created on May 8, 2005
  *
  */
+
+using NPOI.SS.Formula.Atp;
+
 namespace NPOI.SS.Formula.Eval
 {
     using System;
@@ -25,18 +28,23 @@ namespace NPOI.SS.Formula.Eval
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Function;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *  
      */
+
     public abstract class FunctionEval
     {
         /**
          * Some function IDs that require special treatment
          */
+
         private class FunctionID
-        {		/** 1 */
+        {
+            /** 1 */
             public const int IF = FunctionMetadataRegistry.FUNCTION_INDEX_IF;
             public const int SUM = FunctionMetadataRegistry.FUNCTION_INDEX_SUM;
             /** 78 */
@@ -157,7 +165,7 @@ namespace NPOI.SS.Formula.Eval
             retval[67] = CalendarFieldFunction.DAY; // DAY
             retval[68] = CalendarFieldFunction.MONTH; // MONTH
             retval[69] = CalendarFieldFunction.YEAR; // YEAR
-            retval[70] = new NotImplementedFunction("WEEKDAY"); // WEEKDAY
+            retval[70] = WeekdayFunc.instance; // WEEKDAY
             retval[71] = CalendarFieldFunction.HOUR;
             retval[72] = CalendarFieldFunction.MINUTE;
             retval[73] = CalendarFieldFunction.SECOND;
@@ -297,7 +305,7 @@ namespace NPOI.SS.Formula.Eval
             retval[213] = NumericFunction.ROUNDDOWN; // ROUNDDOWN
             retval[214] = new NotImplementedFunction("ASC"); // ASC
             retval[215] = new NotImplementedFunction("DBCS"); // DBCS
-            retval[216] = new NotImplementedFunction("RANK"); // RANK
+            retval[216] = new Rank(); // RANK
             retval[219] = new Address(); // AddRESS
             retval[220] = new Days360(); // DAYS360
             retval[221] = new NotImplementedFunction("TODAY"); // TODAY
@@ -414,7 +422,8 @@ namespace NPOI.SS.Formula.Eval
             retval[339] = new NotImplementedFunction("GetPIVOTTABLE"); // GetPIVOTTABLE
             retval[340] = new NotImplementedFunction("GetPIVOTFIELD"); // GetPIVOTFIELD
             retval[341] = new NotImplementedFunction("GetPIVOTITEM"); // GetPIVOTITEM
-            retval[342] = NumericFunction.RADIANS; ; // RADIANS
+            retval[342] = NumericFunction.RADIANS;
+            ; // RADIANS
             retval[343] = NumericFunction.DEGREES; // DEGREES
             retval[344] = new Subtotal(); // SUBTOTAL
             retval[345] = new Sumif(); // SUMIF
@@ -441,6 +450,89 @@ namespace NPOI.SS.Formula.Eval
             retval[366] = new NotImplementedFunction("STDEVA"); // STDEVA
             retval[367] = new NotImplementedFunction("VARA"); // VARA
             return retval;
+        }
+
+        /**
+     * Register a new function in runtime.
+     *
+     * @param name  the function name
+     * @param func  the functoin to register
+     * @throws ArgumentException if the function is unknown or already  registered.
+     * @since 3.8 beta6
+     */
+
+        public static void RegisterFunction(String name, Function func)
+        {
+            FunctionMetadata metaData = FunctionMetadataRegistry.GetFunctionByName(name);
+            if (metaData == null)
+            {
+                if (AnalysisToolPak.IsATPFunction(name))
+                {
+                    throw new ArgumentException(name + " is a function from the Excel Analysis Toolpack. " +
+                                                "Use AnalysisToolpack.RegisterFunction(String name, FreeRefFunction func) instead.");
+                }
+                else
+                {
+                    throw new ArgumentException("Unknown function: " + name);
+                }
+            }
+
+            int idx = metaData.Index;
+            if (functions[idx] is NotImplementedFunction)
+            {
+                functions[idx] = func;
+            }
+            else
+            {
+                throw new ArgumentException("POI already implememts " + name +
+                                            ". You cannot override POI's implementations of Excel functions");
+            }
+        }
+
+        /**
+         * Returns a collection of function names implemented by POI.
+         *
+         * @return an array of supported functions
+         * @since 3.8 beta6
+         */
+
+        public static ReadOnlyCollection<String> GetSupportedFunctionNames()
+        {
+            List<String> lst = new List<String>();
+            for (int i = 0; i < functions.Length; i++)
+            {
+                Function func = functions[i];
+                FunctionMetadata metaData = FunctionMetadataRegistry.GetFunctionByIndex(i);
+                if (func != null && !(func is NotImplementedFunction))
+                {
+                    lst.Add(metaData.Name);
+                }
+            }
+            lst.Add("INDIRECT"); // INDIRECT is a special case
+            return lst.AsReadOnly(); // Collections.unmodifiableCollection(lst);
+        }
+
+        /**
+         * Returns an array of function names NOT implemented by POI.
+         *
+         * @return an array of not supported functions
+         * @since 3.8 beta6
+         */
+
+        public static ReadOnlyCollection<String> GetNotSupportedFunctionNames()
+        {
+            List<String> lst = new List<String>();
+            for (int i = 0; i < functions.Length; i++)
+            {
+                Function func = functions[i];
+                if (func != null && (func is NotImplementedFunction))
+                {
+                    FunctionMetadata metaData = FunctionMetadataRegistry.GetFunctionByIndex(i);
+                    lst.Add(metaData.Name);
+                }
+            }
+            lst.Remove("INDIRECT"); // INDIRECT is a special case
+            return lst.AsReadOnly(); // Collections.unmodifiableCollection(lst);
         }
     }
 }

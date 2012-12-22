@@ -34,6 +34,9 @@ namespace TestCases.SS.Formula.Functions
             String formulaText = "ADDRESS(1,2)";
             ConfirmResult(fe, cell, formulaText, "$B$1");
 
+            formulaText = "ADDRESS(1,2,)";					// with explicitly empty third parameter
+            ConfirmResult(fe, cell, formulaText, "$B$1");
+
             formulaText = "ADDRESS(22,44)";
             ConfirmResult(fe, cell, formulaText, "$AR$22");
 

@@ -171,5 +171,9 @@ namespace NPOI.SS.Formula.Eval.Forked
                 return _masterCell.ColumnIndex;
             }
         }
+        public CellType CachedFormulaResultType
+        {
+            get { return _masterCell.CachedFormulaResultType; }
+        }
     }
 }

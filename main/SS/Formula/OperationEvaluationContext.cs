@@ -1,4 +1,6 @@
-﻿namespace NPOI.SS.Formula
+﻿using NPOI.Util;
+
+namespace NPOI.SS.Formula
 {
     using System;
     using NPOI.SS.Formula.Eval;
@@ -80,9 +82,9 @@
                 {
                     targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
                 }
-                catch (WorkbookNotFoundException)
+                catch (WorkbookNotFoundException e)
                 {
-                    throw;
+                    throw new RuntimeException(e.Message, e);
                 }
                 otherSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.GetSheetName());
                 if (otherSheetIndex < 0)

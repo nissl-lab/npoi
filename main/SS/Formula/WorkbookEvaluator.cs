@@ -15,6 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using NPOI.SS.Formula.Atp;
+
 namespace NPOI.SS.Formula
 {
     using System;
@@ -53,6 +57,8 @@ namespace NPOI.SS.Formula
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
         private IStabilityClassifier _stabilityClassifier;
         private UDFFinder _udfFinder;
+
+        private bool _ignoreMissingWorkbooks = false;
 
         public WorkbookEvaluator(IEvaluationWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
             : this(workbook, null, stabilityClassifier, udfFinder)
@@ -121,15 +127,36 @@ namespace NPOI.SS.Formula
         }
         private static bool IsDebugLogEnabled()
         {
+#if DEBUG
+            return true;
+#else
             return false;
+#endif
+        }
+
+        private static bool IsInfoLogEnabled()
+        {
+#if TRACE
+            return true;
+#else
+            return false;
+#endif
         }
         private static void LogDebug(String s)
         {
             if (IsDebugLogEnabled())
             {
-                Console.WriteLine(s);
+                Debug.WriteLine(s);
             }
         }
+        private static void LogInfo(String s)
+        {
+            if (IsInfoLogEnabled())
+            {
+                Trace.WriteLine(s);
+            }
+        }
+
         /* package */
         public void AttachToEnvironment(CollaboratingWorkbooksEnvironment collaboratingWorkbooksEnvironment, EvaluationCache cache, int workbookIx)
         {
@@ -291,6 +318,38 @@ namespace NPOI.SS.Formula
                 {
                     throw AddExceptionInfo(e, sheetIndex, rowIndex, columnIndex);
                 }
+                catch (RuntimeException re)
+                {
+                    if (re.InnerException is WorkbookNotFoundException && _ignoreMissingWorkbooks)
+                    {
+                        LogInfo(re.InnerException.Message + " - Continuing with cached value!");
+                        switch (srcCell.CachedFormulaResultType)
+                        {
+                            case CellType.NUMERIC:
+                                result = new NumberEval(srcCell.NumericCellValue);
+                                break;
+                            case CellType.STRING:
+                                result = new StringEval(srcCell.StringCellValue);
+                                break;
+                            case CellType.BLANK:
+                                result = BlankEval.instance;
+                                break;
+                            case CellType.BOOLEAN:
+                                result = BoolEval.ValueOf(srcCell.BooleanCellValue);
+                                break;
+                            case CellType.ERROR:
+                                result = ErrorEval.ValueOf(srcCell.ErrorCellValue);
+                                break;
+                            case CellType.FORMULA:
+                            default:
+                                throw new RuntimeException("Unexpected cell type '" + srcCell.CellType + "' found!");
+                        }
+                    }
+                    else
+                    {
+                        throw re;
+                    }
+                }
                 finally
                 {
                     tracker.EndEvaluate(cce);
@@ -308,7 +367,7 @@ namespace NPOI.SS.Formula
             {
                 String sheetName = GetSheetName(sheetIndex);
                 CellReference cr = new CellReference(rowIndex, columnIndex);
-                LogDebug("Evaluated " + sheetName + "!" + cr.FormatAsString() + " To " + cce.GetValue().ToString());
+                LogDebug("Evaluated " + sheetName + "!" + cr.FormatAsString() + " To " + cce.GetValue());
             }
             // Usually (result === cce.getValue())
             // But sometimes: (result==ErrorEval.CIRCULAR_REF_ERROR, cce.getValue()==null)
@@ -366,10 +425,40 @@ namespace NPOI.SS.Formula
             }
             throw new Exception("Unexpected cell type (" + cellType + ")");
         }
+
+        /**
+         * whether print detailed messages about the next formula evaluation
+         */
+	    private bool dbgEvaluationOutputForNextEval = false;
+
+	    // special logger for formula evaluation output (because of possibly very large output)
+	    private POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
+	    // current indent level for evalution; negative value for no output
+	    private int dbgEvaluationOutputIndent = -1;
+
         // visibility raised for testing
         /* package */
         public ValueEval EvaluateFormula(OperationEvaluationContext ec, Ptg[] ptgs)
         {
+            String dbgIndentStr = "";		// always init. to non-null just for defensive avoiding NPE
+            if (dbgEvaluationOutputForNextEval)
+            {
+                // first evaluation call when ouput is desired, so iit. this evaluator instance
+                dbgEvaluationOutputIndent = 1;
+                dbgEvaluationOutputForNextEval = false;
+            }
+            if (dbgEvaluationOutputIndent > 0)
+            {
+                // init. indent string to needed spaces (create as substring vom very long space-only string;
+                // limit indendation for deep recursions)
+                dbgIndentStr = "                                                                                                    ";
+                dbgIndentStr = dbgIndentStr.Substring(0, Math.Min(dbgIndentStr.Length, dbgEvaluationOutputIndent * 2));
+                EVAL_LOG.Log(POILogger.WARN, dbgIndentStr
+                                   + "- evaluateFormula('" + ec.GetRefEvaluatorForCurrentSheet().SheetName
+                                   + "'/" + new CellReference(ec.RowIndex, ec.ColumnIndex).FormatAsString()
+                                   + "): " + Arrays.ToString(ptgs).Replace("\\Qorg.apache.poi.ss.formula.ptg.\\E", ""));
+                dbgEvaluationOutputIndent++;
+            }
 
             Stack<ValueEval> stack = new Stack<ValueEval>();
             for (int i = 0, iSize = ptgs.Length; i < iSize; i++)
@@ -377,6 +466,10 @@ namespace NPOI.SS.Formula
 
                 // since we don't know how To handle these yet :(
                 Ptg ptg = ptgs[i];
+                if (dbgEvaluationOutputIndent > 0)
+                {
+                    EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "  * ptg " + i + ": " + ptg.ToString());
+                }
                 if (ptg is AttrPtg)
                 {
                     AttrPtg attrPtg = (AttrPtg)ptg;
@@ -506,6 +599,10 @@ namespace NPOI.SS.Formula
                 }
                 //			logDebug("push " + opResult);
                 stack.Push(opResult);
+                if (dbgEvaluationOutputIndent > 0)
+                {
+                    EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "    = " + opResult.ToString());
+                }
             }
 
             ValueEval value = ((ValueEval)stack.Pop());
@@ -513,8 +610,20 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
-            return DereferenceResult(value, ec.RowIndex, ec.ColumnIndex);
-
+            ValueEval result = DereferenceResult(value, ec.RowIndex, ec.ColumnIndex);
+            if (dbgEvaluationOutputIndent > 0)
+            {
+                EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "finshed eval of "
+                                + new CellReference(ec.RowIndex, ec.ColumnIndex).FormatAsString()
+                                + ": " + result.ToString());
+                dbgEvaluationOutputIndent--;
+                if (dbgEvaluationOutputIndent == 1)
+                {
+                    // this evaluation is done, reset indent to stop logging
+                    dbgEvaluationOutputIndent = -1;
+                }
+            } // if
+            return result;
         }
         /**
  * Calculates the number of tokens that the evaluator should skip upon reaching a tAttrSkip.
@@ -663,13 +772,14 @@ namespace NPOI.SS.Formula
             }
             throw new RuntimeException("Unexpected ptg class (" + ptg.GetType().Name + ")");
         }
+
         internal ValueEval EvaluateNameFormula(Ptg[] ptgs, OperationEvaluationContext ec)
         {
-            if (ptgs.Length > 1)
+            if (ptgs.Length == 1)
             {
-                throw new Exception("Complex name formulas not supported yet");
+                return GetEvalForPtg(ptgs[0], ec);
             }
-            return GetEvalForPtg(ptgs[0], ec);
+            return EvaluateFormula(ec, ptgs);
         }
 
         /**
@@ -687,6 +797,86 @@ namespace NPOI.SS.Formula
         public FreeRefFunction FindUserDefinedFunction(String functionName)
         {
             return _udfFinder.FindFunction(functionName);
+        }
+
+        /**
+         * Whether to ignore missing references to external workbooks and
+         * use cached formula results in the main workbook instead.
+         * <p>
+         * In some cases exetrnal workbooks referenced by formulas in the main workbook are not avaiable.
+         * With this method you can control how POI handles such missing references:
+         * <ul>
+         *     <li>by default ignoreMissingWorkbooks=false and POI throws {@link WorkbookNotFoundException}
+         *     if an external reference cannot be resolved</li>
+         *     <li>if ignoreMissingWorkbooks=true then POI uses cached formula result
+         *     that already exists in the main workbook</li>
+         * </ul>
+         *</p>
+         * @param ignore whether to ignore missing references to external workbooks
+         * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=52575">Bug 52575 for details</a>
+         */
+        public bool IgnoreMissingWorkbooks
+        {
+            get { return _ignoreMissingWorkbooks; }
+            set { _ignoreMissingWorkbooks = value; }
+        }
+
+        /**
+         * Return a collection of functions that POI can evaluate
+         *
+         * @return names of functions supported by POI
+         */
+        public static List<String> GetSupportedFunctionNames()
+        {
+            List<String> lst = new List<String>();
+            lst.AddRange(FunctionEval.GetSupportedFunctionNames());
+            lst.AddRange(AnalysisToolPak.GetSupportedFunctionNames());
+            return lst;
+        }
+
+        /**
+         * Return a collection of functions that POI does not support
+         *
+         * @return names of functions NOT supported by POI
+         */
+        public static List<String> GetNotSupportedFunctionNames()
+        {
+            List<String> lst = new List<String>();
+            lst.AddRange(FunctionEval.GetNotSupportedFunctionNames());
+            lst.AddRange(AnalysisToolPak.GetNotSupportedFunctionNames());
+            return lst;
+        }
+
+        /**
+         * Register a ATP function in runtime.
+         *
+         * @param name  the function name
+         * @param func  the functoin to register
+         * @throws IllegalArgumentException if the function is unknown or already  registered.
+         * @since 3.8 beta6
+         */
+        public static void RegisterFunction(String name, FreeRefFunction func)
+        {
+            AnalysisToolPak.RegisterFunction(name, func);
+        }
+
+        /**
+         * Register a function in runtime.
+         *
+         * @param name  the function name
+         * @param func  the functoin to register
+         * @throws IllegalArgumentException if the function is unknown or already  registered.
+         * @since 3.8 beta6
+         */
+        public static void RegisterFunction(String name, Functions.Function func)
+        {
+            FunctionEval.RegisterFunction(name, func);
+        }
+
+        public bool DebugEvaluationOutputForNextEval
+        {
+            get { return dbgEvaluationOutputForNextEval; }
+            set { dbgEvaluationOutputForNextEval = value; }
         }
     }
 }

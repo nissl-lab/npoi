@@ -20,10 +20,9 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Text;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Util;
 
     /**
      *
@@ -51,8 +50,8 @@ namespace NPOI.SS.Formula
         public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
         {
 
-            int rowIx = (relativeRowIndex + FirstRow) & 0xFFFF;
-            int colIx = (relativeColumnIndex + FirstColumn) & 0x00FF;
+            int rowIx = (relativeRowIndex + FirstRow);
+            int colIx = (relativeColumnIndex + FirstColumn);
 
             return _evaluator.GetEvalForCell(rowIx, colIx);
         }
@@ -105,7 +104,7 @@ namespace NPOI.SS.Formula
         public override bool IsSubTotal(int rowIndex, int columnIndex)
         {
             // delegate the query to the sheet evaluator which has access to internal ptgs
-            return _evaluator.IsSubTotal(rowIndex, columnIndex);
+            return _evaluator.IsSubTotal(FirstRow + rowIndex, FirstColumn + columnIndex);
         }
     }
 }

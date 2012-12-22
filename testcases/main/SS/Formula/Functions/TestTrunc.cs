@@ -60,6 +60,14 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short)-1);
             Assert.AreEqual((new NumberEval(2d)).NumberValue, ((NumberEval)result).NumberValue, "TRUNC");
         }
+
+        [Test]
+        public void TestNegative()
+        {
+            ValueEval[] args = {new NumberEval(-8.9), new NumberEval(0)};
+            ValueEval result = NumericFunction.TRUNC.Evaluate(args, -1, (short) -1);
+            Assert.AreEqual((new NumberEval(-8)).NumberValue, ((NumberEval) result).NumberValue, "TRUNC");
+        }
     }
 
 }

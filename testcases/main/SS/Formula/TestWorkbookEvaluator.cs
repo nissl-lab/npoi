@@ -244,6 +244,49 @@ namespace TestCases.SS.Formula
             Assert.AreEqual(CellType.ERROR, cv.CellType);
             Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cv.ErrorValue);
         }
+
+        /**
+         * formulas with defined names.
+         */
+        [Test]
+        public void TestNamesInFormulas()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Sheet1");
+
+            IName name1 = wb.CreateName();
+            name1.NameName = ("aConstant");
+            name1.RefersToFormula = ("3.14");
+
+            IName name2 = wb.CreateName();
+            name2.NameName = ("aFormula");
+            name2.RefersToFormula = ("SUM(Sheet1!$A$1:$A$3)");
+
+            IName name3 = wb.CreateName();
+            name3.NameName = ("aSet");
+            name3.RefersToFormula = ("Sheet1!$A$2:$A$4");
+
+
+            IRow row0 = sheet.CreateRow(0);
+            IRow row1 = sheet.CreateRow(1);
+            IRow row2 = sheet.CreateRow(2);
+            IRow row3 = sheet.CreateRow(3);
+            row0.CreateCell(0).SetCellValue(2);
+            row1.CreateCell(0).SetCellValue(5);
+            row2.CreateCell(0).SetCellValue(3);
+            row3.CreateCell(0).SetCellValue(7);
+
+            row0.CreateCell(2).SetCellFormula("aConstant");
+            row1.CreateCell(2).SetCellFormula("aFormula");
+            row2.CreateCell(2).SetCellFormula("SUM(aSet)");
+            row3.CreateCell(2).SetCellFormula("aConstant+aFormula+SUM(aSet)");
+
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual(3.14, fe.Evaluate(row0.GetCell(2)).NumberValue);
+            Assert.AreEqual(10.0, fe.Evaluate(row1.GetCell(2)).NumberValue);
+            Assert.AreEqual(15.0, fe.Evaluate(row2.GetCell(2)).NumberValue);
+            Assert.AreEqual(28.14, fe.Evaluate(row3.GetCell(2)).NumberValue);
+        }
     }
 
 }
