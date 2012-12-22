@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.Functions
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
             }
             // Negative months are fairly easy
-            while (month < 0)
+            while (month <= 0)
             {
                 year--;
                 month += 12;

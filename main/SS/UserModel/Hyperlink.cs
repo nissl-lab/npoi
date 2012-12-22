@@ -22,7 +22,7 @@ namespace NPOI.SS.UserModel
     {
         Unknown = 0,
         /// <summary>
-        /// Link to a existing file or web page
+        /// Link to an existing file or web page
         /// </summary>
         URL = 1,
         /// <summary>
@@ -44,7 +44,7 @@ namespace NPOI.SS.UserModel
     public interface IHyperlink
     {
         /// <summary>
-        /// Hypelink address. Depending on the hyperlink type it can be URL, e-mail, patrh to a file, etc.
+        /// Hyperlink address. Depending on the hyperlink type it can be URL, e-mail, patrh to a file, etc.
         /// </summary>
         String Address { get; set; }
 

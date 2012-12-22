@@ -397,5 +397,48 @@ namespace TestCases.HSSF.UserModel
             // confirm the evaluation result too
             Assert.AreEqual(ErrorEval.NA, ve);
         }
+        [Test]
+        public void TestDateWithNegativeParts_bug48528()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet("Sheet1");
+            HSSFRow row = (HSSFRow)sheet.CreateRow(1);
+            HSSFCell cell = (HSSFCell)row.CreateCell(0);
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+
+            // 5th Feb 2012 = 40944
+            // 1st Feb 2012 = 40940
+            // 5th Jan 2012 = 40913
+            // 5th Dec 2011 = 40882
+            // 5th Feb 2011 = 40579
+
+            cell.CellFormula=("DATE(2012,2,1)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40940.0, fe.Evaluate(cell).NumberValue);
+
+            cell.CellFormula=("DATE(2012,2,1+4)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40944.0, fe.Evaluate(cell).NumberValue);
+
+            cell.CellFormula=("DATE(2012,2-1,1+4)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
+
+            cell.CellFormula=("DATE(2012,2,1-27)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
+
+            cell.CellFormula=("DATE(2012,2-2,1+4)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
+
+            cell.CellFormula=("DATE(2012,2,1-58)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
+
+            cell.CellFormula=("DATE(2012,2-12,1+4)");
+            fe.NotifyUpdateCell(cell);
+            Assert.AreEqual(40579.0, fe.Evaluate(cell).NumberValue);
+        }
     }
 }
