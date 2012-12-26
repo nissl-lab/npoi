@@ -21,20 +21,22 @@ namespace NPOI.SS.UserModel.Charts
 
 
     /**
+     * Represents scatter charts serie.
      * @author Roman Kashitsyn
      */
-    public interface IScatterChartSerie
+
+    public interface IScatterChartSerie<Tx, Ty>
     {
 
         /**
-         * @param xMarker data marker to use for X values.
-         */
-        void SetXValues(DataMarker xMarker);
+      * @return data source used for X axis values
+      */
+        IChartDataSource<Tx> GetXValues();
 
-        /**'
-         * @param yMarker data marker to use for Y values.
+        /**
+         * @return data source used for Y axis values
          */
-        void SetYValues(DataMarker yMarker);
+        IChartDataSource<Ty> GetYValues();
 
     }
 

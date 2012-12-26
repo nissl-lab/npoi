@@ -30,42 +30,48 @@ namespace NPOI.XSSF.UserModel.Charts
      *
      * @author Roman Kashitsyn
      */
-    public class XSSFScatterChartData : IScatterChartData
+    public class XSSFScatterChartData<Tx, Ty> : IScatterChartData<Tx, Ty>
     {
 
         /**
          * List of all data series.
          */
-        private List<IScatterChartSerie> series;
+        private List<IScatterChartSerie<Tx, Ty>> series;
 
         public XSSFScatterChartData()
         {
-            series = new List<IScatterChartSerie>();
+            series = new List<IScatterChartSerie<Tx, Ty>>();
         }
 
         /**
          * Package private ScatterChartSerie implementation.
          */
-        public class Serie : IScatterChartSerie
+        public class Serie : IScatterChartSerie<Tx, Ty>
         {
             private int id;
             private int order;
             private bool useCache;
             private DataMarker xMarker;
             private DataMarker yMarker;
-            private XSSFNumberCache lastCaclulatedXCache;
-            private XSSFNumberCache lastCalculatedYCache;
+            //private XSSFNumberCache lastCaclulatedXCache;
+            //private XSSFNumberCache lastCalculatedYCache;
 
-            internal Serie(int id, int order)
+            private IChartDataSource<Tx> xs;
+            private IChartDataSource<Ty> ys;
+
+            internal Serie(int id, int order, 
+                IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
                 : base()
             {
 
                 this.id = id;
                 this.order = order;
-                this.useCache = true;
+                //this.useCache = true;
+                this.xs = xs;
+                this.ys = ys;
             }
 
-            public void SetXValues(DataMarker marker)
+            /*public void SetXValues(DataMarker marker)
             {
                 xMarker = marker;
             }
@@ -73,6 +79,23 @@ namespace NPOI.XSSF.UserModel.Charts
             public void SetYValues(DataMarker marker)
             {
                 yMarker = marker;
+            }*/
+            /**
+             * Returns data source used for X axis values.
+             * @return data source used for X axis values
+             */
+            public IChartDataSource<Tx> GetXValues()
+            {
+                return xs;
+            }
+
+            /**
+             * Returns data source used for Y axis values.
+             * @return data source used for Y axis values
+             */
+            public IChartDataSource<Ty> GetYValues()
+            {
+                return ys;
             }
 
             /**
@@ -86,23 +109,23 @@ namespace NPOI.XSSF.UserModel.Charts
             /// <summary>
             /// Returns last calculated number cache for X axis.
             /// </summary>
-            internal XSSFNumberCache LastCaculatedXCache
-            {
-                get
-                {
-                    return lastCaclulatedXCache;
-                }
-            }
+            //internal XSSFNumberCache LastCaculatedXCache
+            //{
+            //    get
+            //    {
+            //        return lastCaclulatedXCache;
+            //    }
+            //}
             /// <summary>
             /// Returns last calculated number cache for Y axis.
             /// </summary>
-            internal XSSFNumberCache LastCalculatedYCache
-            {
-                get
-                {
-                    return lastCalculatedYCache;
-                }
-            }
+            //internal XSSFNumberCache LastCalculatedYCache
+            //{
+            //    get
+            //    {
+            //        return lastCalculatedYCache;
+            //    }
+            //}
 
             internal void AddToChart(CT_ScatterChart ctScatterChart)
             {
@@ -114,7 +137,7 @@ namespace NPOI.XSSF.UserModel.Charts
                  * types and choose appropriate data representation for
                  * X axis.
                  */
-                CT_AxDataSource xVal = scatterSer.AddNewXVal();
+                /*CT_AxDataSource xVal = scatterSer.AddNewXVal();
                 CT_NumRef xNumRef = xVal.AddNewNumRef();
                 xNumRef.f = (xMarker.FormatAsString());
 
@@ -124,19 +147,35 @@ namespace NPOI.XSSF.UserModel.Charts
 
                 if (useCache)
                 {
-                    /* We can not store cache since markers are not immutable */
+                    // We can not store cache since markers are not immutable
                     XSSFNumberCache.BuildCache(xMarker, xNumRef);
                     lastCalculatedYCache = XSSFNumberCache.BuildCache(yMarker, yNumRef);
                 }
+                */
+                CT_AxDataSource xVal = scatterSer.AddNewXVal();
+                XSSFChartUtil.BuildAxDataSource<Tx>(xVal, xs);
+                CT_NumDataSource yVal = scatterSer.AddNewYVal();
+                XSSFChartUtil.BuildNumDataSource<Ty>(yVal, ys);
             }
         }
 
-        public IScatterChartSerie AddSerie(DataMarker xMarker, DataMarker yMarker)
+        /*public IScatterChartSerie AddSerie(DataMarker xMarker, DataMarker yMarker)
         {
             int numOfSeries = series.Count;
             Serie newSerie = new Serie(numOfSeries, numOfSeries);
             newSerie.SetXValues(xMarker);
             newSerie.SetYValues(yMarker);
+            series.Add(newSerie);
+            return newSerie;
+        }*/
+        public IScatterChartSerie<Tx,Ty> AddSerie(IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
+        {
+            if (!ys.IsNumeric)
+            {
+                throw new ArgumentException("Y axis data source must be numeric.");
+            }
+            int numOfSeries = series.Count;
+            Serie newSerie = new Serie(numOfSeries, numOfSeries, xs, ys);
             series.Add(newSerie);
             return newSerie;
         }
@@ -164,7 +203,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public List<IScatterChartSerie> GetSeries()
+        public List<IScatterChartSerie<Tx, Ty>> GetSeries()
         {
             return series;
         }

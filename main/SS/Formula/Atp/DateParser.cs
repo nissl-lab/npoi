@@ -81,12 +81,14 @@ namespace NPOI.SS.Formula.Atp
                 // when 4 digit value appears first, the format is YYYY/MM/DD, regardless of OS settings
                 return MakeDate(f0, f1, f2);
             }
+#if !HIDE_UNREACHABLE_CODE
             // otherwise the format seems to depend on OS settings (default date format)
             if (false)
             {
                 // MM/DD/YYYY is probably a good guess, if the in the US
                 return MakeDate(f2, f0, f1);
             }
+#endif
             // TODO - find a way to choose the correct date format
             throw new RuntimeException("Unable to determine date format for text '" + strVal + "'");
         }

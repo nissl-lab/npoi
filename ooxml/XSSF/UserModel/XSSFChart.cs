@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Xml;
+
 namespace NPOI.XSSF.UserModel
 {
     using NPOI.SS.UserModel;
@@ -246,6 +248,9 @@ namespace NPOI.XSSF.UserModel
             CT_Title title = chart.title;
 
             StringBuilder text = new StringBuilder();
+            XmlSerializer sr = new XmlSerializer(typeof(CT_Title));
+            StringWriter sw = new StringWriter(text);
+            sr.Serialize(sw, title);
             //XmlObject[] t = title
             //    .selectPath("declare namespace a='"+XSSFDrawing.NAMESPACE_A+"' .//a:t");
             //for (int m = 0; m < t.Length; m++)
@@ -259,7 +264,11 @@ namespace NPOI.XSSF.UserModel
             //        }
             //    }
             //}
-
+            string xml = text.ToString();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            text.Length = 0;
+            text.Append(doc.InnerText);
             return new XSSFRichTextString(text.ToString());
         }
 

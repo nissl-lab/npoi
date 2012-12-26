@@ -73,5 +73,13 @@ namespace TestCases.SS.Util
             Assert.AreEqual(CellType.BLANK, emptyCell.CellType);
         }
 
+        [Test]
+        public void TestSheetName()
+        {
+            String sheetName = "TEST SHEET NAME";
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = new SheetBuilder(wb, testData).SetSheetName(sheetName).Build();
+            Assert.AreEqual(sheetName, sheet.SheetName);
+        }
     }
 }

@@ -23,9 +23,9 @@ namespace NPOI.SS.Util
 {
 
     /**
-     * Class that provides useful sheet build capabilities. It can be used
-     * in test cases to improve readability or in Swing applications with
-     * tables.
+     * Class {@code SheetBuilder} provides an easy way of building workbook sheets
+     * from 2D array of Objects. It can be used in test cases to improve code
+     * readability or in Swing applications with tables.
      *
      * @author Roman Kashitsyn
      */
@@ -35,7 +35,7 @@ namespace NPOI.SS.Util
         private IWorkbook workbook;
         private Object[][] cells;
         private bool shouldCreateEmptyCells = false;
-
+        private String sheetName = null;
         public SheetBuilder(IWorkbook workbook, Object[][] cells)
         {
             this.workbook = workbook;
@@ -43,8 +43,11 @@ namespace NPOI.SS.Util
         }
 
         /**
-         * @return true if null objects should be trated as empty cells
-         *         false otherwise
+         * Returns {@code true} if null array elements should be treated as empty
+         * cells.
+         *
+         * @return {@code true} if null objects should be treated as empty cells
+         *         and {@code false} otherwise
          */
         public bool GetCreateEmptyCells()
         {
@@ -52,37 +55,50 @@ namespace NPOI.SS.Util
         }
 
         /**
-         * @param shouldCreateEmptyCells true if null array elements should be
-         *        trated as empty cells
-         * @return this
+         * Specifies if null array elements should be treated as empty cells.
+         *
+         * @param shouldCreateEmptyCells {@code true} if null array elements should be
+         *                               treated as empty cells
+         * @return {@code this}
          */
         public SheetBuilder SetCreateEmptyCells(bool shouldCreateEmptyCells)
         {
             this.shouldCreateEmptyCells = shouldCreateEmptyCells;
             return this;
         }
-
         /**
-         * Builds sheet from parent workbook and 2D array with cell
-         * values. Creates rows anyway (even if row contains only null
-         * cells), creates cells only if corresponding property is true.
-         * The conversion is performed in the following way:
-         *
-         * <ul>
-         * <li>Numbers become numeric cells.</li>
-         * <li><code>java.util.Date</code> or <code>java.util.Calendar</code>
-         *     instances become date cells.</li>
-         * <li>String with leading '=' char become formulas (leading '='
-         *     trancated).</li>
-         * <li>Other objects become strings via <code>Object.toString()</code>
-         *     method.</li>
-         * </ul>
-         *
-         * @return newly created sheet
+         * Specifies name of the sheet to build. If not specified, default name (provided by
+         * workbook) will be used instead.
+         * @param sheetName sheet name to use
+         * @return {@code this}
          */
+        public SheetBuilder SetSheetName(String sheetName)
+        {
+            this.sheetName = sheetName;
+            return this;
+        }
+        /**
+          * Builds sheet from parent workbook and 2D array with cell
+          * values. Creates rows anyway (even if row contains only null
+          * cells), creates cells if either corresponding array value is not
+          * null or createEmptyCells property is true.
+          * The conversion is performed in the following way:
+          * <p/>
+          * <ul>
+          * <li>Numbers become numeric cells.</li>
+          * <li><code>java.util.Date</code> or <code>java.util.Calendar</code>
+          * instances become date cells.</li>
+          * <li>String with leading '=' char become formulas (leading '='
+          * will be truncated).</li>
+          * <li>Other objects become strings via <code>Object.toString()</code>
+          * method call.</li>
+          * </ul>
+          *
+          * @return newly created sheet
+          */
         public ISheet Build()
         {
-            ISheet sheet = workbook.CreateSheet();
+            ISheet sheet = (sheetName == null) ? workbook.CreateSheet() : workbook.CreateSheet(sheetName);
             IRow currentRow = null;
             ICell currentCell = null;
 
@@ -109,17 +125,19 @@ namespace NPOI.SS.Util
          * @param cell cell to change
          * @param value value to set
          */
-        public void SetCellValue(ICell cell, Object value)
+        private void SetCellValue(ICell cell, Object value)
         {
-            double doubleValue = 0;
+            Type doubleType = typeof (double);
             if (value == null || cell == null)
             {
                 return;
             }
             //else if (value is Number)
-            if (double.TryParse(value.ToString(), out doubleValue))
+            else if (doubleType.IsInstanceOfType(value))
+            //if (double.TryParse(value.ToString(), out doubleValue))
             {
-                //double doubleValue = ((Number)value).doubleValue();
+                double doubleValue = 0;
+                double.TryParse(value.ToString(), out doubleValue);
                 cell.SetCellValue(doubleValue);
             }
             else if (value is DateTime)

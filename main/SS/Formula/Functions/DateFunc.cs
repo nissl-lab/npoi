@@ -104,7 +104,7 @@ namespace NPOI.SS.Formula.Functions
             bool use1904windowing = false;
 
             // Have this Java date turned back into an Excel one
-            return DateUtil.GetExcelDate(year, month, day, 0, 0, 0, false); // XXX fix 1900/1904 problem
+            return DateUtil.GetExcelDate(year, month, day, 0, 0, 0, use1904windowing); // XXX fix 1900/1904 problem
         }
 
         private int GetYear(double d)

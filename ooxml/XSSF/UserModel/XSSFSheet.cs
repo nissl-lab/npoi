@@ -2873,7 +2873,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        protected int NumberOfComments
+        internal int NumberOfComments
         {
             get
             {

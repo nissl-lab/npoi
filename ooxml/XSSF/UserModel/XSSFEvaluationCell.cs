@@ -115,5 +115,15 @@ namespace NPOI.XSSF.UserModel
                 return _cell.RichStringCellValue.String;
             }
         }
+
+        #region IEvaluationCell ≥…‘±
+
+
+        public CellType CachedFormulaResultType
+        {
+            get { return _cell.CachedFormulaResultType; }
+        }
+
+        #endregion
     }
 }

@@ -99,7 +99,6 @@
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFManualLayout.cs" />
-    <Compile Include="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFScatterChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFValueAxis.cs" />
     <Compile Include="XSSF\UserModel\TestSheetShiftRows.cs" />
@@ -110,6 +109,8 @@
     <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFCell.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFCellStyle.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFChart.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFChartSheet.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFColor.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFComment.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataFormat.cs" />

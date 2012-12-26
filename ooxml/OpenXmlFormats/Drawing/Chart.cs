@@ -2609,6 +2609,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public CT_StrData AddNewStrCache()
+        {
+            strCache = new CT_StrData();
+            return strCache;
+        }
     }
 
 
@@ -2670,6 +2676,21 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_UnsignedInt AddNewPtCount()
+        {
+            ptCount = new CT_UnsignedInt();
+            return ptCount;
+        }
+
+        public CT_StrVal AddNewPt()
+        {
+            if (pt == null)
+                pt = new List<CT_StrVal>();
+            CT_StrVal strVal = new CT_StrVal();
+            pt.Add(strVal);
+            return strVal;
         }
     }
 
@@ -6521,6 +6542,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.numRefField = value;
             }
         }
+
+        public CT_NumData AddNewNumLit()
+        {
+            numLit = new CT_NumData();
+            return numLit;
+        }
     }
 
 
@@ -6751,6 +6778,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
              this.numRefField = new CT_NumRef();
              return this.numRefField;
          }
+         public CT_NumData AddNewNumLit()
+         {
+             numLit = new CT_NumData();
+             return numLit;
+         }
          public CT_NumData numLit
          {
              get
@@ -6824,6 +6856,20 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         //        this.itemField = value;
         //    }
         //}
+
+
+
+         public CT_StrRef AddNewStrRef()
+         {
+             strRef = new CT_StrRef();
+             return strRef;
+         }
+
+         public CT_StrData AddNewStrLit()
+         {
+             strLit = new CT_StrData();
+             return strLit;
+         }
     }
 
 

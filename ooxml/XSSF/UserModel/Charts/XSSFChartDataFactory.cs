@@ -36,9 +36,9 @@ namespace NPOI.XSSF.UserModel.Charts
         /**
          * @return new scatter chart data instance
          */
-        public IScatterChartData CreateScatterChartData()
+        public IScatterChartData<Tx, Ty> CreateScatterChartData<Tx, Ty>()
         {
-            return new XSSFScatterChartData();
+            return new XSSFScatterChartData<Tx, Ty>();
         }
 
         /**

@@ -106,10 +106,8 @@
     <Compile Include="XSSF\UserModel\Charts\XSSFChartLegend.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartUtil.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XSSF\UserModel\Charts\XSSFNumberCache.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSSF\UserModel\Charts\XSSFScatterChartData.cs">

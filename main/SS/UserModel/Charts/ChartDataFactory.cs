@@ -29,7 +29,7 @@ namespace NPOI.SS.UserModel.Charts
         /// returns an appropriate ScatterChartData instance
         /// </summary>
         /// <returns></returns>
-        IScatterChartData CreateScatterChartData();
+        IScatterChartData<Tx, Ty> CreateScatterChartData<Tx, Ty>();
 
     }
 

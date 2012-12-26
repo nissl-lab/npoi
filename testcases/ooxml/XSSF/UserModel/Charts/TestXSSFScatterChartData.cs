@@ -31,7 +31,7 @@ namespace NPOI.XSSF.UserModel.Charts
     {
 
         private static Object[][] plotData = new Object[][] {
-	        new object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+	        new object[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"},
 	        new object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
             };
         [Test]
@@ -46,14 +46,17 @@ namespace NPOI.XSSF.UserModel.Charts
             IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.BOTTOM);
             IChartAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.LEFT);
 
-            IScatterChartData scatterChartData =
-                chart.GetChartDataFactory().CreateScatterChartData();
+            IScatterChartData<string, double> scatterChartData =
+                chart.GetChartDataFactory().CreateScatterChartData<string, double>();
 
-            DataMarker xMarker = new DataMarker(sheet, CellRangeAddress.ValueOf("A1:A10"));
-            DataMarker yMarker = new DataMarker(sheet, CellRangeAddress.ValueOf("B1:B10"));
-            IScatterChartSerie serie = scatterChartData.AddSerie(xMarker, yMarker);
+            IChartDataSource<String> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            IScatterChartSerie<string, double> serie = scatterChartData.AddSerie(xs, ys);
+
+            Assert.IsNotNull(serie);
 
             Assert.AreEqual(1, scatterChartData.GetSeries().Count);
+            Assert.IsTrue(scatterChartData.GetSeries().Contains(serie));
 
             chart.Plot(scatterChartData, bottomAxis, leftAxis);
         }
