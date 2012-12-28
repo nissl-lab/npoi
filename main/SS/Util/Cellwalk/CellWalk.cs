@@ -33,12 +33,6 @@ namespace NPOI.SS.Util.CellWalk
         private CellRangeAddress range;
         private bool traverseEmptyCells;
 
-        public CellWalk(DataMarker dm)
-            : this(dm.Sheet, dm.Range)
-        {
-
-        }
-
         public CellWalk(ISheet sheet, CellRangeAddress range)
         {
             this.sheet = sheet;

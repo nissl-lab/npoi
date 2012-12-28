@@ -1059,7 +1059,6 @@
     <Compile Include="SS\Util\Cellwalk\CellHandler.cs" />
     <Compile Include="SS\Util\Cellwalk\CellWalk.cs" />
     <Compile Include="SS\Util\Cellwalk\CellWalkContext.cs" />
-    <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\ExpandedDouble.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
