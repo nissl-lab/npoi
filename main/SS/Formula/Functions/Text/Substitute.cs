@@ -88,7 +88,7 @@ namespace NPOI.SS.Formula.Functions
                     return sb.ToString();
                 }
                 // store everything from end of last match to start of this match
-                sb.Append(oldStr.Substring(startIndex, nextMatch));
+                sb.Append(oldStr.Substring(startIndex, nextMatch - startIndex));
                 sb.Append(newStr);
                 startIndex = nextMatch + searchStr.Length;
             }

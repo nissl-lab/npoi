@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.SS.UserModel;
+using NPOI.Util;
 
 namespace NPOI.SS.Util
 {
@@ -127,18 +128,16 @@ namespace NPOI.SS.Util
          */
         private void SetCellValue(ICell cell, Object value)
         {
-            Type doubleType = typeof (double);
             if (value == null || cell == null)
             {
                 return;
             }
             //else if (value is Number)
-            else if (doubleType.IsInstanceOfType(value))
-            //if (double.TryParse(value.ToString(), out doubleValue))
+            else if (Number.IsNumber(value))
             {
-                double doubleValue = 0;
-                double.TryParse(value.ToString(), out doubleValue);
-                cell.SetCellValue(doubleValue);
+                double val;
+                double.TryParse(value.ToString(), out val);
+                cell.SetCellValue(val);
             }
             else if (value is DateTime)
             {

@@ -9,61 +9,85 @@ namespace NPOI.SS.Util
  * Helper methods for when working with Usermodel Workbooks
  */
 public class WorkbookUtil {
-	
-	/**
-	 * Creates a valid sheet name, which is conform to the rules.
-	 * In any case, the result safely can be used for 
-	 * {@link org.apache.poi.ss.usermodel.Workbook#setSheetName(int, String)}.
-	 * <br/>
-	 * Rules:
-	 * <ul>
-	 * <li>never null</li>
-	 * <li>minimum length is 1</li>
-	 * <li>maximum length is 31</li>
-	 * <li>doesn't contain special chars: / \ ? * ] [ </li>
-	 * <li>Sheet names must not begin or end with ' (apostrophe)</li>
-	 * </ul>
-	 * Invalid characters are replaced by one space character ' '.
-	 * 
-	 * @param nameProposal can be any string, will be truncated if necessary,
-	 *        allowed to be null
-	 * @return a valid string, "empty" if to short, "null" if null         
-	 */
+
+    /**
+     * Creates a valid sheet name, which is conform to the rules.
+     * In any case, the result safely can be used for 
+     * {@link org.apache.poi.ss.usermodel.Workbook#setSheetName(int, String)}.
+     * <br/>
+     * Rules:
+     * <ul>
+     * <li>never null</li>
+     * <li>minimum length is 1</li>
+     * <li>maximum length is 31</li>
+     * <li>doesn't contain special chars: 0x0000, 0x0003, / \ ? * ] [ </li>
+     * <li>Sheet names must not begin or end with ' (apostrophe)</li>
+     * </ul>
+     * Invalid characters are replaced by one space character ' '.
+     * 
+     * @param nameProposal can be any string, will be truncated if necessary,
+     *        allowed to be null
+     * @return a valid string, "empty" if to short, "null" if null         
+     */
     public static String CreateSafeSheetName(String nameProposal)
     {
-		if (nameProposal == null) {
-			return "null";
-		}
-		if (nameProposal.Length < 1) {
-			return "empty";
-		}
-		int length = Math.Min(31, nameProposal.Length);
-		String shortenname = nameProposal.Substring(0, length);
-		StringBuilder result = new StringBuilder(shortenname);
-		for (int i=0; i<length; i++) {
-			char ch = result[i];
-			switch (ch) {
-				case '/':
-				case '\\':
-				case '?':
-				case '*':
-				case ']':
-				case '[':
-					result[i] =' ';
-					break;
-				case '\'':
-					if (i==0 || i==length-1) {
-						result[i] =' ';
-					}
-					break;
-				default:
-					// all other chars OK
-                    break;
-			}
-		}
-		return result.ToString();
+        return CreateSafeSheetName(nameProposal, ' ');
 	}
-
+    /**
+     * Creates a valid sheet name, which is conform to the rules.
+     * In any case, the result safely can be used for
+     * {@link org.apache.poi.ss.usermodel.Workbook#setSheetName(int, String)}.
+     * <br />
+     * Rules:
+     * <ul>
+     * <li>never null</li>
+     * <li>minimum length is 1</li>
+     * <li>maximum length is 31</li>
+     * <li>doesn't contain special chars: : 0x0000, 0x0003, / \ ? * ] [ </li>
+     * <li>Sheet names must not begin or end with ' (apostrophe)</li>
+     * </ul>
+     *
+     * @param nameProposal can be any string, will be truncated if necessary,
+     *        allowed to be null
+     * @param replaceChar the char to replace invalid characters.
+     * @return a valid string, "empty" if to short, "null" if null
+     */
+    public static String CreateSafeSheetName(String nameProposal, char replaceChar) {
+        if (nameProposal == null) {
+            return "null";
+        }
+        if (nameProposal.Length < 1) {
+            return "empty";
+        }
+        int length = Math.Min(31, nameProposal.Length);
+        String shortenname = nameProposal.Substring(0, length);
+        StringBuilder result = new StringBuilder(shortenname);
+        for (int i=0; i<length; i++) {
+            char ch = result[(i)];
+            switch (ch) {
+                case '\u0000':
+                case '\u0003':
+                case ':':
+                case '/':
+                case '\\':
+                case '?':
+                case '*':
+                case ']':
+                case '[':
+                    result[i] = replaceChar;
+                    break;
+                case '\'':
+                    if (i==0 || i==length-1) {
+                        result[i] = replaceChar;
+                    }
+                    break;
+                default:
+                    // all other chars OK
+                    break;
+            }
+        }
+        return result.ToString();
+    }
     /**
      * Validates sheet name.
      *

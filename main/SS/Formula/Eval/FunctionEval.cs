@@ -142,7 +142,7 @@ namespace NPOI.SS.Formula.Eval
             retval[43] = new NotImplementedFunction("DMIN"); // DMIN
             retval[44] = new NotImplementedFunction("DMAX"); // DMAX
             retval[45] = new NotImplementedFunction("DSTDEV"); // DSTDEV
-            retval[46] = new NotImplementedFunction("VAR"); // VAR
+            retval[46] = AggregateFunction.VAR; // VAR
             retval[47] = new NotImplementedFunction("DVAR"); // DVAR
             retval[48] = TextFunction.TEXT; // TEXT
             retval[49] = new NotImplementedFunction("LINEST"); // LINEST
@@ -151,7 +151,7 @@ namespace NPOI.SS.Formula.Eval
             retval[52] = new NotImplementedFunction("GROWTH"); // GROWTH
             retval[53] = new NotImplementedFunction("GOTO"); // GOTO
             retval[54] = new NotImplementedFunction("HALT"); // HALT
-            retval[56] = new NotImplementedFunction("PV"); // PV
+            retval[56] = FinanceFunction.PV; // PV
             retval[57] = FinanceFunction.FV; // FV
             retval[58] = FinanceFunction.NPER; // NPER
             retval[59] = FinanceFunction.PMT; // PMT
@@ -285,7 +285,7 @@ namespace NPOI.SS.Formula.Eval
             retval[191] = new NotImplementedFunction("GetNOTE"); // GetNOTE
             retval[192] = new NotImplementedFunction("NOTE"); // NOTE
             retval[193] = new NotImplementedFunction("STDEVP"); // STDEVP
-            retval[194] = new NotImplementedFunction("VARP"); // VARP
+            retval[194] = AggregateFunction.VARP; // VARP
             retval[195] = new NotImplementedFunction("DSTDEVP"); // DSTDEVP
             retval[196] = new NotImplementedFunction("DVARP"); // DVARP
             retval[197] = NumericFunction.TRUNC; // TRUNC
@@ -342,7 +342,7 @@ namespace NPOI.SS.Formula.Eval
             retval[258] = new NotImplementedFunction("GetTOOLBAR"); // GetTOOLBAR
             retval[259] = new NotImplementedFunction("GetTOOL"); // GetTOOL
             retval[260] = new NotImplementedFunction("SPELLINGCHECK"); // SPELLINGCHECK
-            retval[261] = new NotImplementedFunction("ERRORTYPE"); // ERRORTYPE
+            retval[261] = new Errortype(); // ERRORTYPE
             retval[262] = new NotImplementedFunction("APPTITLE"); // APPTITLE
             retval[263] = new NotImplementedFunction("WINDOWTITLE"); // WINDOWTITLE
             retval[264] = new NotImplementedFunction("SAVETOOLBAR"); // SAVETOOLBAR
@@ -381,7 +381,7 @@ namespace NPOI.SS.Formula.Eval
             retval[297] = new NotImplementedFunction("STANDARDIZE"); // STANDARDIZE
             retval[298] = new Odd(); // ODD
             retval[299] = new NotImplementedFunction("PERMUT"); // PERMUT
-            retval[300] = new NotImplementedFunction("POISSON"); // POISSON
+            retval[300] = NumericFunction.POISSON; // POISSON
             retval[301] = new NotImplementedFunction("TDIST"); // TDIST
             retval[302] = new NotImplementedFunction("WEIBULL"); // WEIBULL
             retval[303] = new Sumxmy2(); // SUMXMY2
@@ -440,7 +440,7 @@ namespace NPOI.SS.Formula.Eval
             retval[356] = new NotImplementedFunction("SAVEDIALOG"); // SAVEDIALOG
             retval[357] = new NotImplementedFunction("VIEWGet"); // VIEWGet
             retval[358] = new NotImplementedFunction("GetPIVOTDATA"); // GetPIVOTDATA
-            retval[359] = new NotImplementedFunction("HYPERLINK"); // HYPERLINK
+            retval[359] = new Hyperlink(); // HYPERLINK
             retval[360] = new NotImplementedFunction("PHONETIC"); // PHONETIC
             retval[361] = new NotImplementedFunction("AVERAGEA"); // AVERAGEA
             retval[362] = new Maxa(); // MAXA

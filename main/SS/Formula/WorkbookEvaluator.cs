@@ -563,7 +563,7 @@ namespace NPOI.SS.Formula
                     // skip Parentheses, Attr, etc
                     continue;
                 }
-                if (ptg is MemFuncPtg)
+                if (ptg is MemFuncPtg|| ptg is MemAreaPtg)
                 {
                     // can ignore, rest of Tokens for this expression are in OK RPN order
                     continue;

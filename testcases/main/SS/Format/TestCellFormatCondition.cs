@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace TestCases.SS.format
+namespace TestCases.SS.Format
 {
     using System;
 

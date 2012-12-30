@@ -14,6 +14,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System.Globalization;
+
 namespace TestCases.SS.Format
 {
     using System;
@@ -201,7 +204,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForDateFormat()
         {
-
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -240,7 +243,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForDateFormatAndNegativeFormat()
         {
-
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -364,7 +367,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyLabelCellForDateFormat()
         {
-
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -411,7 +414,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyLabelCellForDateFormatAndNegativeFormat()
         {
-
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -592,7 +595,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasThreePartsFirstIsDateFirstTwoHaveCondition()
         {
-
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -806,7 +809,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyObjectDate()
         {
-
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat cf1 = CellFormat.GetInstance("m/d/yyyy");
             DateTime date1 = new SimpleDateFormat("M/d/y").Parse("01/11/2012");
             Assert.AreEqual("1/11/2012", cf1.Apply(date1).Text);

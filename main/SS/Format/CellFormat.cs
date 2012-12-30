@@ -213,10 +213,11 @@ namespace NPOI.SS.Format
          */
         public virtual CellFormatResult Apply(Object value)
         {
-            double val ;
             //if (value is Number) {
-            if (double.TryParse(value.ToString(), out val))
+            if (NPOI.Util.Number.IsNumber(value))
             {
+                double val ;
+                double.TryParse(value.ToString(), out val);
                 if (val < 0 &&
                     ((formatPartCount == 2
                             && !posNumFmt.HasCondition && !negNumFmt.HasCondition)
@@ -394,12 +395,11 @@ namespace NPOI.SS.Format
          */
         private CellFormatPart GetApplicableFormatPart(Object value)
         {
-
-            double val;
             //if (value is Number) {
-            if (double.TryParse(value.ToString(), out val))
+            if (NPOI.Util.Number.IsNumber(value))
             {
-                //double val = ((double)value);
+                double val;
+                double.TryParse(value.ToString(), out val);
 
                 if (formatPartCount == 1)
                 {

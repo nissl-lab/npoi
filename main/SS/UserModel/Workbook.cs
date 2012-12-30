@@ -192,6 +192,7 @@ namespace NPOI.SS.UserModel
         /// <param name="endColumn">0 based end of repeating columns.</param>
         /// <param name="startRow">0 based start of repeating rows.</param>
         /// <param name="endRow">0 based end of repeating rows.</param>
+        [Obsolete("use Sheet#setRepeatingRows(CellRangeAddress) or Sheet#setRepeatingColumns(CellRangeAddress)")]
         void SetRepeatingRowsAndColumns(int sheetIndex, int startColumn, int endColumn, int startRow, int endRow);
 
 

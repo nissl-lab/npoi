@@ -112,6 +112,16 @@ namespace NPOI.SS.UserModel
          * @param cell
          */
         ICell EvaluateInCell(ICell cell);
+
+        /**
+         * Perform detailed output of formula evaluation for next evaluation only?
+         * Is for developer use only (also developers using POI for their XLS files).
+         * Log-Level WARN is for basic info, INFO for detailed information. These quite
+         * high levels are used because you have to explicitly enable this specific logging.
+	 
+         * @param value whether to perform detailed output
+         */
+        bool DebugEvaluationOutputForNextEval { get; set; }
     }
 
 }

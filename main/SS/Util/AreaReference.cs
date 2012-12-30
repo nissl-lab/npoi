@@ -194,6 +194,14 @@ namespace NPOI.SS.Util
          */
         public static bool IsContiguous(String reference)
         {
+            // If there's a sheet name, strip it off
+            int sheetRefEnd = reference.IndexOf('!');
+            if (sheetRefEnd != -1)
+            {
+                reference = reference.Substring(sheetRefEnd);
+            }
+
+            // Check for the , as a sign of non-coniguous
             if (reference.IndexOf(',') == -1)
             {
                 return true;

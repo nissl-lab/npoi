@@ -326,6 +326,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(20 * 20, row1.Height);
 
             IRow row2 = sheet.CreateRow(1);
+            Assert.AreEqual(sheet.DefaultRowHeight, row2.Height);
             row2.Height = (/*setter*/(short)310);
             Assert.AreEqual(310, row2.Height);
             Assert.AreEqual(310F / 20, row2.HeightInPoints, 0F);

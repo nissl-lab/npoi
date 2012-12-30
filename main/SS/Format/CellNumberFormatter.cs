@@ -76,11 +76,11 @@ namespace NPOI.SS.Format
             {
                 if (value == null)
                     return;
-                double num;
                 //if (value is Number) {
-                if (double.TryParse(value.ToString(), out num))
+                if (NPOI.Util.Number.IsNumber(value))
                 {
-                    //double num = (double)value;
+                    double num;
+                    double.TryParse(value.ToString(), out num);
                     if (num % 1.0 == 0)
                         SIMPLE_INT.FormatValue(toAppendTo, value);
                     else

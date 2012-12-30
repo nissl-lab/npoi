@@ -440,6 +440,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual((short)300, sheet.DefaultRowHeight);
             Assert.AreEqual(15.0F, sheet.DefaultRowHeightInPoints, 0.01F);
 
+            IRow row = sheet.CreateRow(1);
+            // new row inherits  default height from the sheet
+            Assert.AreEqual(sheet.DefaultRowHeight, row.Height);
+
             // Set a new default row height in twips and Test Getting the value in points
             sheet.DefaultRowHeight = (/*setter*/(short)360);
             Assert.AreEqual(18.0f, sheet.DefaultRowHeightInPoints, 0.01F);
@@ -598,6 +602,11 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(12.0, sheet.GetMargin(MarginType.TopMargin), 0.0);
             sheet.SetMargin(/*setter*/MarginType.BottomMargin, 13.0);
             Assert.AreEqual(13.0, sheet.GetMargin(MarginType.BottomMargin), 0.0);
+
+            sheet.SetMargin(MarginType.FooterMargin, 5.6);
+            Assert.AreEqual(5.6, sheet.GetMargin(MarginType.FooterMargin), 0.0);
+            sheet.SetMargin(MarginType.HeaderMargin, 11.5);
+            Assert.AreEqual(11.5, sheet.GetMargin(MarginType.HeaderMargin), 0.0);
 
             // incorrect margin constant
             try

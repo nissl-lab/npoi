@@ -16,6 +16,8 @@
 */
 
 
+using NPOI.Util;
+
 namespace NPOI.SS.Formula.Functions
 {
     using System;
@@ -47,20 +49,6 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Sumproduct : Function
     {
-        [Serializable]
-        private class EvalEx : Exception
-        {
-            private ErrorEval _error;
-
-            public EvalEx(ErrorEval error)
-            {
-                _error = error;
-            }
-            public ErrorEval GetError()
-            {
-                return _error;
-            }
-        }
 
         public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
@@ -92,11 +80,11 @@ namespace NPOI.SS.Formula.Functions
                     return EvaluateAreaSumProduct(args);
                 }
             }
-            catch (EvalEx e)
+            catch (EvaluationException e)
             {
-                return e.GetError();
+                return e.GetErrorEval();
             }
-            throw new Exception("Invalid arg type for SUMPRODUCT: ("
+            throw new RuntimeException("Invalid arg type for SUMPRODUCT: ("
                     + firstArg.GetType().Name + ")");
         }
 
@@ -251,20 +239,20 @@ namespace NPOI.SS.Formula.Functions
                 // null seems to occur when the blank cell Is part of an area ref (but not reliably)
                 if (IsScalarProduct)
                 {
-                    throw new EvalEx(ErrorEval.VALUE_INVALID);
+                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }
                 return 0;
             }
 
             if (ve is ErrorEval)
             {
-                throw new EvalEx((ErrorEval)ve);
+                throw new EvaluationException((ErrorEval)ve);
             }
             if (ve is StringEval)
             {
                 if (IsScalarProduct)
                 {
-                    throw new EvalEx(ErrorEval.VALUE_INVALID);
+                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }
                 // Note for area SUMPRODUCTs, string values are interpreted as zero
                 // even if they would Parse as valid numeric values
@@ -275,7 +263,7 @@ namespace NPOI.SS.Formula.Functions
                 NumericValueEval nve = (NumericValueEval)ve;
                 return nve.NumberValue;
             }
-            throw new Exception("Unexpected value eval class ("
+            throw new RuntimeException("Unexpected value eval class ("
                     + ve.GetType().Name + ")");
         }
     }

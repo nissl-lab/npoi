@@ -51,8 +51,8 @@ namespace NPOI.XSSF.UserModel.Charts
             private int id;
             private int order;
             private bool useCache;
-            private DataMarker xMarker;
-            private DataMarker yMarker;
+            //private DataMarker xMarker;
+            //private DataMarker yMarker;
             //private XSSFNumberCache lastCaclulatedXCache;
             //private XSSFNumberCache lastCalculatedYCache;
 

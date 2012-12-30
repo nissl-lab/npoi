@@ -156,6 +156,8 @@
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Errortype.cs" />
+    <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
     <Compile Include="SS\Formula\Functions\Rank.cs" />
     <Compile Include="SS\Formula\Functions\Rate.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
@@ -1106,6 +1108,7 @@
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />
+    <Compile Include="Util\Number.cs" />
     <Compile Include="Util\Operator.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />

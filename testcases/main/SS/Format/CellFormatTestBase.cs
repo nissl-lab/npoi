@@ -40,7 +40,7 @@ namespace TestCases.SS.Format
      * flag "Categories" is not empty, only tests that have at least one category
      * listed in "Categories" are Run.
      */
-    [TestFixture]
+    //[TestFixture]
     public class CellFormatTestBase
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(CellFormatTestBase));

@@ -178,12 +178,11 @@ namespace NPOI.SS.Format
         {
             if (value == null)
                 value = 0.0;
-            double num;
             //if (value is Number) {
-            if (double.TryParse(value.ToString(), out num))
+            if (NPOI.Util.Number.IsNumber(value))
             {
-                //double num = (double)value;
-                double v = num;
+                double v;
+                double.TryParse(value.ToString(), out v);
                 if (v == 0.0)
                     value = EXCEL_EPOCH_DATE;
                 else

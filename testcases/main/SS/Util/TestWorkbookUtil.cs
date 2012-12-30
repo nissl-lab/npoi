@@ -89,6 +89,9 @@ namespace TestCases.SS.Util
 
             actual = WorkbookUtil.CreateSafeSheetName("1234567890123456789012345678901TOOLONG");
             Assert.AreEqual("1234567890123456789012345678901", actual);
+
+            actual = WorkbookUtil.CreateSafeSheetName("sheet:a4");
+            Assert.AreEqual("sheet a4", actual);
         }
     }
 }

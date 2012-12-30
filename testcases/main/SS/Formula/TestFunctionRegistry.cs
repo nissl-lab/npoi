@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula
                 cv = fe.Evaluate(cellA);
                 Assert.Fail("expectecd exception");
             }
-            catch (NotImplementedException e)
+            catch (NotImplementedException)
             {
                 ;
             }
@@ -72,7 +72,7 @@ namespace TestCases.SS.Formula
                 cv = fe.Evaluate(cellB);
                 Assert.Fail("expectecd exception");
             }
-            catch (NotImplementedException e)
+            catch (NotImplementedException)
             {
                 ;
             }

@@ -102,14 +102,16 @@ namespace NPOI.SS.Util
         {
             get
             {
-                return _firstRow == 0 && _lastRow ==SpreadsheetVersion.EXCEL97.LastRowIndex;
+                return (_firstRow == 0 && _lastRow ==SpreadsheetVersion.EXCEL97.LastRowIndex)
+                    || (_firstRow == -1 && _lastRow == -1);
             }
         }
         public bool IsFullRowRange
         {
             get
             {
-                return _firstCol == 0 && _lastCol == SpreadsheetVersion.EXCEL97.LastColumnIndex;
+                return (_firstCol == 0 && _lastCol == SpreadsheetVersion.EXCEL97.LastColumnIndex)
+                    || (_firstCol == -1 && _lastCol == -1);
             }
         }
 

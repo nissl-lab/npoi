@@ -70,6 +70,7 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestMissingWorkbookMissingOverride()
         {
+            mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);
             HSSFSheet lSheet = (HSSFSheet)mainWorkbook.GetSheetAt(0);
             HSSFCell lA1Cell = (HSSFCell)lSheet.GetRow(0).GetCell(0);
             HSSFCell lB1Cell = (HSSFCell)lSheet.GetRow(1).GetCell(0);

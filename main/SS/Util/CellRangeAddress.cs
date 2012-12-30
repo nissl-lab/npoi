@@ -71,7 +71,10 @@ namespace NPOI.SS.Util
             sb.Append(cellRefFrom.FormatAsString());
 
             //for a single-cell reference return A1 instead of A1:A1
-            if (!cellRefFrom.Equals(cellRefTo))
+            //for full-column ranges or full-row ranges return A:A instead of A,
+            //and 1:1 instead of 1
+            if (!cellRefFrom.Equals(cellRefTo)
+                || IsFullColumnRange || IsFullRowRange)
             {
                 sb.Append(':');
                 sb.Append(cellRefTo.FormatAsString());
@@ -88,10 +91,16 @@ namespace NPOI.SS.Util
             return numberOfItems * ENCODED_SIZE;
         }
 
-            /**
-     * @param ref usually a standard area ref (e.g. "B1:D8").  May be a single cell
-     *            ref (e.g. "B5") in which case the result is a 1 x 1 cell range.
-     */
+        /// <summary>
+        /// Creates a CellRangeAddress from a cell range reference string.
+        /// </summary>
+        /// <param name="reference">
+        /// usually a standard area ref (e.g. "B1:D8").  May be a single 
+        /// cell ref (e.g. "B5") in which case the result is a 1 x 1 cell 
+        /// range. May also be a whole row range (e.g. "3:5"), or a whole 
+        /// column range (e.g. "C:F")
+        /// </param>
+        /// <returns>a CellRangeAddress object</returns>
         public static CellRangeAddress ValueOf(String reference)
         {
             int sep = reference.IndexOf(":", StringComparison.Ordinal);

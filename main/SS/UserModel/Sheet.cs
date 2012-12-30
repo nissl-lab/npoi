@@ -80,7 +80,7 @@ namespace NPOI.SS.UserModel
     /// The most common type of sheet is the worksheet, which is represented as a grid of cells. Worksheet cells can
     /// contain text, numbers, dates, and formulas. Cells can also be formatted.
     /// </remarks>
-    public interface ISheet
+    public interface ISheet //: IEnumerator<IRow>
     {
 
         /// <summary>
@@ -737,6 +737,41 @@ namespace NPOI.SS.UserModel
         /// Whether the text is displayed in right-to-left mode in the window
         /// </summary>
         bool IsRightToLeft { get; set; }
+
+        
+        /// <summary>
+        ///  Get or set the repeating rows used when printing the sheet, as found in File->PageSetup->Sheet.
+        /// <p/>
+        /// Repeating rows cover a range of contiguous rows, e.g.:
+        /// <pre>
+        /// Sheet1!$1:$1
+        /// Sheet2!$5:$8
+        /// </pre>
+        /// The {@link CellRangeAddress} returned contains a column part which spans
+        /// all columns, and a row part which specifies the contiguous range of 
+        /// repeating rows.
+        /// <p/>
+        /// If the Sheet does not have any repeating rows defined, null is returned.
+        /// </summary>
+        //CellRangeAddress RepeatingRows { get; set; }
+
+
+        /// <summary>
+        ///  Gets or set the repeating columns used when printing the sheet, as found in File->PageSetup->Sheet.
+        /// <p/>
+        /// Repeating columns cover a range of contiguous columns, e.g.:
+        /// <pre>
+        /// Sheet1!$A:$A
+        /// Sheet2!$C:$F
+        /// </pre>
+        /// The {@link CellRangeAddress} returned contains a row part which spans all 
+        /// rows, and a column part which specifies the contiguous range of 
+        /// repeating columns.
+        /// <p/>
+        /// If the Sheet does not have any repeating columns defined, null is 
+        /// returned.
+        /// </summary>
+        //CellRangeAddress RepeatingColumns { get; set; }
     }
 
 }

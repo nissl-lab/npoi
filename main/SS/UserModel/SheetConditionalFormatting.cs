@@ -32,55 +32,45 @@ namespace NPOI.SS.UserModel
      */
     public interface ISheetConditionalFormatting
     {
-
-        /**
-         * Add a new Conditional Formatting to the sheet.
-         *
-         * @param regions - list of rectangular regions to apply conditional formatting rules
-         * @param rule -  the rule to apply
-         *
-         * @return index of the newly Created Conditional Formatting object
-         */
+        /// <summary>
+        /// Add a new Conditional Formatting to the sheet.
+        /// </summary>
+        /// <param name="regions">list of rectangular regions to apply conditional formatting rules</param>
+        /// <param name="rule">the rule to apply</param>
+        /// <returns>index of the newly Created Conditional Formatting object</returns>
         int AddConditionalFormatting(CellRangeAddress[] regions,
                                      IConditionalFormattingRule rule);
 
-        /**
-         * Add a new Conditional Formatting consisting of two rules.
-         *
-         * @param regions - list of rectangular regions to apply conditional formatting rules
-         * @param rule1 -  the first rule
-         * @param rule1 -  the second rule
-         *
-         * @return index of the newly Created Conditional Formatting object
-         */
+        /// <summary>
+        /// Add a new Conditional Formatting consisting of two rules.
+        /// </summary>
+        /// <param name="regions"> list of rectangular regions to apply conditional formatting rules</param>
+        /// <param name="rule1">the first rule</param>
+        /// <param name="rule2">the second rule</param>
+        /// <returns>index of the newly Created Conditional Formatting object</returns>
         int AddConditionalFormatting(CellRangeAddress[] regions,
                                      IConditionalFormattingRule rule1,
                                      IConditionalFormattingRule rule2);
 
-        /**
-         * Add a new Conditional Formatting Set to the sheet.
-         *
-         * @param regions - list of rectangular regions to apply conditional formatting rules
-         * @param cfRules - Set of up to three conditional formatting rules
-         *
-         * @return index of the newly Created Conditional Formatting object
-         */
+        /// <summary>
+        /// Add a new Conditional Formatting Set to the sheet.
+        /// </summary>
+        /// <param name="regions">list of rectangular regions to apply conditional formatting rules</param>
+        /// <param name="cfRules">Set of up to three conditional formatting rules</param>
+        /// <returns>index of the newly Created Conditional Formatting object</returns>
         int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules);
 
-        /**
-         * Adds a copy of a ConditionalFormatting object to the sheet
-         * <p>
-         *     This method could be used to copy ConditionalFormatting object
-         *     from one sheet to another. For example:
-         * </p>
-         * <pre>
-         * ConditionalFormatting cf = sheet.GetConditionalFormattingAt(index);
-         * newSheet.AddConditionalFormatting(cf);
-         * </pre>
-         *
-         * @param cf the Conditional Formatting to clone
-         * @return index of the new Conditional Formatting object
-         */
+        /// <summary>
+        /// Adds a copy of a ConditionalFormatting object to the sheet
+        /// </summary>
+        /// <param name="cf">the Conditional Formatting to clone</param>
+        /// <returns>index of the new Conditional Formatting object</returns>
+        /// <remarks>
+        /// This method could be used to copy ConditionalFormatting object
+        /// from one sheet to another. For example:
+        /// ConditionalFormatting cf = sheet.GetConditionalFormattingAt(index);
+        /// newSheet.AddConditionalFormatting(cf);
+        /// </remarks>
         int AddConditionalFormatting(IConditionalFormatting cf);
 
         /**
@@ -114,54 +104,43 @@ namespace NPOI.SS.UserModel
                 String formula1,
                 String formula2);
 
-        /**
-         * Create a conditional formatting rule that Compares a cell value
-         * to a formula calculated result, using an operator     *
-         * <p>
-          * The type  of the Created condition is {@link ConditionalFormattingRule#CONDITION_TYPE_CELL_VALUE_IS}
-         * </p>
-         *
-         * @param comparisonOperation  MUST be a constant value from
-         *		 <c>{@link ComparisonOperator}</c> except  BETWEEN and NOT_BETWEEN
-         *
-         * @param formula  the formula to determine if the conditional formatting is applied
-         */
+
+        /// <summary>
+        /// Create a conditional formatting rule that Compares a cell value to a formula calculated result, using an operator 
+        /// </summary>
+        /// <param name="comparisonOperation">MUST be a constant value from ComparisonOperator except  BETWEEN and NOT_BETWEEN</param>
+        /// <param name="formula">the formula to determine if the conditional formatting is applied</param>
+        /// <returns>a conditional formatting rule</returns>
         IConditionalFormattingRule CreateConditionalFormattingRule(
                 ComparisonOperator comparisonOperation,
                 String formula);
 
-        /**
-         *  Create a conditional formatting rule based on a Boolean formula.
-         *  When the formula result is true, the cell is highlighted.
-         *
-         * <p>
-         *  The type of the Created format condition is  {@link ConditionalFormattingRule#CONDITION_TYPE_FORMULA}
-         * </p>
-         * @param formula   the formula to Evaluate. MUST be a Boolean function.
-         */
+        /// <summary>
+        /// Create a conditional formatting rule based on a Boolean formula.
+        /// When the formula result is true, the cell is highlighted.
+        /// </summary>
+        /// <param name="formula">the formula to Evaluate. MUST be a Boolean function.</param>
+        /// <returns>conditional formatting rule</returns>
         IConditionalFormattingRule CreateConditionalFormattingRule(String formula);
 
-        /**
-        * Gets Conditional Formatting object at a particular index
-        *
-        * @param index  0-based index of the Conditional Formatting object to fetch
-        * @return Conditional Formatting object or <code>null</code> if not found
-        * @throws ArgumentException if the index is  outside of the allowable range (0 ... numberOfFormats-1)
-        */
+        /// <summary>
+        /// Gets Conditional Formatting object at a particular index
+        /// </summary>
+        /// <param name="index">0-based index of the Conditional Formatting object to fetch</param>
+        /// <returns>Conditional Formatting object or null if not found</returns>
+        /// <exception cref="ArgumentException">throws ArgumentException if the index is  outside of the allowable range (0 ... numberOfFormats-1)</exception>
         IConditionalFormatting GetConditionalFormattingAt(int index);
 
-        /**
-         *
-         * @return the number of conditional formats in this sheet
-         */
+        /// <summary>
+        /// get the number of conditional formats in this sheet
+        /// </summary>
         int NumConditionalFormattings { get; }
 
-        /**
-        * Removes a Conditional Formatting object by index
-        *
-        * @param index 0-based index of the Conditional Formatting object to remove
-        * @throws ArgumentException if the index is  outside of the allowable range (0 ... numberOfFormats-1)
-        */
+        /// <summary>
+        /// Removes a Conditional Formatting object by index
+        /// </summary>
+        /// <param name="index">0-based index of the Conditional Formatting object to remove</param>
+        /// <exception cref="ArgumentException">throws ArgumentException if the index is  outside of the allowable range (0 ... numberOfFormats-1)</exception>
         void RemoveConditionalFormatting(int index);
     }
 

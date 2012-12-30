@@ -44,11 +44,11 @@ namespace NPOI.SS.Format
          */
         public override void FormatValue(StringBuilder toAppendTo, Object value)
         {
-            double val ;
             //if (value is Number) {
-            if (double.TryParse(value.ToString(), out val))
+            if (NPOI.Util.Number.IsNumber(value))
             {
-                //double val = ((double)value);
+                double val ;
+                double.TryParse(value.ToString(), out val);
                 if (val == 0)
                 {
                     toAppendTo.Append('0');

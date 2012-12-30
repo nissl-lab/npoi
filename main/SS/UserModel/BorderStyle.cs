@@ -46,7 +46,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// dot border
         /// </summary>
-        HAIR = 0x4,
+        DOTTED = 0x4,
 
         /// <summary>
         /// Thick border
@@ -61,7 +61,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// hair-line border
         /// </summary>
-        DOTTED = 0x7,
+        HAIR = 0x7,
 
         /// <summary>
         /// Medium dashed border

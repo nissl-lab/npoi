@@ -99,28 +99,45 @@ using NPOI.SS.UserModel;
             String[] parts = SeparateRefParts(cellRef);
             _sheetName = parts[0];
             String colRef = parts[1];
-            if (colRef.Length < 1)
-            {
-                throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
-            }
-            _isColAbs = colRef[0] == '$';
+            //if (colRef.Length < 1)
+            //{
+            //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
+            //}
+            _isColAbs = (colRef.Length > 0) && colRef[0] == '$';
+            //_isColAbs = colRef[0] == '$';
             if (_isColAbs)
             {
                 colRef = colRef.Substring(1);
             }
-            _colIndex = ConvertColStringToIndex(colRef);
+            if (colRef.Length == 0)
+            {
+                _colIndex = -1;
+            }
+            else
+            {
+                _colIndex = ConvertColStringToIndex(colRef);
+            }
+            
 
             String rowRef = parts[2];
-            if (rowRef.Length < 1)
-            {
-                throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
-            }
-            _isRowAbs = rowRef[0] == '$';
+            //if (rowRef.Length < 1)
+            //{
+            //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
+            //}
+            //_isRowAbs = rowRef[0] == '$';
+            _isRowAbs = (rowRef.Length > 0) && rowRef[0] == '$';
             if (_isRowAbs)
             {
                 rowRef = rowRef.Substring(1);
             }
-            _rowIndex = int.Parse(rowRef, CultureInfo.InvariantCulture) - 1; // -1 to convert 1-based to zero-based
+            if (rowRef.Length == 0)
+            {
+                _rowIndex = -1;
+            }
+            else
+            {
+                _rowIndex = int.Parse(rowRef, CultureInfo.InvariantCulture) - 1; // -1 to convert 1-based to zero-based
+            }
         }
         public CellReference(ICell cell):this(cell.RowIndex, cell.ColumnIndex, false, false)
         {
@@ -480,16 +497,23 @@ using NPOI.SS.UserModel;
         /* package */
         public void AppendCellReference(StringBuilder sb)
         {
-            if (_isColAbs)
+            if (_colIndex != -1)
             {
-                sb.Append(ABSOLUTE_REFERENCE_MARKER);
+                if (_isColAbs)
+                {
+                    sb.Append(ABSOLUTE_REFERENCE_MARKER);
+                }
+                sb.Append(ConvertNumToColString(_colIndex));
             }
-            sb.Append(ConvertNumToColString(_colIndex));
-            if (_isRowAbs)
+
+            if (_rowIndex != -1)
             {
-                sb.Append(ABSOLUTE_REFERENCE_MARKER);
+                if (_isRowAbs)
+                {
+                    sb.Append(ABSOLUTE_REFERENCE_MARKER);
+                }
+                sb.Append(_rowIndex + 1);
             }
-            sb.Append(_rowIndex + 1);
         }
 
         /**
