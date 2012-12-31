@@ -138,7 +138,6 @@ namespace NPOI.HSSF.Record
                 typeof(AlRunsRecord),
                 //typeof(CodeNameRecord),
 		        typeof(CodepageRecord),
-
 		        typeof(ColumnInfoRecord),
 		        typeof(ContinueRecord),
 		        typeof(CountryRecord),
@@ -146,6 +145,7 @@ namespace NPOI.HSSF.Record
 		        typeof(CRNRecord),
 		        typeof(DateWindow1904Record),
 		        typeof(DBCellRecord),
+                typeof(DConRefRecord),
 		        typeof(DefaultColWidthRecord),
 		        typeof(DefaultRowHeightRecord),
 		        typeof(DeltaRecord),

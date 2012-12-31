@@ -97,6 +97,7 @@
     <Compile Include="HSSF\Record\Chart\TestFontXRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestShtPropsRecord.cs" />
+    <Compile Include="HSSF\Record\TestDConRefRecord.cs" />
     <Compile Include="HSSF\Record\TestUnicodeString.cs" />
     <Compile Include="HSSF\Util\TestRangeAddress.cs" />
     <Compile Include="POIFS\EventFileSystem\Listener.cs" />

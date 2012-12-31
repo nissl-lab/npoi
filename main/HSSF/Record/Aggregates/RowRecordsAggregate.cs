@@ -151,6 +151,9 @@ namespace NPOI.HSSF.Record.Aggregates
                     case RowRecord.sid:
                         InsertRow((RowRecord)rec);
                         continue;
+                    case DConRefRecord.sid:
+                        AddUnknownRecord(rec);
+                        continue;
                     case DBCellRecord.sid:
                         // end of 'Row Block'.  Should only occur after cell records
                         // ignore DBCELL records because POI generates them upon re-serialization

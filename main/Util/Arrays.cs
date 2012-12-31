@@ -282,7 +282,16 @@ namespace NPOI.Util
                              Math.Min(original.Length - from, newLength));
             return copy;
         }
-
+        internal static byte[] CopyOfRange(byte[] original, int from, int to)
+        {
+            int newLength = to - from;
+            if (newLength < 0)
+                throw new ArgumentException(from + " > " + to);
+            byte[] copy = new byte[newLength];
+            Array.Copy(original, from, copy, 0,
+                             Math.Min(original.Length - from, newLength));
+            return copy;
+        }
         /**
          * Returns a string representation of the contents of the specified array.
          * If the array contains other arrays as elements, they are converted to

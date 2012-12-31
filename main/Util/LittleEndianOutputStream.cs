@@ -132,5 +132,10 @@ namespace NPOI.Util
                 throw new RuntimeException(e);
             }
         }
+
+        public void Flush()
+        {
+            out1.Flush();
+        }
     }
 }

@@ -2808,5 +2808,12 @@ using NPOI.POIFS.FileSystem;
                 Assert.IsTrue(text.Contains("Bottom Right Cell"));
             }
         }
+        [Test]
+        public void Test54016()
+        {
+            // This used to break
+            HSSFWorkbook wb = OpenSample("54016.xls");
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+        }
     }
 }

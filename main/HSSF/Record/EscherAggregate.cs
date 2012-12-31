@@ -652,7 +652,7 @@ namespace NPOI.HSSF.Record
                 else if (shapeContainer.RecordId == EscherContainerRecord.SP_CONTAINER)
                 {
                     EscherSpRecord spRecord = shapeContainer.GetChildById(EscherSpRecord.RECORD_ID);
-                    int type = spRecord.Options >> 4;
+                    int type = spRecord.ShapeType;
 
                     switch (type)
                     {
