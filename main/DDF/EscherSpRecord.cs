@@ -134,12 +134,22 @@ namespace NPOI.DDF
 
             return this.GetType().Name + ":" + nl +
                     "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  ShapeType: 0x" + HexDump.ToHex(ShapeType) + nl +
                     "  ShapeId: " + field_1_shapeId + nl +
                     "  Flags: " + DecodeFlags(field_2_flags) + " (0x" + HexDump.ToHex(field_2_flags) + ")" + nl;
 
         }
-
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<ShapeType>0x").Append(HexDump.ToHex(ShapeType)).Append("</ShapeType>\n")
+                    .Append(tab).Append("\t").Append("<ShapeId>").Append(field_1_shapeId).Append("</ShapeId>\n")
+                    .Append(tab).Append("\t").Append("<Flags>").Append(DecodeFlags(field_2_flags) + " (0x" + HexDump.ToHex(field_2_flags) + ")").Append("</Flags>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Converts the shape flags into a more descriptive name.
         /// </summary>
@@ -187,6 +197,15 @@ namespace NPOI.DDF
         {
             get { return field_2_flags; }
             set { this.field_2_flags = value; }
+        }
+
+        /// <summary>
+        /// Get or set shape type. Must be one of MSOSPT values (see [MS-ODRAW] for details).
+        /// </summary>
+        public short ShapeType
+        {
+            get { return Instance; }
+            set { Instance = (value); }
         }
     }
 }

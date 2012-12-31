@@ -130,12 +130,22 @@ namespace NPOI.DDF
             //        }
             return GetType().Name + ":" + nl +
                     "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                     "  NumShapes: " + field_1_numShapes + nl +
                     "  LastMSOSPID: " + field_2_lastMSOSPID + nl;
 
         }
 
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<NumShapes>").Append(field_1_numShapes).Append("</NumShapes>\n")
+                    .Append(tab).Append("\t").Append("<LastMSOSPID>").Append(field_2_lastMSOSPID).Append("</LastMSOSPID>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Gets or sets The number of shapes in this drawing group.
         /// </summary>

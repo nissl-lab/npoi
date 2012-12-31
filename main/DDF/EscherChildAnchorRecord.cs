@@ -120,12 +120,24 @@ namespace NPOI.DDF
 
             return GetType().Name + ":" + nl +
                     "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                     "  X1: " + field_1_dx1 + nl +
                     "  Y1: " + field_2_dy1 + nl +
                     "  X2: " + field_3_dx2 + nl +
                     "  Y2: " + field_4_dy2 + nl;
 
+        }
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<X1>").Append(field_1_dx1).Append("</X1>\n")
+                    .Append(tab).Append("\t").Append("<Y1>").Append(field_2_dy1).Append("</Y1>\n")
+                    .Append(tab).Append("\t").Append("<X2>").Append(field_3_dx2).Append("</X2>\n")
+                    .Append(tab).Append("\t").Append("<Y2>").Append(field_4_dy2).Append("</Y2>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
         }
 
         /// <summary>

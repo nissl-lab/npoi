@@ -16,6 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -140,7 +142,8 @@ namespace NPOI.DDF
             //        }
             return GetType().Name + ":" + nl +
                     "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                     "  Color1: 0x" + HexDump.ToHex(field_1_color1) + nl +
                     "  Color2: 0x" + HexDump.ToHex(field_2_color2) + nl +
                     "  Color3: 0x" + HexDump.ToHex(field_3_color3) + nl +
@@ -148,7 +151,17 @@ namespace NPOI.DDF
                     "";
 
         }
-
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<Color1>0x").Append(HexDump.ToHex(field_1_color1)).Append("</Color1>\n")
+                    .Append(tab).Append("\t").Append("<Color2>0x").Append(HexDump.ToHex(field_2_color2)).Append("</Color2>\n")
+                    .Append(tab).Append("\t").Append("<Color3>0x").Append(HexDump.ToHex(field_3_color3)).Append("</Color3>\n")
+                    .Append(tab).Append("\t").Append("<Color4>0x").Append(HexDump.ToHex(field_4_color4)).Append("</Color4>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Gets or sets the color1.
         /// </summary>

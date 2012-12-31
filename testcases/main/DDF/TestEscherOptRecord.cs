@@ -144,13 +144,15 @@ namespace TestCases.DDF
         {
             String nl = Environment.NewLine;
             EscherOptRecord r = new EscherOptRecord();
-            r.Options=(short)0x000F;
+            // don't try to shoot in foot, please -- vlsergey
+            // r.setOptions((short)0x000F);
             r.RecordId=EscherOptRecord.RECORD_ID;
             EscherProperty prop1 = new EscherBoolProperty((short)1, 1);
             r.AddEscherProperty(prop1);
             String expected = "EscherOptRecord:" + nl +
-                    "  isContainer: True" + nl +
-                    "  options: 0x0013" + nl +
+                    "  isContainer: False" + nl +
+                    "  version: 0x0003" + nl +
+                    "  instance: 0x0001" + nl +
                     "  recordId: 0x" + HexDump.ToHex(EscherOptRecord.RECORD_ID) + nl +
                     "  numchildren: 0" + nl +
                     "  properties:" + nl +

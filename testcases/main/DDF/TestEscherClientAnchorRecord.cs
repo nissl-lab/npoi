@@ -80,7 +80,8 @@ namespace TestCases.DDF
 
             String expected = "EscherClientAnchorRecord:" + nl +
                     "  RecordId: 0xF010" + nl +
-                    "  Options: 0x0001" + nl +
+                    "  Version: 0x0001" + nl +
+                    "  Instance: 0x0000" + nl +
                     "  Flag: 77" + nl +
                     "  Col1: 55" + nl +
                     "  DX1: 33" + nl +
@@ -89,9 +90,9 @@ namespace TestCases.DDF
                     "  Col2: 44" + nl +
                     "  DX2: 22" + nl +
                     "  Row2: 99" + nl +
-                    "  DY2: 66" + nl;
-                    //"  Extra Data:" + nl +
-                    //"00000000 FF DD                                           .." + nl;
+                    "  DY2: 66" + nl +
+                    "  Extra Data:" + nl +
+                    "00000000 FF DD                                           .." + nl;
             Assert.AreEqual(expected, CreateRecord().ToString());
         }
 

@@ -37,9 +37,10 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="propertyNumber">The property number (or id)</param>
         /// <param name="value">The 32 bit value of this bool property</param>
-        public EscherBoolProperty(short propertyNumber, int value):base(propertyNumber, value)
+        public EscherBoolProperty(short propertyNumber, int value)
+            : base(propertyNumber, value)
         {
-            
+
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace NPOI.DDF
         /// <value><c>true</c> if this instance is true; otherwise, <c>false</c>.</value>
         public bool IsTrue
         {
-            get{return propertyValue != 0;}
+            get { return propertyValue != 0; }
         }
 
         /// <summary>
@@ -67,6 +68,13 @@ namespace NPOI.DDF
         //            + ", blipId: " + IsBlipId
         //            + ", value: " + (Value != 0);
         //}
-
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append("<").Append(GetType().Name).Append(" id=\"0x").Append(HexDump.ToHex(Id))
+                    .Append("\" name=\"").Append(Name).Append("\" simpleValue=\"").Append(PropertyValue).Append("\" blipId=\"")
+                    .Append(IsBlipId).Append("\" value=\"").Append(IsTrue).Append("\"").Append("/>\n");
+            return builder.ToString();
+        }
     }
 }

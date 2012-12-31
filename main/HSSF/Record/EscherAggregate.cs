@@ -343,6 +343,19 @@ namespace NPOI.HSSF.Record
             return result.ToString();
         }
 
+        public String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append("<").Append(RecordName).Append(">\n");
+            for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext();)
+            {
+                EscherRecord escherRecord = (EscherRecord) iterator.Current;
+                builder.Append(escherRecord.ToXml(tab + "\t"));
+            }
+            builder.Append(tab).Append("</").Append(RecordName).Append(">\n");
+            return builder.ToString();
+        }
+
         internal class CustomEscherRecordFactory : DefaultEscherRecordFactory
         {
             IList shapeRecords;

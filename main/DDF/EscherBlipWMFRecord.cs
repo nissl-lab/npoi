@@ -282,13 +282,14 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            String extraData;
+            String extraData = string.Empty;
             using (MemoryStream b = new MemoryStream())
             {
                 try
                 {
                     HexDump.Dump(this.field_12_data, 0, b, 0);
-                    extraData = b.ToString();
+                    //extraData = b.ToString();
+                    extraData = Encoding.UTF8.GetString(b.ToArray());
                 }
                 catch (Exception e)
                 {
@@ -296,7 +297,8 @@ namespace NPOI.DDF
                 }
                 return GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
-                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                        "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                         "  Secondary UID: " + HexDump.ToHex(field_1_secondaryUID) + nl +
                         "  CacheOfSize: " + field_2_cacheOfSize + nl +
                         "  BoundaryTop: " + field_3_boundaryTop + nl +
@@ -307,11 +309,42 @@ namespace NPOI.DDF
                         "  Y: " + field_8_height + nl +
                         "  CacheOfSavedSize: " + field_9_cacheOfSavedSize + nl +
                         "  CompressionFlag: " + field_10_compressionFlag + nl +
-                        "  Filter: " + field_11_filter + nl;
-                //"  Data:" + nl + extraData;
+                        "  Filter: " + field_11_filter + nl+
+                        "  Data:" + nl + extraData;
             }
         }
-
+        public override String ToXml(String tab)
+        {
+            String extraData;
+            using (MemoryStream b = new MemoryStream())
+            {
+                try
+                {
+                    HexDump.Dump(this.field_12_data, 0, b, 0);
+                    extraData = HexDump.ToHex(b.ToArray());
+                }
+                catch (Exception e)
+                {
+                    extraData = e.ToString();
+                }
+                StringBuilder builder = new StringBuilder();
+                builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                        .Append(tab).Append("\t").Append("<SecondaryUID>0x").Append(HexDump.ToHex(field_1_secondaryUID)).Append("</SecondaryUID>\n")
+                        .Append(tab).Append("\t").Append("<CacheOfSize>").Append(field_2_cacheOfSize).Append("</CacheOfSize>\n")
+                        .Append(tab).Append("\t").Append("<BoundaryTop>").Append(field_3_boundaryTop).Append("</BoundaryTop>\n")
+                        .Append(tab).Append("\t").Append("<BoundaryLeft>").Append(field_4_boundaryLeft).Append("</BoundaryLeft>\n")
+                        .Append(tab).Append("\t").Append("<BoundaryWidth>").Append(field_5_boundaryWidth).Append("</BoundaryWidth>\n")
+                        .Append(tab).Append("\t").Append("<BoundaryHeight>").Append(field_6_boundaryHeight).Append("</BoundaryHeight>\n")
+                        .Append(tab).Append("\t").Append("<X>").Append(field_7_width).Append("</X>\n")
+                        .Append(tab).Append("\t").Append("<Y>").Append(field_8_height).Append("</Y>\n")
+                        .Append(tab).Append("\t").Append("<CacheOfSavedSize>").Append(field_9_cacheOfSavedSize).Append("</CacheOfSavedSize>\n")
+                        .Append(tab).Append("\t").Append("<CompressionFlag>").Append(field_10_compressionFlag).Append("</CompressionFlag>\n")
+                        .Append(tab).Append("\t").Append("<Filter>").Append(field_11_filter).Append("</Filter>\n")
+                        .Append(tab).Append("\t").Append("<Data>").Append(extraData).Append("</Data>\n");
+                builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+                return builder.ToString();
+            }
+        }
         /// <summary>
         /// Compress the contents of the provided array
         /// </summary>

@@ -68,8 +68,9 @@ namespace TestCases.DDF
             String nl = Environment.NewLine;
 
             String expected = "EscherDgRecord:" + nl +
-                    "  RecordId: 0xF008" + nl +
-                    "  Options: 0x0010" + nl +
+                    "  RecordId: 0xF008" +nl +    
+                    "  Version: 0x0000" + nl +
+                    "  Instance: 0x0001" + nl +
                     "  NumShapes: 2" + nl +
                     "  LastMSOSPID: 1025" + nl;
             Assert.AreEqual(expected, CreateRecord().ToString());

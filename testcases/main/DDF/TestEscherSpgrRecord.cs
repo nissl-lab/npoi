@@ -73,7 +73,8 @@ namespace TestCases.DDF
 
             String expected = "EscherSpgrRecord:" + nl +
                     "  RecordId: 0xF009" + nl +
-                    "  Options: 0x0010" + nl +
+                    "  Version: 0x0000" + nl +
+                    "  Instance: 0x0001" + nl +
                     "  RectX: 1" + nl +
                     "  RectY: 2" + nl +
                     "  RectWidth: 3" + nl +

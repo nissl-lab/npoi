@@ -75,7 +75,8 @@ namespace TestCases.DDF
 
             String expected = "EscherChildAnchorRecord:" + nl +
                     "  RecordId: 0xF00F" + nl +
-                    "  Options: 0x0001" + nl +
+                    "  Version: 0x0001" + nl +
+                    "  Instance: 0x0000" + nl +
                     "  X1: 1" + nl +
                     "  Y1: 2" + nl +
                     "  X2: 3" + nl +

@@ -14,6 +14,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -126,7 +129,7 @@ namespace NPOI.DDF
                 try
                 {
                     HexDump.Dump(this.field_pictureData, 0, b, 0);
-                    extraData = b.ToString();
+                    extraData = HexDump.ToHex(b.ToArray());
                 }
                 catch (Exception e)
                 {
@@ -134,11 +137,34 @@ namespace NPOI.DDF
                 }
                 return this.GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
-                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                        "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                         "  UID: 0x" + HexDump.ToHex(field_1_UID) + nl +
                         "  Marker: 0x" + HexDump.ToHex(field_2_marker) + nl +
                         "  Extra Data:" + nl + extraData;
             }
+        }
+
+        public override String ToXml(String tab)
+        {
+            String extraData;
+            //MemoryStream b = new MemoryStream();
+            try
+            {
+                //HexDump.Dump(this.field_pictureData, 0, b, 0);
+                extraData = HexDump.ToHex(this.field_pictureData);
+            }
+            catch (Exception e)
+            {
+                extraData = e.ToString();
+            }
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<UID>0x").Append(HexDump.ToHex(field_1_UID)).Append("</UID>\n")
+                    .Append(tab).Append("\t").Append("<Marker>0x").Append(HexDump.ToHex(field_2_marker)).Append("</Marker>\n")
+                    .Append(tab).Append("\t").Append("<ExtraData>").Append(extraData).Append("</ExtraData>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
         }
 
     }

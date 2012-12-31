@@ -16,6 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -75,6 +77,13 @@ namespace NPOI.DDF
         {
             get{return (byte)((propertyValue >> 16) & 0xFF);}
         }
-
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append("<").Append(GetType().Name).Append(" id=\"0x").Append(HexDump.ToHex(Id))
+                    .Append("\" name=\"").Append(Name).Append("\" blipId=\"")
+                    .Append(IsBlipId).Append("\" value=\"0x").Append(HexDump.ToHex(propertyValue)).Append("\"/>\n");
+            return builder.ToString();
+        }
     }
 }

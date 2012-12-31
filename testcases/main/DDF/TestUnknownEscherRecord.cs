@@ -121,7 +121,8 @@ namespace TestCases.DDF
             String nl = Environment.NewLine;
             Assert.AreEqual("UnknownEscherRecord:" + nl +
                     "  isContainer: False" + nl +
-                    "  options: 0x1234" + nl +
+                    "  version: 0x0004" + nl +
+                    "  instance: 0x0123" + nl +
                     "  recordId: 0xF112" + nl +
                     "  numchildren: 0" + nl
                     , r.ToString());

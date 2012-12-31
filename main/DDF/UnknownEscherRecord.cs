@@ -34,8 +34,8 @@ namespace NPOI.DDF
         private static byte[] NO_BYTES = new byte[0];
 
         /** The data for this record not including the the 8 byte header */
-        private byte[] thedata = NO_BYTES;
-        private List<EscherRecord> childRecords = new List<EscherRecord>();
+        private byte[] _thedata = NO_BYTES;
+        private List<EscherRecord> _childRecords = new List<EscherRecord>();
 
         public UnknownEscherRecord()
         {
@@ -65,7 +65,7 @@ namespace NPOI.DDF
             if (IsContainerRecord)
             {
                 int bytesWritten = 0;
-                thedata = new byte[0];
+                _thedata = new byte[0];
                 offset += 8;
                 bytesWritten += 8;
                 while (bytesRemaining > 0)
@@ -81,8 +81,8 @@ namespace NPOI.DDF
             }
             else
             {
-                thedata = new byte[bytesRemaining];
-                Array.Copy(data, offset + 8, thedata, 0, bytesRemaining);
+                _thedata = new byte[bytesRemaining];
+                Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
                 return bytesRemaining + 8;
             }
         }
@@ -101,15 +101,15 @@ namespace NPOI.DDF
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
-            int remainingBytes = thedata.Length;
+            int remainingBytes = _thedata.Length;
             for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord r = (EscherRecord)iterator.Current;
                 remainingBytes += r.RecordSize;
             }
             LittleEndian.PutInt(data, offset + 4, remainingBytes);
-            Array.Copy(thedata, 0, data, offset + 8, thedata.Length);
-            int pos = offset + 8 + thedata.Length;
+            Array.Copy(_thedata, 0, data, offset + 8, _thedata.Length);
+            int pos = offset + 8 + _thedata.Length;
             for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord r = (EscherRecord)iterator.Current;
@@ -126,7 +126,7 @@ namespace NPOI.DDF
         /// <value>The data.</value>
         public byte[] Data
         {
-            get { return thedata; }
+            get { return _thedata; }
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace NPOI.DDF
         /// <value>Number of bytes</value>
         public override int RecordSize
         {
-            get { return 8 + thedata.Length; }
+            get { return 8 + _thedata.Length; }
         }
 
         /// <summary>
@@ -146,8 +146,8 @@ namespace NPOI.DDF
         /// <value></value>
         public override List<EscherRecord> ChildRecords
         {
-            get { return childRecords; }
-            set { this.childRecords = value; }
+            get { return _childRecords; }
+            set { this._childRecords = value; }
         }
 
         /// <summary>
@@ -184,10 +184,10 @@ namespace NPOI.DDF
             String theDumpHex = "";
             try
             {
-                if (thedata.Length != 0)
+                if (_thedata.Length != 0)
                 {
-                    theDumpHex = "  Extra Data(" + thedata.Length + "):" + nl;
-                    theDumpHex += HexDump.Dump(thedata, 0, 0);
+                    theDumpHex = "  Extra Data(" + _thedata.Length + "):" + nl;
+                    theDumpHex += HexDump.Dump(_thedata, 0, 0);
                 }
             }
             catch (Exception)
@@ -197,13 +197,29 @@ namespace NPOI.DDF
 
             return this.GetType().Name + ":" + nl +
                     "  isContainer: " + IsContainerRecord + nl +
-                    "  options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  instance: 0x" + HexDump.ToHex(Instance) + nl +
                     "  recordId: 0x" + HexDump.ToHex(RecordId) + nl +
                     "  numchildren: " + ChildRecords.Count + nl +
                     theDumpHex +
                     children.ToString();
         }
-
+        public override String ToXml(String tab)
+        {
+            String theDumpHex = HexDump.ToHex(_thedata, 32);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<IsContainer>").Append(IsContainerRecord).Append("</IsContainer>\n")
+                    .Append(tab).Append("\t").Append("<Numchildren>").Append(HexDump.ToHex(_childRecords.Count)).Append("</Numchildren>\n");
+            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherRecord record = iterator.Current;
+                builder.Append(record.ToXml(tab + "\t"));
+            }
+            builder.Append(theDumpHex).Append("\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Adds the child record.
         /// </summary>

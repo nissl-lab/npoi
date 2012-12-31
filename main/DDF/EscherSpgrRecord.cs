@@ -16,6 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -137,7 +139,8 @@ namespace NPOI.DDF
             //        }
             return GetType().Name + ":" + nl +
                     "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                     "  RectX: " + field_1_rectX1 + nl +
                     "  RectY: " + field_2_rectY1 + nl +
                     "  RectWidth: " + field_3_rectX2 + nl +
@@ -145,6 +148,17 @@ namespace NPOI.DDF
 
         }
 
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<RectX>").Append(field_1_rectX1).Append("</RectX>\n")
+                    .Append(tab).Append("\t").Append("<RectY>").Append(field_2_rectY1).Append("</RectY>\n")
+                    .Append(tab).Append("\t").Append("<RectWidth>").Append(field_3_rectX2).Append("</RectWidth>\n")
+                    .Append(tab).Append("\t").Append("<RectHeight>").Append(field_4_rectY2).Append("</RectHeight>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Gets or sets the starting top-left coordinate of child records.
         /// </summary>

@@ -16,6 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -136,6 +138,14 @@ namespace NPOI.DDF
                     + ", blipId: " + IsBlipId
                     + ", value: " + propertyValue + " (0x" + HexDump.ToHex(propertyValue) + ")";
         }
-
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append("<").Append(GetType().Name).Append(" id=\"0x").Append(HexDump.ToHex(Id))
+                    .Append("\" name=\"").Append(Name).Append("\" blipId=\"")
+                    .Append(IsBlipId).Append("\" complex=\"").Append(IsComplex).Append("\" value=\"").Append("0x")
+                    .Append(HexDump.ToHex(propertyValue)).Append("\"/>\n");
+            return builder.ToString();
+        }
     }
 }

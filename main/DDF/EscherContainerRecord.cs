@@ -41,8 +41,32 @@ namespace NPOI.DDF
         public const short SPGR_CONTAINER = unchecked((short)0xF003);
         public const short SP_CONTAINER = unchecked((short)0xF004);
         public const short SOLVER_CONTAINER = unchecked((short)0xF005);
+        private static POILogger log = POILogFactory.GetLogger(typeof(EscherContainerRecord));
 
-        private List<EscherRecord> childRecords = new List<EscherRecord>();
+        /**
+         * in case if document contains any charts we have such document structure:
+         * BOF
+         * ...
+         * DrawingRecord
+         * ...
+         * ObjRecord|TxtObjRecord
+         * ...
+         * EOF
+         * ...
+         * BOF(Chart begin)
+         * ...
+         * DrawingRecord
+         * ...
+         * ObjRecord|TxtObjRecord
+         * ...
+         * EOF
+         * So, when we call EscherAggregate.createAggregate() we have not all needed data.
+         * When we got warning "WARNING: " + bytesRemaining + " bytes remaining but no space left"
+         * we should save value of bytesRemaining
+         * and add it to container size when we serialize it
+         */
+        private int _remainingLength;
+        private List<EscherRecord> _childRecords = new List<EscherRecord>();
 
         /// <summary>
         /// The contract of this method is to deSerialize an escher record including
@@ -68,7 +92,8 @@ namespace NPOI.DDF
                 AddChildRecord(child);
                 if (offset >= data.Length && bytesRemaining > 0)
                 {
-                    Console.WriteLine("WARNING: " + bytesRemaining + " bytes remaining but no space left");
+                    _remainingLength = bytesRemaining;
+                    log.Log(POILogger.WARN, "Not enough Escher data: " + bytesRemaining + " bytes remaining but no space left");
                 }
             }
             return bytesWritten;
@@ -94,12 +119,15 @@ namespace NPOI.DDF
                 EscherRecord r = (EscherRecord)iterator.Current;
                 remainingBytes += r.RecordSize;
             }
+
+            remainingBytes += _remainingLength;
+
             LittleEndian.PutInt(data, offset + 4, remainingBytes);
             int pos = offset + 8;
             for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord r = (EscherRecord)iterator.Current;
-                pos += r.Serialize(pos, data,listener);
+                pos += r.Serialize(pos, data, listener);
             }
 
             listener.AfterRecordSerialize(pos, RecordId, pos - offset, this);
@@ -153,24 +181,25 @@ namespace NPOI.DDF
         /// <value></value>
         public override List<EscherRecord> ChildRecords
         {
-            get { return new List<EscherRecord>(childRecords); }
-            set {
-                if (value == childRecords)
+            get { return new List<EscherRecord>(_childRecords); }
+            set
+            {
+                if (value == _childRecords)
                 {
                     throw new InvalidOperationException("Child records private data member has escaped");
                 }
-                childRecords.Clear();
-                childRecords.AddRange(value);
+                _childRecords.Clear();
+                _childRecords.AddRange(value);
             }
         }
 
         public bool RemoveChildRecord(EscherRecord toBeRemoved)
         {
-            return childRecords.Remove(toBeRemoved);
+            return _childRecords.Remove(toBeRemoved);
         }
         public List<EscherRecord>.Enumerator GetChildIterator()
         {
-            return childRecords.GetEnumerator();
+            return _childRecords.GetEnumerator();
         }
         /// <summary>
         /// Returns all of our children which are also
@@ -232,7 +261,7 @@ namespace NPOI.DDF
         public override void Display(int indent)
         {
             base.Display(indent);
-            for (IEnumerator iterator = childRecords.GetEnumerator(); iterator.MoveNext(); )
+            for (IEnumerator iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 escherRecord.Display(indent + 1);
@@ -245,7 +274,7 @@ namespace NPOI.DDF
         /// <param name="record">The record.</param>
         public void AddChildRecord(EscherRecord record)
         {
-            this.childRecords.Add(record);
+            this._childRecords.Add(record);
         }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -255,53 +284,61 @@ namespace NPOI.DDF
         /// </returns>
         public override string ToString()
         {
-            return ToString("");
-        }
-        /// <summary>
-        /// Toes the string.
-        /// </summary>
-        /// <param name="indent">The indent.</param>
-        /// <returns></returns>
-        public String ToString(String indent)
-        {
             String nl = Environment.NewLine;
 
             StringBuilder children = new StringBuilder();
-            if (ChildRecords.Count> 0)
+            if (ChildRecords.Count > 0)
             {
                 children.Append("  children: " + nl);
 
                 int count = 0;
                 for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
                 {
-                    String newIndent = indent + "   ";
 
                     EscherRecord record = (EscherRecord)iterator.Current;
-                    children.Append(newIndent + "Child " + count + ":" + nl);
+                    children.Append("    Child " + count + ":" + nl);
 
-                    if (record is EscherContainerRecord)
-                    {
-                        EscherContainerRecord ecr = (EscherContainerRecord)record;
-                        children.Append(ecr.ToString(newIndent));
-                    }
-                    else
-                    {
-                        children.Append(record.ToString());
-                    }
+                    String childResult = (record).ToString();
+                    childResult = childResult.Replace("\n", "\n    ");
+                    children.Append("    ");
+                    children.Append(childResult);
+                    children.Append(nl);
+
+                    //if (record is EscherContainerRecord)
+                    //{
+                    //    EscherContainerRecord ecr = (EscherContainerRecord)record;
+                    //    children.Append(ecr.ToString());
+                    //}
+                    //else
+                    //{
+                    //    children.Append(record.ToString());
+                    //}
                     count++;
                 }
             }
 
             return
-                indent + this.GetType().Name + " (" + RecordName + "):" + nl +
-                indent + "  isContainer: " + IsContainerRecord + nl +
-                indent + "  options: 0x" + HexDump.ToHex(Options) + nl +
-                indent + "  recordId: 0x" + HexDump.ToHex(RecordId) + nl +
-                indent + "  numchildren: " + ChildRecords.Count + nl +
-                indent + children.ToString();
-
+                this.GetType().Name + " (" + RecordName + "):" + nl +
+                "  isContainer: " + IsContainerRecord + nl +
+                "  version: 0x" + HexDump.ToHex(Version) + nl +
+                "  instance: 0x" + HexDump.ToHex(Instance) + nl +
+                "  recordId: 0x" + HexDump.ToHex(RecordId) + nl +
+                "  numchildren: " + ChildRecords.Count + nl +
+                children.ToString();
         }
 
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(RecordName, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)));
+            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherRecord record = iterator.Current;
+                builder.Append(record.ToXml(tab + "\t"));
+            }
+            builder.Append(tab).Append("</").Append(RecordName).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Gets the child by id.
         /// </summary>
@@ -309,7 +346,7 @@ namespace NPOI.DDF
         /// <returns></returns>
         public EscherSpRecord GetChildById(short recordId)
         {
-            for (IEnumerator iterator = childRecords.GetEnumerator(); iterator.MoveNext(); )
+            for (IEnumerator iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 if (escherRecord.RecordId == recordId)

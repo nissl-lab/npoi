@@ -114,7 +114,8 @@ namespace TestCases.DDF
 
             Assert.AreEqual("EscherBlipWMFRecord:" + nl +
                     "  RecordId: 0xF018" + nl +
-                    "  Options: 0x152C" + nl +
+                    "  Version: 0x000C" + nl +
+                    "  Instance: 0x0152" + nl +
                     "  Secondary UID: [01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, ]" + nl +
                     "  CacheOfSize: 6" + nl +
                     "  BoundaryTop: 3" + nl +
@@ -125,9 +126,9 @@ namespace TestCases.DDF
                     "  Y: 11" + nl +
                     "  CacheOfSavedSize: 5" + nl +
                     "  CompressionFlag: 8" + nl +
-                    "  Filter: 7" + nl
-                    //"  Data:" + nl +
-                    //"00000000 01 02                                           .." + nl
+                    "  Filter: 7" + nl +
+                    "  Data:" + nl +
+                    "00000000 01 02                                           .." + nl
                     , r.ToString());
         }
 

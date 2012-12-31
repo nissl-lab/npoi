@@ -64,9 +64,10 @@ namespace TestCases.DDF
 
             String expected = "EscherClientDataRecord:" + nl +
                     "  RecordId: 0xF011" + nl +
-                    "  Options: 0x0002" + nl;
-                    //"  Extra Data:" + nl +
-                    //"No Data" + nl;
+                    "  Version: 0x0002" + nl +
+                    "  Instance: 0x0000" + nl +
+                    "  Extra Data:" + nl +
+                    "No Data" + nl;
             Assert.AreEqual(expected, CreateRecord().ToString());
         }
 

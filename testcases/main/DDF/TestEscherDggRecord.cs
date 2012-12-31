@@ -79,7 +79,8 @@ namespace TestCases.DDF
 
             String expected = "EscherDggRecord:" + nl +
                     "  RecordId: 0xF006" + nl +
-                    "  Options: 0x0000" + nl +
+                    "  Version: 0x0000" + nl +
+                    "  Instance: 0x0000" + nl +
                     "  ShapeIdMax: 1026" + nl +
                     "  NumIdClusters: 2" + nl +
                     "  NumShapesSaved: 2" + nl +

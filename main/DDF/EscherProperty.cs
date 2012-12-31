@@ -16,6 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -111,6 +113,21 @@ namespace NPOI.DDF
         public virtual int PropertySize
         {
             get { return 6; }
+        }
+
+        public virtual String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab)
+                   .Append("<")
+                   .Append(GetType().Name)
+                   .Append(" id=\"")
+                   .Append(Id)
+                   .Append("\" name=\"")
+                   .Append(Name)
+                   .Append("\" blipId=\"")
+                   .Append(IsBlipId).Append("\"/>\n");
+            return builder.ToString();
         }
 
         /// <summary>

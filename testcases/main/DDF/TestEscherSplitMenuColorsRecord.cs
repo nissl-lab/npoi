@@ -73,7 +73,8 @@ namespace TestCases.DDF
 
             String expected = "EscherSplitMenuColorsRecord:" + nl +
                     "  RecordId: 0xF11E" + nl +
-                    "  Options: 0x0040" + nl +
+                    "  Version: 0x0000" + nl +
+                    "  Instance: 0x0004" + nl +
                     "  Color1: 0x00000402" + nl +
                     "  Color2: 0x00000002" + nl +
                     "  Color3: 0x00000002" + nl +

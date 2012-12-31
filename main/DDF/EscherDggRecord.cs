@@ -188,13 +188,26 @@ namespace NPOI.DDF
             }
             return GetType().Name + ":" + nl +
                     "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                    "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                     "  ShapeIdMax: " + field_1_shapeIdMax + nl +
                     "  NumIdClusters: " + NumIdClusters + nl +
                     "  NumShapesSaved: " + field_3_numShapesSaved + nl +
                     "  DrawingsSaved: " + field_4_drawingsSaved + nl +
                     "" + field_5_string.ToString();
 
+        }
+
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<ShapeIdMax>").Append(field_1_shapeIdMax).Append("</ShapeIdMax>\n")
+                    .Append(tab).Append("\t").Append("<NumIdClusters>").Append(NumIdClusters).Append("</NumIdClusters>\n")
+                    .Append(tab).Append("\t").Append("<NumShapesSaved>").Append(field_3_numShapesSaved).Append("</NumShapesSaved>\n")
+                    .Append(tab).Append("\t").Append("<DrawingsSaved>").Append(field_4_drawingsSaved).Append("</DrawingsSaved>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
         }
 
         /// <summary>

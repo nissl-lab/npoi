@@ -16,6 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text;
+
 namespace NPOI.DDF
 {
     using System;
@@ -31,8 +33,10 @@ namespace NPOI.DDF
     /// </summary>
     abstract public class EscherRecord : ICloneable
     {
-        private short options;
-        private short recordId;
+        private static BitField fInstance = BitFieldFactory.GetInstance(0xfff0);
+        private static BitField fVersion = BitFieldFactory.GetInstance(0x000f);
+        private short _options;
+        private short _recordId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EscherRecord"/> class.
@@ -75,12 +79,27 @@ namespace NPOI.DDF
         /// <returns>the number of bytes remaining in this record.  This</returns>
         protected int ReadHeader(byte[] data, int offset)
         {
-            EscherRecordHeader header = EscherRecordHeader.ReadHeader(data, offset);
-            options = header.Options;
-            recordId = header.RecordId;
-            return header.RemainingBytes;
+            //EscherRecordHeader header = EscherRecordHeader.ReadHeader(data, offset);
+            //_options = header.Options;
+            //_recordId = header.RecordId;
+            //return header.RemainingBytes;
+            _options = LittleEndian.GetShort(data, offset);
+            _recordId = LittleEndian.GetShort(data, offset + 2);
+            int remainingBytes = LittleEndian.GetInt(data, offset + 4);
+            return remainingBytes;
         }
 
+        /// <summary>
+        /// Read the options field from header and return instance part of it.
+        /// </summary>
+        /// <param name="data">the byte array to read from</param>
+        /// <param name="offset">the offset to start reading from</param>
+        /// <returns>value of instance part of options field</returns>
+        protected static short ReadInstance( byte[] data, int offset )
+        {
+            short options = LittleEndian.GetShort( data, offset );
+            return fInstance.GetShortValue( options );
+        }
         /// <summary>
         /// Determine whether this is a container record by inspecting the option
         /// field.
@@ -90,17 +109,22 @@ namespace NPOI.DDF
         /// </value>
         public bool IsContainerRecord
         {
-            get { return (options & (short)0x000f) == (short)0x000f; }
+            get { return Version == (short)0x000f; }
         }
 
         /// <summary>
         /// Gets or sets the options field for this record.  All records have one
         /// </summary>
         /// <value>The options.</value>
-        public virtual short Options
+        internal virtual short Options
         {
-            get { return options; }
-            set { this.options = value; }
+            get { return _options; }
+            set
+            {
+                Version = (fVersion.GetShortValue(value));
+                Instance = (fInstance.GetShortValue(value));
+                this._options = value;
+            }
         }
 
         /// <summary>
@@ -154,8 +178,8 @@ namespace NPOI.DDF
         /// <value>The 16 bit record id.</value>
         public virtual short RecordId
         {
-            get { return recordId; }
-            set { this.recordId = value; }
+            get { return _recordId; }
+            set { this._recordId = value; }
         }
 
 
@@ -215,21 +239,21 @@ namespace NPOI.DDF
         /// Returns the instance part of the option record.
         /// </summary>
         /// <returns>The instance part of the record</returns>
-        public short GetInstance()
-        {
-            return (short)(options >> 4);
-        }
+        //public short GetInstance()
+        //{
+        //    return (short)(_options >> 4);
+        //}
 
         /// <summary>
         /// This class Reads the standard escher header.
         /// </summary>
-        internal class EscherRecordHeader
+        internal class DeleteEscherRecordHeader
         {
             private short options;
             private short recordId;
             private int remainingBytes;
 
-            private EscherRecordHeader()
+            private DeleteEscherRecordHeader()
             {
             }
 
@@ -239,9 +263,9 @@ namespace NPOI.DDF
             /// <param name="data">The data.</param>
             /// <param name="offset">The off set.</param>
             /// <returns></returns>
-            public static EscherRecordHeader ReadHeader(byte[] data, int offset)
+            public static DeleteEscherRecordHeader ReadHeader(byte[] data, int offset)
             {
-                EscherRecordHeader header = new EscherRecordHeader();
+                DeleteEscherRecordHeader header = new DeleteEscherRecordHeader();
                 header.options = LittleEndian.GetShort(data, offset);
                 header.recordId = LittleEndian.GetShort(data, offset + 2);
                 header.remainingBytes = LittleEndian.GetInt(data, offset + 4);
@@ -290,6 +314,53 @@ namespace NPOI.DDF
                         ", remainingBytes=" + remainingBytes +
                         "}";
             }
+        }
+
+        /// <summary>
+        /// Get or set the instance part of the option record.
+        /// </summary>
+        public virtual short Instance
+        {
+            get { return fInstance.GetShortValue(_options); }
+            set { _options = fInstance.SetShortValue(_options, value); }
+        }
+
+
+
+        /// <summary>
+        /// Get or set the version part of the option record.
+        /// </summary>
+        public virtual short Version
+        {
+            get { return fVersion.GetShortValue(_options); }
+            set { _options = fVersion.SetShortValue(_options, value); }
+        }
+
+        /**
+         * @param tab - each children must be a right of his parent
+         * @return xml representation of this record
+         */
+        public virtual String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append("<").Append(GetType().Name).Append(">\n")
+                    .Append(tab).Append("\t").Append("<RecordId>0x").Append(HexDump.ToHex(_recordId)).Append("</RecordId>\n")
+                    .Append(tab).Append("\t").Append("<Options>").Append(_options).Append("</Options>\n")
+                    .Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
+
+        protected String FormatXmlRecordHeader(String className, String recordId, String version, String instance)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<").Append(className).Append(" recordId=\"0x").Append(recordId).Append("\" version=\"0x")
+                    .Append(version).Append("\" instance=\"0x").Append(instance).Append("\" size=\"").Append(RecordSize).Append("\">\n");
+            return builder.ToString();
+        }
+
+        public String ToXml()
+        {
+            return ToXml("");
         }
     }
 }

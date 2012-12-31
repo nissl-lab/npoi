@@ -21,9 +21,7 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text;
-    using System.Collections;
-    using NPOI.Util;
-    using NPOI.HSSF.Record;
+    using Util;
 
 
     /// <summary>
@@ -42,11 +40,11 @@ namespace NPOI.DDF
         private static byte[] NO_BYTES = new byte[0];
 
         /** The data for this record not including the the 8 byte header */
-        private byte[] thedata = NO_BYTES;
+        private byte[] _thedata = NO_BYTES;
 
-        public EscherTextboxRecord()
-        {
-        }
+        //public EscherTextboxRecord()
+        //{
+        //}
 
         /**
          * This method deserializes the record from a byte array.
@@ -62,8 +60,8 @@ namespace NPOI.DDF
 
             // Save the data, Ready for the calling code to do something
             //  useful with it
-            thedata = new byte[bytesRemaining];
-            Array.Copy(data, offset + 8, thedata, 0, bytesRemaining);
+            _thedata = new byte[bytesRemaining];
+            Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
             return bytesRemaining + 8;
         }
 
@@ -80,10 +78,10 @@ namespace NPOI.DDF
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
-            int remainingBytes = thedata.Length;
+            int remainingBytes = _thedata.Length;
             LittleEndian.PutInt(data, offset + 4, remainingBytes);
-            Array.Copy(thedata, 0, data, offset + 8, thedata.Length);
-            int pos = offset + 8 + thedata.Length;
+            Array.Copy(_thedata, 0, data, offset + 8, _thedata.Length);
+            int pos = offset + 8 + _thedata.Length;
 
             listener.AfterRecordSerialize(pos, RecordId, pos - offset, this);
             int size = pos - offset;
@@ -101,7 +99,7 @@ namespace NPOI.DDF
         /// <value>The data.</value>
         public byte[] Data
         {
-            get { return thedata; }
+            get { return _thedata; }
         }
 
         /// <summary>
@@ -111,11 +109,11 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="b">The b.</param>
         /// <param name="start">The start.</param>
-        /// <param name="Length">The length.</param>
-        public void SetData(byte[] b, int start, int Length)
+        /// <param name="length">The length.</param>
+        public void SetData(byte[] b, int start, int length)
         {
-            thedata = new byte[Length];
-            Array.Copy(b, start, thedata, 0, Length);
+            _thedata = new byte[length];
+            Array.Copy(b, start, _thedata, 0, length);
         }
         /// <summary>
         /// Sets the data.
@@ -133,7 +131,7 @@ namespace NPOI.DDF
         /// <value>Number of bytes</value>
         public override int RecordSize
         {
-            get { return 8 + thedata.Length; }
+            get { return 8 + _thedata.Length; }
         }
 
         /// <summary>
@@ -158,10 +156,10 @@ namespace NPOI.DDF
             String theDumpHex = "";
             try
             {
-                if (thedata.Length != 0)
+                if (_thedata.Length != 0)
                 {
                     theDumpHex = "  Extra Data:" + nl;
-                    theDumpHex += HexDump.Dump(thedata, 0, 0);
+                    theDumpHex += HexDump.Dump(_thedata, 0, 0);
                 }
             }
             catch (Exception)
@@ -176,7 +174,26 @@ namespace NPOI.DDF
                     "  numchildren: " + ChildRecords.Count + nl +
                     theDumpHex;
         }
-
+        public override String ToXml(String tab)
+        {
+            String theDumpHex = "";
+            try
+            {
+                if (_thedata.Length != 0)
+                {
+                    theDumpHex += HexDump.Dump(_thedata, 0, 0);
+                }
+            }
+            catch (Exception)
+            {
+                theDumpHex = "Error!!";
+            }
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<ExtraData>").Append(theDumpHex).Append("</ExtraData>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
     }
 
 }

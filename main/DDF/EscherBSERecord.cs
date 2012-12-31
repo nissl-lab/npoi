@@ -331,7 +331,8 @@ namespace NPOI.DDF
                 try
                 {
                     HexDump.Dump(this._remainingData, 0, b, 0);
-                    extraData = b.ToString();
+                    //extraData = b.ToString();
+                    extraData = Encoding.UTF8.GetString(b.ToArray());
                 }
                 catch (Exception e)
                 {
@@ -339,7 +340,8 @@ namespace NPOI.DDF
                 }
                 return GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  Version: 0x" + HexDump.ToHex(Version) + '\n' +
+                        "  Instance: 0x" + HexDump.ToHex(Instance) + '\n' +
                         "  BlipTypeWin32: " + field_1_blipTypeWin32 + nl +
                         "  BlipTypeMacOS: " + field_2_blipTypeMacOS + nl +
                         "  SUID: " + HexDump.ToHex(field_3_uid) + nl +
@@ -351,11 +353,28 @@ namespace NPOI.DDF
                         "  Name: " + field_9_name + nl +
                         "  Unused2: " + field_10_unused2 + nl +
                         "  Unused3: " + field_11_unused3 + nl +
-                        "  blipRecord: " + (field_12_blipRecord == null ? "null" : field_12_blipRecord.ToString()) + nl;
-                //"  Extra Data:" + nl + extraData;
+                        "  blipRecord: " + (field_12_blipRecord == null ? "null" : field_12_blipRecord.ToString()) + nl +
+                        "  Extra Data:" + nl + extraData;
             }
         }
-
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<BlipTypeWin32>").Append(field_1_blipTypeWin32).Append("</BlipTypeWin32>\n")
+                    .Append(tab).Append("\t").Append("<BlipTypeMacOS>").Append(field_2_blipTypeMacOS).Append("</BlipTypeMacOS>\n")
+                    .Append(tab).Append("\t").Append("<SUID>").Append(field_3_uid == null ? "" : HexDump.ToHex(field_3_uid)).Append("</SUID>\n")
+                    .Append(tab).Append("\t").Append("<Tag>").Append(field_4_tag).Append("</Tag>\n")
+                    .Append(tab).Append("\t").Append("<Size>").Append(field_5_size).Append("</Size>\n")
+                    .Append(tab).Append("\t").Append("<Ref>").Append(field_6_ref).Append("</Ref>\n")
+                    .Append(tab).Append("\t").Append("<Offset>").Append(field_7_offset).Append("</Offset>\n")
+                    .Append(tab).Append("\t").Append("<Usage>").Append(field_8_usage).Append("</Usage>\n")
+                    .Append(tab).Append("\t").Append("<Name>").Append(field_9_name).Append("</Name>\n")
+                    .Append(tab).Append("\t").Append("<Unused2>").Append(field_10_unused2).Append("</Unused2>\n")
+                    .Append(tab).Append("\t").Append("<Unused3>").Append(field_11_unused3).Append("</Unused3>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
         /// <summary>
         /// Retrieve the string representation given a blip id.
         /// </summary>

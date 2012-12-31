@@ -89,53 +89,63 @@ using System.Configuration;
             String nl = Environment.NewLine;
             Assert.AreEqual("EscherContainerRecord (SpContainer):" + nl +
                     "  isContainer: True" + nl +
-                    "  options: 0x000F" + nl +
+                    "  version: 0x000F" + nl +
+                    "  instance: 0x0000" + nl +
                     "  recordId: 0xF004" + nl +
                     "  numchildren: 0" + nl
                     , r.ToString());
 
             EscherOptRecord r2 = new EscherOptRecord();
-            r2.Options = unchecked((short)0x9876) ;
+            // don't try to shoot in foot, please -- vlsergey
+            // r2.setOptions((short) 0x9876);
             r2.RecordId=EscherOptRecord.RECORD_ID;
 
             String expected;
             r.AddChildRecord(r2);
             expected = "EscherContainerRecord (SpContainer):" + nl +
                        "  isContainer: True" + nl +
-                       "  options: 0x000F" + nl +
+                       "  version: 0x000F" + nl +
+                       "  instance: 0x0000" + nl +
                        "  recordId: 0xF004" + nl +
                        "  numchildren: 1" + nl +
                        "  children: " + nl +
-                       "   Child 0:" + nl +
-                       "EscherOptRecord:" + nl +
-                       "  isContainer: False" + nl +
-                       "  options: 0x0003" + nl +
-                       "  recordId: 0xF00B" + nl +
-                       "  numchildren: 0" + nl +
-                       "  properties:" + nl;
+                       "    Child 0:" + nl +
+                       "    EscherOptRecord:" + nl +
+                       "      isContainer: False" + nl +
+                       "      version: 0x0003" + nl +
+                       "      instance: 0x0000" + nl +
+                       "      recordId: 0xF00B" + nl +
+                       "      numchildren: 0" + nl +
+                       "      properties:" + nl +
+                       "    " + nl;
             Assert.AreEqual(expected, r.ToString());
 
             r.AddChildRecord(r2);
             expected = "EscherContainerRecord (SpContainer):" + nl +
                        "  isContainer: True" + nl +
-                       "  options: 0x000F" + nl +
+                       "  version: 0x000F" + nl +
+                       "  instance: 0x0000" + nl +
                        "  recordId: 0xF004" + nl +
                        "  numchildren: 2" + nl +
                        "  children: " + nl +
-                       "   Child 0:" + nl +
-                       "EscherOptRecord:" + nl +
-                       "  isContainer: False" + nl +
-                       "  options: 0x0003" + nl +
-                       "  recordId: 0xF00B" + nl +
-                       "  numchildren: 0" + nl +
-                       "  properties:" + nl +
-                       "   Child 1:" + nl +
-                       "EscherOptRecord:" + nl +
-                       "  isContainer: False" + nl +
-                       "  options: 0x0003" + nl +
-                       "  recordId: 0xF00B" + nl +
-                       "  numchildren: 0" + nl +
-                       "  properties:" + nl;
+                       "    Child 0:" + nl +
+                       "    EscherOptRecord:" + nl +
+                       "      isContainer: False" + nl +
+                       "      version: 0x0003" + nl +
+                       "      instance: 0x0000" + nl +
+                       "      recordId: 0xF00B" + nl +
+                       "      numchildren: 0" + nl +
+                       "      properties:" + nl +
+                       "    " + nl +
+                       "    Child 1:" + nl +
+                       "    EscherOptRecord:" + nl +
+                       "      isContainer: False" + nl +
+                       "      version: 0x0003" + nl +
+                       "      instance: 0x0000" + nl +
+                       "      recordId: 0xF00B" + nl +
+                       "      numchildren: 0" + nl +
+                       "      properties:" + nl +
+                       "    " + nl;
             Assert.AreEqual(expected, r.ToString());
         }
 

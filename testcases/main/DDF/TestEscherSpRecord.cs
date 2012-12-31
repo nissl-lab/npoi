@@ -68,7 +68,8 @@ namespace TestCases.DDF
 
             String expected = "EscherSpRecord:" + nl +
                     "  RecordId: 0xF00A" + nl +
-                    "  Options: 0x0002" + nl +
+                    "  Version: 0x0002" + nl +
+                    "  ShapeType: 0x0000" + nl +
                     "  ShapeId: 1024" + nl +
                     "  Flags: GROUP|PATRIARCH (0x00000005)" + nl;
             Assert.AreEqual(expected, CreateRecord().ToString());

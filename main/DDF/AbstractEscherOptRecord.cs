@@ -44,10 +44,11 @@ namespace NPOI.DDF
                 IEscherRecordFactory recordFactory)
         {
             int bytesRemaining = ReadHeader(data, offset);
+            short propertiesCount = ReadInstance(data, offset);
             int pos = offset + 8;
 
             EscherPropertyFactory f = new EscherPropertyFactory();
-            properties = f.CreateProperties(data, pos, GetInstance());
+            properties = f.CreateProperties(data, pos, propertiesCount);
             return bytesRemaining + 8;
         }
 
@@ -126,7 +127,7 @@ namespace NPOI.DDF
             listener.AfterRecordSerialize(pos, RecordId, pos - offset, this);
             return pos - offset;
         }
-        internal class EscherPropertyComparer:IComparer<EscherProperty>
+        internal class EscherPropertyComparer : IComparer<EscherProperty>
         {
             public int Compare(EscherProperty p1, EscherProperty p2)
             {
@@ -142,6 +143,48 @@ namespace NPOI.DDF
         {
             properties.Sort(new EscherPropertyComparer());
         }
+
+        /**
+         * Set an escher property. If a property with given propId already
+         exists it is replaced.
+         *
+         * @param value the property to set.
+         */
+        public void SetEscherProperty(EscherProperty value)
+        {
+            List<EscherProperty> toRemove = new List<EscherProperty>();
+            for (IEnumerator<EscherProperty> iterator =
+                          properties.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherProperty prop = iterator.Current;
+                if (prop.Id == value.Id)
+                {
+                    //iterator.Remove();
+                    toRemove.Add(prop);
+                }
+            }
+            foreach (EscherProperty e in toRemove)
+                EscherProperties.Remove(e);
+            properties.Add(value);
+            SortProperties();
+        }
+
+        public void RemoveEscherProperty(int num)
+        {
+            List<EscherProperty> toRemove = new List<EscherProperty>();
+            for (IEnumerator<EscherProperty> iterator = EscherProperties.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherProperty prop = iterator.Current;
+                if (prop.PropertyNumber == num)
+                {
+                    //iterator.Remove();
+                    toRemove.Add(prop);
+                }
+            }
+            foreach (EscherProperty e in toRemove)
+                EscherProperties.Remove(e);
+        }
+
         /**
          * Retrieve the string representation of this record.
          */
@@ -156,8 +199,11 @@ namespace NPOI.DDF
             stringBuilder.Append("  isContainer: ");
             stringBuilder.Append(IsContainerRecord);
             stringBuilder.Append(nl);
-            stringBuilder.Append("  options: 0x");
-            stringBuilder.Append(HexDump.ToHex(Options));
+            stringBuilder.Append("  version: 0x");
+            stringBuilder.Append(HexDump.ToHex(Version));
+            stringBuilder.Append(nl);
+            stringBuilder.Append("  instance: 0x");
+            stringBuilder.Append(HexDump.ToHex(Instance));
             stringBuilder.Append(nl);
             stringBuilder.Append("  recordId: 0x");
             stringBuilder.Append(HexDump.ToHex(RecordId));
@@ -176,6 +222,18 @@ namespace NPOI.DDF
             return stringBuilder.ToString();
         }
 
+        public override String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name,
+                    HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)));
+            foreach (EscherProperty property in EscherProperties)
+            {
+                builder.Append(property.ToXml(tab + "\t"));
+            }
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
+        }
     }
 }
 

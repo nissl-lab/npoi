@@ -116,7 +116,8 @@ namespace NPOI.DDF
                 try
                 {
                     HexDump.Dump(this.remainingData, 0, b, 0);
-                    extraData = b.ToString();
+                    //extraData = b.ToString();
+                    extraData = Encoding.UTF8.GetString(b.ToArray());
                 }
                 catch (Exception)
                 {
@@ -124,9 +125,36 @@ namespace NPOI.DDF
                 }
                 return GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                        "  Options: 0x" + HexDump.ToHex(Options) + nl;
-                //"  Extra Data:" + nl +
-                //extraData;
+                        "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                        "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
+                        "  Extra Data:" + nl + extraData;
+            }
+        }
+        public override String ToXml(String tab)
+        {
+            String extraData;
+            using (MemoryStream b = new MemoryStream())
+            {
+                try
+                {
+                    HexDump.Dump(this.remainingData, 0, b, 0);
+                    extraData = HexDump.ToHex(b.ToArray());
+                }
+                catch (Exception)
+                {
+                    extraData = "error";
+                }
+                if (extraData.Contains("No Data"))
+                {
+                    extraData = "No Data";
+                }
+                StringBuilder builder = new StringBuilder();
+                builder.Append(tab)
+                       .Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId),
+                                                     HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                       .Append(tab).Append("\t").Append("<ExtraData>").Append(extraData).Append("</ExtraData>\n");
+                builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+                return builder.ToString();
             }
         }
 

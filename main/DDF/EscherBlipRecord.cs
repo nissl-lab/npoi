@@ -119,13 +119,13 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            String extraData;
+            String extraData = string.Empty;
             using (MemoryStream b = new MemoryStream())
             {
                 try
                 {
                     HexDump.Dump(this.field_pictureData, 0, b, 0);
-                    extraData = b.ToString();
+                    extraData = HexDump.ToHex(b.ToArray());
                 }
                 catch (Exception e)
                 {
@@ -133,9 +133,21 @@ namespace NPOI.DDF
                 }
                 return this.GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
-                        "  Options: 0x" + HexDump.ToHex(Options) + nl;
-                //"  Extra Data:" + nl + extraData;
+                        "  Options: 0x" + HexDump.ToHex(Options) + nl +
+                        "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                        "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
+                        "  Extra Data:" + nl + extraData;
             }
+        }
+
+        public override String ToXml(String tab)
+        {
+            String extraData = HexDump.ToHex(field_pictureData, 32);
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                    .Append(tab).Append("\t").Append("<ExtraData>").Append(extraData).Append("</ExtraData>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
         }
     }
 }
