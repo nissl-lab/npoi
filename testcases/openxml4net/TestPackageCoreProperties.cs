@@ -17,18 +17,16 @@
 
 using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXml4Net;
 using System.IO;
 using TestCases.OpenXml4Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.SS.Util;
 using System;
 using NPOI.OpenXml4Net.OPC.Internal;
-using System.Globalization;
 namespace TestCases.OPC
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestPackageCoreProperties
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(TestPackageCoreProperties));
@@ -36,7 +34,7 @@ namespace TestCases.OPC
         /**
          * Test namespace core properties Getters.
          */
-        [TestMethod]
+        [Test]
         public void TestGetProperties()
         {
             // Open the namespace
@@ -49,7 +47,7 @@ namespace TestCases.OPC
         /**
          * Test namespace core properties Setters.
          */
-        [TestMethod]
+        [Test]
         public void TestSetProperties()
         {
             String inputPath = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCoreProperiesSetters.docx");
@@ -118,7 +116,7 @@ namespace TestCases.OPC
             Assert.AreEqual("MyTitle", props.GetTitleProperty());
             Assert.AreEqual("2", props.GetVersionProperty());
         }
-        [TestMethod]
+        [Test]
         public void TestCoreProperties_bug51374()
         {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -173,7 +171,7 @@ namespace TestCases.OPC
             Assert.AreEqual(strDate, props.GetModifiedPropertyString());
             Assert.AreEqual(date, props.GetModifiedProperty());
         }
-        [TestMethod]
+        [Test]
         public void TestGetPropertiesLO()
         {
             // Open the namespace

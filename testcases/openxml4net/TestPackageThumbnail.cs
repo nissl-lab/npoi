@@ -19,7 +19,7 @@ using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
 using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace TestCases.OPC
 {
 
@@ -28,14 +28,14 @@ namespace TestCases.OPC
      * 
      * @author Julien Chable
      */
-    [TestClass]
+    [TestFixture]
     public class TestPackageThumbnail
     {
 
         /**
          * Test namespace AddThumbnail() method.
          */
-        [TestMethod]
+        [Test]
         public void TestSetProperties()
         {
             String inputPath = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageThumbnail.docx");

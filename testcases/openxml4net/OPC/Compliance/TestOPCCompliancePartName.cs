@@ -20,7 +20,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
 {
     using System;
     using NPOI.OpenXml4Net.OPC;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using NPOI.OpenXml4Net.Exceptions;
     /**
      * Test part name Open Packaging Convention compliance.
@@ -73,7 +73,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
      *
      * @author Julien Chable
      */
-    [TestClass]
+    [TestFixture]
     public class TestOPCCompliancePartName
     {
 
@@ -82,7 +82,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          *
          * A segment shall not contain percent-encoded unreserved characters. [M1.8]
          */
-        [TestMethod]
+        [Test]
         public void TestInvalidPartNames()
         {
             String[] invalidNames = { "/", "/xml./doc.xml", "[Content_Types].xml", "//xml/." };
@@ -106,7 +106,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test some common valid names.
          */
-        [TestMethod]
+        [Test]
         public void TestValidPartNames()
         {
             String[] validNames = { "/xml/item1.xml", "/document.xml",
@@ -120,7 +120,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * A part name shall not be empty. [M1.1]
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyPartNameFailure()
         {
             try
@@ -141,7 +141,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          *
          * A segment shall include at least one non-dot character. [M1.10]
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameWithInvalidSegmentsFailure()
         {
             String[] invalidNames = { "//document.xml", "//word/document.xml",
@@ -158,7 +158,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * A segment shall not hold any characters other than ipchar (RFC 3987) characters.
          * [M1.6].
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameWithNonPCharCharacters()
         {
             String[] validNames = { "/doc&.xml" };
@@ -180,7 +180,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * A segment shall not contain percent-encoded unreserved characters [M1.8].
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameWithUnreservedEncodedCharactersFailure()
         {
             String[] invalidNames = { "/a/docum%65nt.xml" };
@@ -202,7 +202,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * A part name shall start with a forward slash ('/') character. [M1.4]
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameStartsWithAForwardSlashFailure()
         {
             try
@@ -219,7 +219,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * A part name shall not have a forward slash as the last character. [M1.5]
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameEndsWithAForwardSlashFailure()
         {
             try
@@ -237,7 +237,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * Part name equivalence is determined by comparing part names as
          * case-insensitive ASCII strings. [M1.12]
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameComparaison()
         {
             String[] partName1 = { "/word/document.xml", "/docProps/core.xml", "/rels/.rels" };
@@ -258,7 +258,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          *
          * All the comparisons MUST FAIL !
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameComparaisonFailure()
         {
             String[] partName1 = { "/word/document.xml", "/docProps/core.xml", "/rels/.rels" };

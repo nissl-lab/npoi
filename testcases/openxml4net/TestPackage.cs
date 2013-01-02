@@ -16,20 +16,18 @@
 ==================================================================== */
 
 using NPOI.OpenXml4Net.OPC;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.OpenXml4Net.OPC.Internal;
 using System.IO;
 using System.Collections.Generic;
 using System;
 using TestCases.OpenXml4Net;
-using TestCases.OPC;
-using System.Text;
 using NPOI.Util;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 namespace TestCases.OPC
 {
-    [TestClass]
+    [TestFixture]
     public class TestPackage
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(TestPackage));
@@ -37,7 +35,7 @@ namespace TestCases.OPC
         /**
          * Test that just opening and closing the file doesn't alter the document.
          */
-        [TestMethod]
+        [Test]
         public void TestOpenSave()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
@@ -56,7 +54,7 @@ namespace TestCases.OPC
          * Test that when we create a new Package, we give it
          *  the correct default content types
          */
-        [TestMethod]
+        [Test]
         public void TestCreateGetsContentTypes()
         {
             FileInfo targetFile = OpenXml4NetTestDataSamples.GetOutputFile("TestCreatePackageTMP.docx");
@@ -286,7 +284,7 @@ namespace TestCases.OPC
          *  OutputStream, in Addition to the normal writing
          *  to a file
          */
-        [TestMethod]
+        [Test]
         public void TestSaveToOutputStream()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
@@ -309,7 +307,7 @@ namespace TestCases.OPC
          *  simple InputStream, in Addition to the normal
          *  Reading from a file
          */
-        [TestMethod]
+        [Test]
         public void TestOpenFromInputStream()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
@@ -330,7 +328,7 @@ namespace TestCases.OPC
         /**
          * TODO: fix and enable
          */
-        //[TestMethod]
+        //[Test]
         public void disabled_testRemovePartRecursive()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
@@ -347,7 +345,7 @@ namespace TestCases.OPC
             ZipFileAssert.AssertEqual(targetFile, tempFile);
             File.Delete(targetFile.FullName);
         }
-        [TestMethod]
+        [Test]
         public void TestDeletePart()
         {
             Dictionary<PackagePartName, String> expectedValues;
@@ -407,7 +405,7 @@ namespace TestCases.OPC
             // Don't save modifications
             p.Revert();
         }
-        [TestMethod]
+        [Test]
         public void TestDeletePartRecursive()
         {
             Dictionary<PackagePartName, String> expectedValues;
@@ -453,7 +451,7 @@ namespace TestCases.OPC
          * Test that we can open a file by path, and then
          *  write Changes to it.
          */
-        [TestMethod]
+        [Test]
         public void TestOpenFileThenOverWrite()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");
@@ -494,7 +492,7 @@ namespace TestCases.OPC
          * Test that we can open a file by path, save it
          *  to another file, then delete both
          */
-        [TestMethod]
+        [Test]
         public void TestOpenFileThenSaveDelete()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");
@@ -520,7 +518,7 @@ namespace TestCases.OPC
             //f.SetAccessible(true);
             return (ContentTypeManager)f.GetValue(pkg);
         }
-        [TestMethod]
+        [Test]
         public void TestGetPartsByName()
         {
             String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
@@ -539,6 +537,26 @@ namespace TestCases.OPC
             Assert.IsTrue(selected.ContainsKey("/word/styles.xml"));
             Assert.IsTrue(selected.ContainsKey("/word/theme/theme1.xml"));
             Assert.IsTrue(selected.ContainsKey("/word/webSettings.xml"));
+        }
+        [Test]
+        public void TestReplaceContentType()
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("sample.xlsx");
+            OPCPackage p = OPCPackage.Open(is1);
+
+            ContentTypeManager mgr = GetContentTypeManager(p);
+
+            Assert.True(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
+            Assert.False(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
+
+            Assert.True(
+                    p.ReplaceContentType(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
+                    "application/vnd.ms-excel.sheet.macroEnabled.main+xml")
+            );
+
+            Assert.False(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
+            Assert.True(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
         }
     }
 }

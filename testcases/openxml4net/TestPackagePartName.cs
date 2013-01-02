@@ -16,17 +16,17 @@
 ==================================================================== */
 
 using NPOI.OpenXml4Net.OPC;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace TestCases.OPC
 {
-    [TestClass]
+    [TestFixture]
     public class TestPackagePartName
     {
 
         /**
          * Test method GetExtension().
          */
-        [TestMethod]
+        [Test]
         public void TestGetExtension()
         {
             PackagePartName name1 = PackagingUriHelper.CreatePartName("/doc/props/document.xml");

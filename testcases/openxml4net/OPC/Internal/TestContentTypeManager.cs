@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC;
 
@@ -10,7 +10,7 @@ namespace TestCases.OpenXml4Net.OPC.Internal
     /// <summary>
     /// Summary description for UnitTest1
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class TestContentTypeManager
     {
         public TestContentTypeManager()
@@ -63,7 +63,7 @@ namespace TestCases.OpenXml4Net.OPC.Internal
         /**
          * Test the addition of several default and override content types.
          */
-        [TestMethod]
+        [Test]
         public void TestContentTypeAddition()
         {
             ContentTypeManager ctm = new ZipContentTypeManager(null, null);
@@ -87,7 +87,7 @@ namespace TestCases.OpenXml4Net.OPC.Internal
         /**
  * Test the addition then removal of content types.
  */
-        [TestMethod]
+        [Test]
         public void TestContentTypeRemoval()
         {
             ContentTypeManager ctm = new ZipContentTypeManager(null, null);

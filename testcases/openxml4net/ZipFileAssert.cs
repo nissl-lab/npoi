@@ -17,9 +17,10 @@
 
 using System.IO;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
+using NUnit.Framework;
 namespace TestCases.OPC
 {
 
@@ -175,7 +176,7 @@ namespace TestCases.OPC
             }
             catch (IOException e)
             {
-                throw new AssertFailedException(e.ToString());
+                throw new AssertionException(e.ToString());
             }
         }
     }

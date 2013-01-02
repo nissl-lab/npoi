@@ -21,7 +21,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
     using System;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXml4Net.Exceptions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System.IO;
 
 
@@ -57,11 +57,11 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
      * 
      * @author Julien Chable
      */
-    [TestClass]
+    [TestFixture]
     public class TestOPCComplianceCoreProperties
     {
 
-        [TestMethod]
+        [Test]
         public void TestCorePropertiesPart()
         {
             OPCPackage pkg;
@@ -87,13 +87,13 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
 
             pkg.Revert();
             // Normally must thrown an InvalidFormatException exception.
-            throw new AssertFailedException("expected OPC compliance exception was not thrown");
+            throw new AssertionException("expected OPC compliance exception was not thrown");
         }
 
         /**
          * Test M4.1 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestOnlyOneCorePropertiesPart()
         {
             String msg = ExtractInvalidFormatMessage("OnlyOneCorePropertiesPartFAIL.docx");
@@ -109,7 +109,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.1 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestOnlyOneCorePropertiesPart_AddRelationship()
         {
             Stream is1 = OpenXml4NetTestDataSamples.OpenComplianceSampleStream("OPCCompliance_CoreProperties_OnlyOneCorePropertiesPart.docx");
@@ -138,7 +138,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.1 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestOnlyOneCorePropertiesPart_AddPart()
         {
             String sampleFileName = "OPCCompliance_CoreProperties_OnlyOneCorePropertiesPart.docx";
@@ -168,7 +168,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.2 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestDoNotUseCompatibilityMarkup()
         {
             String msg = ExtractInvalidFormatMessage("DoNotUseCompatibilityMarkupFAIL.docx");
@@ -178,7 +178,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.3 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestDCTermsNamespaceLimitedUse()
         {
             String msg = ExtractInvalidFormatMessage("DCTermsNamespaceLimitedUseFAIL.docx");
@@ -188,7 +188,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.4 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestUnauthorizedXMLLangAttribute()
         {
             String msg = ExtractInvalidFormatMessage("UnauthorizedXMLLangAttributeFAIL.docx");
@@ -198,7 +198,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.5 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestLimitedXSITypeAttribute_NotPresent()
         {
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_NotPresentFAIL.docx");
@@ -208,7 +208,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         /**
          * Test M4.5 rule.
          */
-        [TestMethod]
+        [Test]
         public void TestLimitedXSITypeAttribute_PresentWithUnauthorizedValue()
         {
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_PresentWithUnauthorizedValueFAIL.docx");

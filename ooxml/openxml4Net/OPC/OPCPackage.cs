@@ -1300,7 +1300,21 @@ get{
 	public void RemoveMarshaller(String contentType) {
 		partMarshallers.Remove(new ContentType(contentType));
 	}
-
+    public bool ReplaceContentType(String oldContentType, String newContentType)
+    {
+        bool success = false;
+        List<PackagePart> list = GetPartsByContentType(oldContentType);
+        foreach (PackagePart packagePart in list)
+        {
+            if (packagePart.ContentType.Equals(oldContentType))
+            {
+                PackagePartName partName = packagePart.PartName;
+                contentTypeManager.AddContentType(partName, newContentType);
+                success = true;
+            }
+        }
+        return success;
+    }
 	/**
 	 * Remove an unmarshaller by its content type.
 	 * 

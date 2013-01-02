@@ -145,7 +145,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         {
             if (overrideContentType == null)
                 overrideContentType = new SortedList<PackagePartName, String>();
-            overrideContentType.Add(partName, contentType);
+
+            if(!overrideContentType.ContainsKey(partName))
+                overrideContentType.Add(partName, contentType);
+            else
+                overrideContentType[partName]= contentType;
         }
 
         /**

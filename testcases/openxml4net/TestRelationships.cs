@@ -18,7 +18,7 @@
 using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using TestCases.OpenXml4Net;
 using System.IO;
 using System.Web;
@@ -26,7 +26,7 @@ namespace TestCases.OPC
 {
 
 
-    [TestClass]
+    [TestFixture]
     public class TestRelationships  {
 	private static String HYPERLINK_REL_TYPE =
 		"http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
@@ -43,7 +43,7 @@ namespace TestCases.OPC
          * The code in this case assumes there are no relationships defined, but it should
          * really look also for not yet loaded parts.
          */
-        [TestMethod]
+        [Test]
         public void TestLoadRelationships() {
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("sample.xlsx");
             OPCPackage pkg = OPCPackage.Open(is1);
@@ -65,7 +65,7 @@ namespace TestCases.OPC
          * Checks that we can fetch a collection of relations by
          *  type, then grab from within there by id
          */
-        [TestMethod]
+        [Test]
         public void TestFetchFromCollection() {
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ExcelWithHyperlinks.xlsx");
             OPCPackage pkg = OPCPackage.Open(is1);
@@ -107,7 +107,7 @@ namespace TestCases.OPC
          * Excel uses relations on sheets to store the details of 
          *  external hyperlinks. Check we can load these ok.
          */
-        [TestMethod]
+        [Test]
         public void TestLoadExcelHyperlinkRelations() {
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ExcelWithHyperlinks.xlsx");
             OPCPackage pkg = OPCPackage.Open(is1);
@@ -142,7 +142,7 @@ namespace TestCases.OPC
          *  external hyperlinks. Check we can create these OK, 
          *  then still read them later
          */
-        [TestMethod]
+        [Test]
         public void TestCreateExcelHyperlinkRelations() {
     	    String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("ExcelWithHyperlinks.xlsx");
 	        OPCPackage pkg = OPCPackage.Open(filepath, PackageAccess.READ_WRITE);
@@ -209,7 +209,7 @@ namespace TestCases.OPC
 	        Assert.AreEqual("MyDocument.docx",
 	    		    sheet.GetRelationship("rId9").TargetUri.ToString());
         }
-        [TestMethod]
+        [Test]
         public void TestCreateRelationsFromScratch() {
     	    MemoryStream baos = new MemoryStream();
     	    OPCPackage pkg = OPCPackage.Create(baos);
@@ -260,7 +260,7 @@ namespace TestCases.OPC
             "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties").GetRelationship(0).TargetUri.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestTargetWithSpecialChars(){
 
             OPCPackage pkg;
@@ -321,7 +321,7 @@ namespace TestCases.OPC
         {
             return Path.GetFullPath(Path.Combine(referencePath, relativePath));  
         }
-        [TestMethod]
+        [Test]
         public void TestSelfRelations_bug51187() {
     	MemoryStream baos = new MemoryStream();
     	OPCPackage pkg = OPCPackage.Create(baos);

@@ -18,7 +18,7 @@
 using NPOI.OpenXml4Net.OPC;
 using System;
 using NPOI.OpenXml4Net.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 namespace TestCases.OpenXml4Net.OPC.Compliance
 {
     /**
@@ -29,7 +29,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
      *
      * @author Julien Chable
      */
-    [TestClass]
+    [TestFixture]
     public class TestOPCCompliancePackageModel
     {
 
@@ -38,7 +38,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * part name derived from another part name by appending segments to it.
          * [M1.11]
          */
-        [TestMethod]
+        [Test]
         public void TestPartNameDerivationAdditionAssert_Failure()
         {
             OPCPackage pkg = OPCPackage.Create("TODELETEIFEXIST.docx");
@@ -66,7 +66,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         // * part name derived from another part name by appending segments to it.
         // * [M1.11]
         // */
-        [TestMethod]
+        [Test]
         public void TestPartNameDerivationReadingAssert_Failure()
         {
             String filename = "OPCCompliance_DerivedPartNameFail.docx";
@@ -88,7 +88,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * implementers shall neither create nor recognize packages with equivalent
          * part names.
          */
-        [TestMethod]
+        [Test]
         public void TestAddPackageAlreadyAddAssert_Failure()
         {
             OPCPackage pkg = OPCPackage.Create("DELETEIFEXISTS.docx");
@@ -120,7 +120,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * implementers shall neither create nor recognize packages with equivalent
          * part names.
          */
-        [TestMethod]
+        [Test]
         public void TestAddPackageAlreadyAddAssert_Failure2()
         {
             OPCPackage pkg = OPCPackage.Create("DELETEIFEXISTS.docx");
@@ -153,7 +153,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * the attempt to create such a relationship and shall treat any such
          * relationship as invalid.
          */
-        [TestMethod]
+        [Test]
         public void TestAddRelationshipRelationshipsPartAssert_Failure()
         {
             OPCPackage pkg = OPCPackage.Create("DELETEIFEXISTS.docx");

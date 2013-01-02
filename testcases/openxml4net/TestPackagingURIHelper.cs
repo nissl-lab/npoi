@@ -15,19 +15,19 @@
    limitations under the License.
 ==================================================================== */
 using NPOI.OpenXml4Net.OPC;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 namespace TestCases.OPC
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestPackagingURIHelper
     {
 
         /**
          * Test relativizePartName() method.
          */
-        [TestMethod]
+        [Test]
         public void TestRelativizeUri()
         {
             Uri Uri1 = new Uri("/word/document.xml", UriKind.Relative);
@@ -74,7 +74,7 @@ namespace TestCases.OPC
         /**
          * Test CreatePartName(String, y)
          */
-        [TestMethod]
+        [Test]
         public void TestCreatePartNameRelativeString()
         {
             PackagePartName partNameToValid = PackagingUriHelper
@@ -97,7 +97,7 @@ namespace TestCases.OPC
         /**
          * Test CreatePartName(Uri, y)
          */
-        [TestMethod]
+        [Test]
         public void TestCreatePartNameRelativeUri()
         {
             PackagePartName partNameToValid = PackagingUriHelper
@@ -115,7 +115,7 @@ namespace TestCases.OPC
                     + partNameToValid.Name);
             pkg.Revert();
         }
-        [TestMethod]
+        [Test]
         public void TestCreateUriFromString()
         {
             String[] href = {

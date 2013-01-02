@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.Exceptions;
 namespace TestCase.OPC
@@ -27,7 +27,7 @@ namespace TestCase.OPC
      *
      * @author Julien Chable
      */
-    [TestClass]
+    [TestFixture]
     public class TestContentType
     {
 
@@ -38,7 +38,7 @@ namespace TestCase.OPC
          * namespace parts shall fit the defInition and syntax for media types as
          * specified in RFC 2616, \u00A73.7.
          */
-        [TestMethod]
+        [Test]
         public void TestContentTypeValidation()
         {
             String[] contentTypesToTest = new String[] { "text/xml",
@@ -65,7 +65,7 @@ namespace TestCase.OPC
          * designers shall specify only such content types for inclusion in the
          * format.
          */
-        [TestMethod]
+        [Test]
         public void TestContentTypeValidationFailure()
         {
             String[] contentTypesToTest = new String[] { "text/xml/app", "",
@@ -94,7 +94,7 @@ namespace TestCase.OPC
          * Check rule [O1.2]: Format designers might restrict the usage of
          * parameters for content types.
          */
-        [TestMethod]
+        [Test]
         public void TestContentTypeParameterFailure()
         {
             String[] contentTypesToTest = new String[] { "mail/toto;titi=tata",
@@ -119,7 +119,7 @@ namespace TestCase.OPC
          * that does not include comments and the format designer shall specify such
          * a content type.
          */
-        [TestMethod]
+        [Test]
         public void TestContentTypeCommentFailure()
         {
             String[] contentTypesToTest = new String[] { "text/xml(comment)" };

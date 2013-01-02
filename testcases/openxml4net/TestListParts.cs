@@ -19,12 +19,12 @@ using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 namespace TestCases.OPC
 {
-    [TestClass]
+    [TestFixture]
     public class TestListParts
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(TestListParts));
@@ -33,7 +33,7 @@ namespace TestCases.OPC
 
         private Dictionary<PackagePartName, String> values;
 
-        [TestInitialize]
+        [TestFixtureSetUp]
         public void SetUp()
         {
             values = new Dictionary<PackagePartName, String>();
@@ -80,7 +80,7 @@ namespace TestCases.OPC
         /**
          * List all parts of a namespace.
          */
-        [TestMethod]
+        [Test]
         public void TestListParts1()
         {
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("sample.docx");
