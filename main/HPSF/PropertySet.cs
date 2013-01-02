@@ -25,6 +25,8 @@
  * 
  * ==============================================================*/
 
+using System.Collections.Generic;
+
 namespace NPOI.HPSF
 {
     using System;
@@ -191,14 +193,14 @@ namespace NPOI.HPSF
         /**
          * The sections in this {@link PropertySet}.
          */
-        protected IList sections;
+        protected List<Section> sections;
 
 
         /// <summary>
         /// Returns the {@link Section}s in the property Set.
         /// </summary>
         /// <value>{@link Section}s in the property Set.</value>
-        public virtual IList Sections
+        public virtual List<Section> Sections
         {
             get { return sections; }
         }
@@ -350,13 +352,13 @@ namespace NPOI.HPSF
             int byteOrder = LittleEndian.GetUShort(src, o);
             o += LittleEndianConsts.SHORT_SIZE;
             byte[] temp = new byte[LittleEndianConsts.SHORT_SIZE];
-            LittleEndian.PutShort(temp, (short)byteOrder);
+            LittleEndian.PutShort(temp, 0, (short)byteOrder);
             if (!Arrays.Equals(temp, BYTE_ORDER_ASSERTION))
                 return false;
             int format = LittleEndian.GetUShort(src, o);
             o += LittleEndianConsts.SHORT_SIZE;
             temp = new byte[LittleEndianConsts.SHORT_SIZE];
-            LittleEndian.PutShort(temp, (short)format);
+            LittleEndian.PutShort(temp,0, (short)format);
             if (!Arrays.Equals(temp, FORMAT_ASSERTION))
                 return false;
             long osVersion = LittleEndian.GetUInt(src, offset);
@@ -415,7 +417,7 @@ namespace NPOI.HPSF
              * Summary Information stream has 2. Everything else is a rare
              * exception and is no longer fostered by Microsoft.
              */
-            sections = new ArrayList(sectionCount);
+            sections = new List<Section>(sectionCount);
 
             /*
              * Loop over the section descriptor array. Each descriptor
@@ -446,7 +448,7 @@ namespace NPOI.HPSF
             {
                 if (sections.Count <= 0)
                     return false;
-                return Arrays.Equals(((Section)sections[0]).FormatID.Bytes,
+                return Arrays.Equals(sections[0].FormatID.Bytes,
                                   SectionIDMap.SUMMARY_INFORMATION_ID);
             }
         }
@@ -470,7 +472,7 @@ namespace NPOI.HPSF
             {
                 if (sections.Count <= 0)
                     return false;
-                return Arrays.Equals(((Section)sections[0]).FormatID.Bytes,
+                return Arrays.Equals(sections[0].FormatID.Bytes,
                                   SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
             }
         }
@@ -570,7 +572,7 @@ namespace NPOI.HPSF
             {
                 if (SectionCount< 1)
                     throw new MissingSectionException("Property Set does not contain any sections.");
-                return ((Section)sections[0]);
+                return sections[0];
             }
         }
 
@@ -589,7 +591,7 @@ namespace NPOI.HPSF
                 if (sectionCount != 1)
                     throw new NoSingleSectionException
                         ("Property Set Contains " + sectionCount + " sections.");
-                return ((Section)sections[0]);
+                return sections[0];
             }
         }
 
@@ -670,9 +672,11 @@ namespace NPOI.HPSF
             b.Append(", sectionCount: ");
             b.Append(sectionCount);
             b.Append(", sections: [\n");
-            IList sections = Sections;
-            for (int i = 0; i < sectionCount; i++)
-                b.Append(((Section)sections[i]).ToString());
+            foreach (Section section in Sections)
+            {
+                b.Append(section.ToString());
+            }
+
             b.Append(']');
             b.Append(']');
             return b.ToString();

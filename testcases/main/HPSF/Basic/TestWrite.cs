@@ -411,14 +411,8 @@ namespace TestCases.HPSF.Basic
             check(Variant.VT_EMPTY, null, codepage);
             check(Variant.VT_BOOL, true, codepage);
             check(Variant.VT_BOOL, false, codepage);
-            check(Variant.VT_CF, new byte[] { 0 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1, 2 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1, 2, 3 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1, 2, 3, 4 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1, 2, 3, 4, 5 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1, 2, 3, 4, 5, 6 }, codepage);
-            check(Variant.VT_CF, new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }, codepage);
+            check(Variant.VT_CF, new byte[] { 8, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3,
+                    4 }, codepage);
             check(Variant.VT_I4, 27, codepage);
             check(Variant.VT_I8, (long)28, codepage);
             check(Variant.VT_R8, 29.0, codepage);
@@ -616,7 +610,12 @@ namespace TestCases.HPSF.Basic
                                     variantType, codepage);
             if (objRead is byte[])
             {
-                int diff1 = diff((byte[])value, (byte[])objRead);
+                byte[] valueB = (byte[])value;
+                byte[] readB = (byte[])objRead;
+                if (valueB.Length != readB.Length)
+                    Assert.Fail("Byte arrays are different length - expected " + valueB.Length +
+                          " but found " + readB.Length);
+                int diff1 = diff(valueB, readB);
                 if (diff1 >= 0)
                     Assert.Fail("Byte arrays are different. First different byte is at " +
                          "index " + diff1 + ".");

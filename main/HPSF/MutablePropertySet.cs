@@ -25,6 +25,8 @@
  * 
  * ==============================================================*/
 
+using System.Collections.Generic;
+
 namespace NPOI.HPSF
 {
     using System;
@@ -69,7 +71,7 @@ namespace NPOI.HPSF
 
             /* Initialize the sections. Since property Set must have at least
              * one section it is Added right here. */
-            sections = new ArrayList();
+            sections = new List<Section>();
             sections.Add(new MutableSection());
         }
 
@@ -89,7 +91,7 @@ namespace NPOI.HPSF
             ClassID=ps.ClassID;
             ClearSections();
             if (sections == null)
-                sections = new ArrayList();
+                sections = new List<Section>();
             for (IEnumerator i = ps.Sections.GetEnumerator(); i.MoveNext(); )
             {
                 MutableSection s = new MutableSection((Section)(i.Current));
@@ -178,7 +180,7 @@ namespace NPOI.HPSF
         public virtual void AddSection(Section section)
         {
             if (sections == null)
-                sections = new ArrayList();
+                sections = new List<Section>();
             sections.Add(section);
         }
 

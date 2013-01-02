@@ -75,7 +75,7 @@ namespace NPOI.HPSF
         public virtual long ID
         {
             get { return id; }
-            set { id = value ;}
+            set { id = value; }
         }
 
 
@@ -92,7 +92,7 @@ namespace NPOI.HPSF
         public virtual long Type
         {
             get { return type; }
-            set { type = value;}
+            set { type = value; }
         }
 
 
@@ -107,7 +107,7 @@ namespace NPOI.HPSF
         /// <value>The property's value</value>
         public virtual object Value
         {
-            get{return this.value;}
+            get { return this.value; }
             set { this.value = value; }
         }
 
@@ -257,7 +257,7 @@ namespace NPOI.HPSF
 
                     /* Strip 0x00 characters from the end of the string: */
                     while (b.Length > 0 && b[b.Length - 1] == 0x00)
-                        b.Length=b.Length - 1;
+                        b.Length = b.Length - 1;
                     if (codepage == (int)Constants.CP_UNICODE)
                     {
                         if (sLength % 2 == 1)
@@ -266,7 +266,7 @@ namespace NPOI.HPSF
                     }
                     else
                         o += (int)sLength;
-                    m[id]= b.ToString();
+                    m[id] = b.ToString();
                 }
             }
             catch (Exception ex)
@@ -412,27 +412,41 @@ namespace NPOI.HPSF
             b.Append(GetType());
             Object value = Value;
             b.Append(", value: ");
-            b.Append(value.ToString());
             if (value is String)
             {
-                String s = (String)value;
+                b.Append(value.ToString());
+                String s = value.ToString();
                 int l = s.Length;
-                if (l > 0)
+
+                byte[] bytes = new byte[l*2];
+                for (int i = 0; i < l; i++)
                 {
-                    byte[] bytes = new byte[l * 2];
-                    for (int i = 0; i < l; i++)
-                    {
-                        char c = s[i];
-                        byte high = (byte)((c & 0x00ff00) >> 8);
-                        byte low = (byte)((c & 0x0000ff) >> 0);
-                        bytes[i * 2] = high;
-                        bytes[i * 2 + 1] = low;
-                    }
-                    String hex = HexDump.Dump(bytes, 0L, 0);
-                    b.Append(" [");
-                    b.Append(hex);
-                    b.Append("]");
+                    char c = s[i];
+                    byte high = (byte) ((c & 0x00ff00) >> 8);
+                    byte low = (byte) ((c & 0x0000ff) >> 0);
+                    bytes[i*2] = high;
+                    bytes[i*2 + 1] = low;
                 }
+                b.Append(" [");
+                if (bytes.Length > 0)
+                {
+                    String hex = HexDump.Dump(bytes, 0L, 0);
+                    b.Append(hex);
+                }
+                b.Append("]");
+            }
+            else if (value is byte[])
+            {
+                byte[] bytes = (byte[]) value;
+                if (bytes.Length > 0)
+                {
+                    String hex = HexDump.Dump(bytes, 0L, 0);
+                    b.Append(hex);
+                }
+            }
+            else
+            {
+                b.Append(value.ToString());
             }
             b.Append(']');
             return b.ToString();

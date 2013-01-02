@@ -219,7 +219,7 @@ namespace NPOI.HPSF
             {
                 l = PAD - l;
                 result = new byte[ba.Length+l ];
-                Array.Copy(ba,result, ba.Length);
+                System.Array.Copy(ba,result, ba.Length);
             }
             return result;
         }
@@ -243,7 +243,7 @@ namespace NPOI.HPSF
             {
                 l = PAD - l;
                 result = new char[ca.Length+l];
-                Array.Copy(ca, result, ca.Length);
+                System.Array.Copy(ca, result, ca.Length);
             }
             return result;
         }

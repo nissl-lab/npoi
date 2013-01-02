@@ -49,11 +49,8 @@ namespace NPOI.HPSF
         /// <returns></returns>
         public static int WriteToStream(Stream out1, short n)
         {
-            int Length = LittleEndianConsts.SHORT_SIZE;
-            byte[] buffer = new byte[Length];
-            LittleEndian.PutShort(buffer, 0, n); // FIXME: unsigned
-            out1.Write(buffer, 0, Length);
-            return Length;
+            LittleEndian.PutShort( out1, n ); // FIXME: unsigned
+            return LittleEndian.SHORT_SIZE;
         }
 
 
@@ -68,21 +65,17 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, int n)
         {
-            int l = LittleEndianConsts.INT_SIZE;
-            byte[] buffer = new byte[l];
-            LittleEndian.PutInt(buffer, 0, n);
-            out1.Write(buffer, 0, l);
-            return l;
-
+            LittleEndian.PutInt( n, out1 );
+            return LittleEndian.INT_SIZE;
         }
         /**
- * Writes a four-byte value To an output stream.
- *
- * @param out The stream To Write To.
- * @param n The value To Write.
- * @exception IOException if an I/O error occurs
- * @return The number of bytes written To the output stream. 
- */
+         * Writes a four-byte value To an output stream.
+         *
+         * @param out The stream To Write To.
+         * @param n The value To Write.
+         * @exception IOException if an I/O error occurs
+         * @return The number of bytes written To the output stream. 
+         */
         [Obsolete]
         public static int WriteToStream(Stream out1, uint n)
         {
@@ -105,12 +98,8 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, long n)
         {
-            int l = LittleEndianConsts.LONG_SIZE;
-            byte[] buffer = new byte[l];
-            LittleEndian.PutLong(buffer, 0, n);
-            out1.Write(buffer, 0, l);
-            return l;
-
+            LittleEndian.PutLong( n, out1 );
+            return LittleEndian.LONG_SIZE;
         }
 
 
@@ -128,7 +117,8 @@ namespace NPOI.HPSF
             if (high != 0)
                 throw new IllegalPropertySetDataException
                     ("Value " + n + " cannot be represented by 2 bytes.");
-            WriteToStream(out1, (short)n);
+            //WriteToStream(out1, (short)n);
+            LittleEndian.PutUShort( n, out1 );
         }
 
 
@@ -147,7 +137,8 @@ namespace NPOI.HPSF
             if (high != 0 && high != 0xFFFFFFFF00000000L)
                 throw new IllegalPropertySetDataException
                     ("Value " + n + " cannot be represented by 4 bytes.");
-            return WriteToStream(out1, (int)n);
+            LittleEndian.PutUInt( n, out1 );
+            return LittleEndian.INT_SIZE;
         }
 
 
@@ -220,11 +211,8 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, double n)
         {
-            int l = LittleEndianConsts.DOUBLE_SIZE;
-            byte[] buffer = new byte[l];
-            LittleEndian.PutDouble(buffer, 0, n);
-            out1.Write(buffer, 0, l);
-            return l;
+            LittleEndian.PutDouble( n, out1 );
+            return LittleEndian.DOUBLE_SIZE;
         }
 
     }

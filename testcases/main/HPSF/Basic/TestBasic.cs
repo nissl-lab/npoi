@@ -198,7 +198,8 @@ namespace TestCases.HPSF.Basic
             Assert.IsNotNull(s.Properties);
             Assert.AreEqual(18, s.PropertyCount);
             Assert.AreEqual("Titel", s.GetProperty(2));
-            Assert.AreEqual(1760, s.Size);
+            //Assert.assertEquals(1764, s.getSize());
+            Assert.AreEqual(1776, s.Size);
         }
 
     }

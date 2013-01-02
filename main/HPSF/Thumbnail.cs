@@ -237,7 +237,7 @@ namespace NPOI.HPSF
                 byte[] thumbnail = this.ThumbnailData;
                 int wmfImageLength = thumbnail.Length - OFFSet_WMFDATA;
                 byte[] wmfImage = new byte[wmfImageLength];
-                Array.Copy(thumbnail,
+                System.Array.Copy(thumbnail,
                                  OFFSet_WMFDATA,
                                  wmfImage,
                                  0,

@@ -182,7 +182,7 @@ namespace TestCases.Util
 
             testdata[ 0 ] = unchecked(( short ) 0xFF01);
             testdata[ 1 ] = 0x02FF;
-            LittleEndian.PutShort(received, testdata[ 0 ]);
+            LittleEndian.PutShort(received, 0,  testdata[ 0 ]);
             Assert.IsTrue(ba_equivalent(received, expected, 0,
                                      LittleEndianConsts.SHORT_SIZE));
             LittleEndian.PutShort(received, 1, testdata[ 1 ]);
@@ -205,7 +205,7 @@ namespace TestCases.Util
 
             testdata[ 0 ] = unchecked((int)0xFFFFFF01);
             testdata[ 1 ] = 0x02FFFFFF;
-            LittleEndian.PutInt(received, testdata[ 0 ]);
+            LittleEndian.PutInt(received, 0, testdata[ 0 ]);
             Assert.IsTrue(ba_equivalent(received, expected, 0,
                                      LittleEndianConsts.INT_SIZE));
             LittleEndian.PutInt(received, 1, testdata[ 1 ]);

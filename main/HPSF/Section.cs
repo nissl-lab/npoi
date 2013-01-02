@@ -492,8 +492,8 @@ namespace NPOI.HPSF
              * specially. */
             Property[] pa1 = new Property[Properties.Length];
             Property[] pa2 = new Property[s.Properties.Length];
-            Array.Copy(Properties, 0, pa1, 0, pa1.Length);
-            Array.Copy(s.Properties, 0, pa2, 0, pa2.Length);
+            System.Array.Copy(Properties, 0, pa1, 0, pa1.Length);
+            System.Array.Copy(s.Properties, 0, pa2, 0, pa2.Length);
 
             /* Extract properties 0 and 1 and Remove them from the copy of the
              * arrays. */
@@ -569,8 +569,8 @@ namespace NPOI.HPSF
         {
             Property[] h = new Property[pa.Length - 1];
             if (i > 0)
-                Array.Copy(pa, 0, h, 0, i);
-            Array.Copy(pa, i + 1, h, i, h.Length - i);
+                System.Array.Copy(pa, 0, h, 0, i);
+            System.Array.Copy(pa, i + 1, h, i, h.Length - i);
             return h;
         }
 

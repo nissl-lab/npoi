@@ -37,5 +37,21 @@ namespace NPOI.Util
             //if (value is decimal) return true;
             return false;
         }
+        public static bool IsInteger(object value)
+        {
+            if (value == null)
+            {
+                return false;
+            }
+            if (value is int) return true;
+            if (value is uint) return true;
+            if (value is long) return true;
+            if (value is ulong) return true;
+            if (value is sbyte) return true;
+            if (value is byte) return true;
+            if (value is short) return true;
+            if (value is ushort) return true;
+            return false;
+        }
     }
 }

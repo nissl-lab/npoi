@@ -184,28 +184,7 @@ namespace NPOI.DDF
             get { return _recordId; }
             set { this._recordId = value; }
         }
-        public virtual short Version
-        {
-            get
-            {
-                return fVersion.GetShortValue(_options);
-            }
-            set 
-            {
-                _options = fVersion.SetShortValue(_options, value);
-            }
-        }
-        public virtual short Instance
-        {
-            get
-            {
-                return fInstance.GetShortValue(_options);
-            }
-            set 
-            {
-                _options = fInstance.SetShortValue(_options, value);
-            }
-        }
+        
         /// <summary>
         /// Gets or sets the child records.
         /// </summary>
@@ -227,27 +206,7 @@ namespace NPOI.DDF
         {
             throw new Exception("The class " + this.GetType().Name + " needs to define a clone method");
         }
-        public virtual String ToXml(String tab)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(tab).Append("<").Append(GetType().Name).Append(">\n")
-                    .Append(tab).Append("\t").Append("<RecordId>0x").Append(HexDump.ToHex(_recordId)).Append("</RecordId>\n")
-                    .Append(tab).Append("\t").Append("<Options>").Append(_options).Append("</Options>\n")
-                    .Append(tab).Append("</").Append(GetType().Name).Append(">\n");
-            return builder.ToString();
-        }
-        protected String FormatXmlRecordHeader(String className, String recordId, String version, String instance)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.Append("<").Append(className).Append(" recordId=\"0x").Append(recordId).Append("\" version=\"0x")
-                    .Append(version).Append("\" instance=\"0x").Append(instance).Append("\" size=\"").Append(RecordSize).Append("\">\n");
-            return builder.ToString();
-        }
-
-        public virtual String ToXml()
-        {
-            return ToXml("");
-        }
+        
         /// <summary>
         /// Returns the indexed child record.
         /// </summary>
@@ -278,14 +237,6 @@ namespace NPOI.DDF
         /// <value>The name of the record.</value>
         public abstract String RecordName { get; }
 
-        /// <summary>
-        /// Returns the instance part of the option record.
-        /// </summary>
-        /// <returns>The instance part of the record</returns>
-        //public short GetInstance()
-        //{
-        //    return (short)(_options >> 4);
-        //}
 
         /// <summary>
         /// This class Reads the standard escher header.

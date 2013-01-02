@@ -25,6 +25,8 @@
  * 
  * ==============================================================*/
 
+using System.Collections.Generic;
+
 namespace NPOI.HPSF
 {
     using System;
@@ -65,9 +67,9 @@ namespace NPOI.HPSF
             {
                 return logUnsupportedTypes;
             }
-            set 
-            { 
-                logUnsupportedTypes = value; 
+            set
+            {
+                logUnsupportedTypes = value;
             }
         }
 
@@ -77,7 +79,7 @@ namespace NPOI.HPSF
          * Keeps a list of the variant types an "unsupported" message has alReady
          * been issued for.
          */
-        protected static IList unsupportedMessage;
+        protected static List<long> unsupportedMessage;
 
         /// <summary>
         /// Writes a warning To System.err that a variant type Is
@@ -91,7 +93,7 @@ namespace NPOI.HPSF
             if (IsLogUnsupportedTypes)
             {
                 if (unsupportedMessage == null)
-                    unsupportedMessage = new ArrayList();
+                    unsupportedMessage = new List<long>();
                 long vt = ex.VariantType;
                 if (!unsupportedMessage.Contains(vt))
                 {
@@ -130,183 +132,244 @@ namespace NPOI.HPSF
         }
 
 
-
         /// <summary>
         /// Reads a variant type from a byte array
         /// </summary>
         /// <param name="src">The byte array</param>
         /// <param name="offset">The offset in the byte array where the variant starts</param>
-        /// <param name="Length">The Length of the variant including the variant type field</param>
+        /// <param name="length">The Length of the variant including the variant type field</param>
         /// <param name="type">The variant type To Read</param>
         /// <param name="codepage">The codepage To use for non-wide strings</param>
         /// <returns>A Java object that corresponds best To the variant field. For
         /// example, a VT_I4 is returned as a {@link long}, a VT_LPSTR as a
         /// {@link String}.</returns>
         public static Object Read(byte[] src, int offset,
-                                  int Length, long type,
-                                  int codepage)
+                int length, long type, int codepage)
         {
-            Object value;
-            int o1 = offset;
-            int l1 = Length - LittleEndianConsts.INT_SIZE;
-            long lType = type;
+            TypedPropertyValue typedPropertyValue = new TypedPropertyValue(
+                    (int)type, null);
+            int unpadded;
+            try
+            {
+                unpadded = typedPropertyValue.ReadValue(src, offset);
+            }
+            catch (InvalidOperationException)
+            {
+                int propLength = Math.Min(length, src.Length - offset);
+                byte[] v = new byte[propLength];
+                System.Array.Copy(src, offset, v, 0, propLength);
+                throw new ReadingNotSupportedException(type, v);
+            }
 
-            /* Instead of trying To Read 8-bit characters from a Unicode string,
-             * Read 16-bit characters. */
-            if (codepage == (int)Constants.CP_UNICODE && type == Variant.VT_LPSTR)
-                lType = Variant.VT_LPWSTR;
-
-            switch ((int)lType)
+            switch ((int)type)
             {
                 case Variant.VT_EMPTY:
-                    {
-                        value = null;
-                        break;
-                    }
+                case Variant.VT_I4:
+                case Variant.VT_I8:
+                case Variant.VT_R8:
+                    /*
+                     * we have more property types that can be converted into Java
+                     * objects, but current API need to be preserved, and it returns
+                     * other types as byte arrays. In future major versions it shall be
+                     * changed -- sergey
+                     */
+                    return typedPropertyValue.Value;
+
                 case Variant.VT_I2:
                     {
                         /*
-                         * Read a short. In Java it is represented as an
-                         * Integer object.
+                         * also for backward-compatibility with prev. versions of POI
+                         * --sergey
                          */
-                        value = LittleEndian.GetShort(src, o1);
-                        break;
-                    }
-                case Variant.VT_I4:
-                    {
-                        /*
-                         * Read a word. In Java it is represented as an
-                         * Integer object.
-                         */
-                        value = LittleEndian.GetInt(src, o1);
-                        break;
-                    }
-                case Variant.VT_I8:
-                    {
-                        /*
-                         * Read a double word. In Java it is represented as a
-                         * long object.
-                         */
-                        value = LittleEndian.GetLong(src, o1);
-                        break;
-                    }
-                case Variant.VT_R8:
-                    {
-                        /*
-                         * Read an eight-byte double value. In Java it is represented as
-                         * a Double object.
-                         */
-                        value = LittleEndian.GetDouble(src, o1);
-                        break;
+                        return (short)typedPropertyValue.Value;
                     }
                 case Variant.VT_FILETIME:
                     {
-                        /*
-                         * Read a FILETIME object. In Java it is represented
-                         * as a Date object.
-                         */
-                        int low = LittleEndian.GetInt(src, o1);
-                        o1 += LittleEndianConsts.INT_SIZE;
-                        int high = LittleEndian.GetInt(src, o1);
-                        if (low == 0 && high == 0)
-                            value = null;
-                        else
-                            value = Util.FiletimeToDate(high, low);
-                        break;
+                        Filetime filetime = (Filetime)typedPropertyValue.Value;
+                        return Util.FiletimeToDate((int)filetime.High,
+                                (int)filetime.Low);
                     }
                 case Variant.VT_LPSTR:
                     {
-                        /*
-                         * Read a byte string. In Java it is represented as a
-                         * String object. The 0x00 bytes at the end must be
-                         * stripped.
-                         */
-                        int first = o1 + LittleEndianConsts.INT_SIZE;
-                        long last = first + LittleEndian.GetUInt(src, o1) - 1;
-                        o1 += LittleEndianConsts.INT_SIZE;
-                        while (src[(int)last] == 0 && first <= last)
-                            last--;
-                        int l = (int)(last - first + 1);
-                        value = codepage != -1 ?
-                            Encoding.GetEncoding(codepage).GetString(src, first, l) :
-                            Encoding.UTF8.GetString(src, first, l);
-                        break;
+                        CodePageString string1 = (CodePageString)typedPropertyValue.Value;
+                        return string1.GetJavaValue(codepage);
                     }
                 case Variant.VT_LPWSTR:
                     {
-                        /*
-                         * Read a Unicode string. In Java it is represented as
-                         * a String object. The 0x00 bytes at the end must be
-                         * stripped.
-                         */
-                        int first = o1 + LittleEndianConsts.INT_SIZE;
-                        long last = first + LittleEndian.GetUInt(src, o1) - 1;
-                        long l = last - first;
-                        o1 += LittleEndianConsts.INT_SIZE;
-                        StringBuilder b = new StringBuilder((int)(last - first));
-                        for (int i = 0; i <= l; i++)
-                        {
-                            int i1 = o1 + (i * 2);
-                            int i2 = i1 + 1;
-                            int high = src[i2] << 8;
-                            int low = src[i1] & 0x00ff;
-                            char c = (char)(high | low);
-                            b.Append(c);
-                        }
-                        /* Strip 0x00 characters from the end of the string: */
-                        while (b.Length > 0 && b[b.Length - 1] == 0x00)
-                            b.Length = b.Length - 1;
-                        value = b.ToString();
-                        break;
+                        UnicodeString string1 = (UnicodeString)typedPropertyValue.Value;
+                        return string1.ToJavaString();
                     }
                 case Variant.VT_CF:
                     {
-                        if (l1 < 0)
-                        {
-                            /*
-                             *  YK: reading the ClipboardData packet (VT_CF) is not quite correct.
-                             *  The size of the data is determined by the first four bytes of the packet
-                             *  while the current implementation calculates it in the Section constructor.
-                             *  Test files in Bugzilla 42726 and 45583 clearly show that this approach does not always work.
-                             *  The workaround below attempts to gracefully handle such cases instead of throwing exceptions.
-                             *
-                             *  August 20, 2009
-                             */
-                            l1 = LittleEndian.GetInt(src, o1); 
-                            o1 += LittleEndian.INT_SIZE;
-                        }
-                        byte[] v = new byte[l1];
-                        for (int i = 0; i < l1; i++)
-                            v[i] = src[(o1 + i)];
-                        value = v;
-                        break;
+                        // if(l1 < 0) {
+                        /*
+                         * YK: reading the ClipboardData packet (VT_CF) is not quite
+                         * correct. The size of the data is determined by the first four
+                         * bytes of the packet while the current implementation calculates
+                         * it in the Section constructor. Test files in Bugzilla 42726 and
+                         * 45583 clearly show that this approach does not always work. The
+                         * workaround below attempts to gracefully handle such cases instead
+                         * of throwing exceptions.
+                         * 
+                         * August 20, 2009
+                         */
+                        // l1 = LittleEndian.getInt(src, o1); o1 += LittleEndian.INT_SIZE;
+                        // }
+                        // final byte[] v = new byte[l1];
+                        // System.arraycopy(src, o1, v, 0, v.length);
+                        // value = v;
+                        // break;
+                        ClipboardData clipboardData = (ClipboardData)typedPropertyValue.Value;
+                        return clipboardData.ToByteArray();
                     }
+
                 case Variant.VT_BOOL:
                     {
-                        /*
-                         * The first four bytes in src, from src[offset] To
-                         * src[offset + 3] contain the DWord for VT_BOOL, so
-                         * skip it, we don't need it.
-                         */
-                        // int first = offset + LittleEndianConstants.INT_SIZE;
-                        long boolean = LittleEndian.GetUInt(src, o1);
-                        if (boolean != 0)
-                            value = true;
-                        else
-                            value = false;
-                        break;
+                        VariantBool bool1 = (VariantBool)typedPropertyValue.Value;
+                        return (bool)bool1.Value;
                     }
+
                 default:
                     {
-                        byte[] v = new byte[l1];
-                        for (int i = 0; i < l1; i++)
-                            v[i] = src[(o1 + i)];
+                        /*
+                         * it is not very good, but what can do without breaking current
+                         * API? --sergey
+                         */
+                        byte[] v = new byte[unpadded];
+                        System.Array.Copy(src, offset, v, 0, unpadded);
                         throw new ReadingNotSupportedException(type, v);
                     }
             }
-            return value;
         }
 
+        /**
+         * <p>Turns a codepage number into the equivalent character encoding's
+         * name.</p>
+         *
+         * @param codepage The codepage number
+         *
+         * @return The character encoding's name. If the codepage number is 65001,
+         * the encoding name is "UTF-8". All other positive numbers are mapped to
+         * "cp" followed by the number, e.g. if the codepage number is 1252 the
+         * returned character encoding name will be "cp1252".
+         *
+         * @exception UnsupportedEncodingException if the specified codepage is
+         * less than zero.
+         */
+        public static String CodepageToEncoding(int codepage)
+        {
+            if (codepage <= 0)
+                throw new UnsupportedEncodingException
+                    ("Codepage number may not be " + codepage);
+            switch ((Constants)codepage)
+            {
+                case Constants.CP_UTF16:
+                    return "UTF-16";
+                case Constants.CP_UTF16_BE:
+                    return "UTF-16BE";
+                case Constants.CP_UTF8:
+                    return "UTF-8";
+                case Constants.CP_037:
+                    return "cp037";
+                case Constants.CP_GBK:
+                    return "GBK";
+                case Constants.CP_MS949:
+                    return "ms949";
+                case Constants.CP_WINDOWS_1250:
+                    return "windows-1250";
+                case Constants.CP_WINDOWS_1251:
+                    return "windows-1251";
+                case Constants.CP_WINDOWS_1252:
+                    return "windows-1252";
+                case Constants.CP_WINDOWS_1253:
+                    return "windows-1253";
+                case Constants.CP_WINDOWS_1254:
+                    return "windows-1254";
+                case Constants.CP_WINDOWS_1255:
+                    return "windows-1255";
+                case Constants.CP_WINDOWS_1256:
+                    return "windows-1256";
+                case Constants.CP_WINDOWS_1257:
+                    return "windows-1257";
+                case Constants.CP_WINDOWS_1258:
+                    return "windows-1258";
+                case Constants.CP_JOHAB:
+                    return "johab";
+                case Constants.CP_MAC_ROMAN:
+                    return "MacRoman";
+                case Constants.CP_MAC_JAPAN:
+                    return "SJIS";
+                case Constants.CP_MAC_CHINESE_TRADITIONAL:
+                    return "Big5";
+                case Constants.CP_MAC_KOREAN:
+                    return "EUC-KR";
+                case Constants.CP_MAC_ARABIC:
+                    return "MacArabic";
+                case Constants.CP_MAC_HEBREW:
+                    return "MacHebrew";
+                case Constants.CP_MAC_GREEK:
+                    return "MacGreek";
+                case Constants.CP_MAC_CYRILLIC:
+                    return "MacCyrillic";
+                case Constants.CP_MAC_CHINESE_SIMPLE:
+                    return "EUC_CN";
+                case Constants.CP_MAC_ROMANIA:
+                    return "MacRomania";
+                case Constants.CP_MAC_UKRAINE:
+                    return "MacUkraine";
+                case Constants.CP_MAC_THAI:
+                    return "MacThai";
+                case Constants.CP_MAC_CENTRAL_EUROPE:
+                    return "MacCentralEurope";
+                case Constants.CP_MAC_ICELAND:
+                    return "MacIceland";
+                case Constants.CP_MAC_TURKISH:
+                    return "MacTurkish";
+                case Constants.CP_MAC_CROATIAN:
+                    return "MacCroatian";
+                case Constants.CP_US_ACSII:
+                case Constants.CP_US_ASCII2:
+                    return "US-ASCII";
+                case Constants.CP_KOI8_R:
+                    return "KOI8-R";
+                case Constants.CP_ISO_8859_1:
+                    return "ISO-8859-1";
+                case Constants.CP_ISO_8859_2:
+                    return "ISO-8859-2";
+                case Constants.CP_ISO_8859_3:
+                    return "ISO-8859-3";
+                case Constants.CP_ISO_8859_4:
+                    return "ISO-8859-4";
+                case Constants.CP_ISO_8859_5:
+                    return "ISO-8859-5";
+                case Constants.CP_ISO_8859_6:
+                    return "ISO-8859-6";
+                case Constants.CP_ISO_8859_7:
+                    return "ISO-8859-7";
+                case Constants.CP_ISO_8859_8:
+                    return "ISO-8859-8";
+                case Constants.CP_ISO_8859_9:
+                    return "ISO-8859-9";
+                case Constants.CP_ISO_2022_JP1:
+                case Constants.CP_ISO_2022_JP2:
+                case Constants.CP_ISO_2022_JP3:
+                    return "ISO-2022-JP";
+                case Constants.CP_ISO_2022_KR:
+                    return "ISO-2022-KR";
+                case Constants.CP_EUC_JP:
+                    return "EUC-JP";
+                case Constants.CP_EUC_KR:
+                    return "EUC-KR";
+                case Constants.CP_GB2312:
+                    return "GB2312";
+                case Constants.CP_GB18030:
+                    return "GB18030";
+                case Constants.CP_SJIS:
+                    return "SJIS";
+                default:
+                    return "cp" + codepage;
+            }
+        }
 
         /// <summary>
         /// Writes a variant value To an output stream. This method ensures that
@@ -330,36 +393,32 @@ namespace NPOI.HPSF
             {
                 case Variant.VT_BOOL:
                     {
-                        int trueOrFalse;
+                        byte[] data = new byte[2];
                         if ((bool)value)
-                            trueOrFalse = 1;
+                        {
+                            out1.WriteByte(0xFF);
+                            out1.WriteByte(0xFF);
+                        }
                         else
-                            trueOrFalse = 0;
-                        length = TypeWriter.WriteUIntToStream(out1, (uint)trueOrFalse);
+                        {
+                            out1.WriteByte(0x00);
+                            out1.WriteByte(0x00);
+                        }
+                        length += 2;
                         break;
                     }
                 case Variant.VT_LPSTR:
                     {
-                        if (codepage == 0)
-                            throw new ArgumentOutOfRangeException("codepage");
-                        byte[] bytes =
-                            (codepage == -1 ?
-                            Encoding.UTF8.GetBytes((string)value) :
-                            Encoding.GetEncoding(codepage).GetBytes((string)value));
-                            
-                        length = TypeWriter.WriteUIntToStream(out1, (uint)bytes.Length + 1);
-                        byte[] b = new byte[bytes.Length + 1];
-                        Array.Copy(bytes, 0, b, 0, bytes.Length);
-                        b[b.Length - 1] = 0x00;
-                        out1.Write(b, 0, b.Length);
-                        length += b.Length;
+                        CodePageString codePageString = new CodePageString((String)value,
+                        codepage);
+                        length += codePageString.Write(out1);
                         break;
                     }
                 case Variant.VT_LPWSTR:
                     {
                         int nrOfChars = ((String)value).Length + 1;
                         length += TypeWriter.WriteUIntToStream(out1, (uint)nrOfChars);
-                        char[] s = Util.Pad4((String)value);
+                        char[] s = ((String)value).ToCharArray();
                         for (int i = 0; i < s.Length; i++)
                         {
                             int high = ((s[i] & 0x0000ff00) >> 8);
@@ -370,6 +429,7 @@ namespace NPOI.HPSF
                             out1.WriteByte(highb);
                             length += 2;
                         }
+                        // NullTerminator
                         out1.WriteByte(0x00);
                         out1.WriteByte(0x00);
                         length += 2;
@@ -384,8 +444,7 @@ namespace NPOI.HPSF
                     }
                 case Variant.VT_EMPTY:
                     {
-                        TypeWriter.WriteUIntToStream(out1, Variant.VT_EMPTY);
-                        length = LittleEndianConsts.INT_SIZE;
+                        length += TypeWriter.WriteUIntToStream(out1, Variant.VT_EMPTY);
                         break;
                     }
                 case Variant.VT_I2:
@@ -394,12 +453,13 @@ namespace NPOI.HPSF
                         try
                         {
                             x = Convert.ToInt16(value, CultureInfo.InvariantCulture);
-                        }catch(OverflowException)
-                        {
-                            x=(short)((int)value);
                         }
-                        TypeWriter.WriteToStream(out1, x);
-                        length = LittleEndianConsts.SHORT_SIZE;
+                        catch (OverflowException)
+                        {
+                            x = (short)((int)value);
+                        }
+                        length += TypeWriter.WriteToStream(out1, x);
+                        //length = LittleEndianConsts.SHORT_SIZE;
                         break;
                     }
                 case Variant.VT_I4:
@@ -416,8 +476,7 @@ namespace NPOI.HPSF
                     }
                 case Variant.VT_I8:
                     {
-                        TypeWriter.WriteToStream(out1, Convert.ToInt64(value, CultureInfo.CurrentCulture));
-                        length = LittleEndianConsts.LONG_SIZE;
+                        length += TypeWriter.WriteToStream(out1, Convert.ToInt64(value, CultureInfo.CurrentCulture));
                         break;
                     }
                 case Variant.VT_R8:
@@ -439,11 +498,13 @@ namespace NPOI.HPSF
                         }
                         int high = (int)((filetime >> 32) & 0x00000000FFFFFFFFL);
                         int low = (int)(filetime & 0x00000000FFFFFFFFL);
-                        length += TypeWriter.WriteUIntToStream
-                            (out1, (uint)(0x0000000FFFFFFFFL & low));
-                        length += TypeWriter.WriteUIntToStream
-                            (out1, (uint)(0x0000000FFFFFFFFL & high));
-                        
+                        Filetime filetimeValue = new Filetime(low, high);
+                        length += filetimeValue.Write(out1);
+                        //length += TypeWriter.WriteUIntToStream
+                        //    (out1, (uint)(0x0000000FFFFFFFFL & low));
+                        //length += TypeWriter.WriteUIntToStream
+                        //    (out1, (uint)(0x0000000FFFFFFFFL & high));
+
                         break;
                     }
                 default:
@@ -463,7 +524,12 @@ namespace NPOI.HPSF
                         break;
                     }
             }
-
+            /* pad values to 4-bytes */
+            while ((length & 0x3) != 0)
+            {
+                out1.WriteByte(0x00);
+                length++;
+            }
             return length;
         }
 

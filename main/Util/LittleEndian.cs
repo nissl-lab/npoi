@@ -239,9 +239,26 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">the short (16-bit) value</param>
+        [Obsolete]
         public static void PutShort(byte[] data, short value)
         {
             PutShort(data, 0, value);
+        }
+
+        /**
+         * Put signed short into output stream
+         * 
+         * @param value
+         *            the short (16-bit) value
+         * @param outputStream
+         *            output stream
+         * @throws IOException
+         *             if an I/O error occurs
+         */
+        public static void PutShort( Stream outputStream, short value )
+        {
+            outputStream.WriteByte((byte)((value >> 0) & 0xFF));
+            outputStream.WriteByte((byte)((value >> 8) & 0xFF));
         }
 
         /// <summary>
@@ -264,9 +281,23 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="data">the byte array</param>
         /// <param name="value">the int (32-bit) value</param>
+        [Obsolete]
         public static void PutInt(byte[] data, int value)
         {
             PutInt(data, 0, value);
+        }
+
+        /// <summary>
+        /// Put int into output stream
+        /// </summary>
+        /// <param name="value">the int (32-bit) value</param>
+        /// <param name="outputStream">output stream</param>
+        public static void PutInt(int value, Stream outputStream)
+        {
+            outputStream.WriteByte((byte) ((value >> 0) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 8) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 16) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 24) & 0xFF));
         }
 
         /// <summary>
@@ -505,9 +536,23 @@ namespace NPOI.Util
             PutDouble(data, 0, value);
         }
 
-        
+        /**
+         * put a double value into a byte array
+         * 
+         * @param value
+         *            the double (64-bit) value
+         * @param outputStream
+         *            output stream
+         * @throws IOException
+         *             if an I/O error occurs
+         */
 
-        
+        public static void PutDouble(double value, Stream outputStream)
+        {
+            PutLong(BitConverter.DoubleToInt64Bits(value), outputStream);
+        }
+
+
 
         /// <summary>
         /// Puts the uint.
@@ -518,6 +563,24 @@ namespace NPOI.Util
         public static void PutUInt(byte[] data, uint value)
         {
             PutUInt(data, 0, value);
+        }
+
+        /**
+         * Put unsigned int into output stream
+         * 
+         * @param value
+         *            the int (32-bit) value
+         * @param outputStream
+         *            output stream
+         * @throws IOException
+         *             if an I/O error occurs
+         */
+        public static void PutUInt( long value, Stream outputStream )
+        {
+            outputStream.WriteByte((byte)((value >> 0) & 0xFF));
+            outputStream.WriteByte((byte)((value >> 8) & 0xFF));
+            outputStream.WriteByte((byte)((value >> 16) & 0xFF));
+            outputStream.WriteByte((byte)((value >> 24) & 0xFF));
         }
 
         /// <summary>
@@ -543,7 +606,27 @@ namespace NPOI.Util
             PutLong(data, 0, value);
         }
 
-        
+        /**
+         * Put long into output stream
+         * 
+         * @param value
+         *            the long (64-bit) value
+         * @param outputStream
+         *            output stream
+         * @throws IOException
+         *             if an I/O error occurs
+         */
+        public static void PutLong( long value, Stream outputStream )
+        {
+            outputStream.WriteByte((byte) ((value >> 0) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 8) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 16) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 24) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 32) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 40) & 0xFF));
+            outputStream.WriteByte((byte) ((value >> 48) & 0xFF));
+            outputStream.WriteByte((byte)((value >> 56) & 0xFF));
+        }
 
         /// <summary>
         /// Puts the long.
@@ -634,7 +717,21 @@ namespace NPOI.Util
         {
             PutNumber(data, 0, Convert.ToInt64(value), LittleEndianConsts.SHORT_SIZE);
         }
-
+        /**
+         * Put unsigned short into output stream
+         * 
+         * @param value
+         *            the unsigned short (16-bit) value
+         * @param outputStream
+         *            output stream
+         * @throws IOException
+         *             if an I/O error occurs
+         */
+        public static void PutUShort( int value, Stream outputStream )
+        {
+            outputStream.WriteByte((byte)((value >> 0) & 0xFF));
+            outputStream.WriteByte((byte)((value >> 8) & 0xFF));
+        }
 
         /// <summary>
         /// Reads from stream.

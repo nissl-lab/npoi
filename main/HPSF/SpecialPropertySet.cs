@@ -25,6 +25,8 @@
  * 
  * ==============================================================*/
 
+using System.Collections.Generic;
+
 namespace NPOI.HPSF
 {
     using System;
@@ -143,7 +145,7 @@ namespace NPOI.HPSF
         }
 
 
-        public override IList Sections
+        public override List<Section> Sections
         {
             get { return delegate1.Sections; }
         }

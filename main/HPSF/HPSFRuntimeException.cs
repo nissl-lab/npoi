@@ -25,6 +25,8 @@
  * 
  * ==============================================================*/
 
+using NPOI.Util;
+
 namespace NPOI.HPSF
 {
     using System;
@@ -38,9 +40,9 @@ namespace NPOI.HPSF
     /// @since 2002-02-09
     /// </summary>
     [Serializable]
-    public class HPSFRuntimeException : Exception
+    public class HPSFRuntimeException : RuntimeException
     {
-
+        //private static long serialVersionUID = -7804271670232727159L;
         /// <summary>
         /// Initializes a new instance of the <see cref="HPSFRuntimeException"/> class.
         /// </summary>

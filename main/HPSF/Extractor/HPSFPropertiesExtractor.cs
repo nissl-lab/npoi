@@ -49,7 +49,11 @@ namespace NPOI.HPSF.Extractor
         {
 
         }
-
+        public HPSFPropertiesExtractor(NPOIFSFileSystem fs)
+            : base(new PropertiesOnlyDocument(fs))
+        {
+            
+        }
         /// <summary>
         /// Gets the document summary information text.
         /// </summary>
@@ -198,6 +202,11 @@ namespace NPOI.HPSF.Extractor
         /// </summary>
         private class PropertiesOnlyDocument : POIDocument
         {
+            public PropertiesOnlyDocument(NPOIFSFileSystem fs)
+                : base(fs.Root)
+            {
+                
+            }
             public PropertiesOnlyDocument(POIFSFileSystem fs)
                 : base(fs)
             {

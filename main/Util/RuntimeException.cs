@@ -7,6 +7,11 @@ namespace NPOI.Util
     [Serializable]
     public class RuntimeException:Exception
     {
+        public RuntimeException()
+            :base()
+        {
+            
+        }
         public RuntimeException(string message)
             : base(message)
         {
