@@ -18,6 +18,8 @@
 
 namespace NPOI.HSSF.UserModel
 {
+    using NPOI.DDF;
+    using NPOI.SS.UserModel;
     using System;
 
 
@@ -26,19 +28,19 @@ namespace NPOI.HSSF.UserModel
     /// top-left and buttom-right cell.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFClientAnchor : HSSFAnchor, NPOI.SS.UserModel.IClientAnchor
+    public class HSSFClientAnchor : HSSFAnchor, IClientAnchor
     {
-        int col1;
-        int row1;
-        int col2;
-        int row2;
-        int anchorType;
-
+        private EscherClientAnchorRecord _escherClientAnchor;
+        public HSSFClientAnchor(EscherClientAnchorRecord escherClientAnchorRecord)
+        {
+            this._escherClientAnchor = escherClientAnchorRecord;
+        }
         /// <summary>
         /// Creates a new client anchor and defaults all the anchor positions to 0.
         /// </summary>
         public HSSFClientAnchor()
         {
+            this._escherClientAnchor = new EscherClientAnchorRecord();
         }
 
         /// <summary>
@@ -67,10 +69,19 @@ namespace NPOI.HSSF.UserModel
             CheckRange(row1, 0, 255 * 256, "row1");
             CheckRange(row2, 0, 255 * 256, "row2");
 
-            this.col1 = col1;
-            this.row1 = row1;
-            this.col2 = col2;
-            this.row2 = row2;
+            this.Col1 = col1;
+            this.Row1 = row1;
+            this.Col2 = col2;
+            this.Row2 = row2;
+
+            if (col1 > col2)
+            {
+                _isHorizontallyFlipped = true;
+            }
+            if (row1 > row2)
+            {
+                _isVerticallyFlipped = true;
+            }
         }
 
         /// <summary>
@@ -124,11 +135,11 @@ namespace NPOI.HSSF.UserModel
         /// <value>The col1.</value>
         public int Col1
         {
-            get { return col1; }
+            get { return _escherClientAnchor.Col1; }
             set
             {
                 CheckRange(value, 0, 255, "col1");
-                this.col1 = value;
+                _escherClientAnchor.Col1 = (short)value;
             }
         }
 
@@ -138,11 +149,11 @@ namespace NPOI.HSSF.UserModel
         /// <value>The col2.</value>
         public int Col2
         {
-            get { return col2; }
+            get { return _escherClientAnchor.Col2; }
             set
             {
                 CheckRange(value, 0, 255, "col2");
-                this.col2 = value;
+                _escherClientAnchor.Col2 = (short)value;
             }
         }
 
@@ -152,11 +163,11 @@ namespace NPOI.HSSF.UserModel
         /// <value>The row1.</value>
         public int Row1
         {
-            get { return row1; }
+            get { return _escherClientAnchor.Row1; }
             set
             {
                 CheckRange(value, 0, 256 * 256, "row1");
-                this.row1 = value;
+                _escherClientAnchor.Row1 = (short)value; 
             }
         }
 
@@ -166,11 +177,11 @@ namespace NPOI.HSSF.UserModel
         /// <value>The row2.</value>
         public int Row2
         {
-            get { return row2; }
+            get { return _escherClientAnchor.Row2; }
             set
             {
                 CheckRange(value, 0, 256 * 256, "row2");
-                this.row2 = value;
+                _escherClientAnchor.Row2 = (short)value;
             }
         }
 
@@ -197,12 +208,12 @@ namespace NPOI.HSSF.UserModel
             CheckRange(row1, 0, 255 * 256, "row1");
             CheckRange(row2, 0, 255 * 256, "row2");
 
-            this.col1 = col1;
-            this.row1 = row1;
+            this.Col1 = col1;
+            this.Row1 = row1;
             this.Dx1 = x1;
             this.Dy1 = y1;
-            this.col2 = col2;
-            this.row2 = row2;
+            this.Col2 = col2;
+            this.Row2 = row2;
             this.Dx2 = x2;
             this.Dy2 = y2;
         }
@@ -217,10 +228,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (col1 == col2)
-                    return Dx1 > Dx2;
-                else
-                    return col1 > col2;
+                return _isHorizontallyFlipped;
             }
         }
 
@@ -234,10 +242,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (row1 == row2)
-                    return Dy1 > Dy2;
-                else
-                    return row1 > row2;
+                return _isVerticallyFlipped;
             }
         }
 
@@ -248,8 +253,8 @@ namespace NPOI.HSSF.UserModel
         /// <value>The type of the anchor.</value>
         public int AnchorType
         {
-            get{return anchorType;}
-            set { this.anchorType = value; }
+            get { return _escherClientAnchor.Flag; }
+            set { this._escherClientAnchor.Flag = (short)value; }
         }
 
 

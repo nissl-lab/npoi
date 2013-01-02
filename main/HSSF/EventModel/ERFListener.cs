@@ -29,7 +29,7 @@ namespace NPOI.HSSF.EventModel
      * @see EventRecordFactory
      * @author Andrew C. Oliver acoliver@apache.org
      */
-    public interface ERFListener
+    public interface IERFListener
     {
         /**
          * Process a Record.  This method Is called by the 

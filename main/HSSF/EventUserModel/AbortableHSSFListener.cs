@@ -32,7 +32,7 @@ namespace NPOI.HSSF.EventUserModel
      *
      */
 
-    public abstract class AbortableHSSFListener : HSSFListener
+    public abstract class AbortableHSSFListener : IHSSFListener
     {
         /**
          * This method, inherited from HSSFListener Is implemented as a stub.

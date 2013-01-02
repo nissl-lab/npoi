@@ -344,13 +344,13 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="recordId">The record id.</param>
         /// <returns></returns>
-        public EscherSpRecord GetChildById(short recordId)
+        public EscherRecord GetChildById(short recordId)
         {
             for (IEnumerator iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 if (escherRecord.RecordId == recordId)
-                    return (EscherSpRecord)escherRecord;
+                    return escherRecord;
             }
             return null;
         }

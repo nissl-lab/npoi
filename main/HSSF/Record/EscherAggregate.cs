@@ -294,7 +294,65 @@ namespace NPOI.HSSF.Record
         /**
          * list of "tail" records that need to be Serialized after all drawing Group records
          */
-        internal List<Record> tailRec = new List<Record>();
+        internal Dictionary<int, Record> tailRec = new Dictionary<int, Record>();
+
+        public EscherAggregate(bool createDefaultTree)
+        {
+            if (createDefaultTree)
+            {
+                BuildBaseTree();
+            }
+        }
+        /**
+ * create base tree with such structure:
+ * EscherDgContainer
+ * -EscherSpgrContainer
+ * --EscherSpContainer
+ * ---EscherSpRecord
+ * ---EscherSpgrRecord
+ * ---EscherSpRecord
+ * -EscherDgRecord
+ *
+ * id of DgRecord and SpRecord are empty and must be set later by HSSFPatriarch
+ */
+        private void BuildBaseTree()
+        {
+            EscherContainerRecord dgContainer = new EscherContainerRecord();
+            EscherContainerRecord spgrContainer = new EscherContainerRecord();
+            EscherContainerRecord spContainer1 = new EscherContainerRecord();
+            EscherSpgrRecord spgr = new EscherSpgrRecord();
+            EscherSpRecord sp1 = new EscherSpRecord();
+            dgContainer.RecordId = (EscherContainerRecord.DG_CONTAINER);
+            dgContainer.Options = ((short)0x000F);
+            EscherDgRecord dg = new EscherDgRecord();
+            dg.RecordId = EscherDgRecord.RECORD_ID;
+            short dgId = 1;
+            dg.Options = ((short)(dgId << 4));
+            dg.NumShapes = (0);
+            dg.LastMSOSPID=(1024);
+            spgrContainer.RecordId=(EscherContainerRecord.SPGR_CONTAINER);
+            spgrContainer.Options=((short)0x000F);
+            spContainer1.RecordId=(EscherContainerRecord.SP_CONTAINER);
+            spContainer1.Options=((short)0x000F);
+            spgr.RecordId=(EscherSpgrRecord.RECORD_ID);
+            spgr.Options=((short)0x0001);    // version
+            spgr.RectX1=(0);
+            spgr.RectY1=(0);
+            spgr.RectX2=(1023);
+            spgr.RectY2=(255);
+            sp1.RecordId=(EscherSpRecord.RECORD_ID);
+
+            sp1.Options=((short)0x0002);
+            sp1.Version=((short)0x2);
+            sp1.ShapeId=(-1);
+            sp1.Flags=(EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_PATRIARCH);
+            dgContainer.AddChildRecord(dg);
+            dgContainer.AddChildRecord(spgrContainer);
+            spgrContainer.AddChildRecord(spContainer1);
+            spContainer1.AddChildRecord(spgr);
+            spContainer1.AddChildRecord(sp1);
+            AddEscherRecord(dgContainer);
+        }
 
         public EscherAggregate(DrawingManager2 drawingManager)
         {
@@ -334,7 +392,7 @@ namespace NPOI.HSSF.Record
                 EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 result.Append(escherRecord.ToString() + nl);
             }
-            foreach (StandardRecord record in this.tailRec)
+            foreach (Record record in this.tailRec.Values)
             {
                 result.Append(record.ToString() + nl);
             }
@@ -434,12 +492,14 @@ namespace NPOI.HSSF.Record
                 agg.shapeToObj[shapeRecords[shapeIndex++]]= objRecord;
                 loc += 2;
             }
+            // any NoteRecords that follow the drawing block must be aggregated and and saved in the tailRec collection
             //put noterecord into tailsRec
             for (int i = locFirstDrawingRecord + 1; i < records.Count; i++)
             {
                 if (records[i] is NoteRecord)
                 {
-                    agg.tailRec.Add((NoteRecord)records[i]);
+                    NoteRecord r = (NoteRecord)records[i];
+                    agg.tailRec.Add(r.ShapeId,r);
                 }
             }
             return agg;
@@ -507,12 +567,10 @@ namespace NPOI.HSSF.Record
             }
 
             // Write records that need to be Serialized after all drawing Group records
-            for (int i = 0; i < tailRec.Count; i++)
+            foreach (Record rec in tailRec.Values)
             {
-                Record rec = (Record)tailRec[i];
                 pos += rec.Serialize(pos, data);
             }
-
             int bytesWritten = pos - offset;
             if (bytesWritten != RecordSize)
                 throw new RecordFormatException(bytesWritten + " bytes written but RecordSize reports " + RecordSize);
@@ -550,9 +608,8 @@ namespace NPOI.HSSF.Record
                     objRecordSize += r.RecordSize;
                 }
                 int tailRecordSize = 0;
-                for (IEnumerator iterator = tailRec.GetEnumerator(); iterator.MoveNext(); )
-                {
-                    Record r = (Record)iterator.Current;
+                foreach (Record r in tailRec.Values)
+                {   
                     tailRecordSize += r.RecordSize;
                 }
                 return drawingRecordSize + objRecordSize + tailRecordSize;
@@ -651,7 +708,7 @@ namespace NPOI.HSSF.Record
                 }
                 else if (shapeContainer.RecordId == EscherContainerRecord.SP_CONTAINER)
                 {
-                    EscherSpRecord spRecord = shapeContainer.GetChildById(EscherSpRecord.RECORD_ID);
+                    EscherSpRecord spRecord = (EscherSpRecord)shapeContainer.GetChildById(EscherSpRecord.RECORD_ID);
                     int type = spRecord.ShapeType;
 
                     switch (type)
@@ -883,9 +940,8 @@ namespace NPOI.HSSF.Record
                         if (shapeModel is CommentShape)
                         {
                             CommentShape comment = (CommentShape)shapeModel;
-                            tailRec.Add(comment.NoteRecord);
+                            tailRec.Add(comment.NoteRecord.ShapeId,comment.NoteRecord);
                         }
-
                     }
                     escherParent.AddChildRecord(shapeModel.SpContainer);
                 }

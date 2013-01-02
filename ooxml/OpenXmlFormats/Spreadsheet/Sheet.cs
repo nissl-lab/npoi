@@ -1910,11 +1910,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetXSplit()
         {
-            return this.xSplitField != null;
+            return this.xSplitField != 0D;
         }
         public bool IsSetYSplit()
         {
-            return this.ySplitField != null;
+            return this.ySplitField != 0D;
         }
 
         

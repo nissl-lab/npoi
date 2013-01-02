@@ -22,14 +22,12 @@ namespace NPOI.XWPF.UserModel
     using NPOI.Util;
     using System.IO;
 
-    /**
-     * Raw picture data, normally attached to a WordProcessingML Drawing.
-     * As a rule, pictures are stored in the /word/media/ part of a WordProcessingML package.
-     */
-
-    /**
-     * @author Philipp Epp
-     */
+    /// <summary>
+    /// Raw picture data, normally attached to a WordProcessingML Drawing. As a rule, pictures are stored in the /word/media/ part of a WordProcessingML package.
+    /// </summary>
+    /// <remarks>
+    /// @author Philipp Epp
+    /// </remarks>
     public class XWPFPictureData : POIXMLDocumentPart
     {
 

@@ -15,6 +15,7 @@
    limitations Under the License.
 ==================================================================== */
 
+using NPOI.DDF;
 namespace NPOI.HSSF.UserModel
 {
 
@@ -26,10 +27,8 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public abstract class HSSFAnchor
     {
-        int dx1;
-        int dy1;
-        int dx2;
-        int dy2;
+        protected bool _isHorizontallyFlipped = false;
+        protected bool _isVerticallyFlipped = false;
 
         public HSSFAnchor()
         {
@@ -44,47 +43,62 @@ namespace NPOI.HSSF.UserModel
         /// <param name="dy2">The dy2.</param>
         public HSSFAnchor(int dx1, int dy1, int dx2, int dy2)
         {
-            this.dx1 = dx1;
-            this.dy1 = dy1;
-            this.dx2 = dx2;
-            this.dy2 = dy2;
+            CreateEscherAnchor();
+            this.Dx1 = dx1;
+            this.Dy1 = dy1;
+            this.Dx2 = dx2;
+            this.Dy2 = dy2;
         }
-
+        public static HSSFAnchor CreateAnchorFromEscher(EscherContainerRecord container)
+        {
+            if (null != container.GetChildById(EscherChildAnchorRecord.RECORD_ID))
+            {
+                return new HSSFChildAnchor((EscherChildAnchorRecord)container.GetChildById(EscherChildAnchorRecord.RECORD_ID));
+            }
+            else
+            {
+                if (null != container.GetChildById(EscherClientAnchorRecord.RECORD_ID))
+                {
+                    return new HSSFClientAnchor((EscherClientAnchorRecord)container.GetChildById(EscherClientAnchorRecord.RECORD_ID));
+                }
+                return null;
+            }
+        }
         /// <summary>
         /// Gets or sets the DX1.
         /// </summary>
         /// <value>The DX1.</value>
-        public int Dx1
-        { 
-            get{return dx1;}
-            set { this.dx1 = value; }
+        public abstract int Dx1
+        {
+            get;
+            set;
         }
         /// <summary>
         /// Gets or sets the dy1.
         /// </summary>
         /// <value>The dy1.</value>
-        public int Dy1
+        public abstract int Dy1
         {
-            get { return dy1; }
-            set { this.dy1 = value; }
+            get;
+            set;
         }
         /// <summary>
         /// Gets or sets the dy2.
         /// </summary>
         /// <value>The dy2.</value>
-        public int Dy2
+        public abstract int Dy2
         {
-            get { return dy2; }
-            set { this.dy2 = value; }
+            get;
+            set;
         }
         /// <summary>
         /// Gets or sets the DX2.
         /// </summary>
         /// <value>The DX2.</value>
-        public int Dx2
+        public abstract int Dx2
         {
-            get { return dx2; }
-            set { this.dx2 = value; }
+            get;
+            set;
         }
 
         /// <summary>

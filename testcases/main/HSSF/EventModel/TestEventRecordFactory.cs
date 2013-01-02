@@ -41,7 +41,7 @@ namespace TestCases.HSSF.EventModel
     {
 
 
-        class ERFListener1 : ERFListener
+        class ERFListener1 : IERFListener
         {
             bool[] wascalled;
             public ERFListener1(ref bool[] wascalled)
@@ -68,7 +68,7 @@ namespace TestCases.HSSF.EventModel
         {
             bool[] wascalled = { false, }; // hack to pass boolean by ref into inner class
 
-            ERFListener listener = new ERFListener1(ref wascalled);
+            IERFListener listener = new ERFListener1(ref wascalled);
             ArrayList param = new ArrayList();
             param.Add(BOFRecord.sid);
             EventRecordFactory factory = new EventRecordFactory(listener, param);
@@ -153,7 +153,7 @@ namespace TestCases.HSSF.EventModel
 
 
 
-        class ERFListener2 : ERFListener
+        class ERFListener2 : IERFListener
         {
             private String[] expectedRecordTypes = {
               typeof(UnknownRecord).Name,
@@ -209,7 +209,7 @@ namespace TestCases.HSSF.EventModel
 
             int[] recCnt =  {0} ;
             int[] offset =  {0} ;
-            ERFListener listener = new ERFListener2(ref data, ref recCnt,ref offset);
+            IERFListener listener = new ERFListener2(ref data, ref recCnt,ref offset);
             ArrayList sids = new ArrayList(2);
             sids.Add((short)-256);
             sids.Add((short)0x3C);

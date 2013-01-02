@@ -77,7 +77,7 @@ namespace NPOI.HSSF.Model
             {
                 throw new ArgumentException("Unknown shape type");
             }
-            EscherSpRecord sp = shape.SpContainer.GetChildById(EscherSpRecord.RECORD_ID);
+            EscherSpRecord sp = (EscherSpRecord)shape.SpContainer.GetChildById(EscherSpRecord.RECORD_ID);
             if (hssfShape.Parent!= null)
                 sp.Flags=sp.Flags | EscherSpRecord.FLAG_CHILD;
             return shape;

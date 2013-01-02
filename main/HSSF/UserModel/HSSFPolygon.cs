@@ -22,7 +22,7 @@ namespace NPOI.HSSF.UserModel
     /// <summary>
     /// @author Glen Stampoultzis  (glens at baselinksoftware.com)
     /// </summary>
-    public class HSSFPolygon : HSSFShape
+    public class HSSFPolygon : HSSFSimpleShape
     {
         int[] xPoints;
         int[] yPoints;

@@ -39,7 +39,7 @@ namespace NPOI.HSSF.EventModel
     public class EventRecordFactory
     {
 
-        private ERFListener _listener;
+        private IERFListener _listener;
         private ArrayList _sids;
 
         /**
@@ -48,7 +48,7 @@ namespace NPOI.HSSF.EventModel
          * handler functions are obeyed.  False means they are ignored. True
          * means the event loop exits on error.
          */
-        public EventRecordFactory(ERFListener listener, ArrayList sids)
+        public EventRecordFactory(IERFListener listener, ArrayList sids)
         {
             _listener = listener;
             _sids = sids;

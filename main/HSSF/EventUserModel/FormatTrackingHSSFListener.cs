@@ -30,14 +30,14 @@ namespace NPOI.HSSF.EventUserModel
      *  formatting records, and provides an easy way to look
      *  up the format strings used by cells from their ids.
      */
-    public class FormatTrackingHSSFListener : HSSFListener
+    public class FormatTrackingHSSFListener : IHSSFListener
     {
-        private HSSFListener childListener;
+        private IHSSFListener childListener;
         private Dictionary<int, FormatRecord> customFormatRecords = new Dictionary<int, FormatRecord>();
         private DataFormatter formatter = new DataFormatter();
         private List<ExtendedFormatRecord> xfRecords = new List<ExtendedFormatRecord>();
 
-        public FormatTrackingHSSFListener(HSSFListener childListener)
+        public FormatTrackingHSSFListener(IHSSFListener childListener)
         {
             this.childListener = childListener;
         }

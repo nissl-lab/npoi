@@ -1629,12 +1629,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetZoom()
         {
-            throw new NotImplementedException();
+            return this.zoom != null;
         }
 
-        public void AddNewZoom()
+        public CT_Zoom AddNewZoom()
         {
-            throw new NotImplementedException();
+            this.zoom = new CT_Zoom();
+            return this.zoom;
         }
     }
 

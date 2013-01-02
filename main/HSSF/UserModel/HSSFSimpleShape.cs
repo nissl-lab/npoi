@@ -17,14 +17,15 @@
 
 namespace NPOI.HSSF.UserModel
 {
+    using NPOI.DDF;
+    using NPOI.HSSF.Record;
     using System;
     /// <summary>
     /// Represents a simple shape such as a line, rectangle or oval.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public class HSSFSimpleShape
-       : HSSFShape
+    public class HSSFSimpleShape: HSSFShape
     {
         // The commented out ones haven't been tested yet or aren't supported
         // by HSSFSimpleShape.
@@ -52,6 +53,17 @@ namespace NPOI.HSSF.UserModel
         //    public static short       OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING = 30;
 
         int shapeType = OBJECT_TYPE_LINE;
+
+        public static int WRAP_SQUARE = 0;
+        public static int WRAP_BY_POINTS = 1;
+        public static int WRAP_NONE = 2;
+
+        private TextObjectRecord _textObjectRecord;
+
+        public HSSFSimpleShape(EscherContainerRecord spContainer, ObjRecord objRecord, TextObjectRecord textObjectRecord):base(spContainer, objRecord)
+        {
+            this._textObjectRecord = textObjectRecord;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFSimpleShape"/> class.

@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record.Chart
             Assert.AreEqual(3, r.GetFormatCount());
         }
 
-        private class ChartTitleFormatRecordGrabber : HSSFListener
+        private class ChartTitleFormatRecordGrabber : IHSSFListener
         {
             public IList chartTitleFormatRecords;
 

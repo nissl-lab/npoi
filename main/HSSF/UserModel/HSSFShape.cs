@@ -19,6 +19,8 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using NPOI.SS.UserModel;
+    using NPOI.DDF;
+    using NPOI.HSSF.Record;
     /// <summary>
     /// An abstract shape.
     /// @author Glen Stampoultzis (glens at apache.org)
@@ -28,17 +30,50 @@ namespace NPOI.HSSF.UserModel
     {
         public static int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
         public static int LINEWIDTH_DEFAULT = 9525;
+            public const  int LINESTYLE__COLOR_DEFAULT = 0x08000040;
+    public const  int FILL__FILLCOLOR_DEFAULT = 0x08000009;
+    public const  bool NO_FILL_DEFAULT = true;
+
+    public const  int LINESTYLE_SOLID = 0;              // Solid (continuous) pen
+    public const  int LINESTYLE_DASHSYS = 1;            // PS_DASH system   dash style
+    public const  int LINESTYLE_DOTSYS = 2;             // PS_DOT system   dash style
+    public const  int LINESTYLE_DASHDOTSYS = 3;         // PS_DASHDOT system dash style
+    public const  int LINESTYLE_DASHDOTDOTSYS = 4;      // PS_DASHDOTDOT system dash style
+    public const  int LINESTYLE_DOTGEL = 5;             // square dot style
+    public const  int LINESTYLE_DASHGEL = 6;            // dash style
+    public const  int LINESTYLE_LONGDASHGEL = 7;        // long dash style
+    public const  int LINESTYLE_DASHDOTGEL = 8;         // dash short dash
+    public const  int LINESTYLE_LONGDASHDOTGEL = 9;     // long dash short dash
+    public const  int LINESTYLE_LONGDASHDOTDOTGEL = 10; // long dash short dash short dash
+    public const  int LINESTYLE_NONE = -1;
+
+    public const  int LINESTYLE_DEFAULT = LINESTYLE_NONE;
+
+    public const int NO_FILLHITTEST_TRUE = 0x00110000;
+    public const int NO_FILLHITTEST_FALSE = 0x00010000;
 
         HSSFShape parent;
         [NonSerialized]
-        HSSFAnchor anchor;
+        protected HSSFAnchor anchor;
         [NonSerialized]
         protected internal HSSFPatriarch _patriarch;
+
+        private EscherContainerRecord _escherContainer;
+        private ObjRecord _objRecord;
+        private EscherOptRecord _optRecord;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;
         int lineWidth = LINEWIDTH_DEFAULT;    
         LineStyle lineStyle = LineStyle.Solid;
         bool noFill = false;
+
+        public HSSFShape(EscherContainerRecord spContainer, ObjRecord objRecord)
+        {
+            this._escherContainer = spContainer;
+            this._objRecord = objRecord;
+            this._optRecord = (EscherOptRecord)spContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            this.anchor = HSSFAnchor.CreateAnchorFromEscher(spContainer);
+        }
 
         /// <summary>
         /// Create a new shape with the specified parent and anchor.
@@ -50,14 +85,34 @@ namespace NPOI.HSSF.UserModel
             this.parent = parent;
             this.anchor = anchor;
         }
+        protected abstract EscherContainerRecord CreateSpContainer();
+        
+        protected abstract ObjRecord CreateObjRecord();
+        internal abstract void AfterRemove(HSSFPatriarch patriarch);
+        internal abstract void AfterInsert(HSSFPatriarch patriarch);
 
+        public virtual int ShapeId
+        {
+            get
+            {
+                return ((EscherSpRecord)_escherContainer.GetChildById(EscherSpRecord.RECORD_ID)).ShapeId;
+            }
+            set
+            {
+                EscherSpRecord spRecord = (EscherSpRecord)_escherContainer.GetChildById(EscherSpRecord.RECORD_ID);
+                spRecord.ShapeId = value;
+                CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)_objRecord.SubRecords[0];
+                cod.ObjectId = (short)(value % 1024);
+            }
+        }
         /// <summary>
         /// Gets the parent shape.
         /// </summary>
         /// <value>The parent.</value>
         public HSSFShape Parent
         {
-            get { return parent; }
+            get { return this.parent; }
+            set { this.parent = value; }
         }
 
         /// <summary>
@@ -99,7 +154,10 @@ namespace NPOI.HSSF.UserModel
                 return lineStyleColor;
             }
         }
-
+        internal EscherContainerRecord GetEscherContainer()
+        {
+            return _escherContainer;
+        }
         /// <summary>
         /// Sets the color applied to the lines of this shape
         /// </summary>
@@ -110,7 +168,10 @@ namespace NPOI.HSSF.UserModel
         {
             this.lineStyleColor = ((blue) << 16) | ((green) << 8) | red;
         }
-
+        protected void SetPropertyValue(EscherProperty property)
+        {
+            _optRecord.SetEscherProperty(property);
+        }
         /// <summary>
         /// Gets or sets the color used to fill this shape.
         /// </summary>

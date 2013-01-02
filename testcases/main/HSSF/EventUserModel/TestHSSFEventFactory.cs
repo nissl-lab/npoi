@@ -111,7 +111,7 @@ namespace TestCases.HSSF.EventUserModel
             Assert.IsTrue(true, "no errors while Processing the file");
         }
 
-        private class MockHSSFListener : HSSFListener
+        private class MockHSSFListener : IHSSFListener
         {
             private ArrayList records = new ArrayList();
 

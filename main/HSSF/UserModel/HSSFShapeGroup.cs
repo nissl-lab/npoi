@@ -18,6 +18,8 @@
 
 namespace NPOI.HSSF.UserModel
 {
+    using NPOI.DDF;
+    using NPOI.HSSF.Record;
     using System;
     using System.Collections;
 
@@ -33,13 +35,33 @@ namespace NPOI.HSSF.UserModel
         int y1 = 0;
         int x2 = 1023;
         int y2 = 255;
-
+        private EscherSpgrRecord _spgrRecord;
 
         public HSSFShapeGroup(HSSFShape parent, HSSFAnchor anchor):base(parent, anchor)
         {
             
         }
-
+        public HSSFShapeGroup(EscherContainerRecord spgrContainer, ObjRecord objRecord)
+            : base(spgrContainer, objRecord)
+        {
+            // read internal and external coordinates from spgrContainer
+            EscherContainerRecord spContainer = spgrContainer.ChildContainers[0];
+            _spgrRecord = (EscherSpgrRecord)spContainer.GetChild(0);
+            foreach (EscherRecord ch in spContainer.ChildRecords)
+            {
+                switch (ch.RecordId)
+                {
+                    case EscherSpgrRecord.RECORD_ID:
+                        break;
+                    case EscherClientAnchorRecord.RECORD_ID:
+                        anchor = new HSSFClientAnchor((EscherClientAnchorRecord)ch);
+                        break;
+                    case EscherChildAnchorRecord.RECORD_ID:
+                        anchor = new HSSFChildAnchor((EscherChildAnchorRecord)ch);
+                        break;
+                }
+            }
+        }
         /// <summary>
         /// Create another Group Under this Group.
         /// </summary>

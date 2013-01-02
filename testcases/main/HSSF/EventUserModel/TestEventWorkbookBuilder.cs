@@ -151,7 +151,7 @@ namespace TestCases.HSSF.EventUserModel
             Assert.AreEqual("SUM(Sh3!A1:A4)", wb.GetSheetAt(0).GetRow(6).GetCell(0).CellFormula);
         }
 
-        private class MockHSSFListener : HSSFListener
+        private class MockHSSFListener : IHSSFListener
         {
             public MockHSSFListener() { }
             private ArrayList _records = new ArrayList();

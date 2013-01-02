@@ -26,7 +26,7 @@ namespace NPOI.HSSF.EventUserModel
     /// it with Record SID's).
     /// @author  acoliver@apache.org
     /// </summary>
-    public interface HSSFListener
+    public interface IHSSFListener
     {
 
         /// <summary>

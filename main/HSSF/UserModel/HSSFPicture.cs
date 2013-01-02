@@ -52,18 +52,6 @@ namespace NPOI.HSSF.UserModel
         int pictureIndex;
         //HSSFPatriarch patriarch;
 
-        /// <summary>
-        /// Gets or sets the patriarch.
-        /// </summary>
-        /// <value>The patriarch.</value>
-        public HSSFPatriarch Patriarch
-        {
-            get { return _patriarch; }
-            set { 
-                _patriarch = value; 
-            }
-        }
-
         private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPicture));
 
         /// <summary>

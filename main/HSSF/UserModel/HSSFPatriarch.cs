@@ -24,6 +24,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
+    using NPOI.HSSF.Model;
 
     /// <summary>
     /// The patriarch is the toplevel container for shapes in a sheet.  It does
@@ -174,7 +175,65 @@ namespace NPOI.HSSF.UserModel
         {
             return CreateComment((HSSFAnchor)anchor);
         }
+        internal int NewShapeId()
+        {
+            DrawingManager2 dm = ((HSSFWorkbook)_sheet.Workbook).Workbook.DrawingManager;
+            EscherDgRecord dg =
+                   (EscherDgRecord)_boundAggregate.GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID);
+            short drawingGroupId = dg.DrawingGroupId;
+            return dm.AllocateShapeId(drawingGroupId, dg);
+        }
 
+
+        private void AfterCreate()
+        {
+            DrawingManager2 drawingManager = ((HSSFWorkbook)_sheet.Workbook).Workbook.DrawingManager;
+            short dgId = drawingManager.FindNewDrawingGroupId();
+            _boundAggregate.SetDgId(dgId);
+            _boundAggregate.SetMainSpRecordId(NewShapeId());
+            drawingManager.IncrementDrawingsSaved();
+        }
+
+        public static HSSFPatriarch CreatePatriarch(HSSFPatriarch patriarch, HSSFSheet sheet){
+        HSSFPatriarch newPatriarch = new HSSFPatriarch(sheet, new EscherAggregate(true));
+        newPatriarch.AfterCreate();
+        foreach (HSSFShape shape in patriarch.Children){
+            HSSFShape newShape;
+            if (shape is HSSFShapeGroup){
+                newShape = ((HSSFShapeGroup)shape).CloneShape(newPatriarch);
+            } else {
+                newShape = shape.CloneShape();
+            }
+            newPatriarch.OnCreate(newShape);
+            newPatriarch.AddShape(newShape);
+        }
+        return newPatriarch;
+    }
+        private void OnCreate(HSSFShape shape)
+        {
+            EscherContainerRecord spgrContainer =
+                    _boundAggregate.GetEscherContainer().ChildContainers[0];
+
+            EscherContainerRecord spContainer = shape.GetEscherContainer();
+            int shapeId = NewShapeId();
+            shape.ShapeId = shapeId;
+
+            spgrContainer.AddChildRecord(spContainer);
+            shape.AfterInsert(this);
+            SetFlipFlags(shape);
+        }
+        private void SetFlipFlags(HSSFShape shape)
+        {
+            EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
+            if (shape.Anchor.IsHorizontallyFlipped)
+            {
+                sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
+            }
+            if (shape.Anchor.IsVerticallyFlipped)
+            {
+                sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
+            }
+        }
         /// <summary>
         /// Returns a list of all shapes contained by the patriarch.
         /// </summary>

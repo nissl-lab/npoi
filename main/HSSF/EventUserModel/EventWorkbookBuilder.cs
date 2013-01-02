@@ -50,9 +50,7 @@ namespace NPOI.HSSF.EventUserModel
     public class EventWorkbookBuilder
     {
         /// <summary>
-        /// Wraps up your stub Workbook as a stub
-        /// HSSFWorkbook, ready for passing to
-        /// HSSFFormulaParser
+        /// Wraps up your stub Workbook as a stub HSSFWorkbook, ready for passing to HSSFFormulaParser
         /// </summary>
         /// <param name="workbook">The stub workbook.</param>
         /// <returns></returns>
@@ -125,9 +123,9 @@ namespace NPOI.HSSF.EventUserModel
         /// they go past, so you can Create a Stub {@link Workbook} from
         /// them once required.
         /// </summary>
-        public class SheetRecordCollectingListener : HSSFListener
+        public class SheetRecordCollectingListener : IHSSFListener
         {
-            private HSSFListener childListener;
+            private IHSSFListener childListener;
             private ArrayList boundSheetRecords = new ArrayList();
             private ArrayList externSheetRecords = new ArrayList();
             private SSTRecord sstRecord = null;
@@ -136,7 +134,7 @@ namespace NPOI.HSSF.EventUserModel
             /// Initializes a new instance of the <see cref="SheetRecordCollectingListener"/> class.
             /// </summary>
             /// <param name="childListener">The child listener.</param>
-            public SheetRecordCollectingListener(HSSFListener childListener)
+            public SheetRecordCollectingListener(IHSSFListener childListener)
             {
                 this.childListener = childListener;
             }

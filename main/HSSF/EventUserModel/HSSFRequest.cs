@@ -52,7 +52,7 @@ namespace NPOI.HSSF.EventUserModel
         /// </summary>
         /// <param name="lsnr">for the event</param>
         /// <param name="sid">identifier for the record type this Is the .sid static member on the individual records</param>
-        public void AddListener(HSSFListener lsnr, short sid)
+        public void AddListener(IHSSFListener lsnr, short sid)
         {
             IList list = null;
             Object obj = records[sid];
@@ -79,7 +79,7 @@ namespace NPOI.HSSF.EventUserModel
         /// something?).
         /// </summary>
         /// <param name="lsnr">a single listener to associate with ALL records</param>
-        public void AddListenerForAllRecords(HSSFListener lsnr)
+        public void AddListenerForAllRecords(IHSSFListener lsnr)
         {
             short[] rectypes = RecordFactory.GetAllKnownRecordSIDs();
 
@@ -116,7 +116,7 @@ namespace NPOI.HSSF.EventUserModel
                     }
                     else
                     {
-                        HSSFListener listener = (HSSFListener)listenObj;
+                        IHSSFListener listener = (IHSSFListener)listenObj;
                         listener.ProcessRecord(rec);
                     }
                 }

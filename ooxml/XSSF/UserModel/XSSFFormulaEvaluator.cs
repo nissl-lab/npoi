@@ -306,6 +306,17 @@ namespace NPOI.XSSF.UserModel
             }
             throw new Exception("Unexpected eval class (" + eval.GetType().Name + ")");
         }
+        public bool DebugEvaluationOutputForNextEval
+        {
+            get 
+            {
+                return _bookEvaluator.DebugEvaluationOutputForNextEval;
+            }
+            set
+            {
+                _bookEvaluator.DebugEvaluationOutputForNextEval = (value);
+            }
+        }
     }
 
 

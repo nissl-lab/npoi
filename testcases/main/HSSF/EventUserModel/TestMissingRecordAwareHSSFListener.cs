@@ -369,7 +369,7 @@ namespace TestCases.HSSF.EventUserModel
             Assert.AreEqual(33, rowCount);
         }
 
-        private class MockHSSFListener : HSSFListener
+        private class MockHSSFListener : IHSSFListener
         {
             public MockHSSFListener() { }
             private ArrayList _records = new ArrayList();

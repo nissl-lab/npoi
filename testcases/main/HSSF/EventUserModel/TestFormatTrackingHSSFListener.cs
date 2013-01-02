@@ -115,7 +115,7 @@ namespace TestCases.HSSF.EventUserModel
             }
         }
 
-        private class MockHSSFListener : HSSFListener
+        private class MockHSSFListener : IHSSFListener
         {
             public MockHSSFListener() { }
             internal ArrayList _records = new ArrayList();

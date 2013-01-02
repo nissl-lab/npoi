@@ -32,9 +32,9 @@ namespace NPOI.HSSF.EventUserModel
     /// file, or was skipped from being written as it was
     /// blank.
     /// </summary>
-    public class MissingRecordAwareHSSFListener : HSSFListener
+    public class MissingRecordAwareHSSFListener : IHSSFListener
     {
-        private HSSFListener childListener;
+        private IHSSFListener childListener;
         // Need to have different counters for cell rows and
         //  row rows, as you sometimes get a RowRecord in the
         //  middle of some cells, and that'd break everything
@@ -49,7 +49,7 @@ namespace NPOI.HSSF.EventUserModel
         /// HSSFListener for all Records, and missing records.
         /// </summary>
         /// <param name="listener">The HSSFListener to pass records on to</param>
-        public MissingRecordAwareHSSFListener(HSSFListener listener)
+        public MissingRecordAwareHSSFListener(IHSSFListener listener)
         {
             ResetCounts();
             childListener = listener;

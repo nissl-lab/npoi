@@ -20,7 +20,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.OpenXml4Net.OPC;
     using System.IO;
-using System.Xml.Serialization;
+    using System.Xml.Serialization;
     using System.Xml;
 
     public class XWPFSettings : POIXMLDocumentPart
@@ -48,27 +48,21 @@ using System.Xml.Serialization;
         }
 
         /**
-         * Set zoom.<br/>
          * In the zoom tag inside Settings.xml file <br/>
          * it Sets the value of zoom
-         * <br/>
-         * sample snippet from Settings.xml
-         * <pre>
-         *    &lt;w:zoom w:percent="50" /&gt;
-         * <pre>
          * @return percentage as an integer of zoom level
          */
         public long GetZoomPercent()
         {
             CT_Zoom zoom = ctSettings.zoom;
-            //if (!ctSettings.IsSetZoom())
-            //{
-            //    zoom = ctSettings.AddNewZoom();
-            //}
-            //else
-            //{
-            //    zoom = ctSettings.zoom;
-            //}
+            if (!ctSettings.IsSetZoom())
+            {
+                zoom = ctSettings.AddNewZoom();
+            }
+            else
+            {
+                zoom = ctSettings.zoom;
+            }
 
             return long.Parse(zoom.percent);
         }
@@ -84,12 +78,11 @@ using System.Xml.Serialization;
         /// </example>
         public void SetZoomPercent(long zoomPercent)
         {
-            //if (!ctSettings.IsSetZoom())
-            //{
-            //    ctSettings.AddNewZoom();
-            //}
+            if (!ctSettings.IsSetZoom())
+            {
+                ctSettings.AddNewZoom();
+            }
             CT_Zoom zoom = ctSettings.zoom;
-            //zoom.Percent = (BigInt32.ValueOf(zoomPercent));
             zoom.percent = zoomPercent.ToString();
         }
 
@@ -107,7 +100,8 @@ using System.Xml.Serialization;
          * 
          * @return true if documentProtection is enforced with option ReadOnly
          */
-        public bool IsEnforcedWith(ST_DocProtect editValue) {
+        public bool IsEnforcedWith(ST_DocProtect editValue)
+        {
             CT_DocProtect ctDocProtect = ctSettings.documentProtection;
 
             if (ctDocProtect == null)
@@ -131,9 +125,10 @@ using System.Xml.Serialization;
          *         &lt;w:documentProtection w:edit=&quot;[passed editValue]&quot; w:enforcement=&quot;1&quot;/&gt;
          * </pre>
          */
-        public void SetEnforcementEditValue(ST_DocProtect editValue) {
-            safeGetDocumentProtection().enforcement=(ST_OnOff.Value1);
-            safeGetDocumentProtection().edit=(editValue);
+        public void SetEnforcementEditValue(ST_DocProtect editValue)
+        {
+            SafeGetDocumentProtection().enforcement = (ST_OnOff.Value1);
+            SafeGetDocumentProtection().edit = (editValue);
         }
 
         /**
@@ -143,7 +138,7 @@ using System.Xml.Serialization;
          */
         public void RemoveEnforcement()
         {
-            safeGetDocumentProtection().enforcement = (ST_OnOff.Value0);
+            SafeGetDocumentProtection().enforcement = (ST_OnOff.Value0);
         }
 
 
@@ -164,7 +159,7 @@ using System.Xml.Serialization;
             out1.Close();
         }
 
-        private CT_DocProtect safeGetDocumentProtection()
+        private CT_DocProtect SafeGetDocumentProtection()
         {
             CT_DocProtect documentProtection = ctSettings.documentProtection;
             if (documentProtection == null)
