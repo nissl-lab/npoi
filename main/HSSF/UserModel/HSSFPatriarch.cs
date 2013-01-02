@@ -393,5 +393,9 @@ namespace NPOI.HSSF.UserModel
         {
             throw new RuntimeException("NotImplemented");
         }
+        internal EscherAggregate _getBoundAggregate()
+        {
+            return _boundAggregate;
+        }
     }
 }

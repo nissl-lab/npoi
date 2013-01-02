@@ -95,6 +95,109 @@ namespace NPOI.HSSF.UserModel
                 this.shapeType = value;
             }
         }
+        public int WrapText
+        {
+            get
+            {
+                EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.TEXT__WRAPTEXT);
+                return null == property ? WRAP_SQUARE : property.PropertyValue;
+            }
+            set 
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.TEXT__WRAPTEXT, false, false, value));
+            }
+        }
+        protected TextObjectRecord GetTextObjectRecord()
+        {
+            return _textObjectRecord;
+        }
+        public HSSFRichTextString GetString()
+        {
+            return (HSSFRichTextString)_textObjectRecord.Str;
+        }
+        internal override HSSFShape CloneShape()
+        {
+            TextObjectRecord txo = null;
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            byte[] inSp = GetEscherContainer().Serialize();
+            spContainer.FillFields(inSp, 0, new DefaultEscherRecordFactory());
+            ObjRecord obj = (ObjRecord)GetObjRecord().CloneViaReserialise();
+            if (GetTextObjectRecord() != null && GetString() != null && null != GetString().String)
+            {
+                txo = (TextObjectRecord)GetTextObjectRecord().CloneViaReserialise();
+            }
+            return new HSSFSimpleShape(spContainer, obj, txo);
+        }
+        internal override void AfterInsert(HSSFPatriarch patriarch)
+        {
+            EscherAggregate agg = patriarch._getBoundAggregate();
+            agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
 
+            if (null != GetTextObjectRecord())
+            {
+                agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID), GetTextObjectRecord());
+            }
+        }
+        internal override void AfterRemove(HSSFPatriarch patriarch)
+        {
+            patriarch._getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
+            if (null != GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID))
+            {
+                patriarch._getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID));
+            }
+        }
+        protected override EscherContainerRecord CreateSpContainer()
+        {
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            spContainer.RecordId=EscherContainerRecord.SP_CONTAINER;
+            spContainer.Options = ((short)0x000F);
+
+            EscherSpRecord sp = new EscherSpRecord();
+            sp.RecordId = (EscherSpRecord.RECORD_ID);
+            sp.Flags = (EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_HASSHAPETYPE);
+            sp.Version = ((short)0x2);
+
+            EscherClientDataRecord clientData = new EscherClientDataRecord();
+            clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
+            clientData.Options = ((short)(0x0000));
+
+            EscherOptRecord optRecord = new EscherOptRecord();
+            optRecord.SetEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEDASHING, LINESTYLE_SOLID));
+            optRecord.SetEscherProperty(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080008));
+            //        optRecord.SetEscherProperty(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, LINEWIDTH_DEFAULT));
+            optRecord.SetEscherProperty(new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, FILL__FILLCOLOR_DEFAULT));
+            optRecord.SetEscherProperty(new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, LINESTYLE__COLOR_DEFAULT));
+            optRecord.SetEscherProperty(new EscherBoolProperty(EscherProperties.FILL__NOFILLHITTEST, NO_FILLHITTEST_FALSE));
+            optRecord.SetEscherProperty(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080008));
+
+            optRecord.SetEscherProperty(new EscherShapePathProperty(EscherProperties.GEOMETRY__SHAPEPATH, EscherShapePathProperty.COMPLEX));
+            optRecord.SetEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x080000));
+            optRecord.RecordId = EscherOptRecord.RECORD_ID;
+
+            EscherTextboxRecord escherTextbox = new EscherTextboxRecord();
+            escherTextbox.RecordId = (EscherTextboxRecord.RECORD_ID);
+            escherTextbox.Options = (short)0x0000;
+
+            spContainer.AddChildRecord(sp);
+            spContainer.AddChildRecord(optRecord);
+            spContainer.AddChildRecord(this.Anchor.GetEscherAnchor());
+            spContainer.AddChildRecord(clientData);
+            spContainer.AddChildRecord(escherTextbox);
+            return spContainer;
+        }
+        protected override ObjRecord CreateObjRecord()
+        {
+            ObjRecord obj = new ObjRecord();
+            CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
+            c.IsLocked=true;
+            c.IsPrintable = true;
+            c.IsAutoFill=true;
+            c.IsAutoline=true;
+            EndSubRecord e = new EndSubRecord();
+
+            obj.AddSubRecord(c);
+            obj.AddSubRecord(e);
+            return obj;
+        }
     }
 }

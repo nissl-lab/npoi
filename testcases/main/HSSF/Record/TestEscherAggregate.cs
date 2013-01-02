@@ -126,8 +126,8 @@ namespace TestCases.HSSF.Record
 
             EscherAggregate aggregate = new EscherAggregate(null);
             aggregate.AddEscherRecord(container1);
-            aggregate.AssoicateShapeToObjRecord(d2, new ObjRecord());
-            aggregate.AssoicateShapeToObjRecord(d3, new ObjRecord());
+            aggregate.AssociateShapeToObjRecord(d2, new ObjRecord());
+            aggregate.AssociateShapeToObjRecord(d3, new ObjRecord());
 
             byte[] data = new byte[112];
             int bytesWritten = aggregate.Serialize(0, data);

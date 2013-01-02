@@ -218,5 +218,183 @@ namespace NPOI.HSSF.UserModel
                 return count;
             }
         }
+
+        internal override HSSFShape CloneShape()
+        {
+            throw new NotImplementedException("Use method cloneShape(HSSFPatriarch patriarch)");
+        }
+
+        internal HSSFShape CloneShape(HSSFPatriarch patriarch)
+        {
+            EscherContainerRecord spgrContainer = new EscherContainerRecord();
+            spgrContainer.RecordId = (EscherContainerRecord.SPGR_CONTAINER);
+            spgrContainer.Options = ((short)0x000F);
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            EscherContainerRecord cont = (EscherContainerRecord)GetEscherContainer().GetChildById(EscherContainerRecord.SP_CONTAINER);
+            byte[] inSp = cont.Serialize();
+            spContainer.FillFields(inSp, 0, new DefaultEscherRecordFactory());
+
+            spgrContainer.AddChildRecord(spContainer);
+            ObjRecord obj = null;
+            if (null != this.GetObjRecord())
+            {
+                obj = (ObjRecord)this.GetObjRecord().CloneViaReserialise();
+            }
+
+            HSSFShapeGroup group = new HSSFShapeGroup(spgrContainer, obj);
+            group.Patriarch = patriarch;
+
+            foreach (HSSFShape shape in Children)
+            {
+                HSSFShape newShape;
+                if (shape is HSSFShapeGroup)
+                {
+                    newShape = ((HSSFShapeGroup)shape).CloneShape(patriarch);
+                }
+                else
+                {
+                    newShape = shape.CloneShape();
+                }
+                group.AddShape(newShape);
+                group.OnCreate(newShape);
+            }
+            return group;
+        }
+        private void OnCreate(HSSFShape shape)
+        {
+            if (this.Patriarch != null)
+            {
+                EscherContainerRecord spContainer = shape.GetEscherContainer();
+                int shapeId = this.Patriarch.NewShapeId();
+                shape.ShapeId = (shapeId);
+                GetEscherContainer().AddChildRecord(spContainer);
+                shape.AfterInsert(Patriarch);
+                EscherSpRecord sp;
+                if (shape is HSSFShapeGroup)
+                {
+                    sp = (EscherSpRecord)shape.GetEscherContainer().ChildContainers[0].GetChildById(EscherSpRecord.RECORD_ID);
+                }
+                else
+                {
+                    sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
+                }
+                sp.Flags = sp.Flags | EscherSpRecord.FLAG_CHILD;
+            }
+        }
+        public void AddShape(HSSFShape shape)
+        {
+            shape.Patriarch = this.Patriarch;
+            shape.Parent = this;
+            shapes.Add(shape);
+        }
+        internal override void AfterInsert(HSSFPatriarch patriarch)
+        {
+            EscherAggregate agg = patriarch._getBoundAggregate();
+            EscherContainerRecord containerRecord = (EscherContainerRecord)GetEscherContainer().GetChildById(EscherContainerRecord.SP_CONTAINER);
+            agg.AssociateShapeToObjRecord(containerRecord.GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
+        }
+        public override int ShapeId
+        {
+            get
+            {
+                EscherContainerRecord containerRecord = (EscherContainerRecord)GetEscherContainer().GetChildById(EscherContainerRecord.SP_CONTAINER);
+                return ((EscherSpRecord)containerRecord.GetChildById(EscherSpRecord.RECORD_ID)).ShapeId;
+            }
+            set
+            {
+                EscherContainerRecord containerRecord = (EscherContainerRecord)GetEscherContainer().GetChildById(EscherContainerRecord.SP_CONTAINER);
+                EscherSpRecord spRecord = (EscherSpRecord)containerRecord.GetChildById(EscherSpRecord.RECORD_ID);
+                spRecord.ShapeId = value;
+                CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
+                cod.ObjectId=(short)(value % 1024);
+            }
+        }
+        protected override ObjRecord CreateObjRecord()
+        {
+            ObjRecord obj = new ObjRecord();
+            CommonObjectDataSubRecord cmo = new CommonObjectDataSubRecord();
+            cmo.ObjectType = (CommonObjectType.GROUP);
+            cmo.IsLocked=(true);
+            cmo.IsPrintable=(true);
+            cmo.IsAutoFill=(true);
+            cmo.IsAutoline=(true);
+            GroupMarkerSubRecord gmo = new GroupMarkerSubRecord();
+            EndSubRecord end = new EndSubRecord();
+            obj.AddSubRecord(cmo);
+            obj.AddSubRecord(gmo);
+            obj.AddSubRecord(end);
+            return obj;
+        }
+
+        protected override EscherContainerRecord CreateSpContainer()
+        {
+            EscherContainerRecord spgrContainer = new EscherContainerRecord();
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            EscherSpgrRecord spgr = new EscherSpgrRecord();
+            EscherSpRecord sp = new EscherSpRecord();
+            EscherOptRecord opt = new EscherOptRecord();
+            EscherRecord anchor;
+            EscherClientDataRecord clientData = new EscherClientDataRecord();
+
+            spgrContainer.RecordId=(EscherContainerRecord.SPGR_CONTAINER);
+            spgrContainer.Options=((short)0x000F);
+            spContainer.RecordId=(EscherContainerRecord.SP_CONTAINER);
+            spContainer.Options=(short)0x000F;
+            spgr.RecordId=(EscherSpgrRecord.RECORD_ID);
+            spgr.Options=(short)0x0001;
+            spgr.RectX1=(0);
+            spgr.RectY1=(0);
+            spgr.RectX2=(1023);
+            spgr.RectY2=(255);
+            sp.RecordId=(EscherSpRecord.RECORD_ID);
+            sp.Options=(short)0x0002;
+            if (this.Anchor is HSSFClientAnchor)
+            {
+                sp.Flags = (EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR);
+            }
+            else
+            {
+                sp.Flags = (EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_CHILD);
+            }
+            opt.RecordId = (EscherOptRecord.RECORD_ID);
+            opt.Options = ((short)0x0023);
+            opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 0x00040004));
+            opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00080000));
+
+            anchor = Anchor.GetEscherAnchor();
+            clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
+            clientData.Options = ((short)0x0000);
+
+            spgrContainer.AddChildRecord(spContainer);
+            spContainer.AddChildRecord(spgr);
+            spContainer.AddChildRecord(sp);
+            spContainer.AddChildRecord(opt);
+            spContainer.AddChildRecord(anchor);
+            spContainer.AddChildRecord(clientData);
+            return spgrContainer;
+        }
+
+        internal override void AfterRemove(HSSFPatriarch patriarch)
+        {
+            patriarch._getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().ChildContainers[0]
+                    .GetChildById(EscherClientDataRecord.RECORD_ID));
+            for (int i = 0; i < shapes.Count; i++)
+            {
+                HSSFShape shape = (HSSFShape)shapes[i];
+                RemoveShape(shape);
+                shape.AfterRemove(Patriarch);
+            }
+            shapes.Clear();
+        }
+        public bool RemoveShape(HSSFShape shape)
+        {
+            bool isRemoved = GetEscherContainer().RemoveChildRecord(shape.GetEscherContainer());
+            if (isRemoved)
+            {
+                shape.AfterRemove(this.Patriarch);
+                shapes.Remove(shape);
+            }
+            return isRemoved;
+        }
     }
 }

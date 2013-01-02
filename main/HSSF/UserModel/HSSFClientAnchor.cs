@@ -270,5 +270,59 @@ namespace NPOI.HSSF.UserModel
             if (value < minRange || value > maxRange)
                 throw new ArgumentException(varName + " must be between " + minRange + " and " + maxRange);
         }
+        internal override EscherRecord GetEscherAnchor()
+        {
+            return _escherClientAnchor;
+        }
+
+        protected override void CreateEscherAnchor()
+        {
+            _escherClientAnchor = new EscherClientAnchorRecord();
+        }
+
+        public override int Dx1
+        {
+            get
+            {
+                return _escherClientAnchor.Dx1;
+            }
+            set
+            {
+                _escherClientAnchor.Dx1 = (short)value;
+            }
+        }
+        public override int Dx2
+        {
+            get
+            {
+                return _escherClientAnchor.Dx2;
+            }
+            set
+            {
+                _escherClientAnchor.Dx2 = (short)value;
+            }
+        }
+        public override int Dy1
+        {
+            get
+            {
+                return _escherClientAnchor.Dy1;
+            }
+            set
+            {
+                _escherClientAnchor.Dy1 = (short)value;
+            }
+        }
+        public override int Dy2
+        {
+            get
+            {
+                return _escherClientAnchor.Dy2;
+            }
+            set
+            {
+                _escherClientAnchor.Dy2 = (short)value;
+            }
+        }
     }
 }

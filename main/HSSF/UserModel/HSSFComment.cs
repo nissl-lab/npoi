@@ -173,5 +173,38 @@ namespace NPOI.HSSF.UserModel
             get { return txo; }
         }
 
+        internal override void AfterRemove(HSSFPatriarch patriarch)
+        {
+            base.AfterRemove(patriarch);
+            patriarch._getBoundAggregate().RemoveTailRecord(this.NoteRecord);
+        }
+
+        private const int FILL_TYPE_SOLID = 0;
+        private const int FILL_TYPE_PICTURE = 3;
+        public void SetBackgroundImage(int pictureIndex)
+        {
+            SetPropertyValue(new EscherSimpleProperty(EscherProperties.FILL__PATTERNTEXTURE, false, true, pictureIndex));
+            SetPropertyValue(new EscherSimpleProperty(EscherProperties.FILL__FILLTYPE, false, false, FILL_TYPE_PICTURE));
+            EscherBSERecord bse = ((HSSFWorkbook)((HSSFPatriarch)Patriarch)._sheet.Workbook).Workbook.GetBSERecord(pictureIndex);
+            bse.Ref = (bse.Ref + 1);
+        }
+
+        public void ResetBackgroundImage()
+        {
+            EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.FILL__PATTERNTEXTURE);
+            if (null != property)
+            {
+                EscherBSERecord bse =((HSSFWorkbook)((HSSFPatriarch) Patriarch)._sheet.Workbook).Workbook.GetBSERecord(property.PropertyValue);
+                bse.Ref = (bse.Ref - 1);
+                GetOptRecord().RemoveEscherProperty(EscherProperties.FILL__PATTERNTEXTURE);
+            }
+            SetPropertyValue(new EscherSimpleProperty(EscherProperties.FILL__FILLTYPE, false, false, FILL_TYPE_SOLID));
+        }
+
+        public int GetBackgroundImageId()
+        {
+            EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.FILL__PATTERNTEXTURE);
+            return property == null ? 0 : property.PropertyValue;
+        }
     }
 }
