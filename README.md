@@ -20,7 +20,7 @@ i. huge amout of basic examples
 
 NPOI on SNS
 ============
-QQ Group: 20144214
+QQ Group: 20144214<br />
 Twitter: http://twitter.com/tonyqus 
 
 
