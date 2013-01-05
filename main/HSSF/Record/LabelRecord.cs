@@ -33,6 +33,7 @@ namespace NPOI.HSSF.Record
      */
     public class LabelRecord : Record, CellValueRecordInterface
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(LabelRecord));
         public const short sid = 0x204;
 
         private int field_1_row;
@@ -75,6 +76,11 @@ namespace NPOI.HSSF.Record
             else
             {
                 field_6_value = "";
+            }
+            if (in1.Remaining > 0)
+            {
+                logger.Log(POILogger.INFO, "LabelRecord data remains: " +in1.Remaining +
+                " : " + HexDump.ToHex(in1.ReadRemainder()));
             }
         }
 
@@ -121,7 +127,7 @@ namespace NPOI.HSSF.Record
 
         public bool IsUncompressedUnicode
         {
-            get { return (field_5_unicode_flag == 1); }
+            get { return (field_5_unicode_flag & 0x01) != 0; }
         }
 
         /**

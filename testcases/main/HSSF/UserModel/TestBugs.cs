@@ -2815,5 +2815,11 @@ using NPOI.POIFS.FileSystem;
             HSSFWorkbook wb = OpenSample("54016.xls");
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
+        [Test]
+        public void Test51670()
+        {
+            HSSFWorkbook wb = OpenSample("51670.xls");
+            WriteOutAndReadBack(wb);
+        }
     }
 }
