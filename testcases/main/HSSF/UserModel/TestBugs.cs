@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI;
+
 namespace TestCases.HSSF.UserModel
 {
     using System;
@@ -2815,6 +2817,25 @@ using NPOI.POIFS.FileSystem;
             HSSFWorkbook wb = OpenSample("54016.xls");
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
+
+        /**
+         * Normally encrypted files have BOF then FILEPASS, but
+         *  some may squeeze a WRITEPROTECT in the middle
+         */
+        [Test]
+        public void Test51832()
+        {
+            try
+            {
+                OpenSample("51832.xls");
+                Assert.Fail("Encrypted file");
+            }
+            catch (EncryptedDocumentException e)
+            {
+                // Good
+            }
+        }
+
         [Test]
         public void Test51670()
         {
