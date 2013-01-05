@@ -78,7 +78,7 @@ namespace NPOI.HSSF.Record
         protected override void AppendValueText(StringBuilder sb)
         {
             sb.Append("  .sstIndex = ");
-            sb.Append(HexDump.ShortToHex(XFIndex));
+            sb.Append(HexDump.ShortToHex(SSTIndex));
         }
 
         protected override void SerializeValue(ILittleEndianOutput out1)

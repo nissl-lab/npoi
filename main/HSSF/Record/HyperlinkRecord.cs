@@ -35,6 +35,7 @@ namespace NPOI.HSSF.Record
      */
     public class HyperlinkRecord : StandardRecord
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(HyperlinkRecord));
         /**
          * Link flags
          */
@@ -199,11 +200,8 @@ namespace NPOI.HSSF.Record
                         int charDataSize = in1.ReadInt();
 
                         //From the spec: An optional unsigned integer that MUST be 3 if present
-                        int optFlags = in1.ReadUShort();
-                        if (optFlags != 0x0003)
-                        {
-                            throw new RecordFormatException("Expected 0x3 but found " + optFlags);
-                        }
+                        // but some files has 4
+                        int usKeyValue = in1.ReadUShort();
                         _address = StringUtil.ReadUnicodeLE(in1, charDataSize / 2);
                     }
                     else
@@ -245,7 +243,7 @@ namespace NPOI.HSSF.Record
             //    {
             //        if (expectedTail[i] != result[i])
             //        {
-            //            Console.WriteLine("Mismatch in tail byte [" + i + "]"
+            //           logger.Log( POILogger.ERROR, "Mismatch in tail byte [" + i + "]"
             //                    + "expected " + (expectedTail[i] & 0xFF) + " but got " + (result[i] & 0xFF));
             //        }
             //    }
