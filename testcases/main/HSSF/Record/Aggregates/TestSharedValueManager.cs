@@ -218,5 +218,26 @@ namespace TestCases.HSSF.Record.Aggregates
                 throw new RuntimeException(e);
             }
         }
+        [Test]
+        public void TestBug52527()
+        {
+            HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("52527.xls");
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+
+            Assert.AreEqual("IF(H3,LINEST(N9:N14,K9:M14,FALSE),LINEST(N8:N14,K8:M14,FALSE))",
+                    wb1.GetSheetAt(0).GetRow(4).GetCell(11).CellFormula);
+            Assert.AreEqual("IF(H3,LINEST(N9:N14,K9:M14,FALSE),LINEST(N8:N14,K8:M14,FALSE))",
+                    wb2.GetSheetAt(0).GetRow(4).GetCell(11).CellFormula);
+
+            Assert.AreEqual("1/SQRT(J9)",
+                    wb1.GetSheetAt(0).GetRow(8).GetCell(10).CellFormula);
+            Assert.AreEqual("1/SQRT(J9)",
+                    wb2.GetSheetAt(0).GetRow(8).GetCell(10).CellFormula);
+
+            Assert.AreEqual("1/SQRT(J26)",
+                    wb1.GetSheetAt(0).GetRow(25).GetCell(10).CellFormula);
+            Assert.AreEqual("1/SQRT(J26)",
+                    wb2.GetSheetAt(0).GetRow(25).GetCell(10).CellFormula);
+        }
     }
 }

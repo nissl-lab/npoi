@@ -16,6 +16,8 @@
 ==================================================================== */
 
 
+using NPOI.Util;
+
 namespace NPOI.HSSF.Record.Aggregates
 {
     using System;
@@ -43,7 +45,10 @@ namespace NPOI.HSSF.Record.Aggregates
              * {@link #_sfr}
              */
             private CellReference _firstCell;
-
+            internal CellReference FirstCell
+            {
+                get { return _firstCell; }
+            }
             public SharedFormulaGroup(SharedFormulaRecord sfr, CellReference firstCell)
             {
                 if (!sfr.IsInRange(firstCell.Row, firstCell.Col))
@@ -119,7 +124,7 @@ namespace NPOI.HSSF.Record.Aggregates
         private Dictionary<SharedFormulaRecord, SharedFormulaGroup> _groupsBySharedFormulaRecord;
         /** cached for optimization purposes */
         [NonSerialized]
-        private SharedFormulaGroup[] _groups;
+        private Dictionary<int, SharedFormulaGroup> _groupsCache;
 
         private SharedValueManager(SharedFormulaRecord[] sharedFormulaRecords,
                 CellReference[] firstCells, List<ArrayRecord> arrayRecords, List<TableRecord> tableRecords)
@@ -172,41 +177,71 @@ namespace NPOI.HSSF.Record.Aggregates
         public SharedFormulaRecord LinkSharedFormulaRecord(CellReference firstCell, FormulaRecordAggregate agg)
         {
 
-            SharedFormulaGroup result = FindFormulaGroup(GetGroups(), firstCell);
+            SharedFormulaGroup result = FindFormulaGroupForCell(firstCell);
+            if (null == result)
+            {
+                throw new RuntimeException("Failed to find a matching shared formula record");
+            }
             result.Add(agg);
             return result.SFR;
         }
 
-        private static SharedFormulaGroup FindFormulaGroup(SharedFormulaGroup[] groups, CellReference firstCell)
+        private SharedFormulaGroup FindFormulaGroupForCell(CellReference cellRef)
         {
-            int row = firstCell.Row;
-            int column = firstCell.Col;
-            // Traverse the list of shared formulas and try to find the correct one for us
-
-            // perhaps this could be optimised to some kind of binary search
-            for (int i = 0; i < groups.Length; i++)
+            if (null == _groupsCache)
             {
-                SharedFormulaGroup svg = groups[i];
-                if (svg.IsFirstCell(row, column))
+                _groupsCache = new Dictionary<int, SharedFormulaGroup>(_groupsBySharedFormulaRecord.Count);
+                foreach (SharedFormulaGroup group in _groupsBySharedFormulaRecord.Values)
                 {
-                    return svg;
+                    _groupsCache.Add(GetKeyForCache(group.FirstCell), group);
                 }
             }
-            // TODO - fix file "15228.xls" so it opens in Excel after rewriting with POI
-            throw new Exception("Failed to find a matching shared formula record");
+            int key=GetKeyForCache(cellRef);
+            SharedFormulaGroup sfg = null;
+            if (_groupsCache.ContainsKey(key))
+            {
+                sfg = _groupsCache[key];
+            }
+            
+            return sfg;
         }
 
-        private SharedFormulaGroup[] GetGroups()
+        private int GetKeyForCache(CellReference cellRef)
         {
-            if (_groups == null)
-            {
-                SharedFormulaGroup[] groups = new SharedFormulaGroup[_groupsBySharedFormulaRecord.Count];
-                _groupsBySharedFormulaRecord.Values.CopyTo(groups, 0);
-                Array.Sort(groups, SVGComparator); // make search behaviour more deterministic
-                _groups = groups;
-            }
-            return _groups;
+            // The HSSF has a max of 2^16 rows and 2^8 cols
+            return ((cellRef.Col + 1) << 16 | cellRef.Row);
         }
+
+        //private static SharedFormulaGroup FindFormulaGroup(SharedFormulaGroup[] groups, CellReference firstCell)
+        //{
+        //    int row = firstCell.Row;
+        //    int column = firstCell.Col;
+        //    // Traverse the list of shared formulas and try to find the correct one for us
+
+        //    // perhaps this could be optimised to some kind of binary search
+        //    for (int i = 0; i < groups.Length; i++)
+        //    {
+        //        SharedFormulaGroup svg = groups[i];
+        //        if (svg.IsFirstCell(row, column))
+        //        {
+        //            return svg;
+        //        }
+        //    }
+        //    // TODO - fix file "15228.xls" so it opens in Excel after rewriting with POI
+        //    throw new Exception("Failed to find a matching shared formula record");
+        //}
+
+        //private SharedFormulaGroup[] GetGroups()
+        //{
+        //    if (_groupsCache == null)
+        //    {
+        //        SharedFormulaGroup[] groups = new SharedFormulaGroup[_groupsBySharedFormulaRecord.Count];
+        //        _groupsBySharedFormulaRecord.Values.CopyTo(groups, 0);
+        //        Array.Sort(groups, SVGComparator); // make search behaviour more deterministic
+        //        _groupsCache = groups;
+        //    }
+        //    return _groupsCache;
+        //}
 
         [NonSerialized]
         private SharedFormulaGroupComparator SVGComparator = new SharedFormulaGroupComparator();
@@ -263,18 +298,25 @@ namespace NPOI.HSSF.Record.Aggregates
                 // not the first formula cell in the group
                 return null;
             }
-            SharedFormulaGroup[] groups = GetGroups();
-            for (int i = 0; i < groups.Length; i++)
+            //SharedFormulaGroup[] groups = GetGroups();
+            //for (int i = 0; i < groups.Length; i++)
+            //{
+            //    // note - logic for Finding correct shared formula group is slightly
+            //    // more complicated since the first cell
+            //    SharedFormulaGroup sfg = groups[i];
+            //    if (sfg.IsFirstCell(row, column))
+            //    {
+            //        return sfg.SFR;
+            //    }
+            //}
+            if (!(_groupsBySharedFormulaRecord.Count==0))
             {
-                // note - logic for Finding correct shared formula group is slightly
-                // more complicated since the first cell
-                SharedFormulaGroup sfg = groups[i];
-                if (sfg.IsFirstCell(row, column))
+                SharedFormulaGroup sfg = FindFormulaGroupForCell(firstCell);
+                if (null != sfg)
                 {
                     return sfg.SFR;
                 }
             }
-
             // Since arrays and tables cannot be sparse (all cells in range participate)
             // The first cell will be the top left in the range.  So we can match the
             // ARRAY/TABLE record directly.
@@ -305,7 +347,7 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             SharedFormulaGroup svg = _groupsBySharedFormulaRecord[sharedFormulaRecord];
             _groupsBySharedFormulaRecord.Remove(sharedFormulaRecord);
-            _groups = null; // be sure to reset cached value
+            _groupsCache = null; // be sure to reset cached value
             if (svg == null)
             {
                 throw new InvalidOperationException("Failed to find formulas for shared formula");
