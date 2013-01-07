@@ -757,7 +757,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return  default row height
          */
-        public int DefaultRowHeight
+        public short DefaultRowHeight
         {
             get
             {
@@ -765,7 +765,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                GetSheetTypeSheetFormatPr().defaultRowHeight = ((double)value / 20);
+                DefaultRowHeightInPoints = (float)value / 20;
             }
         }
 
@@ -783,7 +783,9 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                GetSheetTypeSheetFormatPr().defaultRowHeight = value;
+                CT_SheetFormatPr pr = GetSheetTypeSheetFormatPr();
+                pr.defaultRowHeight = (value);
+                pr.customHeight = (true);
             }
         }
 

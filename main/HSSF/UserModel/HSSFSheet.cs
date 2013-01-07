@@ -222,6 +222,8 @@ namespace NPOI.HSSF.UserModel
         public NPOI.SS.UserModel.IRow CreateRow(int rownum)
         {
             HSSFRow row = new HSSFRow(_workbook, this, rownum);
+            // new rows inherit default height from the sheet
+            row.Height = (DefaultRowHeight);
             AddRow(row, true);
             return row;
         }
@@ -509,7 +511,7 @@ namespace NPOI.HSSF.UserModel
         /// twips (1/20 of  a point)
         /// </summary>
         /// <value>The default height of the row.</value>
-        public int DefaultRowHeight
+        public short DefaultRowHeight
         {
             get { return _sheet.DefaultRowHeight; }
             set { _sheet.DefaultRowHeight = (short)value; }

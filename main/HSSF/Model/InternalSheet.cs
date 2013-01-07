@@ -1182,7 +1182,12 @@ namespace NPOI.HSSF.Model
         public short DefaultRowHeight
         {
             get { return defaultrowheight.RowHeight; }
-            set { defaultrowheight.RowHeight = (value); }
+            set 
+            { 
+                defaultrowheight.RowHeight = (value);
+                // set the bit that specifies that the default settings for the row height have been changed.
+                defaultrowheight.OptionFlags = (short)1;
+            }
         }
 
         /**

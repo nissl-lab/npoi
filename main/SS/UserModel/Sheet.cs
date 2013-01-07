@@ -180,7 +180,7 @@ namespace NPOI.SS.UserModel
         /// twips (1/20 of  a point)
         /// </summary>
         /// <value>default row height measured in twips (1/20 of  a point)</value>
-        int DefaultRowHeight { get; set; }
+        short DefaultRowHeight { get; set; }
 
         /// <summary>
         /// Get the default row height for the sheet (if the rows do not define their own height) in
