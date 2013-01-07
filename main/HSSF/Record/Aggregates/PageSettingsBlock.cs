@@ -265,9 +265,10 @@ namespace NPOI.HSSF.Record.Aggregates
 			    pls.VisitContainedRecords(rv);
 		    }
             VisitIfPresent(printSetup, rv);
-            VisitIfPresent(_bitmap, rv);
+            
             VisitIfPresent(_printSize, rv);
             VisitIfPresent(_headerFooter, rv);
+            VisitIfPresent(_bitmap, rv);
         }
         private static void VisitIfPresent(Record r, RecordVisitor rv)
         {
@@ -645,6 +646,12 @@ namespace NPOI.HSSF.Record.Aggregates
             // Take a copy to loop over, so we can update the real one
             //  without concurrency issues
             List<HeaderFooterRecord> hfRecordsToIterate = new List<HeaderFooterRecord>(_sviewHeaderFooters);
+            Dictionary<String, HeaderFooterRecord> hfGuidMap = new Dictionary<String, HeaderFooterRecord>();
+
+            foreach (HeaderFooterRecord hf in hfRecordsToIterate)
+            {
+                hfGuidMap.Add(HexDump.ToHex(hf.Guid), hf);
+            }
 
             // loop through HeaderFooterRecord records having not-empty GUID and match them with
             // CustomViewSettingsRecordAggregate blocks having UserSViewBegin with the same GUID
@@ -655,7 +662,7 @@ namespace NPOI.HSSF.Record.Aggregates
                     if (rb is CustomViewSettingsRecordAggregate)
                     {
                         CustomViewSettingsRecordAggregate cv = (CustomViewSettingsRecordAggregate)rb;
-                        cv.VisitContainedRecords(new CustomRecordVisitor1(cv,hf,_sviewHeaderFooters));
+                        cv.VisitContainedRecords(new CustomRecordVisitor1(cv,hf,_sviewHeaderFooters,hfGuidMap));
                     }
                 }
             }
@@ -665,12 +672,14 @@ namespace NPOI.HSSF.Record.Aggregates
             CustomViewSettingsRecordAggregate _cv;
             HeaderFooterRecord _hf;
             List<HeaderFooterRecord> _sviewHeaderFooters;
-
-            public CustomRecordVisitor1(CustomViewSettingsRecordAggregate cv, HeaderFooterRecord hf, List<HeaderFooterRecord> sviewHeaderFooter)
+            Dictionary<String, HeaderFooterRecord> _hfGuidMap;
+            public CustomRecordVisitor1(CustomViewSettingsRecordAggregate cv, HeaderFooterRecord hf, 
+                List<HeaderFooterRecord> sviewHeaderFooter, Dictionary<String, HeaderFooterRecord> hfGuidMap)
             {
                 this._cv = cv;
                 this._hf = hf;
                 this._sviewHeaderFooters = sviewHeaderFooter;
+                _hfGuidMap = hfGuidMap;
             }
 
             #region RecordVisitor Members
@@ -679,12 +688,15 @@ namespace NPOI.HSSF.Record.Aggregates
             {
                 if (r.Sid == UserSViewBegin.sid)
                 {
-                    byte[] guid1 = ((UserSViewBegin)r).Guid;
-                    byte[] guid2 = _hf.Guid;
-                    if (Arrays.Equals(guid1, guid2))
+                    String guid = HexDump.ToHex(((UserSViewBegin) r).Guid);
+                    HeaderFooterRecord hf = _hfGuidMap[guid];
+
+                    if (hf != null)
                     {
-                        _cv.Append(_hf);
-                        _sviewHeaderFooters.Remove(_hf);
+                        {
+                            _cv.Append(_hf);
+                            _sviewHeaderFooters.Remove(_hf);
+                        }
                     }
                 }
             }
