@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      */
     public class SupBookRecord : StandardRecord
     {
-
+        private static POILogger logger = POILogFactory.GetLogger(typeof(SupBookRecord));
         public const short sid = 0x1AE;
 
         private const short SMALL_RECORD_SIZE = 4;
@@ -44,6 +44,16 @@ namespace NPOI.HSSF.Record
         private String field_2_encoded_url;
         private String[] field_3_sheet_names;
         private bool _isAddInFunctions;
+
+        public const char CH_VOLUME = (char)1;
+        public const char CH_SAME_VOLUME = (char)2;
+        public const char CH_DOWN_DIR = (char)3;
+        public const char CH_UP_DIR = (char)4;
+        public const char CH_LONG_VOLUME = (char)5;
+        public const char CH_STARTUP_DIR = (char)6;
+        public const char CH_ALT_STARTUP_DIR = (char)7;
+        public const char CH_LIB_DIR = (char)8;
+        public static char PATH_SEPERATOR = System.IO.Path.DirectorySeparatorChar;
 
 
         public static SupBookRecord CreateInternalReferences(short numberOfSheets)
@@ -237,21 +247,58 @@ namespace NPOI.HSSF.Record
                 }
                 return encodedUrl;
             }
+            set
+            {
+                //Keep the first marker character!
+                field_2_encoded_url = field_2_encoded_url.Substring(0, 1) + value;
+            }
         }
         private static String DecodeFileName(String encodedUrl)
         {
-            return encodedUrl.Substring(1);
-            // TODO the following special characters may appear in the rest of the string, and need to get interpreted
-            /* see "MICROSOFT OFFICE EXCEL 97-2007  BINARY FILE FORMAT SPECIFICATION"
-            chVolume  1 
-            chSameVolume  2 
-            chDownDir  3
-            chUpDir  4 
-            chLongVolume  5
-            chStartupDir  6
-            chAltStartupDir 7
-            chLibDir  8
-            */
+            /* see "MICROSOFT OFFICE EXCEL 97-2007  BINARY FILE FORMAT SPECIFICATION" */
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < encodedUrl.Length; i++)
+            {
+                char c = encodedUrl[i];
+                switch (c)
+                {
+                    case CH_VOLUME:
+                        char driveLetter = encodedUrl[(++i)];
+                        if (driveLetter == '@')
+                        {
+                            sb.Append("\\\\");
+                        }
+                        else
+                        {
+                            //Windows notation for drive letters
+                            sb.Append(driveLetter).Append(":");
+                        }
+                        break;
+                    case CH_SAME_VOLUME:
+                        sb.Append(PATH_SEPERATOR);
+                        break;
+                    case CH_DOWN_DIR:
+                        sb.Append(PATH_SEPERATOR);
+                        break;
+                    case CH_UP_DIR:
+                        sb.Append("..").Append(PATH_SEPERATOR);
+                        break;
+                    case CH_LONG_VOLUME:
+                        //Don't known to handle...
+                        logger.Log(POILogger.WARN, "Found unexpected key: ChLongVolume - IGNORING");
+                        break;
+                    case CH_STARTUP_DIR:
+                    case CH_ALT_STARTUP_DIR:
+                    case CH_LIB_DIR:
+                        logger.Log(POILogger.WARN, "EXCEL.EXE path unkown - using this directoy instead: .");
+                        sb.Append(".").Append(PATH_SEPERATOR);
+                        break;
+                    default:
+                        sb.Append(c);
+                        break;
+                }
+            }
+            return sb.ToString();
         }
         public String[] SheetNames
         {

@@ -2964,5 +2964,19 @@ namespace NPOI.HSSF.Model
                 return record;
             }
         }
+
+        /**
+	     * Changes an external referenced file to another file.
+	     * A formular in Excel which refers a cell in another file is saved in two parts: 
+	     * The referenced file is stored in an reference table. the row/cell information is saved separate.
+	     * This method invokation will only change the reference in the lookup-table itself.
+	     * @param oldUrl The old URL to search for and which is to be replaced
+	     * @param newUrl The URL replacement
+	     * @return true if the oldUrl was found and replaced with newUrl. Otherwise false
+	     */
+        public bool ChangeExternalReference(String oldUrl, String newUrl)
+        {
+            return linkTable.ChangeExternalReference(oldUrl, newUrl);
+        }
     }
 }

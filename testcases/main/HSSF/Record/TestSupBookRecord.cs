@@ -124,5 +124,48 @@ namespace TestCases.HSSF.Record
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x01AE, dataER, record.Serialize());
         }
+        [Test]
+        public void TestExternalReferenceUrl()
+        {
+            String[] sheetNames = new String[] { "SampleSheet" };
+            char startMarker = (char)1;
+
+            SupBookRecord record;
+
+            record = new SupBookRecord(startMarker + "test.xls", sheetNames);
+            Assert.AreEqual("test.xls", record.URL);
+
+            //UNC path notation
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_VOLUME + "@servername" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
+            Assert.AreEqual("\\\\servername" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Absolute path notation - different device
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_VOLUME + "D" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
+            Assert.AreEqual("D:" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Absolute path notation - same device
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_SAME_VOLUME + "folder" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
+            Assert.AreEqual(SupBookRecord.PATH_SEPERATOR + "folder" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Relative path notation - down
+            record = new SupBookRecord(startMarker + "folder" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
+            Assert.AreEqual("folder" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Relative path notation - up
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_UP_DIR + "test.xls", sheetNames);
+            Assert.AreEqual(".." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Relative path notation - for EXCEL.exe - fallback
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_STARTUP_DIR + "test.xls", sheetNames);
+            Assert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Relative path notation - for EXCEL lib folder - fallback
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_LIB_DIR + "test.xls", sheetNames);
+            Assert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+
+            //Relative path notation - for alternative EXCEL.exe - fallback
+            record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_ALT_STARTUP_DIR + "test.xls", sheetNames);
+            Assert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+        }
     }
 }

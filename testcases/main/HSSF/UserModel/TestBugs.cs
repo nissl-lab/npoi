@@ -2835,7 +2835,16 @@ using NPOI.POIFS.FileSystem;
                 // Good
             }
         }
-
+        [Test]
+        public void Test49896()
+        {
+            HSSFWorkbook wb = OpenSample("49896.xls");
+            HSSFCell cell = (HSSFCell)wb.GetSheetAt(0).GetRow(1).GetCell(1);
+            char separator = Path.DirectorySeparatorChar;
+            Assert.AreEqual("VLOOKUP(A2,'[C:Documents and Settings" + separator + "Yegor" + separator
+                + "My Documents" + separator + "csco.xls]Sheet1'!$A$2:$B$3,2,FALSE)",
+                    cell.CellFormula);
+        }
         [Test]
         public void Test51670()
         {
