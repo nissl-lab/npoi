@@ -140,6 +140,17 @@ namespace NPOI.HSSF.Model
                 }
                 Record rec = (Record)((Record)rb).Clone();
                 clonedRecords.Add(rec);
+
+                if (rb is EscherAggregate)
+                {
+                    // EscherAggregate is used only as a container for SODRAWING and OBJ record combinations
+                    // So, if the container is empty, there is no reason to clone this record
+                    // See https://issues.apache.org/bugzilla/show_bug.cgi?id=49529
+                    if (0 == rb.RecordSize)
+                    {
+                        continue;
+                    }
+                }
             }
             return CreateSheet(new RecordStream(clonedRecords, 0));
         }

@@ -1596,7 +1596,16 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the size of the margin</returns>
         public double GetMargin(NPOI.SS.UserModel.MarginType margin)
         {
-            return _sheet.PageSettings.GetMargin(margin);
+            switch (margin)
+            {
+                case MarginType.FooterMargin:
+                    return _sheet.PageSettings.PrintSetup.FooterMargin;
+                case MarginType.HeaderMargin:
+                    return _sheet.PageSettings.PrintSetup.HeaderMargin;
+                default:
+                    return _sheet.PageSettings.GetMargin(margin);
+                    break;
+            }
         }
 
         /// <summary>
@@ -1606,7 +1615,18 @@ namespace NPOI.HSSF.UserModel
         /// <param name="size">the size of the margin</param>
         public void SetMargin(NPOI.SS.UserModel.MarginType margin, double size)
         {
-            _sheet.PageSettings.SetMargin(margin, size);
+            switch (margin)
+            {
+                case MarginType.FooterMargin:
+                    _sheet.PageSettings.PrintSetup.FooterMargin=(size);
+                    break;
+                case MarginType.HeaderMargin:
+                    _sheet.PageSettings.PrintSetup.HeaderMargin=(size);
+                    break;
+                default:
+                    _sheet.PageSettings.SetMargin(margin, size);
+                    break;
+            }
         }
 
         /// <summary>

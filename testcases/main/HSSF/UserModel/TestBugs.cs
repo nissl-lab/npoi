@@ -2846,6 +2846,20 @@ using NPOI.POIFS.FileSystem;
                     cell.CellFormula);
         }
         [Test]
+        public void Test49529()
+        {
+            // user code reported in Bugzilla #49529
+            HSSFWorkbook workbook = OpenSample("49529.xls");
+            workbook.GetSheetAt(0).CreateDrawingPatriarch();
+            // prior to the fix the line below failed with
+            // java.lang.IllegalStateException: EOF - next record not available
+            workbook.CloneSheet(0);
+
+            // make sure we are still readable
+            WriteOutAndReadBack(workbook);
+        }
+
+        [Test]
         public void Test51670()
         {
             HSSFWorkbook wb = OpenSample("51670.xls");
