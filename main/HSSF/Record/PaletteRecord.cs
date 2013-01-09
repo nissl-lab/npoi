@@ -69,6 +69,19 @@ namespace NPOI.HSSF.Record
                 field_2_colors.Add(new PColor(in1));
             }
         }
+        
+        public short NumColors
+        {
+            get { return (short)field_2_colors.Count; }
+        }
+
+        /// <summary>
+        /// Dangerous! Only call this if you intend to replace the colors!
+        /// </summary>
+        public void ClearColors()
+        {
+            field_2_colors.Clear();
+        }
 
         public override String ToString()
         {
