@@ -6,7 +6,7 @@
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
 
-
+    [Obsolete]
     public class ComboboxShape:AbstractShape
     {
         private EscherContainerRecord spContainer;

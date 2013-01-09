@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.UserModel;
     using NPOI.DDF;
     using NPOI.Util;
-
+    [Obsolete]
     public class PolygonShape: AbstractShape
     {
         private EscherContainerRecord spContainer;
@@ -62,7 +62,7 @@ namespace NPOI.HSSF.Model
             spContainer.RecordId=EscherContainerRecord.SP_CONTAINER;
             spContainer.Options=(short)0x000F;
             sp.RecordId=EscherSpRecord.RECORD_ID;
-            sp.Options=(short)((EscherAggregate.ST_DONUT << 4) | 0x2);
+            sp.Options = (short)((EscherAggregate.ST_NOT_PRIMATIVE << 4) | 0x2);
             sp.ShapeId=shapeId;
             if (hssfShape.Parent == null)
                 sp.Flags=EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_HASSHAPETYPE;

@@ -1222,8 +1222,8 @@ namespace NPOI.HSSF.UserModel
 
                 //only Shift if the region outside the Shifted rows is not merged too
                 //if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
-                if(!SheetUtil.ContainsCell(merged, startRow-1, 0) &&
-                 !SheetUtil.ContainsCell(merged, endRow+1, 0))
+                if (!SheetUtil.ContainsCell(merged, startRow - 1, 0) &&
+                 !SheetUtil.ContainsCell(merged, endRow + 1, 0))
                 {
                     merged.FirstRow = (merged.FirstRow + n);
                     merged.LastRow = (merged.LastRow + n);
@@ -1618,10 +1618,10 @@ namespace NPOI.HSSF.UserModel
             switch (margin)
             {
                 case MarginType.FooterMargin:
-                    _sheet.PageSettings.PrintSetup.FooterMargin=(size);
+                    _sheet.PageSettings.PrintSetup.FooterMargin = (size);
                     break;
                 case MarginType.HeaderMargin:
-                    _sheet.PageSettings.PrintSetup.HeaderMargin=(size);
+                    _sheet.PageSettings.PrintSetup.HeaderMargin = (size);
                     break;
                 default:
                     _sheet.PageSettings.SetMargin(margin, size);
@@ -1782,7 +1782,7 @@ namespace NPOI.HSSF.UserModel
                     _sheet.AggregateDrawingRecords(book.DrawingManager, true);
                     EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
                     _patriarch = new HSSFPatriarch(this, agg);
-                    agg.Patriarch=(_patriarch);
+                    agg.Patriarch = (_patriarch);
                 }
             }
             return _patriarch;
@@ -2071,7 +2071,7 @@ namespace NPOI.HSSF.UserModel
                 int maxColumnWidth = 255 * 256; // The maximum column width for an individual cell is 255 characters
 
                 if (width > maxColumnWidth)
-                { 
+                {
                     width = maxColumnWidth;
                 }
                 SetColumnWidth(column, (int)width);
@@ -2249,5 +2249,188 @@ namespace NPOI.HSSF.UserModel
 
             return new HSSFAutoFilter(this);
         }
+
+
+        public CellRangeAddress RepeatingRows
+        {
+            get
+            {
+                return GetRepeatingRowsOrColums(true);
+            }
+            set
+            {
+                CellRangeAddress columnRangeRef = RepeatingColumns;
+                SetRepeatingRowsAndColumns(value, columnRangeRef);
+            }
+        }
+
+
+        public CellRangeAddress RepeatingColumns
+        {
+            get
+            {
+                return GetRepeatingRowsOrColums(false);
+            }
+            set
+            {
+                CellRangeAddress rowRangeRef = RepeatingRows;
+                SetRepeatingRowsAndColumns(rowRangeRef, value);
+            }
+        }
+
+
+
+        private void SetRepeatingRowsAndColumns(
+            CellRangeAddress rowDef, CellRangeAddress colDef)
+        {
+            int sheetIndex = _workbook.GetSheetIndex(this);
+            int maxRowIndex = SpreadsheetVersion.EXCEL97.LastRowIndex;
+            int maxColIndex = SpreadsheetVersion.EXCEL97.LastColumnIndex;
+
+            int col1 = -1;
+            int col2 = -1;
+            int row1 = -1;
+            int row2 = -1;
+
+            if (rowDef != null)
+            {
+                row1 = rowDef.FirstRow;
+                row2 = rowDef.LastRow;
+                if ((row1 == -1 && row2 != -1) || (row1 > row2)
+                     || (row1 < 0 || row1 > maxRowIndex)
+                     || (row2 < 0 || row2 > maxRowIndex))
+                {
+                    throw new ArgumentException("Invalid row range specification");
+                }
+            }
+            if (colDef != null)
+            {
+                col1 = colDef.FirstColumn;
+                col2 = colDef.LastColumn;
+                if ((col1 == -1 && col2 != -1) || (col1 > col2)
+                    || (col1 < 0 || col1 > maxColIndex)
+                    || (col2 < 0 || col2 > maxColIndex))
+                {
+                    throw new ArgumentException("Invalid column range specification");
+                }
+            }
+
+            short externSheetIndex =
+              (short)_workbook.Workbook.CheckExternSheet(sheetIndex);
+
+            bool setBoth = rowDef != null && colDef != null;
+            bool removeAll = rowDef == null && colDef == null;
+
+            HSSFName name = _workbook.GetBuiltInName(NameRecord.BUILTIN_PRINT_TITLE, sheetIndex);
+            if (removeAll)
+            {
+                if (name != null)
+                {
+                    _workbook.RemoveName(name);
+                }
+                return;
+            }
+            if (name == null)
+            {
+                name = _workbook.CreateBuiltInName(
+                    NameRecord.BUILTIN_PRINT_TITLE, sheetIndex);
+            }
+
+            List<Ptg> ptgList = new List<Ptg>();
+            if (setBoth)
+            {
+                int exprsSize = 2 * 11 + 1; // 2 * Area3DPtg.SIZE + UnionPtg.SIZE
+                ptgList.Add(new MemFuncPtg(exprsSize));
+            }
+            if (colDef != null)
+            {
+                Area3DPtg colArea = new Area3DPtg(0, maxRowIndex, col1, col2,
+                        false, false, false, false, externSheetIndex);
+                ptgList.Add(colArea);
+            }
+            if (rowDef != null)
+            {
+                Area3DPtg rowArea = new Area3DPtg(row1, row2, 0, maxColIndex,
+                        false, false, false, false, externSheetIndex);
+                ptgList.Add(rowArea);
+            }
+            if (setBoth)
+            {
+                ptgList.Add(UnionPtg.instance);
+            }
+
+            Ptg[] ptgs = ptgList.ToArray();
+            //ptgList.toArray(ptgs);
+            name.SetNameDefinition(ptgs);
+
+            HSSFPrintSetup printSetup = (HSSFPrintSetup)PrintSetup;
+            printSetup.ValidSettings = (false);
+            SetActive(true);
+        }
+
+        private CellRangeAddress GetRepeatingRowsOrColums(bool rows)
+        {
+            NameRecord rec = GetBuiltinNameRecord(NameRecord.BUILTIN_PRINT_TITLE);
+            if (rec == null)
+            {
+                return null;
+            }
+            Ptg[] nameDefinition = rec.NameDefinition;
+            if (rec.NameDefinition == null)
+            {
+                return null;
+            }
+
+            int maxRowIndex = SpreadsheetVersion.EXCEL97.LastRowIndex;
+            int maxColIndex = SpreadsheetVersion.EXCEL97.LastColumnIndex;
+
+            foreach (Ptg ptg in nameDefinition)
+            {
+
+                if (ptg is Area3DPtg)
+                {
+                    Area3DPtg areaPtg = (Area3DPtg)ptg;
+
+                    if (areaPtg.FirstColumn == 0
+                        && areaPtg.LastColumn == maxColIndex)
+                    {
+                        if (rows)
+                        {
+                            CellRangeAddress rowRange = new CellRangeAddress(
+                                areaPtg.FirstRow, areaPtg.LastRow, -1, -1);
+                            return rowRange;
+                        }
+                    }
+                    else if (areaPtg.FirstRow == 0
+                      && areaPtg.LastRow == maxRowIndex)
+                    {
+                        if (!rows)
+                        {
+                            CellRangeAddress columnRange = new CellRangeAddress(-1, -1,
+                                areaPtg.FirstColumn, areaPtg.LastColumn);
+                            return columnRange;
+                        }
+                    }
+
+                }
+
+            }
+
+            return null;
+        }
+
+
+        private NameRecord GetBuiltinNameRecord(byte builtinCode)
+        {
+            int sheetIndex = _workbook.GetSheetIndex(this);
+            int recIndex =
+              _workbook.FindExistingBuiltinNameRecordIdx(sheetIndex, builtinCode);
+            if (recIndex == -1)
+            {
+                return null;
+            }
+            return _workbook.GetNameRecord(recIndex);
+        }
+
     }
 }

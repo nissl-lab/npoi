@@ -767,7 +767,89 @@ namespace TestCases.SS.UserModel
             // If both colSplit and rowSplit are zero then the existing freeze pane is Removed
             Assert.IsNull(sheet.PaneInformation);
         }
+        [Test]
+        public void TestGetRepeatingRowsAndColumns()
+        {
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook(
+                "RepeatingRowsCols."
+                + _testDataProvider.StandardFileNameExtension);
 
+            CheckRepeatingRowsAndColumns(wb.GetSheetAt(0), null, null);
+            CheckRepeatingRowsAndColumns(wb.GetSheetAt(1), "1:1", null);
+            CheckRepeatingRowsAndColumns(wb.GetSheetAt(2), null, "A:A");
+            CheckRepeatingRowsAndColumns(wb.GetSheetAt(3), "2:3", "A:B");
+        }
+
+        [Test]
+        public void TestSetRepeatingRowsAndColumnsBug47294()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet();
+            sheet1.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
+            Assert.AreEqual("1:4", sheet1.RepeatingRows.FormatAsString());
+
+            //must handle sheets with quotas, see Bugzilla #47294
+            ISheet sheet2 = wb.CreateSheet("My' Sheet");
+            sheet2.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
+            Assert.AreEqual("1:4", sheet2.RepeatingRows.FormatAsString());
+        }
+        [Test]
+        public void TestSetRepeatingRowsAndColumns()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
+            ISheet sheet2 = wb.CreateSheet("Sheet2");
+            ISheet sheet3 = wb.CreateSheet("Sheet3");
+
+            CheckRepeatingRowsAndColumns(sheet1, null, null);
+
+            sheet1.RepeatingRows = (CellRangeAddress.ValueOf("4:5"));
+            sheet2.RepeatingColumns = (CellRangeAddress.ValueOf("A:C"));
+            sheet3.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
+            sheet3.RepeatingColumns = (CellRangeAddress.ValueOf("A:A"));
+
+            CheckRepeatingRowsAndColumns(sheet1, "4:5", null);
+            CheckRepeatingRowsAndColumns(sheet2, null, "A:C");
+            CheckRepeatingRowsAndColumns(sheet3, "1:4", "A:A");
+
+            // write out, read back, and test refrain...
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            sheet1 = wb.GetSheetAt(0);
+            sheet2 = wb.GetSheetAt(1);
+            sheet3 = wb.GetSheetAt(2);
+
+            CheckRepeatingRowsAndColumns(sheet1, "4:5", null);
+            CheckRepeatingRowsAndColumns(sheet2, null, "A:C");
+            CheckRepeatingRowsAndColumns(sheet3, "1:4", "A:A");
+
+            // check removing repeating rows and columns       
+            sheet3.RepeatingRows = (null);
+            CheckRepeatingRowsAndColumns(sheet3, null, "A:A");
+
+            sheet3.RepeatingColumns = (null);
+            CheckRepeatingRowsAndColumns(sheet3, null, null);
+        }
+
+        private void CheckRepeatingRowsAndColumns(
+            ISheet s, String expectedRows, String expectedCols)
+        {
+            if (expectedRows == null)
+            {
+                Assert.IsNull(s.RepeatingRows);
+            }
+            else
+            {
+                Assert.AreEqual(expectedRows, s.RepeatingRows.FormatAsString());
+            }
+            if (expectedCols == null)
+            {
+                Assert.IsNull(s.RepeatingColumns);
+            }
+            else
+            {
+                Assert.AreEqual(expectedCols, s.RepeatingColumns.FormatAsString());
+            }
+        }
     }
 
 }

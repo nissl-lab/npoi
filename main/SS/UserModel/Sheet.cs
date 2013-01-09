@@ -753,7 +753,7 @@ namespace NPOI.SS.UserModel
         /// <p/>
         /// If the Sheet does not have any repeating rows defined, null is returned.
         /// </summary>
-        //CellRangeAddress RepeatingRows { get; set; }
+        CellRangeAddress RepeatingRows { get; set; }
 
 
         /// <summary>
@@ -771,7 +771,7 @@ namespace NPOI.SS.UserModel
         /// If the Sheet does not have any repeating columns defined, null is 
         /// returned.
         /// </summary>
-        //CellRangeAddress RepeatingColumns { get; set; }
+        CellRangeAddress RepeatingColumns { get; set; }
     }
 
 }

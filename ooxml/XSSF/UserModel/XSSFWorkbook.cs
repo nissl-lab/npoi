@@ -910,7 +910,19 @@ namespace NPOI.XSSF.UserModel
             }
             throw new ArgumentException("Named range was not found: " + name);
         }
-
+        /**
+         * As {@link #removeName(String)} is not necessarily unique 
+         * (name + sheet index is unique), this method is more accurate.
+         * 
+         * @param name the name to remove.
+         */
+        public void RemoveName(XSSFName name)
+        {
+            if (!namedRanges.Remove(name))
+            {
+                throw new ArgumentException("Name was not found: " + name);
+            }
+        }
         /**
          * Delete the printarea for the sheet specified
          *
@@ -1122,47 +1134,28 @@ namespace NPOI.XSSF.UserModel
          * @param startRow    0 based start of repeating rows.
          * @param endRow      0 based end of repeating rows.
          */
+        [Obsolete("use XSSFSheet#setRepeatingRows(CellRangeAddress) or XSSFSheet#setRepeatingColumns(CellRangeAddress)")]
         public void SetRepeatingRowsAndColumns(int sheetIndex,
                                                int startColumn, int endColumn,
                                                int startRow, int endRow)
         {
-            //    Check arguments
-            if ((startColumn == -1 && endColumn != -1) || startColumn < -1 || endColumn < -1 || startColumn > endColumn)
-                throw new ArgumentException("Invalid column range specification");
-            if ((startRow == -1 && endRow != -1) || startRow < -1 || endRow < -1 || startRow > endRow)
-                throw new ArgumentException("Invalid row range specification");
-
             XSSFSheet sheet = (XSSFSheet)GetSheetAt(sheetIndex);
-            bool removingRange = startColumn == -1 && endColumn == -1 && startRow == -1 && endRow == -1;
 
-            XSSFName name = GetBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
-            if (removingRange)
+            CellRangeAddress rows = null;
+            CellRangeAddress cols = null;
+
+            if (startRow != -1)
             {
-                if (name != null) namedRanges.Remove(name);
-                return;
+                rows = new CellRangeAddress(startRow, endRow, -1, -1);
             }
-            if (name == null)
+            if (startColumn != -1)
             {
-                name = CreateBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
+                cols = new CellRangeAddress(-1, -1, startColumn, endColumn);
             }
 
-            String reference = GetReferenceBuiltInRecord(name.SheetName, startColumn, endColumn, startRow, endRow);
-            name.RefersToFormula = (reference);
+            sheet.RepeatingRows=(rows);
+            sheet.RepeatingColumns=(cols);
 
-            // If the print Setup isn't currently defined, then add it
-            //  in but without printer defaults
-            // If it's already there, leave it as-is!
-            CT_Worksheet ctSheet = sheet.GetCTWorksheet();
-            if (ctSheet.IsSetPageSetup() && ctSheet.IsSetPageMargins())
-            {
-                // Everything we need is already there
-            }
-            else
-            {
-                // Have Initial ones Put in place
-                IPrintSetup printSetup = sheet.PrintSetup;
-                printSetup.ValidSettings=(false);
-            }
         }
 
         private static String GetReferenceBuiltInRecord(String sheetName, int startC, int endC, int startR, int endR)

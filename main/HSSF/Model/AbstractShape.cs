@@ -28,6 +28,7 @@ namespace NPOI.HSSF.Model
     /// An abstract shape Is the lowlevel model for a shape.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
+    [Obsolete]
     public abstract class AbstractShape
     {
         /// <summary>

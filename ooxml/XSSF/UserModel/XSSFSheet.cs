@@ -32,6 +32,7 @@ using NPOI.OpenXmlFormats;
 using NPOI.OpenXmlFormats.Dml;
 using System.Collections;
 using NPOI.SS.Formula;
+using System.Text;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -761,7 +762,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (int)((decimal)DefaultRowHeightInPoints * 20);
+                return (short)((decimal)DefaultRowHeightInPoints * 20);
             }
             set
             {
@@ -3686,6 +3687,200 @@ namespace NPOI.XSSF.UserModel
         public IRow CopyRow(int sourceIndex, int targetIndex)
         {
             return SheetUtil.CopyRow(this, sourceIndex, targetIndex);
+        }
+
+        public CellRangeAddress RepeatingRows
+        {
+            get
+            {
+                return GetRepeatingRowsOrColums(true);
+            }
+            set
+            {
+                CellRangeAddress columnRangeRef = RepeatingColumns;
+                SetRepeatingRowsAndColumns(value, columnRangeRef);
+            }
+        }
+
+
+        public CellRangeAddress RepeatingColumns
+        {
+            get
+            {
+                return GetRepeatingRowsOrColums(false);
+            }
+            set
+            {
+                CellRangeAddress rowRangeRef = RepeatingRows;
+                SetRepeatingRowsAndColumns(rowRangeRef, value);
+            }
+        }
+
+
+        private void SetRepeatingRowsAndColumns(
+            CellRangeAddress rowDef, CellRangeAddress colDef)
+        {
+            int col1 = -1;
+            int col2 = -1;
+            int row1 = -1;
+            int row2 = -1;
+
+            if (rowDef != null)
+            {
+                row1 = rowDef.FirstRow;
+                row2 = rowDef.LastRow;
+                if ((row1 == -1 && row2 != -1)
+                    || row1 < -1 || row2 < -1 || row1 > row2)
+                {
+                    throw new ArgumentException("Invalid row range specification");
+                }
+            }
+            if (colDef != null)
+            {
+                col1 = colDef.FirstColumn;
+                col2 = colDef.LastColumn;
+                if ((col1 == -1 && col2 != -1)
+                    || col1 < -1 || col2 < -1 || col1 > col2)
+                {
+                    throw new ArgumentException(
+                        "Invalid column range specification");
+                }
+            }
+
+            int sheetIndex = Workbook.GetSheetIndex(this);
+
+            bool removeAll = rowDef == null && colDef == null;
+            XSSFWorkbook xwb = Workbook as XSSFWorkbook;
+            if (xwb == null)
+                throw new RuntimeException("Workbook should not be null");
+            XSSFName name = xwb.GetBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
+            if (removeAll)
+            {
+                if (name != null)
+                {
+                    xwb.RemoveName(name);
+                }
+                return;
+            }
+            if (name == null)
+            {
+                name = xwb.CreateBuiltInName(
+                    XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
+            }
+
+            String reference = GetReferenceBuiltInRecord(
+                name.SheetName, col1, col2, row1, row2);
+            name.RefersToFormula = (reference);
+
+            // If the print setup isn't currently defined, then add it
+            //  in but without printer defaults
+            // If it's already there, leave it as-is!
+            if (worksheet.IsSetPageSetup() && worksheet.IsSetPageMargins())
+            {
+                // Everything we need is already there
+            }
+            else
+            {
+                // Have initial ones put in place
+                PrintSetup.ValidSettings = (false);
+            }
+        }
+
+        private static String GetReferenceBuiltInRecord(
+            String sheetName, int startC, int endC, int startR, int endR)
+        {
+            // Excel example for built-in title: 
+            //   'second sheet'!$E:$F,'second sheet'!$2:$3
+
+            CellReference colRef =
+              new CellReference(sheetName, 0, startC, true, true);
+            CellReference colRef2 =
+              new CellReference(sheetName, 0, endC, true, true);
+            CellReference rowRef =
+              new CellReference(sheetName, startR, 0, true, true);
+            CellReference rowRef2 =
+              new CellReference(sheetName, endR, 0, true, true);
+
+            String escapedName = SheetNameFormatter.Format(sheetName);
+
+            String c = "";
+            String r = "";
+
+            if (startC == -1 && endC == -1)
+            {
+            }
+            else
+            {
+                c = escapedName + "!$" + colRef.CellRefParts[2]
+                    + ":$" + colRef2.CellRefParts[2];
+            }
+
+            if (startR == -1 && endR == -1)
+            {
+
+            }
+            else if (!rowRef.CellRefParts[1].Equals("0")
+              && !rowRef2.CellRefParts[1].Equals("0"))
+            {
+                r = escapedName + "!$" + rowRef.CellRefParts[1]
+                      + ":$" + rowRef2.CellRefParts[1];
+            }
+
+            StringBuilder rng = new StringBuilder();
+            rng.Append(c);
+            if (rng.Length > 0 && r.Length > 0)
+            {
+                rng.Append(',');
+            }
+            rng.Append(r);
+            return rng.ToString();
+        }
+
+
+        private CellRangeAddress GetRepeatingRowsOrColums(bool rows)
+        {
+            int sheetIndex = Workbook.GetSheetIndex(this);
+            XSSFWorkbook xwb = Workbook as XSSFWorkbook;
+            if (xwb == null)
+                throw new RuntimeException("Workbook should not be null");
+            XSSFName name = xwb.GetBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
+            if (name == null)
+            {
+                return null;
+            }
+            String refStr = name.RefersToFormula;
+            if (refStr == null)
+            {
+                return null;
+            }
+            String[] parts = refStr.Split(",".ToCharArray());
+            int maxRowIndex = SpreadsheetVersion.EXCEL2007.LastRowIndex;
+            int maxColIndex = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
+            foreach (String part in parts)
+            {
+                CellRangeAddress range = CellRangeAddress.ValueOf(part);
+                if ((range.FirstColumn == 0
+                    && range.LastColumn == maxColIndex)
+                    || (range.FirstColumn == -1
+                        && range.LastColumn == -1))
+                {
+                    if (rows)
+                    {
+                        return range;
+                    }
+                }
+                else if (range.FirstRow == 0
+                  && range.LastRow == maxRowIndex
+                  || (range.FirstRow == -1
+                      && range.LastRow == -1))
+                {
+                    if (!rows)
+                    {
+                        return range;
+                    }
+                }
+            }
+            return null;
         }
     }
 

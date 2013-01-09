@@ -55,18 +55,7 @@ namespace TestCases.HSSF.UserModel
         {
             return HSSFTestDataSamples.OpenSampleWorkbook(sampleFileName);
         }
-        [Test]
-        public void TestSetRepeatingRowsAndColumns()
-        {
-            // Test bug 29747
-            HSSFWorkbook b = new HSSFWorkbook();
-            b.CreateSheet();
-            b.CreateSheet();
-            b.CreateSheet();
-            b.SetRepeatingRowsAndColumns(2, 0, 1, -1, -1);
-            NameRecord nameRecord = b.Workbook.GetNameRecord(0);
-            Assert.AreEqual(3, nameRecord.SheetNumber);
-        }
+
         [Test]
         public void TestCaseInsensitiveNames()
         {
@@ -606,7 +595,8 @@ namespace TestCases.HSSF.UserModel
 
             try
             {
-                wb.SetRepeatingRowsAndColumns(3, 4, 5, 8, 11);
+                wb.GetSheetAt(3).RepeatingRows = (CellRangeAddress.ValueOf("9:12"));
+                wb.GetSheetAt(3).RepeatingColumns = (CellRangeAddress.ValueOf("E:F"));
             }
             catch (Exception e)
             {

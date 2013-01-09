@@ -198,6 +198,17 @@ namespace NPOI.HSSF.UserModel
             set { _definedNameRec.DescriptionText = value; }
         }
 
+
+        //
+        /// <summary>
+        /// Sets the NameParsedFormula structure that specifies the formula for the defined name.
+        /// </summary>
+        /// <param name="ptgs">the sequence of {@link Ptg}s for the formula.</param>
+        public void SetNameDefinition(Ptg[] ptgs)
+        {
+            _definedNameRec.NameDefinition = (ptgs);
+        }
+
         /// <summary>
         /// Tests if this name points to a cell that no longer exists
         /// </summary>

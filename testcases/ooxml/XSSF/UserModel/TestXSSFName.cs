@@ -18,6 +18,7 @@
 using TestCases.SS.UserModel;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -41,14 +42,17 @@ namespace NPOI.XSSF.UserModel
             // First Test that Setting RR&C for same sheet more than once only Creates a
             // single  Print_Titles built-in record
             XSSFWorkbook wb = new XSSFWorkbook();
-            wb.CreateSheet("First Sheet");
+            XSSFSheet sheet1 = (XSSFSheet)wb.CreateSheet("First Sheet");
+            sheet1.RepeatingRows = (null);
+            sheet1.RepeatingColumns = (null);
 
-            wb.SetRepeatingRowsAndColumns(0, -1, -1, -1, -1);
+
 
             // Set repeating rows and columns twice for the first sheet
             for (int i = 0; i < 2; i++)
             {
-                wb.SetRepeatingRowsAndColumns(0, 0, 0, 0, 3);
+                sheet1.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
+                sheet1.RepeatingColumns = (CellRangeAddress.ValueOf("A:A"));
                 //sheet.CreateFreezePane(0, 3);
             }
             Assert.AreEqual(1, wb.NumberOfNames);
@@ -58,18 +62,18 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("'First Sheet'!$A:$A,'First Sheet'!$1:$4", nr1.RefersToFormula);
 
             //remove the columns part
-            wb.SetRepeatingRowsAndColumns(0, -1, -1, 0, 3);
+            sheet1.RepeatingColumns = (null);
             Assert.AreEqual("'First Sheet'!$1:$4", nr1.RefersToFormula);
 
             //revert
-            wb.SetRepeatingRowsAndColumns(0, 0, 0, 0, 3);
+            sheet1.RepeatingColumns = (CellRangeAddress.ValueOf("A:A"));
 
             //remove the rows part
-            wb.SetRepeatingRowsAndColumns(0, 0, 0, -1, -1);
+            sheet1.RepeatingRows=(null);
             Assert.AreEqual("'First Sheet'!$A:$A", nr1.RefersToFormula);
 
             //revert
-            wb.SetRepeatingRowsAndColumns(0, 0, 0, 0, 3);
+            sheet1.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
 
             // Save and re-open
             IWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -82,8 +86,9 @@ namespace NPOI.XSSF.UserModel
 
             // check that Setting RR&C on a second sheet causes a new Print_Titles built-in
             // name to be Created
-            nwb.CreateSheet("SecondSheet");
-            nwb.SetRepeatingRowsAndColumns(1, 1, 2, 0, 0);
+            XSSFSheet sheet2 = (XSSFSheet)nwb.CreateSheet("SecondSheet");
+            sheet2.RepeatingRows = (CellRangeAddress.ValueOf("1:1"));
+            sheet2.RepeatingColumns = (CellRangeAddress.ValueOf("B:C"));
 
             Assert.AreEqual(2, nwb.NumberOfNames);
             IName nr2 = nwb.GetNameAt(1);
@@ -91,7 +96,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(XSSFName.BUILTIN_PRINT_TITLE, nr2.NameName);
             Assert.AreEqual("SecondSheet!$B:$C,SecondSheet!$1:$1", nr2.RefersToFormula);
 
-            nwb.SetRepeatingRowsAndColumns(1, -1, -1, -1, -1);
+            sheet2.RepeatingRows = (null);
+            sheet2.RepeatingColumns = (null);
         }
     }
 }

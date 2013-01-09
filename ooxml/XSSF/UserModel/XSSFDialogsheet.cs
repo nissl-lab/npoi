@@ -191,7 +191,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        int ISheet.DefaultRowHeight
+        short ISheet.DefaultRowHeight
         {
             get
             {

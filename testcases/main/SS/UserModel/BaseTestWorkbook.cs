@@ -415,24 +415,23 @@ namespace TestCases.SS.UserModel
      * 
      * @Deprecated remove this test when 
      * {@link Workbook#setRepeatingRowsAndColumns(int, int, int, int, int)} 
-     * is removed 
+     * 
      */
-        [Obsolete]
+        [Obsolete("remove this test when Workbook#setRepeatingRowsAndColumns(int, int, int, int, int) is removed ")]
         [Test]
         public void TestSetRepeatingRowsAnsColumns()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet1 = wb.CreateSheet();
             wb.SetRepeatingRowsAndColumns(wb.GetSheetIndex(sheet1), 0, 0, 0, 3);
-            //TODO: Finish RepeatingRows and RepeatingColumns
-            //Assert.AreEqual("1:4", sheet1.RepeatingRows.FormatAsString());
-            //Assert.AreEqual("A:A", sheet1.RepeatingColumns.FormatAsString());
+            Assert.AreEqual("1:4", sheet1.RepeatingRows.FormatAsString());
+            Assert.AreEqual("A:A", sheet1.RepeatingColumns.FormatAsString());
 
             //must handle sheets with quotas, see Bugzilla #47294
             ISheet sheet2 = wb.CreateSheet("My' Sheet");
             wb.SetRepeatingRowsAndColumns(wb.GetSheetIndex(sheet2), 0, 0, 0, 3);
-            //Assert.AreEqual("1:4", sheet2.RepeatingRows.FormatAsString());
-            //Assert.AreEqual("A:A", sheet1.RepeatingColumns.FormatAsString());
+            Assert.AreEqual("1:4", sheet2.RepeatingRows.FormatAsString());
+            Assert.AreEqual("A:A", sheet1.RepeatingColumns.FormatAsString());
         }
 
         /**

@@ -962,91 +962,29 @@ namespace NPOI.HSSF.UserModel
         /// To remove all repeating rows and columns for a sheet.
         /// workbook.SetRepeatingRowsAndColumns(0,-1,-1,-1,-1);
         /// </example>
+        [Obsolete("use HSSFSheet#setRepeatingRows(CellRangeAddress) or HSSFSheet#setRepeatingColumns(CellRangeAddress)")]
         public void SetRepeatingRowsAndColumns(int sheetIndex,
                                                int startColumn, int endColumn,
                                                int startRow, int endRow)
         {
-            // Check arguments
-            if (startColumn == -1 && endColumn != -1) throw new ArgumentException("Invalid column range specification");
-            if (startRow == -1 && endRow != -1) throw new ArgumentException("Invalid row range specification");
-            if (startColumn < -1 || startColumn >= 0xFF) throw new ArgumentException("Invalid column range specification");
-            if (endColumn < -1 || endColumn >= 0xFF) throw new ArgumentException("Invalid column range specification");
-            if (startRow < -1 || startRow > 65535) throw new ArgumentException("Invalid row range specification");
-            if (endRow < -1 || endRow > 65535) throw new ArgumentException("Invalid row range specification");
-            if (startColumn > endColumn) throw new ArgumentException("Invalid column range specification");
-            if (startRow > endRow) throw new ArgumentException("Invalid row range specification");
-
             HSSFSheet sheet = (HSSFSheet)GetSheetAt(sheetIndex);
-            int externSheetIndex = Workbook.CheckExternSheet(sheetIndex);
 
-            bool settingRowAndColumn =
-                    startColumn != -1 && endColumn != -1 && startRow != -1 && endRow != -1;
-            bool removingRange =
-                    startColumn == -1 && endColumn == -1 && startRow == -1 && endRow == -1;
+            CellRangeAddress rows = null;
+            CellRangeAddress cols = null;
 
-            bool IsNewRecord = false;
-
-
-            int rowColHeaderNameIndex = FindExistingBuiltinNameRecordIdx(sheetIndex, NameRecord.BUILTIN_PRINT_TITLE);
-            if (removingRange)
+            if (startRow != -1)
             {
-                if (rowColHeaderNameIndex >= 0)
-                {
-                    workbook.RemoveName(rowColHeaderNameIndex);
-                }
-                return;
+                rows = new CellRangeAddress(startRow, endRow, -1, -1);
             }
-            NameRecord nameRecord;
-            if (rowColHeaderNameIndex < 0)
+            if (startColumn != -1)
             {
-                //does a lot of the house keeping for builtin records, like setting lengths to zero etc
-                nameRecord = workbook.CreateBuiltInName(NameRecord.BUILTIN_PRINT_TITLE, sheetIndex + 1);
-                IsNewRecord = true;
-            }
-            else
-            {
-                nameRecord = workbook.GetNameRecord(rowColHeaderNameIndex);
-                IsNewRecord = false;
+                cols = new CellRangeAddress(-1, -1, startColumn, endColumn);
             }
 
-
-            ArrayList temp = new ArrayList();
-            if (settingRowAndColumn)
-            {
-                int exprsSize = 2 * 11 + 1; // 2 * Area3DPtg.SIZE + UnionPtg.SIZE
-                temp.Add(new MemFuncPtg(exprsSize));
-            }
-            if (startColumn >= 0)
-            {
-                Area3DPtg colArea = new Area3DPtg(0, MAX_ROW, startColumn, endColumn,
-                        false, false, false, false, externSheetIndex);
-                temp.Add(colArea);
-            }
-            if (startRow >= 0)
-            {
-                Area3DPtg rowArea = new Area3DPtg(startRow, endRow, 0, MAX_COLUMN,
-                        false, false, false, false, externSheetIndex);
-                temp.Add(rowArea);
-            }
-            if (settingRowAndColumn)
-            {
-                temp.Add(UnionPtg.instance);
-            }
-            Ptg[] ptgs = (Ptg[])temp.ToArray(typeof(Ptg));
-            nameRecord.NameDefinition = ptgs;
-
-            if (IsNewRecord)
-            {
-                HSSFName newName = new HSSFName(this, nameRecord);
-                names.Add(newName);
-            }
-
-            NPOI.SS.UserModel.IPrintSetup printSetup = sheet.PrintSetup;
-            printSetup.ValidSettings = (false);
-
-            sheet.IsActive = (true);
+            sheet.RepeatingRows = (rows);
+            sheet.RepeatingColumns = (cols);
         }
-        private int FindExistingBuiltinNameRecordIdx(int sheetIndex, byte builtinCode)
+        internal int FindExistingBuiltinNameRecordIdx(int sheetIndex, byte builtinCode)
         {
             for (int defNameIndex = 0; defNameIndex < names.Count; defNameIndex++)
             {
@@ -1065,6 +1003,29 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             return -1;
+        }
+
+        internal HSSFName CreateBuiltInName(byte builtinCode, int sheetIndex)
+        {
+            NameRecord nameRecord =
+              workbook.CreateBuiltInName(builtinCode, sheetIndex + 1);
+            HSSFName newName = new HSSFName(this, nameRecord, null);
+            names.Add(newName);
+            return newName;
+        }
+
+
+        internal HSSFName GetBuiltInName(byte builtinCode, int sheetIndex)
+        {
+            int index = FindExistingBuiltinNameRecordIdx(sheetIndex, builtinCode);
+            if (index < 0)
+            {
+                return null;
+            }
+            else
+            {
+                return names[(index)];
+            }
         }
 
         private bool IsRowColHeaderRecord(NameRecord r)
@@ -1443,7 +1404,10 @@ namespace NPOI.HSSF.UserModel
 
             return result;
         }
-
+        public NameRecord GetNameRecord(int nameIndex)
+        {
+            return Workbook.GetNameRecord(nameIndex);
+        }
         /// <summary>
         /// TODO - make this less cryptic / move elsewhere
         /// </summary>
@@ -1570,6 +1534,24 @@ namespace NPOI.HSSF.UserModel
             return retval;
         }
 
+        //
+        /// <summary>
+        /// As GetNameIndex(String) is not necessarily unique 
+        /// (name + sheet index is unique), this method is more accurate.
+        /// </summary>
+        /// <param name="name">the name whose index in the list of names of this workbook should be looked up.</param>
+        /// <returns>an index value >= 0 if the name was found; -1, if the name was not found</returns>
+        public int GetNameIndex(HSSFName name)
+        {
+            for (int k = 0; k < names.Count; k++)
+            {
+                if (name == names[(k)])
+                {
+                    return k;
+                }
+            }
+            return -1;
+        }
 
         /// <summary>
         /// Remove the named range by his index
@@ -1604,6 +1586,17 @@ namespace NPOI.HSSF.UserModel
 
         }
 
+        //
+        /// <summary>
+        ///  As #removeName(String) is not necessarily unique (name + sheet index is unique), 
+        ///  this method is more accurate.
+        /// </summary>
+        /// <param name="name">the name to remove.</param>
+        public void RemoveName(HSSFName name)
+        {
+            int index = GetNameIndex(name);
+            RemoveName(index);
+        }
         public HSSFPalette GetCustomPalette()
         {
             return new HSSFPalette(workbook.CustomPalette);

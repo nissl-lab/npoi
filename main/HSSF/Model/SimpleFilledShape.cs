@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Model
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;
 
-
+    [Obsolete]
     public class SimpleFilledShape: AbstractShape
     {
         private EscherContainerRecord spContainer;

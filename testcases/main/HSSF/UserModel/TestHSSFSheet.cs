@@ -54,7 +54,21 @@ namespace TestCases.HSSF.UserModel
         {
 
         }
-
+        /**
+     * Test for Bugzilla #29747.
+     * Moved from TestHSSFWorkbook#testSetRepeatingRowsAndColumns().
+     */
+        [Test]
+        public void TestSetRepeatingRowsAndColumnsBug29747()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet();
+            wb.CreateSheet();
+            HSSFSheet sheet2 = (HSSFSheet)wb.CreateSheet();
+            sheet2.RepeatingRows=(CellRangeAddress.ValueOf("1:2"));
+            NameRecord nameRecord = wb.Workbook.GetNameRecord(0);
+            Assert.AreEqual(3, nameRecord.SheetNumber);
+        }
         /// <summary>
         ///  Some of the tests are depending on the american culture.
         /// </summary>
