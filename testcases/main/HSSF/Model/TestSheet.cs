@@ -844,5 +844,45 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(WindowTwoRecord.sid, ((Record)sheetRecords[2]).Sid);
             Assert.AreEqual(EOFRecord.sid, ((Record)sheetRecords[3]).Sid);
         }
+        [Test]
+        public void TestSheetDimensions()
+        {
+            InternalSheet sheet = InternalSheet.CreateSheet();
+            DimensionsRecord dimensions = (DimensionsRecord)sheet.FindFirstRecordBySid(DimensionsRecord.sid);
+            Assert.AreEqual(0, dimensions.FirstCol);
+            Assert.AreEqual(0, dimensions.FirstRow);
+            Assert.AreEqual(1, dimensions.LastCol);  // plus pne
+            Assert.AreEqual(1, dimensions.LastRow);  // plus pne
+
+            RowRecord rr = new RowRecord(0);
+            sheet.AddRow(rr);
+
+            Assert.AreEqual(0, dimensions.FirstCol);
+            Assert.AreEqual(0, dimensions.FirstRow);
+            Assert.AreEqual(1, dimensions.LastCol);
+            Assert.AreEqual(1, dimensions.LastRow);
+
+            CellValueRecordInterface cvr;
+
+            cvr = new BlankRecord();
+            cvr.Column = ((short)0);
+            cvr.Row = (0);
+            sheet.AddValueRecord(0, cvr);
+
+            Assert.AreEqual(0, dimensions.FirstCol);
+            Assert.AreEqual(0, dimensions.FirstRow);
+            Assert.AreEqual(1, dimensions.LastCol);
+            Assert.AreEqual(1, dimensions.LastRow);
+
+            cvr = new BlankRecord();
+            cvr.Column = ((short)1);
+            cvr.Row = (0);
+            sheet.AddValueRecord(0, cvr);
+
+            Assert.AreEqual(0, dimensions.FirstCol);
+            Assert.AreEqual(0, dimensions.FirstRow);
+            Assert.AreEqual(2, dimensions.LastCol);   //YK:  failed until Bugzilla 53414 was fixed
+            Assert.AreEqual(1, dimensions.LastRow);
+        }
     }
 }
