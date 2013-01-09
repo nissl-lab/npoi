@@ -2466,20 +2466,16 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet CopySheet(String Name, Boolean CopyStyle)
         {
             int maxColumnNum = 0;
-            HSSFSheet NewSheet = (HSSFSheet)Workbook.CreateSheet(Name);
-            NewSheet.Sheet.Records.Clear();
-            for (int i = 0; i < Sheet.Records.Count; i++)
-            {
-                NewSheet.Sheet.Records.Add(Sheet.Records[i]);
-            }
+            HSSFSheet newSheet = (HSSFSheet)Workbook.CreateSheet(Name);
+            newSheet._sheet = Sheet.CloneSheet();
             IDictionary<Int32, HSSFCellStyle> styleMap = (CopyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
             for (int i = FirstRowNum; i <= LastRowNum; i++)
             {
                 HSSFRow srcRow = (HSSFRow)GetRow(i);
-                HSSFRow destRow = (HSSFRow)NewSheet.CreateRow(i);
+                HSSFRow destRow = (HSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, NewSheet, srcRow, destRow, styleMap, new Dictionary<short, short>(), true);
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, new Dictionary<short, short>(), true);
                     if (srcRow.LastCellNum > maxColumnNum)
                     {
                         maxColumnNum = srcRow.LastCellNum;
@@ -2488,28 +2484,28 @@ namespace NPOI.HSSF.UserModel
             }
             for (int i = 0; i <= maxColumnNum; i++)
             {
-                NewSheet.SetColumnWidth(i, GetColumnWidth(i));
+                newSheet.SetColumnWidth(i, GetColumnWidth(i));
             }
-            NewSheet.ForceFormulaRecalculation = true;
-            NewSheet.PrintSetup.Landscape = PrintSetup.Landscape;
-            NewSheet.PrintSetup.HResolution = PrintSetup.HResolution;
-            NewSheet.PrintSetup.VResolution = PrintSetup.VResolution;
-            NewSheet.SetMargin(MarginType.LeftMargin, GetMargin(MarginType.LeftMargin));
-            NewSheet.SetMargin(MarginType.RightMargin, GetMargin(MarginType.RightMargin));
-            NewSheet.SetMargin(MarginType.TopMargin, GetMargin(MarginType.TopMargin));
-            NewSheet.SetMargin(MarginType.BottomMargin, GetMargin(MarginType.BottomMargin));
-            NewSheet.PrintSetup.HeaderMargin = PrintSetup.HeaderMargin;
-            NewSheet.PrintSetup.FooterMargin = PrintSetup.FooterMargin;
-            NewSheet.Header.Left = Header.Left;
-            NewSheet.Header.Center = Header.Center;
-            NewSheet.Header.Right = Header.Right;
-            NewSheet.Footer.Left = Footer.Left;
-            NewSheet.Footer.Center = Footer.Center;
-            NewSheet.Footer.Right = Footer.Right;
-            NewSheet.PrintSetup.Scale = PrintSetup.Scale;
-            NewSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
-            NewSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
-            return NewSheet;
+            newSheet.ForceFormulaRecalculation = true;
+            newSheet.PrintSetup.Landscape = PrintSetup.Landscape;
+            newSheet.PrintSetup.HResolution = PrintSetup.HResolution;
+            newSheet.PrintSetup.VResolution = PrintSetup.VResolution;
+            newSheet.SetMargin(MarginType.LeftMargin, GetMargin(MarginType.LeftMargin));
+            newSheet.SetMargin(MarginType.RightMargin, GetMargin(MarginType.RightMargin));
+            newSheet.SetMargin(MarginType.TopMargin, GetMargin(MarginType.TopMargin));
+            newSheet.SetMargin(MarginType.BottomMargin, GetMargin(MarginType.BottomMargin));
+            newSheet.PrintSetup.HeaderMargin = PrintSetup.HeaderMargin;
+            newSheet.PrintSetup.FooterMargin = PrintSetup.FooterMargin;
+            newSheet.Header.Left = Header.Left;
+            newSheet.Header.Center = Header.Center;
+            newSheet.Header.Right = Header.Right;
+            newSheet.Footer.Left = Footer.Left;
+            newSheet.Footer.Center = Footer.Center;
+            newSheet.Footer.Right = Footer.Right;
+            newSheet.PrintSetup.Scale = PrintSetup.Scale;
+            newSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
+            newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
+            return newSheet;
         }
 
         public void CopyTo(HSSFWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
@@ -2819,8 +2815,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Note: This will probably corrupt data in the source!
-        /// It is only intended for copying of data where the source is only being read.
+        /// Translate color palette entries from the source to the destination sheet
         /// </summary>
         private static void RemapCellStyle(HSSFCellStyle stylish, Dictionary<short, short> paletteMap)
         {
