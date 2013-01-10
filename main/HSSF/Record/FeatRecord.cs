@@ -31,6 +31,7 @@ namespace NPOI.HSSF.Record
      */
     public class FeatRecord : StandardRecord
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(FeatRecord));
         public const short sid = 0x0868;
 
         private FtrHeader futureHeader;
@@ -97,7 +98,7 @@ namespace NPOI.HSSF.Record
                     sharedFeature = new FeatSmartTag(in1);
                     break;
                 default:
-                    System.Console.WriteLine("Unknown Shared Feature " + isf_sharedFeatureType + " found!");
+                    logger.Log(POILogger.ERROR, "Unknown Shared Feature " + isf_sharedFeatureType + " found!");
                     break;
             }
         }
