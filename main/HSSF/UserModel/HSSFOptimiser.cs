@@ -151,14 +151,16 @@ namespace NPOI.HSSF.UserModel
             for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
             {
                 NPOI.SS.UserModel.ISheet s = workbook.GetSheetAt(sheetNum);
-                IEnumerator rIt = s.GetRowEnumerator();
-                while (rIt.MoveNext())
+                //IEnumerator rIt = s.GetRowEnumerator();
+                //while (rIt.MoveNext())
+                foreach (IRow row in s) 
                 {
-                    HSSFRow row = (HSSFRow)rIt.Current;
-                    IEnumerator cIt = row.GetEnumerator();
-                    while (cIt.MoveNext())
+                    //HSSFRow row = (HSSFRow)rIt.Current;
+                    //IEnumerator cIt = row.GetEnumerator();
+                    //while (cIt.MoveNext())
+                    foreach (ICell cell in row) 
                     {
-                        ICell cell = (HSSFCell)cIt.Current;
+                        //ICell cell = (HSSFCell)cIt.Current;
                         if (cell.CellType == NPOI.SS.UserModel.CellType.STRING)
                         {
                             HSSFRichTextString rtr = (HSSFRichTextString)cell.RichStringCellValue;
@@ -187,7 +189,7 @@ namespace NPOI.HSSF.UserModel
 
         /// <summary>
         /// Goes through the Wokrbook, optimising the cell styles
-        /// by removing duplicate ones.
+        /// by removing duplicate ones and ones that aren't used.
         /// For best results, optimise the fonts via a call to
         /// OptimiseFonts(HSSFWorkbook) first
         /// </summary>
@@ -198,9 +200,11 @@ namespace NPOI.HSSF.UserModel
             //  delete the record for it. Start off with no change
             short[] newPos =
                 new short[workbook.Workbook.NumExFormats];
+            bool[] isUsed = new bool[newPos.Length];
             bool[] zapRecords = new bool[newPos.Length];
             for (int i = 0; i < newPos.Length; i++)
             {
+                isUsed[i] = false;
                 newPos[i] = (short)i;
                 zapRecords[i] = false;
             }
@@ -239,7 +243,31 @@ namespace NPOI.HSSF.UserModel
                     zapRecords[i] = true;
                 }
             }
-
+            // Loop over all the cells in the file, and identify any user defined
+            //  styles aren't actually being used (don't touch built-in ones)
+            for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
+            {
+                HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
+                foreach (IRow row in s)
+                {
+                    foreach (ICell cellI in row)
+                    {
+                        HSSFCell cell = (HSSFCell)cellI;
+                        short oldXf = cell.CellValueRecord.XFIndex;
+                        isUsed[oldXf] = true;
+                    }
+                }
+            }
+            // Mark any that aren't used as needing zapping
+            for (int i = 21; i < isUsed.Length; i++)
+            {
+                if (!isUsed[i])
+                {
+                    // Un-used style, can be removed
+                    zapRecords[i] = true;
+                    newPos[i] = 0;
+                }
+            }
             // Update the new positions based on
             //  deletes that have occurred between
             //  the start and them
@@ -260,29 +288,35 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Zap the un-needed user style records
-            for (int i = 21; i < newPos.Length; i++)
+            // removing by index, because removing by object may delete
+            // styles we did not intend to (the ones that _were_ duplicated and not the duplicates)
+            int max = newPos.Length;
+            int removed = 0; // to adjust index after deletion
+            for (int i = 21; i < max; i++)
             {
-                if (zapRecords[i])
+                if (zapRecords[i + removed])
                 {
-                    workbook.Workbook.RemoveExFormatRecord(
-                            xfrs[i]
-                    );
+                    workbook.Workbook.RemoveExFormatRecord(i);
+                    i--;
+                    max--;
+                    removed++;
                 }
             }
 
-            // Finally, update the cells to point at
-            //  their new extended format records
+            // Finally, update the cells to point at their new extended format records
             for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
             {
                 HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
-                IEnumerator rIt = s.GetRowEnumerator();
-                while (rIt.MoveNext())
+                //IEnumerator rIt = s.GetRowEnumerator();
+                //while (rIt.MoveNext())
+                foreach(IRow row in s)
                 {
-                    HSSFRow row = (HSSFRow)rIt.Current;
-                    IEnumerator cIt = row.GetEnumerator();
-                    while (cIt.MoveNext())
+                    //HSSFRow row = (HSSFRow)rIt.Current;
+                    //IEnumerator cIt = row.GetEnumerator();
+                    //while (cIt.MoveNext())
+                    foreach (ICell cell in row)
                     {
-                        ICell cell = (HSSFCell)cIt.Current;
+                        //ICell cell = (HSSFCell)cIt.Current;
                         short oldXf = ((HSSFCell)cell).CellValueRecord.XFIndex;
                         NPOI.SS.UserModel.ICellStyle newStyle = workbook.GetCellStyleAt(
                                 newPos[oldXf]

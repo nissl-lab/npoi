@@ -29,12 +29,21 @@ namespace TestCases.HSSF.UserModel
         public void TestDoesNoHarmIfNothingToDo()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
+            // New files start with 4 built in fonts, and 21 built in styles
+            Assert.AreEqual(4, wb.NumberOfFonts);
+            Assert.AreEqual(21, wb.NumCellStyles);
 
+            // Create a test font and style, and use them
             IFont f = wb.CreateFont();
             f.FontName = ("Testing");
             NPOI.SS.UserModel.ICellStyle s = wb.CreateCellStyle();
             s.SetFont(f);
 
+            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
+            HSSFRow row = (HSSFRow)sheet.CreateRow(0);
+            row.CreateCell(0).CellStyle = (s);
+
+            // Should have one more than the default of each
             Assert.AreEqual(5, wb.NumberOfFonts);
             Assert.AreEqual(22, wb.NumCellStyles);
 
@@ -233,6 +242,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(21, ((HSSFCell)r.GetCell(0)).CellValueRecord.XFIndex);
             // cs2 -> 22
             Assert.AreEqual(22, ((HSSFCell)r.GetCell(1)).CellValueRecord.XFIndex);
+            Assert.AreEqual(22, r.GetCell(1).CellStyle.GetFont(wb).FontHeight);
             // cs3 = cs1 -> 21
             Assert.AreEqual(21, ((HSSFCell)r.GetCell(2)).CellValueRecord.XFIndex);
             // cs4 --> 24 -> 23
@@ -245,6 +255,79 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(21, ((HSSFCell)r.GetCell(6)).CellValueRecord.XFIndex);
             // cs2 -> 22
             Assert.AreEqual(22, ((HSSFCell)r.GetCell(7)).CellValueRecord.XFIndex);
+
+
+            // Add a new duplicate, and two that aren't used
+            HSSFCellStyle csD = (HSSFCellStyle)wb.CreateCellStyle();
+            csD.SetFont(f1);
+            r.CreateCell(8).CellStyle=(csD);
+
+            HSSFFont f3 = (HSSFFont)wb.CreateFont();
+            f3.FontHeight=((short)23);
+            f3.FontName=("Testing 3");
+            HSSFFont f4 = (HSSFFont)wb.CreateFont();
+            f4.FontHeight=((short)24);
+            f4.FontName=("Testing 4");
+
+            HSSFCellStyle csU1 = (HSSFCellStyle)wb.CreateCellStyle();
+            csU1.SetFont(f3);
+            HSSFCellStyle csU2 = (HSSFCellStyle)wb.CreateCellStyle();
+            csU2.SetFont(f4);
+
+            // Check before the optimise
+            Assert.AreEqual(8, wb.NumberOfFonts);
+            Assert.AreEqual(28, wb.NumCellStyles);
+
+            // Optimise, should remove the two un-used ones and the one duplicate
+            HSSFOptimiser.OptimiseCellStyles(wb);
+
+            // Check
+            Assert.AreEqual(8, wb.NumberOfFonts);
+            Assert.AreEqual(25, wb.NumCellStyles);
+
+            // csD -> cs1 -> 21
+            Assert.AreEqual(21, ((HSSFCell)r.GetCell(8)).CellValueRecord.XFIndex);
+        }
+        [Test]
+        public void TestOptimiseStylesCheckActualStyles()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            // Several styles
+            Assert.AreEqual(21, wb.NumCellStyles);
+
+            HSSFCellStyle cs1 = (HSSFCellStyle)wb.CreateCellStyle();
+            cs1.BorderBottom=(BorderStyle.THICK);
+
+            HSSFCellStyle cs2 = (HSSFCellStyle)wb.CreateCellStyle();
+            cs2.BorderBottom=(BorderStyle.DASH_DOT);
+
+            HSSFCellStyle cs3 = (HSSFCellStyle)wb.CreateCellStyle(); // = cs1
+            cs3.BorderBottom=(BorderStyle.THICK);
+
+            Assert.AreEqual(24, wb.NumCellStyles);
+
+            // Use them
+            HSSFSheet s = (HSSFSheet)wb.CreateSheet();
+            HSSFRow r = (HSSFRow)s.CreateRow(0);
+
+            r.CreateCell(0).CellStyle=(cs1);
+            r.CreateCell(1).CellStyle=(cs2);
+            r.CreateCell(2).CellStyle=(cs3);
+
+            Assert.AreEqual(21, ((HSSFCell)r.GetCell(0)).CellValueRecord.XFIndex);
+            Assert.AreEqual(22, ((HSSFCell)r.GetCell(1)).CellValueRecord.XFIndex);
+            Assert.AreEqual(23, ((HSSFCell)r.GetCell(2)).CellValueRecord.XFIndex);
+
+            // Optimise
+            HSSFOptimiser.OptimiseCellStyles(wb);
+
+            // Check
+            Assert.AreEqual(23, wb.NumCellStyles);
+
+            Assert.AreEqual(BorderStyle.THICK, r.GetCell(0).CellStyle.BorderBottom);
+            Assert.AreEqual(BorderStyle.DASH_DOT, r.GetCell(1).CellStyle.BorderBottom);
+            Assert.AreEqual(BorderStyle.THICK, r.GetCell(2).CellStyle.BorderBottom);
         }
     }
 }

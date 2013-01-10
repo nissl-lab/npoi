@@ -2810,13 +2810,6 @@ using NPOI.POIFS.FileSystem;
                 Assert.IsTrue(text.Contains("Bottom Right Cell"));
             }
         }
-        [Test]
-        public void Test54016()
-        {
-            // This used to break
-            HSSFWorkbook wb = OpenSample("54016.xls");
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-        }
 
         /**
          * Normally encrypted files have BOF then FILEPASS, but
@@ -2881,6 +2874,35 @@ using NPOI.POIFS.FileSystem;
 
             wb = WriteOutAndReadBack((HSSFWorkbook)wb);
             Assert.AreEqual(wb.GetAllPictures().Count, 1);
+        }
+        [Test]
+        public void Test53404()
+        {
+            IWorkbook wb = OpenSample("53404.xls");
+            ISheet sheet = wb.GetSheet("test-sheet");
+            int rowCount = sheet.LastRowNum + 1;
+            int newRows = 5;
+            for (int r = rowCount; r < rowCount + newRows; r++)
+            {
+                IRow row = sheet.CreateRow(r);
+                row.CreateCell(0).SetCellValue(1.03 * (r + 7));
+                row.CreateCell(1).SetCellValue(DateTime.Now);
+                row.CreateCell(2).SetCellValue(DateTime.Now);
+                row.CreateCell(3).SetCellValue(String.Format("row:{0}/col:{1}", r, 3));
+                row.CreateCell(4).SetCellValue(true);
+                row.CreateCell(5).SetCellType(CellType.ERROR);
+                row.CreateCell(6).SetCellValue("added cells.");
+            }
+
+            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
+        }
+
+        [Test]
+        public void Test54016()
+        {
+            // This used to break
+            HSSFWorkbook wb = OpenSample("54016.xls");
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
     }
 }
