@@ -24,6 +24,7 @@ namespace NPOI.HSSF.EventUserModel
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
     using System.Globalization;
+    using NPOI.Util;
 
     /**
      * A proxy HSSFListener that keeps track of the document
@@ -32,6 +33,7 @@ namespace NPOI.HSSF.EventUserModel
      */
     public class FormatTrackingHSSFListener : IHSSFListener
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(FormatTrackingHSSFListener));
         private IHSSFListener childListener;
         private Dictionary<int, FormatRecord> customFormatRecords = new Dictionary<int, FormatRecord>();
         private DataFormatter formatter = new DataFormatter();
@@ -139,7 +141,7 @@ namespace NPOI.HSSF.EventUserModel
                 FormatRecord tfr = (FormatRecord)customFormatRecords[formatIndex];
                 if (tfr == null)
                 {
-                    Console.Error.WriteLine("Requested format at index " + formatIndex + ", but it wasn't found");
+                    logger.Log(POILogger.ERROR, "Requested format at index " + formatIndex + ", but it wasn't found");
                 }
                 else
                 {
@@ -178,7 +180,7 @@ namespace NPOI.HSSF.EventUserModel
                 xfRecords[cell.XFIndex];
             if (xfr == null)
             {
-                Console.Error.WriteLine("Cell " + cell.Row + "," + cell.Column + " uses XF with index " + cell.XFIndex + ", but we don't have that");
+                logger.Log(POILogger.ERROR, "Cell " + cell.Row + "," + cell.Column + " uses XF with index " + cell.XFIndex + ", but we don't have that");
                 return -1;
             }
             return xfr.FormatIndex;

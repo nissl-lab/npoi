@@ -499,5 +499,27 @@ namespace TestCases.HSSF.EventUserModel
             }
             Assert.AreEqual(2, eorCount);
         }
+        [Test]
+        public void TestStringRecordHandling()
+        {
+            ReadRecords("53588.xls");
+            Record[] rr = r;
+            int missingCount = 0;
+            int lastCount = 0;
+            for (int i = 0; i < rr.Length; i++)
+            {
+                Record record = rr[i];
+                if (record is MissingCellDummyRecord)
+                {
+                    missingCount++;
+                }
+                if (record is LastCellOfRowDummyRecord)
+                {
+                    lastCount++;
+                }
+            }
+            Assert.AreEqual(1, missingCount);
+            Assert.AreEqual(1, lastCount);
+        }
     }
 }

@@ -2865,5 +2865,22 @@ using NPOI.POIFS.FileSystem;
             HSSFWorkbook wb = OpenSample("51670.xls");
             WriteOutAndReadBack(wb);
         }
+
+        [Test]
+        public void Test53432()
+        {
+            IWorkbook wb = new HSSFWorkbook(); //or new HSSFWorkbook();
+            wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
+            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+
+            wb = new HSSFWorkbook();
+            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
+            Assert.AreEqual(wb.GetAllPictures().Count, 0);
+            wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
+            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+
+            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
+            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+        }
     }
 }

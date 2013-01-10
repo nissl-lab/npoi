@@ -316,8 +316,11 @@ namespace NPOI.HSSF.Record
          */
         public void Decode()
         {
-            byte[] rawData = RawData;
-            ConvertToEscherRecords(0, rawData.Length, rawData);
+            if (null == escherRecords || 0 == escherRecords.Count)
+            {
+                byte[] rawData = RawData;
+                ConvertToEscherRecords(0, rawData.Length, rawData);
+            }
         }
 
     }

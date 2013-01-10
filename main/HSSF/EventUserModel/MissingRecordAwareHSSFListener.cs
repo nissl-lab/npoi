@@ -73,6 +73,12 @@ namespace NPOI.HSSF.EventUserModel
             }
             else
             {
+                if (record is StringRecord)
+                {
+                    //it contains only cashed result of the previous FormulaRecord evaluation
+                    childListener.ProcessRecord(record);
+                    return;
+                }
                 thisRow = -1;
                 thisColumn = -1;
 
