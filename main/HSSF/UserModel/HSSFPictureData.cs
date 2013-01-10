@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.DDF;
     using NPOI.SS.UserModel;
+    using NPOI.Util;
 
     /// <summary>
     /// Represents binary data stored in the file.  Eg. A GIF, JPEG etc...
@@ -57,7 +58,21 @@ namespace NPOI.HSSF.UserModel
         /// <value>the picture data.</value>
         public byte[] Data
         {
-            get { return blip.PictureData; }
+            get
+            {
+                byte[] pictureData = blip.PictureData;
+
+                //PNG created on MAC may have a 16-byte prefix which prevents successful reading.
+                //Just cut it off!.
+                if (PngUtils.MatchesPngHeader(pictureData, 16))
+                {
+                    byte[] png = new byte[pictureData.Length - 16];
+                    System.Array.Copy(pictureData, 16, png, 0, png.Length);
+                    pictureData = png;
+                }
+
+                return pictureData;
+            }
         }
         /// <summary>
         /// gets format of the picture.

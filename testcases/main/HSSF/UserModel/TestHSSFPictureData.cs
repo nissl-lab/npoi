@@ -77,6 +77,34 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
+        public void TestMacPicture()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("53446.xls");
+
+            List<HSSFPictureData> lst = (List<HSSFPictureData>)wb.GetAllPictures();
+            Assert.AreEqual(1, lst.Count);
+
+            HSSFPictureData pict = lst[(0)];
+            String ext = pict.SuggestFileExtension();
+            if (!ext.Equals("png"))
+            {
+                Assert.Fail("Expected a PNG.");
+            }
+
+            //try to read image data using javax.imageio.* (JDK 1.4+)
+            byte[] data = pict.Data;
+            using (MemoryStream ms = new MemoryStream(data))
+            {
+                Image png = Image.FromStream(ms);
+                Assert.IsNotNull(png);
+                Assert.AreEqual(78, png.Width);
+                Assert.AreEqual(76, png.Height);
+                Assert.AreEqual((int)PictureType.PNG, pict.Format);
+                Assert.AreEqual("image/png", pict.MimeType);
+            }
+        }
+
+        [Test]
         public void TestNotNullPictures()
         {
 

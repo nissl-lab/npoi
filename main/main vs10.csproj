@@ -1127,6 +1127,7 @@
     <Compile Include="Util\NullLogger.cs" />
     <Compile Include="Util\Number.cs" />
     <Compile Include="Util\Operator.cs" />
+    <Compile Include="Util\PngUtils.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
     <Compile Include="Util\PushbackStream.cs" />
