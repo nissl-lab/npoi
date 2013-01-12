@@ -88,6 +88,9 @@
     <Compile Include="HPSF\TestVariantSupport.cs" />
     <Compile Include="HSSF\Converter\TestExcelToHtmlConverterSuite.cs" />
     <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
+    <Compile Include="HSSF\Model\HSSFTestModelHelper.cs" />
+    <Compile Include="HSSF\Model\TestEscherRecordFactory.cs" />
+    <Compile Include="HSSF\Model\TestHSSFAnchor.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\TestChartSheetAggregate.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxesUsedRecord.cs" />

@@ -25,37 +25,67 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Model;
     using NPOI.Util;
     using System.Collections.Generic;
+    using System.IO;
 
     internal class SerializationListener : EscherSerializationListener
     {
-        IList spEndingOffsets;
-        IList shapes;
+        IList<int> spEndingOffsets;
+        IList<EscherRecord> records;
+        EscherRecord record;
 
-        public SerializationListener(ref IList spEndingOffsets, ref IList shapes)
+        public SerializationListener(IList<int> spEndingOffsets, IList<EscherRecord> records, EscherRecord e)
         {
             this.spEndingOffsets = spEndingOffsets;
-            this.shapes = shapes;
+            this.records = records;
+            this.record = e;
         }
 
         #region EscherSerializationListener Members
 
-        void EscherSerializationListener.BeforeRecordSerialize(int Offset, short recordId, EscherRecord record)
+        void EscherSerializationListener.BeforeRecordSerialize(int offset, short recordId, EscherRecord record)
         {
            
         }
 
-        void EscherSerializationListener.AfterRecordSerialize(int Offset, short recordId, int size, EscherRecord record)
+        void EscherSerializationListener.AfterRecordSerialize(int offset, short recordId, int size, EscherRecord record)
         {
             if (recordId == EscherClientDataRecord.RECORD_ID || recordId == EscherTextboxRecord.RECORD_ID)
             {
-                spEndingOffsets.Add(Offset);
-                shapes.Add(record);
+                spEndingOffsets.Add(offset);
+                records.Add(record);
             }
         }
 
         #endregion
     }
+    internal class RecordSizeListener : EscherSerializationListener
+    {
+        IList<int> spEndingOffsets;
+        EscherRecord record;
 
+        public RecordSizeListener(IList<int> spEndingOffsets, EscherRecord e)
+        {
+            this.spEndingOffsets = spEndingOffsets;
+            this.record = e;
+        }
+
+        #region EscherSerializationListener Members
+
+        void EscherSerializationListener.BeforeRecordSerialize(int offset, short recordId, EscherRecord record)
+        {
+
+        }
+
+        void EscherSerializationListener.AfterRecordSerialize(int offset, short recordId, int size, EscherRecord record)
+        {
+            if (recordId == EscherClientDataRecord.RECORD_ID || recordId == EscherTextboxRecord.RECORD_ID)
+            {
+                spEndingOffsets.Add(offset);
+            }
+        }
+
+        #endregion
+    }
     /**
      * This class Is used to aggregate the MSODRAWING and OBJ record
      * combinations.  This Is necessary due to the bizare way in which
@@ -70,7 +100,33 @@ namespace NPOI.HSSF.Record
      * we don't aggregate the MSODRAWING -> OBJ records Unless we
      * need to modify them.
      *
-     *
+     * At first document contains 4 types of records which belong to drawing layer.
+     * There are can be such sequence of record:
+     * <p/>
+     * DrawingRecord
+     * ContinueRecord
+     * ...
+     * ContinueRecord
+     * ObjRecord | TextObjectRecord
+     * .....
+     * ContinueRecord
+     * ...
+     * ContinueRecord
+     * ObjRecord | TextObjectRecord
+     * NoteRecord
+     * ...
+     * NoteRecord
+     * <p/>
+     * To work with shapes we have to read data from Drawing and Continue records into single array of bytes and
+     * build escher(office art) records tree from this array.
+     * Each shape in drawing layer matches corresponding ObjRecord
+     * Each textbox matches corresponding TextObjectRecord
+     * <p/>
+     * ObjRecord contains information about shape. Thus each ObjRecord corresponds EscherContainerRecord(SPGR)
+     * <p/>
+     * EscherAggrefate contains also NoteRecords
+     * NoteRecords must be serial
+     * 
      * @author Glen Stampoultzis (glens at apache.org)
      */
     public class EscherAggregate : AbstractEscherHolderRecord
@@ -287,14 +343,14 @@ namespace NPOI.HSSF.Record
         protected HSSFPatriarch patriarch;
 
         /** Maps shape container objects to their OBJ records */
-        private Hashtable shapeToObj = new Hashtable();
+        private Dictionary<EscherRecord, Record> shapeToObj = new Dictionary<EscherRecord, Record>();
         private DrawingManager2 drawingManager;
-        private short drawingGroupId;
+        //private short drawingGroupId;
 
         /**
          * list of "tail" records that need to be Serialized after all drawing Group records
          */
-        internal Dictionary<int, Record> tailRec = new Dictionary<int, Record>();
+        internal Dictionary<int, NoteRecord> tailRec = new Dictionary<int, NoteRecord>();
 
         public EscherAggregate(bool createDefaultTree)
         {
@@ -303,18 +359,379 @@ namespace NPOI.HSSF.Record
                 BuildBaseTree();
             }
         }
+
         /**
- * create base tree with such structure:
- * EscherDgContainer
- * -EscherSpgrContainer
- * --EscherSpContainer
- * ---EscherSpRecord
- * ---EscherSpgrRecord
- * ---EscherSpRecord
- * -EscherDgRecord
- *
- * id of DgRecord and SpRecord are empty and must be set later by HSSFPatriarch
- */
+         * @return  Returns the current sid.
+         */
+        public override short Sid
+        {
+            get { return sid; }
+        }
+
+        /**
+         * Calculates the string representation of this record.  This Is
+         * simply a dump of all the records.
+         */
+        public override String ToString()
+        {
+            String nl = Environment.NewLine;
+
+            StringBuilder result = new StringBuilder();
+            result.Append('[').Append(RecordName).Append(']' + nl);
+            for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherRecord escherRecord = (EscherRecord)iterator.Current;
+                result.Append(escherRecord.ToString() + nl);
+            }
+            result.Append("[/").Append(RecordName).Append(']' + nl);
+
+            return result.ToString();
+        }
+        /**
+         * Calculates the xml representation of this record.  This is
+         * simply a dump of all the records.
+         * @param tab - string which must be added before each line (used by default '\t')
+         * @return xml representation of the all aggregated records
+         */
+        public String ToXml(String tab)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab).Append("<").Append(RecordName).Append(">\n");
+            for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext(); )
+            {
+                EscherRecord escherRecord = (EscherRecord)iterator.Current;
+                builder.Append(escherRecord.ToXml(tab + "\t"));
+            }
+            builder.Append(tab).Append("</").Append(RecordName).Append(">\n");
+            return builder.ToString();
+        }
+
+        /**
+         * @param sid - record sid we want to check if it belongs to drawing layer
+         * @return true if record is instance of DrawingRecord or ContinueRecord or ObjRecord or TextObjRecord
+         */
+        private static bool IsDrawingLayerRecord(short sid)
+        {
+            return sid == DrawingRecord.sid ||
+                    sid == ContinueRecord.sid ||
+                    sid == ObjRecord.sid ||
+                    sid == TextObjectRecord.sid;
+        }
+
+        /**
+         * Collapses the drawing records into an aggregate.
+         * read Drawing, Obj, TxtObj, Note and Continue records into single byte array,
+         * create Escher tree from byte array, create map <EscherRecord, Record>
+         *
+         * @param records - list of all records inside sheet
+         * @param locFirstDrawingRecord - location of the first DrawingRecord inside sheet
+         * @return new EscherAggregate create from all aggregated records which belong to drawing layer
+         */
+        public static EscherAggregate CreateAggregate(List<RecordBase> records, int locFirstDrawingRecord)
+        {
+            // Keep track of any shape records Created so we can match them back to the object id's.
+            // Textbox objects are also treated as shape objects.
+            List<EscherRecord> shapeRecords = new List<EscherRecord>();
+            IEscherRecordFactory recordFactory = new CustomEscherRecordFactory(shapeRecords);
+
+            // Create one big buffer
+            MemoryStream stream = new MemoryStream();
+            EscherAggregate agg = new EscherAggregate(false);
+            int loc = locFirstDrawingRecord;
+            while (loc + 1 < records.Count
+                    && (IsDrawingLayerRecord(GetSid(records, loc))))
+            {
+                try
+                {
+                    if (!(GetSid(records, loc) == DrawingRecord.sid || GetSid(records, loc) == ContinueRecord.sid))
+                    {
+                        loc++;
+                        continue;
+                    }
+                    if (GetSid(records, loc) == DrawingRecord.sid)
+                    {
+                        byte[] data = ((DrawingRecord)records[loc]).Data;
+                        stream.Write(data, 0, data.Length);
+                    }
+                    else
+                    {
+                        byte[] data = ((ContinueRecord)records[loc]).Data;
+                        stream.Write(data, 0, data.Length);
+                    }
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException("Couldn't get data from drawing/continue records", e);
+                }
+                loc++;
+            }
+
+            // Decode the shapes
+            //        agg.escherRecords = new ArrayList();
+            int pos = 0;
+            byte[] buffer = stream.ToArray();
+            while (pos < buffer.Length)
+            {
+                EscherRecord r = recordFactory.CreateRecord(buffer, pos);
+                int bytesRead = r.FillFields(buffer, pos, recordFactory);
+                agg.AddEscherRecord(r);
+                pos += bytesRead;
+            }
+
+            // Associate the object records with the shapes
+            loc = locFirstDrawingRecord + 1;
+            int shapeIndex = 0;
+
+            while (loc < records.Count && IsDrawingLayerRecord(GetSid(records, loc)))
+            {
+                if (!IsObjectRecord(records, loc))
+                {
+                    loc++;
+                    continue;
+                }
+                Record objRecord = (Record)records[loc];
+                agg.shapeToObj[shapeRecords[shapeIndex++]] = objRecord;
+                loc++;
+            }
+            // any NoteRecords that follow the drawing block must be aggregated and and saved in the tailRec collection
+            //put noterecord into tailsRec
+            while (loc < records.Count)
+            {
+                if (GetSid(records, loc) == NoteRecord.sid)
+                {
+                    NoteRecord r = (NoteRecord)records[(loc)];
+                    agg.tailRec[r.ShapeId] = r;
+                }
+                else
+                {
+                    break;
+                }
+                loc++;
+            }
+            int locLastDrawingRecord = loc;
+            //records.SubList(locFirstDrawingRecord, locLastDrawingRecord).Clear();
+            records.RemoveRange(locFirstDrawingRecord, locLastDrawingRecord - locFirstDrawingRecord);
+            records.Insert(locFirstDrawingRecord, agg);
+            return agg;
+
+        }
+        /**
+         * Serializes this aggregate to a byte array.  Since this Is an aggregate
+         * record it will effectively Serialize the aggregated records.
+         *
+         * @param offset    The offset into the start of the array.
+         * @param data      The byte array to Serialize to.
+         * @return          The number of bytes Serialized.
+         */
+        public override int Serialize(int offset, byte[] data)
+        {
+
+            // Determine buffer size
+            List<EscherRecord> records = EscherRecords;
+            int size = GetEscherRecordSize(records);
+            byte[] buffer = new byte[size];
+
+
+            // Serialize escher records into one big data structure and keep note of ending offsets.
+            List<int> spEndingOffsets = new List<int>();
+            List<EscherRecord> shapes = new List<EscherRecord>();
+            int pos = 0;
+            foreach (EscherRecord e in records)
+            {
+                pos += e.Serialize(pos, buffer, new SerializationListener(spEndingOffsets, shapes, e));
+            }
+            // todo: fix this
+            shapes.Insert(0, null);
+            spEndingOffsets.Insert(0, 0);
+
+            // Split escher records into Separate MSODRAWING and OBJ, TXO records.  (We don't break on
+            // the first one because it's the patriach).
+            pos = offset;
+            int writtenEscherBytes = 0;
+            int i;
+            for (i = 1; i < shapes.Count; i++)
+            {
+                int endOffset = (int)spEndingOffsets[i] - 1;
+                int startOffset;
+                if (i == 1)
+                    startOffset = 0;
+                else
+                    startOffset = (int)spEndingOffsets[i - 1];
+
+                byte[] drawingData = new byte[endOffset - startOffset + 1];
+                Array.Copy(buffer, startOffset, drawingData, 0, drawingData.Length);
+                pos += WriteDataIntoDrawingRecord(drawingData, writtenEscherBytes, pos, data, i);
+
+                writtenEscherBytes += drawingData.Length;
+
+                // Write the matching OBJ record
+                Record obj = (Record)shapeToObj[shapes[i]];
+                pos += obj.Serialize(pos, data);
+
+                if (i == shapes.Count - 1 && endOffset < buffer.Length - 1)
+                {
+                    drawingData = new byte[buffer.Length - endOffset - 1];
+                    Array.Copy(buffer, endOffset + 1, drawingData, 0, drawingData.Length);
+                    pos += WriteDataIntoDrawingRecord(drawingData, writtenEscherBytes, pos, data, i);
+                }
+
+            }
+            if ((pos - offset) < buffer.Length - 1)
+            {
+                byte[] drawingData = new byte[buffer.Length - (pos - offset)];
+                System.Array.Copy(buffer, (pos - offset), drawingData, 0, drawingData.Length);
+                pos += WriteDataIntoDrawingRecord(drawingData, writtenEscherBytes, pos, data, i);
+            }
+            // Write records that need to be Serialized after all drawing Group records
+            foreach (Record rec in tailRec.Values)
+            {
+                pos += rec.Serialize(pos, data);
+            }
+            int bytesWritten = pos - offset;
+            if (bytesWritten != RecordSize)
+                throw new RecordFormatException(bytesWritten + " bytes written but RecordSize reports " + RecordSize);
+            return bytesWritten;
+        }
+
+        /**
+         * @param drawingData - escher records saved into single byte array
+         * @param writtenEscherBytes - count of bytes already saved into drawing records (we should know it to decide create
+         *                           drawing or continue record)
+         * @param pos current position of data array
+         * @param data - array of bytes where drawing records must be serialized
+         * @param i - number of shape, saved into data array
+         * @return offset of data array after serialization
+         */
+        private int WriteDataIntoDrawingRecord(byte[] drawingData, int writtenEscherBytes, int pos, byte[] data, int i)
+        {
+            int temp = 0;
+            //First record in drawing layer MUST be DrawingRecord
+            if (writtenEscherBytes + drawingData.Length > RecordInputStream.MAX_RECORD_DATA_SIZE && i != 1)
+            {
+                for (int j = 0; j < drawingData.Length; j += RecordInputStream.MAX_RECORD_DATA_SIZE)
+                {
+                    byte[] buf = new byte[Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j)];
+                    System.Array.Copy(drawingData, j, buf, 0, Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j));
+                    ContinueRecord drawing = new ContinueRecord(buf);
+                    temp += drawing.Serialize(pos + temp, data);
+                }
+            }
+            else
+            {
+                for (int j = 0; j < drawingData.Length; j += RecordInputStream.MAX_RECORD_DATA_SIZE)
+                {
+                    if (j == 0)
+                    {
+                        DrawingRecord drawing = new DrawingRecord();
+                        byte[] buf = new byte[Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j)];
+                        System.Array.Copy(drawingData, j, buf, 0, Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j));
+                        drawing.Data = (buf);
+                        temp += drawing.Serialize(pos + temp, data);
+                    }
+                    else
+                    {
+                        byte[] buf = new byte[Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j)];
+                        System.Array.Copy(drawingData, j, buf, 0, Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j));
+                        ContinueRecord drawing = new ContinueRecord(buf);
+                        temp += drawing.Serialize(pos + temp, data);
+                    }
+                }
+            }
+            return temp;
+        }
+
+        /**
+         * How many bytes do the raw escher records contain.
+         *
+         * @param records List of escher records
+         * @return the number of bytes
+         */
+        private int GetEscherRecordSize(List<EscherRecord> records)
+        {
+            int size = 0;
+            foreach (EscherRecord record in records)
+            {
+                size += record.RecordSize;
+            }
+            return size;
+        }
+        /**
+         * @param records list of records to look into
+         * @param loc - location of the record which sid must be returned
+         * @return sid of the record with selected location
+         */
+        private static short GetSid(List<RecordBase> records, int loc)
+        {
+            return ((Record)records[(loc)]).Sid;
+        }
+
+
+        /**
+     * @return record size, including header size of obj, text, note, drawing, continue records
+     */
+        public override int RecordSize
+        {
+            get
+            {
+                // To determine size of aggregate record we have to know size of each DrawingRecord because if DrawingRecord
+                // is split into several continue records we have to add header size to total EscherAggregate size
+                int continueRecordsHeadersSize = 0;
+                // Determine buffer size
+                List<EscherRecord> records = EscherRecords;
+                int rawEscherSize = GetEscherRecordSize(records);
+                byte[] buffer = new byte[rawEscherSize];
+                List<int> spEndingOffsets = new List<int>();
+                int pos = 0;
+                foreach (EscherRecord e in records)
+                {
+                    pos += e.Serialize(pos, buffer, new RecordSizeListener(spEndingOffsets, e));
+                }
+                spEndingOffsets.Insert(0, 0);
+
+                for (int i = 1; i < spEndingOffsets.Count; i++)
+                {
+                    if (i == spEndingOffsets.Count - 1 && spEndingOffsets[(i)] < pos)
+                    {
+                        continueRecordsHeadersSize += 4;
+                    }
+                    if (spEndingOffsets[(i)] - spEndingOffsets[(i - 1)] <= RecordInputStream.MAX_RECORD_DATA_SIZE)
+                    {
+                        continue;
+                    }
+                    continueRecordsHeadersSize += ((spEndingOffsets[(i)] - spEndingOffsets[(i - 1)]) / RecordInputStream.MAX_RECORD_DATA_SIZE) * 4;
+                }
+
+                int drawingRecordSize = rawEscherSize + (shapeToObj.Count) * 4;
+                if (rawEscherSize != 0 && spEndingOffsets.Count == 1/**EMPTY**/)
+                {
+                    continueRecordsHeadersSize += 4;
+                }
+                int objRecordSize = 0;
+                foreach (Record r in shapeToObj.Values)
+                {
+                    objRecordSize += r.RecordSize;
+                }
+                int tailRecordSize = 0;
+                foreach (NoteRecord noteRecord in tailRec.Values)
+                {
+                    tailRecordSize += noteRecord.RecordSize;
+                }
+                return drawingRecordSize + objRecordSize + tailRecordSize + continueRecordsHeadersSize;
+            }
+        }
+
+        /**
+         * create base tree with such structure:
+         * EscherDgContainer
+         * -EscherSpgrContainer
+         * --EscherSpContainer
+         * ---EscherSpRecord
+         * ---EscherSpgrRecord
+         * ---EscherSpRecord
+         * -EscherDgRecord
+         *
+         * id of DgRecord and SpRecord are empty and must be set later by HSSFPatriarch
+         */
         private void BuildBaseTree()
         {
             EscherContainerRecord dgContainer = new EscherContainerRecord();
@@ -359,13 +776,6 @@ namespace NPOI.HSSF.Record
             this.drawingManager = drawingManager;
         }
 
-        /**
-         * @return  Returns the current sid.
-         */
-        public override short Sid
-        {
-            get { return sid; }
-        }
 
         /**
          * Unused since this Is an aggregate record.  Use CreateAggregate().
@@ -377,47 +787,14 @@ namespace NPOI.HSSF.Record
             throw new InvalidOperationException("Should not reach here");
         }
 
-        /**
-         * Calculates the string representation of this record.  This Is
-         * simply a dump of all the records.
-         */
-        public override String ToString()
-        {
-            String nl = Environment.NewLine;
+        
 
-            StringBuilder result = new StringBuilder();
-            result.Append('[').Append(RecordName).Append(']' + nl);
-            for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext(); )
-            {
-                EscherRecord escherRecord = (EscherRecord)iterator.Current;
-                result.Append(escherRecord.ToString() + nl);
-            }
-            foreach (Record record in this.tailRec.Values)
-            {
-                result.Append(record.ToString() + nl);
-            }
-            result.Append("[/").Append(RecordName).Append(']' + nl);
-
-            return result.ToString();
-        }
-
-        public String ToXml(String tab)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(tab).Append("<").Append(RecordName).Append(">\n");
-            for (IEnumerator iterator = EscherRecords.GetEnumerator(); iterator.MoveNext();)
-            {
-                EscherRecord escherRecord = (EscherRecord) iterator.Current;
-                builder.Append(escherRecord.ToXml(tab + "\t"));
-            }
-            builder.Append(tab).Append("</").Append(RecordName).Append(">\n");
-            return builder.ToString();
-        }
+        
 
         internal class CustomEscherRecordFactory : DefaultEscherRecordFactory
         {
-            IList shapeRecords;
-            public CustomEscherRecordFactory(ref IList shapeRecords)
+            List<EscherRecord> shapeRecords;
+            public CustomEscherRecordFactory(List<EscherRecord> shapeRecords)
             {
                 this.shapeRecords = shapeRecords;
             }
@@ -433,191 +810,6 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        /**
-         * Collapses the drawing records into an aggregate.
-         */
-        public static EscherAggregate CreateAggregate(IList records, int locFirstDrawingRecord, DrawingManager2 drawingManager)
-        {
-            // Keep track of any shape records Created so we can match them back to the object id's.
-            // Textbox objects are also treated as shape objects.
-            IList shapeRecords = new ArrayList();
-            IEscherRecordFactory recordFactory = new CustomEscherRecordFactory(ref shapeRecords);
-
-            // Calculate the size of the buffer
-            EscherAggregate agg = new EscherAggregate(drawingManager);
-            int loc = locFirstDrawingRecord;
-            int dataSize = 0;
-            while (loc + 1 < records.Count
-                    && GetSid(records, loc) == DrawingRecord.sid
-                    && IsObjectRecord(records, loc + 1))
-            {
-                dataSize += ((DrawingRecord)records[loc]).Data.Length;
-                loc += 2;
-            }
-
-            // Create one big buffer
-            byte[] buffer = new byte[dataSize];
-            int offset = 0;
-            loc = locFirstDrawingRecord;
-            while (loc + 1 < records.Count
-                    && GetSid(records, loc) == DrawingRecord.sid
-                    && IsObjectRecord(records, loc + 1))
-            {
-                DrawingRecord drawingRecord = (DrawingRecord)records[loc];
-                Array.Copy(drawingRecord.Data, 0, buffer, offset, drawingRecord.Data.Length);
-                offset += drawingRecord.Data.Length;
-                loc += 2;
-            }
-
-            // Decode the shapes
-            //        agg.escherRecords = new ArrayList();
-            int pos = 0;
-            while (pos < dataSize)
-            {
-                EscherRecord r = recordFactory.CreateRecord(buffer, pos);
-                int bytesRead = r.FillFields(buffer, pos, recordFactory);
-                agg.AddEscherRecord(r);
-                pos += bytesRead;
-            }
-
-            // Associate the object records with the shapes
-            loc = locFirstDrawingRecord;
-            int shapeIndex = 0;
-            agg.shapeToObj = new Hashtable();
-            while (loc + 1 < records.Count
-                    && GetSid(records, loc) == DrawingRecord.sid
-                    && IsObjectRecord(records, loc + 1))
-            {
-                Record objRecord = (Record)records[loc + 1];
-                agg.shapeToObj[shapeRecords[shapeIndex++]]= objRecord;
-                loc += 2;
-            }
-            // any NoteRecords that follow the drawing block must be aggregated and and saved in the tailRec collection
-            //put noterecord into tailsRec
-            for (int i = locFirstDrawingRecord + 1; i < records.Count; i++)
-            {
-                if (records[i] is NoteRecord)
-                {
-                    NoteRecord r = (NoteRecord)records[i];
-                    agg.tailRec.Add(r.ShapeId,r);
-                }
-            }
-            return agg;
-
-        }
-
-        IList spEndingOffsets;
-        IList shapes;
-        /**
-         * Serializes this aggregate to a byte array.  Since this Is an aggregate
-         * record it will effectively Serialize the aggregated records.
-         *
-         * @param offset    The offset into the start of the array.
-         * @param data      The byte array to Serialize to.
-         * @return          The number of bytes Serialized.
-         */
-        public override int Serialize(int offset, byte [] data)
-        {
-            ConvertUserModelToRecords();
-
-            // Determine buffer size
-            IList records = EscherRecords;
-            int size = GetEscherRecordSize(records);
-            byte[] buffer = new byte[size];
-
-
-            // Serialize escher records into one big data structure and keep note of ending offsets.
-            spEndingOffsets = new ArrayList();
-            shapes = new ArrayList();
-            int pos = 0;
-            for (IEnumerator iterator = records.GetEnumerator(); iterator.MoveNext(); )
-            {
-                EscherRecord e = (EscherRecord)iterator.Current;
-                pos += e.Serialize(pos, buffer, new SerializationListener(ref spEndingOffsets,ref shapes));
-            }
-            // todo: fix this
-            shapes.Insert(0, null);
-            spEndingOffsets.Insert(0, null);
-
-            // Split escher records into Separate MSODRAWING and OBJ, TXO records.  (We don't break on
-            // the first one because it's the patriach).
-            pos = offset;
-            for (int i = 1; i < shapes.Count; i++)
-            {
-                int endOffset = (int)spEndingOffsets[i] - 1;
-                int startOffset;
-                if (i == 1)
-                    startOffset = 0;
-                else
-                    startOffset = (int)spEndingOffsets[i - 1];
-
-                // Create and Write a new MSODRAWING record
-                DrawingRecord drawing = new DrawingRecord();
-                byte[] drawingData = new byte[endOffset - startOffset + 1];
-                Array.Copy(buffer, startOffset, drawingData, 0, drawingData.Length);
-                drawing.Data=drawingData;
-                int temp = drawing.Serialize(pos, data);
-                pos += temp;
-
-                // Write the matching OBJ record
-                Record obj = (Record)shapeToObj[shapes[i]];
-                temp = obj.Serialize(pos, data);    
-                pos += temp;
-
-            }
-
-            // Write records that need to be Serialized after all drawing Group records
-            foreach (Record rec in tailRec.Values)
-            {
-                pos += rec.Serialize(pos, data);
-            }
-            int bytesWritten = pos - offset;
-            if (bytesWritten != RecordSize)
-                throw new RecordFormatException(bytesWritten + " bytes written but RecordSize reports " + RecordSize);
-            return bytesWritten;
-        }
-
-        /**
-         * How many bytes do the raw escher records contain.
-         * @param records   List of escher records
-         * @return  the number of bytes
-         */
-        private int GetEscherRecordSize(IList records)
-        {
-            int size = 0;
-            for (IEnumerator iterator = records.GetEnumerator(); iterator.MoveNext(); )
-                size += ((EscherRecord)iterator.Current).RecordSize;
-            return size;
-        }
-
-        /**
-         * The number of bytes required to Serialize this record.
-         */
-        public override int RecordSize
-        {
-            get
-            {
-                ConvertUserModelToRecords();
-                IList records = EscherRecords;
-                int rawEscherSize = GetEscherRecordSize(records);
-                int drawingRecordSize = rawEscherSize + (shapeToObj.Count) * 4;
-                int objRecordSize = 0;
-                for (IEnumerator iterator = shapeToObj.Values.GetEnumerator(); iterator.MoveNext(); )
-                {
-                    Record r = (Record)iterator.Current;
-                    objRecordSize += r.RecordSize;
-                }
-                int tailRecordSize = 0;
-                foreach (Record r in tailRec.Values)
-                {   
-                    tailRecordSize += r.RecordSize;
-                }
-                return drawingRecordSize + objRecordSize + tailRecordSize;
-            }
-        }
-
-
-
         public HSSFPatriarch Patriarch
         {
             get { return patriarch; }
@@ -628,169 +820,169 @@ namespace NPOI.HSSF.Record
          * Converts the Records into UserModel
          *  objects on the bound HSSFPatriarch
          */
-        public void ConvertRecordsToUserModel()
-        {
-            if (patriarch == null)
-            {
-                throw new InvalidOperationException("Must call SetPatriarch() first");
-            }
+        //public void ConvertRecordsToUserModel()
+        //{
+        //    if (patriarch == null)
+        //    {
+        //        throw new InvalidOperationException("Must call SetPatriarch() first");
+        //    }
 
-            // The top level container ought to have
-            //  the DgRecord and the container of one container
-            //  per shape Group (patriach overall first)
-            EscherContainerRecord topContainer =
-                (EscherContainerRecord)GetEscherContainer();
-            if (topContainer == null)
-            {
-                return;
-            }
-            topContainer = (EscherContainerRecord)
-                topContainer.ChildContainers[0];
+        //    // The top level container ought to have
+        //    //  the DgRecord and the container of one container
+        //    //  per shape Group (patriach overall first)
+        //    EscherContainerRecord topContainer =
+        //        (EscherContainerRecord)GetEscherContainer();
+        //    if (topContainer == null)
+        //    {
+        //        return;
+        //    }
+        //    topContainer = (EscherContainerRecord)
+        //        topContainer.ChildContainers[0];
 
-            IList<EscherContainerRecord> tcc = topContainer.ChildContainers;
-            if (tcc.Count == 0)
-            {
-                throw new InvalidOperationException("No child escher containers at the point that should hold the patriach data, and one container per top level shape!");
-            }
+        //    IList<EscherContainerRecord> tcc = topContainer.ChildContainers;
+        //    if (tcc.Count == 0)
+        //    {
+        //        throw new InvalidOperationException("No child escher containers at the point that should hold the patriach data, and one container per top level shape!");
+        //    }
 
-            // First up, Get the patriach position
-            // This Is in the first EscherSpgrRecord, in
-            //  the first container, with a EscherSRecord too
-            EscherContainerRecord patriachContainer =
-                (EscherContainerRecord)tcc[0];
-            EscherSpgrRecord spgr = null;
-            for (IEnumerator it = patriachContainer.ChildRecords.GetEnumerator(); it.MoveNext(); )
-            {
-                EscherRecord r = (EscherRecord)it.Current;
-                if (r is EscherSpgrRecord)
-                {
-                    spgr = (EscherSpgrRecord)r;
-                    break;
-                }
-            }
-            if (spgr != null)
-            {
-                patriarch.SetCoordinates(
-                        spgr.RectX1, spgr.RectY1,
-                        spgr.RectX2, spgr.RectY2
-                );
-            }
+        //    // First up, Get the patriach position
+        //    // This Is in the first EscherSpgrRecord, in
+        //    //  the first container, with a EscherSRecord too
+        //    EscherContainerRecord patriachContainer =
+        //        (EscherContainerRecord)tcc[0];
+        //    EscherSpgrRecord spgr = null;
+        //    for (IEnumerator it = patriachContainer.ChildRecords.GetEnumerator(); it.MoveNext(); )
+        //    {
+        //        EscherRecord r = (EscherRecord)it.Current;
+        //        if (r is EscherSpgrRecord)
+        //        {
+        //            spgr = (EscherSpgrRecord)r;
+        //            break;
+        //        }
+        //    }
+        //    if (spgr != null)
+        //    {
+        //        patriarch.SetCoordinates(
+        //                spgr.RectX1, spgr.RectY1,
+        //                spgr.RectX2, spgr.RectY2
+        //        );
+        //    }
 
-            // Now Process the containers for each Group
-            //  and objects
-            for (int i = 1; i < tcc.Count; i++)
-            {
-                EscherContainerRecord shapeContainer =
-                    (EscherContainerRecord)tcc[i];
-                //Console.Error.WriteLine("\n\n*****\n\n");
-                //Console.Error.WriteLine(shapeContainer);
+        //    // Now Process the containers for each Group
+        //    //  and objects
+        //    for (int i = 1; i < tcc.Count; i++)
+        //    {
+        //        EscherContainerRecord shapeContainer =
+        //            (EscherContainerRecord)tcc[i];
+        //        //Console.Error.WriteLine("\n\n*****\n\n");
+        //        //Console.Error.WriteLine(shapeContainer);
 
-                // Could be a Group, or a base object
-                if (shapeContainer.RecordId == EscherContainerRecord.SPGR_CONTAINER)
-                {
-                    if(shapeContainer.ChildRecords.Count>0)
-                    {
-                        // Group
-                        HSSFShapeGroup group =
-                            new HSSFShapeGroup(null, new HSSFClientAnchor());
-                        patriarch.Children.Add(group);
+        //        // Could be a Group, or a base object
+        //        if (shapeContainer.RecordId == EscherContainerRecord.SPGR_CONTAINER)
+        //        {
+        //            if(shapeContainer.ChildRecords.Count>0)
+        //            {
+        //                // Group
+        //                HSSFShapeGroup group =
+        //                    new HSSFShapeGroup(null, new HSSFClientAnchor());
+        //                patriarch.Children.Add(group);
 
-                        EscherContainerRecord groupContainer =
-                            (EscherContainerRecord)shapeContainer.GetChild(0);
-                        ConvertRecordsToUserModel(groupContainer, group);
-                    }
-                }
-                else if (shapeContainer.RecordId == EscherContainerRecord.SP_CONTAINER)
-                {
-                    EscherSpRecord spRecord = (EscherSpRecord)shapeContainer.GetChildById(EscherSpRecord.RECORD_ID);
-                    int type = spRecord.ShapeType;
+        //                EscherContainerRecord groupContainer =
+        //                    (EscherContainerRecord)shapeContainer.GetChild(0);
+        //                ConvertRecordsToUserModel(groupContainer, group);
+        //            }
+        //        }
+        //        else if (shapeContainer.RecordId == EscherContainerRecord.SP_CONTAINER)
+        //        {
+        //            EscherSpRecord spRecord = (EscherSpRecord)shapeContainer.GetChildById(EscherSpRecord.RECORD_ID);
+        //            int type = spRecord.ShapeType;
 
-                    switch (type)
-                    {
-                        case ST_TEXTBOX:
-                            HSSFSimpleShape box;
+        //            switch (type)
+        //            {
+        //                case ST_TEXTBOX:
+        //                    HSSFSimpleShape box;
 
-                            TextObjectRecord textrec = (TextObjectRecord)shapeToObj[GetEscherChild(shapeContainer, EscherTextboxRecord.RECORD_ID)];
-                             EscherClientAnchorRecord anchorRecord1 = (EscherClientAnchorRecord)GetEscherChild(shapeContainer, EscherClientAnchorRecord.RECORD_ID);
-                                HSSFClientAnchor anchor1 = new HSSFClientAnchor();
-                                anchor1.Col1 = anchorRecord1.Col1;
-                                anchor1.Col2 = anchorRecord1.Col2;
-                                anchor1.Dx1 = anchorRecord1.Dx1;
-                                anchor1.Dx2 = anchorRecord1.Dx2;
-                                anchor1.Dy1 = anchorRecord1.Dy1;
-                                anchor1.Dy2 = anchorRecord1.Dy2;
-                                anchor1.Row1 = anchorRecord1.Row1;
-                                anchor1.Row2 = anchorRecord1.Row2;
-                            if (tailRec.Count>=i && tailRec[i-1] is NoteRecord)
-                            {
-                                NoteRecord noterec=(NoteRecord)tailRec[i - 1];
+        //                    TextObjectRecord textrec = (TextObjectRecord)shapeToObj[GetEscherChild(shapeContainer, EscherTextboxRecord.RECORD_ID)];
+        //                     EscherClientAnchorRecord anchorRecord1 = (EscherClientAnchorRecord)GetEscherChild(shapeContainer, EscherClientAnchorRecord.RECORD_ID);
+        //                        HSSFClientAnchor anchor1 = new HSSFClientAnchor();
+        //                        anchor1.Col1 = anchorRecord1.Col1;
+        //                        anchor1.Col2 = anchorRecord1.Col2;
+        //                        anchor1.Dx1 = anchorRecord1.Dx1;
+        //                        anchor1.Dx2 = anchorRecord1.Dx2;
+        //                        anchor1.Dy1 = anchorRecord1.Dy1;
+        //                        anchor1.Dy2 = anchorRecord1.Dy2;
+        //                        anchor1.Row1 = anchorRecord1.Row1;
+        //                        anchor1.Row2 = anchorRecord1.Row2;
+        //                    if (tailRec.Count>=i && tailRec[i-1] is NoteRecord)
+        //                    {
+        //                        NoteRecord noterec=(NoteRecord)tailRec[i - 1];
                                 
-                                // comment
-                                box =
-                                    new HSSFComment(null, anchor1);
-                                HSSFComment comment=(HSSFComment)box;
-                                comment.Author = noterec.Author;
-                                comment.Row = noterec.Row;
-                                comment.Column = noterec.Column;
-                                comment.Visible = (noterec.Flags == NoteRecord.NOTE_VISIBLE);
-                                comment.String = textrec.Str;                                
-                            }
-                            else
-                            {
-                                // TextBox
-                                box =
-                                    new HSSFTextbox(null, anchor1);
-                                ((HSSFTextbox)box).String = textrec.Str;  
-                            }
-                            patriarch.AddShape(box);
-                            ConvertRecordsToUserModel(shapeContainer, box);
-                            break;
-                        case ST_PICTUREFRAME:
-                            // Duplicated from
-                            // org.apache.poi.hslf.model.Picture.getPictureIndex()
-                            EscherOptRecord opt = (EscherOptRecord)GetEscherChild(shapeContainer, EscherOptRecord.RECORD_ID);
-                            EscherSimpleProperty prop = (EscherSimpleProperty)opt.Lookup(EscherProperties.BLIP__BLIPTODISPLAY);
-                            if (prop != null)
-                            {
-                                int pictureIndex = prop.PropertyValue;
-                                EscherClientAnchorRecord anchorRecord = (EscherClientAnchorRecord)GetEscherChild(shapeContainer, EscherClientAnchorRecord.RECORD_ID);
-                                HSSFClientAnchor anchor = new HSSFClientAnchor();
-                                anchor.Col1 = anchorRecord.Col1;
-                                anchor.Col2 = anchorRecord.Col2;
-                                anchor.Dx1 = anchorRecord.Dx1;
-                                anchor.Dx2 = anchorRecord.Dx2;
-                                anchor.Dy1 = anchorRecord.Dy1;
-                                anchor.Dy2 = anchorRecord.Dy2;
-                                anchor.Row1 = anchorRecord.Row1;
-                                anchor.Row2 = anchorRecord.Row2;
-                                HSSFPicture picture = new HSSFPicture(null, anchor);
-                                picture.PictureIndex = pictureIndex;
-                                patriarch.AddShape(picture);
+        //                        // comment
+        //                        box =
+        //                            new HSSFComment(null, anchor1);
+        //                        HSSFComment comment=(HSSFComment)box;
+        //                        comment.Author = noterec.Author;
+        //                        comment.Row = noterec.Row;
+        //                        comment.Column = noterec.Column;
+        //                        comment.Visible = (noterec.Flags == NoteRecord.NOTE_VISIBLE);
+        //                        comment.String = textrec.Str;                                
+        //                    }
+        //                    else
+        //                    {
+        //                        // TextBox
+        //                        box =
+        //                            new HSSFTextbox(null, anchor1);
+        //                        ((HSSFTextbox)box).String = textrec.Str;  
+        //                    }
+        //                    patriarch.AddShape(box);
+        //                    ConvertRecordsToUserModel(shapeContainer, box);
+        //                    break;
+        //                case ST_PICTUREFRAME:
+        //                    // Duplicated from
+        //                    // org.apache.poi.hslf.model.Picture.getPictureIndex()
+        //                    EscherOptRecord opt = (EscherOptRecord)GetEscherChild(shapeContainer, EscherOptRecord.RECORD_ID);
+        //                    EscherSimpleProperty prop = (EscherSimpleProperty)opt.Lookup(EscherProperties.BLIP__BLIPTODISPLAY);
+        //                    if (prop != null)
+        //                    {
+        //                        int pictureIndex = prop.PropertyValue;
+        //                        EscherClientAnchorRecord anchorRecord = (EscherClientAnchorRecord)GetEscherChild(shapeContainer, EscherClientAnchorRecord.RECORD_ID);
+        //                        HSSFClientAnchor anchor = new HSSFClientAnchor();
+        //                        anchor.Col1 = anchorRecord.Col1;
+        //                        anchor.Col2 = anchorRecord.Col2;
+        //                        anchor.Dx1 = anchorRecord.Dx1;
+        //                        anchor.Dx2 = anchorRecord.Dx2;
+        //                        anchor.Dy1 = anchorRecord.Dy1;
+        //                        anchor.Dy2 = anchorRecord.Dy2;
+        //                        anchor.Row1 = anchorRecord.Row1;
+        //                        anchor.Row2 = anchorRecord.Row2;
+        //                        HSSFPicture picture = new HSSFPicture(null, anchor);
+        //                        picture.PictureIndex = pictureIndex;
+        //                        patriarch.AddShape(picture);
 
-                            }
-                            break;
-                    }
+        //                    }
+        //                    break;
+        //            }
 
 
-                }
-                else
-                {
-                    // Base level
-                    ConvertRecordsToUserModel(shapeContainer, patriarch);
-                }
-            }
+        //        }
+        //        else
+        //        {
+        //            // Base level
+        //            ConvertRecordsToUserModel(shapeContainer, patriarch);
+        //        }
+        //    }
 
-            // Now, clear any trace of what records make up
-            //  the patriarch
-            // Otherwise, everything will go horribly wrong
-            //  when we try to Write out again....
-            //    	clearEscherRecords();
-            drawingManager.GetDgg().FileIdClusters=new EscherDggRecord.FileIdCluster[0];
+        //    // Now, clear any trace of what records make up
+        //    //  the patriarch
+        //    // Otherwise, everything will go horribly wrong
+        //    //  when we try to Write out again....
+        //    //    	clearEscherRecords();
+        //    drawingManager.GetDgg().FileIdClusters=new EscherDggRecord.FileIdCluster[0];
 
-            // TODO: Support Converting our records
-            //  back into shapes
-            log.Log(POILogger.WARN, "Not Processing objects into Patriarch!");
-        }
+        //    // TODO: Support Converting our records
+        //    //  back into shapes
+        //    log.Log(POILogger.WARN, "Not Processing objects into Patriarch!");
+        //}
 
         private EscherRecord GetEscherChild(EscherContainerRecord owner, int recordId)
         {
@@ -804,67 +996,67 @@ namespace NPOI.HSSF.Record
         }
 
 
-        private void ConvertRecordsToUserModel(EscherContainerRecord shapeContainer, Object model)
-        {
-            for (IEnumerator it = shapeContainer.ChildRecords.GetEnumerator(); it.MoveNext(); )
-            {
-                EscherRecord r = (EscherRecord)it.Current;
-                if (r is EscherSpgrRecord)
-                {
-                    // This may be overriden by a later EscherClientAnchorRecord
-                    EscherSpgrRecord spgr = (EscherSpgrRecord)r;
+        //private void ConvertRecordsToUserModel(EscherContainerRecord shapeContainer, Object model)
+        //{
+        //    for (IEnumerator it = shapeContainer.ChildRecords.GetEnumerator(); it.MoveNext(); )
+        //    {
+        //        EscherRecord r = (EscherRecord)it.Current;
+        //        if (r is EscherSpgrRecord)
+        //        {
+        //            // This may be overriden by a later EscherClientAnchorRecord
+        //            EscherSpgrRecord spgr = (EscherSpgrRecord)r;
 
-                    if (model is HSSFShapeGroup)
-                    {
-                        HSSFShapeGroup g = (HSSFShapeGroup)model;
-                        g.SetCoordinates(
-                                spgr.RectX1, spgr.RectY1,
-                                spgr.RectX2, spgr.RectY2
-                        );
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Got top level anchor but not Processing a Group");
-                    }
-                }
-                else if (r is EscherClientAnchorRecord)
-                {
-                    EscherClientAnchorRecord car = (EscherClientAnchorRecord)r;
+        //            if (model is HSSFShapeGroup)
+        //            {
+        //                HSSFShapeGroup g = (HSSFShapeGroup)model;
+        //                g.SetCoordinates(
+        //                        spgr.RectX1, spgr.RectY1,
+        //                        spgr.RectX2, spgr.RectY2
+        //                );
+        //            }
+        //            else
+        //            {
+        //                throw new InvalidOperationException("Got top level anchor but not Processing a Group");
+        //            }
+        //        }
+        //        else if (r is EscherClientAnchorRecord)
+        //        {
+        //            EscherClientAnchorRecord car = (EscherClientAnchorRecord)r;
 
-                    if (model is HSSFShape)
-                    {
-                        HSSFShape g = (HSSFShape)model;
-                        g.Anchor.Dx1=car.Dx1;
-                        g.Anchor.Dx2=car.Dx2;
-                        g.Anchor.Dy1=car.Dy1;
-                        g.Anchor.Dy2=car.Dy2;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Got top level anchor but not Processing a Group or shape");
-                    }
-                }
-                else if (r is EscherTextboxRecord)
-                {
-                    EscherTextboxRecord tbr = (EscherTextboxRecord)r;
+        //            if (model is HSSFShape)
+        //            {
+        //                HSSFShape g = (HSSFShape)model;
+        //                g.Anchor.Dx1=car.Dx1;
+        //                g.Anchor.Dx2=car.Dx2;
+        //                g.Anchor.Dy1=car.Dy1;
+        //                g.Anchor.Dy2=car.Dy2;
+        //            }
+        //            else
+        //            {
+        //                throw new InvalidOperationException("Got top level anchor but not Processing a Group or shape");
+        //            }
+        //        }
+        //        else if (r is EscherTextboxRecord)
+        //        {
+        //            EscherTextboxRecord tbr = (EscherTextboxRecord)r;
 
-                    // Also need to Find the TextObjectRecord too
-                    // TODO
-                }
-                else if (r is EscherSpRecord)
-                {
-                    // Use flags if needed
-                }
-                else if (r is EscherOptRecord)
-                {
-                    // Use properties if needed
-                }
-                else
-                {
-                    //Console.Error.WriteLine(r);
-                }
-            }
-        }
+        //            // Also need to Find the TextObjectRecord too
+        //            // TODO
+        //        }
+        //        else if (r is EscherSpRecord)
+        //        {
+        //            // Use flags if needed
+        //        }
+        //        else if (r is EscherOptRecord)
+        //        {
+        //            // Use properties if needed
+        //        }
+        //        else
+        //        {
+        //            //Console.Error.WriteLine(r);
+        //        }
+        //    }
+        //}
 
         public void Clear()
         {
@@ -880,199 +1072,178 @@ namespace NPOI.HSSF.Record
 
         // =============== Private methods ========================
 
-        private static bool IsObjectRecord(IList records, int loc)
+        private static bool IsObjectRecord(List<RecordBase> records, int loc)
         {
             return GetSid(records, loc) == ObjRecord.sid || GetSid(records, loc) == TextObjectRecord.sid;
         }
+        
 
-        private void ConvertUserModelToRecords()
-        {
-            if (patriarch != null)
-            {
-                shapeToObj.Clear();
-                tailRec.Clear();
-                ClearEscherRecords();
-                if (patriarch.Children.Count != 0)
-                {
-                    ConvertPatriarch(patriarch);
-                    EscherContainerRecord dgContainer = (EscherContainerRecord)GetEscherRecord(0);
-                    EscherContainerRecord spgrContainer = null;
-                    for (int i = 0; i < dgContainer.ChildRecords.Count; i++)
-                        if (dgContainer.GetChild(i).RecordId == EscherContainerRecord.SPGR_CONTAINER)
-                            spgrContainer = (EscherContainerRecord)dgContainer.GetChild(i);
-                    ConvertShapes(patriarch, spgrContainer, shapeToObj);
+        //private void ConvertShapes(HSSFShapeContainer parent, EscherContainerRecord escherParent, Hashtable shapeToObj)
+        //{
+        //    if (escherParent == null) throw new ArgumentException("Parent record required");
 
-                    patriarch = null;
-                }
-            }
-        }
+        //    IList<HSSFShape> shapes = parent.Children;
+        //    for (IEnumerator iterator = shapes.GetEnumerator(); iterator.MoveNext(); )
+        //    {
+        //        HSSFShape shape = (HSSFShape)iterator.Current;
+        //        if (shape is HSSFShapeGroup)
+        //        {
+        //            ConvertGroup((HSSFShapeGroup)shape, escherParent, shapeToObj);
+        //        }
+        //        else
+        //        {
+        //            AbstractShape shapeModel = AbstractShape.CreateShape(
+        //                    shape,
+        //                    drawingManager.AllocateShapeId(drawingGroupId));
+        //            shapeToObj[FindClientData(shapeModel.SpContainer)]=shapeModel.ObjRecord;
+        //            if (shapeModel is TextboxShape)
+        //            {
+        //                EscherRecord escherTextbox = ((TextboxShape)shapeModel).EscherTextbox;
+        //                shapeToObj[escherTextbox]=((TextboxShape)shapeModel).TextObjectRecord;
+        //                //                    escherParent.AddChildRecord(escherTextbox);
 
-        private void ConvertShapes(HSSFShapeContainer parent, EscherContainerRecord escherParent, Hashtable shapeToObj)
-        {
-            if (escherParent == null) throw new ArgumentException("Parent record required");
+        //                if (shapeModel is CommentShape)
+        //                {
+        //                    CommentShape comment = (CommentShape)shapeModel;
+        //                    tailRec.Add(comment.NoteRecord.ShapeId,comment.NoteRecord);
+        //                }
+        //            }
+        //            escherParent.AddChildRecord(shapeModel.SpContainer);
+        //        }
+        //    }
+        //    //        drawingManager.newCluster( (short)1 );
+        //    //        drawingManager.newCluster( (short)2 );
 
-            IList shapes = parent.Children;
-            for (IEnumerator iterator = shapes.GetEnumerator(); iterator.MoveNext(); )
-            {
-                HSSFShape shape = (HSSFShape)iterator.Current;
-                if (shape is HSSFShapeGroup)
-                {
-                    ConvertGroup((HSSFShapeGroup)shape, escherParent, shapeToObj);
-                }
-                else
-                {
-                    AbstractShape shapeModel = AbstractShape.CreateShape(
-                            shape,
-                            drawingManager.AllocateShapeId(drawingGroupId));
-                    shapeToObj[FindClientData(shapeModel.SpContainer)]=shapeModel.ObjRecord;
-                    if (shapeModel is TextboxShape)
-                    {
-                        EscherRecord escherTextbox = ((TextboxShape)shapeModel).EscherTextbox;
-                        shapeToObj[escherTextbox]=((TextboxShape)shapeModel).TextObjectRecord;
-                        //                    escherParent.AddChildRecord(escherTextbox);
+        //}
 
-                        if (shapeModel is CommentShape)
-                        {
-                            CommentShape comment = (CommentShape)shapeModel;
-                            tailRec.Add(comment.NoteRecord.ShapeId,comment.NoteRecord);
-                        }
-                    }
-                    escherParent.AddChildRecord(shapeModel.SpContainer);
-                }
-            }
-            //        drawingManager.newCluster( (short)1 );
-            //        drawingManager.newCluster( (short)2 );
+        //private void ConvertGroup(HSSFShapeGroup shape, EscherContainerRecord escherParent, Hashtable shapeToObj)
+        //{
+        //    EscherContainerRecord spgrContainer = new EscherContainerRecord();
+        //    EscherContainerRecord spContainer = new EscherContainerRecord();
+        //    EscherSpgrRecord spgr = new EscherSpgrRecord();
+        //    EscherSpRecord sp = new EscherSpRecord();
+        //    EscherOptRecord opt = new EscherOptRecord();
+        //    EscherRecord anchor;
+        //    EscherClientDataRecord clientData = new EscherClientDataRecord();
 
-        }
+        //    spgrContainer.RecordId = EscherContainerRecord.SPGR_CONTAINER;
+        //    spgrContainer.Options = (short)0x000F;
+        //    spContainer.RecordId = EscherContainerRecord.SP_CONTAINER;
+        //    spContainer.Options = (short)0x000F;
+        //    spgr.RecordId = EscherSpgrRecord.RECORD_ID;
+        //    spgr.Options = (short)0x0001;
+        //    spgr.RectX1 = shape.X1;
+        //    spgr.RectY1 = shape.Y1;
+        //    spgr.RectX2 = shape.X2;
+        //    spgr.RectY2 = shape.Y2;
+        //    sp.RecordId = EscherSpRecord.RECORD_ID;
+        //    sp.Options = (short)0x0002;
+        //    int shapeId = drawingManager.AllocateShapeId(drawingGroupId);
+        //    sp.ShapeId = shapeId;
+        //    if (shape.Anchor is HSSFClientAnchor)
+        //        sp.Flags = EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR;
+        //    else
+        //        sp.Flags = EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_CHILD;
+        //    opt.RecordId = EscherOptRecord.RECORD_ID;
+        //    opt.Options = (short)0x0023;
+        //    opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 0x00040004));
+        //    opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00080000));
 
-        private void ConvertGroup(HSSFShapeGroup shape, EscherContainerRecord escherParent, Hashtable shapeToObj)
-        {
-            EscherContainerRecord spgrContainer = new EscherContainerRecord();
-            EscherContainerRecord spContainer = new EscherContainerRecord();
-            EscherSpgrRecord spgr = new EscherSpgrRecord();
-            EscherSpRecord sp = new EscherSpRecord();
-            EscherOptRecord opt = new EscherOptRecord();
-            EscherRecord anchor;
-            EscherClientDataRecord clientData = new EscherClientDataRecord();
+        //    anchor = ConvertAnchor.CreateAnchor(shape.Anchor);
+        //    //        clientAnchor.Col1( ( (HSSFClientAnchor) shape.Anchor ).Col1 );
+        //    //        clientAnchor.Row1( (short) ( (HSSFClientAnchor) shape.Anchor ).Row1 );
+        //    //        clientAnchor.Dx1( (short) shape.Anchor.Dx1 );
+        //    //        clientAnchor.Dy1( (short) shape.Anchor.Dy1 );
+        //    //        clientAnchor.Col2( ( (HSSFClientAnchor) shape.Anchor ).Col2 );
+        //    //        clientAnchor.Row2( (short) ( (HSSFClientAnchor) shape.Anchor ).Row2 );
+        //    //        clientAnchor.Dx2( (short) shape.Anchor.Dx2 );
+        //    //        clientAnchor.Dy2( (short) shape.Anchor.Dy2 );
+        //    clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
+        //    clientData.Options = ((short)0x0000);
 
-            spgrContainer.RecordId = EscherContainerRecord.SPGR_CONTAINER;
-            spgrContainer.Options = (short)0x000F;
-            spContainer.RecordId = EscherContainerRecord.SP_CONTAINER;
-            spContainer.Options = (short)0x000F;
-            spgr.RecordId = EscherSpgrRecord.RECORD_ID;
-            spgr.Options = (short)0x0001;
-            spgr.RectX1 = shape.X1;
-            spgr.RectY1 = shape.Y1;
-            spgr.RectX2 = shape.X2;
-            spgr.RectY2 = shape.Y2;
-            sp.RecordId = EscherSpRecord.RECORD_ID;
-            sp.Options = (short)0x0002;
-            int shapeId = drawingManager.AllocateShapeId(drawingGroupId);
-            sp.ShapeId = shapeId;
-            if (shape.Anchor is HSSFClientAnchor)
-                sp.Flags = EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR;
-            else
-                sp.Flags = EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_CHILD;
-            opt.RecordId = EscherOptRecord.RECORD_ID;
-            opt.Options = (short)0x0023;
-            opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 0x00040004));
-            opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00080000));
+        //    spgrContainer.AddChildRecord(spContainer);
+        //    spContainer.AddChildRecord(spgr);
+        //    spContainer.AddChildRecord(sp);
+        //    spContainer.AddChildRecord(opt);
+        //    spContainer.AddChildRecord(anchor);
+        //    spContainer.AddChildRecord(clientData);
 
-            anchor = ConvertAnchor.CreateAnchor(shape.Anchor);
-            //        clientAnchor.Col1( ( (HSSFClientAnchor) shape.Anchor ).Col1 );
-            //        clientAnchor.Row1( (short) ( (HSSFClientAnchor) shape.Anchor ).Row1 );
-            //        clientAnchor.Dx1( (short) shape.Anchor.Dx1 );
-            //        clientAnchor.Dy1( (short) shape.Anchor.Dy1 );
-            //        clientAnchor.Col2( ( (HSSFClientAnchor) shape.Anchor ).Col2 );
-            //        clientAnchor.Row2( (short) ( (HSSFClientAnchor) shape.Anchor ).Row2 );
-            //        clientAnchor.Dx2( (short) shape.Anchor.Dx2 );
-            //        clientAnchor.Dy2( (short) shape.Anchor.Dy2 );
-            clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
-            clientData.Options = ((short)0x0000);
+        //    ObjRecord obj = new ObjRecord();
+        //    CommonObjectDataSubRecord cmo = new CommonObjectDataSubRecord();
+        //    cmo.ObjectType = CommonObjectType.GROUP;
+        //    cmo.ObjectId = shapeId;
+        //    cmo.IsLocked = true;
+        //    cmo.IsPrintable = true;
+        //    cmo.IsAutoFill = true;
+        //    cmo.IsAutoline = true;
+        //    GroupMarkerSubRecord gmo = new GroupMarkerSubRecord();
+        //    EndSubRecord end = new EndSubRecord();
+        //    obj.AddSubRecord(cmo);
+        //    obj.AddSubRecord(gmo);
+        //    obj.AddSubRecord(end);
+        //    shapeToObj[clientData] = obj;
 
-            spgrContainer.AddChildRecord(spContainer);
-            spContainer.AddChildRecord(spgr);
-            spContainer.AddChildRecord(sp);
-            spContainer.AddChildRecord(opt);
-            spContainer.AddChildRecord(anchor);
-            spContainer.AddChildRecord(clientData);
+        //    escherParent.AddChildRecord(spgrContainer);
 
-            ObjRecord obj = new ObjRecord();
-            CommonObjectDataSubRecord cmo = new CommonObjectDataSubRecord();
-            cmo.ObjectType = CommonObjectType.GROUP;
-            cmo.ObjectId = shapeId;
-            cmo.IsLocked = true;
-            cmo.IsPrintable = true;
-            cmo.IsAutoFill = true;
-            cmo.IsAutoline = true;
-            GroupMarkerSubRecord gmo = new GroupMarkerSubRecord();
-            EndSubRecord end = new EndSubRecord();
-            obj.AddSubRecord(cmo);
-            obj.AddSubRecord(gmo);
-            obj.AddSubRecord(end);
-            shapeToObj[clientData] = obj;
+        //    ConvertShapes(shape, spgrContainer, shapeToObj);
 
-            escherParent.AddChildRecord(spgrContainer);
+        //}
 
-            ConvertShapes(shape, spgrContainer, shapeToObj);
+        //private EscherRecord FindClientData(EscherContainerRecord spContainer)
+        //{
+        //    for (IEnumerator iterator = spContainer.ChildRecords.GetEnumerator(); iterator.MoveNext(); )
+        //    {
+        //        EscherRecord r = (EscherRecord)iterator.Current;
+        //        if (r.RecordId == EscherClientDataRecord.RECORD_ID)
+        //            return r;
+        //    }
+        //    throw new ArgumentException("Can not Find client data record");
+        //}
 
-        }
+        //private void ConvertPatriarch(HSSFPatriarch patriarch)
+        //{
+        //    EscherContainerRecord dgContainer = new EscherContainerRecord();
+        //    EscherDgRecord dg;
+        //    EscherContainerRecord spgrContainer = new EscherContainerRecord();
+        //    EscherContainerRecord spContainer1 = new EscherContainerRecord();
+        //    EscherSpgrRecord spgr = new EscherSpgrRecord();
+        //    EscherSpRecord sp1 = new EscherSpRecord();
 
-        private EscherRecord FindClientData(EscherContainerRecord spContainer)
-        {
-            for (IEnumerator iterator = spContainer.ChildRecords.GetEnumerator(); iterator.MoveNext(); )
-            {
-                EscherRecord r = (EscherRecord)iterator.Current;
-                if (r.RecordId == EscherClientDataRecord.RECORD_ID)
-                    return r;
-            }
-            throw new ArgumentException("Can not Find client data record");
-        }
+        //    dgContainer.RecordId=EscherContainerRecord.DG_CONTAINER;
+        //    dgContainer.Options=(short)0x000F;
+        //    dg = drawingManager.CreateDgRecord();
+        //    drawingGroupId = dg.DrawingGroupId;
+        //    //        dg.Options( (short) ( drawingId << 4 ) );
+        //    //        dg.NumShapes( GetNumberOfShapes( patriarch ) );
+        //    //        dg.LastMSOSPID( 0 );  // populated after all shape id's are assigned.
+        //    spgrContainer.RecordId=EscherContainerRecord.SPGR_CONTAINER;
+        //    spgrContainer.Options=(short)0x000F;
+        //    spContainer1.RecordId=EscherContainerRecord.SP_CONTAINER;
+        //    spContainer1.Options=(short)0x000F;
+        //    spgr.RecordId=EscherSpgrRecord.RECORD_ID;
+        //    spgr.Options=(short)0x0001;    // version
+        //    spgr.RectX1=patriarch.X1;
+        //    spgr.RectY1=patriarch.Y1;
+        //    spgr.RectX2=patriarch.X2;
+        //    spgr.RectY2=patriarch.Y2;
+        //    sp1.RecordId=EscherSpRecord.RECORD_ID;
+        //    sp1.Options=(short)0x0002;
+        //    sp1.ShapeId=drawingManager.AllocateShapeId(dg.DrawingGroupId);
+        //    sp1.Flags=EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_PATRIARCH;
 
-        private void ConvertPatriarch(HSSFPatriarch patriarch)
-        {
-            EscherContainerRecord dgContainer = new EscherContainerRecord();
-            EscherDgRecord dg;
-            EscherContainerRecord spgrContainer = new EscherContainerRecord();
-            EscherContainerRecord spContainer1 = new EscherContainerRecord();
-            EscherSpgrRecord spgr = new EscherSpgrRecord();
-            EscherSpRecord sp1 = new EscherSpRecord();
+        //    dgContainer.AddChildRecord(dg);
+        //    dgContainer.AddChildRecord(spgrContainer);
+        //    spgrContainer.AddChildRecord(spContainer1);
+        //    spContainer1.AddChildRecord(spgr);
+        //    spContainer1.AddChildRecord(sp1);
 
-            dgContainer.RecordId=EscherContainerRecord.DG_CONTAINER;
-            dgContainer.Options=(short)0x000F;
-            dg = drawingManager.CreateDgRecord();
-            drawingGroupId = dg.DrawingGroupId;
-            //        dg.Options( (short) ( drawingId << 4 ) );
-            //        dg.NumShapes( GetNumberOfShapes( patriarch ) );
-            //        dg.LastMSOSPID( 0 );  // populated after all shape id's are assigned.
-            spgrContainer.RecordId=EscherContainerRecord.SPGR_CONTAINER;
-            spgrContainer.Options=(short)0x000F;
-            spContainer1.RecordId=EscherContainerRecord.SP_CONTAINER;
-            spContainer1.Options=(short)0x000F;
-            spgr.RecordId=EscherSpgrRecord.RECORD_ID;
-            spgr.Options=(short)0x0001;    // version
-            spgr.RectX1=patriarch.X1;
-            spgr.RectY1=patriarch.Y1;
-            spgr.RectX2=patriarch.X2;
-            spgr.RectY2=patriarch.Y2;
-            sp1.RecordId=EscherSpRecord.RECORD_ID;
-            sp1.Options=(short)0x0002;
-            sp1.ShapeId=drawingManager.AllocateShapeId(dg.DrawingGroupId);
-            sp1.Flags=EscherSpRecord.FLAG_GROUP | EscherSpRecord.FLAG_PATRIARCH;
+        //    AddEscherRecord(dgContainer);
+        //}
 
-            dgContainer.AddChildRecord(dg);
-            dgContainer.AddChildRecord(spgrContainer);
-            spgrContainer.AddChildRecord(spContainer1);
-            spContainer1.AddChildRecord(spgr);
-            spContainer1.AddChildRecord(sp1);
-
-            AddEscherRecord(dgContainer);
-        }
-
-        private static short GetSid(IList records, int loc)
-        {
-            return ((Record)records[loc]).Sid;
-        }
+        //private static short GetSid(IList records, int loc)
+        //{
+        //    return ((Record)records[loc]).Sid;
+        //}
         /// <summary>
         /// Associates an escher record to an OBJ record or a TXO record.
         /// </summary>
@@ -1110,6 +1281,33 @@ namespace NPOI.HSSF.Record
         public void RemoveTailRecord(NoteRecord note)
         {
             tailRec.Remove(note.ShapeId);
+        }
+
+        internal void AddTailRecord(NoteRecord note)
+        {
+            if (tailRec.ContainsKey(note.ShapeId))
+                tailRec.Add(note.ShapeId, note);
+            else
+                tailRec[note.ShapeId] = note;
+        }
+        /**
+     * @return unmodifiable copy of tail records. We need to access them when building shapes.
+     *         Every HSSFComment shape has a link to a NoteRecord from the tailRec collection.
+     */
+        public Dictionary<int, NoteRecord> TailRecords { get { return tailRec; } }
+
+        internal Dictionary<EscherRecord, Record> GetShapeToObjMapping()
+        {
+            return shapeToObj;
+        }
+        /**
+     * @param obj - ObjRecord with id == NoteRecord.id
+     * @return null if note record is not found else returns note record with id == obj.id
+     */
+        internal NoteRecord GetNoteRecordByObj(ObjRecord obj)
+        {
+            CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)obj.SubRecords[0];
+            return tailRec[(cod.ObjectId)];
         }
     }
 }

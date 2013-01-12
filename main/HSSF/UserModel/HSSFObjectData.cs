@@ -25,6 +25,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.HSSF.Model;
     using NPOI.POIFS.FileSystem;
+    using NPOI.DDF;
 
 
     /**
@@ -32,30 +33,20 @@ namespace NPOI.HSSF.UserModel
      *
      * @author Daniel Noll
      */
-    public class HSSFObjectData
+    public class HSSFObjectData : HSSFPicture
     {
-        /**
-         * Underlying object record ultimately containing a reference to the object.
-         */
-        private ObjRecord record;
-
-    /**
-     * Reference to the filesystem root, required for retrieving the object data.
-     */
-    private DirectoryEntry _root;
 
         /**
-         * Constructs object data by wrapping a lower level object record.
-         *
-         * @param record the low-level object record.
-         * @param poifs the filesystem, required for retrieving the object data.
+         * Reference to the filesystem root, required for retrieving the object data.
          */
-        public HSSFObjectData(ObjRecord record, DirectoryEntry root)
+        private DirectoryEntry _root;
+
+
+        public HSSFObjectData(EscherContainerRecord spContainer, ObjRecord objRecord, DirectoryEntry _root)
+            : base(spContainer, objRecord)
         {
-            this.record = record;
-            _root = root;
+            this._root = _root;
         }
-
         /**
          * Returns the OLE2 Class Name of the object
          */
@@ -122,7 +113,7 @@ namespace NPOI.HSSF.UserModel
          */
         public EmbeddedObjectRefSubRecord FindObjectRecord()
         {
-            IEnumerator subRecordIter = record.SubRecords.GetEnumerator();
+            IEnumerator subRecordIter = GetObjRecord().SubRecords.GetEnumerator();
 
             while (subRecordIter.MoveNext())
             {
@@ -134,6 +125,43 @@ namespace NPOI.HSSF.UserModel
             }
 
             throw new InvalidOperationException("Object data does not contain a reference to an embedded object OLE2 directory");
+        }
+
+
+        protected override EscherContainerRecord CreateSpContainer()
+        {
+            throw new InvalidOperationException("HSSFObjectData cannot be created from scratch");
+        }
+
+
+        protected override ObjRecord CreateObjRecord()
+        {
+            throw new InvalidOperationException("HSSFObjectData cannot be created from scratch");
+        }
+
+
+        internal override void AfterRemove(HSSFPatriarch patriarch)
+        {
+            throw new InvalidOperationException("HSSFObjectData cannot be created from scratch");
+        }
+
+
+        internal override void AfterInsert(HSSFPatriarch patriarch)
+        {
+            EscherAggregate agg = patriarch.GetBoundAggregate();
+            agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
+            EscherBSERecord bse =
+                    ((HSSFWorkbook)patriarch.Sheet.Workbook).Workbook.GetBSERecord(PictureIndex);
+            bse.Ref = (bse.Ref + 1);
+        }
+
+        internal override HSSFShape CloneShape()
+        {
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            byte[] inSp = GetEscherContainer().Serialize();
+            spContainer.FillFields(inSp, 0, new DefaultEscherRecordFactory());
+            ObjRecord obj = (ObjRecord)GetObjRecord().CloneViaReserialise();
+            return new HSSFObjectData(spContainer, obj, _root);
         }
     }
 }

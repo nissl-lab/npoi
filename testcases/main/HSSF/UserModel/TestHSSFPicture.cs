@@ -24,6 +24,8 @@ namespace TestCases.HSSF.UserModel
     using NPOI.Util;
     using System.Collections.Generic;
     using System.Collections;
+    using System;
+    using NPOI.HSSF.Model;
 
     /**
      * Test <c>HSSFPicture</c>.
@@ -153,6 +155,72 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(Arrays.Equals(data2, ((HSSFPicture)((HSSFPatriarch)dr).Children[(1)]).PictureData.Data));
             Assert.IsTrue(Arrays.Equals(data3, ((HSSFPicture)((HSSFPatriarch)dr).Children[(2)]).PictureData.Data));
             Assert.IsTrue(Arrays.Equals(data4, ((HSSFPicture)((HSSFPatriarch)dr).Children[(3)]).PictureData.Data));
+        }
+        [Test]
+        public void testBSEPictureRef()
+        {
+            //HSSFWorkbook wb = new HSSFWorkbook();
+
+            //HSSFSheet sh = wb.CreateSheet("Pictures");
+            //HSSFPatriarch dr = sh.CreateDrawingPatriarch();
+            //HSSFClientAnchor anchor = new HSSFClientAnchor();
+
+            //InternalSheet ish = HSSFTestHelper.GetSheetForTest(sh);
+
+            ////register a picture
+            //byte[] data1 = new byte[] { 1, 2, 3 };
+            //int idx1 = wb.AddPicture(data1, Workbook.PICTURE_TYPE_JPEG);
+            //Assert.AreEqual(1, idx1);
+            //HSSFPicture p1 = dr.CreatePicture(anchor, idx1);
+
+            //EscherBSERecord bse = wb.GetWorkbook().GetBSERecord(idx1);
+
+            //Assert.AreEqual(bse.GetRef(), 1);
+            //dr.CreatePicture(new HSSFClientAnchor(), idx1);
+            //Assert.AreEqual(bse.GetRef(), 2);
+
+            //HSSFShapeGroup gr = dr.CreateGroup(new HSSFClientAnchor());
+            //gr.CreatePicture(new HSSFChildAnchor(), idx1);
+            //Assert.AreEqual(bse.GetRef(), 3);
+            throw new NotImplementedException();
+        }
+        [Test]
+        public void testReadExistingImage()
+        {
+            //HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
+            //HSSFSheet sheet = wb.GetSheet("picture");
+            //HSSFPatriarch Drawing = sheet.DrawingPatriarch();
+            //Assert.AreEqual(1, Drawing.Children().Count);
+
+            //HSSFPicture picture = (HSSFPicture)Drawing.Children().Get(0);
+            //Assert.AreEqual(picture.GetFileName(), "test");
+            throw new NotImplementedException();
+        }
+        [Test]
+        public void testSetGetProperties()
+        {
+            //HSSFWorkbook wb = new HSSFWorkbook();
+
+            //HSSFSheet sh = wb.CreateSheet("Pictures");
+            //HSSFPatriarch dr = sh.CreateDrawingPatriarch();
+            //HSSFClientAnchor anchor = new HSSFClientAnchor();
+
+            //register a picture
+            //byte[] data1 = new byte[] { 1, 2, 3 };
+            //int idx1 = wb.AddPicture(data1, Workbook.PICTURE_TYPE_JPEG);
+            //HSSFPicture p1 = dr.CreatePicture(anchor, idx1);
+
+            //Assert.AreEqual(p1.GetFileName(), "");
+            //p1.SetFileName("aaa");
+            //Assert.AreEqual(p1.GetFileName(), "aaa");
+
+            //wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            //sh = wb.GetSheet("Pictures");
+            //dr = sh.DrawingPatriarch();
+
+            //p1 = (HSSFPicture)dr.Children().Get(0);
+            //Assert.AreEqual(p1.GetFileName(), "aaa");
+            throw new NotImplementedException();
         }
     }
 }

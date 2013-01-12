@@ -24,7 +24,10 @@ namespace NPOI.HSSF.UserModel
     public class HSSFChildAnchor : HSSFAnchor
     {
         private EscherChildAnchorRecord _escherChildAnchor;
-
+        /**
+         * create anchor from existing file
+         * @param escherChildAnchorRecord
+         */
         public HSSFChildAnchor(EscherChildAnchorRecord escherChildAnchorRecord)
         {
             this._escherChildAnchor = escherChildAnchorRecord;
@@ -33,8 +36,15 @@ namespace NPOI.HSSF.UserModel
         {
             _escherChildAnchor = new EscherChildAnchorRecord();
         }
-
-        public HSSFChildAnchor(int dx1, int dy1, int dx2, int dy2):base(dx1, dy1, dx2, dy2)
+        /**
+        * create anchor from scratch
+        * @param dx1 x coordinate of the left up corner
+        * @param dy1 y coordinate of the left up corner
+        * @param dx2 x coordinate of the right down corner
+        * @param dy2 y coordinate of the right down corner
+        */
+        public HSSFChildAnchor(int dx1, int dy1, int dx2, int dy2)
+            : base(Math.Min(dx1, dx2), Math.Min(dy1, dy2), Math.Max(dx1, dx2), Math.Max(dy1, dy2))
         {
             if (dx1 > dx2)
             {
@@ -45,7 +55,12 @@ namespace NPOI.HSSF.UserModel
                 _isVerticallyFlipped = true;
             }
         }
-
+        /**
+         * @param dx1 x coordinate of the left up corner
+         * @param dy1 y coordinate of the left up corner
+         * @param dx2 x coordinate of the right down corner
+         * @param dy2 y coordinate of the right down corner
+         */
         public void SetAnchor(int dx1, int dy1, int dx2, int dy2)
         {
             this.Dx1 = Math.Min(dx1, dx2);

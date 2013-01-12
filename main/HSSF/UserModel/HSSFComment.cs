@@ -30,45 +30,108 @@ namespace NPOI.HSSF.UserModel
     /// @author Yegor Kozlov
     /// </summary>
     [Serializable]
-    public class HSSFComment : HSSFTextbox,IComment
+    public class HSSFComment : HSSFTextbox, IComment
     {
+        private static int FILL_TYPE_SOLID = 0;
+        private static int FILL_TYPE_PICTURE = 3;
 
-        private bool visible;
-        private int col, row;
-        private String author;
 
-        
-        private NoteRecord note = null;
-        
-        private TextObjectRecord txo = null;
+        private NoteRecord _note = null;
 
+        //private TextObjectRecord txo = null;
+        public HSSFComment(EscherContainerRecord spContainer, ObjRecord objRecord, TextObjectRecord textObjectRecord, NoteRecord _note)
+            : base(spContainer, objRecord, textObjectRecord)
+        {
+
+            this._note = _note;
+        }
         /// <summary>
         /// Construct a new comment with the given parent and anchor.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="anchor">defines position of this anchor in the sheet</param>
-        public HSSFComment(HSSFShape parent, HSSFAnchor anchor):base(parent, anchor)
+        public HSSFComment(HSSFShape parent, HSSFAnchor anchor)
+            : base(parent, anchor)
         {
-            
-            this.ShapeType = (OBJECT_TYPE_COMMENT);
+            _note = CreateNoteRecord();
 
             //default color for comments
             this.FillColor = 0x08000050;
 
             //by default comments are hidden
-            visible = false;
+            Visible = false;
 
-            author = "";
+            Author = "";
+            CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
+            cod.ObjectType = (CommonObjectType)OBJECT_TYPE_COMMENT; 
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFComment"/> class.
         /// </summary>
         /// <param name="note">The note.</param>
         /// <param name="txo">The txo.</param>
-        public HSSFComment(NoteRecord note, TextObjectRecord txo):this((HSSFShape)null, (HSSFAnchor)null)
-        {          
-            this.txo = txo;
-            this.note = note;
+        public HSSFComment(NoteRecord note, TextObjectRecord txo)
+            : this((HSSFShape)null, new HSSFClientAnchor())
+        {
+            this._note = note;
+        }
+
+
+        internal override void AfterInsert(HSSFPatriarch patriarch)
+        {
+            base.AfterInsert(patriarch);
+            patriarch.getBoundAggregate().AddTailRecord(NoteRecord);
+        }
+
+        protected override EscherContainerRecord CreateSpContainer()
+        {
+            EscherContainerRecord spContainer = base.CreateSpContainer();
+            EscherOptRecord opt = (EscherOptRecord)spContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTLEFT);
+            opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTRIGHT);
+            opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTTOP);
+            opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTBOTTOM);
+            opt.SetEscherProperty(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, false, false, 655362));
+            return spContainer;
+        }
+
+
+        protected override ObjRecord CreateObjRecord()
+        {
+            ObjRecord obj = new ObjRecord();
+            CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
+            c.ObjectType = (CommonObjectType)OBJECT_TYPE_COMMENT;
+            c.IsLocked = (true);
+            c.IsPrintable = (true);
+            c.IsAutoFill = (false);
+            c.IsAutoline = (true);
+
+            NoteStructureSubRecord u = new NoteStructureSubRecord();
+            EndSubRecord e = new EndSubRecord();
+            obj.AddSubRecord(c);
+            obj.AddSubRecord(u);
+            obj.AddSubRecord(e);
+            return obj;
+        }
+
+        private NoteRecord CreateNoteRecord()
+        {
+            NoteRecord note = new NoteRecord();
+            note.Flags = (NoteRecord.NOTE_HIDDEN);
+            note.Author = ("");
+            return note;
+        }
+
+        public override int ShapeId
+        {
+            get { return base.ShapeId; }
+            set
+            {
+                base.ShapeId = (value);
+                CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
+                cod.ObjectId = ((short)(value % 1024));
+                _note.ShapeId = (value % 1024);
+            }
         }
 
         /// <summary>
@@ -85,11 +148,11 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return this.visible;
+                return _note.Flags == NoteRecord.NOTE_VISIBLE;
             }
-            set {
-                if (note != null) note.Flags = value ? NoteRecord.NOTE_VISIBLE : NoteRecord.NOTE_HIDDEN;
-                this.visible = value;
+            set
+            {
+                if (_note != null) _note.Flags = value ? NoteRecord.NOTE_VISIBLE : NoteRecord.NOTE_HIDDEN;
             }
         }
 
@@ -99,10 +162,11 @@ namespace NPOI.HSSF.UserModel
         /// <value>the 0-based row of the cell that Contains the comment</value>
         public int Row
         {
-            get{return row;}
-            set{            
-                if (note != null) note.Row=value;
-            this.row = value;}
+            get { return _note.Row; }
+            set
+            {
+                if (_note != null) _note.Row = value;
+            }
         }
 
 
@@ -112,11 +176,10 @@ namespace NPOI.HSSF.UserModel
         /// <value>the 0-based column of the cell that Contains the comment</value>
         public int Column
         {
-            get { return col; }
+            get { return _note.Column; }
             set
             {
-                if (note != null) note.Column=value;
-                this.col = value;
+                if (_note != null) _note.Column = value;
             }
         }
 
@@ -128,33 +191,15 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return author;
+                return _note.Author;
             }
             set
             {
-                if (note != null) note.Author = value;
-                this.author = value;
+                if (_note != null) _note.Author = value;
             }
         }
 
-        /// <summary>
-        /// Gets or sets the rich text string used by this comment.
-        /// </summary>   
-        public override IRichTextString String
-        {
-            get { return base.String; }
-            set
-            {
-                //if font Is not Set we must Set the default one
-                if (value.NumFormattingRuns == 0) value.ApplyFont((short)0);
-
-                if (txo != null)
-                {
-                    txo.Str=value;
-                }
-                base.String = value;
-            }
-        }
+        
 
         /// <summary>
         /// Gets the note record.
@@ -162,30 +207,41 @@ namespace NPOI.HSSF.UserModel
         /// <value>the underlying Note record.</value>
         internal NoteRecord NoteRecord
         {
-            get { return note; }
+            get { return _note; }
         }
-        /// <summary>
-        /// Gets the text object record.
-        /// </summary>
-        /// <value>the underlying Text record</value>
-        internal TextObjectRecord TextObjectRecord
+        public override int ShapeType
         {
-            get { return txo; }
+            get
+            {
+                return base.ShapeType;
+            }
+            set
+            {
+                throw new InvalidOperationException("Shape type can not be changed in " + this.GetType().Name);
+            }
         }
+        
 
         internal override void AfterRemove(HSSFPatriarch patriarch)
         {
             base.AfterRemove(patriarch);
-            patriarch._getBoundAggregate().RemoveTailRecord(this.NoteRecord);
+            patriarch.getBoundAggregate().RemoveTailRecord(this.NoteRecord);
         }
-
-        private const int FILL_TYPE_SOLID = 0;
-        private const int FILL_TYPE_PICTURE = 3;
+        internal override HSSFShape CloneShape()
+        {
+            TextObjectRecord txo = (TextObjectRecord)GetTextObjectRecord().CloneViaReserialise();
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            byte[] inSp = GetEscherContainer().Serialize();
+            spContainer.FillFields(inSp, 0, new DefaultEscherRecordFactory());
+            ObjRecord obj = (ObjRecord)GetObjRecord().CloneViaReserialise();
+            NoteRecord note = (NoteRecord)NoteRecord.CloneViaReserialise();
+            return new HSSFComment(spContainer, obj, txo, note);
+        }
         public void SetBackgroundImage(int pictureIndex)
         {
             SetPropertyValue(new EscherSimpleProperty(EscherProperties.FILL__PATTERNTEXTURE, false, true, pictureIndex));
             SetPropertyValue(new EscherSimpleProperty(EscherProperties.FILL__FILLTYPE, false, false, FILL_TYPE_PICTURE));
-            EscherBSERecord bse = ((HSSFWorkbook)((HSSFPatriarch)Patriarch)._sheet.Workbook).Workbook.GetBSERecord(pictureIndex);
+            EscherBSERecord bse = ((HSSFWorkbook)((HSSFPatriarch)Patriarch).Sheet.Workbook).Workbook.GetBSERecord(pictureIndex);
             bse.Ref = (bse.Ref + 1);
         }
 
@@ -194,7 +250,7 @@ namespace NPOI.HSSF.UserModel
             EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.FILL__PATTERNTEXTURE);
             if (null != property)
             {
-                EscherBSERecord bse =((HSSFWorkbook)((HSSFPatriarch) Patriarch)._sheet.Workbook).Workbook.GetBSERecord(property.PropertyValue);
+                EscherBSERecord bse = ((HSSFWorkbook)((HSSFPatriarch)Patriarch).Sheet.Workbook).Workbook.GetBSERecord(property.PropertyValue);
                 bse.Ref = (bse.Ref - 1);
                 GetOptRecord().RemoveEscherProperty(EscherProperties.FILL__PATTERNTEXTURE);
             }

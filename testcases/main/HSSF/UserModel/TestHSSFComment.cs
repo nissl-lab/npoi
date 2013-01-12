@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestDefaultShapeType()
         {
-            HSSFComment comment = new HSSFComment((HSSFShape)null, (HSSFAnchor)null);
+            HSSFComment comment = new HSSFComment((HSSFShape)null, new HSSFClientAnchor());
             Assert.AreEqual(HSSFSimpleShape.OBJECT_TYPE_COMMENT, comment.ShapeType);
         }
         /**

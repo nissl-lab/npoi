@@ -30,6 +30,7 @@ namespace NPOI.HSSF.Model
     [Obsolete]
     public class PolygonShape: AbstractShape
     {
+        public const short       OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING = 30;
         private EscherContainerRecord spContainer;
         private ObjRecord objRecord;
 
@@ -135,7 +136,7 @@ namespace NPOI.HSSF.Model
 
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
-            c.ObjectType = CommonObjectType.MICROSOFT_OFFICE_DRAWING;
+            c.ObjectType = (CommonObjectType)OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING;
             c.ObjectId = shapeId;
             c.IsLocked = true;
             c.IsPrintable = true;

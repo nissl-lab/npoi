@@ -21,6 +21,8 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.DDF;
     using NPOI.HSSF.Record;
+    using System.IO;
+    using NPOI.Util;
     /// <summary>
     /// An abstract shape.
     /// @author Glen Stampoultzis (glens at apache.org)
@@ -30,27 +32,27 @@ namespace NPOI.HSSF.UserModel
     {
         public static int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
         public static int LINEWIDTH_DEFAULT = 9525;
-            public const  int LINESTYLE__COLOR_DEFAULT = 0x08000040;
-    public const  int FILL__FILLCOLOR_DEFAULT = 0x08000009;
-    public const  bool NO_FILL_DEFAULT = true;
+        public const int LINESTYLE__COLOR_DEFAULT = 0x08000040;
+        public const int FILL__FILLCOLOR_DEFAULT = 0x08000009;
+        public const bool NO_FILL_DEFAULT = true;
 
-    public const  int LINESTYLE_SOLID = 0;              // Solid (continuous) pen
-    public const  int LINESTYLE_DASHSYS = 1;            // PS_DASH system   dash style
-    public const  int LINESTYLE_DOTSYS = 2;             // PS_DOT system   dash style
-    public const  int LINESTYLE_DASHDOTSYS = 3;         // PS_DASHDOT system dash style
-    public const  int LINESTYLE_DASHDOTDOTSYS = 4;      // PS_DASHDOTDOT system dash style
-    public const  int LINESTYLE_DOTGEL = 5;             // square dot style
-    public const  int LINESTYLE_DASHGEL = 6;            // dash style
-    public const  int LINESTYLE_LONGDASHGEL = 7;        // long dash style
-    public const  int LINESTYLE_DASHDOTGEL = 8;         // dash short dash
-    public const  int LINESTYLE_LONGDASHDOTGEL = 9;     // long dash short dash
-    public const  int LINESTYLE_LONGDASHDOTDOTGEL = 10; // long dash short dash short dash
-    public const  int LINESTYLE_NONE = -1;
+        public const int LINESTYLE_SOLID = 0;              // Solid (continuous) pen
+        public const int LINESTYLE_DASHSYS = 1;            // PS_DASH system   dash style
+        public const int LINESTYLE_DOTSYS = 2;             // PS_DOT system   dash style
+        public const int LINESTYLE_DASHDOTSYS = 3;         // PS_DASHDOT system dash style
+        public const int LINESTYLE_DASHDOTDOTSYS = 4;      // PS_DASHDOTDOT system dash style
+        public const int LINESTYLE_DOTGEL = 5;             // square dot style
+        public const int LINESTYLE_DASHGEL = 6;            // dash style
+        public const int LINESTYLE_LONGDASHGEL = 7;        // long dash style
+        public const int LINESTYLE_DASHDOTGEL = 8;         // dash short dash
+        public const int LINESTYLE_LONGDASHDOTGEL = 9;     // long dash short dash
+        public const int LINESTYLE_LONGDASHDOTDOTGEL = 10; // long dash short dash short dash
+        public const int LINESTYLE_NONE = -1;
 
-    public const  int LINESTYLE_DEFAULT = LINESTYLE_NONE;
+        public const int LINESTYLE_DEFAULT = LINESTYLE_NONE;
 
-    public const int NO_FILLHITTEST_TRUE = 0x00110000;
-    public const int NO_FILLHITTEST_FALSE = 0x00010000;
+        public const int NO_FILLHITTEST_TRUE = 0x00110000;
+        public const int NO_FILLHITTEST_FALSE = 0x00010000;
 
         HSSFShape parent;
         [NonSerialized]
@@ -63,10 +65,15 @@ namespace NPOI.HSSF.UserModel
         private EscherOptRecord _optRecord;
         int lineStyleColor = 0x08000040;
         int fillColor = 0x08000009;
-        int lineWidth = LINEWIDTH_DEFAULT;    
+        int lineWidth = LINEWIDTH_DEFAULT;
         LineStyle lineStyle = LineStyle.Solid;
         bool noFill = false;
 
+        /**
+         * creates shapes from existing file
+         * @param spContainer
+         * @param objRecord
+         */
         public HSSFShape(EscherContainerRecord spContainer, ObjRecord objRecord)
         {
             this._escherContainer = spContainer;
@@ -80,13 +87,16 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="anchor">The anchor.</param>
-        protected HSSFShape(HSSFShape parent, HSSFAnchor anchor)
+        public HSSFShape(HSSFShape parent, HSSFAnchor anchor)
         {
             this.parent = parent;
             this.anchor = anchor;
+            this._escherContainer = CreateSpContainer();
+            _optRecord = (EscherOptRecord)_escherContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            _objRecord = CreateObjRecord();
         }
         protected abstract EscherContainerRecord CreateSpContainer();
-        
+
         protected abstract ObjRecord CreateObjRecord();
         internal abstract void AfterRemove(HSSFPatriarch patriarch);
         internal abstract void AfterInsert(HSSFPatriarch patriarch);
@@ -124,25 +134,64 @@ namespace NPOI.HSSF.UserModel
             get { return anchor; }
             set
             {
+                int i = 0;
+                int recordId = -1;
                 if (parent == null)
                 {
                     if (value is HSSFChildAnchor)
                         throw new ArgumentException("Must use client anchors for shapes directly attached to sheet.");
+                    EscherClientAnchorRecord anch = (EscherClientAnchorRecord)_escherContainer.GetChildById(EscherClientAnchorRecord.RECORD_ID);
+                    if (null != anch)
+                    {
+                        for (i = 0; i < _escherContainer.ChildRecords.Count; i++)
+                        {
+                            if (_escherContainer.GetChild(i).RecordId == EscherClientAnchorRecord.RECORD_ID)
+                            {
+                                if (i != _escherContainer.ChildRecords.Count - 1)
+                                {
+                                    recordId = _escherContainer.GetChild(i + 1).RecordId;
+                                }
+                            }
+                        }
+                        _escherContainer.RemoveChildRecord(anch);
+                    }
                 }
                 else
                 {
                     if (value is HSSFClientAnchor)
                         throw new ArgumentException("Must use child anchors for shapes attached to Groups.");
+                    EscherChildAnchorRecord anch = (EscherChildAnchorRecord)_escherContainer.GetChildById(EscherChildAnchorRecord.RECORD_ID);
+                    if (null != anch)
+                    {
+                        for (i = 0; i < _escherContainer.ChildRecords.Count; i++)
+                        {
+                            if (_escherContainer.GetChild(i).RecordId == EscherChildAnchorRecord.RECORD_ID)
+                            {
+                                if (i != _escherContainer.ChildRecords.Count - 1)
+                                {
+                                    recordId = _escherContainer.GetChild(i + 1).RecordId;
+                                }
+                            }
+                        }
+                        _escherContainer.RemoveChildRecord(anch);
+                    }
                 }
-
+                if (-1 == recordId)
+                {
+                    _escherContainer.AddChildRecord(anchor.GetEscherAnchor());
+                }
+                else
+                {
+                    _escherContainer.AddChildBefore(anchor.GetEscherAnchor(), recordId);
+                }
                 this.anchor = value;
             }
         }
 
-        public void SetLineStyleColor(int lineStyleColor)
-        {
-            this.lineStyleColor = lineStyleColor;
-        }
+        //public void SetLineStyleColor(int lineStyleColor)
+        //{
+        //    this.lineStyleColor = lineStyleColor;
+        //}
         /// <summary>
         /// The color applied to the lines of this shape.
         /// </summary>
@@ -151,7 +200,13 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return lineStyleColor;
+                //return lineStyleColor;
+                EscherRGBProperty rgbProperty = (EscherRGBProperty)_optRecord.Lookup(EscherProperties.LINESTYLE__COLOR);
+                return rgbProperty == null ? LINESTYLE__COLOR_DEFAULT : rgbProperty.RgbColor;
+            }
+            set
+            {
+                SetPropertyValue(new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, value));
             }
         }
         internal EscherContainerRecord GetEscherContainer()
@@ -166,7 +221,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="blue">The blue.</param>
         public void SetLineStyleColor(int red, int green, int blue)
         {
-            this.lineStyleColor = ((blue) << 16) | ((green) << 8) | red;
+            int lineStyleColor = ((blue) << 16) | ((green) << 8) | red;
+            SetPropertyValue(new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, lineStyleColor));
         }
         protected void SetPropertyValue(EscherProperty property)
         {
@@ -178,8 +234,15 @@ namespace NPOI.HSSF.UserModel
         /// <value>The color of the fill.</value>
         public int FillColor
         {
-            get{return fillColor;}
-            set { fillColor = value; }
+            get 
+            {
+                EscherRGBProperty rgbProperty = (EscherRGBProperty)_optRecord.Lookup(EscherProperties.FILL__FILLCOLOR);
+                return rgbProperty == null ? FILL__FILLCOLOR_DEFAULT : rgbProperty.RgbColor;
+            }
+            set 
+            {
+                SetPropertyValue(new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, value));
+            }
         }
 
         /// <summary>
@@ -190,7 +253,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="blue">The blue.</param>
         public void SetFillColor(int red, int green, int blue)
         {
-            this.FillColor = ((blue) << 16) | ((green) << 8) | red;
+            int fillColor = ((blue) << 16) | ((green) << 8) | red;
+            SetPropertyValue(new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, fillColor));
         }
 
         /// <summary>
@@ -199,8 +263,15 @@ namespace NPOI.HSSF.UserModel
         /// <value>The width of the line.</value>
         public int LineWidth
         {
-            get { return lineWidth; }
-            set { this.lineWidth = value; }
+            get
+            {
+                EscherSimpleProperty property = (EscherSimpleProperty)_optRecord.Lookup(EscherProperties.LINESTYLE__LINEWIDTH);
+                return property == null ? LINEWIDTH_DEFAULT : property.PropertyValue;
+            }
+            set
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, value));
+            }
         }
 
         /// <summary>
@@ -209,8 +280,31 @@ namespace NPOI.HSSF.UserModel
         /// <value>The line style.</value>
         public LineStyle LineStyle
         {
-            get { return lineStyle; }
-            set { lineStyle = value; }
+            get
+            {
+                EscherSimpleProperty property = (EscherSimpleProperty)_optRecord.Lookup(EscherProperties.LINESTYLE__LINEDASHING);
+                if (null == property)
+                {
+                    return (LineStyle)LINESTYLE_DEFAULT;
+                }
+                return (LineStyle)property.PropertyValue;
+            }
+            set
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEDASHING, (int)value));
+                if ((int)LineStyle != HSSFShape.LINESTYLE_SOLID)
+                {
+                    SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEENDCAPSTYLE, 0));
+                    if ((int)LineStyle == HSSFShape.LINESTYLE_NONE)
+                    {
+                        SetPropertyValue(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080000));
+                    }
+                    else
+                    {
+                        SetPropertyValue(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080008));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -221,8 +315,102 @@ namespace NPOI.HSSF.UserModel
         /// </value>
         public bool IsNoFill
         {
-            get { return noFill; }
-            set { this.noFill = value; }
+            get
+            {
+                EscherBoolProperty property = (EscherBoolProperty)_optRecord.Lookup(EscherProperties.FILL__NOFILLHITTEST);
+                return property == null ? NO_FILL_DEFAULT : property.PropertyValue == NO_FILLHITTEST_TRUE;
+            }
+            set
+            {
+                SetPropertyValue(new EscherBoolProperty(EscherProperties.FILL__NOFILLHITTEST, value ? NO_FILLHITTEST_TRUE : NO_FILLHITTEST_FALSE));
+            }
+        }
+
+        /// <summary>
+        /// whether this shape is vertically flipped.
+        /// </summary>
+        public bool IsFlipVertical
+        {
+            get
+            {
+                EscherSpRecord sp = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
+                return (sp.Flags & EscherSpRecord.FLAG_FLIPVERT) != 0;
+            }
+            set
+            {
+                EscherSpRecord sp = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
+                if (value)
+                {
+                    sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
+                }
+                else
+                {
+                    sp.Flags = (sp.Flags & (int.MaxValue - EscherSpRecord.FLAG_FLIPVERT));
+                }
+            }
+        }
+
+        /// <summary>
+        /// whether this shape is horizontally flipped.
+        /// </summary>
+        public bool IsFlipHorizontal
+        {
+            get
+            {
+                EscherSpRecord sp = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
+                return (sp.Flags & EscherSpRecord.FLAG_FLIPHORIZ) != 0;
+            }
+            set
+            {
+                EscherSpRecord sp = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
+                if (value)
+                {
+                    sp.Flags=(sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
+                }
+                else
+                {
+                    sp.Flags=(sp.Flags & (int.MaxValue - EscherSpRecord.FLAG_FLIPHORIZ));
+                }
+            }
+        }
+
+        /**
+         * @return the rotation, in degrees, that is applied to a shape.
+         */
+        //
+        /// <summary>
+        /// get or set the rotation, in degrees, that is applied to a shape.
+        /// Negative values specify rotation in the counterclockwise direction.
+        /// Rotation occurs around the center of the shape.
+        /// The default value for this property is 0x00000000
+        /// </summary>
+        public int RotationDegree
+        {
+            get
+            {
+                using (MemoryStream bos = new MemoryStream())
+                {
+                    EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.TRANSFORM__ROTATION);
+                    if (null == property)
+                    {
+                        return 0;
+                    }
+                    try
+                    {
+                        LittleEndian.PutInt(property.PropertyValue, bos);
+                        return LittleEndian.GetShort(bos.ToArray(), 2);
+                    }
+                    catch (IOException e)
+                    {
+                        //e.printStackTrace();
+                        return 0;
+                    }
+                }
+            }
+            set
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.TRANSFORM__ROTATION, (value << 16)));
+            }
         }
 
         /// <summary>
@@ -236,24 +424,24 @@ namespace NPOI.HSSF.UserModel
 
         internal abstract HSSFShape CloneShape();
 
-        internal HSSFPatriarch Patriarch
+        public HSSFPatriarch Patriarch
         {
             get
             {
                 return _patriarch;
             }
-            set 
+            set
             {
                 this._patriarch = value;
             }
         }
 
-        protected ObjRecord GetObjRecord()
+        protected internal ObjRecord GetObjRecord()
         {
             return _objRecord;
         }
 
-        protected EscherOptRecord GetOptRecord()
+        protected internal EscherOptRecord GetOptRecord()
         {
             return _optRecord;
         }

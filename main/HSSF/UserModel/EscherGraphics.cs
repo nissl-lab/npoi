@@ -358,6 +358,7 @@ namespace NPOI.HSSF.UserModel
             shape.LineStyle = LineStyle.None;
             shape.SetFillColor(foreground.R, foreground.G, foreground.B);
             shape.SetLineStyleColor(foreground.R, foreground.G, foreground.B);
+            shape.IsNoFill = (false);
         }
 
         /**

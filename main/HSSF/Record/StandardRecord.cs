@@ -39,6 +39,14 @@ namespace NPOI.HSSF.Record
                 return 4 + DataSize;
             }
         }
+
+        /// <summary>
+        /// Write the data content of this BIFF record including the sid and record length.
+        /// The subclass must write the exact number of bytes as reported by Record#getRecordSize()
+        /// </summary>
+        /// <param name="offset">offset</param>
+        /// <param name="data">data</param>
+        /// <returns></returns>
         public override int Serialize(int offset, byte[] data)
         {
             int dataSize = DataSize;
@@ -60,7 +68,10 @@ namespace NPOI.HSSF.Record
          * Write the data content of this BIFF record.  The 'ushort sid' and 'ushort size' header fields
          * have already been written by the superclass.<br/>
          * 
-         * The subclass must write the exact number of bytes as reported by {@link Record#getDataSize()}
+         * The number of bytes written must equal the record size reported by
+         * {@link Record#getDataSize()} minus four
+         * ( record header consiting of a 'ushort sid' and 'ushort reclength' has already been written
+         * by thye superclass).
          */
         public abstract void Serialize(ILittleEndianOutput out1);
     }

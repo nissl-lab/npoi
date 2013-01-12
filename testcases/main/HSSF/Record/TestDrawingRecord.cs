@@ -54,17 +54,12 @@ namespace TestCases.HSSF.Record
             out1.Write(dataX, 0, dataX.Length);
 
             List<Record> rec = RecordFactory.CreateRecords(new MemoryStream(out1.ToArray()));
-            Assert.AreEqual(1, rec.Count);
+            Assert.AreEqual(2, rec.Count);
             Assert.IsTrue(rec[0] is DrawingRecord);
+            Assert.IsTrue(rec[1] is ContinueRecord);
 
-            //DrawingRecord.Data should return concatenated data1 and data2
-            byte[] tmp = new byte[data1.Length + data2.Length];
-            Array.Copy(data1, 0, tmp, 0, data1.Length);
-            Array.Copy(data2, 0, tmp, data1.Length, data2.Length);
-
-            DrawingRecord dg2 = (DrawingRecord)rec[(0)];
-            Assert.AreEqual(data1.Length + data2.Length, dg2.Data.Length);
-            Assert.IsTrue(Arrays.Equals(tmp, dg2.Data));
+            Assert.IsTrue(Arrays.Equals(data1, ((DrawingRecord)rec[0]).Data));
+            Assert.IsTrue(Arrays.Equals(data2, ((ContinueRecord)rec[1]).Data));
 
         }
 

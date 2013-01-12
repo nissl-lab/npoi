@@ -26,6 +26,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
+using NPOI.Util;
    
     /**
      * Internal POI use only
@@ -34,7 +35,7 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, IFormulaParsingWorkbook
     {
-
+        private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFEvaluationWorkbook));
         private HSSFWorkbook _uBook;
         private NPOI.HSSF.Model.InternalWorkbook _iBook;
 
@@ -140,7 +141,17 @@ namespace NPOI.HSSF.UserModel
             //    // re-parsing the formula text also works, but is a waste of time
             //    // It is useful from time to time to run all unit tests with this code
             //    // to make sure that all formulas POI can evaluate can also be parsed.
-            //    return FormulaParser.Parse(cell.CellFormula, _uBook, FormulaType.CELL, _uBook.GetSheetIndex(cell.Sheet));
+            //    try
+            //    {
+            //        return HSSFFormulaParser.Parse(cell.CellFormula, _uBook, FormulaType.CELL, _uBook.GetSheetIndex(cell.GetSheet()));
+            //    }
+            //    catch (FormulaParseException e)
+            //    {
+            //        // Note - as of Bugzilla 48036 (svn r828244, r828247) POI is capable of evaluating
+            //        // IntesectionPtg.  However it is still not capable of parsing it.
+            //        // So FormulaEvalTestData.xls now contains a few formulas that produce errors here.
+            //        logger.Log(POILogger.ERROR, e.Message);
+            //    }
             //}
             FormulaRecordAggregate fr = (FormulaRecordAggregate)((HSSFCell)cell).CellValueRecord;
             return fr.FormulaTokens;

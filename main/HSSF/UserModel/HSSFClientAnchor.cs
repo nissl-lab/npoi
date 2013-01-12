@@ -40,6 +40,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public HSSFClientAnchor()
         {
+            //Is this necessary?
             this._escherClientAnchor = new EscherClientAnchorRecord();
         }
 
@@ -69,10 +70,10 @@ namespace NPOI.HSSF.UserModel
             CheckRange(row1, 0, 255 * 256, "row1");
             CheckRange(row2, 0, 255 * 256, "row2");
 
-            this.Col1 = col1;
-            this.Row1 = row1;
-            this.Col2 = col2;
-            this.Row2 = row2;
+            Col1=((short)Math.Min(col1, col2));
+            Col2=((short)Math.Max(col1, col2));
+            Row1=((short)Math.Min(row1, row2));
+            Row2=((short)Math.Max(row1, row2));
 
             if (col1 > col2)
             {

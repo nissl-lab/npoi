@@ -110,7 +110,30 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the cloned sheet</returns>
         public ISheet CloneSheet(HSSFWorkbook workbook)
         {
-            return new HSSFSheet(workbook, _sheet.CloneSheet());
+            IDrawing iDrawing = this.DrawingPatriarch;/**Aggregate drawing records**/
+            HSSFSheet sheet = new HSSFSheet(workbook, _sheet.CloneSheet());
+            int pos = sheet._sheet.FindFirstRecordLocBySid(DrawingRecord.sid);
+            DrawingRecord dr = (DrawingRecord)sheet._sheet.FindFirstRecordBySid(DrawingRecord.sid);
+            if (null != dr)
+            {
+                sheet._sheet.Records.Remove(dr);
+            }
+            if (DrawingPatriarch != null)
+            {
+                HSSFPatriarch patr = HSSFPatriarch.CreatePatriarch(this.DrawingPatriarch as HSSFPatriarch, sheet);
+                sheet._sheet.Records.Insert(pos, patr.GetBoundAggregate());
+                sheet._patriarch = patr;
+            }
+            return sheet;
+        }
+
+
+        internal void PreSerialize()
+        {
+            if (_patriarch != null)
+            {
+                _patriarch.PreSerialize();
+            }
         }
         /// <summary>
         /// Copy one row to the target row
@@ -174,11 +197,17 @@ namespace NPOI.HSSF.UserModel
                 if (hrow != null)
                 {
                     lastrow = hrow;
-                    if (cval is Record)
-                    {
-                        //if (log.Check(POILogger.DEBUG))
-                        //    log.Log(DEBUG, "record id = " + StringUtil.ToHexString(((Record)cval).Sid));
-                    }
+                    //if (log.Check(POILogger.DEBUG))
+                    //{
+                    //    if (cval is Record)
+                    //    {
+                    //        log.log(DEBUG, "record id = " + Integer.toHexString(((Record)cval).getSid()));
+                    //    }
+                    //    else
+                    //    {
+                    //        log.log(DEBUG, "record = " + cval);
+                    //    }
+                    //}
 
                     hrow.CreateCellFromRecord(cval);
 
@@ -224,6 +253,7 @@ namespace NPOI.HSSF.UserModel
             HSSFRow row = new HSSFRow(_workbook, this, rownum);
             // new rows inherit default height from the sheet
             row.Height = (DefaultRowHeight);
+            row.RowRecord.BadFontHeight = (false);
             AddRow(row, true);
             return row;
         }
@@ -1398,18 +1428,20 @@ namespace NPOI.HSSF.UserModel
                 if (moveComments)
                 {
                     // This code would get simpler if NoteRecords could be organised by HSSFRow.
-                    for (int i = noteRecs.Length - 1; i >= 0; i--)
+                    HSSFPatriarch patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
+                    for (int i = patriarch.Children.Count - 1; i >= 0; i--)
                     {
-                        NoteRecord nr = noteRecs[i];
-                        if (nr.Row != rowNum)
+                        HSSFShape shape = patriarch.Children[(i)];
+                        if (!(shape is HSSFComment))
                         {
                             continue;
                         }
-                        IComment comment = GetCellComment(rowNum, nr.Column);
-                        if (comment != null)
+                        HSSFComment comment = (HSSFComment)shape;
+                        if (comment.Row != rowNum)
                         {
-                            comment.Row = (rowNum + n);
+                            continue;
                         }
+                        comment.Row = (rowNum + n);
                     }
                 }
             }
@@ -1763,30 +1795,6 @@ namespace NPOI.HSSF.UserModel
         [NonSerialized]
         private HSSFPatriarch _patriarch;
 
-        /// <summary>
-        /// Creates the top-level drawing patriarch.  This will have
-        /// the effect of removing any existing drawings on this
-        /// _sheet.
-        /// This may then be used to Add graphics or charts
-        /// </summary>
-        /// <returns>The new patriarch.</returns>
-        public NPOI.SS.UserModel.IDrawing CreateDrawingPatriarch()
-        {
-            if (_patriarch == null)
-            {
-                // Create the drawing group if it doesn't already exist.
-                _workbook.InitDrawings();
-
-                if (_patriarch == null)
-                {
-                    _sheet.AggregateDrawingRecords(book.DrawingManager, true);
-                    EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-                    _patriarch = new HSSFPatriarch(this, agg);
-                    agg.Patriarch = (_patriarch);
-                }
-            }
-            return _patriarch;
-        }
 
         /// <summary>
         /// Returns the agregate escher records for this _sheet,
@@ -1825,39 +1833,76 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /// <summary>
-        /// Returns the top-level drawing patriach, if there is one.
-        /// This will hold any graphics or charts for the _sheet.
-        /// WARNING - calling this will trigger a parsing of the
-        /// associated escher records. Any that aren't supported
-        /// (such as charts and complex drawing types) will almost
-        /// certainly be lost or corrupted when written out. Only
-        /// use this with simple drawings, otherwise call
-        /// HSSFSheet#CreateDrawingPatriarch() and
-        /// start from scratch!
-        /// </summary>
-        /// <value>The drawing patriarch.</value>
+        /**
+     * This will hold any graphics or charts for the sheet.
+     *
+     * @return the top-level drawing patriarch, if there is one, else returns null
+     */
         public IDrawing DrawingPatriarch
         {
             get
             {
-                if (_patriarch != null)
-                    return _patriarch;
-
-                EscherAggregate agg = this.DrawingEscherAggregate;
-                if (agg == null) return null;
-
-                _patriarch = new HSSFPatriarch(this, agg);
-                agg.Patriarch = _patriarch;
-
-                // Have it Process the records into high level objects
-                //  as best it can do (this step may eat anything
-                //  that Isn't supported, you were warned...)
-                agg.ConvertRecordsToUserModel();
-
-                // Return what we could cope with
+                _patriarch = GetPatriarch(false);
                 return _patriarch;
             }
+        }
+
+        /**
+         * Creates the top-level drawing patriarch.  This will have
+         * the effect of removing any existing drawings on this
+         * sheet.
+         * This may then be used to add graphics or charts
+         *
+         * @return The new patriarch.
+         */
+        public IDrawing CreateDrawingPatriarch()
+        {
+            _patriarch = GetPatriarch(true);
+            return _patriarch;
+        }
+
+        private HSSFPatriarch GetPatriarch(bool createIfMissing)
+        {
+            HSSFPatriarch patriarch = null;
+            if (_patriarch != null)
+            {
+                return _patriarch;
+            }
+            DrawingManager2 dm = book.FindDrawingGroup();
+            if (null == dm)
+            {
+                if (!createIfMissing)
+                {
+                    return null;
+                }
+                else
+                {
+                    book.CreateDrawingGroup();
+                    dm = book.DrawingManager;
+                }
+            }
+            EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
+            if (null == agg)
+            {
+                int pos = _sheet.AggregateDrawingRecords(dm, false);
+                if (-1 == pos)
+                {
+                    if (createIfMissing)
+                    {
+                        pos = _sheet.AggregateDrawingRecords(dm, true);
+                        agg = (EscherAggregate)_sheet.Records[pos];
+                        patriarch = new HSSFPatriarch(this, agg);
+                        patriarch.AfterCreate();
+                        return patriarch;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                agg = (EscherAggregate)_sheet.Records[(pos)];
+            }
+            return new HSSFPatriarch(this, agg);
         }
 
         /// <summary>
@@ -2124,25 +2169,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>cell comment or null if not found</returns>
         public IComment GetCellComment(int row, int column)
         {
-            // Don't call FindCellComment directly, otherwise
-            //  two calls to this method will result in two
-            //  new HSSFComment instances, which is bad
-            HSSFRow r = (HSSFRow)GetRow(row);
-            if (r != null)
-            {
-                NPOI.SS.UserModel.ICell c = r.GetCell(column);
-                if (c != null)
-                {
-                    return c.CellComment;
-                }
-                else
-                {
-                    // No cell, so you will Get new
-                    //  objects every time, sorry...
-                    return HSSFCell.FindCellComment(_sheet, row, column);
-                }
-            }
-            return null;
+            return FindCellComment(row, column);
         }
 
         /// <summary>
@@ -2250,7 +2277,41 @@ namespace NPOI.HSSF.UserModel
             return new HSSFAutoFilter(this);
         }
 
+        protected internal HSSFComment FindCellComment(int row, int column)
+        {
+            HSSFPatriarch patriarch = DrawingPatriarch as HSSFPatriarch;
+            if (null == patriarch)
+            {
+                patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
+            }
+            return LookForComment(patriarch, row, column);
+        }
 
+        private HSSFComment LookForComment(HSSFShapeContainer container, int row, int column)
+        {
+            foreach (Object obj in container.Children)
+            {
+                HSSFShape shape = (HSSFShape)obj;
+                if (shape is HSSFShapeGroup)
+                {
+                    HSSFShape res = LookForComment((HSSFShapeContainer)shape, row, column);
+                    if (null != res)
+                    {
+                        return (HSSFComment)res;
+                    }
+                    continue;
+                }
+                if (shape is HSSFComment)
+                {
+                    HSSFComment comment = (HSSFComment)shape;
+                    if (comment.Column == column && comment.Row == row)
+                    {
+                        return comment;
+                    }
+                }
+            }
+            return null;
+        }
         public CellRangeAddress RepeatingRows
         {
             get

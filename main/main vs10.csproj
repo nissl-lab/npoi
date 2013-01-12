@@ -163,6 +163,9 @@
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\DConRefRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
+    <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
+    <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
     <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIUtils.cs">

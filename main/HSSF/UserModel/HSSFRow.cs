@@ -604,6 +604,7 @@ namespace NPOI.HSSF.UserModel
                 if (value == -1)
                 {
                     row.Height = 20 * 20;
+                    row.BadFontHeight = false;
                 }
                 else
                 {

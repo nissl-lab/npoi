@@ -32,6 +32,7 @@ namespace NPOI.HSSF.UserModel
 
         public HSSFAnchor()
         {
+            CreateEscherAnchor();
         }
 
         /// <summary>

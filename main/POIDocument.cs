@@ -172,17 +172,17 @@ namespace NPOI
         /// For a given named property entry, either return it or null if
         /// if it wasn't found
         /// </summary>
-        /// <param name="SetName">Name of the set.</param>
+        /// <param name="setName">Name of the set.</param>
         /// <returns></returns>
-        protected PropertySet GetPropertySet(String SetName)
+        protected PropertySet GetPropertySet(String setName)
         {
             //directory can be null when creating new documents
-            if (directory == null) return null;
+            if (directory == null || !directory.HasEntry(setName)) return null;
             DocumentInputStream dis;
             try
             {
                 // Find the entry, and Get an input stream for it
-                dis = directory.CreateDocumentInputStream(SetName);
+                dis = directory.CreateDocumentInputStream(setName);
             }
             catch (IOException)
             {
@@ -267,7 +267,7 @@ namespace NPOI
             }
             catch (WritingNotSupportedException)
             {
-                Console.Error.WriteLine("Couldn't Write property Set with name " + name + " as not supported by HPSF yet");
+                //logger.log(POILogger.ERROR, "Couldn't Write property Set with name " + name + " as not supported by HPSF yet");
             }
         }
 

@@ -40,7 +40,7 @@ namespace NPOI.HSSF.Record
         {
             recordData = in1.ReadRemainder();
         }
-
+        [Obsolete]
         public void ProcessContinueRecord(byte[] record)
         {
             //don't merge continue record with the drawing record, it must be Serialized Separately
@@ -64,18 +64,17 @@ namespace NPOI.HSSF.Record
         {
             get { return sid; }
         }
-
         public byte[] Data
         {
             get
             {
-                if (contd != null)
-                {
-                    byte[] newBuffer = new byte[recordData.Length + contd.Length];
-                    Array.Copy(recordData, 0, newBuffer, 0, recordData.Length);
-                    Array.Copy(contd, 0, newBuffer, recordData.Length, contd.Length);
-                    return newBuffer;
-                }
+                //if (contd != null)
+                //{
+                //    byte[] newBuffer = new byte[recordData.Length + contd.Length];
+                //    Array.Copy(recordData, 0, newBuffer, 0, recordData.Length);
+                //    Array.Copy(contd, 0, newBuffer, recordData.Length, contd.Length);
+                //    return newBuffer;
+                //}
                 return recordData;
             }
             set 
@@ -87,7 +86,10 @@ namespace NPOI.HSSF.Record
                 this.recordData = value;
             }
         }
-
+        /**
+         * Cloning of drawing records must be executed through HSSFPatriarch, because all id's must be changed
+         * @return cloned drawing records
+         */
         public override Object Clone()
         {
             DrawingRecord rec = new DrawingRecord();
@@ -99,6 +101,11 @@ namespace NPOI.HSSF.Record
             }
 
             return rec;
+        }
+
+        public override String ToString()
+        {
+            return "DrawingRecord[" + recordData.Length + "]";
         }
     }
 }

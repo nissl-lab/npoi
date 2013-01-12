@@ -26,6 +26,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Model;
+    using NPOI.HSSF.Record;
 
 
     /// <summary>
@@ -33,7 +34,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis
     /// @author Yegor Kozlov (yegor at apache.org)
     /// </summary>
-    public class HSSFPicture : HSSFSimpleShape , IPicture
+    public class HSSFPicture : HSSFSimpleShape, IPicture
     {
         /**
          * width of 1px in columns with default width in Units of 1/256 of a Char width
@@ -52,8 +53,12 @@ namespace NPOI.HSSF.UserModel
         int pictureIndex;
         //HSSFPatriarch patriarch;
 
-        private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPicture));
+        private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFPicture));
+        public HSSFPicture(EscherContainerRecord spContainer, ObjRecord objRecord)
+            : base(spContainer, objRecord)
+        {
 
+        }
         /// <summary>
         /// Constructs a picture object.
         /// </summary>
@@ -62,18 +67,38 @@ namespace NPOI.HSSF.UserModel
         public HSSFPicture(HSSFShape parent, HSSFAnchor anchor)
             : base(parent, anchor)
         {
-
-            this.ShapeType = (OBJECT_TYPE_PICTURE);
+            base.ShapeType = (OBJECT_TYPE_PICTURE);
+            CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
+            cod.ObjectType = CommonObjectType.PICTURE;
         }
-
+        protected override EscherContainerRecord CreateSpContainer()
+        {
+            EscherContainerRecord spContainer = base.CreateSpContainer();
+            EscherOptRecord opt = (EscherOptRecord)spContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            opt.RemoveEscherProperty(EscherProperties.LINESTYLE__LINEDASHING);
+            opt.RemoveEscherProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH);
+            spContainer.RemoveChildRecord(spContainer.GetChildById(EscherTextboxRecord.RECORD_ID));
+            return spContainer;
+        }
         /// <summary>
         /// Gets or sets the index of the picture.
         /// </summary>
         /// <value>The index of the picture.</value>
         public int PictureIndex
         {
-            get { return pictureIndex; }
-            set { this.pictureIndex = value; }
+            get
+            {
+                EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.BLIP__BLIPTODISPLAY);
+                if (null == property)
+                {
+                    return -1;
+                }
+                return property.PropertyValue;
+            }
+            set
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.BLIP__BLIPTODISPLAY, false, true, value));
+            }
         }
 
         /// <summary>
@@ -179,7 +204,7 @@ namespace NPOI.HSSF.UserModel
         private float GetColumnWidthInPixels(int column)
         {
 
-            int cw = _patriarch._sheet.GetColumnWidth(column);
+            int cw = _patriarch.Sheet.GetColumnWidth(column);
             float px = GetPixelWidth(column);
 
             return cw / px;
@@ -193,10 +218,10 @@ namespace NPOI.HSSF.UserModel
         private float GetRowHeightInPixels(int i)
         {
 
-            IRow row = _patriarch._sheet.GetRow(i);
+            IRow row = _patriarch.Sheet.GetRow(i);
             float height;
             if (row != null) height = row.Height;
-            else height = _patriarch._sheet.DefaultRowHeight;
+            else height = _patriarch.Sheet.DefaultRowHeight;
 
             return height / PX_ROW;
         }
@@ -209,8 +234,8 @@ namespace NPOI.HSSF.UserModel
         private float GetPixelWidth(int column)
         {
 
-            int def = _patriarch._sheet.DefaultColumnWidth * 256;
-            int cw = _patriarch._sheet.GetColumnWidth(column);
+            int def = _patriarch.Sheet.DefaultColumnWidth * 256;
+            int cw = _patriarch.Sheet.GetColumnWidth(column);
 
             return cw == def ? PX_DEFAULT : PX_MODIFIED;
         }
@@ -247,7 +272,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>image dimension</returns>
         public Size GetImageDimension()
         {
-            EscherBSERecord bse = _patriarch._sheet.book.GetBSERecord(pictureIndex);
+            EscherBSERecord bse = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(pictureIndex);
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
@@ -268,10 +293,77 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                InternalWorkbook iwb = ((_patriarch._sheet.Workbook) as HSSFWorkbook).Workbook;
+                InternalWorkbook iwb = ((_patriarch.Sheet.Workbook) as HSSFWorkbook).Workbook;
                 EscherBlipRecord blipRecord = iwb.GetBSERecord(pictureIndex).BlipRecord;
                 return new HSSFPictureData(blipRecord);
             }
+        }
+
+
+        internal override void AfterInsert(HSSFPatriarch patriarch)
+        {
+            EscherAggregate agg = patriarch.GetBoundAggregate();
+            agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
+            EscherBSERecord bse =
+                    (patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(PictureIndex);
+            bse.Ref = (bse.Ref + 1);
+        }
+
+        /**
+         * The color applied to the lines of this shape.
+         */
+        public String FileName
+        {
+            get
+            {
+                EscherComplexProperty propFile = (EscherComplexProperty)GetOptRecord().Lookup(
+                              EscherProperties.BLIP__BLIPFILENAME);
+                try
+                {
+                    if (null == propFile)
+                    {
+                        return "";
+                    }
+                    return Encoding.Unicode.GetString(propFile.ComplexData).Trim();
+                }
+                catch (Exception)
+                {
+                    return "";
+                }
+            }
+            set
+            {
+                try
+                {
+                    EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.BLIP__BLIPFILENAME, true,
+                        Encoding.Unicode.GetBytes(value));
+                    SetPropertyValue(prop);
+                }
+                catch (Exception)
+                {
+                    logger.Log(POILogger.ERROR, "Unsupported encoding: UTF-16LE");
+                }
+            }
+        }
+
+
+        public override int ShapeType
+        {
+            get { return base.ShapeType; }
+            set
+            {
+                throw new InvalidOperationException("Shape type can not be changed in " + this.GetType().Name);
+            }
+        }
+
+
+        internal override HSSFShape CloneShape()
+        {
+            EscherContainerRecord spContainer = new EscherContainerRecord();
+            byte[] inSp = GetEscherContainer().Serialize();
+            spContainer.FillFields(inSp, 0, new DefaultEscherRecordFactory());
+            ObjRecord obj = (ObjRecord)GetObjRecord().CloneViaReserialise();
+            return new HSSFPicture(spContainer, obj);
         }
     }
 }

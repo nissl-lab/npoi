@@ -25,6 +25,7 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NUnit.Framework;
+    using System.Collections.Generic;
 
     /**
      * Tests the EscherAggregate class.
@@ -75,14 +76,13 @@ namespace TestCases.HSSF.Record
 
             ObjRecord r2 = new ObjRecord();
 
-            ArrayList records = new ArrayList();
+            List<RecordBase> records = new List<RecordBase>();
             records.Add(d1);
             records.Add(r1);
             records.Add(d2);
             records.Add(r2);
 
-            DrawingManager2 drawingManager = new DrawingManager2(new EscherDggRecord());
-            EscherAggregate aggregate = EscherAggregate.CreateAggregate(records, 0, drawingManager);
+            EscherAggregate aggregate = EscherAggregate.CreateAggregate(records, 0);
 
             Assert.AreEqual(1, aggregate.EscherRecords.Count);
             Assert.AreEqual(unchecked((short)0xF002), aggregate.GetEscherRecord(0).RecordId);
@@ -124,7 +124,7 @@ namespace TestCases.HSSF.Record
             spContainer2.AddChildRecord(d2);
             spContainer3.AddChildRecord(d3);
 
-            EscherAggregate aggregate = new EscherAggregate(null);
+            EscherAggregate aggregate = new EscherAggregate(false);
             aggregate.AddEscherRecord(container1);
             aggregate.AssociateShapeToObjRecord(d2, new ObjRecord());
             aggregate.AssociateShapeToObjRecord(d3, new ObjRecord());

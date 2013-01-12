@@ -157,5 +157,24 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(-1, row.FirstCellNum);
             Assert.AreEqual(-1, row.LastCellNum);
         }
+
+        [Test]
+        public void TestRowHeight()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+
+            Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
+            Assert.AreEqual(row.RowRecord.BadFontHeight, false);
+
+            row.Height=((short)123);
+            Assert.AreEqual(row.Height, 123);
+            Assert.AreEqual(row.RowRecord.BadFontHeight, true);
+
+            row.Height = ((short)-1);
+            Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
+            Assert.AreEqual(row.RowRecord.BadFontHeight, false);
+        }
     }
 }

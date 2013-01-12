@@ -45,7 +45,7 @@ namespace NPOI.HSSF.Model
             drawingGroups.Clear();
         }
 
-        public EscherDgRecord CreateDgRecord()
+        public virtual EscherDgRecord CreateDgRecord()
         {
             EscherDgRecord dg = new EscherDgRecord();
             dg.RecordId = EscherDgRecord.RECORD_ID;
@@ -64,7 +64,7 @@ namespace NPOI.HSSF.Model
          *
          * @return a new shape id.
          */
-        public int AllocateShapeId(short drawingGroupId)
+        public virtual int AllocateShapeId(short drawingGroupId)
         {
             EscherDgRecord dg = GetDrawingGroup(drawingGroupId);
             return AllocateShapeId(drawingGroupId, dg);
@@ -74,7 +74,7 @@ namespace NPOI.HSSF.Model
  *
  * @return a new shape id.
  */
-        public int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
+        public virtual int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
         {
             dgg.NumShapesSaved=(dgg.NumShapesSaved + 1);
 

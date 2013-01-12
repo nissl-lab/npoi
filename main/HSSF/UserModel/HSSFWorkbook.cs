@@ -49,8 +49,6 @@ namespace NPOI.HSSF.UserModel
     public class HSSFWorkbook : POIDocument, IWorkbook
     {
         //private static int DEBUG = POILogger.DEBUG;
-        private const int MAX_ROW = 0xFFFF;
-        private const short MAX_COLUMN = (short)0x00FF;
 
         /**
          * The maximum number of cell styles in a .xls workbook.
@@ -740,7 +738,7 @@ namespace NPOI.HSSF.UserModel
                 names.Add(newName);
             }
             // TODO - maybe same logic required for other/all built-in name records
-            workbook.CloneDrawings(((HSSFSheet)clonedSheet).Sheet);
+            //workbook.CloneDrawings(((HSSFSheet)clonedSheet).Sheet);
             return clonedSheet;
         }
         /// <summary>
@@ -1270,9 +1268,11 @@ namespace NPOI.HSSF.UserModel
 
             // before Getting the workbook size we must tell the sheets that
             // serialization Is about to occur.
+            workbook.PreSerialize();
             for (int i = 0; i < nSheets; i++)
             {
                 sheets[i].Sheet.Preserialize();
+                sheets[i].PreSerialize();
             }
 
             int totalsize = workbook.Size;
@@ -1717,7 +1717,7 @@ namespace NPOI.HSSF.UserModel
             r.UID = uid;
             r.Tag = (short)0xFF;
             r.Size = pictureData.Length + 25;
-            r.Ref = 1;
+            r.Ref = 0;
             r.Offset = 0;
             r.BlipRecord = blipRecord;
 
@@ -1825,7 +1825,7 @@ namespace NPOI.HSSF.UserModel
             List<HSSFObjectData> objects = new List<HSSFObjectData>();
             for (int i = 0; i < NumberOfSheets; i++)
             {
-                GetAllEmbeddedObjects(((HSSFSheet)GetSheetAt(i)).Sheet.Records, objects);
+                GetAllEmbeddedObjects((HSSFSheet)GetSheetAt(i), objects);
             }
             return objects;
         }
@@ -1835,25 +1835,18 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="records">the list of records to search.</param>
         /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(IList records, IList objects)
+        private void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
         {
-            IEnumerator recordIter = records.GetEnumerator();
-            while (recordIter.MoveNext())
+            HSSFPatriarch patriarch = sheet.DrawingPatriarch as HSSFPatriarch;
+            if (null == patriarch)
             {
-                Object obj = recordIter.Current;
-                if (obj is ObjRecord)
+                return;
+            }
+            foreach (HSSFShape shape in patriarch.Children)
+            {
+                if (shape is HSSFObjectData)
                 {
-                    // TODO: More convenient way of determining if there Is stored binary.
-                    // TODO: Link to the data stored in the other stream.
-                    IEnumerator subRecordIter = ((ObjRecord)obj).SubRecords.GetEnumerator();
-                    while (subRecordIter.MoveNext())
-                    {
-                        Object sub = subRecordIter.Current;
-                        if (sub is EmbeddedObjectRefSubRecord)
-                        {
-                            objects.Add(new HSSFObjectData((ObjRecord)obj, directory));
-                        }
-                    }
+                    objects.Add((HSSFObjectData)shape);
                 }
             }
         }

@@ -38,7 +38,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Model;
     using System.Collections.Generic;
     using NPOI.SS.Formula.PTG;
-using NPOI.POIFS.FileSystem;
+    using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.Extractor;
 
     /**
@@ -2504,7 +2504,7 @@ using NPOI.POIFS.FileSystem;
             wb = WriteOutAndReadBack(wb);
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        
+
         [Test]
         public void Test49219()
         {
@@ -2526,7 +2526,7 @@ using NPOI.POIFS.FileSystem;
             HSSFCellStyle cs1 = (HSSFCellStyle)wb.CreateCellStyle();
             HSSFCellStyle cs2 = (HSSFCellStyle)wb.CreateCellStyle();
             HSSFCellStyle cs3 = (HSSFCellStyle)wb.CreateCellStyle();
-            
+
             Assert.AreEqual(21, cs1.Index);
             cs1.UserStyleName = ("Testing");
 
@@ -2810,7 +2810,29 @@ using NPOI.POIFS.FileSystem;
                 Assert.IsTrue(text.Contains("Bottom Right Cell"));
             }
         }
+        /**
+     * Sum across multiple workbooks
+     *  eg =SUM($Sheet2.A1:$Sheet3.A1)
+     * DISABLED - We currently get the formula wrong, and mis-evaluate
+     */
+        public void DISABLEDtest48703()
+        {
+            HSSFWorkbook wb = OpenSample("48703.xls");
+            Assert.AreEqual(3, wb.NumberOfSheets);
 
+            // Check reading the formula
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow r = sheet.GetRow(0);
+            ICell c = r.GetCell(0);
+
+            Assert.AreEqual("SUM(Sheet2!A1:Sheet3!A1)", c.CellFormula);
+            Assert.AreEqual(4.0, c.NumericCellValue);
+
+            // Check the evaluated result
+            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
+            eval.EvaluateFormulaCell(c);
+            Assert.AreEqual(4.0, c.NumericCellValue);
+        }
         /**
          * Normally encrypted files have BOF then FILEPASS, but
          *  some may squeeze a WRITEPROTECT in the middle
@@ -2860,6 +2882,20 @@ using NPOI.POIFS.FileSystem;
         }
 
         [Test]
+        public void Test52272()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
+            HSSFPatriarch p = sh.CreateDrawingPatriarch() as HSSFPatriarch;
+
+            HSSFSimpleShape s = p.CreateSimpleShape(new HSSFClientAnchor());
+            s.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_LINE);
+
+            HSSFSheet sh2 = wb.CloneSheet(0) as HSSFSheet;
+            Assert.IsNotNull(sh2.DrawingPatriarch);
+        }
+
+        [Test]
         public void Test53432()
         {
             IWorkbook wb = new HSSFWorkbook(); //or new HSSFWorkbook();
@@ -2875,6 +2911,22 @@ using NPOI.POIFS.FileSystem;
             wb = WriteOutAndReadBack((HSSFWorkbook)wb);
             Assert.AreEqual(wb.GetAllPictures().Count, 1);
         }
+        [Test]
+        public void Test46250()
+        {
+            IWorkbook wb = OpenSample("46250.xls");
+            ISheet sh = wb.GetSheet("Template");
+            ISheet cSh = wb.CloneSheet(wb.GetSheetIndex(sh));
+
+            HSSFPatriarch patriarch = (HSSFPatriarch)cSh.CreateDrawingPatriarch();
+            HSSFTextbox tb = (HSSFTextbox)patriarch.Children[2];
+
+            tb.String=(new HSSFRichTextString("POI test"));
+            tb.Anchor=(new HSSFClientAnchor(0, 0, 0, 0, (short)0, 0, (short)10, 10));
+
+            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
+        }
+
         [Test]
         public void Test53404()
         {

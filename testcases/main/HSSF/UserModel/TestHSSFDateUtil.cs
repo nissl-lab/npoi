@@ -219,6 +219,27 @@ namespace TestCases.HSSF.UserModel
                 // Should Match despite time-zone
                 Assert.AreEqual(expected, javaDate, "Checking timezone " + id);
             }
+
+
+            //// Check that the timezone aware getter works correctly 
+            //TimeZone cet = TimeZone.getTimeZone("Europe/Copenhagen");
+            //TimeZone ldn = TimeZone.getTimeZone("Europe/London");
+            //TimeZone.setDefault(cet);
+
+            //// 12:45 on 27th April 2012
+            //double excelDate = 41026.53125;
+
+            //// Same, no change
+            //assertEquals(
+            //      HSSFDateUtil.getJavaDate(excelDate, false).getTime(),
+            //      HSSFDateUtil.getJavaDate(excelDate, false, cet).getTime()
+            //);
+
+            //// London vs Copenhagen, should differ by an hour
+            //Date cetDate = HSSFDateUtil.getJavaDate(excelDate, false);
+            //Date ldnDate = HSSFDateUtil.getJavaDate(excelDate, false, ldn);
+            //assertEquals(ldnDate.getTime() - cetDate.getTime(), 60 * 60 * 1000);
+            throw new NotImplementedException();
         }
 
         /**

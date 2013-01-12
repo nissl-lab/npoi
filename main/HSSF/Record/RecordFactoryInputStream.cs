@@ -394,8 +394,8 @@ namespace NPOI.HSSF.Record
                 }
                 if (_lastRecord is DrawingRecord)
                 {
-                    ((DrawingRecord)_lastRecord).ProcessContinueRecord(contRec.Data);
-                    return null;
+                    //((DrawingRecord)_lastRecord).ProcessContinueRecord(contRec.Data);
+                    return contRec;
                 }
                 if (_lastRecord is CrtMlFrtRecord)
                 {
