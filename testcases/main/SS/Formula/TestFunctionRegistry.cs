@@ -48,6 +48,9 @@ namespace TestCases.SS.Formula
             CellValue cv;
             try
             {
+                //NPOI
+                //Run it twice in NUnit Gui Window, the first passed but the second failed.
+                //Maybe the function was cached. Ignore it.
                 cv = fe.Evaluate(cellA);
                 Assert.Fail("expectecd exception");
             }

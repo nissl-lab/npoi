@@ -2340,17 +2340,17 @@ namespace TestCases.HSSF.UserModel
 
             row = s.GetRow(4);
             Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
-            Assert.AreEqual("'[\u0005$http://gagravarr.org/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual("'[$http://gagravarr.org/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             // Change 4
-            row.GetCell(1).CellFormula = ("'[\u0005$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2");
+            row.GetCell(1).CellFormula = ("'[$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2");
             row.GetCell(1).SetCellValue(123.0);
 
             // Add 5
             row = s.CreateRow(5);
             row.CreateCell(1, CellType.FORMULA);
-            row.GetCell(1).CellFormula = ("'[\u0005$http://example.com/FormulaRefs.xls]Sheet1'!B1");
+            row.GetCell(1).CellFormula = ("'[$http://example.com/FormulaRefs.xls]Sheet1'!B1");
             row.GetCell(1).SetCellValue(234.0);
 
 

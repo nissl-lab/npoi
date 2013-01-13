@@ -47,10 +47,10 @@ namespace TestCases.HSSF.UserModel
             fontFmt.SetFontStyle(true, false);
 
             HSSFBorderFormatting bordFmt = (HSSFBorderFormatting)rule1.CreateBorderFormatting();
-            bordFmt.BorderBottom= (short)BorderStyle.THIN;
-            bordFmt.BorderTop= (short)BorderStyle.THICK;
-            bordFmt.BorderLeft= (short)BorderStyle.DASHED;
-            bordFmt.BorderRight= (short)BorderStyle.DOTTED;
+            bordFmt.BorderBottom = BorderFormatting.BORDER_THIN;
+            bordFmt.BorderTop = BorderFormatting.BORDER_THICK;
+            bordFmt.BorderLeft = BorderFormatting.BORDER_DASHED;
+            bordFmt.BorderRight = BorderFormatting.BORDER_DOTTED;
 
             HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
             patternFmt.FillBackgroundColor= (HSSFColor.YELLOW.index);

@@ -52,7 +52,7 @@ namespace TestCases.HPSF.Basic
          */
         public void SetUp()
         {
-            VariantSupport.IsLogUnsupportedTypes=false;
+            VariantSupport.IsLogUnsupportedTypes = false;
         }
 
 
@@ -204,306 +204,176 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestWriteWellKnown1()
         {
-        POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
-        using (FileStream doc1 = _samples.GetFile(POI_FS))
-        {
-
-            /* Read a Test document <em>doc1</em> into a POI filesystem. */
-            POIFSFileSystem poifs = new POIFSFileSystem(doc1);
-            DirectoryEntry dir = poifs.Root;
-            DocumentEntry siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
-            DocumentEntry dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-
-            /*
-             * Read the summary information stream and the document summary
-             * information stream from the POI filesystem.
-             * 
-             * Please note that the result consists of SummaryInformation and
-             * DocumentSummaryInformation instances which are in memory only. To
-             * make them permanent they have to be written to a POI filesystem
-             * explicitly (overwriting the former contents). Then the POI filesystem
-             * should be saved to a file.
-             */
-            DocumentInputStream dis = new DocumentInputStream(siEntry);
-            PropertySet ps = new PropertySet(dis);
-            SummaryInformation si = new SummaryInformation(ps);
-            dis = new DocumentInputStream(dsiEntry);
-            ps = new PropertySet(dis);
-            DocumentSummaryInformation dsi = new DocumentSummaryInformation(ps);
-
-            /*
-             * Write all properties supported by HPSF to the summary information
-             * (e.g. author, edit date, application name) and to the document
-             * summary information (e.g. company, manager).
-             */
-            Calendar cal = new GregorianCalendar();
-            //long time1 = (long)cal.GetMilliseconds(new DateTime(2000, 6, 6, 6, 6, 6));
-
-            //long time2 = (long)cal.GetMilliseconds(new DateTime(2001, 7, 7, 7, 7, 7));
-            //long time3 = (long)cal.GetMilliseconds(new DateTime(2002, 8, 8, 8, 8, 8));
-
-            int nr = 4711;
-            String P_APPLICATION_NAME = "Microsoft Office Word";
-            String P_AUTHOR = "Rainer Klute";
-            int P_CHAR_COUNT = 125;
-            String P_COMMENTS = "";  //"Comments";
-            DateTime P_CREATE_DATE_TIME = new DateTime(2006, 2, 1, 7, 36, 0);
-            long P_EDIT_TIME = ++nr * 1000 * 10;
-            String P_KEYWORDS = "Test HPSF SummaryInformation DocumentSummaryInformation Writing";
-            String P_LAST_AUTHOR = "LastAuthor";
-            DateTime? P_LAST_PRINTED = null;
-            DateTime P_LAST_SAVE_DATE_TIME = new DateTime(2008, 9, 30, 9, 54, 0);
-            int P_PAGE_COUNT = 1;
-            String P_REV_NUMBER = "RevNumber";
-            int P_SECURITY = 1;
-            String P_SUBJECT = "Subject";
-            String P_TEMPLATE = "Normal.dotm";
-            // FIXME (byte array properties not yet implemented): byte[] P_THUMBNAIL = new byte[123];
-            String P_TITLE = "This document is used for testing POI HPSF¡¯s writing capabilities for the summary information stream and the document summary information stream";
-            int P_WORD_COUNT = 21;
-
-            int P_BYTE_COUNT = ++nr;
-            String P_CATEGORY = "Category";
-            String P_COMPANY = "Rainer Klute IT-Consulting GmbH";
-            // FIXME (byte array properties not yet implemented): byte[]  P_DOCPARTS = new byte[123];
-            // FIXME (byte array properties not yet implemented): byte[]  P_HEADING_PAIR = new byte[123];
-            int P_HIDDEN_COUNT = ++nr;
-            int P_LINE_COUNT = ++nr;
-            bool P_LINKS_DIRTY = true;
-            String P_MANAGER = "Manager";
-            int P_MM_CLIP_COUNT = ++nr;
-            int P_NOTE_COUNT = ++nr;
-            int P_PAR_COUNT = ++nr;
-            String P_PRESENTATION_FORMAT = "PresentationFormat";
-            bool P_SCALE = false;
-            int P_SLIDE_COUNT = ++nr;
-            DateTime now = DateTime.Now;
-
-            int POSITIVE_INTEGER = 2222;
-            long POSITIVE_LONG = 3333;
-            Double POSITIVE_DOUBLE = 4444;
-            int NEGATIVE_INTEGER = 2222;
-            long NEGATIVE_LONG = 3333;
-            Double NEGATIVE_DOUBLE = 4444;
-
-            int MAX_INTEGER = int.MaxValue;
-            int MIN_INTEGER = int.MinValue;
-            long MAX_LONG = long.MaxValue;
-            long MIN_LONG = long.MinValue;
-            Double MAX_DOUBLE = Double.MaxValue;
-            Double MIN_DOUBLE = Double.MinValue;
-
-            si.ApplicationName = P_APPLICATION_NAME;
-            si.Author = P_AUTHOR;
-            si.CharCount = P_CHAR_COUNT;
-            si.Comments = P_COMMENTS;
-            si.CreateDateTime = P_CREATE_DATE_TIME;
-            si.EditTime = P_EDIT_TIME;
-            si.Keywords = P_KEYWORDS;
-            si.LastAuthor = P_LAST_AUTHOR;
-            si.LastPrinted = P_LAST_PRINTED;
-            si.LastSaveDateTime = P_LAST_SAVE_DATE_TIME;
-            si.PageCount = P_PAGE_COUNT;
-            si.RevNumber = P_REV_NUMBER;
-            si.Security = P_SECURITY;
-            si.Subject = P_SUBJECT;
-            si.Template = P_TEMPLATE;
-            // FIXME (byte array properties not yet implemented): si.Thumbnail=P_THUMBNAIL;
-            si.Title = P_TITLE;
-            si.WordCount = P_WORD_COUNT;
-
-            dsi.ByteCount = P_BYTE_COUNT;
-            dsi.Category = P_CATEGORY;
-            dsi.Company = P_COMPANY;
-            // FIXME (byte array properties not yet implemented): dsi.Docparts=P_DOCPARTS;
-            // FIXME (byte array properties not yet implemented): dsi.HeadingPair=P_HEADING_PAIR;
-            dsi.HiddenCount = P_HIDDEN_COUNT;
-            dsi.LineCount = P_LINE_COUNT;
-            dsi.LinksDirty = P_LINKS_DIRTY;
-            dsi.Manager = P_MANAGER;
-            dsi.MMClipCount = P_MM_CLIP_COUNT;
-            dsi.NoteCount = P_NOTE_COUNT;
-            dsi.ParCount = P_PAR_COUNT;
-            dsi.PresentationFormat = P_PRESENTATION_FORMAT;
-            dsi.Scale = P_SCALE;
-            dsi.SlideCount = P_SLIDE_COUNT;
-
-            CustomProperties customProperties = dsi.CustomProperties;
-            if (customProperties == null)
-                customProperties = new CustomProperties();
-            customProperties.Put("Schlüssel 1", "Wert 1");
-            customProperties.Put("Schlüssel 2", "Wert 2");
-            customProperties.Put("Schlüssel 3", "Wert 3");
-            customProperties.Put("Schlüssel 4", "Wert 4");
-            customProperties.Put("positive_int", POSITIVE_INTEGER);
-            customProperties.Put("positive_long", POSITIVE_LONG);
-            customProperties.Put("positive_Double", POSITIVE_DOUBLE);
-            customProperties.Put("negative_int", NEGATIVE_INTEGER);
-            customProperties.Put("negative_long", NEGATIVE_LONG);
-            customProperties.Put("negative_Double", NEGATIVE_DOUBLE);
-            customProperties.Put("Boolean", true);
-            customProperties.Put("Date", now);
-            customProperties.Put("max_int", MAX_INTEGER);
-            customProperties.Put("min_int", MIN_INTEGER);
-            customProperties.Put("max_long", MAX_LONG);
-            customProperties.Put("min_long", MIN_LONG);
-            customProperties.Put("max_Double", MAX_DOUBLE);
-            customProperties.Put("min_Double", MIN_DOUBLE);
-            dsi.CustomProperties = customProperties;
-
-            /* Write the summary information stream and the document summary
-             * information stream to the POI filesystem. */
-            si.Write(dir, siEntry.Name);
-            dsi.Write(dir, dsiEntry.Name);
-
-            /* Write the POI filesystem to a (temporary) file <em>doc2</em>
-             * and Close the latter. */
-            using (FileStream doc2 = File.Create( @"\POI_HPSF_Test2.tmp"))
+            POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
+            using (FileStream doc1 = _samples.GetFile(POI_FS))
             {
 
-                poifs.WriteFileSystem(doc2);
-                //doc2.Flush();
+                /* Read a Test document <em>doc1</em> into a POI filesystem. */
+                POIFSFileSystem poifs = new POIFSFileSystem(doc1);
+                DirectoryEntry dir = poifs.Root;
+                DocumentEntry siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
+                DocumentEntry dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
                 /*
-                 * Open <em>doc2</em> for Reading and check summary information and
-                 * document summary information. All properties written before must be
-                 * found in the property streams of <em>doc2</em> and have the correct
-                 * values.
+                 * Read the summary information stream and the document summary
+                 * information stream from the POI filesystem.
+                 * 
+                 * Please note that the result consists of SummaryInformation and
+                 * DocumentSummaryInformation instances which are in memory only. To
+                 * make them permanent they have to be written to a POI filesystem
+                 * explicitly (overwriting the former contents). Then the POI filesystem
+                 * should be saved to a file.
                  */
-                doc2.Flush();
-                doc2.Position = 0;
-                POIFSFileSystem poifs2 = new POIFSFileSystem(doc2);
-                dir = poifs2.Root;
-                siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
-                dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-
-                dis = new DocumentInputStream(siEntry);
-                ps = new PropertySet(dis);
-                si = new SummaryInformation(ps);
+                DocumentInputStream dis = new DocumentInputStream(siEntry);
+                PropertySet ps = new PropertySet(dis);
+                SummaryInformation si = new SummaryInformation(ps);
                 dis = new DocumentInputStream(dsiEntry);
                 ps = new PropertySet(dis);
-                dsi = new DocumentSummaryInformation(ps);
+                DocumentSummaryInformation dsi = new DocumentSummaryInformation(ps);
 
-                Assert.AreEqual(P_APPLICATION_NAME, si.ApplicationName);
-                Assert.AreEqual(P_AUTHOR, si.Author);
-                Assert.AreEqual(P_CHAR_COUNT, si.CharCount);
-                Assert.AreEqual(P_COMMENTS, si.Comments);
-                Assert.AreEqual(P_CREATE_DATE_TIME, si.CreateDateTime);
-                Assert.AreEqual(P_EDIT_TIME, si.EditTime);
-                Assert.AreEqual(P_KEYWORDS, si.Keywords);
-                Assert.AreEqual(P_LAST_AUTHOR, si.LastAuthor);
-                Assert.AreEqual(P_LAST_PRINTED, si.LastPrinted);
-                Assert.AreEqual(P_LAST_SAVE_DATE_TIME, si.LastSaveDateTime);
-                Assert.AreEqual(P_PAGE_COUNT, si.PageCount);
-                Assert.AreEqual(P_REV_NUMBER, si.RevNumber);
-                Assert.AreEqual(P_SECURITY, si.Security);
-                Assert.AreEqual(P_SUBJECT, si.Subject);
-                Assert.AreEqual(P_TEMPLATE, si.Template);
-                // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_THUMBNAIL, si.Thumbnail);
-                Assert.AreEqual(P_TITLE, si.Title);
-                Assert.AreEqual(P_WORD_COUNT, si.WordCount);
+                /*
+                 * Write all properties supported by HPSF to the summary information
+                 * (e.g. author, edit date, application name) and to the document
+                 * summary information (e.g. company, manager).
+                 */
+                Calendar cal = new GregorianCalendar();
+                //long time1 = (long)cal.GetMilliseconds(new DateTime(2000, 6, 6, 6, 6, 6));
 
-                Assert.AreEqual(P_BYTE_COUNT, dsi.ByteCount);
-                Assert.AreEqual(P_CATEGORY, dsi.Category);
-                Assert.AreEqual(P_COMPANY, dsi.Company);
-                // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_, dsi.Docparts);
-                // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_, dsi.HeadingPair);
-                Assert.AreEqual(P_HIDDEN_COUNT, dsi.HiddenCount);
-                Assert.AreEqual(P_LINE_COUNT, dsi.LineCount);
-                Assert.AreEqual(P_LINKS_DIRTY, dsi.LinksDirty);
-                Assert.AreEqual(P_MANAGER, dsi.Manager);
-                Assert.AreEqual(P_MM_CLIP_COUNT, dsi.MMClipCount);
-                Assert.AreEqual(P_NOTE_COUNT, dsi.NoteCount);
-                Assert.AreEqual(P_PAR_COUNT, dsi.ParCount);
-                Assert.AreEqual(P_PRESENTATION_FORMAT, dsi.PresentationFormat);
-                Assert.AreEqual(P_SCALE, dsi.Scale);
-                Assert.AreEqual(P_SLIDE_COUNT, dsi.SlideCount);
+                //long time2 = (long)cal.GetMilliseconds(new DateTime(2001, 7, 7, 7, 7, 7));
+                //long time3 = (long)cal.GetMilliseconds(new DateTime(2002, 8, 8, 8, 8, 8));
 
-                CustomProperties cps = dsi.CustomProperties;
-                //Assert.AreEqual(customProperties, cps);
-                Assert.IsNull(cps["No value available"]);
-                Assert.AreEqual("Wert 1", cps["Schlüssel 1"]);
-                Assert.AreEqual("Wert 2", cps["Schlüssel 2"]);
-                Assert.AreEqual("Wert 3", cps["Schlüssel 3"]);
-                Assert.AreEqual("Wert 4", cps["Schlüssel 4"]);
-                Assert.AreEqual(POSITIVE_INTEGER, cps["positive_int"]);
-                Assert.AreEqual(POSITIVE_LONG, cps["positive_long"]);
-                Assert.AreEqual(POSITIVE_DOUBLE, cps["positive_Double"]);
-                Assert.AreEqual(NEGATIVE_INTEGER, cps["negative_int"]);
-                Assert.AreEqual(NEGATIVE_LONG, cps["negative_long"]);
-                Assert.AreEqual(NEGATIVE_DOUBLE, cps["negative_Double"]);
-                Assert.AreEqual(true, cps["Boolean"]);
-                Assert.AreEqual(now, cps["Date"]);
-                Assert.AreEqual(MAX_INTEGER, cps["max_int"]);
-                Assert.AreEqual(MIN_INTEGER, cps["min_int"]);
-                Assert.AreEqual(MAX_LONG, cps["max_long"]);
-                Assert.AreEqual(MIN_LONG, cps["min_long"]);
-                Assert.AreEqual(MAX_DOUBLE, cps["max_Double"]);
-                Assert.AreEqual(MIN_DOUBLE, cps["min_Double"]);
+                int nr = 4711;
+                String P_APPLICATION_NAME = "Microsoft Office Word";
+                String P_AUTHOR = "Rainer Klute";
+                int P_CHAR_COUNT = 125;
+                String P_COMMENTS = "";  //"Comments";
+                DateTime P_CREATE_DATE_TIME = new DateTime(2006, 2, 1, 7, 36, 0);
+                long P_EDIT_TIME = ++nr * 1000 * 10;
+                String P_KEYWORDS = "Test HPSF SummaryInformation DocumentSummaryInformation Writing";
+                String P_LAST_AUTHOR = "LastAuthor";
+                DateTime? P_LAST_PRINTED = new DateTime(2001, 7, 7, 7, 7, 7);
+                DateTime P_LAST_SAVE_DATE_TIME = new DateTime(2008, 9, 30, 9, 54, 0);
+                int P_PAGE_COUNT = 1;
+                String P_REV_NUMBER = "RevNumber";
+                int P_SECURITY = 1;
+                String P_SUBJECT = "Subject";
+                String P_TEMPLATE = "Normal.dotm";
+                // FIXME (byte array properties not yet implemented): byte[] P_THUMBNAIL = new byte[123];
+                String P_TITLE = "This document is used for testing POI HPSF¡¯s writing capabilities for the summary information stream and the document summary information stream";
+                int P_WORD_COUNT = 21;
 
-                /* Remove all properties supported by HPSF from the summary
-                 * information (e.g. author, edit date, application name) and from the
-                 * document summary information (e.g. company, manager). */
-                si.RemoveApplicationName();
-                si.RemoveAuthor();
-                si.RemoveCharCount();
-                si.RemoveComments();
-                si.RemoveCreateDateTime();
-                si.RemoveEditTime();
-                si.RemoveKeywords();
-                si.RemoveLastAuthor();
-                si.RemoveLastPrinted();
-                si.RemoveLastSaveDateTime();
-                si.RemovePageCount();
-                si.RemoveRevNumber();
-                si.RemoveSecurity();
-                si.RemoveSubject();
-                si.RemoveTemplate();
-                si.RemoveThumbnail();
-                si.RemoveTitle();
-                si.RemoveWordCount();
+                int P_BYTE_COUNT = ++nr;
+                String P_CATEGORY = "Category";
+                String P_COMPANY = "Rainer Klute IT-Consulting GmbH";
+                // FIXME (byte array properties not yet implemented): byte[]  P_DOCPARTS = new byte[123];
+                // FIXME (byte array properties not yet implemented): byte[]  P_HEADING_PAIR = new byte[123];
+                int P_HIDDEN_COUNT = ++nr;
+                int P_LINE_COUNT = ++nr;
+                bool P_LINKS_DIRTY = true;
+                String P_MANAGER = "Manager";
+                int P_MM_CLIP_COUNT = ++nr;
+                int P_NOTE_COUNT = ++nr;
+                int P_PAR_COUNT = ++nr;
+                String P_PRESENTATION_FORMAT = "PresentationFormat";
+                bool P_SCALE = false;
+                int P_SLIDE_COUNT = ++nr;
+                DateTime now = DateTime.Now;
 
-                dsi.RemoveByteCount();
-                dsi.RemoveCategory();
-                dsi.RemoveCompany();
-                dsi.RemoveCustomProperties();
-                dsi.RemoveDocparts();
-                dsi.RemoveHeadingPair();
-                dsi.RemoveHiddenCount();
-                dsi.RemoveLineCount();
-                dsi.RemoveLinksDirty();
-                dsi.RemoveManager();
-                dsi.RemoveMMClipCount();
-                dsi.RemoveNoteCount();
-                dsi.RemoveParCount();
-                dsi.RemovePresentationFormat();
-                dsi.RemoveScale();
-                dsi.RemoveSlideCount();
+                int POSITIVE_INTEGER = 2222;
+                long POSITIVE_LONG = 3333;
+                Double POSITIVE_DOUBLE = 4444;
+                int NEGATIVE_INTEGER = 2222;
+                long NEGATIVE_LONG = 3333;
+                Double NEGATIVE_DOUBLE = 4444;
 
-                /* 
-                 * <li>Write the summary information stream and the document summary
+                int MAX_INTEGER = int.MaxValue;
+                int MIN_INTEGER = int.MinValue;
+                long MAX_LONG = long.MaxValue;
+                long MIN_LONG = long.MinValue;
+                Double MAX_DOUBLE = Double.MaxValue;
+                Double MIN_DOUBLE = Double.MinValue;
+
+                si.ApplicationName = P_APPLICATION_NAME;
+                si.Author = P_AUTHOR;
+                si.CharCount = P_CHAR_COUNT;
+                si.Comments = P_COMMENTS;
+                si.CreateDateTime = P_CREATE_DATE_TIME;
+                si.EditTime = P_EDIT_TIME;
+                si.Keywords = P_KEYWORDS;
+                si.LastAuthor = P_LAST_AUTHOR;
+                si.LastPrinted = P_LAST_PRINTED;
+                si.LastSaveDateTime = P_LAST_SAVE_DATE_TIME;
+                si.PageCount = P_PAGE_COUNT;
+                si.RevNumber = P_REV_NUMBER;
+                si.Security = P_SECURITY;
+                si.Subject = P_SUBJECT;
+                si.Template = P_TEMPLATE;
+                // FIXME (byte array properties not yet implemented): si.Thumbnail=P_THUMBNAIL;
+                si.Title = P_TITLE;
+                si.WordCount = P_WORD_COUNT;
+
+                dsi.ByteCount = P_BYTE_COUNT;
+                dsi.Category = P_CATEGORY;
+                dsi.Company = P_COMPANY;
+                // FIXME (byte array properties not yet implemented): dsi.Docparts=P_DOCPARTS;
+                // FIXME (byte array properties not yet implemented): dsi.HeadingPair=P_HEADING_PAIR;
+                dsi.HiddenCount = P_HIDDEN_COUNT;
+                dsi.LineCount = P_LINE_COUNT;
+                dsi.LinksDirty = P_LINKS_DIRTY;
+                dsi.Manager = P_MANAGER;
+                dsi.MMClipCount = P_MM_CLIP_COUNT;
+                dsi.NoteCount = P_NOTE_COUNT;
+                dsi.ParCount = P_PAR_COUNT;
+                dsi.PresentationFormat = P_PRESENTATION_FORMAT;
+                dsi.Scale = P_SCALE;
+                dsi.SlideCount = P_SLIDE_COUNT;
+
+                CustomProperties customProperties = dsi.CustomProperties;
+                if (customProperties == null)
+                    customProperties = new CustomProperties();
+                customProperties.Put("Schlüssel 1", "Wert 1");
+                customProperties.Put("Schlüssel 2", "Wert 2");
+                customProperties.Put("Schlüssel 3", "Wert 3");
+                customProperties.Put("Schlüssel 4", "Wert 4");
+                customProperties.Put("positive_int", POSITIVE_INTEGER);
+                customProperties.Put("positive_long", POSITIVE_LONG);
+                customProperties.Put("positive_Double", POSITIVE_DOUBLE);
+                customProperties.Put("negative_int", NEGATIVE_INTEGER);
+                customProperties.Put("negative_long", NEGATIVE_LONG);
+                customProperties.Put("negative_Double", NEGATIVE_DOUBLE);
+                customProperties.Put("Boolean", true);
+                customProperties.Put("Date", now);
+                customProperties.Put("max_int", MAX_INTEGER);
+                customProperties.Put("min_int", MIN_INTEGER);
+                customProperties.Put("max_long", MAX_LONG);
+                customProperties.Put("min_long", MIN_LONG);
+                customProperties.Put("max_Double", MAX_DOUBLE);
+                customProperties.Put("min_Double", MIN_DOUBLE);
+                dsi.CustomProperties = customProperties;
+
+                /* Write the summary information stream and the document summary
                  * information stream to the POI filesystem. */
                 si.Write(dir, siEntry.Name);
                 dsi.Write(dir, dsiEntry.Name);
 
-                /* 
-                 * <li>Write the POI filesystem to a (temporary) file <em>doc3</em>
+                /* Write the POI filesystem to a (temporary) file <em>doc2</em>
                  * and Close the latter. */
-                using (FileStream doc3 = File.Create( @"\POI_HPSF_Test3.tmp"))
+                using (FileStream doc2 = File.Create(@"\POI_HPSF_Test2.tmp"))
                 {
 
-                    poifs2.WriteFileSystem(doc3);
-                    doc3.Position = 0;
+                    poifs.WriteFileSystem(doc2);
+                    //doc2.Flush();
 
-                    /* 
-                     * Open <em>doc3</em> for Reading and check summary information
-                     * and document summary information. All properties Removed before must not
-                     * be found in the property streams of <em>doc3</em>.
+                    /*
+                     * Open <em>doc2</em> for Reading and check summary information and
+                     * document summary information. All properties written before must be
+                     * found in the property streams of <em>doc2</em> and have the correct
+                     * values.
                      */
-                    POIFSFileSystem poifs3 = new POIFSFileSystem(doc3);
-
-
-                    dir = poifs3.Root;
+                    doc2.Flush();
+                    doc2.Position = 0;
+                    POIFSFileSystem poifs2 = new POIFSFileSystem(doc2);
+                    dir = poifs2.Root;
                     siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
                     dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
@@ -514,59 +384,189 @@ namespace TestCases.HPSF.Basic
                     ps = new PropertySet(dis);
                     dsi = new DocumentSummaryInformation(ps);
 
-                    Assert.AreEqual(null, si.ApplicationName);
-                    Assert.AreEqual(null, si.Author);
-                    Assert.AreEqual(0, si.CharCount);
-                    Assert.IsTrue(si.WasNull);
-                    Assert.AreEqual(null, si.Comments);
-                    Assert.AreEqual(null, si.CreateDateTime);
-                    Assert.AreEqual(0, si.EditTime);
-                    Assert.IsTrue(si.WasNull);
-                    Assert.AreEqual(null, si.Keywords);
-                    Assert.AreEqual(null, si.LastAuthor);
-                    Assert.AreEqual(null, si.LastPrinted);
-                    Assert.AreEqual(null, si.LastSaveDateTime);
-                    Assert.AreEqual(0, si.PageCount);
-                    Assert.IsTrue(si.WasNull);
-                    Assert.AreEqual(null, si.RevNumber);
-                    Assert.AreEqual(0, si.Security);
-                    Assert.IsTrue(si.WasNull);
-                    Assert.AreEqual(null, si.Subject);
-                    Assert.AreEqual(null, si.Template);
-                    Assert.AreEqual(null, si.Thumbnail);
-                    Assert.AreEqual(null, si.Title);
-                    Assert.AreEqual(0, si.WordCount);
-                    Assert.IsTrue(si.WasNull);
+                    Assert.AreEqual(P_APPLICATION_NAME, si.ApplicationName);
+                    Assert.AreEqual(P_AUTHOR, si.Author);
+                    Assert.AreEqual(P_CHAR_COUNT, si.CharCount);
+                    Assert.AreEqual(P_COMMENTS, si.Comments);
+                    Assert.AreEqual(P_CREATE_DATE_TIME, si.CreateDateTime);
+                    Assert.AreEqual(P_EDIT_TIME, si.EditTime);
+                    Assert.AreEqual(P_KEYWORDS, si.Keywords);
+                    Assert.AreEqual(P_LAST_AUTHOR, si.LastAuthor);
+                    Assert.AreEqual(P_LAST_PRINTED, si.LastPrinted);
+                    Assert.AreEqual(P_LAST_SAVE_DATE_TIME, si.LastSaveDateTime);
+                    Assert.AreEqual(P_PAGE_COUNT, si.PageCount);
+                    Assert.AreEqual(P_REV_NUMBER, si.RevNumber);
+                    Assert.AreEqual(P_SECURITY, si.Security);
+                    Assert.AreEqual(P_SUBJECT, si.Subject);
+                    Assert.AreEqual(P_TEMPLATE, si.Template);
+                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_THUMBNAIL, si.Thumbnail);
+                    Assert.AreEqual(P_TITLE, si.Title);
+                    Assert.AreEqual(P_WORD_COUNT, si.WordCount);
 
-                    Assert.AreEqual(0, dsi.ByteCount);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(null, dsi.Category);
-                    Assert.AreEqual(null, dsi.CustomProperties);
-                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(null, dsi.Docparts);
-                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(null, dsi.HeadingPair);
-                    Assert.AreEqual(0, dsi.HiddenCount);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(0, dsi.LineCount);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(false, dsi.LinksDirty);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(null, dsi.Manager);
-                    Assert.AreEqual(0, dsi.MMClipCount);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(0, dsi.NoteCount);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(0, dsi.ParCount);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(null, dsi.PresentationFormat);
-                    Assert.AreEqual(false, dsi.Scale);
-                    Assert.IsTrue(dsi.WasNull);
-                    Assert.AreEqual(0, dsi.SlideCount);
-                    Assert.IsTrue(dsi.WasNull);
+                    Assert.AreEqual(P_BYTE_COUNT, dsi.ByteCount);
+                    Assert.AreEqual(P_CATEGORY, dsi.Category);
+                    Assert.AreEqual(P_COMPANY, dsi.Company);
+                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_, dsi.Docparts);
+                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_, dsi.HeadingPair);
+                    Assert.AreEqual(P_HIDDEN_COUNT, dsi.HiddenCount);
+                    Assert.AreEqual(P_LINE_COUNT, dsi.LineCount);
+                    Assert.AreEqual(P_LINKS_DIRTY, dsi.LinksDirty);
+                    Assert.AreEqual(P_MANAGER, dsi.Manager);
+                    Assert.AreEqual(P_MM_CLIP_COUNT, dsi.MMClipCount);
+                    Assert.AreEqual(P_NOTE_COUNT, dsi.NoteCount);
+                    Assert.AreEqual(P_PAR_COUNT, dsi.ParCount);
+                    Assert.AreEqual(P_PRESENTATION_FORMAT, dsi.PresentationFormat);
+                    Assert.AreEqual(P_SCALE, dsi.Scale);
+                    Assert.AreEqual(P_SLIDE_COUNT, dsi.SlideCount);
+
+                    CustomProperties cps = dsi.CustomProperties;
+                    //Assert.AreEqual(customProperties, cps);
+                    Assert.IsNull(cps["No value available"]);
+                    Assert.AreEqual("Wert 1", cps["Schlüssel 1"]);
+                    Assert.AreEqual("Wert 2", cps["Schlüssel 2"]);
+                    Assert.AreEqual("Wert 3", cps["Schlüssel 3"]);
+                    Assert.AreEqual("Wert 4", cps["Schlüssel 4"]);
+                    Assert.AreEqual(POSITIVE_INTEGER, cps["positive_int"]);
+                    Assert.AreEqual(POSITIVE_LONG, cps["positive_long"]);
+                    Assert.AreEqual(POSITIVE_DOUBLE, cps["positive_Double"]);
+                    Assert.AreEqual(NEGATIVE_INTEGER, cps["negative_int"]);
+                    Assert.AreEqual(NEGATIVE_LONG, cps["negative_long"]);
+                    Assert.AreEqual(NEGATIVE_DOUBLE, cps["negative_Double"]);
+                    Assert.AreEqual(true, cps["Boolean"]);
+                    Assert.AreEqual(now, cps["Date"]);
+                    Assert.AreEqual(MAX_INTEGER, cps["max_int"]);
+                    Assert.AreEqual(MIN_INTEGER, cps["min_int"]);
+                    Assert.AreEqual(MAX_LONG, cps["max_long"]);
+                    Assert.AreEqual(MIN_LONG, cps["min_long"]);
+                    Assert.AreEqual(MAX_DOUBLE, cps["max_Double"]);
+                    Assert.AreEqual(MIN_DOUBLE, cps["min_Double"]);
+
+                    /* Remove all properties supported by HPSF from the summary
+                     * information (e.g. author, edit date, application name) and from the
+                     * document summary information (e.g. company, manager). */
+                    si.RemoveApplicationName();
+                    si.RemoveAuthor();
+                    si.RemoveCharCount();
+                    si.RemoveComments();
+                    si.RemoveCreateDateTime();
+                    si.RemoveEditTime();
+                    si.RemoveKeywords();
+                    si.RemoveLastAuthor();
+                    si.RemoveLastPrinted();
+                    si.RemoveLastSaveDateTime();
+                    si.RemovePageCount();
+                    si.RemoveRevNumber();
+                    si.RemoveSecurity();
+                    si.RemoveSubject();
+                    si.RemoveTemplate();
+                    si.RemoveThumbnail();
+                    si.RemoveTitle();
+                    si.RemoveWordCount();
+
+                    dsi.RemoveByteCount();
+                    dsi.RemoveCategory();
+                    dsi.RemoveCompany();
+                    dsi.RemoveCustomProperties();
+                    dsi.RemoveDocparts();
+                    dsi.RemoveHeadingPair();
+                    dsi.RemoveHiddenCount();
+                    dsi.RemoveLineCount();
+                    dsi.RemoveLinksDirty();
+                    dsi.RemoveManager();
+                    dsi.RemoveMMClipCount();
+                    dsi.RemoveNoteCount();
+                    dsi.RemoveParCount();
+                    dsi.RemovePresentationFormat();
+                    dsi.RemoveScale();
+                    dsi.RemoveSlideCount();
+
+                    /* 
+                     * <li>Write the summary information stream and the document summary
+                     * information stream to the POI filesystem. */
+                    si.Write(dir, siEntry.Name);
+                    dsi.Write(dir, dsiEntry.Name);
+
+                    /* 
+                     * <li>Write the POI filesystem to a (temporary) file <em>doc3</em>
+                     * and Close the latter. */
+                    using (FileStream doc3 = File.Create(@"\POI_HPSF_Test3.tmp"))
+                    {
+
+                        poifs2.WriteFileSystem(doc3);
+                        doc3.Position = 0;
+
+                        /* 
+                         * Open <em>doc3</em> for Reading and check summary information
+                         * and document summary information. All properties Removed before must not
+                         * be found in the property streams of <em>doc3</em>.
+                         */
+                        POIFSFileSystem poifs3 = new POIFSFileSystem(doc3);
+
+
+                        dir = poifs3.Root;
+                        siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
+                        dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
+
+                        dis = new DocumentInputStream(siEntry);
+                        ps = new PropertySet(dis);
+                        si = new SummaryInformation(ps);
+                        dis = new DocumentInputStream(dsiEntry);
+                        ps = new PropertySet(dis);
+                        dsi = new DocumentSummaryInformation(ps);
+
+                        Assert.AreEqual(null, si.ApplicationName);
+                        Assert.AreEqual(null, si.Author);
+                        Assert.AreEqual(0, si.CharCount);
+                        Assert.IsTrue(si.WasNull);
+                        Assert.AreEqual(null, si.Comments);
+                        Assert.AreEqual(null, si.CreateDateTime);
+                        Assert.AreEqual(0, si.EditTime);
+                        Assert.IsTrue(si.WasNull);
+                        Assert.AreEqual(null, si.Keywords);
+                        Assert.AreEqual(null, si.LastAuthor);
+                        Assert.AreEqual(null, si.LastPrinted);
+                        Assert.AreEqual(null, si.LastSaveDateTime);
+                        Assert.AreEqual(0, si.PageCount);
+                        Assert.IsTrue(si.WasNull);
+                        Assert.AreEqual(null, si.RevNumber);
+                        Assert.AreEqual(0, si.Security);
+                        Assert.IsTrue(si.WasNull);
+                        Assert.AreEqual(null, si.Subject);
+                        Assert.AreEqual(null, si.Template);
+                        Assert.AreEqual(null, si.Thumbnail);
+                        Assert.AreEqual(null, si.Title);
+                        Assert.AreEqual(0, si.WordCount);
+                        Assert.IsTrue(si.WasNull);
+
+                        Assert.AreEqual(0, dsi.ByteCount);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(null, dsi.Category);
+                        Assert.AreEqual(null, dsi.CustomProperties);
+                        // FIXME (byte array properties not yet implemented): Assert.AreEqual(null, dsi.Docparts);
+                        // FIXME (byte array properties not yet implemented): Assert.AreEqual(null, dsi.HeadingPair);
+                        Assert.AreEqual(0, dsi.HiddenCount);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(0, dsi.LineCount);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(false, dsi.LinksDirty);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(null, dsi.Manager);
+                        Assert.AreEqual(0, dsi.MMClipCount);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(0, dsi.NoteCount);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(0, dsi.ParCount);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(null, dsi.PresentationFormat);
+                        Assert.AreEqual(false, dsi.Scale);
+                        Assert.IsTrue(dsi.WasNull);
+                        Assert.AreEqual(0, dsi.SlideCount);
+                        Assert.IsTrue(dsi.WasNull);
+                    }
                 }
             }
-        }
-            File.Delete( @"\POI_HPSF_Test3.tmp");
-            File.Delete( @"\POI_HPSF_Test2.tmp");
+            File.Delete(@"\POI_HPSF_Test3.tmp");
+            File.Delete(@"\POI_HPSF_Test2.tmp");
         }
 
         private void RunTest(FileStream file)
@@ -606,7 +606,7 @@ namespace TestCases.HPSF.Basic
                 /* The document does not have custom properties. */
                 return;
 
-            foreach (DictionaryEntry de in cps )
+            foreach (DictionaryEntry de in cps)
             {
                 CustomProperty cp = (CustomProperty)de.Value;
                 Assert.IsNotNull(cp.Name);
@@ -624,7 +624,7 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestReadCustomPropertiesFromFiles()
         {
-              POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
+            POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
             string[] files = _samples.GetFiles("Test*.*");
 
             for (int i = 0; i < files.Length; i++)
@@ -707,20 +707,20 @@ namespace TestCases.HPSF.Basic
 
             /* Add a custom property. */
             MutableProperty p = new MutableProperty();
-            p.ID=ID_1;
-            p.Type=Variant.VT_LPWSTR;
-            p.Value=VALUE_1;
+            p.ID = ID_1;
+            p.Type = Variant.VT_LPWSTR;
+            p.Value = VALUE_1;
             s.SetProperty(p);
-            dictionary[ID_1]=NAME_1;
-            s.Dictionary=(dictionary);
+            dictionary[ID_1] = NAME_1;
+            s.Dictionary = (dictionary);
             cps = dsi.CustomProperties;
             Assert.AreEqual(1, cps.Count);
             Assert.IsTrue(cps.IsPure);
 
             /* Add another custom property. */
             s.SetProperty((int)ID_2, Variant.VT_LPWSTR, VALUE_1);
-            dictionary[ID_2]=NAME_1;
-            s.Dictionary=(dictionary);
+            dictionary[ID_2] = NAME_1;
+            s.Dictionary = (dictionary);
             cps = dsi.CustomProperties;
             Assert.AreEqual(1, cps.Count);
             Assert.IsFalse(cps.IsPure);

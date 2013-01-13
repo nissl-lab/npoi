@@ -61,6 +61,9 @@ namespace TestCases.SS.Formula
             ICell cell2 = sh.CreateRow(1).CreateCell(0);
             try
             {
+                //NPOI
+                //Run it twice in NUnit Gui Window, the first passed but the second failed.
+                //Maybe the function was cached. Ignore it.
                 cell2.CellFormula=("MYBASEEXTFUNC(\"B1\")");
                 Assert.Fail("Should fail because MYBASEEXTFUNC is an unknown function");
             }

@@ -50,7 +50,7 @@ namespace NPOI.HSSF.UserModel
          */
         private static int PX_ROW = 15;
 
-        int pictureIndex;
+        //int pictureIndex;
         //HSSFPatriarch patriarch;
 
         private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFPicture));
@@ -272,7 +272,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>image dimension</returns>
         public Size GetImageDimension()
         {
-            EscherBSERecord bse = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(pictureIndex);
+            EscherBSERecord bse = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(PictureIndex);
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
@@ -294,7 +294,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 InternalWorkbook iwb = ((_patriarch.Sheet.Workbook) as HSSFWorkbook).Workbook;
-                EscherBlipRecord blipRecord = iwb.GetBSERecord(pictureIndex).BlipRecord;
+                EscherBlipRecord blipRecord = iwb.GetBSERecord(PictureIndex).BlipRecord;
                 return new HSSFPictureData(blipRecord);
             }
         }

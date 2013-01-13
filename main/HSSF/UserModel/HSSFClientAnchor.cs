@@ -281,6 +281,21 @@ namespace NPOI.HSSF.UserModel
             _escherClientAnchor = new EscherClientAnchorRecord();
         }
 
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj == this)
+                return true;
+            if (obj.GetType() != GetType())
+                return false;
+            HSSFClientAnchor anchor = (HSSFClientAnchor)obj;
+
+            return anchor.Col1 == Col1 && anchor.Col2 == Col2 && anchor.Dx1 == Dx1
+                    && anchor.Dx2 == Dx2 && anchor.Dy1 == Dy1 && anchor.Dy2 == Dy2
+                    && anchor.Row1 == Row1 && anchor.Row2 == Row2 && anchor.AnchorType == AnchorType;
+        }
+
         public override int Dx1
         {
             get

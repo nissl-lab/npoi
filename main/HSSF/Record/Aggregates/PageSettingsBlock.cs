@@ -650,7 +650,11 @@ namespace NPOI.HSSF.Record.Aggregates
 
             foreach (HeaderFooterRecord hf in hfRecordsToIterate)
             {
-                hfGuidMap.Add(HexDump.ToHex(hf.Guid), hf);
+                string key = HexDump.ToHex(hf.Guid);
+                if (hfGuidMap.ContainsKey(key))
+                    hfGuidMap[key] = hf;
+                else
+                    hfGuidMap.Add(HexDump.ToHex(hf.Guid), hf);
             }
 
             // loop through HeaderFooterRecord records having not-empty GUID and match them with
