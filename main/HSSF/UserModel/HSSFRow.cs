@@ -603,7 +603,7 @@ namespace NPOI.HSSF.UserModel
             {
                 if (value == -1)
                 {
-                    row.Height = 20 * 20;
+                    row.Height = unchecked((short)(0xFF | 0x8000));
                     row.BadFontHeight = false;
                 }
                 else
@@ -657,13 +657,13 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return (row.Height / 20f);
+                return (Height / 20f);
             }
             set
             {
                 if (value == -1)
                 {
-                    row.Height = 20;
+                    row.Height = unchecked(((short)(0xFF | 0x8000)));
                 }
                 else
                 {

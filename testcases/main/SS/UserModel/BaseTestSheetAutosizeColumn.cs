@@ -140,6 +140,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestDateCells()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();
             IDataFormat df = workbook.GetCreationHelper().CreateDataFormat();
@@ -181,7 +182,6 @@ namespace TestCases.SS.UserModel
             // autosize not-Evaluated cells, formula cells are sized as if the result is 0
             for (int i = 0; i < 8; i++) 
                 sheet.AutoSizeColumn(i);
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(1)); // date formatted as 'm'
             Assert.IsTrue(sheet.GetColumnWidth(3) > sheet.GetColumnWidth(1));  // 'mmm' is wider than 'm'
             Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3)); // date formatted as 'mmm'

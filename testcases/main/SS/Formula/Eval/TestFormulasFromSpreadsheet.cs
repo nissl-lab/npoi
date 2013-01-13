@@ -131,17 +131,18 @@ namespace TestCases.SS.Formula.Eval
                     break;
                 case CellType.ERROR:
                     Assert.AreEqual(CellType.ERROR, actual.CellType, msg);
-                    Assert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
+                    Assert.AreEqual(ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue), msg);
                     break;
                 case CellType.FORMULA: // will never be used, since we will call method After formula Evaluation
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.NUMERIC:
                     Assert.AreEqual(CellType.NUMERIC, actual.CellType, msg);
-                    AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue, AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
+                    AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue,
+                        AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
                     break;
                 case CellType.STRING:
                     Assert.AreEqual(CellType.STRING, actual.CellType, msg);
-                    Assert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
+                    Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
         }
@@ -181,7 +182,7 @@ namespace TestCases.SS.Formula.Eval
             }
 
 
-			Debug.WriteLine(this.GetType().Name + ": " + successMsg);
+            Debug.WriteLine(this.GetType().Name + ": " + successMsg);
 
 
         }
@@ -230,11 +231,11 @@ namespace TestCases.SS.Formula.Eval
                             throw new SystemException("unexpected result");
                         case Result.NO_EVALUATIONS_FOUND: // do nothing
                             String uname = targetFunctionName.ToUpper();
-                        if(startRowIndex >= SS.START_FUNCTIONS_ROW_INDEX &&
-                                funcs.Contains(uname))
-                        {
-                            Debug.WriteLine(uname + ": function is supported but missing test data", "");
-                        }
+                            if (startRowIndex >= SS.START_FUNCTIONS_ROW_INDEX &&
+                                    funcs.Contains(uname))
+                            {
+                                Debug.WriteLine(uname + ": function is supported but missing test data", "");
+                            }
                             break;
                     }
                 }

@@ -32,7 +32,7 @@ namespace NPOI.SS.Formula.Functions
 
         public override ValueEval Evaluate(String arg)
         {
-            return new StringEval(arg.ToLower());
+            return new StringEval(arg.ToUpper());
         }
     }
 }

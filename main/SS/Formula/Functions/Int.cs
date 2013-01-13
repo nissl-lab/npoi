@@ -32,7 +32,10 @@ namespace NPOI.SS.Formula.Functions
 
         public override double Evaluate(double d)
         {
-            return Math.Round(d - 0.5);
+            if (d > 0)
+                return Math.Round(d - 0.49);
+            else
+                return Math.Round(d - 0.5);
         }
 
     }

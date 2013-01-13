@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula.Functions
             // remove any characters that should be replaced
             if (startNum <= oldStr.Length && numChars != 0)
             {
-                strBuff.Remove(startNum - 1, Math.Min(startNum - 1 + numChars, oldStr.Length - startNum + 1));
+                strBuff.Remove(startNum - 1, Math.Min(numChars, oldStr.Length - startNum + 1));
             }
             // now insert (or append) newStr
             if (startNum > strBuff.Length)
