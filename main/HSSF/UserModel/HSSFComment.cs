@@ -63,7 +63,7 @@ namespace NPOI.HSSF.UserModel
 
             Author = "";
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
-            cod.ObjectType = (CommonObjectType)OBJECT_TYPE_COMMENT; 
+            cod.ObjectType = CommonObjectType.COMMENT; 
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFComment"/> class.

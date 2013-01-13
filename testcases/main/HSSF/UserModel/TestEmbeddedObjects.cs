@@ -18,6 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NPOI.HSSF.UserModel;
+using NUnit.Framework;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -25,16 +27,19 @@ namespace TestCases.HSSF.UserModel
  * @author Evgeniy Berlog
  * @date 13.07.12
  */
+    [TestFixture]
     public class TestEmbeddedObjects
     {
-        public void testReadExistingObject(){
-        HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
-        List<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
-        Assert.AreEqual(list.Count, 1);
-        HSSFObjectData obj = list.Get(0);
-        Assert.IsNotNull(obj.GetObjectData());
-        Assert.IsNotNull(obj.GetDirectory());
-        Assert.IsNotNull(obj.GetOLE2ClassName());
-    }
+        [Test]
+        public void TestReadExistingObject()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
+            IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
+            Assert.AreEqual(list.Count, 1);
+            HSSFObjectData obj = list[0];
+            Assert.IsNotNull(obj.GetObjectData());
+            Assert.IsNotNull(obj.GetDirectory());
+            Assert.IsNotNull(obj.OLE2ClassName);
+        }
     }
 }

@@ -137,7 +137,7 @@ namespace NPOI.HSSF.Model
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
             c.ObjectType = (CommonObjectType)OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING;
-            c.ObjectId = shapeId;
+            c.ObjectId = GetCmoObjectId(shapeId);
             c.IsLocked = true;
             c.IsPrintable = true;
             c.IsAutoFill = true;

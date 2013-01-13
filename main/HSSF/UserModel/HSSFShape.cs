@@ -178,11 +178,11 @@ namespace NPOI.HSSF.UserModel
                 }
                 if (-1 == recordId)
                 {
-                    _escherContainer.AddChildRecord(anchor.GetEscherAnchor());
+                    _escherContainer.AddChildRecord(value.GetEscherAnchor());
                 }
                 else
                 {
-                    _escherContainer.AddChildBefore(anchor.GetEscherAnchor(), recordId);
+                    _escherContainer.AddChildBefore(value.GetEscherAnchor(), recordId);
                 }
                 this.anchor = value;
             }

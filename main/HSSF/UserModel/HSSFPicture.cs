@@ -324,7 +324,7 @@ namespace NPOI.HSSF.UserModel
                     {
                         return "";
                     }
-                    return Encoding.Unicode.GetString(propFile.ComplexData).Trim();
+                    return Trim(Encoding.Unicode.GetString(propFile.ComplexData));
                 }
                 catch (Exception)
                 {
@@ -345,7 +345,23 @@ namespace NPOI.HSSF.UserModel
                 }
             }
         }
+        private String Trim(string value)
+        {
+            int end = value.Length;
+            int st = 0;
+            //int off = offset;      /* avoid getfield opcode */
+            char[] val = value.ToCharArray();    /* avoid getfield opcode */
 
+            while ((st < end) && (val[st] <= ' '))
+            {
+                st++;
+            }
+            while ((st < end) && (val[end - 1] <= ' '))
+            {
+                end--;
+            }
+            return ((st > 0) || (end < value.Length)) ? value.Substring(st, end - st) : value;
+        }
 
         public override int ShapeType
         {

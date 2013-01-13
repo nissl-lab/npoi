@@ -18,6 +18,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NPOI.HSSF.UserModel;
+using NUnit.Framework;
+using NPOI.HSSF.Record;
+using NPOI.DDF;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -26,35 +30,36 @@ namespace TestCases.HSSF.UserModel
      * @author Evgeniy Berlog
      * @date 01.08.12
      */
+    [TestFixture]
     public class TestPatriarch
     {
-
+        [Test]
         public void TestGetPatriarch()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sh = wb.CreateSheet();
-            Assert.IsNull(sh.DrawingPatriarch());
+            HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
+            Assert.IsNull(sh.DrawingPatriarch);
 
-            HSSFPatriarch patriarch = sh.CreateDrawingPatriarch();
+            HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             Assert.IsNotNull(patriarch);
             patriarch.CreateSimpleShape(new HSSFClientAnchor());
             patriarch.CreateSimpleShape(new HSSFClientAnchor());
 
-            Assert.AreSame(patriarch, sh.DrawingPatriarch());
+            Assert.AreSame(patriarch, sh.DrawingPatriarch);
 
             EscherAggregate agg = patriarch.GetBoundAggregate();
 
-            EscherDgRecord dg = agg.GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID);
-            int lastId = dg.GetLastMSOSPID();
+            EscherDgRecord dg = agg.GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID) as EscherDgRecord;
+            int lastId = dg.LastMSOSPID;
 
             Assert.AreSame(patriarch, sh.CreateDrawingPatriarch());
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0);
-            patriarch = sh.CreateDrawingPatriarch();
-            dg = patriarch.GetBoundAggregate().GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID);
+            sh = wb.GetSheetAt(0) as HSSFSheet;
+            patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
+            dg = patriarch.GetBoundAggregate().GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID) as EscherDgRecord;
 
-            Assert.AreEqual(lastId, dg.GetLastMSOSPID());
+            Assert.AreEqual(lastId, dg.LastMSOSPID);
         }
     }
 }
