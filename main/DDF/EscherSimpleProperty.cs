@@ -92,6 +92,7 @@ namespace NPOI.DDF
         public int PropertyValue
         {
             get { return propertyValue; }
+            internal set { propertyValue = value; }
         }
 
         /// <summary>
