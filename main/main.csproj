@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
+    <Compile Include="HSSF\Converter\ExcelToHtmlConverter.cs" />
+    <Compile Include="HSSF\Converter\ExcelToHtmlUtils.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Model\InternalChart.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
@@ -135,10 +137,13 @@
     <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\Structure.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
+    <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.cs" />
     <Compile Include="HSSF\UserModel\HSSFDateUtil.cs" />
+    <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
+    <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
     <Compile Include="HSSF\Util\LazilyConcatenatedByteArray.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
@@ -355,7 +360,11 @@
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="SS\Formula\Atp\EDate.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
+    <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
+    <Compile Include="SS\UserModel\Charts\DataSources.cs" />
+    <Compile Include="SS\Util\DateFormatConverter.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
@@ -1101,6 +1110,7 @@
     <EmbeddedResource Include="Resource1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource11.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
