@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 
@@ -30,7 +29,7 @@ namespace NPOI.POIFS.FileSystem
     public class FilteringDirectoryNode : DirectoryEntry
     {
 
-        private HashSet<String> excludes;
+        private List<String> excludes;
         private Dictionary<String, List<String>> childExcludes;
         private DirectoryEntry directory;
         /// <summary>
@@ -44,7 +43,7 @@ namespace NPOI.POIFS.FileSystem
             this.directory = directory;
 
             // Process the excludes
-            this.excludes = new HashSet<String>();
+            this.excludes = new List<String>();
             this.childExcludes = new Dictionary<String, List<String>>();
             foreach (String excl in excludes)
             {

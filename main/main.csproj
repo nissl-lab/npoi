@@ -51,6 +51,22 @@
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
+    <Compile Include="HPSF\Array.cs" />
+    <Compile Include="HPSF\Blob.cs" />
+    <Compile Include="HPSF\ClipboardData.cs" />
+    <Compile Include="HPSF\CodePageString.cs" />
+    <Compile Include="HPSF\Currency.cs" />
+    <Compile Include="HPSF\Date.cs" />
+    <Compile Include="HPSF\Decimal.cs" />
+    <Compile Include="HPSF\Filetime.cs" />
+    <Compile Include="HPSF\GUID.cs" />
+    <Compile Include="HPSF\IndirectPropertyName.cs" />
+    <Compile Include="HPSF\TypedPropertyValue.cs" />
+    <Compile Include="HPSF\UnicodeString.cs" />
+    <Compile Include="HPSF\UnsupportedEncodingException.cs" />
+    <Compile Include="HPSF\VariantBool.cs" />
+    <Compile Include="HPSF\Vector.cs" />
+    <Compile Include="HPSF\VersionedStream.cs" />
     <Compile Include="HSSF\Converter\ExcelToHtmlConverter.cs" />
     <Compile Include="HSSF\Converter\ExcelToHtmlUtils.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
@@ -130,6 +146,7 @@
     <Compile Include="HSSF\Record\Common\UnicodeString.cs" />
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
+    <Compile Include="HSSF\Record\DConRefRecord.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
@@ -351,6 +368,8 @@
     <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DocumentInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DocumentOutputStream.cs" />
+    <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
+    <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentInputStream.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSFileSystem.cs" />
@@ -358,8 +377,19 @@
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
+    <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
+    <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\EDate.cs" />
+    <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
+    <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Errortype.cs" />
+    <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
     <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
+    <Compile Include="SS\Formula\Functions\Rank.cs" />
+    <Compile Include="SS\Formula\Functions\Rate.cs" />
+    <Compile Include="SS\Formula\Functions\Sumifs.cs" />
+    <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
@@ -1079,7 +1109,9 @@
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />
+    <Compile Include="Util\Number.cs" />
     <Compile Include="Util\Operator.cs" />
+    <Compile Include="Util\PngUtils.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
     <Compile Include="Util\PushbackStream.cs" />
@@ -1101,6 +1133,7 @@
     <Compile Include="SS\Format\CellGeneralFormatter.cs" />
     <Compile Include="SS\Format\CellNumberFormatter.cs" />
     <Compile Include="SS\Format\CellTextFormatter.cs" />
+    <Compile Include="Util\ULongField.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
