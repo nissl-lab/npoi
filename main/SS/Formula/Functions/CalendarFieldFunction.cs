@@ -89,7 +89,7 @@ namespace NPOI.SS.Formula.Functions
             // EXCEL functions round up nearly a half second (probably to prevent floating point
             // rounding issues); use UTC here to prevent daylight saving issues for HOUR
             //DateTime d = DateUtil.GetJavaDate(serialDate, false);
-            DateTime d = DateUtil.GetJavaCalendarUTC(serialDate + 0.4995 / DateUtil.SECONDS_PER_DAY, false);
+            DateTime d = DateUtil.GetJavaCalendar(serialDate + 0.4995 / DateUtil.SECONDS_PER_DAY, false);
 
             //Calendar c = new GregorianCalendar();
             //c.setTime(d);

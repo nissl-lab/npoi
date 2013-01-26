@@ -21,11 +21,12 @@ namespace NPOI.HSSF.Model
     using NPOI.DDF;
     using System.Collections;
 
-    /**
-     * Provides utilities to manage drawing Groups.
-     *
-     * @author Glen Stampoultzis (glens at apache.org)
-     */
+    /// <summary>
+    /// Provides utilities to manage drawing Groups.
+    /// </summary>
+    /// <remarks>
+    /// Glen Stampoultzis (glens at apache.org) 
+    /// </remarks>
     public class DrawingManager2
     {
         EscherDggRecord dgg;
@@ -37,9 +38,9 @@ namespace NPOI.HSSF.Model
             this.dgg = dgg;
         }
 
-        /**
-         * Clears the cached list of drawing Groups
-         */
+        /// <summary>
+        /// Clears the cached list of drawing Groups
+        /// </summary>
         public void ClearDrawingGroups()
         {
             drawingGroups.Clear();
@@ -58,22 +59,22 @@ namespace NPOI.HSSF.Model
             dgg.DrawingsSaved=dgg.DrawingsSaved + 1;
             return dg;
         }
-
-        /**
-         * Allocates new shape id for the new drawing Group id.
-         *
-         * @return a new shape id.
-         */
+        /// <summary>
+        /// Allocates new shape id for the new drawing Group id.
+        /// </summary>
+        /// <param name="drawingGroupId"></param>
+        /// <returns>a new shape id.</returns>
         public virtual int AllocateShapeId(short drawingGroupId)
         {
             EscherDgRecord dg = GetDrawingGroup(drawingGroupId);
             return AllocateShapeId(drawingGroupId, dg);
         }
-        /**
- * Allocates new shape id for the new drawing group id.
- *
- * @return a new shape id.
- */
+        /// <summary>
+        /// Allocates new shape id for the new drawing group id.
+        /// </summary>
+        /// <param name="drawingGroupId"></param>
+        /// <param name="dg"></param>
+        /// <returns>a new shape id.</returns>
         public virtual int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
         {
             dgg.NumShapesSaved=(dgg.NumShapesSaved + 1);
@@ -105,9 +106,10 @@ namespace NPOI.HSSF.Model
             return result2;
         }
 
-        /**
-         * Finds the next available (1 based) drawing Group id
-         */
+        /// <summary>
+        /// Finds the next available (1 based) drawing Group id
+        /// </summary>
+        /// <returns></returns>
         public short FindNewDrawingGroupId()
         {
             short dgId = 1;

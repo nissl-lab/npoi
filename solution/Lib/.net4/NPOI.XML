@@ -516,11 +516,23 @@
         <member name="P:NPOI.HSSF.Record.Record.Sid">
             return the non static version of the id for this record.
         </member>
+        <member name="M:NPOI.HSSF.Record.StandardRecord.Serialize(System.Int32,System.Byte[])">
+            <summary>
+            Write the data content of this BIFF record including the sid and record length.
+            The subclass must write the exact number of bytes as reported by Record#getRecordSize()
+            </summary>
+            <param name="offset">offset</param>
+            <param name="data">data</param>
+            <returns></returns>
+        </member>
         <member name="M:NPOI.HSSF.Record.StandardRecord.Serialize(NPOI.Util.ILittleEndianOutput)">
             Write the data content of this BIFF record.  The 'ushort sid' and 'ushort size' header fields
             have already been written by the superclass.<br/>
             
-            The subclass must write the exact number of bytes as reported by {@link Record#getDataSize()}
+            The number of bytes written must equal the record size reported by
+            {@link Record#getDataSize()} minus four
+            ( record header consiting of a 'ushort sid' and 'ushort reclength' has already been written
+            by thye superclass).
         </member>
         <member name="T:NPOI.HSSF.Record.Chart.AttachedLabelRecord">
                  * The series label record defines the type of label associated with the data format record.
@@ -1345,6 +1357,148 @@
              Checks if the data source in this reference record is external to this sheet or internal.
             
              @return true iff this is an external reference.
+        </member>
+        <member name="T:NPOI.HSSF.UserModel.HSSFSimpleShape">
+            <summary>
+            Represents a simple shape such as a line, rectangle or oval.
+            @author Glen Stampoultzis (glens at apache.org)
+            </summary>
+        </member>
+        <member name="T:NPOI.HSSF.UserModel.HSSFShape">
+            <summary>
+            An abstract shape.
+            @author Glen Stampoultzis (glens at apache.org)
+            </summary>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShape.#ctor(NPOI.DDF.EscherContainerRecord,NPOI.HSSF.Record.ObjRecord)">
+            creates shapes from existing file
+            @param spContainer
+            @param objRecord
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShape.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
+            <summary>
+            Create a new shape with the specified parent and anchor.
+            </summary>
+            <param name="parent">The parent.</param>
+            <param name="anchor">The anchor.</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShape.SetLineStyleColor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the color applied to the lines of this shape
+            </summary>
+            <param name="red">The red.</param>
+            <param name="green">The green.</param>
+            <param name="blue">The blue.</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShape.SetFillColor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the color used to fill this shape.
+            </summary>
+            <param name="red">The red.</param>
+            <param name="green">The green.</param>
+            <param name="blue">The blue.</param>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.Parent">
+            <summary>
+            Gets the parent shape.
+            </summary>
+            <value>The parent.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.Anchor">
+            <summary>
+            Gets or sets the anchor that is used by this shape.
+            </summary>
+            <value>The anchor.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.LineStyleColor">
+            <summary>
+            The color applied to the lines of this shape.
+            </summary>
+            <value>The color of the line style.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.FillColor">
+            <summary>
+            Gets or sets the color used to fill this shape.
+            </summary>
+            <value>The color of the fill.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.LineWidth">
+            <summary>
+            Gets or sets with width of the line in EMUs.  12700 = 1 pt.
+            </summary>
+            <value>The width of the line.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.LineStyle">
+            <summary>
+            Gets or sets One of the constants in LINESTYLE_*
+            </summary>
+            <value>The line style.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.IsNoFill">
+            <summary>
+            Gets or sets a value indicating whether this instance is no fill.
+            </summary>
+            <value>
+            	<c>true</c> if this shape Is not filled with a color; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.IsFlipVertical">
+            <summary>
+            whether this shape is vertically flipped.
+            </summary>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.IsFlipHorizontal">
+            <summary>
+            whether this shape is horizontally flipped.
+            </summary>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.RotationDegree">
+            <summary>
+            get or set the rotation, in degrees, that is applied to a shape.
+            Negative values specify rotation in the counterclockwise direction.
+            Rotation occurs around the center of the shape.
+            The default value for this property is 0x00000000
+            </summary>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShape.CountOfAllChildren">
+            <summary>
+            Count of all children and their childrens children.
+            </summary>
+            <value>The count of all children.</value>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFSimpleShape.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NPOI.HSSF.UserModel.HSSFSimpleShape"/> class.
+            </summary>
+            <param name="parent">The parent.</param>
+            <param name="anchor">The anchor.</param>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFSimpleShape.ShapeType">
+            <summary>
+            Gets the shape type.
+            </summary>
+            <value>One of the OBJECT_TYPE_* constants.</value>
+            @see #OBJECT_TYPE_LINE
+            @see #OBJECT_TYPE_OVAL
+            @see #OBJECT_TYPE_RECTANGLE
+            @see #OBJECT_TYPE_PICTURE
+            @see #OBJECT_TYPE_COMMENT
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFSimpleShape.String">
+            <summary>
+            Get or set the rich text string used by this object.
+            </summary>
+        </member>
+        <member name="T:NPOI.HSSF.UserModel.HSSFShapeFactory">
+            @author Evgeniy Berlog
+            date: 05.06.12
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShapeFactory.CreateShapeTree(NPOI.DDF.EscherContainerRecord,NPOI.HSSF.Record.EscherAggregate,NPOI.HSSF.UserModel.HSSFShapeContainer,NPOI.POIFS.FileSystem.DirectoryNode)">
+            build shape tree from escher container
+            @param container root escher container from which escher records must be taken
+            @param agg - EscherAggregate
+            @param out - shape container to which shapes must be added
+            @param root - node to create HSSFObjectData shapes
         </member>
         <member name="M:NPOI.POIFS.FileSystem.EntryUtils.CopyNodeRecursively(NPOI.POIFS.FileSystem.Entry,NPOI.POIFS.FileSystem.DirectoryEntry)">
             Copies an Entry into a target POIFS directory, recursively
@@ -3170,54 +3324,16 @@
             <param name="use1904windowing">Should 1900 or 1904 date windowing be used?</param>
             <returns>Excel representation of Date (-1 if error - test for error by Checking for less than 0.1)</returns>
         </member>
-        <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaDate(System.Double,System.TimeZoneInfo)">
-            Given an Excel date with using 1900 date windowing, and
-            converts it to a java.util.Date.
-            
-            Excel Dates and Times are stored without any timezone 
-            information. If you know (through other means) that your file 
-            uses a different TimeZone to the system default, you can use
-            this version of the getJavaDate() method to handle it.
-             
-            @param date  The Excel date.
-            @param tz The TimeZone to evaluate the date in
-            @return Java representation of the date, or null if date is not a valid Excel date
-        </member>
         <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaDate(System.Double)">
             <summary>
-            Given an Excel date with using 1900 date windowing, and
-            Converts it to a Date.
+             Given an Excel date with using 1900 date windowing, and converts it to a java.util.Date.
+             Excel Dates and Times are stored without any timezone 
+             information. If you know (through other means) that your file 
+             uses a different TimeZone to the system default, you can use
+             this version of the getJavaDate() method to handle it.
             </summary>
             <param name="date">The Excel date.</param>
-            <returns>Java representation of the date, or null if date Is not a valid Excel date</returns>
-            <remarks>
-            NOTE: If the default 
-            <c>TimeZone</c>
-             in Java uses Daylight
-            Saving Time then the conversion back to an Excel date may not give
-            the same value, that Is the comparison
-            <CODE>excelDate == GetExcelDate(GetJavaDate(excelDate,false))</CODE>
-            Is not always true. For example if default timezone Is
-            <c>Europe/Copenhagen</c>
-            , on 2004-03-28 the minute after
-            01:59 CET Is 03:00 CEST, if the excel date represents a time between
-            02:00 and 03:00 then it Is Converted to past 03:00 summer time
-            </remarks>        
-        </member>
-        <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaDate(System.Double,System.Boolean,System.TimeZoneInfo)">
-            Given an Excel date with either 1900 or 1904 date windowing,
-            converts it to a java.util.Date.
-            
-            Excel Dates and Times are stored without any timezone 
-            information. If you know (through other means) that your file 
-            uses a different TimeZone to the system default, you can use
-            this version of the getJavaDate() method to handle it.
-             
-            @param date  The Excel date.
-            @param tz The TimeZone to evaluate the date in
-            @param use1904windowing  true if date uses 1904 windowing,
-             or false if using 1900 date windowing.
-            @return Java representation of the date, or null if date is not a valid Excel date
+            <returns>null if date is not a valid Excel date</returns>
         </member>
         <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaDate(System.Double,System.Boolean)">
               Given an Excel date with either 1900 or 1904 date windowing,
@@ -3239,26 +3355,12 @@
               @see TimeZone
         </member>
         <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaCalendar(System.Double,System.Boolean)">
-            Get EXCEL date as Java Calendar (with default time zone).
-            This is like {@link #getJavaDate(double, boolean)} but returns a Calendar object.
-             @param date  The Excel date.
-             @param use1904windowing  true if date uses 1904 windowing,
-              or false if using 1900 date windowing.
-             @return Java representation of the date, or null if date is not a valid Excel date
-        </member>
-        <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaCalendarUTC(System.Double,System.Boolean)">
-            Get EXCEL date as Java Calendar with UTC time zone.
-            This is similar to {@link #getJavaDate(double, boolean)} but returns a
-            Calendar object that has UTC as time zone, so no daylight saving hassle.
-             @param date  The Excel date.
-             @param use1904windowing  true if date uses 1904 windowing,
-              or false if using 1900 date windowing.
-             @return Java representation of the date in UTC, or null if date is not a valid Excel date
-        </member>
-        <member name="M:NPOI.SS.UserModel.DateUtil.GetJavaCalendar(System.Double,System.Boolean,System.TimeZoneInfo)">
-            Get EXCEL date as Java Calendar with given time zone.
-            @see #getJavaDate(double, TimeZone)
-            @return Java representation of the date, or null if date is not a valid Excel date
+            <summary>
+            Get EXCEL date as Java Calendar (with default time zone). This is like GetJavaDate(double, boolean) but returns a Calendar object.
+            </summary>
+            <param name="date">The Excel date.</param>
+            <param name="use1904windowing">true if date uses 1904 windowing, or false if using 1900 date windowing.</param>
+            <returns>null if date is not a valid Excel date</returns>
         </member>
         <member name="M:NPOI.SS.UserModel.DateUtil.ConvertTime(System.String)">
             <summary>
@@ -7060,7 +7162,7 @@
             For a given named property entry, either return it or null if
             if it wasn't found
             </summary>
-            <param name="SetName">Name of the set.</param>
+            <param name="setName">Name of the set.</param>
             <returns></returns>
         </member>
         <member name="M:NPOI.POIDocument.WriteProperties(NPOI.POIFS.FileSystem.POIFSFileSystem)">
@@ -10320,6 +10422,14 @@
             <param name="name">named range name</param>
             <returns>named range index</returns>
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.GetNameIndex(NPOI.HSSF.UserModel.HSSFName)">
+            <summary>
+            As GetNameIndex(String) is not necessarily unique 
+            (name + sheet index is unique), this method is more accurate.
+            </summary>
+            <param name="name">the name whose index in the list of names of this workbook should be looked up.</param>
+            <returns>an index value >= 0 if the name was found; -1, if the name was not found</returns>
+        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.RemoveName(System.Int32)">
             <summary>
             Remove the named range by his index
@@ -10337,6 +10447,13 @@
             Remove the named range by his name
             </summary>
             <param name="name">named range name</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.RemoveName(NPOI.HSSF.UserModel.HSSFName)">
+            <summary>
+             As #removeName(String) is not necessarily unique (name + sheet index is unique), 
+             this method is more accurate.
+            </summary>
+            <param name="name">the name to remove.</param>
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.DumpDrawingGroupRecords(System.Boolean)">
             <summary>
@@ -10385,7 +10502,7 @@
             </summary>
             <returns>the list of embedded objects (a list of HSSFObjectData objects.)</returns>
         </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.GetAllEmbeddedObjects(System.Collections.IList,System.Collections.IList)">
+        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.GetAllEmbeddedObjects(NPOI.HSSF.UserModel.HSSFSheet,System.Collections.Generic.List{NPOI.HSSF.UserModel.HSSFObjectData})">
             <summary>
             Gets all embedded OLE2 objects from the Workbook.
             </summary>
@@ -10399,6 +10516,15 @@
             foreach(ISheet sheet in workbook) ...
             </summary>
             <returns>Enumeration of all the sheets of this workbook</returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.ChangeExternalReference(System.String,System.String)">
+            Changes an external referenced file to another file.
+            A formular in Excel which refers a cell in another file is saved in two parts: 
+            The referenced file is stored in an reference table. the row/cell information is saved separate.
+            This method invokation will only change the reference in the lookup-table itself.
+            @param oldUrl The old URL to search for and which is to be replaced
+            @param newUrl The URL replacement
+            @return true if the oldUrl was found and replaced with newUrl. Otherwise false
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFWorkbook.MissingCellPolicy">
             <summary>
@@ -10993,9 +11119,6 @@
              @param hssfShape The highlevel shape.
              @param shapeId   The shape id to use for this shape.
         </member>
-        <member name="M:NPOI.HSSF.Model.ComboboxShape.CreateObjRecord(NPOI.HSSF.UserModel.HSSFSimpleShape,System.Int32)">
-            Creates the low level OBJ record for this shape.
-        </member>
         <member name="M:NPOI.HSSF.Model.ComboboxShape.CreateSpContainer(NPOI.HSSF.UserModel.HSSFSimpleShape,System.Int32)">
             Generates the escher shape records for this shape.
         </member>
@@ -11256,6 +11379,15 @@
         </member>
         <member name="M:NPOI.HSSF.Model.LinkTable.FindFirstRecordLocBySid(System.Int16)">
             copied from Workbook
+        </member>
+        <member name="M:NPOI.HSSF.Model.LinkTable.ChangeExternalReference(System.String,System.String)">
+            Changes an external referenced file to another file.
+            A formular in Excel which refers a cell in another file is saved in two parts: 
+            The referenced file is stored in an reference table. the row/cell information is saved separate.
+            This method invokation will only change the reference in the lookup-table itself.
+            @param oldUrl The old URL to search for and which is to be replaced
+            @param newUrl The URL replacement
+            @return true if the oldUrl was found and replaced with newUrl. Otherwise false
         </member>
         <member name="P:NPOI.HSSF.Model.LinkTable.RecordCount">
             TODO - would not be required if calling code used RecordStream or similar
@@ -11998,13 +12130,14 @@
             @return a ScenarioProtectRecord
         </member>
         <member name="M:NPOI.HSSF.Model.InternalSheet.AggregateDrawingRecords(NPOI.HSSF.Model.DrawingManager2,System.Boolean)">
-            Finds the DrawingRecord for our sheet, and
-             attaches it to the DrawingManager (which knows about
+            <summary>
+            Finds the DrawingRecord for our sheet, and  attaches it to the DrawingManager (which knows about
              the overall DrawingGroup for our workbook).
-            If requested, will Create a new DrawRecord
-             if none currently exist
-            @param drawingManager The DrawingManager2 for our workbook
-            @param CreateIfMissing Should one be Created if missing?
+            If requested, will Create a new DrawRecord if none currently exist
+            </summary>
+            <param name="drawingManager">The DrawingManager2 for our workbook</param>
+            <param name="CreateIfMissing">Should one be Created if missing?</param>
+            <returns>location of EscherAggregate record. if no EscherAggregate record is found return -1</returns>
         </member>
         <member name="M:NPOI.HSSF.Model.InternalSheet.Preserialize">
             Perform any work necessary before the sheet is about to be Serialized.
@@ -12394,8 +12527,10 @@
             trying to Address >1 more than we have throw an exception!
         </member>
         <member name="M:NPOI.HSSF.Model.InternalWorkbook.FixTabIdRecord">
-             make the tabid record look like the current situation.
-            
+            <summary>
+            make the tabid record look like the current situation.
+            </summary>
+            <returns>number of bytes written in the TabIdRecord</returns>
         </member>
         <member name="M:NPOI.HSSF.Model.InternalWorkbook.GetFontIndex(NPOI.HSSF.Record.FontRecord)">
             Retrieves the index of the given font
@@ -12441,6 +12576,11 @@
             this to Write the Workbook out.
             @param offset of the data to be written
             @param data array of bytes to Write this to
+        </member>
+        <member name="M:NPOI.HSSF.Model.InternalWorkbook.PreSerialize">
+             Perform any work necessary before the workbook is about to be serialized.
+            
+             Include in it ant code that modifies the workbook record stream and affects its size.
         </member>
         <member name="M:NPOI.HSSF.Model.InternalWorkbook.CreateBOF">
             Creates the BOF record
@@ -12747,6 +12887,13 @@
              subsequent font indicies drop by one,
              so you'll need to update those yourself!
         </member>
+        <member name="M:NPOI.HSSF.Model.InternalWorkbook.RemoveExFormatRecord(System.Int32)">
+            <summary>
+            Removes ExtendedFormatRecord record with given index from the file's list. This will make all
+            subsequent font indicies drop by one,so you'll need to update those yourself!
+            </summary>
+            <param name="index">index of the Extended format record (0-based)</param>
+        </member>
         <member name="M:NPOI.HSSF.Model.InternalWorkbook.WriteProtectWorkbook(System.String,System.String)">
             protect a workbook with a password (not encypted, just Sets Writeprotect
             flags and the password.
@@ -12762,6 +12909,15 @@
         </member>
         <member name="M:NPOI.HSSF.Model.InternalWorkbook.UpdateNamesAfterCellShift(NPOI.SS.Formula.FormulaShifter)">
             Updates named ranges due to moving of cells
+        </member>
+        <member name="M:NPOI.HSSF.Model.InternalWorkbook.ChangeExternalReference(System.String,System.String)">
+            Changes an external referenced file to another file.
+            A formular in Excel which refers a cell in another file is saved in two parts: 
+            The referenced file is stored in an reference table. the row/cell information is saved separate.
+            This method invokation will only change the reference in the lookup-table itself.
+            @param oldUrl The old URL to search for and which is to be replaced
+            @param newUrl The URL replacement
+            @return true if the oldUrl was found and replaced with newUrl. Otherwise false
         </member>
         <member name="P:NPOI.HSSF.Model.InternalWorkbook.NumberOfFontRecords">
              Gets the number of font records
@@ -13558,7 +13714,7 @@
             @author Josh Micich
             </summary>
         </member>
-        <member name="F:NPOI.HSSF.Record.Aggregates.SharedValueManager._groups">
+        <member name="F:NPOI.HSSF.Record.Aggregates.SharedValueManager._groupsCache">
             cached for optimization purposes 
         </member>
         <member name="M:NPOI.HSSF.Record.Aggregates.SharedValueManager.Create(NPOI.HSSF.Record.SharedFormulaRecord[],NPOI.SS.Util.CellReference[],System.Collections.Generic.List{NPOI.HSSF.Record.ArrayRecord},System.Collections.Generic.List{NPOI.HSSF.Record.TableRecord})">
@@ -17766,6 +17922,10 @@
              DrawingRecord (0x00EC)<p/>
             
         </member>
+        <member name="M:NPOI.HSSF.Record.DrawingRecord.Clone">
+            Cloning of drawing records must be executed through HSSFPatriarch, because all id's must be changed
+            @return cloned drawing records
+        </member>
         <member name="T:NPOI.HSSF.Record.DrawingRecordForBiffViewer">
             This Is purely for the biff viewer.  During normal operations we don't want
             to be seeing this.
@@ -17950,7 +18110,33 @@
              we don't aggregate the MSODRAWING -> OBJ records Unless we
              need to modify them.
             
-            
+             At first document contains 4 types of records which belong to drawing layer.
+             There are can be such sequence of record:
+             <p/>
+             DrawingRecord
+             ContinueRecord
+             ...
+             ContinueRecord
+             ObjRecord | TextObjectRecord
+             .....
+             ContinueRecord
+             ...
+             ContinueRecord
+             ObjRecord | TextObjectRecord
+             NoteRecord
+             ...
+             NoteRecord
+             <p/>
+             To work with shapes we have to read data from Drawing and Continue records into single array of bytes and
+             build escher(office art) records tree from this array.
+             Each shape in drawing layer matches corresponding ObjRecord
+             Each textbox matches corresponding TextObjectRecord
+             <p/>
+             ObjRecord contains information about shape. Thus each ObjRecord corresponds EscherContainerRecord(SPGR)
+             <p/>
+             EscherAggrefate contains also NoteRecords
+             NoteRecords must be serial
+             
              @author Glen Stampoultzis (glens at apache.org)
         </member>
         <member name="F:NPOI.HSSF.Record.EscherAggregate.shapeToObj">
@@ -17958,6 +18144,49 @@
         </member>
         <member name="F:NPOI.HSSF.Record.EscherAggregate.tailRec">
             list of "tail" records that need to be Serialized after all drawing Group records
+        </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.ToString">
+            Calculates the string representation of this record.  This Is
+            simply a dump of all the records.
+        </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.ToXml(System.String)">
+            Calculates the xml representation of this record.  This is
+            simply a dump of all the records.
+            @param tab - string which must be added before each line (used by default '\t')
+            @return xml representation of the all aggregated records
+        </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.IsDrawingLayerRecord(System.Int16)">
+            @param sid - record sid we want to check if it belongs to drawing layer
+            @return true if record is instance of DrawingRecord or ContinueRecord or ObjRecord or TextObjRecord
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:NPOI.HSSF.Record.EscherAggregate.CreateAggregate(System.Collections.Generic.List{NPOI.HSSF.Record.RecordBase},System.Int32)" -->
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.Serialize(System.Int32,System.Byte[])">
+             Serializes this aggregate to a byte array.  Since this Is an aggregate
+             record it will effectively Serialize the aggregated records.
+            
+             @param offset    The offset into the start of the array.
+             @param data      The byte array to Serialize to.
+             @return          The number of bytes Serialized.
+        </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.WriteDataIntoDrawingRecord(System.Byte[],System.Int32,System.Int32,System.Byte[],System.Int32)">
+            @param drawingData - escher records saved into single byte array
+            @param writtenEscherBytes - count of bytes already saved into drawing records (we should know it to decide create
+                                      drawing or continue record)
+            @param pos current position of data array
+            @param data - array of bytes where drawing records must be serialized
+            @param i - number of shape, saved into data array
+            @return offset of data array after serialization
+        </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.GetEscherRecordSize(System.Collections.Generic.List{NPOI.DDF.EscherRecord})">
+             How many bytes do the raw escher records contain.
+            
+             @param records List of escher records
+             @return the number of bytes
+        </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.GetSid(System.Collections.Generic.List{NPOI.HSSF.Record.RecordBase},System.Int32)">
+            @param records list of records to look into
+            @param loc - location of the record which sid must be returned
+            @return sid of the record with selected location
         </member>
         <member name="M:NPOI.HSSF.Record.EscherAggregate.BuildBaseTree">
              create base tree with such structure:
@@ -17976,27 +18205,7 @@
             
              @see #CreateAggregate
         </member>
-        <member name="M:NPOI.HSSF.Record.EscherAggregate.ToString">
-            Calculates the string representation of this record.  This Is
-            simply a dump of all the records.
-        </member>
-        <member name="M:NPOI.HSSF.Record.EscherAggregate.CreateAggregate(System.Collections.IList,System.Int32,NPOI.HSSF.Model.DrawingManager2)">
-            Collapses the drawing records into an aggregate.
-        </member>
-        <member name="M:NPOI.HSSF.Record.EscherAggregate.Serialize(System.Int32,System.Byte[])">
-             Serializes this aggregate to a byte array.  Since this Is an aggregate
-             record it will effectively Serialize the aggregated records.
-            
-             @param offset    The offset into the start of the array.
-             @param data      The byte array to Serialize to.
-             @return          The number of bytes Serialized.
-        </member>
-        <member name="M:NPOI.HSSF.Record.EscherAggregate.GetEscherRecordSize(System.Collections.IList)">
-            How many bytes do the raw escher records contain.
-            @param records   List of escher records
-            @return  the number of bytes
-        </member>
-        <member name="M:NPOI.HSSF.Record.EscherAggregate.ConvertRecordsToUserModel">
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.GetEscherChild(NPOI.DDF.EscherContainerRecord,System.Int32)">
             Converts the Records into UserModel
              objects on the bound HSSFPatriarch
         </member>
@@ -18013,11 +18222,19 @@
             </summary>
             <param name="rec">clientData or textbox record to be removed</param>
         </member>
+        <member name="M:NPOI.HSSF.Record.EscherAggregate.GetNoteRecordByObj(NPOI.HSSF.Record.ObjRecord)">
+            @param obj - ObjRecord with id == NoteRecord.id
+            @return null if note record is not found else returns note record with id == obj.id
+        </member>
         <member name="P:NPOI.HSSF.Record.EscherAggregate.Sid">
             @return  Returns the current sid.
         </member>
         <member name="P:NPOI.HSSF.Record.EscherAggregate.RecordSize">
-            The number of bytes required to Serialize this record.
+            @return record size, including header size of obj, text, note, drawing, continue records
+        </member>
+        <member name="P:NPOI.HSSF.Record.EscherAggregate.TailRecords">
+            @return unmodifiable copy of tail records. We need to access them when building shapes.
+                    Every HSSFComment shape has a link to a NoteRecord from the tailRec collection.
         </member>
         <member name="T:NPOI.HSSF.Record.ExtendedFormatRecord">
              Title:        Extended Format Record
@@ -25328,18 +25545,6 @@
             <remarks>WARNING - some versions of excel will loose
             all comments after performing this action!</remarks>
         </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFCell.FindCellComment(NPOI.HSSF.Model.InternalSheet,System.Int32,System.Int32)">
-            <summary>
-            Cell comment Finder.
-            Returns cell comment for the specified sheet, row and column.
-            </summary>
-            <param name="sheet">The sheet.</param>
-            <param name="row">The row.</param>
-            <param name="column">The column.</param>
-            <returns>cell comment or 
-            <c>null</c>
-             if not found</returns>
-        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFCell.UpdateCellNum(System.Int32)">
             Updates the cell record's idea of what
              column it belongs in (0 based)
@@ -25973,6 +26178,23 @@
             Returns null for built in styles, and
              styles where no name has been defined
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFChildAnchor.#ctor(NPOI.DDF.EscherChildAnchorRecord)">
+            create anchor from existing file
+            @param escherChildAnchorRecord
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFChildAnchor.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            create anchor from scratch
+            @param dx1 x coordinate of the left up corner
+            @param dy1 y coordinate of the left up corner
+            @param dx2 x coordinate of the right down corner
+            @param dy2 y coordinate of the right down corner
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFChildAnchor.SetAnchor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            @param dx1 x coordinate of the left up corner
+            @param dy1 y coordinate of the left up corner
+            @param dx2 x coordinate of the right down corner
+            @param dy2 y coordinate of the right down corner
+        </member>
         <member name="T:NPOI.HSSF.UserModel.HSSFClientAnchor">
             <summary>
             A client anchor Is attached to an excel worksheet.  It anchors against a
@@ -26152,109 +26374,6 @@
             @author Glen Stampoultzis (glens at apache.org)
             </summary>
         </member>
-        <member name="T:NPOI.HSSF.UserModel.HSSFSimpleShape">
-            <summary>
-            Represents a simple shape such as a line, rectangle or oval.
-            @author Glen Stampoultzis (glens at apache.org)
-            </summary>
-        </member>
-        <member name="T:NPOI.HSSF.UserModel.HSSFShape">
-            <summary>
-            An abstract shape.
-            @author Glen Stampoultzis (glens at apache.org)
-            </summary>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFShape.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
-            <summary>
-            Create a new shape with the specified parent and anchor.
-            </summary>
-            <param name="parent">The parent.</param>
-            <param name="anchor">The anchor.</param>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFShape.SetLineStyleColor(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Sets the color applied to the lines of this shape
-            </summary>
-            <param name="red">The red.</param>
-            <param name="green">The green.</param>
-            <param name="blue">The blue.</param>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFShape.SetFillColor(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Sets the color used to fill this shape.
-            </summary>
-            <param name="red">The red.</param>
-            <param name="green">The green.</param>
-            <param name="blue">The blue.</param>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.Parent">
-            <summary>
-            Gets the parent shape.
-            </summary>
-            <value>The parent.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.Anchor">
-            <summary>
-            Gets or sets the anchor that is used by this shape.
-            </summary>
-            <value>The anchor.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.LineStyleColor">
-            <summary>
-            The color applied to the lines of this shape.
-            </summary>
-            <value>The color of the line style.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.FillColor">
-            <summary>
-            Gets or sets the color used to fill this shape.
-            </summary>
-            <value>The color of the fill.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.LineWidth">
-            <summary>
-            Gets or sets with width of the line in EMUs.  12700 = 1 pt.
-            </summary>
-            <value>The width of the line.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.LineStyle">
-            <summary>
-            Gets or sets One of the constants in LINESTYLE_*
-            </summary>
-            <value>The line style.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.IsNoFill">
-            <summary>
-            Gets or sets a value indicating whether this instance is no fill.
-            </summary>
-            <value>
-            	<c>true</c> if this shape Is not filled with a color; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFShape.CountOfAllChildren">
-            <summary>
-            Count of all children and their childrens children.
-            </summary>
-            <value>The count of all children.</value>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFSimpleShape.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NPOI.HSSF.UserModel.HSSFSimpleShape"/> class.
-            </summary>
-            <param name="parent">The parent.</param>
-            <param name="anchor">The anchor.</param>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFSimpleShape.ShapeType">
-            <summary>
-            Gets the shape type.
-            </summary>
-            <value>One of the OBJECT_TYPE_* constants.</value>
-            @see #OBJECT_TYPE_LINE
-            @see #OBJECT_TYPE_OVAL
-            @see #OBJECT_TYPE_RECTANGLE
-            @see #OBJECT_TYPE_PICTURE
-            @see #OBJECT_TYPE_COMMENT
-        </member>
         <member name="F:NPOI.HSSF.UserModel.HSSFTextbox.HORIZONTAL_ALIGNMENT_LEFT">
             How to align text horizontally
         </member>
@@ -26267,12 +26386,6 @@
             </summary>
             <param name="parent">The parent.</param>
             <param name="anchor">One of HSSFClientAnchor or HSSFChildAnchor</param>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFTextbox.String">
-            <summary>
-            Gets or sets the rich text string for this textbox.
-            </summary>
-            <value>The string.</value>
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFTextbox.MarginLeft">
             <summary>
@@ -26377,22 +26490,11 @@
             </summary>
             <value>the name of the original author of the comment</value>
         </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFComment.String">
-            <summary>
-            Gets or sets the rich text string used by this comment.
-            </summary>   
-        </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFComment.NoteRecord">
             <summary>
             Gets the note record.
             </summary>
             <value>the underlying Note record.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFComment.TextObjectRecord">
-            <summary>
-            Gets the text object record.
-            </summary>
-            <value>the underlying Text record</value>
         </member>
         <member name="T:NPOI.HSSF.UserModel.HSSFConditionalFormatting">
             <summary>
@@ -26924,6 +27026,13 @@
             </summary>
             <param name="index">The index.</param>
             <param name="rec">The record.</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFFont.GetHSSFColor(NPOI.HSSF.UserModel.HSSFWorkbook)">
+            <summary>
+            get the color value for the font
+            </summary>
+            <param name="wb">HSSFWorkbook</param>
+            <returns></returns>
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFFont.ToString">
             <summary>
@@ -27636,6 +27745,12 @@
             <param name="name">the Name Record</param>
             <param name="comment"></param>
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFName.SetNameDefinition(NPOI.SS.Formula.PTG.Ptg[])">
+            <summary>
+            Sets the NameParsedFormula structure that specifies the formula for the defined name.
+            </summary>
+            <param name="ptgs">the sequence of {@link Ptg}s for the formula.</param>
+        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFName.SetFunction(System.Boolean)">
              Indicates that the defined name refers to a user-defined function.
              This attribute is used when there is an add-in or other code project associated with the file.
@@ -27688,17 +27803,127 @@
             
              @author Daniel Noll
         </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFObjectData.record">
-            Underlying object record ultimately containing a reference to the object.
+        <member name="T:NPOI.HSSF.UserModel.HSSFPicture">
+            <summary>
+            Represents a escher picture.  Eg. A GIF, JPEG etc...
+            @author Glen Stampoultzis
+            @author Yegor Kozlov (yegor at apache.org)
+            </summary>
+        </member>
+        <member name="T:NPOI.SS.UserModel.IPicture">
+             Repersents a picture in a SpreadsheetML document
+            
+             @author Yegor Kozlov
+        </member>
+        <member name="M:NPOI.SS.UserModel.IPicture.Resize">
+            Reset the image to the original size.
+        </member>
+        <member name="M:NPOI.SS.UserModel.IPicture.Resize(System.Double)">
+             Reset the image to the original size.
+            
+             @param scale the amount by which image dimensions are multiplied relative to the original size.
+             <code>resize(1.0)</code> Sets the original size, <code>resize(0.5)</code> resize to 50% of the original,
+             <code>resize(2.0)</code> resizes to 200% of the original.
+        </member>
+        <member name="P:NPOI.SS.UserModel.IPicture.PictureData">
+             Return picture data for this picture
+            
+             @return picture data for this picture
+        </member>
+        <member name="F:NPOI.HSSF.UserModel.HSSFPicture.PX_DEFAULT">
+            width of 1px in columns with default width in Units of 1/256 of a Char width
+        </member>
+        <member name="F:NPOI.HSSF.UserModel.HSSFPicture.PX_MODIFIED">
+            width of 1px in columns with overridden width in Units of 1/256 of a Char width
+        </member>
+        <member name="F:NPOI.HSSF.UserModel.HSSFPicture.PX_ROW">
+            Height of 1px of a row
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
+            <summary>
+            Constructs a picture object.
+            </summary>
+            <param name="parent">The parent.</param>
+            <param name="anchor">The anchor.</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.Resize(System.Double)">
+            <summary>
+            Reset the image to the original size.
+            </summary>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.Resize">
+            <summary>
+            Reset the image to the original size.
+            </summary>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetPreferredSize(System.Double)">
+            <summary>
+            Calculate the preferred size for this picture.
+            </summary>
+            <param name="scale">the amount by which image dimensions are multiplied relative to the original size.</param>
+            <returns>HSSFClientAnchor with the preferred size for this image</returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetPreferredSize">
+            <summary>
+            Calculate the preferred size for this picture.
+            </summary>
+            <returns>HSSFClientAnchor with the preferred size for this image</returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetColumnWidthInPixels(System.Int32)">
+            <summary>
+            Gets the column width in pixels.
+            </summary>
+            <param name="column">The column.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetRowHeightInPixels(System.Int32)">
+            <summary>
+            Gets the row height in pixels.
+            </summary>
+            <param name="i">The row</param>
+            <returns></returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetPixelWidth(System.Int32)">
+            <summary>
+            Gets the width of the pixel.
+            </summary>
+            <param name="column">The column.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetResolution(System.Drawing.Image)">
+            <summary>
+            The metadata of PNG and JPEG can contain the width of a pixel in millimeters.
+            Return the the "effective" dpi calculated as 
+            <c>25.4/HorizontalPixelSize</c>
+            and 
+            <c>25.4/VerticalPixelSize</c>
+            .  Where 25.4 is the number of mm in inch.
+            </summary>
+            <param name="r">The image.</param>
+            <returns>the resolution</returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetImageDimension">
+            <summary>
+            Return the dimension of this image
+            </summary>
+            <returns>image dimension</returns>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPicture.PictureIndex">
+            <summary>
+            Gets or sets the index of the picture.
+            </summary>
+            <value>The index of the picture.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPicture.PictureData">
+             Return picture data for this shape
+            
+             @return picture data for this shape
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPicture.FileName">
+            The color applied to the lines of this shape.
         </member>
         <member name="F:NPOI.HSSF.UserModel.HSSFObjectData._root">
             Reference to the filesystem root, required for retrieving the object data.
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFObjectData.#ctor(NPOI.HSSF.Record.ObjRecord,NPOI.POIFS.FileSystem.DirectoryEntry)">
-             Constructs object data by wrapping a lower level object record.
-            
-             @param record the low-level object record.
-             @param poifs the filesystem, required for retrieving the object data.
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFObjectData.GetDirectory">
              Gets the object data. Only call for ones that have
@@ -27753,7 +27978,7 @@
         <member name="M:NPOI.HSSF.UserModel.HSSFOptimiser.OptimiseCellStyles(NPOI.HSSF.UserModel.HSSFWorkbook)">
             <summary>
             Goes through the Wokrbook, optimising the cell styles
-            by removing duplicate ones.
+            by removing duplicate ones and ones that aren't used.
             For best results, optimise the fonts via a call to
             OptimiseFonts(HSSFWorkbook) first
             </summary>
@@ -28088,11 +28313,51 @@
             @author Glen Stampoultzis (glens at apache.org)
             </summary>
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShapeContainer.AddShape(NPOI.HSSF.UserModel.HSSFShape)">
+            <summary>
+            dd shape to the list of child records
+            </summary>
+            <param name="shape">shape</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShapeContainer.SetCoordinates(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            set coordinates of this group relative to the parent
+            </summary>
+            <param name="x1">x1</param>
+            <param name="y1">y1</param>
+            <param name="x2">x2</param>
+            <param name="y2">y2</param>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFShapeContainer.RemoveShape(NPOI.HSSF.UserModel.HSSFShape)">
+            remove first level shapes
+            @param shape to be removed
+            @return true if shape is removed else return false
+        </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFShapeContainer.Children">
             <summary>
             Gets Any children contained by this shape.
             </summary>
             <value>The children.</value>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShapeContainer.X1">
+            <summary>
+            Get the top left x coordinate of this group.
+            </summary>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShapeContainer.Y1">
+            <summary>
+            Get the top left y coordinate of this group.
+            </summary>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShapeContainer.X2">
+            <summary>
+            Get the bottom right x coordinate of this group.
+            </summary>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFShapeContainer.Y2">
+            <summary>
+            Get the bottom right y coordinate of this group.
+            </summary>
         </member>
         <member name="T:NPOI.SS.UserModel.IDrawing">
             @author Yegor Kozlov
@@ -28144,6 +28409,14 @@
             <param name="sheet">the sheet this patriarch is stored in.</param>
             <param name="boundAggregate">The bound aggregate.</param>
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.PreSerialize">
+            check if any shapes contain wrong data
+            At now(13.08.2010) check if patriarch contains 2 or more comments with same coordinates
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.RemoveShape(NPOI.HSSF.UserModel.HSSFShape)">
+            @param shape to be removed
+            @return true of shape is removed
+        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.CreateGroup(NPOI.HSSF.UserModel.HSSFClientAnchor)">
             <summary>
             Creates a new Group record stored Under this patriarch.
@@ -28169,6 +28442,14 @@
             to the sheet.</param>
             <param name="pictureIndex">Index of the picture.</param>
             <returns>the newly created shape.</returns>
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.CreatePicture(NPOI.SS.UserModel.IClientAnchor,System.Int32)">
+            <summary>
+            CreatePicture
+            </summary>
+            <param name="anchor">the client anchor describes how this picture is attached to the sheet.</param>
+            <param name="pictureIndex">the index of the picture in the workbook collection of pictures.</param>
+            <returns>return newly created shape</returns>
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.CreatePolygon(NPOI.SS.UserModel.IClientAnchor)">
             <summary>
@@ -28231,7 +28512,7 @@
             	<c>true</c> if this instance contains chart; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch._GetBoundAggregate">
+        <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.GetBoundAggregate">
             <summary>
             Returns the aggregate escher record we're bound to
             </summary>
@@ -28250,6 +28531,9 @@
              @param col2 the column (0 based) of the second cell.
              @param row2 the row (0 based) of the second cell.
              @return the newly created client anchor
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPatriarch.BuildShapeTree">
+            create shape tree from existing escher records tree
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFPatriarch.Children">
             <summary>
@@ -28383,122 +28667,6 @@
             </summary>
             <value>The fill pattern.</value>
         </member>
-        <member name="T:NPOI.HSSF.UserModel.HSSFPicture">
-            <summary>
-            Represents a escher picture.  Eg. A GIF, JPEG etc...
-            @author Glen Stampoultzis
-            @author Yegor Kozlov (yegor at apache.org)
-            </summary>
-        </member>
-        <member name="T:NPOI.SS.UserModel.IPicture">
-             Repersents a picture in a SpreadsheetML document
-            
-             @author Yegor Kozlov
-        </member>
-        <member name="M:NPOI.SS.UserModel.IPicture.Resize">
-            Reset the image to the original size.
-        </member>
-        <member name="M:NPOI.SS.UserModel.IPicture.Resize(System.Double)">
-             Reset the image to the original size.
-            
-             @param scale the amount by which image dimensions are multiplied relative to the original size.
-             <code>resize(1.0)</code> Sets the original size, <code>resize(0.5)</code> resize to 50% of the original,
-             <code>resize(2.0)</code> resizes to 200% of the original.
-        </member>
-        <member name="P:NPOI.SS.UserModel.IPicture.PictureData">
-             Return picture data for this picture
-            
-             @return picture data for this picture
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPicture.PX_DEFAULT">
-            width of 1px in columns with default width in Units of 1/256 of a Char width
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPicture.PX_MODIFIED">
-            width of 1px in columns with overridden width in Units of 1/256 of a Char width
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPicture.PX_ROW">
-            Height of 1px of a row
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
-            <summary>
-            Constructs a picture object.
-            </summary>
-            <param name="parent">The parent.</param>
-            <param name="anchor">The anchor.</param>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.Resize(System.Double)">
-            <summary>
-            Reset the image to the original size.
-            </summary>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.Resize">
-            <summary>
-            Reset the image to the original size.
-            </summary>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetPreferredSize(System.Double)">
-            <summary>
-            Calculate the preferred size for this picture.
-            </summary>
-            <param name="scale">the amount by which image dimensions are multiplied relative to the original size.</param>
-            <returns>HSSFClientAnchor with the preferred size for this image</returns>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetPreferredSize">
-            <summary>
-            Calculate the preferred size for this picture.
-            </summary>
-            <returns>HSSFClientAnchor with the preferred size for this image</returns>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetColumnWidthInPixels(System.Int32)">
-            <summary>
-            Gets the column width in pixels.
-            </summary>
-            <param name="column">The column.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetRowHeightInPixels(System.Int32)">
-            <summary>
-            Gets the row height in pixels.
-            </summary>
-            <param name="i">The row</param>
-            <returns></returns>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetPixelWidth(System.Int32)">
-            <summary>
-            Gets the width of the pixel.
-            </summary>
-            <param name="column">The column.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetResolution(System.Drawing.Image)">
-            <summary>
-            The metadata of PNG and JPEG can contain the width of a pixel in millimeters.
-            Return the the "effective" dpi calculated as 
-            <c>25.4/HorizontalPixelSize</c>
-            and 
-            <c>25.4/VerticalPixelSize</c>
-            .  Where 25.4 is the number of mm in inch.
-            </summary>
-            <param name="r">The image.</param>
-            <returns>the resolution</returns>
-        </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPicture.GetImageDimension">
-            <summary>
-            Return the dimension of this image
-            </summary>
-            <returns>image dimension</returns>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFPicture.PictureIndex">
-            <summary>
-            Gets or sets the index of the picture.
-            </summary>
-            <value>The index of the picture.</value>
-        </member>
-        <member name="P:NPOI.HSSF.UserModel.HSSFPicture.PictureData">
-             Return picture data for this shape
-            
-             @return picture data for this shape
-        </member>
         <member name="T:NPOI.HSSF.UserModel.HSSFPictureData">
             <summary>
             Represents binary data stored in the file.  Eg. A GIF, JPEG etc...
@@ -28553,10 +28721,32 @@
             @author Glen Stampoultzis  (glens at baselinksoftware.com)
             </summary>
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPolygon.CreateSpContainer">
+            Generates the shape records for this shape.
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPolygon.CreateObjRecord">
+            Creates the low level OBJ record for this shape.
+        </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFPolygon.SetPoints(System.Int32[],System.Int32[])">
+            @param xPoints - array of x coordinates
+            @param yPoints - array of y coordinates
+        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFPolygon.SetPolygonDrawArea(System.Int32,System.Int32)">
             Defines the width and height of the points in the polygon
             @param width
             @param height
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPolygon.XPoints">
+            @return array of x coordinates
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPolygon.YPoints">
+            @return array of y coordinates
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPolygon.DrawAreaWidth">
+            @return shape width
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPolygon.DrawAreaHeight">
+            @return shape height
         </member>
         <member name="T:NPOI.HSSF.UserModel.HSSFPrintSetup">
             <summary>
@@ -30226,6 +30416,39 @@
             Whether the text is displayed in right-to-left mode in the window
             </summary>
         </member>
+        <member name="P:NPOI.SS.UserModel.ISheet.RepeatingRows">
+            <summary>
+             Get or set the repeating rows used when printing the sheet, as found in File->PageSetup->Sheet.
+            <p/>
+            Repeating rows cover a range of contiguous rows, e.g.:
+            <pre>
+            Sheet1!$1:$1
+            Sheet2!$5:$8
+            </pre>
+            The {@link CellRangeAddress} returned contains a column part which spans
+            all columns, and a row part which specifies the contiguous range of 
+            repeating rows.
+            <p/>
+            If the Sheet does not have any repeating rows defined, null is returned.
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.UserModel.ISheet.RepeatingColumns">
+            <summary>
+             Gets or set the repeating columns used when printing the sheet, as found in File->PageSetup->Sheet.
+            <p/>
+            Repeating columns cover a range of contiguous columns, e.g.:
+            <pre>
+            Sheet1!$A:$A
+            Sheet2!$C:$F
+            </pre>
+            The {@link CellRangeAddress} returned contains a row part which spans all 
+            rows, and a column part which specifies the contiguous range of 
+            repeating columns.
+            <p/>
+            If the Sheet does not have any repeating columns defined, null is 
+            returned.
+            </summary>
+        </member>
         <member name="F:NPOI.HSSF.UserModel.HSSFSheet.INITIAL_CAPACITY">
             Used for compile-time optimization.  This is the initial size for the collection of
             rows.  It is currently Set to 20.  If you generate larger sheets you may benefit
@@ -30663,13 +30886,12 @@
             <param name="fat">if set to <c>true</c> [fat].</param>
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFSheet.CreateDrawingPatriarch">
-            <summary>
-            Creates the top-level drawing patriarch.  This will have
-            the effect of removing any existing drawings on this
-            _sheet.
-            This may then be used to Add graphics or charts
-            </summary>
-            <returns>The new patriarch.</returns>
+             Creates the top-level drawing patriarch.  This will have
+             the effect of removing any existing drawings on this
+             sheet.
+             This may then be used to add graphics or charts
+            
+             @return The new patriarch.
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFSheet.SetColumnGroupCollapsed(System.Int32,System.Boolean)">
             <summary>
@@ -31074,18 +31296,9 @@
             <value>The drawing escher aggregate.</value>
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFSheet.DrawingPatriarch">
-            <summary>
-            Returns the top-level drawing patriach, if there is one.
-            This will hold any graphics or charts for the _sheet.
-            WARNING - calling this will trigger a parsing of the
-            associated escher records. Any that aren't supported
-            (such as charts and complex drawing types) will almost
-            certainly be lost or corrupted when written out. Only
-            use this with simple drawings, otherwise call
-            HSSFSheet#CreateDrawingPatriarch() and
-            start from scratch!
-            </summary>
-            <value>The drawing patriarch.</value>
+             This will hold any graphics or charts for the sheet.
+            
+             @return the top-level drawing patriarch, if there is one, else returns null
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFSheet.TabColorIndex">
             <summary>
@@ -40579,6 +40792,16 @@
              @param obj2 The second object to match against.
              @param obj3 The third object to match against.
              @param obj4 The forth object to match against.
+        </member>
+        <member name="F:NPOI.Util.PngUtils.PNG_FILE_HEADER">
+            File header for PNG format.
+        </member>
+        <member name="M:NPOI.Util.PngUtils.MatchesPngHeader(System.Byte[],System.Int32)">
+             Checks if the offset matches the PNG header.
+            
+             @param data the data to check.
+             @param offset the offset to check at.
+             @return {@code true} if the offset matches.
         </member>
         <member name="F:NPOI.Util.POILogFactory._loggers">
             Map of POILogger instances, with classes as keys
