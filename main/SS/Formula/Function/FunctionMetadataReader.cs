@@ -18,12 +18,9 @@
 namespace NPOI.SS.Formula.Function
 {
     using System;
-    using System.Reflection;
     using System.Collections;
     using System.IO;
     using System.Text.RegularExpressions;
-    using NPOI.SS.Formula;
-    using NPOI.SS;
     using NPOI.SS.Formula.PTG;
     using System.Globalization;
 
@@ -35,7 +32,7 @@ namespace NPOI.SS.Formula.Function
     class FunctionMetadataReader
     {
 
-        //private const String METADATA_FILE_NAME = "functionMetadata.txt";
+        private const String METADATA_FILE_NAME = "functionMetadata.txt";
 
         /** plain ASCII text metadata file uses three dots for ellipsis */
         private static String ELLIPSIS = "...";
@@ -61,7 +58,7 @@ namespace NPOI.SS.Formula.Function
 
         public static FunctionMetadataRegistry CreateRegistry()
         {
-            using (StringReader br = new StringReader(Resource1.functionMetadata))
+            using (StreamReader br = new StreamReader (typeof (FunctionMetadataReader).Assembly.GetManifestResourceStream (METADATA_FILE_NAME)))
             {
 
                 FunctionDataBuilder fdb = new FunctionDataBuilder(400);

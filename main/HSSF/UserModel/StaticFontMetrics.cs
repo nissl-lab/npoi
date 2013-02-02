@@ -35,6 +35,8 @@ namespace NPOI.HSSF.UserModel
      */
     class StaticFontMetrics
     {
+        const string FONT_METRICS_PROPERTIES_FILE_NAME = "font_metrics.properties";
+
         /** The font metrics property file we're using */
         private static Properties fontMetricsProps;
         /** Our cache of font details we've alReady looked up */
@@ -70,12 +72,12 @@ namespace NPOI.HSSF.UserModel
                         
                         if (!File.Exists(propFileName))
                             throw new FileNotFoundException("font_metrics.properties not found at path " + Path.GetFullPath(propFileName));
-                        metricsIn = new MemoryStream(Resource1.font_metrics);
+                        metricsIn = typeof (StaticFontMetrics).Assembly.GetManifestResourceStream (FONT_METRICS_PROPERTIES_FILE_NAME);
                     }
                     else
                     {
                         // Use the built-in font metrics file off the classpath
-                        metricsIn = new MemoryStream(Resource1.font_metrics);
+                        metricsIn = typeof (StaticFontMetrics).Assembly.GetManifestResourceStream (FONT_METRICS_PROPERTIES_FILE_NAME);
                         if (metricsIn == null)
                             throw new FileNotFoundException("font_metrics.properties not found in classpath");
                     }
