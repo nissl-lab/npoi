@@ -675,11 +675,6 @@
     <Compile Include="HSSF\Util\RKUtil.cs" />
     <Compile Include="POIUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource11.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
-    </Compile>
     <Compile Include="SS\Formula\Atp\AnalysisToolPak.cs" />
     <Compile Include="SS\Formula\Atp\MRound.cs" />
     <Compile Include="SS\Formula\Atp\ParityFunction.cs" />
@@ -1137,17 +1132,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
-    <None Include="Resources\font_metrics.properties" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource11.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="Resources\functionMetadata.txt">
+      <LogicalName>functionMetadata.txt</LogicalName>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\functionMetadata.txt" />
+    <EmbeddedResource Include="Resources\font_metrics.properties">
+      <LogicalName>font_metrics.properties</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
