@@ -21,7 +21,6 @@ namespace NPOI.SS.Format
     using NPOI.HSSF.Util;
     using System.Collections.Generic;
     using System.Drawing;
-    using NPOI.Util;
     using System.Collections;
     using System.Text.RegularExpressions;
     using System.Text;

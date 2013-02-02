@@ -27,9 +27,7 @@
 
 namespace NPOI.HPSF
 {
-    using System;
     using System.IO;
-    using System.Collections;
     using NPOI.HPSF.Wellknown;
 
     /// <summary>

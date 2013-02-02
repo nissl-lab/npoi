@@ -19,10 +19,8 @@ namespace NPOI.HSSF.Extractor
 {
     using System;
     using System.Text;
-    using System.IO;
 
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
     using NPOI;
     using NPOI.SS.Formula.Eval;

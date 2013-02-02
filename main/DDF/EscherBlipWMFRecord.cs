@@ -21,10 +21,8 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text;
-    using System.Collections;
     using NPOI.Util;
     using System.IO;
-    using NPOI.HSSF.Record;
     using ICSharpCode.SharpZipLib.Zip.Compression;
     using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 

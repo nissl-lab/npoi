@@ -18,7 +18,6 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Collections.Generic;
-    using NPOI.HSSF.EventUserModel;
     using NPOI;
     using System.IO;
     using NPOI.HSSF.Record.Crypto;

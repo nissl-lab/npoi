@@ -19,9 +19,6 @@
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
-using NPOI.POIFS.Properties;
-using NPOI.POIFS.Storage;
-using NPOI.POIFS.NIO;
 using System;
 using System.Collections.Generic;
 using System.IO;

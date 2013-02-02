@@ -17,10 +17,6 @@
 
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using NPOI.SS.Formula.Eval;
-
-
     public class Maxa : MinaMaxa
     {
         protected internal override double Evaluate(double[] values)

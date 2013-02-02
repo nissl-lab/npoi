@@ -18,15 +18,10 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.IO;
-    using System.Collections;
     using System.Text;
 
     using NPOI.HSSF.Record;
-    using NPOI.Util;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.Util;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
 
 

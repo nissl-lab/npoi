@@ -16,8 +16,6 @@
    limitations under the License.
 ==================================================================== */
 
-
-using NPOI.POIFS.FileSystem;
 namespace NPOI.POIFS.EventFileSystem
 {
 

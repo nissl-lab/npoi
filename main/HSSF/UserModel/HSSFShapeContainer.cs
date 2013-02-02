@@ -18,8 +18,6 @@
 
 namespace NPOI.HSSF.UserModel
 {
-
-    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>

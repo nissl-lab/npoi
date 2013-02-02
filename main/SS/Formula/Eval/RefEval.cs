@@ -17,8 +17,6 @@
 
 namespace NPOI.SS.Formula.Eval
 {
-    using System;
-
     /**
      * @author Amol S Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * 

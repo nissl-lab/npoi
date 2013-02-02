@@ -18,7 +18,6 @@
 namespace NPOI.Util
 {
     using System;
-    using System.IO;
 
     /// <summary>
     /// Adapts a plain byte array to <see cref="T:NPOI.Util.ILittleEndianInput"/>

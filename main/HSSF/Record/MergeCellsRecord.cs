@@ -21,7 +21,6 @@ namespace NPOI.HSSF.Record
 {
 
     using System;
-    using System.IO;
     using System.Text;
     using System.Collections;
 

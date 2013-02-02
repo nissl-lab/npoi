@@ -20,7 +20,6 @@ namespace NPOI.SS.Format
     using System.Text.RegularExpressions;
     using System.Text;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using NPOI.SS.Util;
     using System.Collections;
 

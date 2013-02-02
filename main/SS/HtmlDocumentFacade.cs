@@ -18,9 +18,7 @@
 
 namespace NPOI.SS
 {
-    using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Text;
     using System.Xml;
 

@@ -18,14 +18,11 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-    using System.IO;
     using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
 
-
-    using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.Cont;
     using NPOI.SS.Formula.PTG;

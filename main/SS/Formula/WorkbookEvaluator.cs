@@ -15,7 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using NPOI.SS.Formula.Atp;
 

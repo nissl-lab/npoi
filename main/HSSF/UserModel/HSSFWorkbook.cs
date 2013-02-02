@@ -28,7 +28,6 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula;
-    using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;

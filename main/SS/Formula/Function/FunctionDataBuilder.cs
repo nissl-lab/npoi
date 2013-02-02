@@ -18,7 +18,6 @@
 namespace NPOI.SS.Formula.Function
 {
     using System;
-    using System.Text;
     using System.Collections;
 
 

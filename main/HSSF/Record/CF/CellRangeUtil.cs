@@ -18,7 +18,6 @@
 namespace NPOI.HSSF.Record.CF
 {
     using System;
-    using System.Text;
     using System.Collections;
     using NPOI.SS.Util;
 

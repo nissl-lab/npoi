@@ -17,7 +17,6 @@
 using System;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula.Eval;
-using NPOI.SS.Formula.Function;
 
 namespace NPOI.SS.Formula.Eval
 {

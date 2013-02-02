@@ -17,7 +17,6 @@
 
 namespace NPOI.HSSF.Model
 {
-    using System;
     using NPOI.DDF;
     using System.Collections;
 

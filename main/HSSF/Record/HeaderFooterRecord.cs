@@ -17,8 +17,6 @@
 
 namespace NPOI.HSSF.Record
 {
-
-    using NPOI.HSSF.Record.Aggregates;
     using NPOI.Util;
 
     using System;

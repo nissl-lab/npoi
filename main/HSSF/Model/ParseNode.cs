@@ -19,7 +19,6 @@ namespace NPOI.HSSF.Model
 {
     using System;
 
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Function;
     using NPOI.SS.Formula.PTG;
     /**

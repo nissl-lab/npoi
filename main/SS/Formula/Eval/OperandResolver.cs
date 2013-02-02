@@ -18,7 +18,6 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
-    using System.Text.RegularExpressions;
     using System.Globalization;
 
     /**

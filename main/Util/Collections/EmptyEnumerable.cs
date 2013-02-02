@@ -24,8 +24,6 @@
  * Contributors:
  * 
  * ==============================================================*/
-using System;
-using System.Collections;
 
 namespace NPOI.Util.Collections
 {

@@ -17,10 +17,7 @@
 
 namespace NPOI.HSSF.Model
 {
-    using System;
-    using System.Text;
     using System.Collections;
-    using NPOI.Util;
     using NPOI.HSSF.Record;
     using System.Collections.Generic;
 

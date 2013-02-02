@@ -22,7 +22,6 @@ namespace NPOI.HSSF.Record.Chart
 
     using System;
     using System.Text;
-    using System.Collections;
     using NPOI.Util;
 
 

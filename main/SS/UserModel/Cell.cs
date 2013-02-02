@@ -18,7 +18,6 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    using NPOI.SS.Formula;
     using NPOI.SS.Util;
 
     public enum CellType : int

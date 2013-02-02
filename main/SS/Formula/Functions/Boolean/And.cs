@@ -20,8 +20,6 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
-    using NPOI.SS.Formula.Eval;
-
     public class And : BooleanFunction
     {
         protected override bool InitialResultValue

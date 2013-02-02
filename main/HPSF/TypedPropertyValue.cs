@@ -16,8 +16,6 @@
 ==================================================================== */
 
 using System;
-using NPOI.HSSF.Record;
-using NPOI.HSSF.Util;
 using NPOI.Util;
 
 namespace NPOI.HPSF

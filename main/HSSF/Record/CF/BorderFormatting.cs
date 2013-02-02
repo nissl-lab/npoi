@@ -26,11 +26,8 @@ namespace NPOI.HSSF.Record.CF
 {
     using System;
     using System.Text;
-    using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-
-    using NPOI.SS.UserModel;
 
 
 

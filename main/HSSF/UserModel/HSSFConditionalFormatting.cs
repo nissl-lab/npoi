@@ -18,9 +18,7 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
 
-    using NPOI.HSSF.Util;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;

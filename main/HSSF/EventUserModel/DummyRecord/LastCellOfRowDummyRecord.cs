@@ -17,10 +17,6 @@
 
 namespace NPOI.HSSF.EventUserModel.DummyRecord
 {
-    using System;
-    using System.Text;
-    using NPOI.HSSF.Record;
-
     /**
      * A dummy record to indicate that we've now had the last
      *  cell record for this row.

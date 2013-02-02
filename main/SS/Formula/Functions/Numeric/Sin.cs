@@ -21,7 +21,6 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using NPOI.SS.Formula.Eval;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

@@ -18,8 +18,6 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
-    using System.Text;
-    using NPOI.SS.Formula;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

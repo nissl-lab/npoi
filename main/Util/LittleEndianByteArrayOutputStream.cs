@@ -18,7 +18,6 @@
 namespace NPOI.Util
 {
     using System;
-    using System.IO;
     using System.Globalization;
 
     /// <summary>

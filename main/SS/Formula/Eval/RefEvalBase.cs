@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace NPOI.SS.Formula.Eval
 {
     public abstract class RefEvalBase : RefEval

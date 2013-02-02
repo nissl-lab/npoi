@@ -19,8 +19,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    using System;
-
     /**
      * The conditional format operators used for "Highlight Cells That Contain..." rules.
      * <p>

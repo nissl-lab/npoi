@@ -28,7 +28,6 @@
 namespace NPOI.HPSF
 {
     using System;
-    using System.Collections;
 
     /// <summary>
     /// This exception is thrown when trying To Write a (yet) unsupported variant

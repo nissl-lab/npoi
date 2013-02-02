@@ -24,13 +24,11 @@
  * Contributors:
  * 
  * ==============================================================*/
-using System;
-using System.Collections;
+
 using System.IO;
 using System.Collections.Generic;
 
 using NPOI.POIFS.Storage;
-using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Common;
 
 namespace NPOI.POIFS.Properties

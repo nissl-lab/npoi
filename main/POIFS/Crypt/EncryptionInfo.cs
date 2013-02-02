@@ -15,10 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-using System.IO;
 using NPOI.POIFS.FileSystem;
 using System.Text;
-using System.Xml;
 
 
 namespace NPOI.POIFS.Crypt

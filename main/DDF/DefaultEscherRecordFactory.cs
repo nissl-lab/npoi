@@ -19,10 +19,7 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Collections;
     using System.Reflection;
-    using System.Text;
-    using NPOI.HSSF.Record;
     using NPOI.Util;
     using System.Collections.Generic;
 

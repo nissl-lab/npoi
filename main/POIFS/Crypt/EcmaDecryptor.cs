@@ -16,10 +16,7 @@
 ==================================================================== */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Security;
 using System.Security.Cryptography;
 
 using NPOI.POIFS.FileSystem;

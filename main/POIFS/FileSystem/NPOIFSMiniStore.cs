@@ -20,7 +20,6 @@
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Properties;
-using NPOI.POIFS.NIO;
 using System.Collections.Generic;
 using System;
 using NPOI.Util;

@@ -17,8 +17,6 @@
 
 namespace NPOI.HSSF.UserModel
 {
-    using System;
-    using System.Text;
     using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
 

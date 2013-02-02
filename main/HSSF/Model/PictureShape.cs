@@ -18,9 +18,6 @@
 
 namespace NPOI.HSSF.Model
 {
-    using System;
-    using System.Text;
-
     using NPOI.HSSF.Record;
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;

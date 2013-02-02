@@ -18,8 +18,6 @@
 
 namespace NPOI.DDF
 {
-    using System;
-
     /**
      * Interface for listening to escher serialization events.
      *

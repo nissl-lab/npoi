@@ -17,7 +17,6 @@
 
 using System.IO;
 using System;
-using System.Collections;
 using NPOI.Util;
 
 namespace NPOI.POIFS.NIO

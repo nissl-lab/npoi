@@ -16,7 +16,6 @@
 ==================================================================== */
 namespace NPOI.Util
 {
-    using System;
     using System.IO;
 
     /**

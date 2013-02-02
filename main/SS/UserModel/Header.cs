@@ -17,7 +17,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    using System;
     /// <summary>
     /// Common defInition of a HSSF or XSSF page header.
     /// For a list of all the different fields that can be

@@ -17,8 +17,6 @@
 
 namespace NPOI.HSSF.UserModel
 {
-    using System;
-
     using NPOI.SS.UserModel;
     using System.Globalization;
 

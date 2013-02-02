@@ -21,20 +21,15 @@
 
 namespace NPOI.SS.Formula.Eval
 {
-    using System;
-    using NPOI.SS.Formula;
-
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *  
      */
     public class GreaterEqualEval : RelationalOperationEval
     {
-
         public override bool ConvertComparisonResult(int cmpResult)
         {
             return cmpResult >= 0;
         }
-
     }
 }

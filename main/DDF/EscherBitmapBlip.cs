@@ -21,7 +21,6 @@ namespace NPOI.DDF
 {
     using System;
     using System.IO;
-    using System.Collections;
     using NPOI.Util;
 
     /// <summary>

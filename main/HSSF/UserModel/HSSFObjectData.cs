@@ -23,7 +23,6 @@ namespace NPOI.HSSF.UserModel
 
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using NPOI.HSSF.Model;
     using NPOI.POIFS.FileSystem;
     using NPOI.DDF;
 

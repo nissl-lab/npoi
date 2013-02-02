@@ -20,9 +20,6 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using NPOI.SS.Formula.Eval;
-
     public class Fv : FinanceFunction
     {
         public override double Evaluate(double rate, double arg1, double arg2, double arg3, bool type)

@@ -16,13 +16,10 @@
    limitations under the License.
 ==================================================================== */
 
-using System.Text;
-
 namespace NPOI.DDF
 {
     using System;
-    using System.IO;
-    using System.Collections;
+    using System.Text;
     using NPOI.Util;
 
     /// <summary>

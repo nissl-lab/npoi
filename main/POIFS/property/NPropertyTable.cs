@@ -19,12 +19,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.IO;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Storage;
-using NPOI.POIFS.NIO;
 using NPOI.Util;
 
 namespace NPOI.POIFS.Properties

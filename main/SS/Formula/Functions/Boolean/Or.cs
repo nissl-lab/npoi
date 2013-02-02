@@ -20,9 +20,6 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using NPOI.SS.Formula.Eval;
-
     public class Or : BooleanFunction
     {
 
