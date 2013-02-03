@@ -1140,11 +1140,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
-    <None Include="Resources\font_metrics.properties" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\functionMetadata.txt">
       <LogicalName>functionMetadata.txt</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\font_metrics.properties">
+      <LogicalName>font_metrics.properties</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
