@@ -1137,6 +1137,7 @@
     <Compile Include="Util\SystemOutLogger.cs" />
     <Compile Include="Util\TempFile.cs" />
     <Compile Include="Util\ULongField.cs" />
+    <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
