@@ -18,11 +18,7 @@
 namespace NPOI.SS.Formula.Constant
 {
     using System;
-    using System.Text;
     using NPOI.Util;
-    using NPOI.HSSF.Record;
-
-
 
     /**
      * To support Constant Values (2.5.7) as required by the CRN record.

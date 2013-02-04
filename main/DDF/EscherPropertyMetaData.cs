@@ -19,7 +19,6 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Collections;
 
     /// <summary>
     /// This class stores the type and description of an escher property.

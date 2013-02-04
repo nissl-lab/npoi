@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using NPOI.Util;
 
 namespace NPOI.HSSF.Record.AutoFilter
@@ -10,13 +9,13 @@ namespace NPOI.HSSF.Record.AutoFilter
         private short field_1_iEntry = 0;
         private short field_2_grbit = 0;
 
-        private static BitField wJoinFlag = BitFieldFactory.GetInstance(0x03);
-        private static BitField fSimple1Flag = BitFieldFactory.GetInstance(0x04);
-        private static BitField fSimple2Flag = BitFieldFactory.GetInstance(0x08);
-        private static BitField fTop10Flag = BitFieldFactory.GetInstance(0x10);
-        private static BitField fTopFlag = BitFieldFactory.GetInstance(0x20);
-        private static BitField fPercentFlag = BitFieldFactory.GetInstance(0x40);
-        private static BitField wTop10Flag = BitFieldFactory.GetInstance(0xFF80);
+        private static readonly BitField wJoinFlag = BitFieldFactory.GetInstance(0x03);
+        private static readonly BitField fSimple1Flag = BitFieldFactory.GetInstance(0x04);
+        private static readonly BitField fSimple2Flag = BitFieldFactory.GetInstance(0x08);
+        private static readonly BitField fTop10Flag = BitFieldFactory.GetInstance(0x10);
+        private static readonly BitField fTopFlag = BitFieldFactory.GetInstance(0x20);
+        private static readonly BitField fPercentFlag = BitFieldFactory.GetInstance(0x40);
+        private static readonly BitField wTop10Flag = BitFieldFactory.GetInstance(0xFF80);
 
         private DOPERRecord field_3_doper1;
         private DOPERRecord field_4_doper2;

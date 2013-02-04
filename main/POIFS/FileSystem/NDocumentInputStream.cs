@@ -21,9 +21,7 @@ using NPOI.POIFS.Properties;
 using NPOI.Util;
 using System.IO;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using NPOI.POIFS.NIO;
 
 
 namespace NPOI.POIFS.FileSystem

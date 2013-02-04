@@ -18,12 +18,10 @@
 namespace NPOI.HSSF.Model
 {
     using System;
-    using System.Text;
     using System.Collections;
     using System.Collections.Generic;
 
     using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
 
     /**

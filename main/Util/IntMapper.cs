@@ -19,7 +19,6 @@
 
 namespace NPOI.Util
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>

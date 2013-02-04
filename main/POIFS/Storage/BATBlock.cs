@@ -27,13 +27,11 @@
 
 
 using System;
-using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 
 using NPOI.POIFS.Common;
 using NPOI.Util;
-using NPOI.POIFS.NIO;
 
 namespace NPOI.POIFS.Storage
 {

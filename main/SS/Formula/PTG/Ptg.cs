@@ -22,12 +22,8 @@ namespace NPOI.SS.Formula.PTG
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Collections;
-    using System.Collections.Generic;
 
     using NPOI.Util;
-    using NPOI.HSSF.Record;
-
-    using NPOI.SS.Util;
 
 
     /**

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using NPOI.Util;
-
+﻿
 namespace NPOI.HSSF.Record.Chart
 {
     /// <summary>

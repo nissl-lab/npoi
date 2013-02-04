@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NPOI.Util
+﻿namespace NPOI.Util
 {
     public static class Operator
     {

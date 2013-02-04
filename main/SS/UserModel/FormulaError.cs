@@ -17,7 +17,6 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    using System.Collections.Generic;
 
     /**
      * Enumerates error values in SpreadsheetML formula calculations.

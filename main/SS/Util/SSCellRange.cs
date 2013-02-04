@@ -20,7 +20,6 @@ namespace NPOI.SS.Util
     using System;
 
     using NPOI.SS.UserModel;
-    using NPOI.Util;
     using System.Collections.Generic;
     using System.Globalization;
 

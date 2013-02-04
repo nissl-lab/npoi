@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Collections;
-using NPOI.POIFS.NIO;
 
 namespace NPOI.POIFS.FileSystem
 {

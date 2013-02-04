@@ -21,8 +21,6 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
     using System;
     using System.Text;
-    using System.IO;
-    using System.Collections;
 
     /**
      * Title:        DBCell Record

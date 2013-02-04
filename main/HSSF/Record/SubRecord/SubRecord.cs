@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record
     using System.IO;
 
     using NPOI.Util;
-    using NPOI.SS.Formula;
+
     /**
      * Subrecords are part of the OBJ class.
      */

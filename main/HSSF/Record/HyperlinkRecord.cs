@@ -19,7 +19,6 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
-    using System.IO;
     using NPOI.Util;
     using NPOI.HSSF.Util;
 

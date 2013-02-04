@@ -19,8 +19,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    using System;
-    
     /**
      * @author Yegor Kozlov
      */

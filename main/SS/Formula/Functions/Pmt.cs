@@ -16,9 +16,6 @@
 */
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using NPOI.SS.Formula.Eval;
-
     /**
      * Implementation for the PMT() Excel function.<p/>
      * 

@@ -18,7 +18,6 @@
 
 namespace NPOI.HSSF.EventUserModel
 {
-    using System;
     using System.IO;
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.Record;

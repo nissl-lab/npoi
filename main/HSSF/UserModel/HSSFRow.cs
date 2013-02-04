@@ -18,13 +18,10 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.IO;
     using System.Collections;
     using System.Collections.Generic;
 
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Model;
-    using NPOI.Util;
     using NPOI.SS.UserModel;
     using NPOI.SS;
 

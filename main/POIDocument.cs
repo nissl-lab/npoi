@@ -20,7 +20,6 @@ namespace NPOI
     using System;
     using System.IO;
     using System.Collections;
-    using NPOI.Util;
     using NPOI.POIFS.FileSystem;
     using NPOI.HPSF;
     using System.Collections.Generic;

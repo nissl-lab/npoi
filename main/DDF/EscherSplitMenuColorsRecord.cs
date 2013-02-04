@@ -21,10 +21,7 @@ using System.Text;
 namespace NPOI.DDF
 {
     using System;
-    using System.IO;
-    using System.Collections;
     using NPOI.Util;
-    using NPOI.HSSF.Record;
 
     /// <summary>
     /// A list of the most recently used colours for the drawings contained in

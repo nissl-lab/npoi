@@ -20,7 +20,6 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Windows.Forms;
     using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
@@ -32,9 +31,6 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System.Drawing;
-    using System.Windows.Forms.VisualStyles;
-    using System.Drawing.Drawing2D;
     using System.Globalization;
 
 

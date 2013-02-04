@@ -15,8 +15,6 @@
    limitations under the License.
    ==================================================================== */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 

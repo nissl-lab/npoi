@@ -21,7 +21,6 @@ namespace NPOI.HSSF.UserModel
 
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System.Diagnostics.CodeAnalysis;
 
     /**
      * @author <a href="rjankiraman@emptoris.com">Radhakrishnan J</a>

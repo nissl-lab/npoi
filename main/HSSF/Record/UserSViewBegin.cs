@@ -18,7 +18,6 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-using NPOI.HSSF.Record.Aggregates;
 using System.Text;
 using NPOI.Util;
 

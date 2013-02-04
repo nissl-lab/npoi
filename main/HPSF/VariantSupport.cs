@@ -30,10 +30,7 @@ using System.Collections.Generic;
 namespace NPOI.HPSF
 {
     using System;
-    using System.Collections;
     using System.IO;
-    using System.Text;
-    using NPOI.Util;
     using System.Globalization;
 
     /// <summary>

@@ -20,7 +20,6 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.SS.Formula;
-    using System.Collections;
     using NPOI.Util;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;

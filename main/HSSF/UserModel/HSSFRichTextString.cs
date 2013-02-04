@@ -18,12 +18,10 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.IO;
     using System.Collections;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Model;
-    using NPOI.Util;
 
     /// <summary>
     /// Rich text Unicode string.  These strings can have fonts applied to

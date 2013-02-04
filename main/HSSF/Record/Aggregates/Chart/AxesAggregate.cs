@@ -16,7 +16,6 @@
 ==================================================================== */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record.Chart;
 using System.Diagnostics;

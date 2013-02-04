@@ -19,8 +19,8 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+
     /**
      * VerticalPageBreak record that stores page breaks at columns
      * 

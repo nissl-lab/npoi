@@ -20,9 +20,6 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using NPOI.SS.Formula.Eval;
-
     public class Roundup : TwoArg
     {
         public override double Evaluate(double d0, double d1)

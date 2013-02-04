@@ -19,14 +19,12 @@
 namespace NPOI.HSSF.Model
 {
     using System;
-    using System.Text;
-    using System.Collections;
-    using System.Text.RegularExpressions;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.DDF;
     using NPOI.Util;
+
     [Obsolete]
     public class PolygonShape: AbstractShape
     {

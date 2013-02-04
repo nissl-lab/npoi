@@ -18,12 +18,9 @@
 namespace NPOI.SS.Formula.Function
 {
     using System;
-    using System.Reflection;
     using System.Collections;
     using System.IO;
     using System.Text.RegularExpressions;
-    using NPOI.SS.Formula;
-    using NPOI.SS;
     using NPOI.SS.Formula.PTG;
     using System.Globalization;
 

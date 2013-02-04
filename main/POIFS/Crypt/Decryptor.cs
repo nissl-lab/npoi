@@ -16,13 +16,11 @@
 ==================================================================== */
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
 using NPOI;
-using System.Security;
 using System.Security.Cryptography;
 
 namespace NPOI.POIFS.Crypt

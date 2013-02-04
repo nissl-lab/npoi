@@ -15,8 +15,6 @@
    limitations Under the License.
 ==================================================================== */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NPOI.DDF;
 using NPOI.HSSF.Record;
 

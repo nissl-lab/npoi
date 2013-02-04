@@ -17,9 +17,6 @@
 
 namespace NPOI.SS.Formula
 {
-    using System;
-    using System.Collections;
-    using NPOI.HSSF.Record;
     using NPOI.SS.Formula;
     using NPOI.Util;
 

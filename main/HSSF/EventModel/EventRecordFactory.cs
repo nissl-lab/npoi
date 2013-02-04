@@ -17,12 +17,9 @@
 
 namespace NPOI.HSSF.EventModel
 {
-    using System;
     using System.IO;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using System.Reflection;
-    using System.Text;
 
 
     /**

@@ -19,7 +19,6 @@ namespace NPOI.SS.Formula.Eval
 {
     using System;
     using System.Text;
-    using NPOI.HSSF.Record;
     using NPOI.SS.Formula.PTG;
 
     /**

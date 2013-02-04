@@ -28,7 +28,6 @@ namespace NPOI.HSSF.Converter
     using NPOI.SS.Formula.Eval;
     using NPOI.Util;
     using NPOI.HSSF.Util;
-    using System.Diagnostics;
     using NPOI.SS;
 
     public class ExcelToHtmlConverter

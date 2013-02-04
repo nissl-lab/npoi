@@ -19,8 +19,8 @@ namespace NPOI.HSSF.Record
 {
 
     using System;
-    using System.IO;
     using System.Text;
+
     [Obsolete("Not found in poi,is it useful?")]
     public interface CustomField
            : ICloneable

@@ -24,8 +24,7 @@
  * Contributors:
  * 
  * ==============================================================*/
-using System;
-using System.Collections;
+
 using System.IO;
 using NPOI.POIFS.Common;
 using System.Collections.Generic;

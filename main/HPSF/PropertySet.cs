@@ -31,11 +31,9 @@ namespace NPOI.HPSF
 {
     using System;
     using System.IO;
-    using System.Collections;
     using System.Text;
     using NPOI.Util;
     using NPOI.HPSF.Wellknown;
-    using NPOI.POIFS.FileSystem;
 
     /// <summary>
     /// Represents a property Set in the Horrible Property Set Format

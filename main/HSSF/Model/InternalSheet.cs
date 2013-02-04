@@ -24,7 +24,6 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
-    using NPOI.HSSF.Record.Aggregates.Chart;
 
     /// <summary>
     /// Low level model implementation of a Sheet (one workbook Contains many sheets)

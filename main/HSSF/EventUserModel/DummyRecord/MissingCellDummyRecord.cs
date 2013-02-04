@@ -17,10 +17,6 @@
 
 namespace NPOI.HSSF.EventUserModel.DummyRecord
 {
-    using System;
-    using System.Text;
-    using NPOI.HSSF.Record;
-
     /**
      * A dummy record for when we're missing a cell in a row,
      *  but still want to trigger something

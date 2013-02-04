@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace NPOI.HSSF.Record.AutoFilter
 {
     public class FilterModeRecord:StandardRecord

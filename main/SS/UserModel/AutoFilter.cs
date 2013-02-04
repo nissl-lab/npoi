@@ -16,8 +16,6 @@
 ==================================================================== */
 namespace NPOI.SS.UserModel
 {
-    using System;
-
     /**
      * Represents autofiltering for the specified worksheet.
      *
