@@ -20,34 +20,16 @@ namespace NPOI.HPSF
 {
     public class VariantBool
     {
-
         public static int SIZE = 2;
-
-        private bool _value;
 
         public VariantBool(byte[] data, int offset)
         {
-            short value = LittleEndian.GetShort(data, offset);
-            if (value == 0x0000)
-            {
-                _value = false;
-                return;
-            }
-
-            if (value == 0xffff)
-            {
-                _value = true;
-                return;
-            }
-
-            _value = value != 0;
+            Value = LittleEndian.GetShort(data, offset) != 0;
         }
 
         public bool Value
         {
-            get { return _value; }
-            set { this._value = value; }
+            get; set;
         }
-
     }
 }
