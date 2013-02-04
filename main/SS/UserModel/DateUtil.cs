@@ -15,9 +15,6 @@
    limitations Under the License.
 ==================================================================== */
 
-
-using NPOI.Util;
-
 namespace NPOI.SS.UserModel
 {
     using System.Globalization;

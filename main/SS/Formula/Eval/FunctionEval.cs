@@ -24,9 +24,7 @@ using NPOI.SS.Formula.Atp;
 namespace NPOI.SS.Formula.Eval
 {
     using System;
-    using System.Collections;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Function;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

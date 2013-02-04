@@ -17,11 +17,8 @@
 
 namespace NPOI.HSSF.Record
 {
-
-    using System;
     using NPOI.HSSF.Record.Cont;
     using NPOI.Util;
-    using NPOI.Util.Collections;
 
     /**
      * This class handles serialization of SST records.  It utilizes the record processor

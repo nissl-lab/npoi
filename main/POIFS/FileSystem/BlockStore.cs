@@ -20,7 +20,6 @@ namespace NPOI.POIFS.FileSystem
 {
     using System;
     using NPOI.POIFS.Storage;
-    using NPOI.POIFS.NIO;
     using NPOI.Util;
 
     /// <summary>

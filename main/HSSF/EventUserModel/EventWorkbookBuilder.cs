@@ -17,8 +17,6 @@
 
 namespace NPOI.HSSF.EventUserModel
 {
-    using System;
-
     using System.Collections;
 
     using NPOI.HSSF.Model;

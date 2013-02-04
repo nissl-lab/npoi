@@ -20,7 +20,6 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.HSSF.Util;
     using NPOI.Util;
-    using System.Text;
 
     using System.Drawing;
     using NPOI.SS.UserModel;

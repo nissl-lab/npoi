@@ -17,8 +17,6 @@
 
 namespace NPOI.SS.Formula
 {
-
-    using System;
     using System.Collections;
     using NPOI.SS.Formula.Eval;
 

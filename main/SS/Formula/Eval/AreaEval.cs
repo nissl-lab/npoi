@@ -20,7 +20,6 @@
  */
 namespace NPOI.SS.Formula.Eval
 {
-    using System;
     using NPOI.SS.Formula;
 
     /**

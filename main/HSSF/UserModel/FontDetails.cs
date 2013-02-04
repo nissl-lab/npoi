@@ -19,9 +19,6 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Collections;
-    using System.IO;
-    using NPOI.Util;
-    using System.Text;
     using NPOI.Util.Collections;
     using System.Globalization;
 

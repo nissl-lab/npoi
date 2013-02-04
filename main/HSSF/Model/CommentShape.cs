@@ -14,11 +14,10 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
-using System.Collections;
+
 namespace NPOI.HSSF.Model
 {
     using System;
-    using System.Collections;
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;

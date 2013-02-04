@@ -19,9 +19,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    using System;
-
-    using NPOI.HSSF.UserModel;
     using NPOI.SS.Util;
 
     /**

@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections;
-using System.IO;
 
 using NPOI.POIFS.FileSystem;
 

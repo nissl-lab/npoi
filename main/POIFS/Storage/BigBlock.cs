@@ -25,7 +25,6 @@
  * 
  * ==============================================================*/
 
-using System;
 using System.IO;
 using NPOI.POIFS.Common;
 namespace NPOI.POIFS.Storage

@@ -21,10 +21,7 @@ namespace NPOI.SS.Util
 
     using NPOI.SS.UserModel;
     using System.Drawing;
-    using NPOI.HSSF.UserModel;
     using System.Windows.Forms;
-    using System.Collections;
-    using System.Globalization;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -82,7 +79,8 @@ namespace NPOI.SS.Util
                     throw new NotImplementedException();
                 }
             }
-        };
+        }
+
         public static IRow CopyRow(ISheet sheet, int sourceRowIndex, int targetRowIndex)
         {
             if (sourceRowIndex == targetRowIndex)

@@ -20,10 +20,8 @@ namespace NPOI.HSSF.Record.Aggregates
 {
 
     using System;
-    using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
 

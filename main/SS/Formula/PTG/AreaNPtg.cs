@@ -17,7 +17,6 @@
 
 namespace NPOI.SS.Formula.PTG
 {
-    using NPOI.HSSF.Record;
     using NPOI.Util;
 
     /**

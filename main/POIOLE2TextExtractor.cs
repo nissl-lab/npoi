@@ -16,7 +16,6 @@
 ==================================================================== */
 namespace NPOI
 {
-    using System;
     using NPOI.HPSF;
     using NPOI.HPSF.Extractor;
 

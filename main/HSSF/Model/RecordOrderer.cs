@@ -18,11 +18,8 @@
 namespace NPOI.HSSF.Model
 {
     using System;
-    using System.Text;
-    using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
-    using NPOI.HSSF.Record.AutoFilter;
     using System.Collections.Generic;
     using NPOI.HSSF.Record.PivotTable;
 

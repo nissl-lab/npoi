@@ -21,7 +21,6 @@ namespace NPOI.DDF
     using System;
     using System.IO;
     using System.Text;
-    using System.Collections;
     using NPOI.Util;
 
 

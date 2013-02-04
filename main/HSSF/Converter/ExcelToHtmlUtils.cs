@@ -17,15 +17,12 @@
 namespace NPOI.HSSF.Converter
 {
     using System;
-    using System.Collections.Generic;
     using System.Text;
     using System.IO;
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Util;
-    using NPOI.HSSF.Record.CF;
-    using NPOI.Util;
     using NPOI.SS.Util;
 
     public class ExcelToHtmlUtils

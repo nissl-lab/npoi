@@ -16,8 +16,6 @@
 ==================================================================== */
 namespace NPOI.SS.UserModel
 {
-    using System;
-
     public enum AnchorType : int
     {
         /**

@@ -20,9 +20,7 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text;
-    using System.Collections;
     using NPOI.Util;
-    using System.IO;
 
     /// <summary>
     /// The escher child achor record is used to specify the position of a shape under an

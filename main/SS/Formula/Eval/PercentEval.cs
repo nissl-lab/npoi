@@ -17,9 +17,6 @@
 
 namespace NPOI.SS.Formula.Eval
 {
-    using System;
-    using System.Text;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Functions;
     /**
      * Implementation of Excel formula token '%'. <p/>

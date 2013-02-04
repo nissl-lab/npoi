@@ -21,8 +21,6 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.Util;
 
-    using System.Collections;
-
     /**
      * Represents a NoteStructure (0xD) sub record.
      *

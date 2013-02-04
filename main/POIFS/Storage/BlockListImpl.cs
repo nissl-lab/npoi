@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace NPOI.POIFS.Storage

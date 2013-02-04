@@ -18,8 +18,6 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Text;
-    using System.Threading;
 
     /**
      * This class makes an <c>EvaluationCycleDetector</c> instance available to

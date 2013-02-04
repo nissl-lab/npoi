@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using NPOI.HSSF.Model;
 
 namespace NPOI.HSSF.Record.Aggregates

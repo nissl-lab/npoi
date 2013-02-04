@@ -20,7 +20,7 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    using NPOI.HSSF.Record.CF;
+
     public enum ConditionType : byte
     {
         /// <summary>

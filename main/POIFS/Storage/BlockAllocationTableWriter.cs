@@ -25,13 +25,11 @@
  * 
  * ==============================================================*/
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
-using NPOI.POIFS.NIO;
 using NPOI.Util;
 
 namespace NPOI.POIFS.Storage

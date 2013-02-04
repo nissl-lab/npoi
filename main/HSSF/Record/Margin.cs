@@ -17,10 +17,6 @@
 
 namespace NPOI.HSSF.Record
 {
-
-    using System;
-
-
     /**
      * The margin interface Is a parent used to define left, right, top and bottom margins.
      * This allows much of the code to be generic when it comes to handling margins.

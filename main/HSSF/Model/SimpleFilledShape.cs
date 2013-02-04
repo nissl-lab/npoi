@@ -18,8 +18,6 @@
 namespace NPOI.HSSF.Model
 {
     using System;
-    using System.Text;
-    using System.Collections;
 
     using NPOI.HSSF.Record;
     using NPOI.DDF;

@@ -18,7 +18,6 @@ namespace NPOI.HSSF.Record
 {
 
     using System;
-    using System.Text;
     using NPOI.Util;
     /**
      * DrawingRecord (0x00EC)<p/>

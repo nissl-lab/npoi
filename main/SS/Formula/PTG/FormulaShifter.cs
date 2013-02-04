@@ -21,7 +21,6 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Collections.Generic;
     using System.Text;
     using NPOI.SS.Formula.PTG;
     /**

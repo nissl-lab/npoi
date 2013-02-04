@@ -17,7 +17,6 @@
 
 namespace NPOI.POIFS.FileSystem
 {
-    using System;
     using System.IO;
     using NPOI.Util;
 

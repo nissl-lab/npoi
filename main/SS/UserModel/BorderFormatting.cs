@@ -19,7 +19,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    using System;
     public enum BorderFormattingStyle:short
     {
         /** No border */

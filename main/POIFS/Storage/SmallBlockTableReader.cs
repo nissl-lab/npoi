@@ -25,11 +25,6 @@
  * 
  * ==============================================================*/
 
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.Common;
 

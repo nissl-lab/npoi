@@ -19,8 +19,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    using System;
-    
     /**
      * High level representation for Font Formatting component
      * of Conditional Formatting Settings

@@ -22,7 +22,6 @@ namespace NPOI.HSSF.Record
     using System;
     using System.Text;
     using NPOI.HSSF.Record.CF;
-    using NPOI.HSSF.Util;
     using NPOI.SS.Util;
 
 

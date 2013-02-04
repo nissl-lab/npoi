@@ -14,9 +14,8 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
-using System;
+
 using System.Collections.Generic;
-using System.Text;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record.Chart;
 using System.Diagnostics;

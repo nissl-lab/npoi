@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NPOI.SS.Formula.Eval;
-using System.Text.RegularExpressions;
-using NPOI.SS.Util;
-using System.Globalization;
 using NPOI.SS.UserModel;
 
 namespace NPOI.SS.Formula.Functions

@@ -17,8 +17,6 @@
 
 //http://stackoverflow.com/questions/6843698/calculating-sha-1-hashes-in-java-and-c-sharp  Leon
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NPOI.POIFS.FileSystem;
 using System.Security.Cryptography;
 using System.IO;

@@ -20,8 +20,6 @@
  */
 namespace NPOI.SS.Formula.Eval
 {
-    using NPOI.SS.Formula;
-
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *  
@@ -32,6 +30,5 @@ namespace NPOI.SS.Formula.Eval
         {
             return cmpResult > 0;
         }
-
     }
 }

@@ -27,9 +27,7 @@
 
 namespace NPOI.Util
 {
-    using System;
     using System.IO;
-    using NPOI.POIFS.NIO;
 
     public class IOUtils
     {

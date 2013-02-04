@@ -20,15 +20,11 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using NPOI.SS.Formula.Eval;
-
     public class Sign : OneArg
     {
         public override double Evaluate(double d)
         {
             return MathX.sign(d);
         }
-
     }
 }

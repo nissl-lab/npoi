@@ -27,7 +27,6 @@
 
 namespace NPOI.HPSF
 {
-    using System;
     using System.IO;
 
 

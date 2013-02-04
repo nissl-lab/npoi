@@ -18,7 +18,6 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Text;
 
     /// <summary>
     /// Contains raw Excel error codes (as defined in OOO's excelfileformat.pdf (2.5.6)

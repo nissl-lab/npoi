@@ -18,10 +18,6 @@
 
 namespace NPOI.DDF
 {
-    using System;
-    using System.Collections;
-
-
     public class NullEscherSerializationListener : EscherSerializationListener
     {
         public void BeforeRecordSerialize(int offset, short recordId, EscherRecord record)

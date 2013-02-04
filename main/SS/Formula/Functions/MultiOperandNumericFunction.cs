@@ -18,7 +18,6 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using System.Collections.Generic;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula;
 

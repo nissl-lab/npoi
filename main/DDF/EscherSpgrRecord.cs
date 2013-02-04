@@ -21,10 +21,7 @@ using System.Text;
 namespace NPOI.DDF
 {
     using System;
-    using System.IO;
-    using System.Collections;
     using NPOI.Util;
-    using NPOI.HSSF.Record;
 
     /// <summary>
     /// The spgr record defines information about a shape group.  Groups in escher

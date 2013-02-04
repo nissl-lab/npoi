@@ -2,7 +2,6 @@
 namespace NPOI.Util
 {
     using System;
-    using System.Configuration;
     using System.IO;
     using System.Threading;
 

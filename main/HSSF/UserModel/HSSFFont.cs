@@ -21,10 +21,7 @@ using NPOI.HSSF.Util;
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.IO;
-    using System.Collections;
     using NPOI.HSSF.Record;
-    using NPOI.SS.UserModel;
 
     /// <summary>
     /// Represents a Font used in a workbook.
