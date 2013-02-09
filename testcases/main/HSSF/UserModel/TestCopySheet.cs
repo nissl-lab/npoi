@@ -1,14 +1,15 @@
 ﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NUnit.Framework;
 
 namespace TestCases.HSSF.UserModel
 {
-    [TestClass]
+    [TestFixture]
     public class TestCopySheet
     {
-        [TestMethod]
+        [Test]
         public void TestBasicCopySheet()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -24,7 +25,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreNotEqual(sheetA.GetRow(1).GetCell(0).StringCellValue, sheetB.GetRow(1).GetCell(0).StringCellValue);
         }
 
-        [TestMethod]
+        [Test]
         public void TestBasicCopyTo()
         {
             HSSFWorkbook bookA = new HSSFWorkbook();
@@ -45,7 +46,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookC.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
         }
 
-        [TestMethod]
+        [Test]
         public void TestColorStyleCopy()
         {
             HSSFWorkbook bookA = new HSSFWorkbook();
@@ -96,7 +97,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(copiedCell.CellStyle.GetFont(bookB).FontName, myFont.FontName);
         }
 
-        [TestMethod]
+        [Test]
         public void TestImageCopy()
         {
             HSSFWorkbook srcBook = HSSFTestDataSamples.OpenSampleWorkbook("Images.xls");

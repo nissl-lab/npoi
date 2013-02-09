@@ -11244,25 +11244,38 @@
              @return a new shape id.
         </member>
         <member name="T:NPOI.HSSF.Model.DrawingManager2">
-             Provides utilities to manage drawing Groups.
-            
-             @author Glen Stampoultzis (glens at apache.org)
+            <summary>
+            Provides utilities to manage drawing Groups.
+            </summary>
+            <remarks>
+            Glen Stampoultzis (glens at apache.org) 
+            </remarks>
         </member>
         <member name="M:NPOI.HSSF.Model.DrawingManager2.ClearDrawingGroups">
+            <summary>
             Clears the cached list of drawing Groups
+            </summary>
         </member>
         <member name="M:NPOI.HSSF.Model.DrawingManager2.AllocateShapeId(System.Int16)">
-             Allocates new shape id for the new drawing Group id.
-            
-             @return a new shape id.
+            <summary>
+            Allocates new shape id for the new drawing Group id.
+            </summary>
+            <param name="drawingGroupId"></param>
+            <returns>a new shape id.</returns>
         </member>
         <member name="M:NPOI.HSSF.Model.DrawingManager2.AllocateShapeId(System.Int16,NPOI.DDF.EscherDgRecord)">
-             Allocates new shape id for the new drawing group id.
-            
-             @return a new shape id.
+            <summary>
+            Allocates new shape id for the new drawing group id.
+            </summary>
+            <param name="drawingGroupId"></param>
+            <param name="dg"></param>
+            <returns>a new shape id.</returns>
         </member>
         <member name="M:NPOI.HSSF.Model.DrawingManager2.FindNewDrawingGroupId">
+            <summary>
             Finds the next available (1 based) drawing Group id
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:NPOI.HSSF.Model.HSSFFormulaParser">
             HSSF wrapper for the {@link FormulaParser} and {@link FormulaRenderer} 
@@ -19852,6 +19865,11 @@
         <member name="M:NPOI.HSSF.Record.PaletteRecord.#ctor(NPOI.HSSF.Record.RecordInputStream)">
             Constructs a PaletteRecord record and Sets its fields appropriately.
             @param in the RecordInputstream to Read the record from
+        </member>
+        <member name="M:NPOI.HSSF.Record.PaletteRecord.ClearColors">
+            <summary>
+            Dangerous! Only call this if you intend to replace the colors!
+            </summary>
         </member>
         <member name="M:NPOI.HSSF.Record.PaletteRecord.GetColor(System.Int16)">
              Returns the color value at a given index
@@ -31024,6 +31042,12 @@
             </summary>
             <param name="range">the range of cells to filter</param>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:NPOI.HSSF.UserModel.HSSFSheet.CopySheet" -->
+        <member name="M:NPOI.HSSF.UserModel.HSSFSheet.RemapCellStyle(NPOI.HSSF.UserModel.HSSFCellStyle,System.Collections.Generic.Dictionary{System.Int16,System.Int16})">
+            <summary>
+            Translate color palette entries from the source to the destination sheet
+            </summary>
+        </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFSheet.DisplayZeros">
             Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.
             When false, cells with zero value appear blank instead of showing the number zero.
@@ -31672,36 +31696,6 @@
         <member name="M:NPOI.HSSF.Util.RKUtil.DecodeNumber(System.Int32)">
             Do the dirty work of decoding; made a private static method to
             facilitate testing the algorithm
-        </member>
-        <member name="T:NPOI.Resource1">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:NPOI.Resource1.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:NPOI.Resource1.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="P:NPOI.Resource1.functionMetadata">
-             <summary>
-               Looks up a localized string similar to # Licensed to the Apache Software Foundation (ASF) under one or more
-            # contributor license agreements.  See the NOTICE file distributed with
-            # this work for additional information regarding copyright ownership.
-            # The ASF licenses this file to You under the Apache License, Version 2.0
-            # (the &quot;License&quot;); you may not use this file except in compliance with
-            # the License.  You may obtain a copy of the License at
-            # 
-            #     http://www.apache.org/licenses/LICENSE-2.0
-            # 
-            # Unless required by applicable law  [rest of string was truncated]&quot;;.
-             </summary>
         </member>
         <member name="T:NPOI.SS.Formula.Udf.UDFFinder">
              Common interface for "Add-in" libraries and user defined function libraries.
