@@ -2651,7 +2651,7 @@ namespace NPOI.HSSF.UserModel
 
         private IEnumerable<int> FindUsedPictures(IEnumerable<EscherRecord> escherRecords)
         {
-            HashSet<int> retval = new HashSet<int>();
+            List<int> retval = new List<int>();
             foreach (EscherRecord escherRecord in escherRecords)
             {
                 GetSheetImageIds(escherRecord, retval);
@@ -2659,7 +2659,7 @@ namespace NPOI.HSSF.UserModel
             return retval;
         }
 
-        private void GetSheetImageIds(EscherRecord parent, HashSet<int> usedIds)
+        private void GetSheetImageIds(EscherRecord parent, List<int> usedIds)
         {
             foreach (EscherRecord child in parent.ChildRecords)
             {

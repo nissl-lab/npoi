@@ -38,11 +38,6 @@
       <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\NPOI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -63,11 +58,13 @@
     <Compile Include="POIXMLTextExtractor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfoDotnet2.cs" />
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
     <Compile Include="Util\Units.cs" />
+    <Compile Include="XSSF\Extractor\XSSFExcelExtractor.cs" />
+    <Compile Include="XSSF\Extractor\XSSFExportToXml.cs" />
     <Compile Include="XSSF\Model\CalculationChain.cs" />
     <Compile Include="XSSF\Model\CommentsTable.cs">
       <SubType>Code</SubType>
@@ -80,6 +77,13 @@
     <Compile Include="XSSF\Model\ThemesTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartDataFactory.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartLegend.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartUtil.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFScatterChartData.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFValueAxis.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellAlignment.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellFill.cs" />
@@ -95,6 +99,7 @@
     <Compile Include="XSSF\UserModel\XSSFBorderFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFCellStyle.cs" />
+    <Compile Include="XSSF\UserModel\XSSFChart.cs" />
     <Compile Include="XSSF\UserModel\XSSFChartSheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFChildAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFClientAnchor.cs" />
@@ -202,6 +207,10 @@
     <Compile Include="XWPF\Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\main\main.csproj">
+      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
+      <Name>main</Name>
+    </ProjectReference>
     <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">
       <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
       <Name>OpenXml4Net</Name>
