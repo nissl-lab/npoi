@@ -46,14 +46,14 @@ namespace NPOI.HSSF.UserModel
             record = new HyperlinkRecord();
             switch (type)
             {
-                case HyperlinkType.URL:
-                case HyperlinkType.EMAIL:
+                case HyperlinkType.Url:
+                case HyperlinkType.Email:
                     record.CreateUrlLink();
                     break;
-                case HyperlinkType.FILE:
+                case HyperlinkType.File:
                     record.CreateFileLink();
                     break;
-                case HyperlinkType.DOCUMENT:
+                case HyperlinkType.Document:
                     record.CreateDocumentLink();
                     break;
             }

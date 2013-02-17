@@ -1255,14 +1255,14 @@ namespace NPOI.HSSF.UserModel
 
                 switch (value.Type)
                 {
-                    case HyperlinkType.EMAIL:
-                    case HyperlinkType.URL:
+                    case HyperlinkType.Email:
+                    case HyperlinkType.Url:
                         value.Label = ("url");
                         break;
-                    case HyperlinkType.FILE:
+                    case HyperlinkType.File:
                         value.Label = ("file");
                         break;
-                    case HyperlinkType.DOCUMENT:
+                    case HyperlinkType.Document:
                         value.Label = ("place");
                         break;
                 }
