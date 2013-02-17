@@ -29,12 +29,12 @@ namespace NPOI.SS.UserModel.Charts
          * Specifies the value axis shall cross the category axis
          * between data markers.
          */
-        BETWEEN,
+        Between,
         /**
          * Specifies the value axis shall cross the category axis at
          * the midpoint of a category.
          */
-        MIDPOINT_CATEGORY
+        MidpointCategory
     }
 
 

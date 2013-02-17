@@ -29,12 +29,12 @@ namespace NPOI.SS.UserModel.Charts
          * Specifies that the values on the axis shall be reversed
          * so they go from maximum to minimum.
          */
-        MAX_MIN,
+        MaxToMin,
         /**
          * Specifies that the axis values shall be in the usual
          * order, minimum to maximum.
          */
-        MIN_MAX
+        MinToMax
     }
 
 

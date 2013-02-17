@@ -30,15 +30,15 @@ namespace NPOI.SS.UserModel.Charts
          * possible), or the minimum value (if the minimum is greater than zero) or
          * the maximum (if the maximum is less than zero).
          */
-        AUTO_ZERO,
+        AutoZero,
         /**
          * The axis crosses at the maximum value.
          */
-        MIN,
+        Min,
         /**
          * Axis crosses at the minimum value of the chart.
          */
-        MAX
+        Max
     }
 
 
