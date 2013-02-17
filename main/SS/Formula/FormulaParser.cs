@@ -960,20 +960,20 @@ namespace NPOI.SS.Formula
         {
             public enum PartType
             {
-                CELL, ROW, COLUMN
+                Cell, Row, Column
             }
 
             public static PartType Get(bool hasLetters, bool hasDigits)
             {
                 if (hasLetters)
                 {
-                    return hasDigits ? PartType.CELL : PartType.COLUMN;
+                    return hasDigits ? PartType.Cell : PartType.Column;
                 }
                 if (!hasDigits)
                 {
                     throw new ArgumentException("must have either letters or numbers");
                 }
-                return PartType.ROW;
+                return PartType.Row;
             }
 
             private PartType _type;
@@ -989,7 +989,7 @@ namespace NPOI.SS.Formula
             {
                 get
                 {
-                    return _type == PartType.CELL;
+                    return _type == PartType.Cell;
                 }
             }
 
@@ -997,14 +997,14 @@ namespace NPOI.SS.Formula
             {
                 get
                 {
-                    return _type != PartType.CELL;
+                    return _type != PartType.Cell;
                 }
             }
 
 
             public CellReference getCellReference()
             {
-                if (_type != PartType.CELL)
+                if (_type != PartType.Cell)
                 {
                     throw new InvalidOperationException("Not applicable to this type");
                 }
@@ -1015,7 +1015,7 @@ namespace NPOI.SS.Formula
             {
                 get
                 {
-                    return _type == PartType.COLUMN;
+                    return _type == PartType.Column;
                 }
             }
 
@@ -1023,7 +1023,7 @@ namespace NPOI.SS.Formula
             {
                 get
                 {
-                    return _type == PartType.ROW;
+                    return _type == PartType.Row;
                 }
             }
 
