@@ -1233,7 +1233,7 @@ namespace NPOI.HSSF.Model
             BOFRecord retval = new BOFRecord();
 
             retval.Version=(short)0x600;
-            retval.Type=(short)5;
+            retval.Type = BOFRecordType.Workbook;
             retval.Build=(short)0x10d3;
 
             //        retval.Build=(short)0x0dbb;

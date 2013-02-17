@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Model
     [Obsolete]
     public class PolygonShape: AbstractShape
     {
-        public const short       OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING = 30;
+        public const short OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING = 30;
         private EscherContainerRecord spContainer;
         private ObjRecord objRecord;
 
