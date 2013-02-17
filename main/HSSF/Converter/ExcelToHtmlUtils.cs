@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -34,24 +34,24 @@ namespace NPOI.HSSF.Converter
         {
             switch (alignment)
             {
-                case HorizontalAlignment.CENTER:
+                case HorizontalAlignment.Center:
                     style.Append("text-align: center; ");
                     break;
-                case HorizontalAlignment.CENTER_SELECTION:
+                case HorizontalAlignment.CenterSelection:
                     style.Append("text-align: center; ");
                     break;
-                case HorizontalAlignment.FILL:
+                case HorizontalAlignment.Fill:
                     // XXX: shall we support fill?
                     break;
-                case HorizontalAlignment.GENERAL:
+                case HorizontalAlignment.General:
                     break;
-                case HorizontalAlignment.JUSTIFY:
+                case HorizontalAlignment.Justify:
                     style.Append("text-align: justify; ");
                     break;
-                case HorizontalAlignment.LEFT:
+                case HorizontalAlignment.Left:
                     style.Append("text-align: left; ");
                     break;
-                case HorizontalAlignment.RIGHT:
+                case HorizontalAlignment.Right:
                     style.Append("text-align: right; ");
                     break;
             }
