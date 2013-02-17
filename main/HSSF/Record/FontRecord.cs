@@ -184,16 +184,9 @@ namespace NPOI.HSSF.Record
             set { field_2_attributes = macshadow.SetShortBoolean(field_2_attributes, value); }
             get { return macshadow.IsSet(field_2_attributes); }
         }
+
         /**
          * Set the type of Underlining for the font
-         *
-         * @param u  base or subscript option
-         *
-         * @see #U_NONE
-         * @see #U_SINGLE
-         * @see #U_DOUBLE
-         * @see #U_SINGLE_ACCOUNTING
-         * @see #U_DOUBLE_ACCOUNTING
          */
 
         public FontUnderlineType Underline
