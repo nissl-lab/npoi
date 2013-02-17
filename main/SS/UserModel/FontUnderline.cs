@@ -81,27 +81,27 @@ namespace NPOI.SS.UserModel
             {
                 if (this == DOUBLE)
                 {
-                    return (byte)FontUnderlineType.DOUBLE;
+                    return (byte)FontUnderlineType.Double;
                 }
                 else if (this == DOUBLE_ACCOUNTING)
                 {
-                    return (byte)FontUnderlineType.DOUBLE_ACCOUNTING;
+                    return (byte)FontUnderlineType.DoubleAccounting;
                 }
                 else if (this == SINGLE_ACCOUNTING)
                 {
-                    return (byte)FontUnderlineType.SINGLE_ACCOUNTING;
+                    return (byte)FontUnderlineType.SingleAccounting;
                 }
                 else if (this == NONE)
                 {
-                    return (byte)FontUnderlineType.NONE;
+                    return (byte)FontUnderlineType.None;
                 }
                 else if (this == SINGLE)
                 {
-                    return (byte)FontUnderlineType.SINGLE;
+                    return (byte)FontUnderlineType.Single;
                 }
                 else
                 {
-                    return (byte)FontUnderlineType.SINGLE;
+                    return (byte)FontUnderlineType.Single;
                 }
             }
         }
@@ -130,16 +130,16 @@ namespace NPOI.SS.UserModel
             FontUnderline val;
             switch (value)
             {
-                case FontUnderlineType.DOUBLE:
+                case FontUnderlineType.Double:
                     val = FontUnderline.DOUBLE;
                     break;
-                case FontUnderlineType.DOUBLE_ACCOUNTING:
+                case FontUnderlineType.DoubleAccounting:
                     val = FontUnderline.DOUBLE_ACCOUNTING;
                     break;
-                case FontUnderlineType.SINGLE_ACCOUNTING:
+                case FontUnderlineType.SingleAccounting:
                     val = FontUnderline.SINGLE_ACCOUNTING;
                     break;
-                case FontUnderlineType.SINGLE:
+                case FontUnderlineType.Single:
                     val = FontUnderline.SINGLE;
                     break;
                 default:

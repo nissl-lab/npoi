@@ -451,13 +451,13 @@ namespace NPOI.SS.Util
         public static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
-            if (font1.Boldweight == (short)FontBoldWeight.BOLD)
+            if (font1.Boldweight == (short)FontBoldWeight.Bold)
             {
                 style |= FontStyle.Bold;
             }
             if (font1.IsItalic)
                 style |= FontStyle.Italic;
-            if (font1.Underline == (byte)FontUnderlineType.SINGLE)
+            if (font1.Underline == (byte)FontUnderlineType.Single)
             {
                 style |= FontStyle.Underline;
             }

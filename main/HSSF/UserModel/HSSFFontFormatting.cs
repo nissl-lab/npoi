@@ -61,12 +61,12 @@ namespace NPOI.HSSF.UserModel
             {
                 switch (value)
                 {
-                    case FontSuperScript.SUB:
-                    case FontSuperScript.SUPER:
+                    case FontSuperScript.Sub:
+                    case FontSuperScript.Super:
                         fontFormatting.EscapementType = value;
                         fontFormatting.IsEscapementTypeModified = true;
                         break;
-                    case FontSuperScript.NONE:
+                    case FontSuperScript.None:
                         fontFormatting.EscapementType = value;
                         fontFormatting.IsEscapementTypeModified = false;
                         break;
@@ -139,15 +139,15 @@ namespace NPOI.HSSF.UserModel
             {
                 switch (value)
                 {
-                    case FontUnderlineType.SINGLE:
-                    case FontUnderlineType.DOUBLE:
-                    case FontUnderlineType.SINGLE_ACCOUNTING:
-                    case FontUnderlineType.DOUBLE_ACCOUNTING:
+                    case FontUnderlineType.Single:
+                    case FontUnderlineType.Double:
+                    case FontUnderlineType.SingleAccounting:
+                    case FontUnderlineType.DoubleAccounting:
                         fontFormatting.UnderlineType = value;
                         IsUnderlineTypeModified = true;
                         break;
 
-                    case FontUnderlineType.NONE:
+                    case FontUnderlineType.None:
                         fontFormatting.UnderlineType = value;
                         IsUnderlineTypeModified = false;
                         break;

@@ -681,10 +681,10 @@ namespace NPOI.HSSF.Converter
         {
             switch (font.Boldweight)
             {
-                case (short)FontBoldWeight.BOLD:
+                case (short)FontBoldWeight.Bold:
                     style.Append("font-weight: bold; ");
                     break;
-                case (short)FontBoldWeight.NORMAL:
+                case (short)FontBoldWeight.Normal:
                     // by default, not not increase HTML size
                     // style.Append( "font-weight: normal; " );
                     break;
