@@ -29,25 +29,8 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public class HSSFTextbox : HSSFSimpleShape
     {
-        public static short OBJECT_TYPE_TEXT = 6;
+        public const short OBJECT_TYPE_TEXT = 6;
 
-        /**
-         * How to align text horizontally
-         */
-        public static short HORIZONTAL_ALIGNMENT_LEFT = 1;
-        public static short HORIZONTAL_ALIGNMENT_CENTERED = 2;
-        public static short HORIZONTAL_ALIGNMENT_RIGHT = 3;
-        public static short HORIZONTAL_ALIGNMENT_JUSTIFIED = 4;
-        public static short HORIZONTAL_ALIGNMENT_DISTRIBUTED = 7;
-
-        /**
-         * How to align text vertically
-         */
-        public static short VERTICAL_ALIGNMENT_TOP = 1;
-        public static short VERTICAL_ALIGNMENT_CENTER = 2;
-        public static short VERTICAL_ALIGNMENT_BOTTOM = 3;
-        public static short VERTICAL_ALIGNMENT_JUSTIFY = 4;
-        public static short VERTICAL_ALIGNMENT_DISTRIBUTED = 7;
         public HSSFTextbox(EscherContainerRecord spContainer, ObjRecord objRecord, TextObjectRecord textObjectRecord)
             : base(spContainer, objRecord, textObjectRecord)
         {
@@ -64,9 +47,8 @@ namespace NPOI.HSSF.UserModel
         public HSSFTextbox(HSSFShape parent, HSSFAnchor anchor)
             : base(parent, anchor)
         {
-
-            HorizontalAlignment = (HORIZONTAL_ALIGNMENT_LEFT);
-            VerticalAlignment = (VERTICAL_ALIGNMENT_TOP);
+            HorizontalAlignment = HorizontalTextAlignment.Left;
+            VerticalAlignment = VerticalTextAlignment.Top;
             this.String = (new HSSFRichTextString(""));
         }
 
@@ -222,20 +204,20 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the horizontal alignment.
         /// </summary>
         /// <value>The horizontal alignment.</value>
-        public short HorizontalAlignment
+        public HorizontalTextAlignment HorizontalAlignment
         {
-            get { return (short)GetTextObjectRecord().HorizontalTextAlignment; }
-            set { GetTextObjectRecord().HorizontalTextAlignment = (value); }
+            get { return GetTextObjectRecord().HorizontalTextAlignment; }
+            set { GetTextObjectRecord().HorizontalTextAlignment = value; }
         }
 
         /// <summary>
         /// Gets or sets the vertical alignment.
         /// </summary>
         /// <value>The vertical alignment.</value>
-        public short VerticalAlignment
+        public VerticalTextAlignment VerticalAlignment
         {
-            get { return (short)GetTextObjectRecord().VerticalTextAlignment; }
-            set { GetTextObjectRecord().VerticalTextAlignment = (value); }
+            get { return GetTextObjectRecord().VerticalTextAlignment; }
+            set { GetTextObjectRecord().VerticalTextAlignment = value; }
         }
 
 
