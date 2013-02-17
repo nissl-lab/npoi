@@ -26,11 +26,11 @@ namespace NPOI.SS.UserModel.Charts
     /// </remarks>
     public enum LegendPosition
     {
-        BOTTOM,
-        LEFT,
-        RIGHT,
-        TOP,
-        TOP_RIGHT
+        Bottom,
+        Left,
+        Right,
+        Top,
+        TopRight
     }
 
 
