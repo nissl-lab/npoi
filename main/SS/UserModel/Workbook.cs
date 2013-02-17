@@ -27,12 +27,12 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Indicates the sheet is visible.
         /// </summary>
-        VISIBLE = 0,
+        Visible = 0,
 
         /// <summary>
         /// Indicates the book window is hidden, but can be shown by the user via the user interface.
         /// </summary>
-        HIDDEN = 1,
+        Hidden = 1,
 
         /// <summary>
         /// Indicates the sheet is hidden and cannot be shown in the user interface (UI).
@@ -42,7 +42,7 @@ namespace NPOI.SS.UserModel
         /// ThisWorkbook.Sheets("MySheetName").Visible = xlSheetVeryHidden
         /// 
         /// </remarks>
-        VERY_HIDDEN = 2
+        VeryHidden = 2
     }
 
     /// <summary>
