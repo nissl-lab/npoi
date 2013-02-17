@@ -159,7 +159,7 @@ namespace NPOI.HSSF.UserModel
                     foreach (ICell cell in row) 
                     {
                         //ICell cell = (HSSFCell)cIt.Current;
-                        if (cell.CellType == NPOI.SS.UserModel.CellType.STRING)
+                        if (cell.CellType == NPOI.SS.UserModel.CellType.String)
                         {
                             HSSFRichTextString rtr = (HSSFRichTextString)cell.RichStringCellValue;
                             UnicodeString u = rtr.RawUnicodeString;

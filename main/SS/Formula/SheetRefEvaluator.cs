@@ -80,7 +80,7 @@ namespace NPOI.SS.Formula
         {
             bool subtotal = false;
             IEvaluationCell cell = Sheet.GetCell(rowIndex, columnIndex);
-            if (cell != null && cell.CellType == CellType.FORMULA)
+            if (cell != null && cell.CellType == CellType.Formula)
             {
                 IEvaluationWorkbook wb = _bookEvaluator.Workbook;
                 foreach (Ptg ptg in wb.GetFormulaTokens(cell))

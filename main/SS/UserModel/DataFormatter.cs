@@ -834,7 +834,7 @@ namespace NPOI.SS.UserModel
             }
 
             CellType cellType = cell.CellType;
-            if (evaluator != null && cellType == CellType.FORMULA)
+            if (evaluator != null && cellType == CellType.Formula)
             {
                 try
                 {
@@ -848,11 +848,11 @@ namespace NPOI.SS.UserModel
             }
             switch (cellType)
             {
-                case CellType.FORMULA:
+                case CellType.Formula:
                     // should only occur if evaluator is null
                     return cell.CellFormula;
 
-                case CellType.NUMERIC:
+                case CellType.Numeric:
 
                     if (DateUtil.IsCellDateFormatted(cell))
                     {
@@ -860,12 +860,12 @@ namespace NPOI.SS.UserModel
                     }
                     return GetFormattedNumberString(cell);
 
-                case CellType.STRING:
+                case CellType.String:
                     return cell.RichStringCellValue.String;
 
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return cell.BooleanCellValue.ToString().ToUpper();
-                case CellType.BLANK:
+                case CellType.Blank:
                     return "";
             }
             throw new Exception("Unexpected celltype (" + cellType + ")");

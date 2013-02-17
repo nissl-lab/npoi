@@ -169,10 +169,10 @@ namespace NPOI.HSSF.Record
             int typeCode = GetTypeCode();
             switch (typeCode)
             {
-                case STRING: return NPOI.SS.UserModel.CellType.STRING;
-                case BOOLEAN: return NPOI.SS.UserModel.CellType.BOOLEAN;
-                case ERROR_CODE: return NPOI.SS.UserModel.CellType.ERROR;
-                case EMPTY: return NPOI.SS.UserModel.CellType.STRING; // is this correct?
+                case STRING: return NPOI.SS.UserModel.CellType.String;
+                case BOOLEAN: return NPOI.SS.UserModel.CellType.Boolean;
+                case ERROR_CODE: return NPOI.SS.UserModel.CellType.Error;
+                case EMPTY: return NPOI.SS.UserModel.CellType.String; // is this correct?
             }
             throw new InvalidOperationException("Unexpected type id (" + typeCode + ")");
         }
@@ -425,7 +425,7 @@ namespace NPOI.HSSF.Record
             {
                 if (specialCachedValue == null)
                 {
-                    return NPOI.SS.UserModel.CellType.NUMERIC;
+                    return NPOI.SS.UserModel.CellType.Numeric;
                 }
                 return (NPOI.SS.UserModel.CellType)specialCachedValue.GetValueType();
             }

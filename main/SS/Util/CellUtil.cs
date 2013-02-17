@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -119,22 +119,22 @@ namespace NPOI.SS.Util
             // Set the cell data value
             switch (oldCell.CellType)
             {
-                case CellType.BLANK:
+                case CellType.Blank:
                     newCell.SetCellValue(oldCell.StringCellValue);
                     break;
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     newCell.SetCellValue(oldCell.BooleanCellValue);
                     break;
-                case CellType.ERROR:
+                case CellType.Error:
                     newCell.SetCellErrorValue(oldCell.ErrorCellValue);
                     break;
-                case CellType.FORMULA:
+                case CellType.Formula:
                     newCell.SetCellFormula(oldCell.CellFormula);
                     break;
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     newCell.SetCellValue(oldCell.NumericCellValue);
                     break;
-                case CellType.STRING:
+                case CellType.String:
                     newCell.SetCellValue(oldCell.RichStringCellValue);
                     break;
             }
