@@ -658,7 +658,7 @@ namespace NPOI.HSSF.Converter
         private void BuildStyle_Border(HSSFWorkbook workbook, StringBuilder style,
                 String type, BorderStyle xlsBorder, short borderColor)
         {
-            if (xlsBorder == BorderStyle.NONE)
+            if (xlsBorder == BorderStyle.None)
                 return;
 
             StringBuilder borderStyle = new StringBuilder();

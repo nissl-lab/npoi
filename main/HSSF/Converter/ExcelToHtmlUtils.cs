@@ -115,23 +115,23 @@ namespace NPOI.HSSF.Converter
             string borderStyle;
             switch (xlsBorder)
             {
-                case BorderStyle.NONE:
+                case BorderStyle.None:
                     borderStyle = "none";
                     break;
-                case BorderStyle.DASH_DOT:
-                case BorderStyle.DASH_DOT_DOT:
-                case BorderStyle.DOTTED:
-                case BorderStyle.HAIR:
-                case BorderStyle.MEDIUM_DASH_DOT:
-                case BorderStyle.MEDIUM_DASH_DOT_DOT:
-                case BorderStyle.SLANTED_DASH_DOT:
+                case BorderStyle.DashDot:
+                case BorderStyle.DashDotDot:
+                case BorderStyle.Dotted:
+                case BorderStyle.Hair:
+                case BorderStyle.MediumDashDot:
+                case BorderStyle.MediumDashDotDot:
+                case BorderStyle.SlantedDashDot:
                     borderStyle = "dotted";
                     break;
-                case BorderStyle.DASHED:
-                case BorderStyle.MEDIUM_DASHED:
+                case BorderStyle.Dashed:
+                case BorderStyle.MediumDashed:
                     borderStyle = "dashed";
                     break;
-                case BorderStyle.DOUBLE:
+                case BorderStyle.Double:
                     borderStyle = "double";
                     break;
                 default:
@@ -146,12 +146,12 @@ namespace NPOI.HSSF.Converter
             string borderWidth;
             switch (xlsBorder)
             {
-                case BorderStyle.MEDIUM_DASH_DOT:
-                case BorderStyle.MEDIUM_DASH_DOT_DOT:
-                case BorderStyle.MEDIUM_DASHED:
+                case BorderStyle.MediumDashDot:
+                case BorderStyle.MediumDashDotDot:
+                case BorderStyle.MediumDashed:
                     borderWidth = "2pt";
                     break;
-                case BorderStyle.THICK:
+                case BorderStyle.Thick:
                     borderWidth = "thick";
                     break;
                 default:

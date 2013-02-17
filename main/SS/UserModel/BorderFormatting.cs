@@ -19,37 +19,6 @@
 
 namespace NPOI.SS.UserModel
 {
-    public enum BorderFormattingStyle:short
-    {
-        /** No border */
-        BORDER_NONE = 0x0,
-        /** Thin border */
-        BORDER_THIN = 0x1,
-        /** Medium border */
-        BORDER_MEDIUM = 0x2,
-        /** dash border */
-        BORDER_DASHED = 0x3,
-        /** dot border */
-        BORDER_HAIR = 0x4,
-        /** Thick border */
-        BORDER_THICK = 0x5,
-        /** double-line border */
-        BORDER_DOUBLE = 0x6,
-        /** hair-line border */
-        BORDER_DOTTED = 0x7,
-        /** Medium dashed border */
-        BORDER_MEDIUM_DASHED = 0x8,
-        /** dash-dot border */
-        BORDER_DASH_DOT = 0x9,
-        /** medium dash-dot border */
-        BORDER_MEDIUM_DASH_DOT = 0xA,
-        /** dash-dot-dot border */
-        BORDER_DASH_DOT_DOT = 0xB,
-        /** medium dash-dot-dot border */
-        BORDER_MEDIUM_DASH_DOT_DOT = 0xC,
-        /** slanted dash-dot border */
-        BORDER_SLANTED_DASH_DOT = 0xD
-    }
     /**
      * @author Dmitriy Kumshayev
      * @author Yegor Kozlov
@@ -76,5 +45,4 @@ namespace NPOI.SS.UserModel
 
         short TopBorderColor { get; set; }
     }
-
 }
