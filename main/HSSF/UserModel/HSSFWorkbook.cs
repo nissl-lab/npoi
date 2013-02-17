@@ -1073,7 +1073,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
                          String name, bool italic, bool strikeout,
-                         short typeOffset, FontUnderlineType underline)
+                         FontSuperScript typeOffset, FontUnderlineType underline)
         {
             //        Console.WriteLine( boldWeight + ", " + color + ", " + fontHeight + ", " + name + ", " + italic + ", " + strikeout + ", " + typeOffset + ", " + Underline );
             for (short i = 0; i <= this.NumberOfFonts; i++)

@@ -161,12 +161,9 @@ namespace NPOI.SS.UserModel
         /**
          * get normal,super or subscript.
          * @return offset type to use (none,super,sub)
-         * @see #SS_NONE
-         * @see #SS_SUPER
-         * @see #SS_SUB
          */
 
-        short TypeOffset { get; set; }
+        FontSuperScript TypeOffset { get; set; }
 
         /**
          * get type of text underlining to use

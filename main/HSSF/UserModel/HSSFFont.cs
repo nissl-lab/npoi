@@ -151,10 +151,10 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets normal,base or subscript.
         /// </summary>
         /// <value>offset type to use (none,base,sub)</value>
-        public short TypeOffset
+        public FontSuperScript TypeOffset
         {
             get { return font.SuperSubScript; }
-            set { font.SuperSubScript=(short)value; }
+            set { font.SuperSubScript = value; }
         }
 
 

@@ -37,10 +37,7 @@ namespace NPOI.HSSF.Record
     public class FontRecord
        : StandardRecord
     {
-        public const short sid = 0x31;                                                 // docs are wrong (0x231 Microsoft Support site article Q184647)
-        public const short SS_NONE = 0;
-        public const short SS_SUPER = 1;
-        public const short SS_SUB = 2;
+        public const short sid = 0x31;            // docs are wrong (0x231 Microsoft Support site article Q184647)
 
         private short field_1_font_height;        // in Units of .05 of a point
         private short field_2_attributes;
@@ -284,15 +281,12 @@ namespace NPOI.HSSF.Record
          * Get the type of base or subscript for the font
          *
          * @return base or subscript option
-         * @see #SS_NONE
-         * @see #SS_SUPER
-         * @see #SS_SUB
          */
 
-        public short SuperSubScript
+        public FontSuperScript SuperSubScript
         {
-            get { return field_5_base_sub_script; }
-            set { field_5_base_sub_script = value; }
+            get { return (FontSuperScript) field_5_base_sub_script; }
+            set { field_5_base_sub_script = (short) value; }
         }
         /**
  * Does this FontRecord have all the same font
@@ -339,7 +333,7 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .boldweight      = ")
                 .Append(StringUtil.ToHexString(BoldWeight)).Append("\n");
             buffer.Append("    .basesubscript  = ")
-                .Append(StringUtil.ToHexString(SuperSubScript)).Append("\n");
+                .Append(StringUtil.ToHexString((short) SuperSubScript)).Append("\n");
             buffer.Append("    .underline       = ")
                 .Append(StringUtil.ToHexString((short) Underline)).Append("\n");
             buffer.Append("    .family          = ")
@@ -358,7 +352,7 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(Attributes);
             out1.WriteShort(ColorPaletteIndex);
             out1.WriteShort(BoldWeight);
-            out1.WriteShort(SuperSubScript);
+            out1.WriteShort((int) SuperSubScript);
             out1.WriteByte((int) Underline);
             out1.WriteByte(Family);
             out1.WriteByte(Charset);
