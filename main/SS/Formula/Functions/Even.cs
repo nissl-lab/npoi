@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Even : OneArg
     {
-        private static long PARITY_MASK = unchecked((long)0xFFFFFFFFFFFFFFFEL);
+        private const long PARITY_MASK = unchecked((long)0xFFFFFFFFFFFFFFFEL);
 
         public override double Evaluate(double d)
         {

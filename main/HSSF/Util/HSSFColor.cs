@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Util
     public class HSSFColor : NPOI.SS.UserModel.IColor
     {
         private static Hashtable indexHash; 
-        public static short COLOR_NORMAL = 0x7fff;
+        public const short COLOR_NORMAL = 0x7fff;
 
         // TODO make subclass instances immutable
         /** Creates a new instance of HSSFColor */

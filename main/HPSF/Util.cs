@@ -105,7 +105,7 @@ namespace NPOI.HPSF
          * did you notice that you can tell from the epochs which
          * operating system is the modern one? :-))
          */
-        public static long EPOCH_DIFF = new DateTime(1970, 1, 1).Ticks;   //11644473600000L;
+        public static readonly long EPOCH_DIFF = new DateTime(1970, 1, 1).Ticks;   //11644473600000L;
 
 
         /// <summary>

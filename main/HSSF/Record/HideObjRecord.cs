@@ -35,9 +35,9 @@ namespace NPOI.HSSF.Record
        : StandardRecord
     {
         public const short sid = 0x8d;
-        public static short HIDE_ALL = 2;
-        public static short SHOW_PLACEHOLDERS = 1;
-        public static short SHOW_ALL = 0;
+        public const short HIDE_ALL = 2;
+        public const short SHOW_PLACEHOLDERS = 1;
+        public const short SHOW_ALL = 0;
         private short field_1_hide_obj;
 
         public HideObjRecord()

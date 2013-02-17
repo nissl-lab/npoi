@@ -33,8 +33,8 @@ namespace NPOI.SS.Formula.PTG
     public class IntPtg : ScalarConstantPtg
     {
         // 16 bit Unsigned integer
-        private static int MIN_VALUE = 0x0000;
-        private static int MAX_VALUE = 0xFFFF;
+        private const int MIN_VALUE = 0x0000;
+        private const int MAX_VALUE = 0xFFFF;
 
         /**
          * Excel represents integers 0..65535 with the tInt token. 
@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.PTG
             return i >= MIN_VALUE && i <= MAX_VALUE;
         }
 
-        public static int SIZE = 3;
+        public const int SIZE = 3;
         public const byte sid = 0x1e;
         private int field_1_value;
 

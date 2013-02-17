@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
      */
     public class DBCellRecord : StandardRecord
     {
-        public static int BLOCK_SIZE = 32;
+        public const int BLOCK_SIZE = 32;
         public const short sid = 0xd7;
 
 

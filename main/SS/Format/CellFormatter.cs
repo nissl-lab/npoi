@@ -37,7 +37,7 @@ namespace NPOI.SS.Format
          * This is the locale used to Get a consistent format result from which to
          * work.
          */
-        public static CultureInfo LOCALE = CultureInfo.GetCultureInfo("en-US");
+        public static readonly CultureInfo LOCALE = CultureInfo.GetCultureInfo("en-US");
 
         /**
          * Creates a new formatter object, storing the format in {@link #format}.

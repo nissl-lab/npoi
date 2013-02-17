@@ -27,10 +27,10 @@ namespace NPOI.HSSF.Record.PivotTable
      */
     public class PageItemRecord : StandardRecord
     {
-        public static short sid = 0x00B6;
+        public const short sid = 0x00B6;
         private class FieldInfo
         {
-            public static int ENCODED_SIZE = 6;
+            public const int ENCODED_SIZE = 6;
             /** Index to the View Item SXVI(0x00B2) record */
             private int _isxvi;
             /** Index to the {@link ViewFieldsRecord} SXVD(0x00B1) record */

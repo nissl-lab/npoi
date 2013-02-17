@@ -30,9 +30,9 @@ namespace NPOI.SS.UserModel
      */
     public class FontScheme
     {
-        public static FontScheme NONE = new FontScheme(1);
-        public static FontScheme MAJOR = new FontScheme(2);
-        public static FontScheme MINOR = new FontScheme(3);
+        public static readonly FontScheme NONE = new FontScheme(1);
+        public static readonly FontScheme MAJOR = new FontScheme(2);
+        public static readonly FontScheme MINOR = new FontScheme(3);
 
         private int value;
 

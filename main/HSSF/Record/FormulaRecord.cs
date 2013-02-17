@@ -208,7 +208,7 @@ namespace NPOI.HSSF.Record
         public const short sid =
             0x06;   // docs say 406...because of a bug Microsoft support site article #Q184647)
 
-        private static int FIXED_SIZE = 14;
+        private const int FIXED_SIZE = 14;
 
 
         private double field_4_value;

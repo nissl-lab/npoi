@@ -33,25 +33,25 @@ namespace NPOI.HSSF.Record.CF
     {
         private byte[] _rawData;
 
-        private static int OFFSET_FONT_NAME = 0;
-        private static int OFFSET_FONT_HEIGHT = 64;
-        private static int OFFSET_FONT_OPTIONS = 68;
-        private static int OFFSET_FONT_WEIGHT = 72;
-        private static int OFFSET_ESCAPEMENT_TYPE = 74;
-        private static int OFFSET_UNDERLINE_TYPE = 76;
-        private static int OFFSET_FONT_COLOR_INDEX = 80;
-        private static int OFFSET_OPTION_FLAGS = 88;
-        private static int OFFSET_ESCAPEMENT_TYPE_MODIFIED = 92;
-        private static int OFFSET_UNDERLINE_TYPE_MODIFIED = 96;
-        private static int OFFSET_FONT_WEIGHT_MODIFIED = 100;
-        private static int OFFSET_NOT_USED1 = 104;
-        private static int OFFSET_NOT_USED2 = 108;
-        private static int OFFSET_NOT_USED3 = 112; // for some reason Excel always Writes  0x7FFFFFFF at this offset   
-        private static int OFFSET_FONT_FORMATING_END = 116;
-        private static int RAW_DATA_SIZE = 118;
+        private const int OFFSET_FONT_NAME = 0;
+        private const int OFFSET_FONT_HEIGHT = 64;
+        private const int OFFSET_FONT_OPTIONS = 68;
+        private const int OFFSET_FONT_WEIGHT = 72;
+        private const int OFFSET_ESCAPEMENT_TYPE = 74;
+        private const int OFFSET_UNDERLINE_TYPE = 76;
+        private const int OFFSET_FONT_COLOR_INDEX = 80;
+        private const int OFFSET_OPTION_FLAGS = 88;
+        private const int OFFSET_ESCAPEMENT_TYPE_MODIFIED = 92;
+        private const int OFFSET_UNDERLINE_TYPE_MODIFIED = 96;
+        private const int OFFSET_FONT_WEIGHT_MODIFIED = 100;
+        private const int OFFSET_NOT_USED1 = 104;
+        private const int OFFSET_NOT_USED2 = 108;
+        private const int OFFSET_NOT_USED3 = 112; // for some reason Excel always Writes  0x7FFFFFFF at this offset   
+        private const int OFFSET_FONT_FORMATING_END = 116;
+        private const int RAW_DATA_SIZE = 118;
 
 
-        public static int FONT_CELL_HEIGHT_PRESERVED = unchecked((int)0xFFFFFFFF);
+        public const int FONT_CELL_HEIGHT_PRESERVED = unchecked((int)0xFFFFFFFF);
 
         // FONT OPTIONS MASKS
         private static BitField posture = BitFieldFactory.GetInstance(0x00000002);

@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record
      */
     public class DVRecord : StandardRecord
     {
-        private static UnicodeString NULL_TEXT_STRING = new UnicodeString("\0");
+        private static readonly UnicodeString NULL_TEXT_STRING = new UnicodeString("\0");
 
 
         public const short sid = 0x01BE;
@@ -64,10 +64,10 @@ namespace NPOI.HSSF.Record
         private CellRangeAddressList _regions;
 
 
-        public static int STRING_PROMPT_TITLE = 0;
-        public static int STRING_ERROR_TITLE = 1;
-        public static int STRING_PROMPT_TEXT = 2;
-        public static int STRING_ERROR_TEXT = 3;
+        public const int STRING_PROMPT_TITLE = 0;
+        public const int STRING_ERROR_TITLE = 1;
+        public const int STRING_PROMPT_TEXT = 2;
+        public const int STRING_ERROR_TEXT = 3;
 
         /**
          * Option flags field

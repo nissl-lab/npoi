@@ -26,12 +26,12 @@ namespace NPOI.SS.Formula.PTG
      */
     public class PercentPtg : ValueOperatorPtg
     {
-        public static int SIZE = 1;
+        public const int SIZE = 1;
         public const byte sid = 0x14;
 
-        private static String PERCENT = "%";
+        private const string PERCENT = "%";
 
-        public static ValueOperatorPtg instance = new PercentPtg();
+        public static readonly ValueOperatorPtg instance = new PercentPtg();
 
         private PercentPtg()
         {

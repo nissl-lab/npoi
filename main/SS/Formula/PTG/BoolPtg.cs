@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.PTG
      */
     public class BoolPtg : ScalarConstantPtg
     {
-        public static int SIZE = 2;
+        public const int SIZE = 2;
         public const byte sid = 0x1d;
         private bool field_1_value;
 

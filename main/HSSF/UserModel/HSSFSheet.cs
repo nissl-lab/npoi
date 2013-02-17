@@ -56,7 +56,7 @@ namespace NPOI.HSSF.UserModel
          * by Setting this to a higher number and recompiling a custom edition of HSSFSheet.
          */
 
-        public static int INITIAL_CAPACITY = 20;
+        public const int INITIAL_CAPACITY = 20;
 
         /**
          * reference to the low level Sheet object

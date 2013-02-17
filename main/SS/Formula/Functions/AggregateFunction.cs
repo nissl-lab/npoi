@@ -206,19 +206,19 @@ namespace NPOI.SS.Formula.Functions
 
         }
 
-        public static Function AVEDEV = new AVEDEV();
-        public static Function AVERAGE = new AVERAGE();
-        public static Function DEVSQ = new DEVSQ();
-        public static Function LARGE = new LARGE();
-        public static Function MAX = new MAX();
-        public static Function MEDIAN = new MEDIAN();
-        public static Function MIN = new MIN();
-        public static Function PRODUCT = new PRODUCT();
-        public static Function SMALL = new SMALL();
-        public static Function STDEV = new STDEV();
-        public static Function SUM = new SUM();
-        public static Function SUMSQ = new SUMSQ();
-        public static Function VAR = new VAR();
-        public static Function VARP = new VARP();
+        public static readonly Function AVEDEV = new AVEDEV();
+        public static readonly Function AVERAGE = new AVERAGE();
+        public static readonly Function DEVSQ = new DEVSQ();
+        public static readonly Function LARGE = new LARGE();
+        public static readonly Function MAX = new MAX();
+        public static readonly Function MEDIAN = new MEDIAN();
+        public static readonly Function MIN = new MIN();
+        public static readonly Function PRODUCT = new PRODUCT();
+        public static readonly Function SMALL = new SMALL();
+        public static readonly Function STDEV = new STDEV();
+        public static readonly Function SUM = new SUM();
+        public static readonly Function SUMSQ = new SUMSQ();
+        public static readonly Function VAR = new VAR();
+        public static readonly Function VARP = new VARP();
     }
 }

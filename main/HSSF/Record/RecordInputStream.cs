@@ -82,8 +82,8 @@ namespace NPOI.HSSF.Record
     {
         /** Maximum size of a single record (minus the 4 byte header) without a continue*/
         public const short MAX_RECORD_DATA_SIZE = 8224;
-        private static int INVALID_SID_VALUE = -1;
-        private static int DATA_LEN_NEEDS_TO_BE_READ = -1;
+        private const int INVALID_SID_VALUE = -1;
+        private const int DATA_LEN_NEEDS_TO_BE_READ = -1;
         //private const int EOF_RECORD_ENCODED_SIZE = 4;
 
         //private LittleEndianInput _le;

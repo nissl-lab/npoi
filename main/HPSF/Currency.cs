@@ -20,7 +20,7 @@ namespace NPOI.HPSF
 {
     internal class Currency
     {
-        public static int SIZE = 8;
+        public const int SIZE = 8;
 
         private byte[] _value;
 

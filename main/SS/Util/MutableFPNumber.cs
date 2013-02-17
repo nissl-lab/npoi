@@ -36,24 +36,24 @@ namespace NPOI.SS.Util
          *  This frac value rounds to '1' followed by fourteen zeros with an incremented decimal exponent
          */
         //private static BigInteger BI_MIN_BASE = new BigInteger("0B5E620F47FFFE666", 16);
-        private static BigInteger BI_MIN_BASE = new BigInteger(new int[] { -1243209484, 2147477094 }, 1);
+        private static readonly BigInteger BI_MIN_BASE = new BigInteger(new int[] { -1243209484, 2147477094 }, 1);
         /**
          * For 'Base-10 normalised form'<br/>
          * The maximum {@link #_frac} value when {@link #_binaryExponent} == 49
          * (10^15-0.5) * 2^14
          */
         //private static BigInteger BI_MAX_BASE = new BigInteger("0E35FA9319FFFE000", 16);
-        private static BigInteger BI_MAX_BASE = new BigInteger(new int[] { -480270031, -1610620928 }, 1);
+        private static readonly BigInteger BI_MAX_BASE = new BigInteger(new int[] { -480270031, -1610620928 }, 1);
 
         /**
          * Width of a long
          */
-        private static int C_64 = 64;
+        private const int C_64 = 64;
 
         /**
          * Minimum precision after discarding whole 32-bit words from the significand
          */
-        private static int MIN_PRECISION = 72;
+        private const int MIN_PRECISION = 72;
         private BigInteger _significand;
         private int _binaryExponent;
         public MutableFPNumber(BigInteger frac, int binaryExponent)
@@ -185,7 +185,7 @@ namespace NPOI.SS.Util
          */
         private class TenPower
         {
-            private static BigInteger FIVE = new BigInteger(5L);// new BigInteger("5",10);
+            private static readonly BigInteger FIVE = new BigInteger(5L);// new BigInteger("5",10);
             private static TenPower[] _cache = new TenPower[350];
 
             public BigInteger _multiplicand;

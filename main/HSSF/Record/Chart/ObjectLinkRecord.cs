@@ -36,11 +36,11 @@ namespace NPOI.HSSF.Record.Chart
     {
         public const short sid = 0x1027;
         private short field_1_anchorId;
-        public static short ANCHOR_ID_CHART_TITLE = 1;
-        public static short ANCHOR_ID_Y_AXIS = 2;
-        public static short ANCHOR_ID_X_AXIS = 3;
-        public static short ANCHOR_ID_SERIES_OR_POINT = 4;
-        public static short ANCHOR_ID_Z_AXIS = 7;
+        public const short ANCHOR_ID_CHART_TITLE = 1;
+        public const short ANCHOR_ID_Y_AXIS = 2;
+        public const short ANCHOR_ID_X_AXIS = 3;
+        public const short ANCHOR_ID_SERIES_OR_POINT = 4;
+        public const short ANCHOR_ID_Z_AXIS = 7;
         private short field_2_link1;
         private short field_3_link2;
 

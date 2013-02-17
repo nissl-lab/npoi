@@ -115,8 +115,8 @@ namespace NPOI.SS.Util
     public class NumberToTextConverter
     {
 
-        private static long EXCEL_NAN_BITS = unchecked((long)0xFFFF0420003C0000L);
-        private static int MAX_TEXT_LEN = 20;
+        private const long EXCEL_NAN_BITS = unchecked((long)0xFFFF0420003C0000L);
+        private const int MAX_TEXT_LEN = 20;
 
         private NumberToTextConverter()
         {

@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record.PivotTable
      */
     public class DataItemRecord : StandardRecord
     {
-        public static short sid = 0x00C5;
+        public const short sid = 0x00C5;
 
         private int isxvdData;
         private int iiftab;

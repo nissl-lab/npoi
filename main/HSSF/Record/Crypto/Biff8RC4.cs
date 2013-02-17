@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.Crypto
     public class Biff8RC4
     {
 
-        private static int RC4_REKEYING_INTERVAL = 1024;
+        private const int RC4_REKEYING_INTERVAL = 1024;
 
         private RC4 _rc4;
         /**

@@ -32,19 +32,19 @@ namespace NPOI.SS.Formula.PTG
         //private static HSSFErrorConstants EC = null;
 
         /** <b>#NULL!</b>  - Intersection of two cell ranges is empty */
-        public static ErrPtg NULL_INTERSECTION = new ErrPtg(HSSFErrorConstants.ERROR_NULL);
+        public static readonly ErrPtg NULL_INTERSECTION = new ErrPtg(HSSFErrorConstants.ERROR_NULL);
         /** <b>#DIV/0!</b> - Division by zero */
-        public static ErrPtg DIV_ZERO = new ErrPtg(HSSFErrorConstants.ERROR_DIV_0);
+        public static readonly ErrPtg DIV_ZERO = new ErrPtg(HSSFErrorConstants.ERROR_DIV_0);
         /** <b>#VALUE!</b> - Wrong type of operand */
-        public static ErrPtg VALUE_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_VALUE);
+        public static readonly ErrPtg VALUE_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_VALUE);
         /** <b>#REF!</b> - Illegal or deleted cell reference */
-        public static ErrPtg REF_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_REF);
+        public static readonly ErrPtg REF_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_REF);
         /** <b>#NAME?</b> - Wrong function or range name */
-        public static ErrPtg NAME_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_NAME);
+        public static readonly ErrPtg NAME_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_NAME);
         /** <b>#NUM!</b> - Value range overflow */
-        public static ErrPtg NUM_ERROR = new ErrPtg(HSSFErrorConstants.ERROR_NUM);
+        public static readonly ErrPtg NUM_ERROR = new ErrPtg(HSSFErrorConstants.ERROR_NUM);
         /** <b>#N/A</b> - Argument or function not available */
-        public static ErrPtg N_A = new ErrPtg(HSSFErrorConstants.ERROR_NA);
+        public static readonly ErrPtg N_A = new ErrPtg(HSSFErrorConstants.ERROR_NA);
 
         public static ErrPtg ValueOf(int code)
         {

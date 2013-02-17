@@ -33,28 +33,28 @@ namespace NPOI.SS.Formula.Eval
         private const HSSFErrorConstants EC = null;
 
         /** <b>#NULL!</b>  - Intersection of two cell ranges is empty */
-        public static ErrorEval NULL_INTERSECTION = new ErrorEval(HSSFErrorConstants.ERROR_NULL);
+        public static readonly ErrorEval NULL_INTERSECTION = new ErrorEval(HSSFErrorConstants.ERROR_NULL);
         /** <b>#DIV/0!</b> - Division by zero */
-        public static ErrorEval DIV_ZERO = new ErrorEval(HSSFErrorConstants.ERROR_DIV_0);
+        public static readonly ErrorEval DIV_ZERO = new ErrorEval(HSSFErrorConstants.ERROR_DIV_0);
         /** <b>#VALUE!</b> - Wrong type of operand */
-        public static ErrorEval VALUE_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_VALUE);
+        public static readonly ErrorEval VALUE_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_VALUE);
         /** <b>#REF!</b> - Illegal or deleted cell reference */
-        public static ErrorEval REF_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_REF);
+        public static readonly ErrorEval REF_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_REF);
         /** <b>#NAME?</b> - Wrong function or range name */
-        public static ErrorEval NAME_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_NAME);
+        public static readonly ErrorEval NAME_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_NAME);
         /** <b>#NUM!</b> - Value range overflow */
-        public static ErrorEval NUM_ERROR = new ErrorEval(HSSFErrorConstants.ERROR_NUM);
+        public static readonly ErrorEval NUM_ERROR = new ErrorEval(HSSFErrorConstants.ERROR_NUM);
         /** <b>#N/A</b> - Argument or function not available */
-        public static ErrorEval NA = new ErrorEval(HSSFErrorConstants.ERROR_NA);
+        public static readonly ErrorEval NA = new ErrorEval(HSSFErrorConstants.ERROR_NA);
 
 
         // POI internal error codes
         private const int CIRCULAR_REF_ERROR_CODE = unchecked((int)0xFFFFFFC4);
         private const int FUNCTION_NOT_IMPLEMENTED_CODE = unchecked((int)0xFFFFFFE2);
 
-        public static ErrorEval FUNCTION_NOT_IMPLEMENTED = new ErrorEval(FUNCTION_NOT_IMPLEMENTED_CODE);
+        public static readonly ErrorEval FUNCTION_NOT_IMPLEMENTED = new ErrorEval(FUNCTION_NOT_IMPLEMENTED_CODE);
         // Note - Excel does not seem to represent this condition with an error code
-        public static ErrorEval CIRCULAR_REF_ERROR = new ErrorEval(CIRCULAR_REF_ERROR_CODE);
+        public static readonly ErrorEval CIRCULAR_REF_ERROR = new ErrorEval(CIRCULAR_REF_ERROR_CODE);
 
 
         /**

@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record.Chart
     public class ValueRangeRecord
        : StandardRecord
     {
-        public static short sid = 0x101f;
+        public const short sid = 0x101f;
         private double field_1_minimumAxisValue;
         private double field_2_maximumAxisValue;
         private double field_3_majorIncrement;

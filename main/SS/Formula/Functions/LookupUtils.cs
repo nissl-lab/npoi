@@ -519,10 +519,10 @@ namespace NPOI.SS.Formula.Functions
                 _isGreaterThan = simpleCompareResult > 0;
             }
         }
-        public static CompareResult TYPE_MISMATCH = new CompareResult(true, 0);
-        public static CompareResult LESS_THAN = new CompareResult(false, -1);
-        public static CompareResult EQUAL = new CompareResult(false, 0);
-        public static CompareResult GREATER_THAN = new CompareResult(false, +1);
+        public static readonly CompareResult TYPE_MISMATCH = new CompareResult(true, 0);
+        public static readonly CompareResult LESS_THAN = new CompareResult(false, -1);
+        public static readonly CompareResult EQUAL = new CompareResult(false, 0);
+        public static readonly CompareResult GREATER_THAN = new CompareResult(false, +1);
 
         public static CompareResult ValueOf(int simpleCompareResult)
         {

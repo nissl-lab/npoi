@@ -37,14 +37,14 @@ namespace NPOI.HSSF.Record
        : StandardRecord
     {
         public const short sid = 0x31;                                                 // docs are wrong (0x231 Microsoft Support site article Q184647)
-        public static short SS_NONE = 0;
-        public static short SS_SUPER = 1;
-        public static short SS_SUB = 2;
-        public static byte U_NONE = 0;
-        public static byte U_SINGLE = 1;
-        public static byte U_DOUBLE = 2;
-        public static byte U_SINGLE_ACCOUNTING = 0x21;
-        public static byte U_DOUBLE_ACCOUNTING = 0x22;
+        public const short SS_NONE = 0;
+        public const short SS_SUPER = 1;
+        public const short SS_SUB = 2;
+        public const byte U_NONE = 0;
+        public const byte U_SINGLE = 1;
+        public const byte U_DOUBLE = 2;
+        public const byte U_SINGLE_ACCOUNTING = 0x21;
+        public const byte U_DOUBLE_ACCOUNTING = 0x22;
 
         private short field_1_font_height;        // in Units of .05 of a point
         private short field_2_attributes;

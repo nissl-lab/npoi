@@ -58,19 +58,19 @@ namespace NPOI.HSSF.Record
          * suggested default (0x06 - BIFF8)
          */
 
-        public static short VERSION = 0x06;
+        public const short VERSION = 0x06;
 
         /**
          * suggested default 0x10d3
          */
 
-        public static short BUILD = 0x10d3;
+        public const short BUILD = 0x10d3;
 
         /**
          * suggested default  0x07CC (1996)
          */
 
-        public static short BUILD_YEAR = 0x07CC;   // 1996
+        public const short BUILD_YEAR = 0x07CC;   // 1996
 
         /**
          * suggested default for a normal sheet (0x41)

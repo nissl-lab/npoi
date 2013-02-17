@@ -29,9 +29,9 @@ namespace NPOI.SS.Formula.PTG
     {
         public const byte sid = 0x13;
 
-        private static String MINUS = "-";
+        private const string MINUS = "-";
 
-        public static ValueOperatorPtg instance = new UnaryMinusPtg();
+        public static readonly ValueOperatorPtg instance = new UnaryMinusPtg();
 
         private UnaryMinusPtg()
         {

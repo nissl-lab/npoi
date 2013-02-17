@@ -80,7 +80,7 @@ namespace NPOI.SS.UserModel
         /**
          * The first user-defined format starts at 164.
          */
-        public static int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
+        public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
 
         private static String[] _formats;
 

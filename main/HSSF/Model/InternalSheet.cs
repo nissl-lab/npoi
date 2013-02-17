@@ -112,10 +112,10 @@ namespace NPOI.HSSF.Model
         /** Add an UncalcedRecord if not true indicating formulas have not been calculated */
         protected bool _isUncalced = false;
 
-        //public static byte PANE_LOWER_RIGHT = (byte)0;
-        //public static byte PANE_UPPER_RIGHT = (byte)1;
-        //public static byte PANE_LOWER_LEFT = (byte)2;
-        //public static byte PANE_UPPER_LEFT = (byte)3;
+        //public const byte PANE_LOWER_RIGHT = (byte)0;
+        //public const byte PANE_UPPER_RIGHT = (byte)1;
+        //public const byte PANE_LOWER_LEFT = (byte)2;
+        //public const byte PANE_UPPER_LEFT = (byte)3;
 
 
         /// <summary>

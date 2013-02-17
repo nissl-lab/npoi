@@ -39,43 +39,43 @@ namespace NPOI.HSSF.Record.CF
     public class PatternFormatting : ICloneable
     {
         /**  No background */
-        public static short NO_Fill = 0;
+        public const short NO_Fill = 0;
         /**  Solidly Filled */
-        public static short SOLID_FOREGROUND = 1;
+        public const short SOLID_FOREGROUND = 1;
         /**  Small fine dots */
-        public static short FINE_DOTS = 2;
+        public const short FINE_DOTS = 2;
         /**  Wide dots */
-        public static short ALT_BARS = 3;
+        public const short ALT_BARS = 3;
         /**  SParse dots */
-        public static short SPARSE_DOTS = 4;
+        public const short SPARSE_DOTS = 4;
         /**  Thick horizontal bands */
-        public static short THICK_HORZ_BANDS = 5;
+        public const short THICK_HORZ_BANDS = 5;
         /**  Thick vertical bands */
-        public static short THICK_VERT_BANDS = 6;
+        public const short THICK_VERT_BANDS = 6;
         /**  Thick backward facing diagonals */
-        public static short THICK_BACKWARD_DIAG = 7;
+        public const short THICK_BACKWARD_DIAG = 7;
         /**  Thick forward facing diagonals */
-        public static short THICK_FORWARD_DIAG = 8;
+        public const short THICK_FORWARD_DIAG = 8;
         /**  Large spots */
-        public static short BIG_SPOTS = 9;
+        public const short BIG_SPOTS = 9;
         /**  Brick-like layout */
-        public static short BRICKS = 10;
+        public const short BRICKS = 10;
         /**  Thin horizontal bands */
-        public static short THIN_HORZ_BANDS = 11;
+        public const short THIN_HORZ_BANDS = 11;
         /**  Thin vertical bands */
-        public static short THIN_VERT_BANDS = 12;
+        public const short THIN_VERT_BANDS = 12;
         /**  Thin backward diagonal */
-        public static short THIN_BACKWARD_DIAG = 13;
+        public const short THIN_BACKWARD_DIAG = 13;
         /**  Thin forward diagonal */
-        public static short THIN_FORWARD_DIAG = 14;
+        public const short THIN_FORWARD_DIAG = 14;
         /**  Squares */
-        public static short SQUARES = 15;
+        public const short SQUARES = 15;
         /**  Diamonds */
-        public static short DIAMONDS = 16;
+        public const short DIAMONDS = 16;
         /**  Less Dots */
-        public static short LESS_DOTS = 17;
+        public const short LESS_DOTS = 17;
         /**  Least Dots */
-        public static short LEAST_DOTS = 18;
+        public const short LEAST_DOTS = 18;
 
         public PatternFormatting()
         {

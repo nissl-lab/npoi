@@ -49,13 +49,13 @@ namespace NPOI.SS.Formula.Functions
             public const int GT = 5;
             public const int GE = 6;
 
-            public static CmpOp OP_NONE = op("", NONE);
-            public static CmpOp OP_EQ = op("=", EQ);
-            public static CmpOp OP_NE = op("<>", NE);
-            public static CmpOp OP_LE = op("<=", LE);
-            public static CmpOp OP_LT = op("<", LT);
-            public static CmpOp OP_GT = op(">", GT);
-            public static CmpOp OP_GE = op(">=", GE);
+            public static readonly CmpOp OP_NONE = op("", NONE);
+            public static readonly CmpOp OP_EQ = op("=", EQ);
+            public static readonly CmpOp OP_NE = op("<>", NE);
+            public static readonly CmpOp OP_LE = op("<=", LE);
+            public static readonly CmpOp OP_LT = op("<", LT);
+            public static readonly CmpOp OP_GT = op(">", GT);
+            public static readonly CmpOp OP_GE = op(">=", GE);
             private String _representation;
             private int _code;
 

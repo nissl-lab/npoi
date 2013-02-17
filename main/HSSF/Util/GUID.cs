@@ -10,9 +10,9 @@ namespace NPOI.HSSF.Util
 		 * this class is currently only used here, but could be moved to a
 		 * common package if needed
 		 */
-		private static int TEXT_FORMAT_LENGTH = 36;
+		private const int TEXT_FORMAT_LENGTH = 36;
 
-		public static int ENCODED_SIZE = 16;
+		public const int ENCODED_SIZE = 16;
 
 		/** 4 bytes - little endian */
 		private int _d1;

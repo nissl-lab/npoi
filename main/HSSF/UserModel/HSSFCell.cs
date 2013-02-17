@@ -64,9 +64,9 @@ namespace NPOI.HSSF.UserModel
         private IComment comment;
 
 
-        private static String FILE_FORMAT_NAME = "BIFF8";
-        public static int LAST_COLUMN_NUMBER = SpreadsheetVersion.EXCEL97.LastColumnIndex; // 2^8 - 1
-        private static String LAST_COLUMN_NAME = SpreadsheetVersion.EXCEL97.LastColumnName;
+        private const string FILE_FORMAT_NAME = "BIFF8";
+        public static readonly int LAST_COLUMN_NUMBER = SpreadsheetVersion.EXCEL97.LastColumnIndex; // 2^8 - 1
+        private static readonly string LAST_COLUMN_NAME = SpreadsheetVersion.EXCEL97.LastColumnName;
 
         /// <summary>
         /// Creates new Cell - Should only be called by HSSFRow.  This Creates a cell

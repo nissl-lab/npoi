@@ -34,14 +34,14 @@ namespace NPOI.SS.UserModel
     /// </summary>
     public class DateUtil
     {
-        public static int SECONDS_PER_MINUTE = 60;
-        public static int MINUTES_PER_HOUR = 60;
-        public static int HOURS_PER_DAY = 24;
-        public static int SECONDS_PER_DAY = (HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE);
+        public const int SECONDS_PER_MINUTE = 60;
+        public const int MINUTES_PER_HOUR = 60;
+        public const int HOURS_PER_DAY = 24;
+        public const int SECONDS_PER_DAY = (HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE);
 
-        private static int BAD_DATE = -1;   // used to specify that date Is invalid
-        public static long DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
-        private static char[] TIME_SEPARATOR_PATTERN = new char[] { ':' };
+        private const int BAD_DATE = -1;   // used to specify that date Is invalid
+        public const long DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+        private static readonly char[] TIME_SEPARATOR_PATTERN = new char[] { ':' };
 
         /// <summary>
         /// Given a Calendar, return the number of days since 1899/12/31.

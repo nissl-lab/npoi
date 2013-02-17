@@ -54,14 +54,14 @@ namespace NPOI.SS.Formula.Functions
          */
         protected abstract bool Evaluate(ValueEval arg);
 
-        public static Function ISLOGICAL = new Islogical();
-        public static Function ISNONTEXT = new Isnontext();
-        public static Function ISNUMBER = new Isnumber();
-        public static Function ISTEXT = new Istext();
-        public static Function ISBLANK = new Isblank();
-        public static Function ISERROR = new Iserror();
-        public static Function ISNA = new Isna();
-        public static Function ISREF = new Isref();
-        public static Function ISERR = new Iserr();
+        public static readonly Function ISLOGICAL = new Islogical();
+        public static readonly Function ISNONTEXT = new Isnontext();
+        public static readonly Function ISNUMBER = new Isnumber();
+        public static readonly Function ISTEXT = new Istext();
+        public static readonly Function ISBLANK = new Isblank();
+        public static readonly Function ISERROR = new Iserror();
+        public static readonly Function ISNA = new Isna();
+        public static readonly Function ISREF = new Isref();
+        public static readonly Function ISERR = new Iserr();
     }
 }

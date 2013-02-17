@@ -5,7 +5,7 @@ namespace NPOI.HPSF
 {
     public class Filetime
     {
-        public static int SIZE = LittleEndian.INT_SIZE * 2;
+        public const int SIZE = LittleEndian.INT_SIZE * 2;
 
         private int _dwHighDateTime;
         private int _dwLowDateTime;

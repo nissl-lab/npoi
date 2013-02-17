@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record
     public class DrawingRecordForBiffViewer
            : AbstractEscherHolderRecord
     {
-        public static short sid = 0xEC;
+        public const short sid = 0xEC;
 
         public DrawingRecordForBiffViewer()
         {

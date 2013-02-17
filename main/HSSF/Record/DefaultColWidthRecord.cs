@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record
         /**
      *  The default column width is 8 characters
      */
-        public static int DEFAULT_COLUMN_WIDTH = 0x0008;
+        public const int DEFAULT_COLUMN_WIDTH = 0x0008;
         public DefaultColWidthRecord()
         {
             field_1_col_width = DEFAULT_COLUMN_WIDTH;

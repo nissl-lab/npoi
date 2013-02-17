@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.PTG
     public class Ref3DPtg : RefPtgBase, WorkbookDependentFormula, IExternSheetReferenceToken
     {
         public const byte sid = 0x3a;
-        private static int SIZE = 7; // 6 + 1 for Ptg
+        private const int SIZE = 7; // 6 + 1 for Ptg
         private int field_1_index_extern_sheet;
         /** Field 2 
          * - lower 8 bits is the zero based Unsigned byte column index 

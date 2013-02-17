@@ -58,22 +58,22 @@ using NPOI.SS.UserModel;
          * The run of letters is group 1 and the run of digits is group 2.  
          * Each group may optionally be prefixed with a single '$'.
          */
-        private static string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
+        private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
         /**
          * Matches a run of one or more letters.  The run of letters is group 1.  
          * The text may optionally be prefixed with a single '$'.
          */
-        private static string COLUMN_REF_PATTERN = @"^\$?([A-Za-z]+)$";
+        private const string COLUMN_REF_PATTERN = @"^\$?([A-Za-z]+)$";
         /**
  * Matches a run of one or more digits.  The run of digits is group 1.
  * The text may optionally be prefixed with a single '$'.
  */
-        private static string ROW_REF_PATTERN = @"^\$?([0-9]+)$";
+        private const string ROW_REF_PATTERN = @"^\$?([0-9]+)$";
         /**
          * Named range names must start with a letter or underscore.  Subsequent characters may include
          * digits or dot.  (They can even end in dot).
          */
-        private static string NAMED_RANGE_NAME_PATTERN = "^[_A-Za-z][_.A-Za-z0-9]*$";
+        private const string NAMED_RANGE_NAME_PATTERN = "^[_A-Za-z][_.A-Za-z0-9]*$";
         //private static string BIFF8_LAST_COLUMN = "IV";
         //private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();

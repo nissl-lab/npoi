@@ -88,10 +88,10 @@ namespace NPOI.Util
          * This mask is used to obtain the value of an int as if it were unsigned.
          */
         public const long LONG_MASK = 0xffffffffL;
-        public static long INFLATED = long.MinValue;
+        public const long INFLATED = long.MinValue;
         public const int MIN_RADIX = 2;
         public const int MAX_RADIX = 36;
-        private static String[] zeros = new String[64];
+        private static readonly String[] zeros = new String[64];
         //Constructors
         static BigInteger()
         {
@@ -384,26 +384,26 @@ namespace NPOI.Util
          *
          * @since   1.2
          */
-        public static BigInteger ZERO = new BigInteger(new int[0], 0);
+        public static readonly BigInteger ZERO = new BigInteger(new int[0], 0);
 
         /**
          * The BigInteger constant one.
          *
          * @since   1.2
          */
-        public static BigInteger ONE = ValueOf(1);
+        public static readonly BigInteger ONE = ValueOf(1);
 
         /**
          * The BigInteger constant two.  (Not exported.)
          */
-        private static BigInteger TWO = ValueOf(2);
+        private static readonly BigInteger TWO = ValueOf(2);
 
         /**
          * The BigInteger constant ten.
          *
          * @since   1.5
          */
-        public static BigInteger TEN = ValueOf(10);
+        public static readonly BigInteger TEN = ValueOf(10);
         /**
          * Returns a BigInteger whose value is equal to that of the
          * specified {@code long}.  This "static factory method" is
@@ -425,7 +425,7 @@ namespace NPOI.Util
 
             return new BigInteger(val);
         }
-        private static int MAX_CONSTANT = 16;
+        private const int MAX_CONSTANT = 16;
         private static BigInteger[] posConst = new BigInteger[MAX_CONSTANT + 1];
         private static BigInteger[] negConst = new BigInteger[MAX_CONSTANT + 1];
         /**
@@ -963,7 +963,7 @@ namespace NPOI.Util
 
         // bitsPerDigit in the given radix times 1024
         // Rounded up to avoid underallocation.
-        private static long[] bitsPerDigit = { 0, 0,
+        private static readonly long[] bitsPerDigit = { 0, 0,
         1024, 1624, 2048, 2378, 2648, 2875, 3072, 3247, 3402, 3543, 3672,
         3790, 3899, 4001, 4096, 4186, 4271, 4350, 4426, 4498, 4567, 4633,
         4696, 4756, 4814, 4870, 4923, 4975, 5025, 5074, 5120, 5166, 5210,
@@ -971,11 +971,11 @@ namespace NPOI.Util
         /*
          * These two arrays are the integer analogue of above.
          */
-        private static int[] digitsPerInt = {0, 0, 30, 19, 15, 13, 11,
+        private static readonly int[] digitsPerInt = {0, 0, 30, 19, 15, 13, 11,
         11, 10, 9, 9, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 6, 6, 6, 6,
         6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5};
 
-        private static int[] intRadix = {0, 0,
+        private static readonly int[] intRadix = {0, 0,
         0x40000000, 0x4546b3db, 0x40000000, 0x48c27395, 0x159fd800,
         0x75db9c97, 0x40000000, 0x17179149, 0x3b9aca00, 0xcc6db61,
         0x19a10000, 0x309f1021, 0x57f6c100, 0xa2f1b6f,  0x10000000,

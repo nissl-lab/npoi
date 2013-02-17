@@ -54,7 +54,7 @@ namespace NPOI.SS.Format
         private class CaseInsensitiveComparator : IEqualityComparer<String>
         {
             // use serialVersionUID from JDK 1.2.2 for interoperability
-            //private static long serialVersionUID = 8575799808933029326L;
+            //private const long serialVersionUID = 8575799808933029326L;
 
 
 

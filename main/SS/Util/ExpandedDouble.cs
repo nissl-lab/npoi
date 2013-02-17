@@ -36,8 +36,8 @@ namespace NPOI.SS.Util
      */
     public class ExpandedDouble
     {
-        private static BigInteger BI_FRAC_MASK = new BigInteger(IEEEDouble.FRAC_MASK);
-        private static BigInteger BI_IMPLIED_FRAC_MSB = new BigInteger(IEEEDouble.FRAC_ASSUMED_HIGH_BIT);
+        private static readonly BigInteger BI_FRAC_MASK = new BigInteger(IEEEDouble.FRAC_MASK);
+        private static readonly BigInteger BI_IMPLIED_FRAC_MSB = new BigInteger(IEEEDouble.FRAC_ASSUMED_HIGH_BIT);
 
         private static BigInteger GetFrac(long rawBits)
         {

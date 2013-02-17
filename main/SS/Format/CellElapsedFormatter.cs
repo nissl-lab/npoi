@@ -31,11 +31,11 @@ namespace NPOI.SS.Format
         private TimeSpec topmost;
         private String printfFmt;
 
-        private static Regex PERCENTS = new Regex("%");
+        private static readonly Regex PERCENTS = new Regex("%");
 
-        private static double HOUR__FACTOR = 1.0 / 24.0;
-        private static double MIN__FACTOR = HOUR__FACTOR / 60.0;
-        private static double SEC__FACTOR = MIN__FACTOR / 60.0;
+        private const double HOUR__FACTOR = 1.0 / 24.0;
+        private const double MIN__FACTOR = HOUR__FACTOR / 60.0;
+        private const double SEC__FACTOR = MIN__FACTOR / 60.0;
 
         private class TimeSpec
         {

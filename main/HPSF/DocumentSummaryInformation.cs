@@ -48,8 +48,7 @@ namespace NPOI.HPSF
          * The document name a document summary information stream
          * usually has in a POIFS filesystem.
          */
-        public static String DEFAULT_STREAM_NAME =
-            "\x0005DocumentSummaryInformation";
+        public const string DEFAULT_STREAM_NAME = "\x0005DocumentSummaryInformation";
 
         public override PropertyIDMap PropertySetIDMap
         {

@@ -69,8 +69,8 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             get;
             set;
         }
-        public static short ChartSpecificFutureRecordLowerSid = 0x800;
-        public static short ChartSpecificFutureRecordHigherSid = 0x8FF;
+        public const short ChartSpecificFutureRecordLowerSid = 0x800;
+        public const short ChartSpecificFutureRecordHigherSid = 0x8FF;
         protected virtual bool ShoudWriteStartBlock()
         {
             return false;

@@ -46,7 +46,7 @@ namespace NPOI.HSSF.Record
     public class SSTRecord : ContinuableRecord
     {
         public const short sid = 0x00FC;
-        private static UnicodeString EMPTY_STRING = new UnicodeString("");
+        private static readonly UnicodeString EMPTY_STRING = new UnicodeString("");
 
         /** how big can an SST record be? As big as any record can be: 8228 bytes */
         public const int MAX_RECORD_SIZE = 8228;

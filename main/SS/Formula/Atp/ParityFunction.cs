@@ -29,8 +29,8 @@ namespace NPOI.SS.Formula.Atp
     public class ParityFunction : FreeRefFunction
     {
 
-        public static FreeRefFunction IS_EVEN = new ParityFunction(0);
-        public static FreeRefFunction IS_ODD = new ParityFunction(1);
+        public static readonly FreeRefFunction IS_EVEN = new ParityFunction(0);
+        public static readonly FreeRefFunction IS_ODD = new ParityFunction(1);
         private int _desiredParity;
 
         private ParityFunction(int desiredParity)
