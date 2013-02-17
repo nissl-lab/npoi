@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
     public class DeltaRecord : StandardRecord
     {
         public const short sid = 0x10;
-        public static double DEFAULT_VALUE = 0.0010;   // should be .001
+        public const double DEFAULT_VALUE = 0.0010;   // should be .001
 
         // a double Is an IEEE 8-byte float...damn IEEE and their goofy standards an
         // ambiguous numeric identifiers

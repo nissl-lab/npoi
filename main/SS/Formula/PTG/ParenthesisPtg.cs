@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.PTG
     public class ParenthesisPtg : ControlPtg
     {
 
-        private static int SIZE = 1;
+        private const int SIZE = 1;
         public const byte sid = 0x15;
 
         public static ControlPtg instance = new ParenthesisPtg();

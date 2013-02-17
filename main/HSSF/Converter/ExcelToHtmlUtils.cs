@@ -27,8 +27,9 @@ namespace NPOI.HSSF.Converter
 
     public class ExcelToHtmlUtils
     {
-        private static short EXCEL_COLUMN_WIDTH_FACTOR = 256;
-        private static int UNIT_OFFSET_LENGTH = 7;
+        private const short EXCEL_COLUMN_WIDTH_FACTOR = 256;
+        private const int UNIT_OFFSET_LENGTH = 7;
+
         public static void AppendAlign(StringBuilder style, HorizontalAlignment alignment)
         {
             switch (alignment)

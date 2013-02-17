@@ -26,12 +26,12 @@ namespace NPOI.SS.UserModel
      */
     public class FontFamily
     {
-        public static FontFamily NOT_APPLICABLE = new FontFamily(0);
-        public static FontFamily ROMAN = new FontFamily(1);
-        public static FontFamily SWISS = new FontFamily(2);
-        public static FontFamily MODERN = new FontFamily(3);
-        public static FontFamily SCRIPT = new FontFamily(4);
-        public static FontFamily DECORATIVE = new FontFamily(5);
+        public static readonly FontFamily NOT_APPLICABLE = new FontFamily(0);
+        public static readonly FontFamily ROMAN = new FontFamily(1);
+        public static readonly FontFamily SWISS = new FontFamily(2);
+        public static readonly FontFamily MODERN = new FontFamily(3);
+        public static readonly FontFamily SCRIPT = new FontFamily(4);
+        public static readonly FontFamily DECORATIVE = new FontFamily(5);
 
         private int family;
 

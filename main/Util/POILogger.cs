@@ -36,11 +36,11 @@ namespace NPOI.Util
     public abstract class POILogger
     {
 
-        public static int DEBUG = 1;
-        public static int INFO  = 3;
-        public static int WARN  = 5;
-        public static int ERROR = 7;
-        public static int FATAL = 9;
+        public const int DEBUG = 1;
+        public const int INFO  = 3;
+        public const int WARN  = 5;
+        public const int ERROR = 7;
+        public const int FATAL = 9;
 
         /**
          * package scope so it cannot be instantiated outside of the util

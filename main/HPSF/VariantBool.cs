@@ -20,7 +20,7 @@ namespace NPOI.HPSF
 {
     public class VariantBool
     {
-        public static int SIZE = 2;
+        public const int SIZE = 2;
 
         public VariantBool(byte[] data, int offset)
         {

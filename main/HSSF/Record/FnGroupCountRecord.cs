@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record
          * suggested default (14 dec)
          */
 
-        public static short COUNT = 14;
+        public const short COUNT = 14;
         private short field_1_count;
 
         public FnGroupCountRecord()

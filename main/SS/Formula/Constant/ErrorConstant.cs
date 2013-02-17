@@ -27,15 +27,15 @@ namespace NPOI.SS.Formula.Constant
     /// <c>ErrorEval</c>
     /// </summary>
     ///<remarks> @author Josh Micich</remarks>
-    public class ErrorConstant {
-
-        private static ErrorConstant NULL = new ErrorConstant(HSSFErrorConstants.ERROR_NULL);
-        private static ErrorConstant DIV_0 = new ErrorConstant(HSSFErrorConstants.ERROR_DIV_0);
-        private static ErrorConstant VALUE = new ErrorConstant(HSSFErrorConstants.ERROR_VALUE);
-        private static ErrorConstant REF = new ErrorConstant(HSSFErrorConstants.ERROR_REF);
-        private static ErrorConstant NAME = new ErrorConstant(HSSFErrorConstants.ERROR_NAME);
-        private static ErrorConstant NUM = new ErrorConstant(HSSFErrorConstants.ERROR_NUM);
-        private static ErrorConstant NA = new ErrorConstant(HSSFErrorConstants.ERROR_NA);
+    public class ErrorConstant
+	{
+        private static readonly ErrorConstant NULL = new ErrorConstant(HSSFErrorConstants.ERROR_NULL);
+        private static readonly ErrorConstant DIV_0 = new ErrorConstant(HSSFErrorConstants.ERROR_DIV_0);
+        private static readonly ErrorConstant VALUE = new ErrorConstant(HSSFErrorConstants.ERROR_VALUE);
+        private static readonly ErrorConstant REF = new ErrorConstant(HSSFErrorConstants.ERROR_REF);
+        private static readonly ErrorConstant NAME = new ErrorConstant(HSSFErrorConstants.ERROR_NAME);
+        private static readonly ErrorConstant NUM = new ErrorConstant(HSSFErrorConstants.ERROR_NUM);
+        private static readonly ErrorConstant NA = new ErrorConstant(HSSFErrorConstants.ERROR_NA);
 
 	    private int _errorCode;
 

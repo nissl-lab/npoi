@@ -52,7 +52,7 @@ namespace NPOI.POIFS.Storage
 
         private static POILogger _logger = POILogFactory.GetLogger(typeof(BlockAllocationTableReader));
 
-        private static int MAX_BLOCK_COUNT = 65535;
+        private const int MAX_BLOCK_COUNT = 65535;
        
         private List<int> _entries;
 

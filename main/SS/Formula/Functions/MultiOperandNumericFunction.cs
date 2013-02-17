@@ -109,7 +109,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private static int DEFAULT_MAX_NUM_OPERANDS = 30;
+        private const int DEFAULT_MAX_NUM_OPERANDS = 30;
 
         /**
          * Maximum number of operands accepted by this function.

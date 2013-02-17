@@ -87,9 +87,9 @@ namespace NPOI.SS.Formula.Functions
 
 
 
-        public static Function LEN = new Len();
-        public static Function LOWER = new Lower();
-        public static Function UPPER = new Upper();
+        public static readonly Function LEN = new Len();
+        public static readonly Function LOWER = new Lower();
+        public static readonly Function UPPER = new Upper();
         /**
          * @author Manda Wilson &lt; wilson at c bio dot msk cc dot org &gt;
          */
@@ -99,7 +99,7 @@ namespace NPOI.SS.Formula.Functions
         /// Removes leading and trailing spaces from value if evaluated operand value is string.
         ///</para>
         ///</summary>
-        public static Function TRIM = new Trim();
+        public static readonly Function TRIM = new Trim();
 
         /*
          * @author Manda Wilson &lt; wilson at c bio dot msk cc dot org &gt;
@@ -112,18 +112,18 @@ namespace NPOI.SS.Formula.Functions
         ///
         /// Syntax: MID(text, start_num, num_chars)
         ///</summary>
-        public static Function MID = new Mid();
+        public static readonly Function MID = new Mid();
 
 
 
-        public static Function LEFT = new LeftRight(true);
-        public static Function RIGHT = new LeftRight(false);
+        public static readonly Function LEFT = new LeftRight(true);
+        public static readonly Function RIGHT = new LeftRight(false);
 
-        public static Function CONCATENATE = new Concatenate();
+        public static readonly Function CONCATENATE = new Concatenate();
 
-        public static Function EXACT = new Exact();
+        public static readonly Function EXACT = new Exact();
 
-        public static Function TEXT = new Text();
+        public static readonly Function TEXT = new Text();
         /**
          * @author Torstein Tauno Svendsen (torstei@officenet.no)
          */
@@ -137,17 +137,17 @@ namespace NPOI.SS.Formula.Functions
         /// start_num, is optional (default=1) and specifies where to start searching
         /// from.  Character positions are 1-based.</para>
         ///</summary>
-        public static Function FIND = new SearchFind(true);
+        public static readonly Function FIND = new SearchFind(true);
         ///<summary>
         ///Implementation of the FIND() function. SEARCH is a case-insensitive version of FIND()
         ///<para>
         /// Syntax: SEARCH(Find_text, within_text, start_num)
         ///</para>
         ///</summary>
-        public static Function SEARCH = new SearchFind(false);
+        public static readonly Function SEARCH = new SearchFind(false);
 
-        public static Function CLEAN = new Clean();
-        public static Function CHAR = new CHAR();
+        public static readonly Function CLEAN = new Clean();
+        public static readonly Function CHAR = new CHAR();
 
     }
 }

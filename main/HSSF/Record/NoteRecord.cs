@@ -30,18 +30,18 @@ namespace NPOI.HSSF.Record
      */
     public class NoteRecord : StandardRecord
     {
-        public static NoteRecord[] EMPTY_ARRAY = { };
+        public static readonly NoteRecord[] EMPTY_ARRAY = { };
         public const short sid = 0x1C;
 
         /**
          * Flag indicating that the comment Is hidden (default)
          */
-        public static short NOTE_HIDDEN = 0x0;
+        public const short NOTE_HIDDEN = 0x0;
 
         /**
          * Flag indicating that the comment Is visible
          */
-        public static short NOTE_VISIBLE = 0x2;
+        public const short NOTE_VISIBLE = 0x2;
 
         private int field_1_row;
         private int field_2_col;

@@ -35,9 +35,9 @@ namespace NPOI.DDF
     public class EscherTextboxRecord : EscherRecord
     {
         public const short RECORD_ID = unchecked((short)0xF00D);
-        public static String RECORD_DESCRIPTION = "msofbtClientTextbox";
+        public const string RECORD_DESCRIPTION = "msofbtClientTextbox";
 
-        private static byte[] NO_BYTES = new byte[0];
+        private static readonly byte[] NO_BYTES = new byte[0];
 
         /** The data for this record not including the the 8 byte header */
         private byte[] _thedata = NO_BYTES;

@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
     public class UserSViewEnd : StandardRecord
     {
 
-        public static short sid = 0x01AB;
+        public const short sid = 0x01AB;
         private byte[] _rawData;
 
         public UserSViewEnd(byte[] data)

@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record.Chart
     public class SeriesListRecord
        : StandardRecord
     {
-        public static short sid = 0x1016;
+        public const short sid = 0x1016;
         private short[] field_1_seriesNumbers;
 
 

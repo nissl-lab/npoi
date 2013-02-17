@@ -49,30 +49,30 @@ namespace NPOI.SS.Util
         /**
          * Number of powers of ten Contained in the significand
          */
-        private static int EXPONENT_OFFSET = 14;
+        private const int EXPONENT_OFFSET = 14;
 
-        private static decimal BD_2_POW_24 = new decimal((BigInteger.ONE << 24).LongValue());
+        private static readonly decimal BD_2_POW_24 = new decimal((BigInteger.ONE << 24).LongValue());
 
         /*
          * log<sub>10</sub>(2)&times;2<sup>20</sup>
          */
-        private static int LOG_BASE_10_OF_2_TIMES_2_POW_20 = 315653; // 315652.8287
+        private const int LOG_BASE_10_OF_2_TIMES_2_POW_20 = 315653; // 315652.8287
 
         /**
          * 2<sup>19</sup>
          */
-        private static int C_2_POW_19 = 1 << 19;
+        private const int C_2_POW_19 = 1 << 19;
 
 
         /**
          * the value of {@link #_fractionalPart} that represents 0.5
          */
-        private static int FRAC_HALF = 0x800000;
+        private const int FRAC_HALF = 0x800000;
 
         /**
          * 10<sup>15</sup>
          */
-        private static long MAX_REP_WHOLE_PART = 0x38D7EA4C68000L;
+        private const long MAX_REP_WHOLE_PART = 0x38D7EA4C68000L;
 
 
 

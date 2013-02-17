@@ -30,10 +30,10 @@ namespace NPOI.SS.Formula.Functions
     public class TimeFunc : Fixed3ArgFunction
     {
 
-        private static int SECONDS_PER_MINUTE = 60;
-        private static int SECONDS_PER_HOUR = 3600;
-        private static int HOURS_PER_DAY = 24;
-        private static int SECONDS_PER_DAY = HOURS_PER_DAY * SECONDS_PER_HOUR;
+        private const int SECONDS_PER_MINUTE = 60;
+        private const int SECONDS_PER_HOUR = 3600;
+        private const int HOURS_PER_DAY = 24;
+        private const int SECONDS_PER_DAY = HOURS_PER_DAY * SECONDS_PER_HOUR;
 
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1,

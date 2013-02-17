@@ -37,14 +37,10 @@ namespace NPOI.HSSF.Record
         private short field_3_topRow;
         private short field_4_leftColumn;
         private short field_5_activePane;
-        public static short ACTIVE_PANE_LOWER_RIGHT = 0;
-        public static short ACTIVE_PANE_UPPER_RIGHT = 1;
-        public static short ACTIVE_PANE_LOWER_LEFT = 2;
-        // TODO - Remove obsolete field (it was deprecated May-2008 v3.1)
-        /** @deprecated use ACTIVE_PANE_UPPER_LEFT */
-        [Obsolete]
-        public static short ACTIVE_PANE_UPER_LEFT = 3;
-        public static short ACTIVE_PANE_UPPER_LEFT = 3;
+        public const short ACTIVE_PANE_LOWER_RIGHT = 0;
+        public const short ACTIVE_PANE_UPPER_RIGHT = 1;
+        public const short ACTIVE_PANE_LOWER_LEFT = 2;
+        public const short ACTIVE_PANE_UPPER_LEFT = 3;
 
 
         public PaneRecord()

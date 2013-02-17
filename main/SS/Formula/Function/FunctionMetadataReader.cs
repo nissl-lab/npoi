@@ -19,6 +19,7 @@ namespace NPOI.SS.Formula.Function
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula.PTG;
@@ -35,26 +36,18 @@ namespace NPOI.SS.Formula.Function
         private const String METADATA_FILE_NAME = "functionMetadata.txt";
 
         /** plain ASCII text metadata file uses three dots for ellipsis */
-        private static String ELLIPSIS = "...";
+        private const string ELLIPSIS = "...";
 
-        private static string TAB_DELIM_PATTERN = @"\t";
-        private static string SPACE_DELIM_PATTERN = @"\s";
-        private static byte[] EMPTY_BYTE_ARRAY = { };
+        private const string TAB_DELIM_PATTERN = @"\t";
+        private const string SPACE_DELIM_PATTERN = @"\s";
+        private static readonly byte[] EMPTY_BYTE_ARRAY = { };
 
-        private static String[] DIGIT_ENDING_FUNCTION_NAMES = {
+        private static readonly string[] DIGIT_ENDING_FUNCTION_NAMES = {
 		// Digits at the end of a function might be due to a left-over footnote marker.
 		// except in these cases
 		"LOG10", "ATAN2", "DAYS360", "SUMXMY2", "SUMX2MY2", "SUMX2PY2",
 	};
-        private static ArrayList DIGIT_ENDING_FUNCTION_NAMES_Set = new ArrayList();
-
-        static FunctionMetadataReader()
-        {
-            for (int i = 0; i < DIGIT_ENDING_FUNCTION_NAMES.Length; i++)
-            {
-                DIGIT_ENDING_FUNCTION_NAMES_Set.Add(DIGIT_ENDING_FUNCTION_NAMES[i]);
-            }
-        }
+		private static List<string> DIGIT_ENDING_FUNCTION_NAMES_Set = new List<string> (DIGIT_ENDING_FUNCTION_NAMES);
 
         public static FunctionMetadataRegistry CreateRegistry()
         {

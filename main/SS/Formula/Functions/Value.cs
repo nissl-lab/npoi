@@ -28,8 +28,8 @@ namespace NPOI.SS.Formula.Functions
     public class Value : Fixed1ArgFunction
     {
         /** "1,0000" is valid, "1,00" is not */
-        private static int MIN_DISTANCE_BETWEEN_THOUSANDS_SEPARATOR = 4;
-        private static Double ZERO = 0.0;
+        private const int MIN_DISTANCE_BETWEEN_THOUSANDS_SEPARATOR = 4;
+        private const double ZERO = 0.0;
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {

@@ -165,9 +165,9 @@ namespace NPOI.SS.Formula
 
         private ParseNode _rootNode;
 
-        private static char TAB = '\t';// HSSF + XSSF
-	    private static char CR = '\r';  // Normally just XSSF
-	    private static char LF = '\n';  // Normally just XSSF
+        private const char TAB = '\t';// HSSF + XSSF
+	    private const char CR = '\r';  // Normally just XSSF
+	    private const char LF = '\n';  // Normally just XSSF
 
         /**
          * Lookahead Character.

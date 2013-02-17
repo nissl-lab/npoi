@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
     public class RefreshAllRecord
        : StandardRecord
     {
-        public static short sid = 0x1B7;
+        public const short sid = 0x1B7;
         //private short field_1_refreshall;
         private static BitField refreshFlag = BitFieldFactory.GetInstance(0x0001);
 

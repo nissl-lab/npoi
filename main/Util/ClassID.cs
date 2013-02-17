@@ -76,7 +76,7 @@ namespace NPOI.Util
 
         /** The number of bytes occupied by this object in the byte
          * stream. */
-        public static int LENGTH = 16;
+        public const int LENGTH = 16;
 
         /// <summary>
         /// Gets the length.

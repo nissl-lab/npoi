@@ -37,9 +37,9 @@ namespace NPOI.HSSF.Record.Chart
     {
         public const short sid = 0x101d;
         private short field_1_axisType;
-        public static short AXIS_TYPE_CATEGORY_OR_X_AXIS = 0;
-        public static short AXIS_TYPE_VALUE_AXIS = 1;
-        public static short AXIS_TYPE_SERIES_AXIS = 2;
+        public const short AXIS_TYPE_CATEGORY_OR_X_AXIS = 0;
+        public const short AXIS_TYPE_VALUE_AXIS = 1;
+        public const short AXIS_TYPE_SERIES_AXIS = 2;
         private int field_2_reserved1;
         private int field_3_reserved2;
         private int field_4_reserved3;

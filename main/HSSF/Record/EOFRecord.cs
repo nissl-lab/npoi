@@ -38,8 +38,8 @@ namespace NPOI.HSSF.Record
 public class EOFRecord: StandardRecord
 {
     public const short sid = 0x0A;
-    public static int ENCODED_SIZE = 4;
-    public static EOFRecord instance = new EOFRecord();
+    public const int ENCODED_SIZE = 4;
+    public static readonly EOFRecord instance = new EOFRecord();
 
     public EOFRecord()
     {

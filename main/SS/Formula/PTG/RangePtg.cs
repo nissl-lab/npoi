@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.PTG
      */
     public class RangePtg : OperationPtg
     {
-        public static int SIZE = 1;
+        public const int SIZE = 1;
         public const byte sid = 0x11;
 
         public static OperationPtg instance = new RangePtg();

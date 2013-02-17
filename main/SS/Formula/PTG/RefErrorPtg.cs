@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.PTG
     public class RefErrorPtg : OperandPtg
     {
 
-        private static int SIZE = 5;
+        private const int SIZE = 5;
         public const byte sid = 0x2a;
         private int field_1_reserved;
 

@@ -36,8 +36,8 @@ namespace NPOI.HSSF.Record.Chart
     {
         public const short sid = 0x1032;
         private short field_1_borderType;
-        public static short BORDER_TYPE_REGULAR = 0;
-        public static short BORDER_TYPE_SHADOW = 1;
+        public const short BORDER_TYPE_REGULAR = 0;
+        public const short BORDER_TYPE_SHADOW = 1;
         private short field_2_options;
         private BitField autoSize = BitFieldFactory.GetInstance(0x1);
         private BitField autoPosition = BitFieldFactory.GetInstance(0x2);

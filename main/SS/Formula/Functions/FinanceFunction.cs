@@ -106,9 +106,9 @@ namespace NPOI.SS.Formula.Functions
 
         public abstract double Evaluate(double rate, double arg1, double arg2, double arg3, bool type);
 
-        public static Function FV = new Fv();
-        public static Function NPER = new Nper();
-        public static Function PMT = new Pmt();
-        public static Function PV = new Pv();
+        public static readonly Function FV = new Fv();
+        public static readonly Function NPER = new Nper();
+        public static readonly Function PMT = new Pmt();
+        public static readonly Function PV = new Pv();
     }
 }

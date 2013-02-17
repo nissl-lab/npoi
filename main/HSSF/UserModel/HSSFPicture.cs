@@ -38,16 +38,16 @@ namespace NPOI.HSSF.UserModel
         /**
          * width of 1px in columns with default width in Units of 1/256 of a Char width
          */
-        private static float PX_DEFAULT = 32.00f;
+        private const float PX_DEFAULT = 32.00f;
         /**
          * width of 1px in columns with overridden width in Units of 1/256 of a Char width
          */
-        private static float PX_MODIFIED = 36.56f;
+        private const float PX_MODIFIED = 36.56f;
 
         /**
          * Height of 1px of a row
          */
-        private static int PX_ROW = 15;
+        private const int PX_ROW = 15;
 
         //int pictureIndex;
         //HSSFPatriarch patriarch;

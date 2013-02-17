@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.Udf
      */
     public abstract class UDFFinder
     {
-        public static UDFFinder DEFAULT = new AggregatingUDFFinder(AnalysisToolPak.instance);
+        public static readonly UDFFinder DEFAULT = new AggregatingUDFFinder(AnalysisToolPak.instance);
 
         /**
          * Returns executor by specified name. Returns <code>null</code> if the function name is unknown.

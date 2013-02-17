@@ -87,11 +87,11 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class NumericFunction : Function
     {
-        public static double TEN = 10.0;
-        public static double LOG_10_TO_BASE_e = Math.Log(TEN);
-        public static double E = Math.E;
-        public static double PI = Math.PI;
-        public static double ZERO = 0.0;
+        public const double TEN = 10.0;
+        public static readonly double LOG_10_TO_BASE_e = Math.Log(TEN);
+        public const double E = Math.E;
+        public const double PI = Math.PI;
+        public const double ZERO = 0.0;
 
         public static double SingleOperandEvaluate(ValueEval arg, int srcCellRow, int srcCellCol)
         {
@@ -126,47 +126,47 @@ namespace NPOI.SS.Formula.Functions
         }
         protected abstract double Eval(ValueEval[] evals, int srcCellRow, int srcCellCol);
 
-        public static Function ABS = new Abs();
+        public static readonly Function ABS = new Abs();
 
-        public static Function COS = new Cos();
-        public static Function COSH = new Cosh();
-        public static Function ACOS = new Acos();
-        public static Function ACOSH = new Acosh();
+        public static readonly Function COS = new Cos();
+        public static readonly Function COSH = new Cosh();
+        public static readonly Function ACOS = new Acos();
+        public static readonly Function ACOSH = new Acosh();
 
-        public static Function ASIN = new Asin();
-        public static Function ASINH = new Asinh();
-        public static Function SIN = new Sin();
-        public static Function SINH = new Sinh();
+        public static readonly Function ASIN = new Asin();
+        public static readonly Function ASINH = new Asinh();
+        public static readonly Function SIN = new Sin();
+        public static readonly Function SINH = new Sinh();
 
-        public static Function TAN = new Tan();
-        public static Function TANH = new Tanh();
-        public static Function ATAN = new Atan();
-        public static Function ATANH = new Atanh();
-        public static Function ATAN2 = new Atan2();
+        public static readonly Function TAN = new Tan();
+        public static readonly Function TANH = new Tanh();
+        public static readonly Function ATAN = new Atan();
+        public static readonly Function ATANH = new Atanh();
+        public static readonly Function ATAN2 = new Atan2();
 
-        public static Function DEGREES = new Degrees();
-        public static Function DOLLAR = new Dollar();
-        public static Function EXP = new Exp();
-        public static Function FACT = new Fact();
-        public static Function INT = new Int();
-        public static Function LN = new Ln();
-        public static Function LOG10 = new Log10();
+        public static readonly Function DEGREES = new Degrees();
+        public static readonly Function DOLLAR = new Dollar();
+        public static readonly Function EXP = new Exp();
+        public static readonly Function FACT = new Fact();
+        public static readonly Function INT = new Int();
+        public static readonly Function LN = new Ln();
+        public static readonly Function LOG10 = new Log10();
 
-        public static Function RADIANS = new Radians();
-        public static Function SIGN = new Sign();
-        public static Function SQRT=new Sqrt();
+        public static readonly Function RADIANS = new Radians();
+        public static readonly Function SIGN = new Sign();
+        public static readonly Function SQRT = new Sqrt();
 
-        public static Function CEILING = new Ceiling();
-        public static Function COMBIN=new Combin();
-        public static Function FLOOR = new Floor();
-        public static Function MOD=new Mod();
-        public static Function POWER=new Power();
-        public static Function ROUND=new Round();
-        public static Function ROUNDDOWN=new Rounddown();
-        public static Function ROUNDUP=new Roundup();
+        public static readonly Function CEILING = new Ceiling();
+        public static readonly Function COMBIN =new Combin();
+        public static readonly Function FLOOR = new Floor();
+        public static readonly Function MOD = new Mod();
+        public static readonly Function POWER = new Power();
+        public static readonly Function ROUND = new Round();
+        public static readonly Function ROUNDDOWN = new Rounddown();
+        public static readonly Function ROUNDUP = new Roundup();
 
-        public static Function LOG = new Log();
-        public static Function TRUNC = new Trunc();
-        public static Function POISSON = new Poisson();
+        public static readonly Function LOG = new Log();
+        public static readonly Function TRUNC = new Trunc();
+        public static readonly Function POISSON = new Poisson();
     }
 }

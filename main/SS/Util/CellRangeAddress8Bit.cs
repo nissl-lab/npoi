@@ -7,7 +7,7 @@ namespace NPOI.SS.Util
 
     public class CellRangeAddress8Bit : CellRangeAddressBase
     {
-        public static int ENCODED_SIZE = 6;
+        public const int ENCODED_SIZE = 6;
 
         public CellRangeAddress8Bit(int firstRow, int lastRow, int firstCol, int lastCol)
             : base(firstRow, lastRow, firstCol, lastCol)

@@ -45,7 +45,7 @@ namespace NPOI.HSSF.Record
          * for)
          */
 
-        public static short CODEPAGE = (short)0x4b0;
+        public const short CODEPAGE = (short)0x4b0;
 
         public CodepageRecord()
         {

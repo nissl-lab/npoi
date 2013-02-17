@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
     public class NoteStructureSubRecord: SubRecord
     {
         public const short sid = 0x0D;
-        private static int ENCODED_SIZE = 22;
+        private const int ENCODED_SIZE = 22;
 
         private byte[] reserved;
 

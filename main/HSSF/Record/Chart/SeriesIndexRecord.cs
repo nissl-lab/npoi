@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record.Chart
     public class SeriesIndexRecord
        : StandardRecord
     {
-        public static short sid = 0x1065;
+        public const short sid = 0x1065;
         private short field_1_index;
 
 

@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.Cont
      */
     class UnknownLengthRecordOutput : ILittleEndianOutput
     {
-        private static int MAX_DATA_SIZE = RecordInputStream.MAX_RECORD_DATA_SIZE;
+        private const int MAX_DATA_SIZE = RecordInputStream.MAX_RECORD_DATA_SIZE;
 
         private ILittleEndianOutput _originalOut;
         /** for writing the 'ushort size'  field once its value is known */

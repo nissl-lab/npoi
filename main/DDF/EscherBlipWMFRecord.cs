@@ -35,8 +35,8 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherBlipWMFRecord : EscherBlipRecord
     {
-        //    public static short  RECORD_ID_START    = (short) 0xF018;
-        //    public static short  RECORD_ID_END      = (short) 0xF117;
+        //    public const short  RECORD_ID_START    = (short) 0xF018;
+        //    public const short  RECORD_ID_END      = (short) 0xF117;
         public new const String RECORD_DESCRIPTION = "msofbtBlip";
         private const int HEADER_SIZE = 8;
 

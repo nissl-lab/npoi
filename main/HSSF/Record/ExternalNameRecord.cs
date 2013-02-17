@@ -35,15 +35,15 @@ namespace NPOI.HSSF.Record
     public class ExternalNameRecord : StandardRecord
     {
 
-        public static short sid = 0x23; // as per BIFF8. (some old versions used 0x223)
+        public const short sid = 0x23; // as per BIFF8. (some old versions used 0x223)
 
-        private static int OPT_BUILTIN_NAME = 0x0001;
-        private static int OPT_AUTOMATIC_LINK = 0x0002; // m$ doc calls this fWantAdvise 
-        private static int OPT_PICTURE_LINK = 0x0004;
-        private static int OPT_STD_DOCUMENT_NAME = 0x0008;
-        private static int OPT_OLE_LINK = 0x0010;
-        //	private static int OPT_CLIP_FORMAT_MASK      = 0x7FE0;
-        private static int OPT_ICONIFIED_PICTURE_LINK = 0x8000;
+        private const int OPT_BUILTIN_NAME = 0x0001;
+        private const int OPT_AUTOMATIC_LINK = 0x0002; // m$ doc calls this fWantAdvise 
+        private const int OPT_PICTURE_LINK = 0x0004;
+        private const int OPT_STD_DOCUMENT_NAME = 0x0008;
+        private const int OPT_OLE_LINK = 0x0010;
+        //	private const int OPT_CLIP_FORMAT_MASK      = 0x7FE0;
+        private const int OPT_ICONIFIED_PICTURE_LINK = 0x8000;
 
 
         private short field_1_option_flag;

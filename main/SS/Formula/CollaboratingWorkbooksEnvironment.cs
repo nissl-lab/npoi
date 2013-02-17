@@ -39,8 +39,7 @@ namespace NPOI.SS.Formula
      */
     public class CollaboratingWorkbooksEnvironment
     {
-
-        public static CollaboratingWorkbooksEnvironment EMPTY = new CollaboratingWorkbooksEnvironment();
+        public static readonly CollaboratingWorkbooksEnvironment EMPTY = new CollaboratingWorkbooksEnvironment();
 
         private Hashtable _evaluatorsByName;
         private WorkbookEvaluator[] _evaluators;

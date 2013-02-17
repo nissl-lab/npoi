@@ -32,7 +32,7 @@ namespace NPOI.SS.Formula.PTG
      */
     public class ExpPtg : ControlPtg
     {
-        private static int SIZE = 5;
+        private const int SIZE = 5;
         public const byte sid = 0x1;
         private short field_1_first_row;
         private short field_2_first_col;

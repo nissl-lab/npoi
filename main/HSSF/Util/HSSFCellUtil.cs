@@ -33,27 +33,26 @@ namespace NPOI.HSSF.Util
     /// </summary>
     public class HSSFCellUtil
     {
-
-        public static String ALIGNMENT = "alignment";
-        public static String BORDER_BOTTOM = "borderBottom";
-        public static String BORDER_LEFT = "borderLeft";
-        public static String BORDER_RIGHT = "borderRight";
-        public static String BORDER_TOP = "borderTop";
-        public static String BOTTOM_BORDER_COLOR = "bottomBorderColor";
-        public static String DATA_FORMAT = "dataFormat";
-        public static String FILL_BACKGROUND_COLOR = "fillBackgroundColor";
-        public static String FILL_FOREGROUND_COLOR = "fillForegroundColor";
-        public static String FILL_PATTERN = "fillPattern";
-        public static String FONT = "font";
-        public static String HIDDEN = "hidden";
-        public static String INDENTION = "indention";
-        public static String LEFT_BORDER_COLOR = "leftBorderColor";
-        public static String LOCKED = "locked";
-        public static String RIGHT_BORDER_COLOR = "rightBorderColor";
-        public static String ROTATION = "rotation";
-        public static String TOP_BORDER_COLOR = "topBorderColor";
-        public static String VERTICAL_ALIGNMENT = "verticalAlignment";
-        public static String WRAP_TEXT = "wrapText";
+        public const string ALIGNMENT = "alignment";
+        public const string BORDER_BOTTOM = "borderBottom";
+        public const string BORDER_LEFT = "borderLeft";
+        public const string BORDER_RIGHT = "borderRight";
+        public const string BORDER_TOP = "borderTop";
+        public const string BOTTOM_BORDER_COLOR = "bottomBorderColor";
+        public const string DATA_FORMAT = "dataFormat";
+        public const string FILL_BACKGROUND_COLOR = "fillBackgroundColor";
+        public const string FILL_FOREGROUND_COLOR = "fillForegroundColor";
+        public const string FILL_PATTERN = "fillPattern";
+        public const string FONT = "font";
+        public const string HIDDEN = "hidden";
+        public const string INDENTION = "indention";
+        public const string LEFT_BORDER_COLOR = "leftBorderColor";
+        public const string LOCKED = "locked";
+        public const string RIGHT_BORDER_COLOR = "rightBorderColor";
+        public const string ROTATION = "rotation";
+        public const string TOP_BORDER_COLOR = "topBorderColor";
+        public const string VERTICAL_ALIGNMENT = "verticalAlignment";
+        public const string WRAP_TEXT = "wrapText";
 
         private static UnicodeMapping[] unicodeMappings;
 

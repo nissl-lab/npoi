@@ -73,7 +73,7 @@ namespace NPOI.HSSF.Model
          * (which is duplciated in more than one record)
          */
 
-        private static short CODEPAGE = (short)0x4b0;
+        private const short CODEPAGE = (short)0x4b0;
 
         /**
          * this Contains the Worksheet record objects

@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Functions
     public class Pi : Fixed0ArgFunction
     {
 
-        private static NumberEval PI_EVAL = new NumberEval(Math.PI);
+        private static readonly NumberEval PI_EVAL = new NumberEval(Math.PI);
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex)
         {

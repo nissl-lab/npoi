@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record
      */
     public class TableStylesRecord : StandardRecord
     {
-        public static short sid = 0x088E;
+        public const short sid = 0x088E;
 
         private int rt;
         private int grbitFrt;

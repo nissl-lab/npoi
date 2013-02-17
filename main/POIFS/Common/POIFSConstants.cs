@@ -36,11 +36,11 @@ namespace NPOI.POIFS.Common
         /** Most files use 512 bytes as their big block size */
         public const int SMALLER_BIG_BLOCK_SIZE = 0x0200;
 
-        public static POIFSBigBlockSize SMALLER_BIG_BLOCK_SIZE_DETAILS =
+        public static readonly POIFSBigBlockSize SMALLER_BIG_BLOCK_SIZE_DETAILS =
        new POIFSBigBlockSize(SMALLER_BIG_BLOCK_SIZE, (short)9);
         /** Some use 4096 bytes */
         public const int LARGER_BIG_BLOCK_SIZE = 0x1000;
-        public static POIFSBigBlockSize LARGER_BIG_BLOCK_SIZE_DETAILS =
+        public static readonly POIFSBigBlockSize LARGER_BIG_BLOCK_SIZE_DETAILS =
            new POIFSBigBlockSize(LARGER_BIG_BLOCK_SIZE, (short)12);
         /** Most files use 512 bytes as their big block size */
         //[Obsolete]
@@ -72,7 +72,7 @@ namespace NPOI.POIFS.Common
         /** Indicates the sector is not used (0xFFFFFFFF) */
         public const int UNUSED_BLOCK = -1;
         /** The first 4 bytes of an OOXML file, used in detection */
-        public static byte[] OOXML_FILE_HEADER =
+        public static readonly byte[] OOXML_FILE_HEADER =
             new byte[] { 0x50, 0x4b, 0x03, 0x04 };
     }
 }

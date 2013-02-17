@@ -20,7 +20,7 @@ namespace NPOI.HPSF
 {
     public class Decimal
     {
-        public static int SIZE = 16;
+        public const int SIZE = 16;
 
         private short field_1_wReserved;
         private byte field_2_scale;

@@ -27,7 +27,7 @@ namespace NPOI.POIFS.Crypt
 {
     public abstract class Decryptor
     {
-        public static string DEFAULT_PASSWORD = "VelvetSweatshop";
+        public const string DEFAULT_PASSWORD = "VelvetSweatshop";
 
         /// <summary>
         /// Return a stream with decrypted data.

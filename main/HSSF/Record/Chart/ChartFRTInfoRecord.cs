@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Record.Chart
     /// </summary>
     public class ChartFRTInfoRecord : StandardRecord
     {
-        public static short sid = 0x850;
+        public const short sid = 0x850;
 
         private short rt;
         private short grbitFrt;
@@ -45,7 +45,7 @@ namespace NPOI.HSSF.Record.Chart
 
         private class CFRTID : ICloneable
         {
-            public static int ENCODED_SIZE = 4;
+            public const int ENCODED_SIZE = 4;
             private int rtFirst;
             private int rtLast;
 
@@ -66,7 +66,7 @@ namespace NPOI.HSSF.Record.Chart
                 out1.WriteShort(rtLast);
             }
 
-            #region ICloneable ³ÉÔ±
+            #region ICloneable ï¿½ï¿½Ô±
 
             public object Clone()
             {

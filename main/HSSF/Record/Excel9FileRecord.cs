@@ -12,7 +12,7 @@ namespace NPOI.HSSF.Record
         
         }
 
-        public static short sid = 0x1c0;
+        public const short sid = 0x1c0;
         public override short Sid
         {
             get { return sid; }

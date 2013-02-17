@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0x59;
 
-        private static short DATA_SIZE = 4;
+        private const short DATA_SIZE = 4;
 
 
         private int field_1_number_crn_records;

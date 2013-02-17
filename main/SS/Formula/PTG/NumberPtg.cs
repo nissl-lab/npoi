@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.PTG
      */
     public class NumberPtg : ScalarConstantPtg
     {
-        public static int SIZE = 9;
+        public const int SIZE = 9;
         public const byte sid = 0x1f;
         private double field_1_value;
 

@@ -32,14 +32,14 @@ namespace NPOI.SS.Formula
     public class SheetNameFormatter
     {
 
-        private static String BIFF8_LAST_COLUMN = "IV";
-        private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
-        private static String BIFF8_LAST_ROW = (0x10000).ToString(CultureInfo.InvariantCulture);
-        private static int BIFF8_LAST_ROW_TEXT_LEN = BIFF8_LAST_ROW.Length;
+        private const string BIFF8_LAST_COLUMN = "IV";
+        private const int BIFF8_LAST_COLUMN_TEXT_LEN = 2;
+        private static readonly string BIFF8_LAST_ROW = (0x10000).ToString(CultureInfo.InvariantCulture);
+        private static readonly int BIFF8_LAST_ROW_TEXT_LEN = BIFF8_LAST_ROW.Length;
 
-        private static char DELIMITER = '\'';
+        private const char DELIMITER = '\'';
 
-        private static string CELL_REF_PATTERN = "^([A-Za-z]+)([0-9]+)$";
+        private const string CELL_REF_PATTERN = "^([A-Za-z]+)([0-9]+)$";
 
         private SheetNameFormatter()
         {

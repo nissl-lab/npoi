@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula
      */
     public class OperationEvaluationContext
     {
-        public static FreeRefFunction UDF = UserDefinedFunction.instance;
+        public static readonly FreeRefFunction UDF = UserDefinedFunction.instance;
         private IEvaluationWorkbook _workbook;
         private int _sheetIndex;
         private int _rowIndex;

@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record.Chart
     public class SeriesToChartGroupRecord
        : StandardRecord
     {
-        public static short sid = 0x1045;
+        public const short sid = 0x1045;
         private short field_1_chartGroupIndex;
 
 

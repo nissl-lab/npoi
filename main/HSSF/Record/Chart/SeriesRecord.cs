@@ -33,24 +33,24 @@ namespace NPOI.HSSF.Record.Chart
     public class SeriesRecord
        : StandardRecord
     {
-        public static short sid = 0x1003;
+        public const short sid = 0x1003;
         private short field_1_categoryDataType;
-        public static short CATEGORY_DATA_TYPE_DATES = 0;
-        public static short CATEGORY_DATA_TYPE_NUMERIC = 1;
-        public static short CATEGORY_DATA_TYPE_SEQUENCE = 2;
-        public static short CATEGORY_DATA_TYPE_TEXT = 3;
+        public const short CATEGORY_DATA_TYPE_DATES = 0;
+        public const short CATEGORY_DATA_TYPE_NUMERIC = 1;
+        public const short CATEGORY_DATA_TYPE_SEQUENCE = 2;
+        public const short CATEGORY_DATA_TYPE_TEXT = 3;
         private short field_2_valuesDataType;
-        public static short VALUES_DATA_TYPE_DATES = 0;
-        public static short VALUES_DATA_TYPE_NUMERIC = 1;
-        public static short VALUES_DATA_TYPE_SEQUENCE = 2;
-        public static short VALUES_DATA_TYPE_TEXT = 3;
+        public const short VALUES_DATA_TYPE_DATES = 0;
+        public const short VALUES_DATA_TYPE_NUMERIC = 1;
+        public const short VALUES_DATA_TYPE_SEQUENCE = 2;
+        public const short VALUES_DATA_TYPE_TEXT = 3;
         private short field_3_numCategories;
         private short field_4_numValues;
         private short field_5_bubbleSeriesType;
-        public static short BUBBLE_SERIES_TYPE_DATES = 0;
-        public static short BUBBLE_SERIES_TYPE_NUMERIC = 1;
-        public static short BUBBLE_SERIES_TYPE_SEQUENCE = 2;
-        public static short BUBBLE_SERIES_TYPE_TEXT = 3;
+        public const short BUBBLE_SERIES_TYPE_DATES = 0;
+        public const short BUBBLE_SERIES_TYPE_NUMERIC = 1;
+        public const short BUBBLE_SERIES_TYPE_SEQUENCE = 2;
+        public const short BUBBLE_SERIES_TYPE_TEXT = 3;
         private short field_6_numBubbleValues;
 
 

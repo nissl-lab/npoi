@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
     public class UseSelFSRecord
        : StandardRecord
     {
-        public static short sid = 0x160;
+        public const short sid = 0x160;
 
         private static BitField useNaturalLanguageFormulasFlag = BitFieldFactory.GetInstance(0x0001);
         private int _options;

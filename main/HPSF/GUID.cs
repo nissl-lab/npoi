@@ -20,7 +20,7 @@ namespace NPOI.HPSF
 {
     public class GUID
     {
-        public static int SIZE = 16;
+        public const int SIZE = 16;
 
         private int _data1;
         private short _data2;

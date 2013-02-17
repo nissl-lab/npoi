@@ -53,7 +53,7 @@ namespace NPOI.HSSF.Record
         public const char CH_STARTUP_DIR = (char)6;
         public const char CH_ALT_STARTUP_DIR = (char)7;
         public const char CH_LIB_DIR = (char)8;
-        public static char PATH_SEPERATOR = System.IO.Path.DirectorySeparatorChar;
+        public static readonly char PATH_SEPERATOR = System.IO.Path.DirectorySeparatorChar;
 
 
         public static SupBookRecord CreateInternalReferences(short numberOfSheets)

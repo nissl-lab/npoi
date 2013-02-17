@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.PTG
      */
     public class GreaterEqualPtg : ValueOperatorPtg
     {
-        public static int SIZE = 1;
+        public const int SIZE = 1;
         public const byte sid = 0x0c;
 
         public static ValueOperatorPtg instance = new GreaterEqualPtg();
