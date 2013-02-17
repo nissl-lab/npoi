@@ -30,33 +30,33 @@ namespace NPOI.SS.UserModel
          * The underline is drawn through the descenders of
          * characters such as g and p..
          */
-        public static readonly FontUnderline SINGLE = new FontUnderline(1);
+        public static readonly FontUnderline Single = new FontUnderline(1);
 
         /**
          * Double-line underlining under each character in the
          * cell. underlines are drawn through the descenders of
          * characters such as g and p.
          */
-        public static readonly FontUnderline DOUBLE = new FontUnderline(2);
+        public static readonly FontUnderline Double = new FontUnderline(2);
 
         /**
          * Single-line accounting underlining under each
          * character in the cell. The underline is drawn under the
          * descenders of characters such as g and p.
          */
-        public static readonly FontUnderline SINGLE_ACCOUNTING = new FontUnderline(3);
+        public static readonly FontUnderline SingleAccounting = new FontUnderline(3);
 
         /**
          * Double-line accounting underlining under each
          * character in the cell. The underlines are drawn under
          * the descenders of characters such as g and p.
          */
-        public static readonly FontUnderline DOUBLE_ACCOUNTING = new FontUnderline(4);
+        public static readonly FontUnderline DoubleAccounting = new FontUnderline(4);
 
         /**
          * No underline.
          */
-        public static readonly FontUnderline NONE = new FontUnderline(5);
+        public static readonly FontUnderline None = new FontUnderline(5);
 
 
         private int value;
@@ -79,23 +79,23 @@ namespace NPOI.SS.UserModel
         {
             get
             {
-                if (this == DOUBLE)
+                if (this == Double)
                 {
                     return (byte)FontUnderlineType.Double;
                 }
-                else if (this == DOUBLE_ACCOUNTING)
+                else if (this == DoubleAccounting)
                 {
                     return (byte)FontUnderlineType.DoubleAccounting;
                 }
-                else if (this == SINGLE_ACCOUNTING)
+                else if (this == SingleAccounting)
                 {
                     return (byte)FontUnderlineType.SingleAccounting;
                 }
-                else if (this == NONE)
+                else if (this == None)
                 {
                     return (byte)FontUnderlineType.None;
                 }
-                else if (this == SINGLE)
+                else if (this == Single)
                 {
                     return (byte)FontUnderlineType.Single;
                 }
@@ -113,11 +113,11 @@ namespace NPOI.SS.UserModel
             if (_table == null)
             {
                 _table = new FontUnderline[6];
-                _table[1] = FontUnderline.SINGLE;
-                _table[2] = FontUnderline.DOUBLE;
-                _table[3] = FontUnderline.SINGLE_ACCOUNTING;
-                _table[4] = FontUnderline.DOUBLE_ACCOUNTING;
-                _table[5] = FontUnderline.NONE;
+                _table[1] = FontUnderline.Single;
+                _table[2] = FontUnderline.Double;
+                _table[3] = FontUnderline.SingleAccounting;
+                _table[4] = FontUnderline.DoubleAccounting;
+                _table[5] = FontUnderline.None;
             }
         }
         public static FontUnderline ValueOf(int value)
@@ -131,19 +131,19 @@ namespace NPOI.SS.UserModel
             switch (value)
             {
                 case FontUnderlineType.Double:
-                    val = FontUnderline.DOUBLE;
+                    val = FontUnderline.Double;
                     break;
                 case FontUnderlineType.DoubleAccounting:
-                    val = FontUnderline.DOUBLE_ACCOUNTING;
+                    val = FontUnderline.DoubleAccounting;
                     break;
                 case FontUnderlineType.SingleAccounting:
-                    val = FontUnderline.SINGLE_ACCOUNTING;
+                    val = FontUnderline.SingleAccounting;
                     break;
                 case FontUnderlineType.Single:
-                    val = FontUnderline.SINGLE;
+                    val = FontUnderline.Single;
                     break;
                 default:
-                    val = FontUnderline.NONE;
+                    val = FontUnderline.None;
                     break;
             }
             return val;
