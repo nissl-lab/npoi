@@ -26,61 +26,60 @@ namespace NPOI.SS.UserModel
     {
 
         /**  No background */
-        NO_FILL = 0,
+        NoFill = 0,
 
         /**  Solidly Filled */
-        SOLID_FOREGROUND = 1,
+        SolidForeground = 1,
 
         /**  Small fine dots */
-        FINE_DOTS = 2,
+        FineDots = 2,
 
         /**  Wide dots */
-        ALT_BARS = 3,
+        AltBars = 3,
 
         /**  Sparse dots */
-        SPARSE_DOTS = 4,
+        SparseDots = 4,
 
         /**  Thick horizontal bands */
-        THICK_HORZ_BANDS = 5,
+        ThickHorizontalBands = 5,
 
         /**  Thick vertical bands */
-        THICK_VERT_BANDS = 6,
+        ThickVerticalBands = 6,
 
         /**  Thick backward facing diagonals */
-        THICK_BACKWARD_DIAG = 7,
+        ThickBackwardDiagonals = 7,
 
         /**  Thick forward facing diagonals */
-        THICK_FORWARD_DIAG = 8,
+        ThickForwardDiagonals = 8,
 
         /**  Large spots */
-        BIG_SPOTS = 9,
+        BigSpots = 9,
 
         /**  Brick-like layout */
-        BRICKS = 10,
+        Bricks = 10,
 
         /**  Thin horizontal bands */
-        THIN_HORZ_BANDS = 11,
+        ThinHorizontalBands = 11,
 
         /**  Thin vertical bands */
-        THIN_VERT_BANDS = 12,
+        ThinVerticalBands = 12,
 
         /**  Thin backward diagonal */
-        THIN_BACKWARD_DIAG = 13,
+        ThinBackwardDiagonals = 13,
 
         /**  Thin forward diagonal */
-        THIN_FORWARD_DIAG = 14,
+        ThinForwardDiagonals = 14,
 
         /**  Squares */
-        SQUARES = 15,
+        Squares = 15,
 
         /**  Diamonds */
-        DIAMONDS = 16,
+        Diamonds = 16,
 
         /**  Less Dots */
-        LESS_DOTS = 17,
+        LessDots = 17,
 
         /**  Least Dots */
-        LEAST_DOTS = 18
-
+        LeastDots = 18
     }
 }

@@ -625,11 +625,11 @@ namespace NPOI.HSSF.Converter
             style.Append("white-space: pre-wrap; ");
             ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
 
-            if (cellStyle.FillPattern == FillPatternType.NO_FILL)
+            if (cellStyle.FillPattern == FillPatternType.NoFill)
             {
                 // no fill
             }
-            else if (cellStyle.FillPattern == FillPatternType.SOLID_FOREGROUND)
+            else if (cellStyle.FillPattern == FillPatternType.SolidForeground)
             {
                 //cellStyle.
                 //HSSFColor.
