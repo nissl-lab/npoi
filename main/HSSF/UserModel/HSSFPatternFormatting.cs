@@ -27,45 +27,6 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFPatternFormatting : IPatternFormatting
     {
-        /**  No background */
-        public const short NO_Fill = PatternFormatting.NO_Fill;
-        /**  Solidly Filled */
-        public const short SOLID_FOREGROUND = PatternFormatting.SOLID_FOREGROUND;
-        /**  Small fine dots */
-        public const short FINE_DOTS = PatternFormatting.FINE_DOTS;
-        /**  Wide dots */
-        public const short ALT_BARS = PatternFormatting.ALT_BARS;
-        /**  SParse dots */
-        public const short SPARSE_DOTS = PatternFormatting.SPARSE_DOTS;
-        /**  Thick horizontal bands */
-        public const short THICK_HORZ_BANDS = PatternFormatting.THICK_HORZ_BANDS;
-        /**  Thick vertical bands */
-        public const short THICK_VERT_BANDS = PatternFormatting.THICK_VERT_BANDS;
-        /**  Thick backward facing diagonals */
-        public const short THICK_BACKWARD_DIAG = PatternFormatting.THICK_BACKWARD_DIAG;
-        /**  Thick forward facing diagonals */
-        public const short THICK_FORWARD_DIAG = PatternFormatting.THICK_FORWARD_DIAG;
-        /**  Large spots */
-        public const short BIG_SPOTS = PatternFormatting.BIG_SPOTS;
-        /**  Brick-like layout */
-        public const short BRICKS = PatternFormatting.BRICKS;
-        /**  Thin horizontal bands */
-        public const short THIN_HORZ_BANDS = PatternFormatting.THIN_HORZ_BANDS;
-        /**  Thin vertical bands */
-        public const short THIN_VERT_BANDS = PatternFormatting.THIN_VERT_BANDS;
-        /**  Thin backward diagonal */
-        public const short THIN_BACKWARD_DIAG = PatternFormatting.THIN_BACKWARD_DIAG;
-        /**  Thin forward diagonal */
-        public const short THIN_FORWARD_DIAG = PatternFormatting.THIN_FORWARD_DIAG;
-        /**  Squares */
-        public const short SQUARES = PatternFormatting.SQUARES;
-        /**  Diamonds */
-        public const short DIAMONDS = PatternFormatting.DIAMONDS;
-        /**  Less Dots */
-        public const short LESS_DOTS = PatternFormatting.LESS_DOTS;
-        /**  Least Dots */
-        public const short LEAST_DOTS = PatternFormatting.LEAST_DOTS;
-
         private CFRuleRecord cfRuleRecord;
         private PatternFormatting patternFormatting;
 
@@ -135,19 +96,15 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the fill pattern.
         /// </summary>
         /// <value>The fill pattern.</value>
-        public short FillPattern
+        public FillPattern FillPattern
         {
-            get
-            {
+            get {
                 return patternFormatting.FillPattern;
             }
-            set
-            {
-                patternFormatting.FillPattern=(value);
-                if (value != 0)
-                {
-                    cfRuleRecord.IsPatternStyleModified=(true);
-                }
+            set {
+                patternFormatting.FillPattern = value;
+                if (value != FillPattern.NoFill)
+                    cfRuleRecord.IsPatternStyleModified = true;
             }
         }
     }
