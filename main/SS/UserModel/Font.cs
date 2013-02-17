@@ -171,14 +171,9 @@ namespace NPOI.SS.UserModel
         /**
          * get type of text underlining to use
          * @return underlining type
-         * @see #U_NONE
-         * @see #U_SINGLE
-         * @see #U_DOUBLE
-         * @see #U_SINGLE_ACCOUNTING
-         * @see #U_DOUBLE_ACCOUNTING
          */
 
-        byte Underline { get; set; }
+        FontUnderlineType Underline { get; set; }
 
         /**
          * get character-set to use.

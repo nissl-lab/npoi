@@ -22,6 +22,7 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.Record;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// Represents a Font used in a workbook.
@@ -161,10 +162,10 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the type of text Underlining to use
         /// </summary>
         /// <value>The Underlining type.</value>
-        public byte Underline
+        public FontUnderlineType Underline
         {
             get { return font.Underline; }
-            set { font.Underline=(byte)value; }
+            set { font.Underline = value; }
         }
 
 

@@ -457,7 +457,7 @@ namespace NPOI.SS.Util
             }
             if (font1.IsItalic)
                 style |= FontStyle.Italic;
-            if (font1.Underline == (byte)FontUnderlineType.Single)
+            if (font1.Underline == FontUnderlineType.Single)
             {
                 style |= FontStyle.Underline;
             }

@@ -21,6 +21,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
+    using NPOI.SS.UserModel;
     using NPOI.Util;
 
 
@@ -40,11 +41,6 @@ namespace NPOI.HSSF.Record
         public const short SS_NONE = 0;
         public const short SS_SUPER = 1;
         public const short SS_SUB = 2;
-        public const byte U_NONE = 0;
-        public const byte U_SINGLE = 1;
-        public const byte U_DOUBLE = 2;
-        public const byte U_SINGLE_ACCOUNTING = 0x21;
-        public const byte U_DOUBLE_ACCOUNTING = 0x22;
 
         private short field_1_font_height;        // in Units of .05 of a point
         private short field_2_attributes;
@@ -200,10 +196,10 @@ namespace NPOI.HSSF.Record
          * @see #U_DOUBLE_ACCOUNTING
          */
 
-        public byte Underline
+        public FontUnderlineType Underline
         {
-            set { field_6_underline = value; }
-            get { return field_6_underline; }
+            get { return (FontUnderlineType) field_6_underline; }
+            set { field_6_underline = (byte) value; }
         }
 
         /**
@@ -352,7 +348,7 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .basesubscript  = ")
                 .Append(StringUtil.ToHexString(SuperSubScript)).Append("\n");
             buffer.Append("    .underline       = ")
-                .Append(StringUtil.ToHexString(Underline)).Append("\n");
+                .Append(StringUtil.ToHexString((short) Underline)).Append("\n");
             buffer.Append("    .family          = ")
                 .Append(StringUtil.ToHexString(Family)).Append("\n");
             buffer.Append("    .charset         = ")
@@ -370,7 +366,7 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(ColorPaletteIndex);
             out1.WriteShort(BoldWeight);
             out1.WriteShort(SuperSubScript);
-            out1.WriteByte(Underline);
+            out1.WriteByte((int) Underline);
             out1.WriteByte(Family);
             out1.WriteByte(Charset);
             out1.WriteByte(field_9_zero);

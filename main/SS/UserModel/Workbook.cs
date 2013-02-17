@@ -214,7 +214,7 @@ namespace NPOI.SS.UserModel
         /// <param name="typeOffset"></param>
         /// <param name="underline"></param>
         /// <returns>the font with the matched attributes or null</returns>
-        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, byte underline);
+        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, FontUnderlineType underline);
 
         /// <summary>
         /// Get the number of fonts in the font table
