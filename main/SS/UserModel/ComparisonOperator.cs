@@ -30,47 +30,47 @@ namespace NPOI.SS.UserModel
      */
     public enum ComparisonOperator:byte
     {
-        NO_COMPARISON = 0,
+        NoComparison = 0,
 
         /**
          * 'Between' operator
          */
-        BETWEEN = 1,
+        Between = 1,
 
         /**
          * 'Not between' operator
          */
-        NOT_BETWEEN = 2,
+        NotBetween = 2,
 
         /**
          *  'Equal to' operator
          */
-        EQUAL = 3,
+        Equal = 3,
 
         /**
          * 'Not equal to' operator
          */
-        NOT_EQUAL = 4,
+        NotEqual = 4,
 
         /**
          * 'Greater than' operator
          */
-        GT = 5,
+        GreaterThan = 5,
 
         /**
          * 'Less than' operator
          */
-        LT = 6,
+        LessThan = 6,
 
         /**
          * 'Greater than or equal to' operator
          */
-        GE = 7,
+        GreaterThanOrEqual = 7,
 
         /**
          * 'Less than or equal to' operator
          */
-        LE = 8,
+        LessThanOrEqual = 8,
     }
 
 }

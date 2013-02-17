@@ -190,7 +190,7 @@ namespace NPOI.HSSF.Record
         public static CFRuleRecord Create(HSSFWorkbook workbook, String formulaText)
         {
             Ptg[] formula1 = ParseFormula(formulaText, workbook);
-            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NO_COMPARISON,
+            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NoComparison,
                     formula1, null);
         }
         /**
@@ -207,7 +207,7 @@ namespace NPOI.HSSF.Record
         public static CFRuleRecord Create(HSSFSheet sheet, String formulaText)
         {
             Ptg[] formula1 = ParseFormula(formulaText, sheet);
-            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NO_COMPARISON,
+            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NoComparison,
                     formula1, null);
         }
         /**
