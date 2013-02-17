@@ -6,18 +6,18 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// No diagional border
         /// </summary>
-        NONE=0,
+        None = 0,
         /// <summary>
         /// Backward diagional border, from left-top to right-bottom
         /// </summary>
-        BACKWARD = 1,
+        Backward = 1,
         /// <summary>
         /// Forward diagional border, from right-top to left-bottom
         /// </summary>
-        FORWARD=2,
+        Forward = 2,
         /// <summary>
         /// Both forward and backward diagional border
         /// </summary>
-        BOTH=3
+        Both = 3
     }
 }
