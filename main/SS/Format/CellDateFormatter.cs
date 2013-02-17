@@ -36,10 +36,10 @@ namespace NPOI.SS.Format
         private FormatBase dateFmt;
         private String sFmt;
 
-        private static TimeSpan EXCEL_EPOCH_TIME;
-        private static DateTime EXCEL_EPOCH_DATE;
+        private static readonly TimeSpan EXCEL_EPOCH_TIME;
+        private static readonly DateTime EXCEL_EPOCH_DATE;
 
-        private static CellFormatter SIMPLE_DATE = new CellDateFormatter(
+        private static readonly CellFormatter SIMPLE_DATE = new CellDateFormatter(
                 "mm/d/y");
 
         static CellDateFormatter()

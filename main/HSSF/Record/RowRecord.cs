@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
     public class RowRecord : StandardRecord, IComparable
     {
         public const short sid = 0x208;
-        public static int ENCODED_SIZE = 20;
+        public const int ENCODED_SIZE = 20;
 
         private const int OPTION_BITS_ALWAYS_SET = 0x0100;
         private const int DEFAULT_HEIGHT_BIT = 0x8000;

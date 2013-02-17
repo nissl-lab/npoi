@@ -29,8 +29,8 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public class HSSFComment : HSSFTextbox, IComment
     {
-        private static int FILL_TYPE_SOLID = 0;
-        private static int FILL_TYPE_PICTURE = 3;
+        private const int FILL_TYPE_SOLID = 0;
+        private const int FILL_TYPE_PICTURE = 3;
 
 
         private NoteRecord _note = null;

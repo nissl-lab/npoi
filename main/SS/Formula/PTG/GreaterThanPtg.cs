@@ -27,9 +27,9 @@ namespace NPOI.SS.Formula.PTG
     public class GreaterThanPtg : ValueOperatorPtg
     {
         public const byte sid = 0x0D;
-        private static String GREATERTHAN = ">";
+        private const string GREATERTHAN = ">";
 
-        public static ValueOperatorPtg instance = new GreaterThanPtg();
+        public static readonly ValueOperatorPtg instance = new GreaterThanPtg();
 
         private GreaterThanPtg()
         {

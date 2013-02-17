@@ -36,7 +36,7 @@ namespace NPOI.HSSF.UserModel
 
     public class HSSFConditionalFormattingRule : IConditionalFormattingRule
     {
-        private static byte CELL_COMPARISON = CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS;
+        private const byte CELL_COMPARISON = CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS;
 
         private CFRuleRecord cfRuleRecord;
         private HSSFWorkbook workbook;

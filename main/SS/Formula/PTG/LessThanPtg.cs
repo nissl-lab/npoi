@@ -32,9 +32,9 @@ namespace NPOI.SS.Formula.PTG
         public const byte sid = 0x09;
 
         /** identifier for LESS THAN char */
-        private static String LESSTHAN = "<";
+        private const string LESSTHAN = "<";
 
-        public static ValueOperatorPtg instance = new LessThanPtg();
+        public static readonly ValueOperatorPtg instance = new LessThanPtg();
 
         private LessThanPtg()
         {

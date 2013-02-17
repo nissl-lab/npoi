@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record.Chart
     public class AttachedLabelRecord
        : StandardRecord
     {
-        public static short sid = 0x100c;
+        public const short sid = 0x100c;
         private short field_1_formatFlags;
         private BitField showActual = BitFieldFactory.GetInstance(0x1);
         private BitField showPercent = BitFieldFactory.GetInstance(0x2);

@@ -63,10 +63,10 @@ namespace NPOI.HSSF.Record.Chart
     {
         public const short sid = 0x1021;
         private short field_1_axisType;
-        public static short AXIS_TYPE_AXIS_LINE = 0;
-        public static short AXIS_TYPE_MAJOR_GRID_LINE = 1;
-        public static short AXIS_TYPE_MINOR_GRID_LINE = 2;
-        public static short AXIS_TYPE_WALLS_OR_FLOOR = 3;
+        public const short AXIS_TYPE_AXIS_LINE = 0;
+        public const short AXIS_TYPE_MAJOR_GRID_LINE = 1;
+        public const short AXIS_TYPE_MINOR_GRID_LINE = 2;
+        public const short AXIS_TYPE_WALLS_OR_FLOOR = 3;
 
 
         public AxisLineRecord()

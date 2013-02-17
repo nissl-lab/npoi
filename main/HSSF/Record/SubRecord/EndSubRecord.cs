@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
        : SubRecord
     {
         public const short sid = 0x00;
-        private static int ENCODED_SIZE = 0;
+        private const int ENCODED_SIZE = 0;
 
         public EndSubRecord()
         {

@@ -46,10 +46,10 @@ namespace NPOI.HSSF.Record
     public class RKRecord : CellRecord
     {
         public const short sid = 0x27e;
-        public static short RK_IEEE_NUMBER = 0;
-        public static short RK_IEEE_NUMBER_TIMES_100 = 1;
-        public static short RK_INTEGER = 2;
-        public static short RK_INTEGER_TIMES_100 = 3;
+        public const short RK_IEEE_NUMBER = 0;
+        public const short RK_IEEE_NUMBER_TIMES_100 = 1;
+        public const short RK_INTEGER = 2;
+        public const short RK_INTEGER_TIMES_100 = 3;
 
         private int field_4_rk_number;
 

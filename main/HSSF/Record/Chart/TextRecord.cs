@@ -43,43 +43,43 @@ namespace NPOI.HSSF.Record
         /// <summary>
         /// Left-alignment if iReadingOrder specifies left-to-right reading order; otherwise, right-alignment
         /// </summary>
-        public static byte HORIZONTAL_ALIGNMENT_LEFT = 1;
+        public const byte HORIZONTAL_ALIGNMENT_LEFT = 1;
         /// <summary>
         /// Center-alignment
         /// </summary>
-        public static byte HORIZONTAL_ALIGNMENT_CENTER = 2;
+        public const byte HORIZONTAL_ALIGNMENT_CENTER = 2;
         /// <summary>
         /// Right-alignment if iReadingOrder specifies left-to-right reading order; otherwise, left-alignment
         /// </summary>
-        public static byte HORIZONTAL_ALIGNMENT_BOTTOM = 3;
+        public const byte HORIZONTAL_ALIGNMENT_BOTTOM = 3;
         /// <summary>
         /// Justify-alignment
         /// </summary>
-        public static byte HORIZONTAL_ALIGNMENT_JUSTIFY = 4;
+        public const byte HORIZONTAL_ALIGNMENT_JUSTIFY = 4;
         /// <summary>
         /// distributed alignment
         /// </summary>
-        public static byte HORIZONTAL_ALIGNMENT_DISTRIBUTED = 7;
+        public const byte HORIZONTAL_ALIGNMENT_DISTRIBUTED = 7;
 
         private byte field_2_verticalAlignment;
-        public static byte VERTICAL_ALIGNMENT_TOP = 1;
-        public static byte VERTICAL_ALIGNMENT_CENTER = 2;
-        public static byte VERTICAL_ALIGNMENT_BOTTOM = 3;
-        public static byte VERTICAL_ALIGNMENT_JUSTIFY = 4;
+        public const byte VERTICAL_ALIGNMENT_TOP = 1;
+        public const byte VERTICAL_ALIGNMENT_CENTER = 2;
+        public const byte VERTICAL_ALIGNMENT_BOTTOM = 3;
+        public const byte VERTICAL_ALIGNMENT_JUSTIFY = 4;
         /// <summary>
         /// distributed alignment
         /// </summary>
-        public static byte VERTICAL_ALIGNMENT_DISTRIBUTED = 7;
+        public const byte VERTICAL_ALIGNMENT_DISTRIBUTED = 7;
 
         private short field_3_DisplayMode;
         /// <summary>
         /// Transparent background
         /// </summary>
-        public static short DISPLAY_MODE_TRANSPARENT = 1;
+        public const short DISPLAY_MODE_TRANSPARENT = 1;
         /// <summary>
         /// Opaque background
         /// </summary>
-        public static short DISPLAY_MODE_OPAQUE = 2;
+        public const short DISPLAY_MODE_OPAQUE = 2;
         private int field_4_rgbColor;
         private int field_5_x;
         private int field_6_y;
@@ -96,10 +96,10 @@ namespace NPOI.HSSF.Record
         private BitField autoLabelDeleted = BitFieldFactory.GetInstance(0x40);
         private BitField autoBackground = BitFieldFactory.GetInstance(0x80);
         //private BitField rotation = BitFieldFactory.GetInstance(0x0700); //unused2
-        public static short ROTATION_NONE = 0;
-        public static short ROTATION_TOP_TO_BOTTOM = 1;
-        public static short ROTATION_ROTATED_90_DEGREES = 2;
-        public static short ROTATION_ROTATED_90_DEGREES_CLOCKWISE = 3;
+        public const short ROTATION_NONE = 0;
+        public const short ROTATION_TOP_TO_BOTTOM = 1;
+        public const short ROTATION_ROTATED_90_DEGREES = 2;
+        public const short ROTATION_ROTATED_90_DEGREES_CLOCKWISE = 3;
         private BitField showCategoryLabelAsPercentage = BitFieldFactory.GetInstance(0x800);
         private BitField showValueAsPercentage = BitFieldFactory.GetInstance(0x1000);
         private BitField showBubbleSizes = BitFieldFactory.GetInstance(0x2000);
@@ -107,22 +107,22 @@ namespace NPOI.HSSF.Record
         private short field_10_IndexOfColorValue;
         private short field_11_options2;
         private BitField dataLabelPlacement = BitFieldFactory.GetInstance(0x000F);
-        public static short DATA_LABEL_PLACEMENT_CHART_DEPENDENT = 0;
-        public static short DATA_LABEL_PLACEMENT_OUTSIDE = 1;
-        public static short DATA_LABEL_PLACEMENT_INSIDE = 2;
-        public static short DATA_LABEL_PLACEMENT_CENTER = 3;
-        public static short DATA_LABEL_PLACEMENT_AXIS = 4;
-        public static short DATA_LABEL_PLACEMENT_ABOVE = 5;
-        public static short DATA_LABEL_PLACEMENT_BELOW = 6;
-        public static short DATA_LABEL_PLACEMENT_LEFT = 7;
-        public static short DATA_LABEL_PLACEMENT_RIGHT = 8;
-        public static short DATA_LABEL_PLACEMENT_AUTO = 9;
-        public static short DATA_LABEL_PLACEMENT_USER_MOVED = 10;
+        public const short DATA_LABEL_PLACEMENT_CHART_DEPENDENT = 0;
+        public const short DATA_LABEL_PLACEMENT_OUTSIDE = 1;
+        public const short DATA_LABEL_PLACEMENT_INSIDE = 2;
+        public const short DATA_LABEL_PLACEMENT_CENTER = 3;
+        public const short DATA_LABEL_PLACEMENT_AXIS = 4;
+        public const short DATA_LABEL_PLACEMENT_ABOVE = 5;
+        public const short DATA_LABEL_PLACEMENT_BELOW = 6;
+        public const short DATA_LABEL_PLACEMENT_LEFT = 7;
+        public const short DATA_LABEL_PLACEMENT_RIGHT = 8;
+        public const short DATA_LABEL_PLACEMENT_AUTO = 9;
+        public const short DATA_LABEL_PLACEMENT_USER_MOVED = 10;
 
         private BitField readingOrder = BitFieldFactory.GetInstance(0xC000);
-        public static short READING_ORDER_CONTEXT = 0;
-        public static short READING_ORDER_LTR = 1;
-        public static short READING_ORDER_RTL = 2;
+        public const short READING_ORDER_CONTEXT = 0;
+        public const short READING_ORDER_LTR = 1;
+        public const short READING_ORDER_RTL = 2;
 
         private short field_12_textRotation;
 

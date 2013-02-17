@@ -80,17 +80,16 @@ namespace NPOI.SS.Format
      */
     public abstract class CellFormatType
     {
-
         /** The general (default) format; also used for <tt>"General"</tt>. */
-        public static CellFormatType GENERAL = new GeneralCellFormatType();
+        public static readonly CellFormatType GENERAL = new GeneralCellFormatType();
         /** A numeric format. */
-        public static CellFormatType NUMBER = new NumberCellFormatType();
+        public static readonly CellFormatType NUMBER = new NumberCellFormatType();
         /** A date format. */
-        public static CellFormatType DATE = new DateCellFormatType();
+        public static readonly CellFormatType DATE = new DateCellFormatType();
         /** An elapsed time format. */
-        public static CellFormatType ELAPSED = new ElapsedCellFormatType();
+        public static readonly CellFormatType ELAPSED = new ElapsedCellFormatType();
         /** A text format. */
-        public static CellFormatType TEXT = new TextCellFormatType();
+        public static readonly CellFormatType TEXT = new TextCellFormatType();
 
         /**
          * Returns <tt>true</tt> if the format is special and needs to be quoted.

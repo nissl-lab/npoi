@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record.Chart
         /** the actual text cannot be longer than 255 characters */
         private const int MAX_LEN = 0xFF;
 
-        public static short sid = 0x100d;
+        public const short sid = 0x100d;
         private short field_1_id;
 
         private bool is16bit;

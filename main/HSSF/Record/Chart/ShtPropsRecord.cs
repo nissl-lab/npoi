@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record.Chart
     public class ShtPropsRecord
        : StandardRecord
     {
-        public static short sid = 0x1044;
+        public const short sid = 0x1044;
         private short field_1_flags;
         private BitField manSerAlloc = BitFieldFactory.GetInstance(0x1);
         private BitField plotVisibleOnly = BitFieldFactory.GetInstance(0x2);
@@ -47,9 +47,9 @@ namespace NPOI.HSSF.Record.Chart
         private byte field_2_mdBlank;
         private byte field_3_reserved;
 
-        public static byte EMPTY_NOT_PLOTTED = 0;
-        public static byte EMPTY_ZERO = 1;
-        public static byte EMPTY_INTERPOLATED = 2;
+        public const byte EMPTY_NOT_PLOTTED = 0;
+        public const byte EMPTY_ZERO = 1;
+        public const byte EMPTY_INTERPOLATED = 2;
 
 
         public ShtPropsRecord()

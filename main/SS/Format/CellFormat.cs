@@ -75,9 +75,9 @@ namespace NPOI.SS.Format
         private CellFormatPart textFmt;
         private int formatPartCount;
 
-        private static Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+        private static readonly Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
-        private static CellFormatPart DEFAULT_TEXT_FORMAT =
+        private static readonly CellFormatPart DEFAULT_TEXT_FORMAT =
                 new CellFormatPart("@");
 
         /*
@@ -85,16 +85,16 @@ namespace NPOI.SS.Format
          * format and have an invalid date or time value, are displayed as 255
          * pound signs ("#").
          */
-        private static String INVALID_VALUE_FOR_FORMAT =
+        private const string INVALID_VALUE_FOR_FORMAT =
                 "###################################################" +
                 "###################################################" +
                 "###################################################" +
                 "###################################################" +
                 "###################################################";
 
-        private static String QUOTE = "\"";
+        private const string QUOTE = "\"";
 
-        private static CellFormat GENERAL_FORMAT = new GeneralCellFormat();
+        private static readonly CellFormat GENERAL_FORMAT = new GeneralCellFormat();
         /**
          * Format a value as it would be were no format specified.  This is also
          * used when the format specified is <tt>General</tt>.

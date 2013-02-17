@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record
          * suggested (and probably correct) default
          */
 
-        public static short CODEPAGE = (short)0x4b0;
+        public const short CODEPAGE = (short)0x4b0;
 
         public InterfaceHdrRecord(int codePage)
         {

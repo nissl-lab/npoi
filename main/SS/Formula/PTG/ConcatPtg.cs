@@ -28,9 +28,9 @@ namespace NPOI.SS.Formula.PTG
     {
         public const byte sid = 0x08;
 
-        private static String CONCAT = "&";
+        private const string CONCAT = "&";
 
-        public static ValueOperatorPtg instance = new ConcatPtg();
+        public static readonly ValueOperatorPtg instance = new ConcatPtg();
 
         private ConcatPtg()
         {

@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.PTG
         public const byte sid = 0x17;
         private static BitField fHighByte = BitFieldFactory.GetInstance(0x01);
         /** the Char (")used in formulas to delimit string literals */
-        private static char FORMULA_DELIMITER = '"';
+        private const char FORMULA_DELIMITER = '"';
 
         /**
          * NOTE: OO doc says 16bit Length, but BiffViewer says 8 Book says something

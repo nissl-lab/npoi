@@ -5,7 +5,7 @@
 
     public class Poisson : Fixed3ArgFunction
     {
-        private static double DEFAULT_RETURN_RESULT = 1;
+        private const double DEFAULT_RETURN_RESULT = 1;
         /**
          * This checks is x = 0 and the mean = 0.
          * Excel currently returns the value 1 where as the

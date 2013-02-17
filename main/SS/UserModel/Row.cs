@@ -33,11 +33,11 @@ namespace NPOI.SS.UserModel
             this.id = NEXT_ID++;
         }
         /// <summary>Missing cells are returned as null, Blank cells are returned as normal</summary>
-        public static MissingCellPolicy RETURN_NULL_AND_BLANK = new MissingCellPolicy();
+        public static readonly MissingCellPolicy RETURN_NULL_AND_BLANK = new MissingCellPolicy();
         /// <summary>Missing cells are returned as null, as are blank cells</summary>
-        public static MissingCellPolicy RETURN_BLANK_AS_NULL = new MissingCellPolicy();
+        public static readonly MissingCellPolicy RETURN_BLANK_AS_NULL = new MissingCellPolicy();
         /// <summary>A new, blank cell is Created for missing cells. Blank cells are returned as normal</summary>
-        public static MissingCellPolicy CREATE_NULL_AS_BLANK = new MissingCellPolicy();
+        public static readonly MissingCellPolicy CREATE_NULL_AS_BLANK = new MissingCellPolicy();
     }
 
     /// <summary>

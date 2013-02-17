@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula.PTG
     {
 
         public const byte sid = 0x21;
-        public static int SIZE = 3;
+        public const int SIZE = 3;
         // not used: private int numParams = 0;
     public static FuncPtg Create(ILittleEndianInput in1) {
         return Create(in1.ReadUShort());

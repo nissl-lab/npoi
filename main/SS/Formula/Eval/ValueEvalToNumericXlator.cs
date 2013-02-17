@@ -28,15 +28,15 @@ namespace NPOI.SS.Formula.Eval
     public class ValueEvalToNumericXlator
     {
 
-        public static int STRING_IS_PARSED = 0x0001;
-        public static int BOOL_IS_PARSED = 0x0002;
-        public static int BLANK_IS_PARSED = 0x0004; // => blanks are not ignored, Converted to 0
+        public const int STRING_IS_PARSED = 0x0001;
+        public const int BOOL_IS_PARSED = 0x0002;
+        public const int BLANK_IS_PARSED = 0x0004; // => blanks are not ignored, Converted to 0
 
-        public static int REF_STRING_IS_PARSED = 0x0008;
-        public static int REF_BOOL_IS_PARSED = 0x0010;
-        public static int REF_BLANK_IS_PARSED = 0x0020;
+        public const int REF_STRING_IS_PARSED = 0x0008;
+        public const int REF_BOOL_IS_PARSED = 0x0010;
+        public const int REF_BLANK_IS_PARSED = 0x0020;
 
-        public static int STRING_IS_INVALID_VALUE = 0x0800;
+        public const int STRING_IS_INVALID_VALUE = 0x0800;
 
         private int flags;
 

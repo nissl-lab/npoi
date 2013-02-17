@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record
     public class PageBreakRecord : StandardRecord
     {
         private const bool IS_EMPTY_RECORD_WRITTEN = false;
-        private static int[] EMPTY_INT_ARRAY = { };
+        private static readonly int[] EMPTY_INT_ARRAY = { };
 
         public short sid;
         // fix warning CS0169 "never used": private short numBreaks;
@@ -56,7 +56,7 @@ namespace NPOI.HSSF.Record
         public class Break
         {
 
-            public static int ENCODED_SIZE = 6;
+            public const int ENCODED_SIZE = 6;
             public int main;
             public int subFrom;
             public int subTo;

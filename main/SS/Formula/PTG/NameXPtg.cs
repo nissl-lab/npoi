@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.PTG
     public class NameXPtg : OperandPtg,WorkbookDependentFormula
     {
         public const short sid = 0x39;
-        private static int SIZE = 7;
+        private const int SIZE = 7;
 
         /** index to REF entry in externsheet record */
 	    private int _sheetRefIndex;

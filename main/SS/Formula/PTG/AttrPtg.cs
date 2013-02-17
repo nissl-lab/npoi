@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.PTG
     public class AttrPtg : ControlPtg
     {
         public const byte sid = 0x19;
-        private static int SIZE = 4;
+        private const int SIZE = 4;
         private byte field_1_options;
         private short field_2_data;
 
@@ -52,24 +52,24 @@ namespace NPOI.SS.Formula.PTG
         private static BitField baxcel = BitFieldFactory.GetInstance(0x20); // 'assignment-style formula in a macro sheet'
         private static BitField space = BitFieldFactory.GetInstance(0x40);
 
-        public static AttrPtg SUM = new AttrPtg(0x0010, 0, null, -1);
+        public static readonly AttrPtg SUM = new AttrPtg(0x0010, 0, null, -1);
 
-        public class SpaceType
+        public enum SpaceType
         {
             /** 00H = Spaces before the next token (not allowed before tParen token) */
-            public static int SPACE_BEFORE = 0x00;
+            SPACE_BEFORE = 0x00,
             /** 01H = Carriage returns before the next token (not allowed before tParen token) */
-            public static int CR_BEFORE = 0x01;
+            CR_BEFORE = 0x01,
             /** 02H = Spaces before opening parenthesis (only allowed before tParen token) */
-            public static int SPACE_BEFORE_OPEN_PAREN = 0x02;
+            SPACE_BEFORE_OPEN_PAREN = 0x02,
             /** 03H = Carriage returns before opening parenthesis (only allowed before tParen token) */
-            public static int CR_BEFORE_OPEN_PAREN = 0x03;
+            CR_BEFORE_OPEN_PAREN = 0x03,
             /** 04H = Spaces before closing parenthesis (only allowed before tParen, tFunc, and tFuncVar tokens) */
-            public static int SPACE_BEFORE_CLOSE_PAREN = 0x04;
+            SPACE_BEFORE_CLOSE_PAREN = 0x04,
             /** 05H = Carriage returns before closing parenthesis (only allowed before tParen, tFunc, and tFuncVar tokens) */
-            public static int CR_BEFORE_CLOSE_PAREN = 0x05;
+            CR_BEFORE_CLOSE_PAREN = 0x05,
             /** 06H = Spaces following the equality sign (only in macro sheets) */
-            public static int SPACE_AFTER_EQUALITY = 0x06;
+            SPACE_AFTER_EQUALITY = 0x06
         }
 
         public AttrPtg()

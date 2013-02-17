@@ -27,26 +27,25 @@ namespace NPOI.SS.UserModel
      */
     public class FontCharset
     {
-
-        public static FontCharset ANSI = new FontCharset(0);
-        public static FontCharset DEFAULT = new FontCharset(1);
-        public static FontCharset SYMBOL = new FontCharset(2);
-        public static FontCharset MAC = new FontCharset(77);
-        public static FontCharset SHIFTJIS = new FontCharset(128);
-        public static FontCharset HANGEUL = new FontCharset(129);
-        public static FontCharset JOHAB = new FontCharset(130);
-        public static FontCharset GB2312 = new FontCharset(134);
-        public static FontCharset CHINESEBIG5 = new FontCharset(136);
-        public static FontCharset GREEK = new FontCharset(161);
-        public static FontCharset TURKISH = new FontCharset(162);
-        public static FontCharset VIETNAMESE = new FontCharset(163);
-        public static FontCharset HEBREW = new FontCharset(177);
-        public static FontCharset ARABIC = new FontCharset(178);
-        public static FontCharset BALTIC = new FontCharset(186);
-        public static FontCharset RUSSIAN = new FontCharset(204);
-        public static FontCharset THAI = new FontCharset(222);
-        public static FontCharset EASTEUROPE = new FontCharset(238);
-        public static FontCharset OEM = new FontCharset(255);
+        public static readonly FontCharset ANSI = new FontCharset(0);
+        public static readonly FontCharset DEFAULT = new FontCharset(1);
+        public static readonly FontCharset SYMBOL = new FontCharset(2);
+        public static readonly FontCharset MAC = new FontCharset(77);
+        public static readonly FontCharset SHIFTJIS = new FontCharset(128);
+        public static readonly FontCharset HANGEUL = new FontCharset(129);
+        public static readonly FontCharset JOHAB = new FontCharset(130);
+        public static readonly FontCharset GB2312 = new FontCharset(134);
+        public static readonly FontCharset CHINESEBIG5 = new FontCharset(136);
+        public static readonly FontCharset GREEK = new FontCharset(161);
+        public static readonly FontCharset TURKISH = new FontCharset(162);
+        public static readonly FontCharset VIETNAMESE = new FontCharset(163);
+        public static readonly FontCharset HEBREW = new FontCharset(177);
+        public static readonly FontCharset ARABIC = new FontCharset(178);
+        public static readonly FontCharset BALTIC = new FontCharset(186);
+        public static readonly FontCharset RUSSIAN = new FontCharset(204);
+        public static readonly FontCharset THAI = new FontCharset(222);
+        public static readonly FontCharset EASTEUROPE = new FontCharset(238);
+        public static readonly FontCharset OEM = new FontCharset(255);
 
 
         private int charset;

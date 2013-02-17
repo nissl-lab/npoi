@@ -41,7 +41,7 @@ namespace NPOI.SS.Formula.PTG
     public class Area3DPtg : AreaPtgBase, WorkbookDependentFormula, IExternSheetReferenceToken
     {
         public const byte sid = 0x3b;
-        private static int SIZE = 11; // 10 + 1 for Ptg
+        private const int SIZE = 11; // 10 + 1 for Ptg
         private int field_1_index_extern_sheet;
 
         private BitField rowRelative = BitFieldFactory.GetInstance(0x8000);

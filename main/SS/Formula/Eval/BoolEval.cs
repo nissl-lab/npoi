@@ -34,9 +34,8 @@ namespace NPOI.SS.Formula.Eval
 
         private bool value;
 
-        public static BoolEval FALSE = new BoolEval(false);
-
-        public static BoolEval TRUE = new BoolEval(true);
+        public static readonly BoolEval FALSE = new BoolEval(false);
+        public static readonly BoolEval TRUE = new BoolEval(true);
 
         /**
          * Convenience method for the following:<br/>

@@ -24,7 +24,7 @@ namespace NPOI.HPSF
     {
          internal class ArrayDimension
     {
-        public static int SIZE = 8;
+        public const int SIZE = 8;
 
         private int _indexOffset;
         internal long _size;

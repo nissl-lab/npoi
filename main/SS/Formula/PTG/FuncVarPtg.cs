@@ -29,12 +29,12 @@ namespace NPOI.SS.Formula.PTG
     public class FuncVarPtg : AbstractFunctionPtg
     {
         public const byte sid = 0x22;
-        private static int SIZE = 4;
+        private const int SIZE = 4;
 
             /**
      * Single instance of this token for 'sum() taking a single argument'
      */
-    public static OperationPtg SUM = FuncVarPtg.Create("SUM", 1);
+    public static readonly OperationPtg SUM = FuncVarPtg.Create("SUM", 1);
 
         private FuncVarPtg(int functionIndex, int returnClass, byte[] paramClasses, int numArgs)
             :base(functionIndex, returnClass, paramClasses, numArgs)

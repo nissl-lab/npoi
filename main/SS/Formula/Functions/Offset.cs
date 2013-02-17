@@ -41,8 +41,8 @@ namespace NPOI.SS.Formula.Functions
     public class Offset : Function
     {
         // These values are specific to BIFF8
-        private static int LAST_VALID_ROW_INDEX = 0xFFFF;
-        private static int LAST_VALID_COLUMN_INDEX = 0xFF;
+        private const int LAST_VALID_ROW_INDEX = 0xFFFF;
+        private const int LAST_VALID_COLUMN_INDEX = 0xFF;
 
 
         /**

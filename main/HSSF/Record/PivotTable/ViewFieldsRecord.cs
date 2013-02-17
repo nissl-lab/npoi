@@ -30,30 +30,30 @@ namespace NPOI.HSSF.Record.PivotTable
      */
     public class ViewFieldsRecord : StandardRecord
     {
-        public static short sid = 0x00B1;
+        public const short sid = 0x00B1;
+
+		/**
+         * values for the {@link ViewFieldsRecord#sxaxis} field
+         */
+		private enum Axis
+		{
+			NoAxis = 0,
+			Row = 1,
+			Column = 2,
+			Page = 4,
+			Data = 8
+		}
 
         /** the value of the <c>cchName</c> field when the name is not present */
-        private static int STRING_NOT_PRESENT_LEN = 0xFFFF;
+        private const int STRING_NOT_PRESENT_LEN = 0xFFFF;
         /** 5 shorts */
-	    private static int BASE_SIZE = 10;
+	    private const int BASE_SIZE = 10;
         private int sxaxis;
         private int cSub;
         private int grbitSub;
         private int cItm;
 
         private String _name = null;
-
-        /**
-         * values for the {@link ViewFieldsRecord#sxaxis} field
-         */
-        private static class Axis
-        {
-            public static int NO_AXIS = 0;
-            public static int ROW = 1;
-            public static int COLUMN = 2;
-            public static int PAGE = 4;
-            public static int DATA = 8;
-        }
 
         public ViewFieldsRecord(RecordInputStream in1)
         {

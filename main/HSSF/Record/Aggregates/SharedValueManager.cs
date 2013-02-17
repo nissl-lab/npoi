@@ -117,7 +117,7 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        public static SharedValueManager EMPTY = new SharedValueManager(
+        public static readonly SharedValueManager EMPTY = new SharedValueManager(
                 new SharedFormulaRecord[0], new CellReference[0], new List<ArrayRecord>(), new List<TableRecord>());
         private List<ArrayRecord> _arrayRecords;
         private List<TableRecord> _tableRecords;

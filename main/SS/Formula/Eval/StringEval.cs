@@ -28,8 +28,7 @@ namespace NPOI.SS.Formula.Eval
      */
     public class StringEval : StringValueEval
     {
-
-        public static StringEval EMPTY_INSTANCE = new StringEval("");
+        public static readonly StringEval EMPTY_INSTANCE = new StringEval("");
 
         private String value;
 

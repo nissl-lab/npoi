@@ -32,13 +32,13 @@ namespace NPOI.SS.UserModel
          * intersection operator, when a comma was intended. end example]
          * </p>
          */
-        public static FormulaError NULL = new FormulaError(0x00, "#NULL!");
+        public static readonly FormulaError NULL = new FormulaError(0x00, "#NULL!");
 
         /**
          * Intended to indicate when any number, including zero, is divided by zero.
          * Note: However, any error code divided by zero results in that error code.
          */
-        public static FormulaError DIV0 = new FormulaError(0x07, "#DIV/0!");
+        public static readonly FormulaError DIV0 = new FormulaError(0x07, "#DIV/0!");
 
         /**
          * Intended to indicate when an incompatible type argument is passed to a function, or
@@ -47,7 +47,7 @@ namespace NPOI.SS.UserModel
          * In the case of a function argument, text was expected, but a number was provided
          * </p>
          */
-        public static FormulaError VALUE = new FormulaError(0x0F, "#VALUE!");
+        public static readonly FormulaError VALUE = new FormulaError(0x0F, "#VALUE!");
 
         /**
          * Intended to indicate when a cell reference is invalid.
@@ -57,7 +57,7 @@ namespace NPOI.SS.UserModel
          * OFFSET(A1,0,20000) will result in a #REF! error.
          * </p>
          */
-        public static FormulaError REF = new FormulaError(0x17, "#REF!");
+        public static readonly FormulaError REF = new FormulaError(0x17, "#REF!");
 
         /*
          * Intended to indicate when what looks like a name is used, but no such name has been defined.
@@ -67,7 +67,7 @@ namespace NPOI.SS.UserModel
          * was intended. SUM(A1C10), where the range A1:C10 was intended.
          * </p>
          */
-        public static FormulaError NAME = new FormulaError(0x1D, "#NAME?");
+        public static readonly FormulaError NAME = new FormulaError(0x1D, "#NAME?");
 
         /**
          * Intended to indicate when an argument to a function has a compatible type, but has a
@@ -81,7 +81,7 @@ namespace NPOI.SS.UserModel
          * error.)
          * <p>Example: FACT(1000) might result in a range error. </p>
          */
-        public static FormulaError NUM = new FormulaError(0x24, "#NUM!");
+        public static readonly FormulaError NUM = new FormulaError(0x24, "#NUM!");
 
         /**
          * Intended to indicate when a designated value is not available.
@@ -93,7 +93,7 @@ namespace NPOI.SS.UserModel
          * </p>
          * This error value can be produced by calling the function NA
          */
-        public static FormulaError NA = new FormulaError(0x2A, "#N/A");
+        public static readonly FormulaError NA = new FormulaError(0x2A, "#N/A");
 
         private byte type;
         private String repr;

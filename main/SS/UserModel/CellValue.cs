@@ -31,8 +31,8 @@ namespace NPOI.SS.UserModel
      */
     public class CellValue
     {
-        public static CellValue TRUE = new CellValue(CellType.BOOLEAN, 0.0, true, null, 0);
-        public static CellValue FALSE = new CellValue(CellType.BOOLEAN, 0.0, false, null, 0);
+        public static readonly CellValue TRUE = new CellValue(CellType.BOOLEAN, 0.0, true, null, 0);
+        public static readonly CellValue FALSE = new CellValue(CellType.BOOLEAN, 0.0, false, null, 0);
 
         private CellType _cellType;
         private double _numberValue;

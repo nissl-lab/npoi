@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record
        : StandardRecord
     {
         public const short sid = 0x20B;
-        //public static int DBCELL_CAPACITY = 30;
+        //public const int DBCELL_CAPACITY = 30;
         public int field_1_zero;            // reserved must be 0
         public int field_2_first_row;       // first row on the sheet
         public int field_3_last_row_add1;   // last row

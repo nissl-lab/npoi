@@ -28,11 +28,11 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFShapeFactory
     {
-        private static short OBJECT_TYPE_LINE = 1;
-        private static short OBJECT_TYPE_RECTANGLE = 2;
-        private static short OBJECT_TYPE_OVAL = 3;
-        private static short OBJECT_TYPE_ARC = 4;
-        private static short OBJECT_TYPE_PICTURE = 8;
+        private const short OBJECT_TYPE_LINE = 1;
+        private const short OBJECT_TYPE_RECTANGLE = 2;
+        private const short OBJECT_TYPE_OVAL = 3;
+        private const short OBJECT_TYPE_ARC = 4;
+        private const short OBJECT_TYPE_PICTURE = 8;
 
         /**
          * build shape tree from escher container

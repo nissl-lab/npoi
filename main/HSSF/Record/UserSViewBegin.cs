@@ -33,7 +33,7 @@ using NPOI.Util;
     public class UserSViewBegin : StandardRecord
     {
 
-        public static short sid = 0x01AA;
+        public const short sid = 0x01AA;
         private byte[] _rawData;
 
         public UserSViewBegin(byte[] data)

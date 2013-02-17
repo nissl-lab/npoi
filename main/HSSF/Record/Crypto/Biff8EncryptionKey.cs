@@ -11,8 +11,8 @@ namespace NPOI.HSSF.Record.Crypto
     public class Biff8EncryptionKey
     {
         // these two constants coincidentally have the same value
-        private static int KEY_DIGEST_LENGTH = 5;
-        private static int PASSWORD_HASH_NUMBER_OF_BYTES_USED = 5;
+        private const int KEY_DIGEST_LENGTH = 5;
+        private const int PASSWORD_HASH_NUMBER_OF_BYTES_USED = 5;
 
         private byte[] _keyDigest;
 

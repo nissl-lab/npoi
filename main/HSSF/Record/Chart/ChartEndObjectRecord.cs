@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Chart
      */
     public class ChartEndObjectRecord : StandardRecord
     {
-        public static short sid = 0x0855;
+        public const short sid = 0x0855;
 
         private short rt;
         private short grbitFrt;

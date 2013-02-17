@@ -30,33 +30,33 @@ namespace NPOI.SS.UserModel
          * The underline is drawn through the descenders of
          * characters such as g and p..
          */
-        public static FontUnderline SINGLE = new FontUnderline(1);
+        public static readonly FontUnderline SINGLE = new FontUnderline(1);
 
         /**
          * Double-line underlining under each character in the
          * cell. underlines are drawn through the descenders of
          * characters such as g and p.
          */
-        public static FontUnderline DOUBLE = new FontUnderline(2);
+        public static readonly FontUnderline DOUBLE = new FontUnderline(2);
 
         /**
          * Single-line accounting underlining under each
          * character in the cell. The underline is drawn under the
          * descenders of characters such as g and p.
          */
-        public static FontUnderline SINGLE_ACCOUNTING = new FontUnderline(3);
+        public static readonly FontUnderline SINGLE_ACCOUNTING = new FontUnderline(3);
 
         /**
          * Double-line accounting underlining under each
          * character in the cell. The underlines are drawn under
          * the descenders of characters such as g and p.
          */
-        public static FontUnderline DOUBLE_ACCOUNTING = new FontUnderline(4);
+        public static readonly FontUnderline DOUBLE_ACCOUNTING = new FontUnderline(4);
 
         /**
          * No underline.
          */
-        public static FontUnderline NONE = new FontUnderline(5);
+        public static readonly FontUnderline NONE = new FontUnderline(5);
 
 
         private int value;

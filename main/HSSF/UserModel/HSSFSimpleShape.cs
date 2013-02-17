@@ -34,7 +34,7 @@ namespace NPOI.HSSF.UserModel
         public const short OBJECT_TYPE_LINE = (short)HSSFShapeTypes.Line;
         public const short OBJECT_TYPE_RECTANGLE = (short)HSSFShapeTypes.Rectangle;
         public const short OBJECT_TYPE_OVAL = (short)HSSFShapeTypes.Ellipse;
-        public static short OBJECT_TYPE_ARC = (short)HSSFShapeTypes.Arc;
+        public const short OBJECT_TYPE_ARC = (short)HSSFShapeTypes.Arc;
         //    public static short       OBJECT_TYPE_CHART              = 5;
         //    public static short       OBJECT_TYPE_TEXT               = 6;
         //    public static short       OBJECT_TYPE_BUTTON             = 7;
@@ -51,11 +51,11 @@ namespace NPOI.HSSF.UserModel
         //    public static short       OBJECT_TYPE_GROUP_BOX          = 19;
         public const short OBJECT_TYPE_COMBO_BOX = (short)HSSFShapeTypes.HostControl;
         public const short OBJECT_TYPE_COMMENT = (short)HSSFShapeTypes.TextBox;
-        public static short       OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING = 30;
+        public const short OBJECT_TYPE_MICROSOFT_OFFICE_DRAWING = 30;
 
-        public static int WRAP_SQUARE = 0;
-        public static int WRAP_BY_POINTS = 1;
-        public static int WRAP_NONE = 2;
+        public const int WRAP_SQUARE = 0;
+        public const int WRAP_BY_POINTS = 1;
+        public const int WRAP_NONE = 2;
 
         private TextObjectRecord _textObjectRecord;
 

@@ -30,8 +30,8 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public abstract class HSSFShape //: IShape
     {
-        public static int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
-        public static int LINEWIDTH_DEFAULT = 9525;
+        public const int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
+        public const int LINEWIDTH_DEFAULT = 9525;
         public const int LINESTYLE__COLOR_DEFAULT = 0x08000040;
         public const int FILL__FILLCOLOR_DEFAULT = 0x08000009;
         public const bool NO_FILL_DEFAULT = true;

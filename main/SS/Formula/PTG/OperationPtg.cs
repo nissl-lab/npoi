@@ -25,9 +25,9 @@ namespace NPOI.SS.Formula.PTG
     [Serializable]
     public abstract class OperationPtg : Ptg
     {
-        public static int TYPE_UNARY = 0;
-        public static int TYPE_BINARY = 1;
-        public static int TYPE_FUNCTION = 2;
+        public const int TYPE_UNARY = 0;
+        public const int TYPE_BINARY = 1;
+        public const int TYPE_FUNCTION = 2;
 
         /**
          *  returns a string representation of the operations

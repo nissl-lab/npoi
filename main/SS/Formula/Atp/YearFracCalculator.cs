@@ -38,18 +38,18 @@ namespace NPOI.SS.Formula.Atp
     public class YearFracCalculator
     {
         /** use UTC time-zone to avoid daylight savings issues */
-        //private static TimeZone UTC_TIME_ZONE = TimeZone.GetTimeZone("UTC");
-        private static int MS_PER_HOUR = 60 * 60 * 1000;
-        private static int MS_PER_DAY = 24 * MS_PER_HOUR;
-        private static int DAYS_PER_NORMAL_YEAR = 365;
-        private static int DAYS_PER_LEAP_YEAR = DAYS_PER_NORMAL_YEAR + 1;
+        //private static readonly TimeZone UTC_TIME_ZONE = TimeZone.GetTimeZone("UTC");
+        private const int MS_PER_HOUR = 60 * 60 * 1000;
+        private const int MS_PER_DAY = 24 * MS_PER_HOUR;
+        private const int DAYS_PER_NORMAL_YEAR = 365;
+        private const int DAYS_PER_LEAP_YEAR = DAYS_PER_NORMAL_YEAR + 1;
 
         /** the length of normal long months i.e. 31 */
-        private static int LONG_MONTH_LEN = 31;
+        private const int LONG_MONTH_LEN = 31;
         /** the length of normal short months i.e. 30 */
-        private static int SHORT_MONTH_LEN = 30;
-        private static int SHORT_FEB_LEN = 28;
-        private static int LONG_FEB_LEN = SHORT_FEB_LEN + 1;
+        private const int SHORT_MONTH_LEN = 30;
+        private const int SHORT_FEB_LEN = 28;
+        private const int LONG_FEB_LEN = SHORT_FEB_LEN + 1;
 
 
         /// <summary>

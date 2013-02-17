@@ -33,16 +33,16 @@ namespace NPOI.SS.UserModel
      */
     public class ExcelStyleDateFormatter : SimpleDateFormat
     {
-        public static char MMMMM_START_SYMBOL = '\ue001';
-        public static char MMMMM_TRUNCATE_SYMBOL = '\ue002';
-        public static char H_BRACKET_SYMBOL = '\ue010';
-        public static char HH_BRACKET_SYMBOL = '\ue011';
-        public static char M_BRACKET_SYMBOL = '\ue012';
-        public static char MM_BRACKET_SYMBOL = '\ue013';
-        public static char S_BRACKET_SYMBOL = '\ue014';
-        public static char SS_BRACKET_SYMBOL = '\ue015';
-        public static char L_BRACKET_SYMBOL = '\ue016';
-        public static char LL_BRACKET_SYMBOL = '\ue017';
+        public const char MMMMM_START_SYMBOL = '\ue001';
+        public const char MMMMM_TRUNCATE_SYMBOL = '\ue002';
+        public const char H_BRACKET_SYMBOL = '\ue010';
+        public const char HH_BRACKET_SYMBOL = '\ue011';
+        public const char M_BRACKET_SYMBOL = '\ue012';
+        public const char MM_BRACKET_SYMBOL = '\ue013';
+        public const char S_BRACKET_SYMBOL = '\ue014';
+        public const char SS_BRACKET_SYMBOL = '\ue015';
+        public const char L_BRACKET_SYMBOL = '\ue016';
+        public const char LL_BRACKET_SYMBOL = '\ue017';
 
         private DecimalFormat format1digit = new DecimalFormat("0");
         private DecimalFormat format2digits = new DecimalFormat("00");
