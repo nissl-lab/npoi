@@ -11,7 +11,8 @@ used to create search engines).
 ==================
 *  NPOI Website *
 ==================
-http://npoi.googlecode.com (Latest source code available)
+https://github.com/tonyqus/npoi/ (Latest source code available)
+http://npoi.googlecode.com (No latest source code available)
 http://npoi.codeplex.com (No latest source code available)
 http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
 
@@ -102,6 +103,18 @@ Christian Leutloff - developer
 From: Germany
 Time Zone: GMT+1
 Main Contribution: OpenXmlFormats, Excel 2007 comment read
+
+Jeff Stedfast - developer
+------------------------------
+From: Cambridge, MA, USA
+Time Zone: GMT
+Main contribution: Mono version of NPOI, enumeration changes and compilation optimization
+
+Paul Kratt - developer
+------------------------------
+From: Greater Milwaukee Area, Wisconsin, USA
+Time Zone: GMT
+Main contribution: CopyTo, CopySheet functions in HSSFSheet
 
 ==================
 * How to join us *

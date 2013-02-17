@@ -112,6 +112,7 @@
     <Compile Include="HSSF\UserModel\TestPolygon.cs" />
     <Compile Include="HSSF\UserModel\TestShapeGroup.cs" />
     <Compile Include="HSSF\UserModel\TestText.cs" />
+    <Compile Include="HSSF\UserModel\TestCopySheet.cs" />
     <Compile Include="HSSF\Util\TestRangeAddress.cs" />
     <Compile Include="POIFS\EventFileSystem\Listener.cs" />
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
