@@ -2009,10 +2009,10 @@ namespace NPOI.HSSF.Model
             retval.PaletteOptions=(short)0;
             retval.AdtlPaletteOptions=(short)0;
             retval.FillPaletteOptions=(short)0x20c0;
-            retval.TopBorderPaletteIdx=HSSFColor.BLACK.index;
-            retval.BottomBorderPaletteIdx=HSSFColor.BLACK.index;
-            retval.LeftBorderPaletteIdx=HSSFColor.BLACK.index;
-            retval.RightBorderPaletteIdx=HSSFColor.BLACK.index;
+            retval.TopBorderPaletteIdx=HSSFColor.Black.Index;
+            retval.BottomBorderPaletteIdx=HSSFColor.Black.Index;
+            retval.LeftBorderPaletteIdx=HSSFColor.Black.Index;
+            retval.RightBorderPaletteIdx=HSSFColor.Black.Index;
             return retval;
         }
 

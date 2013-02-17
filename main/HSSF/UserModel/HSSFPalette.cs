@@ -48,8 +48,8 @@ namespace NPOI.HSSF.UserModel
         public HSSFColor GetColor(short index)
         {
             //Handle the special AUTOMATIC case
-            if (index == HSSFColor.AUTOMATIC.index)
-                return HSSFColor.AUTOMATIC.GetInstance();
+            if (index == HSSFColor.Automatic.Index)
+                return HSSFColor.Automatic.GetInstance();
             else
             {
                 byte[] b = palette.GetColor(index);

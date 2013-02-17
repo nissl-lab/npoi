@@ -460,18 +460,18 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         private void CheckDefaultBackgroundFills()
         {
-            if (format.FillForeground == HSSFColor.AUTOMATIC.index)
+            if (format.FillForeground == HSSFColor.Automatic.Index)
             {
                 //JMH: Why +1, hell why not. I guess it made some sense to someone at the time. Doesnt
                 //to me now.... But experience has shown that when the fore is Set to AUTOMATIC then the
                 //background needs to be incremented......
-                if (format.FillBackground != (HSSFColor.AUTOMATIC.index + 1))
-                    FillBackgroundColor=((short)(HSSFColor.AUTOMATIC.index + 1));
+                if (format.FillBackground != (HSSFColor.Automatic.Index + 1))
+                    FillBackgroundColor = HSSFColor.Automatic.Index + 1;
             }
-            else if (format.FillBackground == HSSFColor.AUTOMATIC.index + 1)
+            else if (format.FillBackground == HSSFColor.Automatic.Index + 1)
                 //Now if the forground Changes to a non-AUTOMATIC color the background Resets itself!!!
-                if (format.FillForeground != HSSFColor.AUTOMATIC.index)
-                    FillBackgroundColor=(HSSFColor.AUTOMATIC.index);
+                if (format.FillForeground != HSSFColor.Automatic.Index)
+                    FillBackgroundColor=(HSSFColor.Automatic.Index);
         }
         /**
  * Clones all the style information from another
@@ -566,8 +566,8 @@ namespace NPOI.HSSF.UserModel
                 short result = format.FillBackground;
                 //JMH: Do this ridiculous conversion, and let HSSFCellStyle
                 //internally migrate back and forth
-                if (result == (HSSFColor.AUTOMATIC.index + 1))
-                    return HSSFColor.AUTOMATIC.index;
+                if (result == (HSSFColor.Automatic.Index + 1))
+                    return HSSFColor.Automatic.Index;
                 else return result;
             }
             set
