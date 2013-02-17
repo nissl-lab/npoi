@@ -2825,10 +2825,11 @@ namespace NPOI.HSSF.UserModel
             }
             switch (oldCell.CellType)
             {
-                case NPOI.SS.UserModel.CellType.STRING:
+                case NPOI.SS.UserModel.CellType.String:
                     newCell.SetCellValue(oldCell.StringCellValue);
                     break;
-                case NPOI.SS.UserModel.CellType.NUMNumeric                   newCell.SetCellValue(oldCell.NumericCellValue);
+                case NPOI.SS.UserModel.CellType.Numeric:
+					newCell.SetCellValue(oldCell.NumericCellValue);
                     break;
                 case NPOI.SS.UserModel.CellType.Blank:
                     newCell.SetCellType(NPOI.SS.UserModel.CellType.Blank);
@@ -2849,7 +2850,8 @@ namespace NPOI.HSSF.UserModel
                     {
                         try
                         {
-                            newCell.SetCellType(CellType.NUMNumeric                            newCell.SetCellValue(oldCell.NumericCellValue);
+                            newCell.SetCellType(CellType.Numeric);
+                            newCell.SetCellValue(oldCell.NumericCellValue);
                         }
                         catch (Exception ex)
                         {
