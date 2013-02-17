@@ -114,7 +114,7 @@ namespace NPOI.HSSF.UserModel
         {
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
-            c.ObjectType = CommonObjectType.MICROSOFT_OFFICE_DRAWING;
+            c.ObjectType = CommonObjectType.MicrosoftOfficeDrawing;
             c.IsLocked = (true);
             c.IsPrintable = (true);
             c.IsAutoFill = (true);

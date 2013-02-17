@@ -99,7 +99,7 @@ namespace NPOI.HSSF.UserModel
             set 
             {
                 CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
-                cod.ObjectType = CommonObjectType.MICROSOFT_OFFICE_DRAWING;
+                cod.ObjectType = CommonObjectType.MicrosoftOfficeDrawing;
                 EscherSpRecord spRecord = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
                 spRecord.ShapeType = ((short)value);
             }

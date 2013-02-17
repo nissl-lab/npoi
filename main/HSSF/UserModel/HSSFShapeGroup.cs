@@ -114,7 +114,7 @@ namespace NPOI.HSSF.UserModel
         {
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord cmo = new CommonObjectDataSubRecord();
-            cmo.ObjectType = (CommonObjectType.GROUP);
+            cmo.ObjectType = (CommonObjectType.Group);
             cmo.IsLocked = (true);
             cmo.IsPrintable = (true);
             cmo.IsAutoFill = (true);
@@ -436,7 +436,7 @@ namespace NPOI.HSSF.UserModel
 
 
 
-        #region IEnumerable<HSSFShape> 成员
+        #region IEnumerable<HSSFShape> 锟斤拷员
 
         public IEnumerator<HSSFShape> GetEnumerator()
         {
@@ -445,7 +445,7 @@ namespace NPOI.HSSF.UserModel
 
         #endregion
 
-        #region IEnumerable 成员
+        #region IEnumerable 锟斤拷员
 
         IEnumerator IEnumerable.GetEnumerator()
         {

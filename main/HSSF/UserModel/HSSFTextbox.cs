@@ -57,7 +57,7 @@ namespace NPOI.HSSF.UserModel
         {
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
-            c.ObjectType = CommonObjectType.TEXT;
+            c.ObjectType = CommonObjectType.Text;
             c.IsLocked = (true);
             c.IsPrintable = (true);
             c.IsAutoFill = (true);
