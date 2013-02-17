@@ -148,7 +148,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                Ptg[] ptgs = HSSFFormulaParser.Parse(value, book, NPOI.SS.Formula.FormulaType.NAMEDRANGE, SheetIndex);
+                Ptg[] ptgs = HSSFFormulaParser.Parse(value, book, NPOI.SS.Formula.FormulaType.NamedRange, SheetIndex);
                 _definedNameRec.NameDefinition = ptgs;
             }
         }

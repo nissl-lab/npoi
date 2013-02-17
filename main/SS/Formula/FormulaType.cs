@@ -27,14 +27,13 @@ namespace NPOI.SS.Formula
      */
     public enum FormulaType:int
     {
-        CELL = 0,
-        SHARED = 1,
-        ARRAY = 2,
-        CONDFORMAT = 3,
-        NAMEDRANGE = 4,
+        Cell = 0,
+        Shared = 1,
+        Array = 2,
+        CondFormat = 3,
+        NamedRange = 4,
         // this constant is currently very specific.  The exact differences from general data
         // validation formulas or conditional format formulas is not known yet
-        DATAVALIDATION_LIST = 5,
-
+        DataValidationList = 5,
     }
 }

@@ -204,7 +204,7 @@ namespace NPOI.SS.Formula
 
         public static Ptg[] Parse(String formula, IFormulaParsingWorkbook book)
         {
-            return Parse(formula, book, FormulaType.CELL);
+            return Parse(formula, book, FormulaType.Cell);
         }
 
 

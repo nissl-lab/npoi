@@ -467,7 +467,7 @@ namespace NPOI.HSSF.UserModel
             {
                 IWorkbook wb = sheet.Workbook;
                 // formula is Parsed with slightly different RVA rules: (root node type must be 'reference')
-                return HSSFFormulaParser.Parse(_formula1, (HSSFWorkbook)wb, FormulaType.DATAVALIDATION_LIST, wb.GetSheetIndex(sheet));
+                return HSSFFormulaParser.Parse(_formula1, (HSSFWorkbook)wb, FormulaType.DataValidationList, wb.GetSheetIndex(sheet));
                 // To do: Excel places restrictions on the available operations within a list formula.
                 // Some things like union and intersection are not allowed.
             }
@@ -504,7 +504,7 @@ namespace NPOI.HSSF.UserModel
                 throw new InvalidOperationException("Both formula and value cannot be present");
             }
             IWorkbook wb = sheet.Workbook;
-            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)wb, FormulaType.CELL, wb.GetSheetIndex(sheet));
+            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)wb, FormulaType.Cell, wb.GetSheetIndex(sheet));
         }
     }
 

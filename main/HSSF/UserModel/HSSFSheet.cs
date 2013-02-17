@@ -2030,7 +2030,7 @@ namespace NPOI.HSSF.UserModel
         {
             // make sure the formula parses OK first
             int sheetIndex = _workbook.GetSheetIndex(this);
-            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.ARRAY, sheetIndex);
+            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.Array, sheetIndex);
             ICellRange<ICell> cells = GetCellRange(range);
 
             foreach (HSSFCell c in cells)

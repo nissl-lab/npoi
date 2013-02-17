@@ -639,7 +639,7 @@ namespace NPOI.HSSF.UserModel
                 return;
             }
             int sheetIndex = book.GetSheetIndex(sheet);
-            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, book, FormulaType.CELL, sheetIndex);
+            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, book, FormulaType.Cell, sheetIndex);
 
             SetCellType(CellType.Formula, false, row, col, styleIndex);
             FormulaRecordAggregate agg = (FormulaRecordAggregate)record;

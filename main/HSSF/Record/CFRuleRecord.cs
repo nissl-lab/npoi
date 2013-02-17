@@ -589,7 +589,7 @@ namespace NPOI.HSSF.Record
                 return null;
             }
             int sheetIndex = sheet.Workbook.GetSheetIndex(sheet);
-            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)sheet.Workbook, FormulaType.CELL, sheetIndex);
+            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)sheet.Workbook, FormulaType.Cell, sheetIndex);
         }
     }
 }

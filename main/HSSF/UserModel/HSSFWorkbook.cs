@@ -1445,7 +1445,7 @@ namespace NPOI.HSSF.UserModel
                 sb.Append("!");
                 sb.Append(parts[i]);
             }
-            name.NameDefinition =(HSSFFormulaParser.Parse(sb.ToString(), this, FormulaType.NAMEDRANGE, sheetIndex));
+            name.NameDefinition =(HSSFFormulaParser.Parse(sb.ToString(), this, FormulaType.NamedRange, sheetIndex));
         }
 
         /// <summary>
