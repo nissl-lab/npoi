@@ -47,9 +47,6 @@ namespace NPOI.HSSF.UserModel
          * Get the type of base or subscript for the font
          *
          * @return base or subscript option
-         * @see #SS_NONE
-         * @see #SS_SUPER
-         * @see #SS_SUB
          */
         public FontSuperScript EscapementType
         {
