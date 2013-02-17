@@ -57,19 +57,19 @@ namespace NPOI.SS.Formula.PTG
         public enum SpaceType
         {
             /** 00H = Spaces before the next token (not allowed before tParen token) */
-            SPACE_BEFORE = 0x00,
+            SpaceBefore = 0x00,
             /** 01H = Carriage returns before the next token (not allowed before tParen token) */
-            CR_BEFORE = 0x01,
+            CrBefore = 0x01,
             /** 02H = Spaces before opening parenthesis (only allowed before tParen token) */
-            SPACE_BEFORE_OPEN_PAREN = 0x02,
+            SpaceBeforeOpenParen = 0x02,
             /** 03H = Carriage returns before opening parenthesis (only allowed before tParen token) */
-            CR_BEFORE_OPEN_PAREN = 0x03,
+            CrBeforeOpenParen = 0x03,
             /** 04H = Spaces before closing parenthesis (only allowed before tParen, tFunc, and tFuncVar tokens) */
-            SPACE_BEFORE_CLOSE_PAREN = 0x04,
+            SpaceBeforeCloseParen = 0x04,
             /** 05H = Carriage returns before closing parenthesis (only allowed before tParen, tFunc, and tFuncVar tokens) */
-            CR_BEFORE_CLOSE_PAREN = 0x05,
+            CrBeforeCloseParen = 0x05,
             /** 06H = Spaces following the equality sign (only in macro sheets) */
-            SPACE_AFTER_EQUALITY = 0x06
+            SpaceAfterEquality = 0x06
         }
 
         public AttrPtg()
