@@ -230,7 +230,7 @@ namespace NPOI.Util
             if (cursor == len)
             {
                 _signum = 0;
-                mag = ZERO.mag;
+                mag = Zero.mag;
                 return;
             }
 
@@ -384,19 +384,19 @@ namespace NPOI.Util
          *
          * @since   1.2
          */
-        public static readonly BigInteger ZERO = new BigInteger(new int[0], 0);
+        public static readonly BigInteger Zero = new BigInteger(new int[0], 0);
 
         /**
          * The BigInteger constant one.
          *
          * @since   1.2
          */
-        public static readonly BigInteger ONE = ValueOf(1);
+        public static readonly BigInteger One = ValueOf(1);
 
         /**
          * The BigInteger constant two.  (Not exported.)
          */
-        private static readonly BigInteger TWO = ValueOf(2);
+        private static readonly BigInteger Two = ValueOf(2);
 
         /**
          * The BigInteger constant ten.
@@ -417,7 +417,7 @@ namespace NPOI.Util
         {
             // If -MAX_CONSTANT < val < MAX_CONSTANT, return stashed constant
             if (val == 0)
-                return ZERO;
+                return Zero;
             if (val > 0 && val <= MAX_CONSTANT)
                 return posConst[(int)val];
             else if (val < 0 && val >= -MAX_CONSTANT)
@@ -555,7 +555,7 @@ namespace NPOI.Util
             if (exponent < 0)
                 throw new ArithmeticException("Negative exponent");
             if (_signum == 0)
-                return (exponent == 0 ? ONE : this);
+                return (exponent == 0 ? One : this);
 
             // Perform exponentiation using repeated squaring trick
             int newSign = (_signum < 0 && (exponent & 1) == 1 ? -1 : 1);
@@ -937,11 +937,11 @@ namespace NPOI.Util
          * nonsense values in their 0 and 1 elements, as radixes 0 and 1 are not
          * used.
          */
-        private static int[] digitsPerLong = {0, 0,
+        private static readonly int[] digitsPerLong = {0, 0,
         62, 39, 31, 27, 24, 22, 20, 19, 18, 18, 17, 17, 16, 16, 15, 15, 15, 14,
         14, 14, 14, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12};
 
-        private static BigInteger[] longRadix = {null, null,
+        private static readonly BigInteger[] longRadix = {null, null,
         ValueOf(0x4000000000000000L), ValueOf(0x383d9170b85ff80bL),
         ValueOf(0x4000000000000000L), ValueOf(0x6765c793fa10079dL),
         ValueOf(0x41c21cb8e1000000L), ValueOf(0x3642798750226111L),
@@ -1238,7 +1238,7 @@ namespace NPOI.Util
         public BigInteger ShiftLeft(int n)
         {
             if (_signum == 0)
-                return ZERO;
+                return Zero;
             if (n == 0)
                 return this;
             if (n < 0)
@@ -1343,7 +1343,7 @@ namespace NPOI.Util
 
             // Special case: entire contents shifted off the end
             if (nInts >= magLen)
-                return (_signum >= 0 ? ZERO : negConst[1]);
+                return (_signum >= 0 ? Zero : negConst[1]);
 
             if (nBits == 0)
             {
@@ -1447,7 +1447,7 @@ namespace NPOI.Util
         BigInteger multiply(long v)
         {
             if (v == 0 || _signum == 0)
-                return ZERO;
+                return Zero;
             if (v == INFLATED)
                 return Multiply(BigInteger.ValueOf(v));
             int rsign = (v > 0 ? _signum : -_signum);
@@ -1494,7 +1494,7 @@ namespace NPOI.Util
         public BigInteger Multiply(BigInteger val)
         {
             if (val._signum == 0 || _signum == 0)
-                return ZERO;
+                return Zero;
 
             int[] result = multiplyToLen(mag, mag.Length,
                                          val.mag, val.mag.Length, null);
@@ -1518,7 +1518,7 @@ namespace NPOI.Util
 
             int cmp = compareMagnitude(val);
             if (cmp == 0)
-                return ZERO;
+                return Zero;
             int[] resultMag = (cmp > 0 ? subtract(mag, val.mag)
                                : subtract(val.mag, mag));
             resultMag = trustedStripLeadingZeroInts(resultMag);
@@ -1589,7 +1589,7 @@ namespace NPOI.Util
 
             int cmp = compareMagnitude(val);
             if (cmp == 0)
-                return ZERO;
+                return Zero;
             int[] resultMag = (cmp > 0 ? subtract(mag, val.mag)
                                : subtract(val.mag, mag));
             resultMag = trustedStripLeadingZeroInts(resultMag);
@@ -1748,7 +1748,7 @@ namespace NPOI.Util
          * BigDecimal divideAndRound to increment the quotient. Use this constant
          * only when the method is not going to modify this object.
          */
-        static MutableBigInteger ONE = new MutableBigInteger(1);
+        static readonly MutableBigInteger One = new MutableBigInteger(1);
 
         // Constructors
         private const long LONG_MASK = BigInteger.LONG_MASK;
@@ -1867,7 +1867,7 @@ namespace NPOI.Util
         public BigInteger toBigInteger(int sign)
         {
             if (intLen == 0 || sign == 0)
-                return BigInteger.ZERO;
+                return BigInteger.Zero;
             return new BigInteger(getMagnitudeArray(), sign);
         }
 

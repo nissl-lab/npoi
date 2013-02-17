@@ -51,7 +51,7 @@ namespace NPOI.SS.Util
          */
         private const int EXPONENT_OFFSET = 14;
 
-        private static readonly decimal BD_2_POW_24 = new decimal((BigInteger.ONE << 24).LongValue());
+        private static readonly decimal BD_2_POW_24 = new decimal((BigInteger.One << 24).LongValue());
 
         /*
          * log<sub>10</sub>(2)&times;2<sup>20</sup>

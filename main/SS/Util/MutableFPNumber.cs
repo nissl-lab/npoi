@@ -199,7 +199,7 @@ namespace NPOI.SS.Util
                 BigInteger fivePowIndex = FIVE.Pow(index);
                 int bitsDueToFiveFactors = fivePowIndex.BitLength();
                 int px = 80 + bitsDueToFiveFactors;
-                BigInteger fx = (BigInteger.ONE << px) / (fivePowIndex);
+                BigInteger fx = (BigInteger.One << px) / (fivePowIndex);
                 int adj = fx.BitLength() - 80;
                 _divisor = fx>>(adj);
                 bitsDueToFiveFactors -= adj;
