@@ -26,9 +26,9 @@ namespace NPOI.HSSF.Record.Chart
 
     public enum DateUnit
     {
-        DUDAYS = 0,
-        DUMONTHS = 1,
-        DUYEARS = 2
+        Days = 0,
+        Months = 1,
+        Years = 2
     }
     /*
      * The axis options record provides Unit information and other various tidbits about the axis.

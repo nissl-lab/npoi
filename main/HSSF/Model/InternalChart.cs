@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Record.Chart;
@@ -451,10 +451,10 @@ namespace NPOI.HSSF.Model
             r.MinimumDate = 0;
             r.MaximumDate = 0;
             r.MajorInterval = 1;
-            r.MajorUnit = DateUnit.DUDAYS;
+            r.MajorUnit = DateUnit.Days;
             r.MinorInterval = 1;
-            r.MinorUnit = DateUnit.DUDAYS;
-            r.BaseUnit = DateUnit.DUDAYS;
+            r.MinorUnit = DateUnit.Days;
+            r.BaseUnit = DateUnit.Days;
             r.CrossDate = 0;
             r.IsAutoMin = (true);
             r.IsAutoMax = (true);
