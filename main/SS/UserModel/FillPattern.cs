@@ -22,7 +22,7 @@ namespace NPOI.SS.UserModel
      * The enumeration value indicating the style of fill pattern being used for a cell format.
      * 
      */
-    public enum FillPatternType : short
+    public enum FillPattern : short
     {
 
         /**  No background */

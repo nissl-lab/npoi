@@ -1008,7 +1008,6 @@
     <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SS\UserModel\FillPatternType.cs" />
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />
     <Compile Include="SS\UserModel\FontFamily.cs" />
@@ -1133,6 +1132,7 @@
     <Compile Include="HSSF\Record\TextOrientation.cs" />
     <Compile Include="HSSF\Record\HorizontalTextAlignment.cs" />
     <Compile Include="HSSF\Record\VerticalTextAlignment.cs" />
+    <Compile Include="SS\UserModel\FillPattern.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
