@@ -1165,7 +1165,7 @@ namespace NPOI.SS.Formula
         private bool IsValidCellReference(String str)
         {
             //check range bounds against grid max
-            bool result = CellReference.ClassifyCellReference(str, _ssVersion) == NameType.CELL;
+            bool result = CellReference.ClassifyCellReference(str, _ssVersion) == NameType.Cell;
             if (result)
             {
                 /*
