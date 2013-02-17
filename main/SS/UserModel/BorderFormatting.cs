@@ -25,15 +25,15 @@ namespace NPOI.SS.UserModel
      */
     public interface IBorderFormatting
     {
-        short BorderBottom { get; set; }
+        BorderStyle BorderBottom { get; set; }
 
-        short BorderDiagonal { get; set; }
+        BorderStyle BorderDiagonal { get; set; }
 
-        short BorderLeft { get; set; }
+        BorderStyle BorderLeft { get; set; }
 
-        short BorderRight { get; set; }
+        BorderStyle BorderRight { get; set; }
 
-        short BorderTop { get; set; }
+        BorderStyle BorderTop { get; set; }
 
         short BottomBorderColor { get; set; }
 

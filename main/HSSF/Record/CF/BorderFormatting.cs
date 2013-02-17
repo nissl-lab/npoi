@@ -22,11 +22,13 @@
  *
  * Created on January 22, 2008, 10:05 PM
  */
+
 namespace NPOI.HSSF.Record.CF
 {
     using System;
     using System.Text;
     using NPOI.HSSF.Record;
+    using NPOI.SS.UserModel;
     using NPOI.Util;
 
 
@@ -39,91 +41,6 @@ namespace NPOI.HSSF.Record.CF
 
     public class BorderFormatting
     {
-
-        /**
-         * No border
-         */
-
-        public const short BORDER_NONE = 0x0;
-
-        /**
-         * Thin border
-         */
-
-        public const short BORDER_THIN = 0x1;
-
-        /**
-         * Medium border
-         */
-
-        public const short BORDER_MEDIUM = 0x2;
-
-        /**
-         * dash border
-         */
-
-        public const short BORDER_DASHED = 0x3;
-
-        /**
-         * dot border
-         */
-
-        public const short BORDER_HAIR = 0x4;
-
-        /**
-         * Thick border
-         */
-
-        public const short BORDER_THICK = 0x5;
-
-        /**
-         * double-line border
-         */
-
-        public const short BORDER_DOUBLE = 0x6;
-
-        /**
-         * hair-line border
-         */
-
-        public const short BORDER_DOTTED = 0x7;
-
-        /**
-         * Medium dashed border
-         */
-
-        public const short BORDER_MEDIUM_DASHED = 0x8;
-
-        /**
-         * dash-dot border
-         */
-
-        public const short BORDER_DASH_DOT = 0x9;
-
-        /**
-         * medium dash-dot border
-         */
-
-        public const short BORDER_MEDIUM_DASH_DOT = 0xA;
-
-        /**
-         * dash-dot-dot border
-         */
-
-        public const short BORDER_DASH_DOT_DOT = 0xB;
-
-        /**
-         * medium dash-dot-dot border
-         */
-
-        public const short BORDER_MEDIUM_DASH_DOT_DOT = 0xC;
-
-        /**
-         * slanted dash-dot border
-         */
-
-        public const short BORDER_SLANTED_DASH_DOT = 0xD;
-
         public BorderFormatting()
         {
             field_13_border_styles1 = (short)0;
@@ -158,15 +75,12 @@ namespace NPOI.HSSF.Record.CF
         /// <summary>
         /// Get the type of border to use for the left border of the cell
         /// </summary>
-        public short BorderLeft
-        {
-            get
-            {
-                return (short)bordLeftLineStyle.GetValue(field_13_border_styles1);
+        public BorderStyle BorderLeft {
+            get {
+                return (BorderStyle) bordLeftLineStyle.GetValue (field_13_border_styles1);
             }
-            set
-            {
-                field_13_border_styles1 = bordLeftLineStyle.SetValue(field_13_border_styles1, value);
+            set {
+                field_13_border_styles1 = bordLeftLineStyle.SetValue (field_13_border_styles1, (int) value);
             }
         }
 
@@ -174,31 +88,24 @@ namespace NPOI.HSSF.Record.CF
         /// <summary>
         /// Get the type of border to use for the right border of the cell
         /// </summary>
-        public short BorderRight
-        {
-            get
-            {
-                return (short)bordRightLineStyle.GetValue(field_13_border_styles1);
+        public BorderStyle BorderRight {
+            get {
+                return (BorderStyle) bordRightLineStyle.GetValue (field_13_border_styles1);
             }
-            set
-            {
-                field_13_border_styles1 =
-                    bordRightLineStyle.SetValue(field_13_border_styles1, value);
+            set {
+                field_13_border_styles1 = bordRightLineStyle.SetValue (field_13_border_styles1, (int) value);
             }
         }
 
         /// <summary>
         /// Get the type of border to use for the top border of the cell
         /// </summary>
-        public short BorderTop
-        {
-            get
-            {
-                return (short)bordTopLineStyle.GetValue(field_13_border_styles1);
+        public BorderStyle BorderTop {
+            get {
+                return (BorderStyle) bordTopLineStyle.GetValue (field_13_border_styles1);
             }
-            set
-            {
-                field_13_border_styles1 = bordTopLineStyle.SetValue(field_13_border_styles1, value);
+            set {
+                field_13_border_styles1 = bordTopLineStyle.SetValue (field_13_border_styles1, (int) value);
             }
         }
 
@@ -206,30 +113,24 @@ namespace NPOI.HSSF.Record.CF
         /// <summary>
         /// Get the type of border to use for the bottom border of the cell
         /// </summary>
-        public short BorderBottom
-        {
-            get
-            {
-                return (short)bordBottomLineStyle.GetValue(field_13_border_styles1);
+        public BorderStyle BorderBottom {
+            get {
+                return (BorderStyle) bordBottomLineStyle.GetValue (field_13_border_styles1);
             }
-            set
-            {
-                field_13_border_styles1 = bordBottomLineStyle.SetValue(field_13_border_styles1, value);
+            set {
+                field_13_border_styles1 = bordBottomLineStyle.SetValue (field_13_border_styles1, (int) value);
             }
         }
 
         /// <summary>
         ///  Get the type of border to use for the diagonal border of the cell
         /// </summary>
-        public short BorderDiagonal
-        {
-            get
-            {
-                return (short)bordDiagLineStyle.GetValue(field_14_border_styles2);
+        public BorderStyle BorderDiagonal {
+            get {
+                return (BorderStyle) bordDiagLineStyle.GetValue (field_14_border_styles2);
             }
-            set
-            {
-                field_14_border_styles2 = bordDiagLineStyle.SetValue(field_14_border_styles2, value);
+            set {
+                field_14_border_styles2 = bordDiagLineStyle.SetValue (field_14_border_styles2, (int) value);
             }
         }
 
@@ -345,10 +246,10 @@ namespace NPOI.HSSF.Record.CF
         {
             StringBuilder buffer = new StringBuilder();
             buffer.Append("    [Border Formatting]\n");
-            buffer.Append("          .lftln     = ").Append(StringUtil.ToHexString(BorderLeft)).Append("\n");
-            buffer.Append("          .rgtln     = ").Append(StringUtil.ToHexString(BorderRight)).Append("\n");
-            buffer.Append("          .topln     = ").Append(StringUtil.ToHexString(BorderTop)).Append("\n");
-            buffer.Append("          .btmln     = ").Append(StringUtil.ToHexString(BorderBottom)).Append("\n");
+            buffer.Append("          .lftln     = ").Append(StringUtil.ToHexString((int) BorderLeft)).Append("\n");
+            buffer.Append("          .rgtln     = ").Append(StringUtil.ToHexString((int) BorderRight)).Append("\n");
+            buffer.Append("          .topln     = ").Append(StringUtil.ToHexString((int) BorderTop)).Append("\n");
+            buffer.Append("          .btmln     = ").Append(StringUtil.ToHexString((int) BorderBottom)).Append("\n");
             buffer.Append("          .leftborder= ").Append(StringUtil.ToHexString(LeftBorderColor)).Append("\n");
             buffer.Append("          .rghtborder= ").Append(StringUtil.ToHexString(RightBorderColor)).Append("\n");
             buffer.Append("          .topborder= ").Append(StringUtil.ToHexString(TopBorderColor)).Append("\n");
