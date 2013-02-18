@@ -319,24 +319,26 @@ namespace NPOI.HSSF.Record
         /**
  * @return the Horizontal text alignment field value.
  */
-        public HorizontalTextAlignment HorizontalTextAlignment
+        public HorizontalAlignment HorizontalTextAlignment
         {
-            get
-            {
-                return (HorizontalTextAlignment) _HorizontalTextAlignment.GetValue(field_1_options);
+            get {
+                return (HorizontalAlignment) _HorizontalTextAlignment.GetValue(field_1_options);
             }
-            set { field_1_options = _HorizontalTextAlignment.SetValue(field_1_options, (int) value); }
+            set {
+                field_1_options = _HorizontalTextAlignment.SetValue(field_1_options, (int) value);
+            }
         }
         /**
  * @return the Vertical text alignment field value.
  */
-        public VerticalTextAlignment VerticalTextAlignment
+        public VerticalAlignment VerticalTextAlignment
         {
-            get
-            {
-                return (VerticalTextAlignment) _VerticalTextAlignment.GetValue(field_1_options);
+            get {
+                return (VerticalAlignment) _VerticalTextAlignment.GetValue(field_1_options);
             }
-            set { field_1_options = _VerticalTextAlignment.SetValue(field_1_options, (int) value); }
+            set {
+                field_1_options = _VerticalTextAlignment.SetValue(field_1_options, (int) value);
+            }
         }
 
         /**
@@ -348,6 +350,7 @@ namespace NPOI.HSSF.Record
             get { return textLocked.IsSet(field_1_options); }
             set { field_1_options = textLocked.SetBoolean(field_1_options, value); }
         }
+
         public Ptg LinkRefPtg
         {
             get

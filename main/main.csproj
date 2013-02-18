@@ -1130,8 +1130,6 @@
     <Compile Include="Util\ULongField.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />
-    <Compile Include="HSSF\Record\HorizontalTextAlignment.cs" />
-    <Compile Include="HSSF\Record\VerticalTextAlignment.cs" />
     <Compile Include="SS\UserModel\FillPattern.cs" />
   </ItemGroup>
   <ItemGroup>

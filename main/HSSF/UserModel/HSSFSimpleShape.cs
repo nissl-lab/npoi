@@ -123,8 +123,8 @@ namespace NPOI.HSSF.UserModel
         protected virtual TextObjectRecord CreateTextObjRecord()
         {
             TextObjectRecord obj = new TextObjectRecord();
-            obj.HorizontalTextAlignment = HorizontalTextAlignment.Center;
-            obj.VerticalTextAlignment = VerticalTextAlignment.Center;
+            obj.HorizontalTextAlignment = HorizontalAlignment.Center;
+            obj.VerticalTextAlignment = VerticalAlignment.Center;
             obj.IsTextLocked = (true);
             obj.TextOrientation = TextOrientation.None;
             obj.Str = (new HSSFRichTextString(""));

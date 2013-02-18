@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.DDF;
     using NPOI.HSSF.Record;
+    using NPOI.SS.UserModel;
 
 
     /// <summary>
@@ -47,8 +48,8 @@ namespace NPOI.HSSF.UserModel
         public HSSFTextbox(HSSFShape parent, HSSFAnchor anchor)
             : base(parent, anchor)
         {
-            HorizontalAlignment = HorizontalTextAlignment.Left;
-            VerticalAlignment = VerticalTextAlignment.Top;
+            HorizontalAlignment = HorizontalAlignment.Left;
+            VerticalAlignment = VerticalAlignment.Top;
             this.String = (new HSSFRichTextString(""));
         }
 
@@ -204,7 +205,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the horizontal alignment.
         /// </summary>
         /// <value>The horizontal alignment.</value>
-        public HorizontalTextAlignment HorizontalAlignment
+        public HorizontalAlignment HorizontalAlignment
         {
             get { return GetTextObjectRecord().HorizontalTextAlignment; }
             set { GetTextObjectRecord().HorizontalTextAlignment = value; }
@@ -214,7 +215,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the vertical alignment.
         /// </summary>
         /// <value>The vertical alignment.</value>
-        public VerticalTextAlignment VerticalAlignment
+        public VerticalAlignment VerticalAlignment
         {
             get { return GetTextObjectRecord().VerticalTextAlignment; }
             set { GetTextObjectRecord().VerticalTextAlignment = value; }
