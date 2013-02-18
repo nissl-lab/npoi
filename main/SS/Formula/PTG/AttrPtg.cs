@@ -113,9 +113,9 @@ namespace NPOI.SS.Formula.PTG
         /// </summary>
         /// <param name="type">a constant from SpaceType</param>
         /// <param name="count">The count.</param>
-        public static AttrPtg CreateSpace(int type, int count)
+        public static AttrPtg CreateSpace(SpaceType type, int count)
         {
-            int data = type & 0x00FF | (count << 8) & 0x00FFFF;
+            int data = ((int) type) & 0x00FF | (count << 8) & 0x00FFFF;
             return new AttrPtg(space.Set(0), data, null, -1);
         }
 
