@@ -187,7 +187,7 @@ namespace TestCases.SS.Formula
             {
                 throw new AssertionException("Missing arg result not being handled correctly.");
             }
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             // Adding blank to 1.0 gives 1.0
             Assert.AreEqual(1.0, cv.NumberValue, 0.0);
 
@@ -195,7 +195,7 @@ namespace TestCases.SS.Formula
             cell.CellFormula = "\"abc\"&IF(1,,)";
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.STRING, cv.CellType);
+            Assert.AreEqual(CellType.String, cv.CellType);
             // Adding blank to "abc" gives "abc"
             Assert.AreEqual("abc", cv.StringValue);
 
@@ -203,7 +203,7 @@ namespace TestCases.SS.Formula
             cell.CellFormula = "\"abc\"&CHOOSE(2,5,,9)";
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.STRING, cv.CellType);
+            Assert.AreEqual(CellType.String, cv.CellType);
             // Adding blank to "abc" gives "abc"
             Assert.AreEqual("abc", cv.StringValue);
         }
@@ -234,14 +234,14 @@ namespace TestCases.SS.Formula
                 }
                 throw;
             }
-            Assert.AreEqual(CellType.ERROR, cv.CellType);
+            Assert.AreEqual(CellType.Error, cv.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_VALUE, cv.ErrorValue);
 
             // verify circular refs are still detected properly
             fe.ClearAllCachedResultValues();
             cell.CellFormula = "OFFSET(A1,0,0)";
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.ERROR, cv.CellType);
+            Assert.AreEqual(CellType.Error, cv.CellType);
             Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cv.ErrorValue);
         }
 

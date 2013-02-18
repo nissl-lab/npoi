@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestDefaultFont()
         {
-            BaseTestDefaultFont(HSSFFont.FONT_ARIAL, (short)200, (short)FontColor.NORMAL);
+            BaseTestDefaultFont(HSSFFont.FONT_ARIAL, (short)200, (short)FontColor.Normal);
         }
     }
 }

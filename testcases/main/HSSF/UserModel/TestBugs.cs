@@ -179,7 +179,7 @@ namespace TestCases.HSSF.UserModel
                 cell = row.CreateCell(3);
 
             // Write Test
-            cell.SetCellType(CellType.STRING);
+            cell.SetCellType(CellType.String);
             setCellText(cell, "a Test");
 
             // change existing numeric cell value
@@ -634,7 +634,7 @@ namespace TestCases.HSSF.UserModel
                 if (row != null)
                 {
                     ICell cell = row.GetCell(0);
-                    Assert.AreEqual(CellType.STRING, cell.CellType);
+                    Assert.AreEqual(CellType.String, cell.CellType);
                     count++;
                 }
             }
@@ -761,11 +761,11 @@ namespace TestCases.HSSF.UserModel
             ISheet workSheet = workBook.CreateSheet("Sheet1");
             ICell cell;
             IRow row = workSheet.CreateRow(0);
-            cell = row.CreateCell(0, CellType.NUMERIC);
+            cell = row.CreateCell(0, CellType.Numeric);
             cell.SetCellValue(1.0);
-            cell = row.CreateCell(1, CellType.NUMERIC);
+            cell = row.CreateCell(1, CellType.Numeric);
             cell.SetCellValue(2.0);
-            cell = row.CreateCell(2, CellType.FORMULA);
+            cell = row.CreateCell(2, CellType.Formula);
             cell.CellFormula = ("SUM(A1:B1)");
 
             WriteOutAndReadBack(wb);
@@ -1271,7 +1271,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNull(
                 wb.FindFont(
                     (short)11, (short)123, (short)22,
-                    "Thingy", false, true, (short)2, (byte)2
+                    "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
 
@@ -1287,8 +1287,8 @@ namespace TestCases.HSSF.UserModel
             nf.FontName = ("Thingy");
             nf.IsItalic = (false);
             nf.IsStrikeout = (true);
-            nf.TypeOffset = ((short)2);
-            nf.Underline = ((byte)2);
+            nf.TypeOffset = FontSuperScript.Sub;
+            nf.Underline = FontUnderlineType.Double;
 
             Assert.AreEqual(5, wb.NumberOfFonts);
             Assert.AreEqual(nf, wb.GetFontAt((short)5));
@@ -1297,20 +1297,20 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(
                 wb.FindFont(
                     (short)11, (short)123, (short)22,
-                    "Thingy", false, true, (short)2, (byte)2
+                    "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
             Assert.AreEqual(
                 5,
                 wb.FindFont(
                        (short)11, (short)123, (short)22,
-                       "Thingy", false, true, (short)2, (byte)2
+                       "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    ).Index
             );
             Assert.AreEqual(nf,
                    wb.FindFont(
                        (short)11, (short)123, (short)22,
-                       "Thingy", false, true, (short)2, (byte)2
+                       "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    )
             );
         }
@@ -1415,14 +1415,14 @@ namespace TestCases.HSSF.UserModel
 
         private static void ConfirmCachedValue(double expectedValue, ICell cell)
         {
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
-            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
         }
         private static void ConfirmCachedValue(String expectedValue, ICell cell)
         {
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
-            Assert.AreEqual(CellType.STRING, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(CellType.String, cell.CachedFormulaResultType);
             Assert.AreEqual(expectedValue, cell.RichStringCellValue.String);
         }
 
@@ -1536,7 +1536,7 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheet("OneVariable Table Completed");
             r = s.GetRow(3);
             c = r.GetCell(4);
-            Assert.AreEqual(CellType.FORMULA, c.CellType);
+            Assert.AreEqual(CellType.Formula, c.CellType);
 
             // TODO - Check the formula once tables and
             //  arrays are properly supported
@@ -1546,7 +1546,7 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheet("TwoVariable Table Example");
             r = s.GetRow(3);
             c = r.GetCell(4);
-            Assert.AreEqual(CellType.FORMULA, c.CellType);
+            Assert.AreEqual(CellType.Formula, c.CellType);
 
             // TODO - Check the formula once tables and
             //  arrays are properly supported
@@ -2320,26 +2320,26 @@ namespace TestCases.HSSF.UserModel
             IRow row;
 
             row = s.GetRow(0);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1).CellType);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(1);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(2);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("Sheet1!B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(3);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("[Formulas2.xls]Sheet1!B2", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(4);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("'[$http://gagravarr.org/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
@@ -2349,7 +2349,7 @@ namespace TestCases.HSSF.UserModel
 
             // Add 5
             row = s.CreateRow(5);
-            row.CreateCell(1, CellType.FORMULA);
+            row.CreateCell(1, CellType.Formula);
             row.GetCell(1).CellFormula = ("'[$http://example.com/FormulaRefs.xls]Sheet1'!B1");
             row.GetCell(1).SetCellValue(234.0);
 
@@ -2359,21 +2359,21 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheetAt(0);
 
             row = s.GetRow(0);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1).CellType);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(1);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(2);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("Sheet1!B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
             row = s.GetRow(3);
-            Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
             Assert.AreEqual("[Formulas2.xls]Sheet1!B2", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
@@ -2382,12 +2382,12 @@ namespace TestCases.HSSF.UserModel
             if (1 == 2)
             {
                 row = s.GetRow(4);
-                Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+                Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
                 Assert.AreEqual("'[\u0005$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2", row.GetCell(1).CellFormula);
                 Assert.AreEqual(123.0, row.GetCell(1).NumericCellValue);
 
                 row = s.GetRow(5);
-                Assert.AreEqual(CellType.FORMULA, row.GetCell(1).CellType);
+                Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
                 Assert.AreEqual("'[\u0005$http://example.com/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
                 Assert.AreEqual(234.0, row.GetCell(1).NumericCellValue);
             }
@@ -2585,13 +2585,13 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet("Bug50416");
             IRow row1 = sheet.CreateRow(0);
-            ICell cellA_1 = row1.CreateCell(0, CellType.STRING);
+            ICell cellA_1 = row1.CreateCell(0, CellType.String);
             cellA_1.SetCellValue("Cell A,1");
             IRow row2 = sheet.CreateRow(1);
-            ICell cellA_2 = row2.CreateCell(0, CellType.STRING);
+            ICell cellA_2 = row2.CreateCell(0, CellType.String);
             cellA_2.SetCellValue("Cell A,2");
             IRow row3 = sheet.CreateRow(2);
-            ICell cellA_3 = row3.CreateCell(0, CellType.STRING);
+            ICell cellA_3 = row3.CreateCell(0, CellType.String);
             cellA_3.SetCellValue("Cell A,3");
 
             // Test the last Row number it currently correct
@@ -2942,7 +2942,7 @@ namespace TestCases.HSSF.UserModel
                 row.CreateCell(2).SetCellValue(DateTime.Now);
                 row.CreateCell(3).SetCellValue(String.Format("row:{0}/col:{1}", r, 3));
                 row.CreateCell(4).SetCellValue(true);
-                row.CreateCell(5).SetCellType(CellType.ERROR);
+                row.CreateCell(5).SetCellType(CellType.Error);
                 row.CreateCell(6).SetCellValue("added cells.");
             }
 

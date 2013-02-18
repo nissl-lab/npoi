@@ -195,7 +195,7 @@ namespace TestCases.SS.Util
             decimal bd = new decimal(newFrac.LongValue());
             if (gg > 0)
             {
-                bd = bd/(new decimal((BigInteger.ONE << gg).LongValue()));
+                bd = bd/(new decimal((BigInteger.One << gg).LongValue()));
             }
             else
             {

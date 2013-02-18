@@ -101,7 +101,7 @@ namespace TestCases.HSSF.Record.Aggregates
             agg.SetParsedExpression(ptgsForCell);
 
             String formula = "SUM(A1:A3*B1:B3)";
-            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, null, FormulaType.ARRAY, 0);
+            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, null, FormulaType.Array, 0);
             agg.SetArrayFormula(new CellRangeAddress(rownum, rownum, colnum, colnum), ptgs);
 
             Assert.IsTrue(agg.IsPartOfArrayFormula);

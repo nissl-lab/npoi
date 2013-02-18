@@ -47,19 +47,19 @@ namespace TestCases.HSSF.Record
 
             CFRuleRecord rule1 = CFRuleRecord.Create((HSSFSheet)sheet, "7");
             Assert.AreEqual(CFRuleRecord.CONDITION_TYPE_FORMULA, rule1.ConditionType);
-            Assert.AreEqual((byte)ComparisonOperator.NO_COMPARISON, rule1.ComparisonOperation);
+            Assert.AreEqual((byte)ComparisonOperator.NoComparison, rule1.ComparisonOperation);
             Assert.IsNotNull(rule1.ParsedExpression1);
             Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule1.ParsedExpression2);
 
-            CFRuleRecord rule2 = CFRuleRecord.Create((HSSFSheet)sheet, (byte)ComparisonOperator.BETWEEN, "2", "5");
+            CFRuleRecord rule2 = CFRuleRecord.Create((HSSFSheet)sheet, (byte)ComparisonOperator.Between, "2", "5");
             Assert.AreEqual(CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS, rule2.ConditionType);
-            Assert.AreEqual((byte)ComparisonOperator.BETWEEN, rule2.ComparisonOperation);
+            Assert.AreEqual((byte)ComparisonOperator.Between, rule2.ComparisonOperation);
             Assert.IsNotNull(rule2.ParsedExpression1);
             Assert.IsNotNull(rule2.ParsedExpression2);
 
-            CFRuleRecord rule3 = CFRuleRecord.Create((HSSFSheet)sheet, (byte)ComparisonOperator.EQUAL, null, null);
+            CFRuleRecord rule3 = CFRuleRecord.Create((HSSFSheet)sheet, (byte)ComparisonOperator.Equal, null, null);
             Assert.AreEqual(CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS, rule3.ConditionType);
-            Assert.AreEqual((byte)ComparisonOperator.EQUAL, rule3.ComparisonOperation);
+            Assert.AreEqual((byte)ComparisonOperator.Equal, rule3.ComparisonOperation);
             Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule3.ParsedExpression2);
             Assert.AreSame(Ptg.EMPTY_PTG_ARRAY, rule3.ParsedExpression2);
         }
@@ -153,14 +153,14 @@ namespace TestCases.HSSF.Record
 
         private void TestPatternFormattingAccessors(PatternFormatting patternFormatting)
         {
-            patternFormatting.FillBackgroundColor = (HSSFColor.GREEN.index);
-            Assert.AreEqual(HSSFColor.GREEN.index, patternFormatting.FillBackgroundColor);
+            patternFormatting.FillBackgroundColor = (HSSFColor.Green.Index);
+            Assert.AreEqual(HSSFColor.Green.Index, patternFormatting.FillBackgroundColor);
 
-            patternFormatting.FillForegroundColor = (HSSFColor.INDIGO.index);
-            Assert.AreEqual(HSSFColor.INDIGO.index, patternFormatting.FillForegroundColor);
+            patternFormatting.FillForegroundColor = (HSSFColor.Indigo.Index);
+            Assert.AreEqual(HSSFColor.Indigo.Index, patternFormatting.FillForegroundColor);
 
-            patternFormatting.FillPattern = (PatternFormatting.DIAMONDS);
-            Assert.AreEqual(PatternFormatting.DIAMONDS, patternFormatting.FillPattern);
+            patternFormatting.FillPattern = FillPattern.Diamonds;
+            Assert.AreEqual(FillPattern.Diamonds, patternFormatting.FillPattern);
         }
 
         private void TestBorderFormattingAccessors(BorderFormatting borderFormatting)
@@ -170,39 +170,39 @@ namespace TestCases.HSSF.Record
             borderFormatting.IsBackwardDiagonalOn = (true);
             Assert.IsTrue(borderFormatting.IsBackwardDiagonalOn);
 
-            borderFormatting.BorderBottom = (BorderFormatting.BORDER_DOTTED);
-            Assert.AreEqual(BorderFormatting.BORDER_DOTTED, borderFormatting.BorderBottom);
+            borderFormatting.BorderBottom = BorderStyle.Dotted;
+            Assert.AreEqual(BorderStyle.Dotted, borderFormatting.BorderBottom);
 
-            borderFormatting.BorderDiagonal = (BorderFormatting.BORDER_MEDIUM);
-            Assert.AreEqual(BorderFormatting.BORDER_MEDIUM, borderFormatting.BorderDiagonal);
+            borderFormatting.BorderDiagonal = (BorderStyle.Medium);
+            Assert.AreEqual(BorderStyle.Medium, borderFormatting.BorderDiagonal);
 
-            borderFormatting.BorderLeft = (BorderFormatting.BORDER_MEDIUM_DASH_DOT_DOT);
-            Assert.AreEqual(BorderFormatting.BORDER_MEDIUM_DASH_DOT_DOT, borderFormatting.BorderLeft);
+            borderFormatting.BorderLeft = (BorderStyle.MediumDashDotDot);
+            Assert.AreEqual(BorderStyle.MediumDashDotDot, borderFormatting.BorderLeft);
 
-            borderFormatting.BorderRight = (BorderFormatting.BORDER_MEDIUM_DASHED);
-            Assert.AreEqual(BorderFormatting.BORDER_MEDIUM_DASHED, borderFormatting.BorderRight);
+            borderFormatting.BorderRight = (BorderStyle.MediumDashed);
+            Assert.AreEqual(BorderStyle.MediumDashed, borderFormatting.BorderRight);
 
-            borderFormatting.BorderTop = (BorderFormatting.BORDER_HAIR);
-            Assert.AreEqual(BorderFormatting.BORDER_HAIR, borderFormatting.BorderTop);
+            borderFormatting.BorderTop = (BorderStyle.Hair);
+            Assert.AreEqual(BorderStyle.Hair, borderFormatting.BorderTop);
 
-            borderFormatting.BottomBorderColor = (HSSFColor.AQUA.index);
-            Assert.AreEqual(HSSFColor.AQUA.index, borderFormatting.BottomBorderColor);
+            borderFormatting.BottomBorderColor = (HSSFColor.Aqua.Index);
+            Assert.AreEqual(HSSFColor.Aqua.Index, borderFormatting.BottomBorderColor);
 
-            borderFormatting.DiagonalBorderColor = (HSSFColor.RED.index);
-            Assert.AreEqual(HSSFColor.RED.index, borderFormatting.DiagonalBorderColor);
+            borderFormatting.DiagonalBorderColor = (HSSFColor.Red.Index);
+            Assert.AreEqual(HSSFColor.Red.Index, borderFormatting.DiagonalBorderColor);
 
             Assert.IsFalse(borderFormatting.IsForwardDiagonalOn);
             borderFormatting.IsForwardDiagonalOn = (true);
             Assert.IsTrue(borderFormatting.IsForwardDiagonalOn);
 
-            borderFormatting.LeftBorderColor = (HSSFColor.BLACK.index);
-            Assert.AreEqual(HSSFColor.BLACK.index, borderFormatting.LeftBorderColor);
+            borderFormatting.LeftBorderColor = (HSSFColor.Black.Index);
+            Assert.AreEqual(HSSFColor.Black.Index, borderFormatting.LeftBorderColor);
 
-            borderFormatting.RightBorderColor = (HSSFColor.BLUE.index);
-            Assert.AreEqual(HSSFColor.BLUE.index, borderFormatting.RightBorderColor);
+            borderFormatting.RightBorderColor = (HSSFColor.Blue.Index);
+            Assert.AreEqual(HSSFColor.Blue.Index, borderFormatting.RightBorderColor);
 
-            borderFormatting.TopBorderColor = (HSSFColor.GOLD.index);
-            Assert.AreEqual(HSSFColor.GOLD.index, borderFormatting.TopBorderColor);
+            borderFormatting.TopBorderColor = (HSSFColor.Gold.Index);
+            Assert.AreEqual(HSSFColor.Gold.Index, borderFormatting.TopBorderColor);
         }
 
 
@@ -223,23 +223,23 @@ namespace TestCases.HSSF.Record
             Assert.IsFalse(fontFormatting.IsShadowOn);
             Assert.IsFalse(fontFormatting.IsStruckout);
 
-            Assert.AreEqual(FontSuperScript.NONE, fontFormatting.EscapementType);
+            Assert.AreEqual(FontSuperScript.None, fontFormatting.EscapementType);
             Assert.AreEqual(-1, fontFormatting.FontColorIndex);
             Assert.AreEqual(-1, fontFormatting.FontHeight);
             Assert.AreEqual(0, fontFormatting.FontWeight);
-            Assert.AreEqual(FontUnderlineType.NONE, fontFormatting.UnderlineType);
+            Assert.AreEqual(FontUnderlineType.None, fontFormatting.UnderlineType);
 
             fontFormatting.IsBold = (true);
             Assert.IsTrue(fontFormatting.IsBold);
             fontFormatting.IsBold = (false);
             Assert.IsFalse(fontFormatting.IsBold);
 
-            fontFormatting.EscapementType = FontSuperScript.SUB;
-            Assert.AreEqual(FontSuperScript.SUB, fontFormatting.EscapementType);
-            fontFormatting.EscapementType = FontSuperScript.SUPER;
-            Assert.AreEqual(FontSuperScript.SUPER, fontFormatting.EscapementType);
-            fontFormatting.EscapementType = FontSuperScript.NONE;
-            Assert.AreEqual(FontSuperScript.NONE, fontFormatting.EscapementType);
+            fontFormatting.EscapementType = FontSuperScript.Sub;
+            Assert.AreEqual(FontSuperScript.Sub, fontFormatting.EscapementType);
+            fontFormatting.EscapementType = FontSuperScript.Super;
+            Assert.AreEqual(FontSuperScript.Super, fontFormatting.EscapementType);
+            fontFormatting.EscapementType = FontSuperScript.None;
+            Assert.AreEqual(FontSuperScript.None, fontFormatting.EscapementType);
 
             fontFormatting.IsEscapementTypeModified = (false);
             Assert.IsFalse(fontFormatting.IsEscapementTypeModified);
@@ -297,8 +297,8 @@ namespace TestCases.HSSF.Record
             fontFormatting.IsStruckout = (true);
             Assert.IsTrue(fontFormatting.IsStruckout);
 
-            fontFormatting.UnderlineType = FontUnderlineType.DOUBLE_ACCOUNTING;
-            Assert.AreEqual(FontUnderlineType.DOUBLE_ACCOUNTING, fontFormatting.UnderlineType);
+            fontFormatting.UnderlineType = FontUnderlineType.DoubleAccounting;
+            Assert.AreEqual(FontUnderlineType.DoubleAccounting, fontFormatting.UnderlineType);
 
             fontFormatting.IsUnderlineTypeModified = (false);
             Assert.IsFalse(fontFormatting.IsUnderlineTypeModified);
@@ -309,10 +309,10 @@ namespace TestCases.HSSF.Record
         public void TestWrite() {
 		    HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
-            CFRuleRecord rr = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.BETWEEN, "5", "10");
+            CFRuleRecord rr = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "5", "10");
 
 		    PatternFormatting patternFormatting = new PatternFormatting();
-		    patternFormatting.FillPattern=(PatternFormatting.BRICKS);
+		    patternFormatting.FillPattern = FillPattern.Bricks;
 		    rr.PatternFormatting=(patternFormatting);
 
 		    byte[] data = rr.Serialize();

@@ -409,7 +409,7 @@ namespace TestCases.HSSF.UserModel
             ICell c = s.GetRow(0).GetCell(0);
             NPOI.SS.UserModel.CellType a = c.CellType;
 
-            Assert.AreEqual(a, NPOI.SS.UserModel.CellType.NUMERIC);
+            Assert.AreEqual(a, NPOI.SS.UserModel.CellType.Numeric);
         }
 
         /**

@@ -59,7 +59,7 @@ namespace TestCases.SS.UserModel
                 r = (IRow)rows.Current;
                 foreach (ICell c in r)
                 {
-                    if (c.CellType == CellType.FORMULA)
+                    if (c.CellType == CellType.Formula)
                     {
                         eval.EvaluateFormulaCell(c);
                     }

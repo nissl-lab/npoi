@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula.Functions
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet("new sheet");
             cell11 = sheet.CreateRow(0).CreateCell(0);
-            cell11.SetCellType(CellType.FORMULA);
+            cell11.SetCellType(CellType.Formula);
             Evaluator = new HSSFFormulaEvaluator(wb);
         }
         [Test]
@@ -108,7 +108,7 @@ namespace TestCases.SS.Formula.Functions
             cell11.CellFormula=(formulaText);
             Evaluator.ClearAllCachedResultValues();
             CellValue cv = Evaluator.Evaluate(cell11);
-            if (cv.CellType != CellType.NUMERIC)
+            if (cv.CellType != CellType.Numeric)
             {
                 throw new AssertionException("Wrong result type: " + cv.FormatAsString());
             }

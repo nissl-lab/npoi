@@ -33,19 +33,19 @@ namespace TestCases.HSSF.Util
         [Test]
         public void TestBasics()
         {
-            Assert.IsNotNull(typeof(HSSFColor.YELLOW));
-            Assert.IsTrue(HSSFColor.YELLOW.index > 0);
-            Assert.IsTrue(HSSFColor.YELLOW.index2 > 0);
+            Assert.IsNotNull(typeof(HSSFColor.Yellow));
+            Assert.IsTrue(HSSFColor.Yellow.Index > 0);
+            Assert.IsTrue(HSSFColor.Yellow.Index2 > 0);
         }
         [Test]
         public void TestContents()
         {
-            Assert.AreEqual(3, HSSFColor.YELLOW.triplet.Length);
-            Assert.AreEqual(255, HSSFColor.YELLOW.triplet[0]);
-            Assert.AreEqual(255, HSSFColor.YELLOW.triplet[1]);
-            Assert.AreEqual(0, HSSFColor.YELLOW.triplet[2]);
+            Assert.AreEqual(3, HSSFColor.Yellow.Triplet.Length);
+            Assert.AreEqual(255, HSSFColor.Yellow.Triplet[0]);
+            Assert.AreEqual(255, HSSFColor.Yellow.Triplet[1]);
+            Assert.AreEqual(0, HSSFColor.Yellow.Triplet[2]);
 
-            Assert.AreEqual("FFFF:FFFF:0", HSSFColor.YELLOW.hexString);
+            Assert.AreEqual("FFFF:FFFF:0", HSSFColor.Yellow.HexString);
         }
         [Test]
         public void TestTrippletHash()
@@ -53,12 +53,12 @@ namespace TestCases.HSSF.Util
             Hashtable tripplets = HSSFColor.GetTripletHash();
 
             Assert.AreEqual(
-                    typeof(HSSFColor.MAROON),
-                    tripplets[HSSFColor.MAROON.hexString].GetType()
+                    typeof(HSSFColor.Maroon),
+                    tripplets[HSSFColor.Maroon.HexString].GetType()
             );
             Assert.AreEqual(
-                    typeof(HSSFColor.YELLOW),
-                    tripplets[HSSFColor.YELLOW.hexString].GetType()
+                    typeof(HSSFColor.Yellow),
+                    tripplets[HSSFColor.Yellow.HexString].GetType()
             );
         }
     }

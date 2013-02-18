@@ -840,7 +840,7 @@ namespace TestCases.HSSF.Model
             // Simulating cell formula of "= 4" (note space)
             // The same Ptg array can be observed if an excel file is1 saved with that exact formula
 
-            AttrPtg spacePtg = AttrPtg.CreateSpace(AttrPtg.SpaceType.SPACE_BEFORE, 1);
+            AttrPtg spacePtg = AttrPtg.CreateSpace(AttrPtg.SpaceType.SpaceBefore, 1);
             Ptg[] ptgs = { spacePtg, new IntPtg(4), };
             String formulaString;
             try
@@ -941,7 +941,7 @@ namespace TestCases.HSSF.Model
             String formula = "Sheet1!A1:Sheet1!B3";
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
-            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.CELL, -1);
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
 
             if (ptgs.Length == 3)
             {
@@ -1227,7 +1227,7 @@ namespace TestCases.HSSF.Model
             String formula = "Sheet1!$B$2:$C$3,OFFSET(Sheet1!$E$2:$E$4,1,Sheet1!$A$1),Sheet1!$D$6";
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
-            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.CELL, -1);
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
 
             ConfirmTokenClasses(ptgs,
                 // TODO - AttrPtg), // Excel prepends this

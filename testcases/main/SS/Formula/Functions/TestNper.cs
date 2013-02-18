@@ -56,12 +56,12 @@ namespace TestCases.SS.Formula.Functions
             cell.CellFormula = ("NPER(12,4500,100000,100000)");
             cell.SetCellValue(15.0);
             Assert.AreEqual("NPER(12,4500,100000,100000)", cell.CellFormula);
-            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(15.0, cell.NumericCellValue, 0.0);
 
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             fe.EvaluateFormulaCell(cell);
-            Assert.AreEqual(CellType.ERROR, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Error, cell.CachedFormulaResultType);
             Assert.AreEqual(HSSFErrorConstants.ERROR_NUM, cell.ErrorCellValue);
         }
     }

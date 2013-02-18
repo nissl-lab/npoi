@@ -59,7 +59,7 @@ namespace TestCases.HSSF.UserModel
             ICell cell = sheet.GetRow(8).GetCell(0);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             NPOI.SS.UserModel.CellValue cv = fe.Evaluate(cell);
-            Assert.AreEqual(NPOI.SS.UserModel.CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(NPOI.SS.UserModel.CellType.Numeric, cv.CellType);
             Assert.AreEqual(3.72, cv.NumberValue, 0.0);
         }
         
@@ -122,7 +122,7 @@ namespace TestCases.HSSF.UserModel
                 throw e;
             }
 
-            Assert.AreEqual(CellType.NUMERIC, value.CellType);
+            Assert.AreEqual(CellType.Numeric, value.CellType);
             Assert.AreEqual(5.33, value.NumberValue, 0.0);
         }
         private class EvalCountListener : EvaluationListener
@@ -191,8 +191,8 @@ namespace TestCases.HSSF.UserModel
 
             // VLookup on a name in another file
             cell = wb.GetSheetAt(0).GetRow(1).GetCell(2);
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
-            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
             // WARNING - this is wrong!
             // The file name should be Showing, but bug #45970 is fixed
@@ -202,8 +202,8 @@ namespace TestCases.HSSF.UserModel
 
             // Simple reference to a name in another file
             cell = wb.GetSheetAt(0).GetRow(1).GetCell(4);
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
-            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
             // WARNING - this is wrong!
             // The file name should be Showing, but bug #45970 is fixed
@@ -230,14 +230,14 @@ namespace TestCases.HSSF.UserModel
 
             // Re-check VLOOKUP one
             cell = wb.GetSheetAt(0).GetRow(1).GetCell(2);
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
-            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
 
             // Re-check ref one
             cell = wb.GetSheetAt(0).GetRow(1).GetCell(4);
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
-            Assert.AreEqual(CellType.NUMERIC, cell.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
         }
         [Test]

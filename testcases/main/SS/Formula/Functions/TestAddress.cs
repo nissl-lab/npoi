@@ -74,7 +74,7 @@ namespace TestCases.SS.Formula.Functions
             cell.CellFormula=(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(result.CellType, CellType.STRING);
+            Assert.AreEqual(result.CellType, CellType.String);
             Assert.AreEqual(expectedResult, result.StringValue);
         }
     }

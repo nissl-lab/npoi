@@ -138,7 +138,7 @@ namespace TestCases.SS.Formula.Functions
         {
             double actualValue = cv.NumberValue;
             double expectedValue = cell.NumericCellValue; // cached formula result calculated by Excel
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType, "Invalid formula result: " + cv.ToString());
+            Assert.AreEqual(CellType.Numeric, cv.CellType, "Invalid formula result: " + cv.ToString());
             Assert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
         }
     }

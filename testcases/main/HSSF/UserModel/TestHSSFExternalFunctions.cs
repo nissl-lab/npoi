@@ -53,12 +53,12 @@ namespace TestCases.HSSF.UserModel
             ICell cell2 = sh.GetRow(2).GetCell(1);
             Assert.AreEqual("ISODD(2)", cell2.CellFormula);
             Assert.AreEqual(false, Evaluator.Evaluate(cell2).BooleanValue);
-            Assert.AreEqual(CellType.BOOLEAN, Evaluator.EvaluateFormulaCell(cell2));
+            Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell2));
 
             ICell cell3 = sh.GetRow(3).GetCell(1);
             Assert.AreEqual("ISEVEN(2)", cell3.CellFormula);
             Assert.AreEqual(true, Evaluator.Evaluate(cell3).BooleanValue);
-            Assert.AreEqual(CellType.BOOLEAN, Evaluator.EvaluateFormulaCell(cell3));
+            Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell3));
         }
 
     }

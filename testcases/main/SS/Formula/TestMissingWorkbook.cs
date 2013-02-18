@@ -55,7 +55,7 @@ namespace TestCases.SS.Formula
             HSSFRow lARow = (HSSFRow)lSheet.GetRow(0);
             HSSFCell lA1Cell = (HSSFCell)lARow.GetCell(0);
 
-            Assert.AreEqual(CellType.FORMULA, lA1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
             try
             {
                 evaluator.EvaluateFormulaCell(lA1Cell);
@@ -76,16 +76,16 @@ namespace TestCases.SS.Formula
             HSSFCell lB1Cell = (HSSFCell)lSheet.GetRow(1).GetCell(0);
             HSSFCell lC1Cell = (HSSFCell)lSheet.GetRow(2).GetCell(0);
 
-            Assert.AreEqual(CellType.FORMULA, lA1Cell.CellType);
-            Assert.AreEqual(CellType.FORMULA, lB1Cell.CellType);
-            Assert.AreEqual(CellType.FORMULA, lC1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lB1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lC1Cell.CellType);
 
             HSSFFormulaEvaluator evaluator = (HSSFFormulaEvaluator)mainWorkbook.GetCreationHelper().CreateFormulaEvaluator();
             evaluator.IgnoreMissingWorkbooks = (true);
 
-            Assert.AreEqual(CellType.NUMERIC, evaluator.EvaluateFormulaCell(lA1Cell));
-            Assert.AreEqual(CellType.STRING, evaluator.EvaluateFormulaCell(lB1Cell));
-            Assert.AreEqual(CellType.BOOLEAN, evaluator.EvaluateFormulaCell(lC1Cell));
+            Assert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(lA1Cell));
+            Assert.AreEqual(CellType.String, evaluator.EvaluateFormulaCell(lB1Cell));
+            Assert.AreEqual(CellType.Boolean, evaluator.EvaluateFormulaCell(lC1Cell));
 
             Assert.AreEqual(10.0d, lA1Cell.NumericCellValue, 0.00001d);
             Assert.AreEqual("POI rocks!", lB1Cell.StringCellValue);
@@ -100,9 +100,9 @@ namespace TestCases.SS.Formula
             HSSFCell lB1Cell = (HSSFCell)lSheet.GetRow(1).GetCell(0);
             HSSFCell lC1Cell = (HSSFCell)lSheet.GetRow(2).GetCell(0);
 
-            Assert.AreEqual(CellType.FORMULA, lA1Cell.CellType);
-            Assert.AreEqual(CellType.FORMULA, lB1Cell.CellType);
-            Assert.AreEqual(CellType.FORMULA, lC1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lB1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lC1Cell.CellType);
 
             HSSFFormulaEvaluator lMainWorkbookEvaluator = new HSSFFormulaEvaluator(mainWorkbook);
             HSSFFormulaEvaluator lSourceEvaluator = new HSSFFormulaEvaluator(sourceWorkbook);
@@ -110,9 +110,9 @@ namespace TestCases.SS.Formula
                     new String[] { MAIN_WORKBOOK_FILENAME, SOURCE_DUMMY_WORKBOOK_FILENAME },
                     new HSSFFormulaEvaluator[] { lMainWorkbookEvaluator, lSourceEvaluator });
 
-            Assert.AreEqual(CellType.NUMERIC, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
-            Assert.AreEqual(CellType.STRING, lMainWorkbookEvaluator.EvaluateFormulaCell(lB1Cell));
-            Assert.AreEqual(CellType.BOOLEAN, lMainWorkbookEvaluator.EvaluateFormulaCell(lC1Cell));
+            Assert.AreEqual(CellType.Numeric, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
+            Assert.AreEqual(CellType.String, lMainWorkbookEvaluator.EvaluateFormulaCell(lB1Cell));
+            Assert.AreEqual(CellType.Boolean, lMainWorkbookEvaluator.EvaluateFormulaCell(lC1Cell));
 
             Assert.AreEqual(20.0d, lA1Cell.NumericCellValue, 0.00001d);
             Assert.AreEqual("Apache rocks!", lB1Cell.StringCellValue);

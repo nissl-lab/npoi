@@ -200,11 +200,11 @@ namespace TestCases.HSSF.UserModel
 
             NPOI.SS.UserModel.ICellStyle cs4 = wb.CreateCellStyle();
             cs4.SetFont(f1);
-            cs4.Alignment = HorizontalAlignment.CENTER_SELECTION;// ((short)22);
+            cs4.Alignment = HorizontalAlignment.CenterSelection;// ((short)22);
 
             NPOI.SS.UserModel.ICellStyle cs5 = wb.CreateCellStyle();
             cs5.SetFont(f2);
-            cs5.Alignment = HorizontalAlignment.FILL; //((short)111);
+            cs5.Alignment = HorizontalAlignment.Fill; //((short)111);
 
             NPOI.SS.UserModel.ICellStyle cs6 = wb.CreateCellStyle();
             cs6.SetFont(f2);
@@ -297,13 +297,13 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(21, wb.NumCellStyles);
 
             HSSFCellStyle cs1 = (HSSFCellStyle)wb.CreateCellStyle();
-            cs1.BorderBottom=(BorderStyle.THICK);
+            cs1.BorderBottom=(BorderStyle.Thick);
 
             HSSFCellStyle cs2 = (HSSFCellStyle)wb.CreateCellStyle();
-            cs2.BorderBottom=(BorderStyle.DASH_DOT);
+            cs2.BorderBottom=(BorderStyle.DashDot);
 
             HSSFCellStyle cs3 = (HSSFCellStyle)wb.CreateCellStyle(); // = cs1
-            cs3.BorderBottom=(BorderStyle.THICK);
+            cs3.BorderBottom=(BorderStyle.Thick);
 
             Assert.AreEqual(24, wb.NumCellStyles);
 
@@ -325,9 +325,9 @@ namespace TestCases.HSSF.UserModel
             // Check
             Assert.AreEqual(23, wb.NumCellStyles);
 
-            Assert.AreEqual(BorderStyle.THICK, r.GetCell(0).CellStyle.BorderBottom);
-            Assert.AreEqual(BorderStyle.DASH_DOT, r.GetCell(1).CellStyle.BorderBottom);
-            Assert.AreEqual(BorderStyle.THICK, r.GetCell(2).CellStyle.BorderBottom);
+            Assert.AreEqual(BorderStyle.Thick, r.GetCell(0).CellStyle.BorderBottom);
+            Assert.AreEqual(BorderStyle.DashDot, r.GetCell(1).CellStyle.BorderBottom);
+            Assert.AreEqual(BorderStyle.Thick, r.GetCell(2).CellStyle.BorderBottom);
         }
     }
 }

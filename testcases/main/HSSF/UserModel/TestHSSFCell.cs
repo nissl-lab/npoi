@@ -68,20 +68,20 @@ namespace TestCases.HSSF.UserModel
         //    Cell c = null;
         //    r = s.CreateRow(0);
         //    c = r.CreateCell(1);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.BOOLEAN);
+        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Boolean);
         //    c.SetCellValue(true);
 
         //    c = r.CreateCell(2);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.BOOLEAN);
+        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Boolean);
         //    c.SetCellValue(false);
 
         //    r = s.CreateRow(1);
         //    c = r.CreateCell(1);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.ERROR);
+        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Error);
         //    c.SetCellErrorValue((byte)0);
 
         //    c = r.CreateCell(2);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.ERROR);
+        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Error);
         //    c.SetCellErrorValue((byte)7);
 
         //    wb = WriteOutAndReadBack(wb);

@@ -259,7 +259,7 @@ namespace TestCases.SS.Formula
             {
                 ICell cell = GetOrCreateCell(cellRefText);
                 // be sure to blank cell, in case it is currently a formula
-                cell.SetCellType(CellType.BLANK);
+                cell.SetCellType(CellType.Blank);
                 // otherwise this line will only Set the formula cached result;
                 cell.SetCellValue(value);
                 _Evaluator.NotifyUpdateCell(WrapCell(cell));
@@ -267,7 +267,7 @@ namespace TestCases.SS.Formula
             public void ClearCell(String cellRefText)
             {
                 ICell cell = GetOrCreateCell(cellRefText);
-                cell.SetCellType(CellType.BLANK);
+                cell.SetCellType(CellType.Blank);
                 _Evaluator.NotifyUpdateCell(WrapCell(cell));
             }
 
@@ -653,7 +653,7 @@ namespace TestCases.SS.Formula
             cv = fe.Evaluate(cellA1);
             Assert.AreEqual(3.7, cv.NumberValue, 0.0);
 
-            cellB1.SetCellType(CellType.BLANK);
+            cellB1.SetCellType(CellType.Blank);
             fe.NotifyUpdateCell(cellB1);
             cv = fe.Evaluate(cellA1); // B1 was used to Evaluate A1
             Assert.AreEqual(2.2, cv.NumberValue, 0.0);

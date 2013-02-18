@@ -254,7 +254,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("CSCO");
 
-            Ptg[] ptgs = HSSFFormulaParser.Parse("CSCO!$E$71", wb, FormulaType.NAMEDRANGE, 0);
+            Ptg[] ptgs = HSSFFormulaParser.Parse("CSCO!$E$71", wb, FormulaType.NamedRange, 0);
             for (int i = 0; i < ptgs.Length; i++)
             {
                 Assert.AreEqual('R', ptgs[i].RVAType);
