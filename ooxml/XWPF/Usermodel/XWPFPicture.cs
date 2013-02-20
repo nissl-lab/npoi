@@ -18,6 +18,7 @@
 using System;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml.Picture;
+using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XWPF.UserModel
 {
@@ -64,7 +65,18 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPictureData GetPictureData()
         {
-            String blipId = ctPic.blipFill.blip.embed;
+            //String blipId = ctPic.blipFill.blip.embed;
+            CT_BlipFillProperties blipProps = ctPic.blipFill;
+
+            if (blipProps == null || !blipProps.IsSetBlip())
+            {
+                // return null if Blip data is missing
+                return null;
+            }
+
+            String blipId = blipProps.blip.embed;
+
+
             POIXMLDocumentPart part = run.GetParagraph().GetPart();
             if (part != null)
             {
