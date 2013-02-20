@@ -423,7 +423,8 @@ namespace NPOI.XWPF.UserModel
         {
             try
             {
-                return GetTargetPart(CorePart.GetRelationship(id));
+                PackagePart corePart = CorePart;
+                return corePart.GetRelatedPart(corePart.GetRelationship(id));
             }
             catch (Exception e)
             {
@@ -467,16 +468,16 @@ namespace NPOI.XWPF.UserModel
         public override List<PackagePart> GetAllEmbedds()
         {
             List<PackagePart> embedds = new List<PackagePart>();
-
+            PackagePart part = GetPackagePart();
             // Get the embeddings for the workbook
             foreach (PackageRelationship rel in GetPackagePart().GetRelationshipsByType(OLE_OBJECT_REL_TYPE))
             {
-                embedds.Add(GetTargetPart(rel));
+                embedds.Add(part.GetRelatedPart(rel));
             }
 
             foreach (PackageRelationship rel in GetPackagePart().GetRelationshipsByType(PACK_OBJECT_REL_TYPE))
             {
-                embedds.Add(GetTargetPart(rel));
+                embedds.Add(part.GetRelatedPart(rel));
             }
 
             return embedds;

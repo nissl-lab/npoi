@@ -1792,6 +1792,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                CT_CalcPr calcPr = (Workbook as XSSFWorkbook).GetCTWorkbook().calcPr;
                 if (worksheet.IsSetSheetCalcPr())
                 {
                     // Change the current Setting
@@ -1803,6 +1804,10 @@ namespace NPOI.XSSF.UserModel
                     // Add the Calc block and set it
                     CT_SheetCalcPr calc = worksheet.AddNewSheetCalcPr();
                     calc.fullCalcOnLoad = (value);
+                }
+                if (value && calcPr != null && calcPr.calcMode == ST_CalcMode.manual)
+                {
+                    calcPr.calcMode=(ST_CalcMode.auto);
                 }
             }
         }

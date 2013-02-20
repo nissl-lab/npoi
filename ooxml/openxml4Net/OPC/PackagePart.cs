@@ -479,6 +479,47 @@ namespace NPOI.OpenXml4Net.OPC
             }
             return false;
         }
+
+        /**
+        * Get the PackagePart that is the target of a relationship.
+        *
+        * @param rel A relationship from this part to another one 
+        * @return The target part of the relationship
+        */
+        public PackagePart GetRelatedPart(PackageRelationship rel)
+        {
+            // Ensure this is one of ours
+            if (!IsRelationshipExists(rel))
+            {
+                throw new ArgumentException("Relationship " + rel + " doesn't start with this part " + partName);
+            }
+
+            // Get the target URI, excluding any relative fragments
+            Uri target = rel.TargetUri;
+            if (target.Fragment != null)
+            {
+                String t = target.ToString();
+                try
+                {
+                    target = new Uri(t.Substring(0, t.IndexOf('#')));
+                }
+                catch (UriFormatException e)
+                {
+                    throw new InvalidFormatException("Invalid target URI: " + target);
+                }
+            }
+
+            // Turn that into a name, and fetch
+            PackagePartName relName = PackagingUriHelper.CreatePartName(target);
+            PackagePart part = container.GetPart(relName);
+            if (part == null)
+            {
+                throw new ArgumentException("No part found for relationship " + rel);
+            }
+            return part;
+        }
+
+
         public Stream GetStream(FileMode mode)
         {
             return this.GetStream(mode, FileAccess.Write);

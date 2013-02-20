@@ -94,7 +94,7 @@ namespace NPOI
         PackagePart[] parts = new PackagePart[partsC.Size];
         int count = 0;
         foreach (PackageRelationship rel in partsC) {
-            parts[count] = GetTargetPart(rel);
+            parts[count] = GetPackagePart().GetRelatedPart(rel);
             count++;
         }
         return parts;
