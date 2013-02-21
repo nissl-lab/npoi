@@ -67,12 +67,48 @@ namespace NPOI.OpenXml4Net.OPC
         public ZipPackage(String path, PackageAccess access)
             : base(access)
         {
+            ZipFile zipFile = null;
 
-
-            ZipFile zipFile = ZipHelper.OpenZipFile(path);
-            if (zipFile == null)
+            try
+            {
+                zipFile = ZipHelper.OpenZipFile(path);
+            }
+            catch (IOException e)
+            {
                 throw new InvalidOperationException(
-                        "Can't open the specified file: '" + path + "'");
+                      "Can't open the specified file: '" + path + "'", e);
+            }
+
+            this.zipArchive = new ZipFileZipEntrySource(zipFile);
+        }
+
+        /**
+         * Constructor. Opens a Zip based Open XML document.
+         *
+         * @param file
+         *            The file to open or create.
+         * @param access
+         *            The package access mode.
+         * @throws InvalidFormatException
+         *             If the content type part parsing encounters an error.
+         */
+        public ZipPackage(FileInfo file, PackageAccess access)
+            : base(access)
+        {
+
+
+            ZipFile zipFile = null;
+
+            try
+            {
+                zipFile = ZipHelper.OpenZipFile(file);
+            }
+            catch (IOException e)
+            {
+                throw new InvalidOperationException(
+                      "Can't open the specified file: '" + file + "'", e);
+            }
+
             this.zipArchive = new ZipFileZipEntrySource(zipFile);
         }
 

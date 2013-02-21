@@ -255,7 +255,8 @@ namespace NPOI.HSSF.Model
                 else if (nextClass == typeof(NameCommentRecord))
                 {
                     NameCommentRecord ncr = (NameCommentRecord)rs.GetNext();
-                    commentRecords.Add(ncr.NameText, ncr);
+                    //commentRecords.Add(ncr.NameText, ncr);
+                    commentRecords[ncr.NameText] = ncr;
                 }
                 else
                 {
