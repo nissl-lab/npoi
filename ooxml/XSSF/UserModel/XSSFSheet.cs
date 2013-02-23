@@ -2926,11 +2926,25 @@ namespace NPOI.XSSF.UserModel
          *
          * @param create create a new comments table if it does not exist
          */
-        internal CommentsTable GetCommentsTable(bool Create)
+        protected internal CommentsTable GetCommentsTable(bool create)
         {
-            if (sheetComments == null && Create)
+            if (sheetComments == null && create)
             {
-                sheetComments = (CommentsTable)CreateRelationship(XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int)sheet.sheetId);
+                // Try to create a comments table with the same number as
+                //  the sheet has (i.e. sheet 1 -> comments 1)
+                try
+                {
+                    sheetComments = (CommentsTable)CreateRelationship(
+                          XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int)sheet.sheetId);
+                }
+                catch (PartAlreadyExistsException e)
+                {
+                    // Technically a sheet doesn't need the same number as
+                    //  it's comments, and clearly someone has already pinched
+                    //  our number! Go for the next available one instead
+                    sheetComments = (CommentsTable)CreateRelationship(
+                          XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), -1);
+                }
             }
             return sheetComments;
         }
