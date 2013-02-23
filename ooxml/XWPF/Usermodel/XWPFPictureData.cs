@@ -37,7 +37,7 @@ namespace NPOI.XWPF.UserModel
         internal static POIXMLRelation[] RELATIONS;
         static XWPFPictureData()
         {
-            RELATIONS = new POIXMLRelation[9];
+            RELATIONS = new POIXMLRelation[13];
             RELATIONS[(int)PictureType.EMF] = XWPFRelation.IMAGE_EMF;
             RELATIONS[(int)PictureType.WMF] = XWPFRelation.IMAGE_WMF;
             RELATIONS[(int)PictureType.PICT] = XWPFRelation.IMAGE_PICT;
@@ -45,6 +45,10 @@ namespace NPOI.XWPF.UserModel
             RELATIONS[(int)PictureType.PNG] = XWPFRelation.IMAGE_PNG;
             RELATIONS[(int)PictureType.DIB] = XWPFRelation.IMAGE_DIB;
             RELATIONS[(int)PictureType.GIF] = XWPFRelation.IMAGE_GIF;
+            RELATIONS[(int)PictureType.TIFF] = XWPFRelation.IMAGE_TIFF;
+            RELATIONS[(int)PictureType.EPS] = XWPFRelation.IMAGE_EPS;
+            RELATIONS[(int)PictureType.BMP] = XWPFRelation.IMAGE_BMP;
+            RELATIONS[(int)PictureType.WPG] = XWPFRelation.IMAGE_WPG;
         }
 
         private long? checksum = null;

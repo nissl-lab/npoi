@@ -395,6 +395,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.countField = value;
             }
         }
+
+        public CT_LsdException AddNewLsdException()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]

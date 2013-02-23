@@ -134,7 +134,7 @@ namespace NPOI.XWPF.UserModel
 
         /**
          * add a footnote to the document
-         * @param footnote
+         * @param note
          * @throws IOException		 
          */
         public XWPFFootnote AddFootnote(CT_FtnEdn note)

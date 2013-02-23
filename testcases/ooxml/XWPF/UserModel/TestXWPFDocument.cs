@@ -146,7 +146,29 @@ namespace NPOI.XWPF.UserModel
                 Assert.AreEqual(newJpeg[i], jpeg[i]);
             }
         }
+        [Test]
+        public void TestAllPictureFormats()
+        {
+            XWPFDocument doc = new XWPFDocument();
 
+            doc.AddPictureData(new byte[10], (int)PictureType.EMF);
+            doc.AddPictureData(new byte[11], (int)PictureType.WMF);
+            doc.AddPictureData(new byte[12], (int)PictureType.PICT);
+            doc.AddPictureData(new byte[13], (int)PictureType.JPEG);
+            doc.AddPictureData(new byte[14], (int)PictureType.PNG);
+            doc.AddPictureData(new byte[15], (int)PictureType.DIB);
+            doc.AddPictureData(new byte[16], (int)PictureType.GIF);
+            doc.AddPictureData(new byte[17], (int)PictureType.TIFF);
+            doc.AddPictureData(new byte[18], (int)PictureType.EPS);
+            doc.AddPictureData(new byte[19], (int)PictureType.BMP);
+            doc.AddPictureData(new byte[20], (int)PictureType.WPG);
+
+            Assert.AreEqual(11, doc.AllPictures.Count);
+
+            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            Assert.AreEqual(11, doc.AllPictures.Count);
+
+        }
         [Test]
         public void TestRemoveBodyElement()
         {
@@ -345,6 +367,13 @@ namespace NPOI.XWPF.UserModel
             Assert.AreSame(part1, part2);
 
             doc.Package.Revert();
+        }
+        [Test]
+        public void TestSettings()
+        {
+            XWPFSettings settings = new XWPFSettings();
+            settings.SetZoomPercent(50);
+            Assert.AreEqual(50, settings.GetZoomPercent());
         }
     }
 

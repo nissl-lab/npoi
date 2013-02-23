@@ -46,11 +46,11 @@ namespace NPOI.XWPF.UserModel
             {
                 throw new NullReferenceException();
             }
-
+            // Build up the character runs
             Runs = new List<XWPFRun>();
 
             BuildRunsInOrderFromXml(paragraph.Items);
-
+            // Look for bits associated with the runs
             foreach (XWPFRun run in Runs)
             {
                 CT_R r = run.GetCTR();
@@ -158,7 +158,11 @@ namespace NPOI.XWPF.UserModel
                }
            }*/
         }
-
+        /**
+         * Identifies (in order) the parts of the paragraph /
+         *  sub-paragraph that correspond to character text
+         *  runs, and builds the appropriate runs for these.
+         */
         private void BuildRunsInOrderFromXml(object[] items)
         {
             foreach (object o in items)

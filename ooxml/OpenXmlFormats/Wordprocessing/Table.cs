@@ -1676,6 +1676,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.insideVField = new CT_Border();
             return this.insideVField;
         }
+
+        public bool IsSetInsideH()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetInsideV()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -1805,6 +1815,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rightField = value;
             }
         }
+
+        public bool IsSetLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetBottom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetRight()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblWidth AddNewLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblWidth AddNewTop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblWidth AddNewBottom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblWidth AddNewRight()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -1835,6 +1885,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.tblPrChangeField = value;
             }
+        }
+
+        public CT_String AddNewTblStyle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTblBorders()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTblStyleRowBandSize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_DecimalNumber AddNewTblStyleRowBandSize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTblStyleColBandSize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_DecimalNumber AddNewTblStyleColBandSize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTblCellMar()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TblCellMar AddNewTblCellMar()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -2296,6 +2386,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return GetObjectArray<CT_Tbl>(p, ItemsChoiceTableCellType.tbl);
         }
+
+        public CT_TcPr AddNewTcPr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTcPr()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -2457,6 +2557,36 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
+
+        public CT_OnOff AddNewCantSplit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_OnOff> GetCantSplitList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_OnOff AddNewTblHeader()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CT_OnOff> GetTblHeaderList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfTblHeaderArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfCantSplitArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]
@@ -2874,6 +3004,36 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.tcPrChangeField = value;
             }
+        }
+
+        public CT_Shd AddNewShd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetShd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_VerticalJc AddNewVAlign()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_VMerge AddNewVMerge()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_TcBorders AddNewTcBorders()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_HMerge AddNewHMerge()
+        {
+            throw new NotImplementedException();
         }
     }
 

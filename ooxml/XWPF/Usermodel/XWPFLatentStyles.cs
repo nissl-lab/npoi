@@ -28,7 +28,7 @@ namespace NPOI.XWPF.UserModel
         {
         }
 
-        protected XWPFLatentStyles(CT_LatentStyles latentStyles)
+        public XWPFLatentStyles(CT_LatentStyles latentStyles)
             : this(latentStyles, null)
         {
             ;
@@ -43,7 +43,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Checks wheter specific LatentStyleID is a latentStyle
         */
-        protected bool IsLatentStyle(String latentStyleID)
+        public bool IsLatentStyle(String latentStyleID)
         {
             /*foreach ( CTLsdException lsd in latentStyles.LsdExceptionList) {
                 if(lsd.Name.Equals(latentStyleID));

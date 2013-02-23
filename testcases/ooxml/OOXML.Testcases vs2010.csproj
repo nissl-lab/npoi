@@ -157,6 +157,7 @@
     <Compile Include="XWPF\UserModel\TestXWPFSmartTag.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFStyles.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTable.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTableCell.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTableRow.cs" />
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
