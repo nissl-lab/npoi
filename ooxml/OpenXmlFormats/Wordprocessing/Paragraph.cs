@@ -3186,6 +3186,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return (this.szField!=null && this.szField.val != 0);
         }
+
+        public bool IsSetColor()
+        {
+            return colorField != null && !string.IsNullOrEmpty(colorField.val);
+        }
     }
 
 

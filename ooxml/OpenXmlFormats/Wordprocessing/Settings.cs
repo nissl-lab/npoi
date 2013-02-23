@@ -1637,6 +1637,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.zoom = new CT_Zoom();
             return this.zoom;
         }
+
+        public bool IsSetUpdateFields()
+        {
+            return this.updateFieldsField != null;
+        }
     }
 
 

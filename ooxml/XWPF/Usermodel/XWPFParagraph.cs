@@ -46,46 +46,11 @@ namespace NPOI.XWPF.UserModel
             {
                 throw new NullReferenceException();
             }
-
+            // Build up the character runs
             Runs = new List<XWPFRun>();
 
-            foreach (object o in paragraph.Items)
-            {
-                if (o is CT_R)
-                {
-                    Runs.Add(new XWPFRun((CT_R)o, this));
-                }
-                if (o is CT_Hyperlink1)
-                {
-                    CT_Hyperlink1 link = (CT_Hyperlink1)o;
-                    foreach (CT_R r in link.GetRList())
-                    {
-                        Runs.Add(new XWPFHyperlinkRun(link, r, this));
-                    }
-                }
-                if (o is CT_SdtRun)
-                {
-                    CT_SdtContentRun run = ((CT_SdtRun)o).sdtContent;
-                    foreach (CT_R r in run.GetRList())
-                    {
-                        Runs.Add(new XWPFRun(r, this));
-                    }
-                }
-                if (o is CT_RunTrackChange)
-                {
-                    foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
-                    {
-                        Runs.Add(new XWPFRun(r, this));
-                    }
-                }
-                if (o is CT_SimpleField)
-                {
-                    foreach (CT_R r in ((CT_SimpleField)o).GetRList())
-                    {
-                        Runs.Add(new XWPFRun(r, this));
-                    }
-                }
-            }
+            BuildRunsInOrderFromXml(paragraph.Items);
+            // Look for bits associated with the runs
             foreach (XWPFRun run in Runs)
             {
                 CT_R r = run.GetCTR();
@@ -192,6 +157,57 @@ namespace NPOI.XWPF.UserModel
                   c.Dispose();
                }
            }*/
+        }
+        /**
+         * Identifies (in order) the parts of the paragraph /
+         *  sub-paragraph that correspond to character text
+         *  runs, and builds the appropriate runs for these.
+         */
+        private void BuildRunsInOrderFromXml(object[] items)
+        {
+            foreach (object o in items)
+            {
+                if (o is CT_R)
+                {
+                    Runs.Add(new XWPFRun((CT_R)o, this));
+                }
+                if (o is CT_Hyperlink1)
+                {
+                    CT_Hyperlink1 link = (CT_Hyperlink1)o;
+                    foreach (CT_R r in link.GetRList())
+                    {
+                        Runs.Add(new XWPFHyperlinkRun(link, r, this));
+                    }
+                }
+                if (o is CT_SdtRun)
+                {
+                    CT_SdtContentRun run = ((CT_SdtRun)o).sdtContent;
+                    foreach (CT_R r in run.GetRList())
+                    {
+                        Runs.Add(new XWPFRun(r, this));
+                    }
+                }
+                if (o is CT_RunTrackChange)
+                {
+                    foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
+                    {
+                        Runs.Add(new XWPFRun(r, this));
+                    }
+                }
+                if (o is CT_SimpleField)
+                {
+                    foreach (CT_R r in ((CT_SimpleField)o).GetRList())
+                    {
+                        Runs.Add(new XWPFRun(r, this));
+                    }
+                }
+                if (o is CT_SmartTagRun)
+                {
+                    // Smart Tags can be nested many times. 
+                    // This implementation does not preserve the tagging information
+                    BuildRunsInOrderFromXml((o as CT_SmartTagRun).Items);
+                }
+            }
         }
 
 

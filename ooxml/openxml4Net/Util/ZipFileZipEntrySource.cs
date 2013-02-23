@@ -22,19 +22,27 @@ namespace NPOI.OpenXml4Net.Util
 
         public void Close()
         {
-            zipArchive.Close();
+            if (zipArchive == null)
+            {
+                zipArchive.Close();
+            }
         }
 
         public IEnumerator Entries
         {
             get
             {
+                if (zipArchive == null)
+                    throw new InvalidDataException("Zip File is closed");
                 return zipArchive.GetEnumerator();
+
             }
         }
 
         public Stream GetInputStream(ZipEntry entry)
         {
+            if (zipArchive == null)
+                throw new InvalidDataException("Zip File is closed");
             Stream s = zipArchive.GetInputStream(entry);
             return s;
         }

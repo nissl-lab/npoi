@@ -66,6 +66,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\.net4\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -75,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\InvalidFormatException.cs" />
     <Compile Include="Exceptions\OpenXML4NetException.cs" />
+    <Compile Include="Exceptions\PartAlreadyExistsException.cs" />
     <Compile Include="OPC\CertificateEmbeddingOption.cs" />
     <Compile Include="OPC\CompressionOption.cs" />
     <Compile Include="OPC\Configuration.cs" />
@@ -138,12 +143,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\main\main vs10.csproj">
-      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
-      <Name>main vs10</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

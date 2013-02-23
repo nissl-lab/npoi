@@ -14,54 +14,33 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.UserModel
+namespace NPOI.xwpf.UserModel
 {
-    using System;
-    public enum PictureType
+
+
+    using NPOI.XWPF;
+    using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
+
+    /**
+     * Tests for Reading SmartTags from Word docx.
+     *
+     * @author  Fabian Lange
+     */
+    [TestFixture]
+    public class TestXWPFSmartTag
     {
-        /** Extended windows meta file */
-        EMF = 2,
-
-        /** Windows Meta File */
-        WMF = 3,
-
-        /** Mac PICT format */
-        PICT = 4,
-
-        /** JPEG format */
-        JPEG = 5,
-
-        /** PNG format */
-        PNG = 6,
-
-        /** Device independent bitmap */
-        DIB = 7,
-
-        /** GIF image format */
-        GIF = 8,
-        /**
-         * Tag Image File (.tiff)
-         */
-        TIFF = 9,
-
-        /**
-         * Encapsulated Postscript (.eps)
-         */
-        EPS = 10,
-
-
-        /**
-         * Windows Bitmap (.bmp)
-         */
-        BMP = 11,
-
-        /**
-         * WordPerfect graphics (.wpg)
-         */
-        WPG = 12
-    }
-    public interface Document
-    {
+        [Test]
+        public void TestSmartTags()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("smarttag-snippet.docx");
+            XWPFParagraph p = doc.GetParagraphArray(0);
+            //About NPOI: because the serializer bug(the CT_Run contains whitespace will discard the whitespace),
+            //Text is "CarnegieMellonUniversitySchool of Computer Science"
+            Assert.IsTrue(p.GetText().Contains("Carnegie Mellon University School of Computer Science"));
+            p = doc.GetParagraphArray(2);
+            Assert.IsTrue(p.GetText().Contains("Alice's Adventures"));
+        }
     }
 
 }

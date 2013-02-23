@@ -22,6 +22,7 @@ using NUnit.Framework;
 using TestCases.OpenXml4Net;
 using System.IO;
 using System.Web;
+using System.Text.RegularExpressions;
 namespace TestCases.OPC
 {
 
@@ -322,36 +323,68 @@ namespace TestCases.OPC
             return Path.GetFullPath(Path.Combine(referencePath, relativePath));  
         }
         [Test]
-        public void TestSelfRelations_bug51187() {
-    	MemoryStream baos = new MemoryStream();
-    	OPCPackage pkg = OPCPackage.Create(baos);
+        public void TestSelfRelations_bug51187()
+        {
+            MemoryStream baos = new MemoryStream();
+            OPCPackage pkg = OPCPackage.Create(baos);
 
-    	PackagePart partA =
-    		pkg.CreatePart(PackagingUriHelper.CreatePartName("/partA"), "text/plain");
-    	Assert.IsNotNull(partA);
+            PackagePart partA =
+                pkg.CreatePart(PackagingUriHelper.CreatePartName("/partA"), "text/plain");
+            Assert.IsNotNull(partA);
 
-    	// reference itself
-    	PackageRelationship rel1 = partA.AddRelationship(partA.PartName, TargetMode.Internal, "partA");
-
-    	
-    	// Save, and re-load
-    	pkg.Close();
-    	MemoryStream bais = new MemoryStream(baos.ToArray());
-    	pkg = OPCPackage.Open(bais);
-
-    	partA = pkg.GetPart(PackagingUriHelper.CreatePartName("/partA"));
+            // reference itself
+            PackageRelationship rel1 = partA.AddRelationship(partA.PartName, TargetMode.Internal, "partA");
 
 
-    	// Check the relations
-    	Assert.AreEqual(1, partA.Relationships.Size);
+            // Save, and re-load
+            pkg.Close();
+            MemoryStream bais = new MemoryStream(baos.ToArray());
+            pkg = OPCPackage.Open(bais);
 
-       PackageRelationship rel2 = partA.Relationships.GetRelationship(0);
+            partA = pkg.GetPart(PackagingUriHelper.CreatePartName("/partA"));
 
-    	Assert.AreEqual(rel1.RelationshipType, rel2.RelationshipType);
-       Assert.AreEqual(rel1.Id, rel2.Id);
-       Assert.AreEqual(rel1.SourceUri, rel2.SourceUri);
-       Assert.AreEqual(rel1.TargetUri, rel2.TargetUri);
-       Assert.AreEqual(rel1.TargetMode, rel2.TargetMode);
+
+            // Check the relations
+            Assert.AreEqual(1, partA.Relationships.Size);
+
+            PackageRelationship rel2 = partA.Relationships.GetRelationship(0);
+
+            Assert.AreEqual(rel1.RelationshipType, rel2.RelationshipType);
+            Assert.AreEqual(rel1.Id, rel2.Id);
+            Assert.AreEqual(rel1.SourceUri, rel2.SourceUri);
+            Assert.AreEqual(rel1.TargetUri, rel2.TargetUri);
+            Assert.AreEqual(rel1.TargetMode, rel2.TargetMode);
+        }
+        [Test]
+        public void TestTrailingSpacesInURI_53282()
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("53282.xlsx");
+            OPCPackage pkg = OPCPackage.Open(is1);
+            is1.Close();
+
+            PackageRelationshipCollection sheetRels = pkg.GetPartsByName(new Regex("/xl/worksheets/sheet1.xml"))[(0)].Relationships;
+            Assert.AreEqual(3, sheetRels.Size);
+            PackageRelationship rId1 = sheetRels.GetRelationshipByID("rId1");
+            Assert.AreEqual(TargetMode.External, rId1.TargetMode);
+            Uri targetUri = rId1.TargetUri;
+            Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", targetUri.OriginalString);
+            Assert.Fail("C# cannot resolve this uri \"{0}\"", targetUri.OriginalString);
+            Assert.AreEqual("nobody@nowhere.uk\u00A0", targetUri.Scheme);
+
+            MemoryStream out1 = new MemoryStream();
+            pkg.Save(out1);
+
+
+            pkg = OPCPackage.Open(new ByteArrayInputStream(out1.ToArray()));
+            out1.Close();
+            sheetRels = pkg.GetPartsByName(new Regex("/xl/worksheets/sheet1.xml"))[(0)].Relationships;
+            Assert.AreEqual(3, sheetRels.Size);
+            rId1 = sheetRels.GetRelationshipByID("rId1");
+            Assert.AreEqual(TargetMode.External, rId1.TargetMode);
+            targetUri = rId1.TargetUri;
+            Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", targetUri.OriginalString);
+            Assert.AreEqual("nobody@nowhere.uk\u00A0", targetUri.Scheme);
+
         }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="XSSF\UserModel\Helpers\TestColumnHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\TestHeaderFooterHelper.cs" />
     <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFBugs.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFCell.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFCellStyle.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFChart.cs" />
@@ -153,8 +154,10 @@
     <Compile Include="XWPF\UserModel\TestXWPFParagraph.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFPictureData.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFRun.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFSmartTag.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFStyles.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTable.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTableCell.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTableRow.cs" />
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>

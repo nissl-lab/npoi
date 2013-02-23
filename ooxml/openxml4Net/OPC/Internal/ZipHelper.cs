@@ -129,7 +129,22 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return null;
             }
         }
+        /**
+        * Opens the specified file as a zip, or returns null if no such file exists
+        *
+        * @param file
+        *            The file to open.
+        * @return The zip archive freshly open.
+        */
+        public static ZipFile OpenZipFile(FileInfo file)
+        {
+            if (!file.Exists)
+            {
+                return null;
+            }
 
+            return new ZipFile(File.OpenRead(file.FullName));
+        }
         /**
          * Retrieve and open a zip file with the specified path.
          *
@@ -139,20 +154,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static ZipFile OpenZipFile(String path)
         {
-
-            try
-            {
-                if (!File.Exists(path))
-                {
-                    return null;
-                }
-
-                return new ZipFile(File.OpenRead(path));
-            }
-            catch (IOException)
+            if (!File.Exists(path))
             {
                 return null;
             }
+
+            return new ZipFile(File.OpenRead(path));
         }
 
     }

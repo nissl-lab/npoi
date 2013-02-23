@@ -120,20 +120,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public ContentType(String contentType)
         {
-            // Conversion en US-ASCII
-            String contentTypeASCII = null;
-            try
-            {
-                contentTypeASCII = Encoding.GetEncoding("US-ASCII").GetString(Encoding.Default.GetBytes(contentType));
-
-            }
-            catch (DecoderFallbackException)
-            {
-                throw new InvalidFormatException(
-                        "The specified content type is not an ASCII value.");
-            }
-
-            Match mMediaType = patternMediaType.Match(contentTypeASCII);
+            Match mMediaType = patternMediaType.Match(contentType);
             if (!mMediaType.Success)
                 throw new InvalidFormatException(
                         "The specified content type '"

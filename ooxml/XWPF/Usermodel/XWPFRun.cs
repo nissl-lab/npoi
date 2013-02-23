@@ -29,6 +29,7 @@ namespace NPOI.XWPF.UserModel
      * XWPFrun.object defines a region of text with a common Set of properties
      *
      * @author Yegor Kozlov
+     * @author Gregg Morris (gregg dot morris at gmail dot com) - added getColor(), setColor()
      */
     public class XWPFRun
     {
@@ -254,7 +255,34 @@ namespace NPOI.XWPF.UserModel
             CT_OnOff bold = pr.IsSetB() ? pr.b : pr.AddNewB();
             bold.val=(value ? ST_OnOff.True : ST_OnOff.False);
         }
+        /**
+     * Get text color. The returned value is a string in the hex form "RRGGBB".
+     */
+        public String GetColor()
+        {
+            String color = null;
+            if (run.IsSetRPr())
+            {
+                CT_RPr pr = run.rPr;
+                if (pr.IsSetColor())
+                {
+                    NPOI.OpenXmlFormats.Wordprocessing.CT_Color clr = pr.color;
+                    color = clr.val; //clr.xgetVal().getStringValue();
+                }
+            }
+            return color;
+        }
 
+        /**
+         * Set text color.
+         * @param rgbStr - the desired color, in the hex form "RRGGBB".
+         */
+        public void SetColor(String rgbStr)
+        {
+            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+            NPOI.OpenXmlFormats.Wordprocessing.CT_Color color = pr.IsSetColor() ? pr.color : pr.AddNewColor();
+            color.val = (rgbStr);
+        }
         /**
          * Return the string content of this text run
          *
@@ -487,7 +515,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetFontFamily(String fontFamily)
         {
-            CT_RPr pr = run.rPr;
+            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_Fonts fonts = pr.IsSetRFonts() ? pr.rFonts : pr.AddNewRFonts();
             fonts.ascii=(fontFamily);
         }
@@ -661,7 +689,8 @@ namespace NPOI.XWPF.UserModel
          *  
          * @param pictureData The raw picture data
          * @param pictureType The type of the picture, eg {@link Document#PICTURE_TYPE_JPEG}
-         * @throws IOException 
+         * @param width width in EMUs. To convert to / from points use {@link org.apache.poi.util.Units}
+         * @param height height in EMUs. To convert to / from points use {@link org.apache.poi.util.Units}
          * @throws NPOI.Openxml4j.exceptions.InvalidFormatException 
          * @throws IOException 
          */
@@ -684,7 +713,7 @@ namespace NPOI.XWPF.UserModel
                 //CT_GraphicalObject tmp = new CT_GraphicalObject();
                 //String xml =
                 //    "<a:graphic xmlns:a=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
-                //    "<a:graphicData uri=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
+                //    "<a:graphicData uri=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\">" +
                 //    "<pic:pic xmlns:pic=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\" />" +
                 //    "</a:graphicData>" +
                 //    "</a:graphic>";

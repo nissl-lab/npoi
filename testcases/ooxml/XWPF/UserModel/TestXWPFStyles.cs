@@ -80,9 +80,58 @@ namespace NPOI.XWPF.UserModel
             Assert.IsTrue(styles.StyleExist(strStyleName));
         }
 
-        //	protected void tearDown()  {
-        //		super.TearDown();
-        //	}
+        /**
+	     * Bug #52449 - We should be able to write a file containing
+	     *  both regular and glossary styles without error
+	     */
+        [Test]
+        public void Test52449()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("52449.docx");
+            XWPFStyles styles = doc.GetStyles();
+            Assert.IsNotNull(styles);
+
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            styles = docIn.GetStyles();
+            Assert.IsNotNull(styles);
+        }
+
+
+        /**
+         * YK: tests below don't make much sense,
+         * they exist only to copy xml beans to pi-ooxml-schemas.jar
+         */
+        [Test]
+        public void TestLanguages()
+        {
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFStyles styles = docOut.CreateStyles();
+            styles.SetEastAsia("Chinese");
+
+            styles.SetSpellingLanguage("English");
+
+            CT_Fonts def = new CT_Fonts();
+            styles.SetDefaultFonts(def);
+        }
+        [Test]
+        public void TestType()
+        {
+            CT_Style ctStyle = new CT_Style();
+            XWPFStyle style = new XWPFStyle(ctStyle);
+
+            style.SetType(ST_StyleType.paragraph);
+            Assert.AreEqual(ST_StyleType.paragraph, style.GetStyleType());
+        }
+        [Test]
+        public void TestLatentStyles()
+        {
+            CT_LatentStyles latentStyles = new CT_LatentStyles();
+            CT_LsdException ex = latentStyles.AddNewLsdException();
+            ex.name=("ex1");
+            XWPFLatentStyles ls = new XWPFLatentStyles(latentStyles);
+            Assert.AreEqual(true, ls.IsLatentStyle("ex1"));
+
+        }
 
     }
 

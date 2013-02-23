@@ -1460,11 +1460,13 @@ namespace NPOI.XSSF.UserModel
             {
                 // Get the embeddings for the workbook
                 foreach (PackageRelationship rel in sheet.GetPackagePart().GetRelationshipsByType(XSSFRelation.OLEEMBEDDINGS.Relation))
-                    embedds.Add(GetTargetPart(rel));
-
+                {
+                    embedds.Add(sheet.GetPackagePart().GetRelatedPart(rel));
+                }
                 foreach (PackageRelationship rel in sheet.GetPackagePart().GetRelationshipsByType(XSSFRelation.PACKEMBEDDINGS.Relation))
-                    embedds.Add(GetTargetPart(rel));
-
+                {
+                    embedds.Add(sheet.GetPackagePart().GetRelatedPart(rel));
+                }
             }
             return embedds;
         }

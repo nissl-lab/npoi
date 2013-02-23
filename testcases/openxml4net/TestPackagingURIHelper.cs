@@ -43,8 +43,8 @@ namespace TestCases.OPC
             Assert.AreEqual("../document.xml", retUri2to1.OriginalString);
 
             // Document and CustomXML parts totally different [Julien C.]
-            Uri UriCustomXml = new Uri("/customXml/item1.xml",UriKind.RelativeOrAbsolute);
-            
+            Uri UriCustomXml = new Uri("/customXml/item1.xml", UriKind.RelativeOrAbsolute);
+
             Uri UriRes = PackagingUriHelper.RelativizeUri(Uri1, UriCustomXml);
             Assert.AreEqual("../customXml/item1.xml", UriRes.ToString());
 
@@ -89,7 +89,7 @@ namespace TestCases.OPC
             PackagePartName relativeName = PackagingUriHelper.CreatePartName(
                     "media/image1.gif", partBase);
             Assert.AreEqual(partNameToValid
-                    ,relativeName, "The part name must be equal to "
+                    , relativeName, "The part name must be equal to "
                     + partNameToValid.Name);
             pkg.Revert();
         }
@@ -110,8 +110,8 @@ namespace TestCases.OPC
             PackagePart partBase = pkg.CreatePart(nameBase, ContentTypes.XML);
             // Relative part name
             PackagePartName relativeName = PackagingUriHelper.CreatePartName(
-                    new Uri("media/image1.gif",UriKind.RelativeOrAbsolute), partBase);
-            Assert.AreEqual(partNameToValid,relativeName, "The part name must be equal to "
+                    new Uri("media/image1.gif", UriKind.RelativeOrAbsolute), partBase);
+            Assert.AreEqual(partNameToValid, relativeName, "The part name must be equal to "
                     + partNameToValid.Name);
             pkg.Revert();
         }
@@ -123,7 +123,8 @@ namespace TestCases.OPC
                 "..\\Program%20Files\\AGEIA%20Technologies\\v2.3.3\\NxCooking.dll",
                 "file:///D:\\seva\\1981\\r810102ns.mp3",
                 "..\\cygwin\\home\\yegor\\dinom\\%5baccess%5d.2010-10-26.log",
-                "#'Instructions (Text)'!B21"
+                "#'Instructions (Text)'!B21",
+                "javascript://"
          };
             foreach (String s in href)
             {
@@ -136,6 +137,14 @@ namespace TestCases.OPC
                     Assert.Fail("Failed to create Uri from " + s);
                 }
             }
+        }
+        [Test]
+        public void Test53734()
+        {
+            Uri uri = PackagingUriHelper.ToUri("javascript://");
+            // POI appends a trailing slash tpo avoid "Expected authority at index 13: javascript://"
+            // https://issues.apache.org/bugzilla/show_bug.cgi?id=53734
+            Assert.AreEqual("javascript:///", uri.ToString());
         }
 
     }

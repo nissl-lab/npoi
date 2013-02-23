@@ -2284,6 +2284,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rotWithShapeFieldSpecified = value;
             }
         }
+
+        public bool IsSetBlip()
+        {
+            return this.blipField != null;
+        }
     }
 
 
