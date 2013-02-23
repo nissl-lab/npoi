@@ -379,16 +379,22 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote GetFootnoteByID(int id)
         {
+            if (footnotes == null) return null;
             return footnotes.GetFootnoteById(id);
         }
 
         public XWPFFootnote GetEndnoteByID(int id)
         {
+            if (endnotes == null) return null;
             return endnotes[(id)];
         }
 
         public List<XWPFFootnote> GetFootnotes()
         {
+            if (footnotes == null)
+            {
+                return new List<XWPFFootnote>();
+            }
             return footnotes.GetFootnotesList();
         }
 

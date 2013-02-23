@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS;
     using NPOI.XSSF;
     using NUnit.Framework;
+    using NPOI.SS.Util;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -1223,23 +1224,25 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, sh1.GetCommentsTable(false).GetNumberOfComments());
         }
 
-        //    /**
-        //     * Sheet names with a , in them
-        //     */
-        //    public void Test51963() throws Exception {
-        //       XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
-        //       XSSFSheet sheet = wb.GetSheetAt(0);
-        //       Assert.AreEqual("Abc,1", sheet.GetSheetName());
+        /**
+         * Sheet names with a , in them
+         */
+        [Test]
+        public void Test51963()
+        {
+               XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
+               XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+               Assert.AreEqual("Abc,1", sheet.SheetName);
 
-        //       Name name = wb.GetName("Intekon.ProdCodes");
-        //       Assert.AreEqual("'Abc,1'!$A$1:$A$2", name.GetRefersToFormula());
+               XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
+               Assert.AreEqual("'Abc,1'!$A$1:$A$2", name.RefersToFormula);
 
-        //       AreaReference ref = new AreaReference(name.GetRefersToFormula());
-        //       Assert.AreEqual(0, ref.GetFirstCell().Row);
-        //       Assert.AreEqual(0, ref.GetFirstCell().Col);
-        //       Assert.AreEqual(1, ref.GetLastCell().Row);
-        //       Assert.AreEqual(0, ref.GetLastCell().Col);
-        //    }
+               AreaReference ref1 = new AreaReference(name.RefersToFormula);
+               Assert.AreEqual(0, ref1.FirstCell.Row);
+               Assert.AreEqual(0, ref1.FirstCell.Col);
+               Assert.AreEqual(1, ref1.LastCell.Row);
+               Assert.AreEqual(0, ref1.LastCell.Col);
+        }
 
         //    /**
         //     * Sum across multiple workbooks
