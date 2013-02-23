@@ -31,12 +31,12 @@ namespace NPOI.SS.UserModel
          * This conditional formatting rule Compares a cell value
          * to a formula calculated result, using an operator
          */
-        CELL_VALUE_IS = 1,
+        CellValueIs = 1,
         /**
          *  This conditional formatting rule Contains a formula to Evaluate.
          *  When the formula result is true, the cell is highlighted.
          */
-        FORMULA = 2
+        Formula = 2
     }
     /**
      * Represents a description of a conditional formatting rule

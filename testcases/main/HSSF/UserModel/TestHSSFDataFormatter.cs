@@ -201,7 +201,7 @@ namespace TestCases.HSSF.UserModel
             { // formula cell
                 row = sheet.CreateRow(7);
                 ICell cell = row.CreateCell(0);
-                cell.SetCellType(CellType.FORMULA);
+                cell.SetCellType(CellType.Formula);
                 cell.CellFormula = (/*setter*/"SUM(12.25,12.25)/100");
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (/*setter*/format.GetFormat("##.00%;"));
@@ -369,7 +369,7 @@ namespace TestCases.HSSF.UserModel
             IRow row = sheet.GetRow(0);
             ICell cellA1 = row.GetCell(0);
 
-            Assert.AreEqual(CellType.NUMERIC, cellA1.CellType);
+            Assert.AreEqual(CellType.Numeric, cellA1.CellType);
             Assert.AreEqual(2345.0, cellA1.NumericCellValue, 0.0001);
             Assert.AreEqual("@", cellA1.CellStyle.GetDataFormatString());
 

@@ -273,7 +273,7 @@ namespace NPOI.SS.Formula
             bool shouldCellDependencyBeRecorded = _stabilityClassifier == null ? true
                     : !_stabilityClassifier.IsCellFinal(sheetIndex, rowIndex, columnIndex);
             ValueEval result;
-            if (srcCell == null || srcCell.CellType != CellType.FORMULA)
+            if (srcCell == null || srcCell.CellType != CellType.Formula)
             {
                 result = GetValueFromNonFormulaCell(srcCell);
                 if (shouldCellDependencyBeRecorded)
@@ -324,22 +324,22 @@ namespace NPOI.SS.Formula
                         LogInfo(re.InnerException.Message + " - Continuing with cached value!");
                         switch (srcCell.CachedFormulaResultType)
                         {
-                            case CellType.NUMERIC:
+                            case CellType.Numeric:
                                 result = new NumberEval(srcCell.NumericCellValue);
                                 break;
-                            case CellType.STRING:
+                            case CellType.String:
                                 result = new StringEval(srcCell.StringCellValue);
                                 break;
-                            case CellType.BLANK:
+                            case CellType.Blank:
                                 result = BlankEval.instance;
                                 break;
-                            case CellType.BOOLEAN:
+                            case CellType.Boolean:
                                 result = BoolEval.ValueOf(srcCell.BooleanCellValue);
                                 break;
-                            case CellType.ERROR:
+                            case CellType.Error:
                                 result = ErrorEval.ValueOf(srcCell.ErrorCellValue);
                                 break;
-                            case CellType.FORMULA:
+                            case CellType.Formula:
                             default:
                                 throw new RuntimeException("Unexpected cell type '" + srcCell.CellType + "' found!");
                         }
@@ -411,15 +411,15 @@ namespace NPOI.SS.Formula
             CellType cellType = cell.CellType;
             switch (cellType)
             {
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     return new NumberEval(cell.NumericCellValue);
-                case CellType.STRING:
+                case CellType.String:
                     return new StringEval(cell.StringCellValue);
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return BoolEval.ValueOf(cell.BooleanCellValue);
-                case CellType.BLANK:
+                case CellType.Blank:
                     return BlankEval.instance;
-                case CellType.ERROR:
+                case CellType.Error:
                     return ErrorEval.ValueOf(cell.ErrorCellValue);
             }
             throw new Exception("Unexpected cell type (" + cellType + ")");

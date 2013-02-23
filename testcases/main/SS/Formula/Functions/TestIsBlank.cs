@@ -44,13 +44,13 @@ namespace TestCases.SS.Formula.Functions
 
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.BOOLEAN, result.CellType);
+            Assert.AreEqual(CellType.Boolean, result.CellType);
             Assert.AreEqual(true, result.BooleanValue);
 
             cell.CellFormula=("isblank(D7:D7)");
 
             result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.BOOLEAN, result.CellType);
+            Assert.AreEqual(CellType.Boolean, result.CellType);
             Assert.AreEqual(true, result.BooleanValue);
         }
     }

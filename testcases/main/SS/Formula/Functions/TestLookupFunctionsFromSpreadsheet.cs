@@ -101,12 +101,12 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertionException(msg + " - actual value was null");
             }
-            if (expected.CellType == CellType.ERROR)
+            if (expected.CellType == CellType.Error)
             {
                 ConfirmErrorResult(msg, expected.ErrorCellValue, actual);
                 return;
             }
-            if (actual.CellType == CellType.ERROR)
+            if (actual.CellType == CellType.Error)
             {
                 throw unexpectedError(msg, expected, actual.ErrorValue);
             }
@@ -118,15 +118,15 @@ namespace TestCases.SS.Formula.Functions
 
             switch (expected.CellType)
             {
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
                     break;
-                case CellType.FORMULA: // will never be used, since we will call method After formula Evaluation
+                case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new InvalidOperationException("Cannot expect formula as result of formula Evaluation: " + msg);
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     Assert.AreEqual(expected.NumericCellValue, actual.NumberValue, 0.0);
                     break;
-                case CellType.STRING:
+                case CellType.String:
                     Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
@@ -153,7 +153,7 @@ namespace TestCases.SS.Formula.Functions
 
         private static void ConfirmErrorResult(String msgPrefix, int expectedErrorCode, CellValue actual)
         {
-            if (actual.CellType != CellType.ERROR)
+            if (actual.CellType != CellType.Error)
             {
                 throw new AssertionException(msgPrefix + " Expected cell error ("
                         + ErrorEval.GetText(expectedErrorCode) + ") but actual value was "
@@ -174,10 +174,10 @@ namespace TestCases.SS.Formula.Functions
         {
             switch (expecedCell.CellType)
             {
-                case CellType.BLANK: return "<blank>";
-                case CellType.BOOLEAN: return expecedCell.BooleanCellValue.ToString();
-                case CellType.NUMERIC: return expecedCell.NumericCellValue.ToString();
-                case CellType.STRING: return expecedCell.RichStringCellValue.String;
+                case CellType.Blank: return "<blank>";
+                case CellType.Boolean: return expecedCell.BooleanCellValue.ToString();
+                case CellType.Numeric: return expecedCell.NumericCellValue.ToString();
+                case CellType.String: return expecedCell.RichStringCellValue.String;
             }
             throw new RuntimeException("Unexpected cell type of expected value (" + expecedCell.CellType + ")");
         }
@@ -254,7 +254,7 @@ namespace TestCases.SS.Formula.Functions
                     currentGroupComment = newMarkerValue;
                 }
                 ICell c = r.GetCell(SS.COLUMN_INDEX_EVALUATION);
-                if (c == null || c.CellType != CellType.FORMULA)
+                if (c == null || c.CellType != CellType.Formula)
                 {
                     continue;
                 }
@@ -404,11 +404,11 @@ namespace TestCases.SS.Formula.Functions
             {
                 return null;
             }
-            if (cell.CellType == CellType.BLANK)
+            if (cell.CellType == CellType.Blank)
             {
                 return null;
             }
-            if (cell.CellType == CellType.STRING)
+            if (cell.CellType == CellType.String)
             {
                 return cell.RichStringCellValue.String;
             }

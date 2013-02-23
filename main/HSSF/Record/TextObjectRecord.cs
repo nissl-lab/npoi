@@ -34,27 +34,11 @@ namespace NPOI.HSSF.Record
 
         public const short sid = 0x1B6;
 
-        private static int FORMAT_RUN_ENCODED_SIZE = 8; // 2 shorts and 4 bytes reserved
-
+        private const int FORMAT_RUN_ENCODED_SIZE = 8; // 2 shorts and 4 bytes reserved
 
         private BitField _HorizontalTextAlignment = BitFieldFactory.GetInstance(0x000E);
         private BitField _VerticalTextAlignment = BitFieldFactory.GetInstance(0x0070);
         private BitField textLocked = BitFieldFactory.GetInstance(0x200);
-
-        public const short TEXT_ORIENTATION_NONE = 0;
-        public const short TEXT_ORIENTATION_TOP_TO_BOTTOM = 1;
-        public const short TEXT_ORIENTATION_ROT_RIGHT = 2;
-        public const short TEXT_ORIENTATION_ROT_LEFT = 3;
-
-
-        public const short HORIZONTAL_TEXT_ALIGNMENT_LEFT_ALIGNED = 1;
-        public const short HORIZONTAL_TEXT_ALIGNMENT_CENTERED = 2;
-        public const short HORIZONTAL_TEXT_ALIGNMENT_RIGHT_ALIGNED = 3;
-        public const short HORIZONTAL_TEXT_ALIGNMENT_JUSTIFIED = 4;
-        public const short VERTICAL_TEXT_ALIGNMENT_TOP = 1;
-        public const short VERTICAL_TEXT_ALIGNMENT_CENTER = 2;
-        public const short VERTICAL_TEXT_ALIGNMENT_BOTTOM = 3;
-        public const short VERTICAL_TEXT_ALIGNMENT_JUSTIFY = 4;
 
         private int field_1_options;
         private int field_2_textOrientation;
@@ -323,40 +307,38 @@ namespace NPOI.HSSF.Record
         /**
          * Get the text orientation field for the TextObjectBase record.
          *
-         * @return  One of 
-         *        TEXT_ORIENTATION_NONE
-         *        TEXT_ORIENTATION_TOP_TO_BOTTOM
-         *        TEXT_ORIENTATION_ROT_RIGHT
-         *        TEXT_ORIENTATION_ROT_LEFT
+         * @return a TextOrientation
          */
-        public int TextOrientation
+        public TextOrientation TextOrientation
         {
-            get { return field_2_textOrientation; }
-            set { this.field_2_textOrientation = value; }
+            get { return (TextOrientation) field_2_textOrientation; }
+            set { this.field_2_textOrientation = (int) value; }
         }
 
 
         /**
  * @return the Horizontal text alignment field value.
  */
-        public int HorizontalTextAlignment
+        public HorizontalAlignment HorizontalTextAlignment
         {
-            get
-            {
-                return _HorizontalTextAlignment.GetValue(field_1_options);
+            get {
+                return (HorizontalAlignment) _HorizontalTextAlignment.GetValue(field_1_options);
             }
-            set { field_1_options = _HorizontalTextAlignment.SetValue(field_1_options, value); }
+            set {
+                field_1_options = _HorizontalTextAlignment.SetValue(field_1_options, (int) value);
+            }
         }
         /**
  * @return the Vertical text alignment field value.
  */
-        public int VerticalTextAlignment
+        public VerticalAlignment VerticalTextAlignment
         {
-            get
-            {
-                return _VerticalTextAlignment.GetValue(field_1_options);
+            get {
+                return (VerticalAlignment) _VerticalTextAlignment.GetValue(field_1_options);
             }
-            set { field_1_options = _VerticalTextAlignment.SetValue(field_1_options, value); }
+            set {
+                field_1_options = _VerticalTextAlignment.SetValue(field_1_options, (int) value);
+            }
         }
 
         /**
@@ -368,6 +350,7 @@ namespace NPOI.HSSF.Record
             get { return textLocked.IsSet(field_1_options); }
             set { field_1_options = textLocked.SetBoolean(field_1_options, value); }
         }
+
         public Ptg LinkRefPtg
         {
             get
@@ -384,7 +367,7 @@ namespace NPOI.HSSF.Record
             sb.Append("         .IsHorizontal = ").Append(HorizontalTextAlignment).Append('\n');
             sb.Append("         .IsVertical   = ").Append(VerticalTextAlignment).Append('\n');
             sb.Append("         .textLocked   = ").Append(IsTextLocked).Append('\n');
-            sb.Append("    .textOrientation= ").Append(HexDump.ShortToHex(TextOrientation)).Append("\n");
+            sb.Append("    .textOrientation= ").Append(HexDump.ShortToHex((int) TextOrientation)).Append("\n");
             sb.Append("    .reserved4      = ").Append(HexDump.ShortToHex(field_3_reserved4)).Append("\n");
             sb.Append("    .reserved5      = ").Append(HexDump.ShortToHex(field_4_reserved5)).Append("\n");
             sb.Append("    .reserved6      = ").Append(HexDump.ShortToHex(field_5_reserved6)).Append("\n");

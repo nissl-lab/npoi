@@ -45,11 +45,11 @@ namespace TestCases.HSSF.UserModel
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 6, 4)) as HSSFTextbox;
             HSSFRichTextString str = new HSSFRichTextString("Hello, World");
             textbox.String = (str);
-            textbox.HorizontalAlignment = (HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED);
-            textbox.VerticalAlignment = (HSSFTextbox.VERTICAL_ALIGNMENT_CENTER);
+            textbox.HorizontalAlignment = HorizontalAlignment.Center;
+            textbox.VerticalAlignment = VerticalAlignment.Center;
 
-            Assert.AreEqual(HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED, textbox.HorizontalAlignment);
-            Assert.AreEqual(HSSFTextbox.VERTICAL_ALIGNMENT_CENTER, textbox.VerticalAlignment);
+            Assert.AreEqual(HorizontalAlignment.Center, textbox.HorizontalAlignment);
+            Assert.AreEqual(VerticalAlignment.Center, textbox.VerticalAlignment);
         }
 
         /**

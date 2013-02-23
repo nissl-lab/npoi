@@ -66,7 +66,7 @@ namespace TestCases.HSSF.Model
                     break;
                 }
                 ICell cell = row.GetCell(0);
-                if (cell == null || cell.CellType == NPOI.SS.UserModel.CellType.BLANK)
+                if (cell == null || cell.CellType == NPOI.SS.UserModel.CellType.Blank)
                 {
                     break;
                 }

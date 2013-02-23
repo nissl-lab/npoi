@@ -62,31 +62,31 @@ namespace NPOI.SS.Formula.Eval.Forked
 
             if (cls == typeof(NumberEval))
             {
-                _cellType = CellType.NUMERIC;
+                _cellType = CellType.Numeric;
                 _numberValue = ((NumberEval)value).NumberValue;
                 return;
             }
             if (cls == typeof(StringEval))
             {
-                _cellType = CellType.STRING;
+                _cellType = CellType.String;
                 _stringValue = ((StringEval)value).StringValue;
                 return;
             }
             if (cls == typeof(BoolEval))
             {
-                _cellType = CellType.BOOLEAN;
+                _cellType = CellType.Boolean;
                 _boolValue = ((BoolEval)value).BooleanValue;
                 return;
             }
             if (cls == typeof(ErrorEval))
             {
-                _cellType = CellType.ERROR;
+                _cellType = CellType.Error;
                 _errorValue = ((ErrorEval)value).ErrorCode;
                 return;
             }
             if (cls == typeof(BlankEval))
             {
-                _cellType = CellType.BLANK;
+                _cellType = CellType.Blank;
                 return;
             }
             throw new ArgumentException("Unexpected value class (" + cls.Name + ")");
@@ -95,11 +95,11 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             switch (_cellType)
             {
-                case CellType.BLANK: destCell.SetCellType(CellType.BLANK); return;
-                case CellType.NUMERIC: destCell.SetCellValue(_numberValue); return;
-                case CellType.BOOLEAN: destCell.SetCellValue(_boolValue); return;
-                case CellType.STRING: destCell.SetCellValue(_stringValue); return;
-                case CellType.ERROR: destCell.SetCellErrorValue((byte)_errorValue); return;
+                case CellType.Blank: destCell.SetCellType(CellType.Blank); return;
+                case CellType.Numeric: destCell.SetCellValue(_numberValue); return;
+                case CellType.Boolean: destCell.SetCellValue(_boolValue); return;
+                case CellType.String: destCell.SetCellValue(_stringValue); return;
+                case CellType.Error: destCell.SetCellErrorValue((byte)_errorValue); return;
             }
             throw new InvalidOperationException("Unexpected data type (" + _cellType + ")");
         }
@@ -122,7 +122,7 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             get
             {
-                CheckCellType(CellType.BOOLEAN);
+                CheckCellType(CellType.Boolean);
                 return _boolValue;
             }
         }
@@ -130,7 +130,7 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             get
             {
-                CheckCellType(CellType.ERROR);
+                CheckCellType(CellType.Error);
                 return _errorValue;
             }
         }
@@ -138,7 +138,7 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             get
             {
-                CheckCellType(CellType.NUMERIC);
+                CheckCellType(CellType.Numeric);
                 return _numberValue;
             }
         }
@@ -146,7 +146,7 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             get
             {
-                CheckCellType(CellType.STRING);
+                CheckCellType(CellType.String);
                 return _stringValue;
             }
         }

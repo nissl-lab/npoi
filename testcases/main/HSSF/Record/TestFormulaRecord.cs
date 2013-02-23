@@ -76,7 +76,7 @@ namespace TestCases.HSSF.Record
             FormulaRecord record = new FormulaRecord(TestcaseRecordInputStream.Create(FormulaRecord.sid,  formulaByte));
             Assert.AreEqual(0, record.Row, "Row");
             Assert.AreEqual(0, record.Column, "Column");
-            Assert.AreEqual(record.CachedResultType,NPOI.SS.UserModel.CellType.ERROR);
+            Assert.AreEqual(record.CachedResultType,NPOI.SS.UserModel.CellType.Error);
 
             byte[] output = record.Serialize();
             Assert.AreEqual(33, output.Length, "Output size"); //includes sid+recordlength

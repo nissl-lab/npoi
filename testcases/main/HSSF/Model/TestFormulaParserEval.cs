@@ -98,7 +98,7 @@ namespace TestCases.HSSF.Model
                 }
                 throw;
             }
-            Assert.AreEqual(NPOI.SS.UserModel.CellType.NUMERIC, result.CellType);
+            Assert.AreEqual(NPOI.SS.UserModel.CellType.Numeric, result.CellType);
             Assert.AreEqual(42.0, result.NumberValue, 0.0);
         }
     }

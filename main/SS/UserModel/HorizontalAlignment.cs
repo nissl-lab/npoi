@@ -30,7 +30,7 @@ namespace NPOI.SS.UserModel
          * Numbers, dates, and times are rightaligned. Boolean types are centered.
          * Changing the alignment does not change the type of data.
          */
-        GENERAL,
+        General,
 
         /**
          * The horizontal alignment is left-aligned, even in Rightto-Left mode.
@@ -38,18 +38,18 @@ namespace NPOI.SS.UserModel
          * the cell is indented from the left by the specified number of character spaces. The character spaces are
          * based on the default font and font size for the workbook.
          */
-        LEFT,
+        Left,
 
         /**
          * The horizontal alignment is centered, meaning the text is centered across the cell.
          */
-        CENTER,
+        Center,
 
         /**
          * The horizontal alignment is right-aligned, meaning that cell contents are aligned at the right edge of the cell,
          * even in Right-to-Left mode.
          */
-        RIGHT,
+        Right,
 
         /**
          * Indicates that the value of the cell should be Filled
@@ -66,14 +66,14 @@ namespace NPOI.SS.UserModel
          * </ol>
          * </p>
          */
-        FILL,
+        Fill,
 
         /**
          * The horizontal alignment is justified (flush left and right).
          * For each line of text, aligns each line of the wrapped text in a cell to the right and left
          * (except the last line). If no single line of text wraps in the cell, then the text is not justified.
          */
-        JUSTIFY,
+        Justify,
 
         /**
          * The horizontal alignment is centered across multiple cells.
@@ -81,7 +81,7 @@ namespace NPOI.SS.UserModel
          * in the row of the cell in question. For each cell that is spanned in the alignment,
          * a cell element needs to be written out, with the same style Id which references the centerContinuous alignment.
          */
-        CENTER_SELECTION,
+        CenterSelection,
 
         /**
          * Indicates that each 'word' in each line of text inside the cell is evenly distributed
@@ -93,7 +93,7 @@ namespace NPOI.SS.UserModel
          * <p> A 'word' is a set of characters with no space character in them. </p>
          * <p> Two lines inside a cell are Separated by a carriage return. </p>
          */
-        DISTRIBUTED
+        Distributed
     }
 
 }

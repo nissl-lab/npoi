@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using NPOI.SS.UserModel;
 
@@ -147,9 +147,9 @@ public class WorkbookUtil {
     public static void ValidateSheetState(SheetState state)
     {
         switch(state){
-            case SheetState.VISIBLE: break;
-            case SheetState.HIDDEN: break;
-            case SheetState.VERY_HIDDEN: break;
+            case SheetState.Visible: break;
+            case SheetState.Hidden: break;
+            case SheetState.VeryHidden: break;
             default: throw new ArgumentException("Ivalid sheet state : " + state + "\n" +
                             "Sheet state must beone of the Workbook.SHEET_STATE_* constants");
         }

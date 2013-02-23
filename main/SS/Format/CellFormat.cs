@@ -278,11 +278,11 @@ namespace NPOI.SS.Format
         {
             switch (UltimateType(c))
             {
-                case CellType.BLANK:
+                case CellType.Blank:
                     return Apply("");
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return Apply(c.BooleanCellValue);
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     Double value = c.NumericCellValue;
                     if (GetApplicableFormatPart(value).CellFormatType == CellFormatType.DATE)
                     {
@@ -299,7 +299,7 @@ namespace NPOI.SS.Format
                     {
                         return Apply(value);
                     }
-                case CellType.STRING:
+                case CellType.String:
                     return Apply(c.StringCellValue);
                 default:
                     return Apply("?");
@@ -358,11 +358,11 @@ namespace NPOI.SS.Format
         {
             switch (UltimateType(c))
             {
-                case CellType.BLANK:
+                case CellType.Blank:
                     return Apply(label, "");
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return Apply(label, c.BooleanCellValue);
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     Double value = c.NumericCellValue;
                     if (GetApplicableFormatPart(value).CellFormatType == CellFormatType.DATE)
                     {
@@ -379,7 +379,7 @@ namespace NPOI.SS.Format
                     {
                         return Apply(label, value);
                     }
-                case CellType.STRING:
+                case CellType.String:
                     return Apply(label, c.StringCellValue);
                 default:
                     return Apply(label, "?");
@@ -469,7 +469,7 @@ namespace NPOI.SS.Format
         public static CellType UltimateType(ICell cell)
         {
             CellType type = cell.CellType;
-            if (type == CellType.FORMULA)
+            if (type == CellType.Formula)
                 return cell.CachedFormulaResultType;
             else
                 return type;

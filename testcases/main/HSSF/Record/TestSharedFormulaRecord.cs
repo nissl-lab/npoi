@@ -113,7 +113,7 @@ namespace TestCases.HSSF.Record
 
             SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL97);
 
-            sharedFormula = FormulaParser.Parse("A2", fpb, FormulaType.CELL, -1);
+            sharedFormula = FormulaParser.Parse("A2", fpb, FormulaType.Cell, -1);
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 0, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             //conversion relative to [0,0] should return the original formula
@@ -129,7 +129,7 @@ namespace TestCases.HSSF.Record
             //one row down and one cell right
             Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "B3");
 
-            sharedFormula = FormulaParser.Parse("SUM(A1:C1)", fpb, FormulaType.CELL, -1);
+            sharedFormula = FormulaParser.Parse("SUM(A1:C1)", fpb, FormulaType.Cell, -1);
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 0, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(A1:C1)");
@@ -214,7 +214,7 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual("A$1*2", sheet.GetRow(ROW_IX).GetCell(1).CellFormula);
             cell = sheet.GetRow(ROW_IX).GetCell(1);
-            cell.SetCellType(CellType.BLANK);
+            cell.SetCellType(CellType.Blank);
             Assert.AreEqual(3, countSharedFormulas(sheet));
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -239,7 +239,7 @@ namespace TestCases.HSSF.Record
         {
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(expectedValue, cv.NumberValue, 0.0);
         }
 

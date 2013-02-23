@@ -86,7 +86,7 @@ namespace TestCases.SS.Formula.Eval
                 // else some other unexpected error
                 throw e;
             }
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(0.5, cv.NumberValue, 0.0);
         }
     }

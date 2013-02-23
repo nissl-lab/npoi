@@ -181,7 +181,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             cell.CellFormula = (formula);
             CellValue cv = fe.Evaluate(cell);
-            if (cv.CellType != CellType.NUMERIC)
+            if (cv.CellType != CellType.Numeric)
             {
                 throw new AssertionException("expected numeric cell type but got " + cv.FormatAsString());
             }
@@ -193,7 +193,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             cell.CellFormula=(formula);
             CellValue cv = fe.Evaluate(cell);
-            if (cv.CellType != CellType.ERROR)
+            if (cv.CellType != CellType.Error)
             {
                 throw new AssertionException("expected error cell type but got " + cv.FormatAsString());
             }

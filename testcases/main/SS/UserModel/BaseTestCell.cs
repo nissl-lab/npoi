@@ -59,50 +59,50 @@ namespace TestCases.SS.UserModel
 
             cell.SetCellValue(1.2);
             Assert.AreEqual(1.2, cell.NumericCellValue, 0.0001);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
-            AssertProhibitedValueAccess(cell, CellType.BOOLEAN, CellType.STRING,
-                    CellType.FORMULA, CellType.ERROR);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
+            AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
+                    CellType.Formula, CellType.Error);
 
             cell.SetCellValue(false);
             Assert.AreEqual(false, cell.BooleanCellValue);
-            Assert.AreEqual(CellType.BOOLEAN, cell.CellType);
+            Assert.AreEqual(CellType.Boolean, cell.CellType);
             cell.SetCellValue(true);
             Assert.AreEqual(true, cell.BooleanCellValue);
-            AssertProhibitedValueAccess(cell, CellType.NUMERIC, CellType.STRING,
-                    CellType.FORMULA, CellType.ERROR);
+            AssertProhibitedValueAccess(cell, CellType.Numeric, CellType.String,
+                    CellType.Formula, CellType.Error);
 
             cell.SetCellValue(factory.CreateRichTextString("Foo"));
             Assert.AreEqual("Foo", cell.RichStringCellValue.String);
             Assert.AreEqual("Foo", cell.StringCellValue);
-            Assert.AreEqual(CellType.STRING, cell.CellType);
-            AssertProhibitedValueAccess(cell, CellType.NUMERIC, CellType.BOOLEAN,
-                    CellType.FORMULA, CellType.ERROR);
+            Assert.AreEqual(CellType.String, cell.CellType);
+            AssertProhibitedValueAccess(cell, CellType.Numeric, CellType.Boolean,
+                    CellType.Formula, CellType.Error);
 
             cell.SetCellValue("345");
             Assert.AreEqual("345", cell.RichStringCellValue.String);
             Assert.AreEqual("345", cell.StringCellValue);
-            Assert.AreEqual(CellType.STRING, cell.CellType);
-            AssertProhibitedValueAccess(cell, CellType.NUMERIC, CellType.BOOLEAN,
-                    CellType.FORMULA, CellType.ERROR);
+            Assert.AreEqual(CellType.String, cell.CellType);
+            AssertProhibitedValueAccess(cell, CellType.Numeric, CellType.Boolean,
+                    CellType.Formula, CellType.Error);
 
             DateTime dt = DateTime.Now.AddMilliseconds(123456789);
             cell.SetCellValue(dt);
             Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
-            AssertProhibitedValueAccess(cell, CellType.BOOLEAN, CellType.STRING,
-                    CellType.FORMULA, CellType.ERROR);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
+            AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
+                    CellType.Formula, CellType.Error);
 
             cell.SetCellValue(dt);
             Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
-            AssertProhibitedValueAccess(cell, CellType.BOOLEAN, CellType.STRING,
-                    CellType.FORMULA, CellType.ERROR);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
+            AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
+                    CellType.Formula, CellType.Error);
 
             cell.SetCellErrorValue(FormulaError.NA.Code);
             Assert.AreEqual(FormulaError.NA.Code, cell.ErrorCellValue);
-            Assert.AreEqual(CellType.ERROR, cell.CellType);
-            AssertProhibitedValueAccess(cell, CellType.NUMERIC, CellType.BOOLEAN,
-                    CellType.FORMULA, CellType.STRING);
+            Assert.AreEqual(CellType.Error, cell.CellType);
+            AssertProhibitedValueAccess(cell, CellType.Numeric, CellType.Boolean,
+                    CellType.Formula, CellType.String);
         }
 
         private static void AssertProhibitedValueAccess(ICell cell, params CellType[] types)
@@ -114,19 +114,19 @@ namespace TestCases.SS.UserModel
                 {
                     switch (type)
                     {
-                        case CellType.NUMERIC:
+                        case CellType.Numeric:
                             a = cell.NumericCellValue;
                             break;
-                        case CellType.STRING:
+                        case CellType.String:
                             a = cell.StringCellValue;
                             break;
-                        case CellType.BOOLEAN:
+                        case CellType.Boolean:
                             a = cell.BooleanCellValue;
                             break;
-                        case CellType.FORMULA:
+                        case CellType.Formula:
                             a = cell.CellFormula;
                             break;
-                        case CellType.ERROR:
+                        case CellType.Error:
                             a = cell.ErrorCellValue;
                             break;
                     }
@@ -153,20 +153,20 @@ namespace TestCases.SS.UserModel
             ICell c;
             r = s.CreateRow(0);
             c = r.CreateCell(1);
-            //c.SetCellType(HSSFCellType.BOOLEAN);
+            //c.SetCellType(HSSFCellType.Boolean);
             c.SetCellValue(true);
 
             c = r.CreateCell(2);
-            //c.SetCellType(HSSFCellType.BOOLEAN);
+            //c.SetCellType(HSSFCellType.Boolean);
             c.SetCellValue(false);
 
             r = s.CreateRow(1);
             c = r.CreateCell(1);
-            //c.SetCellType(HSSFCellType.ERROR);
+            //c.SetCellType(HSSFCellType.Error);
             c.SetCellErrorValue((byte)0);
 
             c = r.CreateCell(2);
-            //c.SetCellType(HSSFCellType.ERROR);
+            //c.SetCellType(HSSFCellType.Error);
             c.SetCellErrorValue((byte)7);
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
@@ -197,15 +197,15 @@ namespace TestCases.SS.UserModel
             ICellStyle cs = wb.CreateCellStyle();
             IFont f = wb.CreateFont();
             f.FontHeightInPoints = 20;
-            f.Color = (IndexedColors.RED.Index);
-            f.Boldweight = (int)FontBoldWeight.BOLD;
+            f.Color = (IndexedColors.Red.Index);
+            f.Boldweight = (int)FontBoldWeight.Bold;
             f.FontName = "Arial Unicode MS";
             cs.FillBackgroundColor = 3;
             cs.SetFont(f);
-            cs.BorderTop = BorderStyle.THIN;
-            cs.BorderRight = BorderStyle.THIN;
-            cs.BorderLeft = BorderStyle.THIN;
-            cs.BorderBottom = BorderStyle.THIN;
+            cs.BorderTop = BorderStyle.Thin;
+            cs.BorderRight = BorderStyle.Thin;
+            cs.BorderLeft = BorderStyle.Thin;
+            cs.BorderBottom = BorderStyle.Thin;
 
             r = s.CreateRow(0);
             c = r.CreateCell(0);
@@ -217,15 +217,15 @@ namespace TestCases.SS.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.IsTrue((c.CellType == CellType.FORMULA), "Formula Cell at 0,0");
+            Assert.IsTrue((c.CellType == CellType.Formula), "Formula Cell at 0,0");
             cs = c.CellStyle;
 
             Assert.IsNotNull(cs, "Formula Cell Style");
             Assert.IsTrue((cs.FontIndex == f.Index), "Font Index Matches");
-            Assert.IsTrue((cs.BorderTop == BorderStyle.THIN), "Top Border");
-            Assert.IsTrue((cs.BorderLeft == BorderStyle.THIN), "Left Border");
-            Assert.IsTrue((cs.BorderRight == BorderStyle.THIN), "Right Border");
-            Assert.IsTrue((cs.BorderBottom == BorderStyle.THIN), "Bottom Border");
+            Assert.IsTrue((cs.BorderTop == BorderStyle.Thin), "Top Border");
+            Assert.IsTrue((cs.BorderLeft == BorderStyle.Thin), "Left Border");
+            Assert.IsTrue((cs.BorderRight == BorderStyle.Thin), "Right Border");
+            Assert.IsTrue((cs.BorderBottom == BorderStyle.Thin), "Bottom Border");
         }
 
         /**tests the ToString() method of HSSFCell*/
@@ -272,25 +272,25 @@ namespace TestCases.SS.UserModel
             ICell c1 = r.CreateCell(0);
             c1.CellFormula = ("NA()");
             Assert.AreEqual(0.0, c1.NumericCellValue, 0.0);
-            Assert.AreEqual(CellType.NUMERIC, c1.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Numeric, c1.CachedFormulaResultType);
             c1.SetCellValue(10);
             Assert.AreEqual(10.0, c1.NumericCellValue, 0.0);
-            Assert.AreEqual(CellType.FORMULA, c1.CellType);
-            Assert.AreEqual(CellType.NUMERIC, c1.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, c1.CellType);
+            Assert.AreEqual(CellType.Numeric, c1.CachedFormulaResultType);
 
             ICell c2 = r.CreateCell(1);
             c2.CellFormula = ("NA()");
             Assert.AreEqual(0.0, c2.NumericCellValue, 0.0);
-            Assert.AreEqual(CellType.NUMERIC, c2.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Numeric, c2.CachedFormulaResultType);
             c2.SetCellValue("I Changed!");
             Assert.AreEqual("I Changed!", c2.StringCellValue);
-            Assert.AreEqual(CellType.FORMULA, c2.CellType);
-            Assert.AreEqual(CellType.STRING, c2.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, c2.CellType);
+            Assert.AreEqual(CellType.String, c2.CachedFormulaResultType);
 
             //calglin Cell.CellFormula = (null) for a non-formula cell
             ICell c3 = r.CreateCell(2);
             c3.CellFormula = (null);
-            Assert.AreEqual(CellType.BLANK, c3.CellType);
+            Assert.AreEqual(CellType.Blank, c3.CellType);
 
         }
         private ICell CreateACell()
@@ -304,10 +304,10 @@ namespace TestCases.SS.UserModel
             ICell cell = CreateACell();
 
             cell.SetCellValue("TRUE");
-            Assert.AreEqual(CellType.STRING, cell.CellType);
+            Assert.AreEqual(CellType.String, cell.CellType);
             try
             {
-                cell.SetCellType(CellType.BOOLEAN);
+                cell.SetCellType(CellType.Boolean);
             }
             catch (InvalidCastException)
             {
@@ -315,17 +315,17 @@ namespace TestCases.SS.UserModel
                         "Identified bug in conversion of cell from text to bool");
             }
 
-            Assert.AreEqual(CellType.BOOLEAN, cell.CellType);
+            Assert.AreEqual(CellType.Boolean, cell.CellType);
             Assert.AreEqual(true, cell.BooleanCellValue);
-            cell.SetCellType(CellType.STRING);
+            cell.SetCellType(CellType.String);
             Assert.AreEqual("TRUE", cell.RichStringCellValue.String);
 
             // 'false' text to bool and back
             cell.SetCellValue("FALSE");
-            cell.SetCellType(CellType.BOOLEAN);
-            Assert.AreEqual(CellType.BOOLEAN, cell.CellType);
+            cell.SetCellType(CellType.Boolean);
+            Assert.AreEqual(CellType.Boolean, cell.CellType);
             Assert.AreEqual(false, cell.BooleanCellValue);
-            cell.SetCellType(CellType.STRING);
+            cell.SetCellType(CellType.String);
             Assert.AreEqual("FALSE", cell.RichStringCellValue.String);
         }
         [Test]
@@ -336,7 +336,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellValue(true);
             try
             {
-                cell.SetCellType(CellType.STRING);
+                cell.SetCellType(CellType.String);
             }
             catch (InvalidOperationException e)
             {
@@ -426,7 +426,7 @@ namespace TestCases.SS.UserModel
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cellA1);
             Assert.AreEqual("DEF", cellA1.StringCellValue);
-            cellA1.SetCellType(CellType.STRING);
+            cellA1.SetCellType(CellType.String);
             Assert.AreEqual("DEF", cellA1.StringCellValue);
 
             cellA1.CellFormula = ("25.061");
@@ -434,7 +434,7 @@ namespace TestCases.SS.UserModel
             fe.EvaluateFormulaCell(cellA1);
             ConfirmCannotReadString(cellA1);
             Assert.AreEqual(25.061, cellA1.NumericCellValue, 0.0);
-            cellA1.SetCellType(CellType.STRING);
+            cellA1.SetCellType(CellType.String);
             Assert.AreEqual("25.061", cellA1.StringCellValue);
 
             cellA1.CellFormula = ("TRUE");
@@ -442,7 +442,7 @@ namespace TestCases.SS.UserModel
             fe.EvaluateFormulaCell(cellA1);
             ConfirmCannotReadString(cellA1);
             Assert.AreEqual(true, cellA1.BooleanCellValue);
-            cellA1.SetCellType(CellType.STRING);
+            cellA1.SetCellType(CellType.String);
             Assert.AreEqual("TRUE", cellA1.StringCellValue);
 
             cellA1.CellFormula = ("#NAME?");
@@ -450,13 +450,13 @@ namespace TestCases.SS.UserModel
             fe.EvaluateFormulaCell(cellA1);
             ConfirmCannotReadString(cellA1);
             Assert.AreEqual(ErrorConstants.ERROR_NAME, cellA1.ErrorCellValue);
-            cellA1.SetCellType(CellType.STRING);
+            cellA1.SetCellType(CellType.String);
             Assert.AreEqual("#NAME?", cellA1.StringCellValue);
         }
 
         private static void ConfirmCannotReadString(ICell cell)
         {
-            AssertProhibitedValueAccess(cell, CellType.STRING);
+            AssertProhibitedValueAccess(cell, CellType.String);
         }
 
         /**
@@ -468,7 +468,7 @@ namespace TestCases.SS.UserModel
             ICell cell = CreateACell();
             cell.CellFormula = ("1=1");
             cell.SetCellValue(true);
-            cell.SetCellType(CellType.BOOLEAN);
+            cell.SetCellType(CellType.Boolean);
             if (cell.BooleanCellValue == false)
             {
                 throw new AssertionException("Identified bug 46479d");
@@ -488,34 +488,34 @@ namespace TestCases.SS.UserModel
             ICell cell;
             IRow row = workSheet.CreateRow(0);
 
-            cell = row.CreateCell(0, CellType.NUMERIC);
+            cell = row.CreateCell(0, CellType.Numeric);
             cell.SetCellValue(1.0);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
             Assert.AreEqual(1.0, cell.NumericCellValue, 0.0);
 
-            cell = row.CreateCell(1, CellType.NUMERIC);
+            cell = row.CreateCell(1, CellType.Numeric);
             cell.SetCellValue(2.0);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
             Assert.AreEqual(2.0, cell.NumericCellValue, 0.0);
 
-            cell = row.CreateCell(2, CellType.FORMULA);
+            cell = row.CreateCell(2, CellType.Formula);
             cell.CellFormula = ("SUM(A1:B1)");
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
             Assert.AreEqual("SUM(A1:B1)", cell.CellFormula);
 
             //serialize and check again
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             row = wb.GetSheetAt(0).GetRow(0);
             cell = row.GetCell(0);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
             Assert.AreEqual(1.0, cell.NumericCellValue, 0.0);
 
             cell = row.GetCell(1);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
             Assert.AreEqual(2.0, cell.NumericCellValue, 0.0);
 
             cell = row.GetCell(2);
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
             Assert.AreEqual("SUM(A1:B1)", cell.CellFormula);
         }
         [Test]
@@ -545,7 +545,7 @@ namespace TestCases.SS.UserModel
             ICell cell = wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
             cell.CellStyle = (style);
             int i1 = cell.CellStyle.Index;
-            cell.SetCellType(CellType.BLANK);
+            cell.SetCellType(CellType.Blank);
             int i2 = cell.CellStyle.Index;
             Assert.AreEqual(i1, i2);
         }
@@ -578,32 +578,32 @@ namespace TestCases.SS.UserModel
 
             ICell cell0 = row.CreateCell(0);
             cell0.SetCellValue(Double.NaN);
-            Assert.AreEqual(CellType.ERROR, cell0.CellType, "Double.NaN should change cell type to CELL_TYPE_ERROR");
+            Assert.AreEqual(CellType.Error, cell0.CellType, "Double.NaN should change cell type to CELL_TYPE_ERROR");
             Assert.AreEqual(ErrorConstants.ERROR_NUM, cell0.ErrorCellValue, "Double.NaN should change cell value to #NUM!");
 
             ICell cell1 = row.CreateCell(1);
             cell1.SetCellValue(Double.PositiveInfinity);
-            Assert.AreEqual(CellType.ERROR, cell1.CellType, "Double.PositiveInfinity should change cell type to CELL_TYPE_ERROR");
+            Assert.AreEqual(CellType.Error, cell1.CellType, "Double.PositiveInfinity should change cell type to CELL_TYPE_ERROR");
             Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell1.ErrorCellValue, "Double.POSITIVE_INFINITY should change cell value to #DIV/0!");
 
             ICell cell2 = row.CreateCell(2);
             cell2.SetCellValue(Double.NegativeInfinity);
-            Assert.AreEqual(CellType.ERROR, cell2.CellType, "Double.NegativeInfinity should change cell type to CELL_TYPE_ERROR");
+            Assert.AreEqual(CellType.Error, cell2.CellType, "Double.NegativeInfinity should change cell type to CELL_TYPE_ERROR");
             Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue, "Double.NEGATIVE_INFINITY should change cell value to #DIV/0!");
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             row = wb.GetSheetAt(0).GetRow(0);
 
             cell0 = row.GetCell(0);
-            Assert.AreEqual(CellType.ERROR, cell0.CellType);
+            Assert.AreEqual(CellType.Error, cell0.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_NUM, cell0.ErrorCellValue);
 
             cell1 = row.GetCell(1);
-            Assert.AreEqual(CellType.ERROR, cell1.CellType);
+            Assert.AreEqual(CellType.Error, cell1.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell1.ErrorCellValue);
 
             cell2 = row.GetCell(2);
-            Assert.AreEqual(CellType.ERROR, cell2.CellType);
+            Assert.AreEqual(CellType.Error, cell2.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue);
         }
         [Test]

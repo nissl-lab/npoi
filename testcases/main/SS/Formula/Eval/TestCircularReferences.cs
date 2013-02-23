@@ -50,7 +50,7 @@ namespace TestCases.SS.Formula.Eval
          */
         private static void ConfirmCycleErrorCode(CellValue cellValue)
         {
-            Assert.IsTrue(cellValue.CellType == CellType.ERROR);
+            Assert.IsTrue(cellValue.CellType == CellType.Error);
             Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cellValue.ErrorValue);
         }
 
@@ -82,7 +82,7 @@ namespace TestCases.SS.Formula.Eval
 
             CellValue cellValue = EvaluateWithCycles(wb, testCell);
 
-            Assert.IsTrue(cellValue.CellType == CellType.NUMERIC);
+            Assert.IsTrue(cellValue.CellType == CellType.Numeric);
             Assert.AreEqual(2, cellValue.NumberValue, 0);
         }
 
@@ -151,10 +151,10 @@ namespace TestCases.SS.Formula.Eval
 
             // Happy day flow - Evaluate A1 first
             cv = fe.Evaluate(cellA1);
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(42.0, cv.NumberValue, 0.0);
             cv = fe.Evaluate(cellB1); // no circ-ref-error because A1 result is cached
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(46.0, cv.NumberValue, 0.0);
 
             // Show the bug - Evaluate another cell from the loop first
@@ -164,13 +164,13 @@ namespace TestCases.SS.Formula.Eval
             {
                 throw new AssertionException("Identified bug 46898");
             }
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(46.0, cv.NumberValue, 0.0);
 
             // start Evaluation on another cell
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cellE1);
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(43.0, cv.NumberValue, 0.0);
 
 

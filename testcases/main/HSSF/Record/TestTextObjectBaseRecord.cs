@@ -25,6 +25,7 @@ namespace TestCases.HSSF.Record
     using NPOI.HSSF.Record;
     using NUnit.Framework;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
     using NPOI.Util;
 
     /**
@@ -62,10 +63,10 @@ namespace TestCases.HSSF.Record
         public void TestLoad()
         {
             TextObjectRecord record = new TextObjectRecord(TestcaseRecordInputStream.Create(data));
-            Assert.AreEqual(TextObjectRecord.HORIZONTAL_TEXT_ALIGNMENT_CENTERED, record.HorizontalTextAlignment);
-            Assert.AreEqual(TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_JUSTIFY, record.VerticalTextAlignment);
+            Assert.AreEqual(HorizontalAlignment.Center, record.HorizontalTextAlignment);
+            Assert.AreEqual(VerticalAlignment.Justify, record.VerticalTextAlignment);
             Assert.AreEqual(true, record.IsTextLocked);
-            Assert.AreEqual(TextObjectRecord.TEXT_ORIENTATION_ROT_RIGHT, record.TextOrientation);
+            Assert.AreEqual(TextOrientation.RotRight, record.TextOrientation);
 
 
             Assert.AreEqual(49, record.RecordSize);
@@ -79,10 +80,10 @@ namespace TestCases.HSSF.Record
             str.ApplyFont(0, 2, (short)0x0018);
             str.ApplyFont(2, 2, (short)0x0320);
 
-            record.HorizontalTextAlignment = (TextObjectRecord.HORIZONTAL_TEXT_ALIGNMENT_CENTERED);
-            record.VerticalTextAlignment = (TextObjectRecord.VERTICAL_TEXT_ALIGNMENT_JUSTIFY);
+            record.HorizontalTextAlignment = HorizontalAlignment.Center;
+            record.VerticalTextAlignment = VerticalAlignment.Justify;
             record.IsTextLocked = (true);
-            record.TextOrientation = (TextObjectRecord.TEXT_ORIENTATION_ROT_RIGHT);
+            record.TextOrientation = TextOrientation.RotRight;
             record.Str = (str);
 
             byte[] recordBytes = record.Serialize();

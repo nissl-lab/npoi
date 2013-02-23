@@ -55,21 +55,21 @@ namespace TestCases.SS.UserModel
             //URL
             cell = sheet.CreateRow(0).CreateCell((short)0);
             cell.SetCellValue("URL Link");
-            link = CreateHelper.CreateHyperlink(HyperlinkType.URL);
+            link = CreateHelper.CreateHyperlink(HyperlinkType.Url);
             link.Address = ("http://poi.apache.org/");
             cell.Hyperlink = (link);
 
             //link to a file in the current directory
             cell = sheet.CreateRow(1).CreateCell((short)0);
             cell.SetCellValue("File Link");
-            link = CreateHelper.CreateHyperlink(HyperlinkType.FILE);
+            link = CreateHelper.CreateHyperlink(HyperlinkType.File);
             link.Address = ("hyperinks-beta4-dump.txt");
             cell.Hyperlink = (link);
 
             //e-mail link
             cell = sheet.CreateRow(2).CreateCell((short)0);
             cell.SetCellValue("Email Link");
-            link = CreateHelper.CreateHyperlink(HyperlinkType.EMAIL);
+            link = CreateHelper.CreateHyperlink(HyperlinkType.Email);
             //note, if subject Contains white spaces, make sure they are url-encoded
             link.Address = ("mailto:poi@apache.org?subject=Hyperlinks");
             cell.Hyperlink = (link);
@@ -82,7 +82,7 @@ namespace TestCases.SS.UserModel
 
             cell = sheet.CreateRow(3).CreateCell((short)0);
             cell.SetCellValue("Worksheet Link");
-            link = CreateHelper.CreateHyperlink(HyperlinkType.DOCUMENT);
+            link = CreateHelper.CreateHyperlink(HyperlinkType.Document);
             link.Address = ("'Target Sheet'!A1");
             cell.Hyperlink = (link);
 

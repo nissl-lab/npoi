@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -404,21 +404,21 @@ namespace NPOI.HSSF.Converter
             string value;
             switch (cell.CellType)
             {
-                case CellType.STRING:
+                case CellType.String:
                     // XXX: enrich
                     value = cell.RichStringCellValue.String;
                     break;
-                case CellType.FORMULA:
+                case CellType.Formula:
                     switch (cell.CachedFormulaResultType)
                     {
-                        case CellType.STRING:
+                        case CellType.String:
                             HSSFRichTextString str = cell.RichStringCellValue as HSSFRichTextString;
                             if (str == null || str.Length <= 0)
                                 return false;
 
                             value = str.ToString();
                             break;
-                        case CellType.NUMERIC:
+                        case CellType.Numeric:
                             HSSFCellStyle style = cell.CellStyle as HSSFCellStyle;
                             if (style == null)
                             {
@@ -427,10 +427,10 @@ namespace NPOI.HSSF.Converter
 
                             value = (_formatter.FormatRawCellContents(cell.NumericCellValue, style.DataFormat, style.GetDataFormatString()));
                             break;
-                        case CellType.BOOLEAN:
+                        case CellType.Boolean:
                             value = cell.BooleanCellValue.ToString();
                             break;
-                        case CellType.ERROR:
+                        case CellType.Error:
                             value = ErrorEval.GetText(cell.ErrorCellValue);
                             break;
                         default:
@@ -438,16 +438,16 @@ namespace NPOI.HSSF.Converter
                             break;
                     }
                     break;
-                case CellType.BLANK:
+                case CellType.Blank:
                     value = string.Empty;
                     break;
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     value = _formatter.FormatCellValue(cell);
                     break;
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     value = cell.BooleanCellValue.ToString();
                     break;
-                case CellType.ERROR:
+                case CellType.Error:
                     value = ErrorEval.GetText(cell.ErrorCellValue);
                     break;
                 default:
@@ -465,14 +465,14 @@ namespace NPOI.HSSF.Converter
             string value;
             switch (cell.CellType)
             {
-                case CellType.STRING:
+                case CellType.String:
                     // XXX: enrich
                     value = cell.RichStringCellValue.String;
                     break;
-                case CellType.FORMULA:
+                case CellType.Formula:
                     switch (cell.CachedFormulaResultType)
                     {
-                        case CellType.STRING:
+                        case CellType.String:
                             HSSFRichTextString str = cell.RichStringCellValue as HSSFRichTextString;
                             if (str != null && str.Length > 0)
                             {
@@ -483,7 +483,7 @@ namespace NPOI.HSSF.Converter
                                 value = string.Empty;
                             }
                             break;
-                        case CellType.NUMERIC:
+                        case CellType.Numeric:
                             HSSFCellStyle style = cellStyle;
                             if (style == null)
                             {
@@ -494,10 +494,10 @@ namespace NPOI.HSSF.Converter
                                 value = (_formatter.FormatRawCellContents(cell.NumericCellValue, style.DataFormat, style.GetDataFormatString()));
                             }
                             break;
-                        case CellType.BOOLEAN:
+                        case CellType.Boolean:
                             value = cell.BooleanCellValue.ToString();
                             break;
-                        case CellType.ERROR:
+                        case CellType.Error:
                             value = ErrorEval.GetText(cell.ErrorCellValue);
                             break;
                         default:
@@ -506,16 +506,16 @@ namespace NPOI.HSSF.Converter
                             break;
                     }
                     break;
-                case CellType.BLANK:
+                case CellType.Blank:
                     value = string.Empty;
                     break;
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     value = _formatter.FormatCellValue(cell);
                     break;
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     value = cell.BooleanCellValue.ToString();
                     break;
-                case CellType.ERROR:
+                case CellType.Error:
                     value = ErrorEval.GetText(cell.ErrorCellValue);
                     break;
                 default:
@@ -625,11 +625,11 @@ namespace NPOI.HSSF.Converter
             style.Append("white-space: pre-wrap; ");
             ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
 
-            if (cellStyle.FillPattern == FillPatternType.NO_FILL)
+            if (cellStyle.FillPattern == FillPattern.NoFill)
             {
                 // no fill
             }
-            else if (cellStyle.FillPattern == FillPatternType.SOLID_FOREGROUND)
+            else if (cellStyle.FillPattern == FillPattern.SolidForeground)
             {
                 //cellStyle.
                 //HSSFColor.
@@ -658,7 +658,7 @@ namespace NPOI.HSSF.Converter
         private void BuildStyle_Border(HSSFWorkbook workbook, StringBuilder style,
                 String type, BorderStyle xlsBorder, short borderColor)
         {
-            if (xlsBorder == BorderStyle.NONE)
+            if (xlsBorder == BorderStyle.None)
                 return;
 
             StringBuilder borderStyle = new StringBuilder();
@@ -681,10 +681,10 @@ namespace NPOI.HSSF.Converter
         {
             switch (font.Boldweight)
             {
-                case (short)FontBoldWeight.BOLD:
+                case (short)FontBoldWeight.Bold:
                     style.Append("font-weight: bold; ");
                     break;
-                case (short)FontBoldWeight.NORMAL:
+                case (short)FontBoldWeight.Normal:
                     // by default, not not increase HTML size
                     // style.Append( "font-weight: normal; " );
                     break;

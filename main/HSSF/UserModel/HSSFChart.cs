@@ -420,7 +420,7 @@ namespace NPOI.HSSF.UserModel
         {
             BOFRecord r = new BOFRecord();
             r.Version = ((short)600);
-            r.Type = ((short)20);
+            r.Type = BOFRecordType.Chart;
             r.Build = ((short)0x1CFE);
             r.BuildYear = ((short)1997);
             r.HistoryBitMask = (0x40C9);

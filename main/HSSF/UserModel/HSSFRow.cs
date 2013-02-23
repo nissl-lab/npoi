@@ -111,7 +111,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>a high level representation of the created cell.</returns>
         public ICell CreateCell(int column)
         {
-            return this.CreateCell(column, CellType.BLANK);
+            return this.CreateCell(column, CellType.Blank);
         }
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace NPOI.HSSF.UserModel
             if (policy == MissingCellPolicy.RETURN_BLANK_AS_NULL)
             {
                 if (cell == null) return cell;
-                if (cell.CellType == CellType.BLANK)
+                if (cell.CellType == CellType.Blank)
                 {
                     return null;
                 }
@@ -494,7 +494,7 @@ namespace NPOI.HSSF.UserModel
             {
                 if (cell == null)
                 {
-                    return CreateCell(cellnum, CellType.BLANK);
+                    return CreateCell(cellnum, CellType.Blank);
                 }
                 return cell;
             }

@@ -69,7 +69,7 @@ namespace TestCases.SS.Formula.Eval
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(3.0, cv.NumberValue, 0.0);
         }
 
@@ -120,11 +120,11 @@ namespace TestCases.SS.Formula.Eval
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv;
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(1.0, cv.NumberValue, 0.0);
 
             cv = fe.Evaluate(row.GetCell(1));
-            Assert.AreEqual(CellType.BOOLEAN, cv.CellType);
+            Assert.AreEqual(CellType.Boolean, cv.CellType);
             Assert.AreEqual(true, cv.BooleanValue);
         }
 
@@ -176,7 +176,7 @@ namespace TestCases.SS.Formula.Eval
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
-            Assert.AreEqual(CellType.NUMERIC, cv.CellType);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
 

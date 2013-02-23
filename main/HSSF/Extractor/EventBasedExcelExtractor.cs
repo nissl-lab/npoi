@@ -201,7 +201,7 @@ namespace NPOI.HSSF.Extractor
                         break;
                     case BOFRecord.sid:
                         BOFRecord bof = (BOFRecord)record;
-                        if (bof.Type == BOFRecord.TYPE_WORKSHEET)
+                        if (bof.Type == BOFRecordType.Worksheet)
                         {
                             sheetNum++;
                             rowNum = -1;

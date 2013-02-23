@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) Under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -93,19 +93,19 @@ namespace NPOI.HSSF.UserModel
                 HSSFShape shape;
                 switch (cmo.ObjectType)
                 {
-                    case CommonObjectType.PICTURE:
+                    case CommonObjectType.Picture:
                         shape = new HSSFPicture(container, objRecord);
                         break;
-                    case CommonObjectType.RECTANGLE:
+                    case CommonObjectType.Rectangle:
                         shape = new HSSFSimpleShape(container, objRecord, txtRecord);
                         break;
-                    case CommonObjectType.LINE:
+                    case CommonObjectType.Line:
                         shape = new HSSFSimpleShape(container, objRecord);
                         break;
-                    case CommonObjectType.COMBO_BOX:
+                    case CommonObjectType.ComboBox:
                         shape = new HSSFCombobox(container, objRecord);
                         break;
-                    case CommonObjectType.MICROSOFT_OFFICE_DRAWING:
+                    case CommonObjectType.MicrosoftOfficeDrawing:
                         EscherOptRecord optRecord = (EscherOptRecord)container.GetChildById(EscherOptRecord.RECORD_ID);
                         EscherProperty property = optRecord.Lookup(EscherProperties.GEOMETRY__VERTICES);
                         if (null != property)
@@ -117,10 +117,10 @@ namespace NPOI.HSSF.UserModel
                             shape = new HSSFSimpleShape(container, objRecord, txtRecord);
                         }
                         break;
-                    case CommonObjectType.TEXT:
+                    case CommonObjectType.Text:
                         shape = new HSSFTextbox(container, objRecord, txtRecord);
                         break;
-                    case CommonObjectType.COMMENT:
+                    case CommonObjectType.Comment:
                         shape = new HSSFComment(container, objRecord, txtRecord, agg.GetNoteRecordByObj(objRecord));
                         break;
                     default:

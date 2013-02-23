@@ -44,69 +44,55 @@ namespace NPOI.HSSF.UserModel
             return borderFormatting;
         }
 
-        public short BorderBottom
+        public BorderStyle BorderBottom
         {
-            get{return borderFormatting.BorderBottom;}
-            set
-            {
-                borderFormatting.BorderBottom=(value);
-                if (value != 0)
-                {
-                    cfRuleRecord.IsBottomBorderModified = (true);
+            get { return borderFormatting.BorderBottom; }
+            set {
+                borderFormatting.BorderBottom = value;
+                if (value != BorderStyle.None)
+                    cfRuleRecord.IsBottomBorderModified = true;
+            }
+        }
+
+        public BorderStyle BorderDiagonal
+        {
+            get { return borderFormatting.BorderDiagonal; }
+            set {
+                borderFormatting.BorderDiagonal = value;
+                if (value != BorderStyle.None) {
+                    cfRuleRecord.IsBottomLeftTopRightBorderModified = true;
+                    cfRuleRecord.IsTopLeftBottomRightBorderModified = true;
                 }
             }
         }
 
-        public short BorderDiagonal
+        public BorderStyle BorderLeft
         {
-            get{return borderFormatting.BorderDiagonal;}
-            set
-            {
-                borderFormatting.BorderDiagonal=(value);
-                if (value != 0)
-                {
-                    cfRuleRecord.IsBottomLeftTopRightBorderModified = (true);
-                    cfRuleRecord.IsTopLeftBottomRightBorderModified = (true);
-                }
+            get { return borderFormatting.BorderLeft; }
+            set {
+                borderFormatting.BorderLeft = value;
+                if (value != BorderStyle.None)
+                    cfRuleRecord.IsLeftBorderModified = true;
             }
         }
 
-        public short BorderLeft
+        public BorderStyle BorderRight
         {
-            get{return borderFormatting.BorderLeft;}
-            set
-            {
-                borderFormatting.BorderLeft=(value);
-                if (value != 0)
-                {
-                    cfRuleRecord.IsLeftBorderModified = (true);
-                }
+            get { return borderFormatting.BorderRight; }
+            set {
+                borderFormatting.BorderRight = value;
+                if (value != BorderStyle.None)
+                    cfRuleRecord.IsRightBorderModified = true;
             }
         }
 
-        public short BorderRight
+        public BorderStyle BorderTop
         {
-            get{return borderFormatting.BorderRight;}
-            set
-            {
-                borderFormatting.BorderRight=(value);
-                if (value != 0)
-                {
-                    cfRuleRecord.IsRightBorderModified = (true);
-                }
-            }
-        }
-
-        public short BorderTop
-        {
-            get{return borderFormatting.BorderTop;}
-            set
-            {
-                borderFormatting.BorderTop=(value);
-                if (value != 0)
-                {
-                    cfRuleRecord.IsTopBorderModified = (true);
-                }
+            get { return borderFormatting.BorderTop; }
+            set {
+                borderFormatting.BorderTop = value;
+                if (value != BorderStyle.None)
+                    cfRuleRecord.IsTopBorderModified = true;
             }
         }
 

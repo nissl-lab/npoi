@@ -47,16 +47,16 @@ namespace TestCases.HSSF.UserModel
             fontFmt.SetFontStyle(true, false);
 
             HSSFBorderFormatting bordFmt = (HSSFBorderFormatting)rule1.CreateBorderFormatting();
-            bordFmt.BorderBottom = BorderFormatting.BORDER_THIN;
-            bordFmt.BorderTop = BorderFormatting.BORDER_THICK;
-            bordFmt.BorderLeft = BorderFormatting.BORDER_DASHED;
-            bordFmt.BorderRight = BorderFormatting.BORDER_DOTTED;
+            bordFmt.BorderBottom = BorderStyle.Thin;
+            bordFmt.BorderTop = BorderStyle.Thick;
+            bordFmt.BorderLeft = BorderStyle.Dashed;
+            bordFmt.BorderRight = BorderStyle.Dotted;
 
             HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor= (HSSFColor.YELLOW.index);
+            patternFmt.FillBackgroundColor= (HSSFColor.Yellow.Index);
 
 
-            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.BETWEEN, "1", "2");
+            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Between, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
 		    {
 			    rule1, rule2
@@ -100,14 +100,14 @@ namespace TestCases.HSSF.UserModel
 
             HSSFBorderFormatting r1bf = (HSSFBorderFormatting)rule1.GetBorderFormatting();
             Assert.IsNotNull(r1bf);
-            Assert.AreEqual(BorderFormatting.BORDER_THIN, r1bf.BorderBottom);
-            Assert.AreEqual(BorderFormatting.BORDER_THICK, r1bf.BorderTop);
-            Assert.AreEqual(BorderFormatting.BORDER_DASHED, r1bf.BorderLeft);
-            Assert.AreEqual(BorderFormatting.BORDER_DOTTED, r1bf.BorderRight);
+            Assert.AreEqual(BorderStyle.Thin, r1bf.BorderBottom);
+            Assert.AreEqual(BorderStyle.Thick, r1bf.BorderTop);
+            Assert.AreEqual(BorderStyle.Dashed, r1bf.BorderLeft);
+            Assert.AreEqual(BorderStyle.Dotted, r1bf.BorderRight);
 
             HSSFPatternFormatting r1pf = (HSSFPatternFormatting)rule1.GetPatternFormatting();
             Assert.IsNotNull(r1pf);
-            Assert.AreEqual(HSSFColor.YELLOW.index, r1pf.FillBackgroundColor);
+            Assert.AreEqual(HSSFColor.Yellow.Index, r1pf.FillBackgroundColor);
 
             rule2 = (HSSFConditionalFormattingRule)cf.GetRule(1);
             Assert.AreEqual("2", rule2.Formula2);
@@ -128,10 +128,10 @@ namespace TestCases.HSSF.UserModel
             fontFmt.SetFontStyle(true, false);
 
             HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor = (HSSFColor.YELLOW.index);
+            patternFmt.FillBackgroundColor = (HSSFColor.Yellow.Index);
 
 
-            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.BETWEEN, "1", "2");
+            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Between, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
 		    {
 			    rule1, rule2
@@ -168,12 +168,12 @@ namespace TestCases.HSSF.UserModel
             HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
 
             HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(
-                    ComparisonOperator.BETWEEN, "sum(A10:A15)", "1+sum(B16:B30)");
+                    ComparisonOperator.Between, "sum(A10:A15)", "1+sum(B16:B30)");
             HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
             fontFmt.SetFontStyle(true, false);
 
             HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor = (HSSFColor.YELLOW.index);
+            patternFmt.FillBackgroundColor = (HSSFColor.Yellow.Index);
             HSSFConditionalFormattingRule[] cfRules = { rule1, };
 
             CellRangeAddress[] regions = {

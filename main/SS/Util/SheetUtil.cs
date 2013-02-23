@@ -136,22 +136,22 @@ namespace NPOI.SS.Util
                 // Set the cell data value
                 switch (oldCell.CellType)
                 {
-                    case CellType.BLANK:
+                    case CellType.Blank:
                         newCell.SetCellValue(oldCell.StringCellValue);
                         break;
-                    case CellType.BOOLEAN:
+                    case CellType.Boolean:
                         newCell.SetCellValue(oldCell.BooleanCellValue);
                         break;
-                    case CellType.ERROR:
+                    case CellType.Error:
                         newCell.SetCellErrorValue(oldCell.ErrorCellValue);
                         break;
-                    case CellType.FORMULA:
+                    case CellType.Formula:
                         newCell.SetCellFormula(oldCell.CellFormula);
                         break;
-                    case CellType.NUMERIC:
+                    case CellType.Numeric:
                         newCell.SetCellValue(oldCell.NumericCellValue);
                         break;
-                    case CellType.STRING:
+                    case CellType.String:
                         newCell.SetCellValue(oldCell.RichStringCellValue);
                         break;
                 }
@@ -213,7 +213,7 @@ namespace NPOI.SS.Util
             IFont defaultFont = wb.GetFontAt((short)0);
             Font windowsFont = IFont2Font(defaultFont);
             // for formula cells we compute the cell width for the cached formula result
-            if (cellType == CellType.FORMULA) cellType = cell.CachedFormulaResultType;
+            if (cellType == CellType.Formula) cellType = cell.CachedFormulaResultType;
 
             IFont font = wb.GetFontAt(style.FontIndex);
 
@@ -224,7 +224,7 @@ namespace NPOI.SS.Util
             using (Bitmap bmp = new Bitmap(2048, 100))
             {
                 Graphics g = Graphics.FromImage(bmp);
-                if (cellType == CellType.STRING)
+                if (cellType == CellType.String)
                 {
                     IRichTextString rt = cell.RichStringCellValue;
                     String[] lines = rt.String.Split("\n".ToCharArray());
@@ -277,7 +277,7 @@ namespace NPOI.SS.Util
                 else
                 {
                     String sval = null;
-                    if (cellType == CellType.NUMERIC)
+                    if (cellType == CellType.Numeric)
                     {
                         // Try to get it formatted to look the same as excel
                         try
@@ -289,7 +289,7 @@ namespace NPOI.SS.Util
                             sval = cell.NumericCellValue.ToString();
                         }
                     }
-                    else if (cellType == CellType.BOOLEAN)
+                    else if (cellType == CellType.Boolean)
                     {
                         sval = cell.BooleanCellValue.ToString().ToUpper();
                     }
@@ -451,13 +451,13 @@ namespace NPOI.SS.Util
         public static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
-            if (font1.Boldweight == (short)FontBoldWeight.BOLD)
+            if (font1.Boldweight == (short)FontBoldWeight.Bold)
             {
                 style |= FontStyle.Bold;
             }
             if (font1.IsItalic)
                 style |= FontStyle.Italic;
-            if (font1.Underline == (byte)FontUnderlineType.SINGLE)
+            if (font1.Underline == FontUnderlineType.Single)
             {
                 style |= FontStyle.Underline;
             }

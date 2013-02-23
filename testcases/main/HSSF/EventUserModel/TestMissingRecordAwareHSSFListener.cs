@@ -398,7 +398,7 @@ namespace TestCases.HSSF.EventUserModel
                 if (record is BOFRecord)
                 {
                     BOFRecord r = (BOFRecord)record;
-                    if (r.Type == BOFRecord.TYPE_WORKSHEET)
+                    if (r.Type == BOFRecordType.Worksheet)
                     {
                         log("On new sheet");
                     }

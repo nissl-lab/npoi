@@ -1233,7 +1233,7 @@ namespace NPOI.HSSF.Model
             BOFRecord retval = new BOFRecord();
 
             retval.Version=(short)0x600;
-            retval.Type=(short)5;
+            retval.Type = BOFRecordType.Workbook;
             retval.Build=(short)0x10d3;
 
             //        retval.Build=(short)0x0dbb;
@@ -2009,10 +2009,10 @@ namespace NPOI.HSSF.Model
             retval.PaletteOptions=(short)0;
             retval.AdtlPaletteOptions=(short)0;
             retval.FillPaletteOptions=(short)0x20c0;
-            retval.TopBorderPaletteIdx=HSSFColor.BLACK.index;
-            retval.BottomBorderPaletteIdx=HSSFColor.BLACK.index;
-            retval.LeftBorderPaletteIdx=HSSFColor.BLACK.index;
-            retval.RightBorderPaletteIdx=HSSFColor.BLACK.index;
+            retval.TopBorderPaletteIdx=HSSFColor.Black.Index;
+            retval.BottomBorderPaletteIdx=HSSFColor.Black.Index;
+            retval.LeftBorderPaletteIdx=HSSFColor.Black.Index;
+            retval.RightBorderPaletteIdx=HSSFColor.Black.Index;
             return retval;
         }
 

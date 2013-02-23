@@ -77,7 +77,7 @@ namespace TestCases.HSSF.EventModel
             bof.Build = ((short)0);
             bof.BuildYear = ((short)1999);
             bof.RequiredVersion = (123);
-            bof.Type = (BOFRecord.TYPE_WORKBOOK);
+            bof.Type = (BOFRecordType.Workbook);
             bof.Version = ((short)0x06);
             bof.HistoryBitMask = (BOFRecord.HISTORY_MASK);
 
@@ -102,7 +102,7 @@ namespace TestCases.HSSF.EventModel
             bof.Build = ((short)0);
             bof.BuildYear = ((short)1999);
             bof.RequiredVersion = (123);
-            bof.Type = (BOFRecord.TYPE_WORKBOOK);
+            bof.Type = (BOFRecordType.Workbook);
             bof.Version = ((short)0x06);
             bof.HistoryBitMask = (BOFRecord.HISTORY_MASK);
 

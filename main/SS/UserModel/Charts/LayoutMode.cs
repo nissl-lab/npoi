@@ -28,11 +28,11 @@ namespace NPOI.SS.UserModel.Charts
         /// <summary>
         /// Specifies that the Width or Height shall be interpreted as the Right or Bottom of the chart element.
         /// </summary>
-        EDGE,
+        Edge,
         /// <summary>
         /// Specifies that the Width or Height shall be interpreted as the width or Height of the chart element.
         /// </summary>
-        FACTOR
+        Factor
     }
 
 

@@ -66,22 +66,6 @@ namespace NPOI.HSSF.Record.CF
         private static BitField shadowModified = BitFieldFactory.GetInstance(0x00000010);
         private static BitField cancellationModified = BitFieldFactory.GetInstance(0x00000080);
 
-        /** Escapement type - None */
-        public const short SS_NONE = 0;
-        /** Escapement type - Superscript */
-        public const short SS_SUPER = 1;
-        /** Escapement type - Subscript */
-        public const short SS_SUB = 2;
-        /** Underline type - None */
-        public const byte U_NONE = 0;
-        /** Underline type - Single */
-        public const byte U_SINGLE = 1;
-        /** Underline type - double */
-        public const byte U_DOUBLE = 2;
-        /** Underline type - Single Accounting */
-        public const byte U_SINGLE_ACCOUNTING = 0x21;
-        /** Underline type - double Accounting */
-        public const byte U_DOUBLE_ACCOUNTING = 0x22;
         /** Normal boldness (not bold) */
         private const short FONT_WEIGHT_NORMAL = 0x190;
 
@@ -286,12 +270,6 @@ namespace NPOI.HSSF.Record.CF
          * Get the type of Underlining for the font
          *
          * @return font Underlining type
-         *
-         * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_NONE
-         * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_SINGLE
-         * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_DOUBLE
-         * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_SINGLE_ACCOUNTING
-         * @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_DOUBLE_ACCOUNTING
          */
 
         public FontUnderlineType UnderlineType

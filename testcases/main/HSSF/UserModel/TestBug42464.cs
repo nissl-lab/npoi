@@ -73,7 +73,7 @@ namespace TestCases.HSSF.UserModel
             while (it.MoveNext())
             {
                 ICell cell = (ICell)it.Current;
-                if (cell.CellType != NPOI.SS.UserModel.CellType.FORMULA)
+                if (cell.CellType != NPOI.SS.UserModel.CellType.Formula)
                 {
                     continue;
                 }

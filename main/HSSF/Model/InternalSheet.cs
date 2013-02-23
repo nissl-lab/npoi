@@ -215,7 +215,7 @@ namespace NPOI.HSSF.Model
                 throw new Exception("BOF record expected");
             }
             BOFRecord bof = (BOFRecord)rs.GetNext();
-            if (bof.Type != BOFRecord.TYPE_WORKSHEET)
+            if (bof.Type != BOFRecordType.Worksheet)
             {
                 // TODO - fix junit tests throw new RuntimeException("Bad BOF record type");
             }
@@ -932,7 +932,7 @@ namespace NPOI.HSSF.Model
             BOFRecord retval = new BOFRecord();
 
             retval.Version = ((short)0x600);
-            retval.Type = ((short)0x010);
+            retval.Type = BOFRecordType.Worksheet;
 
             retval.Build = ((short)0x0dbb);
             retval.BuildYear = ((short)1996);
@@ -1792,7 +1792,7 @@ namespace NPOI.HSSF.Model
             windowTwo.FreezePanesNoSplit = (false);
 
             SelectionRecord sel = (SelectionRecord)FindFirstRecordBySid(SelectionRecord.sid);
-            sel.Pane = (byte)NPOI.SS.UserModel.PanePosition.LOWER_RIGHT;
+            sel.Pane = (byte)NPOI.SS.UserModel.PanePosition.LowerRight;
 
         }
 

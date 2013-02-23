@@ -99,7 +99,7 @@ namespace NPOI.HSSF.UserModel
             set 
             {
                 CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
-                cod.ObjectType = CommonObjectType.MICROSOFT_OFFICE_DRAWING;
+                cod.ObjectType = CommonObjectType.MicrosoftOfficeDrawing;
                 EscherSpRecord spRecord = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
                 spRecord.ShapeType = ((short)value);
             }
@@ -123,10 +123,10 @@ namespace NPOI.HSSF.UserModel
         protected virtual TextObjectRecord CreateTextObjRecord()
         {
             TextObjectRecord obj = new TextObjectRecord();
-            obj.HorizontalTextAlignment = (2);
-            obj.VerticalTextAlignment = (2);
+            obj.HorizontalTextAlignment = HorizontalAlignment.Center;
+            obj.VerticalTextAlignment = VerticalAlignment.Center;
             obj.IsTextLocked = (true);
-            obj.TextOrientation = (TextObjectRecord.TEXT_ORIENTATION_NONE);
+            obj.TextOrientation = TextOrientation.None;
             obj.Str = (new HSSFRichTextString(""));
             return obj;
         }

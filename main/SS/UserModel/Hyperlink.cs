@@ -24,19 +24,19 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Link to an existing file or web page
         /// </summary>
-        URL = 1,
+        Url = 1,
         /// <summary>
         /// Link to a place in this document
         /// </summary>
-        DOCUMENT = 2,
+        Document = 2,
         /// <summary>
         /// Link to an E-mail Address
         /// </summary>
-        EMAIL = 3,
+        Email = 3,
         /// <summary>
         /// Link to a file
         /// </summary>
-        FILE = 4
+        File = 4
     }
     /// <summary>
     /// Represents an Excel hyperlink.
