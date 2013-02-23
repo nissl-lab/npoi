@@ -56,6 +56,14 @@ namespace NPOI.SS.UserModel
             return new HSSFWorkbook(fs);
         }
 
+        /**
+	     * Creates an HSSFWorkbook from the given NPOIFSFileSystem
+	     */
+	    public static IWorkbook Create(NPOIFSFileSystem fs)
+        {
+		    return new HSSFWorkbook(fs.Root, true);
+	    }
+
         /// <summary>
         /// Creates an XSSFWorkbook from the given OOXML Package
         /// </summary>
@@ -91,7 +99,35 @@ namespace NPOI.SS.UserModel
             }
             throw new ArgumentException("Your InputStream was neither an OLE2 stream, nor an OOXML stream.");
         }
-
+        /**
+    * Creates the appropriate HSSFWorkbook / XSSFWorkbook from
+    *  the given File, which must exist and be readable.
+    */
+        public static IWorkbook Create(string file)
+        {
+            if (!File.Exists(file))
+            {
+                throw new FileNotFoundException(file);
+            }
+            FileStream fStream = null;
+            try
+            {
+                fStream = new FileStream(file, FileMode.Open, FileAccess.Read);
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(fStream);
+                IWorkbook wb = new HSSFWorkbook(fs.Root, true);
+                return wb;
+            }
+            catch (OfficeXmlFileException e)
+            {
+                OPCPackage pkg = OPCPackage.Open(file);
+                return new XSSFWorkbook(pkg);
+            }
+            finally
+            {
+                if (fStream != null)
+                    fStream.Close();
+            }
+        }
         /// <summary>
         /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from
         /// the given InputStream. The Stream is wraped inside a PushbackInputStream.
