@@ -70,11 +70,11 @@ namespace NPOI.XWPF.UserModel
                 latentStyles = new XWPFLatentStyles(ctStyles.latentStyles, this);
 
             }
-            catch (XmlException)
+            catch (XmlException e)
             {
-                throw new POIXMLException();
+                throw new POIXMLException("Unable to read styles", e);
             }
-            //get any Style
+            // Build up all the style objects
             foreach (CT_Style style in ctStyles.GetStyleList())
             {
                 listStyle.Add(new XWPFStyle(style, this));
@@ -84,6 +84,10 @@ namespace NPOI.XWPF.UserModel
 
         protected override void Commit()
         {
+            if (ctStyles == null)
+            {
+                throw new InvalidOperationException("Unable to write out styles that were never read in!");
+            }
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             xmlOptions.SaveSyntheticDocumentElement=(new QName(CTStyles.type.Name.NamespaceURI, "styles"));
             Dictionary<String,String> map = new Dictionary<String,String>();

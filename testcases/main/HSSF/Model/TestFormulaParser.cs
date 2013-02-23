@@ -840,7 +840,7 @@ namespace TestCases.HSSF.Model
             // Simulating cell formula of "= 4" (note space)
             // The same Ptg array can be observed if an excel file is1 saved with that exact formula
 
-            AttrPtg spacePtg = AttrPtg.CreateSpace(AttrPtg.SpaceType.SPACE_BEFORE, 1);
+            AttrPtg spacePtg = AttrPtg.CreateSpace((int)AttrPtg.SpaceType.SPACE_BEFORE, 1);
             Ptg[] ptgs = { spacePtg, new IntPtg(4), };
             String formulaString;
             try

@@ -148,7 +148,14 @@ namespace NPOI.XWPF
 
             Assert.IsTrue(document.IsEnforcedCommentsProtection());
         }
-
+        [Test]
+        public void TestUpdateFields()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            Assert.IsFalse(doc.IsEnforcedUpdateFields());
+            doc.EnforceUpdateFields();
+            Assert.IsTrue(doc.IsEnforcedUpdateFields());
+        }
     }
 
 }

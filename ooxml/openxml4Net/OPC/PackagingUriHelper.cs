@@ -127,7 +127,7 @@ namespace NPOI.OpenXml4Net.OPC
             CORE_PROPERTIES_PART_NAME = tmpCORE_PROPERTIES_URI;
             PACKAGE_ROOT_PART_NAME = tmpPACKAGE_ROOT_PART_NAME;
         }
-
+        private static Regex missingAuthPattern = new Regex("\\w+://");
         /**
          * Gets the Uri for the package root.
          *
@@ -744,8 +744,38 @@ namespace NPOI.OpenXml4Net.OPC
 
                 value = path + "#" + Encode(fragment);
             }
+            // trailing white spaces must be url-encoded, see Bugzilla 53282
+            if (value.Length > 0)
+            {
+                StringBuilder b = new StringBuilder();
+                int idx = value.Length - 1;
+                for (; idx >= 0; idx--)
+                {
+                    char c = value[idx];
+                    if (char.IsWhiteSpace(c) || c == '\u00A0')
+                    {
+                        b.Append(c);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (b.Length > 0)
+                {
+                    char[] ca = b.ToString().ToCharArray();
+                    Array.Reverse(ca);
+                    value = value.Substring(0, idx + 1) + Encode(new string(ca));
+                }
+            }
 
-            return new Uri(value,UriKind.RelativeOrAbsolute);
+            // MS Office can insert URIs with missing authority, e.g. "http://" or "javascript://"
+            // append a forward slash to avoid parse exception
+            if (missingAuthPattern.IsMatch(value))
+            {
+                value += "/";
+            }
+            return new Uri(value, UriKind.RelativeOrAbsolute);
         }
 
            /**
@@ -785,7 +815,7 @@ namespace NPOI.OpenXml4Net.OPC
 
     private static bool IsUnsafe(int ch)
     {
-        return ch > 0x80 || ch == ' ';
+        return ch > 0x80 || char.IsWhiteSpace((char)ch) || ch == '\u00A0';
     }
         /**
          * Build a part name where the relationship should be stored ((ex

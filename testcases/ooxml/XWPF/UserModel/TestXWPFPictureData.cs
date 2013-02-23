@@ -130,6 +130,32 @@ namespace NPOI.XWPF.UserModel
         {
 
         }
-    }
+        [Test]
+        public void TestBug51770()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug51170.docx");
+            XWPFHeaderFooterPolicy policy = doc.GetHeaderFooterPolicy();
+            XWPFHeader header = policy.GetDefaultHeader();
+            foreach (XWPFParagraph paragraph in header.Paragraphs)
+            {
+                foreach (XWPFRun run in paragraph.GetRuns())
+                {
+                    foreach (XWPFPicture picture in run.GetEmbeddedPictures())
+                    {
+                        if (paragraph.GetDocument() != null)
+                        {
+                            System.Console.WriteLine(picture.GetCTPicture());
+                            XWPFPictureData data = picture.GetPictureData();
+                            if (data != null) System.Console.WriteLine(data.GetFileName());
+                        }
+                    }
+                }
+            }
+        }
 
+        private void process(XWPFParagraph paragraph)
+        {
+
+        }
+    }
 }

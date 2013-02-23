@@ -24,6 +24,7 @@ namespace NPOI.XSSF.Model
     using NPOI.OpenXmlFormats.Dml;
     using System;
     using System.Collections.Generic;
+    using System.IO;
 
     /**
      * Class that represents theme of XLSX document. The theme includes specific
@@ -39,7 +40,15 @@ namespace NPOI.XSSF.Model
             : base(part, rel)
         {
 
-            theme = ThemeDocument.Parse(part.GetInputStream());
+            //theme = ThemeDocument.Parse(part.GetInputStream());
+            try
+            {
+                theme = ThemeDocument.Parse(part.GetInputStream());
+            }
+            catch (XmlException e)
+            {
+                throw new IOException(e.Message);
+            }
         }
 
         internal ThemesTable(ThemeDocument theme)

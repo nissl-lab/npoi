@@ -83,7 +83,18 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            // File -> either
+            wb = WorkbookFactory.Create(
+                  xls
+            );
+            Assert.IsNotNull(wb);
+            Assert.IsTrue(wb is HSSFWorkbook);
 
+            wb = WorkbookFactory.Create(
+                  xlsx
+            );
+            Assert.IsNotNull(wb);
+            Assert.IsTrue(wb is XSSFWorkbook);
             try
             {
                 wb = WorkbookFactory.Create(

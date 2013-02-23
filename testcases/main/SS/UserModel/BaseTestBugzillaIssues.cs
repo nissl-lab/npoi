@@ -41,10 +41,10 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
         }
-        //protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
-        //{
-        //    _testDataProvider = TestDataProvider;
-        //}
+        protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
+        {
+            _testDataProvider = TestDataProvider;
+        }
 
         /**
          * Test writing a hyperlink

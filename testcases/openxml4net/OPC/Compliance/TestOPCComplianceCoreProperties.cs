@@ -33,6 +33,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
      * at most one core properties relationship for a package. A format consumer
      * shall consider more than one core properties relationship for a package to be
      * an error. If present, the relationship shall target the Core Properties part.
+     * (POI relaxes this on reading, as Office sometimes breaks this)
      * 
      * M4.2: The format designer shall not specify and the format producer shall not
      * create Core Properties that use the Markup Compatibility namespace as defined
@@ -81,12 +82,11 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             }
             catch (InvalidFormatException e)
             {
-                // expected during successful test
+                // no longer required for successful test
                 return e.Message;
             }
 
             pkg.Revert();
-            // Normally must thrown an InvalidFormatException exception.
             throw new AssertionException("expected OPC compliance exception was not thrown");
         }
 
@@ -96,8 +96,27 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         [Test]
         public void TestOnlyOneCorePropertiesPart()
         {
-            String msg = ExtractInvalidFormatMessage("OnlyOneCorePropertiesPartFAIL.docx");
-            Assert.AreEqual("OPC Compliance error [M4.1]: there is more than one core properties relationship in the package !", msg);
+            // We have relaxed this check, so we can read the file anyway
+            try
+            {
+                ExtractInvalidFormatMessage("OnlyOneCorePropertiesPartFAIL.docx");
+                Assert.Fail("M4.1 should be being relaxed");
+            }
+            catch (AssertionException e) { }
+
+            // We will use the first core properties, and ignore the others
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("MultipleCoreProperties.docx");
+            OPCPackage pkg = OPCPackage.Open(is1);
+
+            // We can see 2 by type
+            Assert.AreEqual(2, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            // But only the first one by relationship
+            Assert.AreEqual(1, pkg.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES).Count);
+            // It should be core.xml not the older core1.xml
+            Assert.AreEqual(
+                  "/docProps/core.xml",
+                  pkg.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES)[0].PartName.ToString()
+            );
         }
 
         private static Uri CreateURI(String text)
@@ -121,7 +140,8 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 pkg.AddRelationship(PackagingUriHelper.CreatePartName(partUri), TargetMode.Internal,
                         PackageRelationshipTypes.CORE_PROPERTIES);
-                Assert.Fail("expected OPC compliance exception was not thrown");
+                // no longer fail on compliance error
+                //fail("expected OPC compliance exception was not thrown");
             }
             catch (InvalidFormatException e)
             {
@@ -151,7 +171,8 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 pkg.CreatePart(PackagingUriHelper.CreatePartName(partUri),
                         ContentTypes.CORE_PROPERTIES_PART);
-                Assert.Fail("expected OPC compliance exception was not thrown");
+                // no longer fail on compliance error
+                //fail("expected OPC compliance exception was not thrown");
             }
             catch (InvalidFormatException e)
             {

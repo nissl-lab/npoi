@@ -89,7 +89,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * part names.
          */
         [Test]
-        public void TestAddPackageAlreadyAddAssert_Failure()
+        public void TestAddPackageAlreadyAddFailure()
         {
             OPCPackage pkg = OPCPackage.Create("DELETEIFEXISTS.docx");
             PackagePartName name1 = null;
@@ -108,7 +108,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 pkg.CreatePart(name2, ContentTypes.XML);
             }
-            catch (InvalidOperationException e)
+            catch (PartAlreadyExistsException e)
             {
                 return;
             }
