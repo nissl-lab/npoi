@@ -604,29 +604,31 @@ namespace NPOI.XSSF.UserModel
         //        }
         //    }
 
-        //    /**
-        //     * Newlines are valid characters in a formula
-        //     */
-        //    public void Test50440And51875() throws Exception {
-        //       Workbook wb = XSSFTestDataSamples.OpenSampleWorkbook("NewlineInFormulas.xlsx");
-        //       Sheet s = wb.GetSheetAt(0);
-        //       Cell c = s.GetRow(0).GetCell(0);
+            /**
+             * Newlines are valid characters in a formula
+             */
+        [Test]
+        public void Test50440And51875()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("NewlineInFormulas.xlsx");
+            ISheet s = wb.GetSheetAt(0);
+            ICell c = s.GetRow(0).GetCell(0);
 
-        //       Assert.AreEqual("SUM(\n1,2\n)", c.GetCellFormula());
-        //       Assert.AreEqual(3.0, c.GetNumericCellValue());
+            Assert.AreEqual("SUM(\n1,2\n)", c.CellFormula);
+            Assert.AreEqual(3.0, c.NumericCellValue);
 
-        //       FormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
-        //       formulaEvaluator.EvaluateFormulaCell(c);
+            IFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            formulaEvaluator.EvaluateFormulaCell(c);
 
-        //       Assert.AreEqual("SUM(\n1,2\n)", c.GetCellFormula());
-        //       Assert.AreEqual(3.0, c.GetNumericCellValue());
+            Assert.AreEqual("SUM(\n1,2\n)", c.CellFormula);
+            Assert.AreEqual(3.0, c.NumericCellValue);
 
-        //       // For 51875
-        //       Cell b3 = s.GetRow(2).GetCell(1);
-        //       formulaEvaluator.EvaluateFormulaCell(b3);
-        //       Assert.AreEqual("B1+B2", b3.GetCellFormula()); // The newline is lost for shared formulas
-        //       Assert.AreEqual(3.0, b3.GetNumericCellValue());
-        //    }
+            // For 51875
+            ICell b3 = s.GetRow(2).GetCell(1);
+            formulaEvaluator.EvaluateFormulaCell(b3);
+            Assert.AreEqual("B1+B2", b3.CellFormula); // The newline is lost for shared formulas
+            Assert.AreEqual(3.0, b3.NumericCellValue);
+        }
 
         //    /**
         //     * Moving a cell comment from one cell to another
