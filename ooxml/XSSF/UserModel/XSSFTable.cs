@@ -85,6 +85,7 @@ namespace NPOI.XSSF.UserModel
 
         public void WriteTo(Stream out1)
         {
+            UpdateHeaders();
             TableDocument doc = new TableDocument();
             doc.SetTable(ctTable);
             doc.Save(out1);
@@ -252,9 +253,11 @@ namespace NPOI.XSSF.UserModel
             if (startCellReference == null)
             {
                 String ref1 = ctTable.@ref;
-                String[] boundaries = ref1.Split(new char[] { ':' });
-                String from = boundaries[0];
-                startCellReference = new CellReference(from);
+                if(ref1 != null) {
+                    String[] boundaries = ref1.Split(":".ToCharArray());
+                    String from = boundaries[0];
+                    startCellReference = new CellReference(from);
+                }
             }
             return startCellReference;
         }
@@ -285,8 +288,6 @@ namespace NPOI.XSSF.UserModel
          */
         public int GetRowCount()
         {
-
-
             CellReference from = GetStartCellReference();
             CellReference to = GetEndCellReference();
 
@@ -296,6 +297,33 @@ namespace NPOI.XSSF.UserModel
                 rowCount = to.Row - from.Row;
             }
             return rowCount;
+        }
+
+
+        /**
+     * Synchronize table headers with cell values in the parent sheet.
+     * Headers <em>must</em> be in sync, otherwise Excel will display a
+     * "Found unreadable content" message on startup.
+     */
+        public void UpdateHeaders()
+        {
+            XSSFSheet sheet = (XSSFSheet)GetParent();
+            CellReference ref1 = GetStartCellReference() as CellReference;
+            if (ref1 == null) return;
+
+            int headerRow = ref1.Row;
+            int firstHeaderColumn = ref1.Col;
+            XSSFRow row = sheet.GetRow(headerRow) as XSSFRow;
+
+            if (row != null) foreach (CT_TableColumn col in GetCTTable().tableColumns.tableColumn)
+            {
+                int colIdx = (int)col.id - 1 + firstHeaderColumn;
+                XSSFCell cell = row.GetCell(colIdx) as XSSFCell;
+                if (cell != null)
+                {
+                    col.name = (cell.StringCellValue);
+                }
+            }
         }
     }
 }

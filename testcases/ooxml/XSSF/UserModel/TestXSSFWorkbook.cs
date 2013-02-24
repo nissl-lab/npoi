@@ -288,7 +288,7 @@ namespace NPOI.XSSF.UserModel
         //{
         //    XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47668.xlsx");
         //    IList allPictures = workbook.GetAllPictures();
-        //    Assert.AreEqual(2, allPictures.Count);
+        //    Assert.AreEqual(1, allPictures.Count);
 
         //    PackagePartName imagePartName = PackagingUriHelper
         //            .CreatePartName("/xl/media/image1.jpeg");
@@ -454,12 +454,27 @@ namespace NPOI.XSSF.UserModel
             wb.SetForceFormulaRecalculation(true); // resets the EngineId flag to zero
             Assert.AreEqual(0, (int)calcPr.calcId);
             Assert.IsFalse(wb.GetForceFormulaRecalculation());
+
+            // calcMode="manual" is unset when forceFormulaRecalculation=true
+            calcPr.calcMode = (ST_CalcMode.manual);
+            wb.SetForceFormulaRecalculation(true);
+            Assert.AreEqual(ST_CalcMode.auto, calcPr.calcMode);
         }
         [Test]
         public void TestChangeSheetNameWithSharedFormulas()
         {
             ChangeSheetNameWithSharedFormulas("shared_formulas.xlsx");
         }
-
+        [Test]
+        public void TestSetTabColor()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+            Assert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
+            sh.SetTabColor(IndexedColors.RED.Index);
+            Assert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
+            Assert.AreEqual(IndexedColors.RED.Index,
+                    sh.GetCTWorksheet().sheetPr.tabColor.indexed);
+        }
     }
 }

@@ -248,6 +248,28 @@ namespace NPOI.XSSF.UserModel
             validation.CreatePromptBox("Prompt", "Enter some value");
             validation.SuppressDropDownArrow = yesNo;
         }
+        [Test]
+        public void Test53965()
+        {
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            List<XSSFDataValidation> lst = sheet.GetDataValidations();    //<-- works
+            Assert.AreEqual(0, lst.Count);
+
+            //create the cell that will have the validation applied
+            sheet.CreateRow(0).CreateCell(0);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateCustomConstraint("SUM($A$1:$A$1) <= 3500");
+            CellRangeAddressList addressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, addressList);
+            sheet.AddValidationData(validation);
+
+            // this line caused XmlValueOutOfRangeException , see Bugzilla 3965
+            lst = sheet.GetDataValidations();
+            Assert.AreEqual(1, lst.Count);
+        }
     }
 }
 

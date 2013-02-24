@@ -52,6 +52,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFDrawing()
             : base()
         {
+            drawing = NewDrawing();
         }
 
         /**
@@ -65,6 +66,10 @@ namespace NPOI.XSSF.UserModel
         internal XSSFDrawing(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
+            //XmlOptions options = new XmlOptions(DEFAULT_XML_OPTIONS);
+            ////Removing root element
+            //options.setLoadReplaceDocumentElement(null);
+            //drawing = CTDrawing.Factory.parse(part.getInputStream(), options);
             drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(part.GetInputStream());
         }
 
@@ -97,7 +102,9 @@ namespace NPOI.XSSF.UserModel
             //        xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
             //        xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing">
             // */
-            ////if(isNew) xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Drawing.type.GetName().GetNamespaceURI(), "wsDr", "xdr"));
+            //xmlOptions.setSaveSyntheticDocumentElement(
+            //    new QName(CTDrawing.type.getName().getNamespaceURI(), "wsDr", "xdr")
+            //);
             //Dictionary<String, String> map = new Dictionary<String, String>();
             //map[NAMESPACE_A]= "a";
             //map[ST_RelationshipId.NamespaceURI]= "r";
@@ -374,6 +381,56 @@ namespace NPOI.XSSF.UserModel
         }
 
         #endregion
+
+        /**
+     *
+     * @return list of shapes in this drawing
+     */
+        public List<XSSFShape> GetShapes()
+        {
+            List<XSSFShape> lst = new List<XSSFShape>();
+            //foreach (XmlObject obj in drawing.selectPath("./*/*"))
+            //{
+            //    XSSFShape shape = null;
+            //    if (obj is CT_Picture) shape = new XSSFPicture(this, (CT_Picture)obj);
+            //    else if (obj is CT_Connector) shape = new XSSFConnector(this, (CT_Connector)obj);
+            //    else if (obj is CT_Shape) shape = new XSSFSimpleShape(this, (CT_Shape)obj);
+            //    else if (obj is CT_GraphicalObjectFrame) shape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)obj);
+            //    else if (obj is CT_GroupShape) shape = new XSSFShapeGroup(this, (CT_GroupShape)obj);
+
+            //    if (shape != null)
+            //    {
+            //        shape.anchor = GetAnchorFromParent(obj);
+            //        lst.add(shape);
+            //    }
+            //}
+            return lst;
+        }
+
+
+        private XSSFAnchor GetAnchorFromParent(object obj)
+        {
+            XSSFAnchor anchor = null;
+
+            //XmlObject parentXbean = null;
+            //XmlCursor cursor = obj.newCursor();
+            //if (cursor.toParent()) parentXbean = cursor.getObject();
+            //cursor.dispose();
+            //if (parentXbean != null)
+            //{
+            //    if (parentXbean is CT_TwoCellAnchor)
+            //    {
+            //        CT_TwoCellAnchor ct = (CT_TwoCellAnchor)parentXbean;
+            //        anchor = new XSSFClientAnchor(ct.getFrom(), ct.getTo());
+            //    }
+            //    else if (parentXbean is CT_OneCellAnchor)
+            //    {
+            //        CT_OneCellAnchor ct = (CT_OneCellAnchor)parentXbean;
+            //        anchor = new XSSFClientAnchor(ct.getFrom(), CT_Marker.Factory.newInstance());
+            //    }
+            //}
+            return anchor;
+        }
     }
 }
 

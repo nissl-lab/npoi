@@ -15,7 +15,7 @@ namespace NPOI.SS.UserModel
         int LineStyleColor { get; }
 
         int FillColor { get; set; }
-        int LineWidth { get; set; }
+        double LineWidth { get; set; }
         LineStyle LineStyle { get; set; }
         bool IsNoFill { get; set; }
         int CountOfAllChildren { get; }

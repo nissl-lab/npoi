@@ -3000,6 +3000,19 @@ namespace NPOI.XSSF.UserModel
             {
                 // save a detached  copy to avoid XmlValueDisconnectedException,
                 // this may happen when the master cell of a shared formula is Changed
+                CT_CellFormula sf = (CT_CellFormula)f.Copy();
+                CellRangeAddress sfRef = CellRangeAddress.ValueOf(sf.@ref);
+                CellReference cellRef = new CellReference(cell);
+                // If the shared formula range preceeds the master cell then the preceding  part is discarded, e.g.
+                // if the cell is E60 and the shared formula range is C60:M85 then the effective range is E60:M85
+                // see more details in https://issues.apache.org/bugzilla/show_bug.cgi?id=51710
+                if (cellRef.Col > sfRef.FirstColumn || cellRef.Row > sfRef.FirstRow)
+                {
+                    String effectiveRef = new CellRangeAddress(
+                            Math.Max(cellRef.Row, sfRef.FirstRow), sfRef.LastRow,
+                            Math.Max(cellRef.Col, sfRef.FirstColumn), sfRef.LastColumn).FormatAsString();
+                    sf.@ref = (effectiveRef);
+                }
                 sharedFormulas[(int)f.si] = (CT_CellFormula)f.Copy();
             }
             if (f != null && f.t == ST_CellFormulaType.array && f.@ref != null)
@@ -3618,7 +3631,20 @@ namespace NPOI.XSSF.UserModel
                 return new XSSFSheetConditionalFormatting(this);
             }
         }
-
+        /**
+         * Set background color of the sheet tab
+         *
+         * @param colorIndex  the indexed color to set, must be a constant from {@link IndexedColors}
+         */
+        public void SetTabColor(int colorIndex)
+        {
+            CT_SheetPr pr = worksheet.sheetPr;
+            if (pr == null) pr = worksheet.AddNewSheetPr();
+            NPOI.OpenXmlFormats.Spreadsheet.CT_Color color = new OpenXmlFormats.Spreadsheet.CT_Color();
+            color.indexed = (uint)(colorIndex);
+            pr.tabColor = (color);
+        }
+    
         #region ISheet Members
 
 

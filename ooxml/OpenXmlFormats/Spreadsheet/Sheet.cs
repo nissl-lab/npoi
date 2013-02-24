@@ -1048,6 +1048,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
+
+        public void UnsetPageSetup()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]
@@ -1261,6 +1266,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.enableFormatConditionsCalculationField = value;
             }
+        }
+
+        public bool IsSetTabColor()
+        {
+            throw new NotImplementedException();
         }
     }
 

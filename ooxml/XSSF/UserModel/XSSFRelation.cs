@@ -173,7 +173,37 @@ namespace NPOI.XSSF.UserModel
                 "/xl/media/image#.dib",
                 typeof(XSSFPictureData)
         );
+        public static XSSFRelation IMAGE_GIF = new XSSFRelation(
+            "image/gif",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            "/xl/media/image#.gif",
+            typeof(XSSFPictureData)
+        );
 
+        public static XSSFRelation IMAGE_TIFF = new XSSFRelation(
+                "image/tiff",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                "/xl/media/image#.tiff",
+                typeof(XSSFPictureData)
+        );
+        public static XSSFRelation IMAGE_EPS = new XSSFRelation(
+                "image/x-eps",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                "/xl/media/image#.eps",
+                typeof(XSSFPictureData)
+        );
+        public static XSSFRelation IMAGE_BMP = new XSSFRelation(
+                "image/x-ms-bmp",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                "/xl/media/image#.bmp",
+                typeof(XSSFPictureData)
+        );
+        public static XSSFRelation IMAGE_WPG = new XSSFRelation(
+                "image/x-wpg",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                "/xl/media/image#.wpg",
+                typeof(XSSFPictureData)
+        );
         public static XSSFRelation SHEET_COMMENTS = new XSSFRelation(
                   "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
                   "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
@@ -240,7 +270,7 @@ namespace NPOI.XSSF.UserModel
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)
         {
-            if (cls != null && !_table.ContainsKey(rel)) 
+            if (cls != null && !_table.ContainsKey(rel))
                 _table.Add(rel, this);
         }
 

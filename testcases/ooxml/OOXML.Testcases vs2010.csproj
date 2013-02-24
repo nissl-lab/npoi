@@ -101,6 +101,7 @@
     <Compile Include="XSSF\UserModel\Charts\TestXSSFManualLayout.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFScatterChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFValueAxis.cs" />
+    <Compile Include="XSSF\UserModel\TestFormulaEvaluatorOnXSSF.cs" />
     <Compile Include="XSSF\UserModel\TestSheetShiftRows.cs" />
     <Compile Include="XSSF\UserModel\Extensions\TestXSSFBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\TestXSSFCellFill.cs" />

@@ -124,7 +124,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.spPr.prstGeom.prst = (ST_ShapeType)(type);
         }
 
-        protected override CT_ShapeProperties GetShapeProperties()
+        protected internal override CT_ShapeProperties GetShapeProperties()
         {
             return ctShape.spPr;
         }

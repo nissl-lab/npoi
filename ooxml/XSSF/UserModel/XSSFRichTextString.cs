@@ -87,6 +87,25 @@ namespace NPOI.XSSF.UserModel
         public void SetStylesTableReference(StylesTable stylestable)
         {
             this.styles = stylestable;
+            //if (st.SizeOfRArray() > 0)
+            //{
+            //    foreach (CT_RElt r in st.GetRArray())
+            //    {
+            //        CT_RPrElt pr = r.rPr;
+            //        if (pr != null && pr.SizeOfRFontArray() > 0)
+            //        {
+            //            String fontName = pr.GetRFontArray(0).val;
+            //            if (fontName.StartsWith("#"))
+            //            {
+            //                int idx = int.Parse(fontName.Substring(1));
+            //                XSSFFont font = styles.GetFontAt(idx);
+            //                pr.RemoveRFont(0);
+            //                SetRunAttributes(font.getCTFont(), pr);
+            //            }
+            //        }
+            //    }
+            //}
+            throw new NotImplementedException();
         }
         /**
          * Create empty rich text string and Initialize it with empty string
@@ -259,12 +278,15 @@ namespace NPOI.XSSF.UserModel
             if (st.sizeOfRArray() == 0 && st.IsSetT())
             {
                 //convert <t>string</t> into a text Run: <r><t>string</t></r>
-                st.AddNewR().t = st.t;
+                CT_RElt lt = st.AddNewR();
+                lt.t = st.t;
+                PreserveSpaces(lt.t);
                 st.unsetT();
             }
-            CT_RElt lt = st.AddNewR();
-            lt.t= (text);
-            CT_RPrElt pr = lt.AddNewRPr();
+            CT_RElt lt2 = st.AddNewR();
+            lt2.t= (text);
+            PreserveSpaces(lt2.t);
+            CT_RPrElt pr = lt2.AddNewRPr();
             if (font != null) SetRunAttributes(font.GetCTFont(), pr);
         }
 

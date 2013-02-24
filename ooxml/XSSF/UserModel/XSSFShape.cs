@@ -82,7 +82,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return xml bean with shape properties.
          */
-        protected abstract CT_ShapeProperties GetShapeProperties();
+        protected internal abstract CT_ShapeProperties GetShapeProperties();
 
         /**
          * Whether this shape is not Filled with a color
@@ -172,7 +172,7 @@ namespace NPOI.XSSF.UserModel
             get { throw new System.NotImplementedException(); }
         }
 
-        public int LineWidth
+        public double LineWidth
         {
             get
             {

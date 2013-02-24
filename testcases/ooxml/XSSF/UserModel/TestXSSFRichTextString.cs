@@ -141,7 +141,13 @@ namespace NPOI.XSSF.UserModel
         //    Assert.AreEqual("<xml-fragment>Apache</xml-fragment>", xs.xmlText());
         //    rt.String = ("  Apache");
         //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", xs.xmlText());
-
+        //rt.Append(" POI");
+        //rt.Append(" ");
+        //Assert.AreEqual("  Apache POI ", rt.getString());
+        //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", rt.getCTRst().getRArray(0).xgetT().xmlText());
+        //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> POI</xml-fragment>", rt.getCTRst().getRArray(1).xgetT().xmlText());
+        //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> </xml-fragment>", rt.getCTRst().getRArray(2).xgetT().xmlText());
+ 
         //}
 
         /**

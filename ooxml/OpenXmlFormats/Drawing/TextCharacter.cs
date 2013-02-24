@@ -969,6 +969,16 @@ namespace NPOI.OpenXmlFormats.Dml
             this.latinField = new CT_TextFont();
             return this.latinField;
         }
+
+        public bool IsSetSolidFill()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CT_SolidColorFillProperties AddNewSolidFill()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
