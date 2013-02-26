@@ -87,25 +87,25 @@ namespace NPOI.XSSF.UserModel
         public void SetStylesTableReference(StylesTable stylestable)
         {
             this.styles = stylestable;
-            //if (st.SizeOfRArray() > 0)
-            //{
-            //    foreach (CT_RElt r in st.GetRArray())
-            //    {
-            //        CT_RPrElt pr = r.rPr;
-            //        if (pr != null && pr.SizeOfRFontArray() > 0)
-            //        {
-            //            String fontName = pr.GetRFontArray(0).val;
-            //            if (fontName.StartsWith("#"))
-            //            {
-            //                int idx = int.Parse(fontName.Substring(1));
-            //                XSSFFont font = styles.GetFontAt(idx);
-            //                pr.RemoveRFont(0);
-            //                SetRunAttributes(font.getCTFont(), pr);
-            //            }
-            //        }
-            //    }
-            //}
-            throw new NotImplementedException();
+            if (st.sizeOfRArray() > 0)
+            {
+                foreach (CT_RElt r in st.r)
+                {
+                    CT_RPrElt pr = r.rPr;
+                    if (pr != null && pr.sizeOfRFontArray() > 0)
+                    {
+                        String fontName = pr.GetRFontArray(0).val;
+                        if (fontName.StartsWith("#"))
+                        {
+                            int idx = int.Parse(fontName.Substring(1));
+                            XSSFFont font = styles.GetFontAt(idx);
+                            //pr.removeRFont(0);
+                            pr.rFont = null;
+                            SetRunAttributes(font.GetCTFont(), pr);
+                        }
+                    }
+                }
+            }
         }
         /**
          * Create empty rich text string and Initialize it with empty string

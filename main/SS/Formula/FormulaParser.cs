@@ -1311,7 +1311,25 @@ namespace NPOI.SS.Formula
                 msg += " but got " + numArgs + ".";
                 throw new FormulaParseException(msg);
             }
-            if (numArgs > fm.MaxParams)
+            //the maximum number of arguments depends on the Excel version
+            int maxArgs;
+            if (fm.HasUnlimitedVarags)
+            {
+                if (_book != null)
+                {
+                    maxArgs = _book.GetSpreadsheetVersion().MaxFunctionArgs;
+                }
+                else
+                {
+                    //_book can be omitted by test cases
+                    maxArgs = fm.MaxParams; // just use BIFF8
+                }
+            }
+            else
+            {
+                maxArgs = fm.MaxParams;
+            }
+            if (numArgs > maxArgs)
             {
                 String msg = "Too many arguments to function '" + fm.Name + "'. ";
                 if (fm.HasFixedArgsLength)

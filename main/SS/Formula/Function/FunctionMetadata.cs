@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.Function
         private int _maxParams;
         private byte _returnClassCode;
         private byte[] _parameterClassCodes;
-
+        private const short FUNCTION_MAX_PARAMS = 30;
         /* package */
         internal FunctionMetadata(int index, String name, int minParams, int maxParams,
             byte returnClassCode, byte[] parameterClassCodes)
@@ -72,6 +72,13 @@ namespace NPOI.SS.Formula.Function
         public byte[] ParameterClassCodes
         {
             get { return (byte[])_parameterClassCodes.Clone(); }
+        }
+        public bool HasUnlimitedVarags
+        {
+            get
+            {
+                return FUNCTION_MAX_PARAMS == _maxParams;
+            }
         }
         public override String ToString()
         {

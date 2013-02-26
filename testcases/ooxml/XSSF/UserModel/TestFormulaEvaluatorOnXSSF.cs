@@ -23,6 +23,7 @@ using NPOI.OpenXml4Net.OPC;
 using System.IO;
 using TestCases.HSSF;
 using NPOI.Util;
+using NPOI.SS.Util;
 namespace NPOI.XSSF.UserModel{
 
 
@@ -181,7 +182,7 @@ namespace NPOI.XSSF.UserModel{
         [Test]
         public void TestFunctionsFromTestSpreadsheet()
         {
-
+            NumberToTextConverter.RawDoubleBitsToText(BitConverter.DoubleToInt64Bits(1.0));
             ProcessFunctionGroup(SS.START_OPERATORS_ROW_INDEX, null);
             ProcessFunctionGroup(SS.START_FUNCTIONS_ROW_INDEX, null);
             // example for debugging individual functions/operators:

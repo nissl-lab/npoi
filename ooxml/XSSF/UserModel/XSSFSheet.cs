@@ -3013,7 +3013,7 @@ namespace NPOI.XSSF.UserModel
                             Math.Max(cellRef.Col, sfRef.FirstColumn), sfRef.LastColumn).FormatAsString();
                     sf.@ref = (effectiveRef);
                 }
-                sharedFormulas[(int)f.si] = (CT_CellFormula)f.Copy();
+                sharedFormulas[(int)f.si] = sf;
             }
             if (f != null && f.t == ST_CellFormulaType.array && f.@ref != null)
             {

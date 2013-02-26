@@ -59,18 +59,19 @@ namespace NPOI.SS.Formula.PTG
         private static BitField columnMask = BitFieldFactory.GetInstance(0x3FFF);
 
         protected AreaPtgBase(String arearef)
+            : this(new AreaReference(arearef)) 
         {
-            AreaReference ar = new AreaReference(arearef);
-            CellReference firstCell = ar.FirstCell;
-            CellReference lastCell = ar.LastCell;
-            FirstRow = firstCell.Row;
-            FirstColumn = firstCell.Col;
-            LastRow = lastCell.Row;
-            LastColumn = lastCell.Col;
-            IsFirstColRelative = !firstCell.IsColAbsolute;
-            IsLastColRelative = !lastCell.IsColAbsolute;
-            IsFirstRowRelative = !firstCell.IsRowAbsolute;
-            IsLastRowRelative = !lastCell.IsRowAbsolute;
+            //AreaReference ar = new AreaReference(arearef);
+            //CellReference firstCell = ar.FirstCell;
+            //CellReference lastCell = ar.LastCell;
+            //FirstRow = firstCell.Row;
+            //FirstColumn = firstCell.Col;
+            //LastRow = lastCell.Row;
+            //LastColumn = lastCell.Col;
+            //IsFirstColRelative = !firstCell.IsColAbsolute;
+            //IsLastColRelative = !lastCell.IsColAbsolute;
+            //IsFirstRowRelative = !firstCell.IsRowAbsolute;
+            //IsLastRowRelative = !lastCell.IsRowAbsolute;
         }
         protected AreaPtgBase(AreaReference ar)
         {
@@ -88,19 +89,35 @@ namespace NPOI.SS.Formula.PTG
         protected AreaPtgBase(int firstRow, int lastRow, int firstColumn, int lastColumn,
                 bool firstRowRelative, bool lastRowRelative, bool firstColRelative, bool lastColRelative)
         {
+            if (lastRow > firstRow)
+            {
+                FirstRow=(firstRow);
+                LastRow=(lastRow);
+                IsFirstRowRelative=(firstRowRelative);
+                IsLastRowRelative = (lastRowRelative);
+            }
+            else
+            {
+                FirstRow=(lastRow);
+                LastRow=(firstRow);
+                IsFirstRowRelative = (lastRowRelative);
+                IsLastRowRelative = (firstRowRelative);
+            }
 
-            CheckColumnBounds(firstColumn);
-            CheckColumnBounds(lastColumn);
-            CheckRowBounds(firstRow);
-            CheckRowBounds(lastRow);
-            FirstRow = firstRow;
-            LastRow = lastRow;
-            FirstColumn = firstColumn;
-            LastColumn = lastColumn;
-            IsFirstRowRelative = firstRowRelative;
-            IsLastRowRelative = lastRowRelative;
-            IsFirstColRelative = firstColRelative;
-            IsLastColRelative = lastColRelative;
+            if (lastColumn > firstColumn)
+            {
+                FirstColumn=(firstColumn);
+                LastColumn=(lastColumn);
+                IsFirstColRelative = (firstColRelative);
+                IsLastColRelative = (lastColRelative);
+            }
+            else
+            {
+                FirstColumn=(lastColumn);
+                LastColumn=(firstColumn);
+                IsFirstColRelative = (lastColRelative);
+                IsLastColRelative = (firstColRelative);
+            }
         }
         protected void ReadCoordinates(ILittleEndianInput in1)
         {
@@ -124,20 +141,6 @@ namespace NPOI.SS.Formula.PTG
             LittleEndian.PutUShort(array, offset + 4, field_3_first_column);
             LittleEndian.PutUShort(array, offset + 6, field_4_last_column);
         }
-        private static void CheckColumnBounds(int colIx)
-        {
-            if ((colIx & 0x0FF) != colIx)
-            {
-                throw new ArgumentException("colIx (" + colIx + ") Is out of range");
-            }
-        }
-        private static void CheckRowBounds(int rowIx)
-        {
-            if ((rowIx & 0x0FFFF) != rowIx)
-            {
-                throw new ArgumentException("rowIx (" + rowIx + ") Is out of range");
-            }
-        }
 
         protected AreaPtgBase(RecordInputStream in1)
         {
@@ -155,7 +158,6 @@ namespace NPOI.SS.Formula.PTG
             get { return field_1_first_row; }
             set
             {
-                CheckRowBounds(value);
                 field_1_first_row = value;
             }
         }
@@ -168,7 +170,6 @@ namespace NPOI.SS.Formula.PTG
             get { return field_2_last_row; }
             set
             {
-                CheckRowBounds(value);
                 field_2_last_row = value;
             }
         }
@@ -181,7 +182,6 @@ namespace NPOI.SS.Formula.PTG
             get { return columnMask.GetValue(field_3_first_column); }
             set
             {
-                CheckColumnBounds(value);
                 field_3_first_column = columnMask.SetValue(field_3_first_column, value);
             }
         }
@@ -213,7 +213,6 @@ namespace NPOI.SS.Formula.PTG
             get { return columnMask.GetValue(field_4_last_column); }
             set
             {
-                CheckColumnBounds(value);
                 field_4_last_column = columnMask.SetValue(field_4_last_column, value);
             }
         }
