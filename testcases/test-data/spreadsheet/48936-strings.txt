@@ -1,0 +1,81 @@
+[IntegrityCheck-ERROR[MALE[50.0 < x < 199.0], FEMALE[50.0 < x < 199.0]], IntegrityCheck-WARNING[MALE[61.0 < x < 126.0], FEMALE[47.0 < x < 119.0]]]
+Computing[($1 + $2 + $3)/3,[Instrument[BloodPressure, RES_FIRST_DIASTOLIC_BP], Instrument[BloodPressure, RES_SEC_DIASTOLIC_BP], Instrument[BloodPressure, RES_THIRD_DIASTOLIC_BP]]]
+COMPUTED
+BloodPressure
+BloodPressure
+Average Pulse Rate
+Moyenne des lectures de pouls
+Computing[($1 + $2 + $3)/3,[Instrument[BloodPressure, RES_FIRST_PULSE_RATE], Instrument[BloodPressure, RES_SEC_PULSE_RATE], Instrument[BloodPressure, RES_THIRD_PULSE_RATE]]]
+COMPUTED
+BloodPressure
+BloodPressure
+Average Systolic Blood Pressure
+Pression artérielle systolique moyenne
+Computing[($1 + $2 + $3)/3,[Instrument[BloodPressure, RES_FIRST_SYSTOLIC_BP], Instrument[BloodPressure, RES_SEC_SYSTOLIC_BP], Instrument[BloodPressure, RES_THIRD_SYSTOLIC_BP]]]
+COMPUTED
+BloodPressure
+BloodPressure
+BloodPressure
+BloodPressure
+BloodPressure
+BloodPressure
+BloodPressure
+BloodPressure
+BloodPressure
+Armband size used
+Taille du brassard utilisé
+MANUAL
+Small
+Petit
+Medium
+Moyen
+Large
+Grand
+Extra Large
+Très grand
+BloodPressure
+BloodPressure
+Arm suggested to be used for measurement
+Bras suggéré pour la mesure
+Variable[Onyx.CIPreliminaryQuestionnaire.BP_ARM_CHOSEN]
+AUTOMATIC
+false
+BloodPressure
+BloodPressure
+What arm was actually used for the measurements?
+Quel bras a été utilisé pour les mesures?
+MANUAL
+Left
+Gauche
+Right
+Droit
+BloodPressure
+BloodPressure
+Circumference of upper arm at midpoint
+Circonférence du haut du bras
+[IntegrityCheck-ERROR[MALE[17.0 < x < 50.0], FEMALE[17.0 < x < 50.0]]]
+MANUAL
+BloodPressure
+BloodPressure
+Diastolic Blood Pressure reading (1)
+Lecture de la pression artérielle diastolique (1)
+[IntegrityCheck-ERROR[MALE[30 < x < 200 || ], FEMALE[30 < x < 200 || ]], IntegrityCheck-WARNING[MALE[51 < x < 96 || ], FEMALE[51 < x < 96 || ]], IntegrityCheck-ERROR[x < RES_FIRST_SYSTOLIC_BP]]
+MANUAL
+BloodPressure
+BloodPressure
+Pulse Rate reading (1)
+Lecture de pouls (1)
+[IntegrityCheck-ERROR[MALE[30 < x < 200 || ], FEMALE[30 < x < 200 || ]], IntegrityCheck-WARNING[MALE[40 < x < 100 || ], FEMALE[40 < x < 100 || ]]]
+MANUAL
+BloodPressure
+BloodPressure
+Systolic Blood Pressure reading (1)
+Lecture de la pression artérielle systolique  (1)
+[IntegrityCheck-ERROR[MALE[30 < x < 300 || ], FEMALE[30 < x < 300 || ]], IntegrityCheck-WARNING[MALE[77 < x < 192 || ], FEMALE[77 < x < 192 || ]]]
+MANUAL
+BloodPressure
+BloodPressure
+Diastolic Blood Pressure reading (2)
+Lecture de la pression artérielle diastolique (2)
+[IntegrityCheck-ERROR[MALE[30 < x < 200 || ], FEMALE[30 < x < 200 || ]], IntegrityCheck-WARNING[MALE[51 < x < 96 || ], FEMALE[51 < x < 96 || ]], IntegrityCheck-ERROR[x < RES_SEC_SYSTOLIC_BP]]
+

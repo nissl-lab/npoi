@@ -1,0 +1,26 @@
+Author = Nick Burch
+Title = SlideShow Sample
+Subject = A sample slideshow
+Keywords = Sample Testing
+Comments = This is a sample slideshow, for use with testing etc
+
+(Slide 1)
+Title of the first slide
+
+Subtitle of the first slide
+
+This bit is in italic green
+
+(Notes 1)
+I am the notes of the first slide
+
+(Slide 2)
+This is the second slide
+
+* It has bullet points on it
+* They’re fun, aren’t they?
+* Especially in a different font like Arial Black at 16 point!
+
+(Notes 2)
+These are the notes of the 2nd slide
+THIS LINE IS BOLD
