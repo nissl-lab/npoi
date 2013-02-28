@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     [TestFixture]
     public class TestXWPFTableCell
     {
+        [Test]
          [Ignore]
         public void TestSetGetVertAlignment()
         {
@@ -54,6 +55,7 @@ namespace NPOI.XWPF.UserModel
             XWPFTableCell.XWPFVertAlign al = cell.GetVerticalAlignment();
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTH, al);
         }
+        [Test]
          [Ignore]
         public void TestSetGetColor()
         {

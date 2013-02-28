@@ -30,8 +30,8 @@ namespace NPOI.XWPF.UserModel
     [TestFixture]
     public class TestXWPFTable
     {
-
-        protected void SetUp()
+        [SetUp]
+        public void SetUp()
         {
             /*
               XWPFDocument doc = new XWPFDocument();
@@ -137,6 +137,7 @@ namespace NPOI.XWPF.UserModel
             row.SetHeight(20);
             Assert.AreEqual(20, row.GetHeight());
         }
+        [Test]
          [Ignore]
         public void TestSetGetMargins()
         {
@@ -161,6 +162,7 @@ namespace NPOI.XWPF.UserModel
             int r = table.GetCellMarginRight();
             Assert.AreEqual(450, r);
         }
+        [Test]
         [Ignore]
         public void TestSetGetHBorders()
         {
@@ -187,6 +189,7 @@ namespace NPOI.XWPF.UserModel
             NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.GetInsideHBorderType();
             Assert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, bt);
         }
+        [Test]
          [Ignore]
         public void TestSetGetVBorders()
         {
@@ -206,6 +209,7 @@ namespace NPOI.XWPF.UserModel
             String clr = table.GetInsideVBorderColor();
             Assert.AreEqual("00FF00", clr);
         }
+        [Test]
          [Ignore]
         public void TestSetGetRowBandSize()
         {
@@ -216,6 +220,7 @@ namespace NPOI.XWPF.UserModel
             int sz = table.GetRowBandSize();
             Assert.AreEqual(12, sz);
         }
+        [Test]
          [Ignore]
         public void TestSetGetColBandSize()
         {
@@ -226,6 +231,7 @@ namespace NPOI.XWPF.UserModel
             int sz = table.GetColBandSize();
             Assert.AreEqual(16, sz);
         }
+        [Test]
          [Ignore]
         public void TestCreateTable()
         {
