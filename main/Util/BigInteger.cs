@@ -91,20 +91,30 @@ namespace NPOI.Util
         public const long INFLATED = long.MinValue;
         public const int MIN_RADIX = 2;
         public const int MAX_RADIX = 36;
+        private static BigInteger[] posConst = new BigInteger[MAX_CONSTANT + 1];
+        private static BigInteger[] negConst = new BigInteger[MAX_CONSTANT + 1];
         private static readonly String[] zeros = new String[64];
         //Constructors
         static BigInteger()
         {
-            for (int i = 1; i <= MAX_CONSTANT; i++)
+            Init();
+        }
+        static void Init()
+        {
+            if (zeros[63] == null)
             {
-                int[] magnitude = new int[1];
-                magnitude[0] = i;
-                posConst[i] = new BigInteger(magnitude, 1);
-                negConst[i] = new BigInteger(magnitude, -1);
+                for (int i = 1; i <= MAX_CONSTANT; i++)
+                {
+                    int[] magnitude = new int[1];
+                    magnitude[0] = i;
+                    posConst[i] = new BigInteger(magnitude, 1);
+                    negConst[i] = new BigInteger(magnitude, -1);
+                }
+
+                zeros[63] = "000000000000000000000000000000000000000000000000000000000000000";
+                for (int i = 0; i < 63; i++)
+                    zeros[i] = zeros[63].Substring(0, i);
             }
-            zeros[63] = "000000000000000000000000000000000000000000000000000000000000000";
-            for (int i = 0; i < 63; i++)
-                zeros[i] = zeros[63].Substring(0, i);
         }
         /**
          * This internal constructor differs from its public cousin
@@ -160,7 +170,7 @@ namespace NPOI.Util
             }
             else
             {
-                mag = trustedStripLeadingZeroInts(val);
+                mag = TrustedStripLeadingZeroInts(val);
                 _signum = (mag.Length == 0 ? 0 : 1);
             }
         }
@@ -263,16 +273,16 @@ namespace NPOI.Util
                 groupVal = int.Parse(group, CultureInfo.InvariantCulture);
                 if (groupVal < 0)
                     throw new FormatException("Illegal digit");
-                destructiveMulAdd(magnitude, superRadix, groupVal);
+                DestructiveMulAdd(magnitude, superRadix, groupVal);
             }
             // Required for cases where the array was overallocated.
-            mag = trustedStripLeadingZeroInts(magnitude);
+            mag = TrustedStripLeadingZeroInts(magnitude);
         }
         /**
          * Returns the input array stripped of any leading zero bytes.
          * Since the source is trusted the copying may be skipped.
          */
-        private static int[] trustedStripLeadingZeroInts(int[] val)
+        private static int[] TrustedStripLeadingZeroInts(int[] val)
         {
             int vlen = val.Length;
             int keep;
@@ -284,7 +294,7 @@ namespace NPOI.Util
         }
 
         // Multiply x array times word y in place, and add word z
-        private static void destructiveMulAdd(int[] x, int y, int z)
+        private static void DestructiveMulAdd(int[] x, int y, int z)
         {
             // Perform the multiplication word by word
             long ylong = y & LONG_MASK;
@@ -404,6 +414,7 @@ namespace NPOI.Util
          * @since   1.5
          */
         public static readonly BigInteger TEN = ValueOf(10);
+
         /**
          * Returns a BigInteger whose value is equal to that of the
          * specified {@code long}.  This "static factory method" is
@@ -415,7 +426,8 @@ namespace NPOI.Util
          */
         public static BigInteger ValueOf(long val)
         {
-            // If -MAX_CONSTANT < val < MAX_CONSTANT, return stashed constant
+            Init();
+           // If -MAX_CONSTANT < val < MAX_CONSTANT, return stashed constant
             if (val == 0)
                 return ZERO;
             if (val > 0 && val <= MAX_CONSTANT)
@@ -426,14 +438,13 @@ namespace NPOI.Util
             return new BigInteger(val);
         }
         private const int MAX_CONSTANT = 16;
-        private static BigInteger[] posConst = new BigInteger[MAX_CONSTANT + 1];
-        private static BigInteger[] negConst = new BigInteger[MAX_CONSTANT + 1];
+
         /**
          * Returns a BigInteger with the given two's complement representation.
          * Assumes that the input array will not be modified (the returned
          * BigInteger will reference the input array if feasible).
          */
-        private static BigInteger valueOf(int[] val)
+        private static BigInteger ValueOf(int[] val)
         {
             return (val[0] > 0 ? new BigInteger(val, 1) : new BigInteger(val));
         }
@@ -566,15 +577,15 @@ namespace NPOI.Util
             {
                 if ((exponent & 1) == 1)
                 {
-                    result = multiplyToLen(result, result.Length,
+                    result = MultiplyToLen(result, result.Length,
                                            baseToPow2, baseToPow2.Length, null);
-                    result = trustedStripLeadingZeroInts(result);
+                    result = TrustedStripLeadingZeroInts(result);
                 }
                 exponent = Operator.UnsignedRightShift(exponent, 1);
                 if (exponent != 0)
                 {
                     baseToPow2 = squareToLen(baseToPow2, baseToPow2.Length, null);
-                    baseToPow2 = trustedStripLeadingZeroInts(baseToPow2);
+                    baseToPow2 = TrustedStripLeadingZeroInts(baseToPow2);
                 }
             }
             return new BigInteger(result, newSign);
@@ -583,7 +594,7 @@ namespace NPOI.Util
          * Multiplies int arrays x and y to the specified lengths and places
          * the result into z. There will be no leading zeros in the resultant array.
          */
-        private int[] multiplyToLen(int[] x, int xlen, int[] y, int ylen, int[] z)
+        private int[] MultiplyToLen(int[] x, int xlen, int[] y, int ylen, int[] z)
         {
             int xstart = xlen - 1;
             int ystart = ylen - 1;
@@ -778,7 +789,7 @@ namespace NPOI.Util
             {
                 if (bytesCopied == 4)
                 {
-                    nextInt = getInt(intIndex++);
+                    nextInt = GetInt(intIndex++);
                     bytesCopied = 1;
                 }
                 else
@@ -816,7 +827,7 @@ namespace NPOI.Util
          * be arbitrarily high (values are logically preceded by infinitely many
          * sign ints).
          */
-        private int getInt(int n)
+        private int GetInt(int n)
         {
             if (n < 0)
                 return 0;
@@ -1232,7 +1243,7 @@ namespace NPOI.Util
         public int IntValue()
         {
             int result = 0;
-            result = getInt(0);
+            result = GetInt(0);
             return result;
         }
         public BigInteger ShiftLeft(int n)
@@ -1305,7 +1316,7 @@ namespace NPOI.Util
             long result = 0;
 
             for (int i = 1; i >= 0; i--)
-                result = (result << 32) + (getInt(i) & LONG_MASK);
+                result = (result << 32) + (GetInt(i) & LONG_MASK);
             return result;
         }
         /**
@@ -1403,10 +1414,10 @@ namespace NPOI.Util
         {
             int[] result = new int[Math.Max(intLength(), val.intLength())];
             for (int i = 0; i < result.Length; i++)
-                result[i] = (getInt(result.Length - i - 1)
-                             & val.getInt(result.Length - i - 1));
+                result[i] = (GetInt(result.Length - i - 1)
+                             & val.GetInt(result.Length - i - 1));
 
-            return valueOf(result);
+            return ValueOf(result);
         }
         /**
          * Returns a BigInteger whose value is {@code (~this)}.  (This method
@@ -1419,9 +1430,9 @@ namespace NPOI.Util
         {
             int[] result = new int[intLength()];
             for (int i = 0; i < result.Length; i++)
-                result[i] = ~getInt(result.Length - i - 1);
+                result[i] = ~GetInt(result.Length - i - 1);
 
-            return valueOf(result);
+            return ValueOf(result);
         }
         /**
          * Returns a BigInteger whose value is {@code (this | val)}.  (This method
@@ -1435,16 +1446,16 @@ namespace NPOI.Util
         {
             int[] result = new int[Math.Max(intLength(), val.intLength())];
             for (int i = 0; i < result.Length; i++)
-                result[i] = (getInt(result.Length - i - 1)
-                             | val.getInt(result.Length - i - 1));
+                result[i] = (GetInt(result.Length - i - 1)
+                             | val.GetInt(result.Length - i - 1));
 
-            return valueOf(result);
+            return ValueOf(result);
         }
         /**
          * Package private methods used by BigDecimal code to multiply a BigInteger
          * with a long. Assumes v is not equal to INFLATED.
          */
-        BigInteger multiply(long v)
+        BigInteger Multiply(long v)
         {
             if (v == 0 || _signum == 0)
                 return ZERO;
@@ -1496,9 +1507,9 @@ namespace NPOI.Util
             if (val._signum == 0 || _signum == 0)
                 return ZERO;
 
-            int[] result = multiplyToLen(mag, mag.Length,
+            int[] result = MultiplyToLen(mag, mag.Length,
                                          val.mag, val.mag.Length, null);
-            result = trustedStripLeadingZeroInts(result);
+            result = TrustedStripLeadingZeroInts(result);
             return new BigInteger(result, _signum == val._signum ? 1 : -1);
         }
         /**
@@ -1519,9 +1530,9 @@ namespace NPOI.Util
             int cmp = compareMagnitude(val);
             if (cmp == 0)
                 return ZERO;
-            int[] resultMag = (cmp > 0 ? subtract(mag, val.mag)
-                               : subtract(val.mag, mag));
-            resultMag = trustedStripLeadingZeroInts(resultMag);
+            int[] resultMag = (cmp > 0 ? Subtract(mag, val.mag)
+                               : Subtract(val.mag, mag));
+            resultMag = TrustedStripLeadingZeroInts(resultMag);
 
             return new BigInteger(resultMag, cmp == _signum ? 1 : -1);
         }
@@ -1590,9 +1601,9 @@ namespace NPOI.Util
             int cmp = compareMagnitude(val);
             if (cmp == 0)
                 return ZERO;
-            int[] resultMag = (cmp > 0 ? subtract(mag, val.mag)
-                               : subtract(val.mag, mag));
-            resultMag = trustedStripLeadingZeroInts(resultMag);
+            int[] resultMag = (cmp > 0 ? Subtract(mag, val.mag)
+                               : Subtract(val.mag, mag));
+            resultMag = TrustedStripLeadingZeroInts(resultMag);
             return new BigInteger(resultMag, cmp == _signum ? 1 : -1);
         }
 
@@ -1602,7 +1613,7 @@ namespace NPOI.Util
          * than the second.  This method allocates the space necessary to hold the
          * answer.
          */
-        private static int[] subtract(int[] big, int[] little)
+        private static int[] Subtract(int[] big, int[] little)
         {
             int bigIndex = big.Length;
             int[] result = new int[bigIndex];

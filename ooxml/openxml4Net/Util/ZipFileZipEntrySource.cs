@@ -22,7 +22,7 @@ namespace NPOI.OpenXml4Net.Util
 
         public void Close()
         {
-            if (zipArchive == null)
+            if (zipArchive != null)
             {
                 zipArchive.Close();
             }

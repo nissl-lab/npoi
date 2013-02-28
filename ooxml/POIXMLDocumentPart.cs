@@ -416,8 +416,8 @@ namespace NPOI
                         Uri uri = rel.TargetUri;
 
                         PackagePart p;
-                        string[] fragments = uri.OriginalString.Split(new char[] { '/' });
-                        if (fragments[fragments.Length - 1] == null)
+                        
+                        if (uri.OriginalString.IndexOf('#')>=0)
                         {
                             /*
                              * For internal references (e.g. '#Sheet1!A1') the namespace part is null

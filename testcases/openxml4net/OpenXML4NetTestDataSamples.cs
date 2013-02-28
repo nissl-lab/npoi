@@ -31,8 +31,9 @@ namespace TestCases.OpenXml4Net
 
         public static FileInfo GetOutputFile(String outputFileName)
         {
-            String suffix = outputFileName.Substring(outputFileName.LastIndexOf('.'));
-            string path= TempFile.GetTempFilePath(outputFileName, suffix);
+            int dotPos = outputFileName.LastIndexOf('.');
+            String suffix = outputFileName.Substring(dotPos);
+            string path= TempFile.GetTempFilePath(outputFileName.Substring(0,dotPos), suffix);
             FileStream fs = File.Create(path);
             fs.Close();
             return new FileInfo(path);

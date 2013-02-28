@@ -25,6 +25,7 @@ namespace NPOI.SS
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
     using TestCases.HSSF;
+    using System.Configuration;
 
     [TestFixture]
     public class TestWorkbookFactory
@@ -32,12 +33,15 @@ namespace NPOI.SS
         private String xls;
         private String xlsx;
         private String txt;
+
+        string testdataPath;
         [SetUp]
         public void SetUp()
         {
             xls = "SampleSS.xls";
             xlsx = "SampleSS.xlsx";
             txt = "SampleSS.txt";
+            testdataPath = ConfigurationManager.AppSettings["POI.testdata.path"] + "\\spreadsheet\\";
         }
 
         [Test]
@@ -85,13 +89,13 @@ namespace NPOI.SS
             Assert.IsTrue(wb is XSSFWorkbook);
             // File -> either
             wb = WorkbookFactory.Create(
-                  xls
+                  testdataPath + xls
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
 
             wb = WorkbookFactory.Create(
-                  xlsx
+                  testdataPath + xlsx
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);

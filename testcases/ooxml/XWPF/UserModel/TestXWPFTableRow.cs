@@ -32,7 +32,7 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(ctRow);
         }
 
-        [Test]
+         [Ignore]
         public void TestSetGetCantSplitRow()
         {
             // create a table
@@ -48,7 +48,7 @@ namespace NPOI.XWPF.UserModel
             //assert(isCant);
             Assert.IsTrue(isCant);
         }
-        [Test]
+         [Ignore]
         public void TestSetGetRepeatHeader()
         {
             // create a table

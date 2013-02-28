@@ -496,7 +496,7 @@ namespace NPOI.OpenXml4Net.OPC
 
             // Get the target URI, excluding any relative fragments
             Uri target = rel.TargetUri;
-            if (target.Fragment != null)
+            if (target.OriginalString.IndexOf('#') >=0)
             {
                 String t = target.ToString();
                 try
@@ -505,7 +505,7 @@ namespace NPOI.OpenXml4Net.OPC
                 }
                 catch (UriFormatException e)
                 {
-                    throw new InvalidFormatException("Invalid target URI: " + target);
+                    throw new InvalidFormatException("Invalid target URI: " + t);
                 }
             }
 
