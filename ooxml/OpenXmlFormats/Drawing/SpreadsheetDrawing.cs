@@ -517,6 +517,21 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         //    get { return absoluteAnchors; }
         //    set { absoluteAnchors = value; }
         //}
+
+        public void Set(CT_Drawing cT_Drawing)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object SizeOfAbsoluteAnchorArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object SizeOfOneCellAnchorArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]

@@ -19,6 +19,7 @@ using TestCases.SS.UserModel;
 using System;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
+using NPOI.OpenXml4Net.OPC;
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -51,6 +52,80 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(4, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
         }
+        [Test]
+        public void TestCreate()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.CreateSheet() as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+            XSSFCreationHelper CreateHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
+
+            String[] urls = {
+                "http://apache.org",
+                "www.apache.org",
+                "/temp",
+                "c:/temp",
+                "http://apache.org/default.php?s=isTramsformed&submit=Search&la=*&li=*"};
+            for (int i = 0; i < urls.Length; i++)
+            {
+                String s = urls[i];
+                XSSFHyperlink link = CreateHelper.CreateHyperlink(HyperlinkType.URL) as XSSFHyperlink;
+                link.Address=(s);
+
+                XSSFCell cell = row.CreateCell(i) as XSSFCell;
+                cell.Hyperlink=(link);
+            }
+            workbook = XSSFTestDataSamples.WriteOutAndReadBack(workbook) as XSSFWorkbook;
+            sheet = workbook.GetSheetAt(0) as XSSFSheet;
+            PackageRelationshipCollection rels = sheet.GetPackagePart().Relationships;
+            Assert.AreEqual(urls.Length, rels.Size);
+            for (int i = 0; i < rels.Size; i++)
+            {
+                PackageRelationship rel = rels.GetRelationship(i);
+                // there should be a relationship for each URL
+                Assert.AreEqual(urls[i], rel.TargetUri.ToString());
+            }
+
+            // Bugzilla 53041: Hyperlink relations are duplicated when saving XSSF file
+            workbook = XSSFTestDataSamples.WriteOutAndReadBack(workbook) as XSSFWorkbook;
+            sheet = workbook.GetSheetAt(0) as XSSFSheet;
+            rels = sheet.GetPackagePart().Relationships;
+            Assert.AreEqual(urls.Length, rels.Size);
+            for (int i = 0; i < rels.Size; i++)
+            {
+                PackageRelationship rel = rels.GetRelationship(i);
+                // there should be a relationship for each URL
+                Assert.AreEqual(urls[i], rel.TargetUri.ToString());
+            }
+        }
+        [Test]
+        public void TestInvalidURLs()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFCreationHelper CreateHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
+
+            String[] invalidURLs = {
+                "http:\\apache.org",
+                "www.apache .org",
+                "c:\\temp",
+                "\\poi"};
+            foreach (String s in invalidURLs)
+            {
+                try
+                {
+                    CreateHelper.CreateHyperlink(HyperlinkType.URL).Address = (s);
+                    Assert.Fail("expected ArgumentException: " + s);
+                }
+                catch (ArgumentException)
+                {
+                }
+                catch (InvalidOperationException)
+                {
+
+                }
+            }
+        }
+
         [Test]
         public void TestLoadSave()
         {
@@ -164,6 +239,49 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF Hyperlinks",
                     sheet.GetRow(16).GetCell(2).Hyperlink.Address);
         }
+        [Test]
+        public void Test52716()
+        {
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("52716.xlsx");
+            XSSFSheet sh1 = wb1.GetSheetAt(0) as XSSFSheet;
+
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            XSSFSheet sh2 = wb2.GetSheetAt(0) as XSSFSheet;
+
+            Assert.AreEqual(sh1.NumberOfComments, sh2.NumberOfComments);
+            XSSFHyperlink l1 = sh1.GetHyperlink(0, 1);
+            Assert.AreEqual(HyperlinkType.DOCUMENT, l1.Type);
+            Assert.AreEqual("B1", l1.GetCellRef());
+            Assert.AreEqual("Sort on Titel", l1.Tooltip);
+
+            XSSFHyperlink l2 = sh2.GetHyperlink(0, 1);
+            Assert.AreEqual(l1.Tooltip, l2.Tooltip);
+            Assert.AreEqual(HyperlinkType.DOCUMENT, l2.Type);
+            Assert.AreEqual("B1", l2.GetCellRef());
+        }
+        [Test]
+        public void Test53734()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53734.xlsx");
+            XSSFHyperlink link = wb.GetSheetAt(0).GetRow(0).GetCell(0).Hyperlink as XSSFHyperlink;
+            Assert.AreEqual("javascript:///", link.Address);
+
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            link = wb.GetSheetAt(0).GetRow(0).GetCell(0).Hyperlink as XSSFHyperlink;
+            Assert.AreEqual("javascript:///", link.Address);
+        }
+        [Test]
+        public void Test53282()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53282.xlsx");
+            XSSFHyperlink link = wb.GetSheetAt(0).GetRow(0).GetCell(14).Hyperlink as XSSFHyperlink;
+            Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
+
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            link = wb.GetSheetAt(0).GetRow(0).GetCell(14).Hyperlink as XSSFHyperlink;
+            Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
+        }
+
     }
 
 

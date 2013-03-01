@@ -31,7 +31,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Roman Kashitsyn
      */
-    public class XSSFGraphicFrame
+    public class XSSFGraphicFrame : XSSFShape
     {
 
         private static CT_GraphicalObjectFrame prototype = null;
@@ -190,6 +190,11 @@ namespace NPOI.XSSF.UserModel
             //throw new NotImplementedException();
         }
 
+
+        protected internal override CT_ShapeProperties GetShapeProperties()
+        {
+            return null;
+        }
     }
 }
 

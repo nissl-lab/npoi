@@ -163,8 +163,9 @@ namespace NPOI.XSSF.UserModel
             if (validationType != ValidationType.ANY && validationType != ValidationType.LIST)
             {
                 newDataValidation.@operator = ST_DataValidationOperator.between;
-                if(XSSFDataValidation.operatorTypeMappings.ContainsKey(constraint.Operator))
-                newDataValidation.@operator = XSSFDataValidation.operatorTypeMappings[constraint.Operator];
+                if (XSSFDataValidation.operatorTypeMappings.ContainsKey(constraint.Operator))
+                    newDataValidation.@operator = XSSFDataValidation.operatorTypeMappings[constraint.Operator];
+
                 if (constraint.Formula1 != null)
                 {
                     newDataValidation.formula1 = (constraint.Formula1);

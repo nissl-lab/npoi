@@ -35,16 +35,21 @@ namespace NPOI.XSSF.UserModel
         /**
          * Relationships for each known picture type
          */
-        internal static Dictionary<PictureType, POIXMLRelation> RELATIONS;
+        internal static Dictionary<int, POIXMLRelation> RELATIONS;
         static XSSFPictureData()
         {
-            RELATIONS = new Dictionary<PictureType,POIXMLRelation>(8);
-            RELATIONS[PictureType.EMF] = XSSFRelation.IMAGE_EMF;
-            RELATIONS[PictureType.WMF] = XSSFRelation.IMAGE_WMF;
-            RELATIONS[PictureType.PICT] = XSSFRelation.IMAGE_PICT;
-            RELATIONS[PictureType.JPEG] = XSSFRelation.IMAGE_JPEG;
-            RELATIONS[PictureType.PNG] = XSSFRelation.IMAGE_PNG;
-            RELATIONS[PictureType.DIB] = XSSFRelation.IMAGE_DIB;
+            RELATIONS = new Dictionary<int,POIXMLRelation>(8);
+            RELATIONS[(int)PictureType.EMF] = XSSFRelation.IMAGE_EMF;
+            RELATIONS[(int)PictureType.WMF] = XSSFRelation.IMAGE_WMF;
+            RELATIONS[(int)PictureType.PICT] = XSSFRelation.IMAGE_PICT;
+            RELATIONS[(int)PictureType.JPEG] = XSSFRelation.IMAGE_JPEG;
+            RELATIONS[(int)PictureType.PNG] = XSSFRelation.IMAGE_PNG;
+            RELATIONS[(int)PictureType.DIB] = XSSFRelation.IMAGE_DIB;
+            RELATIONS[XSSFWorkbook.PICTURE_TYPE_GIF] = XSSFRelation.IMAGE_GIF;
+            RELATIONS[XSSFWorkbook.PICTURE_TYPE_TIFF] = XSSFRelation.IMAGE_TIFF;
+            RELATIONS[XSSFWorkbook.PICTURE_TYPE_EPS] = XSSFRelation.IMAGE_EPS;
+            RELATIONS[XSSFWorkbook.PICTURE_TYPE_BMP] = XSSFRelation.IMAGE_BMP;
+            RELATIONS[XSSFWorkbook.PICTURE_TYPE_WPG] = XSSFRelation.IMAGE_WPG;
         }
 
         /**
@@ -98,7 +103,7 @@ namespace NPOI.XSSF.UserModel
             String contentType = GetPackagePart().ContentType;
             foreach (PictureType relation in RELATIONS.Keys)
             {
-                if ( RELATIONS[relation].ContentType.Equals(contentType))
+                if (RELATIONS[(int)relation].ContentType.Equals(contentType))
                 {
                     return (int)relation;
                 }

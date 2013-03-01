@@ -368,7 +368,6 @@ namespace TestCases.OPC
             Assert.AreEqual(TargetMode.External, rId1.TargetMode);
             Uri targetUri = rId1.TargetUri;
             Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", targetUri.OriginalString);
-            Assert.Fail("C# cannot resolve this uri \"{0}\"", targetUri.OriginalString);
             Assert.AreEqual("nobody@nowhere.uk\u00A0", targetUri.Scheme);
 
             MemoryStream out1 = new MemoryStream();

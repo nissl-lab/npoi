@@ -53,7 +53,31 @@ namespace NPOI.XSSF.UserModel
          * This constant is used to ensure uniqueness in the first 31 chars
          */
         private static int MAX_SENSITIVE_SHEET_NAME_LEN = 31;
+        /** Extended windows meta file */
+        public static int PICTURE_TYPE_EMF = 2;
 
+        /** Windows Meta File */
+        public static int PICTURE_TYPE_WMF = 3;
+
+        /** Mac PICT format */
+        public static int PICTURE_TYPE_PICT = 4;
+
+        /** JPEG format */
+        public static int PICTURE_TYPE_JPEG = 5;
+
+        /** PNG format */
+        public static int PICTURE_TYPE_PNG = 6;
+
+        /** Device independent bitmap */
+        public static int PICTURE_TYPE_DIB = 7;
+        /**
+         * Images formats supported by XSSF but not by HSSF
+         */
+        public static int PICTURE_TYPE_GIF = 8;
+        public static int PICTURE_TYPE_TIFF = 9;
+        public static int PICTURE_TYPE_EPS = 10;
+        public static int PICTURE_TYPE_BMP = 11;
+        public static int PICTURE_TYPE_WPG = 12;
         /**
          * The underlying XML bean
          */
@@ -138,9 +162,15 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Constructs a XSSFWorkbook object given a OpenXML4J <code>Package</code> object,
-         * see <a href="http://openxml4j.org/">www.Openxml4j.org</a>.
+         *  see <a href="http://poi.apache.org/oxml4j/">http://poi.apache.org/oxml4j/</a>.
+         * 
+         * Once you have finished working with the Workbook, you should close the package
+         * by calling pkg.close, to avoid leaving file handles open.
+         * 
+         * Creating a XSSFWorkbook from a file-backed OPC Package has a lower memory
+         *  footprint than an InputStream backed one.
          *
-         * @param pkg the OpenXML4J <code>Package</code> object.
+         * @param pkg the OpenXML4J <code>OPC Package</code> object.
          */
         public XSSFWorkbook(OPCPackage pkg)
             : base(pkg)
@@ -150,7 +180,20 @@ namespace NPOI.XSSF.UserModel
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
         }
-
+        /**
+         * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
+         *  and then opening an {@link OPCPackage} object for it.
+         * 
+         * Using an {@link InputStream} requires more memory than using a File, so
+         *  if a {@link File} is available then you should instead do something like
+         *   <pre><code>
+         *       OPCPackage pkg = OPCPackage.open(path);
+         *       XSSFWorkbook wb = new XSSFWorkbook(pkg);
+         *       // work with the wb object
+         *       ......
+         *       pkg.close(); // gracefully closes the underlying zip file
+         *   </code></pre>     
+         */
         public XSSFWorkbook(Stream is1)
             : base(PackageHelper.Open(is1))
         {
@@ -163,8 +206,41 @@ namespace NPOI.XSSF.UserModel
         /**
          * Constructs a XSSFWorkbook object given a file name.
          *
+         * <p>
+         *  This constructor is deprecated since POI-3.8 because it does not close
+         *  the underlying .zip file stream. In short, there are two ways to open a OPC package:
+         * </p>
+         * <ol>
+         *     <li>
+         *      from file which leads to invoking java.util.zip.ZipFile(File file)
+         *      deep in POI internals.
+         *     </li>
+         *     <li>
+         *     from input stream in which case we first read everything into memory and
+         *     then pass the data to ZipInputStream.
+         *     </li>
+         * <ol>
+         * <p>    
+         *     It should be noted, that (2) uses quite a bit more memory than (1), which
+         *      doesn't need to hold the whole zip file in memory, and can take advantage
+         *      of native methods.
+         * </p>
+         * <p>
+         *   To construct a workbook from file use the
+         *   {@link #XSSFWorkbook(org.apache.poi.openxml4j.opc.OPCPackage)}  constructor:
+         *   <pre><code>
+         *       OPCPackage pkg = OPCPackage.open(path);
+         *       XSSFWorkbook wb = new XSSFWorkbook(pkg);
+         *       // work with the wb object
+         *       ......
+         *       pkg.close(); // gracefully closes the underlying zip file
+         *   </code></pre>     
+         * </p>
+         * 
          * @param      path   the file name.
+         * @deprecated
          */
+        [Obsolete]
         public XSSFWorkbook(String path)
             : this(OpenPackage(path))
         {
@@ -345,7 +421,7 @@ namespace NPOI.XSSF.UserModel
         public int AddPicture(Stream picStream, int format)
         {
             int imageNumber = GetAllPictures().Count + 1;
-            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(PictureType)format], XSSFFactory.GetInstance(), imageNumber, true);
+            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true);
             Stream out1 = img.GetPackagePart().GetOutputStream();
             IOUtils.Copy(picStream, out1);
             out1.Close();
@@ -369,42 +445,73 @@ namespace NPOI.XSSF.UserModel
             String srcName = srcSheet.SheetName;
             String ClonedName = GetUniqueSheetName(srcName);
 
-            XSSFSheet ClonedSheet = (XSSFSheet)CreateSheet(ClonedName);
+            XSSFSheet clonedSheet = (XSSFSheet)CreateSheet(ClonedName);
             try
             {
                 MemoryStream out1 = new MemoryStream();
                 srcSheet.Write(out1);
-                ClonedSheet.Read(new MemoryStream(out1.ToArray()));
+                clonedSheet.Read(new MemoryStream(out1.ToArray()));
             }
             catch (IOException e)
             {
                 throw new POIXMLException("Failed to clone sheet", e);
             }
-            CT_Worksheet ct = ClonedSheet.GetCTWorksheet();
+            CT_Worksheet ct = clonedSheet.GetCTWorksheet();
 
-            if (ct.IsSetDrawing())
-            {
-                logger.Log(POILogger.WARN, "Cloning sheets with Drawings is not yet supported.");
-                ct.UnsetDrawing();
-            }
             if (ct.IsSetLegacyDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
                 ct.UnsetLegacyDrawing();
             }
-
-            ClonedSheet.IsSelected = false;
+            if (ct.IsSetPageSetup())
+            {
+                logger.Log(POILogger.WARN, "Cloning sheets with page setup is not yet supported.");
+                ct.UnsetPageSetup();
+            }
+            clonedSheet.IsSelected = false;
 
             // copy sheet's relations
             List<POIXMLDocumentPart> rels = srcSheet.GetRelations();
+            // if the sheet being cloned has a drawing then rememebr it and re-create tpoo
+            XSSFDrawing dg = null;
             foreach (POIXMLDocumentPart r in rels)
             {
+                // do not copy the drawing relationship, it will be re-created
+                if(r is XSSFDrawing) 
+                {
+                    dg = (XSSFDrawing)r;
+                    continue;
+                }
                 PackageRelationship rel = r.GetPackageRelationship();
-                ClonedSheet.GetPackagePart().AddRelationship(rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
-                ClonedSheet.AddRelation(rel.Id, r);
+                clonedSheet.GetPackagePart().AddRelationship(
+                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
+                clonedSheet.AddRelation(rel.Id, r);
             }
+            // clone the sheet drawing alongs with its relationships
+            if (dg != null)
+            {
+                if (ct.IsSetDrawing())
+                {
+                    // unset the existing reference to the drawing,
+                    // so that subsequent call of clonedSheet.createDrawingPatriarch() will create a new one
+                    ct.UnsetDrawing();
+                }
+                XSSFDrawing clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
+                // copy drawing contents
+                clonedDg.GetCTDrawing().Set(dg.GetCTDrawing());
 
-            return ClonedSheet;
+                // Clone drawing relations
+                List<POIXMLDocumentPart> srcRels = (srcSheet.CreateDrawingPatriarch() as XSSFDrawing).GetRelations();
+                foreach (POIXMLDocumentPart rel in srcRels)
+                {
+                    PackageRelationship relation = rel.GetPackageRelationship();
+                    (clonedSheet.CreateDrawingPatriarch() as XSSFDrawing)
+                            .GetPackagePart()
+                            .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
+                                    relation.RelationshipType, relation.Id);
+                }
+            }
+            return clonedSheet;
         }
 
         /**
@@ -553,12 +660,15 @@ namespace NPOI.XSSF.UserModel
          * The string MUST NOT begin or end with the single quote (') character.
          * </p>
          *
-         * @param sheetname  sheetname to Set for the sheet.
-         * @return Sheet representing the new sheet.
-         * @throws ArgumentException if the name is null or invalid
-         *  or workbook already Contains a sheet with this name
-         * @see {@link NPOI.ss.util.WorkbookUtil#CreateSafeSheetName(String nameProposal)}
+         * <p>
+         * See {@link org.apache.poi.ss.util.WorkbookUtil#createSafeSheetName(String nameProposal)}
          *      for a safe way to create valid names
+         * </p>
+         * @param sheetname  sheetname to set for the sheet.
+         * @return Sheet representing the new sheet.
+         * @throws IllegalArgumentException if the name is null or invalid
+         *  or workbook already contains a sheet with this name
+         * @see org.apache.poi.ss.util.WorkbookUtil#createSafeSheetName(String nameProposal)
          */
         public ISheet CreateSheet(String sheetname)
         {
@@ -634,31 +744,18 @@ namespace NPOI.XSSF.UserModel
         {
             if (pictures == null)
             {
-                //In OOXML pictures are referred to in sheets,
-                //dive into sheet's relations, select Drawings and their images
-                pictures = new List<XSSFPictureData>();
-                foreach (XSSFSheet sh in sheets)
+                List<PackagePart> mediaParts = Package.GetPartsByName(new Regex("/xl/media/.*?"));
+                pictures = new List<XSSFPictureData>(mediaParts.Count);
+                foreach (PackagePart part in mediaParts)
                 {
-                    foreach (POIXMLDocumentPart dr in sh.GetRelations())
-                    {
-                        if (dr is XSSFDrawing)
-                        {
-                            foreach (POIXMLDocumentPart img in dr.GetRelations())
-                            {
-                                if (img is XSSFPictureData)
-                                {
-                                    pictures.Add((XSSFPictureData)img);
-                                }
-                            }
-                        }
-                    }
+                    pictures.Add(new XSSFPictureData(part, null));
                 }
             }
             return pictures;
         }
 
         /**
-         * gGet the cell style object at the given index
+         * Get the cell style object at the given index
          *
          * @param idx  index within the Set of styles
          * @return XSSFCellStyle object at the index
@@ -1773,6 +1870,10 @@ namespace NPOI.XSSF.UserModel
             // when Set to 0, will tell Excel that it needs to recalculate all formulas
             // in the workbook the next time the file is opened.
             calcPr.calcId = 0;
+            if (value && calcPr.calcMode == ST_CalcMode.manual)
+            {
+                calcPr.calcMode = (ST_CalcMode.auto);
+            }
         }
 
         /**
@@ -1802,7 +1903,7 @@ namespace NPOI.XSSF.UserModel
         public int AddPicture(byte[] pictureData, PictureType format)
         {
             int imageNumber = GetAllPictures().Count + 1;
-            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true);
+            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(int)format], XSSFFactory.GetInstance(), imageNumber, true);
             try
             {
                 Stream out1 = img.GetPackagePart().GetOutputStream();

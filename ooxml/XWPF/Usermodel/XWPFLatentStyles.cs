@@ -45,12 +45,12 @@ namespace NPOI.XWPF.UserModel
         */
         public bool IsLatentStyle(String latentStyleID)
         {
-            /*foreach ( CTLsdException lsd in latentStyles.LsdExceptionList) {
-                if(lsd.Name.Equals(latentStyleID));
-                    return true;
+            foreach (CT_LsdException lsd in latentStyles.lsdException)
+            {
+                if (lsd.name.Equals(latentStyleID)) ;
+                return true;
             }
-            return false;*/
-            throw new NotImplementedException();
+            return false;
         }
     }
 

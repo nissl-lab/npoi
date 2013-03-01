@@ -96,6 +96,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.endParaRPrField = value;
             }
         }
+
+        public object SizeOfRArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]

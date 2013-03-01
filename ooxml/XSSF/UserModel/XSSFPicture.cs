@@ -294,7 +294,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected override CT_ShapeProperties GetShapeProperties()
+        protected internal override CT_ShapeProperties GetShapeProperties()
         {
             return ctPicture.spPr;
         }
@@ -361,15 +361,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 String blipId = ctPicture.blipFill.blip.embed;
-                foreach (POIXMLDocumentPart part in GetDrawing().GetRelations())
-                {
-                    if (part.GetPackageRelationship().Id.Equals(blipId))
-                    {
-                        return (XSSFPictureData)part;
-                    }
-                }
-                logger.Log(POILogger.WARN, "Picture data was not found for blipId=" + blipId);
-                return null;
+                return (XSSFPictureData)GetDrawing().GetRelationById(blipId);
             }
         }
     }

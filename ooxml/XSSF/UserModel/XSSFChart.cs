@@ -306,7 +306,7 @@ namespace NPOI.XSSF.UserModel
         private void ParseValueAxis()
         {
             throw new NotImplementedException();
-            //foreach (CT_ValAx valAx in chart.plotArea.GetValAxArray())
+            //foreach (CT_ValAx valAx in chart.plotArea.GetValAxList())
             //{
             //    axis.Add(new XSSFValueAxis(this, valAx));
             //}

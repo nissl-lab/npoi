@@ -192,7 +192,7 @@ namespace NPOI.XSSF.UserModel
             chExt.cy = (y2);
         }
 
-        protected override CT_ShapeProperties GetShapeProperties()
+        protected internal override CT_ShapeProperties GetShapeProperties()
         {
             throw new InvalidOperationException("Not supported for shape group");
         }

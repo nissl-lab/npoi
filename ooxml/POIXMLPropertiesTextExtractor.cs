@@ -134,24 +134,132 @@ namespace NPOI
             return text.ToString();
         }
         /**
-         * Returns the custom document properties, if
-         *  there are any
-         */
+    * Returns the custom document properties, if
+    *  there are any
+    */
         public String GetCustomPropertiesText()
         {
             StringBuilder text = new StringBuilder();
-            CT_CustomProperties
-                props = Document.GetProperties().GetCustomProperties().GetUnderlyingProperties();
+            CT_CustomProperties props = Document.GetProperties().GetCustomProperties().GetUnderlyingProperties();
 
             List<CT_Property> properties = props.GetPropertyList();
-            for (int i = 0; i < properties.Count; i++)
+            foreach (CT_Property property in properties)
             {
-                // TODO - finish off
                 String val = "(not implemented!)";
+                //val = property.Item.ToString();
+                //if (property.IsSetLpwstr())
+                //{
+                //    val = property.GetLpwstr();
+                //}
+                //else if (property.IsSetLpstr())
+                //{
+                //    val = property.GetLpstr();
+                //}
+                //else if (property.IsSetDate())
+                //{
+                //    val = property.GetDate().toString();
+                //}
+                //else if (property.IsSetFiletime())
+                //{
+                //    val = property.GetFiletime().toString();
+                //}
+                //else if (property.IsSetBool())
+                //{
+                //    val = Boolean.toString(property.GetBool());
+                //}
+
+                //// Integers
+                //else if (property.IsSetI1())
+                //{
+                //    val = Integer.toString(property.GetI1());
+                //}
+                //else if (property.IsSetI2())
+                //{
+                //    val = Integer.toString(property.GetI2());
+                //}
+                //else if (property.IsSetI4())
+                //{
+                //    val = Integer.toString(property.GetI4());
+                //}
+                //else if (property.IsSetI8())
+                //{
+                //    val = Long.toString(property.GetI8());
+                //}
+                //else if (property.IsSetInt())
+                //{
+                //    val = Integer.toString(property.GetInt());
+                //}
+
+                //// Unsigned Integers
+                //else if (property.IsSetUi1())
+                //{
+                //    val = Integer.toString(property.GetUi1());
+                //}
+                //else if (property.IsSetUi2())
+                //{
+                //    val = Integer.toString(property.GetUi2());
+                //}
+                //else if (property.IsSetUi4())
+                //{
+                //    val = Long.toString(property.GetUi4());
+                //}
+                //else if (property.IsSetUi8())
+                //{
+                //    val = property.GetUi8().toString();
+                //}
+                //else if (property.IsSetUint())
+                //{
+                //    val = Long.toString(property.GetUint());
+                //}
+
+                //// Reals
+                //else if (property.IsSetR4())
+                //{
+                //    val = Float.toString(property.GetR4());
+                //}
+                //else if (property.IsSetR8())
+                //{
+                //    val = Double.toString(property.GetR8());
+                //}
+                //else if (property.IsSetDecimal())
+                //{
+                //    BigDecimal d = property.GetDecimal();
+                //    if (d == null)
+                //    {
+                //        val = null;
+                //    }
+                //    else
+                //    {
+                //        val = d.toPlainString();
+                //    }
+                //}
+
+                //else if (property.IsSetArray())
+                //{
+                //    // TODO Fetch the array values and output 
+                //}
+                //else if (property.IsSetVector())
+                //{
+                //    // TODO Fetch the vector values and output
+                //}
+
+                //else if (property.IsSetBlob() || property.IsSetOblob())
+                //{
+                //    // TODO Decode, if possible
+                //}
+                //else if (property.IsSetStream() || property.IsSetOstream() ||
+                //         property.IsSetVstream())
+                //{
+                //    // TODO Decode, if possible
+                //}
+                //else if (property.IsSetStorage() || property.IsSetOstorage())
+                //{
+                //    // TODO Decode, if possible
+                //}
 
                 text.Append(
-                        properties[i].name +
-                        " = " + val + "\n"
+                      property.name +
+                      " = " + val + "\n"
                 );
             }
 

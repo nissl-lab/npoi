@@ -228,6 +228,11 @@ namespace NPOI.OpenXmlFormats
 
             return true;
         }
+
+        public bool IsSetLpwstr()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
