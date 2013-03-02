@@ -2467,6 +2467,11 @@
         <member name="M:NPOI.XSSF.UserModel.XSSFSheet.GetTables">
             Returns any tables associated with this Sheet
         </member>
+        <member name="M:NPOI.XSSF.UserModel.XSSFSheet.SetTabColor(System.Int32)">
+             Set background color of the sheet tab
+            
+             @param colorIndex  the indexed color to set, must be a constant from {@link IndexedColors}
+        </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFSheet.Workbook">
              Returns the parent XSSFWorkbook
             
@@ -3182,6 +3187,10 @@
             
              @return a new CT_TwoCellAnchor
         </member>
+        <member name="M:NPOI.XSSF.UserModel.XSSFDrawing.GetShapes">
+            
+             @return list of shapes in this drawing
+        </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFEvaluationCell">
             XSSF wrapper for a cell under Evaluation
             
@@ -3799,7 +3808,7 @@
              @return the type of this hyperlink
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFHyperlink.Address">
-             Hypelink Address. Depending on the hyperlink type it can be URL, e-mail, path to a file
+             Hyperlink Address. Depending on the hyperlink type it can be URL, e-mail, path to a file
             
              @return the Address of this hyperlink
         </member>
@@ -3833,6 +3842,11 @@
              Return the row of the last cell that Contains the hyperlink
             
              @return the 0-based row of the last cell that Contains the hyperlink
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFHyperlink.Tooltip">
+            <summary>
+            get or set additional text to help the user understand more about the hyperlink
+            </summary>
         </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFOddFooter">
              Odd page footer value. Corresponds to odd printed pages.
@@ -4567,7 +4581,8 @@
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFSimpleShape.ApplyAttributes(NPOI.OpenXmlFormats.Spreadsheet.CT_RPrElt,NPOI.OpenXmlFormats.Dml.CT_TextCharacterProperties)">
             
-             CT_RPrElt --> CTFont adapter
+             org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRPrElt to
+             org.openxmlformats.schemas.drawingml.x2006.main.CTFont adapter
         </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFTable">
              
@@ -4621,6 +4636,11 @@
         <member name="M:NPOI.XSSF.UserModel.XSSFTable.GetRowCount">
               @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
             
+        </member>
+        <member name="M:NPOI.XSSF.UserModel.XSSFTable.UpdateHeaders">
+            Synchronize table headers with cell values in the parent sheet.
+            Headers <em>must</em> be in sync, otherwise Excel will display a
+            "Found unreadable content" message on startup.
         </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFTextBox">
              Represents a text box in a SpreadsheetML Drawing.
@@ -4687,6 +4707,27 @@
             Excel silently tRuncates long sheet names to 31 chars.
             This constant is used to ensure uniqueness in the first 31 chars
         </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_EMF">
+            Extended windows meta file 
+        </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_WMF">
+            Windows Meta File 
+        </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_PICT">
+            Mac PICT format 
+        </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_JPEG">
+            JPEG format 
+        </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_PNG">
+            PNG format 
+        </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_DIB">
+            Device independent bitmap 
+        </member>
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.PICTURE_TYPE_GIF">
+            Images formats supported by XSSF but not by HSSF
+        </member>
         <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.workbook">
             The underlying XML bean
         </member>
@@ -4736,15 +4777,31 @@
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(NPOI.OpenXml4Net.OPC.OPCPackage)">
              Constructs a XSSFWorkbook object given a OpenXML4J <code>Package</code> object,
-             see <a href="http://openxml4j.org/">www.Openxml4j.org</a>.
+              see <a href="http://poi.apache.org/oxml4j/">http://poi.apache.org/oxml4j/</a>.
+             
+             Once you have finished working with the Workbook, you should close the package
+             by calling pkg.close, to avoid leaving file handles open.
+             
+             Creating a XSSFWorkbook from a file-backed OPC Package has a lower memory
+              footprint than an InputStream backed one.
             
-             @param pkg the OpenXML4J <code>Package</code> object.
+             @param pkg the OpenXML4J <code>OPC Package</code> object.
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.String)">
-             Constructs a XSSFWorkbook object given a file name.
+        <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.IO.Stream)">
+            Constructs a XSSFWorkbook object, by buffering the whole stream into memory
+             and then opening an {@link OPCPackage} object for it.
             
-             @param      path   the file name.
+            Using an {@link InputStream} requires more memory than using a File, so
+             if a {@link File} is available then you should instead do something like
+              <pre><code>
+                  OPCPackage pkg = OPCPackage.open(path);
+                  XSSFWorkbook wb = new XSSFWorkbook(pkg);
+                  // work with the wb object
+                  ......
+                  pkg.close(); // gracefully closes the underlying zip file
+              </code></pre>     
         </member>
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.String)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.OnWorkbookCreate">
             Create a new CT_Workbook with all values Set to default
         </member>
@@ -4859,12 +4916,15 @@
              The string MUST NOT begin or end with the single quote (') character.
              </p>
             
-             @param sheetname  sheetname to Set for the sheet.
-             @return Sheet representing the new sheet.
-             @throws ArgumentException if the name is null or invalid
-              or workbook already Contains a sheet with this name
-             @see {@link NPOI.ss.util.WorkbookUtil#CreateSafeSheetName(String nameProposal)}
+             <p>
+             See {@link org.apache.poi.ss.util.WorkbookUtil#createSafeSheetName(String nameProposal)}
                   for a safe way to create valid names
+             </p>
+             @param sheetname  sheetname to set for the sheet.
+             @return Sheet representing the new sheet.
+             @throws IllegalArgumentException if the name is null or invalid
+              or workbook already contains a sheet with this name
+             @see org.apache.poi.ss.util.WorkbookUtil#createSafeSheetName(String nameProposal)
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,System.Int16,System.Byte)">
             Finds a font that matches the one with the supplied attributes
@@ -4876,7 +4936,7 @@
              @see #AddPicture(byte[], int)
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.GetCellStyleAt(System.Int16)">
-             gGet the cell style object at the given index
+             Get the cell style object at the given index
             
              @param idx  index within the Set of styles
              @return XSSFCellStyle object at the index
