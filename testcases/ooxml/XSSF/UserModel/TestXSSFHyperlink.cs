@@ -61,10 +61,10 @@ namespace NPOI.XSSF.UserModel
             XSSFCreationHelper CreateHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
 
             String[] urls = {
-                "http://apache.org",
+                "http://apache.org/",
                 "www.apache.org",
                 "/temp",
-                "c:/temp",
+                "c:\\temp",
                 "http://apache.org/default.php?s=isTramsformed&submit=Search&la=*&li=*"};
             for (int i = 0; i < urls.Length; i++)
             {
@@ -82,8 +82,11 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < rels.Size; i++)
             {
                 PackageRelationship rel = rels.GetRelationship(i);
-                // there should be a relationship for each URL
-                Assert.AreEqual(urls[i], rel.TargetUri.ToString());
+                if (rel.TargetUri.IsAbsoluteUri&&rel.TargetUri.IsFile)
+                    Assert.AreEqual(urls[i],rel.TargetUri.LocalPath);
+                else
+                    // there should be a relationship for each URL
+                    Assert.AreEqual(urls[i], rel.TargetUri.ToString());
             }
 
             // Bugzilla 53041: Hyperlink relations are duplicated when saving XSSF file
@@ -94,8 +97,11 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < rels.Size; i++)
             {
                 PackageRelationship rel = rels.GetRelationship(i);
-                // there should be a relationship for each URL
-                Assert.AreEqual(urls[i], rel.TargetUri.ToString());
+                if (rel.TargetUri.IsAbsoluteUri && rel.TargetUri.IsFile)
+                    Assert.AreEqual(urls[i], rel.TargetUri.LocalPath);
+                else
+                    // there should be a relationship for each URL
+                    Assert.AreEqual(urls[i], rel.TargetUri.ToString());
             }
         }
         [Test]

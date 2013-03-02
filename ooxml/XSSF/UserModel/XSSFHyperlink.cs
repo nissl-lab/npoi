@@ -189,7 +189,7 @@ namespace NPOI.XSSF.UserModel
                 case HyperlinkType.URL:
                     try
                     {
-                        new Uri(address);
+                        new Uri(address,UriKind.RelativeOrAbsolute);
                     }
                     catch (UriFormatException x)
                     {
