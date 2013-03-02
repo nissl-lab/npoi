@@ -197,6 +197,7 @@ namespace NPOI.XSSF.UserModel
          * See Bugzilla 52219.
          */
         [Test]
+        [Ignore]
         public void TestRichText()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
