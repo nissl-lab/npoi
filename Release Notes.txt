@@ -1,8 +1,16 @@
-2.0 Beta 1 (Feb, 2013)
+2.0 Beta 1 [v2.0.1] (Feb, 2013)
 New features
 a. Copy rows, columns inside a sheet
-b. Copy sheet between workbook
-c. insert rows and column
+b. Copy sheet between workbooks (contributed by Paul Kratt)
+c. insert rows and column inside a sheet
+d. OpenXml4Net is stable and ready for use
+e. Support new Excel functions such as RATE, RANK, ISERR
+f. Support converting from Excel to Html
+g. POIFS Browser supports Chart records
+
+Example changes
+a. Use MemoryStream.WriteTo instead in ExportXlsToDownload in order to avoid out of memory exception
+b. add new examples like CalendarDemo, BusinessPlan, CopySheet
 
 POI Bug Fixes
 53282 - Avoid exception when parsing OPC relationships with non-breaking spaces(poi-developers) 
@@ -89,7 +97,7 @@ New PackagePart? method getRelatedPart(PackageRelationship?) to simplify navigat
 51196 - more progress with Chart APi in XSSF(poi-developers)
 51785 - Allow XSSF setForceFormulaRecalculation to work with the minimal ooxml-schemas jar(poi-developers)
  
-2.0 Alpha (August, 2012)
+2.0 Alpha [v2.0.0] (August, 2012)
 New features
 a. Implement OpenXml4Net (same as System.Packaging from Microsoft). It supports both .NET 2.0 and .NET 4.0
 b. Excel 2007 read/write library (NPOI.XSSF)
