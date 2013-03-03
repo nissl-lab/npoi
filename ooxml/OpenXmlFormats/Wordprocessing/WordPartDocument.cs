@@ -10,7 +10,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class DocumentDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Document));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
         //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
         //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
         //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
@@ -57,7 +57,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class FootnotesDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Footnotes));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
         //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
         //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
         //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
@@ -95,7 +95,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class EndnotesDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Endnotes));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
         //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
         //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
         //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
@@ -134,7 +134,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
         //TODO: add namespace according the documnet file.
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Styles));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
         //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
         //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
         //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
@@ -173,7 +173,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
         //TODO: add namespace according the documnet file.
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Numbering));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
         //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
         //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
         //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),

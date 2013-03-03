@@ -14,7 +14,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Xf
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         private CT_CellAlignment alignmentField = null;
@@ -639,7 +639,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Border));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         public override string ToString()
         {
@@ -903,7 +903,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Fonts));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         public override string ToString()
         {
@@ -1358,7 +1358,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return obj;
         }
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Fill));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         public override string ToString()
@@ -1713,7 +1713,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         #endregion tint
 
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Color));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         public override string ToString()
         {
@@ -1753,7 +1753,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Font
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Font));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         // all elements are optional

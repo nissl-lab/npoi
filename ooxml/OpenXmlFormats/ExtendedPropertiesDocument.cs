@@ -10,7 +10,7 @@ namespace NPOI.OpenXmlFormats
     public class ExtendedPropertiesDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_ExtendedProperties));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"),
             new XmlQualifiedName("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes")
         });

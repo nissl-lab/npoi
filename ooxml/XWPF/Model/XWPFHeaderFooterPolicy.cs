@@ -306,7 +306,7 @@ namespace NPOI.XWPF.Model
         //    map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
         //    xmlOptions.SaveSuggestedPrefixes=(map);
         //    return xmlOptions;
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
                 new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
                 new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),

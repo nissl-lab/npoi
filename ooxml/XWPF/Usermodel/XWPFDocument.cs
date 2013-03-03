@@ -786,7 +786,7 @@ namespace NPOI.XWPF.UserModel
             //map.Put("http://schemas.microsoft.com/office/word/2006/wordml", "wne");
             //map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
             //xmlOptions.SaveSuggestedPrefixes=(map);
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
                 new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
                 new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),

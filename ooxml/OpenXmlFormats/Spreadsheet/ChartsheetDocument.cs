@@ -7,7 +7,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class ChartsheetDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chartsheet));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         CT_Chartsheet sheet = null;
 

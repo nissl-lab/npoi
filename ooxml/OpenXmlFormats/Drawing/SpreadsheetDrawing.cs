@@ -466,7 +466,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         //map[NAMESPACE_A]= "a";
         //map[ST_RelationshipId.NamespaceURI]= "r";
         ////xmlOptions.SetSaveSuggestedPrefixes(map);
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             //new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), 
             new XmlQualifiedName("a", "http://schemas.openxmlformats.org/drawingml/2006/main"),
             new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),

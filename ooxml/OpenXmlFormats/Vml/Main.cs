@@ -273,7 +273,7 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.styleField = value;
             }
         }
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
             new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
             new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")
@@ -2644,7 +2644,7 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.pathField = new CT_Path();
             return this.pathField;
         }
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
             new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
             new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")

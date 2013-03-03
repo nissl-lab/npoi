@@ -47,27 +47,31 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         public const string RuleName_LEGENDEXCEPTION = "LEGENDEXCEPTION";
         public const string RuleName_CHARTSHEET = "CHARTSHEET";
 
+        private string _rulename;
+
         protected string RuleName
         {
-            get;
-            private set;
+            get { return _rulename; }
+            private set { _rulename = value; }
         }
+        ChartRecordAggregate _container;
         protected ChartRecordAggregate Container
         {
-            get;
-            private set;
+            get { return _container; }
+            private set { _container = value; }
         }
         protected ChartRecordAggregate(string ruleName, ChartRecordAggregate container)
         {
-            this.RuleName = ruleName;
-            this.Container = container;
+            this._rulename = ruleName;
+            this._container = container;
         }
-        private static StartBlockStack blocks = new StartBlockStack();
+        private StartBlockStack blocks = new StartBlockStack();
 
-        protected static bool IsInStartObject
+        private bool _isInStartObject;
+        protected bool IsInStartObject
         {
-            get;
-            set;
+            get { return _isInStartObject; }
+            set { _isInStartObject=value;}
         }
         public const short ChartSpecificFutureRecordLowerSid = 0x800;
         public const short ChartSpecificFutureRecordHigherSid = 0x8FF;

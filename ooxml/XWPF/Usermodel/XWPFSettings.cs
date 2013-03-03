@@ -175,7 +175,7 @@ namespace NPOI.XWPF.UserModel
             Dictionary<String, String> map = new Dictionary<String, String>();
             map.Put("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w");
             xmlOptions.SaveSuggestedPrefixes=(map);*/
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")});
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();

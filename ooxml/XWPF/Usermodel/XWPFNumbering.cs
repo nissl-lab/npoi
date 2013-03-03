@@ -104,7 +104,7 @@ namespace NPOI.XWPF.UserModel
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             NumberingDocument doc = new NumberingDocument(ctNumbering);
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
                 new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
                 new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),

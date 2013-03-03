@@ -89,7 +89,7 @@ namespace NPOI.XWPF.UserModel
             xmlOptions.SaveSuggestedPrefixes=(map);*/
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("w", "http://schemas.Openxmlformats.org/wordProcessingml/2006/main"),
                 new XmlQualifiedName("r", "http://schemas.Openxmlformats.org/officeDocument/2006/relationships")
             });

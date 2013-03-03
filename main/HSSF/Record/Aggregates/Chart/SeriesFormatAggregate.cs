@@ -122,10 +122,11 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             rv.VisitRecord(EndRecord.instance);
         }
 
+        short _seriesIndex;
         public short SeriesIndex
         {
-            get;
-            set;
+            get { return _seriesIndex; }
+            set { _seriesIndex = value; }
         }
         /// <summary>
         /// LegendException [Begin ATTACHEDLABEL [TEXTPROPS] End]
