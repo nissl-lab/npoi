@@ -238,12 +238,12 @@
       <Name>main vs10</Name>
     </ProjectReference>
     <ProjectReference Include="openxml4Net\OpenXml4Net vs2010.csproj">
-      <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
-      <Name>OpenXml4Net</Name>
+      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
+      <Name>OpenXml4Net vs2010</Name>
     </ProjectReference>
     <ProjectReference Include="OpenXmlFormats\OpenXmlFormats vs2010.csproj">
-      <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
-      <Name>OpenXmlFormats</Name>
+      <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
+      <Name>OpenXmlFormats vs2010</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

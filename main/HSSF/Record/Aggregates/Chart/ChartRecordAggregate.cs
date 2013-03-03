@@ -62,10 +62,10 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         }
         protected ChartRecordAggregate(string ruleName, ChartRecordAggregate container)
         {
-            this._rulename = ruleName;
-            this._container = container;
+            this.RuleName = ruleName;
+            this.Container = container;
         }
-        private StartBlockStack blocks = new StartBlockStack();
+        private static StartBlockStack blocks = new StartBlockStack();
 
         private bool _isInStartObject;
         protected bool IsInStartObject
