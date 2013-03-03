@@ -65,11 +65,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             XmlSerializer xmlse = new XmlSerializer(obj.GetType());
             StringBuilder output = new StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings
-            {
-                Encoding = Encoding.UTF8,
-                OmitXmlDeclaration = true
-            };
+            XmlWriterSettings settings = new XmlWriterSettings();
+
+            settings.Encoding = Encoding.UTF8;
+            settings.OmitXmlDeclaration = true;
             XmlWriter writer = XmlWriter.Create(output, settings);
             xmlse.Serialize(writer, obj);
             

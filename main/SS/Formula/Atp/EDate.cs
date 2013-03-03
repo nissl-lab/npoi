@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.Atp
                 numberOfMonths = OperandResolver.CoerceValueToDouble(OperandResolver.GetSingleValue(args[1], ec.RowIndex, ec.ColumnIndex));
 
                 // calculate the result date (Excel rounds the second argument always to zero; but we have be careful about negative numbers)
-                var resultDate = date.AddMonths((int)Math.Floor(Math.Abs(numberOfMonths)) * Math.Sign(numberOfMonths));
+                DateTime resultDate = date.AddMonths((int)Math.Floor(Math.Abs(numberOfMonths)) * Math.Sign(numberOfMonths));
                 result = DateUtil.GetExcelDate(resultDate);
                     
                 NumericFunction.CheckValue(result);

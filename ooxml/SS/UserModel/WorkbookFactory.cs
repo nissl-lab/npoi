@@ -138,7 +138,7 @@ namespace NPOI.SS.UserModel
         public static IWorkbook Create(Stream inputStream, ImportOption importOption)
         {
             SetImportOption(importOption);
-            var workbook = Create(inputStream);
+            IWorkbook workbook = Create(inputStream);
             return workbook;
         }
 

@@ -103,7 +103,7 @@ namespace NPOI.XWPF.UserModel
             pictures = new List<XWPFPicture>();
             foreach (object o in pictTextObjs)
             {
-                foreach (var pict in GetCTPictures(o))
+                foreach (OpenXmlFormats.Dml.Picture.CT_Picture pict in GetCTPictures(o))
                 {
                     XWPFPicture picture = new XWPFPicture(pict, this);
                    pictures.Add(picture);

@@ -474,7 +474,7 @@ namespace NPOI.XSSF.UserModel
             {
                 NotifyArrayFormulaChanging();
             }
-            SetFormula(formula, (int)FormulaType.CELL);
+            SetFormula(formula, FormulaType.CELL);
         }
 
         internal void SetCellArrayFormula(String formula, CellRangeAddress range)

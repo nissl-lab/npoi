@@ -398,25 +398,48 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_Marker
     {
+        private int _col;
+        private long _colOff;
+        private int _row;
+        private long _rowOff;
+
         public int col
         {
-            get;
-            set;
+            get 
+            {
+                return _col;
+            }
+            set 
+            {
+                _col = value;
+            }
         }
         public long colOff
         {
-            get;
-            set;
+            get 
+            {
+                return _colOff;
+            }
+            set
+            {
+                _colOff = value;
+            }
         }
         public int row
         {
-            get;
-            set;
+            get { return _row; }
+            set { _row = value; }
         }
         public long rowOff
         {
-            get;
-            set;
+            get
+            {
+                return _rowOff;
+            }
+            set
+            {
+                _rowOff = value;
+            }
         }
     }
     public enum ST_EditAs
@@ -431,17 +454,31 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_AnchorClientData
     {
+        bool _fLocksWithSheet;
+        bool _fPrintsWithSheet;
         [XmlAttribute]
         public bool fLocksWithSheet
         {
-            get;
-            set;
+            get
+            {
+                return _fLocksWithSheet;
+            }
+            set
+            {
+                _fLocksWithSheet = value;
+            }
         }
         [XmlAttribute]
         public bool fPrintsWithSheet
         {
-            get;
-            set;
+            get
+            {
+                return _fPrintsWithSheet;
+            }
+            set
+            {
+                _fPrintsWithSheet = value;
+            }
         }
     }
 
@@ -478,7 +515,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
         {
-            var anchor = new CT_TwoCellAnchor();
+            CT_TwoCellAnchor anchor = new CT_TwoCellAnchor();
             twoCellAnchors.Add(anchor);
             return anchor;
         }

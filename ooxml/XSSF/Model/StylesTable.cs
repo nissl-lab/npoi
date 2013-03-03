@@ -433,7 +433,7 @@ namespace NPOI.XSSF.Model
             styleSheet.fonts = (ctFonts);
 
             // Fills
-            var ctf = new List<CT_Fill>(fills.Count);
+            List<CT_Fill> ctf = new List<CT_Fill>(fills.Count);
             foreach (XSSFCellFill f in fills)
                 ctf.Add( f.GetCTFill());
             CT_Fills ctFills = new CT_Fills();

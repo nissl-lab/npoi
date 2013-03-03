@@ -663,10 +663,10 @@ namespace NPOI.HSSF.UserModel
             r.MinimumDate = ((short)-28644);
             r.MaximumDate = ((short)-28715);
             r.MajorInterval = ((short)2);
-            r.MajorUnit = ((short)0);
+            r.MajorUnit = (DateUnit)0;
             r.MinorInterval = ((short)1);
-            r.MinorUnit = ((short)0);
-            r.BaseUnit = ((short)0);
+            r.MinorUnit = (DateUnit)0;
+            r.BaseUnit = (DateUnit)0;
             r.CrossDate = ((short)-28644);
             r.IsAutoMin = (true);
             r.IsAutoMax = (true);

@@ -565,7 +565,7 @@ namespace NPOI.XWPF.UserModel
         public int GetParagraphPos(int pos)
         {
             List<IBodyElement> list = new List<IBodyElement>();
-            foreach (var p in paragraphs)
+            foreach (IBodyElement p in paragraphs)
             {
                 list.Add(p);
             }
@@ -582,7 +582,7 @@ namespace NPOI.XWPF.UserModel
         public int GetTablePos(int pos)
         {
             List<IBodyElement> list = new List<IBodyElement>();
-            foreach (var p in tables)
+            foreach (IBodyElement p in tables)
             {
                 list.Add(p);
             }

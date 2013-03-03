@@ -1206,7 +1206,7 @@ namespace NPOI.XSSF.UserModel
                 CellReference cellRef = pane.IsSetTopLeftCell() ?
                     new CellReference(pane.topLeftCell) : null;
                 return new PaneInformation((short)pane.xSplit, (short)pane.ySplit,
-                        (short)(cellRef == null ? 0 : cellRef.Row), (short)(cellRef == null ? 0 : cellRef.Col),
+                        (cellRef == null ? (short)0 : (short)cellRef.Row), (cellRef == null ? (short)0 : (short)cellRef.Col),
                         //in java the frist enum value is 1,but 0 in c#
                         (byte)(pane.activePane /*- 1*/), pane.state == ST_PaneState.frozen);
             }
@@ -2643,10 +2643,10 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
         {
-            var rowsToRemove = new List<int>();
+            List<int> rowsToRemove = new List<int>();
             foreach (KeyValuePair<int,XSSFRow> rowDict in _rows)
             {
-                var row = rowDict.Value;
+                XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
                 if (rownum < startRow) continue;
 
@@ -2686,7 +2686,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
-            foreach(var rowKey in rowsToRemove)
+            foreach(int rowKey in rowsToRemove)
             {
                 _rows.Remove(rowKey);
             }

@@ -7,7 +7,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class WorksheetDocument
     {
         internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Worksheet));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new[] {
+        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
             new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), 
             new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
 
