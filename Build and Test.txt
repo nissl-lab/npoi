@@ -17,8 +17,8 @@ Select the solution from the appropriate solution folder:
 The name of the solution defines the target: 
 - NPOI.sln for the library NPOI itself.
 - NPOITest.sln for the library together with a test suite.
-
-
+- OOXML.sln for the OOXML library of NPOI
+- OOXMLTest.sln for the OOXML library with a test suite
 
 Test Suite
 ==========
@@ -32,8 +32,12 @@ Copy the content of testcases/test-data to the same folder within NPOI.
 Load the the NPOITest.sln into your IDE, build the project and execute 
 all the unit tests.
 
-Here are some numbers (2012-05-04):
-unit tests: 1712, passed: 1705 (failed 7)
+*****2013-03-06 Test Result******
+NPOI.OOXML and NPOI test suite: 2511 passed, 22 skiped, 24 failed
+
+
+*****2012-05-04 Test Result******
+NPOI test suite: unit tests: 1712, passed: 1705 (failed 7)
 
 There are 11 unit tests flagged with the [Ignore] attribute: 
 - testcases\main\HSSF\Model\TestOperandClassTransformer.cs(63):   [Ignore] //this test is disabled in poi.

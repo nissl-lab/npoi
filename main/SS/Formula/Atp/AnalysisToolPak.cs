@@ -107,7 +107,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "DOLLARDE", null);
             r(m, "DOLLARFR", null);
             r(m, "DURATION", null);
-            r(m, "EDATE", null);
+            r(m, "EDATE", EDate.Instance);
             r(m, "EFFECT", null);
             r(m, "EOMONTH", null);
             r(m, "ERF", null);

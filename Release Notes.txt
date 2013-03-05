@@ -12,6 +12,18 @@ Example changes
 a. Use MemoryStream.WriteTo instead in ExportXlsToDownload in order to avoid out of memory exception
 b. add new examples like CalendarDemo, BusinessPlan, CopySheet
 
+NPOI Bug Fixes
+Issue with 2.0 Beta: Get an non-Closing Element error
+http://npoi.codeplex.com/workitem/11085
+Npoi 2 error in NumericCellValue (XSSFCell)
+http://npoi.codeplex.com/workitem/11083
+[HSSF]Comment is not saved correctly while using a xls template with comment
+http://npoi.codeplex.com/workitem/11169
+Access issue creating worksheet
+http://npoi.codeplex.com/workitem/11383
+Error when running NPOI with Mono C# compiler version 2.0.1.0
+http://npoi.codeplex.com/workitem/4547
+
 POI Bug Fixes
 53282 - Avoid exception when parsing OPC relationships with non-breaking spaces(poi-developers) 
 54016 - Avoid exception when parsing workbooks with DConRefRecord in row aggregate(poi-developers)

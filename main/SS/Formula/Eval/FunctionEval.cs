@@ -306,7 +306,7 @@ namespace NPOI.SS.Formula.Eval
             retval[216] = new Rank(); // RANK
             retval[219] = new Address(); // AddRESS
             retval[220] = new Days360(); // DAYS360
-            retval[221] = new NotImplementedFunction("TODAY"); // TODAY
+            retval[221] = new Today(); // TODAY
             retval[222] = new NotImplementedFunction("VDB"); // VDB
             retval[227] = AggregateFunction.MEDIAN; // MEDIAN
             retval[228] = new Sumproduct(); // SUMPRODUCT
