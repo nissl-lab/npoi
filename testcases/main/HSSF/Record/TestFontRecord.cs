@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using NPOI.HSSF.Record;
 using NPOI.Util;
+using NPOI.SS.UserModel;
 
 namespace TestCases.HSSF.Record
 {
@@ -36,8 +37,8 @@ namespace TestCases.HSSF.Record
             Assert.IsFalse(record.IsMacshadowed);
             Assert.AreEqual(0x7fff, record.ColorPaletteIndex);
             Assert.AreEqual(0x190, record.BoldWeight);
-            Assert.AreEqual(0x00, record.SuperSubScript);
-            Assert.AreEqual(0x00, record.Underline);
+            Assert.AreEqual(FontSuperScript.None, record.SuperSubScript);
+            Assert.AreEqual(FontUnderlineType.None, record.Underline);
             Assert.AreEqual(0x00, record.Family);
             Assert.AreEqual(0x00, record.Charset);
             Assert.AreEqual("Arial", record.FontName);

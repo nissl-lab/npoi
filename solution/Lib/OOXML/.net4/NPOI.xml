@@ -9756,7 +9756,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:NPOI.SS.UserModel.IWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,System.Int16,System.Byte)">
+        <member name="M:NPOI.SS.UserModel.IWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,NPOI.SS.UserModel.FontSuperScript,NPOI.SS.UserModel.FontUnderlineType)">
             <summary>
             Finds a font that matches the one with the supplied attributes
             </summary>
@@ -10286,7 +10286,7 @@
             </summary>
             <returns>new font object</returns>
         </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,System.Int16,System.Byte)">
+        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,NPOI.SS.UserModel.FontSuperScript,NPOI.SS.UserModel.FontUnderlineType)">
             <summary>
             Finds a font that matches the one with the supplied attributes
             </summary>
@@ -14291,48 +14291,6 @@
             
             @author Dmitriy Kumshayev
         </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_NONE">
-            No border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_THIN">
-            Thin border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_MEDIUM">
-            Medium border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_DASHED">
-            dash border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_HAIR">
-            dot border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_THICK">
-            Thick border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_DOUBLE">
-            double-line border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_DOTTED">
-            hair-line border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_MEDIUM_DASHED">
-            Medium dashed border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_DASH_DOT">
-            dash-dot border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_MEDIUM_DASH_DOT">
-            medium dash-dot border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_DASH_DOT_DOT">
-            dash-dot-dot border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_MEDIUM_DASH_DOT_DOT">
-            medium dash-dot-dot border
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.BorderFormatting.BORDER_SLANTED_DASH_DOT">
-            slanted dash-dot border
-        </member>
         <member name="M:NPOI.HSSF.Record.CF.BorderFormatting.#ctor(NPOI.HSSF.Record.RecordInputStream)">
             Creates new FontFormatting 
         </member>
@@ -14466,30 +14424,6 @@
             
             @author Dmitriy Kumshayev
         </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.SS_NONE">
-            Escapement type - None 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.SS_SUPER">
-            Escapement type - Superscript 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.SS_SUB">
-            Escapement type - Subscript 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.U_NONE">
-            Underline type - None 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.U_SINGLE">
-            Underline type - Single 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.U_DOUBLE">
-            Underline type - double 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.U_SINGLE_ACCOUNTING">
-            Underline type - Single Accounting 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.FontFormatting.U_DOUBLE_ACCOUNTING">
-            Underline type - double Accounting 
-        </member>
         <member name="F:NPOI.HSSF.Record.CF.FontFormatting.FONT_WEIGHT_NORMAL">
             Normal boldness (not bold) 
         </member>
@@ -14539,74 +14473,11 @@
              Get the type of Underlining for the font
             
              @return font Underlining type
-            
-             @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_NONE
-             @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_SINGLE
-             @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_DOUBLE
-             @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_SINGLE_ACCOUNTING
-             @see org.apache.poi.hssf.usermodel.HSSFFontFormatting#U_DOUBLE_ACCOUNTING
         </member>
         <member name="T:NPOI.HSSF.Record.CF.PatternFormatting">
             Pattern Formatting Block of the Conditional Formatting Rule Record.
             
             @author Dmitriy Kumshayev
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.NO_Fill">
-             No background 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.SOLID_FOREGROUND">
-             Solidly Filled 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.FINE_DOTS">
-             Small fine dots 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.ALT_BARS">
-             Wide dots 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.SPARSE_DOTS">
-             SParse dots 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THICK_HORZ_BANDS">
-             Thick horizontal bands 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THICK_VERT_BANDS">
-             Thick vertical bands 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THICK_BACKWARD_DIAG">
-             Thick backward facing diagonals 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THICK_FORWARD_DIAG">
-             Thick forward facing diagonals 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.BIG_SPOTS">
-             Large spots 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.BRICKS">
-             Brick-like layout 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THIN_HORZ_BANDS">
-             Thin horizontal bands 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THIN_VERT_BANDS">
-             Thin vertical bands 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THIN_BACKWARD_DIAG">
-             Thin backward diagonal 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.THIN_FORWARD_DIAG">
-             Thin forward diagonal 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.SQUARES">
-             Squares 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.DIAMONDS">
-             Diamonds 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.LESS_DOTS">
-             Less Dots 
-        </member>
-        <member name="F:NPOI.HSSF.Record.CF.PatternFormatting.LEAST_DOTS">
-             Least Dots 
         </member>
         <member name="M:NPOI.HSSF.Record.CF.PatternFormatting.#ctor(NPOI.HSSF.Record.RecordInputStream)">
             Creates new FontFormatting 
@@ -18802,15 +18673,7 @@
              @see #SetAttributes(short)
         </member>
         <member name="P:NPOI.HSSF.Record.FontRecord.Underline">
-             Set the type of Underlining for the font
-            
-             @param u  base or subscript option
-            
-             @see #U_NONE
-             @see #U_SINGLE
-             @see #U_DOUBLE
-             @see #U_SINGLE_ACCOUNTING
-             @see #U_DOUBLE_ACCOUNTING
+            Set the type of Underlining for the font
         </member>
         <member name="P:NPOI.HSSF.Record.FontRecord.Family">
              Set the font family (TODO)
@@ -18852,9 +18715,6 @@
              Get the type of base or subscript for the font
             
              @return base or subscript option
-             @see #SS_NONE
-             @see #SS_SUPER
-             @see #SS_SUB
         </member>
         <member name="T:NPOI.HSSF.Record.FooterRecord">
             Title:        Footer Record 
@@ -21098,11 +20958,7 @@
         <member name="P:NPOI.HSSF.Record.TextObjectRecord.TextOrientation">
              Get the text orientation field for the TextObjectBase record.
             
-             @return  One of 
-                    TEXT_ORIENTATION_NONE
-                    TEXT_ORIENTATION_TOP_TO_BOTTOM
-                    TEXT_ORIENTATION_ROT_RIGHT
-                    TEXT_ORIENTATION_ROT_LEFT
+             @return a TextOrientation
         </member>
         <member name="P:NPOI.HSSF.Record.TextObjectRecord.HorizontalTextAlignment">
             @return the Horizontal text alignment field value.
@@ -21994,22 +21850,22 @@
              @param formulaRow
              @param formulaColumn
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderDiagonal.NONE">
+        <member name="F:NPOI.SS.UserModel.BorderDiagonal.None">
             <summary>
             No diagional border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderDiagonal.BACKWARD">
+        <member name="F:NPOI.SS.UserModel.BorderDiagonal.Backward">
             <summary>
             Backward diagional border, from left-top to right-bottom
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderDiagonal.FORWARD">
+        <member name="F:NPOI.SS.UserModel.BorderDiagonal.Forward">
             <summary>
             Forward diagional border, from right-top to left-bottom
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderDiagonal.BOTH">
+        <member name="F:NPOI.SS.UserModel.BorderDiagonal.Both">
             <summary>
             Both forward and backward diagional border
             </summary>
@@ -22044,6 +21900,34 @@
              @return formula representation of the data source
              @throws {@code UnsupportedOperationException} if the data source is not a
                             reference.
+        </member>
+        <member name="T:NPOI.SS.UserModel.FontUnderline">
+             the different types of possible underline formatting
+            
+             @author Gisella Bronzetti
+        </member>
+        <member name="F:NPOI.SS.UserModel.FontUnderline.SINGLE">
+            Single-line underlining under each character in the cell.
+            The underline is drawn through the descenders of
+            characters such as g and p..
+        </member>
+        <member name="F:NPOI.SS.UserModel.FontUnderline.DOUBLE">
+            Double-line underlining under each character in the
+            cell. underlines are drawn through the descenders of
+            characters such as g and p.
+        </member>
+        <member name="F:NPOI.SS.UserModel.FontUnderline.SINGLE_ACCOUNTING">
+            Single-line accounting underlining under each
+            character in the cell. The underline is drawn under the
+            descenders of characters such as g and p.
+        </member>
+        <member name="F:NPOI.SS.UserModel.FontUnderline.DOUBLE_ACCOUNTING">
+            Double-line accounting underlining under each
+            character in the cell. The underlines are drawn under
+            the descenders of characters such as g and p.
+        </member>
+        <member name="F:NPOI.SS.UserModel.FontUnderline.NONE">
+            No underline.
         </member>
         <member name="T:NPOI.Util.BlockingInputStream">
              Implementation of a BlockingInputStream to provide data to 
@@ -25366,7 +25250,7 @@
             <summary>
             Creates new Cell - Should only be called by HSSFRow.  This Creates a cell
             from scratch.
-            When the cell is initially Created it is Set to CellType.BLANK. Cell types
+            When the cell is initially Created it is Set to CellType.Blank. Cell types
             can be Changed/overwritten by calling SetCellValue with the appropriate
             type as a parameter although conversions from one type to another may be
             prohibited.
@@ -25385,8 +25269,8 @@
             <param name="sheet">Sheet record of the sheet containing this cell</param>
             <param name="row">the row of this cell</param>
             <param name="col">the column for this cell</param>
-            <param name="type">CellType.NUMERIC, CellType.STRING, CellType.FORMULA, CellType.BLANK,
-            CellType.BOOLEAN, CellType.ERROR</param>
+            <param name="type">CellType.Numeric, CellType.String, CellType.Formula, CellType.Blank,
+            CellType.Boolean, CellType.Error</param>
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFCell.#ctor(NPOI.HSSF.UserModel.HSSFWorkbook,NPOI.HSSF.UserModel.HSSFSheet,NPOI.HSSF.Record.CellValueRecordInterface)">
             <summary>
@@ -25684,7 +25568,7 @@
             <summary>
             Only valid for formula cells
             </summary>
-            <value>one of (CellType.NUMERIC,CellType.STRING, CellType.BOOLEAN, CellType.ERROR) depending
+            <value>one of (CellType.Numeric,CellType.String, CellType.Boolean, CellType.Error) depending
             on the cached value of the formula</value>
         </member>
         <member name="T:NPOI.HSSF.UserModel.HSSFCellStyle">
@@ -26389,12 +26273,6 @@
             @author Glen Stampoultzis (glens at apache.org)
             </summary>
         </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFTextbox.HORIZONTAL_ALIGNMENT_LEFT">
-            How to align text horizontally
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFTextbox.VERTICAL_ALIGNMENT_TOP">
-            How to align text vertically
-        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFTextbox.#ctor(NPOI.HSSF.UserModel.HSSFShape,NPOI.HSSF.UserModel.HSSFAnchor)">
             <summary>
             Construct a new textbox with the given parent and anchor.
@@ -27009,18 +26887,10 @@
         <member name="P:NPOI.SS.UserModel.IFont.TypeOffset">
             get normal,super or subscript.
             @return offset type to use (none,super,sub)
-            @see #SS_NONE
-            @see #SS_SUPER
-            @see #SS_SUB
         </member>
         <member name="P:NPOI.SS.UserModel.IFont.Underline">
             get type of text underlining to use
             @return underlining type
-            @see #U_NONE
-            @see #U_SINGLE
-            @see #U_DOUBLE
-            @see #U_SINGLE_ACCOUNTING
-            @see #U_DOUBLE_ACCOUNTING
         </member>
         <member name="P:NPOI.SS.UserModel.IFont.Charset">
             get character-set to use.
@@ -27215,9 +27085,6 @@
              Get the type of base or subscript for the font
             
              @return base or subscript option
-             @see #SS_NONE
-             @see #SS_SUPER
-             @see #SS_SUB
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFFontFormatting.FontColorIndex">
             @return font color index
@@ -27486,7 +27353,7 @@
              and the result. If you want the cell Replaced with
              the result of the formula, use {@link #EvaluateInCell(HSSFCell)}
             @param cell The cell to Evaluate
-            @return The type of the formula result (the cell's type remains as CellType.FORMULA however)
+            @return The type of the formula result (the cell's type remains as CellType.Formula however)
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFFormulaEvaluator.EvaluateFormulaCellValue(NPOI.SS.UserModel.ICell)">
             Returns a CellValue wrapper around the supplied ValueEval instance.
@@ -28109,164 +27976,164 @@
         <member name="M:NPOI.HSSF.Util.HSSFColor.GetHexString">
             @return a hex string exactly like a gnumeric triplet
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.BLACK">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Black">
              Class BLACK
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.BROWN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Brown">
              Class BROWN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.OLIVE_GREEN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.OliveGreen">
              Class OLIVE_GREEN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.DARK_GREEN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.DarkGreen">
              Class DARK_GREEN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.DARK_TEAL">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.DarkTeal">
              Class DARK_TEAL
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.DARK_BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.DarkBlue">
              Class DARK_BLUE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.INDIGO">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Indigo">
              Class INDIGO
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.GREY_80_PERCENT">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Grey80Percent">
              Class GREY_80_PERCENT
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.DARK_RED">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.DarkRed">
              Class DARK_RED
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.ORANGE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Orange">
              Class ORANGE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.DARK_YELLOW">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.DarkYellow">
              Class DARK_YELLOW
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.GREEN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Green">
              Class GREEN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.TEAL">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Teal">
              Class TEAL
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Blue">
              Class BLUE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.BLUE_GREY">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.BlueGrey">
              Class BLUE_GREY
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.GREY_50_PERCENT">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Grey50Percent">
              Class GREY_50_PERCENT
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.RED">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Red">
              Class RED
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LIGHT_ORANGE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.LightOrange">
              Class LIGHT_ORANGE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LIME">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Lime">
              Class LIME
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.SEA_GREEN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.SeaGreen">
              Class SEA_GREEN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.AQUA">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Aqua">
              Class AQUA
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.GREY_40_PERCENT">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Grey40Percent">
              Class GREY_40_PERCENT
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.TURQUOISE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Turquoise">
              Class TURQUOISE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.SKY_BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.SkyBlue">
              Class SKY_BLUE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.PLUM">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Plum">
              Class PLUM
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.GREY_25_PERCENT">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Grey25Percent">
              Class GREY_25_PERCENT
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.ROSE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Rose">
              Class ROSE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.TAN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Tan">
              Class TAN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LIGHT_YELLOW">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.LightYellow">
              Class LIGHT_YELLOW
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LIGHT_GREEN">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.LightGreen">
              Class LIGHT_GREEN
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LIGHT_TURQUOISE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.LightTurquoise">
              Class LIGHT_TURQUOISE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.PALE_BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.PaleBlue">
              Class PALE_BLUE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LAVENDER">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Lavender">
              Class LAVENDER
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.WHITE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.White">
              Class WHITE
             
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.CORNFLOWER_BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.CornflowerBlue">
             Class CORNFLOWER_BLUE
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LEMON_CHIFFON">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.LemonChiffon">
             Class LEMON_CHIFFON
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.MAROON">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Maroon">
             Class MAROON
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.ORCHID">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Orchid">
             Class ORCHID
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.CORAL">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Coral">
             Class CORAL
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.ROYAL_BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.RoyalBlue">
             Class ROYAL_BLUE
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.LightCornflowerBlue">
             Class LIGHT_CORNFLOWER_BLUE
         </member>
-        <member name="T:NPOI.HSSF.Util.HSSFColor.AUTOMATIC">
+        <member name="T:NPOI.HSSF.Util.HSSFColor.Automatic">
              Special Default/Normal/Automatic color.
              <i>Note:</i> This class Is NOT in the default HashTables returned by HSSFColor.
              The index Is a special case which Is interpreted in the various SetXXXColor calls.
@@ -28594,63 +28461,6 @@
         </member>
         <member name="T:NPOI.SS.UserModel.IPatternFormatting">
             @author Yegor Kozlov
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.NO_Fill">
-             No background 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.SOLID_FOREGROUND">
-             Solidly Filled 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.FINE_DOTS">
-             Small fine dots 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.ALT_BARS">
-             Wide dots 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.SPARSE_DOTS">
-             SParse dots 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THICK_HORZ_BANDS">
-             Thick horizontal bands 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THICK_VERT_BANDS">
-             Thick vertical bands 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THICK_BACKWARD_DIAG">
-             Thick backward facing diagonals 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THICK_FORWARD_DIAG">
-             Thick forward facing diagonals 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.BIG_SPOTS">
-             Large spots 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.BRICKS">
-             Brick-like layout 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THIN_HORZ_BANDS">
-             Thin horizontal bands 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THIN_VERT_BANDS">
-             Thin vertical bands 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THIN_BACKWARD_DIAG">
-             Thin backward diagonal 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.THIN_FORWARD_DIAG">
-             Thin forward diagonal 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.SQUARES">
-             Squares 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.DIAMONDS">
-             Diamonds 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.LESS_DOTS">
-             Less Dots 
-        </member>
-        <member name="F:NPOI.HSSF.UserModel.HSSFPatternFormatting.LEAST_DOTS">
-             Least Dots 
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFPatternFormatting.#ctor(NPOI.HSSF.Record.CFRuleRecord)">
             <summary>
@@ -29189,7 +28999,7 @@
             <summary>
             Use this to create new cells within the row and return it.
             
-            The cell that is returned is a <see cref="T:NPOI.SS.UserModel.ICell"/>/<see cref="F:NPOI.SS.UserModel.CellType.BLANK"/>.
+            The cell that is returned is a <see cref="T:NPOI.SS.UserModel.ICell"/>/<see cref="F:NPOI.SS.UserModel.CellType.Blank"/>.
             The type can be changed either through calling <c>SetCellValue</c> or <c>SetCellType</c>.
             </summary>
             <param name="column">the column number this cell represents</param>
@@ -29203,7 +29013,7 @@
             <summary>
             Use this to create new cells within the row and return it.
             
-            The cell that is returned is a <see cref="T:NPOI.SS.UserModel.ICell"/>/<see cref="F:NPOI.SS.UserModel.CellType.BLANK"/>. The type can be changed
+            The cell that is returned is a <see cref="T:NPOI.SS.UserModel.ICell"/>/<see cref="F:NPOI.SS.UserModel.CellType.Blank"/>. The type can be changed
             either through calling <code>SetCellValue</code> or <code>SetCellType</code>.
             </summary>
             <param name="column">the column number this cell represents</param>
@@ -29396,7 +29206,7 @@
         <member name="M:NPOI.HSSF.UserModel.HSSFRow.CreateCell(System.Int32)">
             <summary>
             Use this to create new cells within the row and return it.
-            The cell that is returned is a CELL_TYPE_BLANK (<see cref="T:NPOI.SS.UserModel.ICell"/>/<see cref="F:NPOI.SS.UserModel.CellType.BLANK"/>). 
+            The cell that is returned is a CELL_TYPE_BLANK (<see cref="T:NPOI.SS.UserModel.ICell"/>/<see cref="F:NPOI.SS.UserModel.CellType.Blank"/>). 
             The type can be changed either through calling <c>SetCellValue</c> or <c>SetCellType</c>.
             </summary>
             <param name="column">the column number this cell represents</param>
@@ -30576,7 +30386,7 @@
         </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFSheet.SetColumnHidden(System.Int32,System.Boolean)">
             <summary>
-            Get the visibility state for a given column.F:\Gloria\研究\文件格式\NPOI\src\NPOI\HSSF\Util\HSSFDataValidation.cs
+            Get the visibility state for a given column.F:\Gloria\�о�\�ļ���ʽ\NPOI\src\NPOI\HSSF\Util\HSSFDataValidation.cs
             </summary>
             <param name="column">the column to Get (0-based).</param>
             <param name="hidden">the visiblity state of the column.</param>
@@ -34752,7 +34562,7 @@
         <member name="F:NPOI.SS.Formula.PTG.AttrPtg._chooseFuncOffset">
             only used for tAttrChoose: offset to the tFuncVar for CHOOSE() 
         </member>
-        <member name="M:NPOI.SS.Formula.PTG.AttrPtg.CreateSpace(System.Int32,System.Int32)">
+        <member name="M:NPOI.SS.Formula.PTG.AttrPtg.CreateSpace(NPOI.SS.Formula.PTG.AttrPtg.SpaceType,System.Int32)">
             <summary>
             Creates the space.
             </summary>
@@ -34772,25 +34582,25 @@
             </summary>
             <param name="dist">distance (in bytes) to position behind tFuncVar(IF) token (minus 1).</param>
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SPACE_BEFORE">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SpaceBefore">
             00H = Spaces before the next token (not allowed before tParen token) 
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.CR_BEFORE">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.CrBefore">
             01H = Carriage returns before the next token (not allowed before tParen token) 
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SPACE_BEFORE_OPEN_PAREN">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SpaceBeforeOpenParen">
             02H = Spaces before opening parenthesis (only allowed before tParen token) 
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.CR_BEFORE_OPEN_PAREN">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.CrBeforeOpenParen">
             03H = Carriage returns before opening parenthesis (only allowed before tParen token) 
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SPACE_BEFORE_CLOSE_PAREN">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SpaceBeforeCloseParen">
             04H = Spaces before closing parenthesis (only allowed before tParen, tFunc, and tFuncVar tokens) 
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.CR_BEFORE_CLOSE_PAREN">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.CrBeforeCloseParen">
             05H = Carriage returns before closing parenthesis (only allowed before tParen, tFunc, and tFuncVar tokens) 
         </member>
-        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SPACE_AFTER_EQUALITY">
+        <member name="F:NPOI.SS.Formula.PTG.AttrPtg.SpaceType.SpaceAfterEquality">
             06H = Spaces following the equality sign (only in macro sheets) 
         </member>
         <member name="T:NPOI.SS.Formula.PTG.BoolPtg">
@@ -35504,119 +35314,77 @@
         <member name="P:NPOI.SS.SpreadsheetVersion.MaxTextLength">
             @return the maximum length of a text cell
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_NONE">
-            No border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_THIN">
-            Thin border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_MEDIUM">
-            Medium border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_DASHED">
-            dash border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_HAIR">
-            dot border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_THICK">
-            Thick border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_DOUBLE">
-            double-line border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_DOTTED">
-            hair-line border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_MEDIUM_DASHED">
-            Medium dashed border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_DASH_DOT">
-            dash-dot border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_MEDIUM_DASH_DOT">
-            medium dash-dot border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_DASH_DOT_DOT">
-            dash-dot-dot border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_MEDIUM_DASH_DOT_DOT">
-            medium dash-dot-dot border 
-        </member>
-        <member name="F:NPOI.SS.UserModel.BorderFormattingStyle.BORDER_SLANTED_DASH_DOT">
-            slanted dash-dot border 
-        </member>
         <member name="T:NPOI.SS.UserModel.BorderStyle">
             <summary>
             The enumeration value indicating the line style of a border in a cell
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.NONE">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.None">
             <summary>
             No border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.THIN">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Thin">
             <summary>
             Thin border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.MEDIUM">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Medium">
             <summary>
             Medium border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.DASHED">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Dashed">
             <summary>
             dash border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.DOTTED">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Dotted">
             <summary>
             dot border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.THICK">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Thick">
             <summary>
             Thick border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.DOUBLE">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Double">
             <summary>
             double-line border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.HAIR">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.Hair">
             <summary>
             hair-line border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.MEDIUM_DASHED">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.MediumDashed">
             <summary>
             Medium dashed border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.DASH_DOT">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.DashDot">
             <summary>
             dash-dot border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.MEDIUM_DASH_DOT">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.MediumDashDot">
             <summary>
             medium dash-dot border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.DASH_DOT_DOT">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.DashDotDot">
             <summary>
             dash-dot-dot border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.MEDIUM_DASH_DOT_DOT">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.MediumDashDotDot">
             <summary>
             medium dash-dot-dot border
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.BorderStyle.SLANTED_DASH_DOT">
+        <member name="F:NPOI.SS.UserModel.BorderStyle.SlantedDashDot">
             <summary>
             slanted dash-dot border
             </summary>
@@ -35756,11 +35524,11 @@
             
              @author Roman Kashitsyn
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisCrossBetween.BETWEEN">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisCrossBetween.Between">
             Specifies the value axis shall cross the category axis
             between data markers.
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisCrossBetween.MIDPOINT_CATEGORY">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisCrossBetween.MidpointCategory">
             Specifies the value axis shall cross the category axis at
             the midpoint of a category.
         </member>
@@ -35769,15 +35537,15 @@
             
              @author Roman Kashitsyn
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisCrosses.AUTO_ZERO">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisCrosses.AutoZero">
             The category axis crosses at the zero point of the value axis (if
             possible), or the minimum value (if the minimum is greater than zero) or
             the maximum (if the maximum is less than zero).
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisCrosses.MIN">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisCrosses.Min">
             The axis crosses at the maximum value.
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisCrosses.MAX">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisCrosses.Max">
             Axis crosses at the minimum value of the chart.
         </member>
         <member name="T:NPOI.SS.UserModel.Charts.AxisOrientation">
@@ -35785,11 +35553,11 @@
             
              @author Roman Kashitsyn
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisOrientation.MAX_MIN">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisOrientation.MaxToMin">
             Specifies that the values on the axis shall be reversed
             so they go from maximum to minimum.
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.AxisOrientation.MIN_MAX">
+        <member name="F:NPOI.SS.UserModel.Charts.AxisOrientation.MinToMax">
             Specifies that the axis values shall be in the usual
             order, minimum to maximum.
         </member>
@@ -35924,12 +35692,12 @@
             @author Roman Kashitsyn
             </remarks>
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.LayoutMode.EDGE">
+        <member name="F:NPOI.SS.UserModel.Charts.LayoutMode.Edge">
             <summary>
             Specifies that the Width or Height shall be interpreted as the Right or Bottom of the chart element.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.LayoutMode.FACTOR">
+        <member name="F:NPOI.SS.UserModel.Charts.LayoutMode.Factor">
             <summary>
             Specifies that the Width or Height shall be interpreted as the width or Height of the chart element.
             </summary>
@@ -35943,12 +35711,12 @@
             @author Roman Kashitsyn
             </remarks>
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.LayoutTarget.INNER">
+        <member name="F:NPOI.SS.UserModel.Charts.LayoutTarget.Inner">
             <summary>
             Specifies that the plot area size shall determine the size of the plot area, not including the tick marks and axis labels.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.Charts.LayoutTarget.OUTER">
+        <member name="F:NPOI.SS.UserModel.Charts.LayoutTarget.Outer">
              <summary>
             Specifies that the plot area size shall determine the
             size of the plot area, the tick marks, and the axis
@@ -36082,7 +35850,7 @@
         <member name="M:NPOI.SS.UserModel.Charts.IValueAxis.SetCrossBetween(NPOI.SS.UserModel.Charts.AxisCrossBetween)">
             @param crossBetween cross between type
         </member>
-        <member name="F:NPOI.SS.UserModel.AnchorType.MOVE_AND_RESIZE">
+        <member name="F:NPOI.SS.UserModel.AnchorType.MoveAndResize">
             Move and Resize With Anchor Cells
             <p>
             Specifies that the current drawing shall move and
@@ -36090,7 +35858,7 @@
             object is anchored to the actual from and to row and column)
             </p>
         </member>
-        <member name="F:NPOI.SS.UserModel.AnchorType.MOVE_DONT_RESIZE">
+        <member name="F:NPOI.SS.UserModel.AnchorType.MoveDontResize">
             Move With Cells but Do Not Resize
             <p>
             Specifies that the current drawing shall move with its
@@ -36102,7 +35870,7 @@
             the drawing shall move its to anchors as needed to maintain this same absolute size.
             </p>
         </member>
-        <member name="F:NPOI.SS.UserModel.AnchorType.DONT_MOVE_AND_RESIZE">
+        <member name="F:NPOI.SS.UserModel.AnchorType.DontMoveAndResize">
             Do Not Move or Resize With Underlying Rows/Columns
             <p>
             Specifies that the current start and end positions shall
@@ -36124,28 +35892,28 @@
              @author Dmitriy Kumshayev
              @author Yegor Kozlov
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.BETWEEN">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.Between">
             'Between' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.NOT_BETWEEN">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.NotBetween">
             'Not between' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.EQUAL">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.Equal">
             'Equal to' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.NOT_EQUAL">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.NotEqual">
             'Not equal to' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.GT">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.GreaterThan">
             'Greater than' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.LT">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.LessThan">
             'Less than' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.GE">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.GreaterThanOrEqual">
             'Greater than or equal to' operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ComparisonOperator.LE">
+        <member name="F:NPOI.SS.UserModel.ComparisonOperator.LessThanOrEqual">
             'Less than or equal to' operator
         </member>
         <member name="F:NPOI.SS.UserModel.ConditionType.None">
@@ -36153,11 +35921,11 @@
             Allow accessing the Initial value.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.ConditionType.CELL_VALUE_IS">
+        <member name="F:NPOI.SS.UserModel.ConditionType.CellValueIs">
             This conditional formatting rule Compares a cell value
             to a formula calculated result, using an operator
         </member>
-        <member name="F:NPOI.SS.UserModel.ConditionType.FORMULA">
+        <member name="F:NPOI.SS.UserModel.ConditionType.Formula">
             This conditional formatting rule Contains a formula to Evaluate.
             When the formula result is true, the cell is highlighted.
         </member>
@@ -36263,89 +36031,28 @@
             may wish to use when handling elapsed
             times.
         </member>
-        <member name="T:NPOI.SS.UserModel.FillPatternType">
-            The enumeration value indicating the style of fill pattern being used for a cell format.
-            
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.NO_FILL">
-             No background 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.SOLID_FOREGROUND">
-             Solidly Filled 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.FINE_DOTS">
-             Small fine dots 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.ALT_BARS">
-             Wide dots 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.SPARSE_DOTS">
-             Sparse dots 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THICK_HORZ_BANDS">
-             Thick horizontal bands 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THICK_VERT_BANDS">
-             Thick vertical bands 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THICK_BACKWARD_DIAG">
-             Thick backward facing diagonals 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THICK_FORWARD_DIAG">
-             Thick forward facing diagonals 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.BIG_SPOTS">
-             Large spots 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.BRICKS">
-             Brick-like layout 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THIN_HORZ_BANDS">
-             Thin horizontal bands 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THIN_VERT_BANDS">
-             Thin vertical bands 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THIN_BACKWARD_DIAG">
-             Thin backward diagonal 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.THIN_FORWARD_DIAG">
-             Thin forward diagonal 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.SQUARES">
-             Squares 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.DIAMONDS">
-             Diamonds 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.LESS_DOTS">
-             Less Dots 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FillPatternType.LEAST_DOTS">
-             Least Dots 
-        </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderlineType.NONE">
+        <member name="F:NPOI.SS.UserModel.FontUnderlineType.None">
             not underlined
         </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderlineType.SINGLE">
+        <member name="F:NPOI.SS.UserModel.FontUnderlineType.Single">
             single (normal) underline
         </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderlineType.DOUBLE">
+        <member name="F:NPOI.SS.UserModel.FontUnderlineType.Double">
             double underlined
         </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderlineType.SINGLE_ACCOUNTING">
+        <member name="F:NPOI.SS.UserModel.FontUnderlineType.SingleAccounting">
             accounting style single underline
         </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderlineType.DOUBLE_ACCOUNTING">
+        <member name="F:NPOI.SS.UserModel.FontUnderlineType.DoubleAccounting">
             accounting style double underline
         </member>
-        <member name="F:NPOI.SS.UserModel.FontSuperScript.NONE">
+        <member name="F:NPOI.SS.UserModel.FontSuperScript.None">
             no type Offsetting (not super or subscript)
         </member>
-        <member name="F:NPOI.SS.UserModel.FontSuperScript.SUPER">
+        <member name="F:NPOI.SS.UserModel.FontSuperScript.Super">
             superscript
         </member>
-        <member name="F:NPOI.SS.UserModel.FontSuperScript.SUB">
+        <member name="F:NPOI.SS.UserModel.FontSuperScript.Sub">
             subscript
         </member>
         <member name="F:NPOI.SS.UserModel.FontColor.None">
@@ -36353,10 +36060,10 @@
             Allow accessing the Initial value.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.FontColor.NORMAL">
+        <member name="F:NPOI.SS.UserModel.FontColor.Normal">
             normal type of black color.
         </member>
-        <member name="F:NPOI.SS.UserModel.FontColor.RED">
+        <member name="F:NPOI.SS.UserModel.FontColor.Red">
             Dark Red color
         </member>
         <member name="F:NPOI.SS.UserModel.FontBoldWeight.None">
@@ -36364,10 +36071,10 @@
             Allow accessing the Initial value.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.FontBoldWeight.NORMAL">
+        <member name="F:NPOI.SS.UserModel.FontBoldWeight.Normal">
             Normal boldness (not bold)
         </member>
-        <member name="F:NPOI.SS.UserModel.FontBoldWeight.BOLD">
+        <member name="F:NPOI.SS.UserModel.FontBoldWeight.Bold">
             Bold boldness (bold)
         </member>
         <member name="T:NPOI.SS.UserModel.FontCharset">
@@ -36400,34 +36107,6 @@
              Usually major fonts are used for styles like headings, and minor fonts are used for body and paragraph text.
             
              @author Gisella Bronzetti
-        </member>
-        <member name="T:NPOI.SS.UserModel.FontUnderline">
-             the different types of possible underline formatting
-            
-             @author Gisella Bronzetti
-        </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderline.SINGLE">
-            Single-line underlining under each character in the cell.
-            The underline is drawn through the descenders of
-            characters such as g and p..
-        </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderline.DOUBLE">
-            Double-line underlining under each character in the
-            cell. underlines are drawn through the descenders of
-            characters such as g and p.
-        </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderline.SINGLE_ACCOUNTING">
-            Single-line accounting underlining under each
-            character in the cell. The underline is drawn under the
-            descenders of characters such as g and p.
-        </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderline.DOUBLE_ACCOUNTING">
-            Double-line accounting underlining under each
-            character in the cell. The underlines are drawn under
-            the descenders of characters such as g and p.
-        </member>
-        <member name="F:NPOI.SS.UserModel.FontUnderline.NONE">
-            No underline.
         </member>
         <member name="T:NPOI.SS.UserModel.FormulaError">
              Enumerates error values in SpreadsheetML formula calculations.
@@ -36493,25 +36172,30 @@
             i.e., whether it is aligned general, left, right, horizontally centered, Filled (replicated),
             justified, centered across multiple cells, or distributed.
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.GENERAL">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.General">
             The horizontal alignment is general-aligned. Text data is left-aligned.
             Numbers, dates, and times are rightaligned. Boolean types are centered.
             Changing the alignment does not change the type of data.
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.LEFT">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.Left">
             The horizontal alignment is left-aligned, even in Rightto-Left mode.
             Aligns contents at the left edge of the cell. If an indent amount is specified, the contents of
             the cell is indented from the left by the specified number of character spaces. The character spaces are
             based on the default font and font size for the workbook.
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.CENTER">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.Center">
             The horizontal alignment is centered, meaning the text is centered across the cell.
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.RIGHT">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.Right">
             The horizontal alignment is right-aligned, meaning that cell contents are aligned at the right edge of the cell,
             even in Right-to-Left mode.
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.FILL">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.Justify">
+            The horizontal alignment is justified (flush left and right).
+            For each line of text, aligns each line of the wrapped text in a cell to the right and left
+            (except the last line). If no single line of text wraps in the cell, then the text is not justified.
+        </member>
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.Fill">
             Indicates that the value of the cell should be Filled
             across the entire width of the cell. If blank cells to the right also have the fill alignment,
             they are also Filled with the value, using a convention similar to centerContinuous.
@@ -36526,18 +36210,13 @@
             </ol>
             </p>
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.JUSTIFY">
-            The horizontal alignment is justified (flush left and right).
-            For each line of text, aligns each line of the wrapped text in a cell to the right and left
-            (except the last line). If no single line of text wraps in the cell, then the text is not justified.
-        </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.CENTER_SELECTION">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.CenterSelection">
             The horizontal alignment is centered across multiple cells.
             The information about how many cells to span is expressed in the Sheet Part,
             in the row of the cell in question. For each cell that is spanned in the alignment,
             a cell element needs to be written out, with the same style Id which references the centerContinuous alignment.
         </member>
-        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.DISTRIBUTED">
+        <member name="F:NPOI.SS.UserModel.HorizontalAlignment.Distributed">
             Indicates that each 'word' in each line of text inside the cell is evenly distributed
             across the width of the cell, with flush right and left margins.
             <p>
@@ -36547,22 +36226,22 @@
             <p> A 'word' is a set of characters with no space character in them. </p>
             <p> Two lines inside a cell are Separated by a carriage return. </p>
         </member>
-        <member name="F:NPOI.SS.UserModel.HyperlinkType.URL">
+        <member name="F:NPOI.SS.UserModel.HyperlinkType.Url">
             <summary>
             Link to an existing file or web page
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.HyperlinkType.DOCUMENT">
+        <member name="F:NPOI.SS.UserModel.HyperlinkType.Document">
             <summary>
             Link to a place in this document
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.HyperlinkType.EMAIL">
+        <member name="F:NPOI.SS.UserModel.HyperlinkType.Email">
             <summary>
             Link to an E-mail Address
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.HyperlinkType.FILE">
+        <member name="F:NPOI.SS.UserModel.HyperlinkType.File">
             <summary>
             Link to a file
             </summary>
@@ -36736,22 +36415,22 @@
             Define the position of the pane. One of lower/right, upper/right, lower/left and upper/left.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.PanePosition.LOWER_RIGHT">
+        <member name="F:NPOI.SS.UserModel.PanePosition.LowerRight">
             <summary>
             referes to the lower/right corner
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.PanePosition.UPPER_RIGHT">
+        <member name="F:NPOI.SS.UserModel.PanePosition.UpperRight">
             <summary>
             referes to the upper/right corner
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.PanePosition.LOWER_LEFT">
+        <member name="F:NPOI.SS.UserModel.PanePosition.LowerLeft">
             <summary>
             referes to the lower/left corner
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.PanePosition.UPPER_LEFT">
+        <member name="F:NPOI.SS.UserModel.PanePosition.UpperLeft">
             <summary>
             referes to the upper/left corner
             </summary>
@@ -36775,16 +36454,16 @@
             This enumeration value indicates the type of vertical alignment for a cell, i.e.,
             whether it is aligned top, bottom, vertically centered, justified or distributed.
         </member>
-        <member name="F:NPOI.SS.UserModel.VerticalAlignment.TOP">
+        <member name="F:NPOI.SS.UserModel.VerticalAlignment.Top">
             The vertical alignment is aligned-to-top.
         </member>
-        <member name="F:NPOI.SS.UserModel.VerticalAlignment.CENTER">
+        <member name="F:NPOI.SS.UserModel.VerticalAlignment.Center">
             The vertical alignment is centered across the height of the cell.
         </member>
-        <member name="F:NPOI.SS.UserModel.VerticalAlignment.BOTTOM">
+        <member name="F:NPOI.SS.UserModel.VerticalAlignment.Bottom">
             The vertical alignment is aligned-to-bottom.
         </member>
-        <member name="F:NPOI.SS.UserModel.VerticalAlignment.JUSTIFY">
+        <member name="F:NPOI.SS.UserModel.VerticalAlignment.Justify">
             <p>
             When text direction is horizontal: the vertical alignment of lines of text is distributed vertically,
             where each line of text inside the cell is evenly distributed across the height of the cell,
@@ -36797,7 +36476,7 @@
             If no single line of text wraps in the cell, then the text is not justified.
              </p>
         </member>
-        <member name="F:NPOI.SS.UserModel.VerticalAlignment.DISTRIBUTED">
+        <member name="F:NPOI.SS.UserModel.VerticalAlignment.Distributed">
             <p>
             When text direction is horizontal: the vertical alignment of lines of text is distributed vertically,
             where each line of text inside the cell is evenly distributed across the height of the cell,
@@ -36810,17 +36489,17 @@
             and the line of text is distributed evenly from top to bottom.
             </p>
         </member>
-        <member name="F:NPOI.SS.UserModel.SheetState.VISIBLE">
+        <member name="F:NPOI.SS.UserModel.SheetState.Visible">
             <summary>
             Indicates the sheet is visible.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.SheetState.HIDDEN">
+        <member name="F:NPOI.SS.UserModel.SheetState.Hidden">
             <summary>
             Indicates the book window is hidden, but can be shown by the user via the user interface.
             </summary>
         </member>
-        <member name="F:NPOI.SS.UserModel.SheetState.VERY_HIDDEN">
+        <member name="F:NPOI.SS.UserModel.SheetState.VeryHidden">
             <summary>
             Indicates the sheet is hidden and cannot be shown in the user interface (UI).
             </summary>
@@ -37966,7 +37645,7 @@
         <member name="M:NPOI.Util.BigInteger.ToString(System.Int32)">
              Returns the String representation of this BigInteger in the
              given radix.  If the radix is outside the range from {@link
-             Character#MIN_RADIX} to {@link Character#MAX_RADIX} inclusive,
+             Character#Min_RADIX} to {@link Character#Max_RADIX} inclusive,
              it will default to 10 (as is the case for
              {@code Integer.toString}).  The digit-to-character mapping
              provided by {@code Character.forDigit} is used, and a minus
@@ -37985,12 +37664,12 @@
             
              @since   1.2
         </member>
-        <member name="F:NPOI.Util.BigInteger.ONE">
+        <member name="F:NPOI.Util.BigInteger.One">
              The BigInteger constant one.
             
              @since   1.2
         </member>
-        <member name="F:NPOI.Util.BigInteger.TWO">
+        <member name="F:NPOI.Util.BigInteger.Two">
             The BigInteger constant two.  (Not exported.)
         </member>
         <member name="F:NPOI.Util.BigInteger.TEN">
@@ -38217,7 +37896,7 @@
              @param  n shift distance, in bits.
              @return {@code this >> n}
              @throws ArithmeticException if the shift distance is {@code
-                     Integer.MIN_VALUE}.
+                     Integer.Min_VALUE}.
              @see #shiftLeft
         </member>
         <member name="M:NPOI.Util.BigInteger.Not">
@@ -38289,7 +37968,7 @@
             The offset into the value array where the magnitude of this
             MutableBigInteger begins.
         </member>
-        <member name="F:NPOI.Util.MutableBigInteger.ONE">
+        <member name="F:NPOI.Util.MutableBigInteger.One">
             MutableBigInteger with one element value array with the value 1. Used by
             BigDecimal divideAndRound to increment the quotient. Use this constant
             only when the method is not going to modify this object.
@@ -41717,6 +41396,67 @@
             Getg or sets the LongField's current value
             </summary>
             <value>The current value</value>
+        </member>
+        <member name="T:NPOI.SS.UserModel.FillPattern">
+            The enumeration value indicating the style of fill pattern being used for a cell format.
+            
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.NoFill">
+             No background 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.SolidForeground">
+             Solidly Filled 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.FineDots">
+             Small fine dots 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.AltBars">
+             Wide dots 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.SparseDots">
+             Sparse dots 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThickHorizontalBands">
+             Thick horizontal bands 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThickVerticalBands">
+             Thick vertical bands 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThickBackwardDiagonals">
+             Thick backward facing diagonals 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThickForwardDiagonals">
+             Thick forward facing diagonals 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.BigSpots">
+             Large spots 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.Bricks">
+             Brick-like layout 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThinHorizontalBands">
+             Thin horizontal bands 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThinVerticalBands">
+             Thin vertical bands 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThinBackwardDiagonals">
+             Thin backward diagonal 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.ThinForwardDiagonals">
+             Thin forward diagonal 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.Squares">
+             Squares 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.Diamonds">
+             Diamonds 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.LessDots">
+             Less Dots 
+        </member>
+        <member name="F:NPOI.SS.UserModel.FillPattern.LeastDots">
+             Least Dots 
         </member>
     </members>
 </doc>

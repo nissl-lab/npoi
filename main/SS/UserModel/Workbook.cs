@@ -27,12 +27,12 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Indicates the sheet is visible.
         /// </summary>
-        VISIBLE = 0,
+        Visible = 0,
 
         /// <summary>
         /// Indicates the book window is hidden, but can be shown by the user via the user interface.
         /// </summary>
-        HIDDEN = 1,
+        Hidden = 1,
 
         /// <summary>
         /// Indicates the sheet is hidden and cannot be shown in the user interface (UI).
@@ -42,7 +42,7 @@ namespace NPOI.SS.UserModel
         /// ThisWorkbook.Sheets("MySheetName").Visible = xlSheetVeryHidden
         /// 
         /// </remarks>
-        VERY_HIDDEN = 2
+        VeryHidden = 2
     }
 
     /// <summary>
@@ -214,7 +214,7 @@ namespace NPOI.SS.UserModel
         /// <param name="typeOffset"></param>
         /// <param name="underline"></param>
         /// <returns>the font with the matched attributes or null</returns>
-        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, byte underline);
+        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline);
 
         /// <summary>
         /// Get the number of fonts in the font table

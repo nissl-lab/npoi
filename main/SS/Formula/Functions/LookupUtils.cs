@@ -391,7 +391,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return FindLastIndexInRunOfEqualValues(lookupComparer, vector, midIx, bsi.GetHighIx());
                 }
-                bsi.narrowSearch(midIx, cr.IsLessThan);
+                bsi.NarrowSearch(midIx, cr.IsLessThan);
             }
         }
         /**
@@ -414,14 +414,14 @@ namespace NPOI.SS.Formula.Functions
                 {
                     // every element from midIx to highIx was the wrong type
                     // move highIx down to the low end of the mid values
-                    bsi.narrowSearch(midIx, true);
+                    bsi.NarrowSearch(midIx, true);
                     return -1;
                 }
                 CompareResult cr = lookupComparer.CompareTo(vector.GetItem(newMid));
                 if (cr.IsLessThan && newMid == highIx - 1)
                 {
                     // move highIx down to the low end of the mid values
-                    bsi.narrowSearch(midIx, true);
+                    bsi.NarrowSearch(midIx, true);
                     return -1;
                     // but only when "newMid == highIx-1"? slightly weird.
                     // It would seem more efficient to always do this.
@@ -438,7 +438,7 @@ namespace NPOI.SS.Formula.Functions
                 // Note - if moving highIx down (due to lookup<vector[newMid]),
                 // this execution path only moves highIx it down as far as newMid, not midIx,
                 // which would be more efficient.
-                bsi.narrowSearch(newMid, cr.IsLessThan);
+                bsi.NarrowSearch(newMid, cr.IsLessThan);
                 return -1;
             }
         }
@@ -519,22 +519,23 @@ namespace NPOI.SS.Formula.Functions
                 _isGreaterThan = simpleCompareResult > 0;
             }
         }
-        public static readonly CompareResult TYPE_MISMATCH = new CompareResult(true, 0);
-        public static readonly CompareResult LESS_THAN = new CompareResult(false, -1);
-        public static readonly CompareResult EQUAL = new CompareResult(false, 0);
-        public static readonly CompareResult GREATER_THAN = new CompareResult(false, +1);
+
+        public static readonly CompareResult TypeMismatch = new CompareResult(true, 0);
+        public static readonly CompareResult LessThan = new CompareResult(false, -1);
+        public static readonly CompareResult Equal = new CompareResult(false, 0);
+        public static readonly CompareResult GreaterThan = new CompareResult(false, +1);
 
         public static CompareResult ValueOf(int simpleCompareResult)
         {
             if (simpleCompareResult < 0)
             {
-                return LESS_THAN;
+                return LessThan;
             }
             if (simpleCompareResult > 0)
             {
-                return GREATER_THAN;
+                return GreaterThan;
             }
-            return EQUAL;
+            return Equal;
         }
 
         public bool IsTypeMismatch
@@ -624,9 +625,9 @@ namespace NPOI.SS.Formula.Functions
         {
             return _highIx;
         }
-        public void narrowSearch(int midIx, bool IsLessThan)
+        public void NarrowSearch(int midIx, bool isLessThan)
         {
-            if (IsLessThan)
+            if (isLessThan)
             {
                 _highIx = midIx;
             }
@@ -652,14 +653,14 @@ namespace NPOI.SS.Formula.Functions
             bool otherVal = be.BooleanValue;
             if (_value == otherVal)
             {
-                return CompareResult.EQUAL;
+                return CompareResult.Equal;
             }
             // TRUE > FALSE
             if (_value)
             {
-                return CompareResult.GREATER_THAN;
+                return CompareResult.GreaterThan;
             }
-            return CompareResult.LESS_THAN;
+            return CompareResult.LessThan;
         }
         protected override String GetValueAsString()
         {
@@ -707,7 +708,7 @@ namespace NPOI.SS.Formula.Functions
             }
             if (_tarGetType != other.GetType())
             {
-                return CompareResult.TYPE_MISMATCH;
+                return CompareResult.TypeMismatch;
             }
             if (_tarGetType == typeof(StringEval))
             {

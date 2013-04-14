@@ -283,7 +283,7 @@ namespace NPOI.HSSF.Util
             style.DataFormat = (GetShort(properties, DATA_FORMAT));
             style.FillBackgroundColor = (GetShort(properties, FILL_BACKGROUND_COLOR));
             style.FillForegroundColor = (GetShort(properties, FILL_FOREGROUND_COLOR));
-            style.FillPattern = (NPOI.SS.UserModel.FillPatternType)GetShort(properties, FILL_PATTERN);
+            style.FillPattern = (NPOI.SS.UserModel.FillPattern)GetShort(properties, FILL_PATTERN);
             style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
             style.IsHidden = (GetBoolean(properties, HIDDEN));
             style.Indention = (GetShort(properties, INDENTION));

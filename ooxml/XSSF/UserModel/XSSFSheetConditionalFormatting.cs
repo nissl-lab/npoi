@@ -81,14 +81,14 @@ namespace NPOI.XSSF.UserModel
             ST_ConditionalFormattingOperator operator1;
             switch (comparisonOperation)
             {
-                case ComparisonOperator.BETWEEN: operator1 = ST_ConditionalFormattingOperator.between; break;
-                case ComparisonOperator.NOT_BETWEEN: operator1 = ST_ConditionalFormattingOperator.notBetween; break;
-                case ComparisonOperator.LT: operator1 = ST_ConditionalFormattingOperator.lessThan; break;
-                case ComparisonOperator.LE: operator1 = ST_ConditionalFormattingOperator.lessThanOrEqual; break;
-                case ComparisonOperator.GT: operator1 = ST_ConditionalFormattingOperator.greaterThan; break;
-                case ComparisonOperator.GE: operator1 = ST_ConditionalFormattingOperator.greaterThanOrEqual; break;
-                case ComparisonOperator.EQUAL: operator1 = ST_ConditionalFormattingOperator.equal; break;
-                case ComparisonOperator.NOT_EQUAL: operator1 = ST_ConditionalFormattingOperator.notEqual; break;
+                case ComparisonOperator.Between: operator1 = ST_ConditionalFormattingOperator.between; break;
+                case ComparisonOperator.NotBetween: operator1 = ST_ConditionalFormattingOperator.notBetween; break;
+                case ComparisonOperator.LessThan: operator1 = ST_ConditionalFormattingOperator.lessThan; break;
+                case ComparisonOperator.LessThanOrEqual: operator1 = ST_ConditionalFormattingOperator.lessThanOrEqual; break;
+                case ComparisonOperator.GreaterThan: operator1 = ST_ConditionalFormattingOperator.greaterThan; break;
+                case ComparisonOperator.GreaterThanOrEqual: operator1 = ST_ConditionalFormattingOperator.greaterThanOrEqual; break;
+                case ComparisonOperator.Equal: operator1 = ST_ConditionalFormattingOperator.equal; break;
+                case ComparisonOperator.NotEqual: operator1 = ST_ConditionalFormattingOperator.notEqual; break;
                 default: throw new ArgumentException("Unknown comparison operator: " + comparisonOperation);
             }
             cfRule.@operator = (operator1);

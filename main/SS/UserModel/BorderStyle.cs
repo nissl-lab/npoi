@@ -26,73 +26,71 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// No border
         /// </summary>
-        NONE = 0x0,
+        None = 0x0,
 
         /// <summary>
         /// Thin border
         /// </summary>
-        THIN = 0x1,
+        Thin = 0x1,
 
         /// <summary>
         /// Medium border
         /// </summary>
-        MEDIUM = 0x2,
+        Medium = 0x2,
 
         /// <summary>
         /// dash border
         /// </summary>
-        DASHED = 0x3,
+        Dashed = 0x3,
 
         /// <summary>
         /// dot border
         /// </summary>
-        DOTTED = 0x4,
+        Dotted = 0x4,
 
         /// <summary>
         /// Thick border
         /// </summary>
-        THICK = 0x5,
+        Thick = 0x5,
 
         /// <summary>
         /// double-line border
         /// </summary>
-        DOUBLE = 0x6,
+        Double = 0x6,
 
         /// <summary>
         /// hair-line border
         /// </summary>
-        HAIR = 0x7,
+        Hair = 0x7,
 
         /// <summary>
         /// Medium dashed border
         /// </summary>
-        MEDIUM_DASHED = 0x8,
+        MediumDashed = 0x8,
 
         /// <summary>
         /// dash-dot border
         /// </summary>
-        DASH_DOT = 0x9,
+        DashDot = 0x9,
 
         /// <summary>
         /// medium dash-dot border
         /// </summary>
-        MEDIUM_DASH_DOT = 0xA,
+        MediumDashDot = 0xA,
 
         /// <summary>
         /// dash-dot-dot border
         /// </summary>
-        DASH_DOT_DOT = 0xB,
+        DashDotDot = 0xB,
 
         /// <summary>
         /// medium dash-dot-dot border
         /// </summary>
-        MEDIUM_DASH_DOT_DOT = 0xC,
+        MediumDashDotDot = 0xC,
 
         /// <summary>
         /// slanted dash-dot border
         /// </summary>
-        SLANTED_DASH_DOT = 0xD
-
+        SlantedDashDot = 0xD
     }
-
 }

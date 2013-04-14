@@ -104,7 +104,7 @@
     <Compile Include="Spreadsheet\Styles\CT_BorderPr.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Borders.cs" />
     <Compile Include="Spreadsheet\CT_CalcChain.cs" />
-    <Compile Include="Spreadsheet\CT_Authors.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Authors.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellStyleXfs.cs" />
     <Compile Include="Spreadsheet\SharedString\CT_RElt.cs" />
     <Compile Include="Spreadsheet\SharedString\CT_RPrElt.cs" />
@@ -115,13 +115,13 @@
     <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
-    <Compile Include="Spreadsheet\CT_NumFmt.cs" />
-    <Compile Include="Spreadsheet\CT_NumFmts.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_NumFmt.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_NumFmts.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Cell.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Col.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Cols.cs" />
-    <Compile Include="Spreadsheet\CT_Comment.cs" />
-    <Compile Include="Spreadsheet\CT_Comments.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Comment.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Comments.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Hyperlink.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_MergeCell.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Row.cs" />
@@ -173,7 +173,7 @@
     <Compile Include="Spreadsheet\AutoFilter.cs" />
     <Compile Include="Spreadsheet\BaseTypes.cs" />
     <Compile Include="Spreadsheet\Document\CalcChainDocument.cs" />
-    <Compile Include="Spreadsheet\CT_CommentList.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CommentList.cs" />
     <Compile Include="Spreadsheet\Document\CommentsDocument.cs" />
     <Compile Include="Spreadsheet\Document\ChartsheetDocument.cs" />
     <Compile Include="Spreadsheet\Document\WorksheetDocument.cs" />

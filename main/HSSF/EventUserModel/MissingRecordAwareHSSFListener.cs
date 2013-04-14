@@ -85,7 +85,7 @@ namespace NPOI.HSSF.EventUserModel
                     // the BOFRecord can represent either the beginning of a sheet or the workbook
                     case BOFRecord.sid:
                         BOFRecord bof = (BOFRecord)record;
-                        if (bof.Type == BOFRecord.TYPE_WORKBOOK || bof.Type == BOFRecord.TYPE_WORKSHEET)
+                        if (bof.Type == BOFRecordType.Workbook || bof.Type == BOFRecordType.Worksheet)
                         {
                             // Reset the row and column counts - new workbook / worksheet
                             ResetCounts();

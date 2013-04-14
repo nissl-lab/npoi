@@ -48,8 +48,8 @@ namespace TestCases.HSSF.Record.Aggregates
             IList recs = new ArrayList();
             CFHeaderRecord header = new CFHeaderRecord();
             CFRuleRecord rule1 = CFRuleRecord.Create(sheet, "7");
-            CFRuleRecord rule2 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.BETWEEN, "2", "5");
-            CFRuleRecord rule3 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.GE, "100", null);
+            CFRuleRecord rule2 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "2", "5");
+            CFRuleRecord rule3 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.GreaterThanOrEqual, "100", null);
             header.NumberOfConditionalFormats = (3);
             CellRangeAddress[] cellRanges = {
 				new CellRangeAddress(0,1,0,0),
@@ -114,7 +114,7 @@ namespace TestCases.HSSF.Record.Aggregates
 		    };
             CFRuleRecord[] rules = {
 			CFRuleRecord.Create(sheet, "7"),
-			CFRuleRecord.Create(sheet, (byte)ComparisonOperator.BETWEEN, "2", "5"),
+			CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "2", "5"),
 		    };
             CFRecordsAggregate agg = new CFRecordsAggregate(cellRanges, rules);
             byte[] serializedRecord = new byte[agg.RecordSize];

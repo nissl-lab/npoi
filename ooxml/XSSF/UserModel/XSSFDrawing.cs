@@ -353,11 +353,11 @@ namespace NPOI.XSSF.UserModel
             ST_EditAs aditAs;
             switch (anchor.AnchorType)
             {
-                case (int)AnchorType.DONT_MOVE_AND_RESIZE: 
+                case (int)AnchorType.DontMoveAndResize: 
                     aditAs = ST_EditAs.absolute; break;
-                case (int)AnchorType.MOVE_AND_RESIZE: 
+                case (int)AnchorType.MoveAndResize: 
                     aditAs = ST_EditAs.twoCell; break;
-                case (int)AnchorType.MOVE_DONT_RESIZE: 
+                case (int)AnchorType.MoveDontResize: 
                     aditAs = ST_EditAs.oneCell; break;
                 default: 
                     aditAs = ST_EditAs.oneCell;

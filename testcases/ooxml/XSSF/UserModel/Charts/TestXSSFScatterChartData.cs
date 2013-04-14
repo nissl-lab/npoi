@@ -43,8 +43,8 @@ namespace NPOI.XSSF.UserModel.Charts
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.BOTTOM);
-            IChartAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.LEFT);
+            IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Bottom);
+            IChartAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Left);
 
             IScatterChartData<string, double> scatterChartData =
                 chart.GetChartDataFactory().CreateScatterChartData<string, double>();

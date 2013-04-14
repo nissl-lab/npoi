@@ -133,14 +133,14 @@ namespace TestCases.HSSF.UserModel
             //cell A1 has a link to 'Target Sheet-1'!A1
             cell = sheet.CreateRow(0).CreateCell(0);
             cell.SetCellValue("Worksheet Link");
-            link = new HSSFHyperlink(HyperlinkType.DOCUMENT);
+            link = new HSSFHyperlink(HyperlinkType.Document);
             link.TextMark=("'Target Sheet'!A1");
             cell.Hyperlink=(link);
 
             //cell B1 has a link to cell A1 on the same sheet
             cell = sheet.CreateRow(1).CreateCell(0);
             cell.SetCellValue("Worksheet Link");
-            link = new HSSFHyperlink(HyperlinkType.DOCUMENT);
+            link = new HSSFHyperlink(HyperlinkType.Document);
             link.Address=("'Hyperlinks'!A1");
             cell.Hyperlink=(link);
 
@@ -179,7 +179,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(2, link1.LastRow);
 
             //assign a hyperlink to A4
-            HSSFHyperlink link2 = new HSSFHyperlink(HyperlinkType.DOCUMENT);
+            HSSFHyperlink link2 = new HSSFHyperlink(HyperlinkType.Document);
             link2.Address=("Sheet2!A2");
             ICell cell2 = sheet.GetRow(3).GetCell(0);
             cell2.Hyperlink=(link2);
@@ -216,21 +216,21 @@ namespace TestCases.HSSF.UserModel
             //URL
             cell = sheet.CreateRow(0).CreateCell(0);
             cell.SetCellValue("URL Link");
-            IHyperlink link = new HSSFHyperlink(HyperlinkType.URL);
+            IHyperlink link = new HSSFHyperlink(HyperlinkType.Url);
             link.Address = ("http://poi.apache.org/");
             cell.Hyperlink = link;
 
             //link to a file in the current directory
             cell = sheet.CreateRow(1).CreateCell(0);
             cell.SetCellValue("File Link");
-            link = new HSSFHyperlink(HyperlinkType.FILE);
+            link = new HSSFHyperlink(HyperlinkType.File);
             link.Address = ("link1.xls");
             cell.Hyperlink = link;
 
             //e-mail link
             cell = sheet.CreateRow(2).CreateCell(0);
             cell.SetCellValue("Email Link");
-            link = new HSSFHyperlink(HyperlinkType.EMAIL);
+            link = new HSSFHyperlink(HyperlinkType.Email);
             //note, if subject contains white spaces, make sure they are url-encoded
             link.Address = ("mailto:poi@apache.org?subject=Hyperlinks");
             cell.Hyperlink = link;
@@ -243,7 +243,7 @@ namespace TestCases.HSSF.UserModel
 
             cell = sheet.CreateRow(3).CreateCell(0);
             cell.SetCellValue("Worksheet Link");
-            link = new HSSFHyperlink(HyperlinkType.DOCUMENT);
+            link = new HSSFHyperlink(HyperlinkType.Document);
             link.TextMark = ("'Target Sheet'!A1");
             cell.Hyperlink = link;
 

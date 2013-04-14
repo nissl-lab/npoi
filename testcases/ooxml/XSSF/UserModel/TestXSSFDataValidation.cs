@@ -132,7 +132,7 @@ namespace NPOI.XSSF.UserModel
                     ICell cell_13 = row1.CreateCell(3);
 
 
-                    cell_13.SetCellType(CellType.NUMERIC);
+                    cell_13.SetCellType(CellType.Numeric);
                     cell_13.SetCellValue(validationType == ValidationType.DECIMAL ? dvalue : (double)value);
 
 
@@ -201,11 +201,11 @@ namespace NPOI.XSSF.UserModel
 
 
                     String value1String = validationType == ValidationType.DECIMAL ? dvalue.ToString() : value.ToString();
-                    cell_13.SetCellType(CellType.NUMERIC);
+                    cell_13.SetCellType(CellType.Numeric);
                     cell_13.SetCellValue(validationType == ValidationType.DECIMAL ? dvalue : (int)value);
 
                     String value2String = validationType == ValidationType.DECIMAL ? dvalue2.ToString() : value2.ToString();
-                    cell_14.SetCellType(CellType.NUMERIC);
+                    cell_14.SetCellType(CellType.Numeric);
                     cell_14.SetCellValue(validationType == ValidationType.DECIMAL ? dvalue2 : (int)value2);
 
 

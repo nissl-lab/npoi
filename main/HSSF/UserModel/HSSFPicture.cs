@@ -68,7 +68,7 @@ namespace NPOI.HSSF.UserModel
         {
             base.ShapeType = (OBJECT_TYPE_PICTURE);
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
-            cod.ObjectType = CommonObjectType.PICTURE;
+            cod.ObjectType = CommonObjectType.Picture;
         }
         protected override EscherContainerRecord CreateSpContainer()
         {

@@ -33,13 +33,13 @@ namespace NPOI.XSSF.UserModel.Charts
             IDrawing Drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
-            IValueAxis axis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.BOTTOM);
+            IValueAxis axis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Bottom);
 
-            axis.SetCrossBetween(AxisCrossBetween.MIDPOINT_CATEGORY);
-            Assert.AreEqual(axis.GetCrossBetween(), AxisCrossBetween.MIDPOINT_CATEGORY);
+            axis.SetCrossBetween(AxisCrossBetween.MidpointCategory);
+            Assert.AreEqual(axis.GetCrossBetween(), AxisCrossBetween.MidpointCategory);
 
-            axis.SetCrosses(AxisCrosses.AUTO_ZERO);
-            Assert.AreEqual(axis.GetCrosses(), AxisCrosses.AUTO_ZERO);
+            axis.SetCrosses(AxisCrosses.AutoZero);
+            Assert.AreEqual(axis.GetCrosses(), AxisCrosses.AutoZero);
 
             Assert.AreEqual(chart.GetAxis().Count, 1);
         }

@@ -89,10 +89,10 @@ namespace NPOI.Util
          */
         public const long LONG_MASK = 0xffffffffL;
         public const long INFLATED = long.MinValue;
-        public const int MIN_RADIX = 2;
-        public const int MAX_RADIX = 36;
-        private static BigInteger[] posConst = new BigInteger[MAX_CONSTANT + 1];
-        private static BigInteger[] negConst = new BigInteger[MAX_CONSTANT + 1];
+        public const int Min_RADIX = 2;
+        public const int Max_RADIX = 36;
+        private static BigInteger[] posConst = new BigInteger[Max_CONSTANT + 1];
+        private static BigInteger[] negConst = new BigInteger[Max_CONSTANT + 1];
         private static readonly String[] zeros = new String[64];
         //Constructors
         static BigInteger()
@@ -103,7 +103,7 @@ namespace NPOI.Util
         {
             if (zeros[63] == null)
             {
-                for (int i = 1; i <= MAX_CONSTANT; i++)
+                for (int i = 1; i <= Max_CONSTANT; i++)
                 {
                     int[] magnitude = new int[1];
                     magnitude[0] = i;
@@ -208,7 +208,7 @@ namespace NPOI.Util
             int cursor = 0, numDigits;
             int len = val.Length;
 
-            if (radix < MIN_RADIX || radix > MAX_RADIX)
+            if (radix < Min_RADIX || radix > Max_RADIX)
                 throw new FormatException("Radix out of range");
             if (len == 0)
                 throw new FormatException("Zero length BigInteger");
@@ -324,7 +324,7 @@ namespace NPOI.Util
         /**
          * Returns the String representation of this BigInteger in the
          * given radix.  If the radix is outside the range from {@link
-         * Character#MIN_RADIX} to {@link Character#MAX_RADIX} inclusive,
+         * Character#Min_RADIX} to {@link Character#Max_RADIX} inclusive,
          * it will default to 10 (as is the case for
          * {@code Integer.toString}).  The digit-to-character mapping
          * provided by {@code Character.forDigit} is used, and a minus
@@ -342,7 +342,7 @@ namespace NPOI.Util
         {
             if (_signum == 0)
                 return "0";
-            if (radix < MIN_RADIX || radix > MAX_RADIX)
+            if (radix < Min_RADIX || radix > Max_RADIX)
                 radix = 10;
 
             //now this method only support 10 radix rendering
@@ -401,12 +401,12 @@ namespace NPOI.Util
          *
          * @since   1.2
          */
-        public static readonly BigInteger ONE = ValueOf(1);
+        public static readonly BigInteger One = ValueOf(1);
 
         /**
          * The BigInteger constant two.  (Not exported.)
          */
-        private static readonly BigInteger TWO = ValueOf(2);
+        private static readonly BigInteger Two = ValueOf(2);
 
         /**
          * The BigInteger constant ten.
@@ -427,17 +427,17 @@ namespace NPOI.Util
         public static BigInteger ValueOf(long val)
         {
             Init();
-           // If -MAX_CONSTANT < val < MAX_CONSTANT, return stashed constant
+           // If -Max_CONSTANT < val < Max_CONSTANT, return stashed constant
             if (val == 0)
                 return ZERO;
-            if (val > 0 && val <= MAX_CONSTANT)
+            if (val > 0 && val <= Max_CONSTANT)
                 return posConst[(int)val];
-            else if (val < 0 && val >= -MAX_CONSTANT)
+            else if (val < 0 && val >= -Max_CONSTANT)
                 return negConst[(int)-val];
 
             return new BigInteger(val);
         }
-        private const int MAX_CONSTANT = 16;
+        private const int Max_CONSTANT = 16;
 
         /**
          * Returns a BigInteger with the given two's complement representation.
@@ -566,7 +566,7 @@ namespace NPOI.Util
             if (exponent < 0)
                 throw new ArithmeticException("Negative exponent");
             if (_signum == 0)
-                return (exponent == 0 ? ONE : this);
+                return (exponent == 0 ? One : this);
 
             // Perform exponentiation using repeated squaring trick
             int newSign = (_signum < 0 && (exponent & 1) == 1 ? -1 : 1);
@@ -948,11 +948,11 @@ namespace NPOI.Util
          * nonsense values in their 0 and 1 elements, as radixes 0 and 1 are not
          * used.
          */
-        private static int[] digitsPerLong = {0, 0,
+        private static readonly int[] digitsPerLong = {0, 0,
         62, 39, 31, 27, 24, 22, 20, 19, 18, 18, 17, 17, 16, 16, 15, 15, 15, 14,
         14, 14, 14, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12};
 
-        private static BigInteger[] longRadix = {null, null,
+        private static readonly BigInteger[] longRadix = {null, null,
         ValueOf(0x4000000000000000L), ValueOf(0x383d9170b85ff80bL),
         ValueOf(0x4000000000000000L), ValueOf(0x6765c793fa10079dL),
         ValueOf(0x41c21cb8e1000000L), ValueOf(0x3642798750226111L),
@@ -1256,7 +1256,7 @@ namespace NPOI.Util
             {
                 if (n == int.MinValue)
                 {
-                    throw new ArithmeticException("Shift distance of Integer.MIN_VALUE not supported.");
+                    throw new ArithmeticException("Shift distance of Integer.Min_VALUE not supported.");
                 }
                 else
                 {
@@ -1328,7 +1328,7 @@ namespace NPOI.Util
          * @param  n shift distance, in bits.
          * @return {@code this >> n}
          * @throws ArithmeticException if the shift distance is {@code
-         *         Integer.MIN_VALUE}.
+         *         Integer.Min_VALUE}.
          * @see #shiftLeft
          */
         public BigInteger ShiftRight(int n)
@@ -1339,7 +1339,7 @@ namespace NPOI.Util
             {
                 if (n == int.MinValue)
                 {
-                    throw new ArithmeticException("Shift distance of Integer.MIN_VALUE not supported.");
+                    throw new ArithmeticException("Shift distance of Integer.Min_VALUE not supported.");
                 }
                 else
                 {
@@ -1604,6 +1604,7 @@ namespace NPOI.Util
             int[] resultMag = (cmp > 0 ? Subtract(mag, val.mag)
                                : Subtract(val.mag, mag));
             resultMag = TrustedStripLeadingZeroInts(resultMag);
+
             return new BigInteger(resultMag, cmp == _signum ? 1 : -1);
         }
 
@@ -1759,7 +1760,7 @@ namespace NPOI.Util
          * BigDecimal divideAndRound to increment the quotient. Use this constant
          * only when the method is not going to modify this object.
          */
-        static MutableBigInteger ONE = new MutableBigInteger(1);
+        static readonly MutableBigInteger One = new MutableBigInteger(1);
 
         // Constructors
         private const long LONG_MASK = BigInteger.LONG_MASK;
@@ -1933,7 +1934,7 @@ namespace NPOI.Util
             if (intLen > blen)
                 return 1;
 
-            // Add Integer.MIN_VALUE to make the comparison act as unsigned integer
+            // Add Integer.Min_VALUE to make the comparison act as unsigned integer
             // comparison.
             int[] bval = b._value;
             for (int i = offset, j = b.offset; i < intLen + offset; i++, j++)

@@ -24,10 +24,10 @@ namespace NPOI.SS.UserModel.Charts
      */
     public enum AxisPosition
     {
-        BOTTOM,
-        LEFT,
-        RIGHT,
-        TOP
+        Bottom,
+        Left,
+        Right,
+        Top
     }
 }
 

@@ -113,16 +113,16 @@ namespace NPOI.HSSF.UserModel
             CellType cellType = cv.CellType;
             switch (cellType)
             {
-                case CellType.BOOLEAN:
-                case CellType.ERROR:
-                case CellType.NUMERIC:
-                case CellType.STRING:
+                case CellType.Boolean:
+                case CellType.Error:
+                case CellType.Numeric:
+                case CellType.String:
                     cell.SetCellType(cellType);
                     return;
-                case CellType.BLANK:
+                case CellType.Blank:
                     // never happens - blanks eventually get translated to zero
                     break;
-                case CellType.FORMULA:
+                case CellType.Formula:
                     // this will never happen, we have already evaluated the formula
                     break;
             }
@@ -133,21 +133,21 @@ namespace NPOI.HSSF.UserModel
             CellType cellType = cv.CellType;
             switch (cellType)
             {
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     cell.SetCellValue(cv.BooleanValue);
                     break;
-                case CellType.ERROR:
+                case CellType.Error:
                     cell.SetCellErrorValue((byte)cv.ErrorValue);
                     break;
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     cell.SetCellValue(cv.NumberValue);
                     break;
-                case CellType.STRING:
+                case CellType.String:
                     cell.SetCellValue(new HSSFRichTextString(cv.StringValue));
                     break;
-                //case CellType.BLANK:
+                //case CellType.Blank:
                 //// never happens - blanks eventually get translated to zero
-                //case CellType.FORMULA:
+                //case CellType.Formula:
                 //// this will never happen, we have already evaluated the formula
                 default:
                     throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
@@ -197,17 +197,17 @@ namespace NPOI.HSSF.UserModel
 
             switch (cell.CellType)
             {
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return CellValue.ValueOf(cell.BooleanCellValue);
-                case CellType.ERROR:
+                case CellType.Error:
                     return CellValue.GetError(cell.ErrorCellValue);
-                case CellType.FORMULA:
+                case CellType.Formula:
                     return EvaluateFormulaCellValue(cell);
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     return new CellValue(cell.NumericCellValue);
-                case CellType.STRING:
+                case CellType.String:
                     return new CellValue(cell.RichStringCellValue.String);
-                case CellType.BLANK:
+                case CellType.Blank:
                     return null;
             }
             throw new InvalidOperationException("Bad cell type (" + cell.CellType + ")");
@@ -274,11 +274,11 @@ namespace NPOI.HSSF.UserModel
          *  and the result. If you want the cell Replaced with
          *  the result of the formula, use {@link #EvaluateInCell(HSSFCell)}
          * @param cell The cell to Evaluate
-         * @return The type of the formula result (the cell's type remains as CellType.FORMULA however)
+         * @return The type of the formula result (the cell's type remains as CellType.Formula however)
          */
         public CellType EvaluateFormulaCell(ICell cell)
         {
-            if (cell == null || cell.CellType != CellType.FORMULA)
+            if (cell == null || cell.CellType != CellType.Formula)
             {
                 return CellType.Unknown;
             }
@@ -337,7 +337,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return null;
             }
-            if (cell.CellType == CellType.FORMULA)
+            if (cell.CellType == CellType.Formula)
             {
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellValue(cell, cv);
@@ -388,7 +388,7 @@ namespace NPOI.HSSF.UserModel
                     IRow r = (IRow)it.Current;
                     foreach (ICell c in r.Cells)
                     {
-                        if (c.CellType == CellType.FORMULA)
+                        if (c.CellType == CellType.Formula)
                         {
                             evaluator.EvaluateFormulaCell(c);
                         }

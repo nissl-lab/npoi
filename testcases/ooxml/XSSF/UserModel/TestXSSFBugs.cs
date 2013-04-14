@@ -239,10 +239,10 @@ namespace NPOI.XSSF.UserModel
                 {
                     foreach (ICell c in r)
                     {
-                        if (c.CellType == CellType.FORMULA)
+                        if (c.CellType == CellType.Formula)
                         {
                             CellValue cv = eval.Evaluate(c);
-                            if (cv.CellType == CellType.NUMERIC)
+                            if (cv.CellType == CellType.Numeric)
                             {
                                 // assert that the calculated value agrees with
                                 // the cached formula result calculated by Excel
@@ -386,29 +386,29 @@ namespace NPOI.XSSF.UserModel
                 IRow r = s.CreateRow(0);
 
                 // Setup
-                ICell cn = r.CreateCell(0, CellType.NUMERIC);
+                ICell cn = r.CreateCell(0, CellType.Numeric);
                 cn.SetCellValue(1.2);
-                ICell cs = r.CreateCell(1, CellType.STRING);
+                ICell cs = r.CreateCell(1, CellType.String);
                 cs.SetCellValue("Testing");
 
-                ICell cfn = r.CreateCell(2, CellType.FORMULA);
+                ICell cfn = r.CreateCell(2, CellType.Formula);
                 cfn.SetCellFormula("A1");
-                ICell cfs = r.CreateCell(3, CellType.FORMULA);
+                ICell cfs = r.CreateCell(3, CellType.Formula);
                 cfs.SetCellFormula("B1");
 
                 IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
-                Assert.AreEqual(CellType.NUMERIC, fe.Evaluate(cfn).CellType);
-                Assert.AreEqual(CellType.STRING, fe.Evaluate(cfs).CellType);
+                Assert.AreEqual(CellType.Numeric, fe.Evaluate(cfn).CellType);
+                Assert.AreEqual(CellType.String, fe.Evaluate(cfs).CellType);
                 fe.EvaluateFormulaCell(cfn);
                 fe.EvaluateFormulaCell(cfs);
 
                 // Now Test
-                Assert.AreEqual(CellType.NUMERIC, cn.CellType);
-                Assert.AreEqual(CellType.STRING, cs.CellType);
-                Assert.AreEqual(CellType.FORMULA, cfn.CellType);
-                Assert.AreEqual(CellType.NUMERIC, cfn.CachedFormulaResultType);
-                Assert.AreEqual(CellType.FORMULA, cfs.CellType);
-                Assert.AreEqual(CellType.STRING, cfs.CachedFormulaResultType);
+                Assert.AreEqual(CellType.Numeric, cn.CellType);
+                Assert.AreEqual(CellType.String, cs.CellType);
+                Assert.AreEqual(CellType.Formula, cfn.CellType);
+                Assert.AreEqual(CellType.Numeric, cfn.CachedFormulaResultType);
+                Assert.AreEqual(CellType.Formula, cfs.CellType);
+                Assert.AreEqual(CellType.String, cfs.CachedFormulaResultType);
 
                 // Different ways of retrieving
                 Assert.AreEqual(1.2, cn.NumericCellValue);
@@ -472,7 +472,7 @@ namespace NPOI.XSSF.UserModel
 
             cell = sheet.GetRow(0).GetCell(0);
             Assert.AreEqual("#REF!*#REF!", cell.CellFormula);
-            Assert.AreEqual(CellType.ERROR, Evaluator.EvaluateInCell(cell).CellType);
+            Assert.AreEqual(CellType.Error, Evaluator.EvaluateInCell(cell).CellType);
             Assert.AreEqual("#REF!", FormulaError.ForInt(cell.ErrorCellValue).String);
 
             IName nm1 = wb.GetName("sale_1");
@@ -484,7 +484,7 @@ namespace NPOI.XSSF.UserModel
 
             cell = sheet.GetRow(1).GetCell(0);
             Assert.AreEqual("sale_1*sale_2", cell.CellFormula);
-            Assert.AreEqual(CellType.ERROR, Evaluator.EvaluateInCell(cell).CellType);
+            Assert.AreEqual(CellType.Error, Evaluator.EvaluateInCell(cell).CellType);
             Assert.AreEqual("#REF!", FormulaError.ForInt(cell.ErrorCellValue).String);
         }
 
@@ -625,12 +625,12 @@ namespace NPOI.XSSF.UserModel
             // Otherwise should go
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
-            sheet.GetRow(3).GetCell(0).SetCellType(CellType.FORMULA); // stay
-            sheet.GetRow(4).GetCell(0).SetCellType(CellType.STRING);  // go
+            sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
+            sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
             sheet.GetRow(5).RemoveCell(
                   sheet.GetRow(5).GetCell(0)  // go
             );
-            sheet.GetRow(6).GetCell(0).SetCellType(CellType.BLANK);  // go
+            sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
 
             // Save and check
@@ -654,7 +654,7 @@ namespace NPOI.XSSF.UserModel
             {
                 foreach (ICell cell in row)
                 {
-                    if (cell.CellType == CellType.FORMULA)
+                    if (cell.CellType == CellType.Formula)
                     {
                         formulaEvaluator.EvaluateInCell(cell); // caused NPE on some cells
                     }
@@ -880,7 +880,7 @@ namespace NPOI.XSSF.UserModel
             IFont font1 = wb.CreateFont();
             font1.Color=((short)20);
             IFont font2 = wb.CreateFont();
-            font2.Color = (short)(FontColor.RED);
+            font2.Color = (short)(FontColor.Red);
             IFont font3 = wb.GetFontAt((short)0);
 
             XSSFRow row = sheet.CreateRow(2) as XSSFRow;
@@ -1109,13 +1109,13 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, defaultStyle.Index);
 
             ICellStyle blueStyle = wb.CreateCellStyle();
-            blueStyle.FillForegroundColor=(IndexedColors.AQUA.Index);
-            blueStyle.FillPattern=(FillPatternType.SOLID_FOREGROUND);
+            blueStyle.FillForegroundColor=(IndexedColors.Aqua.Index);
+            blueStyle.FillPattern=(FillPattern.SolidForeground);
             Assert.AreEqual(1, blueStyle.Index);
 
             ICellStyle pinkStyle = wb.CreateCellStyle();
-            pinkStyle.FillForegroundColor=(IndexedColors.PINK.Index);
-            pinkStyle.FillPattern=(FillPatternType.SOLID_FOREGROUND);
+            pinkStyle.FillForegroundColor=(IndexedColors.Pink.Index);
+            pinkStyle.FillPattern=(FillPattern.SolidForeground);
             Assert.AreEqual(2, pinkStyle.Index);
 
             // Starts empty

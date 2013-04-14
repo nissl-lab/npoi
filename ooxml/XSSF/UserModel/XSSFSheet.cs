@@ -3500,7 +3500,7 @@ namespace NPOI.XSSF.UserModel
                     ICellRange<ICell> cr = GetCellRange(range);
                     foreach (ICell c in cr)
                     {
-                        c.SetCellType(CellType.BLANK);
+                        c.SetCellType(CellType.Blank);
                     }
                     return cr;
                 }

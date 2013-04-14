@@ -103,17 +103,17 @@ namespace NPOI.XSSF.UserModel.Charts
             ctValAx.AddNewTickLblPos().val = ST_TickLblPos.nextTo;
 
             SetPosition(pos);
-            SetOrientation(AxisOrientation.MIN_MAX);
-            SetCrossBetween(AxisCrossBetween.MIDPOINT_CATEGORY);
-            SetCrosses(AxisCrosses.AUTO_ZERO);
+            SetOrientation(AxisOrientation.MinToMax);
+            SetCrossBetween(AxisCrossBetween.MidpointCategory);
+            SetCrosses(AxisCrosses.AutoZero);
         }
 
         private static ST_CrossBetween fromCrossBetween(AxisCrossBetween crossBetween)
         {
             switch (crossBetween)
             {
-                case AxisCrossBetween.BETWEEN: return ST_CrossBetween.between;
-                case AxisCrossBetween.MIDPOINT_CATEGORY: return ST_CrossBetween.midCat;
+                case AxisCrossBetween.Between: return ST_CrossBetween.between;
+                case AxisCrossBetween.MidpointCategory: return ST_CrossBetween.midCat;
                 default:
                     throw new ArgumentException();
             }
@@ -123,8 +123,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (ctCrossBetween)
             {
-                case ST_CrossBetween.between: return AxisCrossBetween.BETWEEN;
-                case ST_CrossBetween.midCat: return AxisCrossBetween.MIDPOINT_CATEGORY;
+                case ST_CrossBetween.between: return AxisCrossBetween.Between;
+                case ST_CrossBetween.midCat: return AxisCrossBetween.MidpointCategory;
                 default:
                     throw new ArgumentException();
             }

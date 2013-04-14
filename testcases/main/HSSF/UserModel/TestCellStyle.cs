@@ -77,8 +77,8 @@ namespace TestCases.HSSF.UserModel
         IFont         fnt  = wb.CreateFont();
         NPOI.SS.UserModel.ICellStyle    cs   = wb.CreateCellStyle();
 
-        fnt.Color=(NPOI.HSSF.Util.HSSFColor.RED.index);
-        fnt.Boldweight= (short)FontBoldWeight.BOLD;
+        fnt.Color=(NPOI.HSSF.Util.HSSFColor.Red.Index);
+        fnt.Boldweight= (short)FontBoldWeight.Bold;
         cs.SetFont(fnt);
         for (short rownum = ( short ) 0; rownum < 100; rownum++)
         {
@@ -197,16 +197,16 @@ namespace TestCases.HSSF.UserModel
         NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
         NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
-        cs.BorderBottom= (BorderStyle.THIN);
-        cs.BorderLeft= (BorderStyle.THIN);
-        cs.BorderRight= (BorderStyle.THIN);
-        cs.BorderTop= (BorderStyle.THIN);
+        cs.BorderBottom= (BorderStyle.Thin);
+        cs.BorderLeft= (BorderStyle.Thin);
+        cs.BorderRight= (BorderStyle.Thin);
+        cs.BorderTop= (BorderStyle.Thin);
         cs.FillForegroundColor= ( short ) 0xA;
-        cs.FillPattern = FillPatternType.SOLID_FOREGROUND;
+        cs.FillPattern = FillPattern.SolidForeground;
         fnt.Color= ( short ) 0xf;
         fnt.IsItalic= (true);
         cs2.FillForegroundColor= ( short ) 0x0;
-        cs2.FillPattern= FillPatternType.SOLID_FOREGROUND;
+        cs2.FillPattern= FillPattern.SolidForeground;
         cs2.SetFont(fnt);
         for (short rownum = ( short ) 0; rownum < 100; rownum++)
         {
@@ -248,21 +248,21 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(5, wb.NumberOfFonts);
 
             NPOI.SS.UserModel.ICellStyle orig = wb.CreateCellStyle();
-            orig.Alignment=(HorizontalAlignment.RIGHT);
+            orig.Alignment=(HorizontalAlignment.Right);
             orig.SetFont(fnt);
             orig.DataFormat=((short)18);
 
-            Assert.AreEqual(HorizontalAlignment.RIGHT,orig.Alignment);
+            Assert.AreEqual(HorizontalAlignment.Right,orig.Alignment);
             Assert.AreEqual(fnt,orig.GetFont(wb));
             Assert.AreEqual(18,orig.DataFormat);
 
             NPOI.SS.UserModel.ICellStyle clone = wb.CreateCellStyle();
-            Assert.AreNotEqual(HorizontalAlignment.RIGHT , clone.Alignment);
+            Assert.AreNotEqual(HorizontalAlignment.Right , clone.Alignment);
             Assert.AreNotEqual(fnt, clone.GetFont(wb));
             Assert.AreNotEqual(18, clone.DataFormat);
 
             clone.CloneStyleFrom(orig);
-            Assert.AreEqual(HorizontalAlignment.RIGHT, clone.Alignment);
+            Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
             Assert.AreEqual(fnt , clone.GetFont(wb));
             Assert.AreEqual(18,clone.DataFormat);
             Assert.AreEqual(5, wb.NumberOfFonts);
@@ -286,11 +286,11 @@ namespace TestCases.HSSF.UserModel
             fmt.GetFormat("MadeUpTwo");
 
             NPOI.SS.UserModel.ICellStyle orig = wbOrig.CreateCellStyle();
-            orig.Alignment = (HorizontalAlignment.RIGHT);
+            orig.Alignment = (HorizontalAlignment.Right);
             orig.SetFont(fnt);
             orig.DataFormat=(fmt.GetFormat("Test##"));
 
-            Assert.AreEqual(HorizontalAlignment.RIGHT, orig.Alignment);
+            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
             Assert.AreEqual(fnt,orig.GetFont(wbOrig));
             Assert.AreEqual(fmt.GetFormat("Test##") , orig.DataFormat);
 
@@ -302,11 +302,11 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle clone = wbClone.CreateCellStyle();
             Assert.AreEqual(4, wbClone.NumberOfFonts);
 
-            Assert.AreNotEqual(HorizontalAlignment.RIGHT,clone.Alignment);
+            Assert.AreNotEqual(HorizontalAlignment.Right,clone.Alignment);
             Assert.AreNotEqual("TestingFont", clone.GetFont(wbClone).FontName);
 
             clone.CloneStyleFrom(orig);
-            Assert.AreEqual(HorizontalAlignment.RIGHT, clone.Alignment);
+            Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
             Assert.AreEqual("TestingFont" ,clone.GetFont(wbClone).FontName);
             Assert.AreEqual(fmtClone.GetFormat("Test##"),clone.DataFormat);
             Assert.AreNotEqual(fmtClone.GetFormat("Test##") , fmt.GetFormat("Test##"));

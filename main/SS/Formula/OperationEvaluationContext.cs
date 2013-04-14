@@ -1,4 +1,4 @@
-﻿using NPOI.Util;
+using NPOI.Util;
 
 namespace NPOI.SS.Formula
 {
@@ -171,9 +171,9 @@ namespace NPOI.SS.Formula
             NameType part1refType = ClassifyCellReference(refStrPart1, ssVersion);
             switch (part1refType)
             {
-                case NameType.BAD_CELL_OR_NAMED_RANGE:
+                case NameType.BadCellOrNamedRange:
                     return ErrorEval.REF_INVALID;
-                case NameType.NAMED_RANGE:
+                case NameType.NamedRange:
                     IEvaluationName nm = ((IFormulaParsingWorkbook)_workbook).GetName(refStrPart1, _sheetIndex);
                     if (!nm.IsRange)
                     {
@@ -186,10 +186,10 @@ namespace NPOI.SS.Formula
                 // no ':'
                 switch (part1refType)
                 {
-                    case NameType.COLUMN:
-                    case NameType.ROW:
+                    case NameType.Column:
+                    case NameType.Row:
                         return ErrorEval.REF_INVALID;
-                    case NameType.CELL:
+                    case NameType.Cell:
                         CellReference cr = new CellReference(refStrPart1);
                         return new LazyRefEval(cr.Row, cr.Col, sre);
                 }
@@ -198,9 +198,9 @@ namespace NPOI.SS.Formula
             NameType part2refType = ClassifyCellReference(refStrPart1, ssVersion);
             switch (part2refType)
             {
-                case NameType.BAD_CELL_OR_NAMED_RANGE:
+                case NameType.BadCellOrNamedRange:
                     return ErrorEval.REF_INVALID;
-                case NameType.NAMED_RANGE:
+                case NameType.NamedRange:
                     throw new Exception("Cannot Evaluate '" + refStrPart1
                             + "'. Indirect Evaluation of defined names not supported yet");
             }
@@ -213,19 +213,19 @@ namespace NPOI.SS.Formula
             int firstRow, firstCol, lastRow, lastCol;
             switch (part1refType)
             {
-                case NameType.COLUMN:
+                case NameType.Column:
                     firstRow = 0;
                     lastRow = ssVersion.LastRowIndex;
                     firstCol = ParseColRef(refStrPart1);
                     lastCol = ParseColRef(refStrPart2);
                     break;
-                case NameType.ROW:
+                case NameType.Row:
                     firstCol = 0;
                     lastCol = ssVersion.LastColumnIndex;
                     firstRow = ParseRowRef(refStrPart1);
                     lastRow = ParseRowRef(refStrPart2);
                     break;
-                case NameType.CELL:
+                case NameType.Cell:
                     CellReference cr;
                     cr = new CellReference(refStrPart1);
                     firstRow = cr.Row;
@@ -255,7 +255,7 @@ namespace NPOI.SS.Formula
             int len = str.Length;
             if (len < 1)
             {
-                return NameType.BAD_CELL_OR_NAMED_RANGE;
+                return NameType.BadCellOrNamedRange;
             }
             return CellReference.ClassifyCellReference(str, ssVersion);
         }

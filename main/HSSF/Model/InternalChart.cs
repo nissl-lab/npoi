@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Record.Chart;
@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Model
                 throw new Exception("BOF record expected");
             }
             BOFRecord bof = (BOFRecord)rs.GetNext();
-            if (bof.Type != BOFRecord.TYPE_CHART)
+            if (bof.Type != BOFRecordType.Chart)
             {
                 throw new RuntimeException("Bad BOF record type");
             }
@@ -451,10 +451,10 @@ namespace NPOI.HSSF.Model
             r.MinimumDate = 0;
             r.MaximumDate = 0;
             r.MajorInterval = 1;
-            r.MajorUnit = DateUnit.DUDAYS;
+            r.MajorUnit = DateUnit.Days;
             r.MinorInterval = 1;
-            r.MinorUnit = DateUnit.DUDAYS;
-            r.BaseUnit = DateUnit.DUDAYS;
+            r.MinorUnit = DateUnit.Days;
+            r.BaseUnit = DateUnit.Days;
             r.CrossDate = 0;
             r.IsAutoMin = (true);
             r.IsAutoMax = (true);
@@ -759,7 +759,7 @@ namespace NPOI.HSSF.Model
         {
             BOFRecord retval = new BOFRecord();
             retval.Version = ((short)600);
-            retval.Type = BOFRecord.TYPE_CHART;
+            retval.Type = BOFRecordType.Chart;
             retval.Build = ((short)0x1CFE);
             retval.BuildYear = ((short)1997);
             retval.HistoryBitMask = (0x40C9);

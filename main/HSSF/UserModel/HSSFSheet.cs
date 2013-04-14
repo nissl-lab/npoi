@@ -482,7 +482,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Get the visibility state for a given column.F:\Gloria\ÑÐ¾¿\ÎÄ¼þ¸ñÊ½\NPOI\src\NPOI\HSSF\Util\HSSFDataValidation.cs
+        /// Get the visibility state for a given column.F:\Gloria\ï¿½Ð¾ï¿½\ï¿½Ä¼ï¿½ï¿½ï¿½Ê½\NPOI\src\NPOI\HSSF\Util\HSSFDataValidation.cs
         /// </summary>
         /// <param name="column">the column to Get (0-based).</param>
         /// <param name="hidden">the visiblity state of the column.</param>
@@ -1983,7 +1983,7 @@ namespace NPOI.HSSF.UserModel
             // clear all cells in the range
             foreach (ICell c in result)
             {
-                c.SetCellType(CellType.BLANK);
+                c.SetCellType(CellType.Blank);
             }
             return result;
         }
@@ -2030,7 +2030,7 @@ namespace NPOI.HSSF.UserModel
         {
             // make sure the formula parses OK first
             int sheetIndex = _workbook.GetSheetIndex(this);
-            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.ARRAY, sheetIndex);
+            Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.Array, sheetIndex);
             ICellRange<ICell> cells = GetCellRange(range);
 
             foreach (HSSFCell c in cells)
@@ -2825,39 +2825,39 @@ namespace NPOI.HSSF.UserModel
             }
             switch (oldCell.CellType)
             {
-                case NPOI.SS.UserModel.CellType.STRING:
+                case NPOI.SS.UserModel.CellType.String:
                     newCell.SetCellValue(oldCell.StringCellValue);
                     break;
-                case NPOI.SS.UserModel.CellType.NUMERIC:
-                    newCell.SetCellValue(oldCell.NumericCellValue);
+                case NPOI.SS.UserModel.CellType.Numeric:
+					newCell.SetCellValue(oldCell.NumericCellValue);
                     break;
-                case NPOI.SS.UserModel.CellType.BLANK:
-                    newCell.SetCellType(NPOI.SS.UserModel.CellType.BLANK);
+                case NPOI.SS.UserModel.CellType.Blank:
+                    newCell.SetCellType(NPOI.SS.UserModel.CellType.Blank);
                     break;
-                case NPOI.SS.UserModel.CellType.BOOLEAN:
+                case NPOI.SS.UserModel.CellType.Boolean:
                     newCell.SetCellValue(oldCell.BooleanCellValue);
                     break;
-                case NPOI.SS.UserModel.CellType.ERROR:
+                case NPOI.SS.UserModel.CellType.Error:
                     newCell.SetCellValue(oldCell.ErrorCellValue);
                     break;
-                case NPOI.SS.UserModel.CellType.FORMULA:
+                case NPOI.SS.UserModel.CellType.Formula:
                     if (keepFormulas)
                     {
-                        newCell.SetCellType(CellType.FORMULA);
+                        newCell.SetCellType(CellType.Formula);
                         newCell.CellFormula = oldCell.CellFormula;
                     }
                     else
                     {
                         try
                         {
-                            newCell.SetCellType(CellType.NUMERIC);
+                            newCell.SetCellType(CellType.Numeric);
                             newCell.SetCellValue(oldCell.NumericCellValue);
                         }
                         catch (Exception ex)
                         {
                             try
                             {
-                                newCell.SetCellType(CellType.STRING);
+                                newCell.SetCellType(CellType.String);
                                 newCell.SetCellValue(oldCell.StringCellValue);
                             }
                             catch (Exception exInner)

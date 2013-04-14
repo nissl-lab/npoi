@@ -55,7 +55,7 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet lSheet = (HSSFSheet)mainWorkbook.GetSheetAt(0);
             HSSFCell lA1Cell = (HSSFCell)lSheet.GetRow(0).GetCell(0);
 
-            Assert.AreEqual(CellType.FORMULA, lA1Cell.CellType);
+            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
 
             HSSFFormulaEvaluator lMainWorkbookEvaluator = new HSSFFormulaEvaluator(mainWorkbook);
             HSSFFormulaEvaluator lSourceEvaluator = new HSSFFormulaEvaluator(sourceWorkbook);
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.UserModel
                     new String[] { MAIN_WORKBOOK_FILENAME, SOURCE_WORKBOOK_FILENAME },
                     new HSSFFormulaEvaluator[] { lMainWorkbookEvaluator, lSourceEvaluator });
 
-            Assert.AreEqual(CellType.NUMERIC, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
+            Assert.AreEqual(CellType.Numeric, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
 
             Assert.AreEqual(20.0d, lA1Cell.NumericCellValue, 0.00001d);
 

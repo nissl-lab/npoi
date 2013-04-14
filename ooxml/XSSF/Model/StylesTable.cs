@@ -592,7 +592,7 @@ namespace NPOI.XSSF.Model
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-        public XSSFFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, byte underline)
+        public XSSFFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset,FontUnderlineType underline)
         {
             foreach (XSSFFont font in fonts)
             {

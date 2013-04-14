@@ -543,9 +543,9 @@ namespace TestCases.SS.Formula.Functions
             {
                 HSSFRow row = (HSSFRow)sheet1.GetRow(rowIx - 1);
                 HSSFCell cellA = (HSSFCell)row.GetCell(0);  // cell containing a formula with COUNTIF
-                Assert.AreEqual(CellType.FORMULA, cellA.CellType);
+                Assert.AreEqual(CellType.Formula, cellA.CellType);
                 HSSFCell cellC = (HSSFCell)row.GetCell(2);  // cell with a reference value
-                Assert.AreEqual(CellType.NUMERIC, cellC.CellType);
+                Assert.AreEqual(CellType.Numeric, cellC.CellType);
 
                 CellValue cv = fe.Evaluate(cellA);
                 double actualValue = cv.NumberValue;
@@ -561,9 +561,9 @@ namespace TestCases.SS.Formula.Functions
             {
                 HSSFRow row = (HSSFRow)sheet2.GetRow(rowIx - 1);
                 HSSFCell cellA = (HSSFCell)row.GetCell(0);  // cell containing a formula with COUNTIF
-                Assert.AreEqual(CellType.FORMULA, cellA.CellType);
+                Assert.AreEqual(CellType.Formula, cellA.CellType);
                 HSSFCell cellC = (HSSFCell)row.GetCell(2);  // cell with a reference value
-                Assert.AreEqual(CellType.NUMERIC, cellC.CellType);
+                Assert.AreEqual(CellType.Numeric, cellC.CellType);
 
                 CellValue cv = fe.Evaluate(cellA);
                 double actualValue = cv.NumberValue;

@@ -71,9 +71,9 @@ namespace TestCases.HSSF.UserModel
             fis.Close();
 
             palette = book.GetCustomPalette();
-            HSSFColor color = palette.GetColor(HSSFColor.CORAL.index);  //unmodified
+            HSSFColor color = palette.GetColor(HSSFColor.Coral.Index);  //unmodified
             Assert.IsNotNull(color, "Unexpected null in custom palette (unmodified index)");
-            short[] expectedRGB = HSSFColor.CORAL.triplet;
+            short[] expectedRGB = HSSFColor.Coral.Triplet;
             short[] actualRGB = color.GetTriplet();
             String msg = "Expected palette position to remain unmodified";
             Assert.AreEqual(expectedRGB[0], actualRGB[0], msg);

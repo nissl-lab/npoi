@@ -48,7 +48,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Use this to create new cells within the row and return it.
         /// 
-        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.BLANK"/>.
+        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.Blank"/>.
         /// The type can be changed either through calling <c>SetCellValue</c> or <c>SetCellType</c>.
         /// </summary>
         /// <param name="column">the column number this cell represents</param>
@@ -62,7 +62,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Use this to create new cells within the row and return it.
         /// 
-        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.BLANK"/>. The type can be changed
+        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.Blank"/>. The type can be changed
         /// either through calling <code>SetCellValue</code> or <code>SetCellType</code>.
         /// </summary>
         /// <param name="column">the column number this cell represents</param>

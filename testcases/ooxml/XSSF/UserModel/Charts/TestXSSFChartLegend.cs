@@ -34,8 +34,8 @@ namespace NPOI.XSSF.UserModel.Charts
             IChart chart = Drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();
 
-            legend.Position = LegendPosition.TOP_RIGHT;
-            Assert.AreEqual(LegendPosition.TOP_RIGHT, legend.Position);
+            legend.Position = LegendPosition.TopRight;
+            Assert.AreEqual(LegendPosition.TopRight, legend.Position);
         }
     }
 }

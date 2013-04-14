@@ -46,7 +46,7 @@ namespace TestCases.SS.Util
             NPOI.SS.UserModel.IRow firstRow = sheet.GetRow(0);
             NPOI.SS.UserModel.ICell firstCell = firstRow.GetCell(0);
 
-            Assert.AreEqual(firstCell.CellType, CellType.NUMERIC);
+            Assert.AreEqual(firstCell.CellType, CellType.Numeric);
             Assert.AreEqual(1.0, firstCell.NumericCellValue, 0.00001);
 
 
@@ -55,11 +55,11 @@ namespace TestCases.SS.Util
             Assert.IsNull(secondRow.GetCell(2));
 
             NPOI.SS.UserModel.IRow thirdRow = sheet.GetRow(2);
-            Assert.AreEqual(CellType.STRING, thirdRow.GetCell(0).CellType);
+            Assert.AreEqual(CellType.String, thirdRow.GetCell(0).CellType);
             String cellValue = thirdRow.GetCell(0).StringCellValue;
             Assert.AreEqual(testData[2][0].ToString(), cellValue);
 
-            Assert.AreEqual(CellType.FORMULA, thirdRow.GetCell(2).CellType);
+            Assert.AreEqual(CellType.Formula, thirdRow.GetCell(2).CellType);
             Assert.AreEqual("A1+B2", thirdRow.GetCell(2).CellFormula);
         }
         [Test]
@@ -70,7 +70,7 @@ namespace TestCases.SS.Util
 
             NPOI.SS.UserModel.ICell emptyCell = sheet.GetRow(1).GetCell(1);
             Assert.IsNotNull(emptyCell);
-            Assert.AreEqual(CellType.BLANK, emptyCell.CellType);
+            Assert.AreEqual(CellType.Blank, emptyCell.CellType);
         }
 
         [Test]

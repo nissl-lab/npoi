@@ -57,19 +57,19 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// referes to the lower/right corner
         /// </summary>
-        LOWER_RIGHT = 0,
+        LowerRight = 0,
         /// <summary>
         /// referes to the upper/right corner
         /// </summary>
-        UPPER_RIGHT = 1,
+        UpperRight = 1,
         /// <summary>
         /// referes to the lower/left corner
         /// </summary>
-        LOWER_LEFT = 2,
+        LowerLeft = 2,
         /// <summary>
         /// referes to the upper/left corner
         /// </summary>
-        UPPER_LEFT = 3,
+        UpperLeft = 3,
     }
 
     /// <summary>

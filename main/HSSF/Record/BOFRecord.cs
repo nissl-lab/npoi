@@ -19,14 +19,19 @@
 
 namespace NPOI.HSSF.Record
 {
-
-
     using System;
     using System.Text;
     using System.Collections;
     using NPOI.Util;
 
-
+    public enum BOFRecordType {
+        Workbook = 0x05,
+        VBModule = 0x06,
+        Worksheet = 0x10,
+        Chart = 0x20,
+        Excel4Macro = 0x40,
+        WorkspaceFile = 0x100
+    }
 
     /**
      * Title: Beginning Of File
@@ -77,12 +82,6 @@ namespace NPOI.HSSF.Record
          */
 
         public const short HISTORY_MASK = 0x41;
-        public const short TYPE_WORKBOOK = 0x05;
-        public const short TYPE_VB_MODULE = 0x06;
-        public const short TYPE_WORKSHEET = 0x10;
-        public const short TYPE_CHART = 0x20;
-        public const short TYPE_EXCEL_4_MACRO = 0x40;
-        public const short TYPE_WORKSPACE_FILE = 0x100;
 
         /**
          * Constructs an empty BOFRecord with no fields Set.
@@ -91,10 +90,11 @@ namespace NPOI.HSSF.Record
         public BOFRecord()
         {
         }
-        private BOFRecord(int type)
+
+        private BOFRecord(BOFRecordType type)
         {
             field_1_version = VERSION;
-            field_2_type = type;
+            field_2_type = (int) type;
             field_3_build = BUILD;
             field_4_year = BUILD_YEAR;
             field_5_history = 0x01;
@@ -103,7 +103,7 @@ namespace NPOI.HSSF.Record
 
         public static BOFRecord CreateSheetBOF()
         {
-            return new BOFRecord(TYPE_WORKSHEET);
+            return new BOFRecord(BOFRecordType.Worksheet);
         }
 
         /**
@@ -183,23 +183,24 @@ namespace NPOI.HSSF.Record
          * @return short type of object
          */
 
-        public int Type
+        public BOFRecordType Type
         {
-            get { return field_2_type; }
-            set { field_2_type = value; }
+            get { return (BOFRecordType) field_2_type; }
+            set { field_2_type = (int) value; }
         }
+
         private String TypeName
         {
             get
             {
-                switch (field_2_type)
+                switch (Type)
                 {
-                    case TYPE_CHART: return "chart";
-                    case TYPE_EXCEL_4_MACRO: return "excel 4 macro";
-                    case TYPE_VB_MODULE: return "vb module";
-                    case TYPE_WORKBOOK: return "workbook";
-                    case TYPE_WORKSHEET: return "worksheet";
-                    case TYPE_WORKSPACE_FILE: return "workspace file";
+                    case BOFRecordType.Chart: return "chart";
+                    case BOFRecordType.Excel4Macro: return "excel 4 macro";
+                    case BOFRecordType.VBModule: return "vb module";
+                    case BOFRecordType.Workbook: return "workbook";
+                    case BOFRecordType.Worksheet: return "worksheet";
+                    case BOFRecordType.WorkspaceFile: return "workspace file";
                 }
                 return "#error unknown type#";
             }
@@ -237,7 +238,7 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .version         = ")
                 .Append(StringUtil.ToHexString(Version)).Append("\n");
             buffer.Append("    .type            = ")
-                .Append(StringUtil.ToHexString(Type)).Append("\n");
+                .Append(StringUtil.ToHexString((int) Type)).Append("\n");
             buffer.Append(" (").Append(TypeName).Append(")").Append("\n");
             buffer.Append("    .build           = ")
                 .Append(StringUtil.ToHexString(Build)).Append("\n");
@@ -254,7 +255,7 @@ namespace NPOI.HSSF.Record
         public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(Version);
-            out1.WriteShort(Type);
+            out1.WriteShort((int) Type);
             out1.WriteShort(Build);
             out1.WriteShort(BuildYear);
             out1.WriteInt(HistoryBitMask);

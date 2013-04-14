@@ -24,23 +24,23 @@ namespace NPOI.SS.UserModel
         /**
          * not underlined
          */
-        NONE = 0,
+        None = 0,
         /**
          * single (normal) underline
          */
-        SINGLE = 1,
+        Single = 1,
         /**
          * double underlined
          */
-        DOUBLE = 2,
+        Double = 2,
         /**
          * accounting style single underline
          */
-        SINGLE_ACCOUNTING = 0x21,
+        SingleAccounting = 0x21,
         /**
          * accounting style double underline
          */
-        DOUBLE_ACCOUNTING = 0x22
+        DoubleAccounting = 0x22
     }
 
     public enum FontSuperScript:short
@@ -50,20 +50,21 @@ namespace NPOI.SS.UserModel
          * no type Offsetting (not super or subscript)
          */
 
-        NONE = 0,
+        None = 0,
 
         /**
          * superscript
          */
 
-        SUPER = 1,
+        Super = 1,
 
         /**
          * subscript
          */
 
-        SUB = 2,
+        Sub = 2,
     }
+
     public enum FontColor:short
     {
         /// <summary>
@@ -75,14 +76,15 @@ namespace NPOI.SS.UserModel
          * normal type of black color.
          */
 
-        NORMAL = 0x7fff,
+        Normal = 0x7fff,
 
         /**
          * Dark Red color
          */
 
-        RED = 0xa,
+        Red = 0xa,
     }
+
     public enum FontBoldWeight:short
     {
         /// <summary>
@@ -94,13 +96,13 @@ namespace NPOI.SS.UserModel
          * Normal boldness (not bold)
          */
 
-        NORMAL = 0x190,
+        Normal = 0x190,
 
         /**
          * Bold boldness (bold)
          */
 
-        BOLD = 0x2bc,
+        Bold = 0x2bc,
     }
 
 
@@ -159,24 +161,16 @@ namespace NPOI.SS.UserModel
         /**
          * get normal,super or subscript.
          * @return offset type to use (none,super,sub)
-         * @see #SS_NONE
-         * @see #SS_SUPER
-         * @see #SS_SUB
          */
 
-        short TypeOffset { get; set; }
+        FontSuperScript TypeOffset { get; set; }
 
         /**
          * get type of text underlining to use
          * @return underlining type
-         * @see #U_NONE
-         * @see #U_SINGLE
-         * @see #U_DOUBLE
-         * @see #U_SINGLE_ACCOUNTING
-         * @see #U_DOUBLE_ACCOUNTING
          */
 
-        byte Underline { get; set; }
+        FontUnderlineType Underline { get; set; }
 
         /**
          * get character-set to use.

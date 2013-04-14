@@ -69,7 +69,7 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < urls.Length; i++)
             {
                 String s = urls[i];
-                XSSFHyperlink link = CreateHelper.CreateHyperlink(HyperlinkType.URL) as XSSFHyperlink;
+                XSSFHyperlink link = CreateHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
                 link.Address=(s);
 
                 XSSFCell cell = row.CreateCell(i) as XSSFCell;
@@ -119,7 +119,7 @@ namespace NPOI.XSSF.UserModel
             {
                 try
                 {
-                    CreateHelper.CreateHyperlink(HyperlinkType.URL).Address = (s);
+                    CreateHelper.CreateHyperlink(HyperlinkType.Url).Address = (s);
                     Assert.Fail("expected ArgumentException: " + s);
                 }
                 catch (ArgumentException)
@@ -166,7 +166,7 @@ namespace NPOI.XSSF.UserModel
             IRow r17 = sheet.CreateRow(17);
             ICell r17c = r17.CreateCell(2);
 
-            IHyperlink hyperlink = CreateHelper.CreateHyperlink(HyperlinkType.URL);
+            IHyperlink hyperlink = CreateHelper.CreateHyperlink(HyperlinkType.Url);
             hyperlink.Address = ("http://poi.apache.org/spreadsheet/");
             hyperlink.Label = "POI SS Link";
             r17c.Hyperlink=(hyperlink);
@@ -174,7 +174,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
 
-            Assert.AreEqual(HyperlinkType.URL,
+            Assert.AreEqual(HyperlinkType.Url,
                     sheet.GetRow(17).GetCell(2).Hyperlink.Type);
             Assert.AreEqual("POI SS Link",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Label);
@@ -195,7 +195,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
 
-            Assert.AreEqual(HyperlinkType.URL,
+            Assert.AreEqual(HyperlinkType.Url,
                     sheet.GetRow(17).GetCell(2).Hyperlink.Type);
             Assert.AreEqual("POI SS Link",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Label);
@@ -214,7 +214,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(sheet.GetRow(16).GetCell(2).Hyperlink);
 
             // First is a link to poi
-            Assert.AreEqual(HyperlinkType.URL,
+            Assert.AreEqual(HyperlinkType.Url,
                     sheet.GetRow(3).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(3).GetCell(2).Hyperlink.Label);
@@ -222,7 +222,7 @@ namespace NPOI.XSSF.UserModel
                     sheet.GetRow(3).GetCell(2).Hyperlink.Address);
 
             // Next is an internal doc link
-            Assert.AreEqual(HyperlinkType.DOCUMENT,
+            Assert.AreEqual(HyperlinkType.Document,
                     sheet.GetRow(14).GetCell(2).Hyperlink.Type);
             Assert.AreEqual("Internal hyperlink to A2",
                     sheet.GetRow(14).GetCell(2).Hyperlink.Label);
@@ -230,7 +230,7 @@ namespace NPOI.XSSF.UserModel
                     sheet.GetRow(14).GetCell(2).Hyperlink.Address);
 
             // Next is a file
-            Assert.AreEqual(HyperlinkType.FILE,
+            Assert.AreEqual(HyperlinkType.File,
                     sheet.GetRow(15).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(15).GetCell(2).Hyperlink.Label);
@@ -238,7 +238,7 @@ namespace NPOI.XSSF.UserModel
                     sheet.GetRow(15).GetCell(2).Hyperlink.Address);
 
             // Last is a mailto
-            Assert.AreEqual(HyperlinkType.EMAIL,
+            Assert.AreEqual(HyperlinkType.Email,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Label);
@@ -256,13 +256,13 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual(sh1.NumberOfComments, sh2.NumberOfComments);
             XSSFHyperlink l1 = sh1.GetHyperlink(0, 1);
-            Assert.AreEqual(HyperlinkType.DOCUMENT, l1.Type);
+            Assert.AreEqual(HyperlinkType.Document, l1.Type);
             Assert.AreEqual("B1", l1.GetCellRef());
             Assert.AreEqual("Sort on Titel", l1.Tooltip);
 
             XSSFHyperlink l2 = sh2.GetHyperlink(0, 1);
             Assert.AreEqual(l1.Tooltip, l2.Tooltip);
-            Assert.AreEqual(HyperlinkType.DOCUMENT, l2.Type);
+            Assert.AreEqual(HyperlinkType.Document, l2.Type);
             Assert.AreEqual("B1", l2.GetCellRef());
         }
         [Test]

@@ -256,40 +256,40 @@ namespace TestCases.SS.UserModel
             // 5 -> num
             row.CreateCell(0).SetCellValue("test");
             row.CreateCell(1).SetCellValue(3.2);
-            row.CreateCell(4, CellType.BLANK);
+            row.CreateCell(4, CellType.Blank);
             row.CreateCell(5).SetCellValue(4);
 
             // First up, no policy given, uses default
-            Assert.AreEqual(CellType.STRING, row.GetCell(0).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.String, row.GetCell(0).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1).CellType);
             Assert.AreEqual(null, row.GetCell(2));
             Assert.AreEqual(null, row.GetCell(3));
-            Assert.AreEqual(CellType.BLANK, row.GetCell(4).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(5).CellType);
+            Assert.AreEqual(CellType.Blank, row.GetCell(4).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(5).CellType);
 
             // RETURN_NULL_AND_BLANK - same as default
-            Assert.AreEqual(CellType.STRING, row.GetCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
+            Assert.AreEqual(CellType.String, row.GetCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
             Assert.AreEqual(null, row.GetCell(2, MissingCellPolicy.RETURN_NULL_AND_BLANK));
             Assert.AreEqual(null, row.GetCell(3, MissingCellPolicy.RETURN_NULL_AND_BLANK));
-            Assert.AreEqual(CellType.BLANK, row.GetCell(4, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(5, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
+            Assert.AreEqual(CellType.Blank, row.GetCell(4, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(5, MissingCellPolicy.RETURN_NULL_AND_BLANK).CellType);
 
             // RETURN_BLANK_AS_NULL - nearly the same
-            Assert.AreEqual(CellType.STRING, row.GetCell(0, MissingCellPolicy.RETURN_BLANK_AS_NULL).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1, MissingCellPolicy.RETURN_BLANK_AS_NULL).CellType);
+            Assert.AreEqual(CellType.String, row.GetCell(0, MissingCellPolicy.RETURN_BLANK_AS_NULL).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1, MissingCellPolicy.RETURN_BLANK_AS_NULL).CellType);
             Assert.AreEqual(null, row.GetCell(2, MissingCellPolicy.RETURN_BLANK_AS_NULL));
             Assert.AreEqual(null, row.GetCell(3, MissingCellPolicy.RETURN_BLANK_AS_NULL));
             Assert.AreEqual(null, row.GetCell(4, MissingCellPolicy.RETURN_BLANK_AS_NULL));
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(5, MissingCellPolicy.RETURN_BLANK_AS_NULL).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(5, MissingCellPolicy.RETURN_BLANK_AS_NULL).CellType);
 
             // CREATE_NULL_AS_BLANK - Creates as needed
-            Assert.AreEqual(CellType.STRING, row.GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
-            Assert.AreEqual(CellType.BLANK, row.GetCell(2, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
-            Assert.AreEqual(CellType.BLANK, row.GetCell(3, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
-            Assert.AreEqual(CellType.BLANK, row.GetCell(4, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(5, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
+            Assert.AreEqual(CellType.String, row.GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
+            Assert.AreEqual(CellType.Blank, row.GetCell(2, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
+            Assert.AreEqual(CellType.Blank, row.GetCell(3, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
+            Assert.AreEqual(CellType.Blank, row.GetCell(4, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(5, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellType);
 
             // Check Created ones Get the right column
             Assert.AreEqual(0, row.GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).ColumnIndex);
@@ -304,12 +304,12 @@ namespace TestCases.SS.UserModel
             //  that that is now used if no policy given
             workbook.MissingCellPolicy = (MissingCellPolicy.RETURN_BLANK_AS_NULL);
 
-            Assert.AreEqual(CellType.STRING, row.GetCell(0).CellType);
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(1).CellType);
+            Assert.AreEqual(CellType.String, row.GetCell(0).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(1).CellType);
             Assert.AreEqual(null, row.GetCell(2));
             Assert.AreEqual(null, row.GetCell(3));
             Assert.AreEqual(null, row.GetCell(4));
-            Assert.AreEqual(CellType.NUMERIC, row.GetCell(5).CellType);
+            Assert.AreEqual(CellType.Numeric, row.GetCell(5).CellType);
         }
         [Test]
         public void TestRowHeight()
@@ -410,7 +410,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(it.MoveNext());
 
             // Add another cell, specifying the cellType
-            ICell cell5 = row.CreateCell(2, CellType.STRING);
+            ICell cell5 = row.CreateCell(2, CellType.String);
             it = row.GetEnumerator();
             Assert.IsNotNull(cell5);
             Assert.IsTrue(it.MoveNext());
@@ -421,7 +421,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(cell5 == it.Current);
             Assert.IsTrue(it.MoveNext());
             Assert.IsTrue(cell2 == it.Current);
-            Assert.AreEqual(CellType.STRING, cell5.CellType);
+            Assert.AreEqual(CellType.String, cell5.CellType);
         }
         [Test]
         public void TestRowStyle()

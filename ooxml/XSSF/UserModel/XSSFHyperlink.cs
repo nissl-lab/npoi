@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
             // If it has a location, it's internal
             if (ctHyperlink.location != null)
             {
-                _type = HyperlinkType.DOCUMENT;
+                _type = HyperlinkType.Document;
                 _location = ctHyperlink.location;
             }
             else
@@ -77,7 +77,7 @@ namespace NPOI.XSSF.UserModel
                             ctHyperlink.@ref + " references relation " + ctHyperlink.id + ", but that didn't exist!");
                     }
                     // hyperlink is internal and is not related to other parts
-                    _type = HyperlinkType.DOCUMENT;
+                    _type = HyperlinkType.Document;
                 }
                 else
                 {
@@ -88,15 +88,15 @@ namespace NPOI.XSSF.UserModel
                     if (_location.StartsWith("http://") || _location.StartsWith("https://")
                             || _location.StartsWith("ftp://"))
                     {
-                        _type = HyperlinkType.URL;
+                        _type = HyperlinkType.Url;
                     }
                     else if (_location.StartsWith("mailto:"))
                     {
-                        _type = HyperlinkType.EMAIL;
+                        _type = HyperlinkType.Email;
                     }
                     else
                     {
-                        _type = HyperlinkType.FILE;
+                        _type = HyperlinkType.File;
                     }
                 }
             }
@@ -116,7 +116,7 @@ namespace NPOI.XSSF.UserModel
          */
         public bool NeedsRelationToo()
         {
-            return (_type != HyperlinkType.DOCUMENT);
+            return (_type != HyperlinkType.Document);
         }
 
         /**
@@ -173,7 +173,7 @@ namespace NPOI.XSSF.UserModel
                 Validate(value);
                 _location = value;
                 //we must Set location for internal hyperlinks
-                if (_type == HyperlinkType.DOCUMENT)
+                if (_type == HyperlinkType.Document)
                 {
                     this.Location = value;
                 }
@@ -184,9 +184,9 @@ namespace NPOI.XSSF.UserModel
             switch (_type)
             {
                 // email, path to file and url must be valid URIs
-                case HyperlinkType.EMAIL:
-                case HyperlinkType.FILE:
-                case HyperlinkType.URL:
+                case HyperlinkType.Email:
+                case HyperlinkType.File:
+                case HyperlinkType.Url:
                     try
                     {
                         new Uri(address,UriKind.RelativeOrAbsolute);

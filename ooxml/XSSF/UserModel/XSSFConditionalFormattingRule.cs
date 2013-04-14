@@ -185,8 +185,8 @@ namespace NPOI.XSSF.UserModel
             {
                 switch (_cfRule.type)
                 {
-                    case ST_CfType.expression: return ConditionType.FORMULA;
-                    case ST_CfType.cellIs: return ConditionType.CELL_VALUE_IS;
+                    case ST_CfType.expression: return ConditionType.Formula;
+                    case ST_CfType.cellIs: return ConditionType.CellValueIs;
                 }
                 return 0;
             }
@@ -206,20 +206,20 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 ST_ConditionalFormattingOperator op = _cfRule.@operator;
-                if (op == null) return ComparisonOperator.NO_COMPARISON;
+                if (op == null) return ComparisonOperator.NoComparison;
 
                 switch (op)
                 {
-                    case ST_ConditionalFormattingOperator.lessThan: return ComparisonOperator.LT;
-                    case ST_ConditionalFormattingOperator.lessThanOrEqual: return ComparisonOperator.LE;
-                    case ST_ConditionalFormattingOperator.greaterThan: return ComparisonOperator.GT;
-                    case ST_ConditionalFormattingOperator.greaterThanOrEqual: return ComparisonOperator.GE;
-                    case ST_ConditionalFormattingOperator.equal: return ComparisonOperator.EQUAL;
-                    case ST_ConditionalFormattingOperator.notEqual: return ComparisonOperator.NOT_EQUAL;
-                    case ST_ConditionalFormattingOperator.between: return ComparisonOperator.BETWEEN;
-                    case ST_ConditionalFormattingOperator.notBetween: return ComparisonOperator.NOT_BETWEEN;
+                    case ST_ConditionalFormattingOperator.lessThan: return ComparisonOperator.LessThan;
+                    case ST_ConditionalFormattingOperator.lessThanOrEqual: return ComparisonOperator.LessThan;
+                    case ST_ConditionalFormattingOperator.greaterThan: return ComparisonOperator.GreaterThan;
+                    case ST_ConditionalFormattingOperator.greaterThanOrEqual: return ComparisonOperator.GreaterThanOrEqual;
+                    case ST_ConditionalFormattingOperator.equal: return ComparisonOperator.Equal;
+                    case ST_ConditionalFormattingOperator.notEqual: return ComparisonOperator.NotEqual;
+                    case ST_ConditionalFormattingOperator.between: return ComparisonOperator.Between;
+                    case ST_ConditionalFormattingOperator.notBetween: return ComparisonOperator.NotBetween;
                 }
-                return ComparisonOperator.NO_COMPARISON;
+                return ComparisonOperator.NoComparison;
             }
         }
 

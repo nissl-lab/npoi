@@ -40,7 +40,7 @@ namespace NPOI.XSSF.Model
             ISheet sheet = wb.GetSheet("Test");
             ICell cell = sheet.GetRow(0).GetCell(4);
 
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
             cell.SetCellFormula(null);
 
             //the count of items is less by one
@@ -51,9 +51,9 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(10, c.i);
             Assert.AreEqual("C1", c.r);
 
-            Assert.AreEqual(CellType.STRING, cell.CellType);
+            Assert.AreEqual(CellType.String, cell.CellType);
             cell.SetCellValue("ABC");
-            Assert.AreEqual(CellType.STRING, cell.CellType);
+            Assert.AreEqual(CellType.String, cell.CellType);
         }
 
 

@@ -36,7 +36,7 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestDefaultFont()
         {
-            BaseTestDefaultFont("Calibri", (short)220, IndexedColors.BLACK.Index);
+            BaseTestDefaultFont("Calibri", (short)220, IndexedColors.Black.Index);
         }
         [Test]
         public void TestConstructor()
@@ -187,13 +187,13 @@ namespace NPOI.XSSF.UserModel
             ctFont.SetUArray(0, underlinePropr);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(FontUnderline.SINGLE.ByteValue, xssfFont.Underline);
+            Assert.AreEqual(FontUnderlineType.Single, xssfFont.Underline);
 
-            xssfFont.SetUnderline(FontUnderline.DOUBLE);
+            xssfFont.SetUnderline(FontUnderlineType.Double);
             Assert.AreEqual(1,ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.@double, ctFont.GetUArray(0).val);
 
-            xssfFont.SetUnderline(FontUnderline.DOUBLE_ACCOUNTING);
+            xssfFont.SetUnderline(FontUnderlineType.DoubleAccounting);
             Assert.AreEqual(1,ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.doubleAccounting, ctFont.GetUArray(0).val);
         }
@@ -206,10 +206,10 @@ namespace NPOI.XSSF.UserModel
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(IndexedColors.BLACK.Index, xssfFont.Color);
+            Assert.AreEqual(IndexedColors.Black.Index, xssfFont.Color);
 
-            xssfFont.Color = IndexedColors.RED.Index;
-            Assert.AreEqual((uint)IndexedColors.RED.Index, ctFont.GetColorArray(0).indexed);
+            xssfFont.Color = IndexedColors.Red.Index;
+            Assert.AreEqual((uint)IndexedColors.Red.Index, ctFont.GetColorArray(0).indexed);
         }
         [Test]
         public void TestRgbColor()
@@ -245,8 +245,8 @@ namespace NPOI.XSSF.UserModel
             XSSFFont xssfFont = new XSSFFont(ctFont);
             Assert.AreEqual((short)ctFont.GetColorArray(0).theme, xssfFont.GetThemeColor());
 
-            xssfFont.SetThemeColor(IndexedColors.RED.Index);
-            Assert.AreEqual((uint)IndexedColors.RED.Index, ctFont.GetColorArray(0).theme);
+            xssfFont.SetThemeColor(IndexedColors.Red.Index);
+            Assert.AreEqual((uint)IndexedColors.Red.Index, ctFont.GetColorArray(0).theme);
         }
         [Test]
         public void TestFamily()
@@ -282,9 +282,9 @@ namespace NPOI.XSSF.UserModel
             ctFont.SetVertAlignArray(0, valign);
 
             XSSFFont font = new XSSFFont(ctFont);
-            Assert.AreEqual((short)FontSuperScript.NONE, font.TypeOffset);
+            Assert.AreEqual(FontSuperScript.None, font.TypeOffset);
 
-            font.TypeOffset = (short)FontSuperScript.SUPER;
+            font.TypeOffset = FontSuperScript.Super;
             Assert.AreEqual(ST_VerticalAlignRun.superscript, ctFont.GetVertAlignArray(0).val);
         }
     }

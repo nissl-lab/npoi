@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) Under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -34,7 +34,7 @@ namespace NPOI.HSSF.UserModel
 
             base.ShapeType = (OBJECT_TYPE_COMBO_BOX);
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
-            cod.ObjectType = CommonObjectType.COMBO_BOX;
+            cod.ObjectType = CommonObjectType.ComboBox;
         }
 
         protected override TextObjectRecord CreateTextObjRecord()
@@ -79,7 +79,7 @@ namespace NPOI.HSSF.UserModel
         {
             ObjRecord obj = new ObjRecord();
             CommonObjectDataSubRecord c = new CommonObjectDataSubRecord();
-            c.ObjectType = CommonObjectType.COMBO_BOX;
+            c.ObjectType = CommonObjectType.ComboBox;
             c.IsLocked = (true);
             c.IsPrintable = (false);
             c.IsAutoFill = (true);

@@ -35,8 +35,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             double newRatio = 1.1;
             double newCoordinate = 0.3;
-            LayoutMode nonDefaultMode = LayoutMode.FACTOR;
-            LayoutTarget nonDefaultTarget = LayoutTarget.OUTER;
+            LayoutMode nonDefaultMode = LayoutMode.Factor;
+            LayoutTarget nonDefaultTarget = LayoutTarget.Outer;
 
             IManualLayout layout = GetEmptyLayout();
 

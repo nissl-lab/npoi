@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Atp
                 IRow row = (IRow)rowIterator.Current;
 
                 ICell cell = row.GetCell(SS.YEARFRAC_FORMULA_COLUMN);
-                if (cell == null || cell.CellType != CellType.FORMULA)
+                if (cell == null || cell.CellType != CellType.Formula)
                 {
                     continue;
                 }

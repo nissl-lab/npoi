@@ -112,7 +112,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 String formula = name.RefersToFormula;
                 int sheetIndex = name.SheetIndex;
 
-                Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.NAMEDRANGE, sheetIndex);
+                Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.NamedRange, sheetIndex);
                 if (shifter.AdjustFormula(ptgs, sheetIndex))
                 {
                     String shiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
@@ -194,7 +194,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             IWorkbook wb = sheet.Workbook;
             int sheetIndex = wb.GetSheetIndex(sheet);
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.CELL, sheetIndex);
+            Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex);
             String ShiftedFmla = null;
             if (Shifter.AdjustFormula(ptgs, sheetIndex))
             {
@@ -251,7 +251,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 List<String> formulas = cfRule.formula;
                 for (int i = 0; i < formulas.Count; i++) {
                     String formula = formulas[i];
-                    Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.CELL, sheetIndex);
+                    Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex);
                     if (Shifter.AdjustFormula(ptgs, sheetIndex)) {
                         String ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
                         formulas[i] =  ShiftedFmla;

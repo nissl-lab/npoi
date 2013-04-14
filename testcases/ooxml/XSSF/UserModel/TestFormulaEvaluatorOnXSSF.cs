@@ -119,32 +119,32 @@ namespace NPOI.XSSF.UserModel{
 
             switch (expected.CellType)
             {
-                case CellType.BLANK:
-                    Assert.AreEqual(CellType.BLANK, actual.CellType, msg);
+                case CellType.Blank:
+                    Assert.AreEqual(CellType.Blank, actual.CellType, msg);
                     break;
-                case CellType.BOOLEAN:
-                    Assert.AreEqual(CellType.BOOLEAN, actual.CellType, msg);
+                case CellType.Boolean:
+                    Assert.AreEqual(CellType.Boolean, actual.CellType, msg);
                     Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
                     break;
-                case CellType.ERROR:
-                    Assert.AreEqual(CellType.ERROR, actual.CellType, msg);
+                case CellType.Error:
+                    Assert.AreEqual(CellType.Error, actual.CellType, msg);
                     if (false)
                     { // TODO: fix ~45 functions which are currently returning incorrect error values
                         Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
                     }
                     break;
-                case CellType.FORMULA: // will never be used, since we will call method After formula Evaluation
+                case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
-                case CellType.NUMERIC:
-                    Assert.AreEqual(CellType.NUMERIC, actual.CellType, msg);
+                case CellType.Numeric:
+                    Assert.AreEqual(CellType.Numeric, actual.CellType, msg);
                     AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue, TestMathX.POS_ZERO, TestMathX.DIFF_TOLERANCE_FACTOR);
 
                     //				double delta = Math.abs(expected.NumericCellValue-actual.NumberValue);
                     //				double pctExpected = Math.abs(0.00001*expected.NumericCellValue);
                     //				Assert.IsTrue(msg, delta <= pctExpected);
                     break;
-                case CellType.STRING:
-                    Assert.AreEqual(CellType.STRING, actual.CellType, msg);
+                case CellType.String:
+                    Assert.AreEqual(CellType.String, actual.CellType, msg);
                     Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
@@ -273,7 +273,7 @@ namespace NPOI.XSSF.UserModel{
             for (short colnum = SS.COLUMN_INDEX_FIRST_TEST_VALUE; colnum < endcolnum; colnum++)
             {
                 ICell c = formulasRow.GetCell(colnum);
-                if (c == null || c.CellType != CellType.FORMULA)
+                if (c == null || c.CellType != CellType.Formula)
                 {
                     continue;
                 }
@@ -388,11 +388,11 @@ namespace NPOI.XSSF.UserModel{
                 System.Console.WriteLine("Warning - Row " + r.RowNum + " has no cell " + SS.COLUMN_INDEX_FUNCTION_NAME + ", can't figure out function name");
                 return null;
             }
-            if (cell.CellType == CellType.BLANK)
+            if (cell.CellType == CellType.Blank)
             {
                 return null;
             }
-            if (cell.CellType == CellType.STRING)
+            if (cell.CellType == CellType.String)
             {
                 return cell.RichStringCellValue.String;
             }

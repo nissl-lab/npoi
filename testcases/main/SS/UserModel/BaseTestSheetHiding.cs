@@ -66,15 +66,15 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
 
-            wb.SetSheetHidden(0, SheetState.HIDDEN);
+            wb.SetSheetHidden(0, SheetState.Hidden);
             Assert.IsTrue(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
 
-            wb.SetSheetHidden(0, SheetState.VERY_HIDDEN);
+            wb.SetSheetHidden(0, SheetState.VeryHidden);
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsTrue(wb.IsSheetVeryHidden(0));
 
-            wb.SetSheetHidden(0, SheetState.VISIBLE);
+            wb.SetSheetHidden(0, SheetState.Visible);
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
 
@@ -149,7 +149,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestHide()
         {
-            wbU.SetSheetHidden(0,SheetState.HIDDEN);
+            wbU.SetSheetHidden(0,SheetState.Hidden);
             Assert.IsTrue(wbU.IsSheetHidden(0));
             Assert.IsFalse(wbU.IsSheetHidden(1));
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbU);
@@ -164,7 +164,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestUnHide()
         {
-            wbH.SetSheetHidden(0,SheetState.VISIBLE);
+            wbH.SetSheetHidden(0,SheetState.Visible);
             Assert.IsFalse(wbH.IsSheetHidden(0));
             Assert.IsFalse(wbH.IsSheetHidden(1));
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbH);

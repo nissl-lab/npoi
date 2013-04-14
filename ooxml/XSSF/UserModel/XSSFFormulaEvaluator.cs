@@ -118,17 +118,17 @@ namespace NPOI.XSSF.UserModel
 
             switch (cell.CellType)
             {
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return CellValue.ValueOf(cell.BooleanCellValue);
-                case CellType.ERROR:
+                case CellType.Error:
                     return CellValue.GetError(cell.ErrorCellValue);
-                case CellType.FORMULA:
+                case CellType.Formula:
                     return EvaluateFormulaCellValue(cell);
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     return new CellValue(cell.NumericCellValue);
-                case CellType.STRING:
+                case CellType.String:
                     return new CellValue(cell.RichStringCellValue.String);
-                case CellType.BLANK:
+                case CellType.Blank:
                     return null;
             }
             throw new InvalidOperationException("Bad cell type (" + cell.CellType + ")");
@@ -155,7 +155,7 @@ namespace NPOI.XSSF.UserModel
          */
         public CellType EvaluateFormulaCell(ICell cell)
         {
-            if (cell == null || cell.CellType != CellType.FORMULA)
+            if (cell == null || cell.CellType != CellType.Formula)
             {
                 return CellType.Unknown;
             }
@@ -188,7 +188,7 @@ namespace NPOI.XSSF.UserModel
                 return null;
             }
             XSSFCell result = (XSSFCell)cell;
-            if (cell.CellType == CellType.FORMULA)
+            if (cell.CellType == CellType.Formula)
             {
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellType(cell, cv); // cell will no longer be a formula cell
@@ -201,15 +201,15 @@ namespace NPOI.XSSF.UserModel
             CellType cellType = cv.CellType;
             switch (cellType)
             {
-                case CellType.BOOLEAN:
-                case CellType.ERROR:
-                case CellType.NUMERIC:
-                case CellType.STRING:
+                case CellType.Boolean:
+                case CellType.Error:
+                case CellType.Numeric:
+                case CellType.String:
                     cell.SetCellType(cellType);
                     return;
-                case CellType.BLANK:
+                case CellType.Blank:
                 // never happens - blanks eventually Get translated to zero
-                case CellType.FORMULA:
+                case CellType.Formula:
                 // this will never happen, we have already Evaluated the formula
                     break;
             }
@@ -221,21 +221,21 @@ namespace NPOI.XSSF.UserModel
             CellType cellType = cv.CellType;
             switch (cellType)
             {
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     cell.SetCellValue(cv.BooleanValue);
                     break;
-                case CellType.ERROR:
+                case CellType.Error:
                     cell.SetCellErrorValue((byte)cv.ErrorValue);
                     break;
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     cell.SetCellValue(cv.NumberValue);
                     break;
-                case CellType.STRING:
+                case CellType.String:
                     cell.SetCellValue(new XSSFRichTextString(cv.StringValue));
                     break;
-                case CellType.BLANK:
+                case CellType.Blank:
                 // never happens - blanks eventually Get translated to zero
-                case CellType.FORMULA:
+                case CellType.Formula:
                 // this will never happen, we have already Evaluated the formula
                 default:
                     throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");

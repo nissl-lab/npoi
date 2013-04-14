@@ -31,8 +31,8 @@ namespace NPOI.XSSF.UserModel.Charts
 
         protected XSSFChart chart;
 
-        private static double MIN_LOG_BASE = 2.0;
-        private static double MAX_LOG_BASE = 1000.0;
+        private static double Min_LOG_BASE = 2.0;
+        private static double Max_LOG_BASE = 1000.0;
 
         protected XSSFChartAxis(XSSFChart chart)
         {
@@ -69,8 +69,8 @@ namespace NPOI.XSSF.UserModel.Charts
 
         public void SetLogBase(double logBase)
         {
-            if (logBase < MIN_LOG_BASE ||
-                MAX_LOG_BASE < logBase)
+            if (logBase < Min_LOG_BASE ||
+                Max_LOG_BASE < logBase)
             {
                 throw new ArgumentException("Axis log base must be between 2 and 1000 (inclusive), got: " + logBase);
             }
@@ -195,8 +195,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (orientation)
             {
-                case AxisOrientation.MIN_MAX: return ST_Orientation.minMax;
-                case AxisOrientation.MAX_MIN: return ST_Orientation.maxMin;
+                case AxisOrientation.MinToMax: return ST_Orientation.minMax;
+                case AxisOrientation.MaxToMin: return ST_Orientation.maxMin;
                 default:
                     throw new ArgumentException();
             }
@@ -206,8 +206,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (ctOrientation.val)
             {
-                case ST_Orientation.minMax: return AxisOrientation.MIN_MAX;
-                case ST_Orientation.maxMin: return AxisOrientation.MAX_MIN;
+                case ST_Orientation.minMax: return AxisOrientation.MinToMax;
+                case ST_Orientation.maxMin: return AxisOrientation.MaxToMin;
                 default:
                     throw new ArgumentException();
             }
@@ -217,9 +217,9 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (crosses)
             {
-                case AxisCrosses.AUTO_ZERO: return ST_Crosses.autoZero;
-                case AxisCrosses.MIN: return ST_Crosses.min;
-                case AxisCrosses.MAX: return ST_Crosses.max;
+                case AxisCrosses.AutoZero: return ST_Crosses.autoZero;
+                case AxisCrosses.Min: return ST_Crosses.min;
+                case AxisCrosses.Max: return ST_Crosses.max;
                 default:
                     throw new ArgumentException();
             }
@@ -229,9 +229,9 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (ctCrosses.val)
             {
-                case ST_Crosses.autoZero: return AxisCrosses.AUTO_ZERO;
-                case ST_Crosses.max: return AxisCrosses.MAX;
-                case ST_Crosses.min: return AxisCrosses.MIN;
+                case ST_Crosses.autoZero: return AxisCrosses.AutoZero;
+                case ST_Crosses.max: return AxisCrosses.Max;
+                case ST_Crosses.min: return AxisCrosses.Min;
                 default:
                     throw new ArgumentException();
             }
@@ -241,10 +241,10 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (position)
             {
-                case AxisPosition.BOTTOM: return ST_AxPos.b;
-                case AxisPosition.LEFT: return ST_AxPos.l;
-                case AxisPosition.RIGHT: return ST_AxPos.r;
-                case AxisPosition.TOP: return ST_AxPos.t;
+                case AxisPosition.Bottom: return ST_AxPos.b;
+                case AxisPosition.Left: return ST_AxPos.l;
+                case AxisPosition.Right: return ST_AxPos.r;
+                case AxisPosition.Top: return ST_AxPos.t;
                 default:
                     throw new ArgumentException();
             }
@@ -254,11 +254,11 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (ctAxPos.val)
             {
-                case ST_AxPos.b: return AxisPosition.BOTTOM;
-                case ST_AxPos.l: return AxisPosition.LEFT;
-                case ST_AxPos.r: return AxisPosition.RIGHT;
-                case ST_AxPos.t: return AxisPosition.TOP;
-                default: return AxisPosition.BOTTOM;
+                case ST_AxPos.b: return AxisPosition.Bottom;
+                case ST_AxPos.l: return AxisPosition.Left;
+                case ST_AxPos.r: return AxisPosition.Right;
+                case ST_AxPos.t: return AxisPosition.Top;
+                default: return AxisPosition.Bottom;
             }
         }
     }

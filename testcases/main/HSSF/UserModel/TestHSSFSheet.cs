@@ -1007,7 +1007,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(11 * 20, bs.GetFont(wbSimple).FontHeight);
             Assert.AreEqual(8, bs.GetFont(wbSimple).Color);
             Assert.IsFalse(bs.GetFont(wbSimple).IsItalic);
-            Assert.AreEqual((int)FontBoldWeight.NORMAL, bs.GetFont(wbSimple).Boldweight);
+            Assert.AreEqual((int)FontBoldWeight.Normal, bs.GetFont(wbSimple).Boldweight);
 
 
             ICellStyle cs = wbComplex.GetSheetAt(0).GetColumnStyle(1);
@@ -1017,7 +1017,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(8 * 20, cs.GetFont(wbComplex).FontHeight);
             Assert.AreEqual(10, cs.GetFont(wbComplex).Color);
             Assert.IsFalse(cs.GetFont(wbComplex).IsItalic);
-            Assert.AreEqual((int)FontBoldWeight.BOLD, cs.GetFont(wbComplex).Boldweight);
+            Assert.AreEqual((int)FontBoldWeight.Bold, cs.GetFont(wbComplex).Boldweight);
         }
         [Test]
         public void TestArabic()

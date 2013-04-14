@@ -472,9 +472,9 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
             Assert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
-            sh.SetTabColor(IndexedColors.RED.Index);
+            sh.SetTabColor(IndexedColors.Red.Index);
             Assert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
-            Assert.AreEqual(IndexedColors.RED.Index,
+            Assert.AreEqual(IndexedColors.Red.Index,
                     sh.GetCTWorksheet().sheetPr.tabColor.indexed);
         }
     }

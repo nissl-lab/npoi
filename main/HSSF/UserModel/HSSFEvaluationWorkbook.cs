@@ -143,7 +143,7 @@ using NPOI.Util;
             //    // to make sure that all formulas POI can evaluate can also be parsed.
             //    try
             //    {
-            //        return HSSFFormulaParser.Parse(cell.CellFormula, _uBook, FormulaType.CELL, _uBook.GetSheetIndex(cell.GetSheet()));
+            //        return HSSFFormulaParser.Parse(cell.CellFormula, _uBook, FormulaType.Cell, _uBook.GetSheetIndex(cell.GetSheet()));
             //    }
             //    catch (FormulaParseException e)
             //    {

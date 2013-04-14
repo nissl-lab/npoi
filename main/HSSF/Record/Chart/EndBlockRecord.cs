@@ -35,12 +35,10 @@ namespace NPOI.HSSF.Record.Chart
 
         private short rt;
         private short grbitFrt;
-        private short iObjectKind;
 
-        public short ObjectKind
+        public ObjectKind ObjectKind
         {
-            get { return iObjectKind; }
-            set { iObjectKind = value; }
+            get; set;
         }
         private byte[] unused;
 
@@ -54,8 +52,8 @@ namespace NPOI.HSSF.Record.Chart
         {
             rt = in1.ReadShort();
             grbitFrt = in1.ReadShort();
-            iObjectKind = in1.ReadShort();
-            		// Often, but not always has 6 unused bytes at the end
+            ObjectKind = (ObjectKind) in1.ReadShort();
+            // Often, but not always has 6 unused bytes at the end
 		    if(in1.Available() == 0) {
 			    unused = new byte[0];
 		    } else {
@@ -88,7 +86,7 @@ namespace NPOI.HSSF.Record.Chart
         {
             out1.WriteShort(rt);
             out1.WriteShort(grbitFrt);
-            out1.WriteShort(iObjectKind);
+            out1.WriteShort((short) ObjectKind);
             // 6 bytes unused
             out1.Write(unused);
         }
@@ -100,23 +98,23 @@ namespace NPOI.HSSF.Record.Chart
             buffer.Append("[ENDBLOCK]\n");
             buffer.Append("    .rt         =").Append(HexDump.ShortToHex(rt)).Append('\n');
             buffer.Append("    .grbitFrt   =").Append(HexDump.ShortToHex(grbitFrt)).Append('\n');
-            buffer.Append("    .iObjectKind=").Append(HexDump.ShortToHex(iObjectKind)).Append('\n');
+            buffer.Append("    .iObjectKind=").Append(HexDump.ShortToHex((short) ObjectKind)).Append('\n');
             //buffer.Append("    .unused     =").Append(HexDump.ToHex(unused)).Append('\n');
             buffer.Append("[/ENDBLOCK]\n");
             return buffer.ToString();
         }
+
         public EndBlockRecord clone()
         {
             EndBlockRecord record = new EndBlockRecord();
             record.rt = rt;
             record.grbitFrt = grbitFrt;
-            record.iObjectKind = iObjectKind;
+            record.ObjectKind = ObjectKind;
             record.unused = (byte[])unused.Clone();
             return record;
-
         }
 
-        public static EndBlockRecord CreateEndBlock(short objectKind)
+        public static EndBlockRecord CreateEndBlock(ObjectKind objectKind)
         {
             EndBlockRecord record = new EndBlockRecord();
             record.ObjectKind = objectKind;

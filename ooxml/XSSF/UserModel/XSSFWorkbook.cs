@@ -52,7 +52,7 @@ namespace NPOI.XSSF.UserModel
          * Excel silently tRuncates long sheet names to 31 chars.
          * This constant is used to ensure uniqueness in the first 31 chars
          */
-        private static int MAX_SENSITIVE_SHEET_NAME_LEN = 31;
+        private static int Max_SENSITIVE_SHEET_NAME_LEN = 31;
         /** Extended windows meta file */
         public static int PICTURE_TYPE_EMF = 2;
 
@@ -714,7 +714,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-        public IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, short typeOffset, byte underline)
+        public IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout,FontSuperScript typeOffset, FontUnderlineType underline)
         {
             return stylesSource.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
@@ -1513,17 +1513,17 @@ namespace NPOI.XSSF.UserModel
         {
             List<CT_Sheet> ctSheetArray = workbook.sheets.sheet;
 
-            if (name.Length > MAX_SENSITIVE_SHEET_NAME_LEN)
+            if (name.Length > Max_SENSITIVE_SHEET_NAME_LEN)
             {
-                name = name.Substring(0, MAX_SENSITIVE_SHEET_NAME_LEN);
+                name = name.Substring(0, Max_SENSITIVE_SHEET_NAME_LEN);
             }
 
             for (int i = 0; i < ctSheetArray.Count; i++)
             {
                 String ctName = ctSheetArray[i].name;
-                if (ctName.Length > MAX_SENSITIVE_SHEET_NAME_LEN)
+                if (ctName.Length > Max_SENSITIVE_SHEET_NAME_LEN)
                 {
-                    ctName = ctName.Substring(0, MAX_SENSITIVE_SHEET_NAME_LEN);
+                    ctName = ctName.Substring(0, Max_SENSITIVE_SHEET_NAME_LEN);
                 }
 
                 if (excludeSheetIdx != i && name.Equals(ctName, StringComparison.InvariantCultureIgnoreCase))
@@ -1628,7 +1628,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetSheetHidden(int sheetIx, bool hidden)
         {
-            SetSheetHidden(sheetIx, hidden ? SheetState.HIDDEN : SheetState.VISIBLE);
+            SetSheetHidden(sheetIx, hidden ? SheetState.Hidden : SheetState.Visible);
         }
 
         /**

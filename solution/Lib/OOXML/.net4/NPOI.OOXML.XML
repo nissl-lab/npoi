@@ -809,7 +809,7 @@
              @param out The stream to write to.
              @throws IOException if an error occurs while writing.
         </member>
-        <member name="M:NPOI.XSSF.Model.StylesTable.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,System.Int16,System.Byte)">
+        <member name="M:NPOI.XSSF.Model.StylesTable.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,NPOI.SS.UserModel.FontSuperScript,NPOI.SS.UserModel.FontUnderlineType)">
             Finds a font that matches the one with the supplied attributes
         </member>
         <member name="T:NPOI.XSSF.Model.ThemesTable">
@@ -1496,7 +1496,7 @@
             </p>
             @return the value of the cell as a bool
             @throws InvalidOperationException if the cell type returned by {@link #CellType}
-              is not CellType.BOOLEAN, CellType.BLANK or CellType.FORMULA
+              is not CellType.Boolean, CellType.Blank or CellType.Formula
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCell.NumericCellValue">
             Get the value of the cell as a number.
@@ -1505,7 +1505,7 @@
             For formulas or error cells we return the precalculated value;
             </p>
             @return the value of the cell as a number
-            @throws InvalidOperationException if the cell type returned by {@link #CellType} is CellType.STRING
+            @throws InvalidOperationException if the cell type returned by {@link #CellType} is CellType.String
             @exception NumberFormatException if the cell value isn't a parsable <code>double</code>.
             @see DataFormatter for turning this number into a string similar to that which Excel would render this number as.
         </member>
@@ -1762,12 +1762,12 @@
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.BorderRight">
              Get the type of border to use for the right border of the cell
             
-             @return short - border type, default value is {@link NPOI.ss.usermodel.CellStyle#BorderStyle.NONE}
+             @return short - border type, default value is {@link NPOI.ss.usermodel.CellStyle#BorderStyle.None}
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.BottomBorderColor">
             Get the color to use for the bottom border
             <br/>
-            Color is optional. When missing, IndexedColors.AUTOMATIC is implied.
+            Color is optional. When missing, IndexedColors.Automatic is implied.
             @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
             @see NPOI.ss.usermodel.IndexedColors
         </member>
@@ -3357,7 +3357,7 @@
             
              @param theme - theme color to use
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFFont.SetUnderline(NPOI.SS.UserModel.FontUnderline)">
+        <member name="M:NPOI.XSSF.UserModel.XSSFFont.SetUnderline(NPOI.SS.UserModel.FontUnderlineType)">
              set an enumeration representing the style of underlining that is used.
              The none style is equivalent to not using underlining at all.
              The possible values for this attribute are defined by the FontUnderline
@@ -4703,7 +4703,7 @@
         <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.DEFAULT_CHARACTER_WIDTH">
             Width of one character of the default font in pixels. Same for Calibry and Arial.
         </member>
-        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.MAX_SENSITIVE_SHEET_NAME_LEN">
+        <member name="F:NPOI.XSSF.UserModel.XSSFWorkbook.Max_SENSITIVE_SHEET_NAME_LEN">
             Excel silently tRuncates long sheet names to 31 chars.
             This constant is used to ensure uniqueness in the first 31 chars
         </member>
@@ -4926,7 +4926,7 @@
               or workbook already contains a sheet with this name
              @see org.apache.poi.ss.util.WorkbookUtil#createSafeSheetName(String nameProposal)
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,System.Int16,System.Byte)">
+        <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,NPOI.SS.UserModel.FontSuperScript,NPOI.SS.UserModel.FontUnderlineType)">
             Finds a font that matches the one with the supplied attributes
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.GetAllPictures">

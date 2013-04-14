@@ -68,8 +68,8 @@ namespace TestCases.HSSF.UserModel
             IFont fnt = wb.CreateFont();
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
-            fnt.Color=(NPOI.HSSF.Util.HSSFColor.RED.index);
-            fnt.Boldweight=(short)FontBoldWeight.BOLD;
+            fnt.Color=(NPOI.HSSF.Util.HSSFColor.Red.Index);
+            fnt.Boldweight=(short)FontBoldWeight.Bold;
             cs.SetFont(fnt);
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
@@ -138,16 +138,16 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
             NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
-            cs.BorderBottom=(BorderStyle.THIN);
-            cs.BorderLeft=(BorderStyle.THIN);
-            cs.BorderRight=(BorderStyle.THIN);
-            cs.BorderTop=(BorderStyle.THIN);
+            cs.BorderBottom=(BorderStyle.Thin);
+            cs.BorderLeft=(BorderStyle.Thin);
+            cs.BorderRight=(BorderStyle.Thin);
+            cs.BorderTop=(BorderStyle.Thin);
             cs.FillForegroundColor=((short)0xA);
-            cs.FillPattern = FillPatternType.SOLID_FOREGROUND;
+            cs.FillPattern = FillPattern.SolidForeground;
             fnt.Color=((short)0xf);
             fnt.IsItalic=(true);
             cs2.FillForegroundColor=((short)0x0);
-            cs2.FillPattern = FillPatternType.SOLID_FOREGROUND;
+            cs2.FillPattern = FillPattern.SolidForeground;
             cs2.SetFont(fnt);
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
@@ -178,10 +178,10 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNotNull(r, "Row is not null");
 
                 cs = r.RowStyle;
-                Assert.AreEqual(cs.BorderBottom, BorderStyle.THIN, "FillForegroundColor for row: ");
-                Assert.AreEqual(cs.BorderLeft, BorderStyle.THIN, "FillPattern for row: ");
-                Assert.AreEqual(cs.BorderRight, BorderStyle.THIN, "FillForegroundColor for row: ");
-                Assert.AreEqual(cs.BorderTop, BorderStyle.THIN, "FillPattern for row: ");
+                Assert.AreEqual(cs.BorderBottom, BorderStyle.Thin, "FillForegroundColor for row: ");
+                Assert.AreEqual(cs.BorderLeft, BorderStyle.Thin, "FillPattern for row: ");
+                Assert.AreEqual(cs.BorderRight, BorderStyle.Thin, "FillForegroundColor for row: ");
+                Assert.AreEqual(cs.BorderTop, BorderStyle.Thin, "FillPattern for row: ");
                 Assert.AreEqual(cs.FillForegroundColor, 0xA, "FillForegroundColor for row: ");
                 Assert.AreEqual((short)cs.FillPattern, (short)0x1, "FillPattern for row: ");
 

@@ -206,7 +206,7 @@ namespace NPOI.HSSF.UserModel
          * Normally, the Workbook will be in a POIFS Stream
          * called "Workbook". However, some weird XLS generators use "WORKBOOK"
          */
-        private static String[] WORKBOOK_DIR_ENTRY_NAMES = {
+        private static readonly string[] WORKBOOK_DIR_ENTRY_NAMES = {
             "Workbook", // as per BIFF8 spec
             "WORKBOOK",
         };
@@ -1073,7 +1073,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
                          String name, bool italic, bool strikeout,
-                         short typeOffset, byte Underline)
+                         FontSuperScript typeOffset, FontUnderlineType underline)
         {
             //        Console.WriteLine( boldWeight + ", " + color + ", " + fontHeight + ", " + name + ", " + italic + ", " + strikeout + ", " + typeOffset + ", " + Underline );
             for (short i = 0; i <= this.NumberOfFonts; i++)
@@ -1091,7 +1091,7 @@ namespace NPOI.HSSF.UserModel
                         && hssfFont.IsItalic == italic
                         && hssfFont.IsStrikeout == strikeout
                         && hssfFont.TypeOffset == typeOffset
-                        && hssfFont.Underline == Underline)
+                        && hssfFont.Underline == underline)
                 {
                     //                Console.WriteLine( "Found font" );
                     return hssfFont;
@@ -1445,7 +1445,7 @@ namespace NPOI.HSSF.UserModel
                 sb.Append("!");
                 sb.Append(parts[i]);
             }
-            name.NameDefinition =(HSSFFormulaParser.Parse(sb.ToString(), this, FormulaType.NAMEDRANGE, sheetIndex));
+            name.NameDefinition =(HSSFFormulaParser.Parse(sb.ToString(), this, FormulaType.NamedRange, sheetIndex));
         }
 
         /// <summary>

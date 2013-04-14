@@ -116,7 +116,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 {
                     foreach (ICell cell in row)
                     {
-                        if (cell.CellType == CellType.FORMULA)
+                        if (cell.CellType == CellType.Formula)
                         {
                             UpdateFormula((XSSFCell)cell, frwb);
                         }
@@ -140,7 +140,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 if (formula != null && formula.Length > 0)
                 {
                     int sheetIndex = _wb.GetSheetIndex(cell.Sheet);
-                    Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.CELL, sheetIndex);
+                    Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.Cell, sheetIndex);
                     String updatedFormula = FormulaRenderer.ToFormulaString(frwb, ptgs);
                     if (!formula.Equals(updatedFormula)) f.Value = (updatedFormula);
                 }
@@ -159,7 +159,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (formula != null)
             {
                 int sheetIndex = name.SheetIndex;
-                Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.NAMEDRANGE, sheetIndex);
+                Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.NamedRange, sheetIndex);
                 String updatedFormula = FormulaRenderer.ToFormulaString(frwb, ptgs);
                 if (!formula.Equals(updatedFormula)) name.RefersToFormula = (updatedFormula);
             }

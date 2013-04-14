@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -34,24 +34,24 @@ namespace NPOI.HSSF.Converter
         {
             switch (alignment)
             {
-                case HorizontalAlignment.CENTER:
+                case HorizontalAlignment.Center:
                     style.Append("text-align: center; ");
                     break;
-                case HorizontalAlignment.CENTER_SELECTION:
+                case HorizontalAlignment.CenterSelection:
                     style.Append("text-align: center; ");
                     break;
-                case HorizontalAlignment.FILL:
+                case HorizontalAlignment.Fill:
                     // XXX: shall we support fill?
                     break;
-                case HorizontalAlignment.GENERAL:
+                case HorizontalAlignment.General:
                     break;
-                case HorizontalAlignment.JUSTIFY:
+                case HorizontalAlignment.Justify:
                     style.Append("text-align: justify; ");
                     break;
-                case HorizontalAlignment.LEFT:
+                case HorizontalAlignment.Left:
                     style.Append("text-align: left; ");
                     break;
-                case HorizontalAlignment.RIGHT:
+                case HorizontalAlignment.Right:
                     style.Append("text-align: right; ");
                     break;
             }
@@ -115,23 +115,23 @@ namespace NPOI.HSSF.Converter
             string borderStyle;
             switch (xlsBorder)
             {
-                case BorderStyle.NONE:
+                case BorderStyle.None:
                     borderStyle = "none";
                     break;
-                case BorderStyle.DASH_DOT:
-                case BorderStyle.DASH_DOT_DOT:
-                case BorderStyle.DOTTED:
-                case BorderStyle.HAIR:
-                case BorderStyle.MEDIUM_DASH_DOT:
-                case BorderStyle.MEDIUM_DASH_DOT_DOT:
-                case BorderStyle.SLANTED_DASH_DOT:
+                case BorderStyle.DashDot:
+                case BorderStyle.DashDotDot:
+                case BorderStyle.Dotted:
+                case BorderStyle.Hair:
+                case BorderStyle.MediumDashDot:
+                case BorderStyle.MediumDashDotDot:
+                case BorderStyle.SlantedDashDot:
                     borderStyle = "dotted";
                     break;
-                case BorderStyle.DASHED:
-                case BorderStyle.MEDIUM_DASHED:
+                case BorderStyle.Dashed:
+                case BorderStyle.MediumDashed:
                     borderStyle = "dashed";
                     break;
-                case BorderStyle.DOUBLE:
+                case BorderStyle.Double:
                     borderStyle = "double";
                     break;
                 default:
@@ -146,12 +146,12 @@ namespace NPOI.HSSF.Converter
             string borderWidth;
             switch (xlsBorder)
             {
-                case BorderStyle.MEDIUM_DASH_DOT:
-                case BorderStyle.MEDIUM_DASH_DOT_DOT:
-                case BorderStyle.MEDIUM_DASHED:
+                case BorderStyle.MediumDashDot:
+                case BorderStyle.MediumDashDotDot:
+                case BorderStyle.MediumDashed:
                     borderWidth = "2pt";
                     break;
-                case BorderStyle.THICK:
+                case BorderStyle.Thick:
                     borderWidth = "thick";
                     break;
                 default:

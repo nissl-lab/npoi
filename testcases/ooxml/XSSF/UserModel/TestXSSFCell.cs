@@ -48,7 +48,7 @@ namespace NPOI.XSSF.UserModel
             ISheet sheet = source.GetSheetAt(0);
             IRow row = sheet.GetRow(0);
             ICell cell = row.GetCell(0);
-            cell.SetCellType(CellType.STRING);
+            cell.SetCellType(CellType.String);
             cell.SetCellValue("456");
         }
         [Test]
@@ -110,13 +110,13 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNull(str.String);
             cell_0.SetCellValue(str);
             Assert.AreEqual(0, sst.GetCount());
-            Assert.AreEqual(CellType.BLANK, cell_0.CellType);
+            Assert.AreEqual(CellType.Blank, cell_0.CellType);
 
             //case 2. cell.SetCellValue((String)null);
             ICell cell_1 = row.CreateCell(1);
             cell_1.SetCellValue((String)null);
             Assert.AreEqual(0, sst.GetCount());
-            Assert.AreEqual(CellType.BLANK, cell_1.CellType);
+            Assert.AreEqual(CellType.Blank, cell_1.CellType);
         }
         [Test]
         public void TestFormulaString()
@@ -126,7 +126,7 @@ namespace NPOI.XSSF.UserModel
             CT_Cell ctCell = cell.GetCTCell(); //low-level bean holding cell's xml
 
             cell.SetCellFormula("A2");
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
             Assert.AreEqual("A2", cell.CellFormula);
             //the value is not Set and cell's type='N' which means blank
             Assert.AreEqual(ST_CellType.n, ctCell.t);
@@ -134,7 +134,7 @@ namespace NPOI.XSSF.UserModel
             //set cached formula value
             cell.SetCellValue("t='str'");
             //we are still of 'formula' type
-            Assert.AreEqual(CellType.FORMULA, cell.CellType);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
             Assert.AreEqual("A2", cell.CellFormula);
             //cached formula value is Set and cell's type='STR'
             Assert.AreEqual(ST_CellType.str, ctCell.t);
@@ -142,14 +142,14 @@ namespace NPOI.XSSF.UserModel
 
             //now remove the formula, the cached formula result remains
             cell.SetCellFormula(null);
-            Assert.AreEqual(CellType.STRING, cell.CellType);
+            Assert.AreEqual(CellType.String, cell.CellType);
             Assert.AreEqual(ST_CellType.str, ctCell.t);
             //the line below failed prior to fix of Bug #47889
             Assert.AreEqual("t='str'", cell.StringCellValue);
 
             //revert to a blank cell
             cell.SetCellValue((String)null);
-            Assert.AreEqual(CellType.BLANK, cell.CellType);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
             Assert.AreEqual(ST_CellType.n, ctCell.t);
             Assert.AreEqual("", cell.StringCellValue);
         }
@@ -167,7 +167,7 @@ namespace NPOI.XSSF.UserModel
 
             //try a string cell
             cell = sh.GetRow(0).GetCell(0);
-            Assert.AreEqual(CellType.STRING, cell.CellType);
+            Assert.AreEqual(CellType.String, cell.CellType);
             Assert.AreEqual("a", cell.StringCellValue);
             Assert.AreEqual("a", cell.ToString());
             //Gnumeric produces spreadsheets without styles
@@ -176,7 +176,7 @@ namespace NPOI.XSSF.UserModel
 
             //try a numeric cell
             cell = sh.GetRow(1).GetCell(0);
-            Assert.AreEqual(CellType.NUMERIC, cell.CellType);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
             Assert.AreEqual(1.0, cell.NumericCellValue);
             Assert.AreEqual("1", cell.ToString());
             //Gnumeric produces spreadsheets without styles

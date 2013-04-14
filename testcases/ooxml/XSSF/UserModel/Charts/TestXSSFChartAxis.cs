@@ -35,7 +35,7 @@ namespace NPOI.XSSF.UserModel.Charts
             IDrawing Drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
-            axis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.BOTTOM);
+            axis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Bottom);
         }
         [Test]
         public void TestLogBaseIllegalArgument()

@@ -36,7 +36,7 @@ namespace NPOI.HSSF.UserModel
         public const short MSOBI_JPEG = 0x46A0;
         public const short MSOBI_DIB = 0x7A80;
         // Mask of the bits in the options used to store the image format.
-        public static short FORMAT_MASK = unchecked((short)0xFFF0);
+        public const short FORMAT_MASK = unchecked((short)0xFFF0);
 
         /**
          * Underlying escher blip record containing the bitmap data.

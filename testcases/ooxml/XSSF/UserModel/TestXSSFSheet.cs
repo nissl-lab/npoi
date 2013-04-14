@@ -238,7 +238,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.xSplit);
             //    Assert.AreEqual(10, sheet.GetTopRow());
             //    Assert.AreEqual(10, sheet.GetLeftCol());
-            sheet.CreateSplitPane(4, 8, 12, 12, PanePosition.LOWER_RIGHT);
+            sheet.CreateSplitPane(4, 8, 12, 12, PanePosition.LowerRight);
             Assert.AreEqual(8.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.ySplit);
             Assert.AreEqual(ST_Pane.bottomRight, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.activePane);
         }

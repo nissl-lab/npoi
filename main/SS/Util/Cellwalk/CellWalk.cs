@@ -106,7 +106,7 @@ namespace NPOI.SS.Util.CellWalk
 
         private bool IsEmpty(ICell cell)
         {
-            return (cell.CellType == CellType.BLANK);
+            return (cell.CellType == CellType.Blank);
         }
 
         /**

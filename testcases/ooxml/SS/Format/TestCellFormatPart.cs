@@ -45,9 +45,9 @@ namespace NPOI.SS.Format
             public override object GetValue(ICell cell)
             {
                 CellType type = CellFormat.UltimateType(cell);
-                if (type == CellType.BOOLEAN)
+                if (type == CellType.Boolean)
                     return cell.BooleanCellValue ? "TRUE" : "FALSE";
-                else if (type == CellType.NUMERIC)
+                else if (type == CellType.Numeric)
                     return cell.NumericCellValue;
                 else
                     return cell.StringCellValue;
@@ -115,7 +115,7 @@ namespace NPOI.SS.Format
         {
             public override object GetValue(ICell cell)
             {
-                if (CellFormat.UltimateType(cell) == CellType.BOOLEAN)
+                if (CellFormat.UltimateType(cell) == CellType.Boolean)
                     return cell.BooleanCellValue ? "TRUE" : "FALSE";
                 else
                     return cell.StringCellValue;

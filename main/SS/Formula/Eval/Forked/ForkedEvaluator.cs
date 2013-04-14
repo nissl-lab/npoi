@@ -115,17 +115,17 @@ namespace NPOI.SS.Formula.Eval.Forked
 
             switch (cell.CellType)
             {
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     return BoolEval.ValueOf(cell.BooleanCellValue);
-                case CellType.ERROR:
+                case CellType.Error:
                     return ErrorEval.ValueOf(cell.ErrorCellValue);
-                case CellType.FORMULA:
+                case CellType.Formula:
                     return _evaluator.Evaluate(cell);
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     return new NumberEval(cell.NumericCellValue);
-                case CellType.STRING:
+                case CellType.String:
                     return new StringEval(cell.StringCellValue);
-                case CellType.BLANK:
+                case CellType.Blank:
                     return null;
             }
             throw new InvalidOperationException("Bad cell type (" + cell.CellType + ")");

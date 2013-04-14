@@ -212,7 +212,7 @@ namespace NPOI.XSSF.UserModel
             font.SetColor(new XSSFColor(Color.FromArgb(0, 128, 128)));
             font.IsItalic = (true);
             font.IsBold=(true);
-            font.Underline=FontUnderline.SINGLE.ByteValue;
+            font.Underline=FontUnderlineType.Single;
             rt.ApplyFont(font);
 
             shape.SetText(rt);

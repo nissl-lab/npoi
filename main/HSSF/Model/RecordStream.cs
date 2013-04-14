@@ -120,7 +120,7 @@ namespace NPOI.HSSF.Model
             while (PeekNextSid() > -1)
             {
                 Record r = GetNext();
-                if (r.Sid == BOFRecord.sid && (r as BOFRecord).Type == BOFRecord.TYPE_CHART)
+                if (r.Sid == BOFRecord.sid && (r as BOFRecord).Type == BOFRecordType.Chart)
                 {
                     _nextIndex--;
                     _countRead--;

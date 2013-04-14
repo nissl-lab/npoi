@@ -80,7 +80,7 @@ namespace TestCases.HSSF.Record
         {
             ObjRecord record = new ObjRecord();
             CommonObjectDataSubRecord ftCmo = new CommonObjectDataSubRecord();
-            ftCmo.ObjectType = (CommonObjectType.COMMENT);
+            ftCmo.ObjectType = (CommonObjectType.Comment);
             ftCmo.ObjectId = ((short)1024);
             ftCmo.IsLocked = (true);
             ftCmo.IsPrintable = (true);

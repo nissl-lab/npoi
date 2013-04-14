@@ -778,7 +778,7 @@ namespace TestCases.HSSF.UserModel
             ISheetConditionalFormatting sheetCF = s1.SheetConditionalFormatting;
 
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(
-                    ComparisonOperator.BETWEEN, "'first sheet'!D1", "'other sheet'!D1");
+                    ComparisonOperator.Between, "'first sheet'!D1", "'other sheet'!D1");
 
             IConditionalFormattingRule[] cfRules = { rule1 };
 

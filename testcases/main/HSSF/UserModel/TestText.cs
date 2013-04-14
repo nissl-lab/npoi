@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.HSSF.Model;
 using TestCases.HSSF.Model;
 using NPOI.Util;
@@ -127,11 +128,11 @@ namespace TestCases.HSSF.UserModel
             textbox.String = (new HSSFRichTextString("test"));
             Assert.AreEqual(textbox.String.String, "test");
 
-            textbox.HorizontalAlignment=((short)5);
-            Assert.AreEqual(textbox.HorizontalAlignment, 5);
+            textbox.HorizontalAlignment=((HorizontalAlignment)5);
+            Assert.AreEqual((HorizontalAlignment)5, textbox.HorizontalAlignment);
 
-            textbox.VerticalAlignment=((short)6);
-            Assert.AreEqual(textbox.VerticalAlignment, (short)6);
+            textbox.VerticalAlignment=((VerticalAlignment)6);
+            Assert.AreEqual( (VerticalAlignment)6,textbox.VerticalAlignment);
 
             textbox.MarginBottom=(7);
             Assert.AreEqual(textbox.MarginBottom, 7);
@@ -150,24 +151,24 @@ namespace TestCases.HSSF.UserModel
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             textbox = (HSSFTextbox)patriarch.Children[0];
             Assert.AreEqual(textbox.String.String, "test");
-            Assert.AreEqual(textbox.HorizontalAlignment, 5);
-            Assert.AreEqual(textbox.VerticalAlignment, (short)6);
+            Assert.AreEqual(textbox.HorizontalAlignment, (HorizontalAlignment)5);
+            Assert.AreEqual(textbox.VerticalAlignment, (VerticalAlignment)6);
             Assert.AreEqual(textbox.MarginBottom, 7);
             Assert.AreEqual(textbox.MarginLeft, 8);
             Assert.AreEqual(textbox.MarginRight, 9);
             Assert.AreEqual(textbox.MarginTop, 10);
 
             textbox.String = (new HSSFRichTextString("test1"));
-            textbox.HorizontalAlignment = (HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED);
-            textbox.VerticalAlignment = (HSSFTextbox.VERTICAL_ALIGNMENT_TOP);
+            textbox.HorizontalAlignment = HorizontalAlignment.Center;
+            textbox.VerticalAlignment = VerticalAlignment.Top;
             textbox.MarginBottom = (71);
             textbox.MarginLeft = (81);
             textbox.MarginRight = (91);
             textbox.MarginTop = (101);
 
             Assert.AreEqual(textbox.String.String, "test1");
-            Assert.AreEqual(textbox.HorizontalAlignment, HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED);
-            Assert.AreEqual(textbox.VerticalAlignment, HSSFTextbox.VERTICAL_ALIGNMENT_TOP);
+            Assert.AreEqual(textbox.HorizontalAlignment, HorizontalAlignment.Center);
+            Assert.AreEqual(textbox.VerticalAlignment, VerticalAlignment.Top);
             Assert.AreEqual(textbox.MarginBottom, 71);
             Assert.AreEqual(textbox.MarginLeft, 81);
             Assert.AreEqual(textbox.MarginRight, 91);
@@ -179,8 +180,8 @@ namespace TestCases.HSSF.UserModel
             textbox = (HSSFTextbox)patriarch.Children[0];
 
             Assert.AreEqual(textbox.String.String, "test1");
-            Assert.AreEqual(textbox.HorizontalAlignment, HSSFTextbox.HORIZONTAL_ALIGNMENT_CENTERED);
-            Assert.AreEqual(textbox.VerticalAlignment, HSSFTextbox.VERTICAL_ALIGNMENT_TOP);
+            Assert.AreEqual(textbox.HorizontalAlignment, HorizontalAlignment.Center);
+            Assert.AreEqual(textbox.VerticalAlignment, VerticalAlignment.Top);
             Assert.AreEqual(textbox.MarginBottom, 71);
             Assert.AreEqual(textbox.MarginLeft, 81);
             Assert.AreEqual(textbox.MarginRight, 91);
@@ -194,8 +195,8 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch Drawing = sheet.DrawingPatriarch as HSSFPatriarch;
             Assert.AreEqual(1, Drawing.Children.Count);
             HSSFTextbox textbox = (HSSFTextbox)Drawing.Children[0];
-            Assert.AreEqual(textbox.HorizontalAlignment, HSSFTextbox.HORIZONTAL_ALIGNMENT_LEFT);
-            Assert.AreEqual(textbox.VerticalAlignment, HSSFTextbox.VERTICAL_ALIGNMENT_TOP);
+            Assert.AreEqual(textbox.HorizontalAlignment, HorizontalAlignment.Left);
+            Assert.AreEqual(textbox.VerticalAlignment, VerticalAlignment.Top);
             Assert.AreEqual(textbox.MarginTop, 0);
             Assert.AreEqual(textbox.MarginBottom, 3600000);
             Assert.AreEqual(textbox.MarginLeft, 3600000);

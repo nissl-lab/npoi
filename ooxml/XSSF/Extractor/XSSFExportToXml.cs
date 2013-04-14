@@ -275,11 +275,11 @@ namespace NPOI.XSSF.Extractor
             switch (cell.CellType)
             {
 
-                case CellType.STRING: value = cell.StringCellValue; break;
-                case CellType.BOOLEAN: value += cell.BooleanCellValue; break;
-                case CellType.ERROR: value = cell.ErrorCellString; break;
-                case CellType.FORMULA: value = cell.StringCellValue; break;
-                case CellType.NUMERIC: value += cell.GetRawValue(); break;
+                case CellType.String: value = cell.StringCellValue; break;
+                case CellType.Boolean: value += cell.BooleanCellValue; break;
+                case CellType.Error: value = cell.ErrorCellString; break;
+                case CellType.Formula: value = cell.StringCellValue; break;
+                case CellType.Numeric: value += cell.GetRawValue(); break;
                 default:
                     break;
             }

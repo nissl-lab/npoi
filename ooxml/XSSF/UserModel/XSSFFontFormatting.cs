@@ -47,7 +47,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_font.sizeOfVertAlignArray() == 0) return FontSuperScript.NONE;
+                if (_font.sizeOfVertAlignArray() == 0) return FontSuperScript.None;
 
                 CT_VerticalAlignFontProperty prop = _font.GetVertAlignArray(0);
                 return (FontSuperScript)(prop.val - 1);
@@ -55,7 +55,7 @@ namespace NPOI.XSSF.UserModel
             set 
             {
                 _font.SetVertAlignArray(null);
-                if (value != FontSuperScript.NONE)
+                if (value != FontSuperScript.None)
                 {
                     _font.AddNewVertAlign().val = (ST_VerticalAlignRun)(value + 1);
                 }
@@ -139,21 +139,21 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_font.sizeOfUArray() == 0) return FontUnderlineType.NONE;
+                if (_font.sizeOfUArray() == 0) return FontUnderlineType.None;
                 CT_UnderlineProperty u = _font.GetUArray(0);
                 switch (u.val)
                 {
-                    case ST_UnderlineValues.single: return FontUnderlineType.SINGLE;
-                    case ST_UnderlineValues.@double: return FontUnderlineType.DOUBLE;
-                    case ST_UnderlineValues.singleAccounting: return FontUnderlineType.SINGLE_ACCOUNTING;
-                    case ST_UnderlineValues.doubleAccounting: return FontUnderlineType.DOUBLE_ACCOUNTING;
-                    default: return FontUnderlineType.NONE;
+                    case ST_UnderlineValues.single: return FontUnderlineType.Single;
+                    case ST_UnderlineValues.@double: return FontUnderlineType.Double;
+                    case ST_UnderlineValues.singleAccounting: return FontUnderlineType.SingleAccounting;
+                    case ST_UnderlineValues.doubleAccounting: return FontUnderlineType.DoubleAccounting;
+                    default: return FontUnderlineType.None;
                 }
             }
             set 
             {
                 _font.SetUArray(null);
-                if (value != FontUnderlineType.NONE)
+                if (value != FontUnderlineType.None)
                 {
                     FontUnderline fenum = FontUnderline.ValueOf(value);
                     ST_UnderlineValues val = (ST_UnderlineValues)(fenum.Value);

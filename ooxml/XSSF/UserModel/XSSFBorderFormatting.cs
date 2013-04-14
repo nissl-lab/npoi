@@ -34,107 +34,107 @@ namespace NPOI.XSSF.UserModel
 
         #region IBorderFormatting Members
 
-        public short BorderBottom
+        public BorderStyle BorderBottom
         {
             get
             {
                 if (_border.IsSetBottom())
                 {
-                    return (short)BorderStyle.NONE;
+                    return BorderStyle.None;
                 }
                 else
                 {
-                    return (short)_border.bottom.style;
+                    return (BorderStyle)_border.bottom.style;
                 }
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetBottom() ? _border.bottom : _border.AddNewBottom();
-                if (value == (short)BorderStyle.NONE) _border.unsetBottom();
+                if (value == BorderStyle.None) _border.unsetBottom();
                 else pr.style = (ST_BorderStyle)(value + 1);
             }
         }
 
-        public short BorderDiagonal
+        public BorderStyle BorderDiagonal
         {
             get
             {
                 if (_border.IsSetDiagonal())
                 {
-                    return (short)BorderStyle.NONE;
+                    return BorderStyle.None;
                 }
                 else
                 {
-                    return (short)_border.diagonal.style;
+                    return (BorderStyle)_border.diagonal.style;
                 }
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetDiagonal() ? _border.diagonal : _border.AddNewDiagonal();
-                if (value == (short)BorderStyle.NONE) _border.unsetDiagonal();
+                if (value == (short)BorderStyle.None) _border.unsetDiagonal();
                 else pr.style = (ST_BorderStyle)(value + 1);
             }
         }
 
-        public short BorderLeft
+        public BorderStyle BorderLeft
         {
             get
             {
                 if (!_border.IsSetLeft())
                 {
-                    return (short)BorderStyle.NONE;
+                    return BorderStyle.None;
                 }
                 else
                 {
-                    return (short)_border.left.style;
+                    return (BorderStyle)_border.left.style;
                 }
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetLeft() ? _border.left : _border.AddNewLeft();
-                if (value == (short)BorderStyle.NONE) _border.unsetLeft();
+                if (value == (short)BorderStyle.None) _border.unsetLeft();
                 else pr.style = (ST_BorderStyle)(value + 1);
             }
         }
 
-        public short BorderRight
+        public BorderStyle BorderRight
         {
             get
             {
                 if (!_border.IsSetRight())
                 {
-                    return (short)BorderStyle.NONE;
+                    return BorderStyle.None;
                 }
                 else
                 {
-                    return (short)_border.right.style;
+                    return (BorderStyle)_border.right.style;
                 }
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetRight() ? _border.right : _border.AddNewRight();
-                if (value == (short)BorderStyle.NONE) _border.unsetRight();
+                if (value == (short)BorderStyle.None) _border.unsetRight();
                 else pr.style = (ST_BorderStyle)(value + 1);
             }
         }
 
-        public short BorderTop
+        public BorderStyle BorderTop
         {
             get
             {
                 if (!_border.IsSetTop())
                 {
-                    return (short)BorderStyle.NONE;
+                    return BorderStyle.None;
                 }
                 else
                 {
-                    return (short)_border.top.style;
+                    return (BorderStyle)_border.top.style;
                 }
             }
             set
             {
                 CT_BorderPr pr = _border.IsSetTop() ? _border.top : _border.AddNewTop();
-                if (value == (short)BorderStyle.NONE) _border.unsetTop();
+                if (value == (short)BorderStyle.None) _border.unsetTop();
                 else pr.style = (ST_BorderStyle)(value + 1);
             }
         }

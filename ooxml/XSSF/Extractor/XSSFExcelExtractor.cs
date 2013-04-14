@@ -151,17 +151,17 @@ namespace NPOI.XSSF.Extractor
                             ICell cell = (ICell)ri.Current;
 
                             // Is it a formula one?
-                            if (cell.CellType == CellType.FORMULA && formulasNotResults)
+                            if (cell.CellType == CellType.Formula && formulasNotResults)
                             {
                                 text.Append(cell.CellFormula);
                             }
 
-                            if (cell.CellType == CellType.FORMULA)
+                            if (cell.CellType == CellType.Formula)
                             {
                                 if (formulasNotResults) {
                                text.Append(cell.CellFormula);
         					   } else {
-        					      if (cell.CachedFormulaResultType == CellType.STRING) {
+        					      if (cell.CachedFormulaResultType == CellType.String) {
         					         HandleStringCell(text, cell);
         					      } else {
         					         HandleNonStringCell(text, cell, formatter);
@@ -169,7 +169,7 @@ namespace NPOI.XSSF.Extractor
         					   }
 
                             }
-                            else if (cell.CellType == CellType.STRING)
+                            else if (cell.CellType == CellType.String)
                             {
                                 HandleStringCell(text, cell);
                             }
@@ -217,12 +217,12 @@ namespace NPOI.XSSF.Extractor
         private void HandleNonStringCell(StringBuilder text, ICell cell, DataFormatter formatter)
         {
             CellType type = cell.CellType;
-            if (type == CellType.FORMULA)
+            if (type == CellType.Formula)
             {
                 type = cell.CachedFormulaResultType;
             }
 
-            if (type == CellType.NUMERIC)
+            if (type == CellType.Numeric)
             {
                 ICellStyle cs = cell.CellStyle;
 

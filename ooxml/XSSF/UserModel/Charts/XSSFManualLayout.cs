@@ -34,8 +34,8 @@ namespace NPOI.XSSF.UserModel.Charts
          */
         private CT_ManualLayout layout;
 
-        private static LayoutMode defaultLayoutMode = LayoutMode.EDGE;
-        private static LayoutTarget defaultLayoutTarget = LayoutTarget.INNER;
+        private static LayoutMode defaultLayoutMode = LayoutMode.Edge;
+        private static LayoutTarget defaultLayoutTarget = LayoutTarget.Inner;
 
         /**
          * Create a new SpreadsheetML manual layout.
@@ -247,8 +247,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (mode)
             {
-                case LayoutMode.EDGE: return ST_LayoutMode.edge;
-                case LayoutMode.FACTOR: return ST_LayoutMode.factor;
+                case LayoutMode.Edge: return ST_LayoutMode.edge;
+                case LayoutMode.Factor: return ST_LayoutMode.factor;
                 default:
                     throw new ArgumentException();
             }
@@ -258,8 +258,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (ctLayoutMode.val)
             {
-                case ST_LayoutMode.edge: return LayoutMode.EDGE;
-                case ST_LayoutMode.factor: return LayoutMode.FACTOR;
+                case ST_LayoutMode.edge: return LayoutMode.Edge;
+                case ST_LayoutMode.factor: return LayoutMode.Factor;
                 default:
                     throw new ArgumentException();
             }
@@ -269,8 +269,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (target)
             {
-                case LayoutTarget.INNER: return ST_LayoutTarget.inner;
-                case LayoutTarget.OUTER: return ST_LayoutTarget.outer;
+                case LayoutTarget.Inner: return ST_LayoutTarget.inner;
+                case LayoutTarget.Outer: return ST_LayoutTarget.outer;
                 default:
                     throw new ArgumentException();
             }
@@ -280,8 +280,8 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             switch (ctLayoutTarget.val)
             {
-                case ST_LayoutTarget.inner: return LayoutTarget.INNER;
-                case ST_LayoutTarget.outer: return LayoutTarget.OUTER;
+                case ST_LayoutTarget.inner: return LayoutTarget.Inner;
+                case ST_LayoutTarget.outer: return LayoutTarget.Outer;
                 default:
                     throw new ArgumentException();
             }

@@ -71,7 +71,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(20, bofRecord.RecordSize);
             Assert.AreEqual(262, bofRecord.RequiredVersion);
             Assert.AreEqual(2057, bofRecord.Sid);
-            Assert.AreEqual(5, bofRecord.Type);
+            Assert.AreEqual(BOFRecordType.Workbook, bofRecord.Type);
             Assert.AreEqual(1536, bofRecord.Version);
             recType = MMSRecord.sid;
             //size = 2;

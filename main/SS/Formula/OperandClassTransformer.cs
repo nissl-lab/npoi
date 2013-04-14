@@ -67,14 +67,14 @@ namespace NPOI.SS.Formula
             byte rootNodeOperandClass;
             switch (_formulaType)
             {
-                case FormulaType.CELL:
+                case FormulaType.Cell:
                     rootNodeOperandClass = Ptg.CLASS_VALUE;
                     break;
-                case FormulaType.ARRAY:
+                case FormulaType.Array:
                     rootNodeOperandClass = Ptg.CLASS_ARRAY;
                     break;
-                case FormulaType.NAMEDRANGE:
-                case FormulaType.DATAVALIDATION_LIST:
+                case FormulaType.NamedRange:
+                case FormulaType.DataValidationList:
                     rootNodeOperandClass = Ptg.CLASS_REF;
                     break;
                 default:

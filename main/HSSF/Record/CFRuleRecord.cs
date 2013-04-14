@@ -190,7 +190,7 @@ namespace NPOI.HSSF.Record
         public static CFRuleRecord Create(HSSFWorkbook workbook, String formulaText)
         {
             Ptg[] formula1 = ParseFormula(formulaText, workbook);
-            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NO_COMPARISON,
+            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NoComparison,
                     formula1, null);
         }
         /**
@@ -207,7 +207,7 @@ namespace NPOI.HSSF.Record
         public static CFRuleRecord Create(HSSFSheet sheet, String formulaText)
         {
             Ptg[] formula1 = ParseFormula(formulaText, sheet);
-            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NO_COMPARISON,
+            return new CFRuleRecord(CONDITION_TYPE_FORMULA, ComparisonOperator.NoComparison,
                     formula1, null);
         }
         /**
@@ -589,7 +589,7 @@ namespace NPOI.HSSF.Record
                 return null;
             }
             int sheetIndex = sheet.Workbook.GetSheetIndex(sheet);
-            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)sheet.Workbook, FormulaType.CELL, sheetIndex);
+            return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)sheet.Workbook, FormulaType.Cell, sheetIndex);
         }
     }
 }

@@ -106,28 +106,28 @@ namespace TestCases.HSSF.Util
         [Test]
         public void TestClassifyCellReference()
         {
-            ConfirmNameType("a1", NameType.CELL);
-            ConfirmNameType("pfy1", NameType.NAMED_RANGE);
-            ConfirmNameType("pf1", NameType.NAMED_RANGE); // (col) out of cell range
-            ConfirmNameType("fp1", NameType.CELL);
-            ConfirmNameType("pf$1", NameType.BAD_CELL_OR_NAMED_RANGE);
-            ConfirmNameType("_A1", NameType.NAMED_RANGE);
-            ConfirmNameType("A_1", NameType.NAMED_RANGE);
-            ConfirmNameType("A1_", NameType.NAMED_RANGE);
-            ConfirmNameType(".A1", NameType.BAD_CELL_OR_NAMED_RANGE);
-            ConfirmNameType("A.1", NameType.NAMED_RANGE);
-            ConfirmNameType("A1.", NameType.NAMED_RANGE);
+            ConfirmNameType("a1", NameType.Cell);
+            ConfirmNameType("pfy1", NameType.NamedRange);
+            ConfirmNameType("pf1", NameType.NamedRange); // (col) out of cell range
+            ConfirmNameType("fp1", NameType.Cell);
+            ConfirmNameType("pf$1", NameType.BadCellOrNamedRange);
+            ConfirmNameType("_A1", NameType.NamedRange);
+            ConfirmNameType("A_1", NameType.NamedRange);
+            ConfirmNameType("A1_", NameType.NamedRange);
+            ConfirmNameType(".A1", NameType.BadCellOrNamedRange);
+            ConfirmNameType("A.1", NameType.NamedRange);
+            ConfirmNameType("A1.", NameType.NamedRange);
         }
         [Test]
         public void TestClassificationOfRowReferences()
         {
-            ConfirmNameType("10", NameType.ROW);
-            ConfirmNameType("$10", NameType.ROW);
-            ConfirmNameType("65536", NameType.ROW);
+            ConfirmNameType("10", NameType.Row);
+            ConfirmNameType("$10", NameType.Row);
+            ConfirmNameType("65536", NameType.Row);
 
-            ConfirmNameType("65537", NameType.BAD_CELL_OR_NAMED_RANGE);
-            ConfirmNameType("$100000", NameType.BAD_CELL_OR_NAMED_RANGE);
-            ConfirmNameType("$1$1", NameType.BAD_CELL_OR_NAMED_RANGE);
+            ConfirmNameType("65537", NameType.BadCellOrNamedRange);
+            ConfirmNameType("$100000", NameType.BadCellOrNamedRange);
+            ConfirmNameType("$1$1", NameType.BadCellOrNamedRange);
         }
 
         private void ConfirmNameType(String ref1, NameType expectedResult)

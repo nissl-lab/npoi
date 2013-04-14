@@ -62,9 +62,9 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(Arrays.Equals(jpegData, ((XSSFPictureData)pictures[jpegIdx]).Data));
 
             XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            Assert.AreEqual(AnchorType.MOVE_AND_RESIZE, (AnchorType)anchor.AnchorType);
-            anchor.AnchorType = (int)AnchorType.DONT_MOVE_AND_RESIZE;
-            Assert.AreEqual(AnchorType.DONT_MOVE_AND_RESIZE, (AnchorType)anchor.AnchorType);
+            Assert.AreEqual(AnchorType.MoveAndResize, (AnchorType)anchor.AnchorType);
+            anchor.AnchorType = (int)AnchorType.DontMoveAndResize;
+            Assert.AreEqual(AnchorType.DontMoveAndResize, (AnchorType)anchor.AnchorType);
 
             XSSFPicture shape = (XSSFPicture)drawing.CreatePicture(anchor, jpegIdx);
             Assert.IsTrue(anchor.Equals(shape.GetAnchor()));

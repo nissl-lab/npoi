@@ -142,7 +142,7 @@ namespace NPOI.XSSF.UserModel
             //font1.FontHeight = (short)8.5;
             font1.SetFontHeight(8.5);
             font1.IsItalic = true;
-            font1.Color = IndexedColors.BLUE_GREY.Index;
+            font1.Color = IndexedColors.BlueGrey.Index;
             richText.ApplyFont(0, 5, font1);
 
             //check the low-level stuff
@@ -155,7 +155,7 @@ namespace NPOI.XSSF.UserModel
             CT_RPrElt rPr = richText.GetCTRst().GetRArray(0).rPr;
             Assert.AreEqual(true, rPr.GetIArray(0).val);
             Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
-            Assert.AreEqual(IndexedColors.BLUE_GREY.Index, (short)rPr.GetColorArray(0).indexed);
+            Assert.AreEqual(IndexedColors.BlueGrey.Index, (short)rPr.GetColorArray(0).indexed);
             Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
         }
         [Test]

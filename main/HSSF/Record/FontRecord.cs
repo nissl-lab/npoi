@@ -21,6 +21,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
+    using NPOI.SS.UserModel;
     using NPOI.Util;
 
 
@@ -36,15 +37,7 @@ namespace NPOI.HSSF.Record
     public class FontRecord
        : StandardRecord
     {
-        public const short sid = 0x31;                                                 // docs are wrong (0x231 Microsoft Support site article Q184647)
-        public const short SS_NONE = 0;
-        public const short SS_SUPER = 1;
-        public const short SS_SUB = 2;
-        public const byte U_NONE = 0;
-        public const byte U_SINGLE = 1;
-        public const byte U_DOUBLE = 2;
-        public const byte U_SINGLE_ACCOUNTING = 0x21;
-        public const byte U_DOUBLE_ACCOUNTING = 0x22;
+        public const short sid = 0x31;            // docs are wrong (0x231 Microsoft Support site article Q184647)
 
         private short field_1_font_height;        // in Units of .05 of a point
         private short field_2_attributes;
@@ -188,22 +181,15 @@ namespace NPOI.HSSF.Record
             set { field_2_attributes = macshadow.SetShortBoolean(field_2_attributes, value); }
             get { return macshadow.IsSet(field_2_attributes); }
         }
+
         /**
          * Set the type of Underlining for the font
-         *
-         * @param u  base or subscript option
-         *
-         * @see #U_NONE
-         * @see #U_SINGLE
-         * @see #U_DOUBLE
-         * @see #U_SINGLE_ACCOUNTING
-         * @see #U_DOUBLE_ACCOUNTING
          */
 
-        public byte Underline
+        public FontUnderlineType Underline
         {
-            set { field_6_underline = value; }
-            get { return field_6_underline; }
+            get { return (FontUnderlineType) field_6_underline; }
+            set { field_6_underline = (byte) value; }
         }
 
         /**
@@ -295,15 +281,12 @@ namespace NPOI.HSSF.Record
          * Get the type of base or subscript for the font
          *
          * @return base or subscript option
-         * @see #SS_NONE
-         * @see #SS_SUPER
-         * @see #SS_SUB
          */
 
-        public short SuperSubScript
+        public FontSuperScript SuperSubScript
         {
-            get { return field_5_base_sub_script; }
-            set { field_5_base_sub_script = value; }
+            get { return (FontSuperScript) field_5_base_sub_script; }
+            set { field_5_base_sub_script = (short) value; }
         }
         /**
  * Does this FontRecord have all the same font
@@ -350,9 +333,9 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .boldweight      = ")
                 .Append(StringUtil.ToHexString(BoldWeight)).Append("\n");
             buffer.Append("    .basesubscript  = ")
-                .Append(StringUtil.ToHexString(SuperSubScript)).Append("\n");
+                .Append(StringUtil.ToHexString((short) SuperSubScript)).Append("\n");
             buffer.Append("    .underline       = ")
-                .Append(StringUtil.ToHexString(Underline)).Append("\n");
+                .Append(StringUtil.ToHexString((short) Underline)).Append("\n");
             buffer.Append("    .family          = ")
                 .Append(StringUtil.ToHexString(Family)).Append("\n");
             buffer.Append("    .charset         = ")
@@ -369,8 +352,8 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(Attributes);
             out1.WriteShort(ColorPaletteIndex);
             out1.WriteShort(BoldWeight);
-            out1.WriteShort(SuperSubScript);
-            out1.WriteByte(Underline);
+            out1.WriteShort((int) SuperSubScript);
+            out1.WriteByte((int) Underline);
             out1.WriteByte(Family);
             out1.WriteByte(Charset);
             out1.WriteByte(field_9_zero);

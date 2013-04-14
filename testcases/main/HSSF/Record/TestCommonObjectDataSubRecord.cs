@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord(TestcaseRecordInputStream.Create((short)0x15, data),data.Length);
 
 
-            Assert.AreEqual(CommonObjectType.LIST_BOX, record.ObjectType);
+            Assert.AreEqual(CommonObjectType.ListBox, record.ObjectType);
             Assert.AreEqual((short)1, record.ObjectId);
             Assert.AreEqual((short)1, record.Option);
             Assert.AreEqual(true, record.IsLocked);
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.Record
         {
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord();
 
-            record.ObjectType = (CommonObjectType.LIST_BOX);
+            record.ObjectType = (CommonObjectType.ListBox);
             record.ObjectId = 1;
             record.Option = ((short)1);
             record.IsLocked = (true);

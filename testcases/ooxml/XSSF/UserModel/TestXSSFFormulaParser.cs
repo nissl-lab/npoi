@@ -27,7 +27,7 @@ namespace NPOI.XSSF.UserModel
 
         private static Ptg[] Parse(XSSFEvaluationWorkbook fpb, String fmla)
         {
-            return FormulaParser.Parse(fmla, fpb, FormulaType.CELL, -1);
+            return FormulaParser.Parse(fmla, fpb, FormulaType.Cell, -1);
         }
 
         [Test]

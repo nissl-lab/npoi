@@ -1012,11 +1012,11 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(2).SetCellFormula("sales_1*3");
 
             //check that NamePtg refers to the correct NameRecord
-            Ptg[] ptgs1 = HSSFFormulaParser.Parse("sales_1", wb, FormulaType.CELL, 0);
+            Ptg[] ptgs1 = HSSFFormulaParser.Parse("sales_1", wb, FormulaType.Cell, 0);
             NamePtg nPtg1 = (NamePtg)ptgs1[0];
             Assert.AreSame(nm1, wb.GetNameAt(nPtg1.Index));
 
-            Ptg[] ptgs2 = HSSFFormulaParser.Parse("sales_1", wb, FormulaType.CELL, 1);
+            Ptg[] ptgs2 = HSSFFormulaParser.Parse("sales_1", wb, FormulaType.Cell, 1);
             NamePtg nPtg2 = (NamePtg)ptgs2[0];
             Assert.AreSame(nm2, wb.GetNameAt(nPtg2.Index));
 
