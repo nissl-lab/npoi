@@ -100,6 +100,37 @@
     <Compile Include="Drawing\WordprocessingDrawing.cs" />
     <Compile Include="ExtendedPropertiesDocument.cs" />
     <Compile Include="Shared\Math.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Border.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_BorderPr.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Borders.cs" />
+    <Compile Include="Spreadsheet\CT_CalcChain.cs" />
+    <Compile Include="Spreadsheet\CT_Authors.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyleXfs.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_RElt.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_RPrElt.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_Rst.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_Sst.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CellAlignment.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CellProtection.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
+    <Compile Include="Spreadsheet\CT_NumFmt.cs" />
+    <Compile Include="Spreadsheet\CT_NumFmts.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Cell.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Col.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Cols.cs" />
+    <Compile Include="Spreadsheet\CT_Comment.cs" />
+    <Compile Include="Spreadsheet\CT_Comments.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Hyperlink.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_MergeCell.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Row.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Sheet.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_SheetData.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Worksheet.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_SheetPr.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_MergeCells.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Xf.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\Markup.cs" />
     <Compile Include="Wordprocessing\CustomXml.cs" />
@@ -141,31 +172,31 @@
     <Compile Include="RelationshipReference.cs" />
     <Compile Include="Spreadsheet\AutoFilter.cs" />
     <Compile Include="Spreadsheet\BaseTypes.cs" />
-    <Compile Include="Spreadsheet\CalcChainDocument.cs" />
-    <Compile Include="Spreadsheet\Comments.cs" />
-    <Compile Include="Spreadsheet\CommentsDocument.cs" />
-    <Compile Include="Spreadsheet\ChartsheetDocument.cs" />
-    <Compile Include="Spreadsheet\WorksheetDocument.cs" />
-    <Compile Include="Spreadsheet\MapInfoDocument.cs" />
+    <Compile Include="Spreadsheet\Document\CalcChainDocument.cs" />
+    <Compile Include="Spreadsheet\CT_CommentList.cs" />
+    <Compile Include="Spreadsheet\Document\CommentsDocument.cs" />
+    <Compile Include="Spreadsheet\Document\ChartsheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\WorksheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\MapInfoDocument.cs" />
     <Compile Include="Spreadsheet\SharedStringTable.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookRevisions.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookUserNames.cs" />
     <Compile Include="Spreadsheet\Sheet.cs" />
     <Compile Include="Spreadsheet\SheetMetadata.cs" />
     <Compile Include="Spreadsheet\SingleCellTable.cs" />
-    <Compile Include="Spreadsheet\CalculationChain.cs" />
+    <Compile Include="Spreadsheet\CT_CalcCell.cs" />
     <Compile Include="Spreadsheet\ExternalConnections.cs" />
     <Compile Include="Spreadsheet\QueryTable.cs" />
     <Compile Include="Spreadsheet\CustomXmlMappings.cs" />
-    <Compile Include="Spreadsheet\SingleXmlCellsDocument.cs" />
-    <Compile Include="Spreadsheet\SstDocument.cs" />
-    <Compile Include="Spreadsheet\StyleSheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\SingleXmlCellsDocument.cs" />
+    <Compile Include="Spreadsheet\Document\SstDocument.cs" />
+    <Compile Include="Spreadsheet\Document\StyleSheetDocument.cs" />
     <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
     <Compile Include="Spreadsheet\Styles.cs" />
-    <Compile Include="Spreadsheet\TableDocument.cs" />
-    <Compile Include="Spreadsheet\ThemeDocument.cs" />
+    <Compile Include="Spreadsheet\Document\TableDocument.cs" />
+    <Compile Include="Spreadsheet\Document\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
-    <Compile Include="Spreadsheet\WorkbookDocument.cs" />
+    <Compile Include="Spreadsheet\Document\WorkbookDocument.cs" />
     <Compile Include="Vml\Main.cs" />
     <Compile Include="Vml\OfficeDrawing.cs" />
     <Compile Include="Vml\PresentationDrawing.cs" />
@@ -200,6 +231,10 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
