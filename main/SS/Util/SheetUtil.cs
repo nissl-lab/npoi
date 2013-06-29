@@ -222,8 +222,8 @@ namespace NPOI.SS.Util
 
             double width = -1;
             using (Bitmap bmp = new Bitmap(2048, 100))
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                Graphics g = Graphics.FromImage(bmp);
                 if (cellType == CellType.String)
                 {
                     IRichTextString rt = cell.RichStringCellValue;
