@@ -69,11 +69,12 @@ namespace NPOI.HWPF.Model
                     // As a workaround, have a few extra 0 bytes on the end!
                     byte[] buf = new byte[sepxSize+2];
                     fileOffset += LittleEndianConsts.SHORT_SIZE;
-                    Array.Copy(documentStream, fileOffset, buf, 0, buf.Length);
+                    Array.Copy(documentStream, fileOffset, buf, 0, buf.Length>=documentStream.Length - fileOffset?documentStream.Length - fileOffset: buf.Length);
                     sepx = new SEPX(sed, startAt, endAt,buf);
                 }
                 _sections.Add(sepx);
             }
+
             _sections.Sort(PropertyNode.SEPXComparator.instance);
         }
 
