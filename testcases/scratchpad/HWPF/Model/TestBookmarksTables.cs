@@ -15,8 +15,9 @@
    limitations under the License.
 ==================================================================== */
 using TestCases.HWPF;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF.UserModel;
+using NUnit.Framework;
 namespace NPOI.HWPF.Model
 {
 
@@ -27,10 +28,10 @@ namespace NPOI.HWPF.Model
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestBookmarksTables 
     {
-        [TestMethod]
+        [Test]
         public void TestBookmarks()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("pageref.doc");

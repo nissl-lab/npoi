@@ -19,24 +19,25 @@
 namespace TestCases.HWPF.UserModel
 {
     using NPOI.HWPF.UserModel;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using System.Collections.Generic;
     using NPOI.HWPF;
     using NPOI.HWPF.Model;
     using NPOI.Util;
+    using NUnit.Framework;
     /**
      * Test the picture handling
      *
      * @author Nick Burch
      */
-    [TestClass]
+    [TestFixture]
     public class TestPictures
     {
 
         /**
          * two jpegs
          */
-        [TestMethod]
+        [Test]
         public void TestTwoImages()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("two_images.doc");
@@ -60,7 +61,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * pngs and jpegs
          */
-        [TestMethod]
+        [Test]
         public void TestDifferentImages()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("testPictures.doc");
@@ -92,7 +93,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * emf image, nice and simple
          */
-        [TestMethod]
+        [Test]
         public void TestEmfImage()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("vector_image.doc");
@@ -119,7 +120,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * emf image, with a crazy offset
          */
-        [TestMethod]
+        [Test]
         public void TestEmfComplexImage()
         {
 
@@ -147,7 +148,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual((uint)0x80000000, LittleEndian.GetUInt(pic.GetContent()));
             Assert.AreEqual((uint)0x80000000, LittleEndian.GetUInt(pic.GetRawContent()));
         }
-        [TestMethod]
+        [Test]
         public void TestPicturesWithTable()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug44603.doc");
@@ -155,7 +156,7 @@ namespace TestCases.HWPF.UserModel
             List<Picture> pics = doc.GetPicturesTable().GetAllPictures();
             Assert.AreEqual(2, pics.Count);
         }
-        [TestMethod]
+        [Test]
         public void TestPicturesInHeader()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("header_image.doc");
@@ -163,21 +164,21 @@ namespace TestCases.HWPF.UserModel
             List<Picture> pics = doc.GetPicturesTable().GetAllPictures();
             Assert.AreEqual(2, pics.Count);
         }
-        [TestMethod]
+        [Test]
         public void TestFastSaved()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("rasp.doc");
 
             doc.GetPicturesTable().GetAllPictures(); // just check that we do not throw Exception
         }
-        [TestMethod]
+        [Test]
         public void TestFastSaved2()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("o_kurs.doc");
 
             doc.GetPicturesTable().GetAllPictures(); // just check that we do not throw Exception
         }
-        [TestMethod]
+        [Test]
         public void TestFastSaved3()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("ob_is.doc");
@@ -192,7 +193,7 @@ namespace TestCases.HWPF.UserModel
          *  then used as-is to speed things up.
          * Check that we can properly read one of these
          */
-        [TestMethod]
+        [Test]
         public void TestEmbededDocumentIcon()
         {
             // This file has two embeded excel files, an embeded powerpoint
@@ -278,7 +279,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("10a8", picture.SuggestFullFileName());
             Assert.AreEqual("image/unknown", picture.MimeType);
         }
-        [TestMethod]
+        [Test]
         public void TestEquation()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("equation.doc");
@@ -304,7 +305,7 @@ namespace TestCases.HWPF.UserModel
          *  \u0001 which has the offSet. More than one can
          *  reference the same \u0001
          */
-        [TestMethod]
+        [Test]
         public void TestFloatingPictures()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("FloatingPictures.doc");
@@ -345,7 +346,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(4, escher8s);
             Assert.AreEqual(0, plain8s);
         }
-        [TestMethod]
+        [Test]
         public void TestCroppedPictures()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("testCroppedPictures.doc");

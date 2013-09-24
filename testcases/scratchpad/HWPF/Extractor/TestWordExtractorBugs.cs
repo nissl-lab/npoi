@@ -16,7 +16,8 @@
 ==================================================================== */
 
 using NPOI.HWPF.Extractor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace TestCases.HWPF.Extractor
 {
 
@@ -25,10 +26,10 @@ namespace TestCases.HWPF.Extractor
      *
      * @author Nick Burch (nick at torchbox dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestWordExtractorBugs
     {
-        [TestMethod]
+        [Test]
         public void TestProblemMetadata()
         {
             WordExtractor extractor =

@@ -14,10 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF;
 using TestCases.HWPF;
 using NPOI.HWPF.UserModel;
+using NUnit.Framework;
 namespace TestCases.HWPF.Model
 {
     /**
@@ -26,10 +27,10 @@ namespace TestCases.HWPF.Model
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestNotesTables
     {
-        [TestMethod]
+        [Test]
         public void TestNotes()
         {
             HWPFDocument doc = HWPFTestDataSamples

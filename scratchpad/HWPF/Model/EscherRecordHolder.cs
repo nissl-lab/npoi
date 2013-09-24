@@ -31,7 +31,7 @@ namespace NPOI.HWPF.Model
 
         private void FillEscherRecords(byte[] data, int offset, int size)
         {
-            EscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+            IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
             int pos = offset;
             while (pos < offset + size)
             {

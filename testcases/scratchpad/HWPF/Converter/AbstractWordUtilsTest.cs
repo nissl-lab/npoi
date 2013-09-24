@@ -19,20 +19,21 @@ namespace TestCases.HWPF.Converter
     using NPOI.HWPF;
     using NPOI.HWPF.UserModel;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF.Converter;
+    using NUnit.Framework;
     /**
      * Test cases for {@link AbstractWordUtils}
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
-    [TestClass]
+    [TestFixture]
     public class AbstractWordUtilsTest
     {
         /**
          * Test case for {@link AbstractWordUtils#buildTableCellEdgesArray(Table)}
          */
-        [TestMethod]
+        [Test]
         public void TestBuildTableCellEdgesArray()
         {
             HWPFDocument document = HWPFTestDataSamples

@@ -17,8 +17,9 @@
 
 using System.IO;
 using TestCases.HWPF;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF;
+using NUnit.Framework;
 namespace TestCases.HWPF
 {
 
@@ -29,7 +30,7 @@ namespace TestCases.HWPF
         protected HWPFTestCase()
         {
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
 
@@ -38,7 +39,7 @@ namespace TestCases.HWPF
 
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
 

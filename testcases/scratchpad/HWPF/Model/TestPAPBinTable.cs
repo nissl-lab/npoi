@@ -18,17 +18,18 @@
 using NPOI.HWPF.Model.IO;
 using System.IO;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using TestCases.HWPF;
+using NUnit.Framework;
 namespace NPOI.HWPF.Model
 {
-    [TestClass]
+    [TestFixture]
     public class TestPAPBinTable
     {
         private PAPBinTable _pAPBinTable = null;
         private HWPFDocFixture _hWPFDocFixture;
 
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             TextPieceTable fakeTPT = new TextPieceTable();
@@ -68,7 +69,7 @@ namespace NPOI.HWPF.Model
 
 
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             /**@todo verify the constructors*/
@@ -76,7 +77,7 @@ namespace NPOI.HWPF.Model
 
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void tearDown()
         {
             _hWPFDocFixture = null;

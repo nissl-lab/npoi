@@ -315,7 +315,7 @@ namespace NPOI.HWPF
             _officeDrawingsHeaders = new OfficeDrawingsImpl(_fspaHeaders, _dgg, _mainStream);
             _officeDrawingsMain = new OfficeDrawingsImpl(_fspaMain, _dgg, _mainStream);
 
-            _st = new SectionTable(_mainStream, _tableStream, _fib.GetFcPlcfsed(), _fib.GetLcbPlcfsed(), fcMin, _tpt, _cpSplit);
+            _st = new SectionTable(_mainStream, _tableStream, _fib.GetFcPlcfsed(), _fib.GetLcbPlcfsed(), fcMin, _tpt, _fib.GetSubdocumentTextStreamLength(SubdocumentType.MAIN));
             _ss = new StyleSheet(_tableStream, _fib.GetFcStshf());
             _ft = new FontTable(_tableStream, _fib.GetFcSttbfffn(), _fib.GetLcbSttbfffn());
 

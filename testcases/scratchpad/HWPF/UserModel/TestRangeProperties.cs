@@ -16,11 +16,12 @@
 ==================================================================== */
 
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using System.Collections.Generic;
 using NPOI.HWPF.Model;
 using NPOI.HWPF;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
@@ -29,7 +30,7 @@ namespace TestCases.HWPF.UserModel
      *  the right text in them, and the right font/styling
      *  properties applied to them.
      */
-    [TestClass]
+    [TestFixture]
     public class TestRangeProperties
     {
         private static char page_break = (char)12;
@@ -63,14 +64,14 @@ namespace TestCases.HWPF.UserModel
 
         private HWPFDocument u;
         private HWPFDocument a;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             u = HWPFTestDataSamples.OpenSampleFile("HeaderFooterUnicode.doc");
             a = HWPFTestDataSamples.OpenSampleFile("SampleDoc.doc");
         }
 
-        [TestMethod]
+        [Test]
         public void TestAsciiTextParagraphs()
         {
             Range r = a.GetRange();
@@ -82,7 +83,7 @@ namespace TestCases.HWPF.UserModel
             );
 
             Assert.AreEqual(1, r.NumSections);
-            Assert.AreEqual(1, a.GetSectionTable().GetSections().Count);
+            Assert.AreEqual(1, a.SectionTable.GetSections().Count);
             Section s = r.GetSection(0);
             Assert.AreEqual(
                     a_page_1 +
@@ -130,7 +131,7 @@ namespace TestCases.HWPF.UserModel
                     r.GetParagraph(6).Text
             );
         }
-        [TestMethod]
+        [Test]
         public void TestAsciiStyling()
         {
             Range r = a.GetRange();
@@ -165,7 +166,7 @@ namespace TestCases.HWPF.UserModel
          * Tests the raw defInitions of the paragraphs of
          *  a unicode document
          */
-        [TestMethod]
+        [Test]
         public void TestUnicodeParagraphDefInitions()
         {
             Range r = u.GetRange();
@@ -182,7 +183,7 @@ namespace TestCases.HWPF.UserModel
 
 
             Assert.AreEqual(1, r.NumSections);
-            Assert.AreEqual(1, u.GetSectionTable().GetSections().Count);
+            Assert.AreEqual(1, u.SectionTable.GetSections().Count);
             Section s = r.GetSection(0);
             Assert.AreEqual(
                     u_page_1 +
@@ -258,7 +259,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Tests the paragraph text of a unicode document
          */
-        [TestMethod]
+        [Test]
         public void TestUnicodeTextParagraphs()
         {
             Range r = u.GetRange();
@@ -290,7 +291,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(page_break + "\r", r.GetParagraph(10).Text);
             Assert.AreEqual(p2_parts[0] + "\r", r.GetParagraph(11).Text);
         }
-        [TestMethod]
+        [Test]
         public void TestUnicodeStyling()
         {
             Range r = u.GetRange();

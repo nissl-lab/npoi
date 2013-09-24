@@ -17,19 +17,20 @@
 
 using NPOI.HWPF.Model;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.Util;
 using System;
+using NUnit.Framework;
 namespace TestCases.HWPF.Model
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestDocumentProperties
     {
         private DocumentProperties _documentProperties = null;
         private HWPFDocFixture _hWPFDocFixture;
 
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             int size = _documentProperties.GetSize();
@@ -58,7 +59,7 @@ namespace TestCases.HWPF.Model
             }
 
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             _hWPFDocFixture = new HWPFDocFixture(this);
@@ -67,7 +68,7 @@ namespace TestCases.HWPF.Model
 
             _documentProperties = new DocumentProperties(_hWPFDocFixture._tableStream, _hWPFDocFixture._fib.GetFcDop());
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _documentProperties = null;

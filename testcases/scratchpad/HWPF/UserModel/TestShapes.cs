@@ -17,23 +17,24 @@
 
 using NPOI.HWPF;
 using System.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF.UserModel;
 using System.IO;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
     /**
      * Test the shapes handling
      */
-    [TestClass]
+    [TestFixture]
     public class TestShapes
     {
 
         /**
          * two shapes, second is a group
          */
-        [TestMethod]
+        [Test]
         public void TestShapes1()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("WithArtShapes.doc");

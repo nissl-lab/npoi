@@ -901,7 +901,6 @@ namespace NPOI.HWPF.Converter
                             paragraph, string.Empty);
                 }
             }
-            throw new NotImplementedException();
         }
 
         protected abstract void ProcessSection(HWPFDocumentCore wordDocument,

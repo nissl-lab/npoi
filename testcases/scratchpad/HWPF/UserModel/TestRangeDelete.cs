@@ -16,10 +16,11 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF;
 using NPOI.HWPF.UserModel;
 using NPOI.HWPF.Model;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
@@ -27,7 +28,7 @@ namespace TestCases.HWPF.UserModel
      *	Test to see if Range.Delete() works even if the Range Contains a
      *	CharacterRun that uses Unicode characters.
      */
-    [TestClass]
+    [TestFixture]
     public class TestRangeDelete
     {
 
@@ -48,7 +49,7 @@ namespace TestCases.HWPF.UserModel
 
         private String illustrativeDocFile;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             illustrativeDocFile = "testRangeDelete.doc";
@@ -57,7 +58,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test just opening the files
          */
-        [TestMethod]
+        [Test]
         public void TestOpen()
         {
 
@@ -67,7 +68,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test (more "Confirm" than Test) that we have the general structure that we expect to have.
          */
-        [TestMethod]
+        [Test]
         public void TestDocStructure()
         {
 
@@ -87,7 +88,7 @@ namespace TestCases.HWPF.UserModel
             range = daDoc.GetRange();
 
             Assert.AreEqual(1, range.NumSections);
-            Assert.AreEqual(1, daDoc.GetSectionTable().GetSections().Count);
+            Assert.AreEqual(1, daDoc.SectionTable.GetSections().Count);
             section = range.GetSection(0);
 
             Assert.AreEqual(5, section.NumParagraphs);
@@ -134,7 +135,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test that we can delete text (one instance) from our Range with Unicode text.
          */
-        [TestMethod]
+        [Test]
         public void TestRangeDeleteOne()
         {
 
@@ -182,7 +183,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test that we can delete text (all instances of) from our Range with Unicode text.
          */
-        [TestMethod]
+        [Test]
         public void TestRangeDeleteAll()
         {
 

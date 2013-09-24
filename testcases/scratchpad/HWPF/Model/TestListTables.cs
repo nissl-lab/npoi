@@ -17,17 +17,18 @@
 
 using NPOI.HWPF.Model;
 using NPOI.HWPF.Model.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace TestCases.HWPF.Model
 {
-    [TestClass]
+    [TestFixture]
     public class TestListTables : HWPFTestCase
     {
 
         public TestListTables()
         {
         }
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             FileInformationBlock fib = _hWPFDocFixture._fib;

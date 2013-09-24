@@ -20,6 +20,7 @@ using NPOI.DDF;
 using System.Collections.Generic;
 using NPOI.HWPF.UserModel;
 using System.Collections;
+using System;
 namespace NPOI.HWPF.Model
 {
 
@@ -42,6 +43,9 @@ namespace NPOI.HWPF.Model
      */
     public class PicturesTable
     {
+            private static POILogger logger = POILogFactory
+            .GetLogger( typeof(PicturesTable) );
+
         static int TYPE_IMAGE = 0x08;
         static int TYPE_IMAGE_WORD2000 = 0x00;
         static int TYPE_IMAGE_PASTED_FROM_CLIPBOARD = 0xA;
@@ -166,15 +170,26 @@ namespace NPOI.HWPF.Model
                     }
                     else if (bse.Offset > 0)
                     {
-                        // Blip stored in delay stream, which in a word doc, is the main stream
-                        EscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
-                        EscherRecord record = recordFactory.CreateRecord(_mainStream, bse.Offset);
-
-                        if (record is EscherBlipRecord)
+                        try
                         {
-                            record.FillFields(_mainStream, bse.Offset, recordFactory);
-                            blip = (EscherBlipRecord)record;
-                            pictures.Add(new Picture(blip.PictureData));
+                            // Blip stored in delay stream, which in a word doc, is the main stream
+                            IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+                            EscherRecord record = recordFactory.CreateRecord(_mainStream, bse.Offset);
+
+                            if (record is EscherBlipRecord)
+                            {
+                                record.FillFields(_mainStream, bse.Offset, recordFactory);
+                                blip = (EscherBlipRecord)record;
+                                pictures.Add(new Picture(blip.PictureData));
+                            }
+
+                        }
+                        catch (Exception exc)
+                        {
+                            logger.Log(
+                                    POILogger.WARN,
+                                    "Unable to load picture from BLIB record at offset #",
+                                    bse.Offset, exc);
                         }
                     }
                 }

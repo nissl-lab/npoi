@@ -18,10 +18,11 @@
 using NPOI.HWPF;
 using NPOI.HWPF.UserModel;
 using NPOI.HWPF.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using NPOI;
 using NPOI.HWPF.Extractor;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
@@ -30,14 +31,14 @@ namespace TestCases.HWPF.UserModel
      *
      * @author Nick Burch (nick at torchbox dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestProblems : HWPFTestCase
     {
 
         /**
          * ListEntry passed no ListTable
          */
-        [TestMethod]
+        [Test]
         public void TestListEntryNoListTable()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("ListEntryNoListTable.doc");
@@ -58,7 +59,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * AIOOB for TableSprmUncompressor.unCompressTAPOperation
          */
-        [TestMethod]
+        [Test]
         public void TestSprmAIOOB()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("AIOOB-Tap.doc");
@@ -80,7 +81,7 @@ namespace TestCases.HWPF.UserModel
          * Test for TableCell not skipping the last paragraph. Bugs #45062 and
          * #44292
          */
-        [TestMethod]
+        [Test]
         public void TestTableCellLastParagraph()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug44292.doc");
@@ -150,7 +151,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(65, cell.StartOffset);
             Assert.AreEqual(85, cell.EndOffset);
         }
-        [TestMethod]
+        [Test]
         public void TestRangeDelete()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug28627.doc");
@@ -192,7 +193,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * With an encrypted file, we should give a suitable exception, and not OOM
          */
-        [TestMethod]
+        [Test]
         public void TestEncryptedFile()
         {
             try
@@ -205,7 +206,7 @@ namespace TestCases.HWPF.UserModel
                 // Good
             }
         }
-        [TestMethod]
+        [Test]
         public void TestWriteProperties()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("SampleDoc.doc");
@@ -221,7 +222,7 @@ namespace TestCases.HWPF.UserModel
          * text in this Range.
          * Bug #45269
          */
-        [TestMethod]
+        [Test]
         public void TestReadParagraphsAfterReplaceText()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug45269.doc");
@@ -264,7 +265,7 @@ namespace TestCases.HWPF.UserModel
          *  the Header Stories
          */
 
-        [TestMethod]
+        [Test]
         public void TestProblemHeaderStories49936()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("HeaderFooterProblematic.doc");
@@ -286,7 +287,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Bug #45877 - problematic PAPX with no parent set
          */
-        [TestMethod]
+        [Test]
         public void TestParagraphPAPXNoParent45877()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug45877.doc");
@@ -300,7 +301,7 @@ namespace TestCases.HWPF.UserModel
          * Bug #48245 - don't include the text from the
          *  next cell in the current one
          */
-        [TestMethod]
+        [Test]
         public void TestTableIterator()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("simple-table2.doc");

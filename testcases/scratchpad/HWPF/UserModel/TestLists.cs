@@ -17,16 +17,17 @@
 
 using NPOI.HWPF;
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace TestCases.HWPF.UserModel
 {
     /**
      * Tests for our handling of lists
      */
-    [TestClass]
+    [TestFixture]
     public class TestLists
     {
-        [TestMethod]
+        [Test]
         public void TestBasics()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Lists.doc");
@@ -43,7 +44,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(9, r.GetParagraph(38).GetLvl());
             Assert.AreEqual(9, r.GetParagraph(39).GetLvl());
         }
-        [TestMethod]
+        [Test]
         public void TestUnorderedLists()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Lists.doc");
@@ -87,7 +88,7 @@ namespace TestCases.HWPF.UserModel
 
             // TODO Test for tick not bullet
         }
-        [TestMethod]
+        [Test]
         public void TestOrderedLists()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Lists.doc");
@@ -112,7 +113,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(0, r.GetParagraph(8).GetIlvl());
             Assert.AreEqual(0, r.GetParagraph(9).GetIlvl());
         }
-        [TestMethod]
+        [Test]
         public void TestMultiLevelLists()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Lists.doc");
@@ -171,7 +172,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual(0, r.GetParagraph(33).GetIlvl());
             Assert.AreEqual(0, r.GetParagraph(34).GetIlvl());
         }
-        [TestMethod]
+        [Test]
         public void TestIndentedText()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Lists.doc");
@@ -200,7 +201,7 @@ namespace TestCases.HWPF.UserModel
 
             // TODO Test the indent
         }
-        [TestMethod]
+        [Test]
         public void TestWriteRead()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Lists.doc");

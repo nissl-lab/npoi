@@ -19,7 +19,8 @@ using TestCases.HWPF;
 using System;
 using NPOI.HWPF;
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace TestCases.HWPF.UserModel
 {
 
@@ -29,7 +30,7 @@ namespace TestCases.HWPF.UserModel
      *
      * TODO - re-enable me when unicode paragraph stuff is fixed!
      */
-    [TestClass]
+    [TestFixture]
     public class TestRangeInsertion
     {
 
@@ -41,7 +42,7 @@ namespace TestCases.HWPF.UserModel
 
         private String illustrativeDocFile;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             illustrativeDocFile = "testRangeInsertion.doc";
@@ -50,7 +51,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test just opening the files
          */
-        [TestMethod]
+        [Test]
         public void TestOpen()
         {
 
@@ -60,7 +61,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test (more "Confirm" than test) that we have the general structure that we expect to have.
          */
-        [TestMethod]
+        [Test]
         public void TestDocStructure()
         {
 
@@ -90,7 +91,7 @@ namespace TestCases.HWPF.UserModel
         /**
          * Test that we can insert text in our CharacterRun with Unicode text.
          */
-        [TestMethod]
+        [Test]
         public void TestRangeInsert()
         {
 

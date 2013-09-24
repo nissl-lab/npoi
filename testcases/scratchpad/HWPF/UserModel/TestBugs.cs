@@ -19,13 +19,14 @@ namespace TestCases.HWPF.UserModel
     using NPOI.HWPF;
     using NPOI.HWPF.UserModel;
     using NPOI.HWPF.Model;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using System;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestBugs
     {
-        [TestMethod]
+        [Test]
         public void Test50075()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug50075.doc");
@@ -39,7 +40,7 @@ namespace TestCases.HWPF.UserModel
             // the bug reproduces, if this call fails with NullPointerException
             level.GetNumberText();
         }
-        [TestMethod]
+        [Test]
         public void Test49820()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug49820.doc");

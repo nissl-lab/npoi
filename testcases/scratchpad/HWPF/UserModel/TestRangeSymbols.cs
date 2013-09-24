@@ -17,17 +17,18 @@
 
 using NPOI.HWPF;
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace TestCases.HWPF.UserModel
 {
 
     /**
      * API for Processing of symbols, see Bugzilla 49908
      */
-    [TestClass]
+    [TestFixture]
     public class TestRangeSymbols
     {
-        [TestMethod]
+        [Test]
         public void Test()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug49908.doc");

@@ -17,17 +17,18 @@
 
 using System;
 using NPOI.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using TestCases.HWPF;
+using NUnit.Framework;
 namespace NPOI.HWPF.Model
 {
-    [TestClass]
+    [TestFixture]
     public class TestPlexOfCps
     {
         private PlexOfCps _plexOfCps = null;
         private HWPFDocFixture _hWPFDocFixture;
 
-        [TestMethod]
+        [Test]
         public void TestWriteRead()
         {
             _plexOfCps = new PlexOfCps(4);
@@ -57,7 +58,7 @@ namespace NPOI.HWPF.Model
                 Assert.AreEqual(node.End - node.Start, span);
             }
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             /**@todo verify the constructors*/
@@ -65,7 +66,7 @@ namespace NPOI.HWPF.Model
 
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _plexOfCps = null;

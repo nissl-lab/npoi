@@ -15,7 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using NUnit.Framework;
 using TestCases.HWPF;
 namespace NPOI.HWPF.UserModel
 {
@@ -23,13 +24,13 @@ namespace NPOI.HWPF.UserModel
     /**
      * Tests for Word 6 and Word 95 support
      */
-    [TestClass]
+    [TestFixture]
     public class TestHWPFOldDocument : HWPFTestCase
     {
         /**
          * Test a simple Word 6 document
          */
-        [TestMethod]
+        [Test]
         public void TestWord6()
         {
             // Can't open as HWPFDocument
@@ -57,7 +58,7 @@ namespace NPOI.HWPF.UserModel
         /**
          * Test a simple Word 95 document
          */
-        [TestMethod]
+        [Test]
         public void TestWord95()
         {
             // Can't open as HWPFDocument
@@ -111,7 +112,7 @@ namespace NPOI.HWPF.UserModel
          * Test a word document that has sections,
          *  as well as the usual paragraph stuff.
          */
-        [TestMethod]
+        [Test]
         public void TestWord6Sections()
         {
             HWPFOldDocument doc = HWPFTestDataSamples.OpenOldSampleFile("Word6_sections.doc");
@@ -134,7 +135,7 @@ namespace NPOI.HWPF.UserModel
          * Another word document with sections, this time with a 
          *  few more section properties set on it
          */
-        [TestMethod]
+        [Test]
         public void TestWord6Sections2()
         {
             HWPFOldDocument doc = HWPFTestDataSamples.OpenOldSampleFile("Word6_sections2.doc");

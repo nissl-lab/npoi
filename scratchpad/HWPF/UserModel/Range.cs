@@ -132,7 +132,7 @@ namespace NPOI.HWPF.UserModel
             _start = start;
             _end = end;
             _doc = doc;
-            _sections = _doc.GetSectionTable().GetSections();
+            _sections = _doc.SectionTable.GetSections();
             _paragraphs = _doc.ParagraphTable.GetParagraphs();
             _characters = _doc.CharacterTable.GetTextRuns();
             _text = _doc.Text;
@@ -330,7 +330,7 @@ namespace NPOI.HWPF.UserModel
 
             _doc.CharacterTable.AdjustForInsert(_charStart, text.Length);
             _doc.ParagraphTable.AdjustForInsert(_parStart, text.Length);
-            _doc.GetSectionTable().AdjustForInsert(_sectionStart, text.Length);
+            _doc.SectionTable.AdjustForInsert(_sectionStart, text.Length);
             AdjustForInsert(text.Length);
 
             // update the FIB.CCPText + friends fields
@@ -355,7 +355,7 @@ namespace NPOI.HWPF.UserModel
             _text.Insert(_end, text);
             _doc.CharacterTable.AdjustForInsert(_charEnd - 1, text.Length);
             _doc.ParagraphTable.AdjustForInsert(_parEnd - 1, text.Length);
-            _doc.GetSectionTable().AdjustForInsert(_sectionEnd - 1, text.Length);
+            _doc.SectionTable.AdjustForInsert(_sectionEnd - 1, text.Length);
             AdjustForInsert(text.Length);
 
             return GetCharacterRun(NumCharacterRuns - 1);
@@ -1047,7 +1047,7 @@ namespace NPOI.HWPF.UserModel
             int endIndex = BinarySearchEnd(rpl, startIndex, end);
             while (endIndex < rpl.Count - 1
                     && rpl[endIndex + 1].End <= end)
-                endIndex--;
+                endIndex++; 
 
             if (startIndex < 0 || startIndex >= rpl.Count
                     || startIndex > endIndex || endIndex < 0

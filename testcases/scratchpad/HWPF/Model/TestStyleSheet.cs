@@ -16,16 +16,16 @@
 ==================================================================== */
 
 using NPOI.HWPF.Model.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using TestCases.HWPF;
 namespace NPOI.HWPF.Model
 {
-    [TestClass]
+    [TestFixture]
     public class TestStyleSheet
     {
         private StyleSheet _styleSheet = null;
         private HWPFDocFixture _hWPFDocFixture;
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             HWPFFileSystem fileSys = new HWPFFileSystem();
@@ -42,7 +42,7 @@ namespace NPOI.HWPF.Model
             Assert.AreEqual(newStyleSheet, _styleSheet);
 
         }
-        [TestMethod]
+        [Test]
         public void TestReadWriteFromNonZeroOffset()
         {
             HWPFFileSystem fileSys = new HWPFFileSystem();
@@ -56,7 +56,7 @@ namespace NPOI.HWPF.Model
             StyleSheet newStyleSheet = new StyleSheet(newTableStream, 20);
             Assert.AreEqual(newStyleSheet, _styleSheet);
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             /**@todo verify the constructors*/
@@ -69,7 +69,7 @@ namespace NPOI.HWPF.Model
             _hWPFDocFixture.SetUp();
             _styleSheet = new StyleSheet(tableStream, fib.GetFcStshf());
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _styleSheet = null;

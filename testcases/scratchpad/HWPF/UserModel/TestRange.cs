@@ -16,8 +16,9 @@
 ==================================================================== */
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF.UserModel;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
@@ -25,10 +26,10 @@ namespace TestCases.HWPF.UserModel
      * Tests for Range which aren't around deletion, insertion,
      *  text Replacement or textual contents
      */
-    [TestClass]
+    [TestFixture]
     public class TestRange
     {
-        [TestMethod]
+        [Test]
         public void TestFieldStripping()
         {
             String exp = "This is some text.";

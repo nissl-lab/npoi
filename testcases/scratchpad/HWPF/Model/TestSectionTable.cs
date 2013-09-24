@@ -20,14 +20,15 @@ namespace TestCases.HWPF.Model
     using NPOI.HWPF.Model;
     using NPOI.HWPF.Model.IO;
     using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using System.Collections.Generic;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestSectionTable
     {
         private HWPFDocFixture _hWPFDocFixture;
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             FileInformationBlock fib = _hWPFDocFixture._fib;
@@ -35,7 +36,6 @@ namespace TestCases.HWPF.Model
             byte[] tableStream = _hWPFDocFixture._tableStream;
             int fcMin = fib.GetFcMin();
 
-            CPSplitCalculator cps = new CPSplitCalculator(fib);
 
             ComplexFileTable cft = new ComplexFileTable(mainStream, tableStream, fib.GetFcClx(), fcMin);
             TextPieceTable tpt = cft.GetTextPieceTable();
@@ -43,7 +43,7 @@ namespace TestCases.HWPF.Model
             SectionTable sectionTable = new SectionTable(mainStream, tableStream,
                                                          fib.GetFcPlcfsed(),
                                                          fib.GetLcbPlcfsed(),
-                                                         fcMin, tpt, cps);
+                                                         fcMin, tpt, fib.GetSubdocumentTextStreamLength(SubdocumentType.MAIN));
             HWPFFileSystem fileSys = new HWPFFileSystem();
 
             sectionTable.WriteTo(fileSys, 0);
@@ -55,7 +55,7 @@ namespace TestCases.HWPF.Model
 
             SectionTable newSectionTable = new SectionTable(
                     newMainStream, newTableStream, 0,
-                    newTableStream.Length, 0, tpt, cps);
+                    newTableStream.Length, 0, tpt, fib.GetSubdocumentTextStreamLength(SubdocumentType.MAIN));
 
             List<SEPX> oldSections = sectionTable.GetSections();
             List<SEPX> newSections = newSectionTable.GetSections();
@@ -83,7 +83,7 @@ namespace TestCases.HWPF.Model
                 Assert.AreEqual(oldNode, newNode);
             }
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             /**@todo verify the constructors*/
@@ -91,7 +91,7 @@ namespace TestCases.HWPF.Model
 
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _hWPFDocFixture = null;

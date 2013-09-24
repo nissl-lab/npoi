@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
@@ -23,7 +22,8 @@ namespace TestCases.HWPF.Converter
 {
     using NPOI.HWPF;
     using NPOI.HWPF.Converter;
-    [TestClass]
+    using NUnit.Framework;
+    [TestFixture]
     public class TestWordToTextConverter
     {
 
@@ -31,7 +31,7 @@ namespace TestCases.HWPF.Converter
          * [FAILING] Bug 47731 - Word Extractor considers text copied from some
          * website as an embedded object
          */
-        [TestMethod]
+        [Test]
         public void TestBug47731()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug47731.doc");

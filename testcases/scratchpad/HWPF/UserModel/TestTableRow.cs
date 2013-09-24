@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using NPOI.HWPF;
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 
 namespace TestCases.HWPF.UserModel
 {
-    [TestClass]
+    [TestFixture]
     public class TestTableRow
     {
-        [TestMethod]
+        [Test]
         public void TestInnerTableCellsDetection()
         {
             HWPFDocument hwpfDocument = new HWPFDocument(POIDataSamples
@@ -26,7 +27,7 @@ namespace TestCases.HWPF.UserModel
             TableRow tableRow = innerTable.GetRow(0);
             Assert.AreEqual(2, tableRow.NumCells());
         }
-        [TestMethod]
+        [Test]
         public void TestOuterTableCellsDetection()
         {
             HWPFDocument hwpfDocument = new HWPFDocument(POIDataSamples

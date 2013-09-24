@@ -18,7 +18,7 @@
  */
 
 using NPOI.HWPF.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +33,7 @@ namespace TestCases.HWPF
      * @author Cedric Bosdonnat <cbosdonnat@novell.com>
      * 
      */
-    [TestClass]
+    [TestFixture]
     public class TestFieldsTables : HWPFTestCase
     {
 
@@ -73,7 +73,7 @@ namespace TestCases.HWPF
         {
             return "test-fields.doc";
         }
-        [TestMethod]
+        [Test]
         public void TestReadFields()
         {
             FileInformationBlock fib = _hWPFDocFixture._fib;

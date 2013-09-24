@@ -86,7 +86,10 @@ namespace NPOI.HWPF.Model
         {
             return _chpxList[index];
         }
-
+        public List<CHPX> GetCHPXs()
+        {
+            return _chpxList;
+        }
         public void Fill(List<CHPX> Filler)
         {
             _chpxList.AddRange(Filler);

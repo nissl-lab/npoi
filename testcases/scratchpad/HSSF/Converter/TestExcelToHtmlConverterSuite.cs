@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Converter;
 using System.IO;
+using NUnit.Framework;
 
 namespace TestCases.HSSF.Converter
 {
-    [TestClass]
+    [TestFixture]
     public class TestExcelToHtmlConverterSuite
     {
         private static List<String> failingFiles = new List<string>();
 
-        //[TestMethod]
+        //[Test]
         public void TestExcelToHtmlConverter()
         {
             string[] fileNames = POIDataSamples.GetSpreadSheetInstance().GetFiles("*.xls");

@@ -16,14 +16,15 @@
 ==================================================================== */
 
 using NPOI.HWPF;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF.UserModel;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
     /**
      * Tests for the handling of header stories into headers, footers etc
      */
-    [TestClass]
+    [TestFixture]
     public class TestHeaderStories
     {
         private HWPFDocument none;
@@ -34,7 +35,7 @@ namespace TestCases.HWPF.UserModel
         private HWPFDocument diffFirst;
         private HWPFDocument unicode;
         private HWPFDocument withFields;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
 
@@ -47,7 +48,7 @@ namespace TestCases.HWPF.UserModel
             unicode = HWPFTestDataSamples.OpenSampleFile("HeaderFooterUnicode.doc");
             withFields = HWPFTestDataSamples.OpenSampleFile("HeaderWithMacros.doc");
         }
-        [TestMethod]
+        [Test]
         public void TestNone()
         {
             HeaderStories hs = new HeaderStories(none);
@@ -55,7 +56,7 @@ namespace TestCases.HWPF.UserModel
             Assert.IsNull(hs.GetPlcfHdd());
             Assert.AreEqual(0, hs.GetRange().Text.Length);
         }
-        [TestMethod]
+        [Test]
         public void TestHeader()
         {
             HeaderStories hs = new HeaderStories(header);
@@ -100,7 +101,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("", hs.EvenFooter);
             Assert.AreEqual("", hs.OddFooter);
         }
-        [TestMethod]
+        [Test]
         public void TestFooter()
         {
             HeaderStories hs = new HeaderStories(footer);
@@ -113,7 +114,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("", hs.EvenFooter);
             Assert.AreEqual("Footer Left\tFooter Middle Footer Right\r\r", hs.OddFooter);
         }
-        [TestMethod]
+        [Test]
         public void TestHeaderFooter()
         {
             HeaderStories hs = new HeaderStories(headerFooter);
@@ -126,7 +127,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("", hs.EvenFooter);
             Assert.AreEqual("Footer Left\tFooter Middle Footer Right\r\r", hs.OddFooter);
         }
-        [TestMethod]
+        [Test]
         public void TestOddEven()
         {
             HeaderStories hs = new HeaderStories(oddEven);
@@ -149,7 +150,7 @@ namespace TestCases.HWPF.UserModel
                     hs.GetFooter(2));
             Assert.AreEqual("Footer Left\tFooter Middle Footer Right\r\r", hs.GetFooter(3));
         }
-        [TestMethod]
+        [Test]
         public void TestFirst()
         {
             HeaderStories hs = new HeaderStories(diffFirst);
@@ -167,7 +168,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("Footer Left\tFooter Middle Footer Right\r\r", hs.GetFooter(2));
             Assert.AreEqual("Footer Left\tFooter Middle Footer Right\r\r", hs.GetFooter(3));
         }
-        [TestMethod]
+        [Test]
         public void TestUnicode()
         {
             HeaderStories hs = new HeaderStories(unicode);
@@ -181,7 +182,7 @@ namespace TestCases.HWPF.UserModel
             Assert.AreEqual("", hs.EvenFooter);
             Assert.AreEqual("The footer, with Moli\u00e8re, has Unicode in it.\r\r", hs.OddFooter);
         }
-        [TestMethod]
+        [Test]
         public void TestWithFields()
         {
             HeaderStories hs = new HeaderStories(withFields);

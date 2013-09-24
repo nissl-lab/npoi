@@ -20,16 +20,17 @@ namespace TestCases.HWPF.Converter
 {
     using System;
     using System.Xml;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF;
     using NPOI.HWPF.Converter;
     using NPOI.HWPF.UserModel;
+    using NUnit.Framework;
     /**
      * Test cases for {@link WordToFoConverter}
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
-    //[TestClass]
+    //[TestFixture]
     public class TestWordToFoConverter
     {
         private static void assertContains(String result, String substring)
@@ -49,7 +50,7 @@ namespace TestCases.HWPF.Converter
 
             return wordToFoConverter.Document.InnerXml;
         }
-        [TestMethod]
+        [Test]
         public void testDocumentProperties()
         {
             String result = getFoText("documentProperties.doc");
@@ -61,7 +62,7 @@ namespace TestCases.HWPF.Converter
                     result,
                     "<pdf:Keywords xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\">This is document keywords</pdf:Keywords>");
         }
-        [TestMethod]
+        [Test]
         public void testEndnote()
         {
             String result = getFoText("endingnote.doc");
@@ -76,7 +77,7 @@ namespace TestCases.HWPF.Converter
                     "<fo:inline baseline-shift=\"super\" font-size=\"smaller\">1 </fo:inline>");
             assertContains(result, "Ending note text");
         }
-        [TestMethod]
+        [Test]
         public void testEquation()
         {
             String sampleFileName = "equation.doc";
@@ -84,7 +85,7 @@ namespace TestCases.HWPF.Converter
 
             assertContains(result, "<!--Image link to '0.emf' can be here-->");
         }
-        [TestMethod]
+        [Test]
         public void testHyperlink()
         {
             String sampleFileName = "hyperlink.doc";
@@ -94,7 +95,7 @@ namespace TestCases.HWPF.Converter
                     "<fo:basic-link external-destination=\"http://testuri.org/\">");
             assertContains(result, "Hyperlink text");
         }
-        [TestMethod]
+        [Test]
         public void testInnerTable()
         {
             String sampleFileName = "innertable.doc";
@@ -103,7 +104,7 @@ namespace TestCases.HWPF.Converter
             assertContains(result,
                     "padding-end=\"0.0in\" padding-start=\"0.0in\" width=\"1.0770833in\"");
         }
-        [TestMethod]
+        [Test]
         public void testPageBreak()
         {
             String sampleFileName = "page-break.doc";
@@ -111,7 +112,7 @@ namespace TestCases.HWPF.Converter
 
             assertContains(result, "<fo:block break-before=\"page\"");
         }
-        [TestMethod]
+        [Test]
         public void testPageBreakBefore()
         {
             String sampleFileName = "page-break-before.doc";
@@ -119,7 +120,7 @@ namespace TestCases.HWPF.Converter
 
             assertContains(result, "<fo:block break-before=\"page\"");
         }
-        [TestMethod]
+        [Test]
         public void testPageref()
         {
             String sampleFileName = "pageref.doc";

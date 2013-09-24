@@ -16,19 +16,19 @@
 ==================================================================== */
 
 using NPOI.HWPF.Model.IO;
+using NUnit.Framework;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestCases.HWPF;
 namespace NPOI.HWPF.Model
 {
 
 
-    [TestClass]
+    [TestFixture]
     public class TestTextPieceTable
     {
         private HWPFDocFixture _hWPFDocFixture;
         //private String dirname;
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             FileInformationBlock fib = _hWPFDocFixture._fib;
@@ -60,7 +60,7 @@ namespace NPOI.HWPF.Model
          * Check that we do the positions correctly when
          *  working with pure-ascii
          */
-        [TestMethod]
+        [Test]
         public void TestAsciiParts()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("ThreeColHeadFoot.doc");
@@ -95,7 +95,7 @@ namespace NPOI.HWPF.Model
          * Check that we do the positions correctly when
          *  working with a mix ascii, unicode file
          */
-        [TestMethod]
+        [Test]
         public void TestUnicodeParts()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("HeaderFooterUnicode.doc");
@@ -165,13 +165,13 @@ namespace NPOI.HWPF.Model
                     new MemoryStream(baos.ToArray())
             );
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             _hWPFDocFixture = new HWPFDocFixture(this);
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _hWPFDocFixture = null;

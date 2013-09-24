@@ -18,17 +18,18 @@
 namespace TestCases.HWPF
 {
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System.Collections.Generic;
 using NPOI.HWPF;
 using NPOI.HWPF.Model;
     using System;
+    using NUnit.Framework;
 
 /**
  * Test picture support in HWPF
  * @author nick
  */
-    [TestClass]
+    [TestFixture]
 public class TestHWPFPictures  {
 	private String docAFile;
 	private String docBFile;
@@ -40,7 +41,7 @@ public class TestHWPFPictures  {
 	private String imgCFile;
 	private String imgDFile;
 
-        [TestInitialize]
+        [SetUp]
 	public void SetUp() {
 
 		docAFile = "testPictures.doc";
@@ -57,7 +58,7 @@ public class TestHWPFPictures  {
 	/**
 	 * Test just opening the files
 	 */
-    [TestMethod]
+    [Test]
 	public void TestOpen() {
 		HWPFTestDataSamples.OpenSampleFile(docAFile);
 		HWPFTestDataSamples.OpenSampleFile(docBFile);
@@ -66,7 +67,7 @@ public class TestHWPFPictures  {
 	/**
 	 * Test that we have the right numbers of images in each file
 	 */
-    [TestMethod]
+    [Test]
 	public void TestImageCount() {
 		HWPFDocument docA = HWPFTestDataSamples.OpenSampleFile(docAFile);
 		HWPFDocument docB = HWPFTestDataSamples.OpenSampleFile(docBFile);
@@ -87,7 +88,7 @@ public class TestHWPFPictures  {
 	/**
 	 * Test that we have the right images in at least one file
 	 */
-    [TestMethod]
+    [Test]
 	public void TestImageData() {
 		HWPFDocument docB = HWPFTestDataSamples.OpenSampleFile(docBFile);
 		PicturesTable picB = docB.GetPicturesTable();
@@ -115,7 +116,7 @@ public class TestHWPFPictures  {
 	/**
 	 * Test that compressed image data is correctly returned.
 	 */
-    [TestMethod]
+    [Test]
 	public void TestCompressedImageData() {
 		HWPFDocument docC = HWPFTestDataSamples.OpenSampleFile(docCFile);
 		PicturesTable picC = docC.GetPicturesTable();
@@ -137,7 +138,7 @@ public class TestHWPFPictures  {
 	 * Pending the missing files being uploaded to
 	 *  bug #44937
 	 */
-    //[TestMethod]
+    //[Test]
 	public void BROKENtestEscherDrawing() {
 		HWPFDocument docD = HWPFTestDataSamples.OpenSampleFile(docDFile);
 		List<Picture> allPictures = docD.GetPicturesTable().GetAllPictures();

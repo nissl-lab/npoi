@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.HWPF.Extractor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using TestCases.HWPF;
 using System;
 using System.Text;
@@ -24,6 +24,7 @@ using TestCases;
 using NPOI.POIFS.FileSystem;
 using NPOI.HWPF;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 namespace TestCases.HWPF.Extractor
 {
     /**
@@ -31,7 +32,7 @@ namespace TestCases.HWPF.Extractor
      *
      * @author Nick Burch (nick at torchbox dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestWordExtractor
     {
         private String[] p_text1 = new String[] {
@@ -66,7 +67,7 @@ namespace TestCases.HWPF.Extractor
         // With footnote
         private String filename6;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
 
@@ -90,7 +91,7 @@ namespace TestCases.HWPF.Extractor
         /**
          * Test paragraph based extraction
          */
-        [TestMethod]
+        [Test]
         public void TestExtractFromParagraphs()
         {
             String[] text = extractor.ParagraphText;
@@ -111,7 +112,7 @@ namespace TestCases.HWPF.Extractor
         /**
          * Test the paragraph -> flat extraction
          */
-        [TestMethod]
+        [Test]
         public void TestText()
         {
             Assert.AreEqual(p_text1_block, extractor.Text);
@@ -128,7 +129,7 @@ namespace TestCases.HWPF.Extractor
         /**
          * Test textPieces based extraction
          */
-        [TestMethod]
+        [Test]
         public void TestExtractFromTextPieces()
         {
             String text = extractor.TextFromPieces;
@@ -141,7 +142,7 @@ namespace TestCases.HWPF.Extractor
          *  embeded word documents
          * @throws Exception
          */
-        [TestMethod]
+        [Test]
         public void TestExtractFromEmbeded()
         {
             POIFSFileSystem fs = new POIFSFileSystem(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream(filename3));
@@ -179,7 +180,7 @@ namespace TestCases.HWPF.Extractor
             Assert.AreEqual("Sample Doc 2", extractor3.SummaryInformation.Title);
             Assert.AreEqual("Another Sample Test", extractor3.SummaryInformation.Subject);
         }
-        [TestMethod]
+        [Test]
         public void TestWithHeader()
         {
             // Non-unicode
@@ -200,7 +201,7 @@ namespace TestCases.HWPF.Extractor
             text = extractor.Text;
             Assert.IsTrue(text.IndexOf("This is a simple header") > -1);
         }
-        [TestMethod]
+        [Test]
         public void TestWithFooter()
         {
             // Non-unicode
@@ -221,7 +222,7 @@ namespace TestCases.HWPF.Extractor
             text = extractor.Text;
             Assert.IsTrue(text.IndexOf("The footer, with") > -1);
         }
-        [TestMethod]
+        [Test]
         public void TestFootnote()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile(filename6);
@@ -236,7 +237,7 @@ namespace TestCases.HWPF.Extractor
 
             Assert.IsTrue(b.ToString().Contains("TestFootnote"));
         }
-        [TestMethod]
+        [Test]
         public void TestEndnote()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile(filename6);
@@ -251,7 +252,7 @@ namespace TestCases.HWPF.Extractor
 
             Assert.IsTrue(b.ToString().Contains("TestEndnote"));
         }
-        [TestMethod]
+        [Test]
         public void TestComments()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile(filename6);
@@ -266,7 +267,7 @@ namespace TestCases.HWPF.Extractor
 
             Assert.IsTrue(b.ToString().Contains("TestComment"));
         }
-        [TestMethod]
+        [Test]
         public void TestWord95()
         {
             // Too old for the default
@@ -300,7 +301,7 @@ namespace TestCases.HWPF.Extractor
             Assert.AreEqual("\r\n", tp[5]);
             Assert.AreEqual("Last (4th) paragraph.\r\n", tp[6]);
         }
-        [TestMethod]
+        [Test]
         public void TestWord6()
         {
             // Too old for the default
@@ -324,7 +325,7 @@ namespace TestCases.HWPF.Extractor
             Assert.AreEqual(1, tp.Length);
             Assert.AreEqual("The quick brown fox jumps over the lazy dog\r\n", tp[0]);
         }
-        [TestMethod]
+        [Test]
         public void TestFastSaved()
         {
             extractor = new WordExtractor(
@@ -335,7 +336,7 @@ namespace TestCases.HWPF.Extractor
             Assert.IsTrue(text.Contains("\u0425\u0425\u0425\u0425\u0425"));
             Assert.IsTrue(text.Contains("\u0423\u0423\u0423\u0423\u0423"));
         }
-        [TestMethod]
+        [Test]
         public void TestFirstParagraphFix()
         {
             extractor = new WordExtractor(

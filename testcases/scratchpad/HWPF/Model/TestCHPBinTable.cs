@@ -15,11 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NPOI.HWPF.Model.IO;
 using System.IO;
 using TestCases.HWPF;
 using System.Collections.Generic;
+using NUnit.Framework;
 namespace NPOI.HWPF.Model
 {
     class TextPieceTable1 : TextPieceTable
@@ -29,7 +30,7 @@ namespace NPOI.HWPF.Model
             return true;
         }
     }
-    [TestClass]
+    [TestFixture]
     public class TestCHPBinTable
     {
         private CHPBinTable _cHPBinTable = null;
@@ -37,7 +38,7 @@ namespace NPOI.HWPF.Model
 
         private TextPieceTable fakeTPT = new TextPieceTable1();
 
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             FileInformationBlock fib = _hWPFDocFixture._fib;
@@ -72,14 +73,14 @@ namespace NPOI.HWPF.Model
             }
 
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
 
             _hWPFDocFixture = new HWPFDocFixture(this);
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void tearDown()
         {
             _cHPBinTable = null;

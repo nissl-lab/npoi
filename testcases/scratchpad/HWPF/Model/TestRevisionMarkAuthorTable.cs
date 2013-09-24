@@ -18,19 +18,20 @@
 
 namespace TestCases.HWPF.Model
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF.Model;
     using NPOI.HWPF;
+    using NUnit.Framework;
     /**
      * Test the table which handles author revision marks
      */
-    [TestClass]
+    [TestFixture]
     public class TestRevisionMarkAuthorTable
     {
         /**
          * Tests that an empty file doesn't have one
          */
-        [TestMethod]
+        [Test]
         public void TestEmptyDocument()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("empty.doc");
@@ -43,7 +44,7 @@ namespace TestCases.HWPF.Model
          * Tests that we can load a document with
          *  only simple entries in the table
          */
-        [TestMethod]
+        [Test]
         public void TestSimpleDocument()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("two_images.doc");
@@ -61,7 +62,7 @@ namespace TestCases.HWPF.Model
         /**
          * Several authors, one of whom has no name
          */
-        [TestMethod]
+        [Test]
         public void TestMultipleAuthors()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("MarkAuthorsTable.doc");

@@ -18,17 +18,18 @@
 namespace NPOI.HWPF.Model
 {
     using NPOI.Util;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using TestCases.HWPF;
     using System.IO;
     using System.Collections;
+    using NUnit.Framework;
 
     /**
      * Unit test for {@link SavedByTable} and {@link SavedByEntry}.
      *
      * @author Daniel Noll
      */
-    [TestClass]
+    [TestFixture]
     public class TestSavedByTable
     {
 
@@ -52,7 +53,7 @@ namespace NPOI.HWPF.Model
          *
          * @throws Exception if an unexpected error occurs.
          */
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             // This document is widely available on the internet as "blair.doc".

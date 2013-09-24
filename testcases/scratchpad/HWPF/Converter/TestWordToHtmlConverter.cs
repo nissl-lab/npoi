@@ -18,17 +18,18 @@ namespace TestCases.HWPF.Converter
 {
     using System;
     using System.Xml;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF;
     using NPOI.HWPF.Converter;
     using TestCases;
+    using NUnit.Framework;
 
     /**
      * Test cases for {@link WordToHtmlConverter}
      * 
      * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestWordToHtmlConverter
     {
         private static void AssertContains(String result, String substring)
@@ -70,13 +71,13 @@ namespace TestCases.HWPF.Converter
             ;
             return wordToHtmlConverter.Document.InnerXml;
         }
-        //[TestMethod]
+        //[Test]
         public void TestAIOOBTap()
         {
             String result = GetHtmlText("AIOOB-Tap.doc");
             AssertContains(result.Substring(0, 6000), "<table class=\"t1\">");
         }
-        //[TestMethod]
+        //[Test]
         public void TestBug33519()
         {
             String result = GetHtmlText("Bug33519.doc");
@@ -86,7 +87,7 @@ namespace TestCases.HWPF.Converter
             AssertContains(result,
                     "\u042F\u0432\u043E\u0440 \u0410\u0441\u0435\u043D\u043E\u0432");
         }
-        //[TestMethod]
+        //[Test]
         public void TestBug46610_2()
         {
             String result = GetHtmlText("Bug46610_2.doc");
@@ -94,14 +95,14 @@ namespace TestCases.HWPF.Converter
                     result,
                     "012345678911234567892123456789312345678941234567890123456789112345678921234567893123456789412345678");
         }
-        //[TestMethod]
+        //[Test]
         public void TestBug46817()
         {
             String result = GetHtmlText("Bug46817.doc");
             String substring = "<table class=\"t1\">";
             AssertContains(result, substring);
         }
-        //[TestMethod]
+        //[Test]
         public void TestBug47286()
         {
             String result = GetHtmlText("Bug47286.doc");
@@ -112,12 +113,12 @@ namespace TestCases.HWPF.Converter
             AssertContains(result, "Passport No and the date of expire");
             AssertContains(result, "mfa.gov.cy");
         }
-        //[TestMethod]
+        //[Test]
         public void TestBug48075()
         {
             GetHtmlText("Bug48075.doc");
         }
-        [TestMethod]
+        [Test]
         public void TestDocumentProperties()
         {
             String result = GetHtmlText("documentProperties.doc");
@@ -126,14 +127,14 @@ namespace TestCases.HWPF.Converter
             AssertContains(result,
                     "<meta name=\"keywords\" content=\"This is document keywords\" />");
         }
-        //[TestMethod]
+        //[Test]
         public void TestEmailhyperlink()
         {
             String result = GetHtmlText("Bug47286.doc");
             String substring = "provisastpet@mfa.gov.cy";
             AssertContains(result, substring);
         }
-        //[TestMethod]
+        //[Test]
         public void TestEndnote()
         {
             String result = GetHtmlText("endingnote.doc");
@@ -146,14 +147,14 @@ namespace TestCases.HWPF.Converter
                     "<a class=\"a1 endnoteindex\" href=\"#endnote_back_1\" name=\"endnote_1\">1</a> <span");
             AssertContains(result, "Ending note text");
         }
-        //[TestMethod]
+        //[Test]
         public void TestEquation()
         {
             String result = GetHtmlText("equation.doc");
 
             AssertContains(result, "<!--Image link to '0.emf' can be here-->");
         }
-        //[TestMethod]
+        //[Test]
         public void TestHyperlink()
         {
             String result = GetHtmlText("hyperlink.doc");
@@ -163,17 +164,17 @@ namespace TestCases.HWPF.Converter
                     "<a href=\"http://testuri.org/\"><span>Hyperlink text</span></a>");
             AssertContains(result, "</a><span>; after text</span>");
         }
-        //[TestMethod]
+        //[Test]
         public void TestInnerTable()
         {
             GetHtmlText("innertable.doc");
         }
-        //[TestMethod]
+        //[Test]
         public void TestO_kurs_doc()
         {
             GetHtmlText("o_kurs.doc");
         }
-        //[TestMethod]
+        //[Test]
         public void TestPageref()
         {
             String result = GetHtmlText("pageref.doc");
@@ -182,7 +183,7 @@ namespace TestCases.HWPF.Converter
             AssertContains(result, "<a name=\"userref\">");
             AssertContains(result, "1");
         }
-        //[TestMethod]
+        //[Test]
         public void TestPicture()
         {
             String result = GetHtmlText("picture.doc", true);
@@ -196,14 +197,14 @@ namespace TestCases.HWPF.Converter
             // size without crop
             AssertContains(result, "width:3.4125in;height:2.325in;");
         }
-        //[TestMethod]
+        //[Test]
         public void TestPicturesEscher()
         {
             String result = GetHtmlText("pictures_escher.doc", true);
             AssertContains(result, "<img src=\"s0.PNG\">");
             AssertContains(result, "<img src=\"s808.PNG\">");
         }
-        //[TestMethod]
+        //[Test]
         public void TestTableMerges()
         {
             String result = GetHtmlText("table-merges.doc");

@@ -189,9 +189,12 @@ namespace NPOI.HWPF
             }
         }
 
-        public SectionTable GetSectionTable()
+        public SectionTable SectionTable
         {
-            return _st;
+            get
+            {
+                return _st;
+            }
         }
 
         public StyleSheet GetStyleSheet()

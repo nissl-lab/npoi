@@ -16,27 +16,28 @@
 ==================================================================== */
 
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using NPOI.HWPF.UserModel;
 using NPOI.HWPF;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
-    [TestClass]
+    [TestFixture]
     public class TestBug46610
     {
-        [TestMethod]
+        [Test]
         public void TestUtf()
         {
             RunExtract("Bug46610_1.doc");
         }
-        [TestMethod]
+        [Test]
         public void TestUtf2()
         {
             RunExtract("Bug46610_2.doc");
         }
-        [TestMethod]
+        [Test]
         public void TestExtraction()
         {
             String text = RunExtract("Bug46610_3.doc");

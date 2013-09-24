@@ -18,16 +18,17 @@
 
 namespace TestCases.HWPF.Model
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     using NPOI.HWPF.Model;
+    using NUnit.Framework;
     using System.Reflection;
-    [TestClass]
+    [TestFixture]
     public class TestFileInformationBlock
     {
         private FileInformationBlock _fileInformationBlock = null;
         private HWPFDocFixture _hWPFDocFixture;
 
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             int size = _fileInformationBlock.GetSize();
@@ -45,7 +46,7 @@ namespace TestCases.HWPF.Model
                 Assert.AreEqual(fields[x].GetValue(_fileInformationBlock), fields[x].GetValue(newFileInformationBlock));
             }
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             /**@todo verify the constructors*/
@@ -54,7 +55,7 @@ namespace TestCases.HWPF.Model
             _hWPFDocFixture.SetUp();
             _fileInformationBlock = _hWPFDocFixture._fib;
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _fileInformationBlock = null;

@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <TestList name="NPOI.HSSF.Record.Formula" id="16938e8a-ed3b-4c94-b3fb-55cb6567f3ad" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
   <TestList name="NPOI.HSSF.Record" id="184fc56e-013a-4757-9edb-26db62dbb75f" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
   <TestList name="NPOI.HSSF.Record.Aggregates" id="2b961874-0ff5-466a-8fbc-13b0de4bb2e7" parentListId="184fc56e-013a-4757-9edb-26db62dbb75f" />

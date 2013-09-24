@@ -17,22 +17,23 @@
 
 using NPOI.HWPF.UserModel;
 using NPOI.HWPF;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
+using NUnit.Framework;
 namespace TestCases.HWPF.UserModel
 {
 
     /**
      * API for BorderCode, see Bugzill 49919
      */
-    [TestClass]
+    [TestFixture]
     public class TestBorderCode
     {
 
         private int pos = 0;
         private Range range;
 
-        [TestMethod]
+        [Test]
         public void Test()
         {
             HWPFDocument doc = HWPFTestDataSamples.OpenSampleFile("Bug49919.doc");

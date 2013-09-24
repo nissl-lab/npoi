@@ -73,7 +73,7 @@ namespace NPOI.HWPF.UserModel
                      * Blip stored in delay stream, which in a word doc, is the main
                      * stream
                      */
-                    EscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+                    IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
                     EscherRecord record = recordFactory.CreateRecord(_mainStream,
                             bseRecord.Offset);
 
@@ -95,7 +95,7 @@ namespace NPOI.HWPF.UserModel
             foreach (EscherContainerRecord spContainer in _escherRecordHolder
                     .GetSpContainers())
             {
-                EscherSpRecord escherSpRecord = spContainer
+                EscherSpRecord escherSpRecord = (EscherSpRecord)spContainer
                         .GetChildById(unchecked((short)0xF00A));
                 if (escherSpRecord != null
                         && escherSpRecord.ShapeId == shapeId)

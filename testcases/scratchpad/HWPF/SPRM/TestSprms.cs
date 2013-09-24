@@ -20,10 +20,11 @@
 using System.IO;
 using TestCases;
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace NPOI.HWPF.SPRM
 {
-    [TestClass]
+    [TestFixture]
     public class TestSprms
     {
         private static HWPFDocument Reload(HWPFDocument hwpfDocument)
@@ -37,7 +38,7 @@ namespace NPOI.HWPF.SPRM
          * Test correct Processing of "sprmPItap" (0x6649) and "sprmPFInTable"
          * (0x2416)
          */
-        [TestMethod]
+        [Test]
         public void TestInnerTable()
         {
             Stream resourceAsStream = POIDataSamples.GetDocumentInstance()
@@ -74,7 +75,7 @@ namespace NPOI.HWPF.SPRM
         /**
          * Test correct Processing of "sprmPJc" by uncompressor
          */
-        [TestMethod]
+        [Test]
         public void TestSprmPJc()
         {
             Stream resourceAsStream = POIDataSamples.GetDocumentInstance()

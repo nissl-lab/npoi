@@ -3,12 +3,13 @@
     using NPOI.HWPF;
     using NPOI.HWPF.UserModel;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF.Converter;
-    [TestClass]
+    using NUnit.Framework;
+    [TestFixture]
     public class TestNumberFormatter
     {
-        [TestMethod]
+        [Test]
         public void TestRoman()
         {
             Assert.AreEqual("i", NumberFormatter.GetNumber(1, 2));
@@ -26,7 +27,7 @@
             Assert.AreEqual("mcmx", NumberFormatter.GetNumber(1910, 2));
             Assert.AreEqual("mcmliv", NumberFormatter.GetNumber(1954, 2));
         }
-        [TestMethod]
+        [Test]
         public void TestEnglish()
         {
             Assert.AreEqual("a", NumberFormatter.GetNumber(1, 4));

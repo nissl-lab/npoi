@@ -18,16 +18,17 @@
 
 namespace TestCases.HWPF.Model
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF.Model.IO;
     using NPOI.HWPF.Model;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestFontTable
     {
         private FontTable _fontTable = null;
         private HWPFDocFixture _hWPFDocFixture;
-        [TestMethod]
+        [Test]
         public void TestReadWrite()
         {
             FileInformationBlock fib = _hWPFDocFixture._fib;
@@ -52,7 +53,7 @@ namespace TestCases.HWPF.Model
             Assert.IsTrue(_fontTable.Equals(newFontTable));
 
         }
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             /**@todo verify the constructors*/
@@ -60,7 +61,7 @@ namespace TestCases.HWPF.Model
 
             _hWPFDocFixture.SetUp();
         }
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             _hWPFDocFixture = null;

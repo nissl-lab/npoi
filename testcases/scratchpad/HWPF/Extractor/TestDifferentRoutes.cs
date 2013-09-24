@@ -18,11 +18,12 @@
 using System;
 using TestCases.HWPF;
 using NPOI.HWPF.UserModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System.Text;
 using NPOI.HWPF.Model;
 using NPOI.HWPF;
 using System.Collections.Generic;
+using NUnit.Framework;
 namespace TestCases.HWPF.Extractor
 {
 
@@ -31,7 +32,7 @@ namespace TestCases.HWPF.Extractor
      *
      * @author Nick Burch (nick at torchbox dot com)
      */
-    [TestClass]
+    [TestFixture]
     public class TestDifferentRoutes
     {
         private String[] p_text = new String[] {
@@ -52,7 +53,7 @@ namespace TestCases.HWPF.Extractor
 	};
 
         private HWPFDocument doc;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             doc = HWPFTestDataSamples.OpenSampleFile("test2.doc");
@@ -61,7 +62,7 @@ namespace TestCases.HWPF.Extractor
         /**
          * Test model based extraction
          */
-        [TestMethod]
+        [Test]
         public void TestExtractFromModel()
         {
             Range r = doc.GetRange();
@@ -83,7 +84,7 @@ namespace TestCases.HWPF.Extractor
         /**
          * Test textPieces based extraction
          */
-        [TestMethod]
+        [Test]
         public void TestExtractFromTextPieces()
         {
             StringBuilder textBuf = new StringBuilder();

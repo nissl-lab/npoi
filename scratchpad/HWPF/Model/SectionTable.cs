@@ -44,7 +44,7 @@ namespace NPOI.HWPF.Model
 
         public SectionTable(byte[] documentStream, byte[] tableStream, int OffSet,
                             int size, int fcMin,
-                            TextPieceTable tpt, CPSplitCalculator cps)
+                            TextPieceTable tpt, int mainLength)
         {
             PlexOfCps sedPlex = new PlexOfCps(tableStream, OffSet, size, SED_SIZE);
             this.tpt = tpt;
@@ -58,8 +58,10 @@ namespace NPOI.HWPF.Model
                 SectionDescriptor sed = new SectionDescriptor(node.Bytes, 0);
 
                 int fileOffset = sed.GetFc();
-                int startAt = CPtoFC(node.Start);
-                int endAt = CPtoFC(node.End);
+                //int startAt = CPtoFC(node.Start);
+                //int endAt = CPtoFC(node.End);
+                int startAt = node.Start;
+                int endAt = node.End;
 
                 // check for the optimization
                 if (fileOffset == unchecked((int)0xffffffff))
@@ -80,7 +82,7 @@ namespace NPOI.HWPF.Model
             // Some files seem to lie about their unicode status, which
             //  is very very pesky. Try to work around these, but this
             //  is Getting on for black magic...
-            int mainEndsAt = cps.GetMainDocumentEnd();
+            int mainEndsAt = mainLength;
             bool matchAt = false;
             bool matchHalf = false;
             for (int i = 0; i < _sections.Count; i++)
@@ -90,7 +92,7 @@ namespace NPOI.HWPF.Model
                 {
                     matchAt = true;
                 }
-                else if (s.EndBytes == mainEndsAt || s.EndBytes == mainEndsAt - 1)
+                else if (s.End == mainEndsAt || s.End == mainEndsAt - 1)
                 {
                     matchHalf = true;
                 }

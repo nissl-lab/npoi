@@ -46,6 +46,15 @@ namespace NPOI.HWPF.Model
          * @return the char index
          */
         int GetCharIndex(int bytePos, int startCP);
+        /**
+ * Finds character ranges that includes specified byte range.
+ * 
+ * @param startBytePosInclusive
+ *            start byte range
+ * @param endBytePosExclusive
+ *            end byte range
+ */
+//        int[][] GetCharIndexRanges(int startBytePosInclusive,   int endBytePosExclusive);
 
         /**
          * Check if index is in table

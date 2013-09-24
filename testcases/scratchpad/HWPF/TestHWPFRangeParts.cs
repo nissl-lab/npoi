@@ -17,10 +17,11 @@
 
 namespace TestCases.HWPF
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
     using NPOI.HWPF;
     using System;
     using NPOI.HWPF.UserModel;
+    using NUnit.Framework;
 
 
 
@@ -28,7 +29,7 @@ namespace TestCases.HWPF
      * Test that we pull out the right bits of a file into
      *  the different ranges
      */
-    [TestClass]
+    [TestFixture]
     public class TestHWPFRangeParts
     {
         private static char page_break = (char)12;
@@ -97,7 +98,7 @@ namespace TestCases.HWPF
          * A document with some unicode in it too
          */
         private HWPFDocument docUnicode;
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             docUnicode = HWPFTestDataSamples.OpenSampleFile("HeaderFooterUnicode.doc");
@@ -109,7 +110,7 @@ namespace TestCases.HWPF
          *  don't get broken as we write out and read back in again
          * TODO - Make this work with 3+ Runs
          */
-        [TestMethod]
+        [Test]
         public void TestBasics()
         {
             HWPFDocument doc = docAscii;
@@ -159,7 +160,7 @@ namespace TestCases.HWPF
          *  don't get broken as we write out and read back in again
          * TODO - Make this work with 3+ Runs
          */
-        [TestMethod]
+        [Test]
         public void TestContents()
         {
             HWPFDocument doc = docAscii;
@@ -212,7 +213,7 @@ namespace TestCases.HWPF
          * Note - this Test Runs several times, to ensure that things
          *  don't get broken as we write out and read back in again
          */
-        [TestMethod]
+        [Test]
         public void TestBasicsUnicode()
         {
             HWPFDocument doc = docUnicode;
@@ -257,7 +258,7 @@ namespace TestCases.HWPF
                     doc = HWPFTestDataSamples.WriteOutAndReadBack(doc);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestContentsUnicode()
         {
             Range r;
