@@ -50,8 +50,8 @@ namespace NPOI.Examples.XSSF.CreateCommentInXlsx
             IFont font = workbook.CreateFont();
             font.FontName = ("Arial");
             font.FontHeightInPoints = 10;
-            font.Boldweight = (short)FontBoldWeight.BOLD;
-            font.Color = HSSFColor.RED.index;
+            font.Boldweight = (short)FontBoldWeight.Bold;
+            font.Color = HSSFColor.Red.Index;
             str.ApplyFont(font);
 
             comment2.String = str;

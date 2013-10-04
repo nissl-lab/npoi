@@ -18,8 +18,8 @@ namespace NPOI.Examples.XSSF.AddHyperlinkInXlsx
             ////by default hyperlinks are blue and underlined
             ICellStyle hlink_style = workbook.CreateCellStyle();
             IFont hlink_font = workbook.CreateFont();
-            hlink_font.Underline = (byte)FontUnderlineType.SINGLE;
-            hlink_font.Color = HSSFColor.BLUE.index;
+            hlink_font.Underline = FontUnderlineType.Single;
+            hlink_font.Color = HSSFColor.Blue.Index;
             hlink_style.SetFont(hlink_font);
 
             ICell cell;
@@ -28,7 +28,7 @@ namespace NPOI.Examples.XSSF.AddHyperlinkInXlsx
             //URL
             cell = sheet.CreateRow(0).CreateCell(0);
             cell.SetCellValue("URL Link");
-            XSSFHyperlink link = new XSSFHyperlink(HyperlinkType.URL);
+            XSSFHyperlink link = new XSSFHyperlink(HyperlinkType.Url);
             link.Address = ("http://poi.apache.org/");
             cell.Hyperlink = (link);
             cell.CellStyle = (hlink_style);
@@ -36,7 +36,7 @@ namespace NPOI.Examples.XSSF.AddHyperlinkInXlsx
             //link to a file in the current directory
             cell = sheet.CreateRow(1).CreateCell(0);
             cell.SetCellValue("File Link");
-            link = new XSSFHyperlink(HyperlinkType.FILE);
+            link = new XSSFHyperlink(HyperlinkType.File);
             link.Address = ("link1.xls");
             cell.Hyperlink = (link);
             cell.CellStyle = (hlink_style);
@@ -44,7 +44,7 @@ namespace NPOI.Examples.XSSF.AddHyperlinkInXlsx
             //e-mail link
             cell = sheet.CreateRow(2).CreateCell(0);
             cell.SetCellValue("Email Link");
-            link = new XSSFHyperlink(HyperlinkType.EMAIL);
+            link = new XSSFHyperlink(HyperlinkType.Email);
             //note, if subject contains white spaces, make sure they are url-encoded
             link.Address = ("mailto:poi@apache.org?subject=Hyperlinks");
             cell.Hyperlink = (link);
@@ -58,7 +58,7 @@ namespace NPOI.Examples.XSSF.AddHyperlinkInXlsx
 
             cell = sheet.CreateRow(3).CreateCell(0);
             cell.SetCellValue("Worksheet Link");
-            link = new XSSFHyperlink(HyperlinkType.DOCUMENT);
+            link = new XSSFHyperlink(HyperlinkType.Document);
             link.Address = ("'Target ISheet'!A1");
             cell.Hyperlink = (link);
             cell.CellStyle = (hlink_style);

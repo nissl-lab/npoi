@@ -25,16 +25,16 @@ namespace ColorfulMatrix
                     {
                         //fill background with blue
                         ICellStyle style1 = workbook.CreateCellStyle();
-                        style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BLUE.index2;
-                        style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
+                        style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Blue.Index2;
+                        style1.FillPattern = FillPattern.SolidForeground;
                         cell.CellStyle = style1;
                     }
                     else
                     {
                         //fill background with yellow
                         ICellStyle style1 = workbook.CreateCellStyle();
-                        style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.YELLOW.index2;
-                        style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
+                        style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index2;
+                        style1.FillPattern = FillPattern.SolidForeground;
                         cell.CellStyle = style1;
                     }
                     x++;

@@ -17,9 +17,9 @@ namespace NPOI.Examples.XSSF.ApplyFontInXlsx
 
             //font style1: underlined, italic, red color, fontsize=20
             IFont font1 = workbook.CreateFont();
-            font1.Color = HSSFColor.RED.index;
+            font1.Color = HSSFColor.Red.Index;
             font1.IsItalic = true;
-            font1.Underline = (byte)FontUnderlineType.DOUBLE;
+            font1.Underline = FontUnderlineType.Double;
             font1.FontHeightInPoints = 20;
 
             //bind font with style 1
@@ -28,7 +28,7 @@ namespace NPOI.Examples.XSSF.ApplyFontInXlsx
 
             //font style2: strikeout line, green color, fontsize=15, fontname='宋体'
             IFont font2 = workbook.CreateFont();
-            font2.Color = HSSFColor.OLIVE_GREEN.index;
+            font2.Color = HSSFColor.OliveGreen.Index;
             font2.IsStrikeout = true;
             font2.FontHeightInPoints = 15;
             font2.FontName = "宋体";
@@ -55,9 +55,9 @@ namespace NPOI.Examples.XSSF.ApplyFontInXlsx
             richtext.ApplyFont(0, 16, font4);
             //apply font to "TM"
             IFont font3 = workbook.CreateFont();
-            font3.TypeOffset = (short)FontSuperScript.SUPER;
+            font3.TypeOffset = FontSuperScript.Super;
             font3.IsItalic = true;
-            font3.Color = HSSFColor.BLUE.index;
+            font3.Color = HSSFColor.Blue.Index;
             font3.FontHeightInPoints = 8;
             richtext.ApplyFont(16, 18, font3);
 

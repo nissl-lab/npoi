@@ -21,27 +21,28 @@ namespace NPOI.Examples.XSSF.BorderStylesInXlsx
 
             // Style the cell with borders all around.
             ICellStyle style = workbook.CreateCellStyle();
-            style.BorderBottom = BorderStyle.THIN;
-            style.BottomBorderColor = HSSFColor.BLACK.index;
-            style.BorderLeft = BorderStyle.DASH_DOT_DOT;
-            style.LeftBorderColor = HSSFColor.GREEN.index;
-            style.BorderRight = BorderStyle.HAIR;
-            style.RightBorderColor = HSSFColor.BLUE.index;
-            style.BorderTop = BorderStyle.MEDIUM_DASHED;
-            style.TopBorderColor = HSSFColor.ORANGE.index;
+            style.BorderBottom = BorderStyle.Thin;
+            style.BottomBorderColor = HSSFColor.Black.Index;
+            style.BorderLeft = BorderStyle.DashDotDot;
+            style.LeftBorderColor = HSSFColor.Green.Index;
+            style.BorderRight = BorderStyle.Hair;
+            style.RightBorderColor = HSSFColor.Blue.Index;
+            style.BorderTop = BorderStyle.MediumDashed;
+            style.TopBorderColor = HSSFColor.Orange.Index;
 
-            style.BorderDiagonalLineStyle = BorderStyle.MEDIUM; //this property must be set before BorderDiagonal and BorderDiagonalColor
-            style.BorderDiagonal = BorderDiagonal.FORWARD;
-            style.BorderDiagonalColor = HSSFColor.GOLD.index;
+            //create border diagonal
+            style.BorderDiagonalLineStyle = BorderStyle.Medium; //this property must be set before BorderDiagonal and BorderDiagonalColor
+            style.BorderDiagonal = BorderDiagonal.Forward;
+            style.BorderDiagonalColor = HSSFColor.Gold.Index;
 
             cell.CellStyle = style;
             // Create a cell and put a value in it.
             ICell cell2 = row.CreateCell(2);
             cell2.SetCellValue(5);
             ICellStyle style2 = workbook.CreateCellStyle();
-            style2.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
-            style2.BorderDiagonal = BorderDiagonal.BACKWARD;
-            style2.BorderDiagonalColor = HSSFColor.RED.index;
+            style2.BorderDiagonalLineStyle = BorderStyle.Medium;
+            style2.BorderDiagonal = BorderDiagonal.Backward;
+            style2.BorderDiagonalColor = HSSFColor.Red.Index;
             cell2.CellStyle = style2;
 
             FileStream sw = File.Create("test.xlsx");
