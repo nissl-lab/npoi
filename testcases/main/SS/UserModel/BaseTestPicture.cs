@@ -23,7 +23,7 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestPicture
+    public class BaseTestPicture
     {
         protected ITestDataProvider _testDataProvider;
         protected BaseTestPicture(ITestDataProvider testDataProvider)

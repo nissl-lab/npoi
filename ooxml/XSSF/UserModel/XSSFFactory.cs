@@ -72,7 +72,7 @@ namespace NPOI.XSSF.UserModel
             try
             {
                 Type cls = descriptor.RelationClass;
-                Console.WriteLine(cls.ToString());
+                //Console.WriteLine(cls.ToString());
                 ConstructorInfo constructor = cls.GetConstructor(new Type[] { });
                 return (POIXMLDocumentPart)constructor.Invoke(new object[] { });
             }

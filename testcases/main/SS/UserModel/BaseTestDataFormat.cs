@@ -27,7 +27,6 @@ namespace TestCases.SS.UserModel
      * Tests of implementation of {@link DataFormat}
      *
      */
-    [TestFixture]
     public class BaseTestDataFormat
     {
 

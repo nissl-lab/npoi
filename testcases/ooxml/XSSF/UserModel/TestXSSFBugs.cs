@@ -952,8 +952,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, s3.GetTables().Count);
 
             XSSFTable t = s1.GetTables()[(0)];
-            Assert.AreEqual("Tabella1", t.GetName());
-            Assert.AreEqual("Tabella1", t.GetDisplayName());
+            Assert.AreEqual("Tabella1", t.Name);
+            Assert.AreEqual("Tabella1", t.DisplayName);
             Assert.AreEqual("A1:C3", t.GetCTTable().@ref);
 
             // Add a sheet and re-order
@@ -988,18 +988,18 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, s4.GetTables().Count);
 
             t = s2.GetTables()[(0)];
-            Assert.AreEqual("Tabella1", t.GetName());
-            Assert.AreEqual("Tabella1", t.GetDisplayName());
+            Assert.AreEqual("Tabella1", t.Name);
+            Assert.AreEqual("Tabella1", t.DisplayName);
             Assert.AreEqual("A1:C3", t.GetCTTable().@ref);
 
 
             // Add some more tables, and check
             t = s2.CreateTable();
-            t.SetName("New 2");
-            t.SetDisplayName("New 2");
+            t.Name = ("New 2");
+            t.DisplayName = ("New 2");
             t = s3.CreateTable();
-            t.SetName("New 3");
-            t.SetDisplayName("New 3");
+            t.Name = ("New 3");
+            t.DisplayName = ("New 3");
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             s1 = wb.GetSheetAt(0) as XSSFSheet;
@@ -1012,17 +1012,17 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, s4.GetTables().Count);
 
             t = s2.GetTables()[(0)];
-            Assert.AreEqual("Tabella1", t.GetName());
-            Assert.AreEqual("Tabella1", t.GetDisplayName());
+            Assert.AreEqual("Tabella1", t.Name);
+            Assert.AreEqual("Tabella1", t.DisplayName);
             Assert.AreEqual("A1:C3", t.GetCTTable().@ref);
 
             t = s2.GetTables()[(1)];
-            Assert.AreEqual("New 2", t.GetName());
-            Assert.AreEqual("New 2", t.GetDisplayName());
+            Assert.AreEqual("New 2", t.Name);
+            Assert.AreEqual("New 2", t.DisplayName);
 
             t = s3.GetTables()[(0)];
-            Assert.AreEqual("New 3", t.GetName());
-            Assert.AreEqual("New 3", t.GetDisplayName());
+            Assert.AreEqual("New 3", t.Name);
+            Assert.AreEqual("New 3", t.DisplayName);
 
             // Check the relationships
             Assert.AreEqual(0, s1.GetRelations().Count);

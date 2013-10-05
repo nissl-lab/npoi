@@ -26,7 +26,6 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestFixture]
     public class BaseTestHyperlink
     {
 

@@ -39,7 +39,15 @@ namespace NPOI.OpenXml4Net.OPC
 
         public const string DCMITYPE = "http://purl.org/dc/dcmitype/";
 
+        public const string SCHEMA_MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
 
+        public const string SCHEMA_DRAWING = "http://schemas.openxmlformats.org/drawingml/2006/main";
+
+        public const string SCHEMA_SHEETDRAWINGS = "http://schemas.openxmlformats.org/drawingml/2006/main";
+
+        public const string SCHEMA_VT = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes";
+
+        public const string SCHEMA_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart";
     }
 
 }

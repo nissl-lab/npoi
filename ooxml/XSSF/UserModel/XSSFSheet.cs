@@ -2648,30 +2648,31 @@ namespace NPOI.XSSF.UserModel
             {
                 XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
-                if (rownum < startRow) continue;
+
+                if (RemoveRow(startRow, endRow, n, rownum))
+                {
+                    // remove row from worksheet.SheetData row array
+                    int idx = rowDict.Key+1;
+                    //if (n > 0) 
+                    //{ 
+                    //    idx -= rowsToRemove.Count; 
+                    //} 
+                    //else 
+                    //{ 
+                    //    idx += rowsToRemove.Count; 
+                    //} 
+                    // compensate removed rows
+                    worksheet.sheetData.RemoveRow(idx);
+                    // remove row from _rows
+                    rowsToRemove.Add(rowDict.Key);
+                }
 
                 if (!copyRowHeight)
                 {
                     row.Height = (short)-1;
                 }
 
-                if (RemoveRow(startRow, endRow, n, rownum))
-                {
-                    // remove row from worksheet.GetSheetData row array
-                    int idx = HeadMap(_rows, row.RowNum).Count;
-                    if (n > 0) { idx -= rowsToRemove.Count; } else { idx += rowsToRemove.Count; } // compensate removed rows
-                    worksheet.sheetData.RemoveRow(idx);
-                    // remove row from _rows
-                    //throw new NotImplementedException();
-                    //it.Remove();
-                    rowsToRemove.Add(rowDict.Key);
-                }
-                else if (rownum >= startRow && rownum <= endRow)
-                {
-                    row.Shift(n);
-                }
-
-                if (sheetComments != null)
+                if (sheetComments != null && rownum >= startRow && rownum <= endRow)
                 {
                     //TODO shift Note's anchor in the associated /xl/drawing/vmlDrawings#.vml
                     CT_CommentList lst = sheetComments.GetCTComments().commentList;
@@ -2680,15 +2681,31 @@ namespace NPOI.XSSF.UserModel
                         CellReference ref1 = new CellReference(comment.@ref);
                         if (ref1.Row == rownum)
                         {
-                            ref1 = new CellReference(rownum + n, ref1.Col);
-                            comment.@ref = ref1.FormatAsString();
+                            CellReference ref2 = new CellReference(rownum + n, ref1.Col);
+                            string originRef = comment.@ref;
+                            comment.@ref = ref2.FormatAsString();
+                            break;
                         }
                     }
                 }
             }
+            
             foreach(int rowKey in rowsToRemove)
             {
+
                 _rows.Remove(rowKey);
+            }
+            if(sheetComments!=null)
+                sheetComments.RecreateReference();
+            foreach (XSSFRow row in _rows.Values)
+            {
+                int rownum = row.RowNum;
+
+                if (rownum >= startRow && rownum <= endRow)
+                {
+                    row.Shift(n);
+                }
+
             }
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
 
@@ -2700,14 +2717,13 @@ namespace NPOI.XSSF.UserModel
             rowShifter.ShiftMerged(startRow, endRow, n);
             rowShifter.UpdateConditionalFormatting(Shifter);
 
-            // no need to sort because it is already sorted.
-            ////rebuild the _rows map 
-            //SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
-            //foreach (XSSFRow r in _rows.Values)
-            //{
-            //    map.Add(r.RowNum, r);
-            //}
-            //_rows = map;
+            //rebuild the _rows map 
+            SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
+            foreach (XSSFRow r in _rows.Values)
+            {
+                map.Add(r.RowNum, r);
+            }
+            _rows = map;
         }
 
         /**

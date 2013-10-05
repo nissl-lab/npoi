@@ -28,7 +28,6 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing implementatiosn of
      *  {@link NPOI.SS.usermodel.Cell}
      */
-    [TestFixture]
     public class BaseTestCell
     {
 

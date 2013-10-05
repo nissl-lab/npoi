@@ -25,6 +25,7 @@ namespace NPOI.XWPF.Extractor
     using NPOI.XWPF.UserModel;
     using NPOI.XWPF.Extractor;
     using NUnit.Framework;
+    using System.Diagnostics;
 
     /**
      * Tests for HXFWordExtractor
@@ -81,7 +82,7 @@ namespace NPOI.XWPF.Extractor
             Assert.IsTrue(text.Length > 0);
 
             char euro = '\u20ac';
-            //		System.err.Println("'"+text.Substring(text.Length() - 40) + "'");
+            Debug.WriteLine("'"+text.Substring(text.Length - 40) + "'");
 
             //Check contents
             Assert.IsTrue(text.StartsWith(

@@ -1096,8 +1096,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, tables.Count);
 
             XSSFTable table = tables[0];
-            Assert.AreEqual("Tabella1", table.GetName());
-            Assert.AreEqual("Tabella1", table.GetDisplayName());
+            Assert.AreEqual("Tabella1", table.Name);
+            Assert.AreEqual("Tabella1", table.DisplayName);
 
             // And the others
             XSSFSheet s2 = (XSSFSheet)wb.GetSheetAt(1);

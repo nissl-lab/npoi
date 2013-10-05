@@ -102,20 +102,20 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
             SharedStringsTable sst = wb.GetSharedStringSource();
-            Assert.AreEqual(0, sst.GetCount());
+            Assert.AreEqual(0, sst.Count);
 
             //case 1. cell.SetCellValue(new XSSFRichTextString((String)null));
             ICell cell_0 = row.CreateCell(0);
             XSSFRichTextString str = new XSSFRichTextString((String)null);
             Assert.IsNull(str.String);
             cell_0.SetCellValue(str);
-            Assert.AreEqual(0, sst.GetCount());
+            Assert.AreEqual(0, sst.Count);
             Assert.AreEqual(CellType.Blank, cell_0.CellType);
 
             //case 2. cell.SetCellValue((String)null);
             ICell cell_1 = row.CreateCell(1);
             cell_1.SetCellValue((String)null);
-            Assert.AreEqual(0, sst.GetCount());
+            Assert.AreEqual(0, sst.Count);
             Assert.AreEqual(CellType.Blank, cell_1.CellType);
         }
         [Test]

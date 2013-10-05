@@ -29,7 +29,6 @@ namespace NPOI.XSSF.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestFixture]
     public class TestXSSFComment : BaseTestCellComment
     {
 
@@ -139,8 +138,7 @@ namespace NPOI.XSSF.UserModel
             XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
             XSSFFont font1 = (XSSFFont)wb.CreateFont();
             font1.FontName = ("Tahoma");
-            //font1.FontHeight = (short)8.5;
-            font1.SetFontHeight(8.5);
+            font1.FontHeight = 8.5;
             font1.IsItalic = true;
             font1.Color = IndexedColors.BlueGrey.Index;
             richText.ApplyFont(0, 5, font1);

@@ -36,7 +36,7 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestDefaultFont()
         {
-            BaseTestDefaultFont("Calibri", (short)220, IndexedColors.Black.Index);
+            BaseTestDefaultFont("Calibri", 220, IndexedColors.Black.Index);
         }
         [Test]
         public void TestConstructor()

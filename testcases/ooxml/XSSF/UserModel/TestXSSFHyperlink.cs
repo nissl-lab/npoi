@@ -64,7 +64,7 @@ namespace NPOI.XSSF.UserModel
                 "http://apache.org/",
                 "www.apache.org",
                 "/temp",
-                "c:\\temp",
+                "file:///c:/temp",
                 "http://apache.org/default.php?s=isTramsformed&submit=Search&la=*&li=*"};
             for (int i = 0; i < urls.Length; i++)
             {
@@ -124,10 +124,6 @@ namespace NPOI.XSSF.UserModel
                 }
                 catch (ArgumentException)
                 {
-                }
-                catch (InvalidOperationException)
-                {
-
                 }
             }
         }

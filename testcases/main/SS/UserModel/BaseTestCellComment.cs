@@ -26,7 +26,6 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing implementatiosn of
      * {@link Comment}
      */
-    [TestFixture]
     public class BaseTestCellComment
     {
 

@@ -61,15 +61,15 @@ namespace NPOI.XSSF.UserModel
         internal XSSFTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
-            ReadFrom(part.GetInputStream());
+            XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
+            ReadFrom(xml);
         }
 
-        public void ReadFrom(Stream is1)
+        public void ReadFrom(XmlDocument xmlDoc)
         {
             try
             {
-                TableDocument doc = TableDocument.Parse(is1);
+                TableDocument doc = TableDocument.Parse(xmlDoc, NameSpaceManager);
                 ctTable = doc.GetTable();
             }
             catch (XmlException e)
@@ -187,58 +187,64 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public List<XSSFXmlColumnPr> GetXmlColumnPrs() {
-		
-		if(xmlColumnPr==null){
-			xmlColumnPr = new List<XSSFXmlColumnPr>();
-			foreach(CT_TableColumn column in ctTable.tableColumns.tableColumn){
-				if(column.xmlColumnPr!=null){
-					XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this,column,column.xmlColumnPr);
-					xmlColumnPr.Add(columnPr);
-				}
-			}
-		}
-		return xmlColumnPr;
-	}
+        public List<XSSFXmlColumnPr> GetXmlColumnPrs()
+        {
+
+            if (xmlColumnPr == null)
+            {
+                xmlColumnPr = new List<XSSFXmlColumnPr>();
+                foreach (CT_TableColumn column in ctTable.tableColumns.tableColumn)
+                {
+                    if (column.xmlColumnPr != null)
+                    {
+                        XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this, column, column.xmlColumnPr);
+                        xmlColumnPr.Add(columnPr);
+                    }
+                }
+            }
+            return xmlColumnPr;
+        }
 
         /**
          * @return the name of the Table, if set
          */
-        public String GetName()
+        public String Name
         {
-            return ctTable.name;
-        }
-
-        /**
-         * Changes the name of the Table
-         */
-        public void SetName(String name)
-        {
-            ctTable.name = name;
+            get
+            {
+                return ctTable.name;
+            }
+            set 
+            {
+                ctTable.name = value;
+            }
         }
 
         /**
          * @return the display name of the Table, if set
          */
-        public String GetDisplayName()
+        public String DisplayName
         {
-            return ctTable.displayName;
-        }
+            get
+            {
+                return ctTable.displayName;
+            }
+            set
+            {
+                ctTable.displayName = value;
+            }
 
-        /**
-         * Changes the display name of the Table
-         */
-        public void SetDisplayName(String name)
-        {
-            ctTable.displayName = (name);
         }
 
         /**
          * @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
          */
-        public long GetNumerOfMappedColumns()
+        public long NumberOfMappedColumns
         {
-            return ctTable.tableColumns.count;
+            get
+            {
+                return ctTable.tableColumns.count;
+            }
         }
 
 
@@ -286,17 +292,20 @@ namespace NPOI.XSSF.UserModel
          *  @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
          *
          */
-        public int GetRowCount()
+        public int RowCount
         {
-            CellReference from = GetStartCellReference();
-            CellReference to = GetEndCellReference();
-
-            int rowCount = -1;
-            if (from != null && to != null)
+            get
             {
-                rowCount = to.Row - from.Row;
+                CellReference from = GetStartCellReference();
+                CellReference to = GetEndCellReference();
+
+                int rowCount = -1;
+                if (from != null && to != null)
+                {
+                    rowCount = to.Row - from.Row;
+                }
+                return rowCount;
             }
-            return rowCount;
         }
 
 

@@ -31,11 +31,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             rowField.Insert(index, newrow);
             return newrow;
         }
-        public void RemoveRow(int index)
+        public void RemoveRow(int rowNum)
         {
             if (null != rowField)
             {
-                this.rowField.RemoveAt(index);
+                CT_Row rowToRemove=null;
+                foreach (CT_Row ctrow in rowField)
+                {
+                    if (ctrow.r == rowNum)
+                    {
+                        rowToRemove = ctrow;
+                        break;
+                    }
+                }
+                rowField.Remove(rowToRemove);
             }
         }
         public int SizeOfRowArray()

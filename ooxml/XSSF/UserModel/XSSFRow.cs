@@ -599,7 +599,8 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 //remove the reference in the calculation chain
-                if (calcChain != null) calcChain.RemoveItem(sheetId, cell.GetReference());
+                if (calcChain != null) 
+                    calcChain.RemoveItem(sheetId, cell.GetReference());
 
                 CT_Cell CT_Cell = cell.GetCTCell();
                 String r = new CellReference(rownum, cell.ColumnIndex).FormatAsString();

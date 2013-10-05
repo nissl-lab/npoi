@@ -24,6 +24,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.Util;
 using NPOI.HSSF;
 using TestCases.HSSF;
+using System.Diagnostics;
 namespace NPOI.XSSF
 {
 
@@ -54,7 +55,11 @@ namespace NPOI.XSSF
             {
                 using (MemoryStream baos = new MemoryStream(8192))
                 {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
                     wb.Write(baos);
+                    sw.Stop();
+                    Debug.WriteLine("XSSFWorkbook write time: " + sw.ElapsedMilliseconds + "ms");
                     using (Stream is1 = new MemoryStream(baos.ToArray()))
                     {
                         if (wb is HSSFWorkbook)
@@ -63,7 +68,11 @@ namespace NPOI.XSSF
                         }
                         else if (wb is XSSFWorkbook)
                         {
+                            Stopwatch sw2 = new Stopwatch();
+                            sw2.Start();
                             result = new XSSFWorkbook(is1);
+                            sw2.Stop();
+                            Debug.WriteLine("XSSFWorkbook parse time: " + sw2.ElapsedMilliseconds + "ms");
                         }
                         else
                         {

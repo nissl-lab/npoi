@@ -151,22 +151,23 @@ namespace NPOI.XSSF.Extractor
                             ICell cell = (ICell)ri.Current;
 
                             // Is it a formula one?
-                            if (cell.CellType == CellType.Formula && formulasNotResults)
-                            {
-                                text.Append(cell.CellFormula);
-                            }
-
                             if (cell.CellType == CellType.Formula)
                             {
-                                if (formulasNotResults) {
-                               text.Append(cell.CellFormula);
-        					   } else {
-        					      if (cell.CachedFormulaResultType == CellType.String) {
-        					         HandleStringCell(text, cell);
-        					      } else {
-        					         HandleNonStringCell(text, cell, formatter);
-        					      }
-        					   }
+                                if (formulasNotResults)
+                                {
+                                    text.Append(cell.CellFormula);
+                                }
+                                else
+                                {
+                                    if (cell.CachedFormulaResultType == CellType.String)
+                                    {
+                                        HandleStringCell(text, cell);
+                                    }
+                                    else
+                                    {
+                                        HandleNonStringCell(text, cell, formatter);
+                                    }
+                                }
 
                             }
                             else if (cell.CellType == CellType.String)

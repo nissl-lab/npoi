@@ -32,7 +32,6 @@ namespace TestCases.SS.UserModel
      * A base class for Testing implementations of
      * {@link NPOI.SS.UserModel.Row}
      */
-    [TestFixture]
     public class BaseTestRow
     {
 

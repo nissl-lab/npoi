@@ -25,7 +25,6 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    [TestFixture]
     public class BaseTestFont
     {
         protected ITestDataProvider _testDataProvider;

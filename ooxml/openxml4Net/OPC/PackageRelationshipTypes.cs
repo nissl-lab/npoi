@@ -11,8 +11,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @version 0.2
      */
     public static class PackageRelationshipTypes
-    {
-        /**
+    {        /**
          * Core properties relationship type.
          */
         public const String CORE_PROPERTIES = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";

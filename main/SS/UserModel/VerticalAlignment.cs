@@ -27,17 +27,17 @@ namespace NPOI.SS.UserModel
         /**
          * The vertical alignment is aligned-to-top.
          */
-        Top=1,
+        Top = 1,
 
         /**
          * The vertical alignment is centered across the height of the cell.
          */
-        Center=2,
+        Center = 2,
 
         /**
          * The vertical alignment is aligned-to-bottom.
          */
-        Bottom=3,
+        Bottom = 3,
 
         /**
          * <p>
@@ -52,7 +52,7 @@ namespace NPOI.SS.UserModel
          * If no single line of text wraps in the cell, then the text is not justified.
          *  </p>
          */
-        Justify=4,
+        Justify = 4,
 
         /**
          * <p>
@@ -67,7 +67,7 @@ namespace NPOI.SS.UserModel
          * and the line of text is distributed evenly from top to bottom.
          * </p>
          */
-        Distributed
+        Distributed = 5
     }
 
 }

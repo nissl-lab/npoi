@@ -32,7 +32,6 @@ namespace TestCases.SS.UserModel
      *
      * @author Dragos Buleandra ( dragos.buleandra@trade2b.ro )
      */
-    [TestFixture]
     public class BaseTestDataValidation
     {
         private ITestDataProvider _testDataProvider;

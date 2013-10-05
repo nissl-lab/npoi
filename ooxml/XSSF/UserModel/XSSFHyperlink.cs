@@ -187,14 +187,8 @@ namespace NPOI.XSSF.UserModel
                 case HyperlinkType.Email:
                 case HyperlinkType.File:
                 case HyperlinkType.Url:
-                    try
-                    {
-                        new Uri(address,UriKind.RelativeOrAbsolute);
-                    }
-                    catch (UriFormatException x)
-                    {
-                        throw new InvalidOperationException("Address of hyperlink must be a valid URI:" + address, x);
-                    }
+                        if(!Uri.IsWellFormedUriString(address,UriKind.RelativeOrAbsolute))
+                            throw new ArgumentException("Address of hyperlink must be a valid URI:" + address);
                     break;
             }
         }

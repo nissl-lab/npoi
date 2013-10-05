@@ -148,9 +148,8 @@ namespace NPOI.XSSF.UserModel
                             _cellXf.UnsetExtLst();
 
                         // Create a new Xf with the same contents
-                        _cellXf = CT_Xf.Parse(
-                              src.GetCoreXf().ToString()
-                        );
+                        _cellXf =
+                              src.GetCoreXf().Copy();
                         // Swap it over
                         _stylesSource.ReplaceCellXfAt(_cellXfId, _cellXf);
                     }
@@ -168,9 +167,8 @@ namespace NPOI.XSSF.UserModel
                     // Copy the font
                     try
                     {
-                        CT_Font ctFont = CT_Font.Parse(
-                              src.GetFont().GetCTFont().ToString()
-                        );
+                        CT_Font ctFont = 
+                              src.GetFont().GetCTFont().Clone();
                         XSSFFont font = new XSSFFont(ctFont);
                         font.RegisterTo(_stylesSource);
                         SetFont(font);
@@ -199,7 +197,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                GetCellAlignment().SetHorizontal(value);
+                GetCellAlignment().Horizontal = value;
             }
         }
 
@@ -674,7 +672,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                GetCellAlignment().SetIndent(value);
+                GetCellAlignment().Indent = value;
             }
         }
 
@@ -820,7 +818,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                GetCellAlignment().SetTextRotation(value);
+                GetCellAlignment().TextRotation = value;
             }
         }
 
@@ -877,7 +875,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                GetCellAlignment().SetVertical(value);
+                GetCellAlignment().Vertical = value;
             }
         }
 
@@ -911,7 +909,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                GetCellAlignment().SetWrapText(value);
+                GetCellAlignment().WrapText = value;
             }
         }
 
@@ -1165,7 +1163,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetVerticalAlignment(short align)
         {
-            GetCellAlignment().SetVertical((VerticalAlignment)align);
+            GetCellAlignment().Vertical = (VerticalAlignment)align;
         }
 
 

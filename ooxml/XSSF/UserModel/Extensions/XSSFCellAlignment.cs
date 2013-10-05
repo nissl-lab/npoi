@@ -44,23 +44,18 @@ namespace NPOI.XSSF.UserModel.Extensions
          * @return the type of aligment
          * @see VerticalAlignment
          */
-        public VerticalAlignment GetVertical()
+        public VerticalAlignment Vertical
         {
-            ST_VerticalAlignment align = cellAlignement.vertical;
-
-            return (VerticalAlignment)align;
-        }
-
-        /**
-         * Set the type of vertical alignment for the cell
-         *
-         * @param align - the type of alignment
-         * @see VerticalAlignment
-         */
-        public void SetVertical(VerticalAlignment align)
-        {
-            cellAlignement.vertical = (ST_VerticalAlignment)align;
-            cellAlignement.verticalSpecified = true;
+            get
+            {
+                ST_VerticalAlignment align = cellAlignement.vertical;
+                return (VerticalAlignment)align;
+            }
+            set 
+            {
+                cellAlignement.vertical = (ST_VerticalAlignment)value;
+                cellAlignement.verticalSpecified = true;            
+            }
         }
 
         /**
@@ -69,24 +64,18 @@ namespace NPOI.XSSF.UserModel.Extensions
          * @return the type of aligment
          * @see HorizontalAlignment
          */
-        public HorizontalAlignment GetHorizontal()
+        public HorizontalAlignment Horizontal
         {
-            ST_HorizontalAlignment align = cellAlignement.horizontal;
-            
-
-            return (HorizontalAlignment)align;
-        }
-
-        /**
-         * Set the type of horizontal alignment for the cell
-         *
-         * @param align - the type of alignment
-         * @see HorizontalAlignment
-         */
-        public void SetHorizontal(HorizontalAlignment align)
-        {
-            cellAlignement.horizontal = ((ST_HorizontalAlignment)align);
-            cellAlignement.horizontalSpecified = true;
+            get
+            {
+                ST_HorizontalAlignment align = cellAlignement.horizontal;
+                return (HorizontalAlignment)align;
+            }
+            set 
+            {
+                cellAlignement.horizontal = ((ST_HorizontalAlignment)value);
+                cellAlignement.horizontalSpecified = true;
+            }
         }
 
         /**
@@ -94,20 +83,17 @@ namespace NPOI.XSSF.UserModel.Extensions
          *
          * @return indent - number of spaces
          */
-        public long GetIndent()
+        public long Indent
         {
-            return cellAlignement.indent;
-        }
-
-        /**
-         * Set the number of spaces to indent the text in the cell
-         *
-         * @param indent - number of spaces
-         */
-        public void SetIndent(long indent)
-        {
-            cellAlignement.indent = (indent);
-            cellAlignement.indentSpecified = true;
+            get
+            {
+                return cellAlignement.indent;
+            }
+            set 
+            {
+                cellAlignement.indent = value;
+                cellAlignement.indentSpecified = true;            
+            }
         }
 
         /**
@@ -124,29 +110,17 @@ namespace NPOI.XSSF.UserModel.Extensions
          *
          * @return rotation degrees (between 0 and 180 degrees)
          */
-        public long GetTextRotation()
+        public long TextRotation
         {
-            return cellAlignement.textRotation;
-        }
-
-        /**
-         * Set the degree of rotation for the text in the cell
-         * <p/>
-         * Expressed in degrees. Values range from 0 to 180. The first letter of
-         * the text is considered the center-point of the arc.
-         * <br/>
-         * For 0 - 90, the value represents degrees above horizon. For 91-180 the degrees below the
-         * horizon is calculated as:
-         * <br/>
-         * <code>[degrees below horizon] = 90 - textRotation.</code>
-         * </p>
-         *
-         * @param rotation - the rotation degrees (between 0 and 180 degrees)
-         */
-        public void SetTextRotation(long rotation)
-        {
-            cellAlignement.textRotation = (rotation);
-            cellAlignement.textRotationSpecified = true;
+            get
+            {
+                return cellAlignement.textRotation;
+            }
+            set
+            {
+                cellAlignement.textRotation = value;
+                cellAlignement.textRotationSpecified = true;            
+            }
         }
 
         /**
@@ -154,20 +128,17 @@ namespace NPOI.XSSF.UserModel.Extensions
          *
          * @return a bool value indicating if the text in a cell should be line-wrapped within the cell.
          */
-        public bool GetWrapText()
+        public bool WrapText
         {
-            return cellAlignement.wrapText;
-        }
-
-        /**
-         * Set whether the text should be wrapped
-         *
-         * @param wrapped a bool value indicating if the text in a cell should be line-wrapped within the cell.
-         */
-        public void SetWrapText(bool wrapped)
-        {
-            cellAlignement.wrapText = (wrapped);
-            cellAlignement.wrapTextSpecified = true;
+            get
+            {
+                return cellAlignement.wrapText;
+            }
+            set 
+            {
+                cellAlignement.wrapText = value;
+                cellAlignement.wrapTextSpecified = true;            
+            }
         }
 
         /**

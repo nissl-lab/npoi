@@ -32,7 +32,6 @@ namespace TestCases.SS.UserModel
      * @author Shawn Laubach (slaubach at apache dot com)
      * @author Toshiaki Kamoshida (kamoshida.Toshiaki at future dot co dot jp)
      */
-    [TestFixture]
     public class BaseTestSheetShiftRows
     {
 
@@ -104,9 +103,9 @@ namespace TestCases.SS.UserModel
             ConfirmEmptyRow(s, 0);
             ConfirmEmptyRow(s, 1);
             ConfirmEmptyRow(s, 2);
-            Assert.AreEqual(s.GetRow(3).PhysicalNumberOfCells, 1);
+            Assert.AreEqual(1, s.GetRow(3).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 4);
-            Assert.AreEqual(s.GetRow(5).PhysicalNumberOfCells, 2);
+            Assert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
 
             // Read the first file again
             wb = _testDataProvider.OpenSampleWorkbook(sampleName);
@@ -125,25 +124,25 @@ namespace TestCases.SS.UserModel
                 var msg = string.Format("3b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
             }
-            Assert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 3);
-            Assert.AreEqual(s.GetRow(1).PhysicalNumberOfCells, 4);
+            Assert.AreEqual(3, s.GetRow(0).PhysicalNumberOfCells);
+            Assert.AreEqual(4, s.GetRow(1).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 2);
             ConfirmEmptyRow(s, 3);
-            Assert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
+            Assert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
         }       
-        private static string GetRowValue(ISheet s, int rowIx)
+        private string GetRowValue(ISheet s, int rowIx)
         {
             IRow row = s.GetRow(rowIx);
             if (row == null) { return "null"; } 
-            return row.PhysicalNumberOfCells .ToString();
+            return row.PhysicalNumberOfCells.ToString();
         }
-        private static string GetRowNum(ISheet s, int rowIx)
+        private string GetRowNum(ISheet s, int rowIx)
         {
             IRow row = s.GetRow(rowIx);
             if (row == null) { return "null"; } 
             return row.RowNum.ToString();
         }
-        private static void ConfirmEmptyRow(ISheet s, int rowIx)
+        private void ConfirmEmptyRow(ISheet s, int rowIx)
         {
             IRow row = s.GetRow(rowIx);
             Assert.IsTrue(row == null || row.PhysicalNumberOfCells == 0);

@@ -32,11 +32,6 @@ namespace NPOI.XSSF.UserModel
         {
 
         }
-        [Test]
-        public new void TestShiftRows()
-        {
-            base.TestShiftRows();
-        }
     }
 }
 
