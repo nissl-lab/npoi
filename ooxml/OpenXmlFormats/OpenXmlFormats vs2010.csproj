@@ -115,6 +115,10 @@
     <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fill.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fills.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Font.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fonts.cs" />
     <Compile Include="Spreadsheet\Styles\CT_NumFmt.cs" />
     <Compile Include="Spreadsheet\Styles\CT_NumFmts.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Cell.cs" />

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Xml;
 
 namespace NPOI.XSSF.Model
 {
@@ -44,13 +45,13 @@ namespace NPOI.XSSF.Model
         internal CalculationChain(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
-            ReadFrom(part.GetInputStream());
+            var xml = ConvertStreamToXml(part.GetInputStream());
+            ReadFrom(xml);
         }
 
-        public void ReadFrom(Stream is1)
+        public void ReadFrom(XmlDocument xml)
         {
-            CalcChainDocument doc = CalcChainDocument.Parse(is1);
+            CalcChainDocument doc = CalcChainDocument.Parse(xml, NameSpaceManager);
             chain = doc.GetCalcChain();
 
         }

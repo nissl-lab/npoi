@@ -47,15 +47,17 @@ namespace NPOI.XSSF.Model
             : base(part, rel)
         {
 
-            ReadFrom(part.GetInputStream());
+            var xml = ConvertStreamToXml(part.GetInputStream());
+            ReadFrom(xml);
         }
 
-        public void ReadFrom(Stream is1)
+        public void ReadFrom(XmlDocument xmlDoc)
         {
             try
             {
-                CommentsDocument doc = CommentsDocument.Parse(is1);
+                CommentsDocument doc = CommentsDocument.Parse(xmlDoc, this.NameSpaceManager);
                 comments = doc.GetComments();
+
             }
             catch (XmlException e)
             {
@@ -88,6 +90,15 @@ namespace NPOI.XSSF.Model
             {
                 commentRefs.Remove(oldReference);
                 commentRefs[comment.@ref] = comment;
+            }
+        }
+
+        public void RecreateReference()
+        {
+            commentRefs.Clear();
+            foreach (CT_Comment comment in comments.commentList.comment)
+            {
+                commentRefs.Add(comment.@ref, comment);
             }
         }
 
@@ -137,7 +148,7 @@ namespace NPOI.XSSF.Model
                 commentRefs = new Dictionary<String, CT_Comment>();
                 foreach (CT_Comment comment in comments.commentList.comment)
                 {
-                    commentRefs[comment.@ref] = comment;
+                    commentRefs.Add(comment.@ref, comment);
                 }
             }
 
@@ -155,7 +166,14 @@ namespace NPOI.XSSF.Model
 
             if (commentRefs != null)
             {
-                commentRefs[ct.@ref] = ct;
+                if (commentRefs.ContainsKey(ct.@ref))
+                {
+                    commentRefs[ct.@ref] = ct;
+                }
+                else
+                {
+                    commentRefs.Add(ct.@ref, ct);
+                }
             }
             return ct;
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -45,6 +47,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             set
             {
+
+                if (rField ==null || rField.Count==0)
+                    this.xmltext = "<r><t xml:space=\"preserve\">"+value+"</t></r>";
                 this.tField = value;
             }
         }
@@ -70,7 +75,73 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlText]
         public string XmlText
         {
-            get { return xmltext; }
+            get {
+                if (rField != null && rField.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    using( StringWriter sw = new StringWriter(sb))
+                    {
+                        foreach (CT_RElt r in rField)
+                        {
+                            sw.Write("<r>");
+                            if (r.rPr != null)
+                            {
+                                sw.Write("<rPr>");
+                                if (r.rPr.b != null && r.rPr.b.val)
+                                {
+                                    sw.Write("<b/>");
+                                }
+                                if (r.rPr.i != null && r.rPr.i.val)
+                                {
+                                    sw.Write("<i/>");
+                                }
+                                if (r.rPr.u != null)
+                                {
+                                    sw.Write("<u val=\""+ r.rPr.u.val +"\"/>");
+                                }
+                                if (r.rPr.color != null && r.rPr.color.theme > 0)
+                                {
+                                    sw.Write("<color theme=\"" + r.rPr.color.theme + "\"/>");
+                                }
+                                if (r.rPr.rFont != null)
+                                {
+                                    sw.Write("<rFont val=\"" + r.rPr.rFont.val + "\"/>");
+                                }
+                                if (r.rPr.family != null)
+                                {
+                                    sw.Write("<family val=\"" + r.rPr.family.val + "\"/>");
+                                }
+                                if (r.rPr.charset != null)
+                                {
+                                    sw.Write("<charset val=\"" + r.rPr.charset.val + "\"/>");
+                                }
+                                if (r.rPr.scheme != null)
+                                {
+                                    sw.Write("<scheme val=\"" + r.rPr.scheme.val + "\"/>");
+                                }
+                                if (r.rPr.sz != null)
+                                {
+                                    sw.Write("<sz val=\"" + r.rPr.sz.val + "\"/>");
+                                }
+                                if (r.rPr.vertAlign != null)
+                                {
+                                    sw.Write("<vertAlign val=\"" + r.rPr.vertAlign.val + "\"/>");
+                                }
+                                sw.Write("</rPr>");
+                            }
+                            if (r.t != null)
+                            {
+                                sw.Write("<t xml:space=\"preserve\">");
+                                sw.Write(r.t);
+                                sw.Write("</t>");
+                            }
+                            sw.Write("</r>");
+                        }
+                        xmltext = sb.ToString();
+                    }
+                }
+                return xmltext; 
+            }
             set { xmltext = value; }
         }
         public CT_RElt AddNewR()
@@ -121,5 +192,77 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+
+        public static CT_Rst Parse(XmlNode xmlNode, XmlNamespaceManager namespaceManager)
+        {
+            CT_Rst rst = new CT_Rst();
+            rst.r = new List<CT_RElt>();
+            var rNodes = xmlNode.SelectNodes("d:r", namespaceManager);
+            foreach (XmlNode rNode in rNodes)
+            {
+                CT_RElt relt = rst.AddNewR();
+                var rPrNode = rNode.SelectSingleNode("d:rPr", namespaceManager);
+                if (rPrNode != null)
+                {
+                    CT_RPrElt rprelt = relt.AddNewRPr();
+                    foreach (XmlNode childNode in rPrNode.ChildNodes)
+                    {
+                        switch (childNode.Name)
+                        { 
+                            case "b":
+                                CT_BooleanProperty bprop= rprelt.AddNewB();
+                                bprop.val = true;
+                                break;
+                            case "i":
+                                CT_BooleanProperty iprop = rprelt.AddNewI();
+                                iprop.val = true;
+                                break;
+                            case "u":
+                                CT_UnderlineProperty uProp = rprelt.AddNewU();
+                                uProp.val = (ST_UnderlineValues)Enum.Parse(typeof(ST_UnderlineValues), childNode.Attributes["val"].Value);
+                                break;
+                            case "color":
+                                CT_Color color = rprelt.AddNewColor();
+                                if(childNode.Attributes["theme"]!=null)
+                                    color.theme = uint.Parse(childNode.Attributes["theme"].Value);
+                                if(childNode.Attributes["auto"]!=null)
+                                    color.auto = childNode.Attributes["auto"].Value=="1"?true:false;
+                                if(childNode.Attributes["indexed"]!=null)
+                                    color.indexed = uint.Parse(childNode.Attributes["indexed"].Value);
+                                if(childNode.Attributes["tint"]!=null)
+                                    color.tint = Double.Parse(childNode.Attributes["tint"].Value);
+                                break;
+                            case "rFont":
+                                CT_FontName fontname = rprelt.AddNewRFont();
+                                fontname.val = childNode.Attributes["val"].Value;
+                                break;
+                            case "family":
+                                CT_IntProperty familyProp = rprelt.AddNewFamily();
+                                familyProp.val = Int32.Parse(childNode.Attributes["val"].Value);
+                                break;
+                            case "charset":
+                                CT_IntProperty charsetProp = rprelt.AddNewCharset();
+                                charsetProp.val = Int32.Parse(childNode.Attributes["val"].Value);
+                                break;
+                            case "scheme":
+                                CT_FontScheme schemeProp = rprelt.AddNewScheme();
+                                schemeProp.val = (ST_FontScheme)Enum.Parse(typeof(ST_FontScheme), childNode.Attributes["val"].Value);
+                                break;
+                            case "sz":
+                                CT_FontSize szProp = rprelt.AddNewSz();
+                                szProp.val = Int32.Parse(childNode.Attributes["val"].Value);
+                                break;
+                            case "vertAlign":
+                                CT_VerticalAlignFontProperty vertAlignProp = rprelt.AddNewVertAlign();
+                                vertAlignProp.val = (ST_VerticalAlignRun)Enum.Parse(typeof(ST_VerticalAlignRun), childNode.Attributes["val"].Value);
+                                break;
+                        }
+                    }
+                }
+                var tNode = rNode.SelectSingleNode("d:t", namespaceManager);
+                relt.t = tNode.InnerText.Replace("\r","");
+            }
+            return rst;
+        }
     }
 }

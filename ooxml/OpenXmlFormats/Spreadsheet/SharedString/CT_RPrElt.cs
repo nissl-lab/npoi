@@ -36,15 +36,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private CT_VerticalAlignFontProperty vertAlignField = null;  // vertical alignment of the text
         private CT_FontScheme schemeField = null;
 
-        public static CT_RPrElt Parse(string xml)
-        {
-            CT_RPrElt result;
-            using (StringReader stream = new StringReader(xml))
-            {
-                result = (CT_RPrElt)serializer.Deserialize(stream);
-            }
-            return result;
-        }
+        //public static CT_RPrElt Parse(string xml)
+        //{
+        //    CT_RPrElt result;
+        //    using (StringReader stream = new StringReader(xml))
+        //    {
+        //        result = (CT_RPrElt)serializer.Deserialize(stream);
+        //    }
+        //    return result;
+        //}
 
         public static void Save(Stream stream, CT_RPrElt font)
         {

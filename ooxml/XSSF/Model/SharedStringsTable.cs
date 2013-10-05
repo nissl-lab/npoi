@@ -24,6 +24,9 @@ namespace NPOI.XSSF.Model
     using System.IO;
     using NPOI.OpenXml4Net.OPC;
     using System.Xml;
+    using System.Security;
+    using System.Text.RegularExpressions;
+    using System.Text;
 
     /**
      * Table of strings shared across all sheets in a workbook.
@@ -89,37 +92,33 @@ namespace NPOI.XSSF.Model
             : base(part, rel)
         {
 
-            ReadFrom(part.GetInputStream());
+            var xml = ConvertStreamToXml(part.GetInputStream());
+            ReadFrom(xml);
         }
 
 
-        public void ReadFrom(Stream is1)
+
+        public void ReadFrom(XmlDocument xml)
         {
-            try
-            {
-                int cnt = 0;
-                _sstDoc = SstDocument.Parse(is1);
+                 int cnt = 0;
+                _sstDoc = SstDocument.Parse(xml, NameSpaceManager);
                 CT_Sst sst = _sstDoc.GetSst();
                 count = (int)sst.count;
                 uniqueCount = (int)sst.uniqueCount;
                 foreach (CT_Rst st in sst.si)
                 {
-                    string key=GetKey(st);
-                    if(key!=null && !stmap.ContainsKey(key))
-                        stmap.Add(key, cnt);
-                    strings.Add(st);
+                     string key=GetKey(st);
+                   if(key!=null && !stmap.ContainsKey(key))
+                       stmap.Add(key, cnt);
+                   strings.Add(st);
                     cnt++;
                 }
-            }
-            catch (XmlException e)
-            {
-                throw new IOException(e.Message);
-            }
+
         }
 
         private String GetKey(CT_Rst st)
         {
-            return st.t==null?string.Empty:st.t; //.xmltext
+            return st.XmlText;
         }
 
         /**
@@ -139,9 +138,12 @@ namespace NPOI.XSSF.Model
          *
          * @return the total count of strings in the workbook
          */
-        public int GetCount()
+        public int Count
         {
-            return count;
+            get
+            {
+                return count;
+            }
         }
 
         /**
@@ -151,9 +153,12 @@ namespace NPOI.XSSF.Model
          *
          * @return the total count of unique strings in the workbook
          */
-        public int GetUniqueCount()
+        public int UniqueCount
         {
-            return uniqueCount;
+            get
+            {
+                return uniqueCount;
+            }
         }
 
         /**
@@ -191,13 +196,17 @@ namespace NPOI.XSSF.Model
          *
          * @return array of CT_Rst beans
          */
-        public List<CT_Rst> GetItems()
+        public List<CT_Rst> Items
         {
-            return strings;
+            get
+            {
+                return strings;
+            }
         }
 
         /**
-         * Write this table out as XML.
+         * 
+         * this table out as XML.
          * 
          * @param out The stream to write to.
          * @throws IOException if an error occurs while writing.
@@ -208,15 +217,14 @@ namespace NPOI.XSSF.Model
             // see Bugzilla 48936
             //options.SetSaveCDataLengthThreshold(1000000);
             //options.SetSaveCDataEntityCountThreshold(-1);
-
-            //re-create the sst table every time saving a workbook
             CT_Sst sst = _sstDoc.GetSst();
             sst.count = count;
-            sst.countSpecified = true;
-            sst.uniqueCount = uniqueCount;
-            sst.uniqueCountSpecified = true;
+           sst.countSpecified = true;
+           sst.uniqueCount = uniqueCount;
+           sst.uniqueCountSpecified = true;
 
-            _sstDoc.Save(out1);
+           //re-create the sst table every time saving a workbook
+           _sstDoc.Save(out1);
         }
 
 

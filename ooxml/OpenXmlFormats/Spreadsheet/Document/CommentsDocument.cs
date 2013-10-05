@@ -1,11 +1,12 @@
 ﻿using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class CommentsDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Comments));
+//        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Comments));
         CT_Comments comments = null;
 
         public CommentsDocument()
@@ -15,10 +16,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.comments = comments;
         }
-        public static CommentsDocument Parse(Stream stream)
+        public static CommentsDocument Parse(XmlDocument xmlDoc, XmlNamespaceManager NameSpaceManager)
         {
-            CT_Comments obj = (CT_Comments)serializer.Deserialize(stream);
-            return new CommentsDocument(obj);
+            CommentsDocument commentsDoc = new CommentsDocument();
+            commentsDoc.comments = new CT_Comments();
+            foreach (XmlElement node in xmlDoc.SelectNodes("//d:authors/d:author", NameSpaceManager))
+            {
+                commentsDoc.comments.authors.AddAuthor(node.InnerText);
+            }
+            foreach (XmlElement node in xmlDoc.SelectNodes("//d:commentList/d:comment", NameSpaceManager))
+            {
+                var comment = commentsDoc.comments.commentList.AddNewComment();
+                comment.authorId = uint.Parse(node.GetAttribute("authorId"));
+                comment.@ref = node.GetAttribute("ref");
+                comment.text = CT_Rst.Parse(node.ChildNodes[0], NameSpaceManager);
+            }
+            return commentsDoc;
         }
         public CT_Comments GetComments()
         {
@@ -30,7 +43,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, comments);
+            StreamWriter sw = new StreamWriter(stream);
+            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>");
+            sw.Write("<comments xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">");
+            sw.Write("<authors>");
+            foreach (string author in comments.authors.author)
+            {
+                sw.Write("<author>");
+                sw.Write(author);
+                sw.Write("</author>");
+            }
+            sw.Write("</authors>");
+            sw.Write("<commentList>");
+            foreach (CT_Comment comment in comments.commentList.comment)
+            {
+                sw.Write(string.Format("<comment ref=\"{0}\" authorId=\"{1}\">", comment.@ref, comment.authorId));
+                sw.Write("<text>");
+                sw.Write(comment.text.XmlText);
+                sw.Write("</text>");
+                sw.Write("</comment>");
+            }
+            sw.Write("</commentList>");
+            sw.Write("</comments>");
+            sw.Flush();
         }
     }
 }

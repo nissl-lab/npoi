@@ -22,6 +22,8 @@ namespace NPOI
     using System.Collections.Generic;
     using System.IO;
     using NPOI.OpenXml4Net.Exceptions;
+using System.Xml;
+    using NPOI.OpenXml4Net.OPC.Internal;
 
     /**
      * Represents an entry of a OOXML namespace.
@@ -143,7 +145,39 @@ namespace NPOI
             packageRel = cores.GetRelationship(0);
             packagePart = packagePart.GetRelatedPart(packageRel);
         }
-
+        XmlNamespaceManager nsm = null;
+        public XmlNamespaceManager NameSpaceManager
+        {
+            get {
+                if (nsm == null)
+                    nsm = CreateDefaultNSM();
+                return nsm;
+            }
+        }
+        private XmlNamespaceManager CreateDefaultNSM()
+        {
+            //  Create a NamespaceManager to handle the default namespace, 
+            //  and create a prefix for the default namespace:
+            NameTable nt = new NameTable();
+            var ns = new XmlNamespaceManager(nt);
+            ns.AddNamespace(string.Empty, PackageNamespaces.SCHEMA_MAIN);
+            ns.AddNamespace("d", PackageNamespaces.SCHEMA_MAIN);
+            ns.AddNamespace("r", PackageNamespaces.RELATIONSHIPS);
+            ns.AddNamespace("c", PackageNamespaces.SCHEMA_CHART);
+            ns.AddNamespace("vt", PackageNamespaces.SCHEMA_VT);
+            // extended properties (app.xml)
+            ns.AddNamespace("xp", PackageRelationshipTypes.EXTENDED_PROPERTIES);
+            // custom properties
+            ns.AddNamespace("ctp", PackageRelationshipTypes.CUSTOM_PROPERTIES);
+            // core properties
+            ns.AddNamespace("cp", PackagePropertiesPart.NAMESPACE_CP_URI);
+            // core property namespaces 
+            ns.AddNamespace("dc", PackagePropertiesPart.NAMESPACE_DC_URI);
+            ns.AddNamespace("dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
+            ns.AddNamespace("dcmitype", PackageNamespaces.DCMITYPE);
+            ns.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+            return ns;
+        }
         /**
          * Provides access to the underlying PackagePart
          *
@@ -152,6 +186,13 @@ namespace NPOI
         public PackagePart GetPackagePart()
         {
             return packagePart;
+        }
+
+        public static XmlDocument ConvertStreamToXml(Stream xmlStream)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlStream);
+            return xmlDoc;
         }
 
         /**
