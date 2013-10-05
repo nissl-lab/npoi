@@ -87,10 +87,10 @@ namespace NPOI.SS.Format
                     case 'd':
                     case 'D':
                         mStart = -1;
-                        if (part.Length <= 2)
+                        //if (part.Length <= 2)
                             return part.ToLower();
-                        else
-                            return part.ToLower().Replace('d', 'E');
+                        //else
+                        //    return part.ToLower().Replace('d', 'E');
 
                     case 'm':
                     case 'M':
