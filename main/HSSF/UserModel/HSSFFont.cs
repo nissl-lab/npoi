@@ -78,10 +78,10 @@ namespace NPOI.HSSF.UserModel
         /// use the GetFontHeightInPoints which matches to the familiar 10, 12, 14 etc..
         /// </summary>
         /// <value>height in 1/20ths of a point.</value>
-        public short FontHeight
+        public double FontHeight
         {
             get { return font.FontHeight; }
-            set { font.FontHeight = value; }
+            set { font.FontHeight = (short)value; }
         }
 
         /// <summary>

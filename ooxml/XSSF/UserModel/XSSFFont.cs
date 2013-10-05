@@ -36,11 +36,11 @@ namespace NPOI.XSSF.UserModel
         /**
          * By default, Microsoft Office Excel 2007 uses the Calibry font in font size 11
          */
-        public static String DEFAULT_FONT_NAME = "Calibri";
+        public const String DEFAULT_FONT_NAME = "Calibri";
         /**
          * By default, Microsoft Office Excel 2007 uses the Calibry font in font size 11
          */
-        public static short DEFAULT_FONT_SIZE = 11;
+        public const short DEFAULT_FONT_SIZE = 11;
         /**
          * Default font color is black
          * @see NPOI.SS.usermodel.IndexedColors#BLACK
@@ -232,7 +232,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return short - height in point
          */
-        public short FontHeight
+        public double FontHeight
         {
             get
             {
@@ -246,15 +246,11 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                 SetFontHeight(value);
+                CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
+                fontSize.val = value;
             }
         }
 
-        public void SetFontHeight(double value)
-        {
-            CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
-            fontSize.val = value;
-        }
 
         /**
          * @see #GetFontHeight()

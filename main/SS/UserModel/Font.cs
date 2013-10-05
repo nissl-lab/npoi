@@ -123,7 +123,7 @@ namespace NPOI.SS.UserModel
          * @see #GetFontHeightInPoints()
          */
 
-        short FontHeight { get; set; }
+        double FontHeight { get; set; }
 
         /**
          * get the font height
