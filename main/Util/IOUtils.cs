@@ -40,21 +40,9 @@ namespace NPOI.Util
         /// <remarks>Tony Qu changed the code</remarks>
         public static byte[] ToByteArray(Stream stream)
         {
-            using (MemoryStream baos = new MemoryStream())
-            {
-                byte[] buffer = new byte[4096];
-                int read = -2;
-                while (read != -1 && read != 0)
-                {
-                    read = stream.Read(buffer, 0, buffer.Length);
-                    if (read > 0)
-                    {
-                        baos.Write(buffer, 0, read);
-                    }
-                }
-
-                return baos.ToArray();
-            }
+            MemoryStream baos = new MemoryStream((int)stream.Length);
+            stream.CopyTo(baos, 4096);
+            return baos.GetBuffer();
         }
 		   public static byte[] ToByteArray(ByteBuffer buffer, int length)
         {

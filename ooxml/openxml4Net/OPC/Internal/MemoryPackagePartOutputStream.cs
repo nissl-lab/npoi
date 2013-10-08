@@ -14,7 +14,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public MemoryPackagePartOutputStream(MemoryPackagePart part)
         {
             this._part = part;
-            _buff = new MemoryStream();
+            if (this._part.data == null)
+            {
+                this._part.data = new MemoryStream();
+            }
+            _buff = this._part.data;
         }
 
         public override int Read(byte[] buffer, int offset, int count)
@@ -81,30 +85,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public override void Flush()
         {
             _buff.Flush();
-            if (_part.data != null)
-            {
-                //byte[] newArray = new byte[_part.data.Length + _buff.Length];
-                //// copy the previous contents of part.data in newArray
-                //Array.Copy(_part.data, 0, newArray, 0, _part.data.Length);
-
-                //// append the newly added data
-                //byte[] buffArr = _buff.ToArray();
-                //Array.Copy(buffArr, 0, newArray, _part.data.Length,
-                //        buffArr.Length);
-
-                byte[] newArray = new byte[_buff.Length];
-                byte[] buffArr = _buff.ToArray();
-                Array.Copy(buffArr, 0, newArray, 0,
-                        buffArr.Length);
-
-                // save the result as new data
-                _part.data = newArray;
-            }
-            else
-            {
-                // was empty, just fill it
-                _part.data = _buff.ToArray();
-            }
 
             /*
              * Clear this streams buffer, in case flush() is called a second time

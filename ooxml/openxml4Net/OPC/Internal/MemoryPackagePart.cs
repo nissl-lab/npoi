@@ -13,12 +13,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
  * Storage for the part data.
  */
-        internal byte[] data;
-
-        /**
-         * Size of data.
-         */
-        protected int length;
+        internal MemoryStream data;
 
         /**
          * Constructor.
@@ -67,9 +62,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             // initialize, so we do it now.
             if (data == null)
             {
-                data = new byte[0];
+                return new MemoryStream();
             }
-            return new MemoryStream(data);
+            MemoryStream newMs = new MemoryStream((int)data.Length);
+            data.Position = 0;
+            data.CopyTo(newMs);
+            newMs.Position = 0;
+            return newMs;
         }
 
         protected override Stream GetOutputStreamImpl()
@@ -81,7 +80,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public void Clear()
         {
             data = null;
-            length = 0;
         }
 
         public override bool Save(Stream os)
@@ -92,8 +90,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public override bool Load(Stream ios)
         {
             // Save it
-            ios.Write(data,0,(int)ios.Length);
-            length = data.Length;
+            ios.CopyTo(data);
 
             // All done
             return true;
