@@ -82,6 +82,8 @@
     <Compile Include="Drawing\AudioVideo.cs" />
     <Compile Include="Drawing\GraphicalObjectFormat.cs" />
     <Compile Include="Drawing\DocumentProperties.cs" />
+    <Compile Include="Drawing\Picture.cs" />
+    <Compile Include="Drawing\spreadsheetShape.cs" />
     <Compile Include="Drawing\Table.cs" />
     <Compile Include="Drawing\TableStyle.cs" />
     <Compile Include="Drawing\StyleDefaults.cs" />
@@ -158,7 +160,7 @@
     <Compile Include="Drawing\Compatibility.cs" />
     <Compile Include="Drawing\GraphicalObjectAnimation.cs" />
     <Compile Include="Drawing\GraphicalObject.cs" />
-    <Compile Include="Drawing\Picture.cs" />
+    <Compile Include="Drawing\SpreadsheetPicture.cs" />
     <Compile Include="Drawing\ShapeGeometry.cs" />
     <Compile Include="Drawing\ShapeStyle.cs" />
     <Compile Include="Drawing\ShapeProperties.cs" />

@@ -1694,27 +1694,27 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private ST_ShapeType prstField;
 
-        public void AddNewAvLst()
+        public CT_GeomGuide AddNewAvLst()
         {
-            //this.avLstField = new List<CT_GeomGuide>();
+            if(this.avLstField==null)
+                this.avLstField = new List<CT_GeomGuide>();
+            CT_GeomGuide geomGuideNode = new CT_GeomGuide();
+            avLstField.Add(geomGuideNode);
+            return geomGuideNode;
         }
 
 
-        [XmlArray(Order = 0)]
+//        [XmlArray(Order = 0)]
         //[XmlArrayItem("avLst", IsNullable = false)]
-        [XmlArrayItem("gd", IsNullable = false)]
-        public CT_GeomGuide[] avLst
+        public List<CT_GeomGuide> avLst
         {
             get
             {
-                return this.avLstField.ToArray();
+                return this.avLstField;
             }
             set
             {
-                if (value == null)
-                    this.avLstField = new List<CT_GeomGuide>();
-                else
-                    this.avLstField = new List<CT_GeomGuide>(value);
+                this.avLstField = new List<CT_GeomGuide>(value);
             }
         }
 

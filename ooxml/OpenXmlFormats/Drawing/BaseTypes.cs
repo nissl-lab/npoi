@@ -2149,7 +2149,11 @@ namespace NPOI.OpenXmlFormats.Dml
         [DefaultValue(0)]
         public int l
         {
-            get { return (int)this.lField; }
+            get {
+                if (this.lField == null)
+                    return 0; 
+                return (int)this.lField; 
+            }
             set { this.lField = value; }
         }
         [XmlIgnore]
@@ -2161,7 +2165,11 @@ namespace NPOI.OpenXmlFormats.Dml
         [DefaultValue(0)]
         public int t
         {
-            get { return (int)this.tField; }
+            get {
+                if (this.tField == null)
+                    return 0; 
+                return (int)this.tField; 
+            }
             set { this.tField = value; }
         }
         [XmlIgnore]
@@ -2173,7 +2181,12 @@ namespace NPOI.OpenXmlFormats.Dml
         [DefaultValue(0)]
         public int r
         {
-            get { return (int)this.rField; }
+            get
+            {
+                if (this.rField == null)
+                    return 0; 
+                return (int)this.rField;
+            }
             set { this.rField = value; }
         }
         [XmlIgnore]
@@ -2185,7 +2198,11 @@ namespace NPOI.OpenXmlFormats.Dml
         [DefaultValue(0)]
         public int b
         {
-            get { return (int)this.bField; }
+            get {
+                if (this.bField == null)
+                    return 0;
+                return (int)this.bField; 
+            }
             set { this.bField = value; }
         }
         [XmlIgnore]

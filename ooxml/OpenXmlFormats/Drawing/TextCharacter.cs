@@ -972,12 +972,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public bool IsSetSolidFill()
         {
-            throw new NotImplementedException();
+            return this.solidFill != null;
         }
 
         public CT_SolidColorFillProperties AddNewSolidFill()
         {
-            throw new NotImplementedException();
+            this.solidFillField = new CT_SolidColorFillProperties();
+            return solidFillField;
         }
     }
 

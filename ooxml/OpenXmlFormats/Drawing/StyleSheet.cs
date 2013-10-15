@@ -20,7 +20,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot("themeManager", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = false)]
-    public partial class CT_EmptyElement
+    public class CT_EmptyElement
     {
     }
 
@@ -341,7 +341,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot("theme", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = false)]
-    public partial class CT_OfficeStyleSheet
+    public class CT_OfficeStyleSheet
     {
 
         private CT_BaseStyles themeElementsField;

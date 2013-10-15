@@ -20,7 +20,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlUseShapeRectangle
+    public class CT_GvmlUseShapeRectangle
     {
     }
 
@@ -30,7 +30,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlTextShape
+    public class CT_GvmlTextShape
     {
 
         private CT_TextBody txBodyField;
@@ -90,7 +90,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlShapeNonVisual
+    public class CT_GvmlShapeNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -134,7 +134,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlShape
+    public class CT_GvmlShape
     {
 
         private CT_GvmlShapeNonVisual nvSpPrField;
@@ -225,7 +225,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlConnectorNonVisual
+    public class CT_GvmlConnectorNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -269,7 +269,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlConnector
+    public class CT_GvmlConnector
     {
 
         private CT_GvmlConnectorNonVisual nvCxnSpPrField;
@@ -344,7 +344,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlPictureNonVisual
+    public class CT_GvmlPictureNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -389,7 +389,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlPicture
+    public class CT_GvmlPicture
     {
 
         private CT_GvmlPictureNonVisual nvPicPrField;
@@ -479,7 +479,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlGraphicFrameNonVisual
+    public class CT_GvmlGraphicFrameNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -524,7 +524,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlGraphicalObjectFrame
+    public class CT_GvmlGraphicalObjectFrame
     {
 
         private CT_GvmlGraphicFrameNonVisual nvGraphicFramePrField;
@@ -598,7 +598,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlGroupShapeNonVisual
+    public class CT_GvmlGroupShapeNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -643,7 +643,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_GvmlGroupShape
+    public class CT_GvmlGroupShape
     {
 
         private CT_GvmlGroupShapeNonVisual nvGrpSpPrField;

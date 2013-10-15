@@ -97,9 +97,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        public object SizeOfRArray()
+        public int SizeOfRArray()
         {
-            throw new NotImplementedException();
+            return rField.Count;
         }
     }
 

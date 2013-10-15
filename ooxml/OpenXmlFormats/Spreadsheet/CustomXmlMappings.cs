@@ -67,7 +67,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [DebuggerStepThrough]
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public partial class CT_Schema
+    public class CT_Schema
     {
         private System.Xml.XmlElement anyField; // TODO ensure initialization = new XmlElement(); // 1..1
 
@@ -143,6 +143,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return null != this.namespaceField; }
         }
+
+        public string InnerXml;
     }
 
 
@@ -150,7 +152,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public partial class CT_Map
+    public class CT_Map
     {
         private CT_DataBinding dataBindingField = null; // 0..1  element
 

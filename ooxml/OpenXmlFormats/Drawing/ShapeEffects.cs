@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -1734,12 +1735,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public bool IsSetSrgbClr()
         {
-            throw new NotImplementedException();
+            return srgbClrField != null;
         }
 
         public CT_SRgbColor AddNewSrgbClr()
         {
-            throw new NotImplementedException();
+            this.srgbClrField = new CT_SRgbColor();
+            return srgbClrField;
         }
     }
 
@@ -2192,6 +2194,39 @@ namespace NPOI.OpenXmlFormats.Dml
             return stretchField;
         }
 
+        public static CT_BlipFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node==null)
+                return null;
+
+            CT_BlipFillProperties ctBlipFill = new CT_BlipFillProperties();
+            XmlNode blipNode = node.SelectSingleNode("a:blip", namespaceManager);
+            if (blipNode != null)
+            {
+                CT_Blip ctBlip = ctBlipFill.AddNewBlip();
+                ctBlip.embed = blipNode.Attributes["r:embed"].Value;
+                if (blipNode.Attributes["link"]!=null)
+                    ctBlip.link = blipNode.Attributes["link"].Value;
+                if (blipNode.Attributes["cstate"] != null)
+                    ctBlip.cstate = (ST_BlipCompression)Enum.Parse(typeof(ST_BlipCompression), blipNode.Attributes["cstate"].Value);
+            }
+            XmlNode fillRectNode = node.SelectSingleNode("a:stretch/a:fillRect", namespaceManager);
+            if (fillRectNode != null)
+            {
+                CT_StretchInfoProperties ctStretch = ctBlipFill.AddNewStretch();
+                CT_RelativeRect ctfillRect = ctStretch.AddNewFillRect();
+                if (fillRectNode.Attributes["b"] != null)
+                    ctfillRect.b = Int32.Parse(fillRectNode.Attributes["b"].Value);
+                if (fillRectNode.Attributes["l"] != null)
+                    ctfillRect.l = Int32.Parse(fillRectNode.Attributes["l"].Value);
+                if (fillRectNode.Attributes["r"] != null)
+                    ctfillRect.r = Int32.Parse(fillRectNode.Attributes["r"].Value);
+                if (fillRectNode.Attributes["t"] != null)
+                    ctfillRect.t = Int32.Parse(fillRectNode.Attributes["t"].Value);
+            }
+            return ctBlipFill;
+        }
+
         [XmlElement(Order = 0)]
         public CT_Blip blip
         {
@@ -2298,6 +2333,34 @@ namespace NPOI.OpenXmlFormats.Dml
         public bool IsSetBlip()
         {
             return this.blipField != null;
+        }
+
+
+
+        internal void Write(System.IO.StreamWriter sw)
+        {
+            sw.Write("<xdr:blipFill>");
+            if (this.blip != null)
+            {
+                sw.Write(string.Format("<a:blip xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" r:embed=\"{0}\" />", this.blip.embed));
+            }
+            if (this.stretch != null)
+            {
+                sw.Write("<a:stretch>");
+                if(this.stretch.fillRect!=null)
+                {
+                    sw.Write("<a:fillRect");
+                    if (this.stretch.fillRect.b != 0)
+                        sw.Write(string.Format(" b=\"{0}\"", this.stretch.fillRect.b));
+                    if (this.stretch.fillRect.l != 0)
+                        sw.Write(string.Format(" l=\"{0}\"", this.stretch.fillRect.l));
+                    if (this.stretch.fillRect.r != 0)
+                        sw.Write(string.Format(" r=\"{0}\"", this.stretch.fillRect.r));
+                    sw.Write("/>");
+                }
+                sw.Write("</a:stretch>");
+            }
+            sw.Write("</xdr:blipFill>");
         }
     }
 
