@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(shape.PictureData);
             Assert.IsTrue(Arrays.Equals(jpegData, shape.PictureData.Data));
 
-            CT_TwoCellAnchor ctShapeHolder = drawing.GetCTDrawing().TwoCellAnchors[0];
+            CT_TwoCellAnchor ctShapeHolder = (CT_TwoCellAnchor)drawing.GetCTDrawing().CellAnchors[0];
             // STEditAs.ABSOLUTE corresponds to ClientAnchor.DONT_MOVE_AND_RESIZE
             Assert.AreEqual(ST_EditAs.absolute, ctShapeHolder.editAs);
         }

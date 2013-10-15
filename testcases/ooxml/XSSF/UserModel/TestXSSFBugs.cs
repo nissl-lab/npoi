@@ -511,8 +511,6 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, (c.RichStringCellValue as XSSFRichTextString).GetCTRst().sizeOfRArray());
             Assert.AreEqual(true, (c.RichStringCellValue as XSSFRichTextString).GetCTRst().IsSetT());
             // Should have the preserve Set
-            //TODO: make test pass
-            Assert.Fail("xml serializer bug about preserve spaces");
             //Assert.AreEqual(
             //      1,
             //      (c.RichStringCellValue as XSSFRichTextString).GetCTRst().xgetT().GetDomNode().GetAttributes().GetLength()

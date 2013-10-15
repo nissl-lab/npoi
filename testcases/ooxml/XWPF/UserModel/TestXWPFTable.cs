@@ -138,7 +138,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(20, row.GetHeight());
         }
         [Test]
-         [Ignore]
         public void TestSetGetMargins()
         {
             // instantiate the following class so it'll Get picked up by
@@ -163,7 +162,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(450, r);
         }
         [Test]
-        [Ignore]
         public void TestSetGetHBorders()
         {
             // instantiate the following classes so they'll Get picked up by
@@ -190,7 +188,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, bt);
         }
         [Test]
-         [Ignore]
         public void TestSetGetVBorders()
         {
             // create a table
@@ -210,7 +207,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("00FF00", clr);
         }
         [Test]
-         [Ignore]
         public void TestSetGetRowBandSize()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -221,7 +217,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(12, sz);
         }
         [Test]
-         [Ignore]
         public void TestSetGetColBandSize()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -232,7 +227,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(16, sz);
         }
         [Test]
-         [Ignore]
         public void TestCreateTable()
         {
             // open an empty document

@@ -65,7 +65,8 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(shapes[(4)] is XSSFSimpleShape);
             Assert.IsTrue(shapes[(5)] is XSSFPicture);
 
-            foreach (XSSFShape sh in shapes) Assert.IsNotNull(sh.GetAnchor());
+            foreach (XSSFShape sh in shapes) 
+                Assert.IsNotNull(sh.GetAnchor());
 
         }
         [Test]
@@ -116,7 +117,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(shapes[(0)] is XSSFConnector);
             Assert.IsTrue(shapes[(1)] is XSSFShapeGroup);
             Assert.IsTrue(shapes[(2)] is XSSFSimpleShape);
-            Assert.IsTrue(shapes[(3)] is XSSFSimpleShape); //
+            Assert.IsTrue(shapes[(3)] is XSSFSimpleShape); 
 
             // Save and re-load it
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
@@ -156,7 +157,6 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3, pkg.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count);
         }
         [Test]
-        [Ignore]
         public void TestClone()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithDrawing.xlsx");
@@ -198,7 +198,6 @@ namespace NPOI.XSSF.UserModel
          * See Bugzilla 52219.
          */
         [Test]
-        [Ignore]
         public void TestRichText()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -254,9 +253,10 @@ namespace NPOI.XSSF.UserModel
             sheet = wb.GetSheetAt(0) as XSSFSheet;
             Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             List<XSSFShape> shapes = Drawing.GetShapes();
-            Assert.AreEqual(shapes[(0)].GetAnchor(), anchor1);
-            Assert.AreEqual(shapes[(1)].GetAnchor(), anchor2);
-            Assert.AreEqual(shapes[(2)].GetAnchor(), anchor3);
+            Assert.AreEqual(3, shapes.Count);
+            Assert.AreEqual(shapes[0].GetAnchor(), anchor1);
+            Assert.AreEqual(shapes[1].GetAnchor(), anchor2);
+            Assert.AreEqual(shapes[2].GetAnchor(), anchor3);
 
 
         }
