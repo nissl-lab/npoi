@@ -17,6 +17,7 @@
 
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -45,7 +46,6 @@ namespace NPOI.XSSF.UserModel
             this.drawing = drawing;
             this.ctShape = ctShape;
         }
-
         /**
          * Initialize default structure of a new auto-shape
          *
@@ -108,22 +108,17 @@ namespace NPOI.XSSF.UserModel
          * @return the shape type
          * @see NPOI.ss.usermodel.ShapeTypes
          */
-        public int GetShapeType()
+        public ST_ShapeType ShapeType
         {
-            return (int)ctShape.spPr.prstGeom.prst;
+            get
+            {
+                return ctShape.spPr.prstGeom.prst;
+            }
+            set 
+            {
+                ctShape.spPr.prstGeom.prst = value;
+            }
         }
-
-        /**
-         * Sets the shape types.
-         *
-         * @param type the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
-         * @see NPOI.ss.usermodel.ShapeTypes
-         */
-        public void SetShapeType(int type)
-        {
-            ctShape.spPr.prstGeom.prst = (ST_ShapeType)(type);
-        }
-
         protected internal override CT_ShapeProperties GetShapeProperties()
         {
             return ctShape.spPr;

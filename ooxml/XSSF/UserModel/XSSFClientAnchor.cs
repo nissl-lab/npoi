@@ -91,7 +91,7 @@ namespace NPOI.XSSF.UserModel
          * @param cell1 starting anchor point
          * @param cell2 ending anchor point
          */
-        protected XSSFClientAnchor(CT_Marker cell1, CT_Marker cell2)
+        internal XSSFClientAnchor(CT_Marker cell1, CT_Marker cell2)
         {
             this.cell1 = cell1;
             this.cell2 = cell2;

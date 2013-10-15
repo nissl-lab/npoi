@@ -525,7 +525,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_TableColumns
     {
 
@@ -577,7 +578,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_TableColumn
     {
 
@@ -653,7 +655,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.totalsRowFormulaField = value;
             }
         }
-        [XmlElement]
         public CT_XmlColumnPr xmlColumnPr
         {
             get
@@ -875,7 +876,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_TableFormula
     {
 
@@ -914,7 +916,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_XmlColumnPr
     {
 
@@ -1168,7 +1171,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     
         custom,
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_TableStyleInfo
     {
 
@@ -1342,7 +1346,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SingleXmlCell
     {
 
@@ -1422,7 +1427,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_XmlCellPr
     {
 
@@ -1488,7 +1494,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_XmlPr
     {
 

@@ -49,11 +49,11 @@ namespace NPOI.XSSF.UserModel.Extensions
             get
             {
                 ST_VerticalAlignment align = cellAlignement.vertical;
-                return (VerticalAlignment)align;
+                return (VerticalAlignment)((int)align+1);
             }
             set 
             {
-                cellAlignement.vertical = (ST_VerticalAlignment)value;
+                cellAlignement.vertical = (ST_VerticalAlignment)((int)value-1);
                 cellAlignement.verticalSpecified = true;            
             }
         }
