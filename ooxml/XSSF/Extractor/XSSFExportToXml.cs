@@ -407,7 +407,9 @@ namespace NPOI.XSSF.Extractor
         {
 
             int result = 0;
-            XmlNode xmlSchema = map.GetSchema();
+            string xmlSchema = map.GetSchema();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xmlSchema);
 
 
             String[] leftTokens = leftXpath.Split(new char[]{'/'});
@@ -415,7 +417,7 @@ namespace NPOI.XSSF.Extractor
 
             int minLenght = leftTokens.Length < rightTokens.Length ? leftTokens.Length : rightTokens.Length;
 
-            XmlNode localComplexTypeRootNode = xmlSchema;
+            XmlNode localComplexTypeRootNode = doc.DocumentElement;
 
 
             for (int i = 1; i < minLenght; i++)
@@ -426,9 +428,7 @@ namespace NPOI.XSSF.Extractor
 
                 if (leftElementName.Equals(rightElementName))
                 {
-
-
-                    XmlNode complexType = GetComplexTypeForElement(leftElementName, xmlSchema, localComplexTypeRootNode);
+                    XmlNode complexType = GetComplexTypeForElement(leftElementName,doc.DocumentElement, localComplexTypeRootNode);
                     localComplexTypeRootNode = complexType;
                 }
                 else

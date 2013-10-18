@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -931,9 +933,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private ST_XmlDataType xmlDataTypeField;
 
+        public static CT_XmlColumnPr Parse(XmlNode node, XmlNamespaceManager namespaceMgr)
+        {
+            CT_XmlColumnPr ctXmlColPr = new CT_XmlColumnPr();
+
+            if (node == null)
+                return null;
+
+            if(node.Attributes["mapId"]!=null)
+                ctXmlColPr.mapIdField = uint.Parse(node.Attributes["mapId"].Value);
+            if (node.Attributes["xpath"] != null)
+                ctXmlColPr.xpathField = node.Attributes["xpath"].Value;
+            if (node.Attributes["xmlDataType"] != null)
+                ctXmlColPr.xmlDataTypeField = (ST_XmlDataType)Enum.Parse(typeof(ST_XmlDataType), node.Attributes["xmlDataType"].Value);
+             if (node.Attributes["denormalized"] != null &&node.Attributes["denormalized"].Value=="1")
+                ctXmlColPr.denormalizedField = true;
+            return ctXmlColPr;
+        }
+        public void Write(StreamWriter sw)
+        {
+            sw.Write("<xmlColumnPr");
+            if (this.mapIdField != null)
+                sw.Write(string.Format(" mapId=\"{0}\"", mapIdField));
+            if (this.xpathField != null)
+                sw.Write(string.Format(" xpath=\"{0}\"", xpathField));
+            if (this.xmlDataTypeField != null)
+                sw.Write(string.Format(" xmlDataType=\"{0}\"", xmlDataTypeField));
+            if (this.denormalizedField)
+                sw.Write(" denormalized=\"1\"");
+            sw.Write("/>");
+        }
+
         public CT_XmlColumnPr()
         {
-            this.extLstField = new CT_ExtensionList();
+            //this.extLstField = new CT_ExtensionList();
             this.denormalizedField = false;
         }
         [XmlElement]

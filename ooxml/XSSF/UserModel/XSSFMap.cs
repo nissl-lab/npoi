@@ -64,14 +64,10 @@ namespace NPOI.XSSF.UserModel
             return mapInfo.GetCTSchemaById(schemaId);
         }
 
-        public XmlNode GetSchema()
+        public string GetSchema()
         {
-            XmlNode xmlSchema = null;
-
-            CT_Schema schema = GetCTSchema();
-            xmlSchema = schema.Any;
-
-            return xmlSchema;
+            CT_Schema ctSchema = GetCTSchema();
+            return ctSchema.InnerXml;
         }
 
         /**

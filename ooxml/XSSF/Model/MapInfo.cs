@@ -54,19 +54,19 @@ namespace NPOI.XSSF.Model
             mapInfo = new CT_MapInfo();
 
         }
-
+        XmlDocument xml = null;
         internal MapInfo(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
-            ReadFrom(part.GetInputStream());
+            xml = ConvertStreamToXml(part.GetInputStream());
+            ReadFrom(xml);
         }
 
-        public void ReadFrom(Stream is1)
+        public void ReadFrom(XmlDocument xmldoc)
         {
             try
             {
-                MapInfoDocument doc = MapInfoDocument.Parse(is1);
+                MapInfoDocument doc = MapInfoDocument.Parse(xmldoc, NameSpaceManager);
                 mapInfo = doc.GetMapInfo();
 
                 maps = new Dictionary<int, XSSFMap>();
@@ -161,9 +161,10 @@ namespace NPOI.XSSF.Model
 
         protected void WriteTo(Stream out1)
         {
-            MapInfoDocument doc = new MapInfoDocument();
-            doc.SetMapInfo(mapInfo);
-            doc.Save(out1);
+            //MapInfoDocument doc = new MapInfoDocument();
+            //doc.SetMapInfo(mapInfo);
+            //doc.Save(out1);
+            xml.Save(out1);
         }
 
 
