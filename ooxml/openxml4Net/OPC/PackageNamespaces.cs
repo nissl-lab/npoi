@@ -43,7 +43,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         public const string SCHEMA_DRAWING = "http://schemas.openxmlformats.org/drawingml/2006/main";
 
-        public const string SCHEMA_SHEETDRAWINGS = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        public const string SCHEMA_SHEETDRAWINGS = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing";
 
         public const string SCHEMA_VT = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes";
 
