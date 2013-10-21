@@ -20,11 +20,25 @@ namespace XmlSerializationCodeGenerator
             InitializeComponent();
         }
 
+        List<Type> types = new List<Type>();
+
         private void button1_Click(object sender, EventArgs e)
         {
             var rootNode = treeView1.Nodes.Add("CT_Drawing");
             RecursiveRun(typeof(CT_Drawing), rootNode, 0);
             //treeView1.ExpandAll();
+
+            StringBuilder sb=new StringBuilder();
+            foreach(Type type in types)
+            {
+                sb.AppendLine(type.Name);
+                if (type.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public) != null)
+                    sb.AppendLine("- Parse");
+
+                if (type.GetMethod("Write", BindingFlags.NonPublic | BindingFlags.Instance) != null)
+                    sb.AppendLine("- Write");
+            }
+            textBox1.Text = sb.ToString();
         }
         void RecursiveRun(Type c, TreeNode node, int level)
         {
@@ -37,12 +51,16 @@ namespace XmlSerializationCodeGenerator
             {
                 if (p.Name.EndsWith("Specified")||p.Name=="Item")
                     continue;
+
                 if (p.PropertyType.IsClass&& !(p.PropertyType==typeof(string)))
                 {
                     var subNode = node.Nodes.Add(p.Name + "["+p.PropertyType.Name + " class]");
                     if (typeof(IList).IsAssignableFrom(p.PropertyType)
                         && p.PropertyType.IsGenericType)
                     {
+                        if (!types.Contains(p.PropertyType.GetGenericArguments()[0]))
+                            types.Add(p.PropertyType.GetGenericArguments()[0]);
+
                         RecursiveRun(p.PropertyType.GetGenericArguments()[0], subNode, level + 1);
                         //textBox1.Text += c.Name + " - " + p.PropertyType.GetGenericArguments()[0].Name + Environment.NewLine;
                     }
@@ -53,6 +71,9 @@ namespace XmlSerializationCodeGenerator
                     }
                     else
                     {
+                        if (!types.Contains(p.PropertyType))
+                            types.Add(p.PropertyType);
+
                         RecursiveRun(p.PropertyType, subNode, level + 1);
                     }
                 }
