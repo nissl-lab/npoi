@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -34,49 +35,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             foreach (XmlElement node in xmlDoc.SelectNodes("//d:c", NameSpaceManager))
             {
                 CT_CalcCell cc = new CT_CalcCell();
-                if (node.GetAttributeNode("i") != null)
+                if (node.GetAttributeNode("i")!= null)
                 {
-                    cc.i = Int32.Parse(node.GetAttribute("i"));
+                    cc.i = XmlHelper.ReadInt(node.GetAttributeNode("i"));
                     cc.iSpecified = true;
                 }
                 cc.r = node.GetAttribute("r");
-                if (node.GetAttributeNode("t") != null)
-                {
-                    string value = node.GetAttribute("t");
-                    if (value == "1" || value.ToLower() == "true")
-                    {
-                        cc.t = true;
-                    }
-                    else
-                    {
-                        cc.t = false;
-                    }
-                }
-                if (node.GetAttributeNode("s") != null)
-                {
-                    string value = node.GetAttribute("s");
-                    if (value == "1" || value.ToLower() == "true")
-                    {
-                        cc.s = true;
-                    }
-                    else
-                    {
-                        cc.s = false;
-                    }
-                }
-                if (node.GetAttributeNode("l") != null)
-                {
-                    string value = node.GetAttribute("l");
-                    if (value == "1" || value.ToLower() == "true")
-                    {
-                        cc.l = true;
-                    }
-                    else
-                    {
-                        cc.l = false;
-                    }
-                }
-
+                cc.t = XmlHelper.ReadBool(node.GetAttributeNode("t"));
+                cc.s = XmlHelper.ReadBool(node.GetAttributeNode("s"));
+                cc.l = XmlHelper.ReadBool(node.GetAttributeNode("l"));
                 calcChainDoc.calcChain.AddC(cc);
             }
             return calcChainDoc;

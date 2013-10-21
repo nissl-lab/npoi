@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using NPOI.OpenXml4Net.Util;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -75,37 +76,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             MapInfoDocument doc = new MapInfoDocument();
             doc.map = new CT_MapInfo();
             doc.map.Map = new System.Collections.Generic.List<CT_Map>();
-            foreach (XmlNode mapNode in xmldoc.SelectNodes("d:MapInfo/d:Map", NameSpaceManager))
+            foreach (XmlElement mapNode in xmldoc.SelectNodes("d:MapInfo/d:Map", NameSpaceManager))
             { 
                 CT_Map ctMap=new CT_Map();
-                if (mapNode.Attributes["ID"] != null)
-                    ctMap.ID = uint.Parse(mapNode.Attributes["ID"].Value);
-                if (mapNode.Attributes["Name"] != null)
-                    ctMap.Name = mapNode.Attributes["Name"].Value;
-                if (mapNode.Attributes["RootElement"] != null)
-                    ctMap.RootElement = mapNode.Attributes["RootElement"].Value;
-                if (mapNode.Attributes["SchemaID"] != null)
-                    ctMap.SchemaID = mapNode.Attributes["SchemaID"].Value;
-                if (mapNode.Attributes["ShowImportExportValidationErrors"] != null
-                    && (mapNode.Attributes["ShowImportExportValidationErrors"].Value == "1" 
-                    || mapNode.Attributes["ShowImportExportValidationErrors"].Value.ToLower()=="true"))
-                    ctMap.ShowImportExportValidationErrors = true;
-                if (mapNode.Attributes["PreserveFormat"] != null
-                    && (mapNode.Attributes["PreserveFormat"].Value == "1"
-                    || mapNode.Attributes["PreserveFormat"].Value.ToLower() == "true"))
-                    ctMap.PreserveFormat = true;
-                if (mapNode.Attributes["PreserveSortAFLayout"] != null
-                    && (mapNode.Attributes["PreserveSortAFLayout"].Value == "1"
-                    || mapNode.Attributes["PreserveSortAFLayout"].Value.ToLower() == "true"))
-                    ctMap.PreserveSortAFLayout = true;
-                if (mapNode.Attributes["Append"] != null
-                    && (mapNode.Attributes["Append"].Value == "1"
-                    || mapNode.Attributes["Append"].Value.ToLower() == "true"))
-                    ctMap.Append = true;
-                if (mapNode.Attributes["AutoFit"] != null
-                    && (mapNode.Attributes["AutoFit"].Value == "1"
-                    || mapNode.Attributes["AutoFit"].Value.ToLower() == "true"))
-                    ctMap.AutoFit = true;
+                ctMap.ID = XmlHelper.ReadUInt(mapNode.GetAttributeNode("ID"));
+                ctMap.Name = XmlHelper.ReadString(mapNode.GetAttributeNode("Name"));
+                ctMap.RootElement = XmlHelper.ReadString(mapNode.GetAttributeNode("RootElement"));
+                ctMap.SchemaID = XmlHelper.ReadString(mapNode.GetAttributeNode("SchemaID"));
+                ctMap.ShowImportExportValidationErrors = XmlHelper.ReadBool(mapNode.GetAttributeNode("ShowImportExportValidationErrors"));
+                ctMap.PreserveFormat = XmlHelper.ReadBool(mapNode.GetAttributeNode("PreserveFormat"));
+                ctMap.PreserveSortAFLayout = XmlHelper.ReadBool(mapNode.GetAttributeNode("PreserveSortAFLayout"));
+                ctMap.Append = XmlHelper.ReadBool(mapNode.GetAttributeNode("Append"));
+                ctMap.AutoFit = XmlHelper.ReadBool(mapNode.GetAttributeNode("AutoFit"));
                 doc.map.Map.Add(ctMap);
             }
             doc.map.Schema = new System.Collections.Generic.List<CT_Schema>();

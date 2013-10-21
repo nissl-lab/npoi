@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -21,64 +22,52 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static TableDocument Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceMgr)
         {
             CT_Table obj = new CT_Table();
-            XmlNode tableNode = xmldoc.DocumentElement;
-            obj.id = uint.Parse(tableNode.Attributes["id"].Value);
-            obj.name = tableNode.Attributes["name"].Value;
-            obj.displayName = tableNode.Attributes["displayName"].Value;
+            XmlElement tableNode = xmldoc.DocumentElement;
+            obj.id = XmlHelper.ReadUInt(tableNode.Attributes["id"]);
+            obj.name = XmlHelper.ReadString(tableNode.Attributes["name"]);
+            obj.displayName = XmlHelper.ReadString(tableNode.Attributes["displayName"]);
             if (tableNode.Attributes["tableType"] != null)
             {
                 obj.tableType = (ST_TableType)Enum.Parse(typeof(ST_TableType), tableNode.Attributes["tableType"].Value);
             }
-            if (tableNode.Attributes["totalsRowCount"] != null)
-                obj.totalsRowCount = uint.Parse(tableNode.Attributes["totalsRowCount"].Value);
-            if(tableNode.Attributes["totalsRowShown"].Value=="1"||tableNode.Attributes["totalsRowShown"].Value.ToLower()=="true")
-                obj.totalsRowShown = true;
-            obj.@ref = tableNode.Attributes["ref"].Value;
-            var autoFilter = xmldoc.SelectSingleNode("//d:autoFilter", namespaceMgr);
+            obj.totalsRowCount = XmlHelper.ReadUInt(tableNode.GetAttributeNode("totalsRowCount"));
+            obj.totalsRowShown = XmlHelper.ReadBool(tableNode.GetAttributeNode("totalsRowShown"));
+            obj.@ref = XmlHelper.ReadString(tableNode.Attributes["ref"]);
+            XmlNode autoFilter = xmldoc.SelectSingleNode("//d:autoFilter", namespaceMgr);
             if (autoFilter != null)
             {
                 obj.autoFilter = new CT_AutoFilter();
-                obj.autoFilter.@ref = autoFilter.Attributes["ref"].Value;
+                obj.autoFilter.@ref = XmlHelper.ReadString(autoFilter.Attributes["name"]);
             }
             var tableCols =  xmldoc.SelectNodes("//d:tableColumns/d:tableColumn", namespaceMgr);
             if (tableCols != null)
             {
                 obj.tableColumns = new CT_TableColumns();
                 obj.tableColumns.count = (uint)tableCols.Count;
-                foreach (XmlNode tableColNode in tableCols)
+                foreach (XmlElement tableColNode in tableCols)
                 {
                     CT_TableColumn ctTableCol = new CT_TableColumn();
-                    ctTableCol.id = uint.Parse(tableColNode.Attributes["id"].Value);
-                    ctTableCol.name = tableColNode.Attributes["name"].Value;
-                    if (tableColNode.Attributes["uniqueName"] != null) 
-                        ctTableCol.uniqueName = tableColNode.Attributes["uniqueName"].Value;
-                    if (tableColNode.Attributes["totalsRowCellStyle"]!=null) 
-                        ctTableCol.totalsRowCellStyle = tableColNode.Attributes["totalsRowCellStyle"].Value;
-                    if (tableColNode.Attributes["totalsRowDxfId"] != null)
-                        ctTableCol.totalsRowDxfId = uint.Parse(tableColNode.Attributes["totalsRowDxfId"].Value);
-                    if (tableColNode.Attributes["totalsRowLabel"] != null)
-                        ctTableCol.totalsRowLabel = tableColNode.Attributes["totalsRowLabel"].Value;
-                    if (tableColNode.Attributes["queryTableFieldId"] != null)
-                        ctTableCol.queryTableFieldId = uint.Parse(tableColNode.Attributes["queryTableFieldId"].Value);
-
+                    ctTableCol.id = XmlHelper.ReadUInt(tableColNode.GetAttributeNode("id"));
+                    ctTableCol.name = XmlHelper.ReadString(tableColNode.GetAttributeNode("name")); 
+                    ctTableCol.uniqueName = XmlHelper.ReadString(tableColNode.GetAttributeNode("uniqueName"));
+                    ctTableCol.totalsRowCellStyle = XmlHelper.ReadString(tableColNode.GetAttributeNode("totalsRowCellStyle"));
+                    ctTableCol.totalsRowDxfId = XmlHelper.ReadUInt(tableColNode.GetAttributeNode("totalsRowDxfId"));
+                    ctTableCol.totalsRowLabel = XmlHelper.ReadString(tableColNode.GetAttributeNode("totalsRowDxfId"));
+                    ctTableCol.queryTableFieldId = XmlHelper.ReadUInt(tableColNode.GetAttributeNode("queryTableFieldId"));
                     ctTableCol.xmlColumnPr = CT_XmlColumnPr.Parse(tableColNode.SelectSingleNode("d:xmlColumnPr", namespaceMgr), namespaceMgr);
                     //TODO: parse sub element of CT_TableColumn
                     obj.tableColumns.tableColumn.Add(ctTableCol);
                 }
             }
-            var tableStyleInfo = xmldoc.SelectSingleNode("//d:tableStyleInfo", namespaceMgr);
+            XmlNode tableStyleInfo = xmldoc.SelectSingleNode("//d:tableStyleInfo", namespaceMgr);
             if (tableStyleInfo != null)
             {
                 obj.tableStyleInfo = new CT_TableStyleInfo();
-                obj.tableStyleInfo.name = tableStyleInfo.Attributes["name"].Value;
-                if (tableStyleInfo.Attributes["showFirstColumn"] != null)
-                    obj.tableStyleInfo.showFirstColumn = tableStyleInfo.Attributes["showFirstColumn"].Value == "1" ? true : false;
-                if (tableStyleInfo.Attributes["showLastColumn"] != null)
-                    obj.tableStyleInfo.showLastColumn = tableStyleInfo.Attributes["showLastColumn"].Value == "1" ? true : false;
-                if (tableStyleInfo.Attributes["showRowStripes"] != null)
-                    obj.tableStyleInfo.showRowStripes = tableStyleInfo.Attributes["showRowStripes"].Value == "1" ? true : false;
-                if (tableStyleInfo.Attributes["showColumnStripes"] != null)
-                    obj.tableStyleInfo.showColumnStripes = tableStyleInfo.Attributes["showColumnStripes"].Value == "1" ? true : false;
+                obj.tableStyleInfo.name = XmlHelper.ReadString(tableStyleInfo.Attributes["name"]);
+                obj.tableStyleInfo.showFirstColumn = XmlHelper.ReadBool(tableStyleInfo.Attributes["showFirstColumn"]);
+                obj.tableStyleInfo.showLastColumn = XmlHelper.ReadBool(tableStyleInfo.Attributes["showLastColumn"]);
+                obj.tableStyleInfo.showRowStripes = XmlHelper.ReadBool(tableStyleInfo.Attributes["showRowStripes"]);
+                obj.tableStyleInfo.showColumnStripes = XmlHelper.ReadBool(tableStyleInfo.Attributes["showColumnStripes"]);
             }
             return new TableDocument(obj);
         }
@@ -100,46 +89,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
                 sw.Write("<table xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"");
-                sw.Write(string.Format(" id=\"{0}\" name=\"{1}\" displayName=\"{2}\"", this.ctTable.id, this.ctTable.name, this.ctTable.displayName));
-                sw.Write(string.Format(" ref=\"{0}\"", this.ctTable.@ref));
-                sw.Write(string.Format(" tableType=\"{0}\"", this.ctTable.tableType));
-                if (this.ctTable.totalsRowCount != 0)
-                   sw.Write(string.Format(" totalsRowCount=\"{0}\"", this.ctTable.totalsRowCount));
-                sw.Write(string.Format(" totalsRowShown=\"{0}\"", this.ctTable.totalsRowShown));
+                XmlHelper.WriteAttribute(sw, "id", this.ctTable.id);
+                XmlHelper.WriteAttribute(sw, "name", this.ctTable.name);
+                XmlHelper.WriteAttribute(sw, "displayName", this.ctTable.displayName);
+                XmlHelper.WriteAttribute(sw, "ref", this.ctTable.@ref);
+                XmlHelper.WriteAttribute(sw, "tableType", this.ctTable.tableType.ToString());
+                XmlHelper.WriteAttribute(sw, "totalsRowCount", this.ctTable.totalsRowCount);
+                XmlHelper.WriteAttribute(sw, "totalsRowShown", this.ctTable.totalsRowShown);
                 sw.Write(">");
-                sw.Write("<tableColumns count=\"{0}\">", this.ctTable.tableColumns.count);
-                foreach (CT_TableColumn ctTableCol in this.ctTable.tableColumns.tableColumn)
-                { 
-                    sw.Write(string.Format("<tableColumn id=\"{0}\" name=\"{1}\"", ctTableCol.id, ctTableCol.name));
-                    if (ctTableCol.uniqueName != null)
-                        sw.Write(string.Format(" uniqueName=\"{0}\"", ctTableCol.uniqueName));
-                    if(ctTableCol.totalsRowCellStyle!=null)
-                        sw.Write(string.Format(" totalsRowCellStyle=\"{0}\"", ctTableCol.totalsRowCellStyle));
-                    if (ctTableCol.totalsRowLabel != null)
-                        sw.Write(string.Format(" totalsRowLabel=\"{0}\"", ctTableCol.totalsRowLabel));
-                    if (ctTableCol.totalsRowDxfId != 0)
-                        sw.Write(string.Format(" totalsRowDxfId=\"{0}\"", ctTableCol.totalsRowDxfId));
-                    if (ctTableCol.queryTableFieldId != 0)
-                        sw.Write(string.Format(" queryTableFieldId=\"{0}\"", ctTableCol.queryTableFieldId));
-                    sw.Write(">");
-                    if (ctTableCol.xmlColumnPr != null)
+                if (this.ctTable.tableColumns != null)
+                {
+                    sw.Write("<tableColumns count=\"{0}\">", this.ctTable.tableColumns.count);
+                    foreach (CT_TableColumn ctTableCol in this.ctTable.tableColumns.tableColumn)
                     {
-                        ctTableCol.xmlColumnPr.Write(sw);
+                        sw.Write(string.Format("<tableColumn id=\"{0}\" name=\"{1}\"", ctTableCol.id, ctTableCol.name));
+                        XmlHelper.WriteAttribute(sw, "uniqueName", ctTableCol.uniqueName);
+                        XmlHelper.WriteAttribute(sw, "totalsRowCellStyle", ctTableCol.totalsRowCellStyle);
+                        XmlHelper.WriteAttribute(sw, "totalsRowLabel", ctTableCol.totalsRowLabel);
+                        XmlHelper.WriteAttribute(sw, "totalsRowDxfId", ctTableCol.totalsRowDxfId);
+                        XmlHelper.WriteAttribute(sw, "queryTableFieldId", ctTableCol.queryTableFieldId);
+                        sw.Write(">");
+                        if (ctTableCol.xmlColumnPr != null)
+                        {
+                            ctTableCol.xmlColumnPr.Write(sw);
+                        }
+                        sw.Write("</tableColumn>");
                     }
-                    sw.Write("</tableColumn>");
+                    sw.Write("</tableColumns>");
                 }
-                sw.Write("</tableColumns>");
                 if (this.ctTable.tableStyleInfo != null)
                 {
-                    sw.Write(string.Format("<tableStyleInfo name=\"{0}\"", ctTable.tableStyleInfo.name));
-                    if (ctTable.tableStyleInfo.showColumnStripes)
-                        sw.Write(" showColumnStripes=\"1\"");
-                    if (ctTable.tableStyleInfo.showFirstColumn)
-                        sw.Write(" showFirstColumn=\"1\"");
-                    if (ctTable.tableStyleInfo.showLastColumn)
-                        sw.Write(" showLastColumn=\"1\"");
-                    if (ctTable.tableStyleInfo.showRowStripes)
-                        sw.Write(" showRowStripes=\"1\"");
+                    sw.Write("<tableStyleInfo");
+                    XmlHelper.WriteAttribute(sw, "name", ctTable.tableStyleInfo.name);
+                    XmlHelper.WriteAttribute(sw, "showFirstColumn", ctTable.tableStyleInfo.showFirstColumn);
+                    XmlHelper.WriteAttribute(sw, "showLastColumn", ctTable.tableStyleInfo.showLastColumn);
+                    XmlHelper.WriteAttribute(sw, "showColumnStripes", ctTable.tableStyleInfo.showColumnStripes);
+                    XmlHelper.WriteAttribute(sw, "showRowStripes", ctTable.tableStyleInfo.showRowStripes);
                     sw.Write("/>");
                 }
                 sw.Write("</table>");

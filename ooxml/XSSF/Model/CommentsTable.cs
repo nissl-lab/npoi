@@ -55,7 +55,7 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                CommentsDocument doc = CommentsDocument.Parse(xmlDoc, this.NameSpaceManager);
+                CommentsDocument doc = CommentsDocument.Parse(xmlDoc, NameSpaceManager);
                 comments = doc.GetComments();
 
             }
