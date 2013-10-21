@@ -145,8 +145,8 @@ using System.Xml;
             packageRel = cores.GetRelationship(0);
             packagePart = packagePart.GetRelatedPart(packageRel);
         }
-        XmlNamespaceManager nsm = null;
-        public XmlNamespaceManager NameSpaceManager
+        static XmlNamespaceManager nsm = null;
+        public static XmlNamespaceManager NameSpaceManager
         {
             get {
                 if (nsm == null)
@@ -154,7 +154,7 @@ using System.Xml;
                 return nsm;
             }
         }
-        private XmlNamespaceManager CreateDefaultNSM()
+        internal static XmlNamespaceManager CreateDefaultNSM()
         {
             //  Create a NamespaceManager to handle the default namespace, 
             //  and create a prefix for the default namespace:
@@ -162,6 +162,8 @@ using System.Xml;
             var ns = new XmlNamespaceManager(nt);
             ns.AddNamespace(string.Empty, PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("d", PackageNamespaces.SCHEMA_MAIN);
+            ns.AddNamespace("a", PackageNamespaces.SCHEMA_DRAWING);
+            ns.AddNamespace("xdr", PackageNamespaces.SCHEMA_SHEETDRAWINGS);
             ns.AddNamespace("r", PackageNamespaces.RELATIONSHIPS);
             ns.AddNamespace("c", PackageNamespaces.SCHEMA_CHART);
             ns.AddNamespace("vt", PackageNamespaces.SCHEMA_VT);
@@ -176,6 +178,8 @@ using System.Xml;
             ns.AddNamespace("dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
             ns.AddNamespace("dcmitype", PackageNamespaces.DCMITYPE);
             ns.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
+            ns.AddNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
             return ns;
         }
         /**
