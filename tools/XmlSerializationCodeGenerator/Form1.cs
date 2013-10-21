@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace XmlSerializationCodeGenerator
 {
@@ -31,12 +32,17 @@ namespace XmlSerializationCodeGenerator
             StringBuilder sb=new StringBuilder();
             foreach(Type type in types)
             {
-                sb.AppendLine(type.Name);
-                if (type.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public) != null)
-                    sb.AppendLine("- Parse");
+                if (type.GetProperties().Length == 0)
+                    sb.AppendLine(type.Name + " [x]");
+                else
+                {
+                    sb.AppendLine(type.Name);
+                    if (type.GetMethod("Parse", BindingFlags.Static | BindingFlags.Public) != null)
+                        sb.AppendLine("- Parse");
 
-                if (type.GetMethod("Write", BindingFlags.NonPublic | BindingFlags.Instance) != null)
-                    sb.AppendLine("- Write");
+                    if (type.GetMethod("Write", BindingFlags.NonPublic | BindingFlags.Instance) != null)
+                        sb.AppendLine("- Write");
+                }
             }
             textBox1.Text = sb.ToString();
         }
@@ -224,9 +230,10 @@ namespace XmlSerializationCodeGenerator
             sb.AppendLine();
             sb.AppendLine();
             sb.AppendLine();
+            string xmlPrefix = GetXmlPrefix(t);
             sb.AppendLine("internal void Write(StreamWriter sw, string nodeName)");
             sb.AppendLine("{");
-            sb.AppendLine("\tsw.Write(string.Format(\"<{0}\",nodeName));");
+            sb.AppendLine("\tsw.Write(string.Format(\"<"+xmlPrefix+":{0}\",nodeName));");
             foreach (var p in properties)
             {
                 if (p.Name.EndsWith("Specified"))
@@ -257,7 +264,7 @@ namespace XmlSerializationCodeGenerator
                 sb.AppendLine(string.Format("\tif(this.{0}!=null)", p.Name));
                 if (p.PropertyType.GetProperties().Length == 0)
                 {
-                    sb.AppendLine(string.Format("\t\tsw.Write(\"<{0}/>\");", p.Name));
+                    sb.AppendLine(string.Format("\t\tsw.Write(\"<{1}:{0}/>\");", p.Name, GetXmlPrefix(p.PropertyType)));
                 }
                 else
                 {
@@ -273,7 +280,7 @@ namespace XmlSerializationCodeGenerator
                 sb.AppendLine("\t{");
                 if (genericType.IsEnum)
                 {
-                    sb.AppendLine("\t\tsw.Write(string.Format(\"<{0}/>\",x));");
+                    sb.AppendLine("\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
                 }
                 else
                 {
@@ -281,10 +288,25 @@ namespace XmlSerializationCodeGenerator
                 }
                 sb.AppendLine("\t}");
             }
-            sb.AppendLine("\tsw.Write(string.Format(\"</{0}>\",nodeName));");
+            sb.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + ":{0}>\",nodeName));");
             sb.AppendLine("}");
             #endregion
             textBox1.Text= sb.ToString();
+        }
+
+        public string GetXmlPrefix(Type p)
+        {
+            var a = p.GetCustomAttributes(typeof(XmlTypeAttribute), false);
+            if (a.Length == 0)
+                return "a";
+            if (((XmlTypeAttribute)a[0]).Namespace == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
+            {
+                return "xdr";
+            }
+            else //http://schemas.openxmlformats.org/drawingml/2006/main
+            {
+                return "a";
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
