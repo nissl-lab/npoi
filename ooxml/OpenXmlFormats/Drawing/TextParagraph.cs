@@ -13,6 +13,8 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
 
 
     [Serializable]
@@ -226,21 +228,18 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_TextSpacing
     {
+        private CT_TextSpacingPercent spcPctField;
+        private CT_TextSpacingPoint spcPtsField;
 
-        private object itemField;
-
-        [XmlElement("spcPct", typeof(CT_TextSpacingPercent), Order = 0)]
-        [XmlElement("spcPts", typeof(CT_TextSpacingPoint), Order = 0)]
-        public object Item
+        public CT_TextSpacingPercent spcPct
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            get { return this.spcPctField; }
+            set { this.spcPctField = value; }
+        }
+        public CT_TextSpacingPoint spcPts
+        {
+            get { return this.spcPtsField; }
+            set { this.spcPtsField = value; }
         }
     }
 

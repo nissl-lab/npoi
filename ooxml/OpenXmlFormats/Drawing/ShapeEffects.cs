@@ -33,6 +33,38 @@ namespace NPOI.OpenXmlFormats.Dml
             this.linkField = "";
             this.cstateField = ST_BlipCompression.none;
         }
+        public static CT_Blip Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Blip ctObj = new CT_Blip();
+            ctObj.embed = XmlHelper.ReadString(node.Attributes["embed"]);
+            ctObj.link = XmlHelper.ReadString(node.Attributes["link"]);
+            if (node.Attributes["cstate"] != null)
+                ctObj.cstate = (ST_BlipCompression)Enum.Parse(typeof(ST_BlipCompression), node.Attributes["cstate"].Value);
+            ctObj.Items = new List<Object>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+                //else if (childNode.LocalName == "Items")
+                //    ctObj.Items.Add(Object.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "embed", this.embed);
+            XmlHelper.WriteAttribute(sw, "link", this.link);
+            XmlHelper.WriteAttribute(sw, "cstate", this.cstate.ToString());
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlElement("alphaBiLevel", typeof(CT_AlphaBiLevelEffect), Order = 0)]
         [XmlElement("alphaCeiling", typeof(CT_AlphaCeilingEffect), Order = 0)]
@@ -307,6 +339,24 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_SoftEdgesEffect
     {
+        public static CT_SoftEdgesEffect Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SoftEdgesEffect ctObj = new CT_SoftEdgesEffect();
+            ctObj.rad = XmlHelper.ReadLong(node.Attributes["rad"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "rad", this.rad);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private long radField;
 
@@ -1656,16 +1706,46 @@ namespace NPOI.OpenXmlFormats.Dml
             //this.srgbClrField = new CT_SRgbColor();
             //this.scrgbClrField = new CT_ScRgbColor();
         }
-        public static CT_SolidColorFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceMgr)
+        public static CT_SolidColorFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            CT_SolidColorFillProperties ctSolidClrFill = new CT_SolidColorFillProperties();
-            ctSolidClrFill.schemeClrField = CT_SchemeColor.Parse(node, namespaceMgr);
-            ctSolidClrFill.sysClrField = CT_SystemColor.Parse(node, namespaceMgr);
-            ctSolidClrFill.scrgbClrField = CT_ScRgbColor.Parse(node, namespaceMgr);
-            ctSolidClrFill.hslClrField = CT_HslColor.Parse(node, namespaceMgr);
-            ctSolidClrFill.prstClrField = CT_PresetColor.Parse(node, namespaceMgr);
-            ctSolidClrFill.srgbClrField = CT_SRgbColor.Parse(node, namespaceMgr);
-            return ctSolidClrFill;
+            if (node == null)
+                return null;
+            CT_SolidColorFillProperties ctObj = new CT_SolidColorFillProperties();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "scrgbClr")
+                    ctObj.scrgbClr = CT_ScRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srgbClr")
+                    ctObj.srgbClr = CT_SRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hslClr")
+                    ctObj.hslClr = CT_HslColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sysClr")
+                    ctObj.sysClr = CT_SystemColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "schemeClr")
+                    ctObj.schemeClr = CT_SchemeColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "prstClr")
+                    ctObj.prstClr = CT_PresetColor.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.scrgbClr != null)
+                this.scrgbClr.Write(sw, "scrgbClr");
+            if (this.srgbClr != null)
+                this.srgbClr.Write(sw, "srgbClr");
+            if (this.hslClr != null)
+                this.hslClr.Write(sw, "hslClr");
+            if (this.sysClr != null)
+                this.sysClr.Write(sw, "sysClr");
+            if (this.schemeClr != null)
+                this.schemeClr.Write(sw, "schemeClr");
+            if (this.prstClr != null)
+                this.prstClr.Write(sw, "prstClr");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -1764,7 +1844,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_GradientFillProperties
     {
 
-        private List<CT_GradientStop> gsLstField;
+        private CT_GradientStopList gsLstField;
 
         private CT_LinearShadeProperties linField;
 
@@ -1787,10 +1867,49 @@ namespace NPOI.OpenXmlFormats.Dml
             //this.linField = new CT_LinearShadeProperties();
             //this.gsLstField = new List<CT_GradientStop>();
         }
+        public static CT_GradientFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_GradientFillProperties ctObj = new CT_GradientFillProperties();
+            if (node.Attributes["flip"] != null)
+                ctObj.flip = (ST_TileFlipMode)Enum.Parse(typeof(ST_TileFlipMode), node.Attributes["flip"].Value);
+            ctObj.rotWithShape = XmlHelper.ReadBool(node.Attributes["rotWithShape"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "gsLst")
+                    ctObj.gsLst = CT_GradientStopList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lin")
+                    ctObj.lin = CT_LinearShadeProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "path")
+                    ctObj.path = CT_PathShadeProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tileRect")
+                    ctObj.tileRect = CT_RelativeRect.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
+            XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            sw.Write(">");
+            if (this.gsLst != null)
+                this.gsLst.Write(sw, "gsLst");
+            if (this.lin != null)
+                this.lin.Write(sw, "lin");
+            if (this.path != null)
+                this.path.Write(sw, "path");
+            if (this.tileRect != null)
+                this.tileRect.Write(sw, "tileRect");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
         [XmlArray(Order = 0)]
         [XmlArrayItem("gs", IsNullable = false)]
-        public List<CT_GradientStop> gsLst
+        public CT_GradientStopList gsLst
         {
             get
             {
@@ -1924,6 +2043,51 @@ namespace NPOI.OpenXmlFormats.Dml
             //this.srgbClrField = new CT_SRgbColor();
             //this.scrgbClrField = new CT_ScRgbColor();
         }
+        public static CT_GradientStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_GradientStop ctObj = new CT_GradientStop();
+            ctObj.pos = XmlHelper.ReadInt(node.Attributes["pos"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "scrgbClr")
+                    ctObj.scrgbClr = CT_ScRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srgbClr")
+                    ctObj.srgbClr = CT_SRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hslClr")
+                    ctObj.hslClr = CT_HslColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sysClr")
+                    ctObj.sysClr = CT_SystemColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "schemeClr")
+                    ctObj.schemeClr = CT_SchemeColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "prstClr")
+                    ctObj.prstClr = CT_PresetColor.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "pos", this.pos);
+            sw.Write(">");
+            if (this.scrgbClr != null)
+                this.scrgbClr.Write(sw, "scrgbClr");
+            if (this.srgbClr != null)
+                this.srgbClr.Write(sw, "srgbClr");
+            if (this.hslClr != null)
+                this.hslClr.Write(sw, "hslClr");
+            if (this.sysClr != null)
+                this.sysClr.Write(sw, "sysClr");
+            if (this.schemeClr != null)
+                this.schemeClr.Write(sw, "schemeClr");
+            if (this.prstClr != null)
+                this.prstClr.Write(sw, "prstClr");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
@@ -2044,11 +2208,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "ang", this.ang);
             XmlHelper.WriteAttribute(sw, "scaled", this.scaled);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlAttribute]
@@ -2139,12 +2303,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "path", this.path.ToString());
             sw.Write(">");
-            this.fillToRect.Write(sw, "fillToRect");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.fillToRect != null)
+                this.fillToRect.Write(sw, "fillToRect");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
+
 
         [XmlElement(Order = 0)]
         public CT_RelativeRect fillToRect
@@ -2255,35 +2421,42 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public static CT_BlipFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            if(node==null)
+            if (node == null)
                 return null;
+            CT_BlipFillProperties ctObj = new CT_BlipFillProperties();
+            ctObj.dpi = XmlHelper.ReadUInt(node.Attributes["dpi"]);
+            ctObj.rotWithShape = XmlHelper.ReadBool(node.Attributes["rotWithShape"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "blip")
+                    ctObj.blip = CT_Blip.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srcRect")
+                    ctObj.srcRect = CT_RelativeRect.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tile")
+                    ctObj.tile = CT_TileInfoProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "stretch")
+                    ctObj.stretch = CT_StretchInfoProperties.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
 
-            CT_BlipFillProperties ctBlipFill = new CT_BlipFillProperties();
-            XmlNode blipNode = node.SelectSingleNode("a:blip", namespaceManager);
-            if (blipNode != null)
-            {
-                CT_Blip ctBlip = ctBlipFill.AddNewBlip();
-                ctBlip.embed = blipNode.Attributes["r:embed"].Value;
-                if (blipNode.Attributes["link"]!=null)
-                    ctBlip.link = blipNode.Attributes["link"].Value;
-                if (blipNode.Attributes["cstate"] != null)
-                    ctBlip.cstate = (ST_BlipCompression)Enum.Parse(typeof(ST_BlipCompression), blipNode.Attributes["cstate"].Value);
-            }
-            XmlNode fillRectNode = node.SelectSingleNode("a:stretch/a:fillRect", namespaceManager);
-            if (fillRectNode != null)
-            {
-                CT_StretchInfoProperties ctStretch = ctBlipFill.AddNewStretch();
-                CT_RelativeRect ctfillRect = ctStretch.AddNewFillRect();
-                if (fillRectNode.Attributes["b"] != null)
-                    ctfillRect.b = Int32.Parse(fillRectNode.Attributes["b"].Value);
-                if (fillRectNode.Attributes["l"] != null)
-                    ctfillRect.l = Int32.Parse(fillRectNode.Attributes["l"].Value);
-                if (fillRectNode.Attributes["r"] != null)
-                    ctfillRect.r = Int32.Parse(fillRectNode.Attributes["r"].Value);
-                if (fillRectNode.Attributes["t"] != null)
-                    ctfillRect.t = Int32.Parse(fillRectNode.Attributes["t"].Value);
-            }
-            return ctBlipFill;
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
+            XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            sw.Write(">");
+            if (this.blip != null)
+                this.blip.Write(sw, "blip");
+            if (this.srcRect != null)
+                this.srcRect.Write(sw, "srcRect");
+            if (this.tile != null)
+                this.tile.Write(sw, "tile");
+            if (this.stretch != null)
+                this.stretch.Write(sw, "stretch");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -2394,31 +2567,6 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.blipField != null;
         }
 
-        internal void Write(System.IO.StreamWriter sw)
-        {
-            sw.Write("<xdr:blipFill>");
-            if (this.blip != null)
-            {
-                sw.Write(string.Format("<a:blip xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" r:embed=\"{0}\" />", this.blip.embed));
-            }
-            if (this.stretch != null)
-            {
-                sw.Write("<a:stretch>");
-                if(this.stretch.fillRect!=null)
-                {
-                    sw.Write("<a:fillRect");
-                    if (this.stretch.fillRect.b != 0)
-                        sw.Write(string.Format(" b=\"{0}\"", this.stretch.fillRect.b));
-                    if (this.stretch.fillRect.l != 0)
-                        sw.Write(string.Format(" l=\"{0}\"", this.stretch.fillRect.l));
-                    if (this.stretch.fillRect.r != 0)
-                        sw.Write(string.Format(" r=\"{0}\"", this.stretch.fillRect.r));
-                    sw.Write("/>");
-                }
-                sw.Write("</a:stretch>");
-            }
-            sw.Write("</xdr:blipFill>");
-        }
     }
 
 
@@ -2452,6 +2600,37 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_RectAlignment algnField;
 
         private bool algnFieldSpecified;
+
+        public static CT_TileInfoProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TileInfoProperties ctObj = new CT_TileInfoProperties();
+            ctObj.tx = XmlHelper.ReadLong(node.Attributes["tx"]);
+            ctObj.ty = XmlHelper.ReadLong(node.Attributes["ty"]);
+            ctObj.sx = XmlHelper.ReadInt(node.Attributes["sx"]);
+            ctObj.sy = XmlHelper.ReadInt(node.Attributes["sy"]);
+            if (node.Attributes["flip"] != null)
+                ctObj.flip = (ST_TileFlipMode)Enum.Parse(typeof(ST_TileFlipMode), node.Attributes["flip"].Value);
+            if (node.Attributes["algn"] != null)
+                ctObj.algn = (ST_RectAlignment)Enum.Parse(typeof(ST_RectAlignment), node.Attributes["algn"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "tx", this.tx);
+            XmlHelper.WriteAttribute(sw, "ty", this.ty);
+            XmlHelper.WriteAttribute(sw, "sx", this.sx);
+            XmlHelper.WriteAttribute(sw, "sy", this.sy);
+            XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
+            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public long tx
@@ -2633,11 +2812,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(string.Format("<a:{0}", nodeName));
             sw.Write(">");
             if (this.fillRect != null)
                 this.fillRect.Write(sw, "fillRect");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         private CT_RelativeRect fillRectField = null;
@@ -2692,15 +2871,20 @@ namespace NPOI.OpenXmlFormats.Dml
             return ctObj;
         }
 
+
+
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
             sw.Write(">");
-            this.fgClr.Write(sw, "fgClr");
-            this.bgClr.Write(sw, "bgClr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.fgClr != null)
+                this.fgClr.Write(sw, "fgClr");
+            if (this.bgClr != null)
+                this.bgClr.Write(sw, "bgClr");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
+
 
         public CT_PatternFillProperties()
         {
@@ -3858,6 +4042,32 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_GradientStopList
     {
+        public static CT_GradientStopList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_GradientStopList ctObj = new CT_GradientStopList();
+            ctObj.gs = new List<CT_GradientStop>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "gs")
+                    ctObj.gs.Add(CT_GradientStop.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            foreach (CT_GradientStop x in this.gs)
+            {
+                x.Write(sw, "gs");
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private List<CT_GradientStop> gsField;
 

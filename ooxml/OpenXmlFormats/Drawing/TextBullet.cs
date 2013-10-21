@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using System.IO;
+    using NPOI.OpenXml4Net.Util;
 
 
 
@@ -22,7 +25,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBulletColorFollowText
+    public class CT_TextBulletColorFollowText
     {
     }
 
@@ -32,7 +35,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBulletSizeFollowText
+    public class CT_TextBulletSizeFollowText
     {
     }
 
@@ -42,8 +45,26 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBulletSizePercent
+    public class CT_TextBulletSizePercent
     {
+        public static CT_TextBulletSizePercent Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextBulletSizePercent ctObj = new CT_TextBulletSizePercent();
+            ctObj.val = XmlHelper.ReadInt(node.Attributes["val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private int valField;
 
@@ -82,8 +103,26 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBulletSizePoint
+    public class CT_TextBulletSizePoint
     {
+        public static CT_TextBulletSizePoint Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextBulletSizePoint ctObj = new CT_TextBulletSizePoint();
+            ctObj.val = XmlHelper.ReadInt(node.Attributes["val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private int valField;
 
@@ -122,7 +161,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBulletTypefaceFollowText
+    public class CT_TextBulletTypefaceFollowText
     {
     }
 
@@ -132,8 +171,29 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextAutonumberBullet
+    public class CT_TextAutonumberBullet
     {
+        public static CT_TextAutonumberBullet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextAutonumberBullet ctObj = new CT_TextAutonumberBullet();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_TextAutonumberScheme)Enum.Parse(typeof(ST_TextAutonumberScheme), node.Attributes["type"].Value);
+            ctObj.startAt = XmlHelper.ReadInt(node.Attributes["startAt"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "startAt", this.startAt);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private ST_TextAutonumberScheme typeField;
 
@@ -308,7 +368,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextCharBullet
+    public class CT_TextCharBullet
     {
 
         private string charField;
@@ -333,8 +393,29 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBlipBullet
+    public class CT_TextBlipBullet
     {
+        public static CT_TextBlipBullet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextBlipBullet ctObj = new CT_TextBlipBullet();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "blip")
+                    ctObj.blip = CT_Blip.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.blip != null)
+                this.blip.Write(sw, "blip");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private CT_Blip blipField;
 
@@ -363,7 +444,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextNoBullet
+    public class CT_TextNoBullet
     {
     }
 }

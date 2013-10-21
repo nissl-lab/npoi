@@ -176,12 +176,15 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(string.Format("<xdr:{0}", nodeName));
             sw.Write(">");
-            this.cNvCxnSpPr.Write(sw, "cNvCxnSpPr");
-            this.cNvPr.Write(sw, "cNvPr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.cNvCxnSpPr != null)
+                this.cNvCxnSpPr.Write(sw, "cNvCxnSpPr");
+            if (this.cNvPr != null)
+                this.cNvPr.Write(sw, "cNvPr");
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
+
 
     }
 

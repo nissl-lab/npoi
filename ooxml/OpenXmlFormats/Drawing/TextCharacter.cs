@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using NPOI.OpenXml4Net.Util;
+    using System.IO;
+    using System.Xml;
     
 
     [Serializable]
@@ -36,6 +39,30 @@ namespace NPOI.OpenXmlFormats.Dml
             this.pitchFamilyField = ((sbyte)(0));
             this.charsetField = ((sbyte)(1));
         }
+
+        public static CT_TextFont Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextFont ctObj = new CT_TextFont();
+            ctObj.typeface = XmlHelper.ReadString(node.Attributes["typeface"]);
+            ctObj.panose = XmlHelper.ReadBytes(node.Attributes["panose"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "typeface", this.typeface);
+            XmlHelper.WriteAttribute(sw, "panose", this.panose);
+            XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
+            XmlHelper.WriteAttribute(sw, "charset", this.charset);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
 
         [XmlAttribute]
         public string typeface

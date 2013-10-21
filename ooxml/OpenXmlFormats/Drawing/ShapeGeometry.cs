@@ -888,6 +888,30 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private string bField;
 
+        public static CT_GeomRect Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_GeomRect ctObj = new CT_GeomRect();
+            ctObj.l = XmlHelper.ReadString(node.Attributes["l"]);
+            ctObj.t = XmlHelper.ReadString(node.Attributes["t"]);
+            ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
+            ctObj.b = XmlHelper.ReadString(node.Attributes["b"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "l", this.l);
+            XmlHelper.WriteAttribute(sw, "t", this.t);
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            XmlHelper.WriteAttribute(sw, "b", this.b);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public string l
@@ -1307,11 +1331,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "idx", this.idx);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
 
