@@ -151,7 +151,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public LineStyle LineStyle
+        public virtual LineStyle LineStyle
         {
             get
             {
@@ -167,16 +167,24 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public int LineStyleColor
+        public virtual int LineStyleColor
         {
             get { throw new System.NotImplementedException(); }
         }
 
-        public double LineWidth
+        public virtual double LineWidth
         {
             get
             {
-                throw new System.NotImplementedException();
+                CT_ShapeProperties props = GetShapeProperties();
+                if (props.IsSetLn())
+                {
+                    return props.ln.w*1.0 / EMU_PER_POINT;
+                }
+                else
+                {
+                    return 0.0;
+                }
             }
             set
             {

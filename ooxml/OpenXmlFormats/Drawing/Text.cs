@@ -13,7 +13,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextParagraph {
+    public class CT_TextParagraph {
         
         private CT_TextParagraphProperties pPrField;
         
@@ -200,7 +200,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextListStyle {
+    public class CT_TextListStyle {
         
         private CT_TextParagraphProperties defPPrField;
         
@@ -341,7 +341,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextNormalAutofit {
+    public class CT_TextNormalAutofit {
         
         private int fontScaleField;
         
@@ -383,7 +383,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextShapeAutofit {
+    public class CT_TextShapeAutofit {
     }
     
 
@@ -392,7 +392,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextNoAutofit {
+    public class CT_TextNoAutofit {
     }
 
 
@@ -401,7 +401,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TextBodyProperties
+    public class CT_TextBodyProperties
     {
 
         private CT_PresetTextShape prstTxWarpField;
@@ -1124,7 +1124,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
-    public partial class CT_TextBody {
+    public class CT_TextBody {
         
         private CT_TextBodyProperties bodyPrField;
         

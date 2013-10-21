@@ -122,22 +122,22 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TableProperties()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.effectDagField = new CT_EffectContainer();
-            this.effectLstField = new CT_EffectList();
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
-            this.rtlField = false;
-            this.firstRowField = false;
-            this.firstColField = false;
-            this.lastRowField = false;
-            this.lastColField = false;
-            this.bandRowField = false;
-            this.bandColField = false;
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.effectDagField = new CT_EffectContainer();
+            //this.effectLstField = new CT_EffectList();
+            //this.grpFillField = new CT_GroupFillProperties();
+            //this.pattFillField = new CT_PatternFillProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.gradFillField = new CT_GradientFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
+            //this.noFillField = new CT_NoFillProperties();
+            //this.rtlField = false;
+            //this.firstRowField = false;
+            //this.firstColField = false;
+            //this.lastRowField = false;
+            //this.lastColField = false;
+            //this.bandRowField = false;
+            //this.bandColField = false;
         }
 
         [XmlElement(Order = 0)]
@@ -662,20 +662,20 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TableCellProperties()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
-            this.cell3DField = new CT_Cell3D();
-            this.lnBlToTrField = new CT_LineProperties();
-            this.lnTlToBrField = new CT_LineProperties();
-            this.lnBField = new CT_LineProperties();
-            this.lnTField = new CT_LineProperties();
-            this.lnRField = new CT_LineProperties();
-            this.lnLField = new CT_LineProperties();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.grpFillField = new CT_GroupFillProperties();
+            //this.pattFillField = new CT_PatternFillProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.gradFillField = new CT_GradientFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
+            //this.noFillField = new CT_NoFillProperties();
+            //this.cell3DField = new CT_Cell3D();
+            //this.lnBlToTrField = new CT_LineProperties();
+            //this.lnTlToBrField = new CT_LineProperties();
+            //this.lnBField = new CT_LineProperties();
+            //this.lnTField = new CT_LineProperties();
+            //this.lnRField = new CT_LineProperties();
+            //this.lnLField = new CT_LineProperties();
             this.marLField = 91440;
             this.marRField = 91440;
             this.marTField = 45720;

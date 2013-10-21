@@ -1,4 +1,5 @@
-﻿using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+﻿using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,10 +46,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 ctShape.macroField = node.Attributes["macro"].Value;
             if (node.Attributes["textlink"] != null)
                 ctShape.textlinkField = node.Attributes["textlink"].Value;
-            if (node.Attributes["fLocksText"] != null && node.Attributes["fLocksText"].Value == "1")
-                ctShape.fLocksTextField = true;
-            if (node.Attributes["fPublished"] != null && node.Attributes["fPublished"].Value == "1")
-                ctShape.fPublishedField = true;
+            ctShape.fLocksTextField = XmlHelper.ReadBool(node.Attributes["fLocksText"]);
+            ctShape.fPublishedField = XmlHelper.ReadBool(node.Attributes["fPublished"]);
 
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -60,15 +59,14 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 {
                     ctShape.spPr = CT_ShapeProperties.Parse(childNode, namespaceManager);
                 }
-                else if (childNode.LocalName == "style")
-                {
-                    throw new NotImplementedException();
-                    //ctShape.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
-                }
-                else if (childNode.LocalName == "txBody")
-                {
-                    throw new NotImplementedException();
-                }
+                //else if (childNode.LocalName == "style")
+                //{
+                //    throw new NotImplementedException();
+                //}
+                //else if (childNode.LocalName == "txBody")
+                //{
+                //    throw new NotImplementedException();
+                //}
             }
             return ctShape;
         }
@@ -189,11 +187,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write(">");
             if (this.nvSpPr != null)
             {
-                this.nvSpPr.Write(sw);
+                this.nvSpPr.Write(sw, "nvSpPr");
             }
             if (this.spPr != null)
             {
-                this.spPr.Write(sw);
+                this.spPr.Write(sw, "spPr");
             }
             sw.Write("</xdr:sp>");
         }
@@ -239,128 +237,130 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.cNvSpPrField = value;
             }
         }
-
-        internal static CT_ShapeNonVisual Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static CT_ShapeNonVisual Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            CT_ShapeNonVisual ctNvSpPr = new CT_ShapeNonVisual();
-            XmlNode cnvprNode = node.SelectSingleNode("xdr:cNvPr", namespaceManager);
-            if (cnvprNode != null)
+            if (node == null)
+                return null;
+            CT_ShapeNonVisual ctObj = new CT_ShapeNonVisual();
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                CT_NonVisualDrawingProps ctProps = ctNvSpPr.AddNewCNvPr();
-
-                ctProps.id = uint.Parse(cnvprNode.Attributes["id"].Value);
-                ctProps.name = cnvprNode.Attributes["name"].Value;
-                ctProps.descr = cnvprNode.Attributes["descr"].Value;
-                if (cnvprNode.Attributes["hidden"] != null && cnvprNode.Attributes["hidden"].Value == "1")
-                    ctProps.hidden = true;
-                //TODO::hlinkClick, hlinkCover
+                if (childNode.LocalName == "cNvPr")
+                    ctObj.cNvPr = CT_NonVisualDrawingProps.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cNvSpPr")
+                    ctObj.cNvSpPr = CT_NonVisualDrawingShapeProps.Parse(childNode, namespaceManager);
             }
-            XmlNode cNvSpPrNode = node.SelectSingleNode("xdr:cNvSpPr", namespaceManager);
-            if (cNvSpPrNode != null)
-            {
-                CT_NonVisualDrawingShapeProps ctcNvSpPr = ctNvSpPr.AddNewCNvSpPr();
-                XmlNode spLocksNode = cNvSpPrNode.SelectSingleNode("a:spLocks", namespaceManager);
-                if (spLocksNode != null)
-                {
-                    ctcNvSpPr.spLocks = new CT_ShapeLocking();
+            return ctObj;
+        }
 
-                    if (spLocksNode.Attributes["noChangeAspect"] != null && spLocksNode.Attributes["noChangeAspect"].Value == "1")
-                        ctcNvSpPr.spLocks.noChangeAspect = true;
 
-                    if (spLocksNode.Attributes["noAdjustHandles"] != null && spLocksNode.Attributes["noAdjustHandles"].Value == "1")
-                        ctcNvSpPr.spLocks.noAdjustHandles = true;
 
-                    if (spLocksNode.Attributes["noChangeArrowheads"] != null && spLocksNode.Attributes["noChangeArrowheads"].Value == "1")
-                        ctcNvSpPr.spLocks.noChangeArrowheads = true;
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            this.cNvPr.Write(sw, "cNvPr");
+            this.cNvSpPr.Write(sw, "cNvSpPr");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
-                    if (spLocksNode.Attributes["noChangeShapeType"] != null && spLocksNode.Attributes["noChangeShapeType"].Value == "1")
-                        ctcNvSpPr.spLocks.noChangeShapeType = true;
+    }
 
-                    if (spLocksNode.Attributes["noEditPoints"] != null && spLocksNode.Attributes["noEditPoints"].Value == "1")
-                        ctcNvSpPr.spLocks.noEditPoints = true;
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_GroupShape
+    {
+        CT_GroupShapeProperties grpSpPrField;
+        CT_GroupShapeNonVisual nvGrpSpPrField;
+        CT_Connector connectorField = null;
+        CT_Picture pictureField = null;
+        CT_Shape shapeField = null;
 
-                    if (spLocksNode.Attributes["noGrp"] != null && spLocksNode.Attributes["noGrp"].Value == "1")
-                        ctcNvSpPr.spLocks.noGrp = true;
+        public void Set(CT_GroupShape groupShape)
+        {
+            this.grpSpPrField = groupShape.grpSpPr;
+            this.nvGrpSpPrField = groupShape.nvGrpSpPr;
+        }
 
-                    if (spLocksNode.Attributes["noMove"] != null && spLocksNode.Attributes["noMove"].Value == "1")
-                        ctcNvSpPr.spLocks.noMove = true;
+        public CT_GroupShapeProperties AddNewGrpSpPr()
+        {
+            this.grpSpPrField = new CT_GroupShapeProperties();
+            return this.grpSpPrField;
+        }
+        public CT_GroupShapeNonVisual AddNewNvGrpSpPr()
+        {
+            this.nvGrpSpPrField = new CT_GroupShapeNonVisual();
+            return this.nvGrpSpPrField;
+        }
+        public CT_Connector AddNewCxnSp()
+        {
+            connectorField = new CT_Connector();
+            return connectorField;
+        }
+        public CT_Shape AddNewSp()
+        {
+            shapeField = new CT_Shape();
+            return shapeField;
+        }
+        public CT_Picture AddNewPic()
+        {
+            pictureField = new CT_Picture();
+            return pictureField;
+        }
 
-                    if (spLocksNode.Attributes["noResize"] != null && spLocksNode.Attributes["noResize"].Value == "1")
-                        ctcNvSpPr.spLocks.noResize = true;
+        public CT_GroupShapeNonVisual nvGrpSpPr
+        {
+            get { return nvGrpSpPrField; }
+            set { nvGrpSpPrField = value; }
+        }
+        public CT_GroupShapeProperties grpSpPr
+        {
+            get { return grpSpPrField; }
+            set { grpSpPrField = value; }
 
-                    if (spLocksNode.Attributes["noRot"] != null && spLocksNode.Attributes["noRot"].Value == "1")
-                        ctcNvSpPr.spLocks.noRot = true;
-
-                    if (spLocksNode.Attributes["noSelect"] != null && spLocksNode.Attributes["noSelect"].Value == "1")
-                        ctcNvSpPr.spLocks.noSelect = true;
-                }
-            }
-            return ctNvSpPr;
         }
 
         internal void Write(StreamWriter sw)
         {
-            sw.Write("<xdr:nvSpPr>");
-            if (this.cNvPr != null)
-            {
-                sw.Write(string.Format("<xdr:cNvPr id=\"{0}\" name=\"{1}\" descr=\"{2}\"", this.cNvPr.id, this.cNvPr.name, this.cNvPr.descr));
-                if (this.cNvPr.hidden)
-                {
-                    sw.Write(" hidden=\"1\"");
-                }
-                sw.Write("/>");
-            }
-            if (this.cNvSpPr != null)
-            {
-                sw.Write("<xdr:cNvSpPr>");
-                if (this.cNvSpPr.spLocks != null)
-                {
-                    sw.Write("<a:spLocks");
-                    if (this.cNvSpPr.spLocks.noChangeAspect)
-                    {
-                        sw.Write(" noChangeAspect=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noAdjustHandles)
-                    {
-                        sw.Write(" noAdjustHandles=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noChangeArrowheads)
-                    {
-                        sw.Write(" noChangeArrowheads=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noChangeShapeType)
-                    {
-                        sw.Write(" noChangeShapeType=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noEditPoints)
-                    {
-                        sw.Write(" noEditPoints=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noGrp)
-                    {
-                        sw.Write(" noGrp=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noMove)
-                    {
-                        sw.Write(" noMove=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noResize)
-                    {
-                        sw.Write(" noResize=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noRot)
-                    {
-                        sw.Write(" noRot=\"1\"");
-                    }
-                    if (this.cNvSpPr.spLocks.noSelect)
-                    {
-                        sw.Write(" noSelect=\"1\"");
-                    }
-                    sw.Write("/>");
-                }
-                sw.Write("</xdr:cNvSpPr>");
-            }
-            sw.Write("</xdr:nvSpPr>");
+            throw new NotImplementedException();
+        }
+
+        internal static CT_GroupShape Parse(XmlNode xmlNode, XmlNamespaceManager namespaceManager)
+        {
+            if (xmlNode == null)
+                return null;
+
+            throw new NotImplementedException();
         }
     }
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_GroupShapeNonVisual
+    {
+        CT_NonVisualDrawingProps cNvPrField;
+        CT_NonVisualGroupDrawingShapeProps cNvGrpSpPrField;
+
+        public CT_NonVisualGroupDrawingShapeProps AddNewCNvGrpSpPr()
+        {
+            this.cNvGrpSpPrField = new CT_NonVisualGroupDrawingShapeProps();
+            return this.cNvGrpSpPrField;
+        }
+        public CT_NonVisualDrawingProps AddNewCNvPr()
+        {
+            this.cNvPrField = new CT_NonVisualDrawingProps();
+            return this.cNvPrField;
+        }
+
+        public CT_NonVisualDrawingProps cNvPr
+        {
+            get { return cNvPrField; }
+            set { cNvPrField = value; }
+        }
+        public CT_NonVisualGroupDrawingShapeProps cNvGrpSpPr
+        {
+            get { return cNvGrpSpPrField; }
+            set { cNvGrpSpPrField = value; }
+        }
+    }
+
 }

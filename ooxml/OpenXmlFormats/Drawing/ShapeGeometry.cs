@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Diagnostics;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -1290,6 +1293,26 @@ namespace NPOI.OpenXmlFormats.Dml
         private uint idField;
 
         private uint idxField;
+        public static CT_Connection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Connection ctObj = new CT_Connection();
+            ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            ctObj.idx = XmlHelper.ReadUInt(node.Attributes["idx"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "idx", this.idx);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
 
         [XmlAttribute]
@@ -1496,7 +1519,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_Path2D
     {
 
-        private object[] itemsField;
+        //private object[] itemsField;
 
         private ItemsChoiceType[] itemsElementNameField;
 
@@ -1520,24 +1543,24 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
 
-        [XmlElement("arcTo", typeof(CT_Path2DArcTo))]
-        [XmlElement("close", typeof(CT_Path2DClose))]
-        [XmlElement("cubicBezTo", typeof(CT_Path2DCubicBezierTo))]
-        [XmlElement("lnTo", typeof(CT_Path2DLineTo))]
-        [XmlElement("moveTo", typeof(CT_Path2DMoveTo))]
-        [XmlElement("quadBezTo", typeof(CT_Path2DQuadBezierTo))]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
-        }
+        //[XmlElement("arcTo", typeof(CT_Path2DArcTo))]
+        //[XmlElement("close", typeof(CT_Path2DClose))]
+        //[XmlElement("cubicBezTo", typeof(CT_Path2DCubicBezierTo))]
+        //[XmlElement("lnTo", typeof(CT_Path2DLineTo))]
+        //[XmlElement("moveTo", typeof(CT_Path2DMoveTo))]
+        //[XmlElement("quadBezTo", typeof(CT_Path2DQuadBezierTo))]
+        //[XmlChoiceIdentifier("ItemsElementName")]
+        //public object[] Items
+        //{
+        //    get
+        //    {
+        //        return this.itemsField;
+        //    }
+        //    set
+        //    {
+        //        this.itemsField = value;
+        //    }
+        //}
 
 
         [XmlElement("ItemsElementName")]
@@ -1703,6 +1726,19 @@ namespace NPOI.OpenXmlFormats.Dml
             return geomGuideNode;
         }
 
+        public static CT_PresetGeometry2D Parse(XmlNode prstGeomNode)
+        {
+            CT_PresetGeometry2D prstGeom = new CT_PresetGeometry2D();
+            prstGeom.prst = (ST_ShapeType)Enum.Parse(typeof(ST_ShapeType), prstGeomNode.Attributes["prst"].Value);
+            foreach (XmlNode ggNode in prstGeomNode.ChildNodes)
+            {
+                CT_GeomGuide gg = prstGeom.AddNewAvLst();
+                gg.name = XmlHelper.ReadString(ggNode.Attributes["name"]);
+                gg.fmla = XmlHelper.ReadString(ggNode.Attributes["fmla"]);
+            }
+            return prstGeom;
+        }
+
 
 //        [XmlArray(Order = 0)]
         //[XmlArrayItem("avLst", IsNullable = false)]
@@ -1742,13 +1778,13 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_PresetTextShape
     {
 
-        private CT_GeomGuide[] avLstField;
+        private List<CT_GeomGuide> avLstField;
 
         private ST_TextShapeType prstField;
 
         [XmlArray(Order = 0)]
         [XmlArrayItem("gd", IsNullable = false)]
-        public CT_GeomGuide[] avLst
+        public List<CT_GeomGuide> avLst
         {
             get
             {
@@ -1784,21 +1820,21 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_CustomGeometry2D
     {
 
-        private CT_GeomGuide[] avLstField;
+        private List<CT_GeomGuide> avLstField;
 
-        private CT_GeomGuide[] gdLstField;
+        private List<CT_GeomGuide> gdLstField;
 
-        private object[] ahLstField;
+        private List<object> ahLstField;
 
-        private CT_ConnectionSite[] cxnLstField;
+        private List<CT_ConnectionSite> cxnLstField;
 
         private CT_GeomRect rectField;
 
-        private CT_Path2D[] pathLstField;
+        private List<CT_Path2D> pathLstField;
 
         [XmlArray(Order = 0)]
         [XmlArrayItem("gd", IsNullable = false)]
-        public CT_GeomGuide[] avLst
+        public List<CT_GeomGuide> avLst
         {
             get
             {
@@ -1812,7 +1848,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         [XmlArray(Order = 1)]
         [XmlArrayItem("gd", IsNullable = false)]
-        public CT_GeomGuide[] gdLst
+        public List<CT_GeomGuide> gdLst
         {
             get
             {
@@ -1827,7 +1863,7 @@ namespace NPOI.OpenXmlFormats.Dml
         [XmlArray(Order = 2)]
         [XmlArrayItem("ahPolar", typeof(CT_PolarAdjustHandle), IsNullable = false)]
         [XmlArrayItem("ahXY", typeof(CT_XYAdjustHandle), IsNullable = false)]
-        public object[] ahLst
+        public List<object> ahLst
         {
             get
             {
@@ -1841,7 +1877,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         [XmlArray(Order = 3)]
         [XmlArrayItem("cxn", IsNullable = false)]
-        public CT_ConnectionSite[] cxnLst
+        public List<CT_ConnectionSite> cxnLst
         {
             get
             {
@@ -1868,7 +1904,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         [XmlArray(Order = 5)]
         [XmlArrayItem("path", IsNullable = false)]
-        public CT_Path2D[] pathLst
+        public List<CT_Path2D> pathLst
         {
             get
             {

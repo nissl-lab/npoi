@@ -41,14 +41,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_BackgroundFormatting()
         {
-            this.effectDagField = new CT_EffectContainer();
-            this.effectLstField = new CT_EffectList();
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
+            //this.effectDagField = new CT_EffectContainer();
+            //this.effectLstField = new CT_EffectList();
+            //this.grpFillField = new CT_GroupFillProperties();
+            //this.pattFillField = new CT_PatternFillProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.gradFillField = new CT_GradientFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
+            //this.noFillField = new CT_NoFillProperties();
         }
 
         [XmlElement(Order = 0)]

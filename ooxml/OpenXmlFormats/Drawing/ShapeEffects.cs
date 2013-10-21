@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Xml;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
@@ -642,14 +644,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_PresetShadowEffect()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
-            this.distField = ((long)(0));
-            this.dirField = 0;
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
+            //this.distField = ((long)(0));
+            //this.dirField = 0;
         }
 
         [XmlElement(Order = 0)]
@@ -876,21 +878,21 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_OuterShadowEffect()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
-            this.blurRadField = ((long)(0));
-            this.distField = ((long)(0));
-            this.dirField = 0;
-            this.sxField = 100000;
-            this.syField = 100000;
-            this.kxField = 0;
-            this.kyField = 0;
-            this.algnField = ST_RectAlignment.b;
-            this.rotWithShapeField = true;
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
+            //this.blurRadField = ((long)(0));
+            //this.distField = ((long)(0));
+            //this.dirField = 0;
+            //this.sxField = 100000;
+            //this.syField = 100000;
+            //this.kxField = 0;
+            //this.kyField = 0;
+            //this.algnField = ST_RectAlignment.b;
+            //this.rotWithShapeField = true;
         }
 
         [XmlElement(Order = 0)]
@@ -1169,15 +1171,15 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_InnerShadowEffect()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
-            this.blurRadField = ((long)(0));
-            this.distField = ((long)(0));
-            this.dirField = 0;
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
+            //this.blurRadField = ((long)(0));
+            //this.distField = ((long)(0));
+            //this.dirField = 0;
         }
 
         [XmlElement(Order = 0)]
@@ -1393,13 +1395,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GlowEffect()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
-            this.radField = ((long)(0));
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
+            //this.radField = ((long)(0));
         }
 
         [XmlElement(Order = 0)]
@@ -1654,6 +1656,17 @@ namespace NPOI.OpenXmlFormats.Dml
             //this.srgbClrField = new CT_SRgbColor();
             //this.scrgbClrField = new CT_ScRgbColor();
         }
+        public static CT_SolidColorFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceMgr)
+        {
+            CT_SolidColorFillProperties ctSolidClrFill = new CT_SolidColorFillProperties();
+            ctSolidClrFill.schemeClrField = CT_SchemeColor.Parse(node, namespaceMgr);
+            ctSolidClrFill.sysClrField = CT_SystemColor.Parse(node, namespaceMgr);
+            ctSolidClrFill.scrgbClrField = CT_ScRgbColor.Parse(node, namespaceMgr);
+            ctSolidClrFill.hslClrField = CT_HslColor.Parse(node, namespaceMgr);
+            ctSolidClrFill.prstClrField = CT_PresetColor.Parse(node, namespaceMgr);
+            ctSolidClrFill.srgbClrField = CT_SRgbColor.Parse(node, namespaceMgr);
+            return ctSolidClrFill;
+        }
 
         [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
@@ -1879,6 +1892,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rotWithShapeFieldSpecified = value;
             }
         }
+
     }
 
     [Serializable]
@@ -2016,6 +2030,26 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool scaledField;
 
         private bool scaledFieldSpecified;
+        public static CT_LinearShadeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LinearShadeProperties ctObj = new CT_LinearShadeProperties();
+            ctObj.ang = XmlHelper.ReadInt(node.Attributes["ang"]);
+            ctObj.scaled = XmlHelper.ReadBool(node.Attributes["scaled"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ang", this.ang);
+            XmlHelper.WriteAttribute(sw, "scaled", this.scaled);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public int ang
@@ -2084,7 +2118,32 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_PathShadeProperties()
         {
-            this.fillToRectField = new CT_RelativeRect();
+            //this.fillToRectField = new CT_RelativeRect();
+        }
+        public static CT_PathShadeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PathShadeProperties ctObj = new CT_PathShadeProperties();
+            if (node.Attributes["path"] != null)
+                ctObj.path = (ST_PathShadeType)Enum.Parse(typeof(ST_PathShadeType), node.Attributes["path"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "fillToRect")
+                    ctObj.fillToRect = CT_RelativeRect.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "path", this.path.ToString());
+            sw.Write(">");
+            this.fillToRect.Write(sw, "fillToRect");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -2335,8 +2394,6 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.blipField != null;
         }
 
-
-
         internal void Write(System.IO.StreamWriter sw)
         {
             sw.Write("<xdr:blipFill>");
@@ -2559,6 +2616,29 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_StretchInfoProperties
     {
+        public static CT_StretchInfoProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_StretchInfoProperties ctObj = new CT_StretchInfoProperties();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "fillRect")
+                    ctObj.fillRect = CT_RelativeRect.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.fillRect != null)
+                this.fillRect.Write(sw, "fillRect");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_RelativeRect fillRectField = null;
 
@@ -2595,11 +2675,37 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_PresetPatternVal prstField;
 
         private bool prstFieldSpecified;
+        public static CT_PatternFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PatternFillProperties ctObj = new CT_PatternFillProperties();
+            if (node.Attributes["prst"] != null)
+                ctObj.prst = (ST_PresetPatternVal)Enum.Parse(typeof(ST_PresetPatternVal), node.Attributes["prst"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "fgClr")
+                    ctObj.fgClr = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bgClr")
+                    ctObj.bgClr = CT_Color.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
+            sw.Write(">");
+            this.fgClr.Write(sw, "fgClr");
+            this.bgClr.Write(sw, "bgClr");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_PatternFillProperties()
         {
-            this.bgClrField = new CT_Color();
-            this.fgClrField = new CT_Color();
+            //this.bgClrField = new CT_Color();
+            //this.fgClrField = new CT_Color();
         }
 
         [XmlElement(Order = 0)]
@@ -2872,12 +2978,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_FillEffect()
         {
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
+            //this.grpFillField = new CT_GroupFillProperties();
+            //this.pattFillField = new CT_PatternFillProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.gradFillField = new CT_GradientFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
+            //this.noFillField = new CT_NoFillProperties();
         }
 
         [XmlElement(Order = 0)]
@@ -3109,12 +3215,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ColorReplaceEffect()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
         }
 
         [XmlElement(Order = 0)]
@@ -3472,12 +3578,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_AlphaInverseEffect()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
         }
 
         [XmlElement(Order = 0)]
@@ -3794,12 +3900,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_FillProperties()
         {
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
+            //this.grpFillField = new CT_GroupFillProperties();
+            //this.pattFillField = new CT_PatternFillProperties();
+            //this.blipFillField = new CT_BlipFillProperties();
+            //this.gradFillField = new CT_GradientFillProperties();
+            //this.solidFillField = new CT_SolidColorFillProperties();
+            //this.noFillField = new CT_NoFillProperties();
         }
 
         [XmlElement(Order = 0)]

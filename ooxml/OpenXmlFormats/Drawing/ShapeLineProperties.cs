@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using NPOI.OpenXml4Net.Util;
+    using System.IO;
 
 
     
@@ -708,6 +711,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.solidFillField != null;
         }
+
     }
 
     

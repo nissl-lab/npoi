@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
@@ -108,6 +109,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return graphicField; }
             set { graphicField = value; }
         }
+
+        internal void Write(StreamWriter sw)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -153,224 +159,32 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.cNvPrField = value;
             }
         }
-
-        internal static CT_ConnectorNonVisual Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static CT_ConnectorNonVisual Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            CT_ConnectorNonVisual ctNvPr = new CT_ConnectorNonVisual();
-            XmlNode cnvprNode = node.SelectSingleNode("xdr:cNvPr", namespaceManager);
-            if (cnvprNode != null)
+            if (node == null)
+                return null;
+            CT_ConnectorNonVisual ctObj = new CT_ConnectorNonVisual();
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                CT_NonVisualDrawingProps ctProps = ctNvPr.AddNewCNvPr();
-
-                ctProps.id = uint.Parse(cnvprNode.Attributes["id"].Value);
-                ctProps.name = cnvprNode.Attributes["name"].Value;
-                ctProps.descr = cnvprNode.Attributes["descr"].Value;
-                if (cnvprNode.Attributes["hidden"] != null && cnvprNode.Attributes["hidden"].Value == "1")
-                    ctProps.hidden = true;
-                //TODO::hlinkClick, hlinkCover
+                if (childNode.LocalName == "cNvCxnSpPr")
+                    ctObj.cNvCxnSpPr = CT_NonVisualConnectorProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cNvPr")
+                    ctObj.cNvPr = CT_NonVisualDrawingProps.Parse(childNode, namespaceManager);
             }
-            XmlNode cNvCxnSpPrNode = node.SelectSingleNode("xdr:cNvCxnSpPr", namespaceManager);
-            if (cNvCxnSpPrNode != null)
-            {
-                CT_NonVisualConnectorProperties ctCxnSpPr = ctNvPr.AddNewCNvCxnSpPr();
-                XmlNode cxnSpLocksNode = cNvCxnSpPrNode.SelectSingleNode("a:cxnSpLocks", namespaceManager);
-                if (cxnSpLocksNode != null)
-                {
-                    ctCxnSpPr.cxnSpLocks = new CT_ConnectorLocking();
-
-                    if (cxnSpLocksNode.Attributes["noChangeAspect"] != null && cxnSpLocksNode.Attributes["noChangeAspect"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noChangeAspect = true;
-
-                    if (cxnSpLocksNode.Attributes["noAdjustHandles"] != null && cxnSpLocksNode.Attributes["noAdjustHandles"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noAdjustHandles = true;
-
-                    if (cxnSpLocksNode.Attributes["noChangeArrowheads"] != null && cxnSpLocksNode.Attributes["noChangeArrowheads"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noChangeArrowheads = true;
-
-                    if (cxnSpLocksNode.Attributes["noChangeShapeType"] != null && cxnSpLocksNode.Attributes["noChangeShapeType"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noChangeShapeType = true;
-
-                    if (cxnSpLocksNode.Attributes["noEditPoints"] != null && cxnSpLocksNode.Attributes["noEditPoints"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noEditPoints = true;
-
-                    if (cxnSpLocksNode.Attributes["noGrp"] != null && cxnSpLocksNode.Attributes["noGrp"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noGrp = true;
-
-                    if (cxnSpLocksNode.Attributes["noMove"] != null && cxnSpLocksNode.Attributes["noMove"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noMove = true;
-
-                    if (cxnSpLocksNode.Attributes["noResize"] != null && cxnSpLocksNode.Attributes["noResize"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noResize = true;
-
-                    if (cxnSpLocksNode.Attributes["noRot"] != null && cxnSpLocksNode.Attributes["noRot"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noRot = true;
-
-                    if (cxnSpLocksNode.Attributes["noSelect"] != null && cxnSpLocksNode.Attributes["noSelect"].Value == "1")
-                        ctCxnSpPr.cxnSpLocks.noSelect = true;
-                }
-
-                XmlNode stCxnNode = cNvCxnSpPrNode.SelectSingleNode("a:stCxn", namespaceManager);
-                if (stCxnNode != null)
-                {
-                    ctCxnSpPr.stCxn = new CT_Connection();
-                    ctCxnSpPr.stCxn.id = uint.Parse(stCxnNode.Attributes["id"].Value);
-                    ctCxnSpPr.stCxn.idx = uint.Parse(stCxnNode.Attributes["idx"].Value);
-                }
-                XmlNode endCxnNode = cNvCxnSpPrNode.SelectSingleNode("a:endCxn", namespaceManager);
-                if (endCxnNode != null)
-                {
-                    ctCxnSpPr.endCxn = new CT_Connection();
-                    ctCxnSpPr.endCxn.id = uint.Parse(endCxnNode.Attributes["id"].Value);
-                    ctCxnSpPr.endCxn.idx = uint.Parse(endCxnNode.Attributes["idx"].Value);
-                }
-            }
-            return ctNvPr;
+            return ctObj;
         }
 
-        internal void Write(StreamWriter sw)
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:nvCxnSpPr>");
-            if (this.cNvPr != null)
-            {
-                sw.Write(string.Format("<xdr:cNvPr id=\"{0}\" name=\"{1}\" descr=\"{2}\"", this.cNvPr.id, this.cNvPr.name, this.cNvPr.descr));
-                if (this.cNvPr.hidden)
-                {
-                    sw.Write(" hidden=\"1\"");
-                }
-                sw.Write("/>");
-            }
-            if (this.cNvCxnSpPr != null)
-            {
-                sw.Write("<xdr:cNvCxnSpPr>");
-                if (this.cNvCxnSpPr.cxnSpLocks != null)
-                {
-                    sw.Write("<a:cxnSpLocks");
-                    if (this.cNvCxnSpPr.cxnSpLocks.noChangeAspect)
-                    {
-                        sw.Write(" noChangeAspect=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noAdjustHandles)
-                    {
-                        sw.Write(" noAdjustHandles=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noChangeArrowheads)
-                    {
-                        sw.Write(" noChangeArrowheads=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noChangeShapeType)
-                    {
-                        sw.Write(" noChangeShapeType=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noEditPoints)
-                    {
-                        sw.Write(" noEditPoints=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noGrp)
-                    {
-                        sw.Write(" noGrp=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noMove)
-                    {
-                        sw.Write(" noMove=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noResize)
-                    {
-                        sw.Write(" noResize=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noRot)
-                    {
-                        sw.Write(" noRot=\"1\"");
-                    }
-                    if (this.cNvCxnSpPr.cxnSpLocks.noSelect)
-                    {
-                        sw.Write(" noSelect=\"1\"");
-                    }
-                    sw.Write("/>");
-                }
-                sw.Write("</xdr:cNvCxnSpPr>");
-            }
-            sw.Write("</xdr:nvCxnSpPr>");
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            this.cNvCxnSpPr.Write(sw, "cNvCxnSpPr");
+            this.cNvPr.Write(sw, "cNvPr");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
+
     }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_GroupShape
-    {
-        CT_GroupShapeProperties grpSpPrField;
-        CT_GroupShapeNonVisual nvGrpSpPrField;
-
-        public void Set(CT_GroupShape groupShape)
-        {
-            this.grpSpPrField = groupShape.grpSpPr;
-            this.nvGrpSpPrField = groupShape.nvGrpSpPr;
-        }
-
-        public CT_GroupShapeProperties AddNewGrpSpPr()
-        {
-            this.grpSpPrField = new CT_GroupShapeProperties();
-            return this.grpSpPrField;
-        }
-        public CT_GroupShapeNonVisual AddNewNvGrpSpPr()
-        {
-            this.nvGrpSpPrField = new CT_GroupShapeNonVisual();
-            return this.nvGrpSpPrField;
-        }
-        public CT_Connector AddNewCxnSp()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_Shape AddNewSp()
-        {
-            throw new NotImplementedException();
-        }
-        public CT_Picture AddNewPic()
-        {
-            throw new NotImplementedException();
-        }
-
-        public CT_GroupShapeNonVisual nvGrpSpPr
-        {
-            get { return nvGrpSpPrField; }
-            set { nvGrpSpPrField = value; }
-        }
-        public CT_GroupShapeProperties grpSpPr
-        {
-            get { return grpSpPrField; }
-            set { grpSpPrField = value; }
-
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_GroupShapeNonVisual
-    {
-        CT_NonVisualDrawingProps cNvPrField;
-        CT_NonVisualGroupDrawingShapeProps cNvGrpSpPrField;
-
-        public CT_NonVisualGroupDrawingShapeProps AddNewCNvGrpSpPr()
-        {
-            this.cNvGrpSpPrField = new CT_NonVisualGroupDrawingShapeProps();
-            return this.cNvGrpSpPrField;
-        }
-        public CT_NonVisualDrawingProps AddNewCNvPr()
-        {
-            this.cNvPrField = new CT_NonVisualDrawingProps();
-            return this.cNvPrField;
-        }
-
-        public CT_NonVisualDrawingProps cNvPr
-        {
-            get { return cNvPrField; }
-            set { cNvPrField = value; }
-        }
-        public CT_NonVisualGroupDrawingShapeProps cNvGrpSpPr
-        {
-            get { return cNvGrpSpPrField; }
-            set { cNvGrpSpPrField = value; }
-        }
-    }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
@@ -614,39 +428,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 if (node.LocalName == "twoCellAnchor")
                 {
-                    CT_TwoCellAnchor twoCellAnchor = new CT_TwoCellAnchor();
-                    twoCellAnchor.from = CT_Marker.Parse(node.FirstChild, namespaceManager);
-                    twoCellAnchor.to = CT_Marker.Parse(node.FirstChild.NextSibling, namespaceManager);
-                    if (node.Attributes["editAs"]!=null)
-                        twoCellAnchor.editAs = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), node.Attributes["editAs"].Value);
-
-                    CT_Shape ctShape = CT_Shape.Parse(node.SelectSingleNode("xdr:sp", namespaceManager), namespaceManager);
-                    if (ctShape != null)
-                    {
-                        twoCellAnchor.sp = ctShape;
-                    }
-                    CT_Picture ctPic = CT_Picture.Parse(node.SelectSingleNode("xdr:pic", namespaceManager), namespaceManager);
-                    if (ctPic != null)
-                    {
-                        twoCellAnchor.picture = ctPic;
-                    }
-                    CT_Connector ctConnector = CT_Connector.Parse(node.SelectSingleNode("xdr:cxnSp", namespaceManager), namespaceManager);
-                    if (ctConnector != null)
-                    {
-                        twoCellAnchor.connector = ctConnector;
-                    }
-                    //TODO::parse groupshape
+                    CT_TwoCellAnchor twoCellAnchor = CT_TwoCellAnchor.Parse(node, namespaceManager);
                     ctDrawing.cellAnchors.Add(twoCellAnchor);
                 }
                 else if (node.LocalName == "oneCellAnchor")
                 {
-                    CT_OneCellAnchor oneCellAnchor = new CT_OneCellAnchor();
-                    oneCellAnchor.from = CT_Marker.Parse(node.FirstChild, namespaceManager);
-                    CT_Shape ctShape = CT_Shape.Parse(node.SelectSingleNode("xdr:sp", namespaceManager), namespaceManager);
-                    if (ctShape != null)
-                    {
-                        oneCellAnchor.sp = ctShape;
-                    }
+                    CT_OneCellAnchor oneCellAnchor = CT_OneCellAnchor.Parse(node, namespaceManager);
                     ctDrawing.cellAnchors.Add(oneCellAnchor);
                 }
             }
@@ -681,6 +468,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         private CT_PositiveSize2D extField; //= new CT_PositiveSize2D();
         private CT_AnchorClientData clientDataField = new CT_AnchorClientData(); // 1..1 element
         private CT_Shape shapeField = null;
+        private CT_GroupShape groupShapeField = null;
+        private CT_GraphicalObjectFrame graphicalObjectField = null;
+        private CT_Connector connectorField = null;
+        private CT_Picture pictureField = null;
         [XmlElement]
         public CT_Marker from
         {
@@ -705,12 +496,30 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return clientDataField; }
             set { clientDataField = value; }
         }
-
-        [XmlElement]
         public CT_Shape sp
         {
             get { return shapeField; }
             set { shapeField = value; }
+        }
+        public CT_GroupShape groupShape
+        {
+            get { return groupShapeField; }
+            set { groupShapeField = value; }
+        }
+        public CT_GraphicalObjectFrame graphicFrame
+        {
+            get { return graphicalObjectField; }
+            set { graphicalObjectField = value; }
+        }
+        public CT_Connector connector
+        {
+            get { return connectorField; }
+            set { connectorField = value; }
+        }
+        public CT_Picture picture
+        {
+            get { return pictureField; }
+            set { pictureField = value; }
         }
 
         public void Write(StreamWriter sw)
@@ -723,17 +532,104 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 sp.Write(sw);
             sw.Write("</xdr:oneCellAnchor>");
         }
+
+        internal static CT_OneCellAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_OneCellAnchor oneCellAnchor = new CT_OneCellAnchor();
+            oneCellAnchor.from = CT_Marker.Parse(node.FirstChild, namespaceManager);
+            CT_Shape ctShape = CT_Shape.Parse(node.SelectSingleNode("xdr:sp", namespaceManager), namespaceManager);
+            if (ctShape != null)
+            {
+                oneCellAnchor.sp = ctShape;
+            }
+            return oneCellAnchor;
+        }
     }
 
     public interface IEG_Anchor
     {
-        CT_Marker from { get; set; }
         CT_Shape sp { get; set; }
+        CT_Connector connector { get; set; }
+        CT_GraphicalObjectFrame graphicFrame { get; set; }
+        CT_Picture picture { get; set; }
+        CT_GroupShape groupShape { get; set; }
         CT_AnchorClientData clientData { get; set; }
-        CT_AnchorClientData AddNewClientData();
         void Write(StreamWriter sw);
     }
+    public class CT_AbsoluteCellAnchor : IEG_Anchor
+    {
+        CT_Point2D posField;
+        CT_PositiveSize2D extField;
+        CT_AnchorClientData clientDataField;
+        private CT_Shape shapeField = null;
+        private CT_GroupShape groupShapeField = null;
+        private CT_GraphicalObjectFrame graphicalObjectField = null;
+        private CT_Connector connectorField = null;
+        private CT_Picture pictureField = null;
 
+        public CT_AnchorClientData clientData
+        {
+            get { return clientDataField; }
+            set { clientDataField = value; }
+        }
+
+        public CT_Point2D AddNewOff()
+        {
+            this.posField = new CT_Point2D();
+            return this.posField;
+        }
+
+        public CT_Point2D pos
+        {
+            get
+            {
+                return this.posField;
+            }
+            set
+            {
+                this.posField = value;
+            }
+        }
+        public CT_PositiveSize2D ext
+        {
+            get { return this.extField; }
+            set { this.extField = value; }
+        }
+        public CT_AnchorClientData AddNewClientData()
+        {
+            this.clientDataField = new CT_AnchorClientData();
+            return this.clientDataField;
+        }
+        public CT_Shape sp
+        {
+            get { return shapeField; }
+            set { shapeField = value; }
+        }
+        public CT_GroupShape groupShape
+        {
+            get { return groupShapeField; }
+            set { groupShapeField = value; }
+        }
+        public CT_GraphicalObjectFrame graphicFrame
+        {
+            get { return graphicalObjectField; }
+            set { graphicalObjectField = value; }
+        }
+        public CT_Connector connector
+        {
+            get { return connectorField; }
+            set { connectorField = value; }
+        }
+        public CT_Picture picture
+        {
+            get { return pictureField; }
+            set { pictureField = value; }
+        }
+        public void Write(StreamWriter sw)
+        { 
+            
+        }
+    }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_TwoCellAnchor : IEG_Anchor //- was empty interface
@@ -877,13 +773,33 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 picture.Write(sw);
             if (this.sp != null)
                 sp.Write(sw);
-            else if (this.connector != null)
-                this.connector.Write(sw);
+            //else if (this.connector != null)
+            //    this.connector.Write(sw, "cxnSp");
             else if (this.groupShape != null)
-                throw new NotImplementedException();
+                this.groupShape.Write(sw);
             else if (this.graphicalObjectField != null)
-                throw new NotImplementedException();
+                this.graphicalObjectField.Write(sw);
             sw.Write("</xdr:twoCellAnchor>");
+        }
+
+        internal static CT_TwoCellAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_TwoCellAnchor twoCellAnchor = new CT_TwoCellAnchor();
+            twoCellAnchor.from = CT_Marker.Parse(node.FirstChild, namespaceManager);
+            twoCellAnchor.to = CT_Marker.Parse(node.FirstChild.NextSibling, namespaceManager);
+            if (node.Attributes["editAs"] != null)
+                twoCellAnchor.editAs = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), node.Attributes["editAs"].Value);
+
+            CT_Shape ctShape = CT_Shape.Parse(node.SelectSingleNode("xdr:sp", namespaceManager), namespaceManager);
+            twoCellAnchor.sp = ctShape;
+            CT_Picture ctPic = CT_Picture.Parse(node.SelectSingleNode("xdr:pic", namespaceManager), namespaceManager);
+            twoCellAnchor.picture = ctPic;
+            CT_Connector ctConnector = CT_Connector.Parse(node.SelectSingleNode("xdr:cxnSp", namespaceManager), namespaceManager);
+            twoCellAnchor.connector = ctConnector;
+            //TODO::parse groupshape
+            CT_GroupShape ctGroupShape = CT_GroupShape.Parse(node.SelectSingleNode("xdr:grpSp", namespaceManager), namespaceManager);
+            twoCellAnchor.groupShape = ctGroupShape;
+            return twoCellAnchor;
         }
     }
 
@@ -960,48 +876,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { this.fPublishedField = value; }
         }
 
-        internal static CT_Connector Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        internal static CT_Connector Parse(XmlNode xmlNode, XmlNamespaceManager namespaceManager)
         {
-            if (node == null)
-                return null;
-            CT_Connector ctShape = new CT_Connector();
-            if (node.Attributes["macro"] != null)
-                ctShape.macroField = node.Attributes["macro"].Value;
-            if (node.Attributes["fPublished"] != null && node.Attributes["fPublished"].Value == "1")
-                ctShape.fPublishedField = true;
-
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "nvCxnSpPr")
-                {
-                    ctShape.nvCxnSpPrField = CT_ConnectorNonVisual.Parse(childNode, namespaceManager);
-                }
-                else if (childNode.LocalName == "spPr")
-                {
-                    ctShape.spPrField = CT_ShapeProperties.Parse(childNode, namespaceManager);
-                }
-                else if (childNode.LocalName == "style")
-                {
-                    //ctShape.styleField =  .Parse(childNode, namespaceManager);
-                    throw new NotImplementedException();
-                }
-            }
-            return ctShape;
-        }
-
-
-        internal void Write(StreamWriter sw)
-        {
-            sw.Write("<xdr:cxnSp>");
-            if (this.nvCxnSpPrField != null)
-            {
-                this.nvCxnSpPrField.Write(sw);
-            }
-            if (this.spPr != null)
-            {
-                this.spPr.Write(sw);
-            }
-            sw.Write("</xdr:cxnSp>");
+            throw new NotImplementedException();
         }
     }
 

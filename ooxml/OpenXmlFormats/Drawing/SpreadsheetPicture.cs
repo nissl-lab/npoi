@@ -1,3 +1,4 @@
+using NPOI.OpenXml4Net.Util;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -168,10 +169,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 this.blipFill.Write(sw);
             }
-            if (this.spPr != null)
-            {
-                this.spPr.Write(sw);
-            }
+            //if (this.spPr != null)
+            //{
+            //    this.spPr.Write(sw);
+            //}
             sw.Write("</xdr:pic>");
         }
     }
@@ -193,56 +194,32 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 CT_NonVisualDrawingProps ctProps = ctNvPr.AddNewCNvPr();
 
-                ctProps.id = uint.Parse(cnvprNode.Attributes["id"].Value);
+                ctProps.id = XmlHelper.ReadUInt(cnvprNode.Attributes["id"]);
                 ctProps.name = cnvprNode.Attributes["name"].Value;
                 ctProps.descr = cnvprNode.Attributes["descr"].Value;
-                if (cnvprNode.Attributes["hidden"] != null && cnvprNode.Attributes["hidden"].Value == "1")
-                    ctProps.hidden = true;
+                ctProps.hidden = XmlHelper.ReadBool(cnvprNode.Attributes["hidden"]);
                 //TODO::hlinkClick, hlinkCover
             }
             XmlNode cNvPicPrNode = node.SelectSingleNode("xdr:cNvPicPr", namespaceManager);
             if (cNvPicPrNode != null)
             {
                 CT_NonVisualPictureProperties ctNvPicPr = ctNvPr.AddNewCNvPicPr();
-                if (cNvPicPrNode.Attributes["preferRelativeResize"] != null && cNvPicPrNode.Attributes["preferRelativeResize"].Value == "1")
-                    ctNvPicPr.preferRelativeResize = true;
+                ctNvPicPr.preferRelativeResize = XmlHelper.ReadBool(cNvPicPrNode.Attributes["preferRelativeResize"]);
                 XmlNode picLocksNode = cNvPicPrNode.SelectSingleNode("a:picLocks", namespaceManager);
                 if (picLocksNode != null)
                 {
                     ctNvPicPr.picLocks = new CT_PictureLocking();
-
-                    if (picLocksNode.Attributes["noChangeAspect"] != null && picLocksNode.Attributes["noChangeAspect"].Value == "1")
-                        ctNvPicPr.picLocks.noChangeAspect = true;
-
-                    if (picLocksNode.Attributes["noAdjustHandles"] != null && picLocksNode.Attributes["noAdjustHandles"].Value == "1")
-                        ctNvPicPr.picLocks.noAdjustHandles = true;
-
-                    if (picLocksNode.Attributes["noChangeArrowheads"] != null && picLocksNode.Attributes["noChangeArrowheads"].Value == "1")
-                        ctNvPicPr.picLocks.noChangeArrowheads = true;
-
-                    if (picLocksNode.Attributes["noChangeShapeType"] != null && picLocksNode.Attributes["noChangeShapeType"].Value == "1")
-                        ctNvPicPr.picLocks.noChangeShapeType = true;
-
-                    if (picLocksNode.Attributes["noCrop"] != null && picLocksNode.Attributes["noCrop"].Value == "1")
-                        ctNvPicPr.picLocks.noCrop = true;
-
-                    if (picLocksNode.Attributes["noEditPoints"] != null && picLocksNode.Attributes["noEditPoints"].Value == "1")
-                        ctNvPicPr.picLocks.noEditPoints = true;
-
-                    if (picLocksNode.Attributes["noGrp"] != null && picLocksNode.Attributes["noGrp"].Value == "1")
-                        ctNvPicPr.picLocks.noGrp = true;
-
-                    if (picLocksNode.Attributes["noMove"] != null && picLocksNode.Attributes["noMove"].Value == "1")
-                        ctNvPicPr.picLocks.noMove = true;
-
-                    if (picLocksNode.Attributes["noResize"] != null && picLocksNode.Attributes["noResize"].Value == "1")
-                        ctNvPicPr.picLocks.noResize = true;
-
-                    if (picLocksNode.Attributes["noRot"] != null && picLocksNode.Attributes["noRot"].Value == "1")
-                        ctNvPicPr.picLocks.noRot = true;
-
-                    if (picLocksNode.Attributes["noSelect"] != null && picLocksNode.Attributes["noSelect"].Value == "1")
-                        ctNvPicPr.picLocks.noSelect = true;
+                    ctNvPicPr.picLocks.noChangeAspect = XmlHelper.ReadBool(picLocksNode.Attributes["noChangeAspect"]);
+                    ctNvPicPr.picLocks.noAdjustHandles = XmlHelper.ReadBool(picLocksNode.Attributes["noAdjustHandles"]);
+                    ctNvPicPr.picLocks.noChangeArrowheads = XmlHelper.ReadBool(picLocksNode.Attributes["noChangeArrowheads"]);
+                    ctNvPicPr.picLocks.noChangeShapeType = XmlHelper.ReadBool(picLocksNode.Attributes["noChangeShapeType"]);
+                    ctNvPicPr.picLocks.noCrop = XmlHelper.ReadBool(picLocksNode.Attributes["noCrop"]);
+                    ctNvPicPr.picLocks.noEditPoints = XmlHelper.ReadBool(picLocksNode.Attributes["noEditPoints"]);
+                    ctNvPicPr.picLocks.noGrp = XmlHelper.ReadBool(picLocksNode.Attributes["noGrp"]);
+                    ctNvPicPr.picLocks.noMove = XmlHelper.ReadBool(picLocksNode.Attributes["noMove"]);
+                    ctNvPicPr.picLocks.noResize = XmlHelper.ReadBool(picLocksNode.Attributes["noResize"]);
+                    ctNvPicPr.picLocks.noRot = XmlHelper.ReadBool(picLocksNode.Attributes["noRot"]);
+                    ctNvPicPr.picLocks.noSelect = XmlHelper.ReadBool(picLocksNode.Attributes["noSelect"]);
                 }
             }
             return ctNvPr;
@@ -278,11 +255,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write("<xdr:nvPicPr>");
             if (this.cNvPr != null)
             {
-                sw.Write(string.Format("<xdr:cNvPr id=\"{0}\" name=\"{1}\" descr=\"{2}\"", this.cNvPr.id, this.cNvPr.name, this.cNvPr.descr));
-                if (this.cNvPr.hidden)
-                {
-                    sw.Write(" hidden=\"1\"");
-                }
+                sw.Write(string.Format("<xdr:cNvPr id=\"{0}\" name=\"{1}\"", this.cNvPr.id, this.cNvPr.name));
+                XmlHelper.WriteAttribute(sw, "descr", this.cNvPr.descr);
+                XmlHelper.WriteAttribute(sw, "hidden", this.cNvPr.hidden);
                 sw.Write("/>");
             }
             if (this.cNvPicPr != null)
@@ -291,50 +266,17 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 if (this.cNvPicPr.picLocks != null)
                 {
                     sw.Write("<a:picLocks");
-                    if (this.cNvPicPr.picLocks.noChangeAspect)
-                    {
-                        sw.Write(" noChangeAspect=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noAdjustHandles)
-                    {
-                        sw.Write(" noAdjustHandles=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noChangeArrowheads)
-                    {
-                        sw.Write(" noChangeArrowheads=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noChangeShapeType)
-                    {
-                        sw.Write(" noChangeShapeType=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noCrop)
-                    {
-                        sw.Write(" noCrop=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noEditPoints)
-                    {
-                        sw.Write(" noEditPoints=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noGrp)
-                    {
-                        sw.Write(" noGrp=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noMove)
-                    {
-                        sw.Write(" noMove=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noResize)
-                    {
-                        sw.Write(" noResize=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noRot)
-                    {
-                        sw.Write(" noRot=\"1\"");
-                    }
-                    if (this.cNvPicPr.picLocks.noSelect)
-                    {
-                        sw.Write(" noSelect=\"1\"");
-                    }
+                    XmlHelper.WriteAttribute(sw, "noChangeAspect", this.cNvPicPr.picLocks.noChangeAspect);
+                    XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.cNvPicPr.picLocks.noAdjustHandles);
+                    XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.cNvPicPr.picLocks.noChangeArrowheads);
+                    XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.cNvPicPr.picLocks.noChangeShapeType);
+                    XmlHelper.WriteAttribute(sw, "noCrop", this.cNvPicPr.picLocks.noCrop);
+                    XmlHelper.WriteAttribute(sw, "noEditPoints", this.cNvPicPr.picLocks.noEditPoints);
+                    XmlHelper.WriteAttribute(sw, "noGrp", this.cNvPicPr.picLocks.noGrp);
+                    XmlHelper.WriteAttribute(sw, "noMove", this.cNvPicPr.picLocks.noMove);
+                    XmlHelper.WriteAttribute(sw, "noResize", this.cNvPicPr.picLocks.noResize);
+                    XmlHelper.WriteAttribute(sw, "noRot", this.cNvPicPr.picLocks.noRot);
+                    XmlHelper.WriteAttribute(sw, "noSelect", this.cNvPicPr.picLocks.noSelect);
                     sw.Write("/>");
                 }
                 sw.Write("</xdr:cNvPicPr>");

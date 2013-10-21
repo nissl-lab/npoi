@@ -19,6 +19,7 @@ using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.Util;
+using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -44,6 +45,13 @@ namespace NPOI.XSSF.UserModel
         {
             this.drawing = drawing;
             this.ctShape = ctShape;
+        }
+
+
+        public XSSFSimpleShape(XSSFDrawing drawing, XmlNode spNode)
+        {
+            this.drawing = drawing;
+            this.ctShape = CT_Shape.Parse(spNode, null);
         }
 
         /**

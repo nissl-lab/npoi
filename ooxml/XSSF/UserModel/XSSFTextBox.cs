@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.SS.UserModel;
 
@@ -136,7 +137,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public LineStyle LineStyle
+        public override LineStyle LineStyle
         {
             get
             {
@@ -148,12 +149,12 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public int LineStyleColor
+        public override int LineStyleColor
         {
             get { throw new System.NotImplementedException(); }
         }
 
-        public int LineWidth
+        public override double LineWidth
         {
             get
             {

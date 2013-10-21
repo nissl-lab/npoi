@@ -19,7 +19,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_ColorScheme
+    public class CT_ColorScheme
     {
 
         private CT_Color dk1Field;
@@ -255,7 +255,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_CustomColor
+    public class CT_CustomColor
     {
 
         private CT_ScRgbColor scrgbClrField;
@@ -274,13 +274,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_CustomColor()
         {
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
-            this.nameField = "";
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
+            //this.nameField = "";
         }
 
         [XmlElement(Order = 0)]
@@ -381,7 +381,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_SupplementalFont
+    public class CT_SupplementalFont
     {
 
         private string scriptField;
@@ -420,7 +420,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_CustomColorList
+    public class CT_CustomColorList
     {
 
         private List<CT_CustomColor> custClrField;
@@ -449,7 +449,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_FontCollection
+    public class CT_FontCollection
     {
 
         private CT_TextFont latinField;
@@ -543,7 +543,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_EffectStyleItem
+    public class CT_EffectStyleItem
     {
 
         private CT_EffectList effectLstField;
@@ -620,7 +620,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_FontScheme
+    public class CT_FontScheme
     {
 
         private CT_FontCollection majorFontField;
@@ -696,7 +696,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_FillStyleList
+    public class CT_FillStyleList
     {
 
         private List<object> itemsField;
@@ -730,7 +730,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_LineStyleList
+    public class CT_LineStyleList
     {
 
         private List<CT_LineProperties> lnField;
@@ -759,7 +759,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_EffectStyleList
+    public class CT_EffectStyleList
     {
 
         private List<CT_EffectStyleItem> effectStyleField;
@@ -788,7 +788,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_BackgroundFillStyleList
+    public class CT_BackgroundFillStyleList
     {
 
         private List<object> itemsField;
@@ -822,7 +822,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_StyleMatrix
+    public class CT_StyleMatrix
     {
 
         private CT_FillStyleList fillStyleLstField;
@@ -918,7 +918,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_BaseStyles
+    public class CT_BaseStyles
     {
 
         private CT_ColorScheme clrSchemeField;

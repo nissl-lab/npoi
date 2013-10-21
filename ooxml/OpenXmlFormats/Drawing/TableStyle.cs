@@ -168,17 +168,17 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TableStyleTextStyle()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.prstClrField = new CT_PresetColor();
-            this.schemeClrField = new CT_SchemeColor();
-            this.sysClrField = new CT_SystemColor();
-            this.hslClrField = new CT_HslColor();
-            this.srgbClrField = new CT_SRgbColor();
-            this.scrgbClrField = new CT_ScRgbColor();
-            this.fontRefField = new CT_FontReference();
-            this.fontField = new CT_FontCollection();
-            this.bField = ST_OnOffStyleType.def;
-            this.iField = ST_OnOffStyleType.def;
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.prstClrField = new CT_PresetColor();
+            //this.schemeClrField = new CT_SchemeColor();
+            //this.sysClrField = new CT_SystemColor();
+            //this.hslClrField = new CT_HslColor();
+            //this.srgbClrField = new CT_SRgbColor();
+            //this.scrgbClrField = new CT_ScRgbColor();
+            //this.fontRefField = new CT_FontReference();
+            //this.fontField = new CT_FontCollection();
+            //this.bField = ST_OnOffStyleType.def;
+            //this.iField = ST_OnOffStyleType.def;
         }
 
         [XmlElement(Order = 0)]

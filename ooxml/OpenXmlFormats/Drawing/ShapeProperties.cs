@@ -1,10 +1,1536 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml
 {
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_ConnectorLocking
+    {
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool noGrpField;
+
+        private bool noSelectField;
+
+        private bool noRotField;
+
+        private bool noChangeAspectField;
+
+        private bool noMoveField;
+
+        private bool noResizeField;
+
+        private bool noEditPointsField;
+
+        private bool noAdjustHandlesField;
+
+        private bool noChangeArrowheadsField;
+
+        private bool noChangeShapeTypeField;
+        public static CT_ConnectorLocking Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ConnectorLocking ctObj = new CT_ConnectorLocking();
+            ctObj.noGrp = XmlHelper.ReadBool(node.Attributes["noGrp"]);
+            ctObj.noSelect = XmlHelper.ReadBool(node.Attributes["noSelect"]);
+            ctObj.noRot = XmlHelper.ReadBool(node.Attributes["noRot"]);
+            ctObj.noChangeAspect = XmlHelper.ReadBool(node.Attributes["noChangeAspect"]);
+            ctObj.noMove = XmlHelper.ReadBool(node.Attributes["noMove"]);
+            ctObj.noResize = XmlHelper.ReadBool(node.Attributes["noResize"]);
+            ctObj.noEditPoints = XmlHelper.ReadBool(node.Attributes["noEditPoints"]);
+            ctObj.noAdjustHandles = XmlHelper.ReadBool(node.Attributes["noAdjustHandles"]);
+            ctObj.noChangeArrowheads = XmlHelper.ReadBool(node.Attributes["noChangeArrowheads"]);
+            ctObj.noChangeShapeType = XmlHelper.ReadBool(node.Attributes["noChangeShapeType"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
+            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
+            XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
+            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
+            XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
+            XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
+            XmlHelper.WriteAttribute(sw, "noEditPoints", this.noEditPoints);
+            XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles);
+            XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads);
+            XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
+            sw.Write(">");
+            this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+        public CT_ConnectorLocking()
+        {
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            this.noGrpField = false;
+            this.noSelectField = false;
+            this.noRotField = false;
+            this.noChangeAspectField = false;
+            this.noMoveField = false;
+            this.noResizeField = false;
+            this.noEditPointsField = false;
+            this.noAdjustHandlesField = false;
+            this.noChangeArrowheadsField = false;
+            this.noChangeShapeTypeField = false;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noGrp
+        {
+            get
+            {
+                return this.noGrpField;
+            }
+            set
+            {
+                this.noGrpField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noSelect
+        {
+            get
+            {
+                return this.noSelectField;
+            }
+            set
+            {
+                this.noSelectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noRot
+        {
+            get
+            {
+                return this.noRotField;
+            }
+            set
+            {
+                this.noRotField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeAspect
+        {
+            get
+            {
+                return this.noChangeAspectField;
+            }
+            set
+            {
+                this.noChangeAspectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noMove
+        {
+            get
+            {
+                return this.noMoveField;
+            }
+            set
+            {
+                this.noMoveField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noResize
+        {
+            get
+            {
+                return this.noResizeField;
+            }
+            set
+            {
+                this.noResizeField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noEditPoints
+        {
+            get
+            {
+                return this.noEditPointsField;
+            }
+            set
+            {
+                this.noEditPointsField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noAdjustHandles
+        {
+            get
+            {
+                return this.noAdjustHandlesField;
+            }
+            set
+            {
+                this.noAdjustHandlesField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeArrowheads
+        {
+            get
+            {
+                return this.noChangeArrowheadsField;
+            }
+            set
+            {
+                this.noChangeArrowheadsField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeShapeType
+        {
+            get
+            {
+                return this.noChangeShapeTypeField;
+            }
+            set
+            {
+                this.noChangeShapeTypeField = value;
+            }
+        }
+    }
+
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_PictureLocking
+    {
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool noGrpField;
+
+        private bool noSelectField;
+
+        private bool noRotField;
+
+        private bool noChangeAspectField;
+
+        private bool noMoveField;
+
+        private bool noResizeField;
+
+        private bool noEditPointsField;
+
+        private bool noAdjustHandlesField;
+
+        private bool noChangeArrowheadsField;
+
+        private bool noChangeShapeTypeField;
+
+        private bool noCropField;
+
+        public CT_PictureLocking()
+        {
+            this.extLstField = new CT_OfficeArtExtensionList();
+            this.noGrpField = false;
+            this.noSelectField = false;
+            this.noRotField = false;
+            this.noChangeAspectField = false;
+            this.noMoveField = false;
+            this.noResizeField = false;
+            this.noEditPointsField = false;
+            this.noAdjustHandlesField = false;
+            this.noChangeArrowheadsField = false;
+            this.noChangeShapeTypeField = false;
+            this.noCropField = false;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noGrp
+        {
+            get
+            {
+                return this.noGrpField;
+            }
+            set
+            {
+                this.noGrpField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noSelect
+        {
+            get
+            {
+                return this.noSelectField;
+            }
+            set
+            {
+                this.noSelectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noRot
+        {
+            get
+            {
+                return this.noRotField;
+            }
+            set
+            {
+                this.noRotField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeAspect
+        {
+            get
+            {
+                return this.noChangeAspectField;
+            }
+            set
+            {
+                this.noChangeAspectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noMove
+        {
+            get
+            {
+                return this.noMoveField;
+            }
+            set
+            {
+                this.noMoveField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noResize
+        {
+            get
+            {
+                return this.noResizeField;
+            }
+            set
+            {
+                this.noResizeField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noEditPoints
+        {
+            get
+            {
+                return this.noEditPointsField;
+            }
+            set
+            {
+                this.noEditPointsField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noAdjustHandles
+        {
+            get
+            {
+                return this.noAdjustHandlesField;
+            }
+            set
+            {
+                this.noAdjustHandlesField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeArrowheads
+        {
+            get
+            {
+                return this.noChangeArrowheadsField;
+            }
+            set
+            {
+                this.noChangeArrowheadsField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeShapeType
+        {
+            get
+            {
+                return this.noChangeShapeTypeField;
+            }
+            set
+            {
+                this.noChangeShapeTypeField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noCrop
+        {
+            get
+            {
+                return this.noCropField;
+            }
+            set
+            {
+                this.noCropField = value;
+            }
+        }
+    }
+
+
+
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_GraphicalObjectFrameLocking
+    {
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool noGrpField;
+
+        private bool noDrilldownField;
+
+        private bool noSelectField;
+
+        private bool noChangeAspectField;
+
+        private bool noMoveField;
+
+        private bool noResizeField;
+
+        public CT_GraphicalObjectFrameLocking()
+        {
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            this.noGrpField = false;
+            this.noDrilldownField = false;
+            this.noSelectField = false;
+            this.noChangeAspectField = false;
+            this.noMoveField = false;
+            this.noResizeField = false;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noGrp
+        {
+            get
+            {
+                return this.noGrpField;
+            }
+            set
+            {
+                this.noGrpField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noDrilldown
+        {
+            get
+            {
+                return this.noDrilldownField;
+            }
+            set
+            {
+                this.noDrilldownField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noSelect
+        {
+            get
+            {
+                return this.noSelectField;
+            }
+            set
+            {
+                this.noSelectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeAspect
+        {
+            get
+            {
+                return this.noChangeAspectField;
+            }
+            set
+            {
+                this.noChangeAspectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noMove
+        {
+            get
+            {
+                return this.noMoveField;
+            }
+            set
+            {
+                this.noMoveField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noResize
+        {
+            get
+            {
+                return this.noResizeField;
+            }
+            set
+            {
+                this.noResizeField = value;
+            }
+        }
+    }
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualDrawingProps
+    {
+
+        private CT_Hyperlink hlinkClickField = null;
+
+        private CT_Hyperlink hlinkHoverField = null;
+
+        private CT_OfficeArtExtensionList extLstField = null;
+
+        private uint idField;
+
+        private string nameField = null;
+
+        private string descrField;
+
+        private bool? hiddenField = null;
+
+        public static CT_NonVisualDrawingProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualDrawingProps ctObj = new CT_NonVisualDrawingProps();
+            ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.descr = XmlHelper.ReadString(node.Attributes["descr"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "hlinkClick")
+                    ctObj.hlinkClick = CT_Hyperlink.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hlinkHover")
+                    ctObj.hlinkHover = CT_Hyperlink.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "descr", this.descr);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            sw.Write(">");
+            this.hlinkClick.Write(sw, "hlinkClick");
+            this.hlinkHover.Write(sw, "hlinkHover");
+            this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+        [XmlElement(Order = 0)]
+        public CT_Hyperlink hlinkClick
+        {
+            get
+            {
+                return this.hlinkClickField;
+            }
+            set
+            {
+                this.hlinkClickField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_Hyperlink hlinkHover
+        {
+            get
+            {
+                return this.hlinkHoverField;
+            }
+            set
+            {
+                this.hlinkHoverField = value;
+            }
+        }
+
+        [XmlElement(Order = 2)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public uint id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue("")]
+        public string descr
+        {
+            get
+            {
+                return null == this.descrField ? "" : descrField;
+            }
+            set
+            {
+                this.descrField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool descrSpecified
+        {
+            get { return (null != descrField); }
+        }
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool hidden
+        {
+            get
+            {
+                return null == this.hiddenField ? false : (bool)hiddenField;
+            }
+            set
+            {
+                this.hiddenField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool hiddenSpecified
+        {
+            get { return (null != hiddenField); }
+        }
+    }
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualDrawingShapeProps
+    {
+
+        private CT_ShapeLocking spLocksField;
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool txBoxField;
+        public static CT_NonVisualDrawingShapeProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualDrawingShapeProps ctObj = new CT_NonVisualDrawingShapeProps();
+            ctObj.txBox = XmlHelper.ReadBool(node.Attributes["txBox"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "spLocks")
+                    ctObj.spLocks = CT_ShapeLocking.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "txBox", this.txBox);
+            sw.Write(">");
+            this.spLocks.Write(sw, "spLocks");
+            this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+        [XmlElement(Order = 0)]
+        public CT_ShapeLocking spLocks
+        {
+            get
+            {
+                return this.spLocksField;
+            }
+            set
+            {
+                this.spLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool txBox
+        {
+            get
+            {
+                return this.txBoxField;
+            }
+            set
+            {
+                this.txBoxField = value;
+            }
+        }
+    }
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualConnectorProperties
+    {
+        public static CT_NonVisualConnectorProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualConnectorProperties ctObj = new CT_NonVisualConnectorProperties();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cxnSpLocks")
+                    ctObj.cxnSpLocks = CT_ConnectorLocking.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "stCxn")
+                    ctObj.stCxn = CT_Connection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "endCxn")
+                    ctObj.endCxn = CT_Connection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            this.cxnSpLocks.Write(sw, "cxnSpLocks");
+            this.stCxn.Write(sw, "stCxn");
+            this.endCxn.Write(sw, "endCxn");
+            this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+        private CT_ConnectorLocking cxnSpLocksField;
+
+        private CT_Connection stCxnField;
+
+        private CT_Connection endCxnField;
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        public CT_NonVisualConnectorProperties()
+        {
+            this.extLstField = new CT_OfficeArtExtensionList();
+            this.endCxnField = new CT_Connection();
+            this.stCxnField = new CT_Connection();
+            this.cxnSpLocksField = new CT_ConnectorLocking();
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_ConnectorLocking cxnSpLocks
+        {
+            get
+            {
+                return this.cxnSpLocksField;
+            }
+            set
+            {
+                this.cxnSpLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_Connection stCxn
+        {
+            get
+            {
+                return this.stCxnField;
+            }
+            set
+            {
+                this.stCxnField = value;
+            }
+        }
+
+        [XmlElement(Order = 2)]
+        public CT_Connection endCxn
+        {
+            get
+            {
+                return this.endCxnField;
+            }
+            set
+            {
+                this.endCxnField = value;
+            }
+        }
+
+        [XmlElement(Order = 3)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+    }
+
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualPictureProperties
+    {
+
+        private CT_PictureLocking picLocksField = null;
+
+        private CT_OfficeArtExtensionList extLstField = null;
+
+        private bool? preferRelativeResizeField = null;
+
+        public CT_NonVisualPictureProperties()
+        {
+            this.preferRelativeResizeField = true;
+        }
+
+        public CT_PictureLocking AddNewPicLocks()
+        {
+            this.picLocksField = new CT_PictureLocking();
+            return picLocksField;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_PictureLocking picLocks
+        {
+            get
+            {
+                return this.picLocksField;
+            }
+            set
+            {
+                this.picLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(true)]
+        public bool preferRelativeResize
+        {
+            get
+            {
+                return null == this.preferRelativeResizeField ? true : (bool)preferRelativeResizeField;
+            }
+            set
+            {
+                this.preferRelativeResizeField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool preferRelativeResizeSpecified
+        {
+            get { return (null != preferRelativeResizeField); }
+        }
+    }
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualGroupDrawingShapeProps
+    {
+
+        private CT_GroupLocking grpSpLocksField;
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        public CT_NonVisualGroupDrawingShapeProps()
+        {
+            this.extLstField = new CT_OfficeArtExtensionList();
+            this.grpSpLocksField = new CT_GroupLocking();
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_GroupLocking grpSpLocks
+        {
+            get
+            {
+                return this.grpSpLocksField;
+            }
+            set
+            {
+                this.grpSpLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+    }
+
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualGraphicFrameProperties
+    {
+
+        private CT_GraphicalObjectFrameLocking graphicFrameLocksField;
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        public CT_NonVisualGraphicFrameProperties()
+        {
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.graphicFrameLocksField = new CT_GraphicalObjectFrameLocking();
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_GraphicalObjectFrameLocking graphicFrameLocks
+        {
+            get
+            {
+                return this.graphicFrameLocksField;
+            }
+            set
+            {
+                this.graphicFrameLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+    }
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_ShapeLocking
+    {
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool noGrpField;
+
+        private bool noSelectField;
+
+        private bool noRotField;
+
+        private bool noChangeAspectField;
+
+        private bool noMoveField;
+
+        private bool noResizeField;
+
+        private bool noEditPointsField;
+
+        private bool noAdjustHandlesField;
+
+        private bool noChangeArrowheadsField;
+
+        private bool noChangeShapeTypeField;
+
+        private bool noTextEditField;
+        public static CT_ShapeLocking Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ShapeLocking ctObj = new CT_ShapeLocking();
+            ctObj.noGrp = XmlHelper.ReadBool(node.Attributes["noGrp"]);
+            ctObj.noSelect = XmlHelper.ReadBool(node.Attributes["noSelect"]);
+            ctObj.noRot = XmlHelper.ReadBool(node.Attributes["noRot"]);
+            ctObj.noChangeAspect = XmlHelper.ReadBool(node.Attributes["noChangeAspect"]);
+            ctObj.noMove = XmlHelper.ReadBool(node.Attributes["noMove"]);
+            ctObj.noResize = XmlHelper.ReadBool(node.Attributes["noResize"]);
+            ctObj.noEditPoints = XmlHelper.ReadBool(node.Attributes["noEditPoints"]);
+            ctObj.noAdjustHandles = XmlHelper.ReadBool(node.Attributes["noAdjustHandles"]);
+            ctObj.noChangeArrowheads = XmlHelper.ReadBool(node.Attributes["noChangeArrowheads"]);
+            ctObj.noChangeShapeType = XmlHelper.ReadBool(node.Attributes["noChangeShapeType"]);
+            ctObj.noTextEdit = XmlHelper.ReadBool(node.Attributes["noTextEdit"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
+            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
+            XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
+            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
+            XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
+            XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
+            XmlHelper.WriteAttribute(sw, "noEditPoints", this.noEditPoints);
+            XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles);
+            XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads);
+            XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
+            XmlHelper.WriteAttribute(sw, "noTextEdit", this.noTextEdit);
+            sw.Write(">");
+            this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+        public CT_ShapeLocking()
+        {
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            this.noGrpField = false;
+            this.noSelectField = false;
+            this.noRotField = false;
+            this.noChangeAspectField = false;
+            this.noMoveField = false;
+            this.noResizeField = false;
+            this.noEditPointsField = false;
+            this.noAdjustHandlesField = false;
+            this.noChangeArrowheadsField = false;
+            this.noChangeShapeTypeField = false;
+            this.noTextEditField = false;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noGrp
+        {
+            get
+            {
+                return this.noGrpField;
+            }
+            set
+            {
+                this.noGrpField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noSelect
+        {
+            get
+            {
+                return this.noSelectField;
+            }
+            set
+            {
+                this.noSelectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noRot
+        {
+            get
+            {
+                return this.noRotField;
+            }
+            set
+            {
+                this.noRotField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeAspect
+        {
+            get
+            {
+                return this.noChangeAspectField;
+            }
+            set
+            {
+                this.noChangeAspectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noMove
+        {
+            get
+            {
+                return this.noMoveField;
+            }
+            set
+            {
+                this.noMoveField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noResize
+        {
+            get
+            {
+                return this.noResizeField;
+            }
+            set
+            {
+                this.noResizeField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noEditPoints
+        {
+            get
+            {
+                return this.noEditPointsField;
+            }
+            set
+            {
+                this.noEditPointsField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noAdjustHandles
+        {
+            get
+            {
+                return this.noAdjustHandlesField;
+            }
+            set
+            {
+                this.noAdjustHandlesField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeArrowheads
+        {
+            get
+            {
+                return this.noChangeArrowheadsField;
+            }
+            set
+            {
+                this.noChangeArrowheadsField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeShapeType
+        {
+            get
+            {
+                return this.noChangeShapeTypeField;
+            }
+            set
+            {
+                this.noChangeShapeTypeField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noTextEdit
+        {
+            get
+            {
+                return this.noTextEditField;
+            }
+            set
+            {
+                this.noTextEditField = value;
+            }
+        }
+    }
+
+    [Serializable]
+    [DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_GroupLocking
+    {
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool noGrpField;
+
+        private bool noUngrpField;
+
+        private bool noSelectField;
+
+        private bool noRotField;
+
+        private bool noChangeAspectField;
+
+        private bool noMoveField;
+
+        private bool noResizeField;
+
+        public CT_GroupLocking()
+        {
+            this.extLstField = new CT_OfficeArtExtensionList();
+            this.noGrpField = false;
+            this.noUngrpField = false;
+            this.noSelectField = false;
+            this.noRotField = false;
+            this.noChangeAspectField = false;
+            this.noMoveField = false;
+            this.noResizeField = false;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noGrp
+        {
+            get
+            {
+                return this.noGrpField;
+            }
+            set
+            {
+                this.noGrpField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noUngrp
+        {
+            get
+            {
+                return this.noUngrpField;
+            }
+            set
+            {
+                this.noUngrpField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noSelect
+        {
+            get
+            {
+                return this.noSelectField;
+            }
+            set
+            {
+                this.noSelectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noRot
+        {
+            get
+            {
+                return this.noRotField;
+            }
+            set
+            {
+                this.noRotField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noChangeAspect
+        {
+            get
+            {
+                return this.noChangeAspectField;
+            }
+            set
+            {
+                this.noChangeAspectField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noMove
+        {
+            get
+            {
+                return this.noMoveField;
+            }
+            set
+            {
+                this.noMoveField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool noResize
+        {
+            get
+            {
+                return this.noResizeField;
+            }
+            set
+            {
+                this.noResizeField = value;
+            }
+        }
+    }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -44,86 +1570,6 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.NONE;
 
 
-        public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            CT_ShapeProperties ctShapePr = new CT_ShapeProperties();
-            XmlNode xfrmNode = node.SelectSingleNode("a:xfrm", namespaceManager);
-            if (xfrmNode != null)
-            {
-                CT_Transform2D ctTF2D = ctShapePr.AddNewXfrm();
-                if(xfrmNode.ChildNodes[0].LocalName=="off")
-                {
-                    XmlNode offNode = xfrmNode.ChildNodes[0];
-                    ctTF2D.AddNewOff();
-                    ctTF2D.off.x = long.Parse(offNode.Attributes["x"].Value);
-                    ctTF2D.off.y = long.Parse(offNode.Attributes["y"].Value);
-                }
-                if (xfrmNode.ChildNodes.Count>1 && xfrmNode.ChildNodes[1].LocalName == "ext")
-                {
-                    XmlNode extNode = xfrmNode.ChildNodes[1];
-                    ctTF2D.AddNewExt();
-                    ctTF2D.ext.cx = long.Parse(extNode.Attributes["cx"].Value);
-                    ctTF2D.ext.cy = long.Parse(extNode.Attributes["cy"].Value);
-                }
-            }
-            XmlNode prstGeomNode = node.SelectSingleNode("a:prstGeom", namespaceManager);
-            if (prstGeomNode != null)
-            {
-                CT_PresetGeometry2D prstGeom= ctShapePr.AddNewPrstGeom();
-                prstGeom.prst = (ST_ShapeType)Enum.Parse(typeof(ST_ShapeType), prstGeomNode.Attributes["prst"].Value);
-                foreach(XmlNode ggNode in prstGeomNode.ChildNodes)
-                {
-                     CT_GeomGuide gg = prstGeom.AddNewAvLst();
-                     if (ggNode.Attributes["name"] != null)
-                         gg.name = ggNode.Attributes["name"].Value;
-                     if (ggNode.Attributes["fmla"] != null)
-                         gg.fmla = ggNode.Attributes["fmla"].Value;
-                }
-            }
-            XmlNode solidFillNode = node.SelectSingleNode("a:solidFill", namespaceManager);
-            if (solidFillNode != null)
-            {
-                throw new NotImplementedException();
-                //CT_SolidColorFillProperties ctSolidFill = ctShapePr.AddNewSolidFill();
-                //ctSolidFill.
-            }
-            XmlNode lnNode = node.SelectSingleNode("a:ln", namespaceManager);
-            if (lnNode != null)
-            {
-                throw new NotImplementedException();
-            }
-            return ctShapePr;
-        }
-        internal void Write(StreamWriter sw)
-        {
-            sw.Write("<xdr:spPr>");
-            if (this.xfrm != null)
-            {
-                if(this.xfrm.off!=null)
-                    sw.Write(string.Format("<a:off x=\"{0}\" y=\"{1}\" />", this.xfrm.off.x, this.xfrm.off.y));
-                if(this.xfrm.ext!=null)
-                    sw.Write(string.Format("<a:ext cx=\"{0}\" cy=\"{1}\" />", this.xfrm.ext.cx, this.xfrm.ext.cy));
-            }
-            if (this.prstGeom != null)
-            {
-                sw.Write(string.Format("<a:prstGeom prst=\"{0}\">", this.prstGeom.prst));
-                foreach (CT_GeomGuide ctGG in this.prstGeom.avLst)
-                {
-                    sw.Write("<a:avLst");
-                    if (!string.IsNullOrEmpty(ctGG.name))
-                    {
-                        sw.Write(string.Format(" name=\"{0}\"",ctGG.name));
-                    }
-                    if (!string.IsNullOrEmpty(ctGG.fmla))
-                    {
-                        sw.Write(string.Format(" fmla=\"{0}\"", ctGG.fmla));
-                    }
-                    sw.Write("/>");
-                }
-                sw.Write("</a:prstGeom>");
-            }
-            sw.Write("</xdr:spPr>");
-        }
         public CT_PresetGeometry2D AddNewPrstGeom()
         {
             this.prstGeomField = new CT_PresetGeometry2D();
@@ -377,6 +1823,16 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return ST_BlackWhiteMode.NONE != this.bwModeField; }
         }
+
+        internal static CT_ShapeProperties Parse(XmlNode childNode, XmlNamespaceManager namespaceManager)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void Write(StreamWriter sw, string p)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]
@@ -412,16 +1868,16 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GroupShapeProperties()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.scene3dField = new CT_Scene3D();
-            this.effectDagField = new CT_EffectContainer();
-            this.effectLstField = new CT_EffectList();
-            this.grpFillField = new CT_GroupFillProperties();
-            this.pattFillField = new CT_PatternFillProperties();
-            this.blipFillField = new CT_BlipFillProperties();
-            this.gradFillField = new CT_GradientFillProperties();
-            this.solidFillField = new CT_SolidColorFillProperties();
-            this.noFillField = new CT_NoFillProperties();
+            //this.extlstfield = new ct_officeartextensionlist();
+            //this.scene3dfield = new ct_scene3d();
+            //this.effectdagfield = new ct_effectcontainer();
+            //this.effectlstfield = new ct_effectlist();
+            //this.grpfillfield = new ct_groupfillproperties();
+            //this.pattfillfield = new ct_patternfillproperties();
+            //this.blipfillfield = new ct_blipfillproperties();
+            //this.gradfillfield = new ct_gradientfillproperties();
+            //this.solidfillfield = new ct_solidcolorfillproperties();
+            //this.nofillfield = new ct_nofillproperties();
             //this.xfrmField = new CT_GroupTransform2D();
         }
 

@@ -1,5 +1,8 @@
 
+using NPOI.OpenXml4Net.Util;
 using System;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 
@@ -13,7 +16,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_StyleMatrixReference
+    public class CT_StyleMatrixReference
     {
 
         private CT_ScRgbColor scrgbClrField;
@@ -29,6 +32,51 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_PresetColor prstClrField;
 
         private uint idxField;
+        public static CT_StyleMatrixReference Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_StyleMatrixReference ctObj = new CT_StyleMatrixReference();
+            ctObj.idx = XmlHelper.ReadUInt(node.Attributes["idx"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "scrgbClr")
+                    ctObj.scrgbClr = CT_ScRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srgbClr")
+                    ctObj.srgbClr = CT_SRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hslClr")
+                    ctObj.hslClr = CT_HslColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sysClr")
+                    ctObj.sysClr = CT_SystemColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "schemeClr")
+                    ctObj.schemeClr = CT_SchemeColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "prstClr")
+                    ctObj.prstClr = CT_PresetColor.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "idx", this.idx);
+            sw.Write(">");
+            if (this.scrgbClr != null)
+                this.scrgbClr.Write(sw, "scrgbClr");
+            if (this.srgbClr != null)
+                this.srgbClr.Write(sw, "srgbClr");
+            if (this.hslClr != null)
+                this.hslClr.Write(sw, "hslClr");
+            if (this.sysClr != null)
+                this.sysClr.Write(sw, "sysClr");
+            if (this.schemeClr != null)
+                this.schemeClr.Write(sw, "schemeClr");
+            if (this.prstClr != null)
+                this.prstClr.Write(sw, "prstClr");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
@@ -135,7 +183,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_FontReference
+    public class CT_FontReference
     {
 
         private CT_ScRgbColor scrgbClrField;
@@ -151,7 +199,52 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_PresetColor prstClrField;
 
         private ST_FontCollectionIndex idxField;
+        public static CT_FontReference Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FontReference ctObj = new CT_FontReference();
+            if (node.Attributes["idx"] != null)
+                ctObj.idx = (ST_FontCollectionIndex)Enum.Parse(typeof(ST_FontCollectionIndex), node.Attributes["idx"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "scrgbClr")
+                    ctObj.scrgbClr = CT_ScRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srgbClr")
+                    ctObj.srgbClr = CT_SRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hslClr")
+                    ctObj.hslClr = CT_HslColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sysClr")
+                    ctObj.sysClr = CT_SystemColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "schemeClr")
+                    ctObj.schemeClr = CT_SchemeColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "prstClr")
+                    ctObj.prstClr = CT_PresetColor.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "idx", this.idx.ToString());
+            sw.Write(">");
+            if (this.scrgbClr != null)
+                this.scrgbClr.Write(sw, "scrgbClr");
+            if (this.srgbClr != null)
+                this.srgbClr.Write(sw, "srgbClr");
+            if (this.hslClr != null)
+                this.hslClr.Write(sw, "hslClr");
+            if (this.sysClr != null)
+                this.sysClr.Write(sw, "sysClr");
+            if (this.schemeClr != null)
+                this.schemeClr.Write(sw, "schemeClr");
+            if (this.prstClr != null)
+                this.prstClr.Write(sw, "prstClr");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
         [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
         {
@@ -257,7 +350,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_ShapeStyle
+    public class CT_ShapeStyle
     {
 
         private CT_StyleMatrixReference lnRefField;

@@ -81,7 +81,6 @@
     <Compile Include="Drawing\Gvml.cs" />
     <Compile Include="Drawing\AudioVideo.cs" />
     <Compile Include="Drawing\GraphicalObjectFormat.cs" />
-    <Compile Include="Drawing\DocumentProperties.cs" />
     <Compile Include="Drawing\Picture.cs" />
     <Compile Include="Drawing\spreadsheetShape.cs" />
     <Compile Include="Drawing\Table.cs" />
@@ -235,7 +234,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\openxml4Net\OpenXml4Net vs2010.csproj">
+      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
+      <Name>OpenXml4Net vs2010</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
