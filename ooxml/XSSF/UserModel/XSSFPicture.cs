@@ -24,6 +24,7 @@ using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.Util;
+using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -73,7 +74,11 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a prototype that is used to construct new shapes
          */
-
+        public XSSFPicture(XSSFDrawing drawing, XmlNode ctPicture)
+        {
+            this.drawing = drawing;
+            this.ctPicture =CT_Picture.Parse(ctPicture, POIXMLDocumentPart.NameSpaceManager);
+        }
 
         internal static CT_Picture Prototype()
         {

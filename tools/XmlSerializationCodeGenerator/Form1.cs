@@ -265,5 +265,10 @@ namespace XmlSerializationCodeGenerator
             #endregion
             textBox1.Text= sb.ToString();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(textBox1.Text);
+        }
     }
 }
