@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
     <AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
@@ -53,7 +52,6 @@
     <Compile Include="Drawing\DiagramElementPropertySet.cs" />
     <Compile Include="Drawing\DiagramLayoutVariables.cs" />
     <Compile Include="Drawing\DiagramStyleDefinition.cs" />
-    <Compile Include="Drawing\DocumentProperties.cs" />
     <Compile Include="Drawing\GraphicalObjectAnimation.cs" />
     <Compile Include="Drawing\GraphicalObject.cs" />
     <Compile Include="Drawing\GraphicalObjectFormat.cs" />
@@ -93,31 +91,18 @@
     <Compile Include="Shared\Math.cs" />
     <Compile Include="Spreadsheet\AutoFilter.cs" />
     <Compile Include="Spreadsheet\BaseTypes.cs" />
-    <Compile Include="Spreadsheet\CalcChainDocument.cs" />
-    <Compile Include="Spreadsheet\ChartsheetDocument.cs" />
-    <Compile Include="Spreadsheet\Comments.cs" />
-    <Compile Include="Spreadsheet\CommentsDocument.cs" />
-    <Compile Include="Spreadsheet\MapInfoDocument.cs" />
     <Compile Include="Spreadsheet\SharedStringTable.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookRevisions.cs" />
     <Compile Include="Spreadsheet\SharedWorkbookUserNames.cs" />
     <Compile Include="Spreadsheet\Sheet.cs" />
     <Compile Include="Spreadsheet\SheetMetadata.cs" />
     <Compile Include="Spreadsheet\SingleCellTable.cs" />
-    <Compile Include="Spreadsheet\CalculationChain.cs" />
     <Compile Include="Spreadsheet\ExternalConnections.cs" />
     <Compile Include="Spreadsheet\QueryTable.cs" />
     <Compile Include="Spreadsheet\CustomXmlMappings.cs" />
-    <Compile Include="Spreadsheet\SingleXmlCellsDocument.cs" />
-    <Compile Include="Spreadsheet\SstDocument.cs" />
-    <Compile Include="Spreadsheet\StyleSheetDocument.cs" />
     <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
     <Compile Include="Spreadsheet\Styles.cs" />
-    <Compile Include="Spreadsheet\TableDocument.cs" />
-    <Compile Include="Spreadsheet\ThemeDocument.cs" />
     <Compile Include="Spreadsheet\Workbook.cs" />
-    <Compile Include="Spreadsheet\WorkbookDocument.cs" />
-    <Compile Include="Spreadsheet\WorksheetDocument.cs" />
     <Compile Include="Vml\Main.cs" />
     <Compile Include="Vml\OfficeDrawing.cs" />
     <Compile Include="Vml\PresentationDrawing.cs" />
@@ -144,6 +129,56 @@
     <Compile Include="Wordprocessing\Table.cs" />
     <Compile Include="Wordprocessing\wml.cs" />
     <Compile Include="Wordprocessing\WordPartDocument.cs" />
+    <Compile Include="Spreadsheet\Document\CalcChainDocument.cs" />
+    <Compile Include="Spreadsheet\Document\ChartsheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\CommentsDocument.cs" />
+    <Compile Include="Spreadsheet\Document\MapInfoDocument.cs" />
+    <Compile Include="Spreadsheet\Document\SingleXmlCellsDocument.cs" />
+    <Compile Include="Spreadsheet\Document\SstDocument.cs" />
+    <Compile Include="Spreadsheet\Document\StyleSheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\TableDocument.cs" />
+    <Compile Include="Spreadsheet\Document\ThemeDocument.cs" />
+    <Compile Include="Spreadsheet\Document\WorkbookDocument.cs" />
+    <Compile Include="Spreadsheet\Document\WorksheetDocument.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_RElt.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_RPrElt.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_Rst.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_Sst.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Authors.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Cell.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CellAlignment.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CellProtection.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Col.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Cols.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Comment.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CommentList.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Comments.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Hyperlink.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_MergeCell.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_MergeCells.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Row.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Sheet.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_SheetData.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_SheetPr.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Worksheet.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Border.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_BorderPr.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Borders.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyleXfs.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fill.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fills.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Font.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fonts.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_NumFmt.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_NumFmts.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Xf.cs" />
+    <Compile Include="Drawing\SpreadsheetPicture.cs" />
+    <Compile Include="Drawing\spreadsheetShape.cs" />
+    <Compile Include="Spreadsheet\CT_CalcCell.cs" />
+    <Compile Include="Spreadsheet\CT_CalcChain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\main\npoi.snk">
@@ -158,4 +193,16 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Spreadsheet\Document\" />
+    <Folder Include="Spreadsheet\SharedString\" />
+    <Folder Include="Spreadsheet\Sheet\" />
+    <Folder Include="Spreadsheet\Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\openxml4Net\OpenXml4Net.csproj">
+      <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
+      <Name>OpenXml4Net</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

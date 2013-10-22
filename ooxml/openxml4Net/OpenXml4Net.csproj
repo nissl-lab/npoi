@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OpenXml4Net</RootNamespace>
     <AssemblyName>NPOI.OpenXml4Net</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
@@ -56,16 +55,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\InvalidFormatException.cs" />
@@ -140,6 +137,7 @@
     <Compile Include="Util\ZipEntrySource.cs" />
     <Compile Include="Util\ZipFileZipEntrySource.cs" />
     <Compile Include="Util\ZipInputStreamZipEntrySource.cs" />
+    <Compile Include="Util\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\main\npoi.snk">

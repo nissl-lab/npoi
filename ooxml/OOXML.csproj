@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
     <AssemblyName>NPOI.OOXML</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
@@ -33,15 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIXMLDocument.cs">
@@ -163,54 +160,50 @@
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
     <Compile Include="XWPF\Model\XWPFHyperlinkDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
-    <Compile Include="XWPF\UserModel\BodyElementType.cs" />
-    <Compile Include="XWPF\UserModel\BodyType.cs" />
-    <Compile Include="XWPF\UserModel\Borders.cs" />
-    <Compile Include="XWPF\UserModel\BreakClear.cs" />
-    <Compile Include="XWPF\UserModel\BreakType.cs" />
-    <Compile Include="XWPF\UserModel\Document.cs" />
-    <Compile Include="XWPF\UserModel\IBody.cs" />
-    <Compile Include="XWPF\UserModel\IBodyElement.cs" />
-    <Compile Include="XWPF\UserModel\LineSpacingRule.cs" />
-    <Compile Include="XWPF\UserModel\ParagraphAlignment.cs" />
-    <Compile Include="XWPF\UserModel\PositionInParagraph.cs" />
-    <Compile Include="XWPF\UserModel\TextAlignment.cs" />
-    <Compile Include="XWPF\UserModel\TextSegement.cs" />
-    <Compile Include="XWPF\UserModel\TOC.cs" />
-    <Compile Include="XWPF\UserModel\UnderlinePatterns.cs" />
-    <Compile Include="XWPF\UserModel\VerticalAlign.cs" />
-    <Compile Include="XWPF\UserModel\XWPFAbstractNum.cs" />
-    <Compile Include="XWPF\UserModel\XWPFComment.cs" />
-    <Compile Include="XWPF\UserModel\XWPFDocument.cs" />
-    <Compile Include="XWPF\UserModel\XWPFFactory.cs" />
-    <Compile Include="XWPF\UserModel\XWPFFooter.cs" />
-    <Compile Include="XWPF\UserModel\XWPFFootnote.cs" />
-    <Compile Include="XWPF\UserModel\XWPFFootnotes.cs" />
-    <Compile Include="XWPF\UserModel\XWPFHeader.cs" />
-    <Compile Include="XWPF\UserModel\XWPFHeaderFooter.cs" />
-    <Compile Include="XWPF\UserModel\XWPFHyperlink.cs" />
-    <Compile Include="XWPF\UserModel\XWPFHyperlinkRun.cs" />
-    <Compile Include="XWPF\UserModel\XWPFLatentStyles.cs" />
-    <Compile Include="XWPF\UserModel\XWPFNum.cs" />
-    <Compile Include="XWPF\UserModel\XWPFNumbering.cs" />
-    <Compile Include="XWPF\UserModel\XWPFParagraph.cs" />
-    <Compile Include="XWPF\UserModel\XWPFPicture.cs" />
-    <Compile Include="XWPF\UserModel\XWPFPictureData.cs" />
-    <Compile Include="XWPF\UserModel\XWPFRelation.cs" />
-    <Compile Include="XWPF\UserModel\XWPFRun.cs" />
-    <Compile Include="XWPF\UserModel\XWPFSettings.cs" />
-    <Compile Include="XWPF\UserModel\XWPFStyle.cs" />
-    <Compile Include="XWPF\UserModel\XWPFStyles.cs" />
-    <Compile Include="XWPF\UserModel\XWPFTable.cs" />
-    <Compile Include="XWPF\UserModel\XWPFTableCell.cs" />
-    <Compile Include="XWPF\UserModel\XWPFTableRow.cs" />
     <Compile Include="XWPF\Util\EnumConverter.cs" />
+    <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
+    <Compile Include="XWPF\Usermodel\BodyType.cs" />
+    <Compile Include="XWPF\Usermodel\Borders.cs" />
+    <Compile Include="XWPF\Usermodel\BreakClear.cs" />
+    <Compile Include="XWPF\Usermodel\BreakType.cs" />
+    <Compile Include="XWPF\Usermodel\Document.cs" />
+    <Compile Include="XWPF\Usermodel\IBody.cs" />
+    <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
+    <Compile Include="XWPF\Usermodel\LineSpacingRule.cs" />
+    <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs" />
+    <Compile Include="XWPF\Usermodel\PositionInParagraph.cs" />
+    <Compile Include="XWPF\Usermodel\TextAlignment.cs" />
+    <Compile Include="XWPF\Usermodel\TextSegement.cs" />
+    <Compile Include="XWPF\Usermodel\TOC.cs" />
+    <Compile Include="XWPF\Usermodel\UnderlinePatterns.cs" />
+    <Compile Include="XWPF\Usermodel\VerticalAlign.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFAbstractNum.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFComment.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFooter.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFootnote.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFootnotes.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHeader.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHeaderFooter.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHyperlink.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFHyperlinkRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFLatentStyles.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFNum.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFNumbering.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFParagraph.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFPicture.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFRelation.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\main\main.csproj">
-      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
-      <Name>main</Name>
-    </ProjectReference>
     <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">
       <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
       <Name>OpenXml4Net</Name>
@@ -218,6 +211,10 @@
     <ProjectReference Include="OpenXmlFormats\OpenXmlFormats.csproj">
       <Project>{29E4D389-8B1B-45D8-B197-06116395F5ED}</Project>
       <Name>OpenXmlFormats</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\main\main.csproj">
+      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
+      <Name>main</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
