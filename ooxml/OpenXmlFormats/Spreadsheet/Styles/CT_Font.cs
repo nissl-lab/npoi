@@ -163,10 +163,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public int sizeOfBArray()
         {
+            if (this.bField == null)
+                return 0;
             return this.bField.Count;
         }
         public CT_BooleanProperty AddNewB()
         {
+            if (this.bField == null)
+                this.bField = new List<CT_BooleanProperty>();
             CT_BooleanProperty newB = new CT_BooleanProperty();
             this.bField.Add(newB);
             return newB;

@@ -4689,6 +4689,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public int sizeOfCfRuleArray()
         {
+            if (cfRule == null)
+                return 0;
             return cfRule.Count;
         }
         //public CT_ConditionalFormatting Copy()
@@ -4708,6 +4710,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_CfRule AddNewCfRule()
         {
+            if (this.cfRule == null)
+                this.cfRule = new List<CT_CfRule>();
             CT_CfRule rule = new CT_CfRule();
             this.cfRule.Add(rule);
             return rule;

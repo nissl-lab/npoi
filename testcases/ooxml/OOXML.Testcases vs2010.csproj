@@ -112,6 +112,7 @@
     <Compile Include="XSSF\UserModel\TestXSSFChartSheet.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFColor.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFComment.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataFormat.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataValidation.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDrawing.cs" />

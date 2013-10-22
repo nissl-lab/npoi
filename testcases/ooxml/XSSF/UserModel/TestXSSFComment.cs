@@ -29,6 +29,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * @author Yegor Kozlov
      */
+    [TestFixture]
     public class TestXSSFComment : BaseTestCellComment
     {
 
