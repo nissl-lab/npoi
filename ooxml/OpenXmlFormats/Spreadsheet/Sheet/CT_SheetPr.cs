@@ -222,7 +222,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public bool IsSetTabColor()
         {
-            throw new NotImplementedException();
+            return this.tabColor != null;
         }
     }
 
