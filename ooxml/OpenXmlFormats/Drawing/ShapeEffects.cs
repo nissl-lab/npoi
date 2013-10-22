@@ -1907,8 +1907,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tileRect.Write(sw, "tileRect");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
-        [XmlArray(Order = 0)]
-        [XmlArrayItem("gs", IsNullable = false)]
+        [XmlElement(Order = 0)]
         public CT_GradientStopList gsLst
         {
             get
