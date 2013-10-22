@@ -54,7 +54,7 @@ namespace NPOI.XSSF.Model
 
                     foreach (XSSFMap map in mapInfo.GetAllXSSFMaps())
                     {
-                        XmlNode xmlSchema = map.GetSchema();
+                        string xmlSchema = map.GetSchema();
                         Assert.IsNotNull(xmlSchema);
                     }
                 }

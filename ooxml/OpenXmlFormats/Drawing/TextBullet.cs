@@ -370,6 +370,24 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_TextCharBullet
     {
+        public static CT_TextCharBullet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+	        if(node==null)
+		        return null;
+	        CT_TextCharBullet ctObj = new CT_TextCharBullet();
+	        ctObj.@char = XmlHelper.ReadString(node.Attributes["char"]);
+	        return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "char", this.@char);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private string charField;
 

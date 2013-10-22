@@ -12,6 +12,9 @@ namespace NPOI.OpenXmlFormats.Dml {
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using NPOI.OpenXml4Net.Util;
+    using System.IO;
+    using System.Xml;
     
     
 
@@ -27,7 +30,30 @@ namespace NPOI.OpenXmlFormats.Dml {
         private long hField;
         
         private ST_BevelPresetType prstField;
-        
+        public static CT_Bevel Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Bevel ctObj = new CT_Bevel();
+            ctObj.w = XmlHelper.ReadLong(node.Attributes["w"]);
+            ctObj.h = XmlHelper.ReadLong(node.Attributes["h"]);
+            if (node.Attributes["prst"] != null)
+                ctObj.prst = (ST_BevelPresetType)Enum.Parse(typeof(ST_BevelPresetType), node.Attributes["prst"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w", this.w);
+            XmlHelper.WriteAttribute(sw, "h", this.h);
+            XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
         public CT_Bevel() {
             this.wField = ((long)(76200));
             this.hField = ((long)(76200));
@@ -135,13 +161,61 @@ namespace NPOI.OpenXmlFormats.Dml {
         private long contourWField;
         
         private ST_PresetMaterialType prstMaterialField;
-        
+        public static CT_Shape3D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Shape3D ctObj = new CT_Shape3D();
+            ctObj.z = XmlHelper.ReadLong(node.Attributes["z"]);
+            ctObj.extrusionH = XmlHelper.ReadLong(node.Attributes["extrusionH"]);
+            ctObj.contourW = XmlHelper.ReadLong(node.Attributes["contourW"]);
+            if (node.Attributes["prstMaterial"] != null)
+                ctObj.prstMaterial = (ST_PresetMaterialType)Enum.Parse(typeof(ST_PresetMaterialType), node.Attributes["prstMaterial"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "bevelT")
+                    ctObj.bevelT = CT_Bevel.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bevelB")
+                    ctObj.bevelB = CT_Bevel.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extrusionClr")
+                    ctObj.extrusionClr = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "contourClr")
+                    ctObj.contourClr = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "z", this.z);
+            XmlHelper.WriteAttribute(sw, "extrusionH", this.extrusionH);
+            XmlHelper.WriteAttribute(sw, "contourW", this.contourW);
+            XmlHelper.WriteAttribute(sw, "prstMaterial", this.prstMaterial.ToString());
+            sw.Write(">");
+            if (this.bevelT != null)
+                this.bevelT.Write(sw, "bevelT");
+            if (this.bevelB != null)
+                this.bevelB.Write(sw, "bevelB");
+            if (this.extrusionClr != null)
+                this.extrusionClr.Write(sw, "extrusionClr");
+            if (this.contourClr != null)
+                this.contourClr.Write(sw, "contourClr");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
         public CT_Shape3D() {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.contourClrField = new CT_Color();
-            this.extrusionClrField = new CT_Color();
-            this.bevelBField = new CT_Bevel();
-            this.bevelTField = new CT_Bevel();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.contourClrField = new CT_Color();
+            //this.extrusionClrField = new CT_Color();
+            //this.bevelBField = new CT_Bevel();
+            //this.bevelTField = new CT_Bevel();
             this.zField = ((long)(0));
             this.extrusionHField = ((long)(0));
             this.contourWField = ((long)(0));
@@ -306,7 +380,25 @@ namespace NPOI.OpenXmlFormats.Dml {
         public CT_FlatText() {
             this.zField = ((long)(0));
         }
-        
+        public static CT_FlatText Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FlatText ctObj = new CT_FlatText();
+            ctObj.z = XmlHelper.ReadLong(node.Attributes["z"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "z", this.z);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
         [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
         public long z {

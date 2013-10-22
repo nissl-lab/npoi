@@ -360,6 +360,41 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_StyleMatrixReference effectRefField;
 
         private CT_FontReference fontRefField;
+        public static CT_ShapeStyle Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ShapeStyle ctObj = new CT_ShapeStyle();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "lnRef")
+                    ctObj.lnRef = CT_StyleMatrixReference.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fillRef")
+                    ctObj.fillRef = CT_StyleMatrixReference.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "effectRef")
+                    ctObj.effectRef = CT_StyleMatrixReference.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fontRef")
+                    ctObj.fontRef = CT_FontReference.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.lnRef != null)
+                this.lnRef.Write(sw, "lnRef");
+            if (this.fillRef != null)
+                this.fillRef.Write(sw, "fillRef");
+            if (this.effectRef != null)
+                this.effectRef.Write(sw, "effectRef");
+            if (this.fontRef != null)
+                this.fontRef.Write(sw, "fontRef");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_StyleMatrixReference AddNewFillRef()
         {

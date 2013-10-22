@@ -13,6 +13,8 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
 
 
     [Serializable]
@@ -31,10 +33,45 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_Backdrop()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.upField = new CT_Vector3D();
-            this.normField = new CT_Vector3D();
-            this.anchorField = new CT_Point3D();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.upField = new CT_Vector3D();
+            //this.normField = new CT_Vector3D();
+            //this.anchorField = new CT_Point3D();
+        }
+        public static CT_Backdrop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Backdrop ctObj = new CT_Backdrop();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "anchor")
+                    ctObj.anchor = CT_Point3D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "norm")
+                    ctObj.norm = CT_Vector3D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "up")
+                    ctObj.up = CT_Vector3D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.anchor != null)
+                this.anchor.Write(sw, "anchor");
+            if (this.norm != null)
+                this.norm.Write(sw, "norm");
+            if (this.up != null)
+                this.up.Write(sw, "up");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]

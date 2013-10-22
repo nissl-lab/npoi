@@ -15,6 +15,7 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Collections.Generic;
     using System.IO;
     using System.Xml;
+    using NPOI.OpenXml4Net.Util;
 
 
     [Serializable]
@@ -24,6 +25,24 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_TextSpacingPercent
     {
+        public static CT_TextSpacingPercent Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextSpacingPercent ctObj = new CT_TextSpacingPercent();
+            ctObj.val = XmlHelper.ReadInt(node.Attributes["val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private int valField;
         /*<xsd:restriction base="ST_Percentage">
@@ -52,6 +71,24 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_TextSpacingPoint
     {
+        public static CT_TextSpacingPoint Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextSpacingPoint ctObj = new CT_TextSpacingPoint();
+            ctObj.val = XmlHelper.ReadInt(node.Attributes["val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private int valField;
         /*<xsd:restriction base="xsd:int">
@@ -88,6 +125,27 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_TextTabAlignType algnField;
 
         private bool algnFieldSpecified;
+        public static CT_TextTabStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextTabStop ctObj = new CT_TextTabStop();
+            ctObj.pos = XmlHelper.ReadInt(node.Attributes["pos"]);
+            if (node.Attributes["algn"] != null)
+                ctObj.algn = (ST_TextTabAlignType)Enum.Parse(typeof(ST_TextTabAlignType), node.Attributes["algn"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "pos", this.pos);
+            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public int pos
@@ -204,7 +262,31 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TextLineBreak()
         {
-            this.rPrField = new CT_TextCharacterProperties();
+            //this.rPrField = new CT_TextCharacterProperties();
+        }
+
+        public static CT_TextLineBreak Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextLineBreak ctObj = new CT_TextLineBreak();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rPr")
+                    ctObj.rPr = CT_TextCharacterProperties.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.rPr != null)
+                this.rPr.Write(sw, "rPr");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -230,7 +312,33 @@ namespace NPOI.OpenXmlFormats.Dml
     {
         private CT_TextSpacingPercent spcPctField;
         private CT_TextSpacingPoint spcPtsField;
+        public static CT_TextSpacing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextSpacing ctObj = new CT_TextSpacing();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "spcPct")
+                    ctObj.spcPct = CT_TextSpacingPercent.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "spcPts")
+                    ctObj.spcPts = CT_TextSpacingPoint.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.spcPct != null)
+                this.spcPct.Write(sw, "spcPct");
+            if (this.spcPts != null)
+                this.spcPts.Write(sw, "spcPts");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
         public CT_TextSpacingPercent spcPct
         {
             get { return this.spcPctField; }
@@ -243,6 +351,173 @@ namespace NPOI.OpenXmlFormats.Dml
         }
     }
 
+
+    [Serializable]
+    [System.Diagnostics.DebuggerStepThrough]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_TextParagraph
+    {
+        public static CT_TextParagraph Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextParagraph ctObj = new CT_TextParagraph();
+            ctObj.r = new List<CT_RegularTextRun>();
+            ctObj.br = new List<CT_TextLineBreak>();
+            ctObj.fld = new List<CT_TextField>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pPr")
+                    ctObj.pPr = CT_TextParagraphProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "endParaRPr")
+                    ctObj.endParaRPr = CT_TextCharacterProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "r")
+                    ctObj.r.Add(CT_RegularTextRun.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "br")
+                    ctObj.br.Add(CT_TextLineBreak.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "fld")
+                    ctObj.fld.Add(CT_TextField.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.pPr != null)
+                this.pPr.Write(sw, "pPr");
+            if (this.endParaRPr != null)
+                this.endParaRPr.Write(sw, "endParaRPr");
+            if (this.r != null)
+            {
+                foreach (CT_RegularTextRun x in this.r)
+                {
+                    x.Write(sw, "r");
+                }
+            }
+            if (this.br != null)
+            {
+                foreach (CT_TextLineBreak x in this.br)
+                {
+                    x.Write(sw, "br");
+                }
+            }
+            if (this.fld != null)
+            {
+                foreach (CT_TextField x in this.fld)
+                {
+                    x.Write(sw, "fld");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+        private CT_TextParagraphProperties pPrField;
+
+        private List<CT_RegularTextRun> rField;
+
+        private List<CT_TextLineBreak> brField;
+
+        private List<CT_TextField> fldField;
+
+        private CT_TextCharacterProperties endParaRPrField;
+
+        public CT_RegularTextRun AddNewR()
+        {
+            if (this.rField == null)
+                this.rField = new List<CT_RegularTextRun>();
+            CT_RegularTextRun rtr = new CT_RegularTextRun();
+            this.rField.Add(rtr);
+            return rtr;
+        }
+        public CT_TextParagraphProperties AddNewPPr()
+        {
+            this.pPrField = new CT_TextParagraphProperties();
+            return this.pPrField;
+        }
+        public CT_TextCharacterProperties AddNewEndParaRPr()
+        {
+            this.endParaRPrField = new CT_TextCharacterProperties();
+            return this.endParaRPrField;
+        }
+
+        public CT_TextParagraphProperties pPr
+        {
+            get
+            {
+                return this.pPrField;
+            }
+            set
+            {
+                this.pPrField = value;
+            }
+        }
+
+
+        [XmlElement("r")]
+        public List<CT_RegularTextRun> r
+        {
+            get
+            {
+                return this.rField;
+            }
+            set
+            {
+                this.rField = value;
+            }
+        }
+
+
+        [XmlElement("br")]
+        public List<CT_TextLineBreak> br
+        {
+            get
+            {
+                return this.brField;
+            }
+            set
+            {
+                this.brField = value;
+            }
+        }
+
+
+        [XmlElement("fld")]
+        public List<CT_TextField> fld
+        {
+            get
+            {
+                return this.fldField;
+            }
+            set
+            {
+                this.fldField = value;
+            }
+        }
+
+
+        public CT_TextCharacterProperties endParaRPr
+        {
+            get
+            {
+                return this.endParaRPrField;
+            }
+            set
+            {
+                this.endParaRPrField = value;
+            }
+        }
+
+        public int SizeOfRArray()
+        {
+            return rField.Count;
+        }
+    }
 
     [Serializable]
     [DebuggerStepThrough]
@@ -329,6 +604,123 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool hangingPunctField;
 
         private bool hangingPunctFieldSpecified;
+        public static CT_TextParagraphProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextParagraphProperties ctObj = new CT_TextParagraphProperties();
+            ctObj.marL = XmlHelper.ReadInt(node.Attributes["marL"]);
+            ctObj.marR = XmlHelper.ReadInt(node.Attributes["marR"]);
+            ctObj.lvl = XmlHelper.ReadInt(node.Attributes["lvl"]);
+            ctObj.indent = XmlHelper.ReadInt(node.Attributes["indent"]);
+            if (node.Attributes["algn"] != null)
+                ctObj.algn = (ST_TextAlignType)Enum.Parse(typeof(ST_TextAlignType), node.Attributes["algn"].Value);
+            ctObj.defTabSz = XmlHelper.ReadInt(node.Attributes["defTabSz"]);
+            ctObj.rtl = XmlHelper.ReadBool(node.Attributes["rtl"]);
+            ctObj.eaLnBrk = XmlHelper.ReadBool(node.Attributes["eaLnBrk"]);
+            if (node.Attributes["fontAlgn"] != null)
+                ctObj.fontAlgn = (ST_TextFontAlignType)Enum.Parse(typeof(ST_TextFontAlignType), node.Attributes["fontAlgn"].Value);
+            ctObj.latinLnBrk = XmlHelper.ReadBool(node.Attributes["latinLnBrk"]);
+            ctObj.hangingPunct = XmlHelper.ReadBool(node.Attributes["hangingPunct"]);
+            ctObj.tabLst = new List<CT_TextTabStop>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "lnSpc")
+                    ctObj.lnSpc = CT_TextSpacing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "spcBef")
+                    ctObj.spcBef = CT_TextSpacing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "spcAft")
+                    ctObj.spcAft = CT_TextSpacing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buClrTx")
+                    ctObj.buClrTx = new CT_TextBulletColorFollowText();
+                else if (childNode.LocalName == "buClr")
+                    ctObj.buClr = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buSzTx")
+                    ctObj.buSzTx = new CT_TextBulletSizeFollowText();
+                else if (childNode.LocalName == "buSzPct")
+                    ctObj.buSzPct = CT_TextBulletSizePercent.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buSzPts")
+                    ctObj.buSzPts = CT_TextBulletSizePoint.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buFontTx")
+                    ctObj.buFontTx = new CT_TextBulletTypefaceFollowText();
+                else if (childNode.LocalName == "buFont")
+                    ctObj.buFont = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buNone")
+                    ctObj.buNone = new CT_TextNoBullet();
+                else if (childNode.LocalName == "buAutoNum")
+                    ctObj.buAutoNum = CT_TextAutonumberBullet.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buChar")
+                    ctObj.buChar = CT_TextCharBullet.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "buBlip")
+                    ctObj.buBlip = CT_TextBlipBullet.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "defRPr")
+                    ctObj.defRPr = CT_TextCharacterProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tabLst")
+                    ctObj.tabLst.Add(CT_TextTabStop.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "marL", this.marL);
+            XmlHelper.WriteAttribute(sw, "marR", this.marR);
+            XmlHelper.WriteAttribute(sw, "lvl", this.lvl);
+            XmlHelper.WriteAttribute(sw, "indent", this.indent);
+            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            XmlHelper.WriteAttribute(sw, "defTabSz", this.defTabSz);
+            XmlHelper.WriteAttribute(sw, "rtl", this.rtl);
+            XmlHelper.WriteAttribute(sw, "eaLnBrk", this.eaLnBrk);
+            XmlHelper.WriteAttribute(sw, "fontAlgn", this.fontAlgn.ToString());
+            XmlHelper.WriteAttribute(sw, "latinLnBrk", this.latinLnBrk);
+            XmlHelper.WriteAttribute(sw, "hangingPunct", this.hangingPunct);
+            sw.Write(">");
+            if (this.lnSpc != null)
+                this.lnSpc.Write(sw, "lnSpc");
+            if (this.spcBef != null)
+                this.spcBef.Write(sw, "spcBef");
+            if (this.spcAft != null)
+                this.spcAft.Write(sw, "spcAft");
+            if (this.buClrTx != null)
+                sw.Write("<a:buClrTx/>");
+            if (this.buClr != null)
+                this.buClr.Write(sw, "buClr");
+            if (this.buSzTx != null)
+                sw.Write("<a:buSzTx/>");
+            if (this.buSzPct != null)
+                this.buSzPct.Write(sw, "buSzPct");
+            if (this.buSzPts != null)
+                this.buSzPts.Write(sw, "buSzPts");
+            if (this.buFontTx != null)
+                sw.Write("<a:buFontTx/>");
+            if (this.buFont != null)
+                this.buFont.Write(sw, "buFont");
+            if (this.buNone != null)
+                sw.Write("<a:buNone/>");
+            if (this.buAutoNum != null)
+                this.buAutoNum.Write(sw, "buAutoNum");
+            if (this.buChar != null)
+                this.buChar.Write(sw, "buChar");
+            if (this.buBlip != null)
+                this.buBlip.Write(sw, "buBlip");
+            if (this.defRPr != null)
+                this.defRPr.Write(sw, "defRPr");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.tabLst!= null)
+            {
+                foreach (CT_TextTabStop x in this.tabLst)
+                {
+                    x.Write(sw, "tabLst");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_TextParagraphProperties()
         {
@@ -930,11 +1322,44 @@ namespace NPOI.OpenXmlFormats.Dml
         private string idField;
 
         private string typeField;
+        public static CT_TextField Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextField ctObj = new CT_TextField();
+            ctObj.t = XmlHelper.ReadString(node.Attributes["t"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
+            ctObj.type = XmlHelper.ReadString(node.Attributes["type"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rPr")
+                    ctObj.rPr = CT_TextCharacterProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pPr")
+                    ctObj.pPr = CT_TextParagraphProperties.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "t", this.t);
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "type", this.type);
+            sw.Write(">");
+            if (this.rPr != null)
+                this.rPr.Write(sw, "rPr");
+            if (this.pPr != null)
+                this.pPr.Write(sw, "pPr");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_TextField()
         {
-            this.pPrField = new CT_TextParagraphProperties();
-            this.rPrField = new CT_TextCharacterProperties();
+            //this.pPrField = new CT_TextParagraphProperties();
+            //this.rPrField = new CT_TextCharacterProperties();
         }
 
         [XmlElement(Order = 0)]

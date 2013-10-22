@@ -23,30 +23,42 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             if (node == null)
                 return null;
-
-            CT_Picture ctShape = new CT_Picture();
-            if (node.Attributes["macro"] != null)
-                ctShape.macroField = node.Attributes["macro"].Value;
-            if (node.Attributes["fPublished"] != null && node.Attributes["fPublished"].Value == "1")
-                ctShape.fPublishedField = true;
-
+            CT_Picture ctObj = new CT_Picture();
+            ctObj.macro = XmlHelper.ReadString(node.Attributes["macro"]);
+            ctObj.fPublished = XmlHelper.ReadBool(node.Attributes["fPublished"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "nvPicPr")
-                {
-                    ctShape.nvPicPr = CT_PictureNonVisual.Parse(childNode, namespaceManager);
-                }
-                else if (childNode.LocalName == "spPr")
-                {
-                    ctShape.spPr = CT_ShapeProperties.Parse(childNode, namespaceManager);
-                }
+                    ctObj.nvPicPr = CT_PictureNonVisual.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "blipFill")
-                {
-                    ctShape.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
-                }
+                    ctObj.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "spPr")
+                    ctObj.spPr = CT_ShapeProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "style")
+                    ctObj.style = CT_ShapeStyle.Parse(childNode, namespaceManager);
             }
-            return ctShape;
+            return ctObj;
         }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "macro", this.macro);
+            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
+            sw.Write(">");
+            if (this.nvPicPr != null)
+                this.nvPicPr.Write(sw, "nvPicPr");
+            if (this.blipFill != null)
+                this.blipFill.Write(sw, "blipFill");
+            if (this.spPr != null)
+                this.spPr.Write(sw, "spPr");
+            if (this.style != null)
+                this.style.Write(sw, "style");
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
+        }
+
         [XmlElement]
         public CT_PictureNonVisual nvPicPr
         {
@@ -149,32 +161,6 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         }
 
-        internal void Write(StreamWriter sw)
-        {
-            sw.Write("<xdr:pic");
-            if (this.macroField != null)
-            {
-                sw.Write(string.Format(" macro=\"{0}\"", this.macroField));
-            }
-            if (this.fPublished)
-            {
-                sw.Write(" fPublished=\"1\"");
-            }
-            sw.Write(">");
-            if (this.nvPicPr != null)
-            {
-                this.nvPicPr.Write(sw, "nvPicPr");
-            }
-            if (this.blipFill != null)
-            {
-                this.blipFill.Write(sw, "blipFill");
-            }
-            if (this.spPr != null)
-            {
-                this.spPr.Write(sw, "spPr");
-            }
-            sw.Write("</xdr:pic>");
-        }
     }
 
     // see same class in different name space in Picture.cs

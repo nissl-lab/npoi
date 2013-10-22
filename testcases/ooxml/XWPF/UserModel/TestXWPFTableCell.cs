@@ -26,7 +26,6 @@ namespace NPOI.XWPF.UserModel
     public class TestXWPFTableCell
     {
         [Test]
-         [Ignore]
         public void TestSetGetVertAlignment()
         {
             // instantiate the following classes so they'll Get picked up by
@@ -56,7 +55,6 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTH, al);
         }
         [Test]
-         [Ignore]
         public void TestSetGetColor()
         {
             // create a table

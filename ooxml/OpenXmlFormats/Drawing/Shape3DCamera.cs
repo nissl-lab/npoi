@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using NPOI.OpenXml4Net.Util;
+    using System.IO;
 
 
     [Serializable]
@@ -30,6 +33,36 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool fovFieldSpecified;
 
         private int zoomField;
+        public static CT_Camera Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Camera ctObj = new CT_Camera();
+            if (node.Attributes["prst"] != null)
+                ctObj.prst = (ST_PresetCameraType)Enum.Parse(typeof(ST_PresetCameraType), node.Attributes["prst"].Value);
+            ctObj.fov = XmlHelper.ReadInt(node.Attributes["fov"]);
+            ctObj.zoom = XmlHelper.ReadInt(node.Attributes["zoom"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rot")
+                    ctObj.rot = CT_SphereCoords.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
+            XmlHelper.WriteAttribute(sw, "fov", this.fov);
+            XmlHelper.WriteAttribute(sw, "zoom", this.zoom);
+            sw.Write(">");
+            if (this.rot != null)
+                this.rot.Write(sw, "rot");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_Camera()
         {

@@ -493,9 +493,12 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "g", this.g);
             XmlHelper.WriteAttribute(sw, "b", this.b);
             sw.Write(">");
-            foreach (EG_ColorTransform x in this.ItemsElementName)
+            if (this.ItemsElementName != null)
             {
-                sw.Write(string.Format("<a:{0}/>", x));
+                foreach (EG_ColorTransform x in this.ItemsElementName)
+                {
+                    sw.Write(string.Format("<a:{0}/>", x));
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -761,9 +764,12 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val);
             sw.Write(">");
-            foreach (EG_ColorTransform x in this.ItemsElementName)
+            if (this.ItemsElementName != null)
             {
-                sw.Write(string.Format("<a:{0}/>", x));
+                foreach (EG_ColorTransform x in this.ItemsElementName)
+                {
+                    sw.Write(string.Format("<a:{0}/>", x));
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -925,9 +931,12 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "sat", this.sat);
             XmlHelper.WriteAttribute(sw, "lum", this.lum);
             sw.Write(">");
-            foreach (EG_ColorTransform x in this.ItemsElementName)
+            if (this.ItemsElementName != null)
             {
-                sw.Write(string.Format("<a:{0}/>", x));
+                foreach (EG_ColorTransform x in this.ItemsElementName)
+                {
+                    sw.Write(string.Format("<a:{0}/>", x));
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -1026,9 +1035,12 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             XmlHelper.WriteAttribute(sw, "lastClr", this.lastClr);
             sw.Write(">");
-            foreach (EG_ColorTransform x in this.ItemsElementName)
+            if (this.ItemsElementName != null)
             {
-                sw.Write(string.Format("<a:{0}/>", x));
+                foreach (EG_ColorTransform x in this.ItemsElementName)
+                {
+                    sw.Write(string.Format("<a:{0}/>", x));
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -1274,9 +1286,12 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write(">");
-            foreach (EG_ColorTransform x in this.ItemsElementName)
+            if (this.ItemsElementName != null)
             {
-                sw.Write(string.Format("<a:{0}/>", x));
+                foreach (EG_ColorTransform x in this.ItemsElementName)
+                {
+                    sw.Write(string.Format("<a:{0}/>", x));
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -1498,9 +1513,12 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write(">");
-            foreach (EG_ColorTransform x in this.ItemsElementName)
+            if (this.ItemsElementName != null)
             {
-                sw.Write(string.Format("<a:{0}/>", x));
+                foreach (EG_ColorTransform x in this.ItemsElementName)
+                {
+                    sw.Write(string.Format("<a:{0}/>", x));
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -1964,9 +1982,12 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             sw.Write(">");
-            foreach (CT_OfficeArtExtension x in this.ext)
+            if (this.ext != null)
             {
-                x.Write(sw, "ext");
+                foreach (CT_OfficeArtExtension x in this.ext)
+                {
+                    x.Write(sw, "ext");
+                }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -2202,6 +2223,47 @@ namespace NPOI.OpenXmlFormats.Dml
             this.flipHField = false;
             this.flipVField = false;
         }
+        public static CT_GroupTransform2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_GroupTransform2D ctObj = new CT_GroupTransform2D();
+            ctObj.rot = XmlHelper.ReadInt(node.Attributes["rot"]);
+            ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
+            ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "off")
+                    ctObj.off = CT_Point2D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "ext")
+                    ctObj.ext = CT_PositiveSize2D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "chOff")
+                    ctObj.chOff = CT_Point2D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "chExt")
+                    ctObj.chExt = CT_PositiveSize2D.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "rot", this.rot);
+            XmlHelper.WriteAttribute(sw, "flipH", this.flipH);
+            XmlHelper.WriteAttribute(sw, "flipV", this.flipV);
+            sw.Write(">");
+            if (this.off != null)
+                this.off.Write(sw, "off");
+            if (this.ext != null)
+                this.ext.Write(sw, "ext");
+            if (this.chOff != null)
+                this.chOff.Write(sw, "chOff");
+            if (this.chExt != null)
+                this.chExt.Write(sw, "chExt");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_PositiveSize2D AddNewExt()
         {
@@ -2330,6 +2392,28 @@ namespace NPOI.OpenXmlFormats.Dml
         private long yField;
 
         private long zField;
+        public static CT_Point3D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Point3D ctObj = new CT_Point3D();
+            ctObj.x = XmlHelper.ReadLong(node.Attributes["x"]);
+            ctObj.y = XmlHelper.ReadLong(node.Attributes["y"]);
+            ctObj.z = XmlHelper.ReadLong(node.Attributes["z"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "x", this.x);
+            XmlHelper.WriteAttribute(sw, "y", this.y);
+            XmlHelper.WriteAttribute(sw, "z", this.z);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public long x
@@ -2382,6 +2466,28 @@ namespace NPOI.OpenXmlFormats.Dml
         private long dyField;
 
         private long dzField;
+        public static CT_Vector3D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Vector3D ctObj = new CT_Vector3D();
+            ctObj.dx = XmlHelper.ReadLong(node.Attributes["dx"]);
+            ctObj.dy = XmlHelper.ReadLong(node.Attributes["dy"]);
+            ctObj.dz = XmlHelper.ReadLong(node.Attributes["dz"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "dx", this.dx);
+            XmlHelper.WriteAttribute(sw, "dy", this.dy);
+            XmlHelper.WriteAttribute(sw, "dz", this.dz);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public long dx
@@ -2434,6 +2540,28 @@ namespace NPOI.OpenXmlFormats.Dml
         private int lonField;
 
         private int revField;
+        public static CT_SphereCoords Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SphereCoords ctObj = new CT_SphereCoords();
+            ctObj.lat = XmlHelper.ReadInt(node.Attributes["lat"]);
+            ctObj.lon = XmlHelper.ReadInt(node.Attributes["lon"]);
+            ctObj.rev = XmlHelper.ReadInt(node.Attributes["rev"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "lat", this.lat);
+            XmlHelper.WriteAttribute(sw, "lon", this.lon);
+            XmlHelper.WriteAttribute(sw, "rev", this.rev);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public int lat

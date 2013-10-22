@@ -13,6 +13,8 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
 
 
     [Serializable]
@@ -31,10 +33,45 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_Scene3D()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.backdropField = new CT_Backdrop();
-            this.lightRigField = new CT_LightRig();
-            this.cameraField = new CT_Camera();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.backdropField = new CT_Backdrop();
+            //this.lightRigField = new CT_LightRig();
+            //this.cameraField = new CT_Camera();
+        }
+        public static CT_Scene3D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Scene3D ctObj = new CT_Scene3D();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "camera")
+                    ctObj.camera = CT_Camera.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lightRig")
+                    ctObj.lightRig = CT_LightRig.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "backdrop")
+                    ctObj.backdrop = CT_Backdrop.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.camera != null)
+                this.camera.Write(sw, "camera");
+            if (this.lightRig != null)
+                this.lightRig.Write(sw, "lightRig");
+            if (this.backdrop != null)
+                this.backdrop.Write(sw, "backdrop");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]

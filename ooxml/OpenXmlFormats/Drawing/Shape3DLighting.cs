@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using System.IO;
+    using NPOI.OpenXml4Net.Util;
 
 
     [Serializable]
@@ -29,7 +32,36 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_LightRig()
         {
-            this.rotField = new CT_SphereCoords();
+            //this.rotField = new CT_SphereCoords();
+        }
+        public static CT_LightRig Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LightRig ctObj = new CT_LightRig();
+            if (node.Attributes["rig"] != null)
+                ctObj.rig = (ST_LightRigType)Enum.Parse(typeof(ST_LightRigType), node.Attributes["rig"].Value);
+            if (node.Attributes["dir"] != null)
+                ctObj.dir = (ST_LightRigDirection)Enum.Parse(typeof(ST_LightRigDirection), node.Attributes["dir"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rot")
+                    ctObj.rot = CT_SphereCoords.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "rig", this.rig.ToString());
+            XmlHelper.WriteAttribute(sw, "dir", this.dir.ToString());
+            sw.Write(">");
+            if (this.rot != null)
+                this.rot.Write(sw, "rot");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]

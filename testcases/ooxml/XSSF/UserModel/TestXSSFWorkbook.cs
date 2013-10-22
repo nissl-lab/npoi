@@ -466,7 +466,6 @@ namespace NPOI.XSSF.UserModel
             ChangeSheetNameWithSharedFormulas("shared_formulas.xlsx");
         }
         [Test]
-        [Ignore]
         public void TestSetTabColor()
         {
             XSSFWorkbook wb = new XSSFWorkbook();

@@ -38,6 +38,31 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_LineEndLength lenField;
 
         private bool lenFieldSpecified;
+        public static CT_LineEndProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LineEndProperties ctObj = new CT_LineEndProperties();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_LineEndType)Enum.Parse(typeof(ST_LineEndType), node.Attributes["type"].Value);
+            if (node.Attributes["w"] != null)
+                ctObj.w = (ST_LineEndWidth)Enum.Parse(typeof(ST_LineEndWidth), node.Attributes["w"].Value);
+            if (node.Attributes["len"] != null)
+                ctObj.len = (ST_LineEndLength)Enum.Parse(typeof(ST_LineEndLength), node.Attributes["len"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "w", this.w.ToString());
+            XmlHelper.WriteAttribute(sw, "len", this.len.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public ST_LineEndType type
@@ -203,6 +228,24 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_LineJoinMiterProperties
     {
+        public static CT_LineJoinMiterProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LineJoinMiterProperties ctObj = new CT_LineJoinMiterProperties();
+            ctObj.lim = XmlHelper.ReadInt(node.Attributes["lim"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "lim", this.lim);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private int limField;
 
@@ -243,6 +286,25 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PresetLineDashProperties
     {
+        public static CT_PresetLineDashProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PresetLineDashProperties ctObj = new CT_PresetLineDashProperties();
+            if (node.Attributes["val"] != null)
+                ctObj.val = (ST_PresetLineDashVal)Enum.Parse(typeof(ST_PresetLineDashVal), node.Attributes["val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private ST_PresetLineDashVal valField;
 
@@ -323,6 +385,26 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_DashStop
     {
+        public static CT_DashStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DashStop ctObj = new CT_DashStop();
+            ctObj.d = XmlHelper.ReadInt(node.Attributes["d"]);
+            ctObj.sp = XmlHelper.ReadInt(node.Attributes["sp"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "d", this.d);
+            XmlHelper.WriteAttribute(sw, "sp", this.sp);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         private int dField;
 
@@ -433,6 +515,90 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_PenAlignment algnField = ST_PenAlignment.NONE;
 
         private bool algnFieldSpecified;
+        public static CT_LineProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LineProperties ctObj = new CT_LineProperties();
+            ctObj.w = XmlHelper.ReadInt(node.Attributes["w"]);
+            if (node.Attributes["cap"] != null)
+                ctObj.cap = (ST_LineCap)Enum.Parse(typeof(ST_LineCap), node.Attributes["cap"].Value);
+            if (node.Attributes["cmpd"] != null)
+                ctObj.cmpd = (ST_CompoundLine)Enum.Parse(typeof(ST_CompoundLine), node.Attributes["cmpd"].Value);
+            if (node.Attributes["algn"] != null)
+                ctObj.algn = (ST_PenAlignment)Enum.Parse(typeof(ST_PenAlignment), node.Attributes["algn"].Value);
+            ctObj.custDash = new List<CT_DashStop>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "noFill")
+                    ctObj.noFill = new CT_NoFillProperties();
+                else if (childNode.LocalName == "solidFill")
+                    ctObj.solidFill = CT_SolidColorFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "gradFill")
+                    ctObj.gradFill = CT_GradientFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pattFill")
+                    ctObj.pattFill = CT_PatternFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "prstDash")
+                    ctObj.prstDash = CT_PresetLineDashProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "round")
+                    ctObj.round = new CT_LineJoinRound();
+                else if (childNode.LocalName == "bevel")
+                    ctObj.bevel = new CT_LineJoinBevel();
+                else if (childNode.LocalName == "miter")
+                    ctObj.miter = CT_LineJoinMiterProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "headEnd")
+                    ctObj.headEnd = CT_LineEndProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tailEnd")
+                    ctObj.tailEnd = CT_LineEndProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "custDash")
+                    ctObj.custDash.Add(CT_DashStop.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w", this.w);
+            XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
+            XmlHelper.WriteAttribute(sw, "cmpd", this.cmpd.ToString());
+            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            sw.Write(">");
+            if (this.noFill != null)
+                sw.Write("<a:noFill/>");
+            if (this.solidFill != null)
+                this.solidFill.Write(sw, "solidFill");
+            if (this.gradFill != null)
+                this.gradFill.Write(sw, "gradFill");
+            if (this.pattFill != null)
+                this.pattFill.Write(sw, "pattFill");
+            if (this.prstDash != null)
+                this.prstDash.Write(sw, "prstDash");
+            if (this.round != null)
+                sw.Write("<a:round/>");
+            if (this.bevel != null)
+                sw.Write("<a:bevel/>");
+            if (this.miter != null)
+                this.miter.Write(sw, "miter");
+            if (this.headEnd != null)
+                this.headEnd.Write(sw, "headEnd");
+            if (this.tailEnd != null)
+                this.tailEnd.Write(sw, "tailEnd");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.custDash != null)
+            {
+                foreach (CT_DashStop x in this.custDash)
+                {
+                    x.Write(sw, "custDash");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_LineProperties()
         {

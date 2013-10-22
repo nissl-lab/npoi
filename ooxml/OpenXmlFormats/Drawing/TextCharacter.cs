@@ -147,24 +147,135 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_TextUnderlineFillGroupWrapper
     {
+        private CT_BlipFillProperties blipFillField;
+        private CT_GroupFillProperties grpFillField;
+        private CT_NoFillProperties noFillField;
 
-        private object itemField;
+        private CT_SolidColorFillProperties solidFillField;
 
-        [XmlElement("blipFill", typeof(CT_BlipFillProperties), Order = 0)]
-        [XmlElement("gradFill", typeof(CT_GradientFillProperties), Order = 0)]
-        [XmlElement("grpFill", typeof(CT_GroupFillProperties), Order = 0)]
-        [XmlElement("noFill", typeof(CT_NoFillProperties), Order = 0)]
-        [XmlElement("pattFill", typeof(CT_PatternFillProperties), Order = 0)]
-        [XmlElement("solidFill", typeof(CT_SolidColorFillProperties), Order = 0)]
-        public object Item
+        private CT_GradientFillProperties gradFillField;
+
+        private CT_PatternFillProperties pattFillField;
+
+        public static CT_TextUnderlineFillGroupWrapper Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextUnderlineFillGroupWrapper ctObj = new CT_TextUnderlineFillGroupWrapper();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "noFill")
+                    ctObj.noFill = new CT_NoFillProperties();
+                else if (childNode.LocalName == "solidFill")
+                    ctObj.solidFill = CT_SolidColorFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "gradFill")
+                    ctObj.gradFill = CT_GradientFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "blipFill")
+                    ctObj.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pattFill")
+                    ctObj.pattFill = CT_PatternFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "grpFill")
+                    ctObj.grpFill = new CT_GroupFillProperties();
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.noFill != null)
+                sw.Write("<a:noFill/>");
+            if (this.solidFill != null)
+                this.solidFill.Write(sw, "solidFill");
+            if (this.gradFill != null)
+                this.gradFill.Write(sw, "gradFill");
+            if (this.blipFill != null)
+                this.blipFill.Write(sw, "blipFill");
+            if (this.pattFill != null)
+                this.pattFill.Write(sw, "pattFill");
+            if (this.grpFill != null)
+                sw.Write("<a:grpFill/>");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_NoFillProperties noFill
         {
             get
             {
-                return this.itemField;
+                return this.noFillField;
             }
             set
             {
-                this.itemField = value;
+                this.noFillField = value;
+            }
+        }
+
+        [XmlElement(Order = 2)]
+        public CT_SolidColorFillProperties solidFill
+        {
+            get
+            {
+                return this.solidFillField;
+            }
+            set
+            {
+                this.solidFillField = value;
+            }
+        }
+
+        [XmlElement(Order = 3)]
+        public CT_GradientFillProperties gradFill
+        {
+            get
+            {
+                return this.gradFillField;
+            }
+            set
+            {
+                this.gradFillField = value;
+            }
+        }
+
+        [XmlElement(Order = 4)]
+        public CT_BlipFillProperties blipFill
+        {
+            get
+            {
+                return this.blipFillField;
+            }
+            set
+            {
+                this.blipFillField = value;
+            }
+        }
+
+        [XmlElement(Order = 5)]
+        public CT_PatternFillProperties pattFill
+        {
+            get
+            {
+                return this.pattFillField;
+            }
+            set
+            {
+                this.pattFillField = value;
+            }
+        }
+
+        [XmlElement(Order = 6)]
+        public CT_GroupFillProperties grpFill
+        {
+            get
+            {
+                return this.grpFillField;
+            }
+            set
+            {
+                this.grpFillField = value;
             }
         }
     }
@@ -281,6 +392,150 @@ namespace NPOI.OpenXmlFormats.Dml
         private uint smtIdField;
 
         private string bmkField;
+        public static CT_TextCharacterProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextCharacterProperties ctObj = new CT_TextCharacterProperties();
+            ctObj.kumimoji = XmlHelper.ReadBool(node.Attributes["kumimoji"]);
+            ctObj.lang = XmlHelper.ReadString(node.Attributes["lang"]);
+            ctObj.altLang = XmlHelper.ReadString(node.Attributes["altLang"]);
+            ctObj.sz = XmlHelper.ReadInt(node.Attributes["sz"]);
+            ctObj.b = XmlHelper.ReadBool(node.Attributes["b"]);
+            ctObj.i = XmlHelper.ReadBool(node.Attributes["i"]);
+            if (node.Attributes["u"] != null)
+                ctObj.u = (ST_TextUnderlineType)Enum.Parse(typeof(ST_TextUnderlineType), node.Attributes["u"].Value);
+            if (node.Attributes["strike"] != null)
+                ctObj.strike = (ST_TextStrikeType)Enum.Parse(typeof(ST_TextStrikeType), node.Attributes["strike"].Value);
+            ctObj.kern = XmlHelper.ReadInt(node.Attributes["kern"]);
+            if (node.Attributes["cap"] != null)
+                ctObj.cap = (ST_TextCapsType)Enum.Parse(typeof(ST_TextCapsType), node.Attributes["cap"].Value);
+            ctObj.spc = XmlHelper.ReadInt(node.Attributes["spc"]);
+            ctObj.normalizeH = XmlHelper.ReadBool(node.Attributes["normalizeH"]);
+            ctObj.baseline = XmlHelper.ReadInt(node.Attributes["baseline"]);
+            ctObj.noProof = XmlHelper.ReadBool(node.Attributes["noProof"]);
+            ctObj.dirty = XmlHelper.ReadBool(node.Attributes["dirty"]);
+            ctObj.err = XmlHelper.ReadBool(node.Attributes["err"]);
+            ctObj.smtClean = XmlHelper.ReadBool(node.Attributes["smtClean"]);
+            ctObj.smtId = XmlHelper.ReadUInt(node.Attributes["smtId"]);
+            ctObj.bmk = XmlHelper.ReadString(node.Attributes["bmk"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "ln")
+                    ctObj.ln = CT_LineProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "noFill")
+                    ctObj.noFill = new CT_NoFillProperties();
+                else if (childNode.LocalName == "solidFill")
+                    ctObj.solidFill = CT_SolidColorFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "gradFill")
+                    ctObj.gradFill = CT_GradientFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "blipFill")
+                    ctObj.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pattFill")
+                    ctObj.pattFill = CT_PatternFillProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "grpFill")
+                    ctObj.grpFill = new CT_GroupFillProperties();
+                else if (childNode.LocalName == "effectLst")
+                    ctObj.effectLst = CT_EffectList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "effectDag")
+                    ctObj.effectDag = CT_EffectContainer.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "highlight")
+                    ctObj.highlight = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "uLnTx")
+                    ctObj.uLnTx = new CT_TextUnderlineLineFollowText();
+                else if (childNode.LocalName == "uLn")
+                    ctObj.uLn = CT_LineProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "uFillTx")
+                    ctObj.uFillTx = new CT_TextUnderlineFillFollowText();
+                else if (childNode.LocalName == "uFill")
+                    ctObj.uFill = CT_TextUnderlineFillGroupWrapper.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "latin")
+                    ctObj.latin = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "ea")
+                    ctObj.ea = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cs")
+                    ctObj.cs = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sym")
+                    ctObj.sym = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hlinkClick")
+                    ctObj.hlinkClick = CT_Hyperlink.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hlinkMouseOver")
+                    ctObj.hlinkMouseOver = CT_Hyperlink.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "kumimoji", this.kumimoji);
+            XmlHelper.WriteAttribute(sw, "lang", this.lang);
+            XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
+            XmlHelper.WriteAttribute(sw, "sz", this.sz);
+            XmlHelper.WriteAttribute(sw, "b", this.b);
+            XmlHelper.WriteAttribute(sw, "i", this.i);
+            XmlHelper.WriteAttribute(sw, "u", this.u.ToString());
+            XmlHelper.WriteAttribute(sw, "strike", this.strike.ToString());
+            XmlHelper.WriteAttribute(sw, "kern", this.kern);
+            XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
+            XmlHelper.WriteAttribute(sw, "spc", this.spc);
+            XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH);
+            XmlHelper.WriteAttribute(sw, "baseline", this.baseline);
+            XmlHelper.WriteAttribute(sw, "noProof", this.noProof);
+            XmlHelper.WriteAttribute(sw, "dirty", this.dirty);
+            XmlHelper.WriteAttribute(sw, "err", this.err);
+            XmlHelper.WriteAttribute(sw, "smtClean", this.smtClean);
+            XmlHelper.WriteAttribute(sw, "smtId", this.smtId);
+            XmlHelper.WriteAttribute(sw, "bmk", this.bmk);
+            sw.Write(">");
+            if (this.ln != null)
+                this.ln.Write(sw, "ln");
+            if (this.noFill != null)
+                sw.Write("<a:noFill/>");
+            if (this.solidFill != null)
+                this.solidFill.Write(sw, "solidFill");
+            if (this.gradFill != null)
+                this.gradFill.Write(sw, "gradFill");
+            if (this.blipFill != null)
+                this.blipFill.Write(sw, "blipFill");
+            if (this.pattFill != null)
+                this.pattFill.Write(sw, "pattFill");
+            if (this.grpFill != null)
+                sw.Write("<a:grpFill/>");
+            if (this.effectLst != null)
+                this.effectLst.Write(sw, "effectLst");
+            if (this.effectDag != null)
+                this.effectDag.Write(sw, "effectDag");
+            if (this.highlight != null)
+                this.highlight.Write(sw, "highlight");
+            if (this.uLnTx != null)
+                sw.Write("<a:uLnTx/>");
+            if (this.uLn != null)
+                this.uLn.Write(sw, "uLn");
+            if (this.uFillTx != null)
+                sw.Write("<a:uFillTx/>");
+            if (this.uFill != null)
+                this.uFill.Write(sw, "uFill");
+            if (this.latin != null)
+                this.latin.Write(sw, "latin");
+            if (this.ea != null)
+                this.ea.Write(sw, "ea");
+            if (this.cs != null)
+                this.cs.Write(sw, "cs");
+            if (this.sym != null)
+                this.sym.Write(sw, "sym");
+            if (this.hlinkClick != null)
+                this.hlinkClick.Write(sw, "hlinkClick");
+            if (this.hlinkMouseOver != null)
+                this.hlinkMouseOver.Write(sw, "hlinkMouseOver");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_TextCharacterProperties()
         {
