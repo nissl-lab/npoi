@@ -883,9 +883,6 @@
         <member name="F:NPOI.OpenXml4Net.OPC.Internal.MemoryPackagePart.data">
             Storage for the part data.
         </member>
-        <member name="F:NPOI.OpenXml4Net.OPC.Internal.MemoryPackagePart.length">
-            Size of data.
-        </member>
         <member name="M:NPOI.OpenXml4Net.OPC.Internal.MemoryPackagePart.#ctor(NPOI.OpenXml4Net.OPC.OPCPackage,NPOI.OpenXml4Net.OPC.PackagePartName,System.String)">
             Constructor.
             

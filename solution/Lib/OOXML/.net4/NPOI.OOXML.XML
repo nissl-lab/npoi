@@ -714,19 +714,6 @@
              @param idx index of item to return.
              @return the item at the specified position in this Shared String table.
         </member>
-        <member name="M:NPOI.XSSF.Model.SharedStringsTable.GetCount">
-             Return an integer representing the total count of strings in the workbook. This count does not
-             include any numbers, it counts only the total of text strings in the workbook.
-            
-             @return the total count of strings in the workbook
-        </member>
-        <member name="M:NPOI.XSSF.Model.SharedStringsTable.GetUniqueCount">
-             Returns an integer representing the total count of unique strings in the Shared String Table.
-             A string is unique even if it is a copy of another string, but has different formatting applied
-             at the character level.
-            
-             @return the total count of unique strings in the workbook
-        </member>
         <member name="M:NPOI.XSSF.Model.SharedStringsTable.AddEntry(NPOI.OpenXmlFormats.Spreadsheet.CT_Rst)">
              Add an entry to this Shared String table (a new value is appened to the end).
             
@@ -738,16 +725,30 @@
              @param st the entry to add
              @return index the index of Added entry
         </member>
-        <member name="M:NPOI.XSSF.Model.SharedStringsTable.GetItems">
-             Provide low-level access to the underlying array of CT_Rst beans
-            
-             @return array of CT_Rst beans
-        </member>
         <member name="M:NPOI.XSSF.Model.SharedStringsTable.WriteTo(System.IO.Stream)">
-            Write this table out as XML.
+            
+            this table out as XML.
             
             @param out The stream to write to.
             @throws IOException if an error occurs while writing.
+        </member>
+        <member name="P:NPOI.XSSF.Model.SharedStringsTable.Count">
+             Return an integer representing the total count of strings in the workbook. This count does not
+             include any numbers, it counts only the total of text strings in the workbook.
+            
+             @return the total count of strings in the workbook
+        </member>
+        <member name="P:NPOI.XSSF.Model.SharedStringsTable.UniqueCount">
+             Returns an integer representing the total count of unique strings in the Shared String Table.
+             A string is unique even if it is a copy of another string, but has different formatting applied
+             at the character level.
+            
+             @return the total count of unique strings in the workbook
+        </member>
+        <member name="P:NPOI.XSSF.Model.SharedStringsTable.Items">
+             Provide low-level access to the underlying array of CT_Rst beans
+            
+             @return array of CT_Rst beans
         </member>
         <member name="T:NPOI.XSSF.Model.SingleXmlCells">
              
@@ -927,54 +928,31 @@
             
              @param cellAlignment
         </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetVertical">
+        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetCTCellAlignment">
+            Access to low-level data
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.Vertical">
              Get the type of vertical alignment for the cell
             
              @return the type of aligment
              @see VerticalAlignment
         </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.SetVertical(NPOI.SS.UserModel.VerticalAlignment)">
-             Set the type of vertical alignment for the cell
-            
-             @param align - the type of alignment
-             @see VerticalAlignment
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetHorizontal">
+        <member name="P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.Horizontal">
              Get the type of horizontal alignment for the cell
             
              @return the type of aligment
              @see HorizontalAlignment
         </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.SetHorizontal(NPOI.SS.UserModel.HorizontalAlignment)">
-             Set the type of horizontal alignment for the cell
-            
-             @param align - the type of alignment
-             @see HorizontalAlignment
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetIndent">
+        <member name="P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.Indent">
              Get the number of spaces to indent the text in the cell
             
              @return indent - number of spaces
         </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.SetIndent(System.Int64)">
-             Set the number of spaces to indent the text in the cell
-            
-             @param indent - number of spaces
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetTextRotation" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.SetTextRotation(System.Int64)" -->
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetWrapText">
+        <!-- Badly formed XML comment ignored for member "P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.TextRotation" -->
+        <member name="P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.WrapText">
              Whether the text should be wrapped
             
              @return a bool value indicating if the text in a cell should be line-wrapped within the cell.
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.SetWrapText(System.Boolean)">
-             Set whether the text should be wrapped
-            
-             @param wrapped a bool value indicating if the text in a cell should be line-wrapped within the cell.
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.GetCTCellAlignment">
-            Access to low-level data
         </member>
         <member name="T:NPOI.XSSF.UserModel.Extensions.BorderSide">
             The enumeration value indicating the side being used for a cell border.
@@ -2746,12 +2724,12 @@
              @param cell1 starting anchor point
              @param cell2 ending anchor point
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFClientAnchor.GetFrom">
+        <member name="P:NPOI.XSSF.UserModel.XSSFClientAnchor.From">
              Return starting anchor point
             
              @return starting anchor point
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFClientAnchor.GetTo">
+        <member name="P:NPOI.XSSF.UserModel.XSSFClientAnchor.To">
              Return ending anchor point
             
              @return ending anchor point
@@ -3026,16 +3004,10 @@
              Initialize default structure of a new auto-shape
             
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFConnector.GetShapeType">
+        <member name="P:NPOI.XSSF.UserModel.XSSFConnector.ShapeType">
              Gets the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
             
              @return the shape type
-             @see NPOI.ss.usermodel.ShapeTypes
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFConnector.SetShapeType(System.Int32)">
-             Sets the shape types.
-            
-             @param type the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
              @see NPOI.ss.usermodel.ShapeTypes
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCreationHelper.CreateRichTextString(System.String)">
@@ -3905,7 +3877,7 @@
             
              @param Drawing the XSSFDrawing that owns this picture
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFPicture.Prototype">
+        <member name="M:NPOI.XSSF.UserModel.XSSFPicture.#ctor(NPOI.XSSF.UserModel.XSSFDrawing,System.Xml.XmlNode)">
              Returns a prototype that is used to construct new shapes
             
              @return a prototype that is used to construct new shapes
@@ -4608,21 +4580,6 @@
             
             @return the xpath of the table's root element
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFTable.GetName">
-            @return the name of the Table, if set
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFTable.SetName(System.String)">
-            Changes the name of the Table
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFTable.GetDisplayName">
-            @return the display name of the Table, if set
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFTable.SetDisplayName(System.String)">
-            Changes the display name of the Table
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFTable.GetNumerOfMappedColumns">
-            @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
-        </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFTable.GetStartCellReference">
              @return The reference for the cell in the top-left part of the table
              (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
@@ -4633,14 +4590,23 @@
              (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref)
             
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFTable.GetRowCount">
-              @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
-            
-        </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFTable.UpdateHeaders">
             Synchronize table headers with cell values in the parent sheet.
             Headers <em>must</em> be in sync, otherwise Excel will display a
             "Found unreadable content" message on startup.
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFTable.Name">
+            @return the name of the Table, if set
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFTable.DisplayName">
+            @return the display name of the Table, if set
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFTable.NumberOfMappedColumns">
+            @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFTable.RowCount">
+              @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+            
         </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFTextBox">
              Represents a text box in a SpreadsheetML Drawing.
