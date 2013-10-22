@@ -25,8 +25,9 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var rootNode = treeView1.Nodes.Add("CT_Drawing");
-            RecursiveRun(typeof(CT_Drawing), rootNode, 0);
+            Type targetType= typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet);
+            var rootNode = treeView1.Nodes.Add(targetType.Name);
+            RecursiveRun(targetType, rootNode, 0);
             //treeView1.ExpandAll();
 
             StringBuilder sb=new StringBuilder();
@@ -233,29 +234,31 @@ namespace XmlSerializationCodeGenerator
             string xmlPrefix = GetXmlPrefix(t);
             sb.AppendLine("internal void Write(StreamWriter sw, string nodeName)");
             sb.AppendLine("{");
-            sb.AppendLine("\tsw.Write(string.Format(\"<"+xmlPrefix+":{0}\",nodeName));");
+            sb.AppendLine("\tsw.Write(string.Format(\"<"+xmlPrefix+"{0}\",nodeName));");
             foreach (var p in properties)
             {
                 if (p.Name.EndsWith("Specified"))
                     continue;
+
+                string attributePrefix = GetXmlAttributePrefix(p);
                 if (p.PropertyType.IsValueType)
                 {
                     if (p.PropertyType.IsEnum)
                     {
-                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{0}\", this.{0}.ToString());", p.Name));
+                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0}.ToString());", p.Name, attributePrefix));
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{0}\", this.{0});", p.Name));
+                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
                     }
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{0}\", this.{0});", p.Name));
+                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
                 }
                 else if (p.PropertyType.Name == "Byte[]")
                 {
-                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{0}\", this.{0});", p.Name));
+                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
                 }
             }
             sb.AppendLine("\tsw.Write(\">\");");
@@ -264,7 +267,7 @@ namespace XmlSerializationCodeGenerator
                 sb.AppendLine(string.Format("\tif(this.{0}!=null)", p.Name));
                 if (p.PropertyType.GetProperties().Length == 0)
                 {
-                    sb.AppendLine(string.Format("\t\tsw.Write(\"<{1}:{0}/>\");", p.Name, GetXmlPrefix(p.PropertyType)));
+                    sb.AppendLine(string.Format("\t\tsw.Write(\"<{1}{0}/>\");", p.Name, GetXmlPrefix(p.PropertyType)));
                 }
                 else
                 {
@@ -276,37 +279,73 @@ namespace XmlSerializationCodeGenerator
                 Type genericType = p.PropertyType.GetGenericArguments()[0];
                 if (genericType.Name == "Object")
                     continue;
-                sb.AppendLine(string.Format("\tforeach({0} x in this.{1})", genericType.Name, p.Name));
+                sb.AppendLine(string.Format("\tif(this.{0}!=null)", p.Name));
                 sb.AppendLine("\t{");
+                sb.AppendLine(string.Format("\t\tforeach({0} x in this.{1})", genericType.Name, p.Name));
+                sb.AppendLine("\t\t{");
                 if (genericType.IsEnum)
                 {
-                    sb.AppendLine("\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
+                    sb.AppendLine("\t\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
                 }
                 else
                 {
                     sb.AppendLine(string.Format("\t\tx.Write(sw,\"{0}\");",p.Name));
                 }
+                sb.AppendLine("\t\t}");
                 sb.AppendLine("\t}");
             }
-            sb.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + ":{0}>\",nodeName));");
+            sb.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}>\",nodeName));");
             sb.AppendLine("}");
             #endregion
             textBox1.Text= sb.ToString();
         }
-
+        public string GetXmlAttributePrefix(PropertyInfo p)
+        { 
+            var a = p.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
+            if (a.Length == 0)
+                return "";
+            string n = ((XmlAttributeAttribute)a[0]).Namespace;
+            if (n == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
+            {
+                return "xdr:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/drawingml/2006/main")
+            {
+                return "a:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/spreadsheetml/2006/main")
+            {
+                return "";
+            }
+            else if (n == "http://schemas.openxmlformats.org/officeDocument/2006/relationships")
+            {
+                return "r:";
+            }
+            return "";
+        }
         public string GetXmlPrefix(Type p)
         {
             var a = p.GetCustomAttributes(typeof(XmlTypeAttribute), false);
             if (a.Length == 0)
-                return "a";
-            if (((XmlTypeAttribute)a[0]).Namespace == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
+                return "";
+            string n = ((XmlTypeAttribute)a[0]).Namespace;
+            if (n == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
             {
-                return "xdr";
+                return "xdr:";
             }
-            else //http://schemas.openxmlformats.org/drawingml/2006/main
+            else if (n == "http://schemas.openxmlformats.org/drawingml/2006/main")
             {
-                return "a";
+                return "a:";
             }
+            else if (n == "http://schemas.openxmlformats.org/spreadsheetml/2006/main")
+            {
+                return "";
+            }
+            else if (n == "http://schemas.openxmlformats.org/officeDocument/2006/relationships")
+            {
+                return "r:";
+            }
+            return "";
         }
 
         private void button3_Click(object sender, EventArgs e)
