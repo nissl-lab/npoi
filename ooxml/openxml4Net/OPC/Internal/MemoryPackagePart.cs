@@ -66,7 +66,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
             MemoryStream newMs = new MemoryStream((int)data.Length);
             data.Position = 0;
-            data.CopyTo(newMs);
+            StreamHelper.CopyStream(data, newMs);
             newMs.Position = 0;
             return newMs;
         }
@@ -90,7 +90,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public override bool Load(Stream ios)
         {
             // Save it
-            ios.CopyTo(data);
+            StreamHelper.CopyStream(ios, data);
 
             // All done
             return true;
