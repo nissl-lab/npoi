@@ -55,7 +55,8 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             anyField.Add(el);
         }
-        [XmlAnyElement()]
+        //[XmlAnyElement()]
+        [XmlIgnore]
         public List<string> Any
         {
             get
