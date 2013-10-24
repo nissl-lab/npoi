@@ -21,7 +21,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_ShapeNonVisual
+    public class CT_ShapeNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -67,7 +67,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_Shape
+    public class CT_Shape
     {
 
         private CT_ShapeNonVisual nvSpPrField;
@@ -209,7 +209,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_ConnectorNonVisual
+    public class CT_ConnectorNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -254,7 +254,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_Connector
+    public class CT_Connector
     {
 
         private CT_ConnectorNonVisual nvCxnSpPrField;
@@ -346,7 +346,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_PictureNonVisual
+    public class CT_PictureNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -391,7 +391,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_Picture
+    public class CT_Picture
     {
 
         private CT_PictureNonVisual nvPicPrField;
@@ -501,7 +501,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_GraphicFrameNonVisual
+    public class CT_GraphicFrameNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -639,7 +639,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_GroupShapeNonVisual
+    public class CT_GroupShapeNonVisual
     {
 
         private CT_NonVisualDrawingProps cNvPrField;
@@ -684,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_GroupShape
+    public class CT_GroupShape
     {
 
         private CT_GroupShapeNonVisual nvGrpSpPrField;
@@ -750,7 +750,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_Marker
+    public class CT_Marker
     {
 
         private double xField;
@@ -790,7 +790,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_RelSizeAnchor
+    public class CT_RelSizeAnchor
     {
 
         private CT_Marker fromField;
@@ -855,7 +855,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_AbsSizeAnchor
+    public class CT_AbsSizeAnchor
     {
 
         private CT_Marker fromField;
@@ -919,7 +919,7 @@ namespace NPOI.OpenXmlFormats.Dml.ChartDrawing
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing", IsNullable = true)]
-    public partial class CT_Drawing
+    public class CT_Drawing
     {
 
         private List<object> itemsField;

@@ -56,13 +56,13 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Connector shape = new CT_Connector();
                 CT_ConnectorNonVisual nv = shape.AddNewNvCxnSpPr();
-                CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
                 nvp.id = (1);
                 nvp.name = ("Shape 1");
                 nv.AddNewCNvCxnSpPr();
 
-                CT_ShapeProperties sp = shape.AddNewSpPr();
-                CT_Transform2D t2d = sp.AddNewXfrm();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sp = shape.AddNewSpPr();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D t2d = sp.AddNewXfrm();
                 CT_PositiveSize2D p1 = t2d.AddNewExt();
                 p1.cx = (0);
                 p1.cy = (0);
@@ -119,7 +119,7 @@ namespace NPOI.XSSF.UserModel
                 ctShape.spPr.prstGeom.prst = value;
             }
         }
-        protected internal override CT_ShapeProperties GetShapeProperties()
+        protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
         {
             return ctShape.spPr;
         }

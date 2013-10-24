@@ -153,9 +153,9 @@ namespace NPOI.XWPF.UserModel
         private void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
         {
             XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
-            foreach (XmlElement el in god.Any)
+            foreach (string el in god.Any)
             {
-                System.IO.StringReader stringReader = new System.IO.StringReader(el.OuterXml);
+                System.IO.StringReader stringReader = new System.IO.StringReader(el);
 
                 NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pict =
                     xmlse.Deserialize(System.Xml.XmlReader.Create(stringReader)) as NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
@@ -724,7 +724,7 @@ namespace NPOI.XWPF.UserModel
 
                 inline.graphic = new CT_GraphicalObject();
                 inline.graphic.graphicData = new CT_GraphicalObjectData();
-                inline.graphic.graphicData.AddPicElement((XmlElement)el.Clone());
+                inline.graphic.graphicData.AddPicElement(el.OuterXml);
 
                 // Setup the inline
                 inline.distT = (0);

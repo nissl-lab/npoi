@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Picture pic = new CT_Picture();
                 CT_PictureNonVisual nvpr = pic.AddNewNvPicPr();
-                CT_NonVisualDrawingProps nvProps = nvpr.AddNewCNvPr();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvProps = nvpr.AddNewCNvPr();
                 nvProps.id = (1);
                 nvProps.name = ("Picture 1");
                 nvProps.descr = ("Picture");
@@ -99,8 +99,8 @@ namespace NPOI.XSSF.UserModel
                 blip.AddNewBlip().embed = "";
                 blip.AddNewStretch().AddNewFillRect();
 
-                CT_ShapeProperties sppr = pic.AddNewSpPr();
-                CT_Transform2D t2d = sppr.AddNewXfrm();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sppr = pic.AddNewSpPr();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D t2d = sppr.AddNewXfrm();
                 CT_PositiveSize2D ext = t2d.AddNewExt();
                 //should be original picture width and height expressed in EMUs
                 ext.cx = (0);
@@ -299,7 +299,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected internal override CT_ShapeProperties GetShapeProperties()
+        protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
         {
             return ctPicture.spPr;
         }

@@ -9,7 +9,7 @@ using NPOI.OpenXml4Net.Util;
 namespace NPOI.OpenXmlFormats.Dml
 {
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -21,12 +21,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_GraphicalObjectData ctObj = new CT_GraphicalObjectData();
             ctObj.uri = XmlHelper.ReadString(node.Attributes["uri"]);
-            ctObj.Any = new List<XmlElement>();
-            //foreach (XmlNode childNode in node.ChildNodes)
-            //{
-            //    if (childNode.LocalName == "Any")
-            //        ctObj.Any.Add(XmlElement.Parse(childNode, namespaceManager));
-            //}
+            ctObj.Any = new List<string>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                ctObj.Any.Add(childNode.OuterXml);
+            }
             return ctObj;
         }
 
@@ -37,23 +36,27 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "uri", this.uri);
             sw.Write(">");
-            //foreach (XmlElement x in this.Any)
-            //{
-            //    x.Write(sw, "Any");
-            //}
+            foreach (string x in this.Any)
+            {
+                sw.Write(x);
+            }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
-        private List<XmlElement> anyField = new List<XmlElement>();
+        private List<string> anyField = new List<string>();
 
         private string uriField;
-        
-        public void AddPicElement(XmlElement el)
+
+        public void AddChartElement(string el)
+        {
+            anyField.Add(el);
+        }
+        public void AddPicElement(string el)
         {
             anyField.Add(el);
         }
         [XmlAnyElement()]
-        public List<XmlElement> Any
+        public List<string> Any
         {
             get
             {
@@ -81,7 +84,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]

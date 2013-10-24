@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
@@ -82,7 +83,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return xml bean with shape properties.
          */
-        protected internal abstract CT_ShapeProperties GetShapeProperties();
+        protected internal abstract NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties();
 
         /**
          * Whether this shape is not Filled with a color
@@ -97,7 +98,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                CT_ShapeProperties props = GetShapeProperties();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
                 //unset solid and pattern Fills if they are Set
                 if (props.IsSetPattFill()) props.unsetPattFill();
                 if (props.IsSetSolidFill()) props.unsetSolidFill();
@@ -112,7 +113,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetFillColor(int red, int green, int blue)
         {
-            CT_ShapeProperties props = GetShapeProperties();
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
             CT_SolidColorFillProperties fill = props.IsSetSolidFill() ? props.solidFill : props.AddNewSolidFill();
             CT_SRgbColor rgb = new CT_SRgbColor();
             rgb.val = (new byte[] { (byte)red, (byte)green, (byte)blue });
@@ -124,7 +125,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetLineStyleColor(int red, int green, int blue)
         {
-            CT_ShapeProperties props = GetShapeProperties();
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
             CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
             CT_SolidColorFillProperties fill = ln.IsSetSolidFill() ? ln.solidFill : ln.AddNewSolidFill();
             CT_SRgbColor rgb = new CT_SRgbColor();
@@ -159,7 +160,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                CT_ShapeProperties props = GetShapeProperties();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
                 CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
                 CT_PresetLineDashProperties dashStyle = new CT_PresetLineDashProperties();
                 dashStyle.val = (ST_PresetLineDashVal)(value + 1);
@@ -176,7 +177,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CT_ShapeProperties props = GetShapeProperties();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
                 if (props.IsSetLn())
                 {
                     return props.ln.w*1.0 / EMU_PER_POINT;
@@ -188,7 +189,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                CT_ShapeProperties props = GetShapeProperties();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
                 CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
                 ln.w = (int)(value * EMU_PER_POINT);
             }

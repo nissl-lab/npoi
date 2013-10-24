@@ -59,7 +59,7 @@ namespace NPOI.XSSF.UserModel
 
 
                 CT_GroupShapeNonVisual nv = shape.AddNewNvGrpSpPr();
-                CT_NonVisualDrawingProps nvpr = nv.AddNewCNvPr();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvpr = nv.AddNewCNvPr();
                 nvpr.id = (0);
                 nvpr.name = ("Group 0");
                 nv.AddNewCNvGrpSpPr();
@@ -192,7 +192,7 @@ namespace NPOI.XSSF.UserModel
             chExt.cy = (y2);
         }
 
-        protected internal override CT_ShapeProperties GetShapeProperties()
+        protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
         {
             throw new InvalidOperationException("Not supported for shape group");
         }

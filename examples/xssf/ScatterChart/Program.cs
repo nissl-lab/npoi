@@ -56,7 +56,7 @@ namespace ScatterChart
             chart.Plot(data, bottomAxis, leftAxis);
 
             // Write the output to a file
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             wb.Write(sw);
             sw.Close();
         }
