@@ -31,6 +31,11 @@ namespace NPOI.XSSF.UserModel
         {
 
         }
+        [Test]
+        public void TestRead()
+        {
+            this.TestRead("WithConditionalFormatting.xlsx");
+        }
     }
 
 }
