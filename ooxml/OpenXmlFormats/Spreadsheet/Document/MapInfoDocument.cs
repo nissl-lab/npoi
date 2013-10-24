@@ -31,41 +31,46 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            //serializer.Serialize(stream, map);
             using (StreamWriter sw = new StreamWriter(stream))
             {
                 sw.Write("<MapInfo xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" SelectionNamespaces=\"xmlns:ns1='http://schemas.openxmlformats.org/spreadsheetml/2006/main'\">");
-                foreach (CT_Schema ctSchema in this.map.Schema)
+                if (this.map.Schema != null)
                 {
-                    sw.Write(string.Format("<Schema ID=\"{0}\"", ctSchema.ID));
-                    if(ctSchema.Namespace!=null)
-                        sw.Write(string.Format(" Namespace=\"{0}\"", ctSchema.Namespace));
-                    if(ctSchema.SchemaRef!=null)
-                        sw.Write(string.Format(" SchemaRef=\"{0}\"", ctSchema.SchemaRef));
-                    sw.Write(">");
-                    sw.Write(ctSchema.InnerXml);
-                    sw.Write("</Schema>");
+                    foreach (CT_Schema ctSchema in this.map.Schema)
+                    {
+                        sw.Write(string.Format("<Schema ID=\"{0}\"", ctSchema.ID));
+                        if (ctSchema.Namespace != null)
+                            sw.Write(string.Format(" Namespace=\"{0}\"", ctSchema.Namespace));
+                        if (ctSchema.SchemaRef != null)
+                            sw.Write(string.Format(" SchemaRef=\"{0}\"", ctSchema.SchemaRef));
+                        sw.Write(">");
+                        sw.Write(ctSchema.InnerXml);
+                        sw.Write("</Schema>");
+                    }
                 }
-                foreach (CT_Map ctMap in this.map.Map)
+                if (this.map.Map != null)
                 {
-                    sw.Write(string.Format("<Map ID=\"{0}\"", ctMap.ID));
-                    if (ctMap.SchemaID != null)
-                        sw.Write(string.Format(" SchemaID=\"{0}\"", ctMap.SchemaID));
-                    if (ctMap.RootElement != null)
-                        sw.Write(string.Format(" RootElement=\"{0}\"", ctMap.RootElement));
-                    if (ctMap.Name != null)
-                        sw.Write(string.Format(" Name=\"{0}\"", ctMap.Name));
-                    if (ctMap.PreserveFormat)
-                        sw.Write(" PreserveFormat=\"true\"");
-                    if (ctMap.PreserveSortAFLayout)
-                        sw.Write(" PreserveSortAFLayout=\"true\"");
-                    if (ctMap.ShowImportExportValidationErrors)
-                        sw.Write(" ShowImportExportValidationErrors=\"true\"");
-                    if (ctMap.Append)
-                        sw.Write(" Append=\"true\"");
-                    if (ctMap.AutoFit)
-                        sw.Write(" AutoFit=\"true\"");
-                    sw.Write(" />");
+                    foreach (CT_Map ctMap in this.map.Map)
+                    {
+                        sw.Write(string.Format("<Map ID=\"{0}\"", ctMap.ID));
+                        if (ctMap.SchemaID != null)
+                            sw.Write(string.Format(" SchemaID=\"{0}\"", ctMap.SchemaID));
+                        if (ctMap.RootElement != null)
+                            sw.Write(string.Format(" RootElement=\"{0}\"", ctMap.RootElement));
+                        if (ctMap.Name != null)
+                            sw.Write(string.Format(" Name=\"{0}\"", ctMap.Name));
+                        if (ctMap.PreserveFormat)
+                            sw.Write(" PreserveFormat=\"true\"");
+                        if (ctMap.PreserveSortAFLayout)
+                            sw.Write(" PreserveSortAFLayout=\"true\"");
+                        if (ctMap.ShowImportExportValidationErrors)
+                            sw.Write(" ShowImportExportValidationErrors=\"true\"");
+                        if (ctMap.Append)
+                            sw.Write(" Append=\"true\"");
+                        if (ctMap.AutoFit)
+                            sw.Write(" AutoFit=\"true\"");
+                        sw.Write(" />");
+                    }
                 }
                 sw.Write("</MapInfo");
             }

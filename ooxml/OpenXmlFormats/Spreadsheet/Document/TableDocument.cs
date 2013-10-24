@@ -100,20 +100,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 if (this.ctTable.tableColumns != null)
                 {
                     sw.Write("<tableColumns count=\"{0}\">", this.ctTable.tableColumns.count);
-                    foreach (CT_TableColumn ctTableCol in this.ctTable.tableColumns.tableColumn)
+                    if (this.ctTable.tableColumns.tableColumn != null)
                     {
-                        sw.Write(string.Format("<tableColumn id=\"{0}\" name=\"{1}\"", ctTableCol.id, ctTableCol.name));
-                        XmlHelper.WriteAttribute(sw, "uniqueName", ctTableCol.uniqueName);
-                        XmlHelper.WriteAttribute(sw, "totalsRowCellStyle", ctTableCol.totalsRowCellStyle);
-                        XmlHelper.WriteAttribute(sw, "totalsRowLabel", ctTableCol.totalsRowLabel);
-                        XmlHelper.WriteAttribute(sw, "totalsRowDxfId", ctTableCol.totalsRowDxfId);
-                        XmlHelper.WriteAttribute(sw, "queryTableFieldId", ctTableCol.queryTableFieldId);
-                        sw.Write(">");
-                        if (ctTableCol.xmlColumnPr != null)
+                        foreach (CT_TableColumn ctTableCol in this.ctTable.tableColumns.tableColumn)
                         {
-                            ctTableCol.xmlColumnPr.Write(sw);
+                            sw.Write(string.Format("<tableColumn id=\"{0}\" name=\"{1}\"", ctTableCol.id, ctTableCol.name));
+                            XmlHelper.WriteAttribute(sw, "uniqueName", ctTableCol.uniqueName);
+                            XmlHelper.WriteAttribute(sw, "totalsRowCellStyle", ctTableCol.totalsRowCellStyle);
+                            XmlHelper.WriteAttribute(sw, "totalsRowLabel", ctTableCol.totalsRowLabel);
+                            XmlHelper.WriteAttribute(sw, "totalsRowDxfId", ctTableCol.totalsRowDxfId);
+                            XmlHelper.WriteAttribute(sw, "queryTableFieldId", ctTableCol.queryTableFieldId);
+                            sw.Write(">");
+                            if (ctTableCol.xmlColumnPr != null)
+                            {
+                                ctTableCol.xmlColumnPr.Write(sw);
+                            }
+                            sw.Write("</tableColumn>");
                         }
-                        sw.Write("</tableColumn>");
                     }
                     sw.Write("</tableColumns>");
                 }
