@@ -268,8 +268,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "x", this.x);
-            XmlHelper.WriteAttribute(sw, "y", this.y);
+            XmlHelper.WriteAttribute(sw, "x", this.x, true);
+            XmlHelper.WriteAttribute(sw, "y", this.y, true);
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -325,8 +325,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "cx", this.cx);
-            XmlHelper.WriteAttribute(sw, "cy", this.cy);
+            XmlHelper.WriteAttribute(sw, "cx", this.cx, true);
+            XmlHelper.WriteAttribute(sw, "cy", this.cy, true);
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }

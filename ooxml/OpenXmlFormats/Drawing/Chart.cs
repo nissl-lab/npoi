@@ -2321,7 +2321,6 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlAttribute]
-        [DefaultValue(ST_Orientation.minMax)]
         public ST_Orientation val
         {
             get
@@ -11232,20 +11231,26 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             //this.layoutField = new CT_Layout();
         }
 
-        CT_ValAx valAxField;
-        CT_SerAx serAxField;
-        CT_CatAx catAxField;
-        CT_DateAx dateAxField;
+        List<CT_ValAx> valAxField;
+        List<CT_SerAx> serAxField;
+        List<CT_CatAx> catAxField;
+        List<CT_DateAx> dateAxField;
         public CT_ValAx AddNewValAx()
         {
-            this.valAxField = new CT_ValAx();
-            return this.valAxField;
+            if (valAxField == null)
+                valAxField = new List<CT_ValAx>();
+            CT_ValAx val = new CT_ValAx();
+            this.valAxField.Add(val);
+            return val;
         }
 
         public CT_SerAx AddNewSerAx()
         {
-            this.serAxField = new CT_SerAx();
-            return this.serAxField;
+            if (serAxField == null)
+                serAxField = new List<CT_SerAx>();
+            CT_SerAx val = new CT_SerAx();
+            this.serAxField.Add(val);
+            return val;
         }
         public bool IsSetLayout()
         {
@@ -11333,7 +11338,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
         [XmlElement(Order = 21)]
-        public CT_ValAx valAx
+        public List<CT_ValAx> valAx
         {
             get
             {
@@ -11346,7 +11351,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlElement(Order = 22)]
-        public CT_SerAx serAx
+        public List<CT_SerAx> serAx
         {
             get
             {
@@ -11358,7 +11363,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
         [XmlElement(Order = 23)]
-        public CT_DateAx dateAx
+        public List<CT_DateAx> dateAx
         {
             get
             {
@@ -11370,7 +11375,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
         [XmlElement(Order = 24)]
-        public CT_CatAx catAx
+        public List<CT_CatAx> catAx
         {
             get
             {
