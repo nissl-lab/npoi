@@ -26,6 +26,7 @@ namespace XmlSerializationCodeGenerator
         private void button1_Click(object sender, EventArgs e)
         {
             Type targetType= typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet);
+            //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
             //treeView1.ExpandAll();
@@ -287,9 +288,13 @@ namespace XmlSerializationCodeGenerator
                 {
                     sb.AppendLine("\t\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
                 }
+                else if (genericType.Name == "String")
+                {
+                    sb.AppendLine("\t\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
+                }
                 else
                 {
-                    sb.AppendLine(string.Format("\t\tx.Write(sw,\"{0}\");",p.Name));
+                    sb.AppendLine(string.Format("\t\tx.Write(sw,\"{0}\");", p.Name));
                 }
                 sb.AppendLine("\t\t}");
                 sb.AppendLine("\t}");
