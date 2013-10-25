@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -6,11 +7,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class WorksheetDocument
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Worksheet));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), 
-            new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
-
         CT_Worksheet sheet = null;
 
         public WorksheetDocument()
@@ -20,9 +16,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.sheet = sheet;
         }
-        public static WorksheetDocument Parse(Stream stream)
+        public static WorksheetDocument Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceMgr)
         {
-            CT_Worksheet obj = (CT_Worksheet)serializer.Deserialize(stream);
+            CT_Worksheet obj = CT_Worksheet.Parse(xmldoc.DocumentElement, namespaceMgr);
             return new WorksheetDocument(obj);
         }
         public CT_Worksheet GetWorksheet()
@@ -35,7 +31,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, sheet, namespaces);
+            this.sheet.Write(stream);
         }
     }
 }

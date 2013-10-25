@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_border.IsSetBottom())
+                if (!_border.IsSetBottom())
                 {
                     return BorderStyle.None;
                 }
@@ -51,7 +51,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BorderPr pr = _border.IsSetBottom() ? _border.bottom : _border.AddNewBottom();
                 if (value == BorderStyle.None) _border.unsetBottom();
-                else pr.style = (ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)value;
             }
         }
 
@@ -59,7 +59,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_border.IsSetDiagonal())
+                if (!_border.IsSetDiagonal())
                 {
                     return BorderStyle.None;
                 }
@@ -93,7 +93,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BorderPr pr = _border.IsSetLeft() ? _border.left : _border.AddNewLeft();
                 if (value == (short)BorderStyle.None) _border.unsetLeft();
-                else pr.style = (ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)(value);
             }
         }
 
@@ -114,7 +114,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BorderPr pr = _border.IsSetRight() ? _border.right : _border.AddNewRight();
                 if (value == (short)BorderStyle.None) _border.unsetRight();
-                else pr.style = (ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)(value );
             }
         }
 
@@ -135,7 +135,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BorderPr pr = _border.IsSetTop() ? _border.top : _border.AddNewTop();
                 if (value == (short)BorderStyle.None) _border.unsetTop();
-                else pr.style = (ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)(value );
             }
         }
 

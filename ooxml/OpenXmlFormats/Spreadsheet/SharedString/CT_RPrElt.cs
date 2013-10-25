@@ -36,6 +36,88 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private CT_VerticalAlignFontProperty vertAlignField = null;  // vertical alignment of the text
         private CT_FontScheme schemeField = null;
 
+        public static CT_RPrElt Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RPrElt ctObj = new CT_RPrElt();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rFont")
+                    ctObj.rFont = CT_FontName.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "charset")
+                    ctObj.charset = CT_IntProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "family")
+                    ctObj.family = CT_IntProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "b")
+                    ctObj.b = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "i")
+                    ctObj.i = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "strike")
+                    ctObj.strike = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "outline")
+                    ctObj.outline = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "shadow")
+                    ctObj.shadow = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "condense")
+                    ctObj.condense = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extend")
+                    ctObj.extend = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "color")
+                    ctObj.color = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sz")
+                    ctObj.sz = CT_FontSize.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "u")
+                    ctObj.u = CT_UnderlineProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "vertAlign")
+                    ctObj.vertAlign = CT_VerticalAlignFontProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "scheme")
+                    ctObj.scheme = CT_FontScheme.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.rFont != null)
+                this.rFont.Write(sw, "rFont");
+            if (this.charset != null)
+                this.charset.Write(sw, "charset");
+            if (this.family != null)
+                this.family.Write(sw, "family");
+            if (this.b != null)
+                this.b.Write(sw, "b");
+            if (this.i != null)
+                this.i.Write(sw, "i");
+            if (this.strike != null)
+                this.strike.Write(sw, "strike");
+            if (this.outline != null)
+                this.outline.Write(sw, "outline");
+            if (this.shadow != null)
+                this.shadow.Write(sw, "shadow");
+            if (this.condense != null)
+                this.condense.Write(sw, "condense");
+            if (this.extend != null)
+                this.extend.Write(sw, "extend");
+            if (this.color != null)
+                this.color.Write(sw, "color");
+            if (this.sz != null)
+                this.sz.Write(sw, "sz");
+            if (this.u != null)
+                this.u.Write(sw, "u");
+            if (this.vertAlign != null)
+                this.vertAlign.Write(sw, "vertAlign");
+            if (this.scheme != null)
+                this.scheme.Write(sw, "scheme");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+
         //public static CT_RPrElt Parse(string xml)
         //{
         //    CT_RPrElt result;

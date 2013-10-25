@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -65,5 +67,37 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.colField = value;
             }
         }
+
+        public static CT_Cols Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Cols ctObj = new CT_Cols();
+            ctObj.col = new List<CT_Col>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "col")
+                    ctObj.col.Add(CT_Col.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.col != null)
+            {
+                foreach (CT_Col x in this.col)
+                {
+                    x.Write(sw, "col");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
     }
 }

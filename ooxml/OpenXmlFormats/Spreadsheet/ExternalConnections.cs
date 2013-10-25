@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats {
     
@@ -538,8 +541,27 @@ namespace NPOI.OpenXmlFormats {
     public partial class CT_Index {
         
         private uint vField;
-        
-    
+
+        public static CT_Index Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Index ctObj = new CT_Index();
+            ctObj.v = XmlHelper.ReadUInt(node.Attributes["v"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "v", this.v);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
         [XmlAttribute]
         public uint v {
             get {

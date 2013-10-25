@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -31,6 +34,57 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint? vmField = null;
 
         private bool? phField = null;
+
+        public static CT_Cell Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Cell ctObj = new CT_Cell();
+            ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
+            ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
+            if (node.Attributes["t"] != null)
+                ctObj.t = (ST_CellType)Enum.Parse(typeof(ST_CellType), node.Attributes["t"].Value);
+            ctObj.cm = XmlHelper.ReadUInt(node.Attributes["cm"]);
+            ctObj.vm = XmlHelper.ReadUInt(node.Attributes["vm"]);
+            ctObj.ph = XmlHelper.ReadBool(node.Attributes["ph"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "f")
+                    ctObj.f = CT_CellFormula.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "v")
+                    ctObj.v = childNode.InnerText;
+                else if (childNode.LocalName == "is")
+                    ctObj.@is = CT_Rst.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            XmlHelper.WriteAttribute(sw, "s", this.s);
+            XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
+            XmlHelper.WriteAttribute(sw, "cm", this.cm);
+            XmlHelper.WriteAttribute(sw, "vm", this.vm);
+            XmlHelper.WriteAttribute(sw, "ph", this.ph);
+            sw.Write(">");
+            if (this.f != null)
+                this.f.Write(sw, "f");
+            if (this.v != null)
+                sw.Write(string.Format("<v>{0}</v>", this.v));
+            if (this.@is != null)
+                this.@is.Write(sw, "is");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         //public CT_Cell()
         //{

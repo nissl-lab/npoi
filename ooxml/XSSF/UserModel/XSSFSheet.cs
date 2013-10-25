@@ -33,6 +33,7 @@ using NPOI.OpenXmlFormats.Dml;
 using System.Collections;
 using NPOI.SS.Formula;
 using System.Text;
+using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -127,7 +128,8 @@ namespace NPOI.XSSF.UserModel
         {
             //try
             //{
-            worksheet = WorksheetDocument.Parse(is1).GetWorksheet();
+            XmlDocument doc = ConvertStreamToXml(is1);
+            worksheet = WorksheetDocument.Parse(doc,NameSpaceManager).GetWorksheet();
             //}
             //catch (XmlException e)
             //{
@@ -726,7 +728,7 @@ namespace NPOI.XSSF.UserModel
         public int GetColumnWidth(int columnIndex)
         {
             CT_Col col = columnHelper.GetColumn(columnIndex, false);
-            double width = col == null || !col.IsSetWidth() ? this.DefaultColumnWidth : col.width;
+            double width = (col == null || !col.IsSetWidth()) ? this.DefaultColumnWidth : col.width;
             return (int)(width * 256);
         }
 
@@ -2487,7 +2489,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             // Write collapse field
-            ((XSSFRow)GetRow(endIdx)).GetCTRow().unsetCollapsed();
+            ((XSSFRow)GetRow(endIdx)).GetCTRow().UnsetCollapsed();
         }
 
         /**
@@ -3090,7 +3092,7 @@ namespace NPOI.XSSF.UserModel
             map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-            worksheet.Save(out1);
+            new WorksheetDocument(worksheet).Save(out1);
         }
 
         /**
@@ -3542,19 +3544,16 @@ namespace NPOI.XSSF.UserModel
                 {
                     CellRangeAddressList addressList = new CellRangeAddressList();
 
-
-                    List<String> sqref = ctDataValidation.sqref;
-                    foreach (String stRef in sqref)
+                    String[] regions = ctDataValidation.sqref.Split(new char[] { ' ' });
+                    for (int i = 0; i < regions.Length; i++)
                     {
-                        String[] regions = stRef.Split(new char[] { ' ' });
-                        for (int i = 0; i < regions.Length; i++)
-                        {
-                            String[] parts = regions[i].Split(new char[] { ':' });
-                            CellReference begin = new CellReference(parts[0]);
-                            CellReference end = parts.Length > 1 ? new CellReference(parts[1]) : begin;
-                            CellRangeAddress cellRangeAddress = new CellRangeAddress(begin.Row, end.Row, begin.Col, end.Col);
-                            addressList.AddCellRangeAddress(cellRangeAddress);
-                        }
+                        if (regions[i].Length == 0)
+                            continue;
+                        String[] parts = regions[i].Split(new char[] { ':' });
+                        CellReference begin = new CellReference(parts[0]);
+                        CellReference end = parts.Length > 1 ? new CellReference(parts[1]) : begin;
+                        CellRangeAddress cellRangeAddress = new CellRangeAddress(begin.Row, end.Row, begin.Col, end.Col);
+                        addressList.AddCellRangeAddress(cellRangeAddress);
                     }
                     XSSFDataValidation xssfDataValidation = new XSSFDataValidation(addressList, ctDataValidation);
                     xssfValidations.Add(xssfDataValidation);

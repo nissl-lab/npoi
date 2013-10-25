@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -3076,6 +3078,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public static CT_SheetBackgroundPicture Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetBackgroundPicture ctObj = new CT_SheetBackgroundPicture();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]

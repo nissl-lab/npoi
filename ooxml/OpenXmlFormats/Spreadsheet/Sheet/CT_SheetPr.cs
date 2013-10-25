@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -35,6 +38,57 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool filterModeField;
 
         private bool enableFormatConditionsCalculationField;
+
+        public static CT_SheetPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetPr ctObj = new CT_SheetPr();
+            ctObj.syncHorizontal = XmlHelper.ReadBool(node.Attributes["syncHorizontal"]);
+            ctObj.syncVertical = XmlHelper.ReadBool(node.Attributes["syncVertical"]);
+            ctObj.syncRef = XmlHelper.ReadString(node.Attributes["syncRef"]);
+            ctObj.transitionEvaluation = XmlHelper.ReadBool(node.Attributes["transitionEvaluation"]);
+            ctObj.transitionEntry = XmlHelper.ReadBool(node.Attributes["transitionEntry"]);
+            ctObj.published = XmlHelper.ReadBool(node.Attributes["published"]);
+            ctObj.codeName = XmlHelper.ReadString(node.Attributes["codeName"]);
+            ctObj.filterMode = XmlHelper.ReadBool(node.Attributes["filterMode"]);
+            ctObj.enableFormatConditionsCalculation = XmlHelper.ReadBool(node.Attributes["enableFormatConditionsCalculation"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "tabColor")
+                    ctObj.tabColor = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "outlinePr")
+                    ctObj.outlinePr = CT_OutlinePr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageSetUpPr")
+                    ctObj.pageSetUpPr = CT_PageSetUpPr.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "syncHorizontal", this.syncHorizontal);
+            XmlHelper.WriteAttribute(sw, "syncVertical", this.syncVertical);
+            XmlHelper.WriteAttribute(sw, "syncRef", this.syncRef);
+            XmlHelper.WriteAttribute(sw, "transitionEvaluation", this.transitionEvaluation);
+            XmlHelper.WriteAttribute(sw, "transitionEntry", this.transitionEntry);
+            XmlHelper.WriteAttribute(sw, "published", this.published);
+            XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
+            XmlHelper.WriteAttribute(sw, "filterMode", this.filterMode);
+            XmlHelper.WriteAttribute(sw, "enableFormatConditionsCalculation", this.enableFormatConditionsCalculation);
+            sw.Write(">");
+            if (this.tabColor != null)
+                this.tabColor.Write(sw, "tabColor");
+            if (this.outlinePr != null)
+                this.outlinePr.Write(sw, "outlinePr");
+            if (this.pageSetUpPr != null)
+                this.pageSetUpPr.Write(sw, "pageSetUpPr");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_SheetPr()
         {

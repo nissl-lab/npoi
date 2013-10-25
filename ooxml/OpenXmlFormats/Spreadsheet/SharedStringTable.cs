@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -93,6 +94,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.ebField = value;
             }
         }
+        public static CT_PhoneticRun Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PhoneticRun ctObj = new CT_PhoneticRun();
+            ctObj.t = XmlHelper.ReadString(node.Attributes["t"]);
+            ctObj.sb = XmlHelper.ReadUInt(node.Attributes["sb"]);
+            ctObj.eb = XmlHelper.ReadUInt(node.Attributes["eb"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "t", this.t);
+            XmlHelper.WriteAttribute(sw, "sb", this.sb);
+            XmlHelper.WriteAttribute(sw, "eb", this.eb);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     /// <summary>
@@ -110,6 +134,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private ST_PhoneticType typeField;
 
         private ST_PhoneticAlignment alignmentField;
+
+        public static CT_PhoneticPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PhoneticPr ctObj = new CT_PhoneticPr();
+            ctObj.fontId = XmlHelper.ReadUInt(node.Attributes["fontId"]);
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_PhoneticType)Enum.Parse(typeof(ST_PhoneticType), node.Attributes["type"].Value);
+            if (node.Attributes["alignment"] != null)
+                ctObj.alignment = (ST_PhoneticAlignment)Enum.Parse(typeof(ST_PhoneticAlignment), node.Attributes["alignment"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "fontId", this.fontId);
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "alignment", this.alignment.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_PhoneticPr()
         {

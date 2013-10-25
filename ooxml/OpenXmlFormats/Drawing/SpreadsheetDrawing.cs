@@ -1266,6 +1266,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                     CT_OneCellAnchor oneCellAnchor = CT_OneCellAnchor.Parse(node, namespaceManager);
                     ctDrawing.cellAnchors.Add(oneCellAnchor);
                 }
+                else if (node.LocalName == "absCellAnchor")
+                {
+                    CT_AbsoluteCellAnchor absCellAnchor = CT_AbsoluteCellAnchor.Parse(node, namespaceManager);
+                    ctDrawing.cellAnchors.Add(absCellAnchor);
+                }
             }
             return ctDrawing;
         }
@@ -1380,17 +1385,37 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal static CT_OneCellAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             CT_OneCellAnchor oneCellAnchor = new CT_OneCellAnchor();
-            oneCellAnchor.from = CT_Marker.Parse(node.FirstChild, namespaceManager);
-            CT_Shape ctShape = CT_Shape.Parse(node.SelectSingleNode("xdr:sp", namespaceManager), namespaceManager);
-            oneCellAnchor.sp = ctShape;
-            CT_Picture ctPic = CT_Picture.Parse(node.SelectSingleNode("xdr:pic", namespaceManager), namespaceManager);
-            oneCellAnchor.picture = ctPic;
-            CT_Connector ctConnector = CT_Connector.Parse(node.SelectSingleNode("xdr:cxnSp", namespaceManager), namespaceManager);
-            oneCellAnchor.connector = ctConnector;
-            CT_GroupShape ctGroupShape = CT_GroupShape.Parse(node.SelectSingleNode("xdr:grpSp", namespaceManager), namespaceManager);
-            oneCellAnchor.groupShape = ctGroupShape;
-            CT_GraphicalObjectFrame ctGraphFrame = CT_GraphicalObjectFrame.Parse(node.SelectSingleNode("xdr:graphicFrame", namespaceManager), namespaceManager);
-            oneCellAnchor.graphicFrame = ctGraphFrame;
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "from")
+                {
+                    oneCellAnchor.from = CT_Marker.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "sp")
+                {
+                    oneCellAnchor.sp = CT_Shape.Parse(childNode, namespaceManager); ;
+                }
+                else if (childNode.LocalName == "pic")
+                {
+                    oneCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "cxnSp")
+                {
+                    oneCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "grpSp")
+                {
+                    oneCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "graphicFrame")
+                {
+                    oneCellAnchor.graphicFrame = CT_GraphicalObjectFrame.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "clientData")
+                {
+                    oneCellAnchor.clientData = CT_AnchorClientData.Parse(childNode, namespaceManager);
+                }
+            }
             return oneCellAnchor;
         }
     }
@@ -1415,7 +1440,46 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         private CT_GraphicalObjectFrame graphicalObjectField = null;
         private CT_Connector connectorField = null;
         private CT_Picture pictureField = null;
-
+        public static CT_AbsoluteCellAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_AbsoluteCellAnchor absCellAnchor = new CT_AbsoluteCellAnchor();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pos")
+                {
+                    absCellAnchor.pos = CT_Point2D.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "ext")
+                {
+                    absCellAnchor.ext = CT_PositiveSize2D.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "sp")
+                {
+                    absCellAnchor.sp = CT_Shape.Parse(childNode, namespaceManager); ;
+                }
+                else if (childNode.LocalName == "pic")
+                {
+                    absCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "cxnSp")
+                {
+                    absCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "grpSp")
+                {
+                    absCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "graphicFrame")
+                {
+                    absCellAnchor.graphicFrame = CT_GraphicalObjectFrame.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "clientData")
+                {
+                    absCellAnchor.clientData = CT_AnchorClientData.Parse(childNode, namespaceManager);
+                }
+            }
+            return absCellAnchor;
+        }
 
         public CT_AnchorClientData clientData
         {
@@ -1660,21 +1724,44 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal static CT_TwoCellAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             CT_TwoCellAnchor twoCellAnchor = new CT_TwoCellAnchor();
-            twoCellAnchor.from = CT_Marker.Parse(node.FirstChild, namespaceManager);
-            twoCellAnchor.to = CT_Marker.Parse(node.FirstChild.NextSibling, namespaceManager);
             if (node.Attributes["editAs"] != null)
                 twoCellAnchor.editAs = (ST_EditAs)Enum.Parse(typeof(ST_EditAs), node.Attributes["editAs"].Value);
 
-            CT_Shape ctShape = CT_Shape.Parse(node.SelectSingleNode("xdr:sp", namespaceManager), namespaceManager);
-            twoCellAnchor.sp = ctShape;
-            CT_Picture ctPic = CT_Picture.Parse(node.SelectSingleNode("xdr:pic", namespaceManager), namespaceManager);
-            twoCellAnchor.picture = ctPic;
-            CT_Connector ctConnector = CT_Connector.Parse(node.SelectSingleNode("xdr:cxnSp", namespaceManager), namespaceManager);
-            twoCellAnchor.connector = ctConnector;
-            CT_GroupShape ctGroupShape = CT_GroupShape.Parse(node.SelectSingleNode("xdr:grpSp", namespaceManager), namespaceManager);
-            twoCellAnchor.groupShape = ctGroupShape;
-            CT_GraphicalObjectFrame ctGraphFrame = CT_GraphicalObjectFrame.Parse(node.SelectSingleNode("xdr:graphicFrame", namespaceManager), namespaceManager);
-            twoCellAnchor.graphicFrame = ctGraphFrame;
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "from")
+                {
+                    twoCellAnchor.from = CT_Marker.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "to")
+                {
+                    twoCellAnchor.to = CT_Marker.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "sp")
+                {
+                    twoCellAnchor.sp = CT_Shape.Parse(childNode, namespaceManager); ;
+                }
+                else if (childNode.LocalName == "pic")
+                {
+                    twoCellAnchor.picture = CT_Picture.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "cxnSp")
+                {
+                    twoCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "grpSp")
+                {
+                    twoCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "graphicFrame")
+                {
+                    twoCellAnchor.graphicFrame = CT_GraphicalObjectFrame.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "clientData")
+                {
+                    twoCellAnchor.clientData = CT_AnchorClientData.Parse(childNode, namespaceManager);
+                }
+            }
             return twoCellAnchor;
         }
     }

@@ -332,7 +332,7 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                if (value == -1)
+                if (value < 0)
                 {
                     if (_row.IsSetHt()) _row.unSetHt();
                     if (_row.IsSetCustomHeight()) _row.unSetCustomHeight();
@@ -466,8 +466,8 @@ namespace NPOI.XSSF.UserModel
                 {
                     if (_row.IsSetS())
                     {
-                        _row.unSetS();
-                        _row.unSetCustomFormat();
+                        _row.UnsetS();
+                        _row.UnsetCustomFormat();
                     }
                 }
                 else

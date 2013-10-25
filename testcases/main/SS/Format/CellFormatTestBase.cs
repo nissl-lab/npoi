@@ -28,6 +28,7 @@ namespace TestCases.SS.Format
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using TestCases.SS;
+    using System.Diagnostics;
 
     /**
      * This class is a base class for spreadsheet-based tests, such as are used for
@@ -116,6 +117,7 @@ namespace TestCases.SS.Format
                 if ((expectedText.Length > 0 || format.Length > 0) && byCategory)
                 {
                     ICell cell = row.GetCell(2);
+                    Debug.WriteLine(string.Format("expectedText: {0}, format:{1}", expectedText, format));
                     tryFormat(r, expectedText, format, valueGetter, cell);
                 }
             }

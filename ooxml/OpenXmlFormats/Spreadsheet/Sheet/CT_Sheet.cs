@@ -23,6 +23,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string idField;
 
+
         public CT_Sheet()
         {
             this.stateField = ST_SheetState.visible;

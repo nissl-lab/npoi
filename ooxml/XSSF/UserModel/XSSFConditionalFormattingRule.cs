@@ -205,13 +205,14 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ST_ConditionalFormattingOperator op = _cfRule.@operator;
-                if (op == null) return ComparisonOperator.NoComparison;
+                ST_ConditionalFormattingOperator? op = _cfRule.@operator;
+                if (op == null) 
+                    return ComparisonOperator.NoComparison;
 
                 switch (op)
                 {
                     case ST_ConditionalFormattingOperator.lessThan: return ComparisonOperator.LessThan;
-                    case ST_ConditionalFormattingOperator.lessThanOrEqual: return ComparisonOperator.LessThan;
+                    case ST_ConditionalFormattingOperator.lessThanOrEqual: return ComparisonOperator.LessThanOrEqual;
                     case ST_ConditionalFormattingOperator.greaterThan: return ComparisonOperator.GreaterThan;
                     case ST_ConditionalFormattingOperator.greaterThanOrEqual: return ComparisonOperator.GreaterThanOrEqual;
                     case ST_ConditionalFormattingOperator.equal: return ComparisonOperator.Equal;

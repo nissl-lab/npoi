@@ -320,13 +320,13 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.DefaultRowHeight, row1.Height);
 
             sheet.DefaultRowHeightInPoints = (/*setter*/20);
-            row1.Height = (/*setter*/(short)-1); //reset the row height
+            row1.Height = (short)-1; //reset the row height
             Assert.AreEqual(20.0f, row1.HeightInPoints, 0F);
             Assert.AreEqual(20 * 20, row1.Height);
 
             IRow row2 = sheet.CreateRow(1);
             Assert.AreEqual(sheet.DefaultRowHeight, row2.Height);
-            row2.Height = (/*setter*/(short)310);
+            row2.Height = (short)310;
             Assert.AreEqual(310, row2.Height);
             Assert.AreEqual(310F / 20, row2.HeightInPoints, 0F);
 

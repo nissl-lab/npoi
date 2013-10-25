@@ -61,13 +61,10 @@ namespace NPOI.XSSF.UserModel
         public CellRangeAddress[] GetFormattingRanges()
         {
             List<CellRangeAddress> lst = new List<CellRangeAddress>();
-            foreach (Object stRef in _cf.sqref)
+            String[] regions = _cf.sqref.Split(new char[] { ' ' });
+            for (int i = 0; i < regions.Length; i++)
             {
-                String[] regions = stRef.ToString().Split(new char[] { ' ' });
-                for (int i = 0; i < regions.Length; i++)
-                {
-                    lst.Add(CellRangeAddress.ValueOf(regions[i]));
-                }
+                lst.Add(CellRangeAddress.ValueOf(regions[i]));
             }
             return lst.ToArray();
         }

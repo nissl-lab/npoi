@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -10,6 +12,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetData
     {
+
+        public static CT_SheetData Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetData ctObj = new CT_SheetData();
+            ctObj.row = new List<CT_Row>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "row")
+                    ctObj.row.Add(CT_Row.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.row != null)
+            {
+                foreach (CT_Row x in this.row)
+                {
+                    x.Write(sw, "row");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         private List<CT_Row> rowField = null; // [0..*] 
 

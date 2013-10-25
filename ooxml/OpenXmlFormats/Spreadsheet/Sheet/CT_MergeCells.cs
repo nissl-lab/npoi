@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
+
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -17,6 +21,37 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool countFieldSpecified;
 
+        public static CT_MergeCells Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_MergeCells ctObj = new CT_MergeCells();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.mergeCell = new List<CT_MergeCell>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "mergeCell")
+                    ctObj.mergeCell.Add(CT_MergeCell.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.mergeCell != null)
+            {
+                foreach (CT_MergeCell x in this.mergeCell)
+                {
+                    x.Write(sw, "mergeCell");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
 
         public CT_MergeCells()

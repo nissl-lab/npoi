@@ -15,6 +15,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Xml.Schema;
     using System.Diagnostics;
     using System.Xml;
+    using NPOI.OpenXml4Net.Util;
 
     public enum ST_SmartTagShow
     {
@@ -135,6 +136,31 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool showOutlineSymbolsField;
 
+        public static CT_OutlinePr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_OutlinePr ctObj = new CT_OutlinePr();
+            ctObj.applyStyles = XmlHelper.ReadBool(node.Attributes["applyStyles"]);
+            ctObj.summaryBelow = XmlHelper.ReadBool(node.Attributes["summaryBelow"]);
+            ctObj.summaryRight = XmlHelper.ReadBool(node.Attributes["summaryRight"]);
+            ctObj.showOutlineSymbols = XmlHelper.ReadBool(node.Attributes["showOutlineSymbols"]);
+            return ctObj;
+        }
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "applyStyles", this.applyStyles);
+            XmlHelper.WriteAttribute(sw, "summaryBelow", this.summaryBelow);
+            XmlHelper.WriteAttribute(sw, "summaryRight", this.summaryRight);
+            XmlHelper.WriteAttribute(sw, "showOutlineSymbols", this.showOutlineSymbols);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
         public CT_OutlinePr()
         {
             this.applyStylesField = false;
@@ -205,6 +231,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool fitToPageField;
 
+        public static CT_PageSetUpPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageSetUpPr ctObj = new CT_PageSetUpPr();
+            ctObj.autoPageBreaks = XmlHelper.ReadBool(node.Attributes["autoPageBreaks"]);
+            ctObj.fitToPage = XmlHelper.ReadBool(node.Attributes["fitToPage"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "autoPageBreaks", this.autoPageBreaks);
+            XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
         public CT_PageSetUpPr()
         {
             this.autoPageBreaksField = true;
@@ -257,6 +305,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.refField = value;
             }
         }
+
+        public static CT_SheetDimension Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+{
+	if(node==null)
+		return null;
+	CT_SheetDimension ctObj = new CT_SheetDimension();
+    ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+	return ctObj;
+}
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+{
+	sw.Write(string.Format("<{0}",nodeName));
+    XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+	sw.Write(">");
+	sw.Write(string.Format("</{0}>",nodeName));
+}
+
+    
+
     }
 
     [Serializable]
@@ -267,6 +337,43 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private List<CT_SheetView> sheetViewField;
 
         private CT_ExtensionList extLstField;
+
+
+        public static CT_SheetViews Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetViews ctObj = new CT_SheetViews();
+            ctObj.sheetView = new List<CT_SheetView>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetView")
+                    ctObj.sheetView.Add(CT_SheetView.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.sheetView != null)
+            {
+                foreach (CT_SheetView x in this.sheetView)
+                {
+                    x.Write(sw, "sheetView");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         public CT_SheetViews()
         {
@@ -368,6 +475,94 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint zoomScalePageLayoutViewField;
 
         private uint workbookViewIdField;
+
+        public static CT_SheetView Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetView ctObj = new CT_SheetView();
+            ctObj.windowProtection = XmlHelper.ReadBool(node.Attributes["windowProtection"]);
+            ctObj.showFormulas = XmlHelper.ReadBool(node.Attributes["showFormulas"]);
+            ctObj.showGridLines = XmlHelper.ReadBool(node.Attributes["showGridLines"]);
+            ctObj.showRowColHeaders = XmlHelper.ReadBool(node.Attributes["showRowColHeaders"]);
+            ctObj.showZeros = XmlHelper.ReadBool(node.Attributes["showZeros"]);
+            ctObj.rightToLeft = XmlHelper.ReadBool(node.Attributes["rightToLeft"]);
+            ctObj.tabSelected = XmlHelper.ReadBool(node.Attributes["tabSelected"]);
+            ctObj.showRuler = XmlHelper.ReadBool(node.Attributes["showRuler"]);
+            ctObj.showOutlineSymbols = XmlHelper.ReadBool(node.Attributes["showOutlineSymbols"]);
+            ctObj.defaultGridColor = XmlHelper.ReadBool(node.Attributes["defaultGridColor"]);
+            ctObj.showWhiteSpace = XmlHelper.ReadBool(node.Attributes["showWhiteSpace"]);
+            if (node.Attributes["view"] != null)
+                ctObj.view = (ST_SheetViewType)Enum.Parse(typeof(ST_SheetViewType), node.Attributes["view"].Value);
+            ctObj.topLeftCell = XmlHelper.ReadString(node.Attributes["topLeftCell"]);
+            ctObj.colorId = XmlHelper.ReadUInt(node.Attributes["colorId"]);
+            ctObj.zoomScale = XmlHelper.ReadUInt(node.Attributes["zoomScale"]);
+            ctObj.zoomScaleNormal = XmlHelper.ReadUInt(node.Attributes["zoomScaleNormal"]);
+            ctObj.zoomScaleSheetLayoutView = XmlHelper.ReadUInt(node.Attributes["zoomScaleSheetLayoutView"]);
+            ctObj.zoomScalePageLayoutView = XmlHelper.ReadUInt(node.Attributes["zoomScalePageLayoutView"]);
+            ctObj.workbookViewId = XmlHelper.ReadUInt(node.Attributes["workbookViewId"]);
+            ctObj.selection = new List<CT_Selection>();
+            ctObj.pivotSelection = new List<CT_PivotSelection>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pane")
+                    ctObj.pane = CT_Pane.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "selection")
+                    ctObj.selection.Add(CT_Selection.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "pivotSelection")
+                    ctObj.pivotSelection.Add(CT_PivotSelection.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "windowProtection", this.windowProtection);
+            XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas);
+            XmlHelper.WriteAttribute(sw, "showGridLines", this.showGridLines);
+            XmlHelper.WriteAttribute(sw, "showRowColHeaders", this.showRowColHeaders);
+            XmlHelper.WriteAttribute(sw, "showZeros", this.showZeros);
+            XmlHelper.WriteAttribute(sw, "rightToLeft", this.rightToLeft);
+            XmlHelper.WriteAttribute(sw, "tabSelected", this.tabSelected);
+            XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler);
+            XmlHelper.WriteAttribute(sw, "showOutlineSymbols", this.showOutlineSymbols);
+            XmlHelper.WriteAttribute(sw, "defaultGridColor", this.defaultGridColor);
+            XmlHelper.WriteAttribute(sw, "showWhiteSpace", this.showWhiteSpace);
+            XmlHelper.WriteAttribute(sw, "view", this.view.ToString());
+            XmlHelper.WriteAttribute(sw, "topLeftCell", this.topLeftCell);
+            XmlHelper.WriteAttribute(sw, "colorId", this.colorId);
+            XmlHelper.WriteAttribute(sw, "zoomScale", this.zoomScale);
+            XmlHelper.WriteAttribute(sw, "zoomScaleNormal", this.zoomScaleNormal);
+            XmlHelper.WriteAttribute(sw, "zoomScaleSheetLayoutView", this.zoomScaleSheetLayoutView);
+            XmlHelper.WriteAttribute(sw, "zoomScalePageLayoutView", this.zoomScalePageLayoutView);
+            XmlHelper.WriteAttribute(sw, "workbookViewId", this.workbookViewId);
+            sw.Write(">");
+            if (this.pane != null)
+                this.pane.Write(sw, "pane");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.selection != null)
+            {
+                foreach (CT_Selection x in this.selection)
+                {
+                    x.Write(sw, "selection");
+                }
+            }
+            if (this.pivotSelection != null)
+            {
+                foreach (CT_PivotSelection x in this.pivotSelection)
+                {
+                    x.Write(sw, "pivotSelection");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_SheetView()
         {
@@ -750,6 +945,37 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.activePaneField = ST_Pane.topLeft;
             this.stateField = ST_PaneState.split;
         }
+
+        public static CT_Pane Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Pane ctObj = new CT_Pane();
+            ctObj.xSplit = XmlHelper.ReadDouble(node.Attributes["xSplit"]);
+            ctObj.ySplit = XmlHelper.ReadDouble(node.Attributes["ySplit"]);
+            ctObj.topLeftCell = XmlHelper.ReadString(node.Attributes["topLeftCell"]);
+            if (node.Attributes["activePane"] != null)
+                ctObj.activePane = (ST_Pane)Enum.Parse(typeof(ST_Pane), node.Attributes["activePane"].Value);
+            if (node.Attributes["state"] != null)
+                ctObj.state = (ST_PaneState)Enum.Parse(typeof(ST_PaneState), node.Attributes["state"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "xSplit", this.xSplit);
+            XmlHelper.WriteAttribute(sw, "ySplit", this.ySplit);
+            XmlHelper.WriteAttribute(sw, "topLeftCell", this.topLeftCell);
+            XmlHelper.WriteAttribute(sw, "activePane", this.activePane.ToString());
+            XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
         public bool IsSetTopLeftCell()
         {
             return this.topLeftCellField != null;
@@ -840,6 +1066,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.stateField = value;
             }
         }
+
     }
 
     public enum ST_Pane
@@ -889,6 +1116,36 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.paneField = ST_Pane.topLeft;
             this.activeCellIdField = ((uint)(0));
         }
+
+
+
+        public static CT_Selection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Selection ctObj = new CT_Selection();
+            if (node.Attributes["pane"] != null)
+                ctObj.pane = (ST_Pane)Enum.Parse(typeof(ST_Pane), node.Attributes["pane"].Value);
+            ctObj.activeCell = XmlHelper.ReadString(node.Attributes["activeCell"]);
+            ctObj.activeCellId = XmlHelper.ReadUInt(node.Attributes["activeCellId"]);
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "pane", this.pane.ToString());
+            XmlHelper.WriteAttribute(sw, "activeCell", this.activeCell);
+            XmlHelper.WriteAttribute(sw, "activeCellId", this.activeCellId);
+            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         public void SetSqref(string[] array)
         {
@@ -1009,6 +1266,67 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.previousColField = ((uint)(0));
             this.clickField = ((uint)(0));
         }
+
+        public static CT_PivotSelection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotSelection ctObj = new CT_PivotSelection();
+            if (node.Attributes["pane"] != null)
+                ctObj.pane = (ST_Pane)Enum.Parse(typeof(ST_Pane), node.Attributes["pane"].Value);
+            ctObj.showHeader = XmlHelper.ReadBool(node.Attributes["showHeader"]);
+            ctObj.label = XmlHelper.ReadBool(node.Attributes["label"]);
+            ctObj.data = XmlHelper.ReadBool(node.Attributes["data"]);
+            ctObj.extendable = XmlHelper.ReadBool(node.Attributes["extendable"]);
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            if (node.Attributes["axis"] != null)
+                ctObj.axis = (ST_Axis)Enum.Parse(typeof(ST_Axis), node.Attributes["axis"].Value);
+            ctObj.dimension = XmlHelper.ReadUInt(node.Attributes["dimension"]);
+            ctObj.start = XmlHelper.ReadUInt(node.Attributes["start"]);
+            ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
+            ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
+            ctObj.activeRow = XmlHelper.ReadUInt(node.Attributes["activeRow"]);
+            ctObj.activeCol = XmlHelper.ReadUInt(node.Attributes["activeCol"]);
+            ctObj.previousRow = XmlHelper.ReadUInt(node.Attributes["previousRow"]);
+            ctObj.previousCol = XmlHelper.ReadUInt(node.Attributes["previousCol"]);
+            ctObj.click = XmlHelper.ReadUInt(node.Attributes["click"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotArea")
+                    ctObj.pivotArea = CT_PivotArea.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "pane", this.pane.ToString());
+            XmlHelper.WriteAttribute(sw, "showHeader", this.showHeader);
+            XmlHelper.WriteAttribute(sw, "label", this.label);
+            XmlHelper.WriteAttribute(sw, "data", this.data);
+            XmlHelper.WriteAttribute(sw, "extendable", this.extendable);
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "axis", this.axis.ToString());
+            XmlHelper.WriteAttribute(sw, "dimension", this.dimension);
+            XmlHelper.WriteAttribute(sw, "start", this.start);
+            XmlHelper.WriteAttribute(sw, "min", this.min);
+            XmlHelper.WriteAttribute(sw, "max", this.max);
+            XmlHelper.WriteAttribute(sw, "activeRow", this.activeRow);
+            XmlHelper.WriteAttribute(sw, "activeCol", this.activeCol);
+            XmlHelper.WriteAttribute(sw, "previousRow", this.previousRow);
+            XmlHelper.WriteAttribute(sw, "previousCol", this.previousCol);
+            XmlHelper.WriteAttribute(sw, "click", this.click);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            if (this.pivotArea != null)
+                this.pivotArea.Write(sw, "pivotArea");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_PivotArea pivotArea
         {
@@ -1309,6 +1627,61 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.collapsedLevelsAreSubtotalsField = false;
         }
 
+        public static CT_PivotArea Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotArea ctObj = new CT_PivotArea();
+            ctObj.field = XmlHelper.ReadInt(node.Attributes["field"]);
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_PivotAreaType)Enum.Parse(typeof(ST_PivotAreaType), node.Attributes["type"].Value);
+            ctObj.dataOnly = XmlHelper.ReadBool(node.Attributes["dataOnly"]);
+            ctObj.labelOnly = XmlHelper.ReadBool(node.Attributes["labelOnly"]);
+            ctObj.grandRow = XmlHelper.ReadBool(node.Attributes["grandRow"]);
+            ctObj.grandCol = XmlHelper.ReadBool(node.Attributes["grandCol"]);
+            ctObj.cacheIndex = XmlHelper.ReadBool(node.Attributes["cacheIndex"]);
+            ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"]);
+            ctObj.offset = XmlHelper.ReadString(node.Attributes["offset"]);
+            ctObj.collapsedLevelsAreSubtotals = XmlHelper.ReadBool(node.Attributes["collapsedLevelsAreSubtotals"]);
+            if (node.Attributes["axis"] != null)
+                ctObj.axis = (ST_Axis)Enum.Parse(typeof(ST_Axis), node.Attributes["axis"].Value);
+            ctObj.fieldPosition = XmlHelper.ReadUInt(node.Attributes["fieldPosition"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "references")
+                    ctObj.references = CT_PivotAreaReferences.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "field", this.field);
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "dataOnly", this.dataOnly);
+            XmlHelper.WriteAttribute(sw, "labelOnly", this.labelOnly);
+            XmlHelper.WriteAttribute(sw, "grandRow", this.grandRow);
+            XmlHelper.WriteAttribute(sw, "grandCol", this.grandCol);
+            XmlHelper.WriteAttribute(sw, "cacheIndex", this.cacheIndex);
+            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            XmlHelper.WriteAttribute(sw, "offset", this.offset);
+            XmlHelper.WriteAttribute(sw, "collapsedLevelsAreSubtotals", this.collapsedLevelsAreSubtotals);
+            XmlHelper.WriteAttribute(sw, "axis", this.axis.ToString());
+            XmlHelper.WriteAttribute(sw, "fieldPosition", this.fieldPosition);
+            sw.Write(">");
+            if (this.references != null)
+                this.references.Write(sw, "references");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
         public CT_PivotAreaReferences references
         {
             get
@@ -1536,6 +1909,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool countFieldSpecified;
 
+        public static CT_PivotAreaReferences Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotAreaReferences ctObj = new CT_PivotAreaReferences();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.reference = new List<CT_PivotAreaReference>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "reference")
+                    ctObj.reference.Add(CT_PivotAreaReference.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.reference != null)
+            {
+                foreach (CT_PivotAreaReference x in this.reference)
+                {
+                    x.Write(sw, "reference");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
         public CT_PivotAreaReferences()
         {
             this.referenceField = new List<CT_PivotAreaReference>();
@@ -1625,6 +2031,76 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool varSubtotalField;
 
         private bool varPSubtotalField;
+
+        public static CT_PivotAreaReference Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotAreaReference ctObj = new CT_PivotAreaReference();
+            ctObj.field = XmlHelper.ReadUInt(node.Attributes["field"]);
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.selected = XmlHelper.ReadBool(node.Attributes["selected"]);
+            ctObj.byPosition = XmlHelper.ReadBool(node.Attributes["byPosition"]);
+            ctObj.relative = XmlHelper.ReadBool(node.Attributes["relative"]);
+            ctObj.defaultSubtotal = XmlHelper.ReadBool(node.Attributes["defaultSubtotal"]);
+            ctObj.sumSubtotal = XmlHelper.ReadBool(node.Attributes["sumSubtotal"]);
+            ctObj.countASubtotal = XmlHelper.ReadBool(node.Attributes["countASubtotal"]);
+            ctObj.avgSubtotal = XmlHelper.ReadBool(node.Attributes["avgSubtotal"]);
+            ctObj.maxSubtotal = XmlHelper.ReadBool(node.Attributes["maxSubtotal"]);
+            ctObj.minSubtotal = XmlHelper.ReadBool(node.Attributes["minSubtotal"]);
+            ctObj.productSubtotal = XmlHelper.ReadBool(node.Attributes["productSubtotal"]);
+            ctObj.countSubtotal = XmlHelper.ReadBool(node.Attributes["countSubtotal"]);
+            ctObj.stdDevSubtotal = XmlHelper.ReadBool(node.Attributes["stdDevSubtotal"]);
+            ctObj.stdDevPSubtotal = XmlHelper.ReadBool(node.Attributes["stdDevPSubtotal"]);
+            ctObj.varSubtotal = XmlHelper.ReadBool(node.Attributes["varSubtotal"]);
+            ctObj.varPSubtotal = XmlHelper.ReadBool(node.Attributes["varPSubtotal"]);
+            ctObj.x = new List<CT_Index>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "x")
+                    ctObj.x.Add(CT_Index.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "field", this.field);
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "selected", this.selected);
+            XmlHelper.WriteAttribute(sw, "byPosition", this.byPosition);
+            XmlHelper.WriteAttribute(sw, "relative", this.relative);
+            XmlHelper.WriteAttribute(sw, "defaultSubtotal", this.defaultSubtotal);
+            XmlHelper.WriteAttribute(sw, "sumSubtotal", this.sumSubtotal);
+            XmlHelper.WriteAttribute(sw, "countASubtotal", this.countASubtotal);
+            XmlHelper.WriteAttribute(sw, "avgSubtotal", this.avgSubtotal);
+            XmlHelper.WriteAttribute(sw, "maxSubtotal", this.maxSubtotal);
+            XmlHelper.WriteAttribute(sw, "minSubtotal", this.minSubtotal);
+            XmlHelper.WriteAttribute(sw, "productSubtotal", this.productSubtotal);
+            XmlHelper.WriteAttribute(sw, "countSubtotal", this.countSubtotal);
+            XmlHelper.WriteAttribute(sw, "stdDevSubtotal", this.stdDevSubtotal);
+            XmlHelper.WriteAttribute(sw, "stdDevPSubtotal", this.stdDevPSubtotal);
+            XmlHelper.WriteAttribute(sw, "varSubtotal", this.varSubtotal);
+            XmlHelper.WriteAttribute(sw, "varPSubtotal", this.varPSubtotal);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.x != null)
+            {
+                foreach (CT_Index x in this.x)
+                {
+                    x.Write(sw, "x");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         public CT_PivotAreaReference()
         {
@@ -1935,6 +2411,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.vField = value;
             }
         }
+        public static CT_Index Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Index ctObj = new CT_Index();
+            ctObj.v = XmlHelper.ReadUInt(node.Attributes["v"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "v", this.v);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     public enum ST_SheetViewType
@@ -2137,6 +2632,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return null != this.outlineLevelColField; }
         }
 
+        public static CT_SheetFormatPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetFormatPr ctObj = new CT_SheetFormatPr();
+            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"]);
+            ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"]);
+            ctObj.defaultRowHeight = XmlHelper.ReadDouble(node.Attributes["defaultRowHeight"]);
+            ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);
+            ctObj.zeroHeight = XmlHelper.ReadBool(node.Attributes["zeroHeight"]);
+            ctObj.thickTop = XmlHelper.ReadBool(node.Attributes["thickTop"]);
+            ctObj.thickBottom = XmlHelper.ReadBool(node.Attributes["thickBottom"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "baseColWidth", this.baseColWidth);
+            XmlHelper.WriteAttribute(sw, "defaultColWidth", this.defaultColWidth);
+            XmlHelper.WriteAttribute(sw, "defaultRowHeight", this.defaultRowHeight);
+            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight);
+            XmlHelper.WriteAttribute(sw, "zeroHeight", this.zeroHeight);
+            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop);
+            XmlHelper.WriteAttribute(sw, "thickBottom", this.thickBottom);
+            XmlHelper.WriteAttribute(sw, "outlineLevelRow", this.outlineLevelRow);
+            XmlHelper.WriteAttribute(sw, "outlineLevelCol", this.outlineLevelCol);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+
     }
 
 
@@ -2176,6 +2706,52 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool bxField;
 
         private string valueField;
+
+        public static CT_CellFormula Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellFormula ctObj = new CT_CellFormula();
+            if (node.Attributes["t"] != null)
+                ctObj.t = (ST_CellFormulaType)Enum.Parse(typeof(ST_CellFormulaType), node.Attributes["t"].Value);
+            ctObj.aca = XmlHelper.ReadBool(node.Attributes["aca"]);
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            ctObj.dt2D = XmlHelper.ReadBool(node.Attributes["dt2D"]);
+            ctObj.dtr = XmlHelper.ReadBool(node.Attributes["dtr"]);
+            ctObj.del1 = XmlHelper.ReadBool(node.Attributes["del1"]);
+            ctObj.del2 = XmlHelper.ReadBool(node.Attributes["del2"]);
+            ctObj.r1 = XmlHelper.ReadString(node.Attributes["r1"]);
+            ctObj.r2 = XmlHelper.ReadString(node.Attributes["r2"]);
+            ctObj.ca = XmlHelper.ReadBool(node.Attributes["ca"]);
+            ctObj.si = XmlHelper.ReadUInt(node.Attributes["si"]);
+            ctObj.bx = XmlHelper.ReadBool(node.Attributes["bx"]);
+            ctObj.Value = node.InnerText.Replace("\r","");
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
+            XmlHelper.WriteAttribute(sw, "aca", this.aca);
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr);
+            XmlHelper.WriteAttribute(sw, "del1", this.del1);
+            XmlHelper.WriteAttribute(sw, "del2", this.del2);
+            XmlHelper.WriteAttribute(sw, "r1", this.r1);
+            XmlHelper.WriteAttribute(sw, "r2", this.r2);
+            XmlHelper.WriteAttribute(sw, "ca", this.ca);
+            XmlHelper.WriteAttribute(sw, "si", this.si);
+            XmlHelper.WriteAttribute(sw, "bx", this.bx);
+            
+            sw.Write(">");
+            sw.Write(this.valueField);
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_CellFormula()
         {
@@ -2437,6 +3013,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         private bool fullCalcOnLoadField;
+        public static CT_SheetCalcPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetCalcPr ctObj = new CT_SheetCalcPr();
+            ctObj.fullCalcOnLoad = XmlHelper.ReadBool(node.Attributes["fullCalcOnLoad"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "fullCalcOnLoad", this.fullCalcOnLoad);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_SheetCalcPr()
         {
@@ -2749,6 +3343,58 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.selectUnlockedCellsField = value;
             }
         }
+
+        public static CT_SheetProtection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SheetProtection ctObj = new CT_SheetProtection();
+            ctObj.password = XmlHelper.ReadString(node.Attributes["password"]);
+            ctObj.sheet = XmlHelper.ReadBool(node.Attributes["sheet"]);
+            ctObj.objects = XmlHelper.ReadBool(node.Attributes["objects"]);
+            ctObj.scenarios = XmlHelper.ReadBool(node.Attributes["scenarios"]);
+            ctObj.formatCells = XmlHelper.ReadBool(node.Attributes["formatCells"]);
+            ctObj.formatColumns = XmlHelper.ReadBool(node.Attributes["formatColumns"]);
+            ctObj.formatRows = XmlHelper.ReadBool(node.Attributes["formatRows"]);
+            ctObj.insertColumns = XmlHelper.ReadBool(node.Attributes["insertColumns"]);
+            ctObj.insertRows = XmlHelper.ReadBool(node.Attributes["insertRows"]);
+            ctObj.insertHyperlinks = XmlHelper.ReadBool(node.Attributes["insertHyperlinks"]);
+            ctObj.deleteColumns = XmlHelper.ReadBool(node.Attributes["deleteColumns"]);
+            ctObj.deleteRows = XmlHelper.ReadBool(node.Attributes["deleteRows"]);
+            ctObj.selectLockedCells = XmlHelper.ReadBool(node.Attributes["selectLockedCells"]);
+            ctObj.sort = XmlHelper.ReadBool(node.Attributes["sort"]);
+            ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"]);
+            ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"]);
+            ctObj.selectUnlockedCells = XmlHelper.ReadBool(node.Attributes["selectUnlockedCells"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "password", this.password);
+            XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
+            XmlHelper.WriteAttribute(sw, "objects", this.objects);
+            XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
+            XmlHelper.WriteAttribute(sw, "formatCells", this.formatCells);
+            XmlHelper.WriteAttribute(sw, "formatColumns", this.formatColumns);
+            XmlHelper.WriteAttribute(sw, "formatRows", this.formatRows);
+            XmlHelper.WriteAttribute(sw, "insertColumns", this.insertColumns);
+            XmlHelper.WriteAttribute(sw, "insertRows", this.insertRows);
+            XmlHelper.WriteAttribute(sw, "insertHyperlinks", this.insertHyperlinks);
+            XmlHelper.WriteAttribute(sw, "deleteColumns", this.deleteColumns);
+            XmlHelper.WriteAttribute(sw, "deleteRows", this.deleteRows);
+            XmlHelper.WriteAttribute(sw, "selectLockedCells", this.selectLockedCells);
+            XmlHelper.WriteAttribute(sw, "sort", this.sort);
+            XmlHelper.WriteAttribute(sw, "autoFilter", this.autoFilter);
+            XmlHelper.WriteAttribute(sw, "pivotTables", this.pivotTables);
+            XmlHelper.WriteAttribute(sw, "selectUnlockedCells", this.selectUnlockedCells);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -2763,10 +3409,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private string nameField;
 
         private string securityDescriptorField;
+        public static CT_ProtectedRange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ProtectedRange ctObj = new CT_ProtectedRange();
+            ctObj.password = XmlHelper.ReadBytes(node.Attributes["password"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.securityDescriptor = XmlHelper.ReadString(node.Attributes["securityDescriptor"]);
+            ctObj.sqref = new List<String>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "sqref")
+                    ctObj.sqref.Add(childNode.InnerText);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "password", this.password);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "securityDescriptor", this.securityDescriptor);
+            sw.Write(">");
+            if (this.sqref != null)
+            {
+                foreach (String x in this.sqref)
+                {
+                    sw.Write(string.Format("<sqref><![CDATA[{0}]]></sqref>", x));
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_ProtectedRange()
         {
-            this.sqrefField = new List<string>();
+            //this.sqrefField = new List<string>();
         }
 
         public byte[] password
@@ -2833,14 +3514,51 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool showFieldSpecified;
 
-        private List<string> sqrefField;
+        private string sqrefField;
 
         public CT_Scenarios()
         {
-            this.sqrefField = new List<string>();
-            this.scenarioField = new List<CT_Scenario>();
+            //this.sqrefField = new List<string>();
+            //this.scenarioField = new List<CT_Scenario>();
+        }
+        public static CT_Scenarios Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Scenarios ctObj = new CT_Scenarios();
+            ctObj.current = XmlHelper.ReadUInt(node.Attributes["current"]);
+            ctObj.show = XmlHelper.ReadUInt(node.Attributes["show"]);
+            ctObj.scenario = new List<CT_Scenario>();
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "scenario")
+                    ctObj.scenario.Add(CT_Scenario.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
         }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "current", this.current);
+            XmlHelper.WriteAttribute(sw, "show", this.show);
+            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            sw.Write(">");
+            if (this.scenario != null)
+            {
+                foreach (CT_Scenario x in this.scenario)
+                {
+                    x.Write(sw, "scenario");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+        [XmlElement]
         public List<CT_Scenario> scenario
         {
             get
@@ -2852,7 +3570,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.scenarioField = value;
             }
         }
-
+        [XmlAttribute]
         public uint current
         {
             get
@@ -2877,7 +3595,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.currentFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint show
         {
             get
@@ -2903,7 +3621,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public List<string> sqref
+        [XmlAttribute]
+        public string sqref
         {
             get
             {
@@ -2939,7 +3658,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Scenario()
         {
-            this.inputCellsField = new List<CT_InputCells>();
+            //this.inputCellsField = new List<CT_InputCells>();
             this.lockedField = false;
             this.hiddenField = false;
         }
@@ -3042,6 +3761,49 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.commentField = value;
             }
         }
+
+        public static CT_Scenario Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Scenario ctObj = new CT_Scenario();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.locked = XmlHelper.ReadBool(node.Attributes["locked"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.user = XmlHelper.ReadString(node.Attributes["user"]);
+            ctObj.comment = XmlHelper.ReadString(node.Attributes["comment"]);
+            ctObj.inputCells = new List<CT_InputCells>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "inputCells")
+                    ctObj.inputCells.Add(CT_InputCells.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "locked", this.locked);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "user", this.user);
+            XmlHelper.WriteAttribute(sw, "comment", this.comment);
+            sw.Write(">");
+            if (this.inputCells != null)
+            {
+                foreach (CT_InputCells x in this.inputCells)
+                {
+                    x.Write(sw, "inputCells");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3141,6 +3903,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numFmtIdFieldSpecified = value;
             }
         }
+
+        public static CT_InputCells Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_InputCells ctObj = new CT_InputCells();
+            ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
+            ctObj.deleted = XmlHelper.ReadBool(node.Attributes["deleted"]);
+            ctObj.undone = XmlHelper.ReadBool(node.Attributes["undone"]);
+            ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            ctObj.numFmtId = XmlHelper.ReadUInt(node.Attributes["numFmtId"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            XmlHelper.WriteAttribute(sw, "deleted", this.deleted);
+            XmlHelper.WriteAttribute(sw, "undone", this.undone);
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3230,6 +4020,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.linkField = value;
             }
         }
+
+        public static CT_DataConsolidate Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataConsolidate ctObj = new CT_DataConsolidate();
+            if (node.Attributes["function"] != null)
+                ctObj.function = (ST_DataConsolidateFunction)Enum.Parse(typeof(ST_DataConsolidateFunction), node.Attributes["function"].Value);
+            ctObj.leftLabels = XmlHelper.ReadBool(node.Attributes["leftLabels"]);
+            ctObj.topLabels = XmlHelper.ReadBool(node.Attributes["topLabels"]);
+            ctObj.link = XmlHelper.ReadBool(node.Attributes["link"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "dataRefs")
+                    ctObj.dataRefs = CT_DataRefs.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "function", this.function.ToString());
+            XmlHelper.WriteAttribute(sw, "leftLabels", this.leftLabels);
+            XmlHelper.WriteAttribute(sw, "topLabels", this.topLabels);
+            XmlHelper.WriteAttribute(sw, "link", this.link);
+            sw.Write(">");
+            if (this.dataRefs != null)
+                this.dataRefs.Write(sw, "dataRefs");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3284,6 +4108,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.countFieldSpecified = value;
             }
         }
+
+        public static CT_DataRefs Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataRefs ctObj = new CT_DataRefs();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.dataRef = new List<CT_DataRef>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "dataRef")
+                    ctObj.dataRef.Add(CT_DataRef.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.dataRef != null)
+            {
+                foreach (CT_DataRef x in this.dataRef)
+                {
+                    x.Write(sw, "dataRef");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3348,6 +4205,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public static CT_DataRef Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataRef ctObj = new CT_DataRef();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.sheet = XmlHelper.ReadString(node.Attributes["sheet"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3828,6 +4711,109 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.topLeftCellField = value;
             }
         }
+
+        public static CT_CustomSheetView Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomSheetView ctObj = new CT_CustomSheetView();
+            ctObj.guid = XmlHelper.ReadString(node.Attributes["guid"]);
+            ctObj.scale = XmlHelper.ReadUInt(node.Attributes["scale"]);
+            ctObj.colorId = XmlHelper.ReadUInt(node.Attributes["colorId"]);
+            ctObj.showPageBreaks = XmlHelper.ReadBool(node.Attributes["showPageBreaks"]);
+            ctObj.showFormulas = XmlHelper.ReadBool(node.Attributes["showFormulas"]);
+            ctObj.showGridLines = XmlHelper.ReadBool(node.Attributes["showGridLines"]);
+            ctObj.showRowCol = XmlHelper.ReadBool(node.Attributes["showRowCol"]);
+            ctObj.outlineSymbols = XmlHelper.ReadBool(node.Attributes["outlineSymbols"]);
+            ctObj.zeroValues = XmlHelper.ReadBool(node.Attributes["zeroValues"]);
+            ctObj.fitToPage = XmlHelper.ReadBool(node.Attributes["fitToPage"]);
+            ctObj.printArea = XmlHelper.ReadBool(node.Attributes["printArea"]);
+            ctObj.filter = XmlHelper.ReadBool(node.Attributes["filter"]);
+            ctObj.showAutoFilter = XmlHelper.ReadBool(node.Attributes["showAutoFilter"]);
+            ctObj.hiddenRows = XmlHelper.ReadBool(node.Attributes["hiddenRows"]);
+            ctObj.hiddenColumns = XmlHelper.ReadBool(node.Attributes["hiddenColumns"]);
+            if (node.Attributes["state"] != null)
+                ctObj.state = (ST_SheetState)Enum.Parse(typeof(ST_SheetState), node.Attributes["state"].Value);
+            ctObj.filterUnique = XmlHelper.ReadBool(node.Attributes["filterUnique"]);
+            if (node.Attributes["view"] != null)
+                ctObj.view = (ST_SheetViewType)Enum.Parse(typeof(ST_SheetViewType), node.Attributes["view"].Value);
+            ctObj.showRuler = XmlHelper.ReadBool(node.Attributes["showRuler"]);
+            ctObj.topLeftCell = XmlHelper.ReadString(node.Attributes["topLeftCell"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pane")
+                    ctObj.pane = CT_Pane.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "selection")
+                    ctObj.selection = CT_Selection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rowBreaks")
+                    ctObj.rowBreaks = CT_PageBreak.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "colBreaks")
+                    ctObj.colBreaks = CT_PageBreak.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageMargins")
+                    ctObj.pageMargins = CT_PageMargins.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "printOptions")
+                    ctObj.printOptions = CT_PrintOptions.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageSetup")
+                    ctObj.pageSetup = CT_PageSetup.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "headerFooter")
+                    ctObj.headerFooter = CT_HeaderFooter.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "autoFilter")
+                    ctObj.autoFilter = CT_AutoFilter.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "guid", this.guid);
+            XmlHelper.WriteAttribute(sw, "scale", this.scale);
+            XmlHelper.WriteAttribute(sw, "colorId", this.colorId);
+            XmlHelper.WriteAttribute(sw, "showPageBreaks", this.showPageBreaks);
+            XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas);
+            XmlHelper.WriteAttribute(sw, "showGridLines", this.showGridLines);
+            XmlHelper.WriteAttribute(sw, "showRowCol", this.showRowCol);
+            XmlHelper.WriteAttribute(sw, "outlineSymbols", this.outlineSymbols);
+            XmlHelper.WriteAttribute(sw, "zeroValues", this.zeroValues);
+            XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage);
+            XmlHelper.WriteAttribute(sw, "printArea", this.printArea);
+            XmlHelper.WriteAttribute(sw, "filter", this.filter);
+            XmlHelper.WriteAttribute(sw, "showAutoFilter", this.showAutoFilter);
+            XmlHelper.WriteAttribute(sw, "hiddenRows", this.hiddenRows);
+            XmlHelper.WriteAttribute(sw, "hiddenColumns", this.hiddenColumns);
+            XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
+            XmlHelper.WriteAttribute(sw, "filterUnique", this.filterUnique);
+            XmlHelper.WriteAttribute(sw, "view", this.view.ToString());
+            XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler);
+            XmlHelper.WriteAttribute(sw, "topLeftCell", this.topLeftCell);
+            sw.Write(">");
+            if (this.pane != null)
+                this.pane.Write(sw, "pane");
+            if (this.selection != null)
+                this.selection.Write(sw, "selection");
+            if (this.rowBreaks != null)
+                this.rowBreaks.Write(sw, "rowBreaks");
+            if (this.colBreaks != null)
+                this.colBreaks.Write(sw, "colBreaks");
+            if (this.pageMargins != null)
+                this.pageMargins.Write(sw, "pageMargins");
+            if (this.printOptions != null)
+                this.printOptions.Write(sw, "printOptions");
+            if (this.pageSetup != null)
+                this.pageSetup.Write(sw, "pageSetup");
+            if (this.headerFooter != null)
+                this.headerFooter.Write(sw, "headerFooter");
+            if (this.autoFilter != null)
+                this.autoFilter.Write(sw, "autoFilter");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3900,6 +4886,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.manualBreakCountField = value;
             }
         }
+
+        public static CT_PageBreak Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageBreak ctObj = new CT_PageBreak();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.manualBreakCount = XmlHelper.ReadUInt(node.Attributes["manualBreakCount"]);
+            ctObj.brk = new List<CT_Break>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "brk")
+                    ctObj.brk.Add(CT_Break.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "manualBreakCount", this.manualBreakCount);
+            sw.Write(">");
+            if (this.brk != null)
+            {
+                foreach (CT_Break x in this.brk)
+                {
+                    x.Write(sw, "brk");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -3990,6 +5011,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.ptField = value;
             }
         }
+
+        public static CT_Break Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Break ctObj = new CT_Break();
+            ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
+            ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
+            ctObj.man = XmlHelper.ReadBool(node.Attributes["man"]);
+            ctObj.pt = XmlHelper.ReadBool(node.Attributes["pt"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "min", this.min);
+            XmlHelper.WriteAttribute(sw, "max", this.max);
+            XmlHelper.WriteAttribute(sw, "man", this.man);
+            XmlHelper.WriteAttribute(sw, "pt", this.pt);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -4080,6 +5129,35 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.footerField = value;
             }
         }
+
+        public static CT_PageMargins Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageMargins ctObj = new CT_PageMargins();
+            ctObj.left = XmlHelper.ReadDouble(node.Attributes["left"]);
+            ctObj.right = XmlHelper.ReadDouble(node.Attributes["right"]);
+            ctObj.top = XmlHelper.ReadDouble(node.Attributes["top"]);
+            ctObj.bottom = XmlHelper.ReadDouble(node.Attributes["bottom"]);
+            ctObj.header = XmlHelper.ReadDouble(node.Attributes["header"]);
+            ctObj.footer = XmlHelper.ReadDouble(node.Attributes["footer"]);
+            return ctObj;
+        }
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "left", this.left);
+            XmlHelper.WriteAttribute(sw, "right", this.right);
+            XmlHelper.WriteAttribute(sw, "top", this.top);
+            XmlHelper.WriteAttribute(sw, "bottom", this.bottom);
+            XmlHelper.WriteAttribute(sw, "header", this.header);
+            XmlHelper.WriteAttribute(sw, "footer", this.footer);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -4096,6 +5174,36 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool gridLinesField;
 
         private bool gridLinesSetField;
+
+
+        public static CT_PrintOptions Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PrintOptions ctObj = new CT_PrintOptions();
+            ctObj.horizontalCentered = XmlHelper.ReadBool(node.Attributes["horizontalCentered"]);
+            ctObj.verticalCentered = XmlHelper.ReadBool(node.Attributes["verticalCentered"]);
+            ctObj.headings = XmlHelper.ReadBool(node.Attributes["headings"]);
+            ctObj.gridLines = XmlHelper.ReadBool(node.Attributes["gridLines"]);
+            ctObj.gridLinesSet = XmlHelper.ReadBool(node.Attributes["gridLinesSet"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "horizontalCentered", this.horizontalCentered);
+            XmlHelper.WriteAttribute(sw, "verticalCentered", this.verticalCentered);
+            XmlHelper.WriteAttribute(sw, "headings", this.headings);
+            XmlHelper.WriteAttribute(sw, "gridLines", this.gridLines);
+            XmlHelper.WriteAttribute(sw, "gridLinesSet", this.gridLinesSet);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         public CT_PrintOptions()
         {
@@ -4170,6 +5278,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.gridLinesSetField = value;
             }
         }
+
     }
 
     [Serializable]
@@ -4451,6 +5560,62 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public static CT_PageSetup Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageSetup ctObj = new CT_PageSetup();
+            ctObj.paperSize = XmlHelper.ReadUInt(node.Attributes["paperSize"]);
+            ctObj.scale = XmlHelper.ReadUInt(node.Attributes["scale"]);
+            ctObj.firstPageNumber = XmlHelper.ReadUInt(node.Attributes["firstPageNumber"]);
+            ctObj.fitToWidth = XmlHelper.ReadUInt(node.Attributes["fitToWidth"]);
+            ctObj.fitToHeight = XmlHelper.ReadUInt(node.Attributes["fitToHeight"]);
+            if (node.Attributes["pageOrder"] != null)
+                ctObj.pageOrder = (ST_PageOrder)Enum.Parse(typeof(ST_PageOrder), node.Attributes["pageOrder"].Value);
+            if (node.Attributes["orientation"] != null)
+                ctObj.orientation = (ST_Orientation)Enum.Parse(typeof(ST_Orientation), node.Attributes["orientation"].Value);
+            ctObj.usePrinterDefaults = XmlHelper.ReadBool(node.Attributes["usePrinterDefaults"]);
+            ctObj.blackAndWhite = XmlHelper.ReadBool(node.Attributes["blackAndWhite"]);
+            ctObj.draft = XmlHelper.ReadBool(node.Attributes["draft"]);
+            if (node.Attributes["cellComments"] != null)
+                ctObj.cellComments = (ST_CellComments)Enum.Parse(typeof(ST_CellComments), node.Attributes["cellComments"].Value);
+            ctObj.useFirstPageNumber = XmlHelper.ReadBool(node.Attributes["useFirstPageNumber"]);
+            if (node.Attributes["errors"] != null)
+                ctObj.errors = (ST_PrintError)Enum.Parse(typeof(ST_PrintError), node.Attributes["errors"].Value);
+            ctObj.horizontalDpi = XmlHelper.ReadUInt(node.Attributes["horizontalDpi"]);
+            ctObj.verticalDpi = XmlHelper.ReadUInt(node.Attributes["verticalDpi"]);
+            ctObj.copies = XmlHelper.ReadUInt(node.Attributes["copies"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "paperSize", this.paperSize);
+            XmlHelper.WriteAttribute(sw, "scale", this.scale);
+            XmlHelper.WriteAttribute(sw, "firstPageNumber", this.firstPageNumber);
+            XmlHelper.WriteAttribute(sw, "fitToWidth", this.fitToWidth);
+            XmlHelper.WriteAttribute(sw, "fitToHeight", this.fitToHeight);
+            XmlHelper.WriteAttribute(sw, "pageOrder", this.pageOrder.ToString());
+            XmlHelper.WriteAttribute(sw, "orientation", this.orientation.ToString());
+            XmlHelper.WriteAttribute(sw, "usePrinterDefaults", this.usePrinterDefaults);
+            XmlHelper.WriteAttribute(sw, "blackAndWhite", this.blackAndWhite);
+            XmlHelper.WriteAttribute(sw, "draft", this.draft);
+            XmlHelper.WriteAttribute(sw, "cellComments", this.cellComments.ToString());
+            XmlHelper.WriteAttribute(sw, "useFirstPageNumber", this.useFirstPageNumber);
+            XmlHelper.WriteAttribute(sw, "errors", this.errors.ToString());
+            XmlHelper.WriteAttribute(sw, "horizontalDpi", this.horizontalDpi);
+            XmlHelper.WriteAttribute(sw, "verticalDpi", this.verticalDpi);
+            XmlHelper.WriteAttribute(sw, "copies", this.copies);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     public enum ST_PageOrder:int
@@ -4661,6 +5826,59 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.alignWithMarginsField = value;
             }
         }
+        public static CT_HeaderFooter Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_HeaderFooter ctObj = new CT_HeaderFooter();
+            ctObj.differentOddEven = XmlHelper.ReadBool(node.Attributes["differentOddEven"]);
+            ctObj.differentFirst = XmlHelper.ReadBool(node.Attributes["differentFirst"]);
+            ctObj.scaleWithDoc = XmlHelper.ReadBool(node.Attributes["scaleWithDoc"]);
+            ctObj.alignWithMargins = XmlHelper.ReadBool(node.Attributes["alignWithMargins"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "oddHeader")
+                    ctObj.oddHeader = childNode.InnerText;
+                else if (childNode.LocalName == "oddFooter")
+                    ctObj.oddFooter = childNode.InnerText;
+                else if (childNode.LocalName == "evenHeader")
+                    ctObj.evenHeader = childNode.InnerText;
+                else if (childNode.LocalName == "evenFooter")
+                    ctObj.evenFooter = childNode.InnerText;
+                else if (childNode.LocalName == "firstHeader")
+                    ctObj.firstHeader = childNode.InnerText;
+                else if (childNode.LocalName == "firstFooter")
+                    ctObj.firstFooter = childNode.InnerText;
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "differentOddEven", this.differentOddEven);
+            XmlHelper.WriteAttribute(sw, "differentFirst", this.differentFirst);
+            XmlHelper.WriteAttribute(sw, "scaleWithDoc", this.scaleWithDoc);
+            XmlHelper.WriteAttribute(sw, "alignWithMargins", this.alignWithMargins);
+            sw.Write(">");
+            if (this.oddHeader != null)
+                sw.Write(string.Format("<oddHeader><![CDATA[{0}]]></oddHeader>", this.oddHeader));
+            if (this.oddFooter != null)
+                sw.Write(string.Format("<oddFooter><![CDATA[{0}]]></oddFooter>", this.oddFooter));
+            if (this.evenHeader != null)
+                sw.Write(string.Format("<evenHeader><![CDATA[{0}]]></evenHeader>", this.evenHeader));
+            if (this.evenFooter != null)
+                sw.Write(string.Format("<evenFooter><![CDATA[{0}]]></evenFooter>", this.evenFooter));
+            if (this.firstHeader != null)
+                sw.Write(string.Format("<firstHeader><![CDATA[{0}]]></firstHeader>", this.firstHeader));
+            if (this.firstFooter != null)
+                sw.Write(string.Format("<firstFooter><![CDATA[{0}]]></firstFooter>", this.firstFooter));
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
     }
 
 
@@ -4678,7 +5896,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool pivotField;
 
-        private List<string> sqrefField;
+        private string sqrefField;
+        public static CT_ConditionalFormatting Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ConditionalFormatting ctObj = new CT_ConditionalFormatting();
+            ctObj.pivot = XmlHelper.ReadBool(node.Attributes["pivot"]);
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            ctObj.cfRule = new List<CT_CfRule>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cfRule")
+                    ctObj.cfRule.Add(CT_CfRule.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "pivot", this.pivot);
+            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.cfRule != null)
+            {
+                foreach (CT_CfRule x in this.cfRule)
+                {
+                    x.Write(sw, "cfRule");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_ConditionalFormatting()
         {
@@ -4753,8 +6009,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotField = value;
             }
         }
-        [XmlElement]
-        public List<string> sqref
+        [XmlAttribute]
+        public string sqref
         {
             get
             {
@@ -4786,7 +6042,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool typeFieldSpecified;
 
-        private uint? dxfIdField;
+        private uint dxfIdField;
 
         private bool dxfIdFieldSpecified;
 
@@ -4800,13 +6056,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool bottomField;
 
-        private ST_ConditionalFormattingOperator operatorField;
+        private ST_ConditionalFormattingOperator? operatorField;
 
         private bool operatorFieldSpecified;
 
         private string textField;
 
-        private ST_TimePeriod timePeriodField;
+        private ST_TimePeriod? timePeriodField;
 
         private bool timePeriodFieldSpecified;
 
@@ -4822,25 +6078,103 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CfRule()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.iconSetField = new CT_IconSet();
-            this.dataBarField = new CT_DataBar();
-            this.colorScaleField = new CT_ColorScale();
-            this.formulaField = new List<string>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.iconSetField = new CT_IconSet();
+            //this.dataBarField = new CT_DataBar();
+            //this.colorScaleField = new CT_ColorScale();
+            //this.formulaField = new List<string>();
             this.stopIfTrueField = false;
             this.aboveAverageField = true;
             this.percentField = false;
             this.bottomField = false;
             this.equalAverageField = false;
         }
+        public static CT_CfRule Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CfRule ctObj = new CT_CfRule();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_CfType)Enum.Parse(typeof(ST_CfType), node.Attributes["type"].Value);
+            ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
+            ctObj.priority = XmlHelper.ReadInt(node.Attributes["priority"]);
+            ctObj.stopIfTrue = XmlHelper.ReadBool(node.Attributes["stopIfTrue"]);
+            ctObj.aboveAverage = XmlHelper.ReadBool(node.Attributes["aboveAverage"]);
+            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
+            ctObj.bottom = XmlHelper.ReadBool(node.Attributes["bottom"]);
+            if (node.Attributes["operator"] != null)
+                ctObj.@operator = (ST_ConditionalFormattingOperator)Enum.Parse(typeof(ST_ConditionalFormattingOperator), node.Attributes["operator"].Value);
+            ctObj.text = XmlHelper.ReadString(node.Attributes["text"]);
+            if (node.Attributes["timePeriod"] != null)
+                ctObj.timePeriod = (ST_TimePeriod)Enum.Parse(typeof(ST_TimePeriod), node.Attributes["timePeriod"].Value);
+            ctObj.rank = XmlHelper.ReadUInt(node.Attributes["rank"]);
+            ctObj.stdDev = XmlHelper.ReadInt(node.Attributes["stdDev"]);
+            ctObj.equalAverage = XmlHelper.ReadBool(node.Attributes["equalAverage"]);
+            ctObj.formula = new List<String>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "colorScale")
+                    ctObj.colorScale = CT_ColorScale.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dataBar")
+                    ctObj.dataBar = CT_DataBar.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "iconSet")
+                    ctObj.iconSet = CT_IconSet.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "formula")
+                    ctObj.formula.Add(childNode.InnerText);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
+            XmlHelper.WriteAttribute(sw, "priority", this.priority);
+            XmlHelper.WriteAttribute(sw, "stopIfTrue", this.stopIfTrue);
+            XmlHelper.WriteAttribute(sw, "aboveAverage", this.aboveAverage);
+            XmlHelper.WriteAttribute(sw, "percent", this.percent);
+            XmlHelper.WriteAttribute(sw, "bottom", this.bottom);
+            if(this.@operator!=null)
+                XmlHelper.WriteAttribute(sw, "operator", this.@operator.ToString());
+            XmlHelper.WriteAttribute(sw, "text", this.text);
+            if(this.timePeriodField!=null)
+                XmlHelper.WriteAttribute(sw, "timePeriod", this.timePeriod.ToString());
+            XmlHelper.WriteAttribute(sw, "rank", this.rank);
+            XmlHelper.WriteAttribute(sw, "stdDev", this.stdDev);
+            XmlHelper.WriteAttribute(sw, "equalAverage", this.equalAverage);
+            sw.Write(">");
+            if (this.colorScale != null)
+                this.colorScale.Write(sw, "colorScale");
+            if (this.dataBar != null)
+                this.dataBar.Write(sw, "dataBar");
+            if (this.iconSet != null)
+                this.iconSet.Write(sw, "iconSet");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.formula != null)
+            {
+                foreach (String x in this.formula)
+                {
+                    sw.Write(string.Format("<formula>{0}</formula>", x));
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
 
         public bool IsSetDxfId()
         {
-            return this.dxfId != null;
+            return this.dxfId >=0;
         }
         public void AddFormula(string formula)
         {
+            if (this.formula == null)
+                this.formula = new List<string>();
             this.formula.Add(formula);
         }
 
@@ -4850,6 +6184,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.stopIfTrue = src.stopIfTrue;
             this.bottom = src.bottom;
             this.percent = src.percent;
+            this.dxfId = src.dxfId;
+            this.@operator = src.@operator;
+            this.type = src.type;
             this.equalAverage = src.equalAverage;
             this.aboveAverage = src.aboveAverage;
             this.colorScale = src.colorScale;
@@ -4865,6 +6202,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return formula[index];
         }
+        [XmlElement]
         public List<string> formula
         {
             get
@@ -4876,7 +6214,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formulaField = value;
             }
         }
-
+        [XmlElement]
         public CT_ColorScale colorScale
         {
             get
@@ -4888,7 +6226,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.colorScaleField = value;
             }
         }
-
+        [XmlElement]
         public CT_DataBar dataBar
         {
             get
@@ -4900,7 +6238,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dataBarField = value;
             }
         }
-
+        [XmlElement]
         public CT_IconSet iconSet
         {
             get
@@ -4912,7 +6250,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iconSetField = value;
             }
         }
-
+        [XmlElement]
         public CT_ExtensionList extLst
         {
             get
@@ -4924,7 +6262,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
-
+        [XmlAttribute]
         public ST_CfType type
         {
             get
@@ -4949,16 +6287,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.typeFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint dxfId
         {
             get
             {
-                return (uint)this.dxfIdField;
+                return this.dxfIdField;
             }
             set
             {
                 this.dxfIdField = value;
+                this.dxfIdFieldSpecified = true;
             }
         }
 
@@ -4974,7 +6313,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.dxfIdFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public int priority
         {
             get
@@ -4986,7 +6325,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.priorityField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool stopIfTrue
         {
@@ -4999,7 +6338,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.stopIfTrueField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool aboveAverage
         {
@@ -5012,7 +6351,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.aboveAverageField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool percent
         {
@@ -5038,8 +6377,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.bottomField = value;
             }
         }
-
-        public ST_ConditionalFormattingOperator @operator
+        [XmlAttribute]
+        public ST_ConditionalFormattingOperator? @operator
         {
             get
             {
@@ -5063,7 +6402,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.operatorFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public string text
         {
             get
@@ -5075,8 +6414,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.textField = value;
             }
         }
-
-        public ST_TimePeriod timePeriod
+        [XmlAttribute]
+        public ST_TimePeriod? timePeriod
         {
             get
             {
@@ -5100,7 +6439,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.timePeriodFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public uint rank
         {
             get
@@ -5125,7 +6464,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rankFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         public int stdDev
         {
             get
@@ -5150,7 +6489,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.stdDevFieldSpecified = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool equalAverage
         {
@@ -5203,6 +6542,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.colorField = value;
             }
         }
+
+        public static CT_ColorScale Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ColorScale ctObj = new CT_ColorScale();
+            ctObj.cfvo = new List<CT_Cfvo>();
+            ctObj.color = new List<CT_Color>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cfvo")
+                    ctObj.cfvo.Add(CT_Cfvo.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "color")
+                    ctObj.color.Add(CT_Color.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.cfvo != null)
+            {
+                foreach (CT_Cfvo x in this.cfvo)
+                {
+                    x.Write(sw, "cfvo");
+                }
+            }
+            if (this.color != null)
+            {
+                foreach (CT_Color x in this.color)
+                {
+                    x.Write(sw, "color");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -5272,6 +6652,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.gteField = value;
             }
         }
+
+        public static CT_Cfvo Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Cfvo ctObj = new CT_Cfvo();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), node.Attributes["type"].Value);
+            ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            ctObj.gte = XmlHelper.ReadBool(node.Attributes["gte"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            XmlHelper.WriteAttribute(sw, "gte", this.gte);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     public enum ST_CfvoType
@@ -5382,6 +6794,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showValueField = value;
             }
         }
+
+        public static CT_DataBar Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataBar ctObj = new CT_DataBar();
+            ctObj.minLength = XmlHelper.ReadUInt(node.Attributes["minLength"]);
+            ctObj.maxLength = XmlHelper.ReadUInt(node.Attributes["maxLength"]);
+            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
+            ctObj.cfvo = new List<CT_Cfvo>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "color")
+                    ctObj.color = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cfvo")
+                    ctObj.cfvo.Add(CT_Cfvo.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "minLength", this.minLength);
+            XmlHelper.WriteAttribute(sw, "maxLength", this.maxLength);
+            XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
+            sw.Write(">");
+            if (this.color != null)
+                this.color.Write(sw, "color");
+            if (this.cfvo != null)
+            {
+                foreach (CT_Cfvo x in this.cfvo)
+                {
+                    x.Write(sw, "cfvo");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -5401,13 +6854,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IconSet()
         {
-            this.cfvoField = new List<CT_Cfvo>();
+            //this.cfvoField = new List<CT_Cfvo>();
             this.iconSetField = ST_IconSetType.Item3TrafficLights1;
             this.showValueField = true;
             this.percentField = true;
             this.reverseField = false;
         }
-
+        [XmlElement]
         public List<CT_Cfvo> cfvo
         {
             get
@@ -5420,6 +6873,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(ST_IconSetType.Item3TrafficLights1)]
         public ST_IconSetType iconSet
         {
@@ -5432,7 +6886,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.iconSetField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool showValue
         {
@@ -5445,7 +6899,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.showValueField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool percent
         {
@@ -5458,7 +6912,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.percentField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool reverse
         {
@@ -5470,6 +6924,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.reverseField = value;
             }
+        }
+
+        public static CT_IconSet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_IconSet ctObj = new CT_IconSet();
+            if (node.Attributes["iconSet"] != null)
+                ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), node.Attributes["iconSet"].Value);
+            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
+            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
+            ctObj.reverse = XmlHelper.ReadBool(node.Attributes["reverse"]);
+            ctObj.cfvo = new List<CT_Cfvo>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cfvo")
+                    ctObj.cfvo.Add(CT_Cfvo.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "iconSet", this.iconSet.ToString());
+            XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
+            XmlHelper.WriteAttribute(sw, "percent", this.percent);
+            XmlHelper.WriteAttribute(sw, "reverse", this.reverse);
+            sw.Write(">");
+            if (this.cfvo != null)
+            {
+                foreach (CT_Cfvo x in this.cfvo)
+                {
+                    x.Write(sw, "cfvo");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
         }
     }
 
@@ -5629,22 +7122,57 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_DataValidations()
         {
-            this.dataValidationField = new List<CT_DataValidation>();
+            //this.dataValidationField = new List<CT_DataValidation>();
             this.disablePromptsField = false;
         }
+        public static CT_DataValidations Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataValidations ctObj = new CT_DataValidations();
+            ctObj.disablePrompts = XmlHelper.ReadBool(node.Attributes["disablePrompts"]);
+            ctObj.xWindow = XmlHelper.ReadUInt(node.Attributes["xWindow"]);
+            ctObj.yWindow = XmlHelper.ReadUInt(node.Attributes["yWindow"]);
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.dataValidation = new List<CT_DataValidation>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "dataValidation")
+                    ctObj.dataValidation.Add(CT_DataValidation.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "disablePrompts", this.disablePrompts);
+            XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow);
+            XmlHelper.WriteAttribute(sw, "yWindow", this.yWindow);
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.dataValidation != null)
+            {
+                foreach (CT_DataValidation x in this.dataValidation)
+                {
+                    x.Write(sw, "dataValidation");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
         [XmlElement("dataValidation", Order = 0)]
-        public CT_DataValidation[] dataValidation
+        public List<CT_DataValidation> dataValidation
         {
             get
             {
-                return this.dataValidationField.ToArray();
+                return this.dataValidationField;
             }
             set
             {
-                if (value != null && value.Length > 0)
-                    this.dataValidationField = new List<CT_DataValidation>(value);
-                else
-                    this.dataValidationField = new List<CT_DataValidation>(value);
+                 this.dataValidationField = value;
             }
         }
 
@@ -5742,6 +7270,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_DataValidation AddNewDataValidation()
         {
+            if (this.dataValidationField == null)
+                this.dataValidationField = new List<CT_DataValidation>();
             CT_DataValidation dv = new CT_DataValidation();
             this.dataValidationField.Add(dv);
             this.countField++;
@@ -5783,7 +7313,67 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private string promptField;
 
-        private List<string> sqrefField;
+        private string sqrefField;
+        public static CT_DataValidation Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataValidation ctObj = new CT_DataValidation();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_DataValidationType)Enum.Parse(typeof(ST_DataValidationType), node.Attributes["type"].Value);
+            if (node.Attributes["errorStyle"] != null)
+                ctObj.errorStyle = (ST_DataValidationErrorStyle)Enum.Parse(typeof(ST_DataValidationErrorStyle), node.Attributes["errorStyle"].Value);
+            if (node.Attributes["imeMode"] != null)
+                ctObj.imeMode = (ST_DataValidationImeMode)Enum.Parse(typeof(ST_DataValidationImeMode), node.Attributes["imeMode"].Value);
+            if (node.Attributes["operator"] != null)
+                ctObj.@operator = (ST_DataValidationOperator)Enum.Parse(typeof(ST_DataValidationOperator), node.Attributes["operator"].Value);
+            ctObj.allowBlank = XmlHelper.ReadBool(node.Attributes["allowBlank"]);
+            ctObj.showDropDown = XmlHelper.ReadBool(node.Attributes["showDropDown"]);
+            ctObj.showInputMessage = XmlHelper.ReadBool(node.Attributes["showInputMessage"]);
+            ctObj.showErrorMessage = XmlHelper.ReadBool(node.Attributes["showErrorMessage"]);
+            ctObj.errorTitle = XmlHelper.ReadString(node.Attributes["errorTitle"]);
+            ctObj.error = XmlHelper.ReadString(node.Attributes["error"]);
+            ctObj.promptTitle = XmlHelper.ReadString(node.Attributes["promptTitle"]);
+            ctObj.prompt = XmlHelper.ReadString(node.Attributes["prompt"]);
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "formula1")
+                    ctObj.formula1 = childNode.InnerText;
+                else if (childNode.LocalName == "formula2")
+                    ctObj.formula2 = childNode.InnerText;
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "errorStyle", this.errorStyle.ToString());
+            XmlHelper.WriteAttribute(sw, "imeMode", this.imeMode.ToString());
+            XmlHelper.WriteAttribute(sw, "operator", this.@operator.ToString());
+            XmlHelper.WriteAttribute(sw, "allowBlank", this.allowBlank);
+            XmlHelper.WriteAttribute(sw, "showDropDown", this.showDropDown);
+            XmlHelper.WriteAttribute(sw, "showInputMessage", this.showInputMessage);
+            XmlHelper.WriteAttribute(sw, "showErrorMessage", this.showErrorMessage);
+            XmlHelper.WriteAttribute(sw, "errorTitle", this.errorTitle);
+            XmlHelper.WriteAttribute(sw, "error", this.error);
+            XmlHelper.WriteAttribute(sw, "promptTitle", this.promptTitle);
+            XmlHelper.WriteAttribute(sw, "prompt", this.prompt);
+            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            sw.Write(">");
+            if (this.formula1 != null)
+                sw.Write(string.Format("<formula1><![CDATA[{0}]]></formula1>", this.formula1));
+            if (this.formula2 != null)
+                sw.Write(string.Format("<formula2><![CDATA[{0}]]></formula2>", this.formula2));
+
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         public CT_DataValidation()
         {
@@ -5992,7 +7582,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        public List<string> sqref
+        public string sqref
         {
             get
             {
@@ -6147,6 +7737,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public static CT_CustomProperty Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomProperty ctObj = new CT_CustomProperty();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -6167,6 +7779,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
+
+        public static CT_CellWatch Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellWatch ctObj = new CT_CellWatch();
+            ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -6180,9 +7812,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IgnoredErrors()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.ignoredErrorField = new List<CT_IgnoredError>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.ignoredErrorField = new List<CT_IgnoredError>();
         }
+
+        public static CT_IgnoredErrors Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_IgnoredErrors ctObj = new CT_IgnoredErrors();
+            ctObj.ignoredError = new List<CT_IgnoredError>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "ignoredError")
+                    ctObj.ignoredError.Add(CT_IgnoredError.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.ignoredError != null)
+            {
+                foreach (CT_IgnoredError x in this.ignoredError)
+                {
+                    x.Write(sw, "ignoredError");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public List<CT_IgnoredError> ignoredError
         {
@@ -6214,7 +7881,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_IgnoredError
     {
 
-        private List<string> sqrefField;
+        private string sqrefField;
 
         private bool evalErrorField;
 
@@ -6236,7 +7903,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IgnoredError()
         {
-            this.sqrefField = new List<string>();
+            //this.sqrefField = new List<string>();
             this.evalErrorField = false;
             this.twoDigitTextYearField = false;
             this.numberStoredAsTextField = false;
@@ -6247,8 +7914,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.listDataValidationField = false;
             this.calculatedColumnField = false;
         }
+        public static CT_IgnoredError Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_IgnoredError ctObj = new CT_IgnoredError();
+            ctObj.evalError = XmlHelper.ReadBool(node.Attributes["evalError"]);
+            ctObj.twoDigitTextYear = XmlHelper.ReadBool(node.Attributes["twoDigitTextYear"]);
+            ctObj.numberStoredAsText = XmlHelper.ReadBool(node.Attributes["numberStoredAsText"]);
+            ctObj.formula = XmlHelper.ReadBool(node.Attributes["formula"]);
+            ctObj.formulaRange = XmlHelper.ReadBool(node.Attributes["formulaRange"]);
+            ctObj.unlockedFormula = XmlHelper.ReadBool(node.Attributes["unlockedFormula"]);
+            ctObj.emptyCellReference = XmlHelper.ReadBool(node.Attributes["emptyCellReference"]);
+            ctObj.listDataValidation = XmlHelper.ReadBool(node.Attributes["listDataValidation"]);
+            ctObj.calculatedColumn = XmlHelper.ReadBool(node.Attributes["calculatedColumn"]);
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            return ctObj;
+        }
 
-        public List<string> sqref
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "evalError", this.evalError);
+            XmlHelper.WriteAttribute(sw, "twoDigitTextYear", this.twoDigitTextYear);
+            XmlHelper.WriteAttribute(sw, "numberStoredAsText", this.numberStoredAsText);
+            XmlHelper.WriteAttribute(sw, "formula", this.formula);
+            XmlHelper.WriteAttribute(sw, "formulaRange", this.formulaRange);
+            XmlHelper.WriteAttribute(sw, "unlockedFormula", this.unlockedFormula);
+            XmlHelper.WriteAttribute(sw, "emptyCellReference", this.emptyCellReference);
+            XmlHelper.WriteAttribute(sw, "listDataValidation", this.listDataValidation);
+            XmlHelper.WriteAttribute(sw, "calculatedColumn", this.calculatedColumn);
+            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+        [XmlAttribute]
+        public string sqref
         {
             get
             {
@@ -6259,7 +7963,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sqrefField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool evalError
         {
@@ -6272,7 +7976,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.evalErrorField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool twoDigitTextYear
         {
@@ -6285,7 +7989,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.twoDigitTextYearField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool numberStoredAsText
         {
@@ -6298,7 +8002,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.numberStoredAsTextField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool formula
         {
@@ -6311,7 +8015,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formulaField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool formulaRange
         {
@@ -6324,7 +8028,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.formulaRangeField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool unlockedFormula
         {
@@ -6337,7 +8041,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.unlockedFormulaField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool emptyCellReference
         {
@@ -6350,7 +8054,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.emptyCellReferenceField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool listDataValidation
         {
@@ -6363,7 +8067,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.listDataValidationField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool calculatedColumn
         {
@@ -6415,6 +8119,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
+
+        public static CT_CellSmartTags Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellSmartTags ctObj = new CT_CellSmartTags();
+            ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
+            ctObj.cellSmartTag = new List<CT_CellSmartTag>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cellSmartTag")
+                    ctObj.cellSmartTag.Add(CT_CellSmartTag.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            sw.Write(">");
+            if (this.cellSmartTag != null)
+            {
+                foreach (CT_CellSmartTag x in this.cellSmartTag)
+                {
+                    x.Write(sw, "cellSmartTag");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -6486,6 +8223,43 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xmlBasedField = value;
             }
         }
+
+        public static CT_CellSmartTag Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellSmartTag ctObj = new CT_CellSmartTag();
+            ctObj.type = XmlHelper.ReadUInt(node.Attributes["type"]);
+            ctObj.deleted = XmlHelper.ReadBool(node.Attributes["deleted"]);
+            ctObj.xmlBased = XmlHelper.ReadBool(node.Attributes["xmlBased"]);
+            ctObj.cellSmartTagPr = new List<CT_CellSmartTagPr>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cellSmartTagPr")
+                    ctObj.cellSmartTagPr.Add(CT_CellSmartTagPr.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "type", this.type);
+            XmlHelper.WriteAttribute(sw, "deleted", this.deleted);
+            XmlHelper.WriteAttribute(sw, "xmlBased", this.xmlBased);
+            sw.Write(">");
+            if (this.cellSmartTagPr != null)
+            {
+                foreach (CT_CellSmartTagPr x in this.cellSmartTagPr)
+                {
+                    x.Write(sw, "cellSmartTagPr");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -6520,6 +8294,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.valField = value;
             }
         }
+
+        public static CT_CellSmartTagPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellSmartTagPr ctObj = new CT_CellSmartTagPr();
+            ctObj.key = XmlHelper.ReadString(node.Attributes["key"]);
+            ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "key", this.key);
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -6649,25 +8445,60 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+    
+
+        public static CT_OleObject Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_OleObject ctObj = new CT_OleObject();
+            ctObj.progId = XmlHelper.ReadString(node.Attributes["progId"]);
+            if (node.Attributes["dvAspect"] != null)
+                ctObj.dvAspect = (ST_DvAspect)Enum.Parse(typeof(ST_DvAspect), node.Attributes["dvAspect"].Value);
+            ctObj.link = XmlHelper.ReadString(node.Attributes["link"]);
+            if (node.Attributes["oleUpdate"] != null)
+                ctObj.oleUpdate = (ST_OleUpdate)Enum.Parse(typeof(ST_OleUpdate), node.Attributes["oleUpdate"].Value);
+            ctObj.autoLoad = XmlHelper.ReadBool(node.Attributes["autoLoad"]);
+            ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "progId", this.progId);
+            XmlHelper.WriteAttribute(sw, "dvAspect", this.dvAspect.ToString());
+            XmlHelper.WriteAttribute(sw, "link", this.link);
+            XmlHelper.WriteAttribute(sw, "oleUpdate", this.oleUpdate.ToString());
+            XmlHelper.WriteAttribute(sw, "autoLoad", this.autoLoad);
+            XmlHelper.WriteAttribute(sw, "shapeId", this.shapeId);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     public enum ST_DvAspect
     {
 
-    
+
         DVASPECT_CONTENT,
 
-    
+
         DVASPECT_ICON,
     }
 
     public enum ST_OleUpdate
     {
 
-    
+
         OLEUPDATE_ALWAYS,
 
-    
+
         OLEUPDATE_ONCALL,
     }
 
@@ -6718,6 +8549,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.nameField = value;
             }
+        }
+
+        public static CT_Control Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Control ctObj = new CT_Control();
+            ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "shapeId", this.shapeId);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
     }
 
@@ -6773,6 +8627,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.countFieldSpecified = value;
             }
         }
+
+        public static CT_WebPublishItems Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WebPublishItems ctObj = new CT_WebPublishItems();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.webPublishItem = new List<CT_WebPublishItem>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "webPublishItem")
+                    ctObj.webPublishItem.Add(CT_WebPublishItem.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.webPublishItem != null)
+            {
+                foreach (CT_WebPublishItem x in this.webPublishItem)
+                {
+                    x.Write(sw, "webPublishItem");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -6897,6 +8784,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.autoRepublishField = value;
             }
         }
+
+        public static CT_WebPublishItem Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WebPublishItem ctObj = new CT_WebPublishItem();
+            ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            ctObj.divId = XmlHelper.ReadString(node.Attributes["divId"]);
+            if (node.Attributes["sourceType"] != null)
+                ctObj.sourceType = (ST_WebSourceType)Enum.Parse(typeof(ST_WebSourceType), node.Attributes["sourceType"].Value);
+            ctObj.sourceRef = XmlHelper.ReadString(node.Attributes["sourceRef"]);
+            ctObj.sourceObject = XmlHelper.ReadString(node.Attributes["sourceObject"]);
+            ctObj.destinationFile = XmlHelper.ReadString(node.Attributes["destinationFile"]);
+            ctObj.title = XmlHelper.ReadString(node.Attributes["title"]);
+            ctObj.autoRepublish = XmlHelper.ReadBool(node.Attributes["autoRepublish"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "divId", this.divId);
+            XmlHelper.WriteAttribute(sw, "sourceType", this.sourceType.ToString());
+            XmlHelper.WriteAttribute(sw, "sourceRef", this.sourceRef);
+            XmlHelper.WriteAttribute(sw, "sourceObject", this.sourceObject);
+            XmlHelper.WriteAttribute(sw, "destinationFile", this.destinationFile);
+            XmlHelper.WriteAttribute(sw, "title", this.title);
+            XmlHelper.WriteAttribute(sw, "autoRepublish", this.autoRepublish);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     public enum ST_WebSourceType
@@ -6986,6 +8908,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.countFieldSpecified = value;
             }
         }
+
+        public static CT_TableParts Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TableParts ctObj = new CT_TableParts();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.tablePart = new List<CT_TablePart>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "tablePart")
+                    ctObj.tablePart.Add(CT_TablePart.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.tablePart != null)
+            {
+                foreach (CT_TablePart x in this.tablePart)
+                {
+                    x.Write(sw, "tablePart");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -7008,6 +8963,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public static CT_TablePart Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TablePart ctObj = new CT_TablePart();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -7776,6 +9751,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return this.idField; }
             set { this.idField = value; }
         }
+
+        public static CT_Drawing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Drawing ctObj = new CT_Drawing();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
     }
 
     [Serializable]
@@ -7783,6 +9777,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_LegacyDrawing
     {
         private string idField = string.Empty;
+        public static CT_LegacyDrawing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LegacyDrawing ctObj = new CT_LegacyDrawing();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
@@ -8442,12 +10454,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CustomSheetViews
     {
+        public static CT_CustomSheetViews Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomSheetViews ctObj = new CT_CustomSheetViews();
+            ctObj.customSheetView = new List<CT_CustomSheetView>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "customSheetView")
+                    ctObj.customSheetView.Add(CT_CustomSheetView.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.customSheetView != null)
+            {
+                foreach (CT_CustomSheetView x in this.customSheetView)
+                {
+                    x.Write(sw, "customSheetView");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_CustomSheetView> customSheetViewField;
 
         public CT_CustomSheetViews()
         {
-            this.customSheetViewField = new List<CT_CustomSheetView>();
+            //this.customSheetViewField = new List<CT_CustomSheetView>();
         }
 
         public List<CT_CustomSheetView> customSheetView
@@ -8474,6 +10515,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //{
         //    this.hyperlinkField = new List<CT_Hyperlink>();
         //}
+
+        public static CT_Hyperlinks Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Hyperlinks ctObj = new CT_Hyperlinks();
+            ctObj.hyperlink = new List<CT_Hyperlink>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "hyperlink")
+                    ctObj.hyperlink.Add(CT_Hyperlink.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.hyperlink != null)
+            {
+                foreach (CT_Hyperlink x in this.hyperlink)
+                {
+                    x.Write(sw, "hyperlink");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+
+
+
+
         public void SetHyperlinkArray(CT_Hyperlink[] array)
         {
             hyperlinkField = new List<CT_Hyperlink>(array);
@@ -8498,10 +10575,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         private List<CT_ProtectedRange> protectedRangeField;
+        public static CT_ProtectedRanges Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ProtectedRanges ctObj = new CT_ProtectedRanges();
+            ctObj.protectedRange = new List<CT_ProtectedRange>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "protectedRange")
+                    ctObj.protectedRange.Add(CT_ProtectedRange.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.protectedRange != null)
+            {
+                foreach (CT_ProtectedRange x in this.protectedRange)
+                {
+                    x.Write(sw, "protectedRange");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_ProtectedRanges()
         {
-            this.protectedRangeField = new List<CT_ProtectedRange>();
+            //this.protectedRangeField = new List<CT_ProtectedRange>();
         }
 
         public List<CT_ProtectedRange> protectedRange
@@ -8521,12 +10627,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CellWatches
     {
+        public static CT_CellWatches Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellWatches ctObj = new CT_CellWatches();
+            ctObj.cellWatch = new List<CT_CellWatch>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cellWatch")
+                    ctObj.cellWatch.Add(CT_CellWatch.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.cellWatch != null)
+            {
+                foreach (CT_CellWatch x in this.cellWatch)
+                {
+                    x.Write(sw, "cellWatch");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_CellWatch> cellWatchField;
 
         public CT_CellWatches()
         {
-            this.cellWatchField = new List<CT_CellWatch>();
+            //this.cellWatchField = new List<CT_CellWatch>();
         }
 
         public List<CT_CellWatch> cellWatch
@@ -8551,7 +10686,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CustomChartsheetViews()
         {
-            this.customSheetViewField = new List<CT_CustomChartsheetView>();
+            //this.customSheetViewField = new List<CT_CustomChartsheetView>();
         }
 
         public List<CT_CustomChartsheetView> customSheetView
@@ -8573,10 +10708,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
 
         private List<CT_CustomProperty> customPrField;
+        public static CT_CustomProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomProperties ctObj = new CT_CustomProperties();
+            ctObj.customPr = new List<CT_CustomProperty>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "customPr")
+                    ctObj.customPr.Add(CT_CustomProperty.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.customPr != null)
+            {
+                foreach (CT_CustomProperty x in this.customPr)
+                {
+                    x.Write(sw, "customPr");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_CustomProperties()
         {
-            this.customPrField = new List<CT_CustomProperty>();
+            //this.customPrField = new List<CT_CustomProperty>();
         }
 
         public List<CT_CustomProperty> customPr
@@ -8596,12 +10760,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObjects
     {
+        public static CT_OleObjects Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_OleObjects ctObj = new CT_OleObjects();
+            ctObj.oleObject = new List<CT_OleObject>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "oleObject")
+                    ctObj.oleObject.Add(CT_OleObject.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.oleObject != null)
+            {
+                foreach (CT_OleObject x in this.oleObject)
+                {
+                    x.Write(sw, "oleObject");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_OleObject> oleObjectField;
 
         public CT_OleObjects()
         {
-            this.oleObjectField = new List<CT_OleObject>();
+            //this.oleObjectField = new List<CT_OleObject>();
         }
 
         public List<CT_OleObject> oleObject
@@ -8621,12 +10814,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Controls
     {
+        public static CT_Controls Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Controls ctObj = new CT_Controls();
+            ctObj.control = new List<CT_Control>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "control")
+                    ctObj.control.Add(CT_Control.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.control != null)
+            {
+                foreach (CT_Control x in this.control)
+                {
+                    x.Write(sw, "control");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Control> controlField;
 
         public CT_Controls()
         {
-            this.controlField = new List<CT_Control>();
+            //this.controlField = new List<CT_Control>();
         }
 
         public List<CT_Control> control

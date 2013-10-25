@@ -214,11 +214,9 @@ namespace NPOI.XSSF.UserModel.Helpers
             CT_ConditionalFormatting cf = cfList[j];
 
             List<CellRangeAddress> cellRanges = new List<CellRangeAddress>();
-            foreach (Object stRef in cf.sqref) {
-                String[] regions = stRef.ToString().Split(new char[]{' '});
-                for (int i = 0; i < regions.Length; i++) {
-                    cellRanges.Add(CellRangeAddress.ValueOf(regions[i]));
-                }
+            String[] regions = cf.sqref.ToString().Split(new char[] { ' ' });
+            for (int i = 0; i < regions.Length; i++) {
+                cellRanges.Add(CellRangeAddress.ValueOf(regions[i]));
             }
 
             bool Changed = false;
@@ -242,9 +240,15 @@ namespace NPOI.XSSF.UserModel.Helpers
                     cfList.RemoveAt(j);
                     continue;
                 }
-                List<String> refs = new List<String>();
-                foreach(CellRangeAddress a in temp) refs.Add(a.FormatAsString());
-                cf.sqref=(refs);
+                string refs = string.Empty;
+                foreach (CellRangeAddress a in temp)
+                {
+                    if (refs.Length == 0)
+                        refs = a.FormatAsString();
+                    else
+                        refs += " " + a.FormatAsString();
+                }
+                cf.sqref = refs;
             }
 
             foreach(CT_CfRule cfRule in cf.cfRule){

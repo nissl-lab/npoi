@@ -142,8 +142,8 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47504.xlsx");
             Assert.AreEqual(1, wb.NumberOfSheets);
             XSSFSheet sh = wb.GetSheetAt(0) as XSSFSheet;
-            XSSFDrawing Drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            List<POIXMLDocumentPart> rels = Drawing.GetRelations();
+            XSSFDrawing drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
+            List<POIXMLDocumentPart> rels = drawing.GetRelations();
             Assert.AreEqual(1, rels.Count);
             Assert.AreEqual("Sheet1!A1", rels[0].GetPackageRelationship().TargetUri.Fragment);
 
@@ -151,8 +151,8 @@ namespace NPOI.XSSF.UserModel
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             Assert.AreEqual(1, wb.NumberOfSheets);
             sh = wb.GetSheetAt(0) as XSSFSheet;
-            Drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            rels = Drawing.GetRelations();
+            drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
+            rels = drawing.GetRelations();
             Assert.AreEqual(1, rels.Count);
             Assert.AreEqual("Sheet1!A1", rels[0].GetPackageRelationship().TargetUri.Fragment);
         }

@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -245,6 +248,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return this.collapsedSpecifiedField; }
             set { this.collapsedSpecifiedField = value; }
         }
+
+        public static CT_Col Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Col ctObj = new CT_Col();
+            ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
+            ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
+            ctObj.width = XmlHelper.ReadDouble(node.Attributes["width"]);
+            ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            ctObj.bestFit = XmlHelper.ReadBool(node.Attributes["bestFit"]);
+            ctObj.customWidth = XmlHelper.ReadBool(node.Attributes["customWidth"]);
+            ctObj.phonetic = XmlHelper.ReadBool(node.Attributes["phonetic"]);
+            ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "min", this.min);
+            XmlHelper.WriteAttribute(sw, "max", this.max);
+            XmlHelper.WriteAttribute(sw, "width", this.width);
+            XmlHelper.WriteAttribute(sw, "style", this.style);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            XmlHelper.WriteAttribute(sw, "bestFit", this.bestFit);
+            XmlHelper.WriteAttribute(sw, "customWidth", this.customWidth);
+            XmlHelper.WriteAttribute(sw, "phonetic", this.phonetic);
+            XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
+            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
 
     }

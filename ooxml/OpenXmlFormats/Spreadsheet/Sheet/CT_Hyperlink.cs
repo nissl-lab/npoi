@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -85,5 +88,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.displayField = value;
             }
         }
+
+        public static CT_Hyperlink Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Hyperlink ctObj = new CT_Hyperlink();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.location = XmlHelper.ReadString(node.Attributes["location"]);
+            ctObj.tooltip = XmlHelper.ReadString(node.Attributes["tooltip"]);
+            ctObj.display = XmlHelper.ReadString(node.Attributes["display"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "location", this.location);
+            XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
+            XmlHelper.WriteAttribute(sw, "display", this.display);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
+
+
+
+
+
     }
 }

@@ -177,11 +177,14 @@ namespace NPOI.XSSF.UserModel
             }
 
             CellRangeAddress[] cellRangeAddresses = cellRangeAddressList.CellRangeAddresses;
-            List<String> sqref = new List<String>();
+            string sqref = string.Empty;
             for (int i = 0; i < cellRangeAddresses.Length; i++)
             {
                 CellRangeAddress cellRangeAddress = cellRangeAddresses[i];
-                sqref.Add(cellRangeAddress.FormatAsString());
+                if(sqref.Length==0)
+                    sqref = cellRangeAddress.FormatAsString();
+                else
+                    sqref = " " + cellRangeAddress.FormatAsString();
             }
             newDataValidation.sqref = sqref;
 

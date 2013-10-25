@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -28,6 +29,35 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rPhField = o.rPhField;
             this.phoneticPrField = o.phoneticPrField;
         }
+      
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            if(this.t!=null)
+                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>", t));
+            sw.Write(">");
+            if (this.phoneticPr != null)
+                this.phoneticPr.Write(sw, "phoneticPr");
+            if (this.r != null)
+            {
+                foreach (CT_RElt x in this.r)
+                {
+                    x.Write(sw, "r");
+                }
+            }
+            if (this.rPh != null)
+            {
+                foreach (CT_PhoneticRun x in this.rPh)
+                {
+                    x.Write(sw, "rPh");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         #region t
         public bool IsSetT()
@@ -193,76 +223,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
-        public static CT_Rst Parse(XmlNode xmlNode, XmlNamespaceManager namespaceManager)
+        public static CT_Rst Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            CT_Rst rst = new CT_Rst();
-            rst.r = new List<CT_RElt>();
-            var rNodes = xmlNode.SelectNodes("d:r", namespaceManager);
-            foreach (XmlNode rNode in rNodes)
+            CT_Rst ctObj = new CT_Rst();
+            ctObj.r = new List<CT_RElt>();
+            ctObj.rPh = new List<CT_PhoneticRun>();
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                CT_RElt relt = rst.AddNewR();
-                var rPrNode = rNode.SelectSingleNode("d:rPr", namespaceManager);
-                if (rPrNode != null)
-                {
-                    CT_RPrElt rprelt = relt.AddNewRPr();
-                    foreach (XmlNode childNode in rPrNode.ChildNodes)
-                    {
-                        switch (childNode.Name)
-                        { 
-                            case "b":
-                                CT_BooleanProperty bprop= rprelt.AddNewB();
-                                bprop.val = true;
-                                break;
-                            case "i":
-                                CT_BooleanProperty iprop = rprelt.AddNewI();
-                                iprop.val = true;
-                                break;
-                            case "u":
-                                CT_UnderlineProperty uProp = rprelt.AddNewU();
-                                uProp.val = (ST_UnderlineValues)Enum.Parse(typeof(ST_UnderlineValues), childNode.Attributes["val"].Value);
-                                break;
-                            case "color":
-                                CT_Color color = rprelt.AddNewColor();
-                                if(childNode.Attributes["theme"]!=null)
-                                    color.theme = uint.Parse(childNode.Attributes["theme"].Value);
-                                if(childNode.Attributes["auto"]!=null)
-                                    color.auto = childNode.Attributes["auto"].Value=="1"?true:false;
-                                if(childNode.Attributes["indexed"]!=null)
-                                    color.indexed = uint.Parse(childNode.Attributes["indexed"].Value);
-                                if(childNode.Attributes["tint"]!=null)
-                                    color.tint = Double.Parse(childNode.Attributes["tint"].Value);
-                                break;
-                            case "rFont":
-                                CT_FontName fontname = rprelt.AddNewRFont();
-                                fontname.val = childNode.Attributes["val"].Value;
-                                break;
-                            case "family":
-                                CT_IntProperty familyProp = rprelt.AddNewFamily();
-                                familyProp.val = Int32.Parse(childNode.Attributes["val"].Value);
-                                break;
-                            case "charset":
-                                CT_IntProperty charsetProp = rprelt.AddNewCharset();
-                                charsetProp.val = Int32.Parse(childNode.Attributes["val"].Value);
-                                break;
-                            case "scheme":
-                                CT_FontScheme schemeProp = rprelt.AddNewScheme();
-                                schemeProp.val = (ST_FontScheme)Enum.Parse(typeof(ST_FontScheme), childNode.Attributes["val"].Value);
-                                break;
-                            case "sz":
-                                CT_FontSize szProp = rprelt.AddNewSz();
-                                szProp.val = Int32.Parse(childNode.Attributes["val"].Value);
-                                break;
-                            case "vertAlign":
-                                CT_VerticalAlignFontProperty vertAlignProp = rprelt.AddNewVertAlign();
-                                vertAlignProp.val = (ST_VerticalAlignRun)Enum.Parse(typeof(ST_VerticalAlignRun), childNode.Attributes["val"].Value);
-                                break;
-                        }
-                    }
-                }
-                var tNode = rNode.SelectSingleNode("d:t", namespaceManager);
-                relt.t = tNode.InnerText.Replace("\r","");
+                if (childNode.LocalName == "phoneticPr")
+                    ctObj.phoneticPr = CT_PhoneticPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "r")
+                    ctObj.r.Add(CT_RElt.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "rPh")
+                    ctObj.rPh.Add(CT_PhoneticRun.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "t")
+                    ctObj.t = childNode.InnerText.Replace("\r", "");
             }
-            return rst;
+            return ctObj;
         }
     }
 }

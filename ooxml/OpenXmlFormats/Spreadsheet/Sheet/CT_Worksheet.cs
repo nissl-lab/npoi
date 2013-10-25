@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -32,7 +32,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_SheetProtection sheetProtectionField = null;
 
-        private List<CT_ProtectedRange> protectedRangesField = null;
+        private CT_ProtectedRanges protectedRangesField = null;
 
         private CT_Scenarios scenariosField = null;
 
@@ -42,7 +42,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_DataConsolidate dataConsolidateField = null;
 
-        private List<CT_CustomSheetView> customSheetViewsField = null;
+        private CT_CustomSheetViews customSheetViewsField = null;
 
         private CT_MergeCells mergeCellsField = null;
 
@@ -66,13 +66,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_PageBreak colBreaksField = null;
 
-        private List<CT_CustomProperty> customPropertiesField = null;
+        private CT_CustomProperties customPropertiesField = null;
 
-        private List<CT_CellWatch> cellWatchesField = null;
+        private CT_CellWatches cellWatchesField = null;
 
         private CT_IgnoredErrors ignoredErrorsField = null;
 
-        private List<CT_CellSmartTags> smartTagsField = null;
+        private CT_CellSmartTags smartTagsField = null;
 
         private CT_Drawing drawingField = null;
 
@@ -82,9 +82,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_SheetBackgroundPicture pictureField = null;
 
-        private List<CT_OleObject> oleObjectsField = null;
+        private CT_OleObjects oleObjectsField = null;
 
-        private List<CT_Control> controlsField = null;
+        private CT_Controls controlsField = null;
 
         private CT_WebPublishItems webPublishItemsField = null;
 
@@ -92,15 +92,197 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_ExtensionList extLstField = null;
 
+        public static CT_Worksheet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Worksheet ctObj = new CT_Worksheet();
+            ctObj.cols = new List<CT_Cols>();
+            ctObj.conditionalFormatting = new List<CT_ConditionalFormatting>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "sheetPr")
+                    ctObj.sheetPr = CT_SheetPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dimension")
+                    ctObj.dimension = CT_SheetDimension.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetViews")
+                    ctObj.sheetViews = CT_SheetViews.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetFormatPr")
+                    ctObj.sheetFormatPr = CT_SheetFormatPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetData")
+                    ctObj.sheetData = CT_SheetData.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetCalcPr")
+                    ctObj.sheetCalcPr = CT_SheetCalcPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetProtection")
+                    ctObj.sheetProtection = CT_SheetProtection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "protectedRanges")
+                    ctObj.protectedRanges = CT_ProtectedRanges.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "scenarios")
+                    ctObj.scenarios = CT_Scenarios.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "autoFilter")
+                    ctObj.autoFilter = CT_AutoFilter.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sortState")
+                    ctObj.sortState = CT_SortState.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dataConsolidate")
+                    ctObj.dataConsolidate = CT_DataConsolidate.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "customSheetViews")
+                    ctObj.customSheetViews = CT_CustomSheetViews.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "mergeCells")
+                    ctObj.mergeCells = CT_MergeCells.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "phoneticPr")
+                    ctObj.phoneticPr = CT_PhoneticPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dataValidations")
+                    ctObj.dataValidations = CT_DataValidations.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hyperlinks")
+                    ctObj.hyperlinks = CT_Hyperlinks.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "printOptions")
+                    ctObj.printOptions = CT_PrintOptions.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageMargins")
+                    ctObj.pageMargins = CT_PageMargins.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageSetup")
+                    ctObj.pageSetup = CT_PageSetup.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "headerFooter")
+                    ctObj.headerFooter = CT_HeaderFooter.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rowBreaks")
+                    ctObj.rowBreaks = CT_PageBreak.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "colBreaks")
+                    ctObj.colBreaks = CT_PageBreak.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "customProperties")
+                    ctObj.customProperties = CT_CustomProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cellWatches")
+                    ctObj.cellWatches = CT_CellWatches.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "ignoredErrors")
+                    ctObj.ignoredErrors = CT_IgnoredErrors.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "smartTags")
+                    ctObj.smartTags = CT_CellSmartTags.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "drawing")
+                    ctObj.drawing = CT_Drawing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "legacyDrawing")
+                    ctObj.legacyDrawing = CT_LegacyDrawing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "legacyDrawingHF")
+                    ctObj.legacyDrawingHF = CT_LegacyDrawing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "picture")
+                    ctObj.picture = CT_SheetBackgroundPicture.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "oleObjects")
+                    ctObj.oleObjects = CT_OleObjects.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "controls")
+                    ctObj.controls = CT_Controls.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "webPublishItems")
+                    ctObj.webPublishItems = CT_WebPublishItems.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tableParts")
+                    ctObj.tableParts = CT_TableParts.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cols")
+                    ctObj.cols.Add(CT_Cols.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "conditionalFormatting")
+                    ctObj.conditionalFormatting.Add(CT_ConditionalFormatting.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(Stream stream)
+        {
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+                sw.Write("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">");
+                if (this.sheetPr != null)
+                    this.sheetPr.Write(sw, "sheetPr");
+                if (this.dimension != null)
+                    this.dimension.Write(sw, "dimension");
+                if (this.sheetViews != null)
+                    this.sheetViews.Write(sw, "sheetViews");
+                if (this.sheetFormatPr != null)
+                    this.sheetFormatPr.Write(sw, "sheetFormatPr");
+                if (this.sheetData != null)
+                    this.sheetData.Write(sw, "sheetData");
+                if (this.sheetCalcPr != null)
+                    this.sheetCalcPr.Write(sw, "sheetCalcPr");
+                if (this.sheetProtection != null)
+                    this.sheetProtection.Write(sw, "sheetProtection");
+                if (this.protectedRanges != null)
+                    this.protectedRanges.Write(sw, "protectedRanges");
+                if (this.scenarios != null)
+                    this.scenarios.Write(sw, "scenarios");
+                if (this.autoFilter != null)
+                    this.autoFilter.Write(sw, "autoFilter");
+                if (this.sortState != null)
+                    this.sortState.Write(sw, "sortState");
+                if (this.dataConsolidate != null)
+                    this.dataConsolidate.Write(sw, "dataConsolidate");
+                if (this.customSheetViews != null)
+                    this.customSheetViews.Write(sw, "customSheetViews");
+                if (this.mergeCells != null)
+                    this.mergeCells.Write(sw, "mergeCells");
+                if (this.phoneticPr != null)
+                    this.phoneticPr.Write(sw, "phoneticPr");
+                if (this.dataValidations != null)
+                    this.dataValidations.Write(sw, "dataValidations");
+                if (this.hyperlinks != null)
+                    this.hyperlinks.Write(sw, "hyperlinks");
+                if (this.printOptions != null)
+                    this.printOptions.Write(sw, "printOptions");
+                if (this.pageMargins != null)
+                    this.pageMargins.Write(sw, "pageMargins");
+                if (this.pageSetup != null)
+                    this.pageSetup.Write(sw, "pageSetup");
+                if (this.headerFooter != null)
+                    this.headerFooter.Write(sw, "headerFooter");
+                if (this.rowBreaks != null)
+                    this.rowBreaks.Write(sw, "rowBreaks");
+                if (this.colBreaks != null)
+                    this.colBreaks.Write(sw, "colBreaks");
+                if (this.customProperties != null)
+                    this.customProperties.Write(sw, "customProperties");
+                if (this.cellWatches != null)
+                    this.cellWatches.Write(sw, "cellWatches");
+                if (this.ignoredErrors != null)
+                    this.ignoredErrors.Write(sw, "ignoredErrors");
+                if (this.smartTags != null)
+                    this.smartTags.Write(sw, "smartTags");
+                if (this.drawing != null)
+                    this.drawing.Write(sw, "drawing");
+                if (this.legacyDrawing != null)
+                    this.legacyDrawing.Write(sw, "legacyDrawing");
+                if (this.legacyDrawingHF != null)
+                    this.legacyDrawingHF.Write(sw, "legacyDrawingHF");
+                if (this.picture != null)
+                    this.picture.Write(sw, "picture");
+                if (this.oleObjects != null)
+                    this.oleObjects.Write(sw, "oleObjects");
+                if (this.controls != null)
+                    this.controls.Write(sw, "controls");
+                if (this.webPublishItems != null)
+                    this.webPublishItems.Write(sw, "webPublishItems");
+                if (this.tableParts != null)
+                    this.tableParts.Write(sw, "tableParts");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                if (this.cols != null)
+                {
+                    foreach (CT_Cols x in this.cols)
+                    {
+                        x.Write(sw, "cols");
+                    }
+                }
+                if (this.conditionalFormatting != null)
+                {
+                    foreach (CT_ConditionalFormatting x in this.conditionalFormatting)
+                    {
+                        x.Write(sw, "conditionalFormatting");
+                    }
+                }
+                sw.Write("</worksheet>");
+            }
+        }
 
         public CT_AutoFilter AddNewAutoFilter()
         {
             this.autoFilterField = new CT_AutoFilter();
             return this.autoFilterField;
-        }
-        public void Save(Stream stream)
-        {
-            WorksheetDocument.serializer.Serialize(stream, this, WorksheetDocument.namespaces);
         }
         public bool IsSetRowBreaks()
         {
@@ -427,10 +609,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlArray(Order = 8)]
-        //[XmlArrayItem("protectedRange", IsNullable = false)]
-        [XmlElement("protectedRange")]
-        public List<CT_ProtectedRange> protectedRanges
+        [XmlElement]
+        public CT_ProtectedRanges protectedRanges
         {
             get
             {
@@ -490,10 +670,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlArray(Order = 13)]
-        //[XmlArrayItem("customSheetView", IsNullable = false)]
-        [XmlElement("customSheetView")]
-        public List<CT_CustomSheetView> customSheetViews
+        [XmlElement]
+        public CT_CustomSheetViews customSheetViews
         {
             get
             {
@@ -554,7 +732,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         //[XmlArray(Order = 18)]
-        [XmlElement("hyperlinks", IsNullable = false)]
+        [XmlElement]
         public CT_Hyperlinks hyperlinks
         {
             get
@@ -640,10 +818,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlArray(Order = 25)]
-        //[XmlArrayItem("customPr", IsNullable = false)]
-        [XmlElement("customPr")]
-        public List<CT_CustomProperty> customProperties
+        [XmlElement]
+        public CT_CustomProperties customProperties
         {
             get
             {
@@ -655,10 +831,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlArray(Order = 26)]
-        //[XmlArrayItem("cellWatch", IsNullable = false)]
-        [XmlElement("cellWatch")]
-        public List<CT_CellWatch> cellWatches
+        [XmlElement]
+        public CT_CellWatches cellWatches
         {
             get
             {
@@ -681,11 +855,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.ignoredErrorsField = value;
             }
         }
-
-        //[XmlArray(Order = 28)]
-        //[XmlArrayItem("cellSmartTags", IsNullable = false)]
-        [XmlElement("cellSmartTags")]
-        public List<CT_CellSmartTags> smartTags
+        [XmlElement]
+        public CT_CellSmartTags smartTags
         {
             get
             {
@@ -745,10 +916,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlArray(Order = 33)]
-        //[XmlArrayItem("oleObject", IsNullable = false)]
-        [XmlElement("oleObjects")]
-        public List<CT_OleObject> oleObjects
+        [XmlElement]
+        public CT_OleObjects oleObjects
         {
             get
             {
@@ -760,10 +929,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //[XmlArray(Order = 34)]
-        //[XmlArrayItem("control", IsNullable = false)]
-        [XmlElement("control")]
-        public List<CT_Control> controls
+        [XmlElement]
+        public CT_Controls controls
         {
             get
             {

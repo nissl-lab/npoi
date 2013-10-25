@@ -81,15 +81,24 @@ namespace NPOI.XSSF.UserModel
             ST_ConditionalFormattingOperator operator1;
             switch (comparisonOperation)
             {
-                case ComparisonOperator.Between: operator1 = ST_ConditionalFormattingOperator.between; break;
-                case ComparisonOperator.NotBetween: operator1 = ST_ConditionalFormattingOperator.notBetween; break;
-                case ComparisonOperator.LessThan: operator1 = ST_ConditionalFormattingOperator.lessThan; break;
-                case ComparisonOperator.LessThanOrEqual: operator1 = ST_ConditionalFormattingOperator.lessThanOrEqual; break;
-                case ComparisonOperator.GreaterThan: operator1 = ST_ConditionalFormattingOperator.greaterThan; break;
-                case ComparisonOperator.GreaterThanOrEqual: operator1 = ST_ConditionalFormattingOperator.greaterThanOrEqual; break;
-                case ComparisonOperator.Equal: operator1 = ST_ConditionalFormattingOperator.equal; break;
-                case ComparisonOperator.NotEqual: operator1 = ST_ConditionalFormattingOperator.notEqual; break;
-                default: throw new ArgumentException("Unknown comparison operator: " + comparisonOperation);
+                case ComparisonOperator.Between: 
+                    operator1 = ST_ConditionalFormattingOperator.between; break;
+                case ComparisonOperator.NotBetween: 
+                    operator1 = ST_ConditionalFormattingOperator.notBetween; break;
+                case ComparisonOperator.LessThan: 
+                    operator1 = ST_ConditionalFormattingOperator.lessThan; break;
+                case ComparisonOperator.LessThanOrEqual: 
+                    operator1 = ST_ConditionalFormattingOperator.lessThanOrEqual; break;
+                case ComparisonOperator.GreaterThan: 
+                    operator1 = ST_ConditionalFormattingOperator.greaterThan; break;
+                case ComparisonOperator.GreaterThanOrEqual: 
+                    operator1 = ST_ConditionalFormattingOperator.greaterThanOrEqual; break;
+                case ComparisonOperator.Equal: 
+                    operator1 = ST_ConditionalFormattingOperator.equal; break;
+                case ComparisonOperator.NotEqual: 
+                    operator1 = ST_ConditionalFormattingOperator.notEqual; break;
+                default: 
+                    throw new ArgumentException("Unknown comparison operator: " + comparisonOperation);
             }
             cfRule.@operator = (operator1);
 
@@ -149,9 +158,15 @@ namespace NPOI.XSSF.UserModel
 
             CellRangeAddress[] mergeCellRanges = CellRangeUtil.MergeCellRanges(regions);
             CT_ConditionalFormatting cf = _sheet.GetCTWorksheet().AddNewConditionalFormatting();
-            List<String> refs = new List<String>();
-            foreach (CellRangeAddress a in mergeCellRanges) refs.Add(a.FormatAsString());
-            cf.sqref = (refs);
+            string refs = string.Empty;
+            foreach (CellRangeAddress a in mergeCellRanges)
+            {
+                if (refs.Length == 0)
+                    refs = a.FormatAsString();
+                else
+                    refs += " " +a.FormatAsString() ;
+            }
+            cf.sqref = refs;
 
 
             int priority = 1;

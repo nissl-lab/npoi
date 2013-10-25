@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -17,29 +20,89 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private CT_ExtensionList extLstField = null; // optional element
 
         // the following are all optional attributes
-        private uint? rField = null;
+        private uint rField;
 
         private string spansField = null; // a region is contained in this field, e.g. "1:3"
 
-        private uint? sField = null;
+        private uint sField;
 
-        private bool? customFormatField = null;
+        private bool customFormatField;
 
-        private double? htField = null;
+        private double htField=-1;
 
-        private bool? hiddenField = null;
+        private bool hiddenField;
 
-        private bool? customHeightField = null;
+        private bool customHeightField;
 
-        private byte? outlineLevelField = null;
+        private byte outlineLevelField;
 
-        private bool? collapsedField = null;
+        private bool collapsedField;
 
-        private bool? thickTopField = null;
+        private bool thickTopField;
 
-        private bool? thickBotField = null;
+        private bool thickBotField;
 
-        private bool? phField = null;
+        private bool phField;
+
+        public static CT_Row Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Row ctObj = new CT_Row();
+            ctObj.r = XmlHelper.ReadUInt(node.Attributes["r"]);
+            ctObj.spans = XmlHelper.ReadString(node.Attributes["spans"]);
+            ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
+            ctObj.customFormat = XmlHelper.ReadBool(node.Attributes["customFormat"]);
+            ctObj.ht = XmlHelper.ReadDouble(node.Attributes["ht"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);
+            ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);
+            ctObj.thickTop = XmlHelper.ReadBool(node.Attributes["thickTop"]);
+            ctObj.thickBot = XmlHelper.ReadBool(node.Attributes["thickBot"]);
+            ctObj.ph = XmlHelper.ReadBool(node.Attributes["ph"]);
+            ctObj.c = new List<CT_Cell>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "c")
+                    ctObj.c.Add(CT_Cell.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            XmlHelper.WriteAttribute(sw, "spans", this.spans);
+            XmlHelper.WriteAttribute(sw, "s", this.s);
+            XmlHelper.WriteAttribute(sw, "customFormat", this.customFormat);
+            if(this.ht>=0)
+                XmlHelper.WriteAttribute(sw, "ht", this.ht);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight);
+            XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
+            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed);
+            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop);
+            XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot);
+            XmlHelper.WriteAttribute(sw, "ph", this.ph);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.c != null)
+            {
+                foreach (CT_Cell x in this.c)
+                {
+                    x.Write(sw, "c");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+
 
         public void Set(CT_Row row)
         {
@@ -65,50 +128,49 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cField.Add(cell);
             return cell;
         }
-        public void unsetCollapsed()
+        public void UnsetCollapsed()
         {
-            this.collapsedField = null;
+            this.collapsedField = false;
         }
-        public void unSetS()
+        public void UnsetS()
         {
-            this.sField = null;
+            this.sField = 0;
         }
-        public void unSetCustomFormat()
+        public void UnsetCustomFormat()
         {
-            this.customFormatField = null;
+            this.customFormatField = false;
         }
         public bool IsSetHidden()
         {
-            return this.hiddenField != null;
+            return this.hiddenField != false;
         }
-
         public bool IsSetCollapsed()
         {
-            return this.collapsedField != null;
+            return this.collapsedField != false;
         }
         public bool IsSetHt()
         {
-            return this.htField != null;
+            return this.htField >=0;
         }
         public void unSetHt()
         {
-            this.htField = null;
+            this.htField = -1;
         }
         public bool IsSetCustomHeight()
         {
-            return this.customHeightField != null;
+            return this.customHeightField != false;
         }
         public void unSetCustomHeight()
         {
-            this.customHeightField = null;
+            this.customHeightField = false;
         }
         public bool IsSetS()
         {
-            return this.sField != null;
+            return this.sField != 0;
         }
         public void unsetHidden()
         {
-            this.hiddenField = null;
+            this.hiddenField = false;
         }
 
         public int SizeOfCArray()
@@ -135,12 +197,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.cField = value;
             }
         }
-        [XmlIgnore]
-        public bool cSpecified
-        {
-            get { return null != this.cField; }
-        }
-
         [XmlElement("extLst")]
         public CT_ExtensionList extLst
         {
@@ -152,11 +208,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.extLstField = value;
             }
-        }
-        [XmlIgnore]
-        public bool extLstSpecified
-        {
-            get { return null != this.extLstField; }
         }
 
         [XmlAttribute("r")]
@@ -171,11 +222,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.rField = value;
             }
         }
-        [XmlIgnore]
-        public bool rSpecified
-        {
-            get { return null != this.rField; }
-        }
 
         [XmlAttribute]
         public string spans
@@ -188,11 +234,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.spansField = value;
             }
-        }
-        [XmlIgnore]
-        public bool spansSpecified
-        {
-            get { return (null != spansField); }
         }
 
         //[DefaultValue(typeof(uint), "0")]
@@ -208,12 +249,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sField = value;
             }
         }
-        [XmlIgnore]
-        public bool sSpecified
-        {
-            get { return (null != sField); }
-            set { CT_Row.SetSpecifiedWithDefaultValue(sField, value); }
-        }
 
         //[DefaultValue(false)]
         [XmlAttribute]
@@ -228,19 +263,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.customFormatField = value;
             }
         }
-        [XmlIgnore]
-        public bool customFormatSpecified
-        {
-            get { return (null != customFormatField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(customFormatField, value); }
-        }
-
         [XmlAttribute]
         public double ht
         {
             get
             {
-                return (double)this.htField;
+                return this.htField;
             }
             set
             {
@@ -248,11 +276,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnore]
-        public bool htSpecified
-        {
-            get { return null != this.htField; }
-        }
 
         //[DefaultValue(false)]
         [XmlAttribute]
@@ -267,12 +290,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hiddenField = value;
             }
         }
-        [XmlIgnore]
-        public bool hiddenSpecified
-        {
-            get { return (null != hiddenField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(hiddenField, value); }
-        }
 
         //[DefaultValue(false)]
         [XmlAttribute]
@@ -280,18 +297,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == customHeightField) ? false : (bool)this.customHeightField;
+                return this.customHeightField;
             }
             set
             {
                 this.customHeightField = value;
             }
-        }
-        [XmlIgnore]
-        public bool customHeightSpecified
-        {
-            get { return (null != customHeightField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(customHeightField, value); }
         }
 
         [DefaultValue(typeof(byte), "0")]
@@ -300,18 +311,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == outlineLevelField) ? (byte)0 : (byte)this.outlineLevelField;
+                return this.outlineLevelField;
             }
             set
             {
                 this.outlineLevelField = value;
             }
-        }
-        [XmlIgnore]
-        public bool outlineLevelSpecified
-        {
-            get { return (null != outlineLevelField); }
-            set { CT_Row.SetSpecifiedWithDefaultValue(outlineLevelField, value); }
         }
 
         //[DefaultValue(false)]
@@ -320,18 +325,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == collapsedField) ? false : (bool)this.collapsedField;
+                return this.collapsedField;
             }
             set
             {
                 this.collapsedField = value;
             }
-        }
-        [XmlIgnore]
-        public bool collapsedSpecified
-        {
-            get { return (null != collapsedField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(collapsedField, value); }
         }
 
         [DefaultValue(false)]
@@ -340,18 +339,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == thickTopField) ? false : (bool)this.thickTopField;
+                return this.thickTopField;
             }
             set
             {
                 this.thickTopField = value;
             }
-        }
-        [XmlIgnore]
-        public bool thickTopSpecified
-        {
-            get { return (null != thickTopField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(thickTopField, value); }
         }
 
         [DefaultValue(false)]
@@ -360,18 +353,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == thickBotField) ? false : (bool)this.thickBotField;
+                return this.thickBotField;
             }
             set
             {
                 this.thickBotField = value;
             }
-        }
-        [XmlIgnore]
-        public bool thickBotSpecified
-        {
-            get { return (null != thickBotField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(thickBotField, value); }
         }
 
         [DefaultValue(false)]
@@ -380,52 +367,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == phField) ? false : (bool)this.phField;
+                return this.phField;
             }
             set
             {
                 this.phField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool phSpecified
-        {
-            get { return (null != phField); }
-            set { CT_Row.SetSpecifiedWithDefaultFalse(phField, value); }
-        }
-
-        /// <summary>
-        /// Set the Nullable bool to reflect Specified or not.
-        /// Preserves bool value true. 
-        /// </summary>
-        /// <param name="field">field to set to specified or not</param>
-        /// <param name="specified">true or false</param>
-        public static void SetSpecifiedWithDefaultFalse(bool? field, bool specified)
-        {
-            if (specified)
-            {
-                field = field.HasValue ? field.Value : false; // preserve existing bool value, default to false
-            }
-            else
-            {
-                field = null;
-            }
-        }
-        /// <summary>
-        /// Set the Nullable value type to reflect Specified or not.
-        /// Preserves set values. 
-        /// </summary>
-        /// <param name="field">field to set to specified or not</param>
-        /// <param name="specified">true or false</param>
-        public static void SetSpecifiedWithDefaultValue<T>(T? field, bool specified) where T : struct
-        {
-            if (specified)
-            {
-                field = field.HasValue ? field.Value : default(T);
-            }
-            else
-            {
-                field = null;
             }
         }
     }
