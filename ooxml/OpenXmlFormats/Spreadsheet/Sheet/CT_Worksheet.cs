@@ -197,6 +197,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.sheetViews.Write(sw, "sheetViews");
                 if (this.sheetFormatPr != null)
                     this.sheetFormatPr.Write(sw, "sheetFormatPr");
+                if (this.cols != null)
+                {
+                    foreach (CT_Cols x in this.cols)
+                    {
+                        x.Write(sw, "cols");
+                    }
+                }
                 if (this.sheetData != null)
                     this.sheetData.Write(sw, "sheetData");
                 if (this.sheetCalcPr != null)
@@ -219,6 +226,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.mergeCells.Write(sw, "mergeCells");
                 if (this.phoneticPr != null)
                     this.phoneticPr.Write(sw, "phoneticPr");
+                if (this.conditionalFormatting != null)
+                {
+                    foreach (CT_ConditionalFormatting x in this.conditionalFormatting)
+                    {
+                        x.Write(sw, "conditionalFormatting");
+                    }
+                }
                 if (this.dataValidations != null)
                     this.dataValidations.Write(sw, "dataValidations");
                 if (this.hyperlinks != null)
@@ -261,20 +275,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.tableParts.Write(sw, "tableParts");
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                if (this.cols != null)
-                {
-                    foreach (CT_Cols x in this.cols)
-                    {
-                        x.Write(sw, "cols");
-                    }
-                }
-                if (this.conditionalFormatting != null)
-                {
-                    foreach (CT_ConditionalFormatting x in this.conditionalFormatting)
-                    {
-                        x.Write(sw, "conditionalFormatting");
-                    }
-                }
                 sw.Write("</worksheet>");
             }
         }

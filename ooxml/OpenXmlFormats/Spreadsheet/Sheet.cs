@@ -540,7 +540,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "zoomScaleNormal", this.zoomScaleNormal);
             XmlHelper.WriteAttribute(sw, "zoomScaleSheetLayoutView", this.zoomScaleSheetLayoutView);
             XmlHelper.WriteAttribute(sw, "zoomScalePageLayoutView", this.zoomScalePageLayoutView);
-            XmlHelper.WriteAttribute(sw, "workbookViewId", this.workbookViewId);
+            XmlHelper.WriteAttribute(sw, "workbookViewId", this.workbookViewId, true);
             sw.Write(">");
             if (this.pane != null)
                 this.pane.Write(sw, "pane");
@@ -2450,23 +2450,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_SheetFormatPr
     {
         // all attributes are optional, except defaultRowHeight
-        private uint? baseColWidthField;
+        private uint baseColWidthField=0;
 
-        private double? defaultColWidthField;
+        private double defaultColWidthField = 0.0;
 
-        private double defaultRowHeightField; // required
+        private double defaultRowHeightField=0.0; // required
 
-        private bool? customHeightField;
+        private bool customHeightField;
 
-        private bool? zeroHeightField;
+        private bool zeroHeightField;
 
-        private bool? thickTopField;
+        private bool thickTopField;
 
-        private bool? thickBottomField;
+        private bool thickBottomField;
 
-        private byte? outlineLevelRowField;
+        private byte outlineLevelRowField;
 
-        private byte? outlineLevelColField;
+        private byte outlineLevelColField;
 
         [XmlAttribute]
         [DefaultValue(typeof(uint), "8")]
@@ -2474,17 +2474,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.baseColWidthField ? 8 : (uint)this.baseColWidthField;
+                return this.baseColWidthField;
             }
             set
             {
                 this.baseColWidthField = value;
             }
-        }
-        [XmlIgnore]
-        public bool baseColWidthSpecified
-        {
-            get { return null != this.baseColWidthField; }
         }
 
         [XmlAttribute]
@@ -2492,17 +2487,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.defaultColWidthField ? double.NaN : (double)this.defaultColWidthField;
+                return this.defaultColWidthField;
             }
             set
             {
                 this.defaultColWidthField = value;
             }
-        }
-        [XmlIgnore]
-        public bool defaultColWidthSpecified
-        {
-            get { return null != this.defaultColWidthField; }
         }
 
         [XmlAttribute]
@@ -2524,17 +2514,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.customHeightField ? false : (bool)this.customHeightField;
+                return this.customHeightField;
             }
             set
             {
                 this.customHeightField = value;
             }
-        }
-        [XmlIgnore]
-        public bool customHeightSpecified
-        {
-            get { return null != this.customHeightField; }
         }
 
         [XmlAttribute]
@@ -2543,17 +2528,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.zeroHeightField ? false : (bool)this.zeroHeightField;
+                return this.zeroHeightField;
             }
             set
             {
                 this.zeroHeightField = value;
             }
-        }
-        [XmlIgnore]
-        public bool zeroHeightSpecified
-        {
-            get { return null != this.zeroHeightField; }
         }
 
         [XmlAttribute]
@@ -2562,36 +2542,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.thickTopField ? false : (bool)this.thickTopField;
+                return this.thickTopField;
             }
             set
             {
                 this.thickTopField = value;
             }
         }
-        [XmlIgnore]
-        public bool thickTopSpecified
-        {
-            get { return null != this.thickTopField; }
-        }
-
         [XmlAttribute]
         [DefaultValue(false)]
         public bool thickBottom
         {
             get
             {
-                return null == this.thickBottomField ? false : (bool)this.thickBottomField;
+                return this.thickBottomField;
             }
             set
             {
                 this.thickBottomField = value;
             }
-        }
-        [XmlIgnore]
-        public bool thickBottomSpecified
-        {
-            get { return null != this.thickBottomField; }
         }
 
         [XmlAttribute]
@@ -2600,17 +2569,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.outlineLevelRowField ? (byte)0 : (byte)this.outlineLevelRowField;
+                return this.outlineLevelRowField;
             }
             set
             {
                 this.outlineLevelRowField = value;
             }
-        }
-        [XmlIgnore]
-        public bool outlineLevelRowSpecified
-        {
-            get { return null != this.outlineLevelRowField; }
         }
 
         [XmlAttribute]
@@ -2619,17 +2583,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.outlineLevelColField ? (byte)0 : (byte)this.outlineLevelColField;
+                return this.outlineLevelColField;
             }
             set
             {
                 this.outlineLevelColField = value;
             }
-        }
-        [XmlIgnore]
-        public bool outlineLevelColSpecified
-        {
-            get { return null != this.outlineLevelColField; }
         }
 
         public static CT_SheetFormatPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -9310,7 +9269,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_ChartsheetView()
         {
-            this.extLstField = new CT_ExtensionList();
+            //this.extLstField = new CT_ExtensionList();
             this.tabSelectedField = false;
             this.zoomScaleField = ((uint)(100));
             this.zoomToFitField = false;
