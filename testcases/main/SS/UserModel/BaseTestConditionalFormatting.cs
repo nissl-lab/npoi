@@ -542,7 +542,7 @@ namespace TestCases.SS.UserModel
             IPatternFormatting fmt4 = rule3.GetPatternFormatting();
             //        Assert.AreEqual(IndexedColors.LIGHT_CORNFLOWER_BLUE.index, fmt4.FillBackgroundColor);
             //        Assert.AreEqual(IndexedColors.Automatic.index, fmt4.FillForegroundColor);
-            Assert.AreEqual(FillPattern.NoFill, fmt4.FillPattern);
+            Assert.AreEqual((short)FillPattern.NoFill, fmt4.FillPattern);
             // borders are not Set
             Assert.IsNull(rule3.GetBorderFormatting());
 
@@ -652,13 +652,16 @@ namespace TestCases.SS.UserModel
             patternFmt.FillForegroundColor = (/*setter*/IndexedColors.Blue.Index);
             Assert.AreEqual(IndexedColors.Blue.Index, patternFmt.FillForegroundColor);
 
-            Assert.AreEqual(FillPattern.NoFill, patternFmt.FillPattern);
-            patternFmt.FillPattern = (/*setter*/FillPattern.SolidForeground);
-            Assert.AreEqual(FillPattern.SolidForeground, patternFmt.FillPattern);
-            patternFmt.FillPattern = (/*setter*/FillPattern.NoFill);
-            Assert.AreEqual(FillPattern.NoFill, patternFmt.FillPattern);
-            patternFmt.FillPattern = (/*setter*/FillPattern.Bricks);
-            Assert.AreEqual(FillPattern.Bricks, patternFmt.FillPattern);
+            Assert.AreEqual((short)FillPattern.NoFill, patternFmt.FillPattern);
+            patternFmt.FillPattern = (short)FillPattern.SolidForeground;
+            Assert.AreEqual((short)FillPattern.SolidForeground, patternFmt.FillPattern);
+            patternFmt.FillPattern = (short)FillPattern.NoFill;
+            Assert.AreEqual((short)FillPattern.NoFill, patternFmt.FillPattern);
+            if (this._testDataProvider.GetSpreadsheetVersion() == SpreadsheetVersion.EXCEL97)
+            {
+                patternFmt.FillPattern = (short)FillPattern.Bricks;
+                Assert.AreEqual((short)FillPattern.Bricks, patternFmt.FillPattern);
+            }
 
             IConditionalFormattingRule[] cfRules = { rule1 };
 
@@ -677,7 +680,10 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(IndexedColors.Red.Index, r1fp.FillBackgroundColor);
             Assert.AreEqual(IndexedColors.Blue.Index, r1fp.FillForegroundColor);
-            Assert.AreEqual(FillPattern.Bricks, r1fp.FillPattern);
+            if (this._testDataProvider.GetSpreadsheetVersion() == SpreadsheetVersion.EXCEL97)
+            {
+                Assert.AreEqual(FillPattern.Bricks, r1fp.FillPattern);
+            }
         }
         [Test]
         public void TestCreateBorderFormatting()
