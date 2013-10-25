@@ -140,8 +140,9 @@ namespace NPOI.OpenXml4Net.OPC
 		IEnumerator entries = this.zipArchive.Entries;
 		while (entries.MoveNext()) {
 			ZipEntry entry = (ZipEntry)entries.Current;
-			if (entry.Name.Equals(
-					ContentTypeManager.CONTENT_TYPES_PART_NAME)) {
+            if (entry.Name.ToLower().Equals(
+                    ContentTypeManager.CONTENT_TYPES_PART_NAME.ToLower()))
+            {
 				try {
 					this.contentTypeManager = new ZipContentTypeManager(
 							ZipArchive.GetInputStream(entry), this);
@@ -222,8 +223,8 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 // We get an error when we parse [Content_Types].xml
                 // because it's not a valid URI.
-                if (entry.Name.Equals(
-                        ContentTypeManager.CONTENT_TYPES_PART_NAME))
+                if (entry.Name.ToLower().Equals(
+                        ContentTypeManager.CONTENT_TYPES_PART_NAME.ToLower()))
                 {
                     return null;
                 }

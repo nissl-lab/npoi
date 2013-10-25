@@ -568,7 +568,8 @@ namespace NPOI.OpenXml4Net.OPC
             Uri partNameURI;
             try
             {
-              partNameURI = new Uri(partName,UriKind.Relative);
+                partName = partName.Replace("\\","/");  //tolerate backslash - poi test49609
+                partNameURI = new Uri(partName,UriKind.Relative);
             }
             catch (UriFormatException e)
             {
@@ -775,7 +776,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 value += "/";
             }
-            return new Uri(value, UriKind.RelativeOrAbsolute);
+            return new Uri(value, UriKind.RelativeOrAbsolute);  //unicode character is not allowed in Uri class before .NET4.5
         }
 
            /**
