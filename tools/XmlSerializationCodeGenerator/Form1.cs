@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace XmlSerializationCodeGenerator
@@ -25,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType= typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Stylesheet);
             //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
@@ -119,6 +120,17 @@ namespace XmlSerializationCodeGenerator
             {
                 if (p.Name.EndsWith("Specified"))
                     continue;
+
+                if (p.GetCustomAttributes(typeof(XmlElementAttribute), false).Length > 0)
+                {
+                    if (typeof(IList).IsAssignableFrom(p.PropertyType)
+                        && p.PropertyType.IsGenericType)
+                        listProps.Add(p);
+                    else
+                        subProperties.Add(p);
+                    continue;
+                }
+
                 if (p.PropertyType.IsValueType)
                 {
                     if (p.PropertyType.Name == "Int32")
@@ -128,6 +140,10 @@ namespace XmlSerializationCodeGenerator
                     else if (p.PropertyType.Name == "Int64")
                     {
                         sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadLong(node.Attributes[\"{0}\"]);", p.Name));
+                    }
+                    else if (p.PropertyType.Name == "Double")
+                    {
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadDouble(node.Attributes[\"{0}\"]);", p.Name));
                     }
                     else if (p.PropertyType.Name == "UInt32")
                     {
@@ -145,7 +161,8 @@ namespace XmlSerializationCodeGenerator
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadString(node.Attributes[\"{0}\"]);", p.Name));
+                    string attributePrefix = GetXmlAttributePrefix(p);
+                    sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadString(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                 }
                 else if (p.PropertyType.Name == "Byte[]")
                 {
@@ -185,10 +202,22 @@ namespace XmlSerializationCodeGenerator
                     {
                         sb.AppendLine(string.Format("\t\telse if(childNode.LocalName == \"{0}\")", p.Name));
                     }
-                    if (p.PropertyType.GetProperties().Length == 0)
+                    if (p.PropertyType.IsValueType)
+                    {
+                        sb.AppendLine(string.Format("\t\t\tctObj.{0} = {1}.Parse(childNode.InnerText);", p.Name, p.PropertyType.Name));
+                    }
+                    else if (p.PropertyType.Name == "String")
+                    {
+                        sb.AppendLine(string.Format("\t\t\tctObj.{0} = childNode.InnerText;", p.Name));
+                    }
+                    else if (p.PropertyType.GetProperties().Length == 0)
+                    {
                         sb.AppendLine(string.Format("\t\t\tctObj.{0} = new {1}();", p.Name, p.PropertyType.Name));
+                    }
                     else
+                    {
                         sb.AppendLine(string.Format("\t\t\tctObj.{0} = {1}.Parse(childNode, namespaceManager);", p.Name, p.PropertyType.Name));
+                    }
                 }
                 foreach (var p in listProps)
                 {
@@ -220,7 +249,14 @@ namespace XmlSerializationCodeGenerator
                         {
                             sb.AppendLine(string.Format("\t\telse if(childNode.LocalName == \"{0}\")", p.Name));
                         }
-                        sb.AppendLine(string.Format("\t\t\tctObj.{0}.Add({1}.Parse(childNode, namespaceManager));", p.Name, genericType.Name));
+                        if (genericType.Name == "String")
+                        {
+                            sb.AppendLine(string.Format("\t\t\tctObj.{0}.Add(childNode.InnerText);", p.Name, genericType.Name));
+                        }
+                        else
+                        {
+                            sb.AppendLine(string.Format("\t\t\tctObj.{0}.Add({1}.Parse(childNode, namespaceManager));", p.Name, genericType.Name));
+                        }
                     }
                 }
                 sb.AppendLine("\t}");
@@ -240,7 +276,10 @@ namespace XmlSerializationCodeGenerator
             {
                 if (p.Name.EndsWith("Specified"))
                     continue;
-
+                if (p.GetCustomAttributes(typeof(XmlElementAttribute), false).Length > 0)
+                {
+                    continue;
+                }
                 string attributePrefix = GetXmlAttributePrefix(p);
                 if (p.PropertyType.IsValueType)
                 {
@@ -266,7 +305,15 @@ namespace XmlSerializationCodeGenerator
             foreach (var p in subProperties)
             {
                 sb.AppendLine(string.Format("\tif(this.{0}!=null)", p.Name));
-                if (p.PropertyType.GetProperties().Length == 0)
+                if (p.PropertyType.IsValueType)
+                {
+                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{0}>{{0}}</{0}>\",this.{0}));", p.Name));
+                }
+                else if (p.PropertyType.Name == "String")
+                {
+                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{0}>{{0}}</{0}>\",this.{0}));", p.Name));
+                }
+                else if (p.PropertyType.GetProperties().Length == 0)
                 {
                     sb.AppendLine(string.Format("\t\tsw.Write(\"<{1}{0}/>\");", p.Name, GetXmlPrefix(p.PropertyType)));
                 }
@@ -286,11 +333,11 @@ namespace XmlSerializationCodeGenerator
                 sb.AppendLine("\t\t{");
                 if (genericType.IsEnum)
                 {
-                    sb.AppendLine("\t\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
+                    sb.AppendLine("\t\t\tsw.Write(string.Format(\"<{0}/>\",x));");
                 }
                 else if (genericType.Name == "String")
                 {
-                    sb.AppendLine("\t\t\tsw.Write(string.Format(\"<a:{0}/>\",x));");
+                    sb.AppendLine(string.Format("\t\t\tsw.Write(string.Format(\"<{0}>{{0}}</{0}>\",x));", p.Name));
                 }
                 else
                 {
