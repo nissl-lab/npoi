@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Stylesheet);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Workbook);
             //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
@@ -67,9 +67,11 @@ namespace XmlSerializationCodeGenerator
                     if (typeof(IList).IsAssignableFrom(p.PropertyType)
                         && p.PropertyType.IsGenericType)
                     {
+                        Type genericType = p.PropertyType.GetGenericArguments()[0];
                         if (!types.Contains(p.PropertyType.GetGenericArguments()[0]))
-                            types.Add(p.PropertyType.GetGenericArguments()[0]);
+                            types.Add(genericType);
 
+                        subNode.Text= subNode.Text.Replace("`1", "<" + genericType.Name+">");
                         RecursiveRun(p.PropertyType.GetGenericArguments()[0], subNode, level + 1);
                         //textBox1.Text += c.Name + " - " + p.PropertyType.GetGenericArguments()[0].Name + Environment.NewLine;
                     }
