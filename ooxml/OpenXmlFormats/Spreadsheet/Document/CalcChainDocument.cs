@@ -31,7 +31,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public static CalcChainDocument Parse(XmlDocument xmlDoc, XmlNamespaceManager NameSpaceManager)
         {
-            var calcChainDoc = new CalcChainDocument();
+            CalcChainDocument calcChainDoc = new CalcChainDocument();
             foreach (XmlElement node in xmlDoc.SelectNodes("//d:c", NameSpaceManager))
             {
                 CT_CalcCell cc = new CT_CalcCell();

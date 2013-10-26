@@ -26,7 +26,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             foreach (XmlElement node in xmlDoc.SelectNodes("//d:commentList/d:comment", NameSpaceManager))
             {
-                var comment = commentsDoc.comments.commentList.AddNewComment();
+                CT_Comment comment = commentsDoc.comments.commentList.AddNewComment();
                 comment.authorId = uint.Parse(node.GetAttribute("authorId"));
                 comment.@ref = node.GetAttribute("ref");
                 comment.text = CT_Rst.Parse(node.ChildNodes[0], NameSpaceManager);

@@ -45,7 +45,7 @@ namespace NPOI.XSSF.Model
         internal CalculationChain(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-            var xml = ConvertStreamToXml(part.GetInputStream());
+            XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
             ReadFrom(xml);
         }
 

@@ -159,7 +159,7 @@ using System.Xml;
             //  Create a NamespaceManager to handle the default namespace, 
             //  and create a prefix for the default namespace:
             NameTable nt = new NameTable();
-            var ns = new XmlNamespaceManager(nt);
+            XmlNamespaceManager ns = new XmlNamespaceManager(nt);
             ns.AddNamespace(string.Empty, PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("d", PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("a", PackageNamespaces.SCHEMA_DRAWING);
@@ -195,7 +195,13 @@ using System.Xml;
         public static XmlDocument ConvertStreamToXml(Stream xmlStream)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(xmlStream);
+            using (StreamReader sr = new StreamReader(xmlStream))
+            {
+                string xml = sr.ReadToEnd();
+                xmlDoc.LoadXml(xml);
+            }
+            
+            //xmlDoc.Load(xmlStream);
             return xmlDoc;
         }
 

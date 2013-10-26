@@ -218,7 +218,7 @@ namespace NPOI.OpenXml4Net.Util
         }
         public static void LoadXmlSafe(XmlDocument xmlDoc, string xml, Encoding encoding)
         {
-            var stream = new MemoryStream(encoding.GetBytes(xml));
+            MemoryStream stream = new MemoryStream(encoding.GetBytes(xml));
             LoadXmlSafe(xmlDoc, stream);
         }
 

@@ -52,7 +52,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         }
                         else
                         {
-                            var tNodes = node.SelectNodes(".//d:t", namespaceManager);
+                            XmlNodeList tNodes = node.SelectNodes(".//d:t", namespaceManager);
                             if (tNodes != null)
                             {
                                 rst.r = new System.Collections.Generic.List<CT_RElt>();
@@ -84,7 +84,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             if (Regex.IsMatch(t, "(_x[0-9A-F]{4,4}_)"))
             {
-                var match = Regex.Match(t, "(_x[0-9A-F]{4,4}_)");
+                Match match = Regex.Match(t, "(_x[0-9A-F]{4,4}_)");
                 int indexAdd = 0;
                 while (match.Success)
                 {
@@ -108,7 +108,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal static string ExcelDecodeString(string t)
         {
-            var match = Regex.Match(t, "(_x005F|_x[0-9A-F]{4,4}_)");
+            Match match = Regex.Match(t, "(_x005F|_x[0-9A-F]{4,4}_)");
             if (!match.Success) return t;
 
             bool useNextValue = false;

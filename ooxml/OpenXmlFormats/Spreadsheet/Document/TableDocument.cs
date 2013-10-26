@@ -39,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 obj.autoFilter = new CT_AutoFilter();
                 obj.autoFilter.@ref = XmlHelper.ReadString(autoFilter.Attributes["name"]);
             }
-            var tableCols =  xmldoc.SelectNodes("//d:tableColumns/d:tableColumn", namespaceMgr);
+            XmlNodeList tableCols =  xmldoc.SelectNodes("//d:tableColumns/d:tableColumn", namespaceMgr);
             if (tableCols != null)
             {
                 obj.tableColumns = new CT_TableColumns();
