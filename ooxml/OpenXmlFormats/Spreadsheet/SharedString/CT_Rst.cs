@@ -102,7 +102,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         private string xmltext;
-        [XmlText]
+        [XmlIgnore]
         public string XmlText
         {
             get {

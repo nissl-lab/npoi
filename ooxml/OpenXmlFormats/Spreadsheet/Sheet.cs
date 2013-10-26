@@ -16,6 +16,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Diagnostics;
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
+    using NPOI.OpenXml4Net.OPC;
 
     public enum ST_SmartTagShow
     {
@@ -47,9 +48,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_FunctionGroup
     {
+        public static CT_FunctionGroup Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FunctionGroup ctObj = new CT_FunctionGroup();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string nameField;
-
+        [XmlAttribute]
         public string name
         {
             get
@@ -74,9 +93,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_FunctionGroups()
         {
-            this.functionGroupField = new List<CT_FunctionGroup>();
-            this.builtInGroupCountField = ((uint)(16));
+            //this.functionGroupField = new List<CT_FunctionGroup>();
+            this.builtInGroupCountField = (uint)(16);
         }
+        public static CT_FunctionGroups Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FunctionGroups ctObj = new CT_FunctionGroups();
+            ctObj.builtInGroupCount = XmlHelper.ReadUInt(node.Attributes["builtInGroupCount"]);
+            ctObj.functionGroup = new List<CT_FunctionGroup>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "functionGroup")
+                    ctObj.functionGroup.Add(CT_FunctionGroup.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "builtInGroupCount", this.builtInGroupCount);
+            sw.Write(">");
+            if (this.functionGroup != null)
+            {
+                foreach (CT_FunctionGroup x in this.functionGroup)
+                {
+                    x.Write(sw, "functionGroup");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public List<CT_FunctionGroup> functionGroup
         {
@@ -1290,7 +1341,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.previousRow = XmlHelper.ReadUInt(node.Attributes["previousRow"]);
             ctObj.previousCol = XmlHelper.ReadUInt(node.Attributes["previousCol"]);
             ctObj.click = XmlHelper.ReadUInt(node.Attributes["click"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "pivotArea")
@@ -2705,9 +2756,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "ca", this.ca);
             XmlHelper.WriteAttribute(sw, "si", this.si);
             XmlHelper.WriteAttribute(sw, "bx", this.bx);
-            
             sw.Write(">");
-            sw.Write(this.valueField);
+            sw.Write("<![CDATA[{0}]]>", this.valueField);
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
@@ -4173,7 +4223,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
             ctObj.sheet = XmlHelper.ReadString(node.Attributes["sheet"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -5545,7 +5595,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.horizontalDpi = XmlHelper.ReadUInt(node.Attributes["horizontalDpi"]);
             ctObj.verticalDpi = XmlHelper.ReadUInt(node.Attributes["verticalDpi"]);
             ctObj.copies = XmlHelper.ReadUInt(node.Attributes["copies"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -7703,7 +7753,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_CustomProperty ctObj = new CT_CustomProperty();
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -8419,7 +8469,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 ctObj.oleUpdate = (ST_OleUpdate)Enum.Parse(typeof(ST_OleUpdate), node.Attributes["oleUpdate"].Value);
             ctObj.autoLoad = XmlHelper.ReadBool(node.Attributes["autoLoad"]);
             ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -8516,7 +8566,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Control ctObj = new CT_Control();
             ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
             return ctObj;
         }
@@ -8928,7 +8978,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_TablePart ctObj = new CT_TablePart();
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -9716,7 +9766,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_Drawing ctObj = new CT_Drawing();
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -9741,7 +9791,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_LegacyDrawing ctObj = new CT_LegacyDrawing();
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 

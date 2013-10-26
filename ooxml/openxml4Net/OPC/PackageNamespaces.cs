@@ -48,6 +48,8 @@ namespace NPOI.OpenXml4Net.OPC
         public const string SCHEMA_VT = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes";
 
         public const string SCHEMA_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+
+        public const string SCHEMA_RELATIONSHIPS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
     }
 
 }

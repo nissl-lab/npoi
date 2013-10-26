@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
-using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;
 using System.IO;
+using NPOI.OpenXml4Net.OPC;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -95,7 +94,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Hyperlink ctObj = new CT_Hyperlink();
             ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             ctObj.location = XmlHelper.ReadString(node.Attributes["location"]);
             ctObj.tooltip = XmlHelper.ReadString(node.Attributes["tooltip"]);
             ctObj.display = XmlHelper.ReadString(node.Attributes["display"]);

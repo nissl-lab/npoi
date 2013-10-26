@@ -164,7 +164,7 @@ using System.Xml;
             ns.AddNamespace("d", PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("a", PackageNamespaces.SCHEMA_DRAWING);
             ns.AddNamespace("xdr", PackageNamespaces.SCHEMA_SHEETDRAWINGS);
-            ns.AddNamespace("r", PackageNamespaces.RELATIONSHIPS);
+            ns.AddNamespace("r", PackageNamespaces.SCHEMA_RELATIONSHIPS);
             ns.AddNamespace("c", PackageNamespaces.SCHEMA_CHART);
             ns.AddNamespace("vt", PackageNamespaces.SCHEMA_VT);
             // extended properties (app.xml)

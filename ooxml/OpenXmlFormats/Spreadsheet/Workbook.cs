@@ -12,396 +12,12 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXml4Net.OPC;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
 
-    [Serializable]
-    //[System.Diagnostics.DebuggerStepThrough]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        ElementName = "workbook",
-        IsNullable = false)]
-    public class CT_Workbook
-    {
-        // all elements optional except sheets, only fileRecoveryPr may be listed more than once
-        private CT_FileVersion fileVersionField;
 
-        private CT_FileSharing fileSharingField;
-
-        private CT_WorkbookPr workbookPrField = null;
-
-        private CT_WorkbookProtection workbookProtectionField;
-
-        private CT_BookViews bookViewsField = null;
-
-        private CT_Sheets sheetsField = new CT_Sheets();
-
-        private CT_FunctionGroups functionGroupsField;
-
-        private CT_ExternalReferences externalReferencesField;
-
-        private CT_DefinedNames definedNamesField = null;
-
-        private CT_CalcPr calcPrField = null;
-
-        private CT_OleSize oleSizeField;
-
-        private CT_CustomWorkbookViews customWorkbookViewsField;
-
-        private CT_PivotCaches pivotCachesField;
-
-        private CT_SmartTagPr smartTagPrField;
-
-        private CT_SmartTagTypes smartTagTypesField;
-
-        private CT_WebPublishing webPublishingField;
-
-        private List<CT_FileRecoveryPr> fileRecoveryPrField = null;
-
-        private CT_WebPublishObjects webPublishObjectsField;
-
-        private CT_ExtensionList extLstField;
-
-        public CT_Workbook()
-        {
-            //this.extLstField = new CT_ExtensionList();
-            //this.webPublishObjectsField = new CT_WebPublishObjects();
-            //this.fileRecoveryPrField = new List<CT_FileRecoveryPr>();
-            //this.webPublishingField = new CT_WebPublishing();
-            //this.smartTagTypesField = new List<CT_SmartTagType>();
-            //this.smartTagPrField = new CT_SmartTagPr();
-            //this.pivotCachesField = new List<CT_PivotCache>();
-            //this.customWorkbookViewsField = new List<CT_CustomWorkbookView>();
-            //this.oleSizeField = new CT_OleSize();
-            //this.calcPrField = new CT_CalcPr();
-            //this.definedNamesField = new List<CT_DefinedName>();
-            //this.externalReferencesField = new List<CT_ExternalReference>();
-            //this.functionGroupsField = new CT_FunctionGroups();
-            //this.sheetsField = new List<CT_Sheet>();
-            //this.bookViewsField = new List<CT_BookView>();
-            //this.workbookProtectionField = new CT_WorkbookProtection();
-            //this.workbookPrField = new CT_WorkbookPr();
-            //this.fileSharingField = new CT_FileSharing();
-            //this.fileVersionField = new CT_FileVersion();
-        }
-        public void Save(Stream stream)
-        {
-            WorkbookDocument.serializer.Serialize(stream, this, WorkbookDocument.namespaces);
-        }
-
-        public CT_WorkbookPr AddNewWorkbookPr()
-        {
-            this.workbookPrField = new CT_WorkbookPr();
-            return this.workbookPrField;
-        }
-
-        public CT_CalcPr AddNewCalcPr()
-        {
-            this.calcPrField = new CT_CalcPr();
-            return this.calcPrField;
-        }
-        public CT_Sheets AddNewSheets()
-        {
-            this.sheetsField = new CT_Sheets();
-            return this.sheetsField;
-        }
-        public CT_BookViews AddNewBookViews()
-        {
-            this.bookViewsField = new CT_BookViews();
-            return this.bookViewsField;
-        }
-        public bool IsSetWorkbookPr()
-        {
-            return this.workbookPrField != null;
-        }
-        public bool IsSetCalcPr()
-        {
-            return this.calcPrField != null;
-        }
-        public bool IsSetSheets()
-        {
-            return this.sheetsField != null;
-        }
-        public bool IsSetBookViews()
-        {
-            return this.bookViewsField != null;
-        }
-        public bool IsSetDefinedNames()
-        {
-            return this.definedNamesField != null;
-        }
-        public CT_DefinedNames AddNewDefinedNames()
-        {
-            this.definedNamesField = new CT_DefinedNames();
-            return this.definedNamesField;
-        }
-        //AddNewWorkbookView()
-        public void SetDefinedNames(CT_DefinedNames definedNames)
-        {
-            this.definedNamesField = definedNames;
-        }
-        public void unsetDefinedNames()
-        {
-            this.definedNamesField = null;
-        }
-        [XmlElement]
-        public CT_FileVersion fileVersion
-        {
-            get
-            {
-                return this.fileVersionField;
-            }
-            set
-            {
-                this.fileVersionField = value;
-            }
-        }
-        [XmlElement]
-        public CT_FileSharing fileSharing
-        {
-            get
-            {
-                return this.fileSharingField;
-            }
-            set
-            {
-                this.fileSharingField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_WorkbookPr workbookPr
-        {
-            get
-            {
-                return this.workbookPrField;
-            }
-            set
-            {
-                this.workbookPrField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_WorkbookProtection workbookProtection
-        {
-            get
-            {
-                return this.workbookProtectionField;
-            }
-            set
-            {
-                this.workbookProtectionField = value;
-            }
-        }
-
-        [XmlElement("bookViews", IsNullable = false)]
-        public CT_BookViews bookViews
-        {
-            get
-            {
-                return this.bookViewsField;
-            }
-            set
-            {
-                this.bookViewsField = value;
-            }
-        }
-
-
-        [XmlElement("sheets", IsNullable = false)]
-        public CT_Sheets sheets
-        {
-            get
-            {
-                return this.sheetsField;
-            }
-            set
-            {
-                this.sheetsField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_FunctionGroups functionGroups
-        {
-            get
-            {
-                return this.functionGroupsField;
-            }
-            set
-            {
-                this.functionGroupsField = value;
-            }
-        }
-
-        //[XmlArray(Order = 7)]
-        //[XmlArrayItem("externalReference", IsNullable = false)]
-        [XmlElement]
-        public CT_ExternalReferences externalReferences
-        {
-            get
-            {
-                return this.externalReferencesField;
-            }
-            set
-            {
-                this.externalReferencesField = value;
-            }
-        }
-
-        //[XmlArray(Order = 8)]
-        //[XmlArrayItem("definedName", IsNullable = false)]
-        [XmlElement]
-        public CT_DefinedNames definedNames
-        {
-            get
-            {
-                return this.definedNamesField;
-            }
-            set
-            {
-                this.definedNamesField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_CalcPr calcPr
-        {
-            get
-            {
-                return this.calcPrField;
-            }
-            set
-            {
-                this.calcPrField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_OleSize oleSize
-        {
-            get
-            {
-                return this.oleSizeField;
-            }
-            set
-            {
-                this.oleSizeField = value;
-            }
-        }
-
-        //[XmlArray(Order = 11)]
-        //[XmlArrayItem("customWorkbookView", IsNullable = false)]
-        [XmlElement]
-        public CT_CustomWorkbookViews customWorkbookViews
-        {
-            get
-            {
-                return this.customWorkbookViewsField;
-            }
-            set
-            {
-                this.customWorkbookViewsField = value;
-            }
-        }
-
-        //[XmlArray(Order = 12)]
-        //[XmlArrayItem("pivotCache", IsNullable = false)]
-        [XmlElement]
-        public CT_PivotCaches pivotCaches
-        {
-            get
-            {
-                return this.pivotCachesField;
-            }
-            set
-            {
-                this.pivotCachesField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_SmartTagPr smartTagPr
-        {
-            get
-            {
-                return this.smartTagPrField;
-            }
-            set
-            {
-                this.smartTagPrField = value;
-            }
-        }
-
-        //[XmlArray(Order = 14)]
-        //[XmlArrayItem("smartTagType", IsNullable = false)]
-        [XmlElement]
-        public CT_SmartTagTypes smartTagTypes
-        {
-            get
-            {
-                return this.smartTagTypesField;
-            }
-            set
-            {
-                this.smartTagTypesField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_WebPublishing webPublishing
-        {
-            get
-            {
-                return this.webPublishingField;
-            }
-            set
-            {
-                this.webPublishingField = value;
-            }
-        }
-
-        [XmlElement]
-        public List<CT_FileRecoveryPr> fileRecoveryPr
-        {
-            get
-            {
-                return this.fileRecoveryPrField;
-            }
-            set
-            {
-                this.fileRecoveryPrField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_WebPublishObjects webPublishObjects
-        {
-            get
-            {
-                return this.webPublishObjectsField;
-            }
-            set
-            {
-                this.webPublishObjectsField = value;
-            }
-        }
-
-        [XmlElement]
-        public CT_ExtensionList extLst
-        {
-            get
-            {
-                return this.extLstField;
-            }
-            set
-            {
-                this.extLstField = value;
-            }
-        }
-    }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -417,6 +33,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private string rupBuildField;
 
         private string codeNameField;
+        public static CT_FileVersion Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FileVersion ctObj = new CT_FileVersion();
+            ctObj.appName = XmlHelper.ReadString(node.Attributes["appName"]);
+            ctObj.lastEdited = XmlHelper.ReadString(node.Attributes["lastEdited"]);
+            ctObj.lowestEdited = XmlHelper.ReadString(node.Attributes["lowestEdited"]);
+            ctObj.rupBuild = XmlHelper.ReadString(node.Attributes["rupBuild"]);
+            ctObj.codeName = XmlHelper.ReadString(node.Attributes["codeName"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "appName", this.appName);
+            XmlHelper.WriteAttribute(sw, "lastEdited", this.lastEdited);
+            XmlHelper.WriteAttribute(sw, "lowestEdited", this.lowestEdited);
+            XmlHelper.WriteAttribute(sw, "rupBuild", this.rupBuild);
+            XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public string appName
@@ -480,155 +122,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_WebPublishObject
-    {
 
-        private uint idField;
-
-        private string divIdField;
-
-        private string sourceObjectField;
-
-        private string destinationFileField;
-
-        private string titleField;
-
-        private bool autoRepublishField;
-
-        public CT_WebPublishObject()
-        {
-            this.autoRepublishField = false;
-        }
-
-        public uint id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
-
-        public string divId
-        {
-            get
-            {
-                return this.divIdField;
-            }
-            set
-            {
-                this.divIdField = value;
-            }
-        }
-
-        public string sourceObject
-        {
-            get
-            {
-                return this.sourceObjectField;
-            }
-            set
-            {
-                this.sourceObjectField = value;
-            }
-        }
-
-        public string destinationFile
-        {
-            get
-            {
-                return this.destinationFileField;
-            }
-            set
-            {
-                this.destinationFileField = value;
-            }
-        }
-
-        public string title
-        {
-            get
-            {
-                return this.titleField;
-            }
-            set
-            {
-                this.titleField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool autoRepublish
-        {
-            get
-            {
-                return this.autoRepublishField;
-            }
-            set
-            {
-                this.autoRepublishField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_WebPublishObjects
-    {
-
-        private List<CT_WebPublishObject> webPublishObjectField;
-
-        private uint countField;
-
-        private bool countFieldSpecified;
-
-        public CT_WebPublishObjects()
-        {
-            this.webPublishObjectField = new List<CT_WebPublishObject>();
-        }
-
-        public List<CT_WebPublishObject> webPublishObject
-        {
-            get
-            {
-                return this.webPublishObjectField;
-            }
-            set
-            {
-                this.webPublishObjectField = value;
-            }
-        }
-
-        public uint count
-        {
-            get
-            {
-                return this.countField;
-            }
-            set
-            {
-                this.countField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool countSpecified
-        {
-            get
-            {
-                return this.countFieldSpecified;
-            }
-            set
-            {
-                this.countFieldSpecified = value;
-            }
-        }
-    }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -642,6 +136,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool dataExtractLoadField;
 
         private bool repairLoadField;
+        public static CT_FileRecoveryPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FileRecoveryPr ctObj = new CT_FileRecoveryPr();
+            ctObj.autoRecover = XmlHelper.ReadBool(node.Attributes["autoRecover"]);
+            ctObj.crashSave = XmlHelper.ReadBool(node.Attributes["crashSave"]);
+            ctObj.dataExtractLoad = XmlHelper.ReadBool(node.Attributes["dataExtractLoad"]);
+            ctObj.repairLoad = XmlHelper.ReadBool(node.Attributes["repairLoad"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "autoRecover", this.autoRecover);
+            XmlHelper.WriteAttribute(sw, "crashSave", this.crashSave);
+            XmlHelper.WriteAttribute(sw, "dataExtractLoad", this.dataExtractLoad);
+            XmlHelper.WriteAttribute(sw, "repairLoad", this.repairLoad);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_FileRecoveryPr()
         {
@@ -704,755 +222,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_WebPublishing
-    {
-
-        private bool cssField;
-
-        private bool thicketField;
-
-        private bool longFileNamesField;
-
-        private bool vmlField;
-
-        private bool allowPngField;
-
-        private ST_TargetScreenSize targetScreenSizeField;
-
-        private uint dpiField;
-
-        private uint codePageField;
-
-        private bool codePageFieldSpecified;
-
-        public CT_WebPublishing()
-        {
-            this.cssField = true;
-            this.thicketField = true;
-            this.longFileNamesField = true;
-            this.vmlField = false;
-            this.allowPngField = false;
-            this.targetScreenSizeField = ST_TargetScreenSize.Item800x600;
-            this.dpiField = ((uint)(96));
-        }
-
-        [DefaultValue(true)]
-        public bool css
-        {
-            get
-            {
-                return this.cssField;
-            }
-            set
-            {
-                this.cssField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool thicket
-        {
-            get
-            {
-                return this.thicketField;
-            }
-            set
-            {
-                this.thicketField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool longFileNames
-        {
-            get
-            {
-                return this.longFileNamesField;
-            }
-            set
-            {
-                this.longFileNamesField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool vml
-        {
-            get
-            {
-                return this.vmlField;
-            }
-            set
-            {
-                this.vmlField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool allowPng
-        {
-            get
-            {
-                return this.allowPngField;
-            }
-            set
-            {
-                this.allowPngField = value;
-            }
-        }
-
-        [DefaultValue(ST_TargetScreenSize.Item800x600)]
-        public ST_TargetScreenSize targetScreenSize
-        {
-            get
-            {
-                return this.targetScreenSizeField;
-            }
-            set
-            {
-                this.targetScreenSizeField = value;
-            }
-        }
-
-        [DefaultValue(typeof(uint), "96")]
-        public uint dpi
-        {
-            get
-            {
-                return this.dpiField;
-            }
-            set
-            {
-                this.dpiField = value;
-            }
-        }
-
-        public uint codePage
-        {
-            get
-            {
-                return this.codePageField;
-            }
-            set
-            {
-                this.codePageField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool codePageSpecified
-        {
-            get
-            {
-                return this.codePageFieldSpecified;
-            }
-            set
-            {
-                this.codePageFieldSpecified = value;
-            }
-        }
-    }
-
-    public enum ST_TargetScreenSize
-    {
-
-    
-        [XmlEnum("544x376")]
-        Item544x376,
-
-    
-        [XmlEnum("640x480")]
-        Item640x480,
-
-    
-        [XmlEnum("720x512")]
-        Item720x512,
-
-    
-        [XmlEnum("800x600")]
-        Item800x600,
-
-    
-        [XmlEnum("1024x768")]
-        Item1024x768,
-
-    
-        [XmlEnum("1152x882")]
-        Item1152x882,
-
-    
-        [XmlEnum("1152x900")]
-        Item1152x900,
-
-    
-        [XmlEnum("1280x1024")]
-        Item1280x1024,
-
-    
-        [XmlEnum("1600x1200")]
-        Item1600x1200,
-
-    
-        [XmlEnum("1800x1440")]
-        Item1800x1440,
-
-    
-        [XmlEnum("1920x1200")]
-        Item1920x1200,
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_SmartTagType
-    {
-
-        private string namespaceUriField;
-
-        private string nameField;
-
-        private string urlField;
-
-        public string namespaceUri
-        {
-            get
-            {
-                return this.namespaceUriField;
-            }
-            set
-            {
-                this.namespaceUriField = value;
-            }
-        }
-
-        public string name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
-
-        public string url
-        {
-            get
-            {
-                return this.urlField;
-            }
-            set
-            {
-                this.urlField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_SmartTagPr
-    {
-
-        private bool embedField;
-
-        private ST_SmartTagShow showField;
-
-        public CT_SmartTagPr()
-        {
-            this.embedField = false;
-            this.showField = ST_SmartTagShow.all;
-        }
-
-        [DefaultValue(false)]
-        public bool embed
-        {
-            get
-            {
-                return this.embedField;
-            }
-            set
-            {
-                this.embedField = value;
-            }
-        }
-
-        [DefaultValue(ST_SmartTagShow.all)]
-        public ST_SmartTagShow show
-        {
-            get
-            {
-                return this.showField;
-            }
-            set
-            {
-                this.showField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_PivotCache
-    {
-
-        private uint cacheIdField;
-
-        private string idField;
-
-        public uint cacheId
-        {
-            get
-            {
-                return this.cacheIdField;
-            }
-            set
-            {
-                this.cacheIdField = value;
-            }
-        }
-
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        public string id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_CustomWorkbookView
-    {
-
-        private CT_ExtensionList extLstField;
-
-        private string nameField;
-
-        private string guidField;
-
-        private bool autoUpdateField;
-
-        private uint mergeIntervalField;
-
-        private bool mergeIntervalFieldSpecified;
-
-        private bool changesSavedWinField;
-
-        private bool onlySyncField;
-
-        private bool personalViewField;
-
-        private bool includePrintSettingsField;
-
-        private bool includeHiddenRowColField;
-
-        private bool maximizedField;
-
-        private bool minimizedField;
-
-        private bool showHorizontalScrollField;
-
-        private bool showVerticalScrollField;
-
-        private bool showSheetTabsField;
-
-        private int xWindowField;
-
-        private int yWindowField;
-
-        private uint windowWidthField;
-
-        private uint windowHeightField;
-
-        private uint tabRatioField;
-
-        private uint activeSheetIdField;
-
-        private bool showFormulaBarField;
-
-        private bool showStatusbarField;
-
-        private ST_Comments showCommentsField;
-
-        private ST_Objects showObjectsField;
-
-        public CT_CustomWorkbookView()
-        {
-            this.extLstField = new CT_ExtensionList();
-            this.autoUpdateField = false;
-            this.changesSavedWinField = false;
-            this.onlySyncField = false;
-            this.personalViewField = false;
-            this.includePrintSettingsField = true;
-            this.includeHiddenRowColField = true;
-            this.maximizedField = false;
-            this.minimizedField = false;
-            this.showHorizontalScrollField = true;
-            this.showVerticalScrollField = true;
-            this.showSheetTabsField = true;
-            this.xWindowField = 0;
-            this.yWindowField = 0;
-            this.tabRatioField = ((uint)(600));
-            this.showFormulaBarField = true;
-            this.showStatusbarField = true;
-            this.showCommentsField = ST_Comments.commIndicator;
-            this.showObjectsField = ST_Objects.all;
-        }
-
-        public CT_ExtensionList extLst
-        {
-            get
-            {
-                return this.extLstField;
-            }
-            set
-            {
-                this.extLstField = value;
-            }
-        }
-
-        public string name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
-
-        public string guid
-        {
-            get
-            {
-                return this.guidField;
-            }
-            set
-            {
-                this.guidField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool autoUpdate
-        {
-            get
-            {
-                return this.autoUpdateField;
-            }
-            set
-            {
-                this.autoUpdateField = value;
-            }
-        }
-
-        public uint mergeInterval
-        {
-            get
-            {
-                return this.mergeIntervalField;
-            }
-            set
-            {
-                this.mergeIntervalField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool mergeIntervalSpecified
-        {
-            get
-            {
-                return this.mergeIntervalFieldSpecified;
-            }
-            set
-            {
-                this.mergeIntervalFieldSpecified = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool changesSavedWin
-        {
-            get
-            {
-                return this.changesSavedWinField;
-            }
-            set
-            {
-                this.changesSavedWinField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool onlySync
-        {
-            get
-            {
-                return this.onlySyncField;
-            }
-            set
-            {
-                this.onlySyncField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool personalView
-        {
-            get
-            {
-                return this.personalViewField;
-            }
-            set
-            {
-                this.personalViewField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool includePrintSettings
-        {
-            get
-            {
-                return this.includePrintSettingsField;
-            }
-            set
-            {
-                this.includePrintSettingsField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool includeHiddenRowCol
-        {
-            get
-            {
-                return this.includeHiddenRowColField;
-            }
-            set
-            {
-                this.includeHiddenRowColField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool maximized
-        {
-            get
-            {
-                return this.maximizedField;
-            }
-            set
-            {
-                this.maximizedField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool minimized
-        {
-            get
-            {
-                return this.minimizedField;
-            }
-            set
-            {
-                this.minimizedField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool showHorizontalScroll
-        {
-            get
-            {
-                return this.showHorizontalScrollField;
-            }
-            set
-            {
-                this.showHorizontalScrollField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool showVerticalScroll
-        {
-            get
-            {
-                return this.showVerticalScrollField;
-            }
-            set
-            {
-                this.showVerticalScrollField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool showSheetTabs
-        {
-            get
-            {
-                return this.showSheetTabsField;
-            }
-            set
-            {
-                this.showSheetTabsField = value;
-            }
-        }
-
-        [DefaultValue(0)]
-        public int xWindow
-        {
-            get
-            {
-                return this.xWindowField;
-            }
-            set
-            {
-                this.xWindowField = value;
-            }
-        }
-
-        [DefaultValue(0)]
-        public int yWindow
-        {
-            get
-            {
-                return this.yWindowField;
-            }
-            set
-            {
-                this.yWindowField = value;
-            }
-        }
-
-        public uint windowWidth
-        {
-            get
-            {
-                return this.windowWidthField;
-            }
-            set
-            {
-                this.windowWidthField = value;
-            }
-        }
-
-        public uint windowHeight
-        {
-            get
-            {
-                return this.windowHeightField;
-            }
-            set
-            {
-                this.windowHeightField = value;
-            }
-        }
-
-        [DefaultValue(typeof(uint), "600")]
-        public uint tabRatio
-        {
-            get
-            {
-                return this.tabRatioField;
-            }
-            set
-            {
-                this.tabRatioField = value;
-            }
-        }
-
-        public uint activeSheetId
-        {
-            get
-            {
-                return this.activeSheetIdField;
-            }
-            set
-            {
-                this.activeSheetIdField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool showFormulaBar
-        {
-            get
-            {
-                return this.showFormulaBarField;
-            }
-            set
-            {
-                this.showFormulaBarField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        public bool showStatusbar
-        {
-            get
-            {
-                return this.showStatusbarField;
-            }
-            set
-            {
-                this.showStatusbarField = value;
-            }
-        }
-
-        [DefaultValue(ST_Comments.commIndicator)]
-        public ST_Comments showComments
-        {
-            get
-            {
-                return this.showCommentsField;
-            }
-            set
-            {
-                this.showCommentsField = value;
-            }
-        }
-
-        [DefaultValue(ST_Objects.all)]
-        public ST_Objects showObjects
-        {
-            get
-            {
-                return this.showObjectsField;
-            }
-            set
-            {
-                this.showObjectsField = value;
-            }
-        }
-    }
-
-    public enum ST_Comments
-    {
-
-    
-        commNone,
-
-    
-        commIndicator,
-
-    
-        commIndAndComment,
-    }
 
     public enum ST_Objects
     {
@@ -1471,9 +240,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleSize
     {
+        public static CT_OleSize Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_OleSize ctObj = new CT_OleSize();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string refField;
-
+        [XmlAttribute]
         public string @ref
         {
             get
@@ -1523,6 +310,50 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool forceFullCalcField;
 
         private bool forceFullCalcFieldSpecified;
+        public static CT_CalcPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CalcPr ctObj = new CT_CalcPr();
+            ctObj.calcId = XmlHelper.ReadUInt(node.Attributes["calcId"]);
+            if (node.Attributes["calcMode"] != null)
+                ctObj.calcMode = (ST_CalcMode)Enum.Parse(typeof(ST_CalcMode), node.Attributes["calcMode"].Value);
+            ctObj.fullCalcOnLoad = XmlHelper.ReadBool(node.Attributes["fullCalcOnLoad"]);
+            if (node.Attributes["refMode"] != null)
+                ctObj.refMode = (ST_RefMode)Enum.Parse(typeof(ST_RefMode), node.Attributes["refMode"].Value);
+            ctObj.iterate = XmlHelper.ReadBool(node.Attributes["iterate"]);
+            ctObj.iterateCount = XmlHelper.ReadUInt(node.Attributes["iterateCount"]);
+            ctObj.iterateDelta = XmlHelper.ReadDouble(node.Attributes["iterateDelta"]);
+            ctObj.fullPrecision = XmlHelper.ReadBool(node.Attributes["fullPrecision"]);
+            ctObj.calcCompleted = XmlHelper.ReadBool(node.Attributes["calcCompleted"]);
+            ctObj.calcOnSave = XmlHelper.ReadBool(node.Attributes["calcOnSave"]);
+            ctObj.concurrentCalc = XmlHelper.ReadBool(node.Attributes["concurrentCalc"]);
+            ctObj.concurrentManualCount = XmlHelper.ReadUInt(node.Attributes["concurrentManualCount"]);
+            ctObj.forceFullCalc = XmlHelper.ReadBool(node.Attributes["forceFullCalc"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "calcId", this.calcId);
+            XmlHelper.WriteAttribute(sw, "calcMode", this.calcMode.ToString());
+            XmlHelper.WriteAttribute(sw, "fullCalcOnLoad", this.fullCalcOnLoad);
+            XmlHelper.WriteAttribute(sw, "refMode", this.refMode.ToString());
+            XmlHelper.WriteAttribute(sw, "iterate", this.iterate);
+            XmlHelper.WriteAttribute(sw, "iterateCount", this.iterateCount);
+            XmlHelper.WriteAttribute(sw, "iterateDelta", this.iterateDelta);
+            XmlHelper.WriteAttribute(sw, "fullPrecision", this.fullPrecision);
+            XmlHelper.WriteAttribute(sw, "calcCompleted", this.calcCompleted);
+            XmlHelper.WriteAttribute(sw, "calcOnSave", this.calcOnSave);
+            XmlHelper.WriteAttribute(sw, "concurrentCalc", this.concurrentCalc);
+            XmlHelper.WriteAttribute(sw, "concurrentManualCount", this.concurrentManualCount);
+            XmlHelper.WriteAttribute(sw, "forceFullCalc", this.forceFullCalc);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_CalcPr()
         {
@@ -1755,621 +586,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         R1C1,
     }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_DefinedName
-    {
 
-        private string nameField;
 
-        private string commentField;
 
-        private string customMenuField;
 
-        private string descriptionField;
-
-        private string helpField;
-
-        private string statusBarField;
-
-        private uint localSheetIdField;
-
-        private bool localSheetIdFieldSpecified;
-
-        private bool hiddenField;
-
-        private bool functionField;
-
-        private bool vbProcedureField;
-
-        private bool xlmField;
-
-        private uint functionGroupIdField;
-
-        private bool functionGroupIdFieldSpecified;
-
-        private string shortcutKeyField;
-
-        private bool publishToServerField;
-
-        private bool workbookParameterField;
-
-        private string valueField;
-
-        public CT_DefinedName()
-        {
-            this.hiddenField = false;
-            this.functionField = false;
-            this.vbProcedureField = false;
-            this.xlmField = false;
-            this.publishToServerField = false;
-            this.workbookParameterField = false;
-        }
-
-        [XmlAttribute]
-        public string name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
-
-        public string comment
-        {
-            get
-            {
-                return this.commentField;
-            }
-            set
-            {
-                this.commentField = value;
-            }
-        }
-
-        public string customMenu
-        {
-            get
-            {
-                return this.customMenuField;
-            }
-            set
-            {
-                this.customMenuField = value;
-            }
-        }
-
-        public string description
-        {
-            get
-            {
-                return this.descriptionField;
-            }
-            set
-            {
-                this.descriptionField = value;
-            }
-        }
-
-        public string help
-        {
-            get
-            {
-                return this.helpField;
-            }
-            set
-            {
-                this.helpField = value;
-            }
-        }
-
-        public string statusBar
-        {
-            get
-            {
-                return this.statusBarField;
-            }
-            set
-            {
-                this.statusBarField = value;
-            }
-        }
-        public bool IsSetLocalSheetId()
-        {
-            return localSheetIdFieldSpecified;
-        }
-        public void UnsetLocalSheetId()
-        {
-            localSheetIdFieldSpecified = false;
-        }
-        [XmlAttribute]
-        public uint localSheetId
-        {
-            get
-            {
-                return localSheetIdField;
-            }
-            set
-            {
-                this.localSheetIdField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool localSheetIdSpecified
-        {
-            get
-            {
-                return this.localSheetIdFieldSpecified;
-            }
-            set
-            {
-                this.localSheetIdFieldSpecified = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool hidden
-        {
-            get
-            {
-                return this.hiddenField;
-            }
-            set
-            {
-                this.hiddenField = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool function
-        {
-            get
-            {
-                return this.functionField;
-            }
-            set
-            {
-                this.functionField = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool vbProcedure
-        {
-            get
-            {
-                return this.vbProcedureField;
-            }
-            set
-            {
-                this.vbProcedureField = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool xlm
-        {
-            get
-            {
-                return this.xlmField;
-            }
-            set
-            {
-                this.xlmField = value;
-            }
-        }
-        [XmlAttribute]
-        public uint functionGroupId
-        {
-            get
-            {
-                return this.functionGroupIdField;
-            }
-            set
-            {
-                this.functionGroupIdField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool functionGroupIdSpecified
-        {
-            get
-            {
-                return this.functionGroupIdFieldSpecified;
-            }
-            set
-            {
-                this.functionGroupIdFieldSpecified = value;
-            }
-        }
-        [XmlAttribute]
-        public string shortcutKey
-        {
-            get
-            {
-                return this.shortcutKeyField;
-            }
-            set
-            {
-                this.shortcutKeyField = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool publishToServer
-        {
-            get
-            {
-                return this.publishToServerField;
-            }
-            set
-            {
-                this.publishToServerField = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool workbookParameter
-        {
-            get
-            {
-                return this.workbookParameterField;
-            }
-            set
-            {
-                this.workbookParameterField = value;
-            }
-        }
-
-        [XmlText]
-        public string Value
-        {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_ExternalReference
-    {
-
-        private string idField;
-
-        // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        public string id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_BookView
-    {
-
-        private CT_ExtensionList extLstField = null;
-
-        private ST_Visibility visibilityField;
-
-        private bool minimizedField;
-
-        private bool showHorizontalScrollField;
-
-        private bool showVerticalScrollField;
-
-        private bool showSheetTabsField;
-
-        private int xWindowField;
-
-        private bool xWindowFieldSpecified;
-
-        private int yWindowField;
-
-        private bool yWindowFieldSpecified;
-
-        private uint windowWidthField;
-
-        private bool windowWidthFieldSpecified;
-
-        private uint windowHeightField;
-
-        private bool windowHeightFieldSpecified;
-
-        private uint tabRatioField;
-
-        private uint firstSheetField;
-
-        private uint activeTabField;
-
-        private bool autoFilterDateGroupingField;
-
-        public CT_BookView()
-        {
-//            this.extLstField = new CT_ExtensionList();
-            this.visibilityField = ST_Visibility.visible;
-            this.minimizedField = false;
-            this.showHorizontalScrollField = true;
-            this.showVerticalScrollField = true;
-            this.showSheetTabsField = true;
-            this.tabRatioField = ((uint)(600));
-            this.firstSheetField = ((uint)(0));
-            this.activeTabField = ((uint)(0));
-            this.autoFilterDateGroupingField = true;
-        }
-
-        [XmlElement]
-        public CT_ExtensionList extLst
-        {
-            get
-            {
-                return this.extLstField;
-            }
-            set
-            {
-                this.extLstField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool extLstSpecified
-        {
-            get { return null != this.extLstField; }
-        }
-
-        [DefaultValue(ST_Visibility.visible)]
-        [XmlAttribute]
-        public ST_Visibility visibility
-        {
-            get
-            {
-                return this.visibilityField;
-            }
-            set
-            {
-                this.visibilityField = value;
-            }
-        }
-
-        [DefaultValue(false)]
-        [XmlAttribute]
-        public bool minimized
-        {
-            get
-            {
-                return this.minimizedField;
-            }
-            set
-            {
-                this.minimizedField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        [XmlAttribute]
-        public bool showHorizontalScroll
-        {
-            get
-            {
-                return this.showHorizontalScrollField;
-            }
-            set
-            {
-                this.showHorizontalScrollField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        [XmlAttribute]
-        public bool showVerticalScroll
-        {
-            get
-            {
-                return this.showVerticalScrollField;
-            }
-            set
-            {
-                this.showVerticalScrollField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        [XmlAttribute]
-        public bool showSheetTabs
-        {
-            get
-            {
-                return this.showSheetTabsField;
-            }
-            set
-            {
-                this.showSheetTabsField = value;
-            }
-        }
-
-        [XmlAttribute]
-        public int xWindow
-        {
-            get
-            {
-                return this.xWindowField;
-            }
-            set
-            {
-                this.xWindowField = value;
-                this.xWindowFieldSpecified = true;
-            }
-        }
-
-        [XmlIgnore]
-        public bool xWindowSpecified
-        {
-            get
-            {
-                return this.xWindowFieldSpecified;
-            }
-            set
-            {
-                this.xWindowFieldSpecified = value;
-            }
-        }
-
-        [XmlAttribute]
-        public int yWindow
-        {
-            get
-            {
-                return this.yWindowField;
-            }
-            set
-            {
-                this.yWindowField = value;
-                this.yWindowFieldSpecified = true;
-            }
-        }
-
-        [XmlIgnore]
-        public bool yWindowSpecified
-        {
-            get
-            {
-                return this.yWindowFieldSpecified;
-            }
-            set
-            {
-                this.yWindowFieldSpecified = value;
-            }
-        }
-
-        [XmlAttribute]
-        public uint windowWidth
-        {
-            get
-            {
-                return this.windowWidthField;
-            }
-            set
-            {
-                this.windowWidthField = value;
-                this.windowWidthFieldSpecified = true;
-            }
-        }
-
-        [XmlIgnore]
-        public bool windowWidthSpecified
-        {
-            get
-            {
-                return this.windowWidthFieldSpecified;
-            }
-            set
-            {
-                this.windowWidthFieldSpecified = value;
-            }
-        }
-
-        [XmlAttribute]
-        public uint windowHeight
-        {
-            get
-            {
-                return this.windowHeightField;
-            }
-            set
-            {
-                this.windowHeightField = value;
-                this.windowHeightFieldSpecified = true;
-            }
-        }
-
-        [XmlIgnore]
-        public bool windowHeightSpecified
-        {
-            get
-            {
-                return this.windowHeightFieldSpecified;
-            }
-            set
-            {
-                this.windowHeightFieldSpecified = value;
-            }
-        }
-
-        [DefaultValue(typeof(uint), "600")]
-        [XmlAttribute]
-        public uint tabRatio
-        {
-            get
-            {
-                return this.tabRatioField;
-            }
-            set
-            {
-                this.tabRatioField = value;
-            }
-        }
-
-        [DefaultValue(typeof(uint), "0")]
-        [XmlAttribute]
-        public uint firstSheet
-        {
-            get
-            {
-                return this.firstSheetField;
-            }
-            set
-            {
-                this.firstSheetField = value;
-            }
-        }
-
-        [DefaultValue(typeof(uint), "0")]
-        [XmlAttribute]
-        public uint activeTab
-        {
-            get
-            {
-                return this.activeTabField;
-            }
-            set
-            {
-                this.activeTabField = value;
-            }
-        }
-
-        [DefaultValue(true)]
-        [XmlAttribute]
-        public bool autoFilterDateGrouping
-        {
-            get
-            {
-                return this.autoFilterDateGroupingField;
-            }
-            set
-            {
-                this.autoFilterDateGroupingField = value;
-            }
-        }
-    }
 
     public enum ST_Visibility
     {
@@ -2398,6 +618,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool lockWindowsField;
 
         private bool lockRevisionField;
+        public static CT_WorkbookProtection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WorkbookProtection ctObj = new CT_WorkbookProtection();
+            ctObj.workbookPassword = XmlHelper.ReadBytes(node.Attributes["workbookPassword"]);
+            ctObj.revisionsPassword = XmlHelper.ReadBytes(node.Attributes["revisionsPassword"]);
+            ctObj.lockStructure = XmlHelper.ReadBool(node.Attributes["lockStructure"]);
+            ctObj.lockWindows = XmlHelper.ReadBool(node.Attributes["lockWindows"]);
+            ctObj.lockRevision = XmlHelper.ReadBool(node.Attributes["lockRevision"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "workbookPassword", this.workbookPassword);
+            XmlHelper.WriteAttribute(sw, "revisionsPassword", this.revisionsPassword);
+            XmlHelper.WriteAttribute(sw, "lockStructure", this.lockStructure);
+            XmlHelper.WriteAttribute(sw, "lockWindows", this.lockWindows);
+            XmlHelper.WriteAttribute(sw, "lockRevision", this.lockRevision);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_WorkbookProtection()
         {
@@ -2405,7 +651,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.lockWindowsField = false;
             this.lockRevisionField = false;
         }
-
+        [XmlAttribute]
         public byte[] workbookPassword
         {
             get
@@ -2417,7 +663,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.workbookPasswordField = value;
             }
         }
-
+        [XmlAttribute]
         public byte[] revisionsPassword
         {
             get
@@ -2518,9 +764,65 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.date1904FieldSpecifiedField;
         }
+        public static CT_WorkbookPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WorkbookPr ctObj = new CT_WorkbookPr();
+            ctObj.date1904 = XmlHelper.ReadBool(node.Attributes["date1904"]);
+            ctObj.date1904Specified = node.Attributes["date1904"]!=null;
+            if (node.Attributes["showObjects"] != null)
+                ctObj.showObjects = (ST_Objects)Enum.Parse(typeof(ST_Objects), node.Attributes["showObjects"].Value);
+            ctObj.showBorderUnselectedTables = XmlHelper.ReadBool(node.Attributes["showBorderUnselectedTables"]);
+            ctObj.filterPrivacy = XmlHelper.ReadBool(node.Attributes["filterPrivacy"]);
+            ctObj.promptedSolutions = XmlHelper.ReadBool(node.Attributes["promptedSolutions"]);
+            ctObj.showInkAnnotation = XmlHelper.ReadBool(node.Attributes["showInkAnnotation"]);
+            ctObj.backupFile = XmlHelper.ReadBool(node.Attributes["backupFile"]);
+            ctObj.saveExternalLinkValues = XmlHelper.ReadBool(node.Attributes["saveExternalLinkValues"]);
+            if (node.Attributes["updateLinks"] != null)
+                ctObj.updateLinks = (ST_UpdateLinks)Enum.Parse(typeof(ST_UpdateLinks), node.Attributes["updateLinks"].Value);
+            ctObj.codeName = XmlHelper.ReadString(node.Attributes["codeName"]);
+            ctObj.hidePivotFieldList = XmlHelper.ReadBool(node.Attributes["hidePivotFieldList"]);
+            ctObj.showPivotChartFilter = XmlHelper.ReadBool(node.Attributes["showPivotChartFilter"]);
+            ctObj.allowRefreshQuery = XmlHelper.ReadBool(node.Attributes["allowRefreshQuery"]);
+            ctObj.publishItems = XmlHelper.ReadBool(node.Attributes["publishItems"]);
+            ctObj.checkCompatibility = XmlHelper.ReadBool(node.Attributes["checkCompatibility"]);
+            ctObj.autoCompressPictures = XmlHelper.ReadBool(node.Attributes["autoCompressPictures"]);
+            ctObj.refreshAllConnections = XmlHelper.ReadBool(node.Attributes["refreshAllConnections"]);
+            ctObj.defaultThemeVersion = XmlHelper.ReadUInt(node.Attributes["defaultThemeVersion"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "date1904", this.date1904);
+            XmlHelper.WriteAttribute(sw, "showObjects", this.showObjects.ToString());
+            XmlHelper.WriteAttribute(sw, "showBorderUnselectedTables", this.showBorderUnselectedTables);
+            XmlHelper.WriteAttribute(sw, "filterPrivacy", this.filterPrivacy);
+            XmlHelper.WriteAttribute(sw, "promptedSolutions", this.promptedSolutions);
+            XmlHelper.WriteAttribute(sw, "showInkAnnotation", this.showInkAnnotation);
+            XmlHelper.WriteAttribute(sw, "backupFile", this.backupFile);
+            XmlHelper.WriteAttribute(sw, "saveExternalLinkValues", this.saveExternalLinkValues);
+            XmlHelper.WriteAttribute(sw, "updateLinks", this.updateLinks.ToString());
+            XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
+            XmlHelper.WriteAttribute(sw, "hidePivotFieldList", this.hidePivotFieldList);
+            XmlHelper.WriteAttribute(sw, "showPivotChartFilter", this.showPivotChartFilter);
+            XmlHelper.WriteAttribute(sw, "allowRefreshQuery", this.allowRefreshQuery);
+            XmlHelper.WriteAttribute(sw, "publishItems", this.publishItems);
+            XmlHelper.WriteAttribute(sw, "checkCompatibility", this.checkCompatibility);
+            XmlHelper.WriteAttribute(sw, "autoCompressPictures", this.autoCompressPictures);
+            XmlHelper.WriteAttribute(sw, "refreshAllConnections", this.refreshAllConnections);
+            XmlHelper.WriteAttribute(sw, "defaultThemeVersion", this.defaultThemeVersion);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
         public CT_WorkbookPr()
         {
-            //this.date1904Field = false;
+            this.date1904Field = false;
             this.showObjectsField = ST_Objects.all;
             this.showBorderUnselectedTablesField = true;
             this.filterPrivacyField = false;
@@ -2824,7 +1126,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.readOnlyRecommendedField = false;
         }
+        public static CT_FileSharing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FileSharing ctObj = new CT_FileSharing();
+            ctObj.readOnlyRecommended = XmlHelper.ReadBool(node.Attributes["readOnlyRecommended"]);
+            ctObj.userName = XmlHelper.ReadString(node.Attributes["userName"]);
+            ctObj.reservationPassword = XmlHelper.ReadBytes(node.Attributes["reservationPassword"]);
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "readOnlyRecommended", this.readOnlyRecommended);
+            XmlHelper.WriteAttribute(sw, "userName", this.userName);
+            XmlHelper.WriteAttribute(sw, "reservationPassword", this.reservationPassword);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool readOnlyRecommended
         {
@@ -2837,7 +1161,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.readOnlyRecommendedField = value;
             }
         }
-
+        [XmlAttribute]
         public string userName
         {
             get
@@ -2849,7 +1173,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.userNameField = value;
             }
         }
-
+        [XmlAttribute]
         public byte[] reservationPassword
         {
             get
@@ -2862,201 +1186,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
-    [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
-    [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_BookViews
-    {
 
-        private List<CT_BookView> workbookViewField;
 
-        public CT_BookViews()
-        {
-            this.workbookViewField = new List<CT_BookView>();
-        }
-        public CT_BookView AddNewWorkbookView()
-        {
-            CT_BookView bv = new CT_BookView();
-            this.workbookViewField.Add(bv);
-            return bv;
-        }
-        public CT_BookView GetWorkbookViewArray(int index)
-        {
-            return this.workbookViewField[index];
-        }
 
-        [XmlElement("workbookView")]
-        public List<CT_BookView> workbookView
-        {
-            get
-            {
-                return this.workbookViewField;
-            }
-            set
-            {
-                this.workbookViewField = value;
-            }
-        }
-    }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_CustomWorkbookViews
-    {
 
-        private List<CT_CustomWorkbookView> customWorkbookViewField;
 
-        public CT_CustomWorkbookViews()
-        {
-            this.customWorkbookViewField = new List<CT_CustomWorkbookView>();
-        }
-
-        public List<CT_CustomWorkbookView> customWorkbookView
-        {
-            get
-            {
-                return this.customWorkbookViewField;
-            }
-            set
-            {
-                this.customWorkbookViewField = value;
-            }
-        }
-    }
-    [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
-    [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    [XmlRoot("sheets", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
-    public class CT_Sheets
-    {
-        private List<CT_Sheet> sheetField; // required field
-
-        public CT_Sheets()
-        {
-            this.sheetField = new List<CT_Sheet>();
-        }
-        public CT_Sheet AddNewSheet()
-        {
-            CT_Sheet newsheet = new CT_Sheet();
-            this.sheetField.Add(newsheet);
-            return newsheet;
-        }
-        public void RemoveSheet(int index)
-        {
-            sheetField.RemoveAt(index);
-        }
-        public CT_Sheet InsertNewSheet(int index)
-        {
-            CT_Sheet newsheet = new CT_Sheet();
-            this.sheetField.Insert(index, newsheet);
-            return newsheet;
-        }
-        public CT_Sheet GetSheetArray(int index)
-        {
-            return this.sheetField[index];
-        }
-        [XmlElement("sheet")]
-        public List<CT_Sheet> sheet
-        {
-            get
-            {
-                return this.sheetField;
-            }
-            set
-            {
-                this.sheetField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_SmartTagTypes
-    {
-
-        private List<CT_SmartTagType> smartTagTypeField;
-
-        public CT_SmartTagTypes()
-        {
-            this.smartTagTypeField = new List<CT_SmartTagType>();
-        }
-
-        public List<CT_SmartTagType> smartTagType
-        {
-            get
-            {
-                return this.smartTagTypeField;
-            }
-            set
-            {
-                this.smartTagTypeField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_DefinedNames
-    {
-
-        private List<CT_DefinedName> definedNameField;
-
-        public CT_DefinedNames()
-        {
-            this.definedNameField = new List<CT_DefinedName>();
-        }
-
-        public CT_DefinedName AddNewDefinedName()
-        {
-            CT_DefinedName dn = new CT_DefinedName();
-            this.definedNameField.Add(dn);
-            return dn;
-        }
-
-        public void SetDefinedNameArray(List<CT_DefinedName> array)
-        {
-            this.definedNameField = array;
-        }
-        [XmlElement]
-        public List<CT_DefinedName> definedName
-        {
-            get
-            {
-                return this.definedNameField;
-            }
-            set
-            {
-                this.definedNameField = value;
-            }
-        }
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_ExternalReferences
-    {
-
-        private List<CT_ExternalReference> externalReferenceField;
-
-        public CT_ExternalReferences()
-        {
-            //this.externalReferenceField = new List<CT_ExternalReference>();
-        }
-        [XmlElement]
-        public List<CT_ExternalReference> externalReference
-        {
-            get
-            {
-                return this.externalReferenceField;
-            }
-            set
-            {
-                this.externalReferenceField = value;
-            }
-        }
-    }
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -3084,7 +1219,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_SheetBackgroundPicture ctObj = new CT_SheetBackgroundPicture();
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
             return ctObj;
         }
 
@@ -3100,28 +1235,5 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     }
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
-    public class CT_PivotCaches
-    {
 
-        private List<CT_PivotCache> pivotCacheField;
-
-        public CT_PivotCaches()
-        {
-            this.pivotCacheField = new List<CT_PivotCache>();
-        }
-
-        public List<CT_PivotCache> pivotCache
-        {
-            get
-            {
-                return this.pivotCacheField;
-            }
-            set
-            {
-                this.pivotCacheField = value;
-            }
-        }
-    }
 }

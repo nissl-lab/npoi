@@ -247,14 +247,13 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-
-        //  GetXYZArray() array accessors are deprecated
+        WorkbookDocument doc = null;
         internal override void OnDocumentRead()
         {
             try
             {
-                WorkbookDocument doc = WorkbookDocument.Parse(
-                    GetPackagePart().GetInputStream());
+                XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+                doc = WorkbookDocument.Parse(xmldoc, NameSpaceManager);
                 this.workbook = doc.Workbook;
 
                 Dictionary<String, XSSFSheet> shIdMap = new Dictionary<String, XSSFSheet>();
@@ -315,8 +314,9 @@ namespace NPOI.XSSF.UserModel
          */
         private void OnWorkbookCreate()
         {
-            workbook = new CT_Workbook();
 
+            doc = new WorkbookDocument();
+            workbook = doc.Workbook;
             // don't EVER use the 1904 date system
             CT_WorkbookPr workbookPr = workbook.AddNewWorkbookPr();
             workbookPr.date1904 = (false);
@@ -1449,17 +1449,8 @@ namespace NPOI.XSSF.UserModel
             SaveNamedRanges();
             SaveCalculationChain();
 
-            //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
-            //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CT_Workbook.type.GetName().GetNamespaceURI(), "workbook"));
-            //Dictionary<String, String> map = new Dictionary<String, String>();
-            //map[ST_RelationshipId.NamespaceURI] = "r";
-            //xmlOptions.SetSaveSuggestedPrefixes(map);
-
             PackagePart part = GetPackagePart();
-            using (Stream out1 = part.GetOutputStream())
-            {
-                workbook.Save(out1);
-            }
+            doc.Save(part.GetOutputStream());
         }
 
         /**

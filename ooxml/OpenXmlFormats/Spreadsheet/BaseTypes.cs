@@ -17,6 +17,14 @@ using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public enum ST_GradientType
+    {
+        NONE,
+        linear,
+        path,
+    }
     public class ST_UnsignedshortHex
     {
         string stringValueField = null;

@@ -113,8 +113,8 @@
     <Compile Include="Spreadsheet\SharedString\CT_RPrElt.cs" />
     <Compile Include="Spreadsheet\SharedString\CT_Rst.cs" />
     <Compile Include="Spreadsheet\SharedString\CT_Sst.cs" />
-    <Compile Include="Spreadsheet\Sheet\CT_CellAlignment.cs" />
-    <Compile Include="Spreadsheet\Sheet\CT_CellProtection.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellAlignment.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellProtection.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
@@ -140,6 +140,14 @@
     <Compile Include="Spreadsheet\Sheet\CT_MergeCells.cs" />
     <Compile Include="Spreadsheet\Styles\CT_PatternFill.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Xf.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_Workbook.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_Sheets.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_BookViews.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_ExternalReferences.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_DefinedNames.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_PivotCache.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_SmartTags.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_WebPublishObjects.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\Markup.cs" />
     <Compile Include="Wordprocessing\CustomXml.cs" />
