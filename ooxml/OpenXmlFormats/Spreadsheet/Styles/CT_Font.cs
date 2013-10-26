@@ -14,9 +14,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         ElementName = "font")]
     public class CT_Font
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Font));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+        //internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Font));
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
+        //    new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         // all elements are optional
         private List<CT_FontName> nameField = null; // name of the font
@@ -37,42 +37,174 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Font()
         {
-            this.nameField = new List<CT_FontName>();
-            this.szField = new List<CT_FontSize>();
-            this.colorField = new List<CT_Color>();
-            this.familyField = new List<CT_IntProperty>();
-            this.charsetField = new List<CT_IntProperty>();
-            this.uField = new List<CT_UnderlineProperty>();
-            this.bField = new List<CT_BooleanProperty>();
-            this.iField = new List<CT_BooleanProperty>();
-            this.vertAlignField = new List<CT_VerticalAlignFontProperty>();
-            this.schemeField = new List<CT_FontScheme>();
-            this.strikeField = new List<CT_BooleanProperty>();
+            //this.nameField = new List<CT_FontName>();
+            //this.szField = new List<CT_FontSize>();
+            //this.colorField = new List<CT_Color>();
+            //this.familyField = new List<CT_IntProperty>();
+            //this.charsetField = new List<CT_IntProperty>();
+            //this.uField = new List<CT_UnderlineProperty>();
+            //this.bField = new List<CT_BooleanProperty>();
+            //this.iField = new List<CT_BooleanProperty>();
+            //this.vertAlignField = new List<CT_VerticalAlignFontProperty>();
+            //this.schemeField = new List<CT_FontScheme>();
+            //this.strikeField = new List<CT_BooleanProperty>();
         }
 
-        public static CT_Font Parse(string xml)
+        public static CT_Font Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            CT_Font result;
-            using (StringReader stream = new StringReader(xml))
+            if (node == null)
+                return null;
+            CT_Font ctObj = new CT_Font();
+            ctObj.name = new List<CT_FontName>();
+            ctObj.charset = new List<CT_IntProperty>();
+            ctObj.family = new List<CT_IntProperty>();
+            ctObj.b = new List<CT_BooleanProperty>();
+            ctObj.i = new List<CT_BooleanProperty>();
+            ctObj.strike = new List<CT_BooleanProperty>();
+            ctObj.color = new List<CT_Color>();
+            ctObj.sz = new List<CT_FontSize>();
+            ctObj.u = new List<CT_UnderlineProperty>();
+            ctObj.vertAlign = new List<CT_VerticalAlignFontProperty>();
+            ctObj.scheme = new List<CT_FontScheme>();
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                result = (CT_Font)serializer.Deserialize(stream);
+                if (childNode.LocalName == "outline")
+                    ctObj.outline = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "shadow")
+                    ctObj.shadow = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "condense")
+                    ctObj.condense = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extend")
+                    ctObj.extend = CT_BooleanProperty.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "name")
+                    ctObj.name.Add(CT_FontName.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "charset")
+                    ctObj.charset.Add(CT_IntProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "family")
+                    ctObj.family.Add(CT_IntProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "b")
+                    ctObj.b.Add(CT_BooleanProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "i")
+                    ctObj.i.Add(CT_BooleanProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "strike")
+                    ctObj.strike.Add(CT_BooleanProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "color")
+                    ctObj.color.Add(CT_Color.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "sz")
+                    ctObj.sz.Add(CT_FontSize.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "u")
+                    ctObj.u.Add(CT_UnderlineProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "vertAlign")
+                    ctObj.vertAlign.Add(CT_VerticalAlignFontProperty.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "scheme")
+                    ctObj.scheme.Add(CT_FontScheme.Parse(childNode, namespaceManager));
             }
-            return result;
+            return ctObj;
         }
 
-        public static void Save(Stream stream, CT_Font font)
-        {
-            serializer.Serialize(stream, font, namespaces);
-        }
 
-        public static string GetString(CT_Font font)
+
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            using (StringWriter writer = new StringWriter())
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.outline != null)
+                this.outline.Write(sw, "outline");
+            if (this.shadow != null)
+                this.shadow.Write(sw, "shadow");
+            if (this.condense != null)
+                this.condense.Write(sw, "condense");
+            if (this.extend != null)
+                this.extend.Write(sw, "extend");
+            if (this.name != null)
             {
-                serializer.Serialize(writer, font, namespaces);
-                return writer.ToString();
+                foreach (CT_FontName x in this.name)
+                {
+                    x.Write(sw, "name");
+                }
             }
+            if (this.charset != null)
+            {
+                foreach (CT_IntProperty x in this.charset)
+                {
+                    x.Write(sw, "charset");
+                }
+            }
+            if (this.family != null)
+            {
+                foreach (CT_IntProperty x in this.family)
+                {
+                    x.Write(sw, "family");
+                }
+            }
+            if (this.b != null)
+            {
+                foreach (CT_BooleanProperty x in this.b)
+                {
+                    x.Write(sw, "b");
+                }
+            }
+            if (this.i != null)
+            {
+                foreach (CT_BooleanProperty x in this.i)
+                {
+                    x.Write(sw, "i");
+                }
+            }
+            if (this.strike != null)
+            {
+                foreach (CT_BooleanProperty x in this.strike)
+                {
+                    x.Write(sw, "strike");
+                }
+            }
+            if (this.color != null)
+            {
+                foreach (CT_Color x in this.color)
+                {
+                    x.Write(sw, "color");
+                }
+            }
+            if (this.sz != null)
+            {
+                foreach (CT_FontSize x in this.sz)
+                {
+                    x.Write(sw, "sz");
+                }
+            }
+            if (this.u != null)
+            {
+                foreach (CT_UnderlineProperty x in this.u)
+                {
+                    x.Write(sw, "u");
+                }
+            }
+            if (this.vertAlign != null)
+            {
+                foreach (CT_VerticalAlignFontProperty x in this.vertAlign)
+                {
+                    x.Write(sw, "vertAlign");
+                }
+            }
+            if (this.scheme != null)
+            {
+                foreach (CT_FontScheme x in this.scheme)
+                {
+                    x.Write(sw, "scheme");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
         }
+
+
+        //public static string GetString(CT_Font font)
+        //{
+        //    using (StringWriter writer = new StringWriter())
+        //    {
+        //        serializer.Serialize(writer, font, namespaces);
+        //        return writer.ToString();
+        //    }
+        //}
         #region name
         [XmlElement]
         public List<CT_FontName> name
@@ -523,6 +655,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public int sizeOfSchemeArray()
         {
+            if (this.schemeField == null)
+                return 0;
             return this.schemeField.Count;
         }
         public CT_FontScheme AddNewScheme()
@@ -545,41 +679,69 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public override string ToString()
         {
-            return CT_Font.GetString(this);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                StreamWriter sw = new StreamWriter(ms);
+                this.Write(sw, "font");
+                sw.Flush();
+                ms.Position = 0;
+                StreamReader sr = new StreamReader(ms);
+                string result = sr.ReadToEnd();
+                return result;
+            }
         }
 
         public CT_Font Clone()
         {
             CT_Font ctFont = new CT_Font();
-            if (this.name.Count != 0)
+
+            if (this.name!=null)
             {
-                CT_FontName newName = ctFont.AddNewName();
-                newName.val = this.GetNameArray(0).val;
+                foreach (CT_FontName ctFontName in this.name)
+                {
+                    CT_FontName newName = ctFont.AddNewName();
+                    newName.val = ctFontName.val;
+                }
             }
-            if (this.charset.Count != 0)
+            if (this.charset!=null)
             {
-                CT_IntProperty newCharset = ctFont.AddNewCharset();
-                newCharset.val = this.GetCharsetArray(0).val;
+                foreach (CT_IntProperty ctCharset in this.charset)
+                {
+                    CT_IntProperty newCharset = ctFont.AddNewCharset();
+                    newCharset.val = ctCharset.val;
+                }
             }
-            if (this.family.Count != 0)
+            if (this.family!=null)
             {
-                CT_IntProperty newFamily = ctFont.AddNewFamily();
-                newFamily.val = this.GetFamilyArray(0).val;
+                foreach (CT_IntProperty ctFamily in this.family)
+                {
+                    CT_IntProperty newFamily = ctFont.AddNewFamily();
+                    newFamily.val = ctFamily.val;
+                }
             }
-            if (this.b.Count != 0)
+            if (this.b != null)
             {
-                CT_BooleanProperty newB = ctFont.AddNewB();
-                newB.val = this.GetBArray(0).val;
+                foreach (CT_BooleanProperty ctB in this.b)
+                {
+                    CT_BooleanProperty newB = ctFont.AddNewB();
+                    newB.val = ctB.val;
+                }
             }
-            if (this.i.Count != 0)
+            if (this.i != null)
             {
-                CT_BooleanProperty newI = ctFont.AddNewI();
-                newI.val = this.GetIArray(0).val;
+                foreach (CT_BooleanProperty ctI in this.i)
+                {
+                    CT_BooleanProperty newI = ctFont.AddNewB();
+                    newI.val = ctI.val;
+                }
             }
-            if (this.strike.Count != 0)
+            if (this.strike != null)
             {
-                CT_BooleanProperty newstrike = ctFont.AddNewStrike();
-                newstrike.val = this.GetStrikeArray(0).val;
+                foreach (CT_BooleanProperty ctStrike in this.strike)
+                {
+                    CT_BooleanProperty newstrike = ctFont.AddNewStrike();
+                    newstrike.val = ctStrike.val;
+                }
             }
             if (this.outline != null)
             {
@@ -601,30 +763,46 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 ctFont.extend = new CT_BooleanProperty();
                 ctFont.extend.val = this.extend.val;
             }
-            if (this.color.Count != 0)
+            if (this.color != null)
             {
-                CT_Color newColor = ctFont.AddNewColor();
-                newColor.theme = this.GetColorArray(0).theme;
+                foreach (CT_Color ctColor in this.color)
+                {
+                    CT_Color newColor = ctFont.AddNewColor();
+                    newColor.theme = ctColor.theme;
+                }
             }
-            if (this.sz.Count != 0)
+            if (this.sz != null)
             {
-                CT_FontSize newSz = ctFont.AddNewSz();
-                newSz.val = this.GetSzArray(0).val;
+                foreach (CT_FontSize ctSz in this.sz)
+                {
+                    CT_FontSize newSz = ctFont.AddNewSz();
+                    newSz.val = ctSz.val;
+                }
             }
-            if (this.u.Count != 0)
+            if (this.u != null)
             {
-                CT_UnderlineProperty newU = ctFont.AddNewU();
-                newU.val = this.GetUArray(0).val;
+                foreach (CT_UnderlineProperty ctU in this.u)
+                {
+                    CT_UnderlineProperty newU = ctFont.AddNewU();
+                    newU.val = ctU.val;
+                }
             }
-            if (this.vertAlign.Count != 0)
+            if (this.vertAlign != null)
             {
-                CT_VerticalAlignFontProperty newVertAlign = ctFont.AddNewVertAlign();
-                newVertAlign.val = this.GetVertAlignArray(0).val;
+                foreach (CT_VerticalAlignFontProperty ctVertAlign in this.vertAlign)
+                {
+                    CT_VerticalAlignFontProperty newVertAlign = ctFont.AddNewVertAlign();
+                    newVertAlign.val = ctVertAlign.val;
+                }
+
             }
-            if (this.scheme.Count != 0)
+            if (this.scheme != null)
             {
-                CT_FontScheme newFs = ctFont.AddNewScheme();
-                newFs.val = this.GetSchemeArray(0).val;
+                foreach (CT_FontScheme ctScheme in this.scheme)
+                {
+                    CT_FontScheme newScheme = ctFont.AddNewScheme();
+                    newScheme.val = ctScheme.val;
+                }
             }
             return ctFont;
         }

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -35,8 +37,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CellStyle()
         {
-            this.extLstField = new CT_ExtensionList();
+           // this.extLstField = new CT_ExtensionList();
         }
+        public static CT_CellStyle Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellStyle ctObj = new CT_CellStyle();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.xfId = XmlHelper.ReadUInt(node.Attributes["xfId"]);
+            ctObj.builtinId = XmlHelper.ReadUInt(node.Attributes["builtinId"]);
+            ctObj.iLevel = XmlHelper.ReadUInt(node.Attributes["iLevel"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            ctObj.customBuiltin = XmlHelper.ReadBool(node.Attributes["customBuiltin"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "xfId", this.xfId);
+            XmlHelper.WriteAttribute(sw, "builtinId", this.builtinId);
+            XmlHelper.WriteAttribute(sw, "iLevel", this.iLevel);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            XmlHelper.WriteAttribute(sw, "customBuiltin", this.customBuiltin);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
         [XmlElement]
         public CT_ExtensionList extLst
         {

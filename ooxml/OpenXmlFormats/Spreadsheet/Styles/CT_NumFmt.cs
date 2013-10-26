@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -14,6 +16,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint numFmtIdField;
 
         private string formatCodeField;
+
+        public static CT_NumFmt Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NumFmt ctObj = new CT_NumFmt();
+            ctObj.numFmtId = XmlHelper.ReadUInt(node.Attributes["numFmtId"]);
+            ctObj.formatCode = XmlHelper.ReadString(node.Attributes["formatCode"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public uint numFmtId

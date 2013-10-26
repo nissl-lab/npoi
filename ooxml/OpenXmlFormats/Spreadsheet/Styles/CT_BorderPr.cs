@@ -1,8 +1,10 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -15,6 +17,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private CT_Color colorField;
 
         private ST_BorderStyle styleField;
+        public static CT_BorderPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_BorderPr ctObj = new CT_BorderPr();
+            if (node.Attributes["style"] != null)
+                ctObj.style = (ST_BorderStyle)Enum.Parse(typeof(ST_BorderStyle), node.Attributes["style"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "color")
+                    ctObj.color = CT_Color.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "style", this.style.ToString());
+            sw.Write(">");
+            if (this.color != null)
+                this.color.Write(sw, "color");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
 
         public CT_BorderPr()
         {

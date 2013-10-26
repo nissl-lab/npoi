@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -18,9 +20,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.stylesheet = stylesheet;
         }
 
-        public static StyleSheetDocument Parse(Stream stream)
+        public static StyleSheetDocument Parse(XmlDocument xmldoc, XmlNamespaceManager nameSpaceManager)
         {
-            CT_Stylesheet obj = (CT_Stylesheet)serializer.Deserialize(stream);
+            CT_Stylesheet obj = CT_Stylesheet.Parse(xmldoc.DocumentElement,nameSpaceManager);
             return new StyleSheetDocument(obj);
         }
 
@@ -34,7 +36,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, stylesheet);
+            using (StreamWriter sw1 = new StreamWriter(stream))
+            {
+                this.stylesheet.Write(sw1);
+            }
         }
     }
 }

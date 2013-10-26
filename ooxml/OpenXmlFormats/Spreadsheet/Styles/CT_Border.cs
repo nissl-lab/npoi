@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -59,6 +59,60 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
 
         }
+        public static CT_Border Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Border ctObj = new CT_Border();
+            ctObj.diagonalUp = XmlHelper.ReadBool(node.Attributes["diagonalUp"]);
+            ctObj.diagonalDown = XmlHelper.ReadBool(node.Attributes["diagonalDown"]);
+            ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "left")
+                    ctObj.left = CT_BorderPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "right")
+                    ctObj.right = CT_BorderPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "top")
+                    ctObj.top = CT_BorderPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bottom")
+                    ctObj.bottom = CT_BorderPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "diagonal")
+                    ctObj.diagonal = CT_BorderPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "vertical")
+                    ctObj.vertical = CT_BorderPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "horizontal")
+                    ctObj.horizontal = CT_BorderPr.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "diagonalUp", this.diagonalUp);
+            XmlHelper.WriteAttribute(sw, "diagonalDown", this.diagonalDown);
+            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            sw.Write(">");
+            if (this.left != null)
+                this.left.Write(sw, "left");
+            if (this.right != null)
+                this.right.Write(sw, "right");
+            if (this.top != null)
+                this.top.Write(sw, "top");
+            if (this.bottom != null)
+                this.bottom.Write(sw, "bottom");
+            if (this.diagonal != null)
+                this.diagonal.Write(sw, "diagonal");
+            if (this.vertical != null)
+                this.vertical.Write(sw, "vertical");
+            if (this.horizontal != null)
+                this.horizontal.Write(sw, "horizontal");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
         public CT_Border Copy()
         {
             CT_Border obj = new CT_Border();

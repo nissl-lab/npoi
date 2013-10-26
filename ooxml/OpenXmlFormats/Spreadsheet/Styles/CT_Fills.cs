@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -16,8 +18,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Fills()
         {
-            this.fillField = new List<CT_Fill>();
+            //this.fillField = new List<CT_Fill>();
         }
+        public static CT_Fills Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Fills ctObj = new CT_Fills();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.fill = new List<CT_Fill>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "fill")
+                    ctObj.fill.Add(CT_Fill.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.fill != null)
+            {
+                foreach (CT_Fill x in this.fill)
+                {
+                    x.Write(sw, "fill");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
         [XmlElement]
         public List<CT_Fill> fill
         {

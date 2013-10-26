@@ -20,7 +20,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot("tbl", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = false)]
-    public partial class CT_Table
+    public class CT_Table
     {
 
         private CT_TableProperties tblPrField;
@@ -83,7 +83,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TableProperties
+    public class CT_TableProperties
     {
 
         private CT_NoFillProperties noFillField;
@@ -376,7 +376,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TableCol
+    public class CT_TableCol
     {
 
         private CT_OfficeArtExtensionList extLstField;
@@ -421,7 +421,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TableRow
+    public class CT_TableRow
     {
 
         private List<CT_TableCell> tcField;
@@ -482,7 +482,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TableCell
+    public class CT_TableCell
     {
 
         private CT_TextBody txBodyField;
@@ -501,9 +501,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TableCell()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.tcPrField = new CT_TableCellProperties();
-            this.txBodyField = new CT_TextBody();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.tcPrField = new CT_TableCellProperties();
+            //this.txBodyField = new CT_TextBody();
             this.rowSpanField = 1;
             this.gridSpanField = 1;
             this.hMergeField = false;
@@ -613,7 +613,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TableCellProperties
+    public class CT_TableCellProperties
     {
 
         private CT_LineProperties lnLField;
@@ -987,7 +987,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_TableGrid
+    public class CT_TableGrid
     {
 
         private List<CT_TableCol> gridColField;

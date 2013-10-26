@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -19,11 +21,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_NumFmts()
         {
-            this.numFmtField = new List<CT_NumFmt>();
+            //this.numFmtField = new List<CT_NumFmt>();
+        }
+        public static CT_NumFmts Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NumFmts ctObj = new CT_NumFmts();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.numFmt = new List<CT_NumFmt>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "numFmt")
+                    ctObj.numFmt.Add(CT_NumFmt.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.numFmt != null)
+            {
+                foreach (CT_NumFmt x in this.numFmt)
+                {
+                    x.Write(sw, "numFmt");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         public CT_NumFmt AddNewNumFmt()
         {
+            if (this.numFmtField == null)
+                this.numFmtField = new List<CT_NumFmt>();
             CT_NumFmt newNumFmt = new CT_NumFmt();
             this.numFmtField.Add(newNumFmt);
             return newNumFmt;

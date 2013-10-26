@@ -482,7 +482,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PatternFill ptrn = ct.patternFill;
                 if (value == null)
                 {
-                    if (ptrn != null) ptrn.unsetBgColor();
+                    if (ptrn != null) ptrn.UnsetBgColor();
                 }
                 else
                 {
@@ -564,7 +564,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PatternFill ptrn = ct.patternFill;
                 if (value == null)
                 {
-                    if (ptrn != null) ptrn.unsetFgColor();
+                    if (ptrn != null) ptrn.UnsetFgColor();
                 }
                 else
                 {
@@ -595,7 +595,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Fill ct = GetCTFill();
                 CT_PatternFill ptrn = ct.IsSetPatternFill() ? ct.GetPatternFill() : ct.AddNewPatternFill();
                 if (value == FillPattern.NoFill && ptrn.IsSetPatternType()) 
-                    ptrn.unsetPatternType();
+                    ptrn.UnsetPatternType();
                 else ptrn.patternType = (ST_PatternType)value;
 
                 int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
@@ -744,7 +744,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
 
-                if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetLocked())
+                if (!_cellXf.IsSetProtection())
                 {
                     return true;
                 }
@@ -964,7 +964,7 @@ namespace NPOI.XSSF.UserModel
             CT_PatternFill ptrn = ct.GetPatternFill();
             if (color == null)
             {
-                if (ptrn != null) ptrn.unsetBgColor();
+                if (ptrn != null) ptrn.UnsetBgColor();
             }
             else
             {
@@ -993,7 +993,7 @@ namespace NPOI.XSSF.UserModel
             CT_PatternFill ptrn = ct.GetPatternFill();
             if (color == null)
             {
-                if (ptrn != null) ptrn.unsetFgColor();
+                if (ptrn != null) ptrn.UnsetFgColor();
             }
             else
             {

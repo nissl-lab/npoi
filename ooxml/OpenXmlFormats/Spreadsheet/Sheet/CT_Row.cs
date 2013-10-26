@@ -53,7 +53,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.spans = XmlHelper.ReadString(node.Attributes["spans"]);
             ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
             ctObj.customFormat = XmlHelper.ReadBool(node.Attributes["customFormat"]);
-            ctObj.ht = XmlHelper.ReadDouble(node.Attributes["ht"]);
+            if (node.Attributes["ht"]!=null)
+                ctObj.ht = XmlHelper.ReadDouble(node.Attributes["ht"]);
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);
             ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);

@@ -70,8 +70,8 @@ namespace NPOI.XSSF.Model
         internal StylesTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
-            ReadFrom(part.GetInputStream());
+            XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
+            ReadFrom(xmldoc);
         }
 
         public ThemesTable GetTheme()
@@ -102,11 +102,12 @@ namespace NPOI.XSSF.Model
          * @throws IOException if an error occurs while Reading.
          */
 
-        protected void ReadFrom(Stream is1)
+        protected void ReadFrom(XmlDocument xmldoc)
         {
             try
             {
-                doc = StyleSheetDocument.Parse(is1);
+                
+                doc = StyleSheetDocument.Parse(xmldoc, NameSpaceManager);
 
                 CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
@@ -419,16 +420,15 @@ namespace NPOI.XSSF.Model
             }
             styleSheet.numFmts = (ctFormats);
 
-            int idx;
             // Fonts
             CT_Fonts ctFonts = new CT_Fonts();
             ctFonts.count = (uint)fonts.Count;
             if (ctFonts.count > 0)
                 ctFonts.countSpecified = true;
-            CT_Font[] ctfnt = new CT_Font[fonts.Count];
-            idx = 0;
+            List<CT_Font> ctfnt = new List<CT_Font>(fonts.Count);
+
             foreach (XSSFFont f in fonts)
-                ctfnt[idx++] = f.GetCTFont();
+                ctfnt.Add(f.GetCTFont());
             ctFonts.SetFontArray(ctfnt);
             styleSheet.fonts = (ctFonts);
 
@@ -445,7 +445,6 @@ namespace NPOI.XSSF.Model
 
             // Borders
             List<CT_Border> ctb = new List<CT_Border>(borders.Count);
-            idx = 0;
             foreach (XSSFCellBorder b in borders) 
                 ctb.Add(b.GetCTBorder());
             CT_Borders ctBorders = new CT_Borders();

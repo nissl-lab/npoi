@@ -33,9 +33,9 @@ namespace NPOI.XSSF.UserModel.Extensions
          *
          * @param fill - fill
          */
-        public XSSFCellFill(CT_Fill Fill)
+        public XSSFCellFill(CT_Fill fill)
         {
-            _fill = Fill;
+            _fill = fill;
         }
 
         /**

@@ -46,17 +46,53 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             CT_Fill obj = new CT_Fill();
             obj.patternFillField = this.patternFillField;
+            obj.gradientFillField = this.gradientFillField;
             return obj;
         }
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Fill));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+        public static CT_Fill Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Fill ctObj = new CT_Fill();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "patternFill")
+                    ctObj.patternFill = CT_PatternFill.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "gradientFill")
+                    ctObj.gradientFill = CT_GradientFill.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.patternFill != null)
+                this.patternFill.Write(sw, "patternFill");
+            if (this.gradientFill != null)
+                this.gradientFill.Write(sw, "gradientFill");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+        //internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Fill));
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
+        //    new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         public override string ToString()
         {
-            StringWriter stringWriter = new StringWriter();
-            serializer.Serialize(stringWriter, this, namespaces);
-            return stringWriter.ToString();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                StreamWriter sw = new StreamWriter(ms);
+                this.Write(sw, "fill");
+                sw.Flush();
+                ms.Position = 0;
+                StreamReader sr = new StreamReader(ms);
+                string result = sr.ReadToEnd();
+               return result;
+            }
         }
     }
 

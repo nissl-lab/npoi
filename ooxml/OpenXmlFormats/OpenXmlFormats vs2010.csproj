@@ -101,6 +101,8 @@
     <Compile Include="Drawing\WordprocessingDrawing.cs" />
     <Compile Include="ExtendedPropertiesDocument.cs" />
     <Compile Include="Shared\Math.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Dxfs.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_TableStyles.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Border.cs" />
     <Compile Include="Spreadsheet\Styles\CT_BorderPr.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Borders.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
     <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Colors.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Fill.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Fills.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Font.cs" />
@@ -135,6 +138,7 @@
     <Compile Include="Spreadsheet\Sheet\CT_Worksheet.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_SheetPr.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_MergeCells.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_PatternFill.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Xf.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\Markup.cs" />

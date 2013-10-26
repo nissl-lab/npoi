@@ -1,8 +1,10 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -68,6 +70,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private long readingOrderField;
 
         private bool readingOrderFieldSpecified;
+        public static CT_CellAlignment Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CellAlignment ctObj = new CT_CellAlignment();
+            if (node.Attributes["horizontal"] != null)
+                ctObj.horizontal = (ST_HorizontalAlignment)Enum.Parse(typeof(ST_HorizontalAlignment), node.Attributes["horizontal"].Value);
+            if (node.Attributes["vertical"] != null)
+                ctObj.vertical = (ST_VerticalAlignment)Enum.Parse(typeof(ST_VerticalAlignment), node.Attributes["vertical"].Value);
+            ctObj.textRotation = XmlHelper.ReadLong(node.Attributes["textRotation"]);
+            ctObj.wrapText = XmlHelper.ReadBool(node.Attributes["wrapText"]);
+            ctObj.indent = XmlHelper.ReadLong(node.Attributes["indent"]);
+            ctObj.relativeIndent = XmlHelper.ReadInt(node.Attributes["relativeIndent"]);
+            ctObj.justifyLastLine = XmlHelper.ReadBool(node.Attributes["justifyLastLine"]);
+            ctObj.shrinkToFit = XmlHelper.ReadBool(node.Attributes["shrinkToFit"]);
+            ctObj.readingOrder = XmlHelper.ReadLong(node.Attributes["readingOrder"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "horizontal", this.horizontal.ToString());
+            XmlHelper.WriteAttribute(sw, "vertical", this.vertical.ToString());
+            XmlHelper.WriteAttribute(sw, "textRotation", this.textRotation);
+            XmlHelper.WriteAttribute(sw, "wrapText", this.wrapText);
+            XmlHelper.WriteAttribute(sw, "indent", this.indent);
+            XmlHelper.WriteAttribute(sw, "relativeIndent", this.relativeIndent);
+            XmlHelper.WriteAttribute(sw, "justifyLastLine", this.justifyLastLine);
+            XmlHelper.WriteAttribute(sw, "shrinkToFit", this.shrinkToFit);
+            XmlHelper.WriteAttribute(sw, "readingOrder", this.readingOrder);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public bool IsSetHorizontal()
         {

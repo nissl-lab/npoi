@@ -450,7 +450,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_DashStopList()
         {
-            this.dsField = new List<CT_DashStop>();
+            //this.dsField = new List<CT_DashStop>();
         }
 
         [XmlElement("ds", Order = 0)]
@@ -578,6 +578,13 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.pattFill.Write(sw, "pattFill");
             if (this.prstDash != null)
                 this.prstDash.Write(sw, "prstDash");
+            if (this.custDash != null)
+            {
+                foreach (CT_DashStop x in this.custDash)
+                {
+                    x.Write(sw, "custDash");
+                }
+            }
             if (this.round != null)
                 sw.Write("<a:round/>");
             if (this.bevel != null)
@@ -590,13 +597,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tailEnd.Write(sw, "tailEnd");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            if (this.custDash != null)
-            {
-                foreach (CT_DashStop x in this.custDash)
-                {
-                    x.Write(sw, "custDash");
-                }
-            }
+
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 

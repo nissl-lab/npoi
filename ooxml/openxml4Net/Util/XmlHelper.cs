@@ -74,7 +74,7 @@ namespace NPOI.OpenXml4Net.Util
         public static uint ReadUInt(XmlAttribute attr)
         {
             if (attr == null)
-                return 0;
+                return uint.MinValue;
 
             uint i;
             if (uint.TryParse(attr.Value, out i))
@@ -94,7 +94,7 @@ namespace NPOI.OpenXml4Net.Util
         public static double ReadDouble(XmlAttribute attr)
         {
             if (attr == null)
-                return double.NaN;
+                return 0.0;
             string s = attr.Value;
             if (s == "")
             {
@@ -155,6 +155,10 @@ namespace NPOI.OpenXml4Net.Util
                 return false;
             }
         }
+        internal static string EncodeXml(string xml)
+        {
+            return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
+        }
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value)
         {
             WriteAttribute(sw, attributeName, value, false);
@@ -194,7 +198,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             if (string.IsNullOrEmpty(value) && !writeIfBlank)
                 return;
-            sw.Write(string.Format(" {0}=\"{1}\"",attributeName, value==null?string.Empty:value));
+            sw.Write(string.Format(" {0}=\"{1}\"", attributeName, value == null ? string.Empty : EncodeXml(value)));
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, byte[] value)
         {
@@ -227,12 +231,11 @@ namespace NPOI.OpenXml4Net.Util
             if (attr == null||string.IsNullOrEmpty(attr.Value))
                 return null;
 
-            uint num = uint.Parse(attr.Value, System.Globalization.NumberStyles.AllowHexSpecifier);
-            byte[] temp = BitConverter.GetBytes(num);
-            if (attr.Value.Length / 2 == temp.Length)
-                return temp;
-
-            return NPOI.Util.Arrays.CopyOf(temp, attr.Value.Length / 2);
+            int NumberChars = attr.Value.Length;
+            byte[] bytes = new byte[NumberChars / 2];
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(attr.Value.Substring(i, 2), 16);
+            return bytes;
         }
     }
 }

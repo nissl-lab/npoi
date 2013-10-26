@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -14,9 +14,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(ElementName = "xf", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Xf
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
+        //internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
+        //    new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         private CT_CellAlignment alignmentField = null;
 
@@ -67,27 +67,72 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return obj;
         }
 
-        public static CT_Xf Parse(string xml)
+        public static CT_Xf Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            CT_Xf result;
-            using (StringReader stream = new StringReader(xml))
+            if (node == null)
+                return null;
+            CT_Xf ctObj = new CT_Xf();
+            ctObj.numFmtId = XmlHelper.ReadUInt(node.Attributes["numFmtId"]);
+            ctObj.fontId = XmlHelper.ReadUInt(node.Attributes["fontId"]);
+            ctObj.fillId = XmlHelper.ReadUInt(node.Attributes["fillId"]);
+            ctObj.borderId = XmlHelper.ReadUInt(node.Attributes["borderId"]);
+            ctObj.xfId = XmlHelper.ReadUInt(node.Attributes["xfId"]);
+            ctObj.quotePrefix = XmlHelper.ReadBool(node.Attributes["quotePrefix"]);
+            ctObj.pivotButton = XmlHelper.ReadBool(node.Attributes["pivotButton"]);
+            ctObj.applyNumberFormat = XmlHelper.ReadBool(node.Attributes["applyNumberFormat"]);
+            ctObj.applyFont = XmlHelper.ReadBool(node.Attributes["applyFont"]);
+            ctObj.applyFill = XmlHelper.ReadBool(node.Attributes["applyFill"]);
+            ctObj.applyBorder = XmlHelper.ReadBool(node.Attributes["applyBorder"]);
+            ctObj.applyAlignment = XmlHelper.ReadBool(node.Attributes["applyAlignment"]);
+            ctObj.applyProtection = XmlHelper.ReadBool(node.Attributes["applyProtection"]);
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                result = (CT_Xf)serializer.Deserialize(stream);
+                if (childNode.LocalName == "alignment")
+                    ctObj.alignment = CT_CellAlignment.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "protection")
+                    ctObj.protection = CT_CellProtection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
-            return result;
+            return ctObj;
         }
-        public static void Save(Stream stream, CT_Xf font)
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            serializer.Serialize(stream, font, namespaces);
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "fontId", this.fontId);
+            XmlHelper.WriteAttribute(sw, "fillId", this.fillId);
+            XmlHelper.WriteAttribute(sw, "borderId", this.borderId);
+            XmlHelper.WriteAttribute(sw, "xfId", this.xfId);
+            XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix);
+            XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton);
+            XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
+            XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont);
+            XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill);
+            XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder);
+            XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment);
+            XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection);
+            sw.Write(">");
+            if (this.alignment != null)
+                this.alignment.Write(sw, "alignment");
+            if (this.protection != null)
+                this.protection.Write(sw, "protection");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
-        public override string ToString()
-        {
-            using (StringWriter stream = new StringWriter())
-            {
-                serializer.Serialize(stream, this, namespaces);
-                return stream.ToString();
-            }
-        }
+
+        //public override string ToString()
+        //{
+        //    using (StringWriter stream = new StringWriter())
+        //    {
+        //        serializer.Serialize(stream, this, namespaces);
+        //        return stream.ToString();
+        //    }
+        //}
 
         public bool IsSetFontId()
         {
@@ -122,7 +167,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public bool IsSetLocked()
         {
             // first guess:
-            return IsSetProtection() && protectionField.lockedSpecified && (protectionField.locked == true);
+            return IsSetProtection() &&  (protectionField.locked == true);
         }
         public CT_CellProtection AddNewProtection()
         {

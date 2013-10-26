@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -13,13 +15,46 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private List<CT_Border> borderField;
         private uint countField = 0;
         private bool countFieldSpecified = false;
+        public static CT_Borders Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Borders ctObj = new CT_Borders();
+            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.border = new List<CT_Border>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "border")
+                    ctObj.border.Add(CT_Border.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.border != null)
+            {
+                foreach (CT_Border x in this.border)
+                {
+                    x.Write(sw, "border");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_Borders()
         {
-            this.borderField = new List<CT_Border>();
+            //this.borderField = new List<CT_Border>();
         }
         public CT_Border AddNewBorder()
         {
+            if (this.borderField == null)
+                this.borderField = new List<CT_Border>();
             CT_Border border = new CT_Border();
             this.borderField.Add(border);
             return border;
