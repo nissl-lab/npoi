@@ -131,7 +131,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_FilterColumn
     {
 
-        private object itemField;
+        //private object itemField;
 
         private uint colIdField;
 
@@ -144,19 +144,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.hiddenButtonField = false;
             this.showButtonField = true;
         }
-
-        public object Item
-        {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
-        }
-
+        //[XmlAttribute]
+        //public object Item
+        //{
+        //    get
+        //    {
+        //        return this.itemField;
+        //    }
+        //    set
+        //    {
+        //        this.itemField = value;
+        //    }
+        //}
+        [XmlAttribute]
         public uint colId
         {
             get
@@ -168,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.colIdField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool hiddenButton
         {
@@ -181,7 +181,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.hiddenButtonField = value;
             }
         }
-
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool showButton
         {
@@ -203,11 +203,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.colId = XmlHelper.ReadUInt(node.Attributes["colId"]);
             ctObj.hiddenButton = XmlHelper.ReadBool(node.Attributes["hiddenButton"]);
             ctObj.showButton = XmlHelper.ReadBool(node.Attributes["showButton"]);
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "Item")
-                    ctObj.Item = new Object();
-            }
+            //TODO: implement http://www.schemacentral.com/sc/ooxml/t-ssml_CT_FilterColumn.html
+            //foreach (XmlNode childNode in node.ChildNodes)
+            //{
+            //    if (childNode.LocalName == "Item")
+            //        ctObj.Item = new Object();
+            //}
             return ctObj;
         }
 
@@ -220,8 +221,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "hiddenButton", this.hiddenButton);
             XmlHelper.WriteAttribute(sw, "showButton", this.showButton);
             sw.Write(">");
-            if (this.Item != null)
-                sw.Write("<Item/>");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
