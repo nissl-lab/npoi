@@ -682,7 +682,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(IndexedColors.Blue.Index, r1fp.FillForegroundColor);
             if (this._testDataProvider.GetSpreadsheetVersion() == SpreadsheetVersion.EXCEL97)
             {
-                Assert.AreEqual(FillPattern.Bricks, r1fp.FillPattern);
+                Assert.AreEqual((short)FillPattern.Bricks, r1fp.FillPattern);
             }
         }
         [Test]
