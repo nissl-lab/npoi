@@ -41,7 +41,7 @@ namespace NPOI.Examples.XSSF.PageSetupInXlsx
             //set the print area for the first sheet
             wb.SetPrintArea(0, 1, 2, 0, 3);
 
-            FileStream sw = File.OpenWrite("test.xlsx");
+            FileStream sw = File.Create("test.xlsx");
             wb.Write(sw);
             sw.Close();
         }
