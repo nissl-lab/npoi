@@ -94,7 +94,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             //this.pageSetUpPrField = new CT_PageSetUpPr();
             //this.outlinePrField = new CT_OutlinePr();
-            this.tabColorField = new CT_Color();
+            //this.tabColorField = new CT_Color();
             this.syncHorizontalField = false;
             this.syncVerticalField = false;
             this.transitionEvaluationField = false;

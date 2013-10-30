@@ -90,17 +90,17 @@ namespace NPOI.XSSF.UserModel
                 nvProps.id = (1);
                 nvProps.name = ("Picture 1");
                 nvProps.descr = ("Picture");
-                CT_NonVisualPictureProperties nvPicProps = nvpr.AddNewCNvPicPr();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualPictureProperties nvPicProps = nvpr.AddNewCNvPicPr();
                 nvPicProps.AddNewPicLocks().noChangeAspect = true;
 
 
 
-                CT_BlipFillProperties blip = pic.AddNewBlipFill();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_BlipFillProperties blip = pic.AddNewBlipFill();
                 blip.AddNewBlip().embed = "";
                 blip.AddNewStretch().AddNewFillRect();
 
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sppr = pic.AddNewSpPr();
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D t2d = sppr.AddNewXfrm();
+                CT_Transform2D t2d = sppr.AddNewXfrm();
                 CT_PositiveSize2D ext = t2d.AddNewExt();
                 //should be original picture width and height expressed in EMUs
                 ext.cx = (0);

@@ -299,6 +299,286 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
     }
     [Serializable]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_NonVisualPictureProperties
+    {
+        public static CT_NonVisualPictureProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualPictureProperties ctObj = new CT_NonVisualPictureProperties();
+            ctObj.preferRelativeResize = XmlHelper.ReadBool(node.Attributes["preferRelativeResize"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "picLocks")
+                    ctObj.picLocks = CT_PictureLocking.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
+            sw.Write(">");
+            if (this.picLocks != null)
+                this.picLocks.Write(sw, "picLocks");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
+        }
+
+        private CT_PictureLocking picLocksField = null;
+
+        private CT_OfficeArtExtensionList extLstField = null;
+
+        private bool? preferRelativeResizeField = null;
+
+        public CT_NonVisualPictureProperties()
+        {
+            this.preferRelativeResizeField = true;
+        }
+
+        public CT_PictureLocking AddNewPicLocks()
+        {
+            this.picLocksField = new CT_PictureLocking();
+            return picLocksField;
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_PictureLocking picLocks
+        {
+            get
+            {
+                return this.picLocksField;
+            }
+            set
+            {
+                this.picLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(true)]
+        public bool preferRelativeResize
+        {
+            get
+            {
+                return null == this.preferRelativeResizeField ? true : (bool)preferRelativeResizeField;
+            }
+            set
+            {
+                this.preferRelativeResizeField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool preferRelativeResizeSpecified
+        {
+            get { return (null != preferRelativeResizeField); }
+        }
+    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing", IsNullable = true)]
+    public class CT_BlipFillProperties
+    {
+
+        private CT_Blip blipField = null;
+
+        private CT_RelativeRect srcRectField = null;
+
+        private CT_TileInfoProperties tileField = null;
+
+        private CT_StretchInfoProperties stretchField = null;
+
+        private uint dpiField;
+        private bool dpiFieldSpecified;
+
+        private bool rotWithShapeField;
+
+        private bool rotWithShapeFieldSpecified;
+
+        public CT_Blip AddNewBlip()
+        {
+            this.blipField = new CT_Blip();
+            return blipField;
+        }
+
+        public CT_StretchInfoProperties AddNewStretch()
+        {
+            this.stretchField = new CT_StretchInfoProperties();
+            return stretchField;
+        }
+
+        public static CT_BlipFillProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_BlipFillProperties ctObj = new CT_BlipFillProperties();
+            ctObj.dpi = XmlHelper.ReadUInt(node.Attributes["dpi"]);
+            ctObj.rotWithShape = XmlHelper.ReadBool(node.Attributes["rotWithShape"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "blip")
+                    ctObj.blip = CT_Blip.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srcRect")
+                    ctObj.srcRect = CT_RelativeRect.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tile")
+                    ctObj.tile = CT_TileInfoProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "stretch")
+                    ctObj.stretch = CT_StretchInfoProperties.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
+            XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            sw.Write(">");
+            if (this.blip != null)
+                this.blip.Write(sw, "blip");
+            if (this.srcRect != null)
+                this.srcRect.Write(sw, "srcRect");
+            if (this.tile != null)
+                this.tile.Write(sw, "tile");
+            if (this.stretch != null)
+                this.stretch.Write(sw, "stretch");
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_Blip blip
+        {
+            get
+            {
+                return this.blipField;
+            }
+            set
+            {
+                this.blipField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_RelativeRect srcRect
+        {
+            get
+            {
+                return this.srcRectField;
+            }
+            set
+            {
+                this.srcRectField = value;
+            }
+        }
+
+        [XmlElement(Order = 2)]
+        public CT_TileInfoProperties tile
+        {
+            get
+            {
+                return this.tileField;
+            }
+            set
+            {
+                this.tileField = value;
+            }
+        }
+
+        [XmlElement(Order = 3)]
+        public CT_StretchInfoProperties stretch
+        {
+            get
+            {
+                return this.stretchField;
+            }
+            set
+            {
+                this.stretchField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public uint dpi
+        {
+            get
+            {
+                return (uint)this.dpiField;
+            }
+            set
+            {
+                this.dpiField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool dpiSpecified
+        {
+            get
+            {
+                return dpiFieldSpecified;
+            }
+            set
+            {
+                this.dpiFieldSpecified = value;
+            }
+        }
+
+
+        [XmlAttribute]
+        public bool rotWithShape
+        {
+            get
+            {
+                return (bool)this.rotWithShapeField;
+            }
+            set
+            {
+                this.rotWithShapeField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool rotWithShapeSpecified
+        {
+            get
+            {
+                return rotWithShapeFieldSpecified;
+            }
+            set
+            {
+                this.rotWithShapeFieldSpecified = value;
+            }
+        }
+
+        public bool IsSetBlip()
+        {
+            return this.blipField != null;
+        }
+
+    }
+    [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_ShapeProperties
     {
@@ -637,8 +917,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            if(bwMode!= ST_BlackWhiteMode.NONE)
+                XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "xfrm");
@@ -670,153 +951,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.sp3d.Write(sw, "sp3d");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
-        }
-
-    }
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_Transform2D
-    {
-
-        private CT_Point2D offField = null;
-
-        private CT_PositiveSize2D extField = null;
-
-        private int? rotField = null;
-
-        private bool? flipHField = null;
-
-        private bool? flipVField = null;
-        public static CT_Transform2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_Transform2D ctObj = new CT_Transform2D();
-            ctObj.rot = XmlHelper.ReadInt(node.Attributes["rot"]);
-            ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
-            ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "off")
-                    ctObj.off = CT_Point2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "ext")
-                    ctObj.ext = CT_PositiveSize2D.Parse(childNode, namespaceManager);
-            }
-            return ctObj;
-        }
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV);
-            sw.Write(">");
-            if (this.off != null)
-                this.off.Write(sw, "off");
-            if (this.ext != null)
-                this.ext.Write(sw, "ext");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
 
-
-        public CT_PositiveSize2D AddNewExt()
-        {
-            this.extField = new CT_PositiveSize2D();
-            return this.extField;
-        }
-        public CT_Point2D AddNewOff()
-        {
-            this.offField = new CT_Point2D();
-            return this.offField;
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Point2D off
-        {
-            get
-            {
-                return this.offField;
-            }
-            set
-            {
-                this.offField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_PositiveSize2D ext
-        {
-            get
-            {
-                return this.extField;
-            }
-            set
-            {
-                this.extField = value;
-            }
-        }
-
-        [XmlAttribute]
-        [DefaultValue(0)]
-        public int rot
-        {
-            get
-            {
-                return null == this.rotField ? 0 : (int)rotField;
-            }
-            set
-            {
-                this.rotField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool rotSpecified
-        {
-            get { return (null != rotField); }
-        }
-
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool flipH
-        {
-            get
-            {
-                return null == this.flipHField ? false : (bool)flipHField;
-            }
-            set
-            {
-                this.flipHField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool flipHSpecified
-        {
-            get { return (null != flipHField); }
-        }
-
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool flipV
-        {
-            get
-            {
-                return null == this.flipVField ? false : (bool)flipVField;
-            }
-            set
-            {
-                this.flipVField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool flipVSpecified
-        {
-            get { return (null != flipVField); }
-        }
     }
+
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
