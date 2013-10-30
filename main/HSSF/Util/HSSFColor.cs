@@ -18,8 +18,8 @@
 namespace NPOI.HSSF.Util
 {
     using System;
-    using System.IO;
     using System.Collections;
+    using System.IO;
     using System.Reflection;
     /**
      * Intends to provide support for the very evil index to triplet Issue and
@@ -62,6 +62,7 @@ namespace NPOI.HSSF.Util
             }
             return indexHash;
         }
+
         /**
          * This function returns all the Colours, stored in a Hashtable that
          *  can be edited. No caching is performed. If you don't need to edit
@@ -72,6 +73,7 @@ namespace NPOI.HSSF.Util
         {
             return CreateColorsByIndexMap();
         }
+
         private static Hashtable CreateColorsByIndexMap()
         {
             HSSFColor[] colors = GetAllColors();
@@ -118,34 +120,18 @@ namespace NPOI.HSSF.Util
 
         private static int GetIndex2(HSSFColor color)
         {
-
-            FieldInfo f;
-
-            f = color.GetType().GetField("index2", BindingFlags.Static | BindingFlags.Public);
+            FieldInfo f = color.GetType().GetField("Index2", BindingFlags.Static | BindingFlags.Public);
             if (f == null)
             {
                 return -1;
             }
 
-            short s;
-            try
-            {
-                s = (short)f.GetValue(color);
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
-            catch (InvalidOperationException)
-            {
-                throw;
-            }
+            short s = (short)f.GetValue(color);
             return Convert.ToInt32(s);
         }
 
         private static HSSFColor[] GetAllColors()
         {
-
             return new HSSFColor[] {
                 new Black(), new Brown(), new OliveGreen(), new DarkGreen(),
                 new DarkTeal(), new DarkBlue(), new Indigo(), new Grey80Percent(),
