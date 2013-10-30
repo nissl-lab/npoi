@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
                 nv.AddNewCNvSpPr();
 
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sp = shape.AddNewSpPr();
-                CT_Transform2D t2d = sp.AddNewXfrm();
+                NPOI.OpenXmlFormats.Dml.CT_Transform2D t2d = sp.AddNewXfrm();
                 CT_PositiveSize2D p1 = t2d.AddNewExt();
                 p1.cx = (0);
                 p1.cy = (0);

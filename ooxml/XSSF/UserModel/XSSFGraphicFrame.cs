@@ -75,7 +75,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-                CT_Transform2D transform = graphicFrame.AddNewXfrm();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D transform = graphicFrame.AddNewXfrm();
                 CT_PositiveSize2D extPoint = transform.AddNewExt();
                 CT_Point2D offPoint = transform.AddNewOff();
 
