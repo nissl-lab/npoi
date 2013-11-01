@@ -8,7 +8,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class TableDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Table));
         CT_Table ctTable = null;
 
         public TableDocument()

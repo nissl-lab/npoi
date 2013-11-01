@@ -7,7 +7,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class ThemeDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_OfficeStyleSheet));
         CT_OfficeStyleSheet stylesheet = null;
         public ThemeDocument()
         {

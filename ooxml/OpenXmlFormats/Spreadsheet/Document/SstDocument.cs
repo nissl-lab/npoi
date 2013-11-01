@@ -9,8 +9,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class SstDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Sst));
-
         CT_Sst sst = null;
 
         public SstDocument()
