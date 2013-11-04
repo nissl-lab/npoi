@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Workbook);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Wordprocessing.CT_Footnotes);
             //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
@@ -53,7 +53,10 @@ namespace XmlSerializationCodeGenerator
         {
             if (c.Name == "XmlElement"||c.Name=="Byte[]")
                 return;
-            
+
+            if (level > 4)
+                return;
+
             node.Tag = c;
             var properties = c.GetProperties();
             foreach (var p in properties)
@@ -255,6 +258,10 @@ namespace XmlSerializationCodeGenerator
                         {
                             sb.AppendLine(string.Format("\t\t\tctObj.{0}.Add(childNode.InnerText);", p.Name, genericType.Name));
                         }
+                        else if (genericType.GetProperties().Length == 0)
+                        {
+                            sb.AppendLine(string.Format("\t\t\tctObj.{0}.Add(new {1}());", p.Name, genericType.Name));
+                        }
                         else
                         {
                             sb.AppendLine(string.Format("\t\t\tctObj.{0}.Add({1}.Parse(childNode, namespaceManager));", p.Name, genericType.Name));
@@ -341,6 +348,10 @@ namespace XmlSerializationCodeGenerator
                 {
                     sb.AppendLine(string.Format("\t\t\tsw.Write(string.Format(\"<{0}>{{0}}</{0}>\",x));", p.Name));
                 }
+                else if (genericType.GetProperties().Length == 0)
+                {
+                    sb.AppendLine(string.Format("\t\tsw.Write(\"<{0}/>\");", p.Name));
+                }
                 else
                 {
                     sb.AppendLine(string.Format("\t\tx.Write(sw,\"{0}\");", p.Name));
@@ -405,6 +416,29 @@ namespace XmlSerializationCodeGenerator
         private void button3_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(textBox1.Text);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb=new StringBuilder();
+            Type type = (Type)treeView1.SelectedNode.Tag;
+            var property = type.GetProperty("Items");
+            if (property != null)
+            {
+                var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
+                foreach (var attr in attrs)
+                {
+                    var xmlAttr = (XmlElementAttribute)attr;
+                    sb.AppendLine(string.Format("List<{1}> {0}Field;", xmlAttr.ElementName, xmlAttr.Type.Name));
+                    sb.AppendLine(string.Format("public List<{1}> {0}", xmlAttr.ElementName, xmlAttr.Type.Name));
+                    sb.AppendLine("{");
+                    sb.AppendLine(string.Format("\tget{{return this.{0}Field;}}", xmlAttr.ElementName));
+                    sb.AppendLine(string.Format("\tset{{this.{0}Field=value;}}", xmlAttr.ElementName));
+                    sb.AppendLine("}");
+                    sb.AppendLine();
+                }
+                textBox1.Text = sb.ToString();
+            }
         }
     }
 }

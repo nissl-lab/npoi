@@ -40,10 +40,11 @@ namespace NPOI.XSSF.Model
             : base(part, rel)
         {
 
-            //theme = ThemeDocument.Parse(part.GetInputStream());
+            XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
+                
             try
             {
-                theme = ThemeDocument.Parse(part.GetInputStream());
+                theme = ThemeDocument.Parse(xmldoc, NameSpaceManager);
             }
             catch (XmlException e)
             {

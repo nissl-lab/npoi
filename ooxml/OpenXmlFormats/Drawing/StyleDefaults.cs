@@ -13,14 +13,16 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using System.IO;
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_DefaultShapeDefinition
+    public class CT_DefaultShapeDefinition
     {
 
         private CT_ShapeProperties spPrField;
@@ -32,14 +34,53 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_ShapeStyle styleField;
 
         private CT_OfficeArtExtensionList extLstField;
+        public static CT_DefaultShapeDefinition Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DefaultShapeDefinition ctObj = new CT_DefaultShapeDefinition();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "spPr")
+                    ctObj.spPr = CT_ShapeProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bodyPr")
+                    ctObj.bodyPr = CT_TextBodyProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lstStyle")
+                    ctObj.lstStyle = CT_TextListStyle.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "style")
+                    ctObj.style = CT_ShapeStyle.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.spPr != null)
+                this.spPr.Write(sw, "spPr");
+            if (this.bodyPr != null)
+                this.bodyPr.Write(sw, "bodyPr");
+            if (this.lstStyle != null)
+                this.lstStyle.Write(sw, "lstStyle");
+            if (this.style != null)
+                this.style.Write(sw, "style");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_DefaultShapeDefinition()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.styleField = new CT_ShapeStyle();
-            this.lstStyleField = new CT_TextListStyle();
-            this.bodyPrField = new CT_TextBodyProperties();
-            this.spPrField = new CT_ShapeProperties();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.styleField = new CT_ShapeStyle();
+            //this.lstStyleField = new CT_TextListStyle();
+            //this.bodyPrField = new CT_TextBodyProperties();
+            //this.spPrField = new CT_ShapeProperties();
         }
 
         [XmlElement(Order = 0)]
@@ -110,11 +151,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
-    public partial class CT_ObjectStyleDefaults
+    public class CT_ObjectStyleDefaults
     {
 
         private CT_DefaultShapeDefinition spDefField;
@@ -127,10 +168,45 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ObjectStyleDefaults()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.txDefField = new CT_DefaultShapeDefinition();
-            this.lnDefField = new CT_DefaultShapeDefinition();
-            this.spDefField = new CT_DefaultShapeDefinition();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.txDefField = new CT_DefaultShapeDefinition();
+            //this.lnDefField = new CT_DefaultShapeDefinition();
+            //this.spDefField = new CT_DefaultShapeDefinition();
+        }
+        public static CT_ObjectStyleDefaults Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ObjectStyleDefaults ctObj = new CT_ObjectStyleDefaults();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "spDef")
+                    ctObj.spDef = CT_DefaultShapeDefinition.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lnDef")
+                    ctObj.lnDef = CT_DefaultShapeDefinition.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "txDef")
+                    ctObj.txDef = CT_DefaultShapeDefinition.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.spDef != null)
+                this.spDef.Write(sw, "spDef");
+            if (this.lnDef != null)
+                this.lnDef.Write(sw, "lnDef");
+            if (this.txDef != null)
+                this.txDef.Write(sw, "txDef");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]

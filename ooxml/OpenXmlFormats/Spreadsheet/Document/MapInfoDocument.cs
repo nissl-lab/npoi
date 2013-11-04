@@ -7,7 +7,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class MapInfoDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_MapInfo));
         CT_MapInfo map = null;
 
         public MapInfoDocument()

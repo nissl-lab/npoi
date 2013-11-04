@@ -38,8 +38,8 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_Blip ctObj = new CT_Blip();
-            ctObj.embed = XmlHelper.ReadString(node.Attributes["embed"]);
-            ctObj.link = XmlHelper.ReadString(node.Attributes["link"]);
+            ctObj.embed = XmlHelper.ReadString(node.Attributes["r:embed"]);
+            ctObj.link = XmlHelper.ReadString(node.Attributes["r:link"]);
             if (node.Attributes["cstate"] != null)
                 ctObj.cstate = (ST_BlipCompression)Enum.Parse(typeof(ST_BlipCompression), node.Attributes["cstate"].Value);
             ctObj.Items = new List<Object>();
@@ -47,6 +47,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 if (childNode.LocalName == "extLst")
                     ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+                //TODO: implement http://www.schemacentral.com/sc/ooxml/t-a_CT_Blip.html
                 //else if (childNode.LocalName == "Items")
                 //    ctObj.Items.Add(Object.Parse(childNode, namespaceManager));
             }
@@ -56,9 +57,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "embed", this.embed);
-            XmlHelper.WriteAttribute(sw, "link", this.link);
+            sw.Write(string.Format("<a:{0} xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:embed", this.embed);
+            XmlHelper.WriteAttribute(sw, "r:link", this.link);
             XmlHelper.WriteAttribute(sw, "cstate", this.cstate.ToString());
             sw.Write(">");
             if (this.extLst != null)

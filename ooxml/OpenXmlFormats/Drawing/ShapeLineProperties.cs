@@ -500,7 +500,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_OfficeArtExtensionList extLstField;
 
-        private int? wField = null;
+        private int wField = 0;
 
         private bool wFieldSpecified;
 
@@ -564,9 +564,12 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w", this.w);
-            XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
-            XmlHelper.WriteAttribute(sw, "cmpd", this.cmpd.ToString());
-            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            if(this.cap!= ST_LineCap.NONE)
+                XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
+            if(this.cmpd !=  ST_CompoundLine.NONE)
+                XmlHelper.WriteAttribute(sw, "cmpd", this.cmpd.ToString());
+            if(this.algn!= ST_PenAlignment.NONE)
+                XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             sw.Write(">");
             if (this.noFill != null)
                 sw.Write("<a:noFill/>");
@@ -767,7 +770,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return (int)this.wField;
+                return this.wField;
             }
             set
             {

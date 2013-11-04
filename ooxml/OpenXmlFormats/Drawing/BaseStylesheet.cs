@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using NPOI.OpenXml4Net.Util;
+    using System.IO;
 
 
     [Serializable]
@@ -52,19 +55,92 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ColorScheme()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.folHlinkField = new CT_Color();
-            this.hlinkField = new CT_Color();
-            this.accent6Field = new CT_Color();
-            this.accent5Field = new CT_Color();
-            this.accent4Field = new CT_Color();
-            this.accent3Field = new CT_Color();
-            this.accent2Field = new CT_Color();
-            this.accent1Field = new CT_Color();
-            this.lt2Field = new CT_Color();
-            this.dk2Field = new CT_Color();
-            this.lt1Field = new CT_Color();
-            this.dk1Field = new CT_Color();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.folHlinkField = new CT_Color();
+            //this.hlinkField = new CT_Color();
+            //this.accent6Field = new CT_Color();
+            //this.accent5Field = new CT_Color();
+            //this.accent4Field = new CT_Color();
+            //this.accent3Field = new CT_Color();
+            //this.accent2Field = new CT_Color();
+            //this.accent1Field = new CT_Color();
+            //this.lt2Field = new CT_Color();
+            //this.dk2Field = new CT_Color();
+            //this.lt1Field = new CT_Color();
+            //this.dk1Field = new CT_Color();
+        }
+        public static CT_ColorScheme Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ColorScheme ctObj = new CT_ColorScheme();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "dk1")
+                    ctObj.dk1 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lt1")
+                    ctObj.lt1 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dk2")
+                    ctObj.dk2 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lt2")
+                    ctObj.lt2 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "accent1")
+                    ctObj.accent1 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "accent2")
+                    ctObj.accent2 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "accent3")
+                    ctObj.accent3 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "accent4")
+                    ctObj.accent4 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "accent5")
+                    ctObj.accent5 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "accent6")
+                    ctObj.accent6 = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hlink")
+                    ctObj.hlink = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "folHlink")
+                    ctObj.folHlink = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            if (this.dk1 != null)
+                this.dk1.Write(sw, "dk1");
+            if (this.lt1 != null)
+                this.lt1.Write(sw, "lt1");
+            if (this.dk2 != null)
+                this.dk2.Write(sw, "dk2");
+            if (this.lt2 != null)
+                this.lt2.Write(sw, "lt2");
+            if (this.accent1 != null)
+                this.accent1.Write(sw, "accent1");
+            if (this.accent2 != null)
+                this.accent2.Write(sw, "accent2");
+            if (this.accent3 != null)
+                this.accent3.Write(sw, "accent3");
+            if (this.accent4 != null)
+                this.accent4.Write(sw, "accent4");
+            if (this.accent5 != null)
+                this.accent5.Write(sw, "accent5");
+            if (this.accent6 != null)
+                this.accent6.Write(sw, "accent6");
+            if (this.hlink != null)
+                this.hlink.Write(sw, "hlink");
+            if (this.folHlink != null)
+                this.folHlink.Write(sw, "folHlink");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -271,6 +347,51 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_PresetColor prstClrField;
 
         private string nameField;
+        public static CT_CustomColor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomColor ctObj = new CT_CustomColor();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "scrgbClr")
+                    ctObj.scrgbClr = CT_ScRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "srgbClr")
+                    ctObj.srgbClr = CT_SRgbColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hslClr")
+                    ctObj.hslClr = CT_HslColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sysClr")
+                    ctObj.sysClr = CT_SystemColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "schemeClr")
+                    ctObj.schemeClr = CT_SchemeColor.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "prstClr")
+                    ctObj.prstClr = CT_PresetColor.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            if (this.scrgbClr != null)
+                this.scrgbClr.Write(sw, "scrgbClr");
+            if (this.srgbClr != null)
+                this.srgbClr.Write(sw, "srgbClr");
+            if (this.hslClr != null)
+                this.hslClr.Write(sw, "hslClr");
+            if (this.sysClr != null)
+                this.sysClr.Write(sw, "sysClr");
+            if (this.schemeClr != null)
+                this.schemeClr.Write(sw, "schemeClr");
+            if (this.prstClr != null)
+                this.prstClr.Write(sw, "prstClr");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_CustomColor()
         {
@@ -387,6 +508,26 @@ namespace NPOI.OpenXmlFormats.Dml
         private string scriptField;
 
         private string typefaceField;
+        public static CT_SupplementalFont Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SupplementalFont ctObj = new CT_SupplementalFont();
+            ctObj.script = XmlHelper.ReadString(node.Attributes["script"]);
+            ctObj.typeface = XmlHelper.ReadString(node.Attributes["typeface"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "script", this.script);
+            XmlHelper.WriteAttribute(sw, "typeface", this.typeface);
+            sw.Write(">");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         [XmlAttribute]
         public string script
@@ -461,14 +602,59 @@ namespace NPOI.OpenXmlFormats.Dml
         private List<CT_SupplementalFont> fontField;
 
         private CT_OfficeArtExtensionList extLstField;
+        public static CT_FontCollection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FontCollection ctObj = new CT_FontCollection();
+            ctObj.font = new List<CT_SupplementalFont>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "latin")
+                    ctObj.latin = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "ea")
+                    ctObj.ea = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cs")
+                    ctObj.cs = CT_TextFont.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "font")
+                    ctObj.font.Add(CT_SupplementalFont.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.latin != null)
+                this.latin.Write(sw, "latin");
+            if (this.ea != null)
+                this.ea.Write(sw, "ea");
+            if (this.cs != null)
+                this.cs.Write(sw, "cs");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.font != null)
+            {
+                foreach (CT_SupplementalFont x in this.font)
+                {
+                    x.Write(sw, "font");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_FontCollection()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.fontField = new List<CT_SupplementalFont>();
-            this.csField = new CT_TextFont();
-            this.eaField = new CT_TextFont();
-            this.latinField = new CT_TextFont();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.fontField = new List<CT_SupplementalFont>();
+            //this.csField = new CT_TextFont();
+            //this.eaField = new CT_TextFont();
+            //this.latinField = new CT_TextFont();
         }
 
         [XmlElement(Order = 0)]
@@ -553,13 +739,48 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_Scene3D scene3dField;
 
         private CT_Shape3D sp3dField;
+        public static CT_EffectStyleItem Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_EffectStyleItem ctObj = new CT_EffectStyleItem();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "effectLst")
+                    ctObj.effectLst = CT_EffectList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "effectDag")
+                    ctObj.effectDag = CT_EffectContainer.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "scene3d")
+                    ctObj.scene3d = CT_Scene3D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sp3d")
+                    ctObj.sp3d = CT_Shape3D.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.effectLst != null)
+                this.effectLst.Write(sw, "effectLst");
+            if (this.effectDag != null)
+                this.effectDag.Write(sw, "effectDag");
+            if (this.scene3d != null)
+                this.scene3d.Write(sw, "scene3d");
+            if (this.sp3d != null)
+                this.sp3d.Write(sw, "sp3d");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_EffectStyleItem()
         {
-            this.sp3dField = new CT_Shape3D();
-            this.scene3dField = new CT_Scene3D();
-            this.effectDagField = new CT_EffectContainer();
-            this.effectLstField = new CT_EffectList();
+            //this.sp3dField = new CT_Shape3D();
+            //this.scene3dField = new CT_Scene3D();
+            //this.effectDagField = new CT_EffectContainer();
+            //this.effectLstField = new CT_EffectList();
         }
 
         [XmlElement(Order = 0)]
@@ -630,12 +851,45 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_OfficeArtExtensionList extLstField;
 
         private string nameField;
+        public static CT_FontScheme Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FontScheme ctObj = new CT_FontScheme();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "majorFont")
+                    ctObj.majorFont = CT_FontCollection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "minorFont")
+                    ctObj.minorFont = CT_FontCollection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            if (this.majorFont != null)
+                this.majorFont.Write(sw, "majorFont");
+            if (this.minorFont != null)
+                this.minorFont.Write(sw, "minorFont");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_FontScheme()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.minorFontField = new CT_FontCollection();
-            this.majorFontField = new CT_FontCollection();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.minorFontField = new CT_FontCollection();
+            //this.majorFontField = new CT_FontCollection();
         }
 
         [XmlElement(Order = 0)]
@@ -698,29 +952,163 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_FillStyleList
     {
-
-        private List<object> itemsField;
-
+        
         public CT_FillStyleList()
         {
-            this.itemsField = new List<object>();
+        }
+        public static CT_FillStyleList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FillStyleList ctObj = new CT_FillStyleList();
+            ctObj.blipFill = new List<CT_BlipFillProperties>();
+            ctObj.gradFill = new List<CT_GradientFillProperties>();
+            ctObj.grpFill = new List<CT_GroupFillProperties>();
+            ctObj.noFill = new List<CT_NoFillProperties>();
+            ctObj.pattFill = new List<CT_PatternFillProperties>();
+            ctObj.solidFill = new List<CT_SolidColorFillProperties>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "blipFill")
+                    ctObj.blipFill.Add(CT_BlipFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "gradFill")
+                    ctObj.gradFill.Add(CT_GradientFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "grpFill")
+                    ctObj.grpFill.Add(new CT_GroupFillProperties());
+                else if (childNode.LocalName == "noFill")
+                    ctObj.noFill.Add(new CT_NoFillProperties());
+                else if (childNode.LocalName == "pattFill")
+                    ctObj.pattFill.Add(CT_PatternFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "solidFill")
+                    ctObj.solidFill.Add(CT_SolidColorFillProperties.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
         }
 
-        [XmlElement("blipFill", typeof(CT_BlipFillProperties), Order = 0)]
-        [XmlElement("gradFill", typeof(CT_GradientFillProperties), Order = 0)]
-        [XmlElement("grpFill", typeof(CT_GroupFillProperties), Order = 0)]
-        [XmlElement("noFill", typeof(CT_NoFillProperties), Order = 0)]
-        [XmlElement("pattFill", typeof(CT_PatternFillProperties), Order = 0)]
-        [XmlElement("solidFill", typeof(CT_SolidColorFillProperties), Order = 0)]
-        public List<object> Items
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.blipFill != null)
+            {
+                foreach (CT_BlipFillProperties x in this.blipFill)
+                {
+                    x.Write(sw, "blipFill");
+                }
+            }
+            if (this.gradFill != null)
+            {
+                foreach (CT_GradientFillProperties x in this.gradFill)
+                {
+                    x.Write(sw, "gradFill");
+                }
+            }
+            if (this.grpFill != null)
+            {
+                foreach (CT_GroupFillProperties x in this.grpFill)
+                {
+                    sw.Write("<grpFill/>");
+                }
+            }
+            if (this.noFill != null)
+            {
+                foreach (CT_NoFillProperties x in this.noFill)
+                {
+                    sw.Write("<noFill/>");
+                }
+            }
+            if (this.pattFill != null)
+            {
+                foreach (CT_PatternFillProperties x in this.pattFill)
+                {
+                    x.Write(sw, "pattFill");
+                }
+            }
+            if (this.solidFill != null)
+            {
+                foreach (CT_SolidColorFillProperties x in this.solidFill)
+                {
+                    x.Write(sw, "solidFill");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+
+
+
+        List<CT_BlipFillProperties> blipFillField;
+        public List<CT_BlipFillProperties> blipFill
         {
             get
             {
-                return this.itemsField;
+                return blipFillField;
             }
             set
             {
-                this.itemsField = value;
+                blipFillField = value;
+            }
+        }
+        List<CT_GradientFillProperties> gradFillField;
+        public List<CT_GradientFillProperties> gradFill
+        {
+            get
+            {
+                return gradFillField;
+            }
+            set
+            {
+                gradFillField = value;
+            }
+        }
+        List<CT_GroupFillProperties> grpFillField;
+        public List<CT_GroupFillProperties> grpFill
+        {
+            get
+            {
+                return grpFillField;
+            }
+            set
+            {
+                grpFillField = value;
+            }
+        }
+        List<CT_NoFillProperties> noFillField;
+        public List<CT_NoFillProperties> noFill
+        {
+            get
+            {
+                return noFillField;
+            }
+            set
+            {
+                noFillField = value;
+            }
+        }
+        List<CT_PatternFillProperties> pattFillField;
+        public List<CT_PatternFillProperties> pattFill
+        {
+            get
+            {
+                return pattFillField;
+            }
+            set
+            {
+                pattFillField = value;
+            }
+        }
+        List<CT_SolidColorFillProperties> solidFillField;
+        public List<CT_SolidColorFillProperties> solidFill
+        {
+            get
+            {
+                return solidFillField;
+            }
+            set
+            {
+                solidFillField = value;
             }
         }
     }
@@ -790,29 +1178,161 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_BackgroundFillStyleList
     {
+        public static CT_BackgroundFillStyleList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_BackgroundFillStyleList ctObj = new CT_BackgroundFillStyleList();
+            ctObj.blipFill = new List<CT_BlipFillProperties>();
+            ctObj.gradFill = new List<CT_GradientFillProperties>();
+            ctObj.grpFill = new List<CT_GroupFillProperties>();
+            ctObj.noFill = new List<CT_NoFillProperties>();
+            ctObj.pattFill = new List<CT_PatternFillProperties>();
+            ctObj.solidFill = new List<CT_SolidColorFillProperties>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "blipFill")
+                    ctObj.blipFill.Add(CT_BlipFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "gradFill")
+                    ctObj.gradFill.Add(CT_GradientFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "grpFill")
+                    ctObj.grpFill.Add(new CT_GroupFillProperties());
+                else if (childNode.LocalName == "noFill")
+                    ctObj.noFill.Add(new CT_NoFillProperties());
+                else if (childNode.LocalName == "pattFill")
+                    ctObj.pattFill.Add(CT_PatternFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "solidFill")
+                    ctObj.solidFill.Add(CT_SolidColorFillProperties.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
 
-        private List<object> itemsField;
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.blipFill != null)
+            {
+                foreach (CT_BlipFillProperties x in this.blipFill)
+                {
+                    x.Write(sw, "blipFill");
+                }
+            }
+            if (this.gradFill != null)
+            {
+                foreach (CT_GradientFillProperties x in this.gradFill)
+                {
+                    x.Write(sw, "gradFill");
+                }
+            }
+            if (this.grpFill != null)
+            {
+                foreach (CT_GroupFillProperties x in this.grpFill)
+                {
+                    sw.Write("<grpFill/>");
+                }
+            }
+            if (this.noFill != null)
+            {
+                foreach (CT_NoFillProperties x in this.noFill)
+                {
+                    sw.Write("<noFill/>");
+                }
+            }
+            if (this.pattFill != null)
+            {
+                foreach (CT_PatternFillProperties x in this.pattFill)
+                {
+                    x.Write(sw, "pattFill");
+                }
+            }
+            if (this.solidFill != null)
+            {
+                foreach (CT_SolidColorFillProperties x in this.solidFill)
+                {
+                    x.Write(sw, "solidFill");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+
 
         public CT_BackgroundFillStyleList()
         {
-            this.itemsField = new List<object>();
+            //this.itemsField = new List<object>();
         }
-
-        [XmlElement("blipFill", typeof(CT_BlipFillProperties), Order = 0)]
-        [XmlElement("gradFill", typeof(CT_GradientFillProperties), Order = 0)]
-        [XmlElement("grpFill", typeof(CT_GroupFillProperties), Order = 0)]
-        [XmlElement("noFill", typeof(CT_NoFillProperties), Order = 0)]
-        [XmlElement("pattFill", typeof(CT_PatternFillProperties), Order = 0)]
-        [XmlElement("solidFill", typeof(CT_SolidColorFillProperties), Order = 0)]
-        public List<object> Items
+        List<CT_BlipFillProperties> blipFillField;
+        public List<CT_BlipFillProperties> blipFill
+        {
+            get 
+            {
+                return blipFillField;
+            }
+            set {
+                blipFillField = value;
+            }
+        }
+        List<CT_GradientFillProperties> gradFillField;
+        public List<CT_GradientFillProperties> gradFill
         {
             get
             {
-                return this.itemsField;
+                return gradFillField;
             }
             set
             {
-                this.itemsField = value;
+                gradFillField = value;
+            }
+        }
+        List<CT_GroupFillProperties> grpFillField;
+        public List<CT_GroupFillProperties> grpFill
+        {
+            get
+            {
+                return grpFillField;
+            }
+            set
+            {
+                grpFillField = value;
+            }
+        }
+        List<CT_NoFillProperties> noFillField;
+        public List<CT_NoFillProperties> noFill
+        {
+            get
+            {
+                return noFillField;
+            }
+            set
+            {
+                noFillField = value;
+            }
+        }
+        List<CT_PatternFillProperties> pattFillField;
+        public List<CT_PatternFillProperties> pattFill
+        {
+            get
+            {
+                return pattFillField;
+            }
+            set
+            {
+                pattFillField = value;
+            }
+        }
+        List<CT_SolidColorFillProperties> solidFillField;
+        public List<CT_SolidColorFillProperties> solidFill
+        {
+            get
+            {
+                return solidFillField;
+            }
+            set
+            {
+                solidFillField = value;
             }
         }
     }
@@ -834,13 +1354,62 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_BackgroundFillStyleList bgFillStyleLstField;
 
         private string nameField;
+        public static CT_StyleMatrix Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_StyleMatrix ctObj = new CT_StyleMatrix();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.lnStyleLst = new List<CT_LineProperties>();
+            ctObj.effectStyleLst = new List<CT_EffectStyleItem>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "fillStyleLst")
+                    ctObj.fillStyleLst = CT_FillStyleList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bgFillStyleLst")
+                    ctObj.bgFillStyleLst = CT_BackgroundFillStyleList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lnStyleLst")
+                    ctObj.lnStyleLst.Add(CT_LineProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "effectStyleLst")
+                    ctObj.effectStyleLst.Add(CT_EffectStyleItem.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            if (this.fillStyleLst != null)
+                this.fillStyleLst.Write(sw, "fillStyleLst");
+            if (this.bgFillStyleLst != null)
+                this.bgFillStyleLst.Write(sw, "bgFillStyleLst");
+            if (this.lnStyleLst != null)
+            {
+                foreach (CT_LineProperties x in this.lnStyleLst)
+                {
+                    x.Write(sw, "lnStyleLst");
+                }
+            }
+            if (this.effectStyleLst != null)
+            {
+                foreach (CT_EffectStyleItem x in this.effectStyleLst)
+                {
+                    x.Write(sw, "effectStyleLst");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_StyleMatrix()
         {
-            this.bgFillStyleLstField = new CT_BackgroundFillStyleList();
-            this.effectStyleLstField = new List<CT_EffectStyleItem>();
-            this.lnStyleLstField = new List<CT_LineProperties>();
-            this.fillStyleLstField = new CT_FillStyleList();
+            //this.bgFillStyleLstField = new CT_BackgroundFillStyleList();
+            //this.effectStyleLstField = new List<CT_EffectStyleItem>();
+            //this.lnStyleLstField = new List<CT_LineProperties>();
+            //this.fillStyleLstField = new CT_FillStyleList();
             this.nameField = "";
         }
 
@@ -928,6 +1497,41 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_StyleMatrix fmtSchemeField;
 
         private CT_OfficeArtExtensionList extLstField;
+        public static CT_BaseStyles Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_BaseStyles ctObj = new CT_BaseStyles();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "clrScheme")
+                    ctObj.clrScheme = CT_ColorScheme.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fontScheme")
+                    ctObj.fontScheme = CT_FontScheme.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fmtScheme")
+                    ctObj.fmtScheme = CT_StyleMatrix.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.clrScheme != null)
+                this.clrScheme.Write(sw, "clrScheme");
+            if (this.fontScheme != null)
+                this.fontScheme.Write(sw, "fontScheme");
+            if (this.fmtScheme != null)
+                this.fmtScheme.Write(sw, "fmtScheme");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
 
         public CT_BaseStyles()
         {

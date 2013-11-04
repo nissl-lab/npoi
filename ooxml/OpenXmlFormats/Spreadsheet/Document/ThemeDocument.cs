@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Dml;
+using System.Diagnostics;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class ThemeDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_OfficeStyleSheet));
         CT_OfficeStyleSheet stylesheet = null;
         public ThemeDocument()
         {
@@ -16,11 +16,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.stylesheet = stylesheet;
         }
 
-        public static ThemeDocument Parse(Stream stream)
-        {
-            CT_OfficeStyleSheet obj = (CT_OfficeStyleSheet)serializer.Deserialize(stream);
-            return new ThemeDocument(obj) ;
-        }
         public CT_OfficeStyleSheet GetTheme()
         {
             return stylesheet;
@@ -28,7 +23,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, stylesheet);
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                this.stylesheet.Write(sw);
+            }
+        }
+
+        public static ThemeDocument Parse(System.Xml.XmlDocument xmldoc, System.Xml.XmlNamespaceManager namespaceManager)
+        {
+            CT_OfficeStyleSheet obj = CT_OfficeStyleSheet.Parse(xmldoc.DocumentElement, namespaceManager);
+            return new ThemeDocument(obj);
         }
     }
 }

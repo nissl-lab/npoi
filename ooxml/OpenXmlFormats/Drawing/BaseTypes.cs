@@ -2148,11 +2148,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rotField = value;
             }
         }
-        [XmlIgnore]
-        public bool rotSpecified
-        {
-            get { return (null != rotField); }
-        }
 
         [XmlAttribute]
         [DefaultValue(false)]
@@ -2167,12 +2162,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.flipHField = value;
             }
         }
-        [XmlIgnore]
-        public bool flipHSpecified
-        {
-            get { return (null != flipHField); }
-        }
-
         [XmlAttribute]
         [DefaultValue(false)]
         public bool flipV
@@ -2185,11 +2174,6 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.flipVField = value;
             }
-        }
-        [XmlIgnore]
-        public bool flipVSpecified
-        {
-            get { return (null != flipVField); }
         }
     }
 

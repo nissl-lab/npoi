@@ -6,7 +6,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class CommentsDocument
     {
-//        static XmlSerializer serializer = new XmlSerializer(typeof(CT_Comments));
         CT_Comments comments = null;
 
         public CommentsDocument()

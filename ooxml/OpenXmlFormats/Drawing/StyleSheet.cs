@@ -13,6 +13,9 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Xml;
+    using System.IO;
+    using NPOI.OpenXml4Net.Util;
 
 
     [Serializable]
@@ -58,9 +61,69 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private ST_ColorSchemeIndex folHlinkField;
 
+        public static CT_ColorMapping Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ColorMapping ctObj = new CT_ColorMapping();
+            if (node.Attributes["bg1"] != null)
+                ctObj.bg1 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["bg1"].Value);
+            if (node.Attributes["tx1"] != null)
+                ctObj.tx1 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["tx1"].Value);
+            if (node.Attributes["bg2"] != null)
+                ctObj.bg2 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["bg2"].Value);
+            if (node.Attributes["tx2"] != null)
+                ctObj.tx2 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["tx2"].Value);
+            if (node.Attributes["accent1"] != null)
+                ctObj.accent1 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["accent1"].Value);
+            if (node.Attributes["accent2"] != null)
+                ctObj.accent2 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["accent2"].Value);
+            if (node.Attributes["accent3"] != null)
+                ctObj.accent3 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["accent3"].Value);
+            if (node.Attributes["accent4"] != null)
+                ctObj.accent4 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["accent4"].Value);
+            if (node.Attributes["accent5"] != null)
+                ctObj.accent5 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["accent5"].Value);
+            if (node.Attributes["accent6"] != null)
+                ctObj.accent6 = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["accent6"].Value);
+            if (node.Attributes["hlink"] != null)
+                ctObj.hlink = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["hlink"].Value);
+            if (node.Attributes["folHlink"] != null)
+                ctObj.folHlink = (ST_ColorSchemeIndex)Enum.Parse(typeof(ST_ColorSchemeIndex), node.Attributes["folHlink"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "bg1", this.bg1.ToString());
+            XmlHelper.WriteAttribute(sw, "tx1", this.tx1.ToString());
+            XmlHelper.WriteAttribute(sw, "bg2", this.bg2.ToString());
+            XmlHelper.WriteAttribute(sw, "tx2", this.tx2.ToString());
+            XmlHelper.WriteAttribute(sw, "accent1", this.accent1.ToString());
+            XmlHelper.WriteAttribute(sw, "accent2", this.accent2.ToString());
+            XmlHelper.WriteAttribute(sw, "accent3", this.accent3.ToString());
+            XmlHelper.WriteAttribute(sw, "accent4", this.accent4.ToString());
+            XmlHelper.WriteAttribute(sw, "accent5", this.accent5.ToString());
+            XmlHelper.WriteAttribute(sw, "accent6", this.accent6.ToString());
+            XmlHelper.WriteAttribute(sw, "hlink", this.hlink.ToString());
+            XmlHelper.WriteAttribute(sw, "folHlink", this.folHlink.ToString());
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
         public CT_ColorMapping()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
+            //this.extLstField = new CT_OfficeArtExtensionList();
         }
 
         [XmlElement(Order = 0)]
@@ -272,10 +335,38 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_ColorMapping clrMapField;
 
+        public static CT_ColorSchemeAndMapping Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ColorSchemeAndMapping ctObj = new CT_ColorSchemeAndMapping();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "clrScheme")
+                    ctObj.clrScheme = CT_ColorScheme.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "clrMap")
+                    ctObj.clrMap = CT_ColorMapping.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(">");
+            if (this.clrScheme != null)
+                this.clrScheme.Write(sw, "clrScheme");
+            if (this.clrMap != null)
+                this.clrMap.Write(sw, "clrMap");
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
         public CT_ColorSchemeAndMapping()
         {
-            this.clrMapField = new CT_ColorMapping();
-            this.clrSchemeField = new CT_ColorScheme();
+            //this.clrMapField = new CT_ColorMapping();
+            //this.clrSchemeField = new CT_ColorScheme();
         }
 
         [XmlElement(Order = 0)]
@@ -358,12 +449,65 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_OfficeStyleSheet()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.custClrLstField = new List<CT_CustomColor>();
-            this.extraClrSchemeLstField = new List<CT_ColorSchemeAndMapping>();
-            this.objectDefaultsField = new CT_ObjectStyleDefaults();
-            this.themeElementsField = new CT_BaseStyles();
-            this.nameField = "";
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.custClrLstField = new List<CT_CustomColor>();
+            //this.extraClrSchemeLstField = new List<CT_ColorSchemeAndMapping>();
+            //this.objectDefaultsField = new CT_ObjectStyleDefaults();
+            //this.themeElementsField = new CT_BaseStyles();
+            //this.nameField = "";
+        }
+        public static CT_OfficeStyleSheet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_OfficeStyleSheet ctObj = new CT_OfficeStyleSheet();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.extraClrSchemeLst = new List<CT_ColorSchemeAndMapping>();
+            ctObj.custClrLst = new List<CT_CustomColor>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "themeElements")
+                    ctObj.themeElements = CT_BaseStyles.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "objectDefaults")
+                    ctObj.objectDefaults = CT_ObjectStyleDefaults.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extraClrSchemeLst")
+                    ctObj.extraClrSchemeLst.Add(CT_ColorSchemeAndMapping.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "custClrLst")
+                    ctObj.custClrLst.Add(CT_CustomColor.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw)
+        {
+            sw.Write("<a:theme xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"");
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            if (this.themeElements != null)
+                this.themeElements.Write(sw, "themeElements");
+            if (this.objectDefaults != null)
+                this.objectDefaults.Write(sw, "objectDefaults");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.extraClrSchemeLst != null)
+            {
+                foreach (CT_ColorSchemeAndMapping x in this.extraClrSchemeLst)
+                {
+                    x.Write(sw, "extraClrSchemeLst");
+                }
+            }
+            if (this.custClrLst != null)
+            {
+                foreach (CT_CustomColor x in this.custClrLst)
+                {
+                    x.Write(sw, "custClrLst");
+                }
+            }
+            sw.Write(string.Format("</a:theme>"));
         }
 
         [XmlElement]

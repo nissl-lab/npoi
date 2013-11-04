@@ -5556,7 +5556,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.copiesField = value;
             }
         }
-        // TODO is the following correct?
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
@@ -9220,7 +9219,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_ChartsheetPr()
         {
-            this.tabColorField = new CT_Color();
+            //this.tabColorField = new CT_Color();
             this.publishedField = true;
         }
 
