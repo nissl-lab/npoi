@@ -19,17 +19,17 @@
 namespace TestCases.HPSF.Basic
 {
     using System;
+    using System.Collections;
     using System.IO;
     using System.Text;
-    using System.Collections;
-    using NUnit.Framework;
+
     using NPOI.HPSF;
-    using NPOI.Util;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.POIFS.EventFileSystem;
     using NPOI.HPSF.Wellknown;
+    using NPOI.POIFS.EventFileSystem;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.Util;
 
-
+    using NUnit.Framework;
 
     /**
      * Tests HPSF's writing functionality.
@@ -752,56 +752,50 @@ namespace TestCases.HPSF.Basic
             out1.Close();
         }
 
-
-
         /**
          * Tests writing and Reading back a proper dictionary.
          */
         [Test]
         public void TestDictionary()
         {
-            FileStream copy = File.Create( @"\Test-HPSF.ole2");
-            //copy.deleteOnExit();
+            using (FileStream copy = File.Create(@".\Test-HPSF.ole2"))
+            {
+                /* Write: */
+                POIFSFileSystem poiFs = new POIFSFileSystem();
+                MutablePropertySet ps1 = new MutablePropertySet();
+                MutableSection s = (MutableSection)ps1.Sections[0];
+                Hashtable m = new Hashtable(3, 1.0f);
+                m[1] = "String 1";
+                m[2] = "String 2";
+                m[3] = "String 3";
+                s.Dictionary = (m);
+                s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+                int codepage = (int)Constants.CP_UNICODE;
+                s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
+                poiFs.CreateDocument(ps1.GetStream(), "Test");
+                poiFs.WriteFileSystem(copy);
 
-            /* Write: */
-            FileStream out1 = copy;
-            POIFSFileSystem poiFs = new POIFSFileSystem();
-            MutablePropertySet ps1 = new MutablePropertySet();
-            MutableSection s = (MutableSection)ps1.Sections[0];
-            Hashtable m = new Hashtable(3, 1.0f);
-            m[1] = "String 1";
-            m[2] = "String 2";
-            m[3] = "String 3";
-            s.Dictionary = (m);
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
-            int codepage = (int)Constants.CP_UNICODE;
-            s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                          codepage);
-            poiFs.CreateDocument(ps1.GetStream(), "Test");
-            poiFs.WriteFileSystem(out1);
+                /* Read back: */
+                POIFile[] psf = Util.ReadPropertySets(copy);
+                Assert.AreEqual(1, psf.Length);
+                byte[] bytes = psf[0].GetBytes();
+                Stream in1 = new ByteArrayInputStream(bytes);
+                PropertySet ps2 = PropertySetFactory.Create(in1);
 
-            /* Read back: */
-            POIFile[] psf = Util.ReadPropertySets(copy);
-            Assert.AreEqual(1, psf.Length);
-            byte[] bytes = psf[0].GetBytes();
-            Stream in1 = new ByteArrayInputStream(bytes);
-            PropertySet ps2 = PropertySetFactory.Create(in1);
+                /* Check if the result is a DocumentSummaryInformation stream, as
+                 * specified. */
+                Assert.IsTrue(ps2.IsDocumentSummaryInformation);
 
-            /* Check if the result is a DocumentSummaryInformation stream, as
-             * specified. */
-            Assert.IsTrue(ps2.IsDocumentSummaryInformation);
+                /* Compare the property Set stream with the corresponding one
+                 * from the origin file and check whether they are equal. */
+                Assert.IsTrue(ps1.Equals(ps2));
+            }
 
-            /* Compare the property Set stream with the corresponding one
-             * from the origin file and check whether they are equal. */
-            Assert.IsTrue(ps1.Equals(ps2));
-
-            out1.Close();
-            copy.Close();
-            File.Delete( @"\Test-HPSF.ole2");
-
+            if (File.Exists(@".\Test-HPSF.ole2"))
+            {
+                File.Delete(@".\Test-HPSF.ole2");
+            }
         }
-
-
 
         /**
          * Tests writing and Reading back a proper dictionary with an invalid
@@ -812,34 +806,34 @@ namespace TestCases.HPSF.Basic
         {
             try
             {
-                FileStream copy = File.Create( @"\Test-HPSF.ole2");
-                //copy.deleteOnExit();
-
-                /* Write: */
-                FileStream out1 = copy;
-                POIFSFileSystem poiFs = new POIFSFileSystem();
-                MutablePropertySet ps1 = new MutablePropertySet();
-                MutableSection s = (MutableSection)ps1.Sections[0];
-                Hashtable m = new Hashtable(3, 1.0f);
-                m[1] = "String 1";
-                m[2] = "String 2";
-                m[3] = "String 3";
-                s.Dictionary = (m);
-                s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
-                int codepage = 12345;
-                s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                              codepage);
-                poiFs.CreateDocument(ps1.GetStream(), "Test");
-                poiFs.WriteFileSystem(out1);
-                out1.Close();
-                Assert.Fail("This Testcase did not detect the invalid codepage value.");
+                using (FileStream copy = File.Create(@".\Test-HPSF.ole2"))
+                {
+                    /* Write: */
+                    POIFSFileSystem poiFs = new POIFSFileSystem();
+                    MutablePropertySet ps1 = new MutablePropertySet();
+                    MutableSection s = (MutableSection)ps1.Sections[0];
+                    Hashtable m = new Hashtable(3, 1.0f);
+                    m[1] = "String 1";
+                    m[2] = "String 2";
+                    m[3] = "String 3";
+                    s.Dictionary = m;
+                    s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);                    
+                    s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
+                    poiFs.CreateDocument(ps1.GetStream(), "Test");
+                    poiFs.WriteFileSystem(copy);
+                    Assert.Fail("This Testcase did not detect the invalid codepage value.");
+                }
             }
             catch (IllegalPropertySetDataException)
             {
                 //Assert.IsTrue(true);
             }
+            
+            if (File.Exists(@".\Test-HPSF.ole2"))
+            {
+                File.Delete(@".\Test-HPSF.ole2");
+            }
         }
-
 
 
         /**
