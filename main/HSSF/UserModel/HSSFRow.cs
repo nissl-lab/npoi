@@ -288,12 +288,10 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public void RemoveAllCells()
         {
-            int initialLen = cells.Count;
-            for (int i = 0; i < initialLen; i++)
+            foreach (ICell cell in cells.Values)
             {
-                RemoveCell(cells[i], true);
+                RemoveCell(cell, true);
             }
-            //cells = new HSSFCell[INITIAL_CAPACITY];
         }
 
         /// <summary>
