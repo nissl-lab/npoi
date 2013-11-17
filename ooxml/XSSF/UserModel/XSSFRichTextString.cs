@@ -99,7 +99,6 @@ namespace NPOI.XSSF.UserModel
                         {
                             int idx = int.Parse(fontName.Substring(1));
                             XSSFFont font = styles.GetFontAt(idx);
-                            //pr.removeRFont(0);
                             pr.rFont = null;
                             SetRunAttributes(font.GetCTFont(), pr);
                         }

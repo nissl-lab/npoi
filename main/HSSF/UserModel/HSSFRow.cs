@@ -288,7 +288,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public void RemoveAllCells()
         {
-            foreach (ICell cell in cells.Values)
+            ICell[] cellsToRemove = new ICell[cells.Values.Count];
+            cells.Values.CopyTo(cellsToRemove, 0);
+            foreach (ICell cell in cellsToRemove)
             {
                 RemoveCell(cell, true);
             }

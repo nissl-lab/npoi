@@ -367,7 +367,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellValue(IRichTextString str)
         {
-            if (str == null || str.String == null)
+            if (str == null || string.IsNullOrEmpty(str.String))
             {
                 SetCellType(CellType.Blank);
                 return;
