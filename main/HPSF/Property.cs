@@ -238,12 +238,11 @@ namespace NPOI.HPSF
                                  * of bytes is twice the number of the characters. */
                                 int nrBytes = (int)(sLength * 2);
                                 byte[] h = new byte[nrBytes];
-                                for (int i2 = 0; i2 < nrBytes; i2 += 2)
+                                for (int i2 = 0; i2 < nrBytes; i2++)
                                 {
-                                    h[i2] = src[o + i2 + 1];
-                                    h[i2 + 1] = src[o + i2];
+                                    h[i2] = src[o + i2];
                                 }
-                                b.Append(Encoding.GetEncoding(codepage).GetString(h, 0, nrBytes));
+                                b.Append(Encoding.GetEncoding(codepage).GetString(h, 0, nrBytes-2));
                                 break;
                             }
                         default:

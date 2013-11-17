@@ -486,11 +486,10 @@ namespace NPOI.HPSF
                     length += TypeWriter.WriteUIntToStream(out1, (uint)sLength);
                     byte[] ca =
                         Encoding.GetEncoding(codepage).GetBytes(value);
-                    for (int j = 0; j < ca.Length; j += 2)   //Tony qu fixed the bug
+                    for (int j =0; j < ca.Length; j++)   
                     {
-                        out1.WriteByte(ca[j + 1]);
                         out1.WriteByte(ca[j]);
-                        length += 2;
+                        length ++;
                     }
                     sLength -= value.Length;
                     while (sLength > 0)
@@ -618,12 +617,12 @@ namespace NPOI.HPSF
                     /* If the codepage property (ID 1) for the strings (keys and
                      * values) used in the dictionary is not yet defined, Set it To
                      * Unicode. */
+
                     if (GetProperty(PropertyIDMap.PID_CODEPAGE) == null)
                     {
                         SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
                                     (int)Constants.CP_UNICODE);
                     }
-                    //int codepage = (int) GetProperty(PropertyIDMap.PID_CODEPAGE);
 
                 }
                 else
