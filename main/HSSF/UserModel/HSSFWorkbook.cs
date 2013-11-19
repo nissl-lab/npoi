@@ -855,6 +855,7 @@ namespace NPOI.HSSF.UserModel
                 if (sheetname.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     retval = (HSSFSheet)_sheets[k];
+                    break;
                 }
             }
             return retval;
