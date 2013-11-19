@@ -17,18 +17,17 @@
 
 namespace TestCases.SS.Util
 {
-
     using System;
-    using System.Text;
-    using System.Collections.Generic;
+
+    using NPOI.SS.Util;
 
     using NUnit.Framework;
-    using NPOI.SS.Util;
+
     /**
- * Tests for {@link NumberToTextConverter}
- * 
- * @author Josh Micich
- */
+     * Tests for {@link NumberToTextConverter}
+     * 
+     * @author Josh Micich
+     */
     [TestFixture]
     public class TestNumberToTextConverter
     {
@@ -63,7 +62,9 @@ namespace TestCases.SS.Util
                         ConfirmNaN(example.RawDoubleBits, example.ExcelRendering);
                         continue;
                     }
+
                     String actual = NumberToTextConverter.ToText(example.DoubleValue);
+
                     if (!example.ExcelRendering.Equals(actual))
                     {
                         failureCount++;
@@ -71,20 +72,18 @@ namespace TestCases.SS.Util
                                 + FormatExample(example) + " "
                                 + " bad-result='" + actual + "' "
                                 + "Excel String=" + example.ExcelRendering;
-                        //System.err.println(msg);
-                        System.Console.WriteLine(msg);
-                        continue;
+                        Console.WriteLine(msg);
                     }
                 }
                 catch (Exception e)
                 {
                     failureCount++;
-                    System.Console.WriteLine("Error in excel rendering for examples[" + i + "] "
+                    Console.WriteLine("Error in excel rendering for examples[" + i + "] "
                             + FormatExample(example) + "':" + e.Message);
-                    //e.printStackTrace();
-                    System.Console.Write(e.StackTrace);
+                    Console.Write(e.StackTrace);
                 }
             }
+
             if (failureCount > 0)
             {
                 throw new Exception(failureCount
@@ -134,6 +133,7 @@ namespace TestCases.SS.Util
 
             Assert.AreEqual(excelRep, strExcel);
         }
+
         [Test]
         public void TestSimpleRendering_bug56156()
         {

@@ -17,10 +17,10 @@
 
 namespace TestCases.SS.Formula.Functions
 {
-
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
+
+    using NUnit.Framework;
 
     /**
      * Test cases for SUMPRODUCT()
@@ -39,6 +39,7 @@ namespace TestCases.SS.Formula.Functions
         {
             return new Sumif().Evaluate(args, rowIx, colIx);
         }
+
         private static void ConfirmDouble(double expected, ValueEval actualEval)
         {
             if (!(actualEval is NumericValueEval))
@@ -48,9 +49,11 @@ namespace TestCases.SS.Formula.Functions
             NumericValueEval nve = (NumericValueEval)actualEval;
             Assert.AreEqual(expected, nve.NumberValue, 0);
         }
+
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ValueEval[] arg0values = new ValueEval[] { _30, _30, _40, _40, _50, _50 };
             ValueEval[] arg2values = new ValueEval[] { _30, _40, _50, _60, _60, _60 };
 
@@ -70,8 +73,8 @@ namespace TestCases.SS.Formula.Functions
             Confirm(140.0, arg0, new StringEval("<=40.0"));
             Confirm(160.0, arg0, new StringEval("<>40.0"));
             Confirm(80.0, arg0, new StringEval("=40.0"));
-
         }
+
         private static void Confirm(double expectedResult, params ValueEval[] args)
         {
             ConfirmDouble(expectedResult, invokeSumif(-1, -1, args));
@@ -114,5 +117,4 @@ namespace TestCases.SS.Formula.Functions
             ConfirmDouble(60, ve);
         }
     }
-
 }

@@ -15,20 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
-using System.Globalization;
-
 namespace TestCases.SS.Format
 {
     using System;
-
-    using NPOI.SS.Format;
-    using NUnit.Framework;
-    using System.Windows.Forms;
+    using System.Globalization;
     using System.Text;
+    using System.Threading;
+    using System.Windows.Forms;
+
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.Format;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System.Threading;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class TestCellFormat
@@ -43,6 +43,7 @@ namespace TestCases.SS.Format
             }
             _255_POUND_SIGNS = sb.ToString();
         }
+
         [Test]
         public void TestSome()
         {
@@ -55,55 +56,70 @@ namespace TestCases.SS.Format
         [Test]
         public void TestPositiveFormatHasOnePart()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(12.345);
             Assert.AreEqual("12.35", result.Text);
         }
+
         [Test]
         public void TestNegativeFormatHasOnePart()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(-12.345);
             Assert.AreEqual("-12.35", result.Text);
         }
+
         [Test]
         public void TestZeroFormatHasOnePart()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(0.0);
             Assert.AreEqual("0.00", result.Text);
         }
+
         [Test]
         public void TestPositiveFormatHasPosAndNegParts()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(12.345);
             Assert.AreEqual("12.35", result.Text);
         }
+
         [Test]
         public void TestNegativeFormatHasPosAndNegParts()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(-12.345);
             Assert.AreEqual("-12.35", result.Text);
         }
+
         [Test]
         public void TestNegativeFormatHasPosAndNegParts2()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;(0.00)");
             CellFormatResult result = fmt.Apply(-12.345);
             Assert.AreEqual("(12.35)", result.Text);
         }
+
         [Test]
         public void TestZeroFormatHasPosAndNegParts()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(0.0);
             Assert.AreEqual("0.00", result.Text);
         }
+
         [Test]
         public void TestFormatWithThreeSections()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00;-");
 
             Assert.AreEqual("12.35", fmt.Apply(12.345).Text);
@@ -111,9 +127,11 @@ namespace TestCases.SS.Format
             Assert.AreEqual("-", fmt.Apply(0.0).Text);
             Assert.AreEqual("abc", fmt.Apply("abc").Text);
         }
+
         [Test]
         public void TestFormatWithFourSections()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00;-; @ ");
 
             Assert.AreEqual("12.35", fmt.Apply(12.345).Text);
@@ -121,9 +139,11 @@ namespace TestCases.SS.Format
             Assert.AreEqual("-", fmt.Apply(0.0).Text);
             Assert.AreEqual(" abc ", fmt.Apply("abc").Text);
         }
+
         [Test]
         public void TestApplyCellForGeneralFormat()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -139,7 +159,7 @@ namespace TestCases.SS.Format
 
             // case Cell.CELL_TYPE_BLANK
             CellFormatResult result0 = cf.Apply(cell0);
-            Assert.AreEqual("", result0.Text);
+            Assert.AreEqual(string.Empty, result0.Text);
 
             // case Cell.CELL_TYPE_BOOLEAN
             cell1.SetCellValue(true);
@@ -159,11 +179,12 @@ namespace TestCases.SS.Format
             cell4.SetCellValue("abc");
             CellFormatResult result4 = cf.Apply(cell4);
             Assert.AreEqual("abc", result4.Text);
-
         }
+
         [Test]
         public void TestApplyCellForAtFormat()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -179,7 +200,7 @@ namespace TestCases.SS.Format
 
             // case Cell.CELL_TYPE_BLANK
             CellFormatResult result0 = cf.Apply(cell0);
-            Assert.AreEqual("", result0.Text);
+            Assert.AreEqual(string.Empty, result0.Text);
 
             // case Cell.CELL_TYPE_BOOLEAN
             cell1.SetCellValue(true);
@@ -199,12 +220,13 @@ namespace TestCases.SS.Format
             cell4.SetCellValue("abc");
             CellFormatResult result4 = cf.Apply(cell4);
             Assert.AreEqual("abc", result4.Text);
-
         }
+
         [Test]
         public void TestApplyCellForDateFormat()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -221,12 +243,11 @@ namespace TestCases.SS.Format
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
             Assert.AreEqual(_255_POUND_SIGNS, result1.Text);
-
         }
+
         [Test]
         public void TestApplyCellForTimeFormat()
         {
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -238,12 +259,13 @@ namespace TestCases.SS.Format
             cell.SetCellValue(DateUtil.ConvertTime("03:04:05"));
             CellFormatResult result = cf.Apply(cell);
             Assert.AreEqual("03:04", result.Text);
-
         }
+
         [Test]
         public void TestApplyCellForDateFormatAndNegativeFormat()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -260,11 +282,12 @@ namespace TestCases.SS.Format
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
             Assert.AreEqual("(1)", result1.Text);
-
         }
+
         [Test]
         public void TestApplyLabelCellForGeneralFormat()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -286,8 +309,8 @@ namespace TestCases.SS.Format
 
             // case Cell.CELL_TYPE_BLANK
             CellFormatResult result0 = cf.Apply(label0, cell0);
-            Assert.AreEqual("", result0.Text);
-            Assert.AreEqual("", label0.Text);
+            Assert.AreEqual(string.Empty, result0.Text);
+            Assert.AreEqual(string.Empty, label0.Text);
 
             // case Cell.CELL_TYPE_BOOLEAN
             cell1.SetCellValue(true);
@@ -311,11 +334,12 @@ namespace TestCases.SS.Format
             CellFormatResult result4 = cf.Apply(label4, cell4);
             Assert.AreEqual("abc", result4.Text);
             Assert.AreEqual("abc", label4.Text);
-
         }
+
         [Test]
         public void TestApplyLabelCellForAtFormat()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -337,8 +361,8 @@ namespace TestCases.SS.Format
 
             // case Cell.CELL_TYPE_BLANK
             CellFormatResult result0 = cf.Apply(label0, cell0);
-            Assert.AreEqual("", result0.Text);
-            Assert.AreEqual("", label0.Text);
+            Assert.AreEqual(string.Empty, result0.Text);
+            Assert.AreEqual(string.Empty, label0.Text);
 
             // case Cell.CELL_TYPE_BOOLEAN
             cell1.SetCellValue(true);
@@ -362,12 +386,13 @@ namespace TestCases.SS.Format
             CellFormatResult result4 = cf.Apply(label4, cell4);
             Assert.AreEqual("abc", result4.Text);
             Assert.AreEqual("abc", label4.Text);
-
         }
+
         [Test]
         public void TestApplyLabelCellForDateFormat()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -389,12 +414,11 @@ namespace TestCases.SS.Format
             CellFormatResult result1 = cf.Apply(label1, cell1);
             Assert.AreEqual(_255_POUND_SIGNS, result1.Text);
             Assert.AreEqual(_255_POUND_SIGNS, label1.Text);
-
         }
+
         [Test]
         public void TestApplyLabelCellForTimeFormat()
         {
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -409,12 +433,13 @@ namespace TestCases.SS.Format
             CellFormatResult result = cf.Apply(label, cell);
             Assert.AreEqual("03:04", result.Text);
             Assert.AreEqual("03:04", label.Text);
-
         }
+
         [Test]
         public void TestApplyLabelCellForDateFormatAndNegativeFormat()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -436,11 +461,12 @@ namespace TestCases.SS.Format
             CellFormatResult result1 = cf.Apply(label1, cell1);
             Assert.AreEqual("(1)", result1.Text);
             Assert.AreEqual("(1)", label1.Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasOnePartAndPartHasCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -464,11 +490,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasTwoPartsFirstHasCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -498,11 +525,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("TRUE");
             Assert.AreEqual("TRUE", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasTwoPartsBothHaveCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -529,11 +557,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasThreePartsFirstHasCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -562,11 +591,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasThreePartsFirstTwoHaveCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -590,12 +620,13 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasThreePartsFirstIsDateFirstTwoHaveCondition()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -618,11 +649,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasTwoPartsFirstHasConditionSecondIsGeneral()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -646,11 +678,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasThreePartsFirstTwoHaveConditionThirdIsGeneral()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -674,11 +707,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasFourPartsFirstHasCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -707,11 +741,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("~~abc~~", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasFourPartsSecondHasCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -741,11 +776,12 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue(true);
             Assert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
-
         }
+
         [Test]
         public void TestApplyFormatHasFourPartsFirstTwoHaveCondition()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
@@ -780,6 +816,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyObjectNumber()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             CellFormat cf1 = CellFormat.GetInstance("0.000");
 
@@ -800,7 +837,6 @@ namespace TestCases.SS.Format
 
             Assert.AreEqual("1.235", cf4.Apply(1.2345).Text);
             Assert.AreEqual(_255_POUND_SIGNS, cf4.Apply(-1.2345).Text);
-
         }
 
         /*
@@ -813,13 +849,13 @@ namespace TestCases.SS.Format
             CellFormat cf1 = CellFormat.GetInstance("m/d/yyyy");
             DateTime date1 = new SimpleDateFormat("M/d/y").Parse("01/11/2012");
             Assert.AreEqual("1/11/2012", cf1.Apply(date1).Text);
-
         }
 
         [Test]
         public void TestApplyCellForDateFormatWithConditions()
         {
-            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -836,7 +872,6 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue(-1);
             Assert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
-
         }
 
         /*
@@ -845,11 +880,9 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyObjectString()
         {
-
             CellFormat cf = CellFormat.GetInstance("0.00");
 
             Assert.AreEqual("abc", cf.Apply("abc").Text);
-
         }
 
         /*
@@ -858,7 +891,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyObjectBoolean()
         {
-
             CellFormat cf1 = CellFormat.GetInstance("0");
             CellFormat cf2 = CellFormat.GetInstance("General");
             CellFormat cf3 = CellFormat.GetInstance("@");
@@ -866,8 +898,6 @@ namespace TestCases.SS.Format
             Assert.AreEqual("TRUE", cf1.Apply(true).Text);
             Assert.AreEqual("FALSE", cf2.Apply(false).Text);
             Assert.AreEqual("TRUE", cf3.Apply(true).Text);
-
         }
-
     }
 }

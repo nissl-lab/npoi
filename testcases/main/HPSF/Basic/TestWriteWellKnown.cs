@@ -18,19 +18,15 @@
 namespace TestCases.HPSF.Basic
 {
     using System;
-    using System.IO;
-    using System.Text;
     using System.Collections;
-    using NUnit.Framework;
-    using NPOI.HPSF;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.HPSF.Wellknown;
     using System.Globalization;
+    using System.IO;
 
-    //import java.util.Calendar;
-    //import java.util.GregorianCalendar;
+    using NPOI.HPSF;
+    using NPOI.HPSF.Wellknown;
+    using NPOI.POIFS.FileSystem;
 
-
+    using NUnit.Framework;
 
     /**
      * Tests HPSF's high-level writing functionality for the well-known property
@@ -54,8 +50,6 @@ namespace TestCases.HPSF.Basic
         {
             VariantSupport.IsLogUnsupportedTypes = false;
         }
-
-
 
         /**
          * This Test method checks whether DocumentSummary information streams
@@ -136,7 +130,6 @@ namespace TestCases.HPSF.Basic
             }
         }
 
-
         /**
          * This Test method Test the writing of properties in the well-known
          * property Set streams "SummaryInformation" and
@@ -187,9 +180,9 @@ namespace TestCases.HPSF.Basic
         private TestContext testContextInstance;
 
         /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
+        /// Gets or sets the test context which provides
+        /// information about and functionality for the current test run.
+        /// </summary>
         public TestContext TestContext
         {
             get
@@ -201,13 +194,14 @@ namespace TestCases.HPSF.Basic
                 testContextInstance = value;
             }
         }
+
         [Test]
         public void TestWriteWellKnown1()
         {
             POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
+
             using (FileStream doc1 = _samples.GetFile(POI_FS))
             {
-
                 /* Read a Test document <em>doc1</em> into a POI filesystem. */
                 POIFSFileSystem poifs = new POIFSFileSystem(doc1);
                 DirectoryEntry dir = poifs.Root;
@@ -358,9 +352,8 @@ namespace TestCases.HPSF.Basic
 
                 /* Write the POI filesystem to a (temporary) file <em>doc2</em>
                  * and Close the latter. */
-                using (FileStream doc2 = File.Create(@"\POI_HPSF_Test2.tmp"))
+                using (FileStream doc2 = File.Create(@".\POI_HPSF_Test2.tmp"))
                 {
-
                     poifs.WriteFileSystem(doc2);
                     //doc2.Flush();
 
@@ -489,9 +482,8 @@ namespace TestCases.HPSF.Basic
                     /* 
                      * <li>Write the POI filesystem to a (temporary) file <em>doc3</em>
                      * and Close the latter. */
-                    using (FileStream doc3 = File.Create(@"\POI_HPSF_Test3.tmp"))
+                    using (FileStream doc3 = File.Create(@".\POI_HPSF_Test3.tmp"))
                     {
-
                         poifs2.WriteFileSystem(doc3);
                         doc3.Position = 0;
 
@@ -501,7 +493,6 @@ namespace TestCases.HPSF.Basic
                          * be found in the property streams of <em>doc3</em>.
                          */
                         POIFSFileSystem poifs3 = new POIFSFileSystem(doc3);
-
 
                         dir = poifs3.Root;
                         siEntry = (DocumentEntry)dir.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
@@ -565,8 +556,16 @@ namespace TestCases.HPSF.Basic
                     }
                 }
             }
-            File.Delete(@"\POI_HPSF_Test3.tmp");
-            File.Delete(@"\POI_HPSF_Test2.tmp");
+
+            if (File.Exists(@".\POI_HPSF_Test3.tmp"))
+            {
+                File.Delete(@".\POI_HPSF_Test3.tmp");
+            }
+
+            if (File.Exists(@".\POI_HPSF_Test2.tmp"))
+            {
+                File.Delete(@".\POI_HPSF_Test2.tmp");
+            }
         }
 
         private void RunTest(FileStream file)
@@ -614,7 +613,6 @@ namespace TestCases.HPSF.Basic
             }
         }
 
-
         /**
          * Tests the simplified custom properties by Reading them from the
          * available Test files.
@@ -635,8 +633,6 @@ namespace TestCases.HPSF.Basic
                 }
             }
         }
-
-
 
         /**
          * Tests basic custom property features.
@@ -674,8 +670,6 @@ namespace TestCases.HPSF.Basic
             Assert.AreEqual(0, cps.Count);
         }
 
-
-
         /**
          * Tests Reading custom properties from a section including Reading
          * custom properties which are not pure.
@@ -712,7 +706,7 @@ namespace TestCases.HPSF.Basic
             p.Value = VALUE_1;
             s.SetProperty(p);
             dictionary[ID_1] = NAME_1;
-            s.Dictionary = (dictionary);
+            s.Dictionary = dictionary;
             cps = dsi.CustomProperties;
             Assert.AreEqual(1, cps.Count);
             Assert.IsTrue(cps.IsPure);
@@ -720,13 +714,10 @@ namespace TestCases.HPSF.Basic
             /* Add another custom property. */
             s.SetProperty((int)ID_2, Variant.VT_LPWSTR, VALUE_1);
             dictionary[ID_2] = NAME_1;
-            s.Dictionary = (dictionary);
+            s.Dictionary = dictionary;
             cps = dsi.CustomProperties;
             Assert.AreEqual(1, cps.Count);
             Assert.IsFalse(cps.IsPure);
         }
-
-
-
     }
 }

@@ -15,15 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.Formula.Atp;
-using NPOI.SS.Formula.Eval;
-using NUnit.Framework;
-using System;
 namespace TestCases.SS.Formula.Atp
 {
+    using System;
+    using NPOI.SS.Formula.Atp;
+    using NPOI.SS.Formula.Eval;
+    using NUnit.Framework;
+
     /**
- * @author jfaenomoto@gmail.com
- */
+     * @author jfaenomoto@gmail.com
+     */
     [TestFixture]
     public class TestDateParser
     {
@@ -40,6 +41,7 @@ namespace TestCases.SS.Formula.Atp
                 Assert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
             }
         }
+
         [Test]
         public void TestFailWhenLooksLikeDateButItIsnt()
         {
@@ -53,6 +55,7 @@ namespace TestCases.SS.Formula.Atp
                 Assert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
             }
         }
+
         [Test]
         public void TestFailWhenIsInvalidDate()
         {
@@ -66,22 +69,20 @@ namespace TestCases.SS.Formula.Atp
                 Assert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
             }
         }
+
         [Test]
         public void TestShouldParseValidDate()
         {
-            //Calendar aDate = Calendar.getInstance();
-            //aDate.setTime(new Date(84, OCTOBER, 20));
-            DateTime aDate = DateTime.Parse("84-10-20");
-            Assert.AreEqual(aDate, DateParser.ParseDate("1984/10/20"));
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
+            Assert.AreEqual(new DateTime(1984, 10, 20), DateParser.ParseDate("1984/10/20"));
         }
+
         [Test]
         public void TestShouldIgnoreTimestamp()
         {
-            //Calendar aDate = Calendar.getInstance();
-            //aDate.setTime(new Date(84, OCTOBER, 20));
-            DateTime aDate = DateTime.Parse("84-10-20");
-            Assert.AreEqual(aDate, DateParser.ParseDate("1984/10/20 12:34:56"));
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            Assert.AreEqual(new DateTime(1984, 10, 20), DateParser.ParseDate("1984/10/20 12:34:56"));
         }
-
     }
 }

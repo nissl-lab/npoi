@@ -17,14 +17,16 @@
 
 namespace TestCases.SS.Formula
 {
-
     using System;
-    using NUnit.Framework;
+
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
+
+    using NUnit.Framework;
+
     using TestCases.HSSF;
 
     /**
@@ -35,7 +37,6 @@ namespace TestCases.SS.Formula
     [TestFixture]
     public class TestWorkbookEvaluator
     {
-
         private static ValueEval EvaluateFormula(Ptg[] ptgs)
         {
             OperationEvaluationContext ec = new OperationEvaluationContext(null, null, 0, 0, 0, null);
@@ -49,11 +50,7 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestAttrSum()
         {
-
-            Ptg[] ptgs = {
-			new IntPtg(42),
-			AttrPtg.SUM,
-		};
+            Ptg[] ptgs = { new IntPtg(42), AttrPtg.SUM, };
 
             ValueEval result = EvaluateFormula(ptgs);
             Assert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
@@ -75,9 +72,7 @@ namespace TestCases.SS.Formula
         }
         private static void ConfirmRefErr(Ptg ptg)
         {
-            Ptg[] ptgs = {
-			ptg,
-		};
+            Ptg[] ptgs = { ptg };
 
             ValueEval result = EvaluateFormula(ptgs);
             Assert.AreEqual(ErrorEval.REF_INVALID, result);
@@ -90,11 +85,7 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestMemFunc()
         {
-
-            Ptg[] ptgs = {
-			new IntPtg(42),
-			AttrPtg.SUM,
-		};
+            Ptg[] ptgs = { new IntPtg(42), AttrPtg.SUM, };
 
             ValueEval result = EvaluateFormula(ptgs);
             Assert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
@@ -114,20 +105,18 @@ namespace TestCases.SS.Formula
             HSSFFormulaEvaluator[] Evaluators = { EvaluatorA, EvaluatorB, };
             HSSFFormulaEvaluator.SetupEnvironment(bookNames, Evaluators);
 
-            ICell cell;
-
             ISheet aSheet1 = wbA.GetSheetAt(0);
             ISheet bSheet1 = wbB.GetSheetAt(0);
 
             // Simple case - single link from wbA to wbB
             ConfirmFormula(wbA, 0, 0, 0, "[multibookFormulaB.xls]BSheet1!B1");
-            cell = aSheet1.GetRow(0).GetCell(0);
+            ICell cell = aSheet1.GetRow(0).GetCell(0);
             ConfirmEvaluation(35, EvaluatorA, cell);
-
 
             // more complex case - back link into wbA
             // [wbA]ASheet1!A2 references (among other things) [wbB]BSheet1!B2
             ConfirmFormula(wbA, 0, 1, 0, "[multibookFormulaB.xls]BSheet1!$B$2+2*A3");
+
             // [wbB]BSheet1!B2 references (among other things) [wbA]AnotherSheet!A1:B2
             ConfirmFormula(wbB, 0, 1, 1, "SUM([multibookFormulaA.xls]AnotherSheet!$A$1:$B$2)+B3");
 
@@ -187,7 +176,9 @@ namespace TestCases.SS.Formula
             {
                 throw new AssertionException("Missing arg result not being handled correctly.");
             }
+
             Assert.AreEqual(CellType.Numeric, cv.CellType);
+
             // Adding blank to 1.0 gives 1.0
             Assert.AreEqual(1.0, cv.NumberValue, 0.0);
 
@@ -196,6 +187,7 @@ namespace TestCases.SS.Formula
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
             Assert.AreEqual(CellType.String, cv.CellType);
+
             // Adding blank to "abc" gives "abc"
             Assert.AreEqual("abc", cv.StringValue);
 
@@ -204,6 +196,7 @@ namespace TestCases.SS.Formula
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
             Assert.AreEqual(CellType.String, cv.CellType);
+
             // Adding blank to "abc" gives "abc"
             Assert.AreEqual("abc", cv.StringValue);
         }
@@ -234,6 +227,7 @@ namespace TestCases.SS.Formula
                 }
                 throw;
             }
+
             Assert.AreEqual(CellType.Error, cv.CellType);
             Assert.AreEqual(ErrorConstants.ERROR_VALUE, cv.ErrorValue);
 
@@ -251,21 +245,22 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestNamesInFormulas()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet("Sheet1");
 
             IName name1 = wb.CreateName();
-            name1.NameName = ("aConstant");
-            name1.RefersToFormula = ("3.14");
+            name1.NameName = "aConstant";
+            name1.RefersToFormula = "3.14";
 
             IName name2 = wb.CreateName();
-            name2.NameName = ("aFormula");
-            name2.RefersToFormula = ("SUM(Sheet1!$A$1:$A$3)");
+            name2.NameName = "aFormula";
+            name2.RefersToFormula = "SUM(Sheet1!$A$1:$A$3)";
 
             IName name3 = wb.CreateName();
-            name3.NameName = ("aSet");
-            name3.RefersToFormula = ("Sheet1!$A$2:$A$4");
-
+            name3.NameName = "aSet";
+            name3.RefersToFormula = "Sheet1!$A$2:$A$4";
 
             IRow row0 = sheet.CreateRow(0);
             IRow row1 = sheet.CreateRow(1);
@@ -288,5 +283,4 @@ namespace TestCases.SS.Formula
             Assert.AreEqual(28.14, fe.Evaluate(row3.GetCell(2)).NumberValue);
         }
     }
-
 }
