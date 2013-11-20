@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -1052,6 +1054,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string linePitchField;
 
         private string charSpaceField;
+        public static CT_DocGrid Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DocGrid ctObj = new CT_DocGrid();
+            if (node.Attributes["w:type"] != null)
+                ctObj.type = (ST_DocGrid)Enum.Parse(typeof(ST_DocGrid), node.Attributes["w:type"].Value);
+            ctObj.linePitch = XmlHelper.ReadString(node.Attributes["w:linePitch"]);
+            ctObj.charSpace = XmlHelper.ReadString(node.Attributes["w:charSpace"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "w:linePitch", this.linePitch);
+            XmlHelper.WriteAttribute(sw, "w:charSpace", this.charSpace);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_DocGrid type

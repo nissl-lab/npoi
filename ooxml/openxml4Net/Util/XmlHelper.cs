@@ -74,7 +74,7 @@ namespace NPOI.OpenXml4Net.Util
         public static uint ReadUInt(XmlAttribute attr)
         {
             if (attr == null)
-                return uint.MinValue;
+                return 0;
 
             uint i;
             if (uint.TryParse(attr.Value, out i))
@@ -86,7 +86,21 @@ namespace NPOI.OpenXml4Net.Util
                 return 0;
             }
         }
+        public static ulong ReadULong(XmlAttribute attr)
+        {
+            if (attr == null)
+                return 0;
 
+            ulong i;
+            if (ulong.TryParse(attr.Value, out i))
+            {
+                return i;
+            }
+            else
+            {
+                return 0;
+            }
+        }
         public static bool ReadBool(XmlAttribute attr)
         {
             return ReadBool(attr, false);

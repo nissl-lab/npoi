@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -22,6 +24,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_OnOff
     {
+        public static CT_OnOff Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_OnOff ctObj = new CT_OnOff();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_OnOff valField;
 
@@ -114,6 +136,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_LongHexNumber
     {
+        public static CT_LongHexNumber Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LongHexNumber ctObj = new CT_LongHexNumber();
+            ctObj.val = XmlHelper.ReadBytes(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
         private byte[] valField;
         /// <summary>
         /// Four Digit Hexadecimal Number Value
@@ -194,6 +236,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_DecimalNumber
     {
+        public static CT_DecimalNumber Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DecimalNumber ctObj = new CT_DecimalNumber();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private string valField;
 
@@ -251,6 +312,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_SignedTwipsMeasure
     {
 
+        public static CT_SignedTwipsMeasure Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SignedTwipsMeasure ctObj = new CT_SignedTwipsMeasure();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
         private string valField;
         /// <summary>
         /// Signed Measurement in Twentieths of a Point
@@ -305,6 +386,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_HpsMeasure
     {
+        public static CT_HpsMeasure Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_HpsMeasure ctObj = new CT_HpsMeasure();
+            ctObj.val = XmlHelper.ReadULong(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ulong valField;
 
@@ -332,7 +432,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SignedHpsMeasure
     {
+        public static CT_SignedHpsMeasure Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SignedHpsMeasure ctObj = new CT_SignedHpsMeasure();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
         private string valField;
         /// <summary>
         /// Signed Measurement in Half-Points
@@ -349,14 +466,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.valField = value;
             }
         }
-    }
-
-    //TODO: Maybe need a CT_DateTime for datetime data
-    /// <summary>
-    /// Standard Date and Time Storage Format
-    /// </summary>
-    public class CT_DateTime
-    {
     }
 
     /// <summary>
@@ -394,6 +503,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_String
     {
+        public static CT_String Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_String ctObj = new CT_String();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private string valField;
         /// <summary>

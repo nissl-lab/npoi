@@ -5,6 +5,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
 using System.Xml.Schema;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -318,6 +320,27 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_HdrFtrRef : CT_Rel
     {
+        public static CT_HdrFtrRef Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_HdrFtrRef ctObj = new CT_HdrFtrRef();
+            if (node.Attributes["w:type"] != null)
+                ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         private ST_HdrFtr typeField;
 
@@ -372,10 +395,45 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_FtnProps()
         {
-            this.numRestartField = new CT_NumRestart();
-            this.numStartField = new CT_DecimalNumber();
-            this.numFmtField = new CT_NumFmt();
-            this.posField = new CT_FtnPos();
+            //this.numRestartField = new CT_NumRestart();
+            //this.numStartField = new CT_DecimalNumber();
+            //this.numFmtField = new CT_NumFmt();
+            //this.posField = new CT_FtnPos();
+        }
+        public static CT_FtnProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FtnProps ctObj = new CT_FtnProps();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pos")
+                    ctObj.pos = CT_FtnPos.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "numFmt")
+                    ctObj.numFmt = CT_NumFmt.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "numStart")
+                    ctObj.numStart = CT_DecimalNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "numRestart")
+                    ctObj.numRestart = CT_NumRestart.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.pos != null)
+                this.pos.Write(sw, "w:pos");
+            if (this.numFmt != null)
+                this.numFmt.Write(sw, "w:numFmt");
+            if (this.numStart != null)
+                this.numStart.Write(sw, "w:numStart");
+            if (this.numRestart != null)
+                this.numRestart.Write(sw, "w:numRestart");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -438,6 +496,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FtnPos
     {
+        public static CT_FtnPos Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FtnPos ctObj = new CT_FtnPos();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_FtnPos)Enum.Parse(typeof(ST_FtnPos), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         private ST_FtnPos valField;
 
@@ -939,10 +1016,45 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_EdnProps()
         {
-            this.numRestartField = new CT_NumRestart();
-            this.numStartField = new CT_DecimalNumber();
-            this.numFmtField = new CT_NumFmt();
-            this.posField = new CT_EdnPos();
+            //this.numRestartField = new CT_NumRestart();
+            //this.numStartField = new CT_DecimalNumber();
+            //this.numFmtField = new CT_NumFmt();
+            //this.posField = new CT_EdnPos();
+        }
+        public static CT_EdnProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_EdnProps ctObj = new CT_EdnProps();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pos")
+                    ctObj.pos = CT_EdnPos.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "numFmt")
+                    ctObj.numFmt = CT_NumFmt.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "numStart")
+                    ctObj.numStart = CT_DecimalNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "numRestart")
+                    ctObj.numRestart = CT_NumRestart.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.pos != null)
+                this.pos.Write(sw, "w:pos");
+            if (this.numFmt != null)
+                this.numFmt.Write(sw, "w:numFmt");
+            if (this.numStart != null)
+                this.numStart.Write(sw, "w:numStart");
+            if (this.numRestart != null)
+                this.numRestart.Write(sw, "w:numRestart");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -1005,6 +1117,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_EdnPos
     {
+        public static CT_EdnPos Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_EdnPos ctObj = new CT_EdnPos();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_EdnPos)Enum.Parse(typeof(ST_EdnPos), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         private ST_EdnPos valField;
 

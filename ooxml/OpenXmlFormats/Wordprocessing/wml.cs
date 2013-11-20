@@ -14,6 +14,9 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Shared;
 using NPOI.OpenXmlFormats.Dml;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -462,9 +465,39 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool vertCompressFieldSpecified;
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        public static CT_EastAsianLayout Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_EastAsianLayout ctObj = new CT_EastAsianLayout();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            if (node.Attributes["w:combine"] != null)
+                ctObj.combine = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:combine"].Value);
+            if (node.Attributes["w:combineBrackets"] != null)
+                ctObj.combineBrackets = (ST_CombineBrackets)Enum.Parse(typeof(ST_CombineBrackets), node.Attributes["w:combineBrackets"].Value);
+            if (node.Attributes["w:vert"] != null)
+                ctObj.vert = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:vert"].Value);
+            if (node.Attributes["w:vertCompress"] != null)
+                ctObj.vertCompress = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:vertCompress"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "w:combine", this.combine.ToString());
+            XmlHelper.WriteAttribute(sw, "w:combineBrackets", this.combineBrackets.ToString());
+            XmlHelper.WriteAttribute(sw, "w:vert", this.vert.ToString());
+            XmlHelper.WriteAttribute(sw, "w:vertCompress", this.vertCompress.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -605,50 +638,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
     
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Em
-    {
-
-        private ST_Em valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_Em val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    public enum ST_Em
-    {
-
-    
-        none,
-
-    
-        dot,
-
-    
-        comma,
-
-    
-        circle,
-
-    
-        underDot,
-    }
 
     
     [Serializable]
@@ -657,6 +646,27 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FitText
     {
+        public static CT_FitText Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FitText ctObj = new CT_FitText();
+            ctObj.val = XmlHelper.ReadULong(node.Attributes["w:val"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            XmlHelper.WriteAttribute(sw, "w:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ulong valField;
 
@@ -769,6 +779,30 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string bidiField;
 
+        public static CT_Language Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Language ctObj = new CT_Language();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            ctObj.eastAsia = XmlHelper.ReadString(node.Attributes["w:eastAsia"]);
+            ctObj.bidi = XmlHelper.ReadString(node.Attributes["w:bidi"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
+            XmlHelper.WriteAttribute(sw, "w:bidi", this.bidi);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
         {
@@ -823,6 +857,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Cnf
     {
+        public static CT_Cnf Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Cnf ctObj = new CT_Cnf();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private string valField;
 
@@ -866,6 +919,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.idField = value;
             }
         }
+        public static CT_Rel Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Rel ctObj = new CT_Rel();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
     }
 
     
@@ -986,8 +1059,48 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Columns()
         {
-            this.colField = new List<CT_Column>();
+            //this.colField = new List<CT_Column>();
         }
+        public static CT_Columns Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Columns ctObj = new CT_Columns();
+            if (node.Attributes["w:equalWidth"] != null)
+                ctObj.equalWidth = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:equalWidth"].Value);
+            ctObj.space = XmlHelper.ReadULong(node.Attributes["w:space"]);
+            ctObj.num = XmlHelper.ReadString(node.Attributes["w:num"]);
+            if (node.Attributes["w:sep"] != null)
+                ctObj.sep = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:sep"].Value);
+            ctObj.col = new List<CT_Column>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "col")
+                    ctObj.col.Add(CT_Column.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:equalWidth", this.equalWidth.ToString());
+            XmlHelper.WriteAttribute(sw, "w:space", this.space);
+            XmlHelper.WriteAttribute(sw, "w:num", this.num);
+            XmlHelper.WriteAttribute(sw, "w:sep", this.sep.ToString());
+            sw.Write(">");
+            if (this.col != null)
+            {
+                foreach (CT_Column x in this.col)
+                {
+                    x.Write(sw, "col");
+                }
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         [XmlElement("col", Order = 0)]
         public List<CT_Column> col
@@ -1109,6 +1222,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ulong spaceField;
 
         private bool spaceFieldSpecified;
+        public static CT_Column Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Column ctObj = new CT_Column();
+            ctObj.w = XmlHelper.ReadULong(node.Attributes["w:w"]);
+            ctObj.space = XmlHelper.ReadULong(node.Attributes["w:space"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:w", this.w);
+            XmlHelper.WriteAttribute(sw, "w:space", this.space);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong w
@@ -1163,457 +1296,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_VerticalJc
-    {
+ 
 
-        private ST_VerticalJc valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_VerticalJc val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    public enum ST_VerticalJc
-    {
-
-    
-        top,
-
-    
-        center,
-
-    
-        both,
-
-    
-        bottom,
-    }
-
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_SectPrChange : CT_TrackChange
-    {
-
-        private CT_SectPrBase sectPrField;
-
-        public CT_SectPrChange()
-        {
-            this.sectPrField = new CT_SectPrBase();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_SectPrBase sectPr
-        {
-            get
-            {
-                return this.sectPrField;
-            }
-            set
-            {
-                this.sectPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_SectPrBase
-    {
-
-        private CT_FtnProps footnotePrField;
-
-        private CT_EdnProps endnotePrField;
-
-        private CT_SectType typeField;
-
-        private CT_PageSz pgSzField;
-
-        private CT_PageMar pgMarField;
-
-        private CT_PaperSource paperSrcField;
-
-        private CT_PageBorders pgBordersField;
-
-        private CT_LineNumber lnNumTypeField;
-
-        private CT_PageNumber pgNumTypeField;
-
-        private CT_Columns colsField;
-
-        private CT_OnOff formProtField;
-
-        private CT_VerticalJc vAlignField;
-
-        private CT_OnOff noEndnoteField;
-
-        private CT_OnOff titlePgField;
-
-        private CT_TextDirection textDirectionField;
-
-        private CT_OnOff bidiField;
-
-        private CT_OnOff rtlGutterField;
-
-        private CT_DocGrid docGridField;
-
-        private CT_Rel printerSettingsField;
-
-        private byte[] rsidRPrField;
-
-        private byte[] rsidDelField;
-
-        private byte[] rsidRField;
-
-        private byte[] rsidSectField;
-
-        public CT_SectPrBase()
-        {
-            this.printerSettingsField = new CT_Rel();
-            this.docGridField = new CT_DocGrid();
-            this.rtlGutterField = new CT_OnOff();
-            this.bidiField = new CT_OnOff();
-            this.textDirectionField = new CT_TextDirection();
-            this.titlePgField = new CT_OnOff();
-            this.noEndnoteField = new CT_OnOff();
-            this.vAlignField = new CT_VerticalJc();
-            this.formProtField = new CT_OnOff();
-            this.colsField = new CT_Columns();
-            this.pgNumTypeField = new CT_PageNumber();
-            this.lnNumTypeField = new CT_LineNumber();
-            this.pgBordersField = new CT_PageBorders();
-            this.paperSrcField = new CT_PaperSource();
-            this.pgMarField = new CT_PageMar();
-            this.pgSzField = new CT_PageSz();
-            this.typeField = new CT_SectType();
-            this.endnotePrField = new CT_EdnProps();
-            this.footnotePrField = new CT_FtnProps();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_FtnProps footnotePr
-        {
-            get
-            {
-                return this.footnotePrField;
-            }
-            set
-            {
-                this.footnotePrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_EdnProps endnotePr
-        {
-            get
-            {
-                return this.endnotePrField;
-            }
-            set
-            {
-                this.endnotePrField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_SectType type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_PageSz pgSz
-        {
-            get
-            {
-                return this.pgSzField;
-            }
-            set
-            {
-                this.pgSzField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_PageMar pgMar
-        {
-            get
-            {
-                return this.pgMarField;
-            }
-            set
-            {
-                this.pgMarField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_PaperSource paperSrc
-        {
-            get
-            {
-                return this.paperSrcField;
-            }
-            set
-            {
-                this.paperSrcField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_PageBorders pgBorders
-        {
-            get
-            {
-                return this.pgBordersField;
-            }
-            set
-            {
-                this.pgBordersField = value;
-            }
-        }
-
-        [XmlElement(Order = 7)]
-        public CT_LineNumber lnNumType
-        {
-            get
-            {
-                return this.lnNumTypeField;
-            }
-            set
-            {
-                this.lnNumTypeField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_PageNumber pgNumType
-        {
-            get
-            {
-                return this.pgNumTypeField;
-            }
-            set
-            {
-                this.pgNumTypeField = value;
-            }
-        }
-
-        [XmlElement(Order = 9)]
-        public CT_Columns cols
-        {
-            get
-            {
-                return this.colsField;
-            }
-            set
-            {
-                this.colsField = value;
-            }
-        }
-
-        [XmlElement(Order = 10)]
-        public CT_OnOff formProt
-        {
-            get
-            {
-                return this.formProtField;
-            }
-            set
-            {
-                this.formProtField = value;
-            }
-        }
-
-        [XmlElement(Order = 11)]
-        public CT_VerticalJc vAlign
-        {
-            get
-            {
-                return this.vAlignField;
-            }
-            set
-            {
-                this.vAlignField = value;
-            }
-        }
-
-        [XmlElement(Order = 12)]
-        public CT_OnOff noEndnote
-        {
-            get
-            {
-                return this.noEndnoteField;
-            }
-            set
-            {
-                this.noEndnoteField = value;
-            }
-        }
-
-        [XmlElement(Order = 13)]
-        public CT_OnOff titlePg
-        {
-            get
-            {
-                return this.titlePgField;
-            }
-            set
-            {
-                this.titlePgField = value;
-            }
-        }
-
-        [XmlElement(Order = 14)]
-        public CT_TextDirection textDirection
-        {
-            get
-            {
-                return this.textDirectionField;
-            }
-            set
-            {
-                this.textDirectionField = value;
-            }
-        }
-
-        [XmlElement(Order = 15)]
-        public CT_OnOff bidi
-        {
-            get
-            {
-                return this.bidiField;
-            }
-            set
-            {
-                this.bidiField = value;
-            }
-        }
-
-        [XmlElement(Order = 16)]
-        public CT_OnOff rtlGutter
-        {
-            get
-            {
-                return this.rtlGutterField;
-            }
-            set
-            {
-                this.rtlGutterField = value;
-            }
-        }
-
-        [XmlElement(Order = 17)]
-        public CT_DocGrid docGrid
-        {
-            get
-            {
-                return this.docGridField;
-            }
-            set
-            {
-                this.docGridField = value;
-            }
-        }
-
-        [XmlElement(Order = 18)]
-        public CT_Rel printerSettings
-        {
-            get
-            {
-                return this.printerSettingsField;
-            }
-            set
-            {
-                this.printerSettingsField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidRPr
-        {
-            get
-            {
-                return this.rsidRPrField;
-            }
-            set
-            {
-                this.rsidRPrField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidDel
-        {
-            get
-            {
-                return this.rsidDelField;
-            }
-            set
-            {
-                this.rsidDelField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidR
-        {
-            get
-            {
-                return this.rsidRField;
-            }
-            set
-            {
-                this.rsidRField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidSect
-        {
-            get
-            {
-                return this.rsidSectField;
-            }
-            set
-            {
-                this.rsidSectField = value;
-            }
-        }
-    }
-
-    
     
     [Serializable]
     
@@ -2187,8 +1871,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Hyperlink()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.sndField = new CT_EmbeddedWAVAudioFile();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.sndField = new CT_EmbeddedWAVAudioFile();
             this.invalidUrlField = "";
             this.actionField = "";
             this.tgtFrameField = "";

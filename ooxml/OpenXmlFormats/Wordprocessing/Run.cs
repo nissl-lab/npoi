@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -839,6 +841,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Jc
     {
+        public static CT_Jc Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Jc ctObj = new CT_Jc();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_Jc)Enum.Parse(typeof(ST_Jc), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_Jc valField;
 
@@ -899,6 +921,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextDirection
     {
+        public static CT_TextDirection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextDirection ctObj = new CT_TextDirection();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_TextDirection)Enum.Parse(typeof(ST_TextDirection), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_TextDirection valField;
 
@@ -948,6 +990,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextAlignment
     {
+        public static CT_TextAlignment Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextAlignment ctObj = new CT_TextAlignment();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_TextAlignment)Enum.Parse(typeof(ST_TextAlignment), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_TextAlignment valField;
 
@@ -994,6 +1056,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextboxTightWrap
     {
+        public static CT_TextboxTightWrap Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextboxTightWrap ctObj = new CT_TextboxTightWrap();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_TextboxTightWrap)Enum.Parse(typeof(ST_TextboxTightWrap), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         private ST_TextboxTightWrap valField;
 
@@ -1041,6 +1122,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_VerticalAlignRun
     {
+        public static CT_VerticalAlignRun Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_VerticalAlignRun ctObj = new CT_VerticalAlignRun();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_VerticalAlignRun)Enum.Parse(typeof(ST_VerticalAlignRun), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_VerticalAlignRun valField;
 

@@ -3,6 +3,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -85,7 +87,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Picture : CT_PictureBase
+    public class CT_Picture
     {
 
         private CT_Rel movieField;
@@ -94,8 +96,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Picture()
         {
-            this.controlField = new CT_Control();
-            this.movieField = new CT_Rel();
+            //this.controlField = new CT_Control();
+            //this.movieField = new CT_Rel();
         }
 
         [XmlElement(Order = 0)]
@@ -140,7 +142,35 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             throw new NotImplementedException();
         }
 
-        
+        public static CT_Picture Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Picture ctObj = new CT_Picture();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "movie")
+                    ctObj.movie = CT_Rel.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "control")
+                    ctObj.control = CT_Control.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.movie != null)
+                this.movie.Write(sw, "movie");
+            if (this.control != null)
+                this.control.Write(sw, "control");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
     }
 
     [Serializable]
@@ -321,6 +351,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Control
     {
+        public static CT_Control Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Control ctObj = new CT_Control();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["w:name"]);
+            ctObj.shapeid = XmlHelper.ReadString(node.Attributes["w:shapeid"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:name", this.name);
+            XmlHelper.WriteAttribute(sw, "w:shapeid", this.shapeid);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private string nameField;
 

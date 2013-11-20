@@ -105,7 +105,7 @@ namespace NPOI.XWPF.UserModel
 
                 list.Add(lvl);
             }
-            ctAbstractNum.lvl = list.ToArray();
+            ctAbstractNum.lvl = list;
         }
         #endregion
 

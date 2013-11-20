@@ -23,12 +23,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             numbering = new CT_Numbering();
         }
-        public static NumberingDocument Parse(Stream stream)
-        {
-            CT_Numbering obj = (CT_Numbering)serializer.Deserialize(stream);
-
-            return new NumberingDocument(obj);
-        }
         public NumberingDocument(CT_Numbering numbering)
         {
             this.numbering = numbering;
@@ -40,9 +34,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.numbering;
             }
         }
-        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        public void Save(Stream stream)
         {
-            serializer.Serialize(stream, numbering, namespaces);
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                numbering.Write(sw);
+            }
+        }
+
+        public static NumberingDocument Parse(System.Xml.XmlDocument doc, System.Xml.XmlNamespaceManager NameSpaceManager)
+        {
+            CT_Numbering obj = CT_Numbering.Parse(doc, NameSpaceManager);
+            return new NumberingDocument(obj);
         }
     }
 }

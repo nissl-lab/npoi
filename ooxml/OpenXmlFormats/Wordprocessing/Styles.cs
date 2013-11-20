@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -880,6 +882,131 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             throw new NotImplementedException();
         }
     }
+    [Serializable]
+
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    public class CT_Em
+    {
+        public static CT_Em Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Em ctObj = new CT_Em();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_Em)Enum.Parse(typeof(ST_Em), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
+        private ST_Em valField;
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        public ST_Em val
+        {
+            get
+            {
+                return this.valField;
+            }
+            set
+            {
+                this.valField = value;
+            }
+        }
+    }
+
+
+    [Serializable]
+
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    public class CT_VerticalJc
+    {
+        public static CT_VerticalJc Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_VerticalJc ctObj = new CT_VerticalJc();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_VerticalJc)Enum.Parse(typeof(ST_VerticalJc), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
+        private ST_VerticalJc valField;
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+        public ST_VerticalJc val
+        {
+            get
+            {
+                return this.valField;
+            }
+            set
+            {
+                this.valField = value;
+            }
+        }
+    }
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    public enum ST_VerticalJc
+    {
+
+
+        top,
+
+
+        center,
+
+
+        both,
+
+
+        bottom,
+    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    public enum ST_Em
+    {
+
+
+        none,
+
+
+        dot,
+
+
+        comma,
+
+
+        circle,
+
+
+        underDot,
+    }
 
     [Serializable]
 
@@ -909,6 +1036,44 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] themeFillTintField;
 
         private byte[] themeFillShadeField;
+        public static CT_Shd Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Shd ctObj = new CT_Shd();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_Shd)Enum.Parse(typeof(ST_Shd), node.Attributes["w:val"].Value);
+            ctObj.color = XmlHelper.ReadString(node.Attributes["w:color"]);
+            if (node.Attributes["w:themeColor"] != null)
+                ctObj.themeColor = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["w:themeColor"].Value);
+            ctObj.themeTint = XmlHelper.ReadBytes(node.Attributes["w:themeTint"]);
+            ctObj.themeShade = XmlHelper.ReadBytes(node.Attributes["w:themeShade"]);
+            ctObj.fill = XmlHelper.ReadString(node.Attributes["w:fill"]);
+            if (node.Attributes["w:themeFill"] != null)
+                ctObj.themeFill = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["w:themeFill"].Value);
+            ctObj.themeFillTint = XmlHelper.ReadBytes(node.Attributes["w:themeFillTint"]);
+            ctObj.themeFillShade = XmlHelper.ReadBytes(node.Attributes["w:themeFillShade"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
+            XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
+            XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
+            XmlHelper.WriteAttribute(sw, "w:themeShade", this.themeShade);
+            XmlHelper.WriteAttribute(sw, "w:fill", this.fill);
+            XmlHelper.WriteAttribute(sw, "w:themeFill", this.themeFill.ToString());
+            XmlHelper.WriteAttribute(sw, "w:themeFillTint", this.themeFillTint);
+            XmlHelper.WriteAttribute(sw, "w:themeFillShade", this.themeFillShade);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Shd val
@@ -1195,6 +1360,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextScale
     {
+        public static CT_TextScale Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextScale ctObj = new CT_TextScale();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private string valField;
         /// <summary>
@@ -1222,6 +1406,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Highlight
     {
+        public static CT_Highlight Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Highlight ctObj = new CT_Highlight();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_HighlightColor)Enum.Parse(typeof(ST_HighlightColor), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_HighlightColor valField;
         /// <summary>
@@ -1258,6 +1462,33 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] themeTintField;
 
         private byte[] themeShadeField;
+
+        public static CT_Color Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Color ctObj = new CT_Color();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            if (node.Attributes["themeColor"] != null)
+                ctObj.themeColor = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["themeColor"].Value);
+            ctObj.themeTint = XmlHelper.ReadBytes(node.Attributes["themeTint"]);
+            ctObj.themeShade = XmlHelper.ReadBytes(node.Attributes["themeShade"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val);
+            XmlHelper.WriteAttribute(sw, "themeColor", this.themeColor.ToString());
+            XmlHelper.WriteAttribute(sw, "themeTint", this.themeTint);
+            XmlHelper.WriteAttribute(sw, "themeShade", this.themeShade);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
         /// <summary>
         /// Run Content Color
         /// </summary>
@@ -1355,6 +1586,37 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] themeTintField;
 
         private byte[] themeShadeField;
+
+        public static CT_Underline Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Underline ctObj = new CT_Underline();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_Underline)Enum.Parse(typeof(ST_Underline), node.Attributes["w:val"].Value);
+            ctObj.color = XmlHelper.ReadString(node.Attributes["w:color"]);
+            if (node.Attributes["w:themeColor"] != null)
+                ctObj.themeColor = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["w:themeColor"].Value);
+            ctObj.themeTint = XmlHelper.ReadBytes(node.Attributes["w:themeTint"]);
+            ctObj.themeShade = XmlHelper.ReadBytes(node.Attributes["w:themeShade"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
+            XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
+            XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
+            XmlHelper.WriteAttribute(sw, "w:themeShade", this.themeShade);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
         /// <summary>
         /// Underline Style value
         /// </summary>
@@ -1565,6 +1827,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TextEffect
     {
+        public static CT_TextEffect Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextEffect ctObj = new CT_TextEffect();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_TextEffect)Enum.Parse(typeof(ST_TextEffect), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ST_TextEffect valField;
         /// <summary>
@@ -1661,6 +1943,48 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_OnOff frameField;
 
         private bool frameFieldSpecified;
+
+        public static CT_Border Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Border ctObj = new CT_Border();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_Border)Enum.Parse(typeof(ST_Border), node.Attributes["w:val"].Value);
+            ctObj.color = XmlHelper.ReadString(node.Attributes["w:color"]);
+            if (node.Attributes["w:themeColor"] != null)
+                ctObj.themeColor = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["w:themeColor"].Value);
+            ctObj.themeTint = XmlHelper.ReadBytes(node.Attributes["w:themeTint"]);
+            ctObj.themeShade = XmlHelper.ReadBytes(node.Attributes["w:themeShade"]);
+            ctObj.sz = XmlHelper.ReadULong(node.Attributes["w:sz"]);
+            ctObj.space = XmlHelper.ReadULong(node.Attributes["w:space"]);
+            if (node.Attributes["w:shadow"] != null)
+                ctObj.shadow = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:shadow"].Value);
+            if (node.Attributes["w:frame"] != null)
+                ctObj.frame = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:frame"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
+            XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
+            XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
+            XmlHelper.WriteAttribute(sw, "w:themeShade", this.themeShade);
+            XmlHelper.WriteAttribute(sw, "w:sz", this.sz);
+            XmlHelper.WriteAttribute(sw, "w:space", this.space);
+            XmlHelper.WriteAttribute(sw, "w:shadow", this.shadow.ToString());
+            XmlHelper.WriteAttribute(sw, "w:frame", this.frame.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
+
         /// <summary>
         /// Border Style
         /// </summary>

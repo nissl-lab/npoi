@@ -1,4 +1,7 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
@@ -24,6 +27,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private bool orientFieldSpecified;
 
         private string codeField;
+        public static CT_PageSz Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageSz ctObj = new CT_PageSz();
+            ctObj.w = XmlHelper.ReadULong(node.Attributes["w:w"]);
+            ctObj.h = XmlHelper.ReadULong(node.Attributes["w:h"]);
+            if (node.Attributes["w:orient"] != null)
+                ctObj.orient = (ST_PageOrientation)Enum.Parse(typeof(ST_PageOrientation), node.Attributes["w:orient"].Value);
+            ctObj.code = XmlHelper.ReadString(node.Attributes["w:code"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:w", this.w);
+            XmlHelper.WriteAttribute(sw, "w:h", this.h);
+            XmlHelper.WriteAttribute(sw, "w:orient", this.orient.ToString());
+            XmlHelper.WriteAttribute(sw, "w:code", this.code);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ulong w
@@ -152,6 +180,37 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private ulong gutterField;
 
+        public static CT_PageMar Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageMar ctObj = new CT_PageMar();
+            ctObj.top = XmlHelper.ReadString(node.Attributes["w:top"]);
+            ctObj.right = XmlHelper.ReadULong(node.Attributes["w:right"]);
+            ctObj.bottom = XmlHelper.ReadString(node.Attributes["w:bottom"]);
+            ctObj.left = XmlHelper.ReadULong(node.Attributes["w:left"]);
+            ctObj.header = XmlHelper.ReadULong(node.Attributes["w:header"]);
+            ctObj.footer = XmlHelper.ReadULong(node.Attributes["w:footer"]);
+            ctObj.gutter = XmlHelper.ReadULong(node.Attributes["w:gutter"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:top", this.top);
+            XmlHelper.WriteAttribute(sw, "w:right", this.right);
+            XmlHelper.WriteAttribute(sw, "w:bottom", this.bottom);
+            XmlHelper.WriteAttribute(sw, "w:left", this.left);
+            XmlHelper.WriteAttribute(sw, "w:header", this.header);
+            XmlHelper.WriteAttribute(sw, "w:footer", this.footer);
+            XmlHelper.WriteAttribute(sw, "w:gutter", this.gutter);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string top
         {
@@ -255,6 +314,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string firstField;
 
         private string otherField;
+        public static CT_PaperSource Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PaperSource ctObj = new CT_PaperSource();
+            ctObj.first = XmlHelper.ReadString(node.Attributes["w:first"]);
+            ctObj.other = XmlHelper.ReadString(node.Attributes["w:other"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:first", this.first);
+            XmlHelper.WriteAttribute(sw, "w:other", this.other);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string first
@@ -313,11 +392,56 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_PageBorders()
         {
-            this.rightField = new CT_Border();
-            this.bottomField = new CT_Border();
-            this.leftField = new CT_Border();
-            this.topField = new CT_Border();
+            //this.rightField = new CT_Border();
+            //this.bottomField = new CT_Border();
+            //this.leftField = new CT_Border();
+            //this.topField = new CT_Border();
         }
+        public static CT_PageBorders Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageBorders ctObj = new CT_PageBorders();
+            if (node.Attributes["w:zOrder"] != null)
+                ctObj.zOrder = (ST_PageBorderZOrder)Enum.Parse(typeof(ST_PageBorderZOrder), node.Attributes["w:zOrder"].Value);
+            if (node.Attributes["w:display"] != null)
+                ctObj.display = (ST_PageBorderDisplay)Enum.Parse(typeof(ST_PageBorderDisplay), node.Attributes["w:display"].Value);
+            if (node.Attributes["w:offsetFrom"] != null)
+                ctObj.offsetFrom = (ST_PageBorderOffset)Enum.Parse(typeof(ST_PageBorderOffset), node.Attributes["w:offsetFrom"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "top")
+                    ctObj.top = CT_Border.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "left")
+                    ctObj.left = CT_Border.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bottom")
+                    ctObj.bottom = CT_Border.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "right")
+                    ctObj.right = CT_Border.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:zOrder", this.zOrder.ToString());
+            XmlHelper.WriteAttribute(sw, "w:display", this.display.ToString());
+            XmlHelper.WriteAttribute(sw, "w:offsetFrom", this.offsetFrom.ToString());
+            sw.Write(">");
+            if (this.top != null)
+                this.top.Write(sw, "top");
+            if (this.left != null)
+                this.left.Write(sw, "left");
+            if (this.bottom != null)
+                this.bottom.Write(sw, "bottom");
+            if (this.right != null)
+                this.right.Write(sw, "right");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         [XmlElement(Order = 0)]
         public CT_Border top
@@ -511,6 +635,32 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_ChapterSep chapSepField;
 
         private bool chapSepFieldSpecified;
+        public static CT_PageNumber Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageNumber ctObj = new CT_PageNumber();
+            if (node.Attributes["w:fmt"] != null)
+                ctObj.fmt = (ST_NumberFormat)Enum.Parse(typeof(ST_NumberFormat), node.Attributes["w:fmt"].Value);
+            ctObj.start = XmlHelper.ReadString(node.Attributes["w:start"]);
+            ctObj.chapStyle = XmlHelper.ReadString(node.Attributes["w:chapStyle"]);
+            if (node.Attributes["w:chapSep"] != null)
+                ctObj.chapSep = (ST_ChapterSep)Enum.Parse(typeof(ST_ChapterSep), node.Attributes["w:chapSep"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:fmt", this.fmt.ToString());
+            XmlHelper.WriteAttribute(sw, "w:start", this.start);
+            XmlHelper.WriteAttribute(sw, "w:chapStyle", this.chapStyle);
+            XmlHelper.WriteAttribute(sw, "w:chapSep", this.chapSep.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_NumberFormat fmt
@@ -601,6 +751,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_SectionMark valField;
 
         private bool valFieldSpecified;
+        public static CT_SectType Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SectType ctObj = new CT_SectType();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_SectionMark)Enum.Parse(typeof(ST_SectionMark), node.Attributes["w:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_SectionMark val
@@ -668,6 +837,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_LineNumberRestart restartField;
 
         private bool restartFieldSpecified;
+        public static CT_LineNumber Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LineNumber ctObj = new CT_LineNumber();
+            ctObj.countBy = XmlHelper.ReadString(node.Attributes["w:countBy"]);
+            ctObj.start = XmlHelper.ReadString(node.Attributes["w:start"]);
+            ctObj.distance = XmlHelper.ReadULong(node.Attributes["w:distance"]);
+            if (node.Attributes["w:restart"] != null)
+                ctObj.restart = (ST_LineNumberRestart)Enum.Parse(typeof(ST_LineNumberRestart), node.Attributes["w:restart"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:countBy", this.countBy);
+            XmlHelper.WriteAttribute(sw, "w:start", this.start);
+            XmlHelper.WriteAttribute(sw, "w:distance", this.distance);
+            XmlHelper.WriteAttribute(sw, "w:restart", this.restart.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
         public string countBy

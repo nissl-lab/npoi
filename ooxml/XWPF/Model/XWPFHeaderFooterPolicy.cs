@@ -481,7 +481,8 @@ namespace NPOI.XWPF.Model
             CT_TextPath shapeTextPath = shape.AddNewTextpath();
             shapeTextPath.style=("font-family:&quot;Cambria&quot;;font-size:1pt");
             shapeTextPath.@string=(text);
-            pict.Set(group);
+            throw new NotImplementedException();
+            //pict.Set(group);
             // end watermark paragraph
             return new XWPFParagraph(p, doc);
         }

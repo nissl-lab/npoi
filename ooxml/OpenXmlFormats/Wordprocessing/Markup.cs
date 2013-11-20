@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -468,7 +471,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string authorField;
 
-        private System.DateTime dateField;
+        private string dateField;
 
         private bool dateFieldSpecified;
 
@@ -486,7 +489,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public System.DateTime date
+        public string date
         {
             get
             {
@@ -510,6 +513,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.dateFieldSpecified = value;
             }
         }
+        public static CT_TrackChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TrackChange ctObj = new CT_TrackChange();
+            ctObj.author = XmlHelper.ReadString(node.Attributes["w:author"]);
+            ctObj.date = XmlHelper.ReadString(node.Attributes["w:date"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:author", this.author);
+            XmlHelper.WriteAttribute(sw, "w:date", this.date);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
+
     }
 
     [XmlInclude(typeof(CT_TblGridChange))]
@@ -541,9 +569,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string idField;
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
