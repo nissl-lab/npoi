@@ -48,7 +48,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, ps.Count);
             XWPFParagraph p = ps[(0)];
 
-            Assert.AreEqual(5, p.GetCTP().GetRList().Count);
+            Assert.AreEqual(5, p.GetCTP().r.Count);
             Assert.AreEqual("First header column!\tMid header\tRight header!", p.GetText());
         }
 
@@ -247,7 +247,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(0, paragraph.GetCTP().SizeOfBookmarkEndArray());
             CT_Bookmark ctBookmark = paragraph.GetCTP().GetBookmarkStartArray(0);
             Assert.AreEqual("poi", ctBookmark.name);
-            foreach (CT_Bookmark bookmark in paragraph.GetCTP().GetBookmarkStartList())
+            foreach (CT_Bookmark bookmark in paragraph.GetCTP().bookmarkStart)
             {
                 Assert.AreEqual("poi", bookmark.name);
             }

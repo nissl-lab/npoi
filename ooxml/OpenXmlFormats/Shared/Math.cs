@@ -7,4824 +7,5585 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
+using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Wordprocessing;
 
 namespace NPOI.OpenXmlFormats.Shared
 {
    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot("mathPr", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = false)]
-    public class CT_MathPr
-    {
-
-        private CT_String mathFontField;
-
-        private CT_BreakBin brkBinField;
-
-        private CT_BreakBinSub brkBinSubField;
-
-        private CT_OnOff smallFracField;
-
-        private CT_OnOff dispDefField;
-
-        private CT_TwipsMeasure lMarginField;
-
-        private CT_TwipsMeasure rMarginField;
-
-        private CT_OMathJc defJcField;
-
-        private CT_TwipsMeasure preSpField;
-
-        private CT_TwipsMeasure postSpField;
-
-        private CT_TwipsMeasure interSpField;
-
-        private CT_TwipsMeasure intraSpField;
-
-        private object itemField;
-
-        private CT_LimLoc intLimField;
-
-        private CT_LimLoc naryLimField;
-
-        /// <summary>
-        /// CT_MathPr class constructor
-        /// </summary>
-        public CT_MathPr()
-        {
-            this.naryLimField = new CT_LimLoc();
-            this.intLimField = new CT_LimLoc();
-            this.intraSpField = new CT_TwipsMeasure();
-            this.interSpField = new CT_TwipsMeasure();
-            this.postSpField = new CT_TwipsMeasure();
-            this.preSpField = new CT_TwipsMeasure();
-            this.defJcField = new CT_OMathJc();
-            this.rMarginField = new CT_TwipsMeasure();
-            this.lMarginField = new CT_TwipsMeasure();
-            this.dispDefField = new CT_OnOff();
-            this.smallFracField = new CT_OnOff();
-            this.brkBinSubField = new CT_BreakBinSub();
-            this.brkBinField = new CT_BreakBin();
-            this.mathFontField = new CT_String();
-            this.mathFont.val = "Cambria Math";
-            this.brkBin.val = ST_BreakBin.before;
-            this.brkBinSub.val = ST_BreakBinSub.Item;
-            this.smallFrac.val = ST_OnOff.off;
-            this.lMargin.val = 0;
-            this.rMargin.val = 0;
-            this.defJc.val = ST_Jc.centerGroup;
-            this.itemField = new CT_TwipsMeasure();
-            (this.Item as CT_TwipsMeasure).val = 1440;
-            this.intLim.val = ST_LimLoc.subSup;
-            this.naryLim.val = ST_LimLoc.undOvr;
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_String mathFont
-        {
-            get
-            {
-                return this.mathFontField;
-            }
-            set
-            {
-                this.mathFontField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_BreakBin brkBin
-        {
-            get
-            {
-                return this.brkBinField;
-            }
-            set
-            {
-                this.brkBinField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_BreakBinSub brkBinSub
-        {
-            get
-            {
-                return this.brkBinSubField;
-            }
-            set
-            {
-                this.brkBinSubField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OnOff smallFrac
-        {
-            get
-            {
-                return this.smallFracField;
-            }
-            set
-            {
-                this.smallFracField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_OnOff dispDef
-        {
-            get
-            {
-                return this.dispDefField;
-            }
-            set
-            {
-                this.dispDefField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_TwipsMeasure lMargin
-        {
-            get
-            {
-                return this.lMarginField;
-            }
-            set
-            {
-                this.lMarginField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_TwipsMeasure rMargin
-        {
-            get
-            {
-                return this.rMarginField;
-            }
-            set
-            {
-                this.rMarginField = value;
-            }
-        }
-
-        [XmlElement(Order = 7)]
-        public CT_OMathJc defJc
-        {
-            get
-            {
-                return this.defJcField;
-            }
-            set
-            {
-                this.defJcField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_TwipsMeasure preSp
-        {
-            get
-            {
-                return this.preSpField;
-            }
-            set
-            {
-                this.preSpField = value;
-            }
-        }
-
-        [XmlElement(Order = 9)]
-        public CT_TwipsMeasure postSp
-        {
-            get
-            {
-                return this.postSpField;
-            }
-            set
-            {
-                this.postSpField = value;
-            }
-        }
-
-        [XmlElement(Order = 10)]
-        public CT_TwipsMeasure interSp
-        {
-            get
-            {
-                return this.interSpField;
-            }
-            set
-            {
-                this.interSpField = value;
-            }
-        }
-
-        [XmlElement(Order = 11)]
-        public CT_TwipsMeasure intraSp
-        {
-            get
-            {
-                return this.intraSpField;
-            }
-            set
-            {
-                this.intraSpField = value;
-            }
-        }
-
-        [XmlElement("wrapIndent", typeof(CT_TwipsMeasure), Order = 12)]
-        [XmlElement("wrapRight", typeof(CT_OnOff), Order = 12)]
-        public object Item
-        {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
-        }
-
-        [XmlElement(Order = 13)]
-        public CT_LimLoc intLim
-        {
-            get
-            {
-                return this.intLimField;
-            }
-            set
-            {
-                this.intLimField = value;
-            }
-        }
-
-        [XmlElement(Order = 14)]
-        public CT_LimLoc naryLim
-        {
-            get
-            {
-                return this.naryLimField;
-            }
-            set
-            {
-                this.naryLimField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_String
-    {
-
-        private string valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public string val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_LimLoc
-    {
-
-        private ST_LimLoc valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_LimLoc val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_LimLoc
-    {
-
-    
-        undOvr,
-
-    
-        subSup,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMathJc
-    {
-
-        private ST_Jc valField;
-
-        private bool valFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_Jc val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool valSpecified
-        {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_Jc
-    {
-
-    
-        left,
-
-    
-        right,
-
-    
-        center,
-
-    
-        centerGroup,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_TwipsMeasure
-    {
-
-        private uint valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public uint val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OnOff
-    {
-
-        private ST_OnOff valField;
-
-        private bool valFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_OnOff val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool valSpecified
-        {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_OnOff
-    {
-        /// <summary>
-        /// False
-        /// </summary>
-        [XmlEnum("0")]
-        Value0 = 0,
-
-        /// <summary>
-        /// True
-        /// </summary>
-        [XmlEnum("1")]
-        Value1 = 1,
-    
-        on,
-
-    
-        off,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_BreakBinSub
-    {
-
-        private ST_BreakBinSub valField;
-
-        private bool valFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_BreakBinSub val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool valSpecified
-        {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_BreakBinSub
-    {
-
-    
-        [XmlEnum("--")]
-        Item,
-
-    
-        [XmlEnum("-+")]
-        Item1,
-
-    
-        [XmlEnum("+-")]
-        Item2,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_BreakBin
-    {
-
-        private ST_BreakBin valField;
-
-        private bool valFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_BreakBin val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool valSpecified
-        {
-            get
-            {
-                return this.valField != ST_BreakBin.NONE;
-                //return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_BreakBin
-    {
-
-        NONE,
-        before,
-
-    
-        after,
-
-    
-        repeat,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Integer255
-    {
-
-        private string valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Integer2
-    {
-
-        private string valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SpacingRule
-    {
-
-        private string valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_UnSignedInteger
-    {
-
-        private uint valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public uint val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Char
-    {
-
-        private string valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public string val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_XAlign
-    {
-
-        private ST_XAlign valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_XAlign val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_XAlign
-    {
-
-    
-        left,
-
-    
-        center,
-
-    
-        right,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_YAlign
-    {
-
-        private ST_YAlign valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_YAlign val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_YAlign
-    {
-
-    
-        top,
-
-    
-        center,
-
-    
-        bot,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Shp
-    {
-
-        private ST_Shp valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_Shp val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_Shp
-    {
-
-    
-        centered,
-
-    
-        match,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_FType
-    {
-
-        private ST_FType valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_FType val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_FType
-    {
-
-    
-        bar,
-
-    
-        skw,
-
-    
-        lin,
-
-    
-        noBar,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_TopBot
-    {
-
-        private ST_TopBot valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_TopBot val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_TopBot
-    {
-
-    
-        top,
-
-    
-        bot,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Script
-    {
-
-        private ST_Script valField;
-
-        private bool valFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_Script val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool valSpecified
-        {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_Script
-    {
-
-    
-        roman,
-
-    
-        script,
-
-    
-        fraktur,
-
-    
-        [XmlEnum("double-struck")]
-        doublestruck,
-
-    
-        [XmlEnum("sans-serif")]
-        sansserif,
-
-    
-        monospace,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Style
-    {
-
-        private ST_Style valField;
-
-        private bool valFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_Style val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool valSpecified
-        {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_Style
-    {
-
-    
-        p,
-
-    
-        b,
-
-    
-        i,
-
-    
-        bi,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_ManualBreak
-    {
-
-        private string alnAtField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string alnAt
-        {
-            get
-            {
-                return this.alnAtField;
-            }
-            set
-            {
-                this.alnAtField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_RPR
-    {
-
-        private CT_OnOff litField;
-
-        private object[] itemsField;
-
-        private CT_ManualBreak brkField;
-
-        private CT_OnOff alnField;
-
-        /// <summary>
-        /// CT_RPR class constructor
-        /// </summary>
-        public CT_RPR()
-        {
-            this.alnField = new CT_OnOff();
-            this.brkField = new CT_ManualBreak();
-            this.itemsField = new object[0];
-            this.litField = new CT_OnOff();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OnOff lit
-        {
-            get
-            {
-                return this.litField;
-            }
-            set
-            {
-                this.litField = value;
-            }
-        }
-
-        [XmlElement("nor", typeof(CT_OnOff), Order = 1)]
-        [XmlElement("scr", typeof(CT_Script), Order = 1)]
-        [XmlElement("sty", typeof(CT_Style), Order = 1)]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_ManualBreak brk
-        {
-            get
-            {
-                return this.brkField;
-            }
-            set
-            {
-                this.brkField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OnOff aln
-        {
-            get
-            {
-                return this.alnField;
-            }
-            set
-            {
-                this.alnField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Text1
-    {
-
-        private string spaceField;
-
-        private string valueField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
-        public string space
-        {
-            get
-            {
-                return this.spaceField;
-            }
-            set
-            {
-                this.spaceField = value;
-            }
-        }
-
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string Value
-        {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_R
-    {
-
-        private CT_RPR rPrField;
-
-        private CT_RPr rPr1Field;
-
-        private object[] itemsField;
-
-        private ItemsChoiceType6[] itemsElementNameField;
-
-        /// <summary>
-        /// CT_R class constructor
-        /// </summary>
-        public CT_R()
-        {
-            this.itemsElementNameField = new ItemsChoiceType6[0];
-            this.itemsField = new object[0];
-            this.rPr1Field = new CT_RPr();
-            this.rPrField = new CT_RPR();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_RPR rPr
-        {
-            get
-            {
-                return this.rPrField;
-            }
-            set
-            {
-                this.rPrField = value;
-            }
-        }
-
-        [XmlElement("rPr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        public CT_RPr rPr1
-        {
-            get
-            {
-                return this.rPr1Field;
-            }
-            set
-            {
-                this.rPr1Field = value;
-            }
-        }
-
-        [XmlElement("t", typeof(CT_Text1), Order = 2)]
-        [XmlElement("annotationRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("br", typeof(CT_Br), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("commentReference", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("continuationSeparator", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("cr", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("dayLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("dayShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("delInstrText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("delText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("drawing", typeof(CT_Drawing), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("endnoteRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("endnoteReference", typeof(CT_FtnEdnRef), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("fldChar", typeof(CT_FldChar), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("footnoteRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("footnoteReference", typeof(CT_FtnEdnRef), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("instrText", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("lastRenderedPageBreak", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("monthLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("monthShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("noBreakHyphen", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("object", typeof(CT_Object), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("pgNum", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("pict", typeof(CT_Picture), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("ptab", typeof(CT_PTab), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("ruby", typeof(CT_Ruby), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("separator", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("softHyphen", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("sym", typeof(CT_Sym), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("t", typeof(CT_Text), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("tab", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("yearLong", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlElement("yearShort", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
-        }
-
-        [XmlElement("ItemsElementName", Order = 3)]
-        [XmlIgnore]
-        public ItemsChoiceType6[] ItemsElementName
-        {
-            get
-            {
-                return this.itemsElementNameField;
-            }
-            set
-            {
-                this.itemsElementNameField = value;
-            }
-        }
-    }
-
-
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
-    public enum ItemsChoiceType6
-    {
-
-    
-        t,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:annotationRef")]
-        annotationRef,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:br")]
-        br,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentReference")]
-        commentReference,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:continuationSeparato" +
-            "r")]
-        continuationSeparator,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:cr")]
-        cr,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayLong")]
-        dayLong,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayShort")]
-        dayShort,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delInstrText")]
-        delInstrText,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delText")]
-        delText,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:drawing")]
-        drawing,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteRef")]
-        endnoteRef,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteReference")]
-        endnoteReference,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:fldChar")]
-        fldChar,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteRef")]
-        footnoteRef,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteReference")]
-        footnoteReference,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:instrText")]
-        instrText,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:lastRenderedPageBrea" +
-            "k")]
-        lastRenderedPageBreak,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthLong")]
-        monthLong,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthShort")]
-        monthShort,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:noBreakHyphen")]
-        noBreakHyphen,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:object")]
-        @object,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pgNum")]
-        pgNum,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pict")]
-        pict,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ptab")]
-        ptab,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ruby")]
-        ruby,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:separator")]
-        separator,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:softHyphen")]
-        softHyphen,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:sym")]
-        sym,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:t")]
-        t1,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:tab")]
-        tab,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearLong")]
-        yearLong,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearShort")]
-        yearShort,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_CtrlPr
-    {
-
-        private CT_RPr rPrField;
-
-        private CT_RPrChange insField;
-
-        private CT_RPrChange delField;
-
-        [XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        public CT_RPr rPr
-        {
-            get
-            {
-                return this.rPrField;
-            }
-            set
-            {
-                this.rPrField = value;
-            }
-        }
-
-        //[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 1)]
-        //public CT_RPrChange ins
-        //{
-        //    get
-        //    {
-        //        return this.insField;
-        //    }
-        //    set
-        //    {
-        //        this.insField = value;
-        //    }
-        //}
-
-        //[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 2)]
-        //public CT_RPrChange del
-        //{
-        //    get
-        //    {
-        //        return this.delField;
-        //    }
-        //    set
-        //    {
-        //        this.delField = value;
-        //    }
-        //}
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_AccPr
-    {
-
-        private CT_Char chrField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_AccPr class constructor
-        /// </summary>
-        public CT_AccPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.chrField = new CT_Char();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Char chr
-        {
-            get
-            {
-                return this.chrField;
-            }
-            set
-            {
-                this.chrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Acc
-    {
-
-        private CT_AccPr accPrField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Acc class constructor
-        /// </summary>
-        public CT_Acc()
-        {
-            this.eField = new CT_OMathArg();
-            this.accPrField = new CT_AccPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_AccPr accPr
-        {
-            get
-            {
-                return this.accPrField;
-            }
-            set
-            {
-                this.accPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMathArg
-    {
-
-        private CT_OMathArgPr argPrField;
-
-        private object[] itemsField;
-
-        private ItemsChoiceType7[] itemsElementNameField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_OMathArg class constructor
-        /// </summary>
-        public CT_OMathArg()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.itemsElementNameField = new ItemsChoiceType7[0];
-            this.itemsField = new object[0];
-            this.argPrField = new CT_OMathArgPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OMathArgPr argPr
-        {
-            get
-            {
-                return this.argPrField;
-            }
-            set
-            {
-                this.argPrField = value;
-            }
-        }
-
-        [XmlElement("acc", typeof(CT_Acc), Order = 1)]
-        [XmlElement("bar", typeof(CT_Bar), Order = 1)]
-        [XmlElement("borderBox", typeof(CT_BorderBox), Order = 1)]
-        [XmlElement("box", typeof(CT_Box), Order = 1)]
-        [XmlElement("d", typeof(CT_D), Order = 1)]
-        [XmlElement("eqArr", typeof(CT_EqArr), Order = 1)]
-        [XmlElement("f", typeof(CT_F), Order = 1)]
-        [XmlElement("func", typeof(CT_Func), Order = 1)]
-        [XmlElement("groupChr", typeof(CT_GroupChr), Order = 1)]
-        [XmlElement("limLow", typeof(CT_LimLow), Order = 1)]
-        [XmlElement("limUpp", typeof(CT_LimUpp), Order = 1)]
-        [XmlElement("m", typeof(CT_M), Order = 1)]
-        [XmlElement("nary", typeof(CT_Nary), Order = 1)]
-        [XmlElement("oMath", typeof(CT_OMath), Order = 1)]
-        [XmlElement("oMathPara", typeof(CT_OMathPara), Order = 1)]
-        [XmlElement("phant", typeof(CT_Phant), Order = 1)]
-        [XmlElement("r", typeof(CT_R), Order = 1)]
-        [XmlElement("rad", typeof(CT_Rad), Order = 1)]
-        [XmlElement("sPre", typeof(CT_SPre), Order = 1)]
-        [XmlElement("sSub", typeof(CT_SSub), Order = 1)]
-        [XmlElement("sSubSup", typeof(CT_SSubSup), Order = 1)]
-        [XmlElement("sSup", typeof(CT_SSup), Order = 1)]
-        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
-        }
-
-        [XmlElement("ItemsElementName", Order = 2)]
-        [XmlIgnore]
-        public ItemsChoiceType7[] ItemsElementName
-        {
-            get
-            {
-                return this.itemsElementNameField;
-            }
-            set
-            {
-                this.itemsElementNameField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMathArgPr
-    {
-
-        private CT_Integer2 argSzField;
-
-        /// <summary>
-        /// CT_OMathArgPr class constructor
-        /// </summary>
-        public CT_OMathArgPr()
-        {
-            this.argSzField = new CT_Integer2();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Integer2 argSz
-        {
-            get
-            {
-                return this.argSzField;
-            }
-            set
-            {
-                this.argSzField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
-    public enum ItemsChoiceType7
-    {
-
-    
-        acc,
-
-    
-        bar,
-
-    
-        borderBox,
-
-    
-        box,
-
-    
-        d,
-
-    
-        eqArr,
-
-    
-        f,
-
-    
-        func,
-
-    
-        groupChr,
-
-    
-        limLow,
-
-    
-        limUpp,
-
-    
-        m,
-
-    
-        nary,
-
-    
-        oMath,
-
-    
-        oMathPara,
-
-    
-        phant,
-
-    
-        r,
-
-    
-        rad,
-
-    
-        sPre,
-
-    
-        sSub,
-
-    
-        sSubSup,
-
-    
-        sSup,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
-        bookmarkEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
-        bookmarkStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
-        commentRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
-        commentRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
-            "")]
-        customXmlDelRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
-            "rt")]
-        customXmlDelRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
-            "")]
-        customXmlInsRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
-            "rt")]
-        customXmlInsRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
-            "geEnd")]
-        customXmlMoveFromRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
-            "geStart")]
-        customXmlMoveFromRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
-            "End")]
-        customXmlMoveToRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
-            "Start")]
-        customXmlMoveToRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
-        del,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
-        ins,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
-        moveFrom,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
-        moveFromRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
-        moveFromRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
-        moveTo,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
-        moveToRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
-        moveToRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
-        permEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
-        permStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
-        proofErr,
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_BarPr
-    {
-
-        private CT_TopBot posField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_BarPr class constructor
-        /// </summary>
-        public CT_BarPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.posField = new CT_TopBot();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_TopBot pos
-        {
-            get
-            {
-                return this.posField;
-            }
-            set
-            {
-                this.posField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Bar
-    {
-
-        private CT_BarPr barPrField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Bar class constructor
-        /// </summary>
-        public CT_Bar()
-        {
-            this.eField = new CT_OMathArg();
-            this.barPrField = new CT_BarPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_BarPr barPr
-        {
-            get
-            {
-                return this.barPrField;
-            }
-            set
-            {
-                this.barPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_BoxPr
-    {
-
-        private CT_OnOff opEmuField;
-
-        private CT_OnOff noBreakField;
-
-        private CT_OnOff diffField;
-
-        private CT_ManualBreak brkField;
-
-        private CT_OnOff alnField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_BoxPr class constructor
-        /// </summary>
-        public CT_BoxPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.alnField = new CT_OnOff();
-            this.brkField = new CT_ManualBreak();
-            this.diffField = new CT_OnOff();
-            this.noBreakField = new CT_OnOff();
-            this.opEmuField = new CT_OnOff();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OnOff opEmu
-        {
-            get
-            {
-                return this.opEmuField;
-            }
-            set
-            {
-                this.opEmuField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OnOff noBreak
-        {
-            get
-            {
-                return this.noBreakField;
-            }
-            set
-            {
-                this.noBreakField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OnOff diff
-        {
-            get
-            {
-                return this.diffField;
-            }
-            set
-            {
-                this.diffField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_ManualBreak brk
-        {
-            get
-            {
-                return this.brkField;
-            }
-            set
-            {
-                this.brkField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_OnOff aln
-        {
-            get
-            {
-                return this.alnField;
-            }
-            set
-            {
-                this.alnField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Box
-    {
-
-        private CT_BoxPr boxPrField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Box class constructor
-        /// </summary>
-        public CT_Box()
-        {
-            this.eField = new CT_OMathArg();
-            this.boxPrField = new CT_BoxPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_BoxPr boxPr
-        {
-            get
-            {
-                return this.boxPrField;
-            }
-            set
-            {
-                this.boxPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_BorderBoxPr
-    {
-
-        private CT_OnOff hideTopField;
-
-        private CT_OnOff hideBotField;
-
-        private CT_OnOff hideLeftField;
-
-        private CT_OnOff hideRightField;
-
-        private CT_OnOff strikeHField;
-
-        private CT_OnOff strikeVField;
-
-        private CT_OnOff strikeBLTRField;
-
-        private CT_OnOff strikeTLBRField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_BorderBoxPr class constructor
-        /// </summary>
-        public CT_BorderBoxPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.strikeTLBRField = new CT_OnOff();
-            this.strikeBLTRField = new CT_OnOff();
-            this.strikeVField = new CT_OnOff();
-            this.strikeHField = new CT_OnOff();
-            this.hideRightField = new CT_OnOff();
-            this.hideLeftField = new CT_OnOff();
-            this.hideBotField = new CT_OnOff();
-            this.hideTopField = new CT_OnOff();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OnOff hideTop
-        {
-            get
-            {
-                return this.hideTopField;
-            }
-            set
-            {
-                this.hideTopField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OnOff hideBot
-        {
-            get
-            {
-                return this.hideBotField;
-            }
-            set
-            {
-                this.hideBotField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OnOff hideLeft
-        {
-            get
-            {
-                return this.hideLeftField;
-            }
-            set
-            {
-                this.hideLeftField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OnOff hideRight
-        {
-            get
-            {
-                return this.hideRightField;
-            }
-            set
-            {
-                this.hideRightField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_OnOff strikeH
-        {
-            get
-            {
-                return this.strikeHField;
-            }
-            set
-            {
-                this.strikeHField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_OnOff strikeV
-        {
-            get
-            {
-                return this.strikeVField;
-            }
-            set
-            {
-                this.strikeVField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_OnOff strikeBLTR
-        {
-            get
-            {
-                return this.strikeBLTRField;
-            }
-            set
-            {
-                this.strikeBLTRField = value;
-            }
-        }
-
-        [XmlElement(Order = 7)]
-        public CT_OnOff strikeTLBR
-        {
-            get
-            {
-                return this.strikeTLBRField;
-            }
-            set
-            {
-                this.strikeTLBRField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_BorderBox
-    {
-
-        private CT_BorderBoxPr borderBoxPrField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_BorderBox class constructor
-        /// </summary>
-        public CT_BorderBox()
-        {
-            this.eField = new CT_OMathArg();
-            this.borderBoxPrField = new CT_BorderBoxPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_BorderBoxPr borderBoxPr
-        {
-            get
-            {
-                return this.borderBoxPrField;
-            }
-            set
-            {
-                this.borderBoxPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_DPr
-    {
-
-        private CT_Char begChrField;
-
-        private CT_Char sepChrField;
-
-        private CT_Char endChrField;
-
-        private CT_OnOff growField;
-
-        private CT_Shp shpField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_DPr class constructor
-        /// </summary>
-        public CT_DPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.shpField = new CT_Shp();
-            this.growField = new CT_OnOff();
-            this.endChrField = new CT_Char();
-            this.sepChrField = new CT_Char();
-            this.begChrField = new CT_Char();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Char begChr
-        {
-            get
-            {
-                return this.begChrField;
-            }
-            set
-            {
-                this.begChrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_Char sepChr
-        {
-            get
-            {
-                return this.sepChrField;
-            }
-            set
-            {
-                this.sepChrField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_Char endChr
-        {
-            get
-            {
-                return this.endChrField;
-            }
-            set
-            {
-                this.endChrField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OnOff grow
-        {
-            get
-            {
-                return this.growField;
-            }
-            set
-            {
-                this.growField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_Shp shp
-        {
-            get
-            {
-                return this.shpField;
-            }
-            set
-            {
-                this.shpField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_D
-    {
-
-        private CT_DPr dPrField;
-
-        private List<CT_OMathArg> eField;
-
-        /// <summary>
-        /// CT_D class constructor
-        /// </summary>
-        public CT_D()
-        {
-            this.eField = new List<CT_OMathArg>();
-            this.dPrField = new CT_DPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_DPr dPr
-        {
-            get
-            {
-                return this.dPrField;
-            }
-            set
-            {
-                this.dPrField = value;
-            }
-        }
-
-        [XmlElement("e", Order = 1)]
-        public List<CT_OMathArg> e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_EqArrPr
-    {
-
-        private CT_YAlign baseJcField;
-
-        private CT_OnOff maxDistField;
-
-        private CT_OnOff objDistField;
-
-        private CT_SpacingRule rSpRuleField;
-
-        private CT_UnSignedInteger rSpField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_EqArrPr class constructor
-        /// </summary>
-        public CT_EqArrPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.rSpField = new CT_UnSignedInteger();
-            this.rSpRuleField = new CT_SpacingRule();
-            this.objDistField = new CT_OnOff();
-            this.maxDistField = new CT_OnOff();
-            this.baseJcField = new CT_YAlign();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_YAlign baseJc
-        {
-            get
-            {
-                return this.baseJcField;
-            }
-            set
-            {
-                this.baseJcField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OnOff maxDist
-        {
-            get
-            {
-                return this.maxDistField;
-            }
-            set
-            {
-                this.maxDistField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OnOff objDist
-        {
-            get
-            {
-                return this.objDistField;
-            }
-            set
-            {
-                this.objDistField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_SpacingRule rSpRule
-        {
-            get
-            {
-                return this.rSpRuleField;
-            }
-            set
-            {
-                this.rSpRuleField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_UnSignedInteger rSp
-        {
-            get
-            {
-                return this.rSpField;
-            }
-            set
-            {
-                this.rSpField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_EqArr
-    {
-
-        private CT_EqArrPr eqArrPrField;
-
-        private List<CT_OMathArg> eField;
-
-        /// <summary>
-        /// CT_EqArr class constructor
-        /// </summary>
-        public CT_EqArr()
-        {
-            this.eField = new List<CT_OMathArg>();
-            this.eqArrPrField = new CT_EqArrPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_EqArrPr eqArrPr
-        {
-            get
-            {
-                return this.eqArrPrField;
-            }
-            set
-            {
-                this.eqArrPrField = value;
-            }
-        }
-
-        [XmlElement("e", Order = 1)]
-        public List<CT_OMathArg> e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_FPr
-    {
-
-        private CT_FType typeField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_FPr class constructor
-        /// </summary>
-        public CT_FPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.typeField = new CT_FType();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_FType type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_F
-    {
-
-        private CT_FPr fPrField;
-
-        private CT_OMathArg numField;
-
-        private CT_OMathArg denField;
-
-        /// <summary>
-        /// CT_F class constructor
-        /// </summary>
-        public CT_F()
-        {
-            this.denField = new CT_OMathArg();
-            this.numField = new CT_OMathArg();
-            this.fPrField = new CT_FPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_FPr fPr
-        {
-            get
-            {
-                return this.fPrField;
-            }
-            set
-            {
-                this.fPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg num
-        {
-            get
-            {
-                return this.numField;
-            }
-            set
-            {
-                this.numField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg den
-        {
-            get
-            {
-                return this.denField;
-            }
-            set
-            {
-                this.denField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_FuncPr
-    {
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_FuncPr class constructor
-        /// </summary>
-        public CT_FuncPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Func
-    {
-
-        private CT_FuncPr funcPrField;
-
-        private CT_OMathArg fNameField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Func class constructor
-        /// </summary>
-        public CT_Func()
-        {
-            this.eField = new CT_OMathArg();
-            this.fNameField = new CT_OMathArg();
-            this.funcPrField = new CT_FuncPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_FuncPr funcPr
-        {
-            get
-            {
-                return this.funcPrField;
-            }
-            set
-            {
-                this.funcPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg fName
-        {
-            get
-            {
-                return this.fNameField;
-            }
-            set
-            {
-                this.fNameField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_GroupChrPr
-    {
-
-        private CT_Char chrField;
-
-        private CT_TopBot posField;
-
-        private CT_TopBot vertJcField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_GroupChrPr class constructor
-        /// </summary>
-        public CT_GroupChrPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.vertJcField = new CT_TopBot();
-            this.posField = new CT_TopBot();
-            this.chrField = new CT_Char();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Char chr
-        {
-            get
-            {
-                return this.chrField;
-            }
-            set
-            {
-                this.chrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_TopBot pos
-        {
-            get
-            {
-                return this.posField;
-            }
-            set
-            {
-                this.posField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_TopBot vertJc
-        {
-            get
-            {
-                return this.vertJcField;
-            }
-            set
-            {
-                this.vertJcField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_GroupChr
-    {
-
-        private CT_GroupChrPr groupChrPrField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_GroupChr class constructor
-        /// </summary>
-        public CT_GroupChr()
-        {
-            this.eField = new CT_OMathArg();
-            this.groupChrPrField = new CT_GroupChrPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_GroupChrPr groupChrPr
-        {
-            get
-            {
-                return this.groupChrPrField;
-            }
-            set
-            {
-                this.groupChrPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_LimLowPr
-    {
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_LimLowPr class constructor
-        /// </summary>
-        public CT_LimLowPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_LimLow
-    {
-
-        private CT_LimLowPr limLowPrField;
-
-        private CT_OMathArg eField;
-
-        private CT_OMathArg limField;
-
-        /// <summary>
-        /// CT_LimLow class constructor
-        /// </summary>
-        public CT_LimLow()
-        {
-            this.limField = new CT_OMathArg();
-            this.eField = new CT_OMathArg();
-            this.limLowPrField = new CT_LimLowPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_LimLowPr limLowPr
-        {
-            get
-            {
-                return this.limLowPrField;
-            }
-            set
-            {
-                this.limLowPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg lim
-        {
-            get
-            {
-                return this.limField;
-            }
-            set
-            {
-                this.limField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_LimUppPr
-    {
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_LimUppPr class constructor
-        /// </summary>
-        public CT_LimUppPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_LimUpp
-    {
-
-        private CT_LimUppPr limUppPrField;
-
-        private CT_OMathArg eField;
-
-        private CT_OMathArg limField;
-
-        /// <summary>
-        /// CT_LimUpp class constructor
-        /// </summary>
-        public CT_LimUpp()
-        {
-            this.limField = new CT_OMathArg();
-            this.eField = new CT_OMathArg();
-            this.limUppPrField = new CT_LimUppPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_LimUppPr limUppPr
-        {
-            get
-            {
-                return this.limUppPrField;
-            }
-            set
-            {
-                this.limUppPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg lim
-        {
-            get
-            {
-                return this.limField;
-            }
-            set
-            {
-                this.limField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_MCPr
-    {
-
-        private CT_Integer255 countField;
-
-        private CT_XAlign mcJcField;
-
-        /// <summary>
-        /// CT_MCPr class constructor
-        /// </summary>
-        public CT_MCPr()
-        {
-            this.mcJcField = new CT_XAlign();
-            this.countField = new CT_Integer255();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Integer255 count
-        {
-            get
-            {
-                return this.countField;
-            }
-            set
-            {
-                this.countField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_XAlign mcJc
-        {
-            get
-            {
-                return this.mcJcField;
-            }
-            set
-            {
-                this.mcJcField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_MC
-    {
-
-        private CT_MCPr mcPrField;
-
-        /// <summary>
-        /// CT_MC class constructor
-        /// </summary>
-        public CT_MC()
-        {
-            this.mcPrField = new CT_MCPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_MCPr mcPr
-        {
-            get
-            {
-                return this.mcPrField;
-            }
-            set
-            {
-                this.mcPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_MCS
-    {
-
-        private List<CT_MC> mcField;
-
-        /// <summary>
-        /// CT_MCS class constructor
-        /// </summary>
-        public CT_MCS()
-        {
-            this.mcField = new List<CT_MC>();
-        }
-
-        [XmlElement("mc", Order = 0)]
-        public List<CT_MC> mc
-        {
-            get
-            {
-                return this.mcField;
-            }
-            set
-            {
-                this.mcField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_MPr
-    {
-
-        private CT_YAlign baseJcField;
-
-        private CT_OnOff plcHideField;
-
-        private CT_SpacingRule rSpRuleField;
-
-        private CT_SpacingRule cGpRuleField;
-
-        private CT_UnSignedInteger rSpField;
-
-        private CT_UnSignedInteger cSpField;
-
-        private CT_UnSignedInteger cGpField;
-
-        private List<CT_MC> mcsField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_MPr class constructor
-        /// </summary>
-        public CT_MPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.mcsField = new List<CT_MC>();
-            this.cGpField = new CT_UnSignedInteger();
-            this.cSpField = new CT_UnSignedInteger();
-            this.rSpField = new CT_UnSignedInteger();
-            this.cGpRuleField = new CT_SpacingRule();
-            this.rSpRuleField = new CT_SpacingRule();
-            this.plcHideField = new CT_OnOff();
-            this.baseJcField = new CT_YAlign();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_YAlign baseJc
-        {
-            get
-            {
-                return this.baseJcField;
-            }
-            set
-            {
-                this.baseJcField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OnOff plcHide
-        {
-            get
-            {
-                return this.plcHideField;
-            }
-            set
-            {
-                this.plcHideField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_SpacingRule rSpRule
-        {
-            get
-            {
-                return this.rSpRuleField;
-            }
-            set
-            {
-                this.rSpRuleField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_SpacingRule cGpRule
-        {
-            get
-            {
-                return this.cGpRuleField;
-            }
-            set
-            {
-                this.cGpRuleField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_UnSignedInteger rSp
-        {
-            get
-            {
-                return this.rSpField;
-            }
-            set
-            {
-                this.rSpField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_UnSignedInteger cSp
-        {
-            get
-            {
-                return this.cSpField;
-            }
-            set
-            {
-                this.cSpField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_UnSignedInteger cGp
-        {
-            get
-            {
-                return this.cGpField;
-            }
-            set
-            {
-                this.cGpField = value;
-            }
-        }
-
-        [XmlArray(Order = 7)]
-        [XmlArrayItem("mc", IsNullable = false)]
-        public List<CT_MC> mcs
-        {
-            get
-            {
-                return this.mcsField;
-            }
-            set
-            {
-                this.mcsField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_MR
-    {
-
-        private List<CT_OMathArg> eField;
-
-        /// <summary>
-        /// CT_MR class constructor
-        /// </summary>
-        public CT_MR()
-        {
-            this.eField = new List<CT_OMathArg>();
-        }
-
-        [XmlElement("e", Order = 0)]
-        public List<CT_OMathArg> e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_M
-    {
-
-        private CT_MPr mPrField;
-
-        private List<CT_OMathArg> mrField;
-
-        /// <summary>
-        /// CT_M class constructor
-        /// </summary>
-        public CT_M()
-        {
-            this.mrField = new List<CT_OMathArg>();
-            this.mPrField = new CT_MPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_MPr mPr
-        {
-            get
-            {
-                return this.mPrField;
-            }
-            set
-            {
-                this.mPrField = value;
-            }
-        }
-
-        [XmlArray(Order = 1)]
-        [XmlArrayItem("e", typeof(CT_OMathArg), IsNullable = false)]
-        public List<CT_OMathArg> mr
-        {
-            get
-            {
-                return this.mrField;
-            }
-            set
-            {
-                this.mrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_NaryPr
-    {
-
-        private CT_Char chrField;
-
-        private CT_LimLoc limLocField;
-
-        private CT_OnOff growField;
-
-        private CT_OnOff subHideField;
-
-        private CT_OnOff supHideField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_NaryPr class constructor
-        /// </summary>
-        public CT_NaryPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.supHideField = new CT_OnOff();
-            this.subHideField = new CT_OnOff();
-            this.growField = new CT_OnOff();
-            this.limLocField = new CT_LimLoc();
-            this.chrField = new CT_Char();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Char chr
-        {
-            get
-            {
-                return this.chrField;
-            }
-            set
-            {
-                this.chrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_LimLoc limLoc
-        {
-            get
-            {
-                return this.limLocField;
-            }
-            set
-            {
-                this.limLocField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OnOff grow
-        {
-            get
-            {
-                return this.growField;
-            }
-            set
-            {
-                this.growField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OnOff subHide
-        {
-            get
-            {
-                return this.subHideField;
-            }
-            set
-            {
-                this.subHideField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_OnOff supHide
-        {
-            get
-            {
-                return this.supHideField;
-            }
-            set
-            {
-                this.supHideField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Nary
-    {
-
-        private CT_NaryPr naryPrField;
-
-        private CT_OMathArg subField;
-
-        private CT_OMathArg supField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Nary class constructor
-        /// </summary>
-        public CT_Nary()
-        {
-            this.eField = new CT_OMathArg();
-            this.supField = new CT_OMathArg();
-            this.subField = new CT_OMathArg();
-            this.naryPrField = new CT_NaryPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_NaryPr naryPr
-        {
-            get
-            {
-                return this.naryPrField;
-            }
-            set
-            {
-                this.naryPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg sub
-        {
-            get
-            {
-                return this.subField;
-            }
-            set
-            {
-                this.subField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg sup
-        {
-            get
-            {
-                return this.supField;
-            }
-            set
-            {
-                this.supField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_PhantPr
-    {
-
-        private CT_OnOff showField;
-
-        private CT_OnOff zeroWidField;
-
-        private CT_OnOff zeroAscField;
-
-        private CT_OnOff zeroDescField;
-
-        private CT_OnOff transpField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_PhantPr class constructor
-        /// </summary>
-        public CT_PhantPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.transpField = new CT_OnOff();
-            this.zeroDescField = new CT_OnOff();
-            this.zeroAscField = new CT_OnOff();
-            this.zeroWidField = new CT_OnOff();
-            this.showField = new CT_OnOff();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OnOff show
-        {
-            get
-            {
-                return this.showField;
-            }
-            set
-            {
-                this.showField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OnOff zeroWid
-        {
-            get
-            {
-                return this.zeroWidField;
-            }
-            set
-            {
-                this.zeroWidField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OnOff zeroAsc
-        {
-            get
-            {
-                return this.zeroAscField;
-            }
-            set
-            {
-                this.zeroAscField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OnOff zeroDesc
-        {
-            get
-            {
-                return this.zeroDescField;
-            }
-            set
-            {
-                this.zeroDescField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_OnOff transp
-        {
-            get
-            {
-                return this.transpField;
-            }
-            set
-            {
-                this.transpField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Phant
-    {
-
-        private CT_PhantPr phantPrField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Phant class constructor
-        /// </summary>
-        public CT_Phant()
-        {
-            this.eField = new CT_OMathArg();
-            this.phantPrField = new CT_PhantPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_PhantPr phantPr
-        {
-            get
-            {
-                return this.phantPrField;
-            }
-            set
-            {
-                this.phantPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_RadPr
-    {
-
-        private CT_OnOff degHideField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_RadPr class constructor
-        /// </summary>
-        public CT_RadPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.degHideField = new CT_OnOff();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OnOff degHide
-        {
-            get
-            {
-                return this.degHideField;
-            }
-            set
-            {
-                this.degHideField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_Rad
-    {
-
-        private CT_RadPr radPrField;
-
-        private CT_OMathArg degField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_Rad class constructor
-        /// </summary>
-        public CT_Rad()
-        {
-            this.eField = new CT_OMathArg();
-            this.degField = new CT_OMathArg();
-            this.radPrField = new CT_RadPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_RadPr radPr
-        {
-            get
-            {
-                return this.radPrField;
-            }
-            set
-            {
-                this.radPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg deg
-        {
-            get
-            {
-                return this.degField;
-            }
-            set
-            {
-                this.degField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SPrePr
-    {
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_SPrePr class constructor
-        /// </summary>
-        public CT_SPrePr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SPre
-    {
-
-        private CT_SPrePr sPrePrField;
-
-        private CT_OMathArg subField;
-
-        private CT_OMathArg supField;
-
-        private CT_OMathArg eField;
-
-        /// <summary>
-        /// CT_SPre class constructor
-        /// </summary>
-        public CT_SPre()
-        {
-            this.eField = new CT_OMathArg();
-            this.supField = new CT_OMathArg();
-            this.subField = new CT_OMathArg();
-            this.sPrePrField = new CT_SPrePr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_SPrePr sPrePr
-        {
-            get
-            {
-                return this.sPrePrField;
-            }
-            set
-            {
-                this.sPrePrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg sub
-        {
-            get
-            {
-                return this.subField;
-            }
-            set
-            {
-                this.subField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg sup
-        {
-            get
-            {
-                return this.supField;
-            }
-            set
-            {
-                this.supField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SSubPr
-    {
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_SSubPr class constructor
-        /// </summary>
-        public CT_SSubPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SSub
-    {
-
-        private CT_SSubPr sSubPrField;
-
-        private CT_OMathArg eField;
-
-        private CT_OMathArg subField;
-
-        /// <summary>
-        /// CT_SSub class constructor
-        /// </summary>
-        public CT_SSub()
-        {
-            this.subField = new CT_OMathArg();
-            this.eField = new CT_OMathArg();
-            this.sSubPrField = new CT_SSubPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_SSubPr sSubPr
-        {
-            get
-            {
-                return this.sSubPrField;
-            }
-            set
-            {
-                this.sSubPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg sub
-        {
-            get
-            {
-                return this.subField;
-            }
-            set
-            {
-                this.subField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SSubSupPr
-    {
-
-        private CT_OnOff alnScrField;
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_SSubSupPr class constructor
-        /// </summary>
-        public CT_SSubSupPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-            this.alnScrField = new CT_OnOff();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OnOff alnScr
-        {
-            get
-            {
-                return this.alnScrField;
-            }
-            set
-            {
-                this.alnScrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SSubSup
-    {
-
-        private CT_SSubSupPr sSubSupPrField;
-
-        private CT_OMathArg eField;
-
-        private CT_OMathArg subField;
-
-        private CT_OMathArg supField;
-
-        /// <summary>
-        /// CT_SSubSup class constructor
-        /// </summary>
-        public CT_SSubSup()
-        {
-            this.supField = new CT_OMathArg();
-            this.subField = new CT_OMathArg();
-            this.eField = new CT_OMathArg();
-            this.sSubSupPrField = new CT_SSubSupPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_SSubSupPr sSubSupPr
-        {
-            get
-            {
-                return this.sSubSupPrField;
-            }
-            set
-            {
-                this.sSubSupPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg sub
-        {
-            get
-            {
-                return this.subField;
-            }
-            set
-            {
-                this.subField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_OMathArg sup
-        {
-            get
-            {
-                return this.supField;
-            }
-            set
-            {
-                this.supField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SSupPr
-    {
-
-        private CT_CtrlPr ctrlPrField;
-
-        /// <summary>
-        /// CT_SSupPr class constructor
-        /// </summary>
-        public CT_SSupPr()
-        {
-            this.ctrlPrField = new CT_CtrlPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_CtrlPr ctrlPr
-        {
-            get
-            {
-                return this.ctrlPrField;
-            }
-            set
-            {
-                this.ctrlPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_SSup
-    {
-
-        private CT_SSupPr sSupPrField;
-
-        private CT_OMathArg eField;
-
-        private CT_OMathArg supField;
-
-        /// <summary>
-        /// CT_SSup class constructor
-        /// </summary>
-        public CT_SSup()
-        {
-            this.supField = new CT_OMathArg();
-            this.eField = new CT_OMathArg();
-            this.sSupPrField = new CT_SSupPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_SSupPr sSupPr
-        {
-            get
-            {
-                return this.sSupPrField;
-            }
-            set
-            {
-                this.sSupPrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_OMathArg e
-        {
-            get
-            {
-                return this.eField;
-            }
-            set
-            {
-                this.eField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_OMathArg sup
-        {
-            get
-            {
-                return this.supField;
-            }
-            set
-            {
-                this.supField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMathParaPr
-    {
-
-        private CT_OMathJc jcField;
-
-        /// <summary>
-        /// CT_OMathParaPr class constructor
-        /// </summary>
-        public CT_OMathParaPr()
-        {
-            this.jcField = new CT_OMathJc();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OMathJc jc
-        {
-            get
-            {
-                return this.jcField;
-            }
-            set
-            {
-                this.jcField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMathPara
-    {
-
-        private CT_OMathParaPr oMathParaPrField;
-
-        private List<CT_OMath> oMathField;
-
-        /// <summary>
-        /// CT_OMathPara class constructor
-        /// </summary>
-        public CT_OMathPara()
-        {
-            this.oMathField = new List<CT_OMath>();
-            this.oMathParaPrField = new CT_OMathParaPr();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_OMathParaPr oMathParaPr
-        {
-            get
-            {
-                return this.oMathParaPrField;
-            }
-            set
-            {
-                this.oMathParaPrField = value;
-            }
-        }
-
-        [XmlElement("oMath", Order = 1)]
-        public List<CT_OMath> oMath
-        {
-            get
-            {
-                return this.oMathField;
-            }
-            set
-            {
-                this.oMathField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMath
-    {
-
-        private object[] itemsField;
-
-        private ItemsChoiceType8[] itemsElementNameField;
-
-        /// <summary>
-        /// CT_OMath class constructor
-        /// </summary>
-        public CT_OMath()
-        {
-            this.itemsElementNameField = new ItemsChoiceType8[0];
-            this.itemsField = new object[0];
-        }
-
-        [XmlElement("acc", typeof(CT_Acc), Order = 0)]
-        [XmlElement("bar", typeof(CT_Bar), Order = 0)]
-        [XmlElement("borderBox", typeof(CT_BorderBox), Order = 0)]
-        [XmlElement("box", typeof(CT_Box), Order = 0)]
-        [XmlElement("d", typeof(CT_D), Order = 0)]
-        [XmlElement("eqArr", typeof(CT_EqArr), Order = 0)]
-        [XmlElement("f", typeof(CT_F), Order = 0)]
-        [XmlElement("func", typeof(CT_Func), Order = 0)]
-        [XmlElement("groupChr", typeof(CT_GroupChr), Order = 0)]
-        [XmlElement("limLow", typeof(CT_LimLow), Order = 0)]
-        [XmlElement("limUpp", typeof(CT_LimUpp), Order = 0)]
-        [XmlElement("m", typeof(CT_M), Order = 0)]
-        [XmlElement("nary", typeof(CT_Nary), Order = 0)]
-        [XmlElement("oMath", typeof(CT_OMath), Order = 0)]
-        [XmlElement("oMathPara", typeof(CT_OMathPara), Order = 0)]
-        [XmlElement("phant", typeof(CT_Phant), Order = 0)]
-        [XmlElement("r", typeof(CT_R), Order = 0)]
-        [XmlElement("rad", typeof(CT_Rad), Order = 0)]
-        [XmlElement("sPre", typeof(CT_SPre), Order = 0)]
-        [XmlElement("sSub", typeof(CT_SSub), Order = 0)]
-        [XmlElement("sSubSup", typeof(CT_SSubSup), Order = 0)]
-        [XmlElement("sSup", typeof(CT_SSup), Order = 0)]
-        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
-        }
-
-        [XmlElement("ItemsElementName", Order = 1)]
-        [XmlIgnore]
-        public ItemsChoiceType8[] ItemsElementName
-        {
-            get
-            {
-                return this.itemsElementNameField;
-            }
-            set
-            {
-                this.itemsElementNameField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
-    public enum ItemsChoiceType8
-    {
-
-    
-        acc,
-
-    
-        bar,
-
-    
-        borderBox,
-
-    
-        box,
-
-    
-        d,
-
-    
-        eqArr,
-
-    
-        f,
-
-    
-        func,
-
-    
-        groupChr,
-
-    
-        limLow,
-
-    
-        limUpp,
-
-    
-        m,
-
-    
-        nary,
-
-    
-        oMath,
-
-    
-        oMathPara,
-
-    
-        phant,
-
-    
-        r,
-
-    
-        rad,
-
-    
-        sPre,
-
-    
-        sSub,
-
-    
-        sSubSup,
-
-    
-        sSup,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
-        bookmarkEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
-        bookmarkStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
-        commentRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
-        commentRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
-            "")]
-        customXmlDelRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
-            "rt")]
-        customXmlDelRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
-            "")]
-        customXmlInsRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
-            "rt")]
-        customXmlInsRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
-            "geEnd")]
-        customXmlMoveFromRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
-            "geStart")]
-        customXmlMoveFromRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
-            "End")]
-        customXmlMoveToRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
-            "Start")]
-        customXmlMoveToRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
-        del,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
-        ins,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
-        moveFrom,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
-        moveFromRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
-        moveFromRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
-        moveTo,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
-        moveToRangeEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
-        moveToRangeStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
-        permEnd,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
-        permStart,
-
-    
-        [XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
-        proofErr,
-    }
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot("mathPr", Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = false)]
+	public class CT_MathPr
+	{
+
+		private CT_String mathFontField;
+
+		private CT_BreakBin brkBinField;
+
+		private CT_BreakBinSub brkBinSubField;
+
+		private CT_OnOff smallFracField;
+
+		private CT_OnOff dispDefField;
+
+		private CT_TwipsMeasure lMarginField;
+
+		private CT_TwipsMeasure rMarginField;
+
+		private CT_OMathJc defJcField;
+
+		private CT_TwipsMeasure preSpField;
+
+		private CT_TwipsMeasure postSpField;
+
+		private CT_TwipsMeasure interSpField;
+
+		private CT_TwipsMeasure intraSpField;
+
+		private object itemField;
+
+		private CT_LimLoc intLimField;
+
+		private CT_LimLoc naryLimField;
+
+		/// <summary>
+		/// CT_MathPr class constructor
+		/// </summary>
+		public CT_MathPr()
+		{
+			this.naryLimField = new CT_LimLoc();
+			this.intLimField = new CT_LimLoc();
+			this.intraSpField = new CT_TwipsMeasure();
+			this.interSpField = new CT_TwipsMeasure();
+			this.postSpField = new CT_TwipsMeasure();
+			this.preSpField = new CT_TwipsMeasure();
+			this.defJcField = new CT_OMathJc();
+			this.rMarginField = new CT_TwipsMeasure();
+			this.lMarginField = new CT_TwipsMeasure();
+			this.dispDefField = new CT_OnOff();
+			this.smallFracField = new CT_OnOff();
+			this.brkBinSubField = new CT_BreakBinSub();
+			this.brkBinField = new CT_BreakBin();
+			this.mathFontField = new CT_String();
+			this.mathFont.val = "Cambria Math";
+			this.brkBin.val = ST_BreakBin.before;
+			this.brkBinSub.val = ST_BreakBinSub.Item;
+			this.smallFrac.val = ST_OnOff.off;
+			this.lMargin.val = 0;
+			this.rMargin.val = 0;
+			this.defJc.val = ST_Jc.centerGroup;
+			this.itemField = new CT_TwipsMeasure();
+			(this.Item as CT_TwipsMeasure).val = 1440;
+			this.intLim.val = ST_LimLoc.subSup;
+			this.naryLim.val = ST_LimLoc.undOvr;
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_String mathFont
+		{
+			get
+			{
+				return this.mathFontField;
+			}
+			set
+			{
+				this.mathFontField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_BreakBin brkBin
+		{
+			get
+			{
+				return this.brkBinField;
+			}
+			set
+			{
+				this.brkBinField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_BreakBinSub brkBinSub
+		{
+			get
+			{
+				return this.brkBinSubField;
+			}
+			set
+			{
+				this.brkBinSubField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OnOff smallFrac
+		{
+			get
+			{
+				return this.smallFracField;
+			}
+			set
+			{
+				this.smallFracField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_OnOff dispDef
+		{
+			get
+			{
+				return this.dispDefField;
+			}
+			set
+			{
+				this.dispDefField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_TwipsMeasure lMargin
+		{
+			get
+			{
+				return this.lMarginField;
+			}
+			set
+			{
+				this.lMarginField = value;
+			}
+		}
+
+		[XmlElement(Order = 6)]
+		public CT_TwipsMeasure rMargin
+		{
+			get
+			{
+				return this.rMarginField;
+			}
+			set
+			{
+				this.rMarginField = value;
+			}
+		}
+
+		[XmlElement(Order = 7)]
+		public CT_OMathJc defJc
+		{
+			get
+			{
+				return this.defJcField;
+			}
+			set
+			{
+				this.defJcField = value;
+			}
+		}
+
+		[XmlElement(Order = 8)]
+		public CT_TwipsMeasure preSp
+		{
+			get
+			{
+				return this.preSpField;
+			}
+			set
+			{
+				this.preSpField = value;
+			}
+		}
+
+		[XmlElement(Order = 9)]
+		public CT_TwipsMeasure postSp
+		{
+			get
+			{
+				return this.postSpField;
+			}
+			set
+			{
+				this.postSpField = value;
+			}
+		}
+
+		[XmlElement(Order = 10)]
+		public CT_TwipsMeasure interSp
+		{
+			get
+			{
+				return this.interSpField;
+			}
+			set
+			{
+				this.interSpField = value;
+			}
+		}
+
+		[XmlElement(Order = 11)]
+		public CT_TwipsMeasure intraSp
+		{
+			get
+			{
+				return this.intraSpField;
+			}
+			set
+			{
+				this.intraSpField = value;
+			}
+		}
+
+		[XmlElement("wrapIndent", typeof(CT_TwipsMeasure), Order = 12)]
+		[XmlElement("wrapRight", typeof(CT_OnOff), Order = 12)]
+		public object Item
+		{
+			get
+			{
+				return this.itemField;
+			}
+			set
+			{
+				this.itemField = value;
+			}
+		}
+
+		[XmlElement(Order = 13)]
+		public CT_LimLoc intLim
+		{
+			get
+			{
+				return this.intLimField;
+			}
+			set
+			{
+				this.intLimField = value;
+			}
+		}
+
+		[XmlElement(Order = 14)]
+		public CT_LimLoc naryLim
+		{
+			get
+			{
+				return this.naryLimField;
+			}
+			set
+			{
+				this.naryLimField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_String
+	{
+
+		private string valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public string val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_LimLoc
+	{
+
+		private ST_LimLoc valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_LimLoc val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_LimLoc
+	{
+
+	
+		undOvr,
+
+	
+		subSup,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OMathJc
+	{
+
+		private ST_Jc valField;
+
+		private bool valFieldSpecified;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_Jc val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+
+		[XmlIgnore]
+		public bool valSpecified
+		{
+			get
+			{
+				return this.valFieldSpecified;
+			}
+			set
+			{
+				this.valFieldSpecified = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_Jc
+	{
+
+	
+		left,
+
+	
+		right,
+
+	
+		center,
+
+	
+		centerGroup,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_TwipsMeasure
+	{
+
+		private uint valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public uint val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OnOff
+	{
+
+		private ST_OnOff valField;
+
+		private bool valFieldSpecified;
+		public static CT_OnOff Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_OnOff ctObj = new CT_OnOff();
+			if (node.Attributes["m:val"] != null)
+				ctObj.val = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["m:val"].Value);
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
+			sw.Write(">");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_OnOff val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+
+		[XmlIgnore]
+		public bool valSpecified
+		{
+			get
+			{
+				return this.valFieldSpecified;
+			}
+			set
+			{
+				this.valFieldSpecified = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_OnOff
+	{
+		/// <summary>
+		/// False
+		/// </summary>
+		[XmlEnum("0")]
+		Value0 = 0,
+
+		/// <summary>
+		/// True
+		/// </summary>
+		[XmlEnum("1")]
+		Value1 = 1,
+	
+		on,
+
+	
+		off,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_BreakBinSub
+	{
+
+		private ST_BreakBinSub valField;
+
+		private bool valFieldSpecified;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_BreakBinSub val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+
+		[XmlIgnore]
+		public bool valSpecified
+		{
+			get
+			{
+				return this.valFieldSpecified;
+			}
+			set
+			{
+				this.valFieldSpecified = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_BreakBinSub
+	{
+
+	
+		[XmlEnum("--")]
+		Item,
+
+	
+		[XmlEnum("-+")]
+		Item1,
+
+	
+		[XmlEnum("+-")]
+		Item2,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_BreakBin
+	{
+
+		private ST_BreakBin valField;
+
+		private bool valFieldSpecified;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_BreakBin val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+
+		[XmlIgnore]
+		public bool valSpecified
+		{
+			get
+			{
+				return this.valField != ST_BreakBin.NONE;
+				//return this.valFieldSpecified;
+			}
+			set
+			{
+				this.valFieldSpecified = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_BreakBin
+	{
+
+		NONE,
+		before,
+
+	
+		after,
+
+	
+		repeat,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Integer255
+	{
+
+		private string valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+		public string val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Integer2
+	{
+
+		private string valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+		public string val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SpacingRule
+	{
+
+		private string valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+		public string val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_UnSignedInteger
+	{
+
+		private uint valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public uint val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Char
+	{
+		public static CT_Char Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_Char ctObj = new CT_Char();
+			ctObj.val = XmlHelper.ReadString(node.Attributes["m:val"]);
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			XmlHelper.WriteAttribute(sw, "m:val", this.val);
+			sw.Write(">");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		private string valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public string val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_XAlign
+	{
+
+		private ST_XAlign valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_XAlign val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_XAlign
+	{
+
+	
+		left,
+
+	
+		center,
+
+	
+		right,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_YAlign
+	{
+
+		private ST_YAlign valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_YAlign val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_YAlign
+	{
+
+	
+		top,
+
+	
+		center,
+
+	
+		bot,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Shp
+	{
+
+		private ST_Shp valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_Shp val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_Shp
+	{
+
+	
+		centered,
+
+	
+		match,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_FType
+	{
+
+		private ST_FType valField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_FType val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_FType
+	{
+
+	
+		bar,
+
+	
+		skw,
+
+	
+		lin,
+
+	
+		noBar,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_TopBot
+	{
+
+		private ST_TopBot valField;
+		public static CT_TopBot Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_TopBot ctObj = new CT_TopBot();
+			if (node.Attributes["m:val"] != null)
+				ctObj.val = (ST_TopBot)Enum.Parse(typeof(ST_TopBot), node.Attributes["m:val"].Value);
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
+			sw.Write(">");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_TopBot val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_TopBot
+	{
+
+	
+		top,
+
+	
+		bot,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Script
+	{
+
+		private ST_Script valField;
+
+		private bool valFieldSpecified;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_Script val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+
+		[XmlIgnore]
+		public bool valSpecified
+		{
+			get
+			{
+				return this.valFieldSpecified;
+			}
+			set
+			{
+				this.valFieldSpecified = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_Script
+	{
+
+	
+		roman,
+
+	
+		script,
+
+	
+		fraktur,
+
+	
+		[XmlEnum("double-struck")]
+		doublestruck,
+
+	
+		[XmlEnum("sans-serif")]
+		sansserif,
+
+	
+		monospace,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Style
+	{
+
+		private ST_Style valField;
+
+		private bool valFieldSpecified;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+		public ST_Style val
+		{
+			get
+			{
+				return this.valField;
+			}
+			set
+			{
+				this.valField = value;
+			}
+		}
+
+		[XmlIgnore]
+		public bool valSpecified
+		{
+			get
+			{
+				return this.valFieldSpecified;
+			}
+			set
+			{
+				this.valFieldSpecified = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	public enum ST_Style
+	{
+
+	
+		p,
+
+	
+		b,
+
+	
+		i,
+
+	
+		bi,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_ManualBreak
+	{
+
+		private string alnAtField;
+		public static CT_ManualBreak Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_ManualBreak ctObj = new CT_ManualBreak();
+			ctObj.alnAt = XmlHelper.ReadString(node.Attributes["m:alnAt"]);
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			XmlHelper.WriteAttribute(sw, "m:alnAt", this.alnAt);
+			sw.Write(">");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+		public string alnAt
+		{
+			get
+			{
+				return this.alnAtField;
+			}
+			set
+			{
+				this.alnAtField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_RPR
+	{
+
+		private CT_OnOff litField;
+
+		private object[] itemsField;
+
+		private CT_ManualBreak brkField;
+
+		private CT_OnOff alnField;
+
+		/// <summary>
+		/// CT_RPR class constructor
+		/// </summary>
+		public CT_RPR()
+		{
+			this.alnField = new CT_OnOff();
+			this.brkField = new CT_ManualBreak();
+			this.itemsField = new object[0];
+			this.litField = new CT_OnOff();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OnOff lit
+		{
+			get
+			{
+				return this.litField;
+			}
+			set
+			{
+				this.litField = value;
+			}
+		}
+
+		[XmlElement("nor", typeof(CT_OnOff), Order = 1)]
+		[XmlElement("scr", typeof(CT_Script), Order = 1)]
+		[XmlElement("sty", typeof(CT_Style), Order = 1)]
+		public object[] Items
+		{
+			get
+			{
+				return this.itemsField;
+			}
+			set
+			{
+				this.itemsField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_ManualBreak brk
+		{
+			get
+			{
+				return this.brkField;
+			}
+			set
+			{
+				this.brkField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OnOff aln
+		{
+			get
+			{
+				return this.alnField;
+			}
+			set
+			{
+				this.alnField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Text1
+	{
+
+		private string spaceField;
+
+		private string valueField;
+
+		[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
+		public string space
+		{
+			get
+			{
+				return this.spaceField;
+			}
+			set
+			{
+				this.spaceField = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlTextAttribute()]
+		public string Value
+		{
+			get
+			{
+				return this.valueField;
+			}
+			set
+			{
+				this.valueField = value;
+			}
+		}
+	}
+
+
+	[Serializable]
+
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_R
+	{
+
+		private CT_RPR rPrField;
+
+		private CT_RPr rPr1Field;
+
+
+		/// <summary>
+		/// CT_R class constructor
+		/// </summary>
+		public CT_R()
+		{
+			//this.rPr1Field = new CT_RPr();
+			//this.rPrField = new CT_RPR();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_RPR rPr
+		{
+			get
+			{
+				return this.rPrField;
+			}
+			set
+			{
+				this.rPrField = value;
+			}
+		}
+
+		[XmlElement("rPr", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 1)]
+		public CT_RPr rPr1
+		{
+			get
+			{
+				return this.rPr1Field;
+			}
+			set
+			{
+				this.rPr1Field = value;
+			}
+		}
+
+		List<CT_Empty> endnoteRefField;
+		public List<CT_Empty> endnoteRef
+		{
+			get { return this.endnoteRefField; }
+			set { this.endnoteRefField = value; }
+		}
+
+		List<CT_Object> objectField;
+		public List<CT_Object> @object
+		{
+			get { return this.objectField; }
+			set { this.objectField = value; }
+		}
+
+		List<CT_Empty> pgNumField;
+		public List<CT_Empty> pgNum
+		{
+			get { return this.pgNumField; }
+			set { this.pgNumField = value; }
+		}
+
+		List<CT_Empty> annotationRefField;
+		public List<CT_Empty> annotationRef
+		{
+			get { return this.annotationRefField; }
+			set { this.annotationRefField = value; }
+		}
+
+		List<CT_Br> brField;
+		public List<CT_Br> br
+		{
+			get { return this.brField; }
+			set { this.brField = value; }
+		}
+
+		List<CT_Markup> commentReferenceField;
+		public List<CT_Markup> commentReference
+		{
+			get { return this.commentReferenceField; }
+			set { this.commentReferenceField = value; }
+		}
+
+		List<CT_Empty> continuationSeparatorField;
+		public List<CT_Empty> continuationSeparator
+		{
+			get { return this.continuationSeparatorField; }
+			set { this.continuationSeparatorField = value; }
+		}
+
+		List<CT_Empty> crField;
+		public List<CT_Empty> cr
+		{
+			get { return this.crField; }
+			set { this.crField = value; }
+		}
+
+		List<CT_Empty> dayLongField;
+		public List<CT_Empty> dayLong
+		{
+			get { return this.dayLongField; }
+			set { this.dayLongField = value; }
+		}
+
+		List<CT_Empty> dayShortField;
+		public List<CT_Empty> dayShort
+		{
+			get { return this.dayShortField; }
+			set { this.dayShortField = value; }
+		}
+
+		List<CT_Text> delInstrTextField;
+		public List<CT_Text> delInstrText
+		{
+			get { return this.delInstrTextField; }
+			set { this.delInstrTextField = value; }
+		}
+
+		List<CT_Text> delTextField;
+		public List<CT_Text> delText
+		{
+			get { return this.delTextField; }
+			set { this.delTextField = value; }
+		}
+
+		List<CT_Drawing> drawingField;
+		public List<CT_Drawing> drawing
+		{
+			get { return this.drawingField; }
+			set { this.drawingField = value; }
+		}
+
+		List<CT_FtnEdnRef> endnoteReferenceField;
+		public List<CT_FtnEdnRef> endnoteReference
+		{
+			get { return this.endnoteReferenceField; }
+			set { this.endnoteReferenceField = value; }
+		}
+
+		List<CT_FldChar> fldCharField;
+		public List<CT_FldChar> fldChar
+		{
+			get { return this.fldCharField; }
+			set { this.fldCharField = value; }
+		}
+
+		List<CT_Empty> footnoteRefField;
+		public List<CT_Empty> footnoteRef
+		{
+			get { return this.footnoteRefField; }
+			set { this.footnoteRefField = value; }
+		}
+
+		List<CT_FtnEdnRef> footnoteReferenceField;
+		public List<CT_FtnEdnRef> footnoteReference
+		{
+			get { return this.footnoteReferenceField; }
+			set { this.footnoteReferenceField = value; }
+		}
+
+		List<CT_Text> instrTextField;
+		public List<CT_Text> instrText
+		{
+			get { return this.instrTextField; }
+			set { this.instrTextField = value; }
+		}
+
+		List<CT_Empty> lastRenderedPageBreakField;
+		public List<CT_Empty> lastRenderedPageBreak
+		{
+			get { return this.lastRenderedPageBreakField; }
+			set { this.lastRenderedPageBreakField = value; }
+		}
+
+		List<CT_Empty> monthLongField;
+		public List<CT_Empty> monthLong
+		{
+			get { return this.monthLongField; }
+			set { this.monthLongField = value; }
+		}
+
+		List<CT_Empty> monthShortField;
+		public List<CT_Empty> monthShort
+		{
+			get { return this.monthShortField; }
+			set { this.monthShortField = value; }
+		}
+
+		List<CT_Empty> noBreakHyphenField;
+		public List<CT_Empty> noBreakHyphen
+		{
+			get { return this.noBreakHyphenField; }
+			set { this.noBreakHyphenField = value; }
+		}
+
+		List<CT_Empty> yearLongField;
+		public List<CT_Empty> yearLong
+		{
+			get { return this.yearLongField; }
+			set { this.yearLongField = value; }
+		}
+
+		List<CT_Picture> pictField;
+		public List<CT_Picture> pict
+		{
+			get { return this.pictField; }
+			set { this.pictField = value; }
+		}
+
+		List<CT_PTab> ptabField;
+		public List<CT_PTab> ptab
+		{
+			get { return this.ptabField; }
+			set { this.ptabField = value; }
+		}
+
+		List<CT_Ruby> rubyField;
+		public List<CT_Ruby> ruby
+		{
+			get { return this.rubyField; }
+			set { this.rubyField = value; }
+		}
+
+		List<CT_Empty> separatorField;
+		public List<CT_Empty> separator
+		{
+			get { return this.separatorField; }
+			set { this.separatorField = value; }
+		}
+
+		List<CT_Empty> softHyphenField;
+		public List<CT_Empty> softHyphen
+		{
+			get { return this.softHyphenField; }
+			set { this.softHyphenField = value; }
+		}
+
+		List<CT_Sym> symField;
+		public List<CT_Sym> sym
+		{
+			get { return this.symField; }
+			set { this.symField = value; }
+		}
+
+		List<CT_Text> tField;
+		public List<CT_Text> t
+		{
+			get { return this.tField; }
+			set { this.tField = value; }
+		}
+
+		List<CT_Empty> tabField;
+		public List<CT_Empty> tab
+		{
+			get { return this.tabField; }
+			set { this.tabField = value; }
+		}
+
+		List<CT_Empty> yearShortField;
+		public List<CT_Empty> yearShort
+		{
+			get { return this.yearShortField; }
+			set { this.yearShortField = value; }
+		}
+
+
+	}
+
+
+
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+	public enum ItemsChoiceType6
+	{
+
+	
+		t,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:annotationRef")]
+		annotationRef,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:br")]
+		br,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentReference")]
+		commentReference,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:continuationSeparato" +
+			"r")]
+		continuationSeparator,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:cr")]
+		cr,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayLong")]
+		dayLong,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:dayShort")]
+		dayShort,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delInstrText")]
+		delInstrText,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:delText")]
+		delText,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:drawing")]
+		drawing,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteRef")]
+		endnoteRef,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:endnoteReference")]
+		endnoteReference,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:fldChar")]
+		fldChar,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteRef")]
+		footnoteRef,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:footnoteReference")]
+		footnoteReference,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:instrText")]
+		instrText,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:lastRenderedPageBrea" +
+			"k")]
+		lastRenderedPageBreak,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthLong")]
+		monthLong,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:monthShort")]
+		monthShort,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:noBreakHyphen")]
+		noBreakHyphen,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:object")]
+		@object,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pgNum")]
+		pgNum,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:pict")]
+		pict,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ptab")]
+		ptab,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ruby")]
+		ruby,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:separator")]
+		separator,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:softHyphen")]
+		softHyphen,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:sym")]
+		sym,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:t")]
+		t1,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:tab")]
+		tab,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearLong")]
+		yearLong,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:yearShort")]
+		yearShort,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_CtrlPr
+	{
+
+		private CT_RPr rPrField;
+
+		private CT_RPrChange insField;
+
+		private CT_RPrChange delField;
+
+		[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		public CT_RPr rPr
+		{
+			get
+			{
+				return this.rPrField;
+			}
+			set
+			{
+				this.rPrField = value;
+			}
+		}
+
+		[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 1)]
+		public CT_RPrChange ins
+		{
+			get
+			{
+				return this.insField;
+			}
+			set
+			{
+				this.insField = value;
+			}
+		}
+
+		[XmlElement(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Type = typeof(CT_RPrChange), Order = 2)]
+		public CT_RPrChange del
+		{
+			get
+			{
+				return this.delField;
+			}
+			set
+			{
+				this.delField = value;
+			}
+		}
+
+		public static CT_CtrlPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_CtrlPr ctObj = new CT_CtrlPr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "rPr")
+					ctObj.rPr = CT_RPr.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "ins")
+					ctObj.ins = CT_RPrChange.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "del")
+					ctObj.del = CT_RPrChange.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.rPr != null)
+				this.rPr.Write(sw, "rPr");
+			if (this.ins != null)
+				this.ins.Write(sw, "ins");
+			if (this.del != null)
+				this.del.Write(sw, "del");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_AccPr
+	{
+
+		private CT_Char chrField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_AccPr class constructor
+		/// </summary>
+		public CT_AccPr()
+		{
+			//this.ctrlPrField = new CT_CtrlPr();
+			//this.chrField = new CT_Char();
+		}
+		public static CT_AccPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_AccPr ctObj = new CT_AccPr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "chr")
+					ctObj.chr = CT_Char.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "ctrlPr")
+					ctObj.ctrlPr = CT_CtrlPr.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.chr != null)
+				this.chr.Write(sw, "chr");
+			if (this.ctrlPr != null)
+				this.ctrlPr.Write(sw, "ctrlPr");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_Char chr
+		{
+			get
+			{
+				return this.chrField;
+			}
+			set
+			{
+				this.chrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Acc
+	{
+
+		private CT_AccPr accPrField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Acc class constructor
+		/// </summary>
+		public CT_Acc()
+		{
+			this.eField = new CT_OMathArg();
+			this.accPrField = new CT_AccPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_AccPr accPr
+		{
+			get
+			{
+				return this.accPrField;
+			}
+			set
+			{
+				this.accPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OMathArg
+	{
+
+		private CT_OMathArgPr argPrField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_OMathArg class constructor
+		/// </summary>
+		public CT_OMathArg()
+		{
+			//this.ctrlPrField = new CT_CtrlPr();
+			//this.argPrField = new CT_OMathArgPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OMathArgPr argPr
+		{
+			get
+			{
+				return this.argPrField;
+			}
+			set
+			{
+				this.argPrField = value;
+			}
+		}
+		List<CT_TrackChange> customXmlInsRangeStartField;
+		public List<CT_TrackChange> customXmlInsRangeStart
+		{
+			get { return this.customXmlInsRangeStartField; }
+			set { this.customXmlInsRangeStartField = value; }
+		}
+
+		List<CT_LimLow> limLowField;
+		public List<CT_LimLow> limLow
+		{
+			get { return this.limLowField; }
+			set { this.limLowField = value; }
+		}
+
+		List<CT_Phant> phantField;
+		public List<CT_Phant> phant
+		{
+			get { return this.phantField; }
+			set { this.phantField = value; }
+		}
+
+		List<CT_TrackChange> customXmlMoveToRangeStartField;
+		public List<CT_TrackChange> customXmlMoveToRangeStart
+		{
+			get { return this.customXmlMoveToRangeStartField; }
+			set { this.customXmlMoveToRangeStartField = value; }
+		}
+
+		List<CT_LimUpp> limUppField;
+		public List<CT_LimUpp> limUpp
+		{
+			get { return this.limUppField; }
+			set { this.limUppField = value; }
+		}
+
+		List<CT_EqArr> eqArrField;
+		public List<CT_EqArr> eqArr
+		{
+			get { return this.eqArrField; }
+			set { this.eqArrField = value; }
+		}
+
+		List<CT_MarkupRange> commentRangeEndField;
+		public List<CT_MarkupRange> commentRangeEnd
+		{
+			get { return this.commentRangeEndField; }
+			set { this.commentRangeEndField = value; }
+		}
+
+		List<CT_Acc> accField;
+		public List<CT_Acc> acc
+		{
+			get { return this.accField; }
+			set { this.accField = value; }
+		}
+
+		List<CT_Bar> barField;
+		public List<CT_Bar> bar
+		{
+			get { return this.barField; }
+			set { this.barField = value; }
+		}
+
+		List<CT_BorderBox> borderBoxField;
+		public List<CT_BorderBox> borderBox
+		{
+			get { return this.borderBoxField; }
+			set { this.borderBoxField = value; }
+		}
+
+		List<CT_Box> boxField;
+		public List<CT_Box> box
+		{
+			get { return this.boxField; }
+			set { this.boxField = value; }
+		}
+
+		List<CT_MarkupRange> commentRangeStartField;
+		public List<CT_MarkupRange> commentRangeStart
+		{
+			get { return this.commentRangeStartField; }
+			set { this.commentRangeStartField = value; }
+		}
+
+		List<CT_Markup> customXmlDelRangeEndField;
+		public List<CT_Markup> customXmlDelRangeEnd
+		{
+			get { return this.customXmlDelRangeEndField; }
+			set { this.customXmlDelRangeEndField = value; }
+		}
+
+		List<CT_TrackChange> customXmlDelRangeStartField;
+		public List<CT_TrackChange> customXmlDelRangeStart
+		{
+			get { return this.customXmlDelRangeStartField; }
+			set { this.customXmlDelRangeStartField = value; }
+		}
+
+		List<CT_TrackChange> customXmlMoveFromRangeStartField;
+		public List<CT_TrackChange> customXmlMoveFromRangeStart
+		{
+			get { return this.customXmlMoveFromRangeStartField; }
+			set { this.customXmlMoveFromRangeStartField = value; }
+		}
+
+		List<CT_RunTrackChange> delField;
+		public List<CT_RunTrackChange> del
+		{
+			get { return this.delField; }
+			set { this.delField = value; }
+		}
+
+		List<CT_RunTrackChange> insField;
+		public List<CT_RunTrackChange> ins
+		{
+			get { return this.insField; }
+			set { this.insField = value; }
+		}
+
+		List<CT_RunTrackChange> moveFromField;
+		public List<CT_RunTrackChange> moveFrom
+		{
+			get { return this.moveFromField; }
+			set { this.moveFromField = value; }
+		}
+
+		List<CT_MarkupRange> moveFromRangeEndField;
+		public List<CT_MarkupRange> moveFromRangeEnd
+		{
+			get { return this.moveFromRangeEndField; }
+			set { this.moveFromRangeEndField = value; }
+		}
+
+		List<CT_MoveBookmark> moveFromRangeStartField;
+		public List<CT_MoveBookmark> moveFromRangeStart
+		{
+			get { return this.moveFromRangeStartField; }
+			set { this.moveFromRangeStartField = value; }
+		}
+
+		List<CT_RunTrackChange> moveToField;
+		public List<CT_RunTrackChange> moveTo
+		{
+			get { return this.moveToField; }
+			set { this.moveToField = value; }
+		}
+
+		List<CT_MarkupRange> moveToRangeEndField;
+		public List<CT_MarkupRange> moveToRangeEnd
+		{
+			get { return this.moveToRangeEndField; }
+			set { this.moveToRangeEndField = value; }
+		}
+
+		List<CT_MoveBookmark> moveToRangeStartField;
+		public List<CT_MoveBookmark> moveToRangeStart
+		{
+			get { return this.moveToRangeStartField; }
+			set { this.moveToRangeStartField = value; }
+		}
+
+		List<CT_Perm> permEndField;
+		public List<CT_Perm> permEnd
+		{
+			get { return this.permEndField; }
+			set { this.permEndField = value; }
+		}
+
+		List<CT_PermStart> permStartField;
+		public List<CT_PermStart> permStart
+		{
+			get { return this.permStartField; }
+			set { this.permStartField = value; }
+		}
+
+		List<CT_Markup> customXmlInsRangeEndField;
+		public List<CT_Markup> customXmlInsRangeEnd
+		{
+			get { return this.customXmlInsRangeEndField; }
+			set { this.customXmlInsRangeEndField = value; }
+		}
+
+		List<CT_OMath> oMathField;
+		public List<CT_OMath> oMath
+		{
+			get { return this.oMathField; }
+			set { this.oMathField = value; }
+		}
+
+		List<CT_OMathPara> oMathParaField;
+		public List<CT_OMathPara> oMathPara
+		{
+			get { return this.oMathParaField; }
+			set { this.oMathParaField = value; }
+		}
+
+		List<CT_ProofErr> proofErrField;
+		public List<CT_ProofErr> proofErr
+		{
+			get { return this.proofErrField; }
+			set { this.proofErrField = value; }
+		}
+
+		List<CT_D> dField;
+		public List<CT_D> d
+		{
+			get { return this.dField; }
+			set { this.dField = value; }
+		}
+
+		List<CT_Bookmark> bookmarkStartField;
+		public List<CT_Bookmark> bookmarkStart
+		{
+			get { return this.bookmarkStartField; }
+			set { this.bookmarkStartField = value; }
+		}
+
+		List<CT_M> mField;
+		public List<CT_M> m
+		{
+			get { return this.mField; }
+			set { this.mField = value; }
+		}
+
+		List<CT_F> fField;
+		public List<CT_F> f
+		{
+			get { return this.fField; }
+			set { this.fField = value; }
+		}
+
+		List<CT_Nary> naryField;
+		public List<CT_Nary> nary
+		{
+			get { return this.naryField; }
+			set { this.naryField = value; }
+		}
+
+		List<CT_Markup> customXmlMoveFromRangeEndField;
+		public List<CT_Markup> customXmlMoveFromRangeEnd
+		{
+			get { return this.customXmlMoveFromRangeEndField; }
+			set { this.customXmlMoveFromRangeEndField = value; }
+		}
+
+		List<CT_Func> funcField;
+		public List<CT_Func> func
+		{
+			get { return this.funcField; }
+			set { this.funcField = value; }
+		}
+
+		List<CT_Markup> customXmlMoveToRangeEndField;
+		public List<CT_Markup> customXmlMoveToRangeEnd
+		{
+			get { return this.customXmlMoveToRangeEndField; }
+			set { this.customXmlMoveToRangeEndField = value; }
+		}
+
+		List<CT_GroupChr> groupChrField;
+		public List<CT_GroupChr> groupChr
+		{
+			get { return this.groupChrField; }
+			set { this.groupChrField = value; }
+		}
+
+		List<CT_R> rField;
+		public List<CT_R> r
+		{
+			get { return this.rField; }
+			set { this.rField = value; }
+		}
+
+		List<CT_Rad> radField;
+		public List<CT_Rad> rad
+		{
+			get { return this.radField; }
+			set { this.radField = value; }
+		}
+
+		List<CT_SPre> sPreField;
+		public List<CT_SPre> sPre
+		{
+			get { return this.sPreField; }
+			set { this.sPreField = value; }
+		}
+
+		List<CT_SSub> sSubField;
+		public List<CT_SSub> sSub
+		{
+			get { return this.sSubField; }
+			set { this.sSubField = value; }
+		}
+
+		List<CT_SSubSup> sSubSupField;
+		public List<CT_SSubSup> sSubSup
+		{
+			get { return this.sSubSupField; }
+			set { this.sSubSupField = value; }
+		}
+
+		List<CT_SSup> sSupField;
+		public List<CT_SSup> sSup
+		{
+			get { return this.sSupField; }
+			set { this.sSupField = value; }
+		}
+
+		List<CT_MarkupRange> bookmarkEndField;
+		public List<CT_MarkupRange> bookmarkEnd
+		{
+			get { return this.bookmarkEndField; }
+			set { this.bookmarkEndField = value; }
+		}
+
+
+
+		[XmlElement(Order = 3)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+
+		internal static CT_OMathArg Parse(XmlNode childNode, XmlNamespaceManager namespaceManager)
+		{
+			throw new NotImplementedException();
+		}
+
+		internal void Write(StreamWriter sw, string p)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OMathArgPr
+	{
+
+		private CT_Integer2 argSzField;
+
+		/// <summary>
+		/// CT_OMathArgPr class constructor
+		/// </summary>
+		public CT_OMathArgPr()
+		{
+			this.argSzField = new CT_Integer2();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_Integer2 argSz
+		{
+			get
+			{
+				return this.argSzField;
+			}
+			set
+			{
+				this.argSzField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+	public enum ItemsChoiceType7
+	{
+
+	
+		acc,
+
+	
+		bar,
+
+	
+		borderBox,
+
+	
+		box,
+
+	
+		d,
+
+	
+		eqArr,
+
+	
+		f,
+
+	
+		func,
+
+	
+		groupChr,
+
+	
+		limLow,
+
+	
+		limUpp,
+
+	
+		m,
+
+	
+		nary,
+
+	
+		oMath,
+
+	
+		oMathPara,
+
+	
+		phant,
+
+	
+		r,
+
+	
+		rad,
+
+	
+		sPre,
+
+	
+		sSub,
+
+	
+		sSubSup,
+
+	
+		sSup,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
+		bookmarkEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
+		bookmarkStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
+		commentRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
+		commentRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
+			"")]
+		customXmlDelRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
+			"rt")]
+		customXmlDelRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
+			"")]
+		customXmlInsRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
+			"rt")]
+		customXmlInsRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+			"geEnd")]
+		customXmlMoveFromRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+			"geStart")]
+		customXmlMoveFromRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+			"End")]
+		customXmlMoveToRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+			"Start")]
+		customXmlMoveToRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
+		del,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
+		ins,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
+		moveFrom,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
+		moveFromRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
+		moveFromRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
+		moveTo,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
+		moveToRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
+		moveToRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
+		permEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
+		permStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
+		proofErr,
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_BarPr
+	{
+
+		private CT_TopBot posField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_BarPr class constructor
+		/// </summary>
+		public CT_BarPr()
+		{
+			//this.ctrlPrField = new CT_CtrlPr();
+			//this.posField = new CT_TopBot();
+		}
+		public static CT_BarPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_BarPr ctObj = new CT_BarPr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "pos")
+					ctObj.pos = CT_TopBot.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "ctrlPr")
+					ctObj.ctrlPr = CT_CtrlPr.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.pos != null)
+				this.pos.Write(sw, "pos");
+			if (this.ctrlPr != null)
+				this.ctrlPr.Write(sw, "ctrlPr");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_TopBot pos
+		{
+			get
+			{
+				return this.posField;
+			}
+			set
+			{
+				this.posField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Bar
+	{
+
+		private CT_BarPr barPrField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Bar class constructor
+		/// </summary>
+		public CT_Bar()
+		{
+			//this.eField = new CT_OMathArg();
+			//this.barPrField = new CT_BarPr();
+		}
+		public static CT_Bar Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_Bar ctObj = new CT_Bar();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "barPr")
+					ctObj.barPr = CT_BarPr.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "e")
+					ctObj.e = CT_OMathArg.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.barPr != null)
+				this.barPr.Write(sw, "barPr");
+			if (this.e != null)
+				this.e.Write(sw, "e");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+		[XmlElement(Order = 0)]
+		public CT_BarPr barPr
+		{
+			get
+			{
+				return this.barPrField;
+			}
+			set
+			{
+				this.barPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_BoxPr
+	{
+
+		private CT_OnOff opEmuField;
+
+		private CT_OnOff noBreakField;
+
+		private CT_OnOff diffField;
+
+		private CT_ManualBreak brkField;
+
+		private CT_OnOff alnField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_BoxPr class constructor
+		/// </summary>
+		public CT_BoxPr()
+		{
+			//this.ctrlPrField = new CT_CtrlPr();
+			//this.alnField = new CT_OnOff();
+			//this.brkField = new CT_ManualBreak();
+			//this.diffField = new CT_OnOff();
+			//this.noBreakField = new CT_OnOff();
+			//this.opEmuField = new CT_OnOff();
+		}
+		public static CT_BoxPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_BoxPr ctObj = new CT_BoxPr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "opEmu")
+					ctObj.opEmu = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "noBreak")
+					ctObj.noBreak = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "diff")
+					ctObj.diff = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "brk")
+					ctObj.brk = CT_ManualBreak.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "aln")
+					ctObj.aln = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "ctrlPr")
+					ctObj.ctrlPr = CT_CtrlPr.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.opEmu != null)
+				this.opEmu.Write(sw, "opEmu");
+			if (this.noBreak != null)
+				this.noBreak.Write(sw, "noBreak");
+			if (this.diff != null)
+				this.diff.Write(sw, "diff");
+			if (this.brk != null)
+				this.brk.Write(sw, "brk");
+			if (this.aln != null)
+				this.aln.Write(sw, "aln");
+			if (this.ctrlPr != null)
+				this.ctrlPr.Write(sw, "ctrlPr");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OnOff opEmu
+		{
+			get
+			{
+				return this.opEmuField;
+			}
+			set
+			{
+				this.opEmuField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OnOff noBreak
+		{
+			get
+			{
+				return this.noBreakField;
+			}
+			set
+			{
+				this.noBreakField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OnOff diff
+		{
+			get
+			{
+				return this.diffField;
+			}
+			set
+			{
+				this.diffField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_ManualBreak brk
+		{
+			get
+			{
+				return this.brkField;
+			}
+			set
+			{
+				this.brkField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_OnOff aln
+		{
+			get
+			{
+				return this.alnField;
+			}
+			set
+			{
+				this.alnField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Box
+	{
+
+		private CT_BoxPr boxPrField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Box class constructor
+		/// </summary>
+		public CT_Box()
+		{
+			this.eField = new CT_OMathArg();
+			this.boxPrField = new CT_BoxPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_BoxPr boxPr
+		{
+			get
+			{
+				return this.boxPrField;
+			}
+			set
+			{
+				this.boxPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_BorderBoxPr
+	{
+
+		private CT_OnOff hideTopField;
+
+		private CT_OnOff hideBotField;
+
+		private CT_OnOff hideLeftField;
+
+		private CT_OnOff hideRightField;
+
+		private CT_OnOff strikeHField;
+
+		private CT_OnOff strikeVField;
+
+		private CT_OnOff strikeBLTRField;
+
+		private CT_OnOff strikeTLBRField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_BorderBoxPr class constructor
+		/// </summary>
+		public CT_BorderBoxPr()
+		{
+			//this.ctrlPrField = new CT_CtrlPr();
+			//this.strikeTLBRField = new CT_OnOff();
+			//this.strikeBLTRField = new CT_OnOff();
+			//this.strikeVField = new CT_OnOff();
+			//this.strikeHField = new CT_OnOff();
+			//this.hideRightField = new CT_OnOff();
+			//this.hideLeftField = new CT_OnOff();
+			//this.hideBotField = new CT_OnOff();
+			//this.hideTopField = new CT_OnOff();
+		}
+		public static CT_BorderBoxPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_BorderBoxPr ctObj = new CT_BorderBoxPr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "hideTop")
+					ctObj.hideTop = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "hideBot")
+					ctObj.hideBot = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "hideLeft")
+					ctObj.hideLeft = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "hideRight")
+					ctObj.hideRight = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "strikeH")
+					ctObj.strikeH = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "strikeV")
+					ctObj.strikeV = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "strikeBLTR")
+					ctObj.strikeBLTR = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "strikeTLBR")
+					ctObj.strikeTLBR = CT_OnOff.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "ctrlPr")
+					ctObj.ctrlPr = CT_CtrlPr.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.hideTop != null)
+				this.hideTop.Write(sw, "hideTop");
+			if (this.hideBot != null)
+				this.hideBot.Write(sw, "hideBot");
+			if (this.hideLeft != null)
+				this.hideLeft.Write(sw, "hideLeft");
+			if (this.hideRight != null)
+				this.hideRight.Write(sw, "hideRight");
+			if (this.strikeH != null)
+				this.strikeH.Write(sw, "strikeH");
+			if (this.strikeV != null)
+				this.strikeV.Write(sw, "strikeV");
+			if (this.strikeBLTR != null)
+				this.strikeBLTR.Write(sw, "strikeBLTR");
+			if (this.strikeTLBR != null)
+				this.strikeTLBR.Write(sw, "strikeTLBR");
+			if (this.ctrlPr != null)
+				this.ctrlPr.Write(sw, "ctrlPr");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OnOff hideTop
+		{
+			get
+			{
+				return this.hideTopField;
+			}
+			set
+			{
+				this.hideTopField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OnOff hideBot
+		{
+			get
+			{
+				return this.hideBotField;
+			}
+			set
+			{
+				this.hideBotField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OnOff hideLeft
+		{
+			get
+			{
+				return this.hideLeftField;
+			}
+			set
+			{
+				this.hideLeftField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OnOff hideRight
+		{
+			get
+			{
+				return this.hideRightField;
+			}
+			set
+			{
+				this.hideRightField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_OnOff strikeH
+		{
+			get
+			{
+				return this.strikeHField;
+			}
+			set
+			{
+				this.strikeHField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_OnOff strikeV
+		{
+			get
+			{
+				return this.strikeVField;
+			}
+			set
+			{
+				this.strikeVField = value;
+			}
+		}
+
+		[XmlElement(Order = 6)]
+		public CT_OnOff strikeBLTR
+		{
+			get
+			{
+				return this.strikeBLTRField;
+			}
+			set
+			{
+				this.strikeBLTRField = value;
+			}
+		}
+
+		[XmlElement(Order = 7)]
+		public CT_OnOff strikeTLBR
+		{
+			get
+			{
+				return this.strikeTLBRField;
+			}
+			set
+			{
+				this.strikeTLBRField = value;
+			}
+		}
+
+		[XmlElement(Order = 8)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_BorderBox
+	{
+
+		private CT_BorderBoxPr borderBoxPrField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_BorderBox class constructor
+		/// </summary>
+		public CT_BorderBox()
+		{
+			//this.eField = new CT_OMathArg();
+			//this.borderBoxPrField = new CT_BorderBoxPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_BorderBoxPr borderBoxPr
+		{
+			get
+			{
+				return this.borderBoxPrField;
+			}
+			set
+			{
+				this.borderBoxPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+
+
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_DPr
+	{
+
+		private CT_Char begChrField;
+
+		private CT_Char sepChrField;
+
+		private CT_Char endChrField;
+
+		private CT_OnOff growField;
+
+		private CT_Shp shpField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_DPr class constructor
+		/// </summary>
+		public CT_DPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.shpField = new CT_Shp();
+			this.growField = new CT_OnOff();
+			this.endChrField = new CT_Char();
+			this.sepChrField = new CT_Char();
+			this.begChrField = new CT_Char();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_Char begChr
+		{
+			get
+			{
+				return this.begChrField;
+			}
+			set
+			{
+				this.begChrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_Char sepChr
+		{
+			get
+			{
+				return this.sepChrField;
+			}
+			set
+			{
+				this.sepChrField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_Char endChr
+		{
+			get
+			{
+				return this.endChrField;
+			}
+			set
+			{
+				this.endChrField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OnOff grow
+		{
+			get
+			{
+				return this.growField;
+			}
+			set
+			{
+				this.growField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_Shp shp
+		{
+			get
+			{
+				return this.shpField;
+			}
+			set
+			{
+				this.shpField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_D
+	{
+
+		private CT_DPr dPrField;
+
+		private List<CT_OMathArg> eField;
+
+		/// <summary>
+		/// CT_D class constructor
+		/// </summary>
+		public CT_D()
+		{
+			this.eField = new List<CT_OMathArg>();
+			this.dPrField = new CT_DPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_DPr dPr
+		{
+			get
+			{
+				return this.dPrField;
+			}
+			set
+			{
+				this.dPrField = value;
+			}
+		}
+
+		[XmlElement("e", Order = 1)]
+		public List<CT_OMathArg> e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_EqArrPr
+	{
+
+		private CT_YAlign baseJcField;
+
+		private CT_OnOff maxDistField;
+
+		private CT_OnOff objDistField;
+
+		private CT_SpacingRule rSpRuleField;
+
+		private CT_UnSignedInteger rSpField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_EqArrPr class constructor
+		/// </summary>
+		public CT_EqArrPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.rSpField = new CT_UnSignedInteger();
+			this.rSpRuleField = new CT_SpacingRule();
+			this.objDistField = new CT_OnOff();
+			this.maxDistField = new CT_OnOff();
+			this.baseJcField = new CT_YAlign();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_YAlign baseJc
+		{
+			get
+			{
+				return this.baseJcField;
+			}
+			set
+			{
+				this.baseJcField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OnOff maxDist
+		{
+			get
+			{
+				return this.maxDistField;
+			}
+			set
+			{
+				this.maxDistField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OnOff objDist
+		{
+			get
+			{
+				return this.objDistField;
+			}
+			set
+			{
+				this.objDistField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_SpacingRule rSpRule
+		{
+			get
+			{
+				return this.rSpRuleField;
+			}
+			set
+			{
+				this.rSpRuleField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_UnSignedInteger rSp
+		{
+			get
+			{
+				return this.rSpField;
+			}
+			set
+			{
+				this.rSpField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_EqArr
+	{
+
+		private CT_EqArrPr eqArrPrField;
+
+		private List<CT_OMathArg> eField;
+
+		/// <summary>
+		/// CT_EqArr class constructor
+		/// </summary>
+		public CT_EqArr()
+		{
+			this.eField = new List<CT_OMathArg>();
+			this.eqArrPrField = new CT_EqArrPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_EqArrPr eqArrPr
+		{
+			get
+			{
+				return this.eqArrPrField;
+			}
+			set
+			{
+				this.eqArrPrField = value;
+			}
+		}
+
+		[XmlElement("e", Order = 1)]
+		public List<CT_OMathArg> e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_FPr
+	{
+
+		private CT_FType typeField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_FPr class constructor
+		/// </summary>
+		public CT_FPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.typeField = new CT_FType();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_FType type
+		{
+			get
+			{
+				return this.typeField;
+			}
+			set
+			{
+				this.typeField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_F
+	{
+
+		private CT_FPr fPrField;
+
+		private CT_OMathArg numField;
+
+		private CT_OMathArg denField;
+
+		/// <summary>
+		/// CT_F class constructor
+		/// </summary>
+		public CT_F()
+		{
+			this.denField = new CT_OMathArg();
+			this.numField = new CT_OMathArg();
+			this.fPrField = new CT_FPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_FPr fPr
+		{
+			get
+			{
+				return this.fPrField;
+			}
+			set
+			{
+				this.fPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg num
+		{
+			get
+			{
+				return this.numField;
+			}
+			set
+			{
+				this.numField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg den
+		{
+			get
+			{
+				return this.denField;
+			}
+			set
+			{
+				this.denField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_FuncPr
+	{
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_FuncPr class constructor
+		/// </summary>
+		public CT_FuncPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Func
+	{
+
+		private CT_FuncPr funcPrField;
+
+		private CT_OMathArg fNameField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Func class constructor
+		/// </summary>
+		public CT_Func()
+		{
+			this.eField = new CT_OMathArg();
+			this.fNameField = new CT_OMathArg();
+			this.funcPrField = new CT_FuncPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_FuncPr funcPr
+		{
+			get
+			{
+				return this.funcPrField;
+			}
+			set
+			{
+				this.funcPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg fName
+		{
+			get
+			{
+				return this.fNameField;
+			}
+			set
+			{
+				this.fNameField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_GroupChrPr
+	{
+
+		private CT_Char chrField;
+
+		private CT_TopBot posField;
+
+		private CT_TopBot vertJcField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_GroupChrPr class constructor
+		/// </summary>
+		public CT_GroupChrPr()
+		{
+			//this.ctrlPrField = new CT_CtrlPr();
+			//this.vertJcField = new CT_TopBot();
+			//this.posField = new CT_TopBot();
+			//this.chrField = new CT_Char();
+		}
+		public static CT_GroupChrPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_GroupChrPr ctObj = new CT_GroupChrPr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "chr")
+					ctObj.chr = CT_Char.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "pos")
+					ctObj.pos = CT_TopBot.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "vertJc")
+					ctObj.vertJc = CT_TopBot.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "ctrlPr")
+					ctObj.ctrlPr = CT_CtrlPr.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.chr != null)
+				this.chr.Write(sw, "chr");
+			if (this.pos != null)
+				this.pos.Write(sw, "pos");
+			if (this.vertJc != null)
+				this.vertJc.Write(sw, "vertJc");
+			if (this.ctrlPr != null)
+				this.ctrlPr.Write(sw, "ctrlPr");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_Char chr
+		{
+			get
+			{
+				return this.chrField;
+			}
+			set
+			{
+				this.chrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_TopBot pos
+		{
+			get
+			{
+				return this.posField;
+			}
+			set
+			{
+				this.posField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_TopBot vertJc
+		{
+			get
+			{
+				return this.vertJcField;
+			}
+			set
+			{
+				this.vertJcField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_GroupChr
+	{
+
+		private CT_GroupChrPr groupChrPrField;
+
+		private CT_OMathArg eField;
+		public static CT_GroupChr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_GroupChr ctObj = new CT_GroupChr();
+			foreach (XmlNode childNode in node.ChildNodes)
+			{
+				if (childNode.LocalName == "groupChrPr")
+					ctObj.groupChrPr = CT_GroupChrPr.Parse(childNode, namespaceManager);
+				else if (childNode.LocalName == "e")
+					ctObj.e = CT_OMathArg.Parse(childNode, namespaceManager);
+			}
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<m:{0}", nodeName));
+			sw.Write(">");
+			if (this.groupChrPr != null)
+				this.groupChrPr.Write(sw, "groupChrPr");
+			if (this.e != null)
+				this.e.Write(sw, "e");
+			sw.Write(string.Format("</m:{0}>", nodeName));
+		}
+
+		/// <summary>
+		/// CT_GroupChr class constructor
+		/// </summary>
+		public CT_GroupChr()
+		{
+			//this.eField = new CT_OMathArg();
+			//this.groupChrPrField = new CT_GroupChrPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_GroupChrPr groupChrPr
+		{
+			get
+			{
+				return this.groupChrPrField;
+			}
+			set
+			{
+				this.groupChrPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_LimLowPr
+	{
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_LimLowPr class constructor
+		/// </summary>
+		public CT_LimLowPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_LimLow
+	{
+
+		private CT_LimLowPr limLowPrField;
+
+		private CT_OMathArg eField;
+
+		private CT_OMathArg limField;
+
+		/// <summary>
+		/// CT_LimLow class constructor
+		/// </summary>
+		public CT_LimLow()
+		{
+			this.limField = new CT_OMathArg();
+			this.eField = new CT_OMathArg();
+			this.limLowPrField = new CT_LimLowPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_LimLowPr limLowPr
+		{
+			get
+			{
+				return this.limLowPrField;
+			}
+			set
+			{
+				this.limLowPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg lim
+		{
+			get
+			{
+				return this.limField;
+			}
+			set
+			{
+				this.limField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_LimUppPr
+	{
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_LimUppPr class constructor
+		/// </summary>
+		public CT_LimUppPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_LimUpp
+	{
+
+		private CT_LimUppPr limUppPrField;
+
+		private CT_OMathArg eField;
+
+		private CT_OMathArg limField;
+
+		/// <summary>
+		/// CT_LimUpp class constructor
+		/// </summary>
+		public CT_LimUpp()
+		{
+			this.limField = new CT_OMathArg();
+			this.eField = new CT_OMathArg();
+			this.limUppPrField = new CT_LimUppPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_LimUppPr limUppPr
+		{
+			get
+			{
+				return this.limUppPrField;
+			}
+			set
+			{
+				this.limUppPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg lim
+		{
+			get
+			{
+				return this.limField;
+			}
+			set
+			{
+				this.limField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_MCPr
+	{
+
+		private CT_Integer255 countField;
+
+		private CT_XAlign mcJcField;
+
+		/// <summary>
+		/// CT_MCPr class constructor
+		/// </summary>
+		public CT_MCPr()
+		{
+			this.mcJcField = new CT_XAlign();
+			this.countField = new CT_Integer255();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_Integer255 count
+		{
+			get
+			{
+				return this.countField;
+			}
+			set
+			{
+				this.countField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_XAlign mcJc
+		{
+			get
+			{
+				return this.mcJcField;
+			}
+			set
+			{
+				this.mcJcField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_MC
+	{
+
+		private CT_MCPr mcPrField;
+
+		/// <summary>
+		/// CT_MC class constructor
+		/// </summary>
+		public CT_MC()
+		{
+			this.mcPrField = new CT_MCPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_MCPr mcPr
+		{
+			get
+			{
+				return this.mcPrField;
+			}
+			set
+			{
+				this.mcPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_MCS
+	{
+
+		private List<CT_MC> mcField;
+
+		/// <summary>
+		/// CT_MCS class constructor
+		/// </summary>
+		public CT_MCS()
+		{
+			this.mcField = new List<CT_MC>();
+		}
+
+		[XmlElement("mc", Order = 0)]
+		public List<CT_MC> mc
+		{
+			get
+			{
+				return this.mcField;
+			}
+			set
+			{
+				this.mcField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_MPr
+	{
+
+		private CT_YAlign baseJcField;
+
+		private CT_OnOff plcHideField;
+
+		private CT_SpacingRule rSpRuleField;
+
+		private CT_SpacingRule cGpRuleField;
+
+		private CT_UnSignedInteger rSpField;
+
+		private CT_UnSignedInteger cSpField;
+
+		private CT_UnSignedInteger cGpField;
+
+		private List<CT_MC> mcsField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_MPr class constructor
+		/// </summary>
+		public CT_MPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.mcsField = new List<CT_MC>();
+			this.cGpField = new CT_UnSignedInteger();
+			this.cSpField = new CT_UnSignedInteger();
+			this.rSpField = new CT_UnSignedInteger();
+			this.cGpRuleField = new CT_SpacingRule();
+			this.rSpRuleField = new CT_SpacingRule();
+			this.plcHideField = new CT_OnOff();
+			this.baseJcField = new CT_YAlign();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_YAlign baseJc
+		{
+			get
+			{
+				return this.baseJcField;
+			}
+			set
+			{
+				this.baseJcField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OnOff plcHide
+		{
+			get
+			{
+				return this.plcHideField;
+			}
+			set
+			{
+				this.plcHideField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_SpacingRule rSpRule
+		{
+			get
+			{
+				return this.rSpRuleField;
+			}
+			set
+			{
+				this.rSpRuleField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_SpacingRule cGpRule
+		{
+			get
+			{
+				return this.cGpRuleField;
+			}
+			set
+			{
+				this.cGpRuleField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_UnSignedInteger rSp
+		{
+			get
+			{
+				return this.rSpField;
+			}
+			set
+			{
+				this.rSpField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_UnSignedInteger cSp
+		{
+			get
+			{
+				return this.cSpField;
+			}
+			set
+			{
+				this.cSpField = value;
+			}
+		}
+
+		[XmlElement(Order = 6)]
+		public CT_UnSignedInteger cGp
+		{
+			get
+			{
+				return this.cGpField;
+			}
+			set
+			{
+				this.cGpField = value;
+			}
+		}
+
+		[XmlArray(Order = 7)]
+		[XmlArrayItem("mc", IsNullable = false)]
+		public List<CT_MC> mcs
+		{
+			get
+			{
+				return this.mcsField;
+			}
+			set
+			{
+				this.mcsField = value;
+			}
+		}
+
+		[XmlElement(Order = 8)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_MR
+	{
+
+		private List<CT_OMathArg> eField;
+
+		/// <summary>
+		/// CT_MR class constructor
+		/// </summary>
+		public CT_MR()
+		{
+			this.eField = new List<CT_OMathArg>();
+		}
+
+		[XmlElement("e", Order = 0)]
+		public List<CT_OMathArg> e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_M
+	{
+
+		private CT_MPr mPrField;
+
+		private List<CT_OMathArg> mrField;
+
+		/// <summary>
+		/// CT_M class constructor
+		/// </summary>
+		public CT_M()
+		{
+			this.mrField = new List<CT_OMathArg>();
+			this.mPrField = new CT_MPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_MPr mPr
+		{
+			get
+			{
+				return this.mPrField;
+			}
+			set
+			{
+				this.mPrField = value;
+			}
+		}
+
+		[XmlArray(Order = 1)]
+		[XmlArrayItem("e", typeof(CT_OMathArg), IsNullable = false)]
+		public List<CT_OMathArg> mr
+		{
+			get
+			{
+				return this.mrField;
+			}
+			set
+			{
+				this.mrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_NaryPr
+	{
+
+		private CT_Char chrField;
+
+		private CT_LimLoc limLocField;
+
+		private CT_OnOff growField;
+
+		private CT_OnOff subHideField;
+
+		private CT_OnOff supHideField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_NaryPr class constructor
+		/// </summary>
+		public CT_NaryPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.supHideField = new CT_OnOff();
+			this.subHideField = new CT_OnOff();
+			this.growField = new CT_OnOff();
+			this.limLocField = new CT_LimLoc();
+			this.chrField = new CT_Char();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_Char chr
+		{
+			get
+			{
+				return this.chrField;
+			}
+			set
+			{
+				this.chrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_LimLoc limLoc
+		{
+			get
+			{
+				return this.limLocField;
+			}
+			set
+			{
+				this.limLocField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OnOff grow
+		{
+			get
+			{
+				return this.growField;
+			}
+			set
+			{
+				this.growField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OnOff subHide
+		{
+			get
+			{
+				return this.subHideField;
+			}
+			set
+			{
+				this.subHideField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_OnOff supHide
+		{
+			get
+			{
+				return this.supHideField;
+			}
+			set
+			{
+				this.supHideField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Nary
+	{
+
+		private CT_NaryPr naryPrField;
+
+		private CT_OMathArg subField;
+
+		private CT_OMathArg supField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Nary class constructor
+		/// </summary>
+		public CT_Nary()
+		{
+			this.eField = new CT_OMathArg();
+			this.supField = new CT_OMathArg();
+			this.subField = new CT_OMathArg();
+			this.naryPrField = new CT_NaryPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_NaryPr naryPr
+		{
+			get
+			{
+				return this.naryPrField;
+			}
+			set
+			{
+				this.naryPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg sub
+		{
+			get
+			{
+				return this.subField;
+			}
+			set
+			{
+				this.subField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg sup
+		{
+			get
+			{
+				return this.supField;
+			}
+			set
+			{
+				this.supField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_PhantPr
+	{
+
+		private CT_OnOff showField;
+
+		private CT_OnOff zeroWidField;
+
+		private CT_OnOff zeroAscField;
+
+		private CT_OnOff zeroDescField;
+
+		private CT_OnOff transpField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_PhantPr class constructor
+		/// </summary>
+		public CT_PhantPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.transpField = new CT_OnOff();
+			this.zeroDescField = new CT_OnOff();
+			this.zeroAscField = new CT_OnOff();
+			this.zeroWidField = new CT_OnOff();
+			this.showField = new CT_OnOff();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OnOff show
+		{
+			get
+			{
+				return this.showField;
+			}
+			set
+			{
+				this.showField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OnOff zeroWid
+		{
+			get
+			{
+				return this.zeroWidField;
+			}
+			set
+			{
+				this.zeroWidField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OnOff zeroAsc
+		{
+			get
+			{
+				return this.zeroAscField;
+			}
+			set
+			{
+				this.zeroAscField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OnOff zeroDesc
+		{
+			get
+			{
+				return this.zeroDescField;
+			}
+			set
+			{
+				this.zeroDescField = value;
+			}
+		}
+
+		[XmlElement(Order = 4)]
+		public CT_OnOff transp
+		{
+			get
+			{
+				return this.transpField;
+			}
+			set
+			{
+				this.transpField = value;
+			}
+		}
+
+		[XmlElement(Order = 5)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Phant
+	{
+
+		private CT_PhantPr phantPrField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Phant class constructor
+		/// </summary>
+		public CT_Phant()
+		{
+			this.eField = new CT_OMathArg();
+			this.phantPrField = new CT_PhantPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_PhantPr phantPr
+		{
+			get
+			{
+				return this.phantPrField;
+			}
+			set
+			{
+				this.phantPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_RadPr
+	{
+
+		private CT_OnOff degHideField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_RadPr class constructor
+		/// </summary>
+		public CT_RadPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.degHideField = new CT_OnOff();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OnOff degHide
+		{
+			get
+			{
+				return this.degHideField;
+			}
+			set
+			{
+				this.degHideField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_Rad
+	{
+
+		private CT_RadPr radPrField;
+
+		private CT_OMathArg degField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_Rad class constructor
+		/// </summary>
+		public CT_Rad()
+		{
+			this.eField = new CT_OMathArg();
+			this.degField = new CT_OMathArg();
+			this.radPrField = new CT_RadPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_RadPr radPr
+		{
+			get
+			{
+				return this.radPrField;
+			}
+			set
+			{
+				this.radPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg deg
+		{
+			get
+			{
+				return this.degField;
+			}
+			set
+			{
+				this.degField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SPrePr
+	{
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_SPrePr class constructor
+		/// </summary>
+		public CT_SPrePr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SPre
+	{
+
+		private CT_SPrePr sPrePrField;
+
+		private CT_OMathArg subField;
+
+		private CT_OMathArg supField;
+
+		private CT_OMathArg eField;
+
+		/// <summary>
+		/// CT_SPre class constructor
+		/// </summary>
+		public CT_SPre()
+		{
+			this.eField = new CT_OMathArg();
+			this.supField = new CT_OMathArg();
+			this.subField = new CT_OMathArg();
+			this.sPrePrField = new CT_SPrePr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_SPrePr sPrePr
+		{
+			get
+			{
+				return this.sPrePrField;
+			}
+			set
+			{
+				this.sPrePrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg sub
+		{
+			get
+			{
+				return this.subField;
+			}
+			set
+			{
+				this.subField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg sup
+		{
+			get
+			{
+				return this.supField;
+			}
+			set
+			{
+				this.supField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SSubPr
+	{
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_SSubPr class constructor
+		/// </summary>
+		public CT_SSubPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SSub
+	{
+
+		private CT_SSubPr sSubPrField;
+
+		private CT_OMathArg eField;
+
+		private CT_OMathArg subField;
+
+		/// <summary>
+		/// CT_SSub class constructor
+		/// </summary>
+		public CT_SSub()
+		{
+			this.subField = new CT_OMathArg();
+			this.eField = new CT_OMathArg();
+			this.sSubPrField = new CT_SSubPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_SSubPr sSubPr
+		{
+			get
+			{
+				return this.sSubPrField;
+			}
+			set
+			{
+				this.sSubPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg sub
+		{
+			get
+			{
+				return this.subField;
+			}
+			set
+			{
+				this.subField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SSubSupPr
+	{
+
+		private CT_OnOff alnScrField;
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_SSubSupPr class constructor
+		/// </summary>
+		public CT_SSubSupPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+			this.alnScrField = new CT_OnOff();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OnOff alnScr
+		{
+			get
+			{
+				return this.alnScrField;
+			}
+			set
+			{
+				this.alnScrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SSubSup
+	{
+
+		private CT_SSubSupPr sSubSupPrField;
+
+		private CT_OMathArg eField;
+
+		private CT_OMathArg subField;
+
+		private CT_OMathArg supField;
+
+		/// <summary>
+		/// CT_SSubSup class constructor
+		/// </summary>
+		public CT_SSubSup()
+		{
+			this.supField = new CT_OMathArg();
+			this.subField = new CT_OMathArg();
+			this.eField = new CT_OMathArg();
+			this.sSubSupPrField = new CT_SSubSupPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_SSubSupPr sSubSupPr
+		{
+			get
+			{
+				return this.sSubSupPrField;
+			}
+			set
+			{
+				this.sSubSupPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg sub
+		{
+			get
+			{
+				return this.subField;
+			}
+			set
+			{
+				this.subField = value;
+			}
+		}
+
+		[XmlElement(Order = 3)]
+		public CT_OMathArg sup
+		{
+			get
+			{
+				return this.supField;
+			}
+			set
+			{
+				this.supField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SSupPr
+	{
+
+		private CT_CtrlPr ctrlPrField;
+
+		/// <summary>
+		/// CT_SSupPr class constructor
+		/// </summary>
+		public CT_SSupPr()
+		{
+			this.ctrlPrField = new CT_CtrlPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_CtrlPr ctrlPr
+		{
+			get
+			{
+				return this.ctrlPrField;
+			}
+			set
+			{
+				this.ctrlPrField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_SSup
+	{
+
+		private CT_SSupPr sSupPrField;
+
+		private CT_OMathArg eField;
+
+		private CT_OMathArg supField;
+
+		/// <summary>
+		/// CT_SSup class constructor
+		/// </summary>
+		public CT_SSup()
+		{
+			this.supField = new CT_OMathArg();
+			this.eField = new CT_OMathArg();
+			this.sSupPrField = new CT_SSupPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_SSupPr sSupPr
+		{
+			get
+			{
+				return this.sSupPrField;
+			}
+			set
+			{
+				this.sSupPrField = value;
+			}
+		}
+
+		[XmlElement(Order = 1)]
+		public CT_OMathArg e
+		{
+			get
+			{
+				return this.eField;
+			}
+			set
+			{
+				this.eField = value;
+			}
+		}
+
+		[XmlElement(Order = 2)]
+		public CT_OMathArg sup
+		{
+			get
+			{
+				return this.supField;
+			}
+			set
+			{
+				this.supField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OMathParaPr
+	{
+
+		private CT_OMathJc jcField;
+
+		/// <summary>
+		/// CT_OMathParaPr class constructor
+		/// </summary>
+		public CT_OMathParaPr()
+		{
+			this.jcField = new CT_OMathJc();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OMathJc jc
+		{
+			get
+			{
+				return this.jcField;
+			}
+			set
+			{
+				this.jcField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OMathPara
+	{
+
+		private CT_OMathParaPr oMathParaPrField;
+
+		private List<CT_OMath> oMathField;
+
+		/// <summary>
+		/// CT_OMathPara class constructor
+		/// </summary>
+		public CT_OMathPara()
+		{
+			this.oMathField = new List<CT_OMath>();
+			this.oMathParaPrField = new CT_OMathParaPr();
+		}
+
+		[XmlElement(Order = 0)]
+		public CT_OMathParaPr oMathParaPr
+		{
+			get
+			{
+				return this.oMathParaPrField;
+			}
+			set
+			{
+				this.oMathParaPrField = value;
+			}
+		}
+
+		[XmlElement("oMath", Order = 1)]
+		public List<CT_OMath> oMath
+		{
+			get
+			{
+				return this.oMathField;
+			}
+			set
+			{
+				this.oMathField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
+	[XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
+	public class CT_OMath
+	{
+
+		private object[] itemsField;
+
+		private ItemsChoiceType8[] itemsElementNameField;
+
+		/// <summary>
+		/// CT_OMath class constructor
+		/// </summary>
+		public CT_OMath()
+		{
+			this.itemsElementNameField = new ItemsChoiceType8[0];
+			this.itemsField = new object[0];
+		}
+
+		[XmlElement("acc", typeof(CT_Acc), Order = 0)]
+		[XmlElement("bar", typeof(CT_Bar), Order = 0)]
+		[XmlElement("borderBox", typeof(CT_BorderBox), Order = 0)]
+		[XmlElement("box", typeof(CT_Box), Order = 0)]
+		[XmlElement("d", typeof(CT_D), Order = 0)]
+		[XmlElement("eqArr", typeof(CT_EqArr), Order = 0)]
+		[XmlElement("f", typeof(CT_F), Order = 0)]
+		[XmlElement("func", typeof(CT_Func), Order = 0)]
+		[XmlElement("groupChr", typeof(CT_GroupChr), Order = 0)]
+		[XmlElement("limLow", typeof(CT_LimLow), Order = 0)]
+		[XmlElement("limUpp", typeof(CT_LimUpp), Order = 0)]
+		[XmlElement("m", typeof(CT_M), Order = 0)]
+		[XmlElement("nary", typeof(CT_Nary), Order = 0)]
+		[XmlElement("oMath", typeof(CT_OMath), Order = 0)]
+		[XmlElement("oMathPara", typeof(CT_OMathPara), Order = 0)]
+		[XmlElement("phant", typeof(CT_Phant), Order = 0)]
+		[XmlElement("r", typeof(CT_R), Order = 0)]
+		[XmlElement("rad", typeof(CT_Rad), Order = 0)]
+		[XmlElement("sPre", typeof(CT_SPre), Order = 0)]
+		[XmlElement("sSub", typeof(CT_SSub), Order = 0)]
+		[XmlElement("sSubSup", typeof(CT_SSubSup), Order = 0)]
+		[XmlElement("sSup", typeof(CT_SSup), Order = 0)]
+		[XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("bookmarkStart", typeof(CT_Bookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("commentRangeStart", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("del", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("ins", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("moveFrom", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("moveTo", typeof(CT_RunTrackChange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("permEnd", typeof(CT_Perm), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("permStart", typeof(CT_PermStart), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlElement("proofErr", typeof(CT_ProofErr), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 0)]
+		[XmlChoiceIdentifier("ItemsElementName")]
+		public object[] Items
+		{
+			get
+			{
+				return this.itemsField;
+			}
+			set
+			{
+				this.itemsField = value;
+			}
+		}
+
+		[XmlElement("ItemsElementName", Order = 1)]
+		[XmlIgnore]
+		public ItemsChoiceType8[] ItemsElementName
+		{
+			get
+			{
+				return this.itemsElementNameField;
+			}
+			set
+			{
+				this.itemsElementNameField = value;
+			}
+		}
+	}
+
+	
+	[Serializable]
+	[XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IncludeInSchema = false)]
+	public enum ItemsChoiceType8
+	{
+
+	
+		acc,
+
+	
+		bar,
+
+	
+		borderBox,
+
+	
+		box,
+
+	
+		d,
+
+	
+		eqArr,
+
+	
+		f,
+
+	
+		func,
+
+	
+		groupChr,
+
+	
+		limLow,
+
+	
+		limUpp,
+
+	
+		m,
+
+	
+		nary,
+
+	
+		oMath,
+
+	
+		oMathPara,
+
+	
+		phant,
+
+	
+		r,
+
+	
+		rad,
+
+	
+		sPre,
+
+	
+		sSub,
+
+	
+		sSubSup,
+
+	
+		sSup,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkEnd")]
+		bookmarkEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:bookmarkStart")]
+		bookmarkStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeEnd")]
+		commentRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:commentRangeStart")]
+		commentRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeEnd" +
+			"")]
+		customXmlDelRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlDelRangeSta" +
+			"rt")]
+		customXmlDelRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeEnd" +
+			"")]
+		customXmlInsRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlInsRangeSta" +
+			"rt")]
+		customXmlInsRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+			"geEnd")]
+		customXmlMoveFromRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveFromRan" +
+			"geStart")]
+		customXmlMoveFromRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+			"End")]
+		customXmlMoveToRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:customXmlMoveToRange" +
+			"Start")]
+		customXmlMoveToRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:del")]
+		del,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:ins")]
+		ins,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFrom")]
+		moveFrom,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeEnd")]
+		moveFromRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveFromRangeStart")]
+		moveFromRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveTo")]
+		moveTo,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeEnd")]
+		moveToRangeEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:moveToRangeStart")]
+		moveToRangeStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permEnd")]
+		permEnd,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:permStart")]
+		permStart,
+
+	
+		[XmlEnum("http://schemas.openxmlformats.org/wordprocessingml/2006/main:proofErr")]
+		proofErr,
+	}
 }

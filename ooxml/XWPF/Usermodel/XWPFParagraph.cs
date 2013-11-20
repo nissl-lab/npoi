@@ -49,7 +49,7 @@ namespace NPOI.XWPF.UserModel
             // Build up the character runs
             Runs = new List<XWPFRun>();
 
-            BuildRunsInOrderFromXml(paragraph.Items);
+            BuildRunsInOrderFromXml(paragraph);
             // Look for bits associated with the runs
             foreach (XWPFRun run in Runs)
             {
@@ -163,51 +163,129 @@ namespace NPOI.XWPF.UserModel
          *  sub-paragraph that correspond to character text
          *  runs, and builds the appropriate runs for these.
          */
-        private void BuildRunsInOrderFromXml(object[] items)
+        private void BuildRunsInOrderFromXml(CT_P paragraph)
         {
-            foreach (object o in items)
-            {
-                if (o is CT_R)
-                {
-                    Runs.Add(new XWPFRun((CT_R)o, this));
-                }
-                if (o is CT_Hyperlink1)
-                {
-                    CT_Hyperlink1 link = (CT_Hyperlink1)o;
-                    foreach (CT_R r in link.GetRList())
-                    {
-                        Runs.Add(new XWPFHyperlinkRun(link, r, this));
-                    }
-                }
-                if (o is CT_SdtRun)
-                {
-                    CT_SdtContentRun run = ((CT_SdtRun)o).sdtContent;
-                    foreach (CT_R r in run.GetRList())
-                    {
-                        Runs.Add(new XWPFRun(r, this));
-                    }
-                }
-                if (o is CT_RunTrackChange)
-                {
-                    foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
-                    {
-                        Runs.Add(new XWPFRun(r, this));
-                    }
-                }
-                if (o is CT_SimpleField)
-                {
-                    foreach (CT_R r in ((CT_SimpleField)o).GetRList())
-                    {
-                        Runs.Add(new XWPFRun(r, this));
-                    }
-                }
-                if (o is CT_SmartTagRun)
-                {
-                    // Smart Tags can be nested many times. 
-                    // This implementation does not preserve the tagging information
-                    BuildRunsInOrderFromXml((o as CT_SmartTagRun).Items);
-                }
-            }
+			if (paragraph.r != null)
+			{
+				foreach (CT_R r in paragraph.r)
+				{
+					Runs.Add(new XWPFRun((CT_R)r, this));
+				}
+			}
+			if (paragraph.hyperlink != null)
+			{
+				foreach (CT_Hyperlink1 link in paragraph.hyperlink)
+				{
+					foreach (CT_R r in link.r)
+					{
+						Runs.Add(new XWPFHyperlinkRun(link, r, this));
+					}
+				}
+			}
+			if (paragraph.sdt != null)
+			{
+				foreach (CT_SdtRun o in paragraph.sdt)
+				{
+					CT_SdtContentRun run = o.sdtContent;
+					foreach (CT_R r in run.GetRList())
+					{
+						Runs.Add(new XWPFRun(r, this));
+					}
+				}
+			}
+			if (paragraph.del != null)
+			{
+				foreach (CT_RunTrackChange o in paragraph.del)
+				{
+					foreach (CT_R r in o.GetRList())
+					{
+						Runs.Add(new XWPFRun(r, this));
+					}
+				}
+			}
+			if (paragraph.ins != null)
+			{
+				foreach (CT_RunTrackChange o in paragraph.ins)
+				{
+					foreach (CT_R r in o.GetRList())
+					{
+						Runs.Add(new XWPFRun(r, this));
+					}
+				}
+			}
+			if (paragraph.moveFrom != null)
+			{
+				foreach (CT_RunTrackChange o in paragraph.moveFrom)
+				{
+					foreach (CT_R r in o.GetRList())
+					{
+						Runs.Add(new XWPFRun(r, this));
+					}
+				}
+			}
+			if (paragraph.moveTo != null)
+			{
+				foreach (CT_RunTrackChange o in paragraph.moveFrom)
+				{
+					foreach (CT_R r in o.GetRList())
+					{
+						Runs.Add(new XWPFRun(r, this));
+					}
+				}
+			}
+			if (paragraph.fldSimple != null)
+			{
+				foreach (CT_SimpleField o in paragraph.fldSimple)
+				{
+					foreach (CT_R r in o.GetRList())
+					{
+						Runs.Add(new XWPFRun(r, this));
+					}
+				}
+			}
+			//foreach (object o in items)
+			//{
+			//	if (o is CT_R)
+			//	{
+			//		Runs.Add(new XWPFRun((CT_R)o, this));
+			//	}
+			//	if (o is CT_Hyperlink1)
+			//	{
+			//		CT_Hyperlink1 link = (CT_Hyperlink1)o;
+			//		foreach (CT_R r in link.GetRList())
+			//		{
+			//			Runs.Add(new XWPFHyperlinkRun(link, r, this));
+			//		}
+			//	}
+			//	if (o is CT_SdtRun)
+			//	{
+			//		CT_SdtContentRun run = ((CT_SdtRun)o).sdtContent;
+			//		foreach (CT_R r in run.GetRList())
+			//		{
+			//			Runs.Add(new XWPFRun(r, this));
+			//		}
+			//	}
+			//	if (o is CT_RunTrackChange)
+			//	{
+			//		foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
+			//		{
+			//			Runs.Add(new XWPFRun(r, this));
+			//		}
+			//	}
+			//	if (o is CT_SimpleField)
+			//	{
+			//		foreach (CT_R r in ((CT_SimpleField)o).GetRList())
+			//		{
+			//			Runs.Add(new XWPFRun(r, this));
+			//		}
+			//	}
+			//	if (o is CT_SmartTagRun)
+			//	{
+			//		// Smart Tags can be nested many times. 
+			//		// This implementation does not preserve the tagging information
+			//		BuildRunsInOrderFromXml((o as CT_SmartTagRun).Items);
+			//	}
+			//}
         }
 
 
@@ -224,8 +302,9 @@ namespace NPOI.XWPF.UserModel
 
         public bool IsEmpty()
         {
+			throw new NotImplementedException();
             //return !paragraph.DomNode.HasChildNodes();
-            return paragraph.Items.Length == 0;
+            //return paragraph.Items.Length == 0;
         }
 
         public XWPFDocument GetDocument()

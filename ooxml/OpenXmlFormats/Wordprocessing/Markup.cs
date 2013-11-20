@@ -58,6 +58,33 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Bookmark : CT_BookmarkRange
     {
+		public static CT_Bookmark Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_Bookmark ctObj = new CT_Bookmark();
+			ctObj.name = XmlHelper.ReadString(node.Attributes["w:name"]);
+			ctObj.colFirst = XmlHelper.ReadString(node.Attributes["w:colFirst"]);
+			ctObj.colLast = XmlHelper.ReadString(node.Attributes["w:colLast"]);
+			if (node.Attributes["w:displacedByCustomXml"] != null)
+				ctObj.displacedByCustomXml = (ST_DisplacedByCustomXml)Enum.Parse(typeof(ST_DisplacedByCustomXml), node.Attributes["w:displacedByCustomXml"].Value);
+			ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<w:{0}", nodeName));
+			XmlHelper.WriteAttribute(sw, "w:name", this.name);
+			XmlHelper.WriteAttribute(sw, "w:colFirst", this.colFirst);
+			XmlHelper.WriteAttribute(sw, "w:colLast", this.colLast);
+			XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
+			XmlHelper.WriteAttribute(sw, "r:id", this.id);
+			sw.Write(">");
+			sw.Write(string.Format("</w:{0}>", nodeName));
+		}
 
         private string nameField;
 

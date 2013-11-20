@@ -2359,9 +2359,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Hyperlink1
     {
 
-        private List<object> itemsField;
-
-        private List<ItemsChoiceType12> itemsElementNameField;
 
         private string tgtFrameField;
 
@@ -2379,74 +2376,233 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Hyperlink1()
         {
-            this.itemsElementNameField = new List<ItemsChoiceType12>();
-            this.itemsField = new List<object>();
+			this.rField = new List<CT_R>();
         }
+		List<CT_PermStart> permStartField;
+		public List<CT_PermStart> permStart
+		{
+			get { return this.permStartField; }
+			set { this.permStartField = value; }
+		}
 
-        [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
-        [XmlElement("oMathPara", typeof(CT_OMathPara), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
-        [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 0)]
-        [XmlElement("bookmarkStart", typeof(CT_Bookmark), Order = 0)]
-        [XmlElement("commentRangeEnd", typeof(CT_MarkupRange), Order = 0)]
-        [XmlElement("commentRangeStart", typeof(CT_MarkupRange), Order = 0)]
-        [XmlElement("customXml", typeof(CT_CustomXmlRun), Order = 0)]
-        [XmlElement("customXmlDelRangeEnd", typeof(CT_Markup), Order = 0)]
-        [XmlElement("customXmlDelRangeStart", typeof(CT_TrackChange), Order = 0)]
-        [XmlElement("customXmlInsRangeEnd", typeof(CT_Markup), Order = 0)]
-        [XmlElement("customXmlInsRangeStart", typeof(CT_TrackChange), Order = 0)]
-        [XmlElement("customXmlMoveFromRangeEnd", typeof(CT_Markup), Order = 0)]
-        [XmlElement("customXmlMoveFromRangeStart", typeof(CT_TrackChange), Order = 0)]
-        [XmlElement("customXmlMoveToRangeEnd", typeof(CT_Markup), Order = 0)]
-        [XmlElement("customXmlMoveToRangeStart", typeof(CT_TrackChange), Order = 0)]
-        [XmlElement("del", typeof(CT_RunTrackChange), Order = 0)]
-        [XmlElement("fldSimple", typeof(CT_SimpleField), Order = 0)]
-        [XmlElement("hyperlink", typeof(CT_Hyperlink1), Order = 0)]
-        [XmlElement("ins", typeof(CT_RunTrackChange), Order = 0)]
-        [XmlElement("moveFrom", typeof(CT_RunTrackChange), Order = 0)]
-        [XmlElement("moveFromRangeEnd", typeof(CT_MarkupRange), Order = 0)]
-        [XmlElement("moveFromRangeStart", typeof(CT_MoveBookmark), Order = 0)]
-        [XmlElement("moveTo", typeof(CT_RunTrackChange), Order = 0)]
-        [XmlElement("moveToRangeEnd", typeof(CT_MarkupRange), Order = 0)]
-        [XmlElement("moveToRangeStart", typeof(CT_MoveBookmark), Order = 0)]
-        [XmlElement("permEnd", typeof(CT_Perm), Order = 0)]
-        [XmlElement("permStart", typeof(CT_PermStart), Order = 0)]
-        [XmlElement("proofErr", typeof(CT_ProofErr), Order = 0)]
-        [XmlElement("r", typeof(CT_R), Order = 0)]
-        [XmlElement("sdt", typeof(CT_SdtRun), Order = 0)]
-        [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 0)]
-        [XmlElement("subDoc", typeof(CT_Rel), Order = 0)]
-        [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
-        {
-            get
-            {
-                return this.itemsField.ToArray();
-            }
-            set
-            {
-                if (value == null || value.Length == 0)
-                    this.itemsField = new List<object>();
-                else
-                    this.itemsField = new List<object>(value);
-            }
-        }
+		List<CT_Rel> subDocField;
+		public List<CT_Rel> subDoc
+		{
+			get { return this.subDocField; }
+			set { this.subDocField = value; }
+		}
 
-        [XmlElement("ItemsElementName", Order = 1)]
-        [XmlIgnore]
-        public ItemsChoiceType12[] ItemsElementName
-        {
-            get
-            {
-                return this.itemsElementNameField.ToArray();
-            }
-            set
-            {
-                if (value == null || value.Length == 0)
-                    this.itemsElementNameField = new List<ItemsChoiceType12>();
-                else
-                    this.itemsElementNameField = new List<ItemsChoiceType12>(value);
-            }
-        }
+		List<CT_TrackChange> customXmlDelRangeStartField;
+		public List<CT_TrackChange> customXmlDelRangeStart
+		{
+			get { return this.customXmlDelRangeStartField; }
+			set { this.customXmlDelRangeStartField = value; }
+		}
+
+		List<CT_TrackChange> customXmlInsRangeStartField;
+		public List<CT_TrackChange> customXmlInsRangeStart
+		{
+			get { return this.customXmlInsRangeStartField; }
+			set { this.customXmlInsRangeStartField = value; }
+		}
+
+		List<CT_Markup> customXmlMoveFromRangeEndField;
+		public List<CT_Markup> customXmlMoveFromRangeEnd
+		{
+			get { return this.customXmlMoveFromRangeEndField; }
+			set { this.customXmlMoveFromRangeEndField = value; }
+		}
+
+		List<CT_OMath> oMathField;
+		public List<CT_OMath> oMath
+		{
+			get { return this.oMathField; }
+			set { this.oMathField = value; }
+		}
+
+		List<CT_OMathPara> oMathParaField;
+		public List<CT_OMathPara> oMathPara
+		{
+			get { return this.oMathParaField; }
+			set { this.oMathParaField = value; }
+		}
+
+		List<CT_TrackChange> customXmlMoveFromRangeStartField;
+		public List<CT_TrackChange> customXmlMoveFromRangeStart
+		{
+			get { return this.customXmlMoveFromRangeStartField; }
+			set { this.customXmlMoveFromRangeStartField = value; }
+		}
+
+		List<CT_Markup> customXmlMoveToRangeEndField;
+		public List<CT_Markup> customXmlMoveToRangeEnd
+		{
+			get { return this.customXmlMoveToRangeEndField; }
+			set { this.customXmlMoveToRangeEndField = value; }
+		}
+
+		List<CT_TrackChange> customXmlMoveToRangeStartField;
+		public List<CT_TrackChange> customXmlMoveToRangeStart
+		{
+			get { return this.customXmlMoveToRangeStartField; }
+			set { this.customXmlMoveToRangeStartField = value; }
+		}
+
+		List<CT_RunTrackChange> delField;
+		public List<CT_RunTrackChange> del
+		{
+			get { return this.delField; }
+			set { this.delField = value; }
+		}
+
+		List<CT_MarkupRange> bookmarkEndField;
+		public List<CT_MarkupRange> bookmarkEnd
+		{
+			get { return this.bookmarkEndField; }
+			set { this.bookmarkEndField = value; }
+		}
+
+		List<CT_SimpleField> fldSimpleField;
+		public List<CT_SimpleField> fldSimple
+		{
+			get { return this.fldSimpleField; }
+			set { this.fldSimpleField = value; }
+		}
+
+		List<CT_Hyperlink1> hyperlinkField;
+		public List<CT_Hyperlink1> hyperlink
+		{
+			get { return this.hyperlinkField; }
+			set { this.hyperlinkField = value; }
+		}
+
+		List<CT_Bookmark> bookmarkStartField;
+		public List<CT_Bookmark> bookmarkStart
+		{
+			get { return this.bookmarkStartField; }
+			set { this.bookmarkStartField = value; }
+		}
+
+		List<CT_RunTrackChange> insField;
+		public List<CT_RunTrackChange> ins
+		{
+			get { return this.insField; }
+			set { this.insField = value; }
+		}
+
+		List<CT_MarkupRange> commentRangeEndField;
+		public List<CT_MarkupRange> commentRangeEnd
+		{
+			get { return this.commentRangeEndField; }
+			set { this.commentRangeEndField = value; }
+		}
+
+		List<CT_Markup> customXmlInsRangeEndField;
+		public List<CT_Markup> customXmlInsRangeEnd
+		{
+			get { return this.customXmlInsRangeEndField; }
+			set { this.customXmlInsRangeEndField = value; }
+		}
+
+		List<CT_RunTrackChange> moveFromField;
+		public List<CT_RunTrackChange> moveFrom
+		{
+			get { return this.moveFromField; }
+			set { this.moveFromField = value; }
+		}
+
+		List<CT_MarkupRange> moveFromRangeEndField;
+		public List<CT_MarkupRange> moveFromRangeEnd
+		{
+			get { return this.moveFromRangeEndField; }
+			set { this.moveFromRangeEndField = value; }
+		}
+
+		List<CT_MoveBookmark> moveFromRangeStartField;
+		public List<CT_MoveBookmark> moveFromRangeStart
+		{
+			get { return this.moveFromRangeStartField; }
+			set { this.moveFromRangeStartField = value; }
+		}
+
+		List<CT_RunTrackChange> moveToField;
+		public List<CT_RunTrackChange> moveTo
+		{
+			get { return this.moveToField; }
+			set { this.moveToField = value; }
+		}
+
+		List<CT_MarkupRange> moveToRangeEndField;
+		public List<CT_MarkupRange> moveToRangeEnd
+		{
+			get { return this.moveToRangeEndField; }
+			set { this.moveToRangeEndField = value; }
+		}
+
+		List<CT_MoveBookmark> moveToRangeStartField;
+		public List<CT_MoveBookmark> moveToRangeStart
+		{
+			get { return this.moveToRangeStartField; }
+			set { this.moveToRangeStartField = value; }
+		}
+
+		List<CT_Perm> permEndField;
+		public List<CT_Perm> permEnd
+		{
+			get { return this.permEndField; }
+			set { this.permEndField = value; }
+		}
+
+		List<CT_MarkupRange> commentRangeStartField;
+		public List<CT_MarkupRange> commentRangeStart
+		{
+			get { return this.commentRangeStartField; }
+			set { this.commentRangeStartField = value; }
+		}
+
+		List<CT_CustomXmlRun> customXmlField;
+		public List<CT_CustomXmlRun> customXml
+		{
+			get { return this.customXmlField; }
+			set { this.customXmlField = value; }
+		}
+
+		List<CT_ProofErr> proofErrField;
+		public List<CT_ProofErr> proofErr
+		{
+			get { return this.proofErrField; }
+			set { this.proofErrField = value; }
+		}
+
+		List<CT_R> rField;
+		public List<CT_R> r
+		{
+			get { return this.rField; }
+			set { this.rField = value; }
+		}
+
+		List<CT_Markup> customXmlDelRangeEndField;
+		public List<CT_Markup> customXmlDelRangeEnd
+		{
+			get { return this.customXmlDelRangeEndField; }
+			set { this.customXmlDelRangeEndField = value; }
+		}
+
+		List<CT_SdtRun> sdtField;
+		public List<CT_SdtRun> sdt
+		{
+			get { return this.sdtField; }
+			set { this.sdtField = value; }
+		}
+
+		List<CT_SmartTagRun> smartTagField;
+		public List<CT_SmartTagRun> smartTag
+		{
+			get { return this.smartTagField; }
+			set { this.smartTagField = value; }
+		}
+
+
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string tgtFrame
@@ -2541,115 +2697,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public IEnumerable<CT_R> GetRList()
-        {
-            return GetObjectList<CT_R>(ItemsChoiceType12.r);
-        }
 
-        #region Generic methods for object operation
-
-        private List<T> GetObjectList<T>(ItemsChoiceType12 type) where T : class
-        {
-            lock (this)
-            {
-                List<T> list = new List<T>();
-                for (int i = 0; i < itemsElementNameField.Count; i++)
-                {
-                    if (itemsElementNameField[i] == type)
-                        list.Add(itemsField[i] as T);
-                }
-                return list;
-            }
-        }
-        private int SizeOfArray(ItemsChoiceType12 type)
-        {
-            lock (this)
-            {
-                int size = 0;
-                for (int i = 0; i < itemsElementNameField.Count; i++)
-                {
-                    if (itemsElementNameField[i] == type)
-                        size++;
-                }
-                return size;
-            }
-        }
-        private T GetObjectArray<T>(int p, ItemsChoiceType12 type) where T : class
-        {
-            lock (this)
-            {
-                int pos = GetObjectIndex(type, p);
-                if (pos < 0 || pos >= this.itemsField.Count)
-                    return null;
-                return itemsField[pos] as T;
-            }
-        }
-        private T InsertNewObject<T>(ItemsChoiceType12 type, int p) where T : class, new()
-        {
-            T t = new T();
-            lock (this)
-            {
-                int pos = GetObjectIndex(type, p);
-                this.itemsElementNameField.Insert(pos, type);
-                this.itemsField.Insert(pos, t);
-            }
-            return t;
-        }
-        private T AddNewObject<T>(ItemsChoiceType12 type) where T : class, new()
-        {
-            T t = new T();
-            lock (this)
-            {
-                this.itemsElementNameField.Add(type);
-                this.itemsField.Add(t);
-            }
-            return t;
-        }
-        private void SetObject<T>(ItemsChoiceType12 type, int p, T obj) where T : class
-        {
-            lock (this)
-            {
-                int pos = GetObjectIndex(type, p);
-                if (pos < 0 || pos >= this.itemsField.Count)
-                    return;
-                if (this.itemsField[pos] is T)
-                    this.itemsField[pos] = obj;
-                else
-                    throw new Exception(string.Format(@"object types are difference, itemsField[{0}] is {1}, and parameter obj is {2}",
-                        pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
-            }
-        }
-        private int GetObjectIndex(ItemsChoiceType12 type, int p)
-        {
-            int index = -1;
-            int pos = 0;
-            for (int i = 0; i < itemsElementNameField.Count; i++)
-            {
-                if (itemsElementNameField[i] == type)
-                {
-                    if (pos == p)
-                    {
-                        index = i;
-                        break;
-                    }
-                    else
-                        pos++;
-                }
-            }
-            return index;
-        }
-        private void RemoveObject(ItemsChoiceType12 type, int p)
-        {
-            lock (this)
-            {
-                int pos = GetObjectIndex(type, p);
-                if (pos < 0 || pos >= this.itemsField.Count)
-                    return;
-                itemsElementNameField.RemoveAt(pos);
-                itemsField.RemoveAt(pos);
-            }
-        }
-        #endregion
     }
 
     
