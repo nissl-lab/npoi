@@ -485,5 +485,72 @@ namespace XmlSerializationCodeGenerator
                 textBox1.Text = sb.ToString();
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            StringBuilder writeCode = new StringBuilder();
+            StringBuilder parseCode = new StringBuilder();
+            Type type = (Type)treeView1.SelectedNode.Tag;
+            string xmlPrefix = GetXmlPrefix(type);
+
+            parseCode.AppendFormat("public static {0} Parse(XmlNode node, XmlNamespaceManager namespaceManager)" + Environment.NewLine, type.Name);
+            parseCode.AppendLine("{");
+            parseCode.AppendLine("\tif(node==null)");
+            parseCode.AppendLine("\t\treturn null;");
+            parseCode.AppendLine(string.Format("\t{0} ctObj = new {0}();", type.Name));
+            parseCode.AppendLine("\tforeach(XmlNode childNode in node.ChildNodes)");
+            parseCode.AppendLine("\t{");
+
+            writeCode.AppendLine("internal void Write(StreamWriter sw, string nodeName)");
+            writeCode.AppendLine("{");
+            writeCode.AppendLine("\tsw.Write(string.Format(\"<" + xmlPrefix + "{0}\",nodeName));");
+            writeCode.AppendLine("\tsw.Write(\">\");");
+            writeCode.AppendLine("\tforeach(object o in this.Items)");
+            writeCode.AppendLine("\t{");
+            var property = type.GetProperty("Items");
+            if (property != null)
+            {
+                var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
+
+                var firstIf = true;
+                foreach (var attr in attrs)
+                {
+                    var xmlAttr = (XmlElementAttribute)attr;
+
+                    if (firstIf)
+                    {
+                        parseCode.AppendLine(string.Format("\t\tif(childNode.LocalName == \"{0}\")", xmlAttr.ElementName));
+                    }
+                    else
+                    {
+                        parseCode.AppendLine(string.Format("\t\telse if(childNode.LocalName == \"{0}\")", xmlAttr.ElementName));
+                    }
+                    parseCode.AppendLine("\t\t{");
+                    parseCode.AppendLine(string.Format("\t\t\tctObj.Items.Add({0}.Parse(childNode, namespaceManager));", xmlAttr.Type.Name));
+                    parseCode.AppendLine(string.Format("\t\t\tctObj.ItemsElementName.Add(ItemsChoiceType{1}.{0});", xmlAttr.ElementName, textBox2.Text));
+                    parseCode.AppendLine("\t\t}");
+                    if (firstIf)
+                    {
+                        writeCode.AppendLine(string.Format("\t\tif(o is {0})", xmlAttr.Type.Name));
+                    }
+                    else
+                    {
+                        writeCode.AppendLine(string.Format("\t\telse if(o is {0})", xmlAttr.Type.Name));
+                    }
+                    writeCode.AppendLine(string.Format("\t\t\t(({0})o).Write(sw, \"{1}\");", xmlAttr.Type.Name, xmlAttr.ElementName));
+                    firstIf = false;
+                }
+            }
+            parseCode.AppendLine("\t}");
+            parseCode.AppendLine("}");
+
+            writeCode.AppendLine("\t}");
+            writeCode.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}\",nodeName));");
+            writeCode.AppendLine("}");
+
+            textBox1.Text = parseCode.ToString();
+            textBox1.Text += Environment.NewLine;
+            textBox1.Text += writeCode.ToString();
+        }
     }
 }
