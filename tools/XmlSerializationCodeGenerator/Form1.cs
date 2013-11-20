@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Wordprocessing.CT_Numbering);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Wordprocessing.CT_Comment);
             //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
@@ -56,7 +56,7 @@ namespace XmlSerializationCodeGenerator
 
             node.Tag = c;
 
-            if (level > 6)
+            if (level >2)
                 return;
 
             var properties = c.GetProperties();
