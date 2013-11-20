@@ -276,7 +276,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Object()
         {
-            this.controlField = new CT_Control();
+            //this.controlField = new CT_Control();
         }
 
         [XmlElement(Order = 0)]

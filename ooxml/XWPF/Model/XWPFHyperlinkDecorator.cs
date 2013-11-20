@@ -55,7 +55,7 @@ namespace NPOI.XWPF.Model
             // loop over hyperlink anchors
             foreach (CT_Hyperlink1 link in paragraph.GetCTP().GetHyperlinkList())
             {
-                foreach (CT_R r in link.r)
+                foreach (CT_R r in link.GetRList())
                 {
                     // Loop over text Runs
                     foreach (CT_Text text in r.GetTList())

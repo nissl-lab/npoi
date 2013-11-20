@@ -41,10 +41,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_DisplacedByCustomXml displacedByCustomXmlField;
 
         private bool displacedByCustomXmlFieldSpecified;
+        public static CT_Perm Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Perm ctObj = new CT_Perm();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            if (node.Attributes["w:displacedByCustomXml"] != null)
+                ctObj.displacedByCustomXml = (ST_DisplacedByCustomXml)Enum.Parse(typeof(ST_DisplacedByCustomXml), node.Attributes["w:displacedByCustomXml"].Value);
+            return ctObj;
+        }
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get

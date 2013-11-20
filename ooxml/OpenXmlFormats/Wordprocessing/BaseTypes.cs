@@ -549,6 +549,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Lang
     {
+        public static CT_Lang Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Lang ctObj = new CT_Lang();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         private string valField;
         /// <summary>
