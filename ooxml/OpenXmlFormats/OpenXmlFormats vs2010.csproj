@@ -150,12 +150,13 @@
     <Compile Include="Spreadsheet\Workbook\CT_WebPublishObjects.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\Document\CommentsDocument.cs" />
+    <Compile Include="Wordprocessing\Document\FootnotesDocument.cs" />
     <Compile Include="Wordprocessing\Document\HdrDocument.cs" />
     <Compile Include="Wordprocessing\Document\FtrDocument.cs" />
     <Compile Include="Wordprocessing\Document\SettingsDocument.cs" />
     <Compile Include="Wordprocessing\Document\NumberingDocument.cs" />
     <Compile Include="Wordprocessing\Document\StylesDocument.cs" />
-    <Compile Include="Wordprocessing\Document\NoteDocument.cs" />
+    <Compile Include="Wordprocessing\Document\EndnotesDocument.cs" />
     <Compile Include="Wordprocessing\Markup.cs" />
     <Compile Include="Wordprocessing\CustomXml.cs" />
     <Compile Include="Wordprocessing\Document.cs" />

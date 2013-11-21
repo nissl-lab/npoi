@@ -930,35 +930,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("temporary", typeof(CT_OnOff), Order = 0)]
         [XmlElement("text", typeof(CT_SdtText), Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
+        public List<object> Items
         {
             get
             {
-                return this.itemsField.ToArray();
+                return this.itemsField;
             }
             set
             {
-                if (value == null || value.Length == 0)
-                    this.itemsField = new List<object>();
-                else
-                    this.itemsField = new List<object>(value);
+                 this.itemsField = value;
             }
         }
 
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public ItemsChoiceType17[] ItemsElementName
+        public List<ItemsChoiceType17> ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField.ToArray();
+                return this.itemsElementNameField;
             }
             set
             {
-                if (value == null || value.Length == 0)
-                    this.itemsElementNameField = new List<ItemsChoiceType17>();
-                else
-                    this.itemsElementNameField = new List<ItemsChoiceType17>(value);
+                this.itemsElementNameField = value;
             }
         }
 

@@ -150,18 +150,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("sdt", typeof(CT_SdtBlock), Order = 0)]
         [XmlElement("tbl", typeof(CT_Tbl), Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
+        public List<object> Items
         {
             get
             {
-                return this.itemsField.ToArray();
+                return this.itemsField;
             }
             set
             {
-                if (value != null && value.Length > 0)
-                    this.itemsField = new List<object>(value);
-                else
-                    this.itemsField = new List<object>();
+                this.itemsField = value;
             }
         }
 
@@ -178,18 +175,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public DocumentBodyItemChoiceType[] ItemsElementName
+        public List<DocumentBodyItemChoiceType> ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField.ToArray();
+                return this.itemsElementNameField;
             }
             set
             {
-                if (value != null && value.Length > 0)
-                    this.itemsElementNameField = new List<DocumentBodyItemChoiceType>(value);
-                else
-                    this.itemsElementNameField = new List<DocumentBodyItemChoiceType>();
+                this.itemsElementNameField = value;
             }
         }
 
