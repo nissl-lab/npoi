@@ -54,7 +54,7 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
-        private SortedDictionary<int, XSSFRow> _rows;
+        private SortedList<int, XSSFRow> _rows;
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
         private CommentsTable sheetComments;
@@ -126,15 +126,15 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Read(Stream is1)
         {
-            try
-            {
+            //try
+            //{
             XmlDocument doc = ConvertStreamToXml(is1);
-            worksheet = WorksheetDocument.Parse(doc,NamespaceManager).GetWorksheet();
-            }
-            catch (XmlException e)
-            {
-                throw new POIXMLException(e);
-            }
+            worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
+            //}
+            //catch (XmlException e)
+            //{
+            //    throw new POIXMLException(e);
+            //}
 
             InitRows(worksheet);
             columnHelper = new ColumnHelper(worksheet);
@@ -171,7 +171,7 @@ namespace NPOI.XSSF.UserModel
 
         private void InitRows(CT_Worksheet worksheet)
         {
-            _rows = new SortedDictionary<int, XSSFRow>();
+            _rows = new SortedList<int, XSSFRow>();
             tables = new Dictionary<String, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
@@ -575,20 +575,14 @@ namespace NPOI.XSSF.UserModel
         {
             return CreateDrawingPatriarch().CreateCellComment(new XSSFClientAnchor());
         }
-        int GetLastKey(SortedDictionary<int, XSSFRow>.KeyCollection keys)
+        int GetLastKey(IList<int> keys)
         {
-            int i = 0;
-            foreach (int key in keys)
-            {
-                if (i == keys.Count - 1)
-                    return key;
-                i++;
-            }
-            throw new ArgumentOutOfRangeException();
+            int i = keys.Count;
+            return keys[keys.Count-1];
         }
-        SortedDictionary<int, XSSFRow> HeadMap(SortedDictionary<int, XSSFRow> rows, int rownum)
+        SortedList<int, XSSFRow> HeadMap(SortedList<int, XSSFRow> rows, int rownum)
         {
-            SortedDictionary<int, XSSFRow> headmap = new SortedDictionary<int, XSSFRow>();
+            SortedList<int, XSSFRow> headmap = new SortedList<int, XSSFRow>();
             foreach (int key in rows.Keys)
             {
                 if (key < rownum)
@@ -2720,7 +2714,7 @@ namespace NPOI.XSSF.UserModel
             rowShifter.UpdateConditionalFormatting(Shifter);
 
             //rebuild the _rows map 
-            SortedDictionary<int, XSSFRow> map = new SortedDictionary<int, XSSFRow>();
+            SortedList<int, XSSFRow> map = new SortedList<int, XSSFRow>();
             foreach (XSSFRow r in _rows.Values)
             {
                 map.Add(r.RowNum, r);
