@@ -156,7 +156,7 @@ namespace NPOI.OpenXml4Net.Util
                 return blankValue;
 
             string value = attr.Value;
-            if (value == "1" || value == "-1" || value.ToLower() == "true")
+            if (value == "1" || value == "-1" || value.ToLower() == "true" || value.ToLower() == "on")
             {
                 return true;
             }

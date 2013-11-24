@@ -363,6 +363,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_AbstractNum AddNewAbstractNum()
         {
             CT_AbstractNum num = new CT_AbstractNum();
+            if (this.abstractNumField == null)
+                this.abstractNumField = new List<CT_AbstractNum>();
             this.abstractNumField.Add(num);
             return num;
         }
@@ -376,6 +378,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void RemoveAbstractNum(int p)
         {
+            if (this.abstractNumField == null)
+                return;
             abstractNumField.RemoveAt(p);
         }
     }
@@ -951,7 +955,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //this.styleLinkField = new CT_String();
             //this.nameField = new CT_String();
             //this.tmplField = new CT_LongHexNumber();
-            //this.multiLevelTypeField = new CT_MultiLevelType();
+            this.multiLevelTypeField = new CT_MultiLevelType();
             this.nsidField = new CT_LongHexNumber();
             this.nsidField.val = new byte[4];
             Array.Copy(BitConverter.GetBytes(DateTime.Now.Ticks), 4, this.nsidField.val, 0, 4);
@@ -1164,8 +1168,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_MultiLevelType ctObj = new CT_MultiLevelType();
-            if (node.Attributes["val"] != null)
-                ctObj.val = (ST_MultiLevelType)Enum.Parse(typeof(ST_MultiLevelType), node.Attributes["val"].Value);
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_MultiLevelType)Enum.Parse(typeof(ST_MultiLevelType), node.Attributes["w:val"].Value);
             return ctObj;
         }
 
@@ -1173,10 +1177,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         private ST_MultiLevelType valField;
@@ -1253,18 +1257,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Lvl()
         {
-            //this.rPrField = new CT_RPr();
-            //this.pPrField = new CT_PPr();
-            //this.lvlJcField = new CT_Jc();
+            this.rPrField = new CT_RPr();
+            this.pPrField = new CT_PPr();
+            this.lvlJcField = new CT_Jc();
             //this.legacyField = new CT_LvlLegacy();
             //this.lvlPicBulletIdField = new CT_DecimalNumber();
-            //this.lvlTextField = new CT_LevelText();
+            this.lvlTextField = new CT_LevelText();
             //this.suffField = new CT_LevelSuffix();
             //this.isLglField = new CT_OnOff();
             //this.pStyleField = new CT_String();
             //this.lvlRestartField = new CT_DecimalNumber();
-            //this.numFmtField = new CT_NumFmt();
-            //this.startField = new CT_DecimalNumber();
+            this.numFmtField = new CT_NumFmt();
+            this.startField = new CT_DecimalNumber();
         }
         public static CT_Lvl Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {

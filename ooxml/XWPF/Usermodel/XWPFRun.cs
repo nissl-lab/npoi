@@ -201,11 +201,7 @@ namespace NPOI.XWPF.UserModel
         {
             if (!onoff.IsSetVal())
                 return true;
-            if (onoff.val == ST_OnOff.on)
-                return true;
-            if (onoff.val == ST_OnOff.True)
-                return true;
-            return false;
+            return onoff.val;
         }
 
         /**
@@ -252,7 +248,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_OnOff bold = pr.IsSetB() ? pr.b : pr.AddNewB();
-            bold.val=(value ? ST_OnOff.True : ST_OnOff.False);
+            bold.val=value ;
         }
         /**
      * Get text color. The returned value is a string in the hex form "RRGGBB".
@@ -369,7 +365,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
-            italic.val = (value ? ST_OnOff.True : ST_OnOff.False);
+            italic.val = value;
         }
 
         /**
@@ -449,7 +445,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_OnOff strike = pr.IsSetStrike() ? pr.strike : pr.AddNewStrike();
-            strike.val = (value ? ST_OnOff.True : ST_OnOff.False);
+            strike.val = value ;
         }
 
         /**

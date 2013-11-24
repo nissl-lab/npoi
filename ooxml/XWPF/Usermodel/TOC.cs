@@ -45,8 +45,8 @@ namespace NPOI.XWPF.UserModel
             fonts.eastAsiaTheme = (ST_Theme.minorHAnsi);
             fonts.hAnsiTheme = (ST_Theme.minorHAnsi);
             fonts.cstheme=(ST_Theme.minorBidi);
-            rPr.AddNewB().val=(ST_OnOff.off);
-            rPr.AddNewBCs().val = (ST_OnOff.off);
+            rPr.AddNewB().val=false;
+            rPr.AddNewBCs().val = false;
             rPr.AddNewColor().val=("auto");
             rPr.AddNewSz().val=24;
             rPr.AddNewSzCs().val = 24;

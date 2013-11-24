@@ -541,21 +541,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Object)
                     ((CT_Object)o).Write(sw, "object");
                 else if (o is CT_Empty)
-                    sw.Write("<pgNum/>");
+                    sw.Write("<w:pgNum/>");
                 else if (o is CT_Empty)
-                    sw.Write("<annotationRef/>");
+                    sw.Write("<w:annotationRef/>");
                 else if (o is CT_Br)
                     ((CT_Br)o).Write(sw, "br");
                 else if (o is CT_Markup)
-                    ((CT_Markup)o).Write(sw, "commentReference");
+                    ((CT_Markup)o).Write(sw, "w:commentReference");
                 else if (o is CT_Empty)
-                    sw.Write("<continuationSeparator/>");
+                    sw.Write("<w:continuationSeparator/>");
                 else if (o is CT_Empty)
-                    sw.Write("<cr/>");
+                    sw.Write("<w:cr/>");
                 else if (o is CT_Empty)
-                    sw.Write("<dayLong/>");
+                    sw.Write("<w:dayLong/>");
                 else if (o is CT_Empty)
-                    sw.Write("<dayShort/>");
+                    sw.Write("<w:dayShort/>");
                 else if (o is CT_Text)
                     ((CT_Text)o).Write(sw, "delInstrText");
                 else if (o is CT_Text)
@@ -563,25 +563,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Drawing)
                     ((CT_Drawing)o).Write(sw, "drawing");
                 else if (o is CT_Empty)
-                    sw.Write("<endnoteRef/>");
+                    sw.Write("<w:endnoteRef/>");
                 else if (o is CT_FtnEdnRef)
                     ((CT_FtnEdnRef)o).Write(sw, "endnoteReference");
                 else if (o is CT_FldChar)
                     ((CT_FldChar)o).Write(sw, "fldChar");
                 else if (o is CT_Empty)
-                    sw.Write("<footnoteRef/>");
+                    sw.Write("<w:footnoteRef/>");
                 else if (o is CT_FtnEdnRef)
                     ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
                 else if (o is CT_Empty)
-                    sw.Write("<lastRenderedPageBreak/>");
+                    sw.Write("<w:lastRenderedPageBreak/>");
                 else if (o is CT_Empty)
-                    sw.Write("<monthLong/>");
+                    sw.Write("<w:monthLong/>");
                 else if (o is CT_Empty)
-                    sw.Write("<monthShort/>");
+                    sw.Write("<w:monthShort/>");
                 else if (o is CT_Empty)
-                    sw.Write("<noBreakHyphen/>");
+                    sw.Write("<w:noBreakHyphen/>");
                 else if (o is CT_Empty)
-                    sw.Write("<yearLong/>");
+                    sw.Write("<w:yearLong/>");
                 else if (o is CT_Picture)
                     ((CT_Picture)o).Write(sw, "pict");
                 else if (o is CT_PTab)
@@ -589,17 +589,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Ruby)
                     ((CT_Ruby)o).Write(sw, "ruby");
                 else if (o is CT_Empty)
-                    sw.Write("<separator/>");
+                    sw.Write("<w:separator/>");
                 else if (o is CT_Empty)
-                    sw.Write("<softHyphen/>");
+                    sw.Write("<w:softHyphen/>");
                 else if (o is CT_Sym)
                     ((CT_Sym)o).Write(sw, "sym");
                 else if (o is CT_Text)
                     ((CT_Text)o).Write(sw, "t");
                 else if (o is CT_Empty)
-                    sw.Write("<tab/>");
+                    sw.Write("<w:tab/>");
                 else if (o is CT_Empty)
-                    sw.Write("<yearShort/>");
+                    sw.Write("<w:yearShort/>");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }

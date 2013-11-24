@@ -212,11 +212,11 @@ namespace NPOI.XWPF.UserModel
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
             CT_OnOff wordWrap = ppr.AddNewWordWrap();
-            wordWrap.val = (ST_OnOff.False);
+            wordWrap.val = false;
             Assert.AreEqual(false, p.IsWordWrap());
 
             p.SetWordWrap(true);
-            Assert.AreEqual(ST_OnOff.True, ppr.wordWrap.val);
+            Assert.AreEqual(true, ppr.wordWrap.val);
         }
 
 
@@ -230,11 +230,11 @@ namespace NPOI.XWPF.UserModel
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
             CT_OnOff pageBreak = ppr.AddNewPageBreakBefore();
-            pageBreak.val = (ST_OnOff.False);
+            pageBreak.val = false;
             Assert.AreEqual(false, p.IsPageBreak());
 
             p.SetPageBreak (true);
-            Assert.AreEqual(ST_OnOff.True, ppr.pageBreakBefore.val);
+            Assert.AreEqual(true, ppr.pageBreakBefore.val);
         }
 
         [Test]

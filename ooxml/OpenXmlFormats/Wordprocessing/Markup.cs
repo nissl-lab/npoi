@@ -845,7 +845,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             CT_TrackChange ctObj = new CT_TrackChange();
             ctObj.author = XmlHelper.ReadString(node.Attributes["w:author"]);
             ctObj.date = XmlHelper.ReadString(node.Attributes["w:date"]);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
             return ctObj;
         }
 
@@ -854,9 +854,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:author", this.author);
+            XmlHelper.WriteAttribute(sw, "w:author", this.author, true);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
-            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "w:id", this.id, true);
             sw.Write(">");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }

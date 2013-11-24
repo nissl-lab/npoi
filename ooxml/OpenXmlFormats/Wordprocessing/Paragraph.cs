@@ -4047,8 +4047,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 			set
 			{
 				this.bField = value;
-				this.bField.valSpecified = this.bField.val == ST_OnOff.on || 
-					this.bField.val == ST_OnOff.True || this.bField.val == ST_OnOff.Value1;
 			}
 		}
 
@@ -4075,8 +4073,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 			set
 			{
 				this.iField = value;
-				this.iField.valSpecified = this.iField.val == ST_OnOff.on ||
-					this.iField.val == ST_OnOff.True || this.iField.val == ST_OnOff.Value1;
 			}
 		}
 
@@ -6493,8 +6489,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		{
 			if (pageBreakBeforeField == null)
 				return false;
-			return this.pageBreakBeforeField.val == ST_OnOff.on || this.pageBreakBeforeField.val == ST_OnOff.True ||
-				this.pageBreakBeforeField.val == ST_OnOff.Value1;
+            return this.pageBreakBeforeField.val == true;
 		}
 
 		public CT_OnOff AddNewPageBreakBefore()
@@ -6515,8 +6510,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		{
 			if (wordWrapField == null)
 				return false;
-			return this.wordWrapField.val == ST_OnOff.Value1 || this.wordWrapField.val == ST_OnOff.True ||
-				this.wordWrapField.val == ST_OnOff.on;
+			return this.wordWrapField.val == true;
 		}
 
 		public CT_OnOff AddNewWordWrap()

@@ -576,7 +576,7 @@ namespace NPOI.OpenXmlFormats.Shared
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<m:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "m:val", this.val);
+            XmlHelper.WriteAttribute(sw, "m:val", this.val, true);
             sw.Write(">");
             sw.Write(string.Format("</m:{0}>", nodeName));
         }

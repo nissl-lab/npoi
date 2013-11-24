@@ -183,18 +183,10 @@ namespace UpdateEmbeddedDoc
 
         static void Main(string[] args)
         {
-            try
-            {
-                UpdateEmbeddedDoc ued = new UpdateEmbeddedDoc(args[0]);
+               UpdateEmbeddedDoc ued = new UpdateEmbeddedDoc(args[0]);
                 ued.UpdateEmbeddedDoc1();
                 ued.CheckUpdatedDoc();
-            }
-            catch (Exception ex)
-            {
-                System.Console.WriteLine(ex.GetType().Name);
-                System.Console.WriteLine(ex.Message);
-                System.Console.WriteLine(ex.StackTrace);
-            }
+
         }
 
 

@@ -47,73 +47,94 @@ namespace NPOI.XWPF.UserModel
             this.endPos = endPos;
         }
 
-        public PositionInParagraph GetBeginPos()
+        public PositionInParagraph BeginPos
         {
-            return beginPos;
+            get
+            {
+                return beginPos;
+            }
+            set
+            {
+                beginPos = value;
+            }
         }
 
-        public PositionInParagraph GetEndPos()
+        public PositionInParagraph EndPos
         {
-            return endPos;
+            get
+            {
+                return endPos;
+            }
         }
 
-        public int GetBeginRun()
+        public int BeginRun
         {
-            return beginPos.Run;
+            get
+            {
+                return beginPos.Run;
+            }
+            set 
+            {
+                beginPos.Run = value;
+            }
         }
 
-        public void SetBeginRun(int beginRun)
+        public int BeginText
         {
-            beginPos.Run = (beginRun);
+            get
+            {
+                return beginPos.Text;
+            }
+            set 
+            {
+                beginPos.Text = value;
+            }
         }
 
-        public int GetBeginText()
+        public int BeginChar
         {
-            return beginPos.Text;
+            get
+            {
+                return beginPos.Char;
+            }
+            set 
+            {
+                beginPos.Char = value;
+            }
+        }
+        public int EndRun
+        {
+            get
+            {
+                return endPos.Run;
+            }
+            set 
+            {
+                endPos.Run = value;
+            }
         }
 
-        public void SetBeginText(int beginText)
+        public int EndText
         {
-            beginPos.Text = (beginText);
+            get
+            {
+                return endPos.Text;
+            }
+            set 
+            {
+                endPos.Text = value;
+            }
         }
-
-        public int GetBeginChar()
+        public int EndChar
         {
-            return beginPos.Char;
-        }
-
-        public void SetBeginChar(int beginChar)
-        {
-            beginPos.Char = (beginChar);
-        }
-        public int GetEndRun()
-        {
-            return endPos.Run;
-        }
-
-        public void SetEndRun(int endRun)
-        {
-            endPos.Run = (endRun);
-        }
-
-        public int GetEndText()
-        {
-            return endPos.Text;
-        }
-
-        public void SetEndText(int endText)
-        {
-            endPos.Text = (endText);
-        }
-
-        public int GetEndChar()
-        {
-            return endPos.Char;
-        }
-
-        public void SetEndChar(int endChar)
-        {
-            endPos.Char = (endChar);
+            get
+            {
+                return endPos.Char;
+            }
+            set 
+            {
+                endPos.Char = value;
+            }
         }
     }
 

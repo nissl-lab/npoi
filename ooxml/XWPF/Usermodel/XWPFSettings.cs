@@ -109,7 +109,7 @@ namespace NPOI.XWPF.UserModel
                 return false;
             }
 
-            return ctDocProtect.enforcement.Equals(ST_OnOff.Value1) && ctDocProtect.edit.Equals(editValue);
+            return ctDocProtect.enforcement.Equals(ST_OnOff.on) && ctDocProtect.edit.Equals(editValue);
         }
 
         /**
@@ -127,7 +127,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetEnforcementEditValue(ST_DocProtect editValue)
         {
-            SafeGetDocumentProtection().enforcement = (ST_OnOff.Value1);
+            SafeGetDocumentProtection().enforcement = (ST_OnOff.on);
             SafeGetDocumentProtection().edit = (editValue);
         }
 
@@ -138,7 +138,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void RemoveEnforcement()
         {
-            SafeGetDocumentProtection().enforcement = (ST_OnOff.Value0);
+            SafeGetDocumentProtection().enforcement = (ST_OnOff.off);
         }
 
         /**
@@ -156,13 +156,13 @@ namespace NPOI.XWPF.UserModel
         public void SetUpdateFields()
         {
             CT_OnOff onOff = new CT_OnOff();
-            onOff.val = (ST_OnOff.True);
+            onOff.val = true;
             ctSettings.updateFields=(onOff);
         }
 
         public bool IsUpdateFields()
         {
-            return ctSettings.IsSetUpdateFields() && ctSettings.updateFields.val == ST_OnOff.True;
+            return ctSettings.IsSetUpdateFields() && ctSettings.updateFields.val == true;
         }
         protected override void Commit()
         {

@@ -30,7 +30,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_OnOff ctObj = new CT_OnOff();
             if (node.Attributes["w:val"] != null)
-                ctObj.val = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:val"].Value);
+            {
+                ctObj.val =  XmlHelper.ReadBool(node.Attributes["w:val"]);
+            }
             return ctObj;
         }
 
@@ -39,18 +41,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
             sw.Write(">");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
 
-        private ST_OnOff valField;
+        private bool valField;
 
         private bool valFieldSpecified;
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_OnOff val
+        public bool val
         {
             get
             {
@@ -78,7 +80,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void UnSetVal()
         {
-            this.val = ST_OnOff.False;
+            this.val = false;
             this.valFieldSpecified = false;
         }
 
@@ -97,14 +99,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// <summary>
         /// False
         /// </summary>
-        [XmlEnum("0")]
-        Value0 = 0,
-
+        off,
         /// <summary>
         /// True
         /// </summary>
-        [XmlEnum("1")]
-        Value1 = 1,
+        on,
+        ///// <summary>
+        ///// False
+        ///// </summary>
+        //[XmlEnum("0")]
+        //Value0 = 0,
+
+        ///// <summary>
+        ///// True
+        ///// </summary>
+        //[XmlEnum("1")]
+        //Value1 = 1,
 
         /// <summary>
         /// True
@@ -117,16 +127,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// </summary>
         [XmlEnum("false")]
         False,
-
-        /// <summary>
-        /// True
-        /// </summary>
-        on,
-
-        /// <summary>
-        /// False
-        /// </summary>
-        off,
     }
     /// <summary>
     /// Long Hexadecimal Number
@@ -268,7 +268,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            XmlHelper.WriteAttribute(sw, "w:val", this.val, true);
             sw.Write(">");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
@@ -473,7 +473,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_SignedHpsMeasure ctObj = new CT_SignedHpsMeasure();
-            ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
             return ctObj;
         }
 
@@ -481,10 +481,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "val", this.val);
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
         private string valField;
         /// <summary>
