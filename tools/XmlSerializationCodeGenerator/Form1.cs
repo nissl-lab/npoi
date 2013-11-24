@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Wordprocessing.CT_Comment);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Shared.CT_MathPr);
             //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
@@ -56,7 +56,7 @@ namespace XmlSerializationCodeGenerator
 
             node.Tag = c;
 
-            if (level >2)
+            if (level >1)
                 return;
 
             var properties = c.GetProperties();
@@ -468,6 +468,7 @@ namespace XmlSerializationCodeGenerator
             StringBuilder sb=new StringBuilder();
             Type type = (Type)treeView1.SelectedNode.Tag;
             var property = type.GetProperty("Items");
+
             if (property != null)
             {
                 var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
@@ -484,10 +485,33 @@ namespace XmlSerializationCodeGenerator
                 }
                 textBox1.Text = sb.ToString();
             }
+            else
+            {
+               property = type.GetProperty("Item");
+               if (property != null)
+               {
+                   var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
+                   foreach (var attr in attrs)
+                   {
+                       var xmlAttr = (XmlElementAttribute)attr;
+                       sb.AppendLine(string.Format("{1} {0}Field;", xmlAttr.ElementName, xmlAttr.Type.Name));
+                       sb.AppendLine(string.Format("public {1} {0}", xmlAttr.ElementName, xmlAttr.Type.Name));
+                       sb.AppendLine("{");
+                       sb.AppendLine(string.Format("\tget{{return this.{0}Field;}}", xmlAttr.ElementName));
+                       sb.AppendLine(string.Format("\tset{{this.{0}Field=value;}}", xmlAttr.ElementName));
+                       sb.AppendLine("}");
+                       sb.AppendLine();
+                   }
+                   textBox1.Text = sb.ToString();
+               }
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            if (treeView1.SelectedNode == null)
+                return;
+
             StringBuilder writeCode = new StringBuilder();
             StringBuilder parseCode = new StringBuilder();
             Type type = (Type)treeView1.SelectedNode.Tag;
@@ -508,6 +532,7 @@ namespace XmlSerializationCodeGenerator
             writeCode.AppendLine("\tforeach(object o in this.Items)");
             writeCode.AppendLine("\t{");
             var property = type.GetProperty("Items");
+
             if (property != null)
             {
                 var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
@@ -526,8 +551,15 @@ namespace XmlSerializationCodeGenerator
                         parseCode.AppendLine(string.Format("\t\telse if(childNode.LocalName == \"{0}\")", xmlAttr.ElementName));
                     }
                     parseCode.AppendLine("\t\t{");
-                    parseCode.AppendLine(string.Format("\t\t\tctObj.Items.Add({0}.Parse(childNode, namespaceManager));", xmlAttr.Type.Name));
-                    parseCode.AppendLine(string.Format("\t\t\tctObj.ItemsElementName.Add(ItemsChoiceType{1}.{0});", xmlAttr.ElementName, textBox2.Text));
+                    if (xmlAttr.Type.GetProperties().Length == 0)
+                    {
+                        parseCode.AppendLine(string.Format("\t\t\tctObj.Items.Add(new {0}());", xmlAttr.Type.Name));
+                    }
+                    else
+                    {
+                        parseCode.AppendLine(string.Format("\t\t\tctObj.Items.Add({0}.Parse(childNode, namespaceManager));", xmlAttr.Type.Name));
+                    }
+                    parseCode.AppendLine(string.Format("\t\t\tctObj.ItemsElementName.Add(ItemsChoiceType{1}.{0});", xmlAttr.ElementName, textBox2.Text));                    
                     parseCode.AppendLine("\t\t}");
                     if (firstIf)
                     {
@@ -537,15 +569,19 @@ namespace XmlSerializationCodeGenerator
                     {
                         writeCode.AppendLine(string.Format("\t\telse if(o is {0})", xmlAttr.Type.Name));
                     }
-                    writeCode.AppendLine(string.Format("\t\t\t(({0})o).Write(sw, \"{1}\");", xmlAttr.Type.Name, xmlAttr.ElementName));
+                    if(xmlAttr.Type.GetProperties().Length==0)
+                        writeCode.AppendLine(string.Format("\t\t\tsw.Write(\"<{0}/>\");", xmlAttr.ElementName));
+                    else
+                        writeCode.AppendLine(string.Format("\t\t\t(({0})o).Write(sw, \"{1}\");", xmlAttr.Type.Name, xmlAttr.ElementName));
                     firstIf = false;
                 }
             }
             parseCode.AppendLine("\t}");
+            parseCode.AppendLine("\treturn ctObj;"); 
             parseCode.AppendLine("}");
 
             writeCode.AppendLine("\t}");
-            writeCode.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}\",nodeName));");
+            writeCode.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}>\",nodeName));");
             writeCode.AppendLine("}");
 
             textBox1.Text = parseCode.ToString();
