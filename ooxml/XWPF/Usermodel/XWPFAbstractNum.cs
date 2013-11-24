@@ -90,7 +90,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_Lvl lvl = new CT_Lvl();
                 lvl.start.val = "1";
-                lvl.tentative = i==0? ST_OnOff.Value0 : ST_OnOff.Value1;
+                lvl.tentative = i==0? ST_OnOff.on : ST_OnOff.off;
                 lvl.ilvl = i.ToString();
                 lvl.lvlJc.val = ST_Jc.left;
                 lvl.numFmt.val = ST_NumberFormat.bullet;
@@ -105,16 +105,16 @@ namespace NPOI.XWPF.UserModel
 
                 list.Add(lvl);
             }
-            ctAbstractNum.lvl = list.ToArray();
+            ctAbstractNum.lvl = list;
         }
         #endregion
 
         internal void SetLevelTentative(int lvl, bool tentative)
         {
             if (tentative)
-                this.ctAbstractNum.lvl[lvl].tentative = ST_OnOff.Value1;
+                this.ctAbstractNum.lvl[lvl].tentative = ST_OnOff.on;
             else
-                this.ctAbstractNum.lvl[lvl].tentative = ST_OnOff.Value0;
+                this.ctAbstractNum.lvl[lvl].tentative = ST_OnOff.off;
         }
     }
     /// <summary>

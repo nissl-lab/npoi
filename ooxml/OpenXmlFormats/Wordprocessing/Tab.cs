@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
@@ -103,6 +106,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private bool leaderFieldSpecified;
 
         private string posField;
+        public static CT_TabStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TabStop ctObj = new CT_TabStop();
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_TabJc)Enum.Parse(typeof(ST_TabJc), node.Attributes["w:val"].Value);
+            if (node.Attributes["w:leader"] != null)
+                ctObj.leader = (ST_TabTlc)Enum.Parse(typeof(ST_TabTlc), node.Attributes["w:leader"].Value);
+            ctObj.pos = XmlHelper.ReadString(node.Attributes["w:pos"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
+            XmlHelper.WriteAttribute(sw, "w:pos", this.pos);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_TabJc val
@@ -169,6 +197,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_PTabRelativeTo relativeToField;
 
         private ST_PTabLeader leaderField;
+        public static CT_PTab Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PTab ctObj = new CT_PTab();
+            if (node.Attributes["w:alignment"] != null)
+                ctObj.alignment = (ST_PTabAlignment)Enum.Parse(typeof(ST_PTabAlignment), node.Attributes["w:alignment"].Value);
+            if (node.Attributes["w:relativeTo"] != null)
+                ctObj.relativeTo = (ST_PTabRelativeTo)Enum.Parse(typeof(ST_PTabRelativeTo), node.Attributes["w:relativeTo"].Value);
+            if (node.Attributes["w:leader"] != null)
+                ctObj.leader = (ST_PTabLeader)Enum.Parse(typeof(ST_PTabLeader), node.Attributes["w:leader"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:alignment", this.alignment.ToString());
+            XmlHelper.WriteAttribute(sw, "w:relativeTo", this.relativeTo.ToString());
+            XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_PTabAlignment alignment

@@ -69,7 +69,7 @@ namespace NPOI.XSSF.UserModel
         {
             try
             {
-                TableDocument doc = TableDocument.Parse(xmlDoc, NameSpaceManager);
+                TableDocument doc = TableDocument.Parse(xmlDoc, NamespaceManager);
                 ctTable = doc.GetTable();
             }
             catch (XmlException e)

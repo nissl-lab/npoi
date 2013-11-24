@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -459,6 +461,47 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_Theme csthemeField;
 
         private bool csthemeFieldSpecified;
+
+        public static CT_Fonts Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Fonts ctObj = new CT_Fonts();
+            if (node.Attributes["w:hint"] != null)
+                ctObj.hint = (ST_Hint)Enum.Parse(typeof(ST_Hint), node.Attributes["w:hint"].Value);
+            ctObj.ascii = XmlHelper.ReadString(node.Attributes["w:ascii"]);
+            ctObj.hAnsi = XmlHelper.ReadString(node.Attributes["w:hAnsi"]);
+            ctObj.eastAsia = XmlHelper.ReadString(node.Attributes["w:eastAsia"]);
+            ctObj.cs = XmlHelper.ReadString(node.Attributes["w:cs"]);
+            if (node.Attributes["w:asciiTheme"] != null)
+                ctObj.asciiTheme = (ST_Theme)Enum.Parse(typeof(ST_Theme), node.Attributes["w:asciiTheme"].Value);
+            if (node.Attributes["w:hAnsiTheme"] != null)
+                ctObj.hAnsiTheme = (ST_Theme)Enum.Parse(typeof(ST_Theme), node.Attributes["w:hAnsiTheme"].Value);
+            if (node.Attributes["w:eastAsiaTheme"] != null)
+                ctObj.eastAsiaTheme = (ST_Theme)Enum.Parse(typeof(ST_Theme), node.Attributes["w:eastAsiaTheme"].Value);
+            if (node.Attributes["w:cstheme"] != null)
+                ctObj.cstheme = (ST_Theme)Enum.Parse(typeof(ST_Theme), node.Attributes["w:cstheme"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:hint", this.hint.ToString());
+            XmlHelper.WriteAttribute(sw, "w:ascii", this.ascii);
+            XmlHelper.WriteAttribute(sw, "w:hAnsi", this.hAnsi);
+            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
+            XmlHelper.WriteAttribute(sw, "w:cs", this.cs);
+            XmlHelper.WriteAttribute(sw, "w:asciiTheme", this.asciiTheme.ToString());
+            XmlHelper.WriteAttribute(sw, "w:hAnsiTheme", this.hAnsiTheme.ToString());
+            XmlHelper.WriteAttribute(sw, "w:eastAsiaTheme", this.eastAsiaTheme.ToString());
+            XmlHelper.WriteAttribute(sw, "w:cstheme", this.cstheme.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Hint hint

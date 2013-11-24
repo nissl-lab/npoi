@@ -109,7 +109,6 @@ namespace NPOI.XWPF.UserModel
                 XWPFTableRow tabRow = new XWPFTableRow(row, this);
                 tableRows.Add(tabRow);
                 foreach (CT_Tc cell in row.GetTcList()) {
-                    cell.TableRow = row;
                     foreach (CT_P ctp in cell.GetPList()) {
                         XWPFParagraph p = new XWPFParagraph(ctp, part);
                         if (rowText.Length > 0) {

@@ -14,14 +14,17 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Shared;
 using NPOI.OpenXmlFormats.Dml;
+using System.IO;
+using NPOI.OpenXml4Net.Util;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
 
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot("recipients", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_Recipients
@@ -48,9 +51,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_RecipientData
@@ -107,12 +110,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-    
-    
 
-    
+
+
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot("txbxContent", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_TxbxContent
@@ -186,9 +189,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_AltChunk
@@ -200,7 +203,32 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_AltChunk()
         {
-            this.altChunkPrField = new CT_AltChunkPr();
+            //this.altChunkPrField = new CT_AltChunkPr();
+        }
+        public static CT_AltChunk Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_AltChunk ctObj = new CT_AltChunk();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "altChunkPr")
+                    ctObj.altChunkPr = CT_AltChunkPr.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            if (this.altChunkPr != null)
+                this.altChunkPr.Write(sw, "altChunkPr");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -230,9 +258,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_AltChunkPr
@@ -242,7 +270,28 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_AltChunkPr()
         {
-            this.matchSrcField = new CT_OnOff();
+            //this.matchSrcField = new CT_OnOff();
+        }
+        public static CT_AltChunkPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_AltChunkPr ctObj = new CT_AltChunkPr();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "matchSrc")
+                    ctObj.matchSrc = CT_OnOff.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.matchSrc != null)
+                this.matchSrc.Write(sw, "matchSrc");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -260,185 +309,185 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType
     {
 
-    
+
         [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
-    
+
         [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
-    
+
         altChunk,
 
-    
+
         bookmarkEnd,
 
-    
+
         bookmarkStart,
 
-    
+
         commentRangeEnd,
 
-    
+
         commentRangeStart,
 
-    
+
         customXml,
 
-    
+
         customXmlDelRangeEnd,
 
-    
+
         customXmlDelRangeStart,
 
-    
+
         customXmlInsRangeEnd,
 
-    
+
         customXmlInsRangeStart,
 
-    
+
         customXmlMoveFromRangeEnd,
 
-    
+
         customXmlMoveFromRangeStart,
 
-    
+
         customXmlMoveToRangeEnd,
 
-    
+
         customXmlMoveToRangeStart,
 
-    
+
         del,
 
-    
+
         ins,
 
-    
+
         moveFrom,
 
-    
+
         moveFromRangeEnd,
 
-    
+
         moveFromRangeStart,
 
-    
+
         moveTo,
 
-    
+
         moveToRangeEnd,
 
-    
+
         moveToRangeStart,
 
-    
+
         p,
 
-    
+
         permEnd,
 
-    
+
         permStart,
 
-    
+
         proofErr,
 
-    
+
         sdt,
 
-    
+
         tbl,
     }
 
 
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_DisplacedByCustomXml
     {
 
-    
+
         next,
 
-    
+
         prev,
     }
 
 
-    
-    
 
-    
+
+
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_ThemeColor
     {
 
-    
+
         dark1,
 
-    
+
         light1,
 
-    
+
         dark2,
 
-    
+
         light2,
 
-    
+
         accent1,
 
-    
+
         accent2,
 
-    
+
         accent3,
 
-    
+
         accent4,
 
-    
+
         accent5,
 
-    
+
         accent6,
 
-    
+
         hyperlink,
 
-    
+
         followedHyperlink,
 
-    
+
         none,
 
-    
+
         background1,
 
-    
+
         text1,
 
-    
+
         background2,
 
-    
+
         text2,
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_EastAsianLayout
@@ -462,9 +511,39 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool vertCompressFieldSpecified;
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
+        public static CT_EastAsianLayout Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_EastAsianLayout ctObj = new CT_EastAsianLayout();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            if (node.Attributes["w:combine"] != null)
+                ctObj.combine = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:combine"].Value);
+            if (node.Attributes["w:combineBrackets"] != null)
+                ctObj.combineBrackets = (ST_CombineBrackets)Enum.Parse(typeof(ST_CombineBrackets), node.Attributes["w:combineBrackets"].Value);
+            if (node.Attributes["w:vert"] != null)
+                ctObj.vert = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:vert"].Value);
+            if (node.Attributes["w:vertCompress"] != null)
+                ctObj.vertCompress = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:vertCompress"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "w:combine", this.combine.ToString());
+            XmlHelper.WriteAttribute(sw, "w:combineBrackets", this.combineBrackets.ToString());
+            XmlHelper.WriteAttribute(sw, "w:vert", this.vert.ToString());
+            XmlHelper.WriteAttribute(sw, "w:vertCompress", this.vertCompress.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -582,81 +661,58 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_CombineBrackets
     {
 
-    
+
         none,
 
-    
+
         round,
 
-    
+
         square,
 
-    
+
         angle,
 
-    
+
         curly,
     }
 
-    
+
+
+
     [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Em
-    {
 
-        private ST_Em valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_Em val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    public enum ST_Em
-    {
-
-    
-        none,
-
-    
-        dot,
-
-    
-        comma,
-
-    
-        circle,
-
-    
-        underDot,
-    }
-
-    
-    [Serializable]
-    
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FitText
     {
+        public static CT_FitText Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FitText ctObj = new CT_FitText();
+            ctObj.val = XmlHelper.ReadULong(node.Attributes["w:val"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            XmlHelper.WriteAttribute(sw, "w:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private ulong valField;
 
@@ -691,73 +747,73 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
-    
 
-    
+
+
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_HighlightColor
     {
 
-    
+
         black,
 
-    
+
         blue,
 
-    
+
         cyan,
 
-    
+
         green,
 
-    
+
         magenta,
 
-    
+
         red,
 
-    
+
         yellow,
 
-    
+
         white,
 
-    
+
         darkBlue,
 
-    
+
         darkCyan,
 
-    
+
         darkGreen,
 
-    
+
         darkMagenta,
 
-    
+
         darkRed,
 
-    
+
         darkYellow,
 
-    
+
         darkGray,
 
-    
+
         lightGray,
 
-    
+
         none,
     }
 
-    
-    
 
-    
+
+
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Language
@@ -768,6 +824,30 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string eastAsiaField;
 
         private string bidiField;
+
+        public static CT_Language Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Language ctObj = new CT_Language();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            ctObj.eastAsia = XmlHelper.ReadString(node.Attributes["w:eastAsia"]);
+            ctObj.bidi = XmlHelper.ReadString(node.Attributes["w:bidi"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
+            XmlHelper.WriteAttribute(sw, "w:bidi", this.bidi);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string val
@@ -808,21 +888,40 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-    
 
-    
-    
-    
 
-    
 
-    
+
+
+
+
+
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Cnf
     {
+        public static CT_Cnf Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Cnf ctObj = new CT_Cnf();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
 
         private string valField;
 
@@ -839,14 +938,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-    
+
 
 
     [XmlInclude(typeof(CT_FontRel))]
     [XmlInclude(typeof(CT_HdrFtrRef))]
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Rel
@@ -866,11 +965,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.idField = value;
             }
         }
+        public static CT_Rel Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Rel ctObj = new CT_Rel();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FontRel : CT_Rel
@@ -922,701 +1041,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceHdrFtrRefType
     {
 
-    
+
         footerReference,
 
-    
+
         headerReference,
     }
 
 
-    
 
-    
+
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_ChapterSep
     {
 
-    
+
         hyphen,
 
-    
+
         period,
 
-    
+
         colon,
 
-    
+
         emDash,
 
-    
+
         enDash,
     }
 
-    
     [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Columns
-    {
 
-        private List<CT_Column> colField;
-
-        private ST_OnOff equalWidthField;
-
-        private bool equalWidthFieldSpecified;
-
-        private ulong spaceField;
-
-        private bool spaceFieldSpecified;
-
-        private string numField;
-
-        private ST_OnOff sepField;
-
-        private bool sepFieldSpecified;
-
-        public CT_Columns()
-        {
-            this.colField = new List<CT_Column>();
-        }
-
-        [XmlElement("col", Order = 0)]
-        public List<CT_Column> col
-        {
-            get
-            {
-                return this.colField;
-            }
-            set
-            {
-                this.colField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_OnOff equalWidth
-        {
-            get
-            {
-                return this.equalWidthField;
-            }
-            set
-            {
-                this.equalWidthField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool equalWidthSpecified
-        {
-            get
-            {
-                return this.equalWidthFieldSpecified;
-            }
-            set
-            {
-                this.equalWidthFieldSpecified = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong space
-        {
-            get
-            {
-                return this.spaceField;
-            }
-            set
-            {
-                this.spaceField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool spaceSpecified
-        {
-            get
-            {
-                return this.spaceFieldSpecified;
-            }
-            set
-            {
-                this.spaceFieldSpecified = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string num
-        {
-            get
-            {
-                return this.numField;
-            }
-            set
-            {
-                this.numField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_OnOff sep
-        {
-            get
-            {
-                return this.sepField;
-            }
-            set
-            {
-                this.sepField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool sepSpecified
-        {
-            get
-            {
-                return this.sepFieldSpecified;
-            }
-            set
-            {
-                this.sepFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Column
-    {
-
-        private ulong wField;
-
-        private bool wFieldSpecified;
-
-        private ulong spaceField;
-
-        private bool spaceFieldSpecified;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong w
-        {
-            get
-            {
-                return this.wField;
-            }
-            set
-            {
-                this.wField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool wSpecified
-        {
-            get
-            {
-                return this.wFieldSpecified;
-            }
-            set
-            {
-                this.wFieldSpecified = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong space
-        {
-            get
-            {
-                return this.spaceField;
-            }
-            set
-            {
-                this.spaceField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool spaceSpecified
-        {
-            get
-            {
-                return this.spaceFieldSpecified;
-            }
-            set
-            {
-                this.spaceFieldSpecified = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_VerticalJc
-    {
-
-        private ST_VerticalJc valField;
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_VerticalJc val
-        {
-            get
-            {
-                return this.valField;
-            }
-            set
-            {
-                this.valField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    public enum ST_VerticalJc
-    {
-
-    
-        top,
-
-    
-        center,
-
-    
-        both,
-
-    
-        bottom,
-    }
-
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_SectPrChange : CT_TrackChange
-    {
-
-        private CT_SectPrBase sectPrField;
-
-        public CT_SectPrChange()
-        {
-            this.sectPrField = new CT_SectPrBase();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_SectPrBase sectPr
-        {
-            get
-            {
-                return this.sectPrField;
-            }
-            set
-            {
-                this.sectPrField = value;
-            }
-        }
-    }
-
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_SectPrBase
-    {
-
-        private CT_FtnProps footnotePrField;
-
-        private CT_EdnProps endnotePrField;
-
-        private CT_SectType typeField;
-
-        private CT_PageSz pgSzField;
-
-        private CT_PageMar pgMarField;
-
-        private CT_PaperSource paperSrcField;
-
-        private CT_PageBorders pgBordersField;
-
-        private CT_LineNumber lnNumTypeField;
-
-        private CT_PageNumber pgNumTypeField;
-
-        private CT_Columns colsField;
-
-        private CT_OnOff formProtField;
-
-        private CT_VerticalJc vAlignField;
-
-        private CT_OnOff noEndnoteField;
-
-        private CT_OnOff titlePgField;
-
-        private CT_TextDirection textDirectionField;
-
-        private CT_OnOff bidiField;
-
-        private CT_OnOff rtlGutterField;
-
-        private CT_DocGrid docGridField;
-
-        private CT_Rel printerSettingsField;
-
-        private byte[] rsidRPrField;
-
-        private byte[] rsidDelField;
-
-        private byte[] rsidRField;
-
-        private byte[] rsidSectField;
-
-        public CT_SectPrBase()
-        {
-            this.printerSettingsField = new CT_Rel();
-            this.docGridField = new CT_DocGrid();
-            this.rtlGutterField = new CT_OnOff();
-            this.bidiField = new CT_OnOff();
-            this.textDirectionField = new CT_TextDirection();
-            this.titlePgField = new CT_OnOff();
-            this.noEndnoteField = new CT_OnOff();
-            this.vAlignField = new CT_VerticalJc();
-            this.formProtField = new CT_OnOff();
-            this.colsField = new CT_Columns();
-            this.pgNumTypeField = new CT_PageNumber();
-            this.lnNumTypeField = new CT_LineNumber();
-            this.pgBordersField = new CT_PageBorders();
-            this.paperSrcField = new CT_PaperSource();
-            this.pgMarField = new CT_PageMar();
-            this.pgSzField = new CT_PageSz();
-            this.typeField = new CT_SectType();
-            this.endnotePrField = new CT_EdnProps();
-            this.footnotePrField = new CT_FtnProps();
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_FtnProps footnotePr
-        {
-            get
-            {
-                return this.footnotePrField;
-            }
-            set
-            {
-                this.footnotePrField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_EdnProps endnotePr
-        {
-            get
-            {
-                return this.endnotePrField;
-            }
-            set
-            {
-                this.endnotePrField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_SectType type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_PageSz pgSz
-        {
-            get
-            {
-                return this.pgSzField;
-            }
-            set
-            {
-                this.pgSzField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_PageMar pgMar
-        {
-            get
-            {
-                return this.pgMarField;
-            }
-            set
-            {
-                this.pgMarField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_PaperSource paperSrc
-        {
-            get
-            {
-                return this.paperSrcField;
-            }
-            set
-            {
-                this.paperSrcField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_PageBorders pgBorders
-        {
-            get
-            {
-                return this.pgBordersField;
-            }
-            set
-            {
-                this.pgBordersField = value;
-            }
-        }
-
-        [XmlElement(Order = 7)]
-        public CT_LineNumber lnNumType
-        {
-            get
-            {
-                return this.lnNumTypeField;
-            }
-            set
-            {
-                this.lnNumTypeField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_PageNumber pgNumType
-        {
-            get
-            {
-                return this.pgNumTypeField;
-            }
-            set
-            {
-                this.pgNumTypeField = value;
-            }
-        }
-
-        [XmlElement(Order = 9)]
-        public CT_Columns cols
-        {
-            get
-            {
-                return this.colsField;
-            }
-            set
-            {
-                this.colsField = value;
-            }
-        }
-
-        [XmlElement(Order = 10)]
-        public CT_OnOff formProt
-        {
-            get
-            {
-                return this.formProtField;
-            }
-            set
-            {
-                this.formProtField = value;
-            }
-        }
-
-        [XmlElement(Order = 11)]
-        public CT_VerticalJc vAlign
-        {
-            get
-            {
-                return this.vAlignField;
-            }
-            set
-            {
-                this.vAlignField = value;
-            }
-        }
-
-        [XmlElement(Order = 12)]
-        public CT_OnOff noEndnote
-        {
-            get
-            {
-                return this.noEndnoteField;
-            }
-            set
-            {
-                this.noEndnoteField = value;
-            }
-        }
-
-        [XmlElement(Order = 13)]
-        public CT_OnOff titlePg
-        {
-            get
-            {
-                return this.titlePgField;
-            }
-            set
-            {
-                this.titlePgField = value;
-            }
-        }
-
-        [XmlElement(Order = 14)]
-        public CT_TextDirection textDirection
-        {
-            get
-            {
-                return this.textDirectionField;
-            }
-            set
-            {
-                this.textDirectionField = value;
-            }
-        }
-
-        [XmlElement(Order = 15)]
-        public CT_OnOff bidi
-        {
-            get
-            {
-                return this.bidiField;
-            }
-            set
-            {
-                this.bidiField = value;
-            }
-        }
-
-        [XmlElement(Order = 16)]
-        public CT_OnOff rtlGutter
-        {
-            get
-            {
-                return this.rtlGutterField;
-            }
-            set
-            {
-                this.rtlGutterField = value;
-            }
-        }
-
-        [XmlElement(Order = 17)]
-        public CT_DocGrid docGrid
-        {
-            get
-            {
-                return this.docGridField;
-            }
-            set
-            {
-                this.docGridField = value;
-            }
-        }
-
-        [XmlElement(Order = 18)]
-        public CT_Rel printerSettings
-        {
-            get
-            {
-                return this.printerSettingsField;
-            }
-            set
-            {
-                this.printerSettingsField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidRPr
-        {
-            get
-            {
-                return this.rsidRPrField;
-            }
-            set
-            {
-                this.rsidRPrField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidDel
-        {
-            get
-            {
-                return this.rsidDelField;
-            }
-            set
-            {
-                this.rsidDelField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidR
-        {
-            get
-            {
-                return this.rsidRField;
-            }
-            set
-            {
-                this.rsidRField = value;
-            }
-        }
-
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
-        public byte[] rsidSect
-        {
-            get
-            {
-                return this.rsidSectField;
-            }
-            set
-            {
-                this.rsidSectField = value;
-            }
-        }
-    }
-
-    
-    
-    [Serializable]
-    
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TrackChangeRange : CT_TrackChange
@@ -1653,8 +1117,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
-    
+
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
@@ -1682,7 +1146,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
@@ -1839,9 +1303,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_DivBdr
@@ -1916,7 +1380,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
@@ -1939,61 +1403,61 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_TargetScreenSz
     {
 
-    
+
         [XmlEnum("544x376")]
         Item544x376,
 
-    
+
         [XmlEnum("640x480")]
         Item640x480,
 
-    
+
         [XmlEnum("720x512")]
         Item720x512,
 
-    
+
         [XmlEnum("800x600")]
         Item800x600,
 
-    
+
         [XmlEnum("1024x768")]
         Item1024x768,
 
-    
+
         [XmlEnum("1152x882")]
         Item1152x882,
 
-    
+
         [XmlEnum("1152x900")]
         Item1152x900,
 
-    
+
         [XmlEnum("1280x1024")]
         Item1280x1024,
 
-    
+
         [XmlEnum("1600x1200")]
         Item1600x1200,
 
-    
+
         [XmlEnum("1800x1440")]
         Item1800x1440,
 
-    
+
         [XmlEnum("1920x1200")]
         Item1920x1200,
     }
 
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Panose
@@ -2014,56 +1478,56 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-    
 
-    
-    
-    
 
-  
+
+
+
+
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType9
     {
 
-    
+
         [XmlEnum("urn:schemas-microsoft-com:office:office:")]
         office,
 
-    
+
         [XmlEnum("urn:schemas-microsoft-com:vml:")]
         vml,
     }
 
 
 
-    
 
-    
+
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_StyleType
     {
 
-    
+
         paragraph,
 
-    
+
         character,
 
-    
+
         table,
 
-    
+
         numbering,
     }
 
-    
-    
-    
-    
 
-    
+
+
+
+
+
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
@@ -2071,96 +1535,97 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Drawing
     {
 
-        private List<object> itemsField;
-
         public CT_Drawing()
         {
-            this.itemsField = new List<object>();
+            
+        }
+        public static CT_Drawing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Drawing ctObj = new CT_Drawing();
+            ctObj.anchor = new List<CT_Anchor>();
+            ctObj.inline = new List<CT_Inline>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "anchor")
+                    ctObj.anchor.Add(CT_Anchor.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "inline")
+                    ctObj.inline.Add(CT_Inline.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
         }
 
-        [XmlElement("anchor", typeof(CT_Anchor), Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", Order = 0)]
-        [XmlElement("inline", typeof(CT_Inline), Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", Order = 0)]
-        public object[] Items
+
+
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            get
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.anchor != null)
             {
-                return this.itemsField.ToArray();
-            }
-            set
-            {
-                if (value == null || value.Length == 0)
+                foreach (CT_Anchor x in this.anchor)
                 {
-                    this.itemsField = new List<object>();
-                }
-                else
-                {
-                    this.itemsField = new List<object>(value);
+                    x.Write(sw, "anchor");
                 }
             }
+            if (this.inline != null)
+            {
+                foreach (CT_Inline x in this.inline)
+                {
+                    x.Write(sw, "inline");
+                }
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
+
+        List<CT_Anchor> anchorField;
+        public List<CT_Anchor> anchor
+        {
+            get { return this.anchorField; }
+            set { this.anchorField = value; }
+        }
+
+        List<CT_Inline> inlineField;
+        public List<CT_Inline> inline
+        {
+            get { return this.inlineField; }
+            set { this.inlineField = value; }
+        }
+
+
 
         public CT_Inline AddNewInline()
         {
-            CT_Inline inline = new CT_Inline();
-            itemsField.Add(inline);
-            return inline;
+            CT_Inline inlineObj = new CT_Inline();
+            if (this.inlineField == null)
+                this.inlineField = new List<CT_Inline>();
+            this.inlineField.Add(inlineObj);
+            return inlineObj;
         }
 
         public List<CT_Anchor> GetAnchorList()
         {
-            lock (this)
-            {
-                List<CT_Anchor> list = new List<CT_Anchor>();
-                foreach (object o in itemsField)
-                {
-                    if (o is CT_Anchor)
-                        list.Add(o as CT_Anchor);
-                }
-                return list;
-            }
+            return this.anchor;
         }
 
         public List<CT_Inline> GetInlineList()
         {
-            lock (this)
-            {
-                List<CT_Inline> list = new List<CT_Inline>();
-                foreach (object o in itemsField)
-                {
-                    if (o is CT_Inline)
-                        list.Add(o as CT_Inline);
-                }
-                return list;
-            }
+            return this.inline;
         }
 
         public CT_Inline GetInlineArray(int p)
         {
             lock (this)
             {
-                int index = 0;
-                CT_Inline ret = null;
-                for (int i = 0; i < itemsField.Count; i++)
-                {
-                    if (itemsField[i] is CT_Inline)
-                    {
-                        if (index == p)
-                        {
-                            ret = itemsField[i] as CT_Inline;
-                            break;
-                        }
-                        else
-                            index++;
-                    }
-                }
-                return ret;
+                return this.inline[p];
             }
         }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     public class CT_Hyperlink
     {
@@ -2187,8 +1652,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Hyperlink()
         {
-            this.extLstField = new CT_OfficeArtExtensionList();
-            this.sndField = new CT_EmbeddedWAVAudioFile();
+            //this.extLstField = new CT_OfficeArtExtensionList();
+            //this.sndField = new CT_EmbeddedWAVAudioFile();
             this.invalidUrlField = "";
             this.actionField = "";
             this.tgtFrameField = "";
@@ -2224,8 +1689,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
@@ -2336,16 +1799,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.endSndField = value;
             }
         }
-
-        public IEnumerable<CT_R> GetRList()
-        {
-            throw new NotImplementedException();
-        }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SimpleField
@@ -2353,7 +1811,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_Text fldDataField;
 
-        private List<object> itemsField;
+        private ArrayList itemsField;
 
         private List<ItemsChoiceType13> itemsElementNameField;
 
@@ -2370,8 +1828,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_SimpleField()
         {
             this.itemsElementNameField = new List<ItemsChoiceType13>();
-            this.itemsField = new List<object>();
-            this.fldDataField = new CT_Text();
+            this.itemsField = new ArrayList();
+            //this.fldDataField = new CT_Text();
         }
 
         [XmlElement(Order = 0)]
@@ -2385,6 +1843,258 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.fldDataField = value;
             }
+        }
+        public static CT_SimpleField Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_SimpleField ctObj = new CT_SimpleField();
+            ctObj.instr = XmlHelper.ReadString(node.Attributes["w:instr"]);
+            if (node.Attributes["w:fldLock"] != null)
+                ctObj.fldLock = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:fldLock"].Value);
+            if (node.Attributes["w:dirty"] != null)
+                ctObj.dirty = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:dirty"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "subDoc")
+                {
+                    ctObj.Items.Add(CT_Rel.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.subDoc);
+                }
+                else if (childNode.LocalName == "moveFrom")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.moveFrom);
+                }
+                else if (childNode.LocalName == "moveFromRangeStart")
+                {
+                    ctObj.Items.Add(CT_MoveBookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.moveFromRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlMoveFromRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlMoveFromRangeStart);
+                }
+                else if (childNode.LocalName == "sdt")
+                {
+                    ctObj.Items.Add(CT_SdtRun.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.sdt);
+                }
+                else if (childNode.LocalName == "smartTag")
+                {
+                    ctObj.Items.Add(CT_SmartTagRun.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.smartTag);
+                }
+                else if (childNode.LocalName == "customXmlMoveToRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlMoveToRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlMoveFromRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlMoveFromRangeEnd);
+                }
+                else if (childNode.LocalName == "del")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.del);
+                }
+                else if (childNode.LocalName == "fldSimple")
+                {
+                    ctObj.Items.Add(CT_SimpleField.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.fldSimple);
+                }
+                else if (childNode.LocalName == "customXmlInsRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlInsRangeStart);
+                }
+                else if (childNode.LocalName == "moveTo")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.moveTo);
+                }
+                else if (childNode.LocalName == "moveToRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.moveToRangeEnd);
+                }
+                else if (childNode.LocalName == "moveToRangeStart")
+                {
+                    ctObj.Items.Add(CT_MoveBookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.moveToRangeStart);
+                }
+                else if (childNode.LocalName == "moveFromRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.moveFromRangeEnd);
+                }
+                else if (childNode.LocalName == "permEnd")
+                {
+                    ctObj.Items.Add(CT_Perm.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.permEnd);
+                }
+                else if (childNode.LocalName == "permStart")
+                {
+                    ctObj.Items.Add(CT_PermStart.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.permStart);
+                }
+                else if (childNode.LocalName == "proofErr")
+                {
+                    ctObj.Items.Add(CT_ProofErr.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.proofErr);
+                }
+                else if (childNode.LocalName == "r")
+                {
+                    ctObj.Items.Add(CT_R.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.r);
+                }
+                else if (childNode.LocalName == "ins")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.ins);
+                }
+                else if (childNode.LocalName == "customXmlMoveToRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlMoveToRangeEnd);
+                }
+                else if (childNode.LocalName == "hyperlink")
+                {
+                    ctObj.Items.Add(CT_Hyperlink1.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.hyperlink);
+                }
+                else if (childNode.LocalName == "oMath")
+                {
+                    ctObj.Items.Add(CT_OMath.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.oMath);
+                }
+                else if (childNode.LocalName == "oMathPara")
+                {
+                    ctObj.Items.Add(CT_OMathPara.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.oMathPara);
+                }
+                else if (childNode.LocalName == "bookmarkEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.bookmarkEnd);
+                }
+                else if (childNode.LocalName == "bookmarkStart")
+                {
+                    ctObj.Items.Add(CT_Bookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.bookmarkStart);
+                }
+                else if (childNode.LocalName == "commentRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.commentRangeEnd);
+                }
+                else if (childNode.LocalName == "commentRangeStart")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.commentRangeStart);
+                }
+                else if (childNode.LocalName == "customXml")
+                {
+                    ctObj.Items.Add(CT_CustomXmlRun.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXml);
+                }
+                else if (childNode.LocalName == "customXmlDelRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlDelRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlDelRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlDelRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlInsRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType13.customXmlInsRangeEnd);
+                }
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:instr", this.instr);
+            XmlHelper.WriteAttribute(sw, "w:fldLock", this.fldLock.ToString());
+            XmlHelper.WriteAttribute(sw, "w:dirty", this.dirty.ToString());
+            sw.Write(">");
+            foreach (object o in this.Items)
+            {
+                if (o is CT_Rel)
+                    ((CT_Rel)o).Write(sw, "subDoc");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "moveFrom");
+                else if (o is CT_MoveBookmark)
+                    ((CT_MoveBookmark)o).Write(sw, "moveFromRangeStart");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlMoveFromRangeStart");
+                else if (o is CT_SdtRun)
+                    ((CT_SdtRun)o).Write(sw, "sdt");
+                else if (o is CT_SmartTagRun)
+                    ((CT_SmartTagRun)o).Write(sw, "smartTag");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlMoveToRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlMoveFromRangeEnd");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "del");
+                else if (o is CT_SimpleField)
+                    ((CT_SimpleField)o).Write(sw, "fldSimple");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlInsRangeStart");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "moveTo");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "moveToRangeEnd");
+                else if (o is CT_MoveBookmark)
+                    ((CT_MoveBookmark)o).Write(sw, "moveToRangeStart");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
+                else if (o is CT_Perm)
+                    ((CT_Perm)o).Write(sw, "permEnd");
+                else if (o is CT_PermStart)
+                    ((CT_PermStart)o).Write(sw, "permStart");
+                else if (o is CT_ProofErr)
+                    ((CT_ProofErr)o).Write(sw, "proofErr");
+                else if (o is CT_R)
+                    ((CT_R)o).Write(sw, "r");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "ins");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlMoveToRangeEnd");
+                else if (o is CT_Hyperlink1)
+                    ((CT_Hyperlink1)o).Write(sw, "hyperlink");
+                else if (o is CT_OMath)
+                    ((CT_OMath)o).Write(sw, "oMath");
+                else if (o is CT_OMathPara)
+                    ((CT_OMathPara)o).Write(sw, "oMathPara");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "bookmarkEnd");
+                else if (o is CT_Bookmark)
+                    ((CT_Bookmark)o).Write(sw, "bookmarkStart");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "commentRangeStart");
+                else if (o is CT_CustomXmlRun)
+                    ((CT_CustomXmlRun)o).Write(sw, "customXml");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlDelRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlDelRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
@@ -2420,35 +2130,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 1)]
         [XmlElement("subDoc", typeof(CT_Rel), Order = 1)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
+        public ArrayList Items
         {
             get
             {
-                return this.itemsField.ToArray();
+                return this.itemsField;
             }
             set
             {
-                if (value == null || value.Length == 0)
-                    this.itemsField = new List<object>();
-                else
-                    this.itemsField = new List<object>(value);
+                this.itemsField = value;
             }
         }
 
         [XmlElement("ItemsElementName", Order = 2)]
         [XmlIgnore]
-        public ItemsChoiceType13[] ItemsElementName
+        public List<ItemsChoiceType13> ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField.ToArray();
+                return this.itemsElementNameField;
             }
             set
             {
-                if (value == null || value.Length == 0)
-                    this.itemsElementNameField = new List<ItemsChoiceType13>();
-                else
-                    this.itemsElementNameField = new List<ItemsChoiceType13>(value);
+                this.itemsElementNameField = value;
             }
         }
 
@@ -2628,9 +2332,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         #endregion
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Text
@@ -2639,6 +2343,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string spaceField;
 
         private string valueField;
+
+        public static CT_Text Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Text ctObj = new CT_Text();
+            ctObj.space = XmlHelper.ReadString(node.Attributes["xml:space"]);
+            ctObj.Value = node.InnerText;
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            this.space = "preserve";
+            XmlHelper.WriteAttribute(sw, "xml:space", this.space);
+            sw.Write(">");
+            sw.Write(XmlHelper.EncodeXml(this.valueField));
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
         public string space
@@ -2667,15 +2391,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
+
     [Serializable]
-    
+
     [XmlType(TypeName = "CT_Hyperlink", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot("CT_Hyperlink", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Hyperlink1
     {
 
-        private List<object> itemsField;
+        private ArrayList itemsField;
 
         private List<ItemsChoiceType12> itemsElementNameField;
 
@@ -2696,7 +2420,265 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_Hyperlink1()
         {
             this.itemsElementNameField = new List<ItemsChoiceType12>();
-            this.itemsField = new List<object>();
+            this.itemsField = new ArrayList();
+        }
+        public static CT_Hyperlink1 Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Hyperlink1 ctObj = new CT_Hyperlink1();
+            ctObj.tgtFrame = XmlHelper.ReadString(node.Attributes["w:tgtFrame"]);
+            ctObj.tooltip = XmlHelper.ReadString(node.Attributes["w:tooltip"]);
+            ctObj.docLocation = XmlHelper.ReadString(node.Attributes["w:docLocation"]);
+            if (node.Attributes["w:history"] != null)
+                ctObj.history = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:history"].Value);
+            ctObj.anchor = XmlHelper.ReadString(node.Attributes["w:anchor"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "bookmarkStart")
+                {
+                    ctObj.Items.Add(CT_Bookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.bookmarkStart);
+                }
+                else if (childNode.LocalName == "customXmlDelRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlDelRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlDelRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlDelRangeStart);
+                }
+                else if (childNode.LocalName == "del")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.del);
+                }
+                else if (childNode.LocalName == "moveToRangeStart")
+                {
+                    ctObj.Items.Add(CT_MoveBookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.moveToRangeStart);
+                }
+                else if (childNode.LocalName == "oMath")
+                {
+                    ctObj.Items.Add(CT_OMath.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.oMath);
+                }
+                else if (childNode.LocalName == "oMathPara")
+                {
+                    ctObj.Items.Add(CT_OMathPara.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.oMathPara);
+                }
+                else if (childNode.LocalName == "bookmarkEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.bookmarkEnd);
+                }
+                else if (childNode.LocalName == "commentRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.commentRangeEnd);
+                }
+                else if (childNode.LocalName == "commentRangeStart")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.commentRangeStart);
+                }
+                else if (childNode.LocalName == "customXml")
+                {
+                    ctObj.Items.Add(CT_CustomXmlRun.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXml);
+                }
+                else if (childNode.LocalName == "customXmlInsRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlInsRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlInsRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlInsRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlMoveFromRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlMoveFromRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlMoveFromRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlMoveFromRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlMoveToRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlMoveToRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlMoveToRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.customXmlMoveToRangeStart);
+                }
+                else if (childNode.LocalName == "hyperlink")
+                {
+                    ctObj.Items.Add(CT_Hyperlink1.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.hyperlink);
+                }
+                else if (childNode.LocalName == "ins")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.ins);
+                }
+                else if (childNode.LocalName == "moveFrom")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.moveFrom);
+                }
+                else if (childNode.LocalName == "moveFromRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.moveFromRangeEnd);
+                }
+                else if (childNode.LocalName == "moveFromRangeStart")
+                {
+                    ctObj.Items.Add(CT_MoveBookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.moveFromRangeStart);
+                }
+                else if (childNode.LocalName == "moveTo")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.moveTo);
+                }
+                else if (childNode.LocalName == "moveToRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.moveToRangeEnd);
+                }
+                else if (childNode.LocalName == "fldSimple")
+                {
+                    ctObj.Items.Add(CT_SimpleField.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.fldSimple);
+                }
+                else if (childNode.LocalName == "permEnd")
+                {
+                    ctObj.Items.Add(CT_Perm.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.permEnd);
+                }
+                else if (childNode.LocalName == "permStart")
+                {
+                    ctObj.Items.Add(CT_PermStart.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.permStart);
+                }
+                else if (childNode.LocalName == "proofErr")
+                {
+                    ctObj.Items.Add(CT_ProofErr.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.proofErr);
+                }
+                else if (childNode.LocalName == "r")
+                {
+                    ctObj.Items.Add(CT_R.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.r);
+                }
+                else if (childNode.LocalName == "sdt")
+                {
+                    ctObj.Items.Add(CT_SdtRun.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.sdt);
+                }
+                else if (childNode.LocalName == "smartTag")
+                {
+                    ctObj.Items.Add(CT_SmartTagRun.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.smartTag);
+                }
+                else if (childNode.LocalName == "subDoc")
+                {
+                    ctObj.Items.Add(CT_Rel.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(ItemsChoiceType12.subDoc);
+                }
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:tgtFrame", this.tgtFrame);
+            XmlHelper.WriteAttribute(sw, "w:tooltip", this.tooltip);
+            XmlHelper.WriteAttribute(sw, "w:docLocation", this.docLocation);
+            XmlHelper.WriteAttribute(sw, "w:history", this.history.ToString());
+            XmlHelper.WriteAttribute(sw, "w:anchor", this.anchor);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            foreach (object o in this.Items)
+            {
+                if (o is CT_Bookmark)
+                    ((CT_Bookmark)o).Write(sw, "bookmarkStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlDelRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlDelRangeStart");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "del");
+                else if (o is CT_MoveBookmark)
+                    ((CT_MoveBookmark)o).Write(sw, "moveToRangeStart");
+                else if (o is CT_OMath)
+                    ((CT_OMath)o).Write(sw, "oMath");
+                else if (o is CT_OMathPara)
+                    ((CT_OMathPara)o).Write(sw, "oMathPara");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "bookmarkEnd");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "commentRangeStart");
+                else if (o is CT_CustomXmlRun)
+                    ((CT_CustomXmlRun)o).Write(sw, "customXml");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlInsRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlMoveFromRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlMoveFromRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlMoveToRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlMoveToRangeStart");
+                else if (o is CT_Hyperlink1)
+                    ((CT_Hyperlink1)o).Write(sw, "hyperlink");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "ins");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "moveFrom");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
+                else if (o is CT_MoveBookmark)
+                    ((CT_MoveBookmark)o).Write(sw, "moveFromRangeStart");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "moveTo");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "moveToRangeEnd");
+                else if (o is CT_SimpleField)
+                    ((CT_SimpleField)o).Write(sw, "fldSimple");
+                else if (o is CT_Perm)
+                    ((CT_Perm)o).Write(sw, "permEnd");
+                else if (o is CT_PermStart)
+                    ((CT_PermStart)o).Write(sw, "permStart");
+                else if (o is CT_ProofErr)
+                    ((CT_ProofErr)o).Write(sw, "proofErr");
+                else if (o is CT_R)
+                    ((CT_R)o).Write(sw, "r");
+                else if (o is CT_SdtRun)
+                    ((CT_SdtRun)o).Write(sw, "sdt");
+                else if (o is CT_SmartTagRun)
+                    ((CT_SmartTagRun)o).Write(sw, "smartTag");
+                else if (o is CT_Rel)
+                    ((CT_Rel)o).Write(sw, "subDoc");
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -2732,35 +2714,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("smartTag", typeof(CT_SmartTagRun), Order = 0)]
         [XmlElement("subDoc", typeof(CT_Rel), Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
+        public ArrayList Items
         {
             get
             {
-                return this.itemsField.ToArray();
+                return this.itemsField;
             }
             set
             {
-                if (value == null || value.Length == 0)
-                    this.itemsField = new List<object>();
-                else
-                    this.itemsField = new List<object>(value);
+                this.itemsField = value;
             }
         }
 
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public ItemsChoiceType12[] ItemsElementName
+        public List<ItemsChoiceType12> ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField.ToArray();
+                return this.itemsElementNameField;
             }
             set
             {
-                if (value == null || value.Length == 0)
-                    this.itemsElementNameField = new List<ItemsChoiceType12>();
-                else
-                    this.itemsElementNameField = new List<ItemsChoiceType12>(value);
+                this.itemsElementNameField = value;
             }
         }
 
@@ -2842,8 +2818,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
@@ -2968,226 +2942,245 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         #endregion
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType12
     {
 
-    
+
         [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
-    
+
         [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
-    
+
         bookmarkEnd,
 
-    
+
         bookmarkStart,
 
-    
+
         commentRangeEnd,
 
-    
+
         commentRangeStart,
 
-    
+
         customXml,
 
-    
+
         customXmlDelRangeEnd,
 
-    
+
         customXmlDelRangeStart,
 
-    
+
         customXmlInsRangeEnd,
 
-    
+
         customXmlInsRangeStart,
 
-    
+
         customXmlMoveFromRangeEnd,
 
-    
+
         customXmlMoveFromRangeStart,
 
-    
+
         customXmlMoveToRangeEnd,
 
-    
+
         customXmlMoveToRangeStart,
 
-    
+
         del,
 
-    
+
         fldSimple,
 
-    
+
         hyperlink,
 
-    
+
         ins,
 
-    
+
         moveFrom,
 
-    
+
         moveFromRangeEnd,
 
-    
+
         moveFromRangeStart,
 
-    
+
         moveTo,
 
-    
+
         moveToRangeEnd,
 
-    
+
         moveToRangeStart,
 
-    
+
         permEnd,
 
-    
+
         permStart,
 
-    
+
         proofErr,
 
-    
+
         r,
 
-    
+
         sdt,
 
-    
+
         smartTag,
 
-    
+
         subDoc,
     }
 
-    
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
     public enum ItemsChoiceType13
     {
 
-    
+
         [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMath")]
         oMath,
 
-    
+
         [XmlEnum("http://schemas.openxmlformats.org/officeDocument/2006/math:oMathPara")]
         oMathPara,
 
-    
+
         bookmarkEnd,
 
-    
+
         bookmarkStart,
 
-    
+
         commentRangeEnd,
 
-    
+
         commentRangeStart,
 
-    
+
         customXml,
 
-    
+
         customXmlDelRangeEnd,
 
-    
+
         customXmlDelRangeStart,
 
-    
+
         customXmlInsRangeEnd,
 
-    
+
         customXmlInsRangeStart,
 
-    
+
         customXmlMoveFromRangeEnd,
 
-    
+
         customXmlMoveFromRangeStart,
 
-    
+
         customXmlMoveToRangeEnd,
 
-    
+
         customXmlMoveToRangeStart,
 
-    
+
         del,
 
-    
+
         fldSimple,
 
-    
+
         hyperlink,
 
-    
+
         ins,
 
-    
+
         moveFrom,
 
-    
+
         moveFromRangeEnd,
 
-    
+
         moveFromRangeStart,
 
-    
+
         moveTo,
 
-    
+
         moveToRangeEnd,
 
-    
+
         moveToRangeStart,
 
-    
+
         permEnd,
 
-    
+
         permStart,
 
-    
+
         proofErr,
 
-    
+
         r,
 
-    
+
         sdt,
 
-    
+
         smartTag,
 
-    
+
         subDoc,
     }
-    
 
-    
+
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_ProofErr
     {
 
         private ST_ProofErr typeField;
+        public static CT_ProofErr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ProofErr ctObj = new CT_ProofErr();
+            if (node.Attributes["w:type"] != null)
+                ctObj.type = (ST_ProofErr)Enum.Parse(typeof(ST_ProofErr), node.Attributes["w:type"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_ProofErr type
@@ -3202,19 +3195,42 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
     }
-    
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_Placeholder
     {
 
         private CT_String docPartField;
+        public static CT_Placeholder Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Placeholder ctObj = new CT_Placeholder();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "docPart")
+                    ctObj.docPart = CT_String.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.docPart != null)
+                this.docPart.Write(sw, "docPart");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         public CT_Placeholder()
         {
-            this.docPartField = new CT_String();
+            //this.docPartField = new CT_String();
         }
 
         [XmlElement(Order = 0)]
@@ -3231,11 +3247,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-    
 
-    
+
+
     [Serializable]
-    
+
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_DataBinding
@@ -3246,6 +3262,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string xpathField;
 
         private string storeItemIDField;
+
+        public static CT_DataBinding Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataBinding ctObj = new CT_DataBinding();
+            ctObj.prefixMappings = XmlHelper.ReadString(node.Attributes["w:prefixMappings"]);
+            ctObj.xpath = XmlHelper.ReadString(node.Attributes["w:xpath"]);
+            ctObj.storeItemID = XmlHelper.ReadString(node.Attributes["w:storeItemID"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:prefixMappings", this.prefixMappings);
+            XmlHelper.WriteAttribute(sw, "w:xpath", this.xpath);
+            XmlHelper.WriteAttribute(sw, "w:storeItemID", this.storeItemID);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string prefixMappings
@@ -3285,5 +3324,5 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.storeItemIDField = value;
             }
         }
-    }    
+    }
 }

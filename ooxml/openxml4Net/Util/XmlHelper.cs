@@ -74,7 +74,7 @@ namespace NPOI.OpenXml4Net.Util
         public static uint ReadUInt(XmlAttribute attr)
         {
             if (attr == null)
-                return uint.MinValue;
+                return 0;
 
             uint i;
             if (uint.TryParse(attr.Value, out i))
@@ -86,7 +86,21 @@ namespace NPOI.OpenXml4Net.Util
                 return 0;
             }
         }
+        public static ulong ReadULong(XmlAttribute attr)
+        {
+            if (attr == null)
+                return 0;
 
+            ulong i;
+            if (ulong.TryParse(attr.Value, out i))
+            {
+                return i;
+            }
+            else
+            {
+                return 0;
+            }
+        }
         public static bool ReadBool(XmlAttribute attr)
         {
             return ReadBool(attr, false);
@@ -142,7 +156,7 @@ namespace NPOI.OpenXml4Net.Util
                 return blankValue;
 
             string value = attr.Value;
-            if (value == "1" || value == "-1" || value.ToLower() == "true")
+            if (value == "1" || value == "-1" || value.ToLower() == "true" || value.ToLower() == "on")
             {
                 return true;
             }
@@ -155,7 +169,7 @@ namespace NPOI.OpenXml4Net.Util
                 return false;
             }
         }
-        internal static string EncodeXml(string xml)
+        public static string EncodeXml(string xml)
         {
             return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
         }

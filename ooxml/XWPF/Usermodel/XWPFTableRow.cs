@@ -169,7 +169,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_TrPr trpr = GetTrPr();
             CT_OnOff onoff = trpr.AddNewCantSplit();
-            onoff.val=(split ? ST_OnOff.on : ST_OnOff.off);
+            onoff.val= split;
         }
 
         /**
@@ -185,7 +185,7 @@ namespace NPOI.XWPF.UserModel
             if (trpr.SizeOfCantSplitArray() > 0)
             {
                 CT_OnOff onoff = trpr.GetCantSplitList()[0];
-                isCant = onoff.val == (ST_OnOff.on);
+                isCant = onoff.val;
             }
             return isCant;
         }
@@ -200,7 +200,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_TrPr trpr = GetTrPr();
             CT_OnOff onoff = trpr.AddNewTblHeader();
-            onoff.val = (repeat ? ST_OnOff.on : ST_OnOff.off);
+            onoff.val = repeat;
         }
 
         /**
@@ -216,7 +216,7 @@ namespace NPOI.XWPF.UserModel
             if (trpr.SizeOfTblHeaderArray() > 0)
             {
                 CT_OnOff rpt = trpr.GetTblHeaderList()[0];
-                repeat = rpt.val == (ST_OnOff.on);
+                repeat = rpt.val;
             }
             return repeat;
         }

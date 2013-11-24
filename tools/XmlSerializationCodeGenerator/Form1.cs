@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Wordprocessing.CT_Footnotes);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Shared.CT_MathPr);
             //Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
@@ -54,10 +54,11 @@ namespace XmlSerializationCodeGenerator
             if (c.Name == "XmlElement"||c.Name=="Byte[]")
                 return;
 
-            if (level > 4)
+            node.Tag = c;
+
+            if (level >1)
                 return;
 
-            node.Tag = c;
             var properties = c.GetProperties();
             foreach (var p in properties)
             {
@@ -135,43 +136,46 @@ namespace XmlSerializationCodeGenerator
                         subProperties.Add(p);
                     continue;
                 }
-
+                string attributePrefix = GetXmlAttributePrefix(p);
                 if (p.PropertyType.IsValueType)
                 {
                     if (p.PropertyType.Name == "Int32")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadInt(node.Attributes[\"{0}\"]);", p.Name));
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadInt(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                     }
                     else if (p.PropertyType.Name == "Int64")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadLong(node.Attributes[\"{0}\"]);", p.Name));
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadLong(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                     }
                     else if (p.PropertyType.Name == "Double")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadDouble(node.Attributes[\"{0}\"]);", p.Name));
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadDouble(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                     }
                     else if (p.PropertyType.Name == "UInt32")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadUInt(node.Attributes[\"{0}\"]);", p.Name));
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadUInt(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                    }
+                    else if (p.PropertyType.Name == "UInt64")
+                    {
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadULong(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                     }
                     else if (p.PropertyType.Name == "Boolean")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBool(node.Attributes[\"{0}\"]);", p.Name));
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBool(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                     }
                     else if (p.PropertyType.IsEnum)
                     {
-                        sb.AppendLine(string.Format("\tif (node.Attributes[\"{0}\"]!=null)", p.Name));
-                        sb.AppendLine(string.Format("\t\tctObj.{0} = ({1})Enum.Parse(typeof({1}), node.Attributes[\"{0}\"].Value);", p.Name, p.PropertyType.Name));
+                        sb.AppendLine(string.Format("\tif (node.Attributes[\"{1}{0}\"]!=null)", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\t\tctObj.{0} = ({1})Enum.Parse(typeof({1}), node.Attributes[\"{2}{0}\"].Value);", p.Name, p.PropertyType.Name, attributePrefix));
                     }
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    string attributePrefix = GetXmlAttributePrefix(p);
                     sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadString(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                 }
                 else if (p.PropertyType.Name == "Byte[]")
                 {
-                    sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBytes(node.Attributes[\"{0}\"]);", p.Name));
+                    sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBytes(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                 }
                 else if (p.PropertyType.IsClass)
                 {
@@ -316,11 +320,11 @@ namespace XmlSerializationCodeGenerator
                 sb.AppendLine(string.Format("\tif(this.{0}!=null)", p.Name));
                 if (p.PropertyType.IsValueType)
                 {
-                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{0}>{{0}}</{0}>\",this.{0}));", p.Name));
+                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}));", p.Name, GetXmlPrefix(p.PropertyType)));
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{0}>{{0}}</{0}>\",this.{0}));", p.Name));
+                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}}));", p.Name, GetXmlPrefix(p.PropertyType)));
                 }
                 else if (p.PropertyType.GetProperties().Length == 0)
                 {
@@ -367,8 +371,9 @@ namespace XmlSerializationCodeGenerator
         public string GetXmlAttributePrefix(PropertyInfo p)
         { 
             var a = p.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
+            
             if (a.Length == 0)
-                return "";
+                return "w:";
             string n = ((XmlAttributeAttribute)a[0]).Namespace;
             if (n == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
             {
@@ -386,13 +391,33 @@ namespace XmlSerializationCodeGenerator
             {
                 return "r:";
             }
-            return "";
+            else if (n == "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
+            {
+                return "w:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/markup-compatibility/2006")
+            {
+                return "ve:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:office")
+            {
+                return "o:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/officeDocument/2006/math")
+            {
+                return "m:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")
+            {
+                return "wp:";
+            }
+            return "w:";
         }
         public string GetXmlPrefix(Type p)
         {
             var a = p.GetCustomAttributes(typeof(XmlTypeAttribute), false);
             if (a.Length == 0)
-                return "";
+                return "w:";
             string n = ((XmlTypeAttribute)a[0]).Namespace;
             if (n == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
             {
@@ -410,7 +435,27 @@ namespace XmlSerializationCodeGenerator
             {
                 return "r:";
             }
-            return "";
+            else if (n == "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
+            {
+                return "w:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/markup-compatibility/2006")
+            {
+                return "ve:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:office")
+            {
+                return "o:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/officeDocument/2006/math")
+            {
+                return "m:";
+            }
+            else if (n == "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")
+            {
+                return "wp:";
+            } 
+            return "w:";
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -423,6 +468,7 @@ namespace XmlSerializationCodeGenerator
             StringBuilder sb=new StringBuilder();
             Type type = (Type)treeView1.SelectedNode.Tag;
             var property = type.GetProperty("Items");
+
             if (property != null)
             {
                 var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
@@ -439,6 +485,108 @@ namespace XmlSerializationCodeGenerator
                 }
                 textBox1.Text = sb.ToString();
             }
+            else
+            {
+               property = type.GetProperty("Item");
+               if (property != null)
+               {
+                   var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
+                   foreach (var attr in attrs)
+                   {
+                       var xmlAttr = (XmlElementAttribute)attr;
+                       sb.AppendLine(string.Format("{1} {0}Field;", xmlAttr.ElementName, xmlAttr.Type.Name));
+                       sb.AppendLine(string.Format("public {1} {0}", xmlAttr.ElementName, xmlAttr.Type.Name));
+                       sb.AppendLine("{");
+                       sb.AppendLine(string.Format("\tget{{return this.{0}Field;}}", xmlAttr.ElementName));
+                       sb.AppendLine(string.Format("\tset{{this.{0}Field=value;}}", xmlAttr.ElementName));
+                       sb.AppendLine("}");
+                       sb.AppendLine();
+                   }
+                   textBox1.Text = sb.ToString();
+               }
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode == null)
+                return;
+
+            StringBuilder writeCode = new StringBuilder();
+            StringBuilder parseCode = new StringBuilder();
+            Type type = (Type)treeView1.SelectedNode.Tag;
+            string xmlPrefix = GetXmlPrefix(type);
+
+            parseCode.AppendFormat("public static {0} Parse(XmlNode node, XmlNamespaceManager namespaceManager)" + Environment.NewLine, type.Name);
+            parseCode.AppendLine("{");
+            parseCode.AppendLine("\tif(node==null)");
+            parseCode.AppendLine("\t\treturn null;");
+            parseCode.AppendLine(string.Format("\t{0} ctObj = new {0}();", type.Name));
+            parseCode.AppendLine("\tforeach(XmlNode childNode in node.ChildNodes)");
+            parseCode.AppendLine("\t{");
+
+            writeCode.AppendLine("internal void Write(StreamWriter sw, string nodeName)");
+            writeCode.AppendLine("{");
+            writeCode.AppendLine("\tsw.Write(string.Format(\"<" + xmlPrefix + "{0}\",nodeName));");
+            writeCode.AppendLine("\tsw.Write(\">\");");
+            writeCode.AppendLine("\tforeach(object o in this.Items)");
+            writeCode.AppendLine("\t{");
+            var property = type.GetProperty("Items");
+
+            if (property != null)
+            {
+                var attrs = property.GetCustomAttributes(typeof(XmlElementAttribute), false);
+
+                var firstIf = true;
+                foreach (var attr in attrs)
+                {
+                    var xmlAttr = (XmlElementAttribute)attr;
+
+                    if (firstIf)
+                    {
+                        parseCode.AppendLine(string.Format("\t\tif(childNode.LocalName == \"{0}\")", xmlAttr.ElementName));
+                    }
+                    else
+                    {
+                        parseCode.AppendLine(string.Format("\t\telse if(childNode.LocalName == \"{0}\")", xmlAttr.ElementName));
+                    }
+                    parseCode.AppendLine("\t\t{");
+                    if (xmlAttr.Type.GetProperties().Length == 0)
+                    {
+                        parseCode.AppendLine(string.Format("\t\t\tctObj.Items.Add(new {0}());", xmlAttr.Type.Name));
+                    }
+                    else
+                    {
+                        parseCode.AppendLine(string.Format("\t\t\tctObj.Items.Add({0}.Parse(childNode, namespaceManager));", xmlAttr.Type.Name));
+                    }
+                    parseCode.AppendLine(string.Format("\t\t\tctObj.ItemsElementName.Add(ItemsChoiceType{1}.{0});", xmlAttr.ElementName, textBox2.Text));                    
+                    parseCode.AppendLine("\t\t}");
+                    if (firstIf)
+                    {
+                        writeCode.AppendLine(string.Format("\t\tif(o is {0})", xmlAttr.Type.Name));
+                    }
+                    else
+                    {
+                        writeCode.AppendLine(string.Format("\t\telse if(o is {0})", xmlAttr.Type.Name));
+                    }
+                    if(xmlAttr.Type.GetProperties().Length==0)
+                        writeCode.AppendLine(string.Format("\t\t\tsw.Write(\"<{0}/>\");", xmlAttr.ElementName));
+                    else
+                        writeCode.AppendLine(string.Format("\t\t\t(({0})o).Write(sw, \"{1}\");", xmlAttr.Type.Name, xmlAttr.ElementName));
+                    firstIf = false;
+                }
+            }
+            parseCode.AppendLine("\t}");
+            parseCode.AppendLine("\treturn ctObj;"); 
+            parseCode.AppendLine("}");
+
+            writeCode.AppendLine("\t}");
+            writeCode.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}>\",nodeName));");
+            writeCode.AppendLine("}");
+
+            textBox1.Text = parseCode.ToString();
+            textBox1.Text += Environment.NewLine;
+            textBox1.Text += writeCode.ToString();
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Shared;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
+using System.Collections;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -69,12 +72,43 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot("document", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_Document : CT_DocumentBase
     {
+        public static CT_Document Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Document ctObj = new CT_Document();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "body")
+                    ctObj.body = CT_Body.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "background")
+                    ctObj.background = CT_Background.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw)
+        {
+            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+            sw.Write("<w:document xmlns:ve=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" ");
+            sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" ");
+            sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" ");
+            sw.Write("xmlns:w10=\"urn:schemas-microsoft-com:office:word\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" ");
+            sw.Write("xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\">");
+            if (this.body != null)
+                this.body.Write(sw, "body");
+            if (this.background != null)
+                this.background.Write(sw, "background");
+            sw.Write("</w:document>");
+        }
 
         private CT_Body bodyField;
 
         public CT_Document()
         {
-            this.bodyField = new CT_Body();
+            //this.bodyField = new CT_Body();
         }
 
         [XmlElement(Order = 0)]
@@ -104,7 +138,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Body
     {
 
-        private List<object> itemsField;
+        private ArrayList itemsField;
 
         private List<DocumentBodyItemChoiceType> itemsElementNameField;
 
@@ -112,9 +146,245 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Body()
         {
-            this.sectPrField = new CT_SectPr();
+            //this.sectPrField = new CT_SectPr();
             this.itemsElementNameField = new List<DocumentBodyItemChoiceType>();
-            this.itemsField = new List<object>();
+            this.itemsField = new ArrayList();
+        }
+        public static CT_Body Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Body ctObj = new CT_Body();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "moveTo")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.moveTo);
+                }
+                else if (childNode.LocalName == "sectPr")
+                {
+                    ctObj.sectPr = CT_SectPr.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "oMathPara")
+                {
+                    ctObj.Items.Add(CT_OMathPara.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.oMathPara);
+                }
+                else if (childNode.LocalName == "customXml")
+                {
+                    ctObj.Items.Add(CT_CustomXmlBlock.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXml);
+                }
+                else if (childNode.LocalName == "oMath")
+                {
+                    ctObj.Items.Add(CT_OMath.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.oMath);
+                }
+                else if (childNode.LocalName == "altChunk")
+                {
+                    ctObj.Items.Add(CT_AltChunk.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.altChunk);
+                }
+                else if (childNode.LocalName == "bookmarkEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.bookmarkEnd);
+                }
+                else if (childNode.LocalName == "bookmarkStart")
+                {
+                    ctObj.Items.Add(CT_Bookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.bookmarkStart);
+                }
+                else if (childNode.LocalName == "commentRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.commentRangeEnd);
+                }
+                else if (childNode.LocalName == "commentRangeStart")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.commentRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlDelRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlDelRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlDelRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlDelRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlInsRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlInsRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlInsRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlInsRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlMoveFromRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlMoveFromRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlMoveFromRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlMoveFromRangeStart);
+                }
+                else if (childNode.LocalName == "customXmlMoveToRangeEnd")
+                {
+                    ctObj.Items.Add(CT_Markup.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlMoveToRangeEnd);
+                }
+                else if (childNode.LocalName == "customXmlMoveToRangeStart")
+                {
+                    ctObj.Items.Add(CT_TrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.customXmlMoveToRangeStart);
+                }
+                else if (childNode.LocalName == "del")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.del);
+                }
+                else if (childNode.LocalName == "ins")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.ins);
+                }
+                else if (childNode.LocalName == "moveFrom")
+                {
+                    ctObj.Items.Add(CT_RunTrackChange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.moveFrom);
+                }
+                else if (childNode.LocalName == "moveFromRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.moveFromRangeEnd);
+                }
+                else if (childNode.LocalName == "moveFromRangeStart")
+                {
+                    ctObj.Items.Add(CT_MoveBookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.moveFromRangeStart);
+                }
+                else if (childNode.LocalName == "moveToRangeEnd")
+                {
+                    ctObj.Items.Add(CT_MarkupRange.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.moveToRangeEnd);
+                }
+                else if (childNode.LocalName == "moveToRangeStart")
+                {
+                    ctObj.Items.Add(CT_MoveBookmark.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.moveToRangeStart);
+                }
+                else if (childNode.LocalName == "p")
+                {
+                    ctObj.Items.Add(CT_P.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.p);
+                }
+                else if (childNode.LocalName == "permEnd")
+                {
+                    ctObj.Items.Add(CT_Perm.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.permEnd);
+                }
+                else if (childNode.LocalName == "permStart")
+                {
+                    ctObj.Items.Add(CT_PermStart.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.permStart);
+                }
+                else if (childNode.LocalName == "proofErr")
+                {
+                    ctObj.Items.Add(CT_ProofErr.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.proofErr);
+                }
+                else if (childNode.LocalName == "sdt")
+                {
+                    ctObj.Items.Add(CT_SdtBlock.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.sdt);
+                }
+                else if (childNode.LocalName == "tbl")
+                {
+                    ctObj.Items.Add(CT_Tbl.Parse(childNode, namespaceManager));
+                    ctObj.ItemsElementName.Add(DocumentBodyItemChoiceType.tbl);
+                }
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.sectPr != null)
+                this.sectPr.Write(sw, "sectPr");
+            foreach (object o in this.Items)
+            {
+                if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "moveTo");
+                else if (o is CT_OMathPara)
+                    ((CT_OMathPara)o).Write(sw, "oMathPara");
+                else if (o is CT_CustomXmlBlock)
+                    ((CT_CustomXmlBlock)o).Write(sw, "customXml");
+                else if (o is CT_OMath)
+                    ((CT_OMath)o).Write(sw, "oMath");
+                else if (o is CT_AltChunk)
+                    ((CT_AltChunk)o).Write(sw, "altChunk");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "bookmarkEnd");
+                else if (o is CT_Bookmark)
+                    ((CT_Bookmark)o).Write(sw, "bookmarkStart");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "commentRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlDelRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlDelRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlInsRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlMoveFromRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlMoveFromRangeStart");
+                else if (o is CT_Markup)
+                    ((CT_Markup)o).Write(sw, "customXmlMoveToRangeEnd");
+                else if (o is CT_TrackChange)
+                    ((CT_TrackChange)o).Write(sw, "customXmlMoveToRangeStart");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "del");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "ins");
+                else if (o is CT_RunTrackChange)
+                    ((CT_RunTrackChange)o).Write(sw, "moveFrom");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
+                else if (o is CT_MoveBookmark)
+                    ((CT_MoveBookmark)o).Write(sw, "moveFromRangeStart");
+                else if (o is CT_MarkupRange)
+                    ((CT_MarkupRange)o).Write(sw, "moveToRangeEnd");
+                else if (o is CT_MoveBookmark)
+                    ((CT_MoveBookmark)o).Write(sw, "moveToRangeStart");
+                else if (o is CT_P)
+                    ((CT_P)o).Write(sw, "p");
+                else if (o is CT_Perm)
+                    ((CT_Perm)o).Write(sw, "permEnd");
+                else if (o is CT_PermStart)
+                    ((CT_PermStart)o).Write(sw, "permStart");
+                else if (o is CT_ProofErr)
+                    ((CT_ProofErr)o).Write(sw, "proofErr");
+                else if (o is CT_SdtBlock)
+                    ((CT_SdtBlock)o).Write(sw, "sdt");
+                else if (o is CT_Tbl)
+                    ((CT_Tbl)o).Write(sw, "tbl");
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -148,18 +418,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         [XmlElement("sdt", typeof(CT_SdtBlock), Order = 0)]
         [XmlElement("tbl", typeof(CT_Tbl), Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public object[] Items
+        public ArrayList Items
         {
             get
             {
-                return this.itemsField.ToArray();
+                return this.itemsField;
             }
             set
             {
-                if (value != null && value.Length > 0)
-                    this.itemsField = new List<object>(value);
-                else
-                    this.itemsField = new List<object>();
+                this.itemsField = value;
             }
         }
 
@@ -176,18 +443,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public DocumentBodyItemChoiceType[] ItemsElementName
+        public List<DocumentBodyItemChoiceType> ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField.ToArray();
+                return this.itemsElementNameField;
             }
             set
             {
-                if (value != null && value.Length > 0)
-                    this.itemsElementNameField = new List<DocumentBodyItemChoiceType>(value);
-                else
-                    this.itemsElementNameField = new List<DocumentBodyItemChoiceType>();
+                this.itemsElementNameField = value;
             }
         }
 
@@ -215,11 +479,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public int sizeOfTblArray()
         {
-            throw new NotImplementedException();
+            return SizeOfArray(DocumentBodyItemChoiceType.tbl);
         }
-        public CT_Tbl[] getTblArray()
+        public List<CT_Tbl> getTblArray()
         {
-            throw new NotImplementedException();
+            return GetObjectList<CT_Tbl>(DocumentBodyItemChoiceType.tbl);
         }
         public CT_Tbl insertNewTbl(int paramInt)
         {
@@ -508,8 +772,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_DocPart()
         {
-            this.docPartBodyField = new CT_Body();
-            this.docPartPrField = new CT_DocPartPr();
+            //this.docPartBodyField = new CT_Body();
+            //this.docPartPrField = new CT_DocPartPr();
         }
 
         [XmlElement(Order = 0)]
@@ -1052,6 +1316,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string linePitchField;
 
         private string charSpaceField;
+        public static CT_DocGrid Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DocGrid ctObj = new CT_DocGrid();
+            if (node.Attributes["w:type"] != null)
+                ctObj.type = (ST_DocGrid)Enum.Parse(typeof(ST_DocGrid), node.Attributes["w:type"].Value);
+            ctObj.linePitch = XmlHelper.ReadString(node.Attributes["w:linePitch"]);
+            ctObj.charSpace = XmlHelper.ReadString(node.Attributes["w:charSpace"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "w:linePitch", this.linePitch);
+            XmlHelper.WriteAttribute(sw, "w:charSpace", this.charSpace);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_DocGrid type

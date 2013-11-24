@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
+using NPOI.OpenXml4Net.Util;
 
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
@@ -38,10 +41,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_DisplacedByCustomXml displacedByCustomXmlField;
 
         private bool displacedByCustomXmlFieldSpecified;
+        public static CT_Perm Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Perm ctObj = new CT_Perm();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            if (node.Attributes["w:displacedByCustomXml"] != null)
+                ctObj.displacedByCustomXml = (ST_DisplacedByCustomXml)Enum.Parse(typeof(ST_DisplacedByCustomXml), node.Attributes["w:displacedByCustomXml"].Value);
+            return ctObj;
+        }
 
-        // TODO is the following correct/better with regard the namespace?
-        //[XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -163,6 +185,37 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.colLastField = value;
             }
         }
+		public static CT_PermStart Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+		{
+			if (node == null)
+				return null;
+			CT_PermStart ctObj = new CT_PermStart();
+			if (node.Attributes["w:edGrp"] != null)
+				ctObj.edGrp = (ST_EdGrp)Enum.Parse(typeof(ST_EdGrp), node.Attributes["w:edGrp"].Value);
+			ctObj.ed = XmlHelper.ReadString(node.Attributes["w:ed"]);
+			ctObj.colFirst = XmlHelper.ReadString(node.Attributes["w:colFirst"]);
+			ctObj.colLast = XmlHelper.ReadString(node.Attributes["w:colLast"]);
+			ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
+			if (node.Attributes["w:displacedByCustomXml"] != null)
+				ctObj.displacedByCustomXml = (ST_DisplacedByCustomXml)Enum.Parse(typeof(ST_DisplacedByCustomXml), node.Attributes["w:displacedByCustomXml"].Value);
+			return ctObj;
+		}
+
+
+
+		internal void Write(StreamWriter sw, string nodeName)
+		{
+			sw.Write(string.Format("<w:{0}", nodeName));
+			XmlHelper.WriteAttribute(sw, "w:edGrp", this.edGrp.ToString());
+			XmlHelper.WriteAttribute(sw, "w:ed", this.ed);
+			XmlHelper.WriteAttribute(sw, "w:colFirst", this.colFirst);
+			XmlHelper.WriteAttribute(sw, "w:colLast", this.colLast);
+			XmlHelper.WriteAttribute(sw, "w:id", this.id);
+			XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
+			sw.Write(">");
+			sw.Write(string.Format("</w:{0}>", nodeName));
+		}
+
     }
 
 

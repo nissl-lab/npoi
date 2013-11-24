@@ -64,10 +64,10 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentRead()
         {
             NumberingDocument numberingDoc = null;
-            Stream is1;
-            is1 = GetPackagePart().GetInputStream();
+            
+            XmlDocument doc = ConvertStreamToXml(GetPackagePart().GetInputStream());
             try {
-                numberingDoc = NumberingDocument.Parse(is1);
+                numberingDoc = NumberingDocument.Parse(doc, NamespaceManager);
                 ctNumbering = numberingDoc.Numbering;
                 //get any Nums
                 foreach(CT_Num ctNum in ctNumbering.GetNumList()) {
@@ -77,8 +77,8 @@ namespace NPOI.XWPF.UserModel
                     abstractNums.Add(new XWPFAbstractNum(ctAbstractNum, this));
                 }
                 isNew = false;
-            } catch (Exception) {
-                throw new POIXMLException();
+            } catch (Exception e) {
+                throw new POIXMLException(e);
             }
         }
 
@@ -104,17 +104,17 @@ namespace NPOI.XWPF.UserModel
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             NumberingDocument doc = new NumberingDocument(ctNumbering);
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-                new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-                new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
-                new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-                new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
-                new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-                new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
-                new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
-                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
-             });
-            doc.Save(out1, namespaces);
+            //XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
+            //    new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+            //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
+            //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+            //    new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
+            //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
+            //    new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
+            //    new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
+            //     new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
+            // });
+            doc.Save(out1);
             out1.Close();
         }
 

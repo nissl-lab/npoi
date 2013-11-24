@@ -64,8 +64,8 @@ namespace NPOI.XWPF.UserModel
             StylesDocument stylesDoc;
             try
             {
-                Stream is1 = GetPackagePart().GetInputStream();
-                stylesDoc = StylesDocument.Parse(is1);
+                XmlDocument doc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+                stylesDoc = StylesDocument.Parse(doc,NamespaceManager);
                 ctStyles = stylesDoc.Styles;
                 latentStyles = new XWPFLatentStyles(ctStyles.latentStyles, this);
 
@@ -95,20 +95,11 @@ namespace NPOI.XWPF.UserModel
             map.Put("http://schemas.Openxmlformats.org/wordProcessingml/2006/main", "w");
             xmlOptions.SaveSuggestedPrefixes=(map);*/
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            StylesDocument doc = new StylesDocument(ctStyles);
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-                new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-                new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
-                new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-                new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
-                new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-                new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
-                new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
-                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")
-             });
-            doc.Save(out1, namespaces);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                StylesDocument doc = new StylesDocument(ctStyles);
+                doc.Save(out1);
+            }
         }
 
 

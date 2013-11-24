@@ -66,8 +66,6 @@ namespace NPOI.XWPF.UserModel
         public XWPFDocument(OPCPackage pkg)
             : base(pkg)
         {
-            ;
-
             //build a tree of POIXMLDocumentParts, this document being the root
             Load(XWPFFactory.GetInstance());
         }
@@ -90,10 +88,14 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentRead()
         {
             try {
-                DocumentDocument doc = DocumentDocument.Parse(GetPackagePart().GetInputStream());
+                XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+                DocumentDocument doc = DocumentDocument.Parse(xmldoc, NamespaceManager);
                 ctDocument = doc.Document;
 
                 InitFootnotes();
+                // parse the document with cursor and add
+                //    // the XmlObject to its lists
+
                 foreach (object o in ctDocument.body.Items)
                 {
                     if (o is CT_P)
@@ -109,24 +111,6 @@ namespace NPOI.XWPF.UserModel
                         tables.Add(t);
                     }
                 }
-                // parse the document with cursor and add
-            //    // the XmlObject to its lists
-            //    XmlCursor cursor = ctDocument.Body.NewCursor();
-            //    cursor.SelectPath("./*");
-            //    while (cursor.ToNextSelection()) {
-            //        XmlObject o = cursor.Object;
-            //        if (o is CTP) {
-            //            XWPFParagraph p = new XWPFParagraph((CTP) o, this);
-            //            bodyElements.Add(p);
-            //            paragraphs.Add(p);
-            //        } else if (o is CTTbl) {
-            //            XWPFTable t = new XWPFTable((CTTbl) o, this);
-            //            bodyElements.Add(t);
-            //            tables.Add(t);
-            //        }
-            //    }
-            //    cursor.Dispose();
-
                 // Sort out headers and footers
                 if (doc.Document.body.sectPr != null)
                     headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
@@ -158,8 +142,8 @@ namespace NPOI.XWPF.UserModel
                     }
                     else if (relation.Equals(XWPFRelation.COMMENT.Relation))
                     {
-                        // TODO Create according XWPFComment class, extending POIXMLDocumentPart
-                        CommentsDocument cmntdoc = CommentsDocument.Parse(p.GetPackagePart().GetInputStream());
+                        XmlDocument xml = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
+                        CommentsDocument cmntdoc = CommentsDocument.Parse(xml ,NamespaceManager);
                         foreach (CT_Comment ctcomment in cmntdoc.Comments.comment)
                         {
                             comments.Add(new XWPFComment(ctcomment, this));
@@ -200,7 +184,9 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
                 InitHyperlinks();
-            } catch (XmlException e) {
+            }
+            catch (XmlException e)
+            {
                 throw new POIXMLException(e);
             }
             
@@ -231,19 +217,22 @@ namespace NPOI.XWPF.UserModel
             foreach(POIXMLDocumentPart p in GetRelations()){
                String relation = p.GetPackageRelationship().RelationshipType;
                if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
-                  FootnotesDocument footnotesDocument = FootnotesDocument.Parse(p.GetPackagePart().GetInputStream());
+                   XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
+                  FootnotesDocument footnotesDocument = FootnotesDocument.Parse(xmldoc, NamespaceManager);
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
 
                   foreach (CT_FtnEdn ctFtnEdn in footnotesDocument.Footnotes.footnote)
                   {
-                     footnotes.AddFootnote(ctFtnEdn);
+                     this.footnotes.AddFootnote(ctFtnEdn);
                   }
                } else if (relation.Equals(XWPFRelation.ENDNOTE.Relation)){
-                   EndnotesDocument endnotesDocument = EndnotesDocument.Parse(p.GetPackagePart().GetInputStream());
+                   XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
+                   EndnotesDocument endnotesDocument = EndnotesDocument.Parse(xmldoc, NamespaceManager);
 
-                  foreach(CT_FtnEdn ctFtnEdn in endnotesDocument.Endnotes.endnote) {
-                     endnotes.Add(int.Parse(ctFtnEdn.id), new XWPFFootnote(this, ctFtnEdn));
+                  foreach(CT_FtnEdn ctFtnEdn in endnotesDocument.Endnotes.endnote) 
+                  {
+                     this.endnotes.Add(int.Parse(ctFtnEdn.id), new XWPFFootnote(this, ctFtnEdn));
                   }
                }
             }
@@ -409,8 +398,9 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote GetEndnoteByID(int id)
         {
-            if (endnotes == null) return null;
-            return endnotes[(id)];
+            if (endnotes == null) 
+                return null;
+            return endnotes[id];
         }
 
         public List<XWPFFootnote> GetFootnotes()
@@ -486,8 +476,8 @@ namespace NPOI.XWPF.UserModel
             if(parts.Length != 1) {
                 throw new InvalidOperationException("Expecting one Styles document part, but found " + parts.Length);
             }
-
-            StylesDocument sd = StylesDocument.Parse(parts[0].GetInputStream());
+            XmlDocument xmldoc = ConvertStreamToXml(parts[0].GetInputStream());
+            StylesDocument sd = StylesDocument.Parse(xmldoc, NamespaceManager);
             return sd.Styles;
         }
 
@@ -786,22 +776,13 @@ namespace NPOI.XWPF.UserModel
             //map.Put("http://schemas.microsoft.com/office/word/2006/wordml", "wne");
             //map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
             //xmlOptions.SaveSuggestedPrefixes=(map);
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-                new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-                new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-                new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
-                new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
-                new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml"),
-                new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-                new XmlQualifiedName("w10", "urn:schemas-microsoft-com:office:word"),
-                new XmlQualifiedName("wne", "http://schemas.microsoft.com/office/word/2006/wordml"),
-                new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")
-            });
+
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            DocumentDocument doc = new DocumentDocument(ctDocument);
-            doc.Save(out1, namespaces);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                DocumentDocument doc = new DocumentDocument(ctDocument);
+                doc.Save(out1);
+            }
         }
 
         /**
@@ -1403,6 +1384,8 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFNumbering GetNumbering()
         {
+            if (numbering == null)
+                numbering = new XWPFNumbering();
             return numbering;
         }
 
@@ -1528,14 +1511,18 @@ namespace NPOI.XWPF.UserModel
             }
             return tableRow.GetTableCell(cell);
              */
-            if (cell == null|| cell.Table == null)
+            if (cell == null|| !(cell.Parent is CT_Row))
                 return null;
-            XWPFTable table = GetTable(cell.Table);
+
+            object parent2 = ((CT_Row)cell.Parent).Parent;
+            if ( parent2== null || !(parent2 is CT_Tbl))
+                return null;
+            XWPFTable table = GetTable((CT_Tbl)parent2);
             if (table == null)
             {
                 return null;
             }
-            XWPFTableRow tableRow = table.GetRow(cell.TableRow);
+            XWPFTableRow tableRow = table.GetRow((CT_Row)cell.Parent);
             if (tableRow == null)
             {
                 return null;

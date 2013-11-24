@@ -66,40 +66,40 @@ namespace NPOI.XWPF.UserModel
         public void TestSetGetBold()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
-            rpr.AddNewB().val = (ST_OnOff.True);
+            rpr.AddNewB().val = true;
 
             XWPFRun run = new XWPFRun(ctRun, p);
             Assert.AreEqual(true, run.IsBold());
 
             run.SetBold(false);
             Assert.AreEqual(false, run.IsBold());
-            Assert.AreEqual(ST_OnOff.False, rpr.b.val);
+            Assert.AreEqual(false, rpr.b.val);
         }
 
         [Test]
         public void TestSetGetItalic()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
-            rpr.AddNewI().val = (ST_OnOff.True);
+            rpr.AddNewI().val = true;
 
             XWPFRun run = new XWPFRun(ctRun, p);
             Assert.AreEqual(true, run.IsItalic());
 
             run.SetItalic(false);
-            Assert.AreEqual(ST_OnOff.False, rpr.i.val);
+            Assert.AreEqual(false, rpr.i.val);
         }
 
         [Test]
         public void TestSetGetStrike()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
-            rpr.AddNewStrike().val = (ST_OnOff.True);
+            rpr.AddNewStrike().val = true;
 
             XWPFRun run = new XWPFRun(ctRun, p);
             Assert.AreEqual(true, run.IsStrike());
 
             run.SetStrike(false);
-            Assert.AreEqual(ST_OnOff.False, rpr.strike.val);
+            Assert.AreEqual(false, rpr.strike.val);
         }
 
         [Test]

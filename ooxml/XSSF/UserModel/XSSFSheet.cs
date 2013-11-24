@@ -126,15 +126,15 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Read(Stream is1)
         {
-            //try
-            //{
+            try
+            {
             XmlDocument doc = ConvertStreamToXml(is1);
-            worksheet = WorksheetDocument.Parse(doc,NameSpaceManager).GetWorksheet();
-            //}
-            //catch (XmlException e)
-            //{
-            //    throw new POIXMLException(e);
-            //}
+            worksheet = WorksheetDocument.Parse(doc,NamespaceManager).GetWorksheet();
+            }
+            catch (XmlException e)
+            {
+                throw new POIXMLException(e);
+            }
 
             InitRows(worksheet);
             columnHelper = new ColumnHelper(worksheet);

@@ -148,14 +148,14 @@ namespace NPOI.XSSF.Model
                 s.CreateRow(i++).CreateCell(0).SetCellValue(str);
             }
 
-            //try
-            //{
+            try
+            {
                 w = XSSFTestDataSamples.WriteOutAndReadBack(w);
-            //}
-            //catch (POIXMLException)
-            //{
-            //    Assert.Fail("Detected Bug #48936");
-            //}
+            }
+            catch (POIXMLException)
+            {
+                Assert.Fail("Detected Bug #48936");
+            }
             s = w.GetSheetAt(0);
             i = 0;
             foreach (String str in lst)

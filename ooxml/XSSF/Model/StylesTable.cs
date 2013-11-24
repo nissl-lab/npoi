@@ -107,7 +107,7 @@ namespace NPOI.XSSF.Model
             try
             {
                 
-                doc = StyleSheetDocument.Parse(xmldoc, NameSpaceManager);
+                doc = StyleSheetDocument.Parse(xmldoc, NamespaceManager);
 
                 CT_Stylesheet styleSheet = doc.GetStyleSheet();
 

@@ -134,11 +134,10 @@ namespace NPOI.XWPF.UserModel
             if (o is NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing)
             {
                 NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing drawing = o as NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing;
-                foreach (object obj in drawing.Items)
+                if (drawing.inline!=null)
                 {
-                    if (obj is CT_Inline)
+                    foreach (CT_Inline inline in drawing.inline)
                     {
-                        CT_Inline inline = obj as CT_Inline;
                         GetPictures(inline.graphic.graphicData, pictures);
                     }
                 }
@@ -202,11 +201,7 @@ namespace NPOI.XWPF.UserModel
         {
             if (!onoff.IsSetVal())
                 return true;
-            if (onoff.val == ST_OnOff.on)
-                return true;
-            if (onoff.val == ST_OnOff.True)
-                return true;
-            return false;
+            return onoff.val;
         }
 
         /**
@@ -253,7 +248,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_OnOff bold = pr.IsSetB() ? pr.b : pr.AddNewB();
-            bold.val=(value ? ST_OnOff.True : ST_OnOff.False);
+            bold.val=value ;
         }
         /**
      * Get text color. The returned value is a string in the hex form "RRGGBB".
@@ -370,7 +365,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
-            italic.val = (value ? ST_OnOff.True : ST_OnOff.False);
+            italic.val = value;
         }
 
         /**
@@ -450,7 +445,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
             CT_OnOff strike = pr.IsSetStrike() ? pr.strike : pr.AddNewStrike();
-            strike.val = (value ? ST_OnOff.True : ST_OnOff.False);
+            strike.val = value ;
         }
 
         /**
@@ -703,8 +698,6 @@ namespace NPOI.XWPF.UserModel
             XWPFPictureData picData = (XWPFPictureData)doc.GetRelationById(relationId);
 
             // Create the Drawing entry for it
-            try
-            {
                 NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing Drawing = run.AddNewDrawing();
                 CT_Inline inline = Drawing.AddNewInline();
 
@@ -785,11 +778,7 @@ namespace NPOI.XWPF.UserModel
                 XWPFPicture xwpfPicture = new XWPFPicture(pic, this);
                 pictures.Add(xwpfPicture);
                 return xwpfPicture;
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException("", e);
-            }
+
         }
 
         /**

@@ -109,7 +109,7 @@ namespace NPOI.XWPF.UserModel
                 return false;
             }
 
-            return ctDocProtect.enforcement.Equals(ST_OnOff.Value1) && ctDocProtect.edit.Equals(editValue);
+            return ctDocProtect.enforcement.Equals(ST_OnOff.on) && ctDocProtect.edit.Equals(editValue);
         }
 
         /**
@@ -127,7 +127,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetEnforcementEditValue(ST_DocProtect editValue)
         {
-            SafeGetDocumentProtection().enforcement = (ST_OnOff.Value1);
+            SafeGetDocumentProtection().enforcement = (ST_OnOff.on);
             SafeGetDocumentProtection().edit = (editValue);
         }
 
@@ -138,7 +138,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void RemoveEnforcement()
         {
-            SafeGetDocumentProtection().enforcement = (ST_OnOff.Value0);
+            SafeGetDocumentProtection().enforcement = (ST_OnOff.off);
         }
 
         /**
@@ -156,13 +156,13 @@ namespace NPOI.XWPF.UserModel
         public void SetUpdateFields()
         {
             CT_OnOff onOff = new CT_OnOff();
-            onOff.val = (ST_OnOff.True);
+            onOff.val = true;
             ctSettings.updateFields=(onOff);
         }
 
         public bool IsUpdateFields()
         {
-            return ctSettings.IsSetUpdateFields() && ctSettings.updateFields.val == ST_OnOff.True;
+            return ctSettings.IsSetUpdateFields() && ctSettings.updateFields.val == true;
         }
         protected override void Commit()
         {
@@ -178,10 +178,11 @@ namespace NPOI.XWPF.UserModel
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")});
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            SettingsDocument sd = new SettingsDocument(ctSettings);
-            sd.Save(out1, namespaces);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                SettingsDocument sd = new SettingsDocument(ctSettings);
+                sd.Save(out1);
+            }
         }
 
         private CT_DocProtect SafeGetDocumentProtection()
@@ -197,14 +198,15 @@ namespace NPOI.XWPF.UserModel
 
         private void ReadFrom(Stream inputStream)
         {
-            try
-            {
-                ctSettings = SettingsDocument.Parse(inputStream).Settings;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("SettingsDocument parse failed", e);
-            }
+            //try
+            //{
+                XmlDocument xmldoc = ConvertStreamToXml(inputStream);
+                ctSettings = SettingsDocument.Parse(xmldoc,NamespaceManager).Settings;
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new Exception("SettingsDocument parse failed", e);
+            //}
         }
 
     }

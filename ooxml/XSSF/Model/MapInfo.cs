@@ -66,7 +66,7 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                MapInfoDocument doc = MapInfoDocument.Parse(xmldoc, NameSpaceManager);
+                MapInfoDocument doc = MapInfoDocument.Parse(xmldoc, NamespaceManager);
                 mapInfo = doc.GetMapInfo();
 
                 maps = new Dictionary<int, XSSFMap>();
