@@ -101,7 +101,7 @@ namespace NPOI.XSSF.Model
         public void ReadFrom(XmlDocument xml)
         {
                  int cnt = 0;
-                _sstDoc = SstDocument.Parse(xml, NameSpaceManager);
+                _sstDoc = SstDocument.Parse(xml, NamespaceManager);
                 CT_Sst sst = _sstDoc.GetSst();
                 count = (int)sst.count;
                 uniqueCount = (int)sst.uniqueCount;

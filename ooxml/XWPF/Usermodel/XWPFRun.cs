@@ -134,11 +134,10 @@ namespace NPOI.XWPF.UserModel
             if (o is NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing)
             {
                 NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing drawing = o as NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing;
-                foreach (object obj in drawing.Items)
+                if (drawing.inline!=null)
                 {
-                    if (obj is CT_Inline)
+                    foreach (CT_Inline inline in drawing.inline)
                     {
-                        CT_Inline inline = obj as CT_Inline;
                         GetPictures(inline.graphic.graphicData, pictures);
                     }
                 }
@@ -703,8 +702,6 @@ namespace NPOI.XWPF.UserModel
             XWPFPictureData picData = (XWPFPictureData)doc.GetRelationById(relationId);
 
             // Create the Drawing entry for it
-            try
-            {
                 NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing Drawing = run.AddNewDrawing();
                 CT_Inline inline = Drawing.AddNewInline();
 
@@ -785,11 +782,7 @@ namespace NPOI.XWPF.UserModel
                 XWPFPicture xwpfPicture = new XWPFPicture(pic, this);
                 pictures.Add(xwpfPicture);
                 return xwpfPicture;
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException("", e);
-            }
+
         }
 
         /**

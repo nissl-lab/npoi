@@ -22,6 +22,7 @@ namespace NPOI.XWPF.UserModel
     using System.Text;
     using NPOI.XWPF.Util;
     using NPOI.Util;
+    using System.Collections;
     /**
      * Sketch of XWPF paragraph class
      */
@@ -118,52 +119,14 @@ namespace NPOI.XWPF.UserModel
                      Runs.Add(new XWPFRun(r, this));
                   }
                }
-            }
-
-            c.Dispose();
-       
-            // Look for bits associated with the Runs
-            foreach(XWPFRun run in Runs) {
-               CTR r = Run.CTR;
-          
-               // Check for bits that only apply when
-               //  attached to a core document
-               // TODO Make this nicer by tracking the XWPFFootnotes directly
-               if(document != null) {
-                  c = r.NewCursor();
-                  c.SelectPath("child::*");
-                  while (c.ToNextSelection()) {
-                     XmlObject o = c.Object;
-                     if(o is CTFtnEdnRef) {
-                        CTFtnEdnRef ftn = (CTFtnEdnRef)o;
-                        footnoteText.Append("[").Append(ftn.Id).Append(": ");
-                        XWPFFootnote footnote =
-                           ftn.DomNode.LocalName.Equals("footnoteReference") ?
-                                 document.GetFootnoteByID(ftn.Id.IntValue()) :
-                                 document.GetEndnoteByID(ftn.Id.IntValue());
-   
-                        bool first = true;
-                        foreach (XWPFParagraph p in footnote.Paragraphs) {
-                           if (!first) {
-                              footnoteText.Append("\n");
-                              first = false;
-                           }
-                           footnoteText.Append(p.Text);
-                        }
-   
-                        footnoteText.Append("]");
-                     }
-                  }
-                  c.Dispose();
-               }
-           }*/
+            }*/
         }
         /**
          * Identifies (in order) the parts of the paragraph /
          *  sub-paragraph that correspond to character text
          *  runs, and builds the appropriate runs for these.
          */
-        private void BuildRunsInOrderFromXml(object[] items)
+        private void BuildRunsInOrderFromXml(ArrayList items)
         {
             foreach (object o in items)
             {
@@ -225,7 +188,7 @@ namespace NPOI.XWPF.UserModel
         public bool IsEmpty()
         {
             //return !paragraph.DomNode.HasChildNodes();
-            return paragraph.Items.Length == 0;
+            return paragraph.Items.Count == 0;
         }
 
         public XWPFDocument GetDocument()
@@ -254,14 +217,15 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetStyleID()
         {
-            //if (paragraph.PPr != null){
-            //    if(paragraph.PPr.PStyle!= null){
-            //        if (paragraph.PPr.PStyle.Val!= null)
-            //            return paragraph.PPr.PStyle.Val;
-            //    }
-            //}
-            //return null;
-            throw new NotImplementedException();
+            if (paragraph.pPr != null)
+            {
+                if (paragraph.pPr.pStyle != null)
+                {
+                    if (paragraph.pPr.pStyle.val != null)
+                        return paragraph.pPr.pStyle.val;
+                }
+            }
+            return null;
         }
         /**
          * If style exist for this paragraph
@@ -296,10 +260,9 @@ namespace NPOI.XWPF.UserModel
             {
                 paragraph.pPr.numPr.AddNewNumId();
             }
-            paragraph.pPr.numPr.ilvl.val = "0";
-            //string abstractNumId = this.GetDocument().GetNumbering().GetNum(numId).GetCTNum().abstractNumId.val;
-            //this.GetDocument().GetNumbering().GetAbstractNum(abstractNumId).SetLevelTentative(0, false);
-            paragraph.pPr.numPr.numId.val = (numId);
+            //paragraph.pPr.numPr.ilvl = new CT_DecimalNumber();
+            //paragraph.pPr.numPr.ilvl.val = "0";
+            paragraph.pPr.numPr.numId.val = numId;
         }
         /// <summary>
         /// Set NumID and level of Paragraph

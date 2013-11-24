@@ -226,6 +226,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ctObj.ItemsElementName.Add(ParagraphItemsChoiceType.subDoc);
                 }
             }
+            return ctObj;
         }
 
         internal void Write(StreamWriter sw, string nodeName)
@@ -306,7 +307,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Rel)
                     ((CT_Rel)o).Write(sw, "subDoc");
             }
-            sw.Write(string.Format("</w:{0}", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
@@ -2850,6 +2851,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		public CT_HdrFtrRef AddNewHeaderReference()
 		{
 			CT_HdrFtrRef ref1 = new CT_HdrFtrRef();
+            if (this.headerReferenceField == null)
+                this.headerReferenceField = new List<CT_HdrFtrRef>();
+
 			this.headerReferenceField.Add(ref1);
 			return ref1;
 		}
@@ -2857,6 +2861,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		public CT_HdrFtrRef AddNewFooterReference()
 		{
 			CT_HdrFtrRef ref1 = new CT_HdrFtrRef();
+            if (this.footerReferenceField == null)
+                this.footerReferenceField = new List<CT_HdrFtrRef>();
 			this.footerReferenceField.Add(ref1);
 			return ref1;
 		}
@@ -3825,185 +3831,185 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		public CT_RPr()
 		{
 		}
-		public static CT_RPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-		{
-			if (node == null)
-				return null;
-			CT_RPr ctObj = new CT_RPr();
-			foreach (XmlNode childNode in node.ChildNodes)
-			{
-				if (childNode.LocalName == "rStyle")
-					ctObj.rStyle = CT_String.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "rFonts")
-					ctObj.rFonts = CT_Fonts.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "b")
-					ctObj.b = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "bCs")
-					ctObj.bCs = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "i")
-					ctObj.i = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "iCs")
-					ctObj.iCs = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "caps")
-					ctObj.caps = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "smallCaps")
-					ctObj.smallCaps = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "strike")
-					ctObj.strike = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "dstrike")
-					ctObj.dstrike = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "outline")
-					ctObj.outline = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "shadow")
-					ctObj.shadow = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "emboss")
-					ctObj.emboss = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "imprint")
-					ctObj.imprint = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "noProof")
-					ctObj.noProof = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "snapToGrid")
-					ctObj.snapToGrid = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "vanish")
-					ctObj.vanish = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "webHidden")
-					ctObj.webHidden = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "color")
-					ctObj.color = CT_Color.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "spacing")
-					ctObj.spacing = CT_SignedTwipsMeasure.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "w")
-					ctObj.w = CT_TextScale.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "kern")
-					ctObj.kern = CT_HpsMeasure.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "position")
-					ctObj.position = CT_SignedHpsMeasure.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "sz")
-					ctObj.sz = CT_HpsMeasure.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "szCs")
-					ctObj.szCs = CT_HpsMeasure.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "highlight")
-					ctObj.highlight = CT_Highlight.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "u")
-					ctObj.u = CT_Underline.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "effect")
-					ctObj.effect = CT_TextEffect.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "bdr")
-					ctObj.bdr = CT_Border.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "shd")
-					ctObj.shd = CT_Shd.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "fitText")
-					ctObj.fitText = CT_FitText.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "vertAlign")
-					ctObj.vertAlign = CT_VerticalAlignRun.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "rtl")
-					ctObj.rtl = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "cs")
-					ctObj.cs = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "em")
-					ctObj.em = CT_Em.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "lang")
-					ctObj.lang = CT_Language.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "eastAsianLayout")
-					ctObj.eastAsianLayout = CT_EastAsianLayout.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "specVanish")
-					ctObj.specVanish = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "oMath")
-					ctObj.oMath = CT_OnOff.Parse(childNode, namespaceManager);
-				else if (childNode.LocalName == "rPrChange")
-					ctObj.rPrChange = CT_RPrChange.Parse(childNode, namespaceManager);
-			}
-			return ctObj;
-		}
+        public static CT_RPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RPr ctObj = new CT_RPr();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rStyle")
+                    ctObj.rStyle = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rFonts")
+                    ctObj.rFonts = CT_Fonts.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "b")
+                    ctObj.b = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bCs")
+                    ctObj.bCs = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "i")
+                    ctObj.i = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "iCs")
+                    ctObj.iCs = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "caps")
+                    ctObj.caps = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "smallCaps")
+                    ctObj.smallCaps = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "strike")
+                    ctObj.strike = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dstrike")
+                    ctObj.dstrike = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "outline")
+                    ctObj.outline = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "shadow")
+                    ctObj.shadow = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "emboss")
+                    ctObj.emboss = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "imprint")
+                    ctObj.imprint = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "noProof")
+                    ctObj.noProof = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "snapToGrid")
+                    ctObj.snapToGrid = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "vanish")
+                    ctObj.vanish = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "webHidden")
+                    ctObj.webHidden = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "color")
+                    ctObj.color = CT_Color.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "spacing")
+                    ctObj.spacing = CT_SignedTwipsMeasure.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "w")
+                    ctObj.w = CT_TextScale.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "kern")
+                    ctObj.kern = CT_HpsMeasure.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "position")
+                    ctObj.position = CT_SignedHpsMeasure.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sz")
+                    ctObj.sz = CT_HpsMeasure.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "szCs")
+                    ctObj.szCs = CT_HpsMeasure.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "highlight")
+                    ctObj.highlight = CT_Highlight.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "u")
+                    ctObj.u = CT_Underline.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "effect")
+                    ctObj.effect = CT_TextEffect.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "bdr")
+                    ctObj.bdr = CT_Border.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "shd")
+                    ctObj.shd = CT_Shd.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fitText")
+                    ctObj.fitText = CT_FitText.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "vertAlign")
+                    ctObj.vertAlign = CT_VerticalAlignRun.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rtl")
+                    ctObj.rtl = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "cs")
+                    ctObj.cs = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "em")
+                    ctObj.em = CT_Em.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lang")
+                    ctObj.lang = CT_Language.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "eastAsianLayout")
+                    ctObj.eastAsianLayout = CT_EastAsianLayout.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "specVanish")
+                    ctObj.specVanish = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "oMath")
+                    ctObj.oMath = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rPrChange")
+                    ctObj.rPrChange = CT_RPrChange.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
 
 
 
-		internal void Write(StreamWriter sw, string nodeName)
-		{
-			sw.Write(string.Format("<w:{0}", nodeName));
-			sw.Write(">");
-			if (this.rStyle != null)
-				this.rStyle.Write(sw, "rStyle");
-			if (this.rFonts != null)
-				this.rFonts.Write(sw, "rFonts");
-			if (this.b != null)
-				this.b.Write(sw, "b");
-			if (this.bCs != null)
-				this.bCs.Write(sw, "bCs");
-			if (this.i != null)
-				this.i.Write(sw, "i");
-			if (this.iCs != null)
-				this.iCs.Write(sw, "iCs");
-			if (this.caps != null)
-				this.caps.Write(sw, "caps");
-			if (this.smallCaps != null)
-				this.smallCaps.Write(sw, "smallCaps");
-			if (this.strike != null)
-				this.strike.Write(sw, "strike");
-			if (this.dstrike != null)
-				this.dstrike.Write(sw, "dstrike");
-			if (this.outline != null)
-				this.outline.Write(sw, "outline");
-			if (this.shadow != null)
-				this.shadow.Write(sw, "shadow");
-			if (this.emboss != null)
-				this.emboss.Write(sw, "emboss");
-			if (this.imprint != null)
-				this.imprint.Write(sw, "imprint");
-			if (this.noProof != null)
-				this.noProof.Write(sw, "noProof");
-			if (this.snapToGrid != null)
-				this.snapToGrid.Write(sw, "snapToGrid");
-			if (this.vanish != null)
-				this.vanish.Write(sw, "vanish");
-			if (this.webHidden != null)
-				this.webHidden.Write(sw, "webHidden");
-			if (this.color != null)
-				this.color.Write(sw, "color");
-			if (this.spacing != null)
-				this.spacing.Write(sw, "spacing");
-			if (this.w != null)
-				this.w.Write(sw, "w");
-			if (this.kern != null)
-				this.kern.Write(sw, "kern");
-			if (this.position != null)
-				this.position.Write(sw, "position");
-			if (this.sz != null)
-				this.sz.Write(sw, "sz");
-			if (this.szCs != null)
-				this.szCs.Write(sw, "szCs");
-			if (this.highlight != null)
-				this.highlight.Write(sw, "highlight");
-			if (this.u != null)
-				this.u.Write(sw, "u");
-			if (this.effect != null)
-				this.effect.Write(sw, "effect");
-			if (this.bdr != null)
-				this.bdr.Write(sw, "bdr");
-			if (this.shd != null)
-				this.shd.Write(sw, "shd");
-			if (this.fitText != null)
-				this.fitText.Write(sw, "fitText");
-			if (this.vertAlign != null)
-				this.vertAlign.Write(sw, "vertAlign");
-			if (this.rtl != null)
-				this.rtl.Write(sw, "rtl");
-			if (this.cs != null)
-				this.cs.Write(sw, "cs");
-			if (this.em != null)
-				this.em.Write(sw, "em");
-			if (this.lang != null)
-				this.lang.Write(sw, "lang");
-			if (this.eastAsianLayout != null)
-				this.eastAsianLayout.Write(sw, "eastAsianLayout");
-			if (this.specVanish != null)
-				this.specVanish.Write(sw, "specVanish");
-			if (this.oMath != null)
-				this.oMath.Write(sw, "oMath");
-			if (this.rPrChange != null)
-				this.rPrChange.Write(sw, "rPrChange");
-			sw.Write(string.Format("</w:{0}>", nodeName));
-		}
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.rStyle != null)
+                this.rStyle.Write(sw, "rStyle");
+            if (this.rFonts != null)
+                this.rFonts.Write(sw, "rFonts");
+            if (this.b != null)
+                this.b.Write(sw, "b");
+            if (this.bCs != null)
+                this.bCs.Write(sw, "bCs");
+            if (this.i != null)
+                this.i.Write(sw, "i");
+            if (this.iCs != null)
+                this.iCs.Write(sw, "iCs");
+            if (this.caps != null)
+                this.caps.Write(sw, "caps");
+            if (this.smallCaps != null)
+                this.smallCaps.Write(sw, "smallCaps");
+            if (this.strike != null)
+                this.strike.Write(sw, "strike");
+            if (this.dstrike != null)
+                this.dstrike.Write(sw, "dstrike");
+            if (this.outline != null)
+                this.outline.Write(sw, "outline");
+            if (this.shadow != null)
+                this.shadow.Write(sw, "shadow");
+            if (this.emboss != null)
+                this.emboss.Write(sw, "emboss");
+            if (this.imprint != null)
+                this.imprint.Write(sw, "imprint");
+            if (this.noProof != null)
+                this.noProof.Write(sw, "noProof");
+            if (this.snapToGrid != null)
+                this.snapToGrid.Write(sw, "snapToGrid");
+            if (this.vanish != null)
+                this.vanish.Write(sw, "vanish");
+            if (this.webHidden != null)
+                this.webHidden.Write(sw, "webHidden");
+            if (this.color != null)
+                this.color.Write(sw, "color");
+            if (this.spacing != null)
+                this.spacing.Write(sw, "spacing");
+            if (this.w != null)
+                this.w.Write(sw, "w");
+            if (this.kern != null)
+                this.kern.Write(sw, "kern");
+            if (this.position != null)
+                this.position.Write(sw, "position");
+            if (this.sz != null)
+                this.sz.Write(sw, "sz");
+            if (this.szCs != null)
+                this.szCs.Write(sw, "szCs");
+            if (this.highlight != null)
+                this.highlight.Write(sw, "highlight");
+            if (this.u != null)
+                this.u.Write(sw, "u");
+            if (this.effect != null)
+                this.effect.Write(sw, "effect");
+            if (this.bdr != null)
+                this.bdr.Write(sw, "bdr");
+            if (this.shd != null)
+                this.shd.Write(sw, "shd");
+            if (this.fitText != null)
+                this.fitText.Write(sw, "fitText");
+            if (this.vertAlign != null)
+                this.vertAlign.Write(sw, "vertAlign");
+            if (this.rtl != null)
+                this.rtl.Write(sw, "rtl");
+            if (this.cs != null)
+                this.cs.Write(sw, "cs");
+            if (this.em != null)
+                this.em.Write(sw, "em");
+            if (this.lang != null)
+                this.lang.Write(sw, "lang");
+            if (this.eastAsianLayout != null)
+                this.eastAsianLayout.Write(sw, "eastAsianLayout");
+            if (this.specVanish != null)
+                this.specVanish.Write(sw, "specVanish");
+            if (this.oMath != null)
+                this.oMath.Write(sw, "oMath");
+            if (this.rPrChange != null)
+                this.rPrChange.Write(sw, "rPrChange");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
 		[XmlElement(Order = 0)]
 		public CT_String rStyle
@@ -7440,6 +7446,48 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		private CT_TcPr tcPrField;
 
 		private ST_TblStyleOverrideType typeField;
+        public static CT_TblStylePr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TblStylePr ctObj = new CT_TblStylePr();
+            if (node.Attributes["w:type"] != null)
+                ctObj.type = (ST_TblStyleOverrideType)Enum.Parse(typeof(ST_TblStyleOverrideType), node.Attributes["w:type"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pPr")
+                    ctObj.pPr = CT_PPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rPr")
+                    ctObj.rPr = CT_RPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblPr")
+                    ctObj.tblPr = CT_TblPrBase.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "trPr")
+                    ctObj.trPr = CT_TrPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tcPr")
+                    ctObj.tcPr = CT_TcPr.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            sw.Write(">");
+            if (this.pPr != null)
+                this.pPr.Write(sw, "pPr");
+            if (this.rPr != null)
+                this.rPr.Write(sw, "rPr");
+            if (this.tblPr != null)
+                this.tblPr.Write(sw, "tblPr");
+            if (this.trPr != null)
+                this.trPr.Write(sw, "trPr");
+            if (this.tcPr != null)
+                this.tcPr.Write(sw, "tcPr");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
 		public CT_TblStylePr()
 		{

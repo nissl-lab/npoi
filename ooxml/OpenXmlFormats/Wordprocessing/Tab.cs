@@ -197,6 +197,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_PTabRelativeTo relativeToField;
 
         private ST_PTabLeader leaderField;
+        public static CT_PTab Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PTab ctObj = new CT_PTab();
+            if (node.Attributes["w:alignment"] != null)
+                ctObj.alignment = (ST_PTabAlignment)Enum.Parse(typeof(ST_PTabAlignment), node.Attributes["w:alignment"].Value);
+            if (node.Attributes["w:relativeTo"] != null)
+                ctObj.relativeTo = (ST_PTabRelativeTo)Enum.Parse(typeof(ST_PTabRelativeTo), node.Attributes["w:relativeTo"].Value);
+            if (node.Attributes["w:leader"] != null)
+                ctObj.leader = (ST_PTabLeader)Enum.Parse(typeof(ST_PTabLeader), node.Attributes["w:leader"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:alignment", this.alignment.ToString());
+            XmlHelper.WriteAttribute(sw, "w:relativeTo", this.relativeTo.ToString());
+            XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_PTabAlignment alignment

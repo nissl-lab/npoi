@@ -146,7 +146,7 @@ using System.Xml;
             packagePart = packagePart.GetRelatedPart(packageRel);
         }
         static XmlNamespaceManager nsm = null;
-        public static XmlNamespaceManager NameSpaceManager
+        public static XmlNamespaceManager NamespaceManager
         {
             get {
                 if (nsm == null)
@@ -167,6 +167,13 @@ using System.Xml;
             ns.AddNamespace("r", PackageNamespaces.SCHEMA_RELATIONSHIPS);
             ns.AddNamespace("c", PackageNamespaces.SCHEMA_CHART);
             ns.AddNamespace("vt", PackageNamespaces.SCHEMA_VT);
+            ns.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"); 
+            ns.AddNamespace("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            ns.AddNamespace("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+            ns.AddNamespace("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            ns.AddNamespace("o", "urn:schemas-microsoft-com:office:office");
+            ns.AddNamespace("v", "urn:schemas-microsoft-com:vml");
+            ns.AddNamespace("wne","http://schemas.microsoft.com/office/word/2006/wordml");
             // extended properties (app.xml)
             ns.AddNamespace("xp", PackageRelationshipTypes.EXTENDED_PROPERTIES);
             // custom properties

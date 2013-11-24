@@ -65,16 +65,20 @@ namespace NPOI.XWPF.UserModel
         {
             FootnotesDocument notesDoc;
             try {
-               Stream is1 = GetPackagePart().GetInputStream();
-               notesDoc = FootnotesDocument.Parse(is1);
+               XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+               notesDoc = FootnotesDocument.Parse(xmldoc, NamespaceManager);
                ctFootnotes = notesDoc.Footnotes;
             } catch (XmlException) {
                throw new POIXMLException();
             }
 	   
             //get any Footnote
-            foreach(CT_FtnEdn note in ctFootnotes.FootnoteList) {
-               listFootnote.Add(new XWPFFootnote(note, this));
+            if (ctFootnotes.footnote != null)
+            {
+                foreach (CT_FtnEdn note in ctFootnotes.footnote)
+                {
+                    listFootnote.Add(new XWPFFootnote(note, this));
+                }
             }
         }
 
@@ -88,14 +92,11 @@ namespace NPOI.XWPF.UserModel
             map.Put("http://schemas.Openxmlformats.org/wordProcessingml/2006/main", "w");
             xmlOptions.SaveSuggestedPrefixes=(map);*/
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-                new XmlQualifiedName("w", "http://schemas.Openxmlformats.org/wordProcessingml/2006/main"),
-                new XmlQualifiedName("r", "http://schemas.Openxmlformats.org/officeDocument/2006/relationships")
-            });
-            FootnotesDocument notesDoc = new FootnotesDocument(ctFootnotes);
-            notesDoc.Save(out1, null);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                FootnotesDocument notesDoc = new FootnotesDocument(ctFootnotes);
+                notesDoc.Save(out1);
+            }
         }
 
         public List<XWPFFootnote> GetFootnotesList()

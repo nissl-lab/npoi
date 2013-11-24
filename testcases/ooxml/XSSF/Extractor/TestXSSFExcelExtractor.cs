@@ -146,21 +146,21 @@ namespace NPOI.XSSF.Extractor
          * From bug #45540
          */
            [Test]
-        public void TestHeaderFooter()
-        {
-            String[] files = new String[] {
-			"45540_classic_Header.xlsx", "45540_form_Header.xlsx",
-			"45540_classic_Footer.xlsx", "45540_form_Footer.xlsx",
-		};
-            foreach (String sampleName in files)
-            {
-                XSSFExcelExtractor extractor = GetExtractor(sampleName);
-                String text = extractor.Text;
+           public void TestHeaderFooter()
+           {
+               String[] files = new String[] {
+        "45540_classic_Header.xlsx", "45540_form_Header.xlsx",
+        "45540_classic_Footer.xlsx", "45540_form_Footer.xlsx",
+        };
+               foreach (String sampleName in files)
+               {
+                   XSSFExcelExtractor extractor = GetExtractor(sampleName);
+                   String text = extractor.Text;
 
-                Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text from " + sampleName + "\n" + text);
-                Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
-            }
-        }
+                   Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text from " + sampleName + "\n" + text);
+                   Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
+               }
+           }
 
         /**
          * From bug #45544

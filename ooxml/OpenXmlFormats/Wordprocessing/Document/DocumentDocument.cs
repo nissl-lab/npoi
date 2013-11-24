@@ -9,33 +9,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 {
     public class DocumentDocument
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Document));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-        //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), 
-        //    new XmlQualifiedName("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"),
-        //    new XmlQualifiedName("m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-        //    new XmlQualifiedName("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
-        //    new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships") });
-
         CT_Document document = null;
         public DocumentDocument()
         {
 
         }
-        public static DocumentDocument Parse(Stream stream)
+        public static DocumentDocument Parse(XmlDocument doc, XmlNamespaceManager namespaceMgr)
         {
-            XmlReaderSettings xmlrs = new XmlReaderSettings();
-            xmlrs.IgnoreWhitespace = false;
-            using (XmlReader xmlr = XmlReader.Create(stream, xmlrs))
-            {
-                CT_Document obj = (CT_Document)serializer.Deserialize(xmlr);
-                return new DocumentDocument(obj);
-            }
-            //XmlTextReader xmlReader = new XmlTextReader(stream);
-            //xmlReader.WhitespaceHandling = WhitespaceHandling.All;
-            
-
-            
+            CT_Document obj = CT_Document.Parse(doc.DocumentElement, namespaceMgr);
+            return new DocumentDocument(obj);
         }
 
         public DocumentDocument(CT_Document document)
@@ -49,9 +31,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.document;
             }
         }
-        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        public void Save(Stream stream)
         {
-            serializer.Serialize(stream, document, namespaces);
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                document.Write(sw);
+            }
         }
     }
 }

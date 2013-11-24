@@ -126,11 +126,6 @@ namespace NPOI.XWPF.UserModel
         }
 
         [Test]
-        public void TestGetChecksum()
-        {
-
-        }
-        [Test]
         public void TestBug51770()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug51170.docx");

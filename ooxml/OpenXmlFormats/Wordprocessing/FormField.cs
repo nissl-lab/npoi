@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
@@ -109,6 +112,32 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.itemField = value;
             }
+        }
+        public static CT_FldChar Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_FldChar ctObj = new CT_FldChar();
+            if (node.Attributes["w:fldCharType"] != null)
+                ctObj.fldCharType = (ST_FldCharType)Enum.Parse(typeof(ST_FldCharType), node.Attributes["w:fldCharType"].Value);
+            if (node.Attributes["w:fldLock"] != null)
+                ctObj.fldLock = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:fldLock"].Value);
+            if (node.Attributes["w:dirty"] != null)
+                ctObj.dirty = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:dirty"].Value);
+
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:fldCharType", this.fldCharType.ToString());
+            XmlHelper.WriteAttribute(sw, "w:fldLock", this.fldLock.ToString());
+            XmlHelper.WriteAttribute(sw, "w:dirty", this.dirty.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

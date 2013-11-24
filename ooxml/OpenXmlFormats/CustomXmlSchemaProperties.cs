@@ -6,9 +6,12 @@
 // ------------------------------------------------------------------------------
 namespace NPOI.OpenXmlFormats
 {
+    using NPOI.OpenXml4Net.Util;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
+    using System.Xml;
     using System.Xml.Serialization;
 
 
@@ -48,6 +51,28 @@ namespace NPOI.OpenXmlFormats
         private string manifestLocationField;
 
         private string schemaLocationField;
+        public static CT_Schema Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Schema ctObj = new CT_Schema();
+            ctObj.uri = XmlHelper.ReadString(node.Attributes["w:uri"]);
+            ctObj.manifestLocation = XmlHelper.ReadString(node.Attributes["w:manifestLocation"]);
+            ctObj.schemaLocation = XmlHelper.ReadString(node.Attributes["w:schemaLocation"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
+            XmlHelper.WriteAttribute(sw, "w:manifestLocation", this.manifestLocation);
+            XmlHelper.WriteAttribute(sw, "w:schemaLocation", this.schemaLocation);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         public CT_Schema()
         {

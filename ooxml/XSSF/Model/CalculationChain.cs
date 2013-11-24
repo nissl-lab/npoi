@@ -51,7 +51,7 @@ namespace NPOI.XSSF.Model
 
         public void ReadFrom(XmlDocument xml)
         {
-            CalcChainDocument doc = CalcChainDocument.Parse(xml, NameSpaceManager);
+            CalcChainDocument doc = CalcChainDocument.Parse(xml, NamespaceManager);
             chain = doc.GetCalcChain();
 
         }

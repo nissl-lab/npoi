@@ -80,7 +80,7 @@ namespace NPOI.OpenXmlFormats
     [DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties", IsNullable = true)]
-    public partial class CT_Property
+    public class CT_Property
     {
 
         private object itemField;

@@ -67,7 +67,7 @@ namespace NPOI.XWPF.UserModel
             
             XmlDocument doc = ConvertStreamToXml(GetPackagePart().GetInputStream());
             try {
-                numberingDoc = NumberingDocument.Parse(doc, NameSpaceManager);
+                numberingDoc = NumberingDocument.Parse(doc, NamespaceManager);
                 ctNumbering = numberingDoc.Numbering;
                 //get any Nums
                 foreach(CT_Num ctNum in ctNumbering.GetNumList()) {
@@ -77,8 +77,8 @@ namespace NPOI.XWPF.UserModel
                     abstractNums.Add(new XWPFAbstractNum(ctAbstractNum, this));
                 }
                 isNew = false;
-            } catch (Exception) {
-                throw new POIXMLException();
+            } catch (Exception e) {
+                throw new POIXMLException(e);
             }
         }
 

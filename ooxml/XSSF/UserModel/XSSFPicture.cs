@@ -77,7 +77,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFPicture(XSSFDrawing drawing, XmlNode ctPicture)
         {
             this.drawing = drawing;
-            this.ctPicture =CT_Picture.Parse(ctPicture, POIXMLDocumentPart.NameSpaceManager);
+            this.ctPicture =CT_Picture.Parse(ctPicture, POIXMLDocumentPart.NamespaceManager);
         }
 
         internal static CT_Picture Prototype()

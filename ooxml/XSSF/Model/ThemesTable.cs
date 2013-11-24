@@ -44,7 +44,7 @@ namespace NPOI.XSSF.Model
                 
             try
             {
-                theme = ThemeDocument.Parse(xmldoc, NameSpaceManager);
+                theme = ThemeDocument.Parse(xmldoc, NamespaceManager);
             }
             catch (XmlException e)
             {

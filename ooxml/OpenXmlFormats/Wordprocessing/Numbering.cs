@@ -347,6 +347,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_Num AddNewNum()
         {
             CT_Num num = new CT_Num();
+            if (this.numField == null)
+                this.numField = new List<CT_Num>();
             numField.Add(num);
             return num;
         }
@@ -853,9 +855,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public void AddNewNumId()
+        public CT_DecimalNumber AddNewNumId()
         {
-            throw new NotImplementedException();
+            this.numId = new CT_DecimalNumber();
+            return this.numId;
         }
     }
 
@@ -870,6 +873,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private string fontField;
 
         private byte[] charField;
+        public static CT_Sym Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Sym ctObj = new CT_Sym();
+            ctObj.font = XmlHelper.ReadString(node.Attributes["w:font"]);
+            ctObj.@char = XmlHelper.ReadBytes(node.Attributes["w:char"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:font", this.font);
+            XmlHelper.WriteAttribute(sw, "w:char", this.@char);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string font
@@ -1800,6 +1823,38 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_OnOff qFormatField;
 
         private bool qFormatFieldSpecified;
+        public static CT_LsdException Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LsdException ctObj = new CT_LsdException();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["w:name"]);
+            if (node.Attributes["w:locked"] != null)
+                ctObj.locked = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:locked"].Value);
+            ctObj.uiPriority = XmlHelper.ReadString(node.Attributes["w:uiPriority"]);
+            if (node.Attributes["w:semiHidden"] != null)
+                ctObj.semiHidden = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:semiHidden"].Value);
+            if (node.Attributes["w:unhideWhenUsed"] != null)
+                ctObj.unhideWhenUsed = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:unhideWhenUsed"].Value);
+            if (node.Attributes["w:qFormat"] != null)
+                ctObj.qFormat = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:qFormat"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:name", this.name);
+            XmlHelper.WriteAttribute(sw, "w:locked", this.locked.ToString());
+            XmlHelper.WriteAttribute(sw, "w:uiPriority", this.uiPriority);
+            XmlHelper.WriteAttribute(sw, "w:semiHidden", this.semiHidden.ToString());
+            XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", this.unhideWhenUsed.ToString());
+            XmlHelper.WriteAttribute(sw, "w:qFormat", this.qFormat.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string name

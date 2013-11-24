@@ -18,48 +18,42 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_PictureBase
     {
 
-        private List<System.Xml.XmlElement> itemsField;
+        private List<XmlNode> itemsField;
 
         private List<ItemsChoiceType9> itemsElementNameField;
 
         public CT_PictureBase()
         {
             this.itemsElementNameField = new List<ItemsChoiceType9>();
-            this.itemsField = new List<System.Xml.XmlElement>();
+            this.itemsField = new List<XmlNode>();
         }
 
         [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
         [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:vml", Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public System.Xml.XmlElement[] Items
+        public List<XmlNode> Items
         {
             get
             {
-                return this.itemsField.ToArray();
+                return this.itemsField;
             }
             set
             {
-                if (value == null)
-                    this.itemsField = new List<XmlElement>();
-                else
-                    this.itemsField = new List<XmlElement>(value);
+                this.itemsField =value;
             }
         }
 
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
-        public ItemsChoiceType9[] ItemsElementName
+        public List<ItemsChoiceType9> ItemsElementName
         {
             get
             {
-                return this.itemsElementNameField.ToArray();
+                return this.itemsElementNameField;
             }
             set
             {
-                if (value == null)
-                    this.itemsElementNameField = new List<ItemsChoiceType9>();
-                else
-                    this.itemsElementNameField = new List<ItemsChoiceType9>(value);
+               this.itemsElementNameField = value;
             }
         }
 
@@ -78,7 +72,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             xmlDoc.LoadXml(output.ToString());
             lock(this)
             {
-                this.itemsField.Add((XmlElement)xmlDoc.DocumentElement.CloneNode(true));
+                this.itemsField.Add(xmlDoc.DocumentElement.CloneNode(true));
                 this.itemsElementNameField.Add(ItemsChoiceType9.vml);
             }
         }
@@ -87,7 +81,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Picture
+    public class CT_Picture : CT_PictureBase
     {
 
         private CT_Rel movieField;
@@ -153,6 +147,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ctObj.movie = CT_Rel.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "control")
                     ctObj.control = CT_Control.Parse(childNode, namespaceManager);
+                else if(childNode.Prefix == "o")
+                { 
+                    ctObj.ItemsElementName.Add(ItemsChoiceType9.office);
+                    ctObj.Items.Add(childNode);
+                }else if(childNode.Prefix=="v")
+                {
+                    ctObj.ItemsElementName.Add(ItemsChoiceType9.vml);
+                    ctObj.Items.Add(childNode);
+                }
             }
             return ctObj;
         }
@@ -167,10 +170,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.movie.Write(sw, "movie");
             if (this.control != null)
                 this.control.Write(sw, "control");
+            foreach (XmlNode childnode in Items)
+            {
+                sw.Write(childnode.OuterXml);
+            }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
-
-
     }
 
     [Serializable]
@@ -189,6 +194,32 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] themeTintField;
 
         private byte[] themeShadeField;
+        public static CT_Background Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Background ctObj = new CT_Background();
+            ctObj.color = XmlHelper.ReadString(node.Attributes["w:color"]);
+            if (node.Attributes["w:themeColor"] != null)
+                ctObj.themeColor = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["w:themeColor"].Value);
+            ctObj.themeTint = XmlHelper.ReadBytes(node.Attributes["w:themeTint"]);
+            ctObj.themeShade = XmlHelper.ReadBytes(node.Attributes["w:themeShade"]);
+
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
+            XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
+            XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
+            XmlHelper.WriteAttribute(sw, "w:themeShade", this.themeShade);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string color
@@ -343,6 +374,34 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.dyaOrigFieldSpecified = value;
             }
         }
+        public static CT_Object Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Object ctObj = new CT_Object();
+            ctObj.dxaOrig = XmlHelper.ReadULong(node.Attributes["w:dxaOrig"]);
+            ctObj.dyaOrig = XmlHelper.ReadULong(node.Attributes["w:dyaOrig"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "control")
+                    ctObj.control = CT_Control.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:dxaOrig", this.dxaOrig);
+            XmlHelper.WriteAttribute(sw, "w:dyaOrig", this.dyaOrig);
+            sw.Write(">");
+            if (this.control != null)
+                this.control.Write(sw, "control");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
     }
 
     [Serializable]

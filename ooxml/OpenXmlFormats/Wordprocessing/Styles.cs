@@ -23,9 +23,46 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Styles()
         {
-            this.styleField = new List<CT_Style>();
-            this.latentStylesField = new CT_LatentStyles();
-            this.docDefaultsField = new CT_DocDefaults();
+            //this.styleField = new List<CT_Style>();
+            //this.latentStylesField = new CT_LatentStyles();
+            //this.docDefaultsField = new CT_DocDefaults();
+        }
+        public static CT_Styles Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Styles ctObj = new CT_Styles();
+            ctObj.style = new List<CT_Style>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "docDefaults")
+                    ctObj.docDefaults = CT_DocDefaults.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "latentStyles")
+                    ctObj.latentStyles = CT_LatentStyles.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "style")
+                    ctObj.style.Add(CT_Style.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw)
+        {
+            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+            sw.Write("<w:styles xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">");
+            if (this.docDefaults != null)
+                this.docDefaults.Write(sw, "docDefaults");
+            if (this.latentStyles != null)
+                this.latentStyles.Write(sw, "latentStyles");
+            if (this.style != null)
+            {
+                foreach (CT_Style x in this.style)
+                {
+                    x.Write(sw, "style");
+                }
+            }
+            sw.Write("</w:styles>");
         }
 
         [XmlElement(Order = 0)]
@@ -75,6 +112,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public void AddNewStyle()
         {
             CT_Style s = new CT_Style();
+            if (styleField == null)
+                styleField = new List<CT_Style>();
             styleField.Add(s);
         }
 
@@ -112,8 +151,35 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_DocDefaults()
         {
-            this.pPrDefaultField = new CT_PPrDefault();
-            this.rPrDefaultField = new CT_RPrDefault();
+            //this.pPrDefaultField = new CT_PPrDefault();
+            //this.rPrDefaultField = new CT_RPrDefault();
+        }
+        public static CT_DocDefaults Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DocDefaults ctObj = new CT_DocDefaults();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rPrDefault")
+                    ctObj.rPrDefault = CT_RPrDefault.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pPrDefault")
+                    ctObj.pPrDefault = CT_PPrDefault.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.rPrDefault != null)
+                this.rPrDefault.Write(sw, "rPrDefault");
+            if (this.pPrDefault != null)
+                this.pPrDefault.Write(sw, "pPrDefault");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -166,7 +232,30 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_RPrDefault()
         {
-            this.rPrField = new CT_RPr();
+            
+        }
+        public static CT_RPrDefault Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RPrDefault ctObj = new CT_RPrDefault();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rPr")
+                    ctObj.rPr = CT_RPr.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.rPr != null)
+                this.rPr.Write(sw, "rPr");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -206,7 +295,29 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_PPrDefault()
         {
-            this.pPrField = new CT_PPr();
+        }
+        public static CT_PPrDefault Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PPrDefault ctObj = new CT_PPrDefault();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pPr")
+                    ctObj.pPr = CT_PPr.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.pPr != null)
+                this.pPr.Write(sw, "pPr");
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -252,10 +363,55 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private bool defQFormatFieldSpecified;
 
         private string countField;
+        public static CT_LatentStyles Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LatentStyles ctObj = new CT_LatentStyles();
+            if (node.Attributes["w:defLockedState"] != null)
+                ctObj.defLockedState = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:defLockedState"].Value);
+            ctObj.defUIPriority = XmlHelper.ReadString(node.Attributes["w:defUIPriority"]);
+            if (node.Attributes["w:defSemiHidden"] != null)
+                ctObj.defSemiHidden = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:defSemiHidden"].Value);
+            if (node.Attributes["w:defUnhideWhenUsed"] != null)
+                ctObj.defUnhideWhenUsed = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:defUnhideWhenUsed"].Value);
+            if (node.Attributes["w:defQFormat"] != null)
+                ctObj.defQFormat = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:defQFormat"].Value);
+            ctObj.count = XmlHelper.ReadString(node.Attributes["w:count"]);
+            ctObj.lsdException = new List<CT_LsdException>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "lsdException")
+                    ctObj.lsdException.Add(CT_LsdException.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:defLockedState", this.defLockedState.ToString());
+            XmlHelper.WriteAttribute(sw, "w:defUIPriority", this.defUIPriority);
+            XmlHelper.WriteAttribute(sw, "w:defSemiHidden", this.defSemiHidden.ToString());
+            XmlHelper.WriteAttribute(sw, "w:defUnhideWhenUsed", this.defUnhideWhenUsed.ToString());
+            XmlHelper.WriteAttribute(sw, "w:defQFormat", this.defQFormat.ToString());
+            XmlHelper.WriteAttribute(sw, "w:count", this.count);
+            sw.Write(">");
+            if (this.lsdException != null)
+            {
+                foreach (CT_LsdException x in this.lsdException)
+                {
+                    x.Write(sw, "lsdException");
+                }
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         public CT_LatentStyles()
         {
-            this.lsdExceptionField = new List<CT_LsdException>();
+            //this.lsdExceptionField = new List<CT_LsdException>();
         }
 
         [XmlElement("lsdException", Order = 0)]
@@ -404,6 +560,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_LsdException AddNewLsdException()
         {
             CT_LsdException lsd = new CT_LsdException();
+            if (this.lsdExceptionField == null)
+                this.lsdExceptionField = new List<CT_LsdException>();
             this.lsdExceptionField.Add(lsd);
             return lsd;
         }
@@ -476,28 +634,152 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Style()
         {
-            this.tblStylePrField = new List<CT_TblStylePr>();
-            this.tcPrField = new CT_TcPr();
-            this.trPrField = new CT_TrPr();
-            this.tblPrField = new CT_TblPrBase();
-            this.rPrField = new CT_RPr();
-            this.pPrField = new CT_PPr();
-            this.rsidField = new CT_LongHexNumber();
-            this.personalReplyField = new CT_OnOff();
-            this.personalComposeField = new CT_OnOff();
-            this.personalField = new CT_OnOff();
-            this.lockedField = new CT_OnOff();
-            this.qFormatField = new CT_OnOff();
-            this.unhideWhenUsedField = new CT_OnOff();
-            this.semiHiddenField = new CT_OnOff();
-            this.uiPriorityField = new CT_DecimalNumber();
-            this.hiddenField = new CT_OnOff();
-            this.autoRedefineField = new CT_OnOff();
-            this.linkField = new CT_String();
-            this.nextField = new CT_String();
-            this.basedOnField = new CT_String();
-            this.aliasesField = new CT_String();
-            this.nameField = new CT_String();
+            //this.tblStylePrField = new List<CT_TblStylePr>();
+            //this.tcPrField = new CT_TcPr();
+            //this.trPrField = new CT_TrPr();
+            //this.tblPrField = new CT_TblPrBase();
+            //this.rPrField = new CT_RPr();
+            //this.pPrField = new CT_PPr();
+            //this.rsidField = new CT_LongHexNumber();
+            //this.personalReplyField = new CT_OnOff();
+            //this.personalComposeField = new CT_OnOff();
+            //this.personalField = new CT_OnOff();
+            //this.lockedField = new CT_OnOff();
+            //this.qFormatField = new CT_OnOff();
+            //this.unhideWhenUsedField = new CT_OnOff();
+            //this.semiHiddenField = new CT_OnOff();
+            //this.uiPriorityField = new CT_DecimalNumber();
+            //this.hiddenField = new CT_OnOff();
+            //this.autoRedefineField = new CT_OnOff();
+            //this.linkField = new CT_String();
+            //this.nextField = new CT_String();
+            //this.basedOnField = new CT_String();
+            //this.aliasesField = new CT_String();
+            //this.nameField = new CT_String();
+        }
+        public static CT_Style Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Style ctObj = new CT_Style();
+            if (node.Attributes["w:type"] != null)
+                ctObj.type = (ST_StyleType)Enum.Parse(typeof(ST_StyleType), node.Attributes["w:type"].Value);
+            ctObj.styleId = XmlHelper.ReadString(node.Attributes["w:styleId"]);
+            if (node.Attributes["w:default"] != null)
+                ctObj.@default = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:default"].Value);
+            if (node.Attributes["w:customStyle"] != null)
+                ctObj.customStyle = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:customStyle"].Value);
+            ctObj.tblStylePr = new List<CT_TblStylePr>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "name")
+                    ctObj.name = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "aliases")
+                    ctObj.aliases = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "basedOn")
+                    ctObj.basedOn = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "next")
+                    ctObj.next = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "link")
+                    ctObj.link = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "autoRedefine")
+                    ctObj.autoRedefine = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hidden")
+                    ctObj.hidden = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "uiPriority")
+                    ctObj.uiPriority = CT_DecimalNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "semiHidden")
+                    ctObj.semiHidden = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "unhideWhenUsed")
+                    ctObj.unhideWhenUsed = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "qFormat")
+                    ctObj.qFormat = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "locked")
+                    ctObj.locked = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "personal")
+                    ctObj.personal = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "personalCompose")
+                    ctObj.personalCompose = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "personalReply")
+                    ctObj.personalReply = CT_OnOff.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rsid")
+                    ctObj.rsid = CT_LongHexNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pPr")
+                    ctObj.pPr = CT_PPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rPr")
+                    ctObj.rPr = CT_RPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblPr")
+                    ctObj.tblPr = CT_TblPrBase.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "trPr")
+                    ctObj.trPr = CT_TrPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tcPr")
+                    ctObj.tcPr = CT_TcPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblStylePr")
+                    ctObj.tblStylePr.Add(CT_TblStylePr.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "w:styleId", this.styleId);
+            XmlHelper.WriteAttribute(sw, "w:default", this.@default.ToString());
+            XmlHelper.WriteAttribute(sw, "w:customStyle", this.customStyle.ToString());
+            sw.Write(">");
+            if (this.name != null)
+                this.name.Write(sw, "name");
+            if (this.aliases != null)
+                this.aliases.Write(sw, "aliases");
+            if (this.basedOn != null)
+                this.basedOn.Write(sw, "basedOn");
+            if (this.next != null)
+                this.next.Write(sw, "next");
+            if (this.link != null)
+                this.link.Write(sw, "link");
+            if (this.autoRedefine != null)
+                this.autoRedefine.Write(sw, "autoRedefine");
+            if (this.hidden != null)
+                this.hidden.Write(sw, "hidden");
+            if (this.uiPriority != null)
+                this.uiPriority.Write(sw, "uiPriority");
+            if (this.semiHidden != null)
+                this.semiHidden.Write(sw, "semiHidden");
+            if (this.unhideWhenUsed != null)
+                this.unhideWhenUsed.Write(sw, "unhideWhenUsed");
+            if (this.qFormat != null)
+                this.qFormat.Write(sw, "qFormat");
+            if (this.locked != null)
+                this.locked.Write(sw, "locked");
+            if (this.personal != null)
+                this.personal.Write(sw, "personal");
+            if (this.personalCompose != null)
+                this.personalCompose.Write(sw, "personalCompose");
+            if (this.personalReply != null)
+                this.personalReply.Write(sw, "personalReply");
+            if (this.rsid != null)
+                this.rsid.Write(sw, "rsid");
+            if (this.pPr != null)
+                this.pPr.Write(sw, "pPr");
+            if (this.rPr != null)
+                this.rPr.Write(sw, "rPr");
+            if (this.tblPr != null)
+                this.tblPr.Write(sw, "tblPr");
+            if (this.trPr != null)
+                this.trPr.Write(sw, "trPr");
+            if (this.tcPr != null)
+                this.tcPr.Write(sw, "tcPr");
+            if (this.tblStylePr != null)
+            {
+                foreach (CT_TblStylePr x in this.tblStylePr)
+                {
+                    x.Write(sw, "tblStylePr");
+                }
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]

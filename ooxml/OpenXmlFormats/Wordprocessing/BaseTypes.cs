@@ -183,6 +183,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_ShortHexNumber
     {
         private byte[] valField;
+        public static CT_ShortHexNumber Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ShortHexNumber ctObj = new CT_ShortHexNumber();
+            ctObj.val = XmlHelper.ReadBytes(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         /// <summary>
         /// Two Digit Hexadecimal Number Value
@@ -285,6 +303,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         private ulong valField;
+        public static CT_TwipsMeasure Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TwipsMeasure ctObj = new CT_TwipsMeasure();
+            ctObj.val = XmlHelper.ReadULong(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
 
         /// <summary>
         /// Measurement in Twentieths of a Point

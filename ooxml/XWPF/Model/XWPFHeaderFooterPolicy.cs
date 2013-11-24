@@ -25,6 +25,7 @@ namespace NPOI.XWPF.Model
     using System.Xml;
     using NPOI.OpenXmlFormats.Vml;
     using NPOI.OpenXmlFormats.Vml.Office;
+    using System.Diagnostics;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -35,9 +36,9 @@ namespace NPOI.XWPF.Model
      */
     public class XWPFHeaderFooterPolicy
     {
-        public static ST_HdrFtr DEFAULT = ST_HdrFtr.DEFAULT;
-        public static ST_HdrFtr EVEN = ST_HdrFtr.EVEN;
-        public static ST_HdrFtr FIRST = ST_HdrFtr.FIRST;
+        public static ST_HdrFtr DEFAULT = ST_HdrFtr.@default;
+        public static ST_HdrFtr EVEN = ST_HdrFtr.even;
+        public static ST_HdrFtr FIRST = ST_HdrFtr.first;
 
         private XWPFDocument doc;
 
@@ -104,11 +105,11 @@ namespace NPOI.XWPF.Model
 
         private void assignFooter(XWPFFooter ftr, ST_HdrFtr type)
         {
-            if (type == ST_HdrFtr.FIRST)
+            if (type == ST_HdrFtr.first)
             {
                 firstPageFooter = ftr;
             }
-            else if (type == ST_HdrFtr.EVEN)
+            else if (type == ST_HdrFtr.even)
             {
                 evenPageFooter = ftr;
             }
@@ -120,11 +121,11 @@ namespace NPOI.XWPF.Model
 
         private void assignHeader(XWPFHeader hdr, ST_HdrFtr type)
         {
-            if (type == ST_HdrFtr.FIRST)
+            if (type == ST_HdrFtr.first)
             {
                 firstPageHeader = hdr;
             }
-            else if (type == ST_HdrFtr.EVEN)
+            else if (type == ST_HdrFtr.even)
             {
                 evenPageHeader = hdr;
             }
@@ -150,14 +151,13 @@ namespace NPOI.XWPF.Model
             CT_HdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
             wrapper.SetHeaderFooter(hdr);
 
-            Stream outputStream = wrapper.GetPackagePart().GetOutputStream();
             hdrDoc.SetHdr((CT_Hdr)hdr);
 
-            //XmlOptions xmlOptions = Commit(wrapper);
-
             assignHeader(wrapper, type);
-            hdrDoc.Save(outputStream, Commit(wrapper));
-            outputStream.Close();
+            using (Stream outputStream = wrapper.GetPackagePart().GetOutputStream())
+            {
+                hdrDoc.Save(outputStream);
+            }
             return wrapper;
         }
 
@@ -177,14 +177,13 @@ namespace NPOI.XWPF.Model
             CT_HdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
             wrapper.SetHeaderFooter(ftr);
 
-            Stream outputStream = wrapper.GetPackagePart().GetOutputStream();
             ftrDoc.SetFtr((CT_Ftr)ftr);
 
-            //XmlOptions xmlOptions = Commit(wrapper);
-
             assignFooter(wrapper, type);
-            ftrDoc.Save(outputStream, Commit(wrapper));
-            outputStream.Close();
+            using (Stream outputStream = wrapper.GetPackagePart().GetOutputStream())
+            {
+                ftrDoc.Save(outputStream);
+            }
             return wrapper;
         }
 
@@ -410,8 +409,7 @@ namespace NPOI.XWPF.Model
             catch (IOException e)
             {
                 // TODO Auto-generated catch block
-                //e.PrintStackTrace();
-                Console.Write(e.StackTrace);
+                Trace.Write(e.StackTrace);
             }
         }
 
@@ -481,8 +479,7 @@ namespace NPOI.XWPF.Model
             CT_TextPath shapeTextPath = shape.AddNewTextpath();
             shapeTextPath.style=("font-family:&quot;Cambria&quot;;font-size:1pt");
             shapeTextPath.@string=(text);
-            throw new NotImplementedException();
-            //pict.Set(group);
+            pict.Set(group);
             // end watermark paragraph
             return new XWPFParagraph(p, doc);
         }

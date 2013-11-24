@@ -178,10 +178,11 @@ namespace NPOI.XWPF.UserModel
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")});
             PackagePart part = GetPackagePart();
-            Stream out1 = part.GetOutputStream();
-            SettingsDocument sd = new SettingsDocument(ctSettings);
-            sd.Save(out1, namespaces);
-            out1.Close();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                SettingsDocument sd = new SettingsDocument(ctSettings);
+                sd.Save(out1);
+            }
         }
 
         private CT_DocProtect SafeGetDocumentProtection()
@@ -197,14 +198,15 @@ namespace NPOI.XWPF.UserModel
 
         private void ReadFrom(Stream inputStream)
         {
-            try
-            {
-                ctSettings = SettingsDocument.Parse(inputStream).Settings;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("SettingsDocument parse failed", e);
-            }
+            //try
+            //{
+                XmlDocument xmldoc = ConvertStreamToXml(inputStream);
+                ctSettings = SettingsDocument.Parse(xmldoc,NamespaceManager).Settings;
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new Exception("SettingsDocument parse failed", e);
+            //}
         }
 
     }

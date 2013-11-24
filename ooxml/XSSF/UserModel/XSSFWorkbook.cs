@@ -253,7 +253,7 @@ namespace NPOI.XSSF.UserModel
             try
             {
                 XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
-                doc = WorkbookDocument.Parse(xmldoc, NameSpaceManager);
+                doc = WorkbookDocument.Parse(xmldoc, NamespaceManager);
                 this.workbook = doc.Workbook;
 
                 Dictionary<String, XSSFSheet> shIdMap = new Dictionary<String, XSSFSheet>();

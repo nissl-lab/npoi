@@ -148,29 +148,6 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(policy.GetEvenPageHeader());
         }
 
-        [Test]
-        public void TestAddPictureData()
-        {
-
-        }
-
-        [Test]
-        public void TestGetAllPictures()
-        {
-
-        }
-
-        [Test]
-        public void TestGetAllPackagePictures()
-        {
-
-        }
-
-        [Test]
-        public void TestGetPictureDataById()
-        {
-
-        }
     }
 
 }

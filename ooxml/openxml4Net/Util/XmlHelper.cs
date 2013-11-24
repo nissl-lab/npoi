@@ -169,7 +169,7 @@ namespace NPOI.OpenXml4Net.Util
                 return false;
             }
         }
-        internal static string EncodeXml(string xml)
+        public static string EncodeXml(string xml)
         {
             return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
         }

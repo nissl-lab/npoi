@@ -68,7 +68,7 @@ namespace NPOI.XSSF.UserModel
             : base(part, rel)
         {
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
-            drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(xmldoc, NameSpaceManager);
+            drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(xmldoc, NamespaceManager);
         }
 
         /**
@@ -446,15 +446,15 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFAnchor anchor = null;
             XmlNode parentNode = obj.ParentNode;
-            XmlNode fromNode = parentNode.SelectSingleNode("xdr:from", POIXMLDocumentPart.NameSpaceManager);
+            XmlNode fromNode = parentNode.SelectSingleNode("xdr:from", POIXMLDocumentPart.NamespaceManager);
             if(fromNode==null)
                 throw new InvalidDataException("xdr:from node is missing");
-            CT_Marker ctFrom = CT_Marker.Parse(fromNode, POIXMLDocumentPart.NameSpaceManager);
-            XmlNode toNode = parentNode.SelectSingleNode("xdr:to", POIXMLDocumentPart.NameSpaceManager);
+            CT_Marker ctFrom = CT_Marker.Parse(fromNode, POIXMLDocumentPart.NamespaceManager);
+            XmlNode toNode = parentNode.SelectSingleNode("xdr:to", POIXMLDocumentPart.NamespaceManager);
             CT_Marker ctTo=null;
             if (toNode != null)
             {
-                ctTo = CT_Marker.Parse(toNode, POIXMLDocumentPart.NameSpaceManager);
+                ctTo = CT_Marker.Parse(toNode, POIXMLDocumentPart.NamespaceManager);
             }
             anchor = new XSSFClientAnchor(ctFrom, ctTo);
             return anchor;
