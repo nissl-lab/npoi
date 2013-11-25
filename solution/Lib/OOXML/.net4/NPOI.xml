@@ -6515,7 +6515,7 @@
             </summary>
             <param name="ps">The property Set To copy</param>
         </member>
-        <member name="F:NPOI.HPSF.MutablePropertySet.OFFSet_HEADER">
+        <member name="F:NPOI.HPSF.MutablePropertySet.OFFSET_HEADER">
             The Length of the property Set stream header.
         </member>
         <member name="M:NPOI.HPSF.MutablePropertySet.ClearSections">

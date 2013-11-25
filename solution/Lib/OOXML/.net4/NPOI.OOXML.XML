@@ -773,7 +773,7 @@
         <member name="M:NPOI.XSSF.Model.StylesTable.#ctor">
             Create a new, empty StylesTable
         </member>
-        <member name="M:NPOI.XSSF.Model.StylesTable.ReadFrom(System.IO.Stream)">
+        <member name="M:NPOI.XSSF.Model.StylesTable.ReadFrom(System.Xml.XmlDocument)">
              Read this shared styles table from an XML file.
             
              @param is The input stream Containing the XML document.
@@ -7198,7 +7198,7 @@
         <member name="F:NPOI.XWPF.UserModel.XWPFParagraph.document">
             For access to the document's hyperlink, comments, tables etc 
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.BuildRunsInOrderFromXml(System.Object[])">
+        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.BuildRunsInOrderFromXml(System.Collections.ArrayList)">
             Identifies (in order) the parts of the paragraph /
              sub-paragraph that correspond to character text
              runs, and builds the appropriate runs for these.
