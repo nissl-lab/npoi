@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintSetupInXlsx", "xssf\Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WritePerformanceTest", "xssf\WritePerformanceTest\WritePerformanceTest.csproj", "{87009589-28B8-4F63-A50D-A0C599E01A1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCustomProperties", "xssf\CreateCustomProperties\CreateCustomProperties.csproj", "{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -275,6 +277,16 @@ Global
 		{87009589-28B8-4F63-A50D-A0C599E01A1E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{87009589-28B8-4F63-A50D-A0C599E01A1E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{87009589-28B8-4F63-A50D-A0C599E01A1E}.Release|x86.ActiveCfg = Release|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
