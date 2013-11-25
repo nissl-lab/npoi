@@ -2670,32 +2670,36 @@ namespace NPOI.OpenXmlFormats.Vml
         {
             if (this.formulasField == null)
                 this.formulasField = new List<CT_Formulas>();
-            this.formulasField.Add(new CT_Formulas());
-            return this.formulasField[this.formulasField.Count - 1];
+            CT_Formulas obj = new CT_Formulas();
+            this.formulasField.Add(obj);
+            return obj;
         }
 
         public CT_TextPath AddNewTextpath()
         {
             if (this.textpathField == null)
                 this.textpathField = new List<CT_TextPath>();
-            this.textpathField.Add(new CT_TextPath());
-            return this.textpathField[this.textpathField.Count - 1];
+            CT_TextPath obj = new CT_TextPath();
+            this.textpathField.Add(obj);
+            return obj;
         }
 
         public CT_Handles AddNewHandles()
         {
             if (this.handlesField == null)
                 this.handlesField = new List<CT_Handles>();
-            this.handlesField.Add(new CT_Handles());
-            return this.handlesField[this.handlesField.Count - 1];
+            CT_Handles obj = new CT_Handles();
+            this.handlesField.Add(obj);
+            return obj;
         }
 
         public CT_Lock AddNewLock()
         {
             if (this.lockField == null)
                 this.lockField = new List<CT_Lock>();
-            this.lockField.Add(new CT_Lock());
-            return this.lockField[this.lockField.Count - 1];
+            CT_Lock obj = new CT_Lock();
+            this.lockField.Add(obj);
+            return obj;
         }
     }
     

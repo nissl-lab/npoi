@@ -353,11 +353,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return num;
         }
 
-        public void SetNumArray(int pos, CT_Num cT_Num)
+        public void SetNumArray(int pos, CT_Num ct_Num)
         {
+            if (this.numField == null)
+                this.numField = new List<CT_Num>();
+
             if (pos < 0 || pos >= numField.Count)
-                numField.Add(cT_Num);
-            numField[pos] = cT_Num;
+                numField.Add(ct_Num);
+            numField[pos] = ct_Num;
         }
 
         public CT_AbstractNum AddNewAbstractNum()
@@ -371,6 +374,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void SetAbstractNumArray(int pos, CT_AbstractNum cT_AbstractNum)
         {
+            if (this.abstractNumField == null)
+                this.abstractNumField = new List<CT_AbstractNum>();
             if (pos < 0 || pos >= abstractNumField.Count)
                 abstractNumField.Add(cT_AbstractNum);
             abstractNumField[pos] = cT_AbstractNum;

@@ -8999,9 +8999,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot("chartsheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Chartsheet
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chartsheet));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
         private CT_ChartsheetPr sheetPrField;
 
         private CT_ChartsheetViews sheetViewsField;
@@ -9046,7 +9043,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, this, namespaces);
+            throw new NotImplementedException();
         }
         [XmlElement]
         public CT_ChartsheetPr sheetPr

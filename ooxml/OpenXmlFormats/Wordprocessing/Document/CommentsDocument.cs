@@ -31,7 +31,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.comments;
             }
         }
-        public void Save(Stream stream, XmlSerializerNamespaces namespaces)
+        public void Save(Stream stream)
         {
             using (StreamWriter sw = new StreamWriter(stream))
             {

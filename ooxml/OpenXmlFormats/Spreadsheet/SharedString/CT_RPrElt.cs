@@ -15,10 +15,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_RPrElt
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_RPrElt));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
-
         // all elements are optional
         private CT_FontName rFontField = null; // name of the font
         private CT_IntProperty charsetField = null;
@@ -116,31 +112,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
-
-
-        //public static CT_RPrElt Parse(string xml)
-        //{
-        //    CT_RPrElt result;
-        //    using (StringReader stream = new StringReader(xml))
-        //    {
-        //        result = (CT_RPrElt)serializer.Deserialize(stream);
-        //    }
-        //    return result;
-        //}
-
-        public static void Save(Stream stream, CT_RPrElt font)
-        {
-            serializer.Serialize(stream, font, namespaces);
-        }
-
-        public static string GetString(CT_Font font)
-        {
-            using (StringWriter writer = new StringWriter())
-            {
-                serializer.Serialize(writer, font, namespaces);
-                return writer.ToString();
-            }
-        }
 
         #region rFont
         [XmlElement]

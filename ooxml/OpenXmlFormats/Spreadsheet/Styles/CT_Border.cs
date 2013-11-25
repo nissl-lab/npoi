@@ -350,14 +350,5 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.outlineField = value;
             }
         }
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Border));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
-        public override string ToString()
-        {
-            StringWriter stringWriter = new StringWriter();
-            serializer.Serialize(stringWriter, this);
-            return stringWriter.ToString();
-        }
     }
 }

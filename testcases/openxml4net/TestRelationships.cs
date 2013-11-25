@@ -362,7 +362,7 @@ namespace TestCases.OPC
             OPCPackage pkg = OPCPackage.Open(is1);
             is1.Close();
 
-            PackageRelationshipCollection sheetRels = pkg.GetPartsByName(new Regex("/xl/worksheets/sheet1.xml"))[(0)].Relationships;
+            PackageRelationshipCollection sheetRels = pkg.GetPartsByName(new Regex("/xl/worksheets/sheet1.xml"))[0].Relationships;
             Assert.AreEqual(3, sheetRels.Size);
             PackageRelationship rId1 = sheetRels.GetRelationshipByID("rId1");
             Assert.AreEqual(TargetMode.External, rId1.TargetMode);
