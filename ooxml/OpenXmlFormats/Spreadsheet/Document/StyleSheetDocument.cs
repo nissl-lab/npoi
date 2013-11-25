@@ -19,9 +19,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.stylesheet = stylesheet;
         }
 
-        public static StyleSheetDocument Parse(XmlDocument xmldoc, XmlNamespaceManager nameSpaceManager)
+        public static StyleSheetDocument Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceManager)
         {
-            CT_Stylesheet obj = CT_Stylesheet.Parse(xmldoc.DocumentElement,nameSpaceManager);
+            CT_Stylesheet obj = CT_Stylesheet.Parse(xmldoc.DocumentElement,namespaceManager);
             return new StyleSheetDocument(obj);
         }
 
