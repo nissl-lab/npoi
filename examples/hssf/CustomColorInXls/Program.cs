@@ -44,13 +44,13 @@ namespace CustomColorInXls
 
 
             HSSFPalette palette = workbook.GetCustomPalette();
-            palette.SetColorAtIndex(HSSFColor.PINK.index, (byte)255, (byte)234, (byte)222);
+            palette.SetColorAtIndex(HSSFColor.Pink.Index, (byte)255, (byte)234, (byte)222);
             //HSSFColor myColor = palette.AddColor((byte)253, (byte)0, (byte)0);
 
             ISheet sheet1 = workbook.CreateSheet("Sheet1");
             ICellStyle style1 = workbook.CreateCellStyle();
-            style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.PINK.index;
-            style1.FillPattern = FillPatternType.SOLID_FOREGROUND;
+            style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Pink.Index;
+            style1.FillPattern = FillPattern.SolidForeground;
             sheet1.CreateRow(0).CreateCell(0).CellStyle = style1;
 
             WriteToFile();

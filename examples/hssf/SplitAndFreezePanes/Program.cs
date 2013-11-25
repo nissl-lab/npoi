@@ -44,7 +44,7 @@ namespace SplitAndFreezePanes
             // Freeze the columns and rows (forget about scrolling position of the lower right quadrant).
             sheet3.CreateFreezePane(2, 2);
             // Create a split with the lower left side being the active quadrant
-            sheet4.CreateSplitPane(2000, 2000, 0, 0, PanePosition.LOWER_LEFT);
+            sheet4.CreateSplitPane(2000, 2000, 0, 0, PanePosition.LowerLeft);
 
             WriteToFile();
         }

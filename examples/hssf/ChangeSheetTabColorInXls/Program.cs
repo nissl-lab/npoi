@@ -17,11 +17,11 @@ namespace ChangeSheetTabColorInXls
             InitializeWorkbook();
 
             ISheet sheet1=hssfworkbook.CreateSheet("Sheet1");
-            sheet1.TabColorIndex = HSSFColor.RED.index;
+            sheet1.TabColorIndex = HSSFColor.Red.Index;
             ISheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
-            sheet2.TabColorIndex = HSSFColor.BLUE.index;
+            sheet2.TabColorIndex = HSSFColor.Blue.Index;
             ISheet sheet3 = hssfworkbook.CreateSheet("Sheet3");
-            sheet3.TabColorIndex = HSSFColor.AQUA.index;
+            sheet3.TabColorIndex = HSSFColor.Aqua.Index;
 
             WriteToFile();
         }

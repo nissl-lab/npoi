@@ -54,27 +54,27 @@ namespace SetBorderStyleInXls
 
             // Style the cell with borders all around.
             ICellStyle style = hssfworkbook.CreateCellStyle();
-            style.BorderBottom= BorderStyle.THIN;
-            style.BottomBorderColor= HSSFColor.BLACK.index;
-            style.BorderLeft = BorderStyle.DASH_DOT_DOT;
-            style.LeftBorderColor= HSSFColor.GREEN.index;
-            style.BorderRight = BorderStyle.HAIR;
-            style.RightBorderColor= HSSFColor.BLUE.index;
-            style.BorderTop = BorderStyle.MEDIUM_DASHED;
-            style.TopBorderColor= HSSFColor.ORANGE.index;
+            style.BorderBottom= BorderStyle.Thin;
+            style.BottomBorderColor= HSSFColor.Black.Index;
+            style.BorderLeft = BorderStyle.DashDotDot;
+            style.LeftBorderColor= HSSFColor.Green.Index;
+            style.BorderRight = BorderStyle.Hair;
+            style.RightBorderColor= HSSFColor.Blue.Index;
+            style.BorderTop = BorderStyle.MediumDashed;
+            style.TopBorderColor= HSSFColor.Orange.Index;
 
-            style.BorderDiagonal = BorderDiagonal.FORWARD;
-            style.BorderDiagonalColor = HSSFColor.GOLD.index;
-            style.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
+            style.BorderDiagonal = BorderDiagonal.Forward;
+            style.BorderDiagonalColor = HSSFColor.Gold.Index;
+            style.BorderDiagonalLineStyle = BorderStyle.Medium;
 
             cell.CellStyle= style;
             // Create a cell and put a value in it.
             ICell cell2 = row.CreateCell(2);
             cell2.SetCellValue(5);
             ICellStyle style2 = hssfworkbook.CreateCellStyle();
-            style2.BorderDiagonal = BorderDiagonal.BACKWARD;
-            style2.BorderDiagonalColor = HSSFColor.RED.index;
-            style2.BorderDiagonalLineStyle = BorderStyle.MEDIUM;
+            style2.BorderDiagonal = BorderDiagonal.Backward;
+            style2.BorderDiagonalColor = HSSFColor.Red.Index;
+            style2.BorderDiagonalLineStyle = BorderStyle.Medium;
             cell2.CellStyle = style2;
 
             WriteToFile();

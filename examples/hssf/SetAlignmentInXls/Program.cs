@@ -56,8 +56,8 @@ namespace SetAlignmentInXls
                 //create the first cell
                 row.CreateCell(0).SetCellValue("Left");
                ICellStyle styleLeft=hssfworkbook.CreateCellStyle();
-                styleLeft.Alignment = HorizontalAlignment.LEFT;
-                styleLeft.VerticalAlignment = VerticalAlignment.TOP;
+                styleLeft.Alignment = HorizontalAlignment.Left;
+                styleLeft.VerticalAlignment = VerticalAlignment.Top;
                 row.GetCell(0).CellStyle = styleLeft;
                 //set indention for the text in the cell
                 styleLeft.Indention = 3;
@@ -65,8 +65,8 @@ namespace SetAlignmentInXls
                 //create the second cell
                 row.CreateCell(1).SetCellValue("Center Hello World Hello WorldHello WorldHello WorldHello WorldHello World");
                ICellStyle styleMiddle = hssfworkbook.CreateCellStyle();
-                styleMiddle.Alignment = HorizontalAlignment.CENTER;
-                styleMiddle.VerticalAlignment = VerticalAlignment.CENTER;
+                styleMiddle.Alignment = HorizontalAlignment.Center;
+                styleMiddle.VerticalAlignment = VerticalAlignment.Center;
                 row.GetCell(1).CellStyle = styleMiddle;
                 //wrap the text in the cell
                 styleMiddle.WrapText = true;
@@ -75,8 +75,8 @@ namespace SetAlignmentInXls
                 //create the third cell
                 row.CreateCell(2).SetCellValue("Right");
                ICellStyle styleRight = hssfworkbook.CreateCellStyle();
-                styleRight.Alignment = HorizontalAlignment.JUSTIFY;
-                styleRight.VerticalAlignment = VerticalAlignment.BOTTOM;
+                styleRight.Alignment = HorizontalAlignment.Justify;
+                styleRight.VerticalAlignment = VerticalAlignment.Bottom;
                 row.GetCell(2).CellStyle = styleRight;
 
             }

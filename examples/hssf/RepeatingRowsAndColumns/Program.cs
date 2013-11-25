@@ -49,7 +49,7 @@ namespace RepeatingRowsAndColumns
 
             IFont boldFont = hssfworkbook.CreateFont();
             boldFont.FontHeightInPoints = 22;
-            boldFont.Boldweight = (short)FontBoldWeight.BOLD;
+            boldFont.Boldweight = (short)FontBoldWeight.Bold;
 
            ICellStyle boldStyle = hssfworkbook.CreateCellStyle();
             boldStyle.SetFont(boldFont);

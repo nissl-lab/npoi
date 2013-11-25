@@ -51,14 +51,14 @@ namespace ConditionalFormattingInXls
             // when cell's value is bigger than 55 and smaller than 500
             // applies patternFormatting defined below.
             IConditionalFormattingRule rule = hscf.CreateConditionalFormattingRule(
-                ComparisonOperator.BETWEEN,
+                ComparisonOperator.Between,
                 "55", // 1st formula 
                 "500"     // 2nd formula 
             );
 
             // Create pattern with red background
             IPatternFormatting patternFmt = rule.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.RED.index;
+            patternFmt.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
 
             //// Define a region containing first column
             CellRangeAddress[] regions = {

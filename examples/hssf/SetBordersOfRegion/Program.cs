@@ -17,14 +17,14 @@ namespace SetBordersOfRegion
             ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             //create a common style
             ICellStyle blackBorder=hssfworkbook.CreateCellStyle();
-            blackBorder.BorderBottom = BorderStyle.THIN;
-            blackBorder.BorderLeft = BorderStyle.THIN;
-            blackBorder.BorderRight = BorderStyle.THIN;
-            blackBorder.BorderTop = BorderStyle.THIN;
-            blackBorder.BottomBorderColor = HSSFColor.BLACK.index;
-            blackBorder.LeftBorderColor = HSSFColor.BLACK.index;
-            blackBorder.RightBorderColor = HSSFColor.BLACK.index;
-            blackBorder.TopBorderColor = HSSFColor.BLACK.index;
+            blackBorder.BorderBottom = BorderStyle.Thin;
+            blackBorder.BorderLeft = BorderStyle.Thin;
+            blackBorder.BorderRight = BorderStyle.Thin;
+            blackBorder.BorderTop = BorderStyle.Thin;
+            blackBorder.BottomBorderColor = HSSFColor.Black.Index;
+            blackBorder.LeftBorderColor = HSSFColor.Black.Index;
+            blackBorder.RightBorderColor = HSSFColor.Black.Index;
+            blackBorder.TopBorderColor = HSSFColor.Black.Index;
 
             //create horizontal 1-9
             for (int i = 1; i <= 9; i++)

@@ -28,12 +28,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
-using NPOI.OpenXml4Net.OPC;
 using System.Net.Mime;
+using NPOI.OpenXml4Net.OPC;
 
 namespace NPOI.Examples.ModifyExistingOOXMLFile
 {
@@ -41,8 +37,7 @@ namespace NPOI.Examples.ModifyExistingOOXMLFile
     {
         static void Main(string[] args)
         {
-            //create ooxml file in memory
-            Package p = Package.Open("test.zip", PackageAccess.READ_WRITE);
+            OPCPackage p = OPCPackage.Open("test.zip", PackageAccess.READ_WRITE);
 
             PackagePartName pn3 = new PackagePartName(new Uri("/c.xml", UriKind.Relative), true);
             if (!p.ContainPart(pn3))

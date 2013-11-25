@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPOI.OpenXml4Net.OPC;
 using System.Net.Mime;
+using System.IO;
+using NPOI.OpenXml4Net.OPC;
 
 namespace NPOI.Examples.CreateBasicOOXMLFile
 {
@@ -11,7 +12,7 @@ namespace NPOI.Examples.CreateBasicOOXMLFile
         static void Main(string[] args)
         {
             //create ooxml file in memory
-            Package p = Package.Create();
+            OPCPackage p = OPCPackage.Create(new MemoryStream());
 
             //create package parts
             PackagePartName pn1=new PackagePartName(new Uri("/a/abcd/e",UriKind.Relative),true);

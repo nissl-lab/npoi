@@ -143,7 +143,7 @@ namespace DrawingInXls
                     new HSSFClientAnchor(0, 0, 900, 100, (short)4, 4, (short)5, 4 + 1));
             IFont font = wb.CreateFont();
             font.IsItalic = true;
-            font.Underline = (byte)FontUnderlineType.DOUBLE;
+            font.Underline = FontUnderlineType.Double;
             HSSFRichTextString str = new HSSFRichTextString("Woo!!!");
             str.ApplyFont(2, 5, font);
             textbox3.String = str;

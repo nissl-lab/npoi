@@ -50,7 +50,7 @@ namespace MergeCellsInXls
             cell.SetCellValue("Sales Report");
 
            ICellStyle style = hssfworkbook.CreateCellStyle();
-            style.Alignment = HorizontalAlignment.CENTER;
+            style.Alignment = HorizontalAlignment.Center;
             //create a font style
             IFont font = hssfworkbook.CreateFont();
             font.FontHeight = 20*20;
@@ -66,7 +66,7 @@ namespace MergeCellsInXls
             sheet.AddMergedRegion(region);
 
             //set enclosed border for the merged region
-            ((HSSFSheet)sheet).SetEnclosedBorderOfRegion(region, BorderStyle.DOTTED, NPOI.HSSF.Util.HSSFColor.RED.index);
+            ((HSSFSheet)sheet).SetEnclosedBorderOfRegion(region, BorderStyle.Dotted, NPOI.HSSF.Util.HSSFColor.Red.Index);
 
             WriteToFile();
         }
