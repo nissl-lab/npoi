@@ -186,7 +186,27 @@ namespace NPOI.HSSF.Util
         {
             SetCellStyleProperty(cell, workbook, FONT, font);
         }
+        private static bool CompareHashTableKeyValueIsEqual(Hashtable a, Hashtable b)
+        {
+            foreach (DictionaryEntry a_entry in a)
+            {
+                foreach (DictionaryEntry b_entry in b)
+                {
+                    if (a_entry.Key.ToString() == b_entry.Key.ToString())
+                    {
+                        if ((a_entry.Value is short && b_entry.Value is short
+                            && (short)a_entry.Value != (short)b_entry.Value) ||
+                            (a_entry.Value is bool && b_entry.Value is bool
+                            && (bool)a_entry.Value != (bool)b_entry.Value))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
 
+            return true;
+        }
         /**
          *  This method attempt to find an already existing HSSFCellStyle that matches
          *  what you want the style to be. If it does not find the style, then it
@@ -218,7 +238,8 @@ namespace NPOI.HSSF.Util
                 NPOI.SS.UserModel.ICellStyle wbStyle = workbook.GetCellStyleAt(i);
                 Hashtable wbStyleMap = GetFormatProperties(wbStyle);
 
-                if (wbStyleMap.Equals(values))
+                // if (wbStyleMap.Equals(values))
+                if (CompareHashTableKeyValueIsEqual(wbStyleMap, values))
                 {
                     newStyle = wbStyle;
                     break;
