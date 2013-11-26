@@ -32,7 +32,7 @@ namespace NPOI.XWPF.UserModel
         protected IBody part;
         /** For access to the document's hyperlink, comments, tables etc */
         protected XWPFDocument document;
-        protected List<XWPFRun> Runs;
+        protected List<XWPFRun> runs;
 
         private StringBuilder footnoteText = new StringBuilder();
 
@@ -48,11 +48,11 @@ namespace NPOI.XWPF.UserModel
                 throw new NullReferenceException();
             }
             // Build up the character runs
-            Runs = new List<XWPFRun>();
+            runs = new List<XWPFRun>();
 
             BuildRunsInOrderFromXml(paragraph.Items);
             // Look for bits associated with the runs
-            foreach (XWPFRun run in Runs)
+            foreach (XWPFRun run in runs)
             {
                 CT_R r = run.GetCTR();
                 if (document != null)
@@ -132,14 +132,14 @@ namespace NPOI.XWPF.UserModel
             {
                 if (o is CT_R)
                 {
-                    Runs.Add(new XWPFRun((CT_R)o, this));
+                    runs.Add(new XWPFRun((CT_R)o, this));
                 }
                 if (o is CT_Hyperlink1)
                 {
                     CT_Hyperlink1 link = (CT_Hyperlink1)o;
                     foreach (CT_R r in link.GetRList())
                     {
-                        Runs.Add(new XWPFHyperlinkRun(link, r, this));
+                        runs.Add(new XWPFHyperlinkRun(link, r, this));
                     }
                 }
                 if (o is CT_SdtRun)
@@ -147,21 +147,21 @@ namespace NPOI.XWPF.UserModel
                     CT_SdtContentRun run = ((CT_SdtRun)o).sdtContent;
                     foreach (CT_R r in run.GetRList())
                     {
-                        Runs.Add(new XWPFRun(r, this));
+                        runs.Add(new XWPFRun(r, this));
                     }
                 }
                 if (o is CT_RunTrackChange)
                 {
                     foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
                     {
-                        Runs.Add(new XWPFRun(r, this));
+                        runs.Add(new XWPFRun(r, this));
                     }
                 }
                 if (o is CT_SimpleField)
                 {
                     foreach (CT_R r in ((CT_SimpleField)o).GetRList())
                     {
-                        Runs.Add(new XWPFRun(r, this));
+                        runs.Add(new XWPFRun(r, this));
                     }
                 }
                 if (o is CT_SmartTagRun)
@@ -174,26 +174,33 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        public CT_P GetCTP()
+        internal CT_P GetCTP()
         {
             return paragraph;
         }
 
-        public IList<XWPFRun> GetRuns()
+        public IList<XWPFRun> Runs
         {
-            //return Collections.UnmodifiableList(Runs);
-            return Runs.AsReadOnly();
+			get
+			{
+				return runs.AsReadOnly();
+			}
         }
 
-        public bool IsEmpty()
+        public bool IsEmpty
         {
-            //return !paragraph.DomNode.HasChildNodes();
-            return paragraph.Items.Count == 0;
+			get
+			{
+				return paragraph.Items.Count == 0;
+			}
         }
 
-        public XWPFDocument GetDocument()
+        public XWPFDocument Document
         {
-            return document;
+			get
+			{
+				return document;
+			}
         }
 
         /**
@@ -203,7 +210,7 @@ namespace NPOI.XWPF.UserModel
         public String GetText()
         {
             StringBuilder out1 = new StringBuilder();
-            foreach(XWPFRun run in Runs) {
+            foreach(XWPFRun run in runs) {
                 out1.Append(run.ToString());
             }
             out1.Append(footnoteText);
@@ -290,7 +297,7 @@ namespace NPOI.XWPF.UserModel
         public String GetParagraphText()
         {
             StringBuilder out1 = new StringBuilder();
-            foreach(XWPFRun run in Runs) {
+            foreach(XWPFRun run in runs) {
                 out1.Append(run.ToString());
             }
             return out1.ToString();
@@ -302,7 +309,7 @@ namespace NPOI.XWPF.UserModel
         public String GetPictureText()
         {
             StringBuilder out1 = new StringBuilder();
-            foreach(XWPFRun run in Runs) {
+            foreach(XWPFRun run in runs) {
                 out1.Append(run.GetPictureText());
             }
             return out1.ToString();
@@ -313,9 +320,12 @@ namespace NPOI.XWPF.UserModel
          *
          * @return  the footnote text or empty string if the paragraph does not have footnotes
          */
-        public String GetFootnoteText()
+        public String FootnoteText
         {
-            return footnoteText.ToString();
+			get
+			{
+				return footnoteText.ToString();
+			}
         }
 
         /// <summary>
@@ -325,7 +335,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFRun CreateRun()
         {
             XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
-            Runs.Add(xwpfRun);
+            runs.Add(xwpfRun);
             return xwpfRun;
         }
 
@@ -737,17 +747,20 @@ namespace NPOI.XWPF.UserModel
          *
          * @return bool - if page break is Set
          */
-        public bool IsPageBreak()
+        public bool IsPageBreak
         {
-            CT_PPr ppr = GetCTPPr();
-            CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
-                    .pageBreakBefore : null;
-            if (ct_pageBreak != null
-                    && ct_pageBreak.val)
-            {
-                return true;
-            }
-            return false;
+			get
+			{
+				CT_PPr ppr = GetCTPPr();
+				CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+						.pageBreakBefore : null;
+				if (ct_pageBreak != null
+						&& ct_pageBreak.val)
+				{
+					return true;
+				}
+				return false;
+			}
         }
 
         /**
@@ -1082,23 +1095,6 @@ namespace NPOI.XWPF.UserModel
                     : -1;
         }
 
-        /**
-         * This element specifies whether a consumer shall break Latin text which
-         * exceeds the text extents of a line by breaking the word across two lines
-         * (breaking on the character level) or by moving the word to the following
-         * line (breaking on the word level).
-         *
-         * @param wrap - bool
-         */
-        public void SetWordWrap(bool wrap)
-        {
-            CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-                    .wordWrap : GetCTPPr().AddNewWordWrap();
-            if (wrap)
-                wordWrap.val = true;
-            else
-                wordWrap.UnSetVal();
-        }
 
         /**
          * This element specifies whether a consumer shall break Latin text which
@@ -1108,15 +1104,27 @@ namespace NPOI.XWPF.UserModel
          *
          * @return bool
          */
-        public bool IsWordWrap()
+        public bool IsWordWrap
         {
-            CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-                    .wordWrap : null;
-            if (wordWrap != null)
-            {
-                return wordWrap.val;
-            }
-            return false;
+			get
+			{
+				CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
+						.wordWrap : null;
+				if (wordWrap != null)
+				{
+					return wordWrap.val;
+				}
+				return false;
+			}
+			set 
+			{
+				CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
+			.wordWrap : GetCTPPr().AddNewWordWrap();
+				if (value)
+					wordWrap.val = true;
+				else
+					wordWrap.UnSetVal();
+			}
         }
 
         /**
@@ -1200,11 +1208,10 @@ namespace NPOI.XWPF.UserModel
          */
         protected void AddRun(CT_R Run)
         {
-            //int pos;
-            //pos = paragraph.RList.Size();
-            //paragraph.AddNewR();
-            //paragraph.SetRArray(pos, Run);
-            throw new NotImplementedException();
+            int pos;
+            pos = paragraph.GetRList().Count;
+            paragraph.AddNewR();
+            paragraph.SetRArray(pos, Run);
         }
 
         /**
@@ -1214,7 +1221,7 @@ namespace NPOI.XWPF.UserModel
          * @param searched
          * @param startPos
          */
-        public TextSegement searchText(String searched, PositionInParagraph startPos)
+        public TextSegement SearchText(String searched, PositionInParagraph startPos)
         {
 
             int startRun = startPos.Run,
@@ -1294,7 +1301,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_R ctRun = paragraph.InsertNewR(pos);
                 XWPFRun newRun = new XWPFRun(ctRun, this);
-                Runs.Insert(pos, newRun);
+                runs.Insert(pos, newRun);
                 return newRun;
             }
             return null;
@@ -1350,7 +1357,7 @@ namespace NPOI.XWPF.UserModel
             if (pos >= 0 && pos < paragraph.SizeOfRArray())
             {
                 GetCTP().RemoveR(pos);
-                Runs.RemoveAt(pos);
+                runs.RemoveAt(pos);
                 return true;
             }
             return false;
@@ -1406,9 +1413,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void AddRun(XWPFRun r)
         {
-            if (!Runs.Contains(r))
+            if (!runs.Contains(r))
             {
-                Runs.Add(r);
+                runs.Add(r);
             }
         }
 
@@ -1419,11 +1426,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun GetRun(CT_R r)
         {
-            for (int i = 0; i < GetRuns().Count; i++)
+            for (int i = 0; i < Runs.Count; i++)
             {
-                if (GetRuns()[(i)].GetCTR() == r)
+                if (Runs[i].GetCTR() == r)
                 {
-                    return GetRuns()[(i)];
+                    return Runs[i];
                 }
             }
             return null;

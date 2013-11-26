@@ -54,20 +54,20 @@ namespace NPOI.XWPF.Model
             // Simple text
             ps = simple.Paragraphs[(0)];
             Assert.AreEqual("I am a test document", ps.GetParagraphText());
-            Assert.AreEqual(1, ps.GetRuns().Count);
+            Assert.AreEqual(1, ps.Runs.Count);
 
             ph = hyperlink.Paragraphs[(4)];
             Assert.AreEqual("We have a hyperlink here, and another.", ph.GetParagraphText());
-            Assert.AreEqual(3, ph.GetRuns().Count);
+            Assert.AreEqual(3, ph.Runs.Count);
 
 
             // The proper way to do hyperlinks(!)
-            Assert.IsFalse(ps.GetRuns()[(0)] is XWPFHyperlinkRun);
-            Assert.IsFalse(ph.GetRuns()[(0)] is XWPFHyperlinkRun);
-            Assert.IsTrue(ph.GetRuns()[(1)] is XWPFHyperlinkRun);
-            Assert.IsFalse(ph.GetRuns()[(2)] is XWPFHyperlinkRun);
+            Assert.IsFalse(ps.Runs[(0)] is XWPFHyperlinkRun);
+            Assert.IsFalse(ph.Runs[(0)] is XWPFHyperlinkRun);
+            Assert.IsTrue(ph.Runs[(1)] is XWPFHyperlinkRun);
+            Assert.IsFalse(ph.Runs[(2)] is XWPFHyperlinkRun);
 
-            XWPFHyperlinkRun link = (XWPFHyperlinkRun)ph.GetRuns()[(1)];
+            XWPFHyperlinkRun link = (XWPFHyperlinkRun)ph.Runs[(1)];
             Assert.AreEqual("http://poi.apache.org/", link.GetHyperlink(hyperlink).URL);
 
 

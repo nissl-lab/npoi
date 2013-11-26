@@ -119,8 +119,8 @@ namespace NPOI.XWPF.UserModel
             CT_Style ctStyle = new CT_Style();
             XWPFStyle style = new XWPFStyle(ctStyle);
 
-            style.SetType(ST_StyleType.paragraph);
-            Assert.AreEqual(ST_StyleType.paragraph, style.GetStyleType());
+			style.StyleType = ST_StyleType.paragraph;
+            Assert.AreEqual(ST_StyleType.paragraph, style.StyleType);
         }
         [Test]
         public void TestLatentStyles()

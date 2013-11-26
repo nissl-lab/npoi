@@ -138,7 +138,7 @@ namespace NPOI.XWPF.UserModel
 
             for (int i = 0; i < paragraphs.Count; i++)
             {
-                if (!paragraphs[(i)].IsEmpty())
+                if (!paragraphs[(i)].IsEmpty)
                 {
                     String text = paragraphs[(i)].GetText();
                     if (text != null && text.Length > 0)

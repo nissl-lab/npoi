@@ -1161,7 +1161,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetName()
         {
-            throw new NotImplementedException();
+			return this.name != null;
         }
     }
     [Serializable]

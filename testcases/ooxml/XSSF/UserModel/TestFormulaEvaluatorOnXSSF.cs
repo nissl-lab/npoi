@@ -128,10 +128,10 @@ namespace NPOI.XSSF.UserModel{
                     break;
                 case CellType.Error:
                     Assert.AreEqual(CellType.Error, actual.CellType, msg);
-                    if (false)
-                    { // TODO: fix ~45 functions which are currently returning incorrect error values
-                        Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
-                    }
+					//if (false)
+					//{ // TODO: fix ~45 functions which are currently returning incorrect error values
+					//	Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
+					//}
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
@@ -199,10 +199,10 @@ namespace NPOI.XSSF.UserModel{
                 + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
                 throw new AssertionException(msg);
             }
-            if (false)
-            { // normally no output for successful Tests
-                Console.WriteLine(this.GetType().Name + ": " + successMsg);
-            }
+			//if (false)
+			//{ // normally no output for successful Tests
+			//	Console.WriteLine(this.GetType().Name + ": " + successMsg);
+			//}
         }
 
         /**

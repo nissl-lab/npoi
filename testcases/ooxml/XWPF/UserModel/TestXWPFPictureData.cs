@@ -133,11 +133,11 @@ namespace NPOI.XWPF.UserModel
             XWPFHeader header = policy.GetDefaultHeader();
             foreach (XWPFParagraph paragraph in header.Paragraphs)
             {
-                foreach (XWPFRun run in paragraph.GetRuns())
+                foreach (XWPFRun run in paragraph.Runs)
                 {
                     foreach (XWPFPicture picture in run.GetEmbeddedPictures())
                     {
-                        if (paragraph.GetDocument() != null)
+                        if (paragraph.Document != null)
                         {
                             System.Console.WriteLine(picture.GetCTPicture());
                             XWPFPictureData data = picture.GetPictureData();

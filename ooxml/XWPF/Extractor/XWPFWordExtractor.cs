@@ -94,7 +94,7 @@ namespace NPOI.XWPF.Extractor
                         }
 
                         // Do the paragraph text
-                        foreach (XWPFRun run in paragraph.GetRuns())
+                        foreach (XWPFRun run in paragraph.Runs)
                         {
                             text.Append(run.ToString());
                             if (run is XWPFHyperlinkRun && fetchHyperlinks)
@@ -110,7 +110,7 @@ namespace NPOI.XWPF.Extractor
                         text.Append(decorator.GetCommentText()).Append('\n');
 
                         // Do endnotes and footnotes
-                        String footnameText = paragraph.GetFootnoteText();
+                        String footnameText = paragraph.FootnoteText;
                         if (footnameText != null && footnameText.Length > 0)
                         {
                             text.Append(footnameText + "\n");

@@ -77,7 +77,7 @@ namespace NPOI.XWPF.UserModel
             String blipId = blipProps.blip.embed;
 
 
-            POIXMLDocumentPart part = run.GetParagraph().GetPart();
+            POIXMLDocumentPart part = run.Paragraph.GetPart();
             if (part != null)
             {
                 POIXMLDocumentPart relatedPart = part.GetRelationById(blipId);

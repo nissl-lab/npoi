@@ -54,18 +54,32 @@ namespace NPOI.XWPF.UserModel
          * Get StyleID of the style
          * @return styleID		StyleID of the style
          */
-        public String GetStyleId()
+        public String StyleId
         {
-            return ctStyle.styleId;
+			get
+			{
+				return ctStyle.styleId;
+			}
+			set 
+			{
+				ctStyle.styleId =value;
+			}
         }
 
         /**
          * Get Type of the Style
          * @return	ctType 
          */
-        public ST_StyleType GetStyleType()
+        public ST_StyleType StyleType
         {
-            return ctStyle.type;
+			get
+			{
+				return ctStyle.type;
+			}
+			set 
+			{
+				ctStyle.type = value;
+			}
         }
 
         /**
@@ -84,23 +98,7 @@ namespace NPOI.XWPF.UserModel
         {
             return this.ctStyle;
         }
-        /**
-         * Set styleID
-         * @param styleId
-         */
-        public void SetStyleId(String styleId)
-        {
-            ctStyle.styleId=(styleId);
-        }
 
-        /**
-         * Set styleType
-         * @param type
-         */
-        public void SetType(ST_StyleType type)
-        {
-            ctStyle.type=(type);
-        }
         /**
          * Get styles
          * @return styles		the styles to which this style belongs
@@ -110,43 +108,54 @@ namespace NPOI.XWPF.UserModel
             return styles;
         }
 
-        public String GetBasisStyleID()
+        public String BasisStyleID
         {
-            if (ctStyle.basedOn != null)
-                return ctStyle.basedOn.val;
-            else
-                return null;
+			get
+			{
+				if (ctStyle.basedOn != null)
+					return ctStyle.basedOn.val;
+				else
+					return null;
+			}
         }
 
 
         /**
          * Get StyleID of the linked Style
          */
-        public String GetLinkStyleID()
+        public String LinkStyleID
         {
-            if (ctStyle.link!=null)
-                return ctStyle.link.val;
-            else
-                return null;
+			get
+			{
+				if (ctStyle.link != null)
+					return ctStyle.link.val;
+				else
+					return null;
+			}
         }
 
         /**
          * Get StyleID of the next style
          */
-        public String GetNextStyleID()
+        public String NextStyleID
         {
-            if(ctStyle.next!=null)
-                return ctStyle.next.val;
-            else
-                return null;
-            throw new NotImplementedException();
+			get
+			{
+				if (ctStyle.next != null)
+					return ctStyle.next.val;
+				else
+					return null;
+			}
         }
 
-        public String GetName()
+        public String Name
         {
-            if (ctStyle.IsSetName())
-                return ctStyle.name.val;
-            return null;
+			get
+			{
+				if (ctStyle.IsSetName())
+					return ctStyle.name.val;
+				return null;
+			}
         }
 
         /**

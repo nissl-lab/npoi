@@ -59,7 +59,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     if (anchor.docPr != null)
                     {
-                        GetDocument().GetDrawingIdManager().Reserve(anchor.docPr.id);
+                        this.Document.GetDrawingIdManager().Reserve(anchor.docPr.id);
                     }
                 }
                 List<CT_Inline> inlineList = ctDrawing.GetInlineList();
@@ -67,7 +67,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     if (inline.docPr != null)
                     {
-                        GetDocument().GetDrawingIdManager().Reserve(inline.docPr.id);
+                        this.Document.GetDrawingIdManager().Reserve(inline.docPr.id);
                     }
                 }
             }
@@ -167,7 +167,7 @@ namespace NPOI.XWPF.UserModel
          * @return CT_R object
          */
 
-        public CT_R GetCTR()
+        internal CT_R GetCTR()
         {
             return run;
         }
@@ -176,22 +176,28 @@ namespace NPOI.XWPF.UserModel
          * Get the currenty referenced paragraph object
          * @return current paragraph
          */
-        public XWPFParagraph GetParagraph()
+        public XWPFParagraph Paragraph
         {
-            return paragraph;
+			get
+			{
+				return paragraph;
+			}
         }
 
         /**
          * @return The {@link XWPFDocument} instance, this run.belongs to, or
          *         <code>null</code> if parent structure (paragraph > document) is not properly Set.
          */
-        public XWPFDocument GetDocument()
+        public XWPFDocument Document
         {
-            if (paragraph != null)
-            {
-                return paragraph.GetDocument();
-            }
-            return null;
+			get
+			{
+				if (paragraph != null)
+				{
+					return paragraph.Document;
+				}
+				return null;
+			}
         }
 
         /**
@@ -210,14 +216,17 @@ namespace NPOI.XWPF.UserModel
          *
          * @return <code>true</code> if the bold property is applied
          */
-        public bool IsBold()
+        public bool IsBold
         {
-            CT_RPr pr = run.rPr;
-            if (pr == null || !pr.IsSetB())
-            {
-                return false;
-            }
-            return IsCTOnOff(pr.b);
+			get
+			{
+				CT_RPr pr = run.rPr;
+				if (pr == null || !pr.IsSetB())
+				{
+					return false;
+				}
+				return IsCTOnOff(pr.b);
+			}
         }
 
         /**
@@ -328,45 +337,23 @@ namespace NPOI.XWPF.UserModel
          *
          * @return <code>true</code> if the italic property is applied
          */
-        public bool IsItalic()
+        public bool IsItalic
         {
-            CT_RPr pr = run.rPr;
-            if (pr == null || !pr.IsSetI())
-                return false;
-            return IsCTOnOff(pr.i);
+			get
+			{
+				CT_RPr pr = run.rPr;
+				if (pr == null || !pr.IsSetI())
+					return false;
+				return IsCTOnOff(pr.i);
+			}
+			set 
+			{
+				CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+				CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
+				italic.val = value;
+			}
         }
 
-        /**
-         * Whether the bold property shall be applied to all non-complex script
-         * characters in the contents of this run.when displayed in a document
-         * <p/>
-         * <p/>
-         * This formatting property is a toggle property, which specifies that its
-         * behavior differs between its use within a style defInition and its use as
-         * direct formatting. When used as part of a style defInition, Setting this
-         * property shall toggle the current state of that property as specified up
-         * to this point in the hierarchy (i.e. applied to not applied, and vice
-         * versa). Setting it to <code>false</code> (or an equivalent) shall
-         * result in the current Setting remaining unChanged. However, when used as
-         * direct formatting, Setting this property to true or false shall Set the
-         * absolute state of the resulting property.
-         * </p>
-         * <p/>
-         * If this element is not present, the default value is to leave the
-         * formatting applied at previous level in the style hierarchy. If this
-         * element is never applied in the style hierarchy, then bold shall not be
-         * applied to non-complex script characters.
-         * </p>
-         *
-         * @param value <code>true</code> if the italic property is applied to
-         *              this run
-         */
-        public void SetItalic(bool value)
-        {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-            CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
-            italic.val = value;
-        }
 
         /**
          * Specifies that the contents of this run.should be displayed along with an
@@ -375,10 +362,13 @@ namespace NPOI.XWPF.UserModel
          * @return the Underline pattern Applyed to this run
          * @see UnderlinePatterns
          */
-        public UnderlinePatterns GetUnderline()
+        public UnderlinePatterns Underline
         {
-            CT_RPr pr = run.rPr;
-            return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
+			get
+			{
+				CT_RPr pr = run.rPr;
+				return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
+			}
         }
 
         /**
@@ -409,12 +399,15 @@ namespace NPOI.XWPF.UserModel
          *
          * @return <code>true</code> if the strike property is applied
          */
-        public bool IsStrike()
+        public bool IsStrike
         {
-            CT_RPr pr = run.rPr;
-            if (pr == null || !pr.IsSetStrike())
-                return false;
-            return IsCTOnOff(pr.strike);
+			get
+			{
+				CT_RPr pr = run.rPr;
+				if (pr == null || !pr.IsSetStrike())
+					return false;
+				return IsCTOnOff(pr.strike);
+			}
         }
 
         /**
@@ -521,10 +514,13 @@ namespace NPOI.XWPF.UserModel
          *
          * @return value representing the font size
          */
-        public int GetFontSize()
+        public int FontSize
         {
-            CT_RPr pr = run.rPr;
-            return (pr != null && pr.IsSetSz()) ? (int)pr.sz.val/2 : -1;
+			get
+			{
+				CT_RPr pr = run.rPr;
+				return (pr != null && pr.IsSetSz()) ? (int)pr.sz.val / 2 : -1;
+			}
         }
 
         /**
@@ -691,7 +687,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height)
         {
-            XWPFDocument doc = paragraph.GetDocument();
+            XWPFDocument doc = paragraph.Document;
 
             // Add the picture + relationship
             String relationId = doc.AddPictureData(pictureData, pictureType);
@@ -726,7 +722,7 @@ namespace NPOI.XWPF.UserModel
                 inline.distL = (0);
 
                 CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
-                long id = GetParagraph().GetDocument().GetDrawingIdManager().ReserveNew();
+                long id = Paragraph.Document.GetDrawingIdManager().ReserveNew();
                 docPr.id = (uint)(id);
                 /* This name is not visible in Word 2010 anywhere. */
                 docPr.name = ("Drawing " + id);

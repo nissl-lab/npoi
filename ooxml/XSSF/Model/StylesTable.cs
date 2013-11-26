@@ -361,7 +361,7 @@ namespace NPOI.XSSF.Model
         /**
          * For unit testing only
          */
-        public int _GetNumberFormatSize()
+        public int GetNumberFormatSize()
         {
             return numberFormats.Count;
         }
@@ -369,14 +369,14 @@ namespace NPOI.XSSF.Model
         /**
          * For unit testing only
          */
-        public int _GetXfsSize()
+        public int GetXfsSize()
         {
             return xfs.Count;
         }
         /**
          * For unit testing only
          */
-        public int _GetStyleXfsSize()
+        public int GetStyleXfsSize()
         {
             return styleXfs.Count;
         }
@@ -387,7 +387,7 @@ namespace NPOI.XSSF.Model
         {
             return doc.GetStyleSheet();
         }
-        public int _GetDXfsSize()
+        public int GetDXfsSize()
         {
             return dxfs.Count;
         }

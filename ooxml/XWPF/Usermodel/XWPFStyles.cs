@@ -121,7 +121,7 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (XWPFStyle style in listStyle)
             {
-                if (style.GetStyleId().Equals(styleID))
+                if (style.StyleId.Equals(styleID))
                     return true;
             }
             return false;
@@ -147,7 +147,7 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (XWPFStyle style in listStyle)
             {
-                if (style.GetStyleId().Equals(styleID))
+                if (style.StyleId.Equals(styleID))
                     return style;
             }
             return null;
@@ -173,14 +173,14 @@ namespace NPOI.XWPF.UserModel
          */
         private List<XWPFStyle> GetUsedStyleList(XWPFStyle style, List<XWPFStyle> usedStyleList)
         {
-            String basisStyleID = style.GetBasisStyleID();
+            String basisStyleID = style.BasisStyleID;
             XWPFStyle basisStyle = GetStyle(basisStyleID);
             if ((basisStyle != null) && (!usedStyleList.Contains(basisStyle)))
             {
                 usedStyleList.Add(basisStyle);
                 GetUsedStyleList(basisStyle, usedStyleList);
             }
-            String linkStyleID = style.GetLinkStyleID();
+            String linkStyleID = style.LinkStyleID;
             XWPFStyle linkStyle = GetStyle(linkStyleID);
             if ((linkStyle != null) && (!usedStyleList.Contains(linkStyle)))
             {
@@ -188,7 +188,7 @@ namespace NPOI.XWPF.UserModel
                 GetUsedStyleList(linkStyle, usedStyleList);
             }
 
-            String nextStyleID = style.GetNextStyleID();
+            String nextStyleID = style.NextStyleID;
             XWPFStyle nextStyle = GetStyle(nextStyleID);
             if ((nextStyle != null) && (!usedStyleList.Contains(nextStyle)))
             {

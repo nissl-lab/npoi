@@ -63,21 +63,21 @@ namespace NPOI.XWPF.UserModel
             IList<XWPFParagraph> ps = xml.Paragraphs;
             Assert.AreEqual(10, ps.Count);
 
-            Assert.IsFalse(ps[(0)].IsEmpty());
+            Assert.IsFalse(ps[(0)].IsEmpty);
             Assert.AreEqual(
                     "This is a sample word document. It has two pages. It has a three column heading, but no footer.",
                     ps[(0)].GetText());
 
-            Assert.IsTrue(ps[1].IsEmpty());
+            Assert.IsTrue(ps[1].IsEmpty);
             Assert.AreEqual("", ps[1].GetText());
 
-            Assert.IsFalse(ps[2].IsEmpty());
+            Assert.IsFalse(ps[2].IsEmpty);
             Assert.AreEqual("HEADING TEXT", ps[2].GetText());
 
-            Assert.IsTrue(ps[3].IsEmpty());
+            Assert.IsTrue(ps[3].IsEmpty);
             Assert.AreEqual("", ps[3].GetText());
 
-            Assert.IsFalse(ps[4].IsEmpty());
+            Assert.IsFalse(ps[4].IsEmpty);
             Assert.AreEqual("More on page one", ps[4].GetText());
         }
 
@@ -213,9 +213,9 @@ namespace NPOI.XWPF.UserModel
 
             CT_OnOff wordWrap = ppr.AddNewWordWrap();
             wordWrap.val = false;
-            Assert.AreEqual(false, p.IsWordWrap());
+            Assert.AreEqual(false, p.IsWordWrap);
 
-            p.SetWordWrap(true);
+            p.IsWordWrap = true;
             Assert.AreEqual(true, ppr.wordWrap.val);
         }
 
@@ -231,7 +231,7 @@ namespace NPOI.XWPF.UserModel
 
             CT_OnOff pageBreak = ppr.AddNewPageBreakBefore();
             pageBreak.val = false;
-            Assert.AreEqual(false, p.IsPageBreak());
+            Assert.AreEqual(false, p.IsPageBreak);
 
             p.SetPageBreak (true);
             Assert.AreEqual(true, ppr.pageBreakBefore.val);
@@ -269,16 +269,16 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
 
             XWPFParagraph p = doc.Paragraphs[0];
-            Assert.AreEqual(2, p.GetRuns().Count);
+            Assert.AreEqual(2, p.Runs.Count);
 
             XWPFRun r = p.CreateRun();
-            Assert.AreEqual(3, p.GetRuns().Count);
-            Assert.AreEqual(2, p.GetRuns().IndexOf(r));
+            Assert.AreEqual(3, p.Runs.Count);
+            Assert.AreEqual(2, p.Runs.IndexOf(r));
 
             XWPFRun r2 = p.InsertNewRun(1);
-            Assert.AreEqual(4, p.GetRuns().Count);
-            Assert.AreEqual(1, p.GetRuns().IndexOf(r2));
-            Assert.AreEqual(3, p.GetRuns().IndexOf(r));
+            Assert.AreEqual(4, p.Runs.Count);
+            Assert.AreEqual(1, p.Runs.IndexOf(r2));
+            Assert.AreEqual(3, p.Runs.IndexOf(r));
         }
 
         [Test]
@@ -301,39 +301,39 @@ namespace NPOI.XWPF.UserModel
 
             // Image one
             p = doc.Paragraphs[5];
-            Assert.AreEqual(6, p.GetRuns().Count);
+            Assert.AreEqual(6, p.Runs.Count);
 
-            r = p.GetRuns()[0];
+            r = p.Runs[0];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
             Assert.AreEqual("image1.wmf", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
 
-            r = p.GetRuns()[1];
+            r = p.Runs[1];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
             Assert.AreEqual("image2.png", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
 
-            r = p.GetRuns()[2];
+            r = p.Runs[2];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
             Assert.AreEqual("image3.emf", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
 
-            r = p.GetRuns()[3];
+            r = p.Runs[3];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
             Assert.AreEqual("image4.emf", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
 
-            r = p.GetRuns()[4];
+            r = p.Runs[4];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
             Assert.AreEqual("image5.jpeg", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
 
-            r = p.GetRuns()[5];
+            r = p.Runs[5];
             //Is there a bug about XmlSerializer? it can not Deserialize the tag which inner text is only one whitespace
             //e.g. <w:t> </w:t> to CT_Text;
             //TODO 
@@ -345,7 +345,7 @@ namespace NPOI.XWPF.UserModel
 
 
             // Look in detail at one
-            r = p.GetRuns()[4];
+            r = p.Runs[4];
             XWPFPicture pict = r.GetEmbeddedPictures()[0];
             //CT_Picture picture = pict.GetCTPicture();
             NPOI.OpenXmlFormats.Dml.Picture.CT_Picture picture = pict.GetCTPicture();

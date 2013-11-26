@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
         {
             StylesTable styles = ((XSSFWorkbook)_sh.Workbook).GetStylesSource();
             CT_Dxf dxf = null;
-            if (styles._GetDXfsSize() > 0 && _cfRule.IsSetDxfId())
+            if (styles.GetDXfsSize() > 0 && _cfRule.IsSetDxfId())
             {
                 int dxfId = (int)_cfRule.dxfId;
                 dxf = styles.GetDxfAt(dxfId);
