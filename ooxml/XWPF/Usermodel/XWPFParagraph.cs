@@ -1193,7 +1193,7 @@ namespace NPOI.XWPF.UserModel
          * Get a <b>copy</b> of the currently used CTPPr, if none is used, return
          * a new instance.
          */
-        private CT_PPr GetCTPPr()
+        public CT_PPr GetCTPPr()
         {
             CT_PPr pr = paragraph.pPr == null ? paragraph.AddNewPPr()
                     : paragraph.pPr;

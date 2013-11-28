@@ -40,7 +40,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        public CT_Row GetCtRow()
+        public CT_Row GetCTRow()
         {
             return ctRow;
         }

@@ -121,9 +121,12 @@ namespace NPOI.XWPF.UserModel
          *  complex headers/footers have a table or two
          *  in Addition. 
          */
-        public IList<XWPFTable> GetTables()
+        public IList<XWPFTable> Tables
         {
-            return tables.AsReadOnly();
+			get
+			{
+				return tables.AsReadOnly();
+			}
         }
 
 
@@ -149,7 +152,7 @@ namespace NPOI.XWPF.UserModel
                 }
             }
 
-            IList<XWPFTable> tables = GetTables();
+            IList<XWPFTable> tables = this.Tables;
             for (int i = 0; i < tables.Count; i++)
             {
                 String text = tables[(i)].GetText();
@@ -483,7 +486,7 @@ namespace NPOI.XWPF.UserModel
          * @param pos
          * @param table
          */
-        public void insertTable(int pos, XWPFTable table)
+        public void InsertTable(int pos, XWPFTable table)
         {
             bodyElements.Insert(pos, table);
             int i;
@@ -607,12 +610,12 @@ namespace NPOI.XWPF.UserModel
             throw new NotImplementedException();
         }
 
-        public XWPFParagraph insertNewParagraph(System.Xml.XmlDocument cursor)
+        public XWPFParagraph InsertNewParagraph(System.Xml.XmlDocument cursor)
         {
             throw new NotImplementedException();
         }
 
-        public XWPFTable insertNewTbl(System.Xml.XmlDocument cursor)
+        public XWPFTable InsertNewTbl(System.Xml.XmlDocument cursor)
         {
             throw new NotImplementedException();
         }

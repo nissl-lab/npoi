@@ -95,12 +95,12 @@ namespace NPOI.XWPF.UserModel
             r3.AddNewTc().AddNewP();
 
             XWPFTable xtab = new XWPFTable(table, doc);
-            Assert.AreEqual(3, xtab.GetNumberOfRows());
+            Assert.AreEqual(3, xtab.NumberOfRows);
             Assert.IsNotNull(xtab.GetRow(2));
 
             //add a new row
             xtab.CreateRow();
-            Assert.AreEqual(4, xtab.GetNumberOfRows());
+            Assert.AreEqual(4, xtab.NumberOfRows);
 
             //check number of cols
             Assert.AreEqual(2, table.GetTrArray(0).SizeOfTcArray());
@@ -120,9 +120,9 @@ namespace NPOI.XWPF.UserModel
 
             XWPFTable xtab = new XWPFTable(table, doc);
 
-            Assert.AreEqual(1000, xtab.GetWidth());
+            Assert.AreEqual(1000, xtab.Width);
 
-            xtab.SetWidth(100);
+            xtab.Width = 100;
             Assert.AreEqual(100, int.Parse(table.tblPr.tblW.w));
         }
         [Test]
@@ -152,13 +152,13 @@ namespace NPOI.XWPF.UserModel
             // Set margins
             table.SetCellMargins(50, 50, 250, 450);
             // Get margin components
-            int t = table.GetCellMarginTop();
+            int t = table.CellMarginTop;
             Assert.AreEqual(50, t);
-            int l = table.GetCellMarginLeft();
+            int l = table.CellMarginLeft;
             Assert.AreEqual(50, l);
-            int b = table.GetCellMarginBottom();
+            int b = table.CellMarginBottom;
             Assert.AreEqual(250, b);
-            int r = table.GetCellMarginRight();
+            int r = table.CellMarginRight;
             Assert.AreEqual(450, r);
         }
         [Test]
@@ -178,13 +178,13 @@ namespace NPOI.XWPF.UserModel
             // Set inside horizontal border
             table.SetInsideHBorder(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, 4, 0, "FF0000");
             // Get inside horizontal border components
-            int s = table.GetInsideHBorderSize();
+            int s = table.InsideHBorderSize;
             Assert.AreEqual(4, s);
-            int sp = table.GetInsideHBorderSpace();
+            int sp = table.InsideHBorderSpace;
             Assert.AreEqual(0, sp);
-            String clr = table.GetInsideHBorderColor();
+            String clr = table.InsideHBorderColor;
             Assert.AreEqual("FF0000", clr);
-            NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.GetInsideHBorderType();
+            NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.InsideHBorderType;
             Assert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, bt);
         }
         [Test]
@@ -197,13 +197,13 @@ namespace NPOI.XWPF.UserModel
             // Set inside vertical border
             table.SetInsideVBorder(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.DOUBLE, 4, 0, "00FF00");
             // Get inside vertical border components
-            NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.GetInsideVBorderType();
+            NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.InsideVBorderType;
             Assert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.DOUBLE, bt);
-            int sz = table.GetInsideVBorderSize();
+            int sz = table.InsideVBorderSize;
             Assert.AreEqual(4, sz);
-            int sp = table.GetInsideVBorderSpace();
+            int sp = table.InsideVBorderSpace;
             Assert.AreEqual(0, sp);
-            String clr = table.GetInsideVBorderColor();
+            String clr = table.InsideVBorderColor;
             Assert.AreEqual("00FF00", clr);
         }
         [Test]
@@ -212,8 +212,8 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             CT_Tbl ctTable = new CT_Tbl();
             XWPFTable table = new XWPFTable(ctTable, doc);
-            table.SetRowBandSize(12);
-            int sz = table.GetRowBandSize();
+            table.RowBandSize = 12;
+            int sz = table.RowBandSize;
             Assert.AreEqual(12, sz);
         }
         [Test]
@@ -222,8 +222,8 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             CT_Tbl ctTable = new CT_Tbl();
             XWPFTable table = new XWPFTable(ctTable, doc);
-            table.SetColBandSize(16);
-            int sz = table.GetColBandSize();
+            table.ColBandSize = 16;
+            int sz = table.ColBandSize;
             Assert.AreEqual(16, sz);
         }
         [Test]
@@ -238,7 +238,7 @@ namespace NPOI.XWPF.UserModel
             XWPFTable table = doc.CreateTable(noRows, noCols);
 
             // assert the table is empty
-            List<XWPFTableRow> rows = table.GetRows();
+            List<XWPFTableRow> rows = table.Rows;
             Assert.AreEqual(noRows, rows.Count, "Table has less rows than requested.");
             foreach (XWPFTableRow xwpfRow in rows)
             {

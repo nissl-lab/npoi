@@ -67,7 +67,7 @@ namespace NPOI.XWPF.UserModel
          *  of the IBodyPart, for complex cases
          *  where a paragraph isn't used.
          */
-        IList<XWPFTable> GetTables();
+		IList<XWPFTable> Tables { get; }
 
         /**
          * if there is a corresponding {@link XWPFParagraph} of the parameter ctTable in the paragraphList of this header or footer
@@ -101,20 +101,20 @@ namespace NPOI.XWPF.UserModel
          *inserts a new paragraph at position of the cursor
          * @param cursor
          */
-        XWPFParagraph insertNewParagraph(XmlDocument cursor);
+        XWPFParagraph InsertNewParagraph(XmlDocument cursor);
 
         /**
          * inserts a new Table at the cursor position.
          * @param cursor
          */
-        XWPFTable insertNewTbl(/*XmlCursor*/XmlDocument cursor);
+        XWPFTable InsertNewTbl(/*XmlCursor*/XmlDocument cursor);
 
         /**
          * inserts a new Table at position pos
          * @param pos
          * @param table
          */
-        void insertTable(int pos, XWPFTable table);
+        void InsertTable(int pos, XWPFTable table);
 
         /**
          * returns the TableCell to which the Table belongs

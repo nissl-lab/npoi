@@ -59,7 +59,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     if (anchor.docPr != null)
                     {
-                        this.Document.GetDrawingIdManager().Reserve(anchor.docPr.id);
+                        this.Document.DrawingIdManager.Reserve(anchor.docPr.id);
                     }
                 }
                 List<CT_Inline> inlineList = ctDrawing.GetInlineList();
@@ -67,7 +67,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     if (inline.docPr != null)
                     {
-                        this.Document.GetDrawingIdManager().Reserve(inline.docPr.id);
+                        this.Document.DrawingIdManager.Reserve(inline.docPr.id);
                     }
                 }
             }
@@ -167,7 +167,7 @@ namespace NPOI.XWPF.UserModel
          * @return CT_R object
          */
 
-        internal CT_R GetCTR()
+        public CT_R GetCTR()
         {
             return run;
         }
@@ -722,7 +722,7 @@ namespace NPOI.XWPF.UserModel
                 inline.distL = (0);
 
                 CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
-                long id = Paragraph.Document.GetDrawingIdManager().ReserveNew();
+                long id = Paragraph.Document.DrawingIdManager.ReserveNew();
                 docPr.id = (uint)(id);
                 /* This name is not visible in Word 2010 anywhere. */
                 docPr.name = ("Drawing " + id);

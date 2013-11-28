@@ -45,7 +45,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
          */
-        private IdentifierManager DrawingIdManager = new IdentifierManager(1L, 4294967295L);
+        private IdentifierManager drawingIdManager = new IdentifierManager(1L, 4294967295L);
         protected List<XWPFFooter> footers = new List<XWPFFooter>();
         protected List<XWPFHeader> headers = new List<XWPFHeader>();
         protected List<XWPFComment> comments = new List<XWPFComment>();
@@ -290,9 +290,12 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        internal IdentifierManager GetDrawingIdManager()
+        internal IdentifierManager DrawingIdManager
         {
-            return DrawingIdManager;
+			get
+			{
+				return drawingIdManager;
+			}
         }
 
         /**
@@ -324,9 +327,12 @@ namespace NPOI.XWPF.UserModel
         /**
          * @see NPOI.XWPF.UserModel.IBody#getTables()
          */
-        public IList<XWPFTable> GetTables()
+        public IList<XWPFTable> Tables
         {
-            return tables.AsReadOnly();
+			get
+			{
+				return tables.AsReadOnly();
+			}
         }
 
         /**
@@ -345,9 +351,12 @@ namespace NPOI.XWPF.UserModel
          * 
          * @return  the list of footers
          */
-        public IList<XWPFFooter> GetFooterList()
+        public IList<XWPFFooter> FooterList
         {
-            return footers.AsReadOnly();
+			get
+			{
+				return footers.AsReadOnly();
+			}
         }
 
         public XWPFFooter GetFooterArray(int pos)
@@ -374,7 +383,7 @@ namespace NPOI.XWPF.UserModel
 
         public String GetTblStyle(XWPFTable table)
         {
-            return table.GetStyleID();
+            return table.StyleID;
         }
 
         public XWPFHyperlink GetHyperlinkByID(String id)
@@ -590,7 +599,7 @@ namespace NPOI.XWPF.UserModel
          * @return the {@link XWPFParagraph} object representing the newly inserted
          *         CTP object
          */
-        public XWPFParagraph insertNewParagraph(/*XmlCursor*/XmlDocument cursor)
+        public XWPFParagraph InsertNewParagraph(/*XmlCursor*/XmlDocument cursor)
         {
             //if (isCursorInBody(cursor)) {
             //    String uri = CTP.type.Name.NamespaceURI;
@@ -659,7 +668,7 @@ namespace NPOI.XWPF.UserModel
             throw new NotImplementedException();
         }
 
-        public XWPFTable insertNewTbl(/*XmlCursor*/XmlDocument cursor)
+        public XWPFTable InsertNewTbl(/*XmlCursor*/XmlDocument cursor)
         {
             //    if (isCursorInBody(cursor)) {
             //    String uri = CTTbl.type.getName().getNamespaceURI();
@@ -1178,7 +1187,7 @@ namespace NPOI.XWPF.UserModel
          * @param pos
          * @param table
          */
-        public void insertTable(int pos, XWPFTable table)
+        public void InsertTable(int pos, XWPFTable table)
         {
             bodyElements.Insert(pos, table);
             int i;

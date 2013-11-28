@@ -664,7 +664,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
         #endregion
-    }
+
+		public CT_TblGrid AddNewTblGrid()
+		{
+			this.tblGrid = new CT_TblGrid();
+			return this.tblGrid;
+		}
+	}
 
 
     [Serializable]
@@ -924,7 +930,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblGridChangeField = value;
             }
         }
-    }
+
+		public CT_TblGridCol AddNewGridCol()
+		{
+			if (this.gridCol == null)
+				gridCol = new List<CT_TblGridCol>();
+
+			CT_TblGridCol col=new CT_TblGridCol();
+			gridCol.Add(col);
+			return col;
+		}
+	}
 
     [Serializable]
 
@@ -2852,7 +2868,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblPrChangeField = value;
             }
         }
-    }
+
+		public CT_TblLayoutType AddNewTblLayout()
+		{
+			this.tblLayout = new CT_TblLayoutType();
+			return this.tblLayout;
+		}
+	}
 
 
     [Serializable]

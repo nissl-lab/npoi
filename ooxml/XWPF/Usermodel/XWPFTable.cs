@@ -135,29 +135,28 @@ namespace NPOI.XWPF.UserModel
             tblpro.tblW.type=(ST_TblWidth.auto);
 
             // layout
-            // tblpro.AddNewTblLayout().Type=(STTblLayoutType.AUTOFIT);
+             tblpro.AddNewTblLayout().type =  ST_TblLayoutType.autofit;
 
             // borders
             CT_TblBorders borders = tblpro.AddNewTblBorders();
-            borders.AddNewBottom().val=(ST_Border.single);
-            borders.AddNewInsideH().val = (ST_Border.single);
-            borders.AddNewInsideV().val = (ST_Border.single);
-            borders.AddNewLeft().val = (ST_Border.single);
-            borders.AddNewRight().val = (ST_Border.single);
-            borders.AddNewTop().val = (ST_Border.single);
+            borders.AddNewBottom().val=ST_Border.single;
+            borders.AddNewInsideH().val = ST_Border.single;
+            borders.AddNewInsideV().val = ST_Border.single;
+            borders.AddNewLeft().val = ST_Border.single;
+            borders.AddNewRight().val = ST_Border.single;
+            borders.AddNewTop().val = ST_Border.single;
 
-            /*
-           * CTTblGrid tblgrid=table.AddNewTblGrid();
-           * tblgrid.AddNewGridCol().W=(new Bigint("2000"));
-           */
-            GetRows();
+            
+            CT_TblGrid tblgrid=table.AddNewTblGrid();
+            tblgrid.AddNewGridCol().w= (ulong)2000;
+           
         }
 
         /**
          * @return ctTbl object
          */
 
-        public CT_Tbl GetCTTbl()
+        internal CT_Tbl GetCTTbl()
         {
             return ctTbl;
         }
@@ -172,7 +171,7 @@ namespace NPOI.XWPF.UserModel
 
         public void AddNewRowBetween(int start, int end)
         {
-            // TODO
+			throw new NotImplementedException();
         }
 
         /**
@@ -212,38 +211,41 @@ namespace NPOI.XWPF.UserModel
         {
             if (pos >= 0 && pos < ctTbl.SizeOfTrArray()) {
                 //return new XWPFTableRow(ctTbl.GetTrArray(pos));
-                return GetRows()[(pos)];
+                return Rows[(pos)];
             }
             return null;
         }
 
 
         /**
-         * @param width
-         */
-        public void SetWidth(int width)
-        {
-            CT_TblPr tblPr = GetTrPr();
-            CT_TblWidth tblWidth = tblPr.IsSetTblW() ? tblPr.tblW : tblPr
-                    .AddNewTblW();
-            tblWidth.w = width.ToString();
-        }
-
-        /**
          * @return width value
          */
-        public int GetWidth()
+        public int Width
         {
-            CT_TblPr tblPr = GetTrPr();
-            return tblPr.IsSetTblW() ? int.Parse(tblPr.tblW.w) : -1;
+			get
+			{
+				CT_TblPr tblPr = GetTrPr();
+				return tblPr.IsSetTblW() ? int.Parse(tblPr.tblW.w) : -1;
+			}
+			set 
+			{
+
+				CT_TblPr tblPr = GetTrPr();
+				CT_TblWidth tblWidth = tblPr.IsSetTblW() ? tblPr.tblW : tblPr
+						.AddNewTblW();
+				tblWidth.w = value.ToString();
+			}
         }
 
         /**
          * @return number of rows in table
          */
-        public int GetNumberOfRows()
+        public int NumberOfRows
         {
-            return ctTbl.SizeOfTrArray();
+			get
+			{
+				return ctTbl.SizeOfTrArray();
+			}
         }
 
         private CT_TblPr GetTrPr()
@@ -267,210 +269,235 @@ namespace NPOI.XWPF.UserModel
          * Get the StyleID of the table
          * @return	style-ID of the table
          */
-        public String GetStyleID()
+        public String StyleID
         {
-            String styleId = null;
-            CT_TblPr tblPr = ctTbl.tblPr;
-            if (tblPr != null)
-            {
-                CT_String styleStr = tblPr.tblStyle;
-                if (styleStr != null)
-                {
-                    styleId = styleStr.val;
-                }
-            }
-            return styleId;
+			get
+			{
+				String styleId = null;
+				CT_TblPr tblPr = ctTbl.tblPr;
+				if (tblPr != null)
+				{
+					CT_String styleStr = tblPr.tblStyle;
+					if (styleStr != null)
+					{
+						styleId = styleStr.val;
+					}
+				}
+				return styleId;
+			}
+			set
+			{
+				CT_TblPr tblPr = GetTrPr();
+				CT_String styleStr = tblPr.tblStyle;
+				if (styleStr == null)
+				{
+					styleStr = tblPr.AddNewTblStyle();
+				}
+				styleStr.val = value;
+			}
         }
-        /**
-         * Set the table style. If the style is not defined in the document, MS Word
-         * will Set the table style to "Normal".
-         * @param styleName - the style name to apply to this table
-         */
-        public void SetStyleID(String styleName)
+        public XWPFBorderType InsideHBorderType
         {
-            CT_TblPr tblPr = GetTrPr();
-            CT_String styleStr = tblPr.tblStyle;
-            if (styleStr == null)
-            {
-                styleStr = tblPr.AddNewTblStyle();
-            }
-            styleStr.val=(styleName);
-        }
+			get
+			{
+				XWPFBorderType bt = XWPFBorderType.NONE;
 
-        public XWPFBorderType GetInsideHBorderType()
-        {
-            XWPFBorderType bt = XWPFBorderType.NONE;
-
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideH())
-                {
-                    CT_Border border = ctb.insideH;
-                    bt = stBorderTypeMap[border.val];
-                }
-            }
-            return bt;
-        }
-
-        public int GetInsideHBorderSize()
-        {
-            int size = -1;
-
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideH())
-                {
-                    CT_Border border = ctb.insideH;
-                    size = (int)border.sz;
-                }
-            }
-            return size;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideH())
+					{
+						CT_Border border = ctb.insideH;
+						bt = stBorderTypeMap[border.val];
+					}
+				}
+				return bt;
+			}
         }
 
-        public int GetInsideHBorderSpace()
+        public int InsideHBorderSize
         {
-            int space = -1;
+			get
+			{
+				int size = -1;
 
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideH())
-                {
-                    CT_Border border = ctb.insideH;
-                    space = (int)border.space;
-                }
-            }
-            return space;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideH())
+					{
+						CT_Border border = ctb.insideH;
+						size = (int)border.sz;
+					}
+				}
+				return size;
+			}
         }
 
-        public String GetInsideHBorderColor()
+        public int InsideHBorderSpace
         {
-            String color = null;
+			get
+			{
+				int space = -1;
 
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideH())
-                {
-                    CT_Border border = ctb.insideH;
-                    color = border.color;
-                }
-            }
-            return color;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideH())
+					{
+						CT_Border border = ctb.insideH;
+						space = (int)border.space;
+					}
+				}
+				return space;
+			}
         }
 
-        public XWPFBorderType GetInsideVBorderType()
+        public String InsideHBorderColor
         {
-            XWPFBorderType bt = XWPFBorderType.NONE;
+			get
+			{
+				String color = null;
 
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideV())
-                {
-                    CT_Border border = ctb.insideV;
-                    bt = stBorderTypeMap[border.val];
-                }
-            }
-            return bt;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideH())
+					{
+						CT_Border border = ctb.insideH;
+						color = border.color;
+					}
+				}
+				return color;
+			}
         }
 
-        public int GetInsideVBorderSize()
+        public XWPFBorderType InsideVBorderType
         {
-            int size = -1;
+			get
+			{
+				XWPFBorderType bt = XWPFBorderType.NONE;
 
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideV())
-                {
-                    CT_Border border = ctb.insideV;
-                    size = (int)border.sz;
-                }
-            }
-            return size;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideV())
+					{
+						CT_Border border = ctb.insideV;
+						bt = stBorderTypeMap[border.val];
+					}
+				}
+
+				return bt;
+			}
         }
 
-        public int GetInsideVBorderSpace()
+        public int InsideVBorderSize
         {
-            int space = -1;
+			get
+			{
+				int size = -1;
 
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideV())
-                {
-                    CT_Border border = ctb.insideV;
-                    space = (int)border.space;
-                }
-            }
-            return space;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideV())
+					{
+						CT_Border border = ctb.insideV;
+						size = (int)border.sz;
+					}
+				}
+				return size;
+			}
         }
 
-        public String GetInsideVBorderColor()
+        public int InsideVBorderSpace
         {
-            String color = null;
+			get
+			{
+				int space = -1;
 
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblBorders())
-            {
-                CT_TblBorders ctb = tblPr.tblBorders;
-                if (ctb.IsSetInsideV())
-                {
-                    CT_Border border = ctb.insideV;
-                    color = border.color;
-                }
-            }
-            return color;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideV())
+					{
+						CT_Border border = ctb.insideV;
+						space = (int)border.space;
+					}
+				}
+				return space;
+			}
         }
 
-        public int GetRowBandSize()
+        public String InsideVBorderColor
         {
-            int size = 0;
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblStyleRowBandSize())
-            {
-                CT_DecimalNumber rowSize = tblPr.tblStyleRowBandSize;
-                int.TryParse(rowSize.val, out size);
-            }
-            return size;
+			get
+			{
+				String color = null;
+
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblBorders())
+				{
+					CT_TblBorders ctb = tblPr.tblBorders;
+					if (ctb.IsSetInsideV())
+					{
+						CT_Border border = ctb.insideV;
+						color = border.color;
+					}
+				}
+				return color;
+			}
         }
 
-        public void SetRowBandSize(int size)
+        public int RowBandSize
         {
-            CT_TblPr tblPr = GetTrPr();
-            CT_DecimalNumber rowSize = tblPr.IsSetTblStyleRowBandSize() ? tblPr.tblStyleRowBandSize : tblPr.AddNewTblStyleRowBandSize();
-            rowSize.val = size.ToString();
+			get
+			{
+				int size = 0;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblStyleRowBandSize())
+				{
+					CT_DecimalNumber rowSize = tblPr.tblStyleRowBandSize;
+					int.TryParse(rowSize.val, out size);
+				}
+				return size;
+			}
+			set 
+			{
+				CT_TblPr tblPr = GetTrPr();
+				CT_DecimalNumber rowSize = tblPr.IsSetTblStyleRowBandSize() ? tblPr.tblStyleRowBandSize : tblPr.AddNewTblStyleRowBandSize();
+				rowSize.val = value.ToString();			
+			}
         }
 
-        public int GetColBandSize()
+        public int ColBandSize
         {
-            int size = 0;
-            CT_TblPr tblPr = GetTrPr();
-            if (tblPr.IsSetTblStyleColBandSize())
-            {
-                CT_DecimalNumber colSize = tblPr.tblStyleColBandSize;
-                int.TryParse(colSize.val, out size);
-            }
-            return size;
+			get
+			{
+				int size = 0;
+				CT_TblPr tblPr = GetTrPr();
+				if (tblPr.IsSetTblStyleColBandSize())
+				{
+					CT_DecimalNumber colSize = tblPr.tblStyleColBandSize;
+					int.TryParse(colSize.val, out size);
+				}
+				return size;
+			}
+			set 
+			{
+				CT_TblPr tblPr = GetTrPr();
+				CT_DecimalNumber colSize = tblPr.IsSetTblStyleColBandSize() ? tblPr.tblStyleColBandSize : tblPr.AddNewTblStyleColBandSize();
+				colSize.val = value.ToString();
+			}
         }
-
-        public void SetColBandSize(int size)
-        {
-            CT_TblPr tblPr = GetTrPr();
-            CT_DecimalNumber colSize = tblPr.IsSetTblStyleColBandSize() ? tblPr.tblStyleColBandSize : tblPr.AddNewTblStyleColBandSize();
-            colSize.val = size.ToString();
-        }
-
         public void SetInsideHBorder(XWPFBorderType type, int size, int space, String rgbColor)
         {
             CT_TblPr tblPr = GetTrPr();
@@ -493,68 +520,80 @@ namespace NPOI.XWPF.UserModel
             b.color = (rgbColor);
         }
 
-        public int GetCellMarginTop()
+        public int CellMarginTop
         {
-            int margin = 0;
-            CT_TblPr tblPr = GetTrPr();
-            CT_TblCellMar tcm = tblPr.tblCellMar;
-            if (tcm != null)
-            {
-                CT_TblWidth tw = tcm.top;
-                if (tw != null)
-                {
-                    int.TryParse(tw.w, out margin);
-                }
-            }
-            return margin;
+			get
+			{
+				int margin = 0;
+				CT_TblPr tblPr = GetTrPr();
+				CT_TblCellMar tcm = tblPr.tblCellMar;
+				if (tcm != null)
+				{
+					CT_TblWidth tw = tcm.top;
+					if (tw != null)
+					{
+						int.TryParse(tw.w, out margin);
+					}
+				}
+				return margin;
+			}
         }
 
-        public int GetCellMarginLeft()
+        public int CellMarginLeft
         {
-            int margin = 0;
-            CT_TblPr tblPr = GetTrPr();
-            CT_TblCellMar tcm = tblPr.tblCellMar;
-            if (tcm != null)
-            {
-                CT_TblWidth tw = tcm.left;
-                if (tw != null)
-                {
-                    int.TryParse(tw.w, out margin);
-                }
-            }
-            return margin;
+			get
+			{
+				int margin = 0;
+				CT_TblPr tblPr = GetTrPr();
+				CT_TblCellMar tcm = tblPr.tblCellMar;
+				if (tcm != null)
+				{
+					CT_TblWidth tw = tcm.left;
+					if (tw != null)
+					{
+						int.TryParse(tw.w, out margin);
+					}
+				}
+				return margin;
+			}
         }
 
-        public int GetCellMarginBottom()
+        public int CellMarginBottom
         {
-            int margin = 0;
-            CT_TblPr tblPr = GetTrPr();
-            CT_TblCellMar tcm = tblPr.tblCellMar;
-            if (tcm != null)
-            {
-                CT_TblWidth tw = tcm.bottom;
-                if (tw != null)
-                {
-                    int.TryParse(tw.w, out margin);
-                }
-            }
-            return margin;
+			get
+			{
+				int margin = 0;
+				CT_TblPr tblPr = GetTrPr();
+				CT_TblCellMar tcm = tblPr.tblCellMar;
+				if (tcm != null)
+				{
+					CT_TblWidth tw = tcm.bottom;
+					if (tw != null)
+					{
+						int.TryParse(tw.w, out margin);
+					}
+				}
+				return margin;
+			}
         }
 
-        public int GetCellMarginRight()
+        public int CellMarginRight
         {
-            int margin = 0;
-            CT_TblPr tblPr = GetTrPr();
-            CT_TblCellMar tcm = tblPr.tblCellMar;
-            if (tcm != null)
-            {
-                CT_TblWidth tw = tcm.right;
-                if (tw != null)
-                {
-                    int.TryParse(tw.w, out margin);
-                }
-            }
-            return margin;
+			get
+			{
+				int margin = 0;
+				CT_TblPr tblPr = GetTrPr();
+				CT_TblCellMar tcm = tblPr.tblCellMar;
+				if (tcm != null)
+				{
+					CT_TblWidth tw = tcm.right;
+					if (tw != null)
+					{
+						int.TryParse(tw.w, out margin);
+					}
+				}
+				return margin;
+			}
         }
 
         public void SetCellMargins(int top, int left, int bottom, int right)
@@ -587,7 +626,7 @@ namespace NPOI.XWPF.UserModel
         public void AddRow(XWPFTableRow row)
         {
             ctTbl.AddNewTr();
-            ctTbl.SetTrArray(GetNumberOfRows()-1, row.GetCtRow());
+            ctTbl.SetTrArray(this.NumberOfRows-1, row.GetCTRow());
             tableRows.Add(row);
         }
 
@@ -601,7 +640,7 @@ namespace NPOI.XWPF.UserModel
             if (pos >= 0 && pos <= tableRows.Count)
             {
                 ctTbl.InsertNewTr(pos);
-                ctTbl.SetTrArray(pos, row.GetCtRow());
+                ctTbl.SetTrArray(pos, row.GetCTRow());
                 tableRows.Insert(pos, row);
                 return true;
             }
@@ -642,9 +681,12 @@ namespace NPOI.XWPF.UserModel
             return false;
         }
 
-        public List<XWPFTableRow> GetRows()
+        public List<XWPFTableRow> Rows
         {
-            return tableRows;
+			get
+			{
+				return tableRows;
+			}
         }
 
 
@@ -696,8 +738,8 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableRow GetRow(CT_Row row)
         {
-            for(int i=0; i<GetRows().Count; i++){
-                if(GetRows()[(i)].GetCtRow() == row) return GetRow(i); 
+            for(int i=0; i<Rows.Count; i++){
+                if(Rows[(i)].GetCTRow() == row) return GetRow(i); 
             }
             return null;
         }

@@ -63,9 +63,12 @@ namespace NPOI.XWPF.UserModel
             return paragraphs.GetEnumerator();
         }
 
-        public IList<XWPFTable> GetTables()
+        public IList<XWPFTable> Tables
         {
-            return tables;
+			get
+			{
+				return tables;
+			}
         }
 
         public IList<XWPFPictureData> Pictures
@@ -114,7 +117,7 @@ namespace NPOI.XWPF.UserModel
          * @param table
          * @see NPOI.XWPF.UserModel.IBody#insertTable(int pos, XWPFTable table)
          */
-        public void insertTable(int pos, XWPFTable table)
+        public void InsertTable(int pos, XWPFTable table)
         {
             bodyElements.Insert(pos, table);
             int i;
@@ -233,7 +236,7 @@ namespace NPOI.XWPF.UserModel
          * @return the inserted table
          * @see NPOI.XWPF.UserModel.IBody#insertNewTbl(XmlCursor cursor)
          */
-        public XWPFTable insertNewTbl(/*XmlCursor*/XmlDocument cursor)
+        public XWPFTable InsertNewTbl(/*XmlCursor*/XmlDocument cursor)
         {
             /*if(isCursorInFtn(cursor)){
                 String uri = CTTbl.type.Name.NamespaceURI;
@@ -276,7 +279,7 @@ namespace NPOI.XWPF.UserModel
          * @return the inserted paragraph
          * @see NPOI.XWPF.UserModel.IBody#insertNewParagraph(XmlCursor cursor)
          */
-        public XWPFParagraph insertNewParagraph(/*XmlCursor*/XmlDocument cursor)
+        public XWPFParagraph InsertNewParagraph(/*XmlCursor*/XmlDocument cursor)
         {
             /*if(isCursorInFtn(cursor)){
                 String uri = CTP.type.Name.NamespaceURI;

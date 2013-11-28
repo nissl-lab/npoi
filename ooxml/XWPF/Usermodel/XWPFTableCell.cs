@@ -271,7 +271,7 @@ namespace NPOI.XWPF.UserModel
          * @param cursor
          * @return the inserted paragraph
          */
-        public XWPFParagraph insertNewParagraph(/*XmlCursor*/ XmlDocument cursor)
+        public XWPFParagraph InsertNewParagraph(/*XmlCursor*/ XmlDocument cursor)
         {
             /*if(!isCursorInTableCell(cursor))
                 return null;
@@ -307,7 +307,7 @@ namespace NPOI.XWPF.UserModel
             throw new NotImplementedException();
         }
 
-        public XWPFTable insertNewTbl(/*XmlCursor*/ XmlDocument cursor)
+        public XWPFTable InsertNewTbl(/*XmlCursor*/ XmlDocument cursor)
         {
             /*if(isCursorInTableCell(cursor)){
                 String uri = CTTbl.type.Name.NamespaceURI;
@@ -399,7 +399,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFTable GetTable(CT_Tbl ctTable)
         {
             for(int i=0; i<tables.Count; i++){
-                if(GetTables()[(i)].GetCTTbl() == ctTable) return GetTables()[(i)]; 
+                if(this.Tables[(i)].GetCTTbl() == ctTable) return Tables[(i)]; 
             }
             return null;
         }
@@ -421,9 +421,12 @@ namespace NPOI.XWPF.UserModel
         /** 
          * @see NPOI.XWPF.UserModel.IBody#getTables()
          */
-        public IList<XWPFTable> GetTables()
+        public IList<XWPFTable> Tables
         {
-            return tables.AsReadOnly();
+			get
+			{
+				return tables.AsReadOnly();
+			}
         }
 
 
@@ -431,7 +434,7 @@ namespace NPOI.XWPF.UserModel
          * inserts an existing XWPFTable to the arrays bodyElements and tables
          * @see NPOI.XWPF.UserModel.IBody#insertTable(int, NPOI.XWPF.UserModel.XWPFTable)
          */
-        public void insertTable(int pos, XWPFTable table)
+        public void InsertTable(int pos, XWPFTable table)
         {
             bodyElements.Insert(pos, table);
             int i;
