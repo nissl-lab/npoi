@@ -29,10 +29,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_OnOff ctObj = new CT_OnOff();
-            if (node.Attributes["w:val"] != null)
-            {
-                ctObj.val =  XmlHelper.ReadBool(node.Attributes["w:val"]);
-            }
+			if (node.Attributes["w:val"] != null)
+			{
+				ctObj.val = XmlHelper.ReadBool(node.Attributes["w:val"]);
+			}
+			else
+			{
+				ctObj.val = true;
+			}
             return ctObj;
         }
 
