@@ -35,20 +35,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\solution\Lib\OOXML\.net4\NPOI.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net4\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\solution\Lib\OOXML\.net4\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\solution\Lib\OOXML\.net4\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\solution\Lib\OOXML\.net4\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\solution\Lib\OOXML\.net4\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
