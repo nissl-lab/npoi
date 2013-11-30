@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WritePerformanceTest", "xss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCustomProperties", "xssf\CreateCustomProperties\CreateCustomProperties.csproj", "{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonthlySalaryReport", "xssf\MonthlySalaryReport\MonthlySalaryReport.csproj", "{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -287,6 +289,16 @@ Global
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|x86.ActiveCfg = Release|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
