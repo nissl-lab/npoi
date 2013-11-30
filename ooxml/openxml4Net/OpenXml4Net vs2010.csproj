@@ -72,7 +72,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\..\solution\Lib\.net4\NPOI.OpenXml4Net.XML</DocumentationFile>
-    <DocumentationFile>..\solution\Lib\.net4\NPOI.OpenXml4Net.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
     <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
@@ -84,7 +83,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\..\solution\Lib\.net2\NPOI.OpenXml4Net.XML</DocumentationFile>
-    <DocumentationFile>..\solution\Lib\.net2\NPOI.OpenXml4Net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">

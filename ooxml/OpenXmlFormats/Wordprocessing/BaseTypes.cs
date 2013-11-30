@@ -29,14 +29,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_OnOff ctObj = new CT_OnOff();
-			if (node.Attributes["w:val"] != null)
-			{
-				ctObj.val = XmlHelper.ReadBool(node.Attributes["w:val"]);
-			}
-			else
-			{
-				ctObj.val = true;
-			}
+            if (node.Attributes["w:val"] != null)
+            {
+                ctObj.val = XmlHelper.ReadBool(node.Attributes["w:val"]);
+            }
+            else
+            {
+                ctObj.val = true;
+            }
             return ctObj;
         }
 
@@ -45,7 +45,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val);
+            //if true, don't render val attribute
+            if (!this.val)
+                XmlHelper.WriteAttribute(sw, "w:val", this.val, true);
             sw.Write(">");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
