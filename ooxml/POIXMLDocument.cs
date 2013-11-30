@@ -24,6 +24,7 @@ namespace NPOI
     using NPOI.OpenXml4Net.OPC;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net;
+    using System.Reflection;
 
     public abstract class POIXMLDocument : POIXMLDocumentPart
     {
@@ -87,18 +88,20 @@ namespace NPOI
          *  relationships of the base document with the
          *  specified content type.
          */
-        protected PackagePart[] GetRelatedByType(String contentType)  {
-        PackageRelationshipCollection partsC =
-            GetPackagePart().GetRelationshipsByType(contentType);
+        protected PackagePart[] GetRelatedByType(String contentType)
+        {
+            PackageRelationshipCollection partsC =
+                GetPackagePart().GetRelationshipsByType(contentType);
 
-        PackagePart[] parts = new PackagePart[partsC.Size];
-        int count = 0;
-        foreach (PackageRelationship rel in partsC) {
-            parts[count] = GetPackagePart().GetRelatedPart(rel);
-            count++;
+            PackagePart[] parts = new PackagePart[partsC.Size];
+            int count = 0;
+            foreach (PackageRelationship rel in partsC)
+            {
+                parts[count] = GetPackagePart().GetRelatedPart(rel);
+                count++;
+            }
+            return parts;
         }
-        return parts;
-    }
 
         /**
          * Checks that the supplied Stream (which MUST
@@ -120,11 +123,11 @@ namespace NPOI
             if (inp is PushbackStream)
             {
                 PushbackStream pin = (PushbackStream)inp;
-                pin.Position = pin.Position-4;
+                pin.Position = pin.Position - 4;
             }
             else
             {
-                inp.Position=0;
+                inp.Position = 0;
             }
 
             // Did it match the ooxml zip signature?
@@ -185,6 +188,10 @@ namespace NPOI
          */
         public void Write(Stream stream)
         {
+            if (!this.GetProperties().CustomProperties.Contains("Generator"))
+                this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
+            if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
+                this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
             //force all children to commit their Changes into the underlying OOXML Package
             List<PackagePart> context = new List<PackagePart>();
             OnSave(context);
@@ -197,8 +204,6 @@ namespace NPOI
         }
     }
 }
-
-
 
 
 

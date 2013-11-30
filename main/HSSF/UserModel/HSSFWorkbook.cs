@@ -34,6 +34,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using System.Globalization;
     using System.Security.Cryptography;
+    using System.Reflection;
 
 
     /// <summary>
@@ -1216,7 +1217,25 @@ namespace NPOI.HSSF.UserModel
         {
             byte[] bytes = GetBytes();
             POIFSFileSystem fs = new POIFSFileSystem();
-            
+
+            if (this.DocumentSummaryInformation == null)
+            {
+                this.DocumentSummaryInformation = HPSF.PropertySetFactory.CreateDocumentSummaryInformation();
+            }
+            NPOI.HPSF.CustomProperties cp = this.DocumentSummaryInformation.CustomProperties;
+            if(cp==null)
+            {
+                cp= new NPOI.HPSF.CustomProperties();
+            }
+            cp.Put("Generator", "NPOI");
+            cp.Put("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+            this.DocumentSummaryInformation.CustomProperties = cp;
+            if (this.SummaryInformation == null)
+            {
+                this.SummaryInformation = HPSF.PropertySetFactory.CreateSummaryInformation();
+            }            
+            this.SummaryInformation.ApplicationName = "NPOI";
+
             // For tracking what we've written out, used if we're
             //  going to be preserving nodes
             List<string> excepts = new List<string>(1);
