@@ -176,7 +176,7 @@ namespace NPOI.HPSF
             if (codepage == -1)
                 result = Encoding.UTF8.GetString(_value);
             else
-                result = Encoding.GetEncoding(codepageToEncoding(codepage)).GetString(_value);
+                result = Encoding.GetEncoding(codepage).GetString(_value);
             int terminator = result.IndexOf('\0');
             if (terminator == -1)
             {
@@ -206,7 +206,7 @@ namespace NPOI.HPSF
             if (codepage == -1)
                 _value = Encoding.UTF8.GetBytes(aString + "\0");
             else
-                _value = Encoding.GetEncoding(codepageToEncoding(codepage)).GetBytes(aString + "\0");
+                _value = Encoding.GetEncoding(codepage).GetBytes(aString + "\0");
         }
 
         public int Write(Stream out1)
