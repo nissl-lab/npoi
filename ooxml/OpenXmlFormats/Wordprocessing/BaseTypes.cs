@@ -90,7 +90,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetVal()
         {
-            return this.valFieldSpecified;// && this.valField != ST_OnOff.True;
+            return this.valFieldSpecified && !this.valField;
         }
     }
     /// <summary>

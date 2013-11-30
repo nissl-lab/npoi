@@ -274,7 +274,7 @@ namespace NPOI.XWPF.UserModel
             Settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
             CreateStyles();
 
-            POIXMLProperties.ExtendedProperties expProps = GetProperties().GetExtendedProperties();
+            ExtendedProperties expProps = GetProperties().ExtendedProperties;
             expProps.GetUnderlyingProperties().Application = (DOCUMENT_CREATOR);
         }
 

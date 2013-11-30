@@ -76,30 +76,30 @@ namespace NPOI.XWPF.UserModel
         public void TestMetadataBasics()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            Assert.IsNotNull(xml.GetProperties().GetCoreProperties());
-            Assert.IsNotNull(xml.GetProperties().GetExtendedProperties());
+            Assert.IsNotNull(xml.GetProperties().CoreProperties);
+            Assert.IsNotNull(xml.GetProperties().ExtendedProperties);
 
-            Assert.AreEqual("Microsoft Office Word", xml.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Application);
-            Assert.AreEqual(1315, xml.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Characters);
-            Assert.AreEqual(10, xml.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Lines);
+            Assert.AreEqual("Microsoft Office Word", xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
+            Assert.AreEqual(1315, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Characters);
+            Assert.AreEqual(10, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Lines);
 
-            Assert.AreEqual(null, xml.GetProperties().GetCoreProperties().GetTitle());
-            Assert.AreEqual(null, xml.GetProperties().GetCoreProperties().GetUnderlyingProperties().GetSubjectProperty());
+            Assert.AreEqual(null, xml.GetProperties().CoreProperties.Title);
+            Assert.AreEqual(null, xml.GetProperties().CoreProperties.GetUnderlyingProperties().GetSubjectProperty());
         }
 
         [Test]
         public void TestMetadataComplex()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("IllustrativeCases.docx");
-            Assert.IsNotNull(xml.GetProperties().GetCoreProperties());
-            Assert.IsNotNull(xml.GetProperties().GetExtendedProperties());
+            Assert.IsNotNull(xml.GetProperties().CoreProperties);
+            Assert.IsNotNull(xml.GetProperties().ExtendedProperties);
 
-            Assert.AreEqual("Microsoft Office Outlook", xml.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Application);
-            Assert.AreEqual(5184, xml.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Characters);
-            Assert.AreEqual(0, xml.GetProperties().GetExtendedProperties().GetUnderlyingProperties().Lines);
+            Assert.AreEqual("Microsoft Office Outlook", xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
+            Assert.AreEqual(5184, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Characters);
+            Assert.AreEqual(0, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Lines);
 
-            Assert.AreEqual(" ", xml.GetProperties().GetCoreProperties().GetTitle());
-            Assert.AreEqual(" ", xml.GetProperties().GetCoreProperties().GetUnderlyingProperties().GetSubjectProperty());
+            Assert.AreEqual(" ", xml.GetProperties().CoreProperties.Title);
+            Assert.AreEqual(" ", xml.GetProperties().CoreProperties.GetUnderlyingProperties().GetSubjectProperty());
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             POIXMLProperties props = doc.GetProperties();
             Assert.IsNotNull(props);
-            Assert.AreEqual("NPOI", props.GetExtendedProperties().GetUnderlyingProperties().Application);
+            Assert.AreEqual("NPOI", props.ExtendedProperties.GetUnderlyingProperties().Application);
         }
 
         [Test]

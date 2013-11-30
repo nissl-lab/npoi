@@ -44,12 +44,12 @@ namespace NPOI.XWPF
         public void TestGetSetKeywords()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestPoiXMLDocumentCorePropertiesGetKeywords.docx");
-            String keywords = doc.GetProperties().GetCoreProperties().GetKeywords();
+            String keywords = doc.GetProperties().CoreProperties.Keywords;
             Assert.AreEqual("extractor, test, rdf", keywords);
 
-            doc.GetProperties().GetCoreProperties().SetKeywords ("test, keywords");
+            doc.GetProperties().CoreProperties.Keywords =  ("test, keywords");
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-            keywords = doc.GetProperties().GetCoreProperties().GetKeywords();
+            keywords = doc.GetProperties().CoreProperties.Keywords;
             Assert.AreEqual("test, keywords", keywords);
         }
     }

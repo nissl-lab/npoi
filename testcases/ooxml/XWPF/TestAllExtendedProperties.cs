@@ -42,7 +42,7 @@ namespace NPOI.XWPF
         public void TestGetAllExtendedProperties()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestPoiXMLDocumentCorePropertiesGetKeywords.docx");
-            CT_ExtendedProperties ctProps = doc.GetProperties().GetExtendedProperties().GetUnderlyingProperties();
+            CT_ExtendedProperties ctProps = doc.GetProperties().ExtendedProperties.GetUnderlyingProperties();
             Assert.AreEqual("Microsoft Office Word", ctProps.Application);
             Assert.AreEqual("14.0000", ctProps.AppVersion);
             Assert.AreEqual(57, ctProps.Characters);

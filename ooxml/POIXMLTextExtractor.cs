@@ -39,23 +39,23 @@ namespace NPOI
         /**
          * Returns the core document properties
          */
-        public NPOI.POIXMLProperties.CoreProperties GetCoreProperties()
+        public CoreProperties GetCoreProperties()
         {
-            return _document.GetProperties().GetCoreProperties();
+            return _document.GetProperties().CoreProperties;
         }
         /**
          * Returns the extended document properties
          */
-        public NPOI.POIXMLProperties.ExtendedProperties GetExtendedProperties()
+        public ExtendedProperties GetExtendedProperties()
         {
-            return _document.GetProperties().GetExtendedProperties();
+            return _document.GetProperties().ExtendedProperties;
         }
         /**
          * Returns the custom document properties
          */
-        public NPOI.POIXMLProperties.CustomProperties GetCustomProperties()
+        public CustomProperties GetCustomProperties()
         {
-            return _document.GetProperties().GetCustomProperties();
+            return _document.GetProperties().CustomProperties;
         }
 
         /**

@@ -237,39 +237,42 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns the title, or null if none is Set
          */
-        public XSSFRichTextString GetTitle()
+        public XSSFRichTextString Title
         {
-            if (!chart.IsSetTitle())
+            get
             {
-                return null;
+                if (!chart.IsSetTitle())
+                {
+                    return null;
+                }
+
+                // TODO Do properly
+                CT_Title title = chart.title;
+
+                StringBuilder text = new StringBuilder();
+                XmlSerializer sr = new XmlSerializer(typeof(CT_Title));
+                StringWriter sw = new StringWriter(text);
+                sr.Serialize(sw, title);
+                //XmlObject[] t = title
+                //    .selectPath("declare namespace a='"+XSSFDrawing.NAMESPACE_A+"' .//a:t");
+                //for (int m = 0; m < t.Length; m++)
+                //{
+                //    NodeList kids = t[m].GetDomNode().GetChildNodes();
+                //    for (int n = 0; n < kids.GetLength(); n++)
+                //    {
+                //        if (kids.item(n) is Text)
+                //        {
+                //            text.Append(kids.item(n).GetNodeValue());
+                //        }
+                //    }
+                //}
+                string xml = text.ToString();
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(xml);
+                text.Length = 0;
+                text.Append(doc.InnerText);
+                return new XSSFRichTextString(text.ToString());
             }
-
-            // TODO Do properly
-            CT_Title title = chart.title;
-
-            StringBuilder text = new StringBuilder();
-            XmlSerializer sr = new XmlSerializer(typeof(CT_Title));
-            StringWriter sw = new StringWriter(text);
-            sr.Serialize(sw, title);
-            //XmlObject[] t = title
-            //    .selectPath("declare namespace a='"+XSSFDrawing.NAMESPACE_A+"' .//a:t");
-            //for (int m = 0; m < t.Length; m++)
-            //{
-            //    NodeList kids = t[m].GetDomNode().GetChildNodes();
-            //    for (int n = 0; n < kids.GetLength(); n++)
-            //    {
-            //        if (kids.item(n) is Text)
-            //        {
-            //            text.Append(kids.item(n).GetNodeValue());
-            //        }
-            //    }
-            //}
-            string xml = text.ToString();
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            text.Length = 0;
-            text.Append(doc.InnerText);
-            return new XSSFRichTextString(text.ToString());
         }
 
         public IChartLegend GetOrCreateLegend()

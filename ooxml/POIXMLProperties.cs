@@ -24,7 +24,317 @@ using NPOI.OpenXmlFormats;
 
 namespace NPOI
 {
+    /**
+ * The core document properties
+ */
+    public class CoreProperties
+    {
+        private PackagePropertiesPart part;
+        internal CoreProperties(PackagePropertiesPart part)
+        {
+            this.part = part;
+        }
 
+        public String Category
+        {
+            get
+            {
+                return part.GetCategoryProperty();
+            }
+            set 
+            {
+                part.SetCategoryProperty(value);
+            }
+        }
+        public String GetContentStatus()
+        {
+            return part.GetContentStatusProperty();
+        }
+        public void SetContentStatus(String contentStatus)
+        {
+            part.SetContentStatusProperty(contentStatus);
+        }
+        public String GetContentType()
+        {
+            return part.GetContentTypeProperty();
+        }
+        public void SetContentType(String contentType)
+        {
+            part.SetContentTypeProperty(contentType);
+        }
+        public DateTime? Created
+        {
+            get
+            {
+                return part.GetCreatedProperty();
+            }
+            set 
+            {
+                part.SetCreatedProperty(value);    
+            }
+        }
+        public void SetCreated(String date)
+        {
+            part.SetCreatedProperty(date);
+        }
+        public String Creator
+        {
+            get
+            {
+                return part.GetCreatorProperty();
+            }
+            set 
+            {
+                part.SetCreatorProperty(value);
+            }
+        }
+        public String Description
+        {
+            get
+            {
+                return part.GetDescriptionProperty();
+            }
+            set 
+            {
+                part.SetDescriptionProperty(value);
+            }
+        }
+        public String Identifier
+        {
+            get
+            {
+                return part.GetIdentifierProperty();
+            }
+            set 
+            {
+                part.SetIdentifierProperty(value);
+            }
+        }
+        public String Keywords
+        {
+            get
+            {
+                return part.GetKeywordsProperty();
+            }
+            set 
+            {
+                part.SetKeywordsProperty(value);
+            }
+        }
+        public DateTime? LastPrinted
+        {
+            get
+            {
+                return part.GetLastPrintedProperty();
+            }
+            set 
+            {
+                part.SetLastPrintedProperty(value);
+            }
+        }
+        public void SetLastPrinted(String date)
+        {
+            part.SetLastPrintedProperty(date);
+        }
+        public DateTime? Modified
+        {
+            get
+            {
+                return part.GetModifiedProperty();
+            }
+            set 
+            {
+                part.SetModifiedProperty(value);
+            }
+        }
+        public void SetModified(String date)
+        {
+            part.SetModifiedProperty(date);
+        }
+        public String Subject
+        {
+            get
+            {
+                return part.GetSubjectProperty();
+            }
+            set 
+            {
+                part.SetSubjectProperty(value);
+            }
+        }
+        public String Title
+        {
+            get
+            {
+                return part.GetTitleProperty();
+            }
+            set 
+            {
+                part.SetTitleProperty(value);
+            }
+        }
+        public String Revision
+        {
+            get
+            {
+                return part.GetRevisionProperty();
+            }
+            set
+            {
+                try
+                {
+                    long.Parse(value);
+                    part.SetRevisionProperty(value);
+                }
+                catch (FormatException) { }            
+            }
+        }
+
+        public PackagePropertiesPart GetUnderlyingProperties()
+        {
+            return part;
+        }
+    }
+
+    /**
+     * Extended document properties
+     */
+    public class ExtendedProperties
+    {
+        public ExtendedPropertiesDocument props;
+        internal ExtendedProperties(ExtendedPropertiesDocument props)
+        {
+            this.props = props;
+        }
+
+        public CT_ExtendedProperties GetUnderlyingProperties()
+        {
+            return props.GetProperties();
+        }
+    }
+
+    /**
+     *  Custom document properties
+     */
+    public class CustomProperties
+    {
+        /**
+         *  Each custom property element Contains an fmtid attribute
+         *  with the same GUID value ({D5CDD505-2E9C-101B-9397-08002B2CF9AE}).
+         */
+        public static String FORMAT_ID = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
+
+        public CustomPropertiesDocument props;
+        internal CustomProperties(CustomPropertiesDocument props)
+        {
+            this.props = props;
+        }
+
+        public CT_CustomProperties GetUnderlyingProperties()
+        {
+            return props.GetProperties();
+        }
+
+        /**
+         * Add a new property
+         *
+         * @param name the property name
+         * @throws IllegalArgumentException if a property with this name already exists
+         */
+        private CT_Property Add(String name)
+        {
+            if (Contains(name))
+            {
+                throw new ArgumentException("A property with this name " +
+                        "already exists in the custom properties");
+            }
+
+            CT_Property p = props.GetProperties().AddNewProperty();
+            int pid = NextPid();
+            p.pid = pid;
+            p.fmtid = FORMAT_ID;
+            p.name = name;
+            return p;
+        }
+
+        /**
+         * Add a new string property
+         *
+         * @throws IllegalArgumentException if a property with this name already exists
+         */
+        public void AddProperty(String name, String value)
+        {
+            CT_Property p = Add(name);
+            p.ItemElementName = ItemChoiceType.lpwstr;
+            p.Item = value;
+        }
+
+        /**
+         * Add a new double property
+         *
+         * @throws IllegalArgumentException if a property with this name already exists
+         */
+        public void AddProperty(String name, double value)
+        {
+            CT_Property p = Add(name);
+            p.ItemElementName = ItemChoiceType.r8;
+            p.Item = value;
+        }
+
+        /**
+         * Add a new integer property
+         *
+         * @throws IllegalArgumentException if a property with this name already exists
+         */
+        public void AddProperty(String name, int value)
+        {
+            CT_Property p = Add(name);
+            p.ItemElementName = ItemChoiceType.i4;
+            p.Item = value;
+        }
+
+        /**
+         * Add a new bool property
+         *
+         * @throws IllegalArgumentException if a property with this name already exists
+         */
+        public void AddProperty(String name, bool value)
+        {
+            CT_Property p = Add(name);
+            p.ItemElementName = ItemChoiceType.@bool;
+            p.Item = value;
+        }
+
+        /**
+         * Generate next id that uniquely relates a custom property
+         *
+         * @return next property id starting with 2
+         */
+        protected int NextPid()
+        {
+            int propid = 1;
+            foreach (CT_Property p in props.GetProperties().GetPropertyList())
+            {
+                if (p.pid > propid) propid = p.pid;
+            }
+            return propid + 1;
+        }
+
+        /**
+         * Check if a property with this name already exists in the collection of custom properties
+         *
+         * @param name the name to check
+         * @return whether a property with the given name exists in the custom properties
+         */
+        public bool Contains(String name)
+        {
+            foreach (CT_Property p in props.GetProperties().GetPropertyList())
+            {
+                if (p.name.Equals(name)) return true;
+            }
+            return false;
+        }
+    }
     /**
      * Wrapper around the two different kinds of OOXML properties
      *  a document can have
@@ -96,25 +406,34 @@ namespace NPOI
         /**
          * Returns the core document properties
          */
-        public CoreProperties GetCoreProperties()
+        public CoreProperties CoreProperties
         {
-            return core;
+            get
+            {
+                return core;
+            }
         }
 
         /**
          * Returns the extended document properties
          */
-        public ExtendedProperties GetExtendedProperties()
+        public ExtendedProperties ExtendedProperties
         {
-            return ext;
+            get
+            {
+                return ext;
+            }
         }
 
         /**
          * Returns the custom document properties
          */
-        public CustomProperties GetCustomProperties()
+        public CustomProperties CustomProperties
         {
-            return cust;
+            get
+            {
+                return cust;
+            }
         }
 
         /**
@@ -164,284 +483,7 @@ namespace NPOI
 
 
         }
-        /**
-         * The core document properties
-         */
-        public class CoreProperties
-        {
-            private PackagePropertiesPart part;
-            internal CoreProperties(PackagePropertiesPart part)
-            {
-                this.part = part;
-            }
 
-            public String GetCategory()
-            {
-                return part.GetCategoryProperty();
-            }
-            public void SetCategory(String category)
-            {
-                part.SetCategoryProperty(category);
-            }
-            public String GetContentStatus()
-            {
-                return part.GetContentStatusProperty();
-            }
-            public void SetContentStatus(String contentStatus)
-            {
-                part.SetContentStatusProperty(contentStatus);
-            }
-            public String GetContentType()
-            {
-                return part.GetContentTypeProperty();
-            }
-            public void SetContentType(String contentType)
-            {
-                part.SetContentTypeProperty(contentType);
-            }
-            public DateTime? GetCreated()
-            {
-                return part.GetCreatedProperty();
-            }
-            public void SetCreated(Nullable<DateTime> date)
-            {
-                part.SetCreatedProperty(date);
-            }
-            public void SetCreated(String date)
-            {
-                part.SetCreatedProperty(date);
-            }
-            public String GetCreator()
-            {
-                return part.GetCreatorProperty();
-            }
-            public void SetCreator(String creator)
-            {
-                part.SetCreatorProperty(creator);
-            }
-            public String GetDescription()
-            {
-                return part.GetDescriptionProperty();
-            }
-            public void SetDescription(String description)
-            {
-                part.SetDescriptionProperty(description);
-            }
-            public String GetIdentifier()
-            {
-                return part.GetIdentifierProperty();
-            }
-            public void SetIdentifier(String identifier)
-            {
-                part.SetIdentifierProperty(identifier);
-            }
-            public String GetKeywords()
-            {
-                return part.GetKeywordsProperty();
-            }
-            public void SetKeywords(String keywords)
-            {
-                part.SetKeywordsProperty(keywords);
-            }
-            public DateTime? GetLastPrinted()
-            {
-                return part.GetLastPrintedProperty();
-            }
-            public void SetLastPrinted(Nullable<DateTime> date)
-            {
-                part.SetLastPrintedProperty(date);
-            }
-            public void SetLastPrinted(String date)
-            {
-                part.SetLastPrintedProperty(date);
-            }
-            public DateTime? GetModified()
-            {
-                return part.GetModifiedProperty();
-            }
-            public void SetModified(Nullable<DateTime> date)
-            {
-                part.SetModifiedProperty(date);
-            }
-            public void SetModified(String date)
-            {
-                part.SetModifiedProperty(date);
-            }
-            public String GetSubject()
-            {
-                return part.GetSubjectProperty();
-            }
-            public void SetSubjectProperty(String subject)
-            {
-                part.SetSubjectProperty(subject);
-            }
-            public void SetTitle(String title)
-            {
-                part.SetTitleProperty(title);
-            }
-            public String GetTitle()
-            {
-                return part.GetTitleProperty();
-            }
-            public String GetRevision()
-            {
-                return part.GetRevisionProperty();
-            }
-            public void SetRevision(String revision)
-            {
-                try
-                {
-                    long.Parse(revision);
-                    part.SetRevisionProperty(revision);
-                }
-                catch (FormatException) { }
-            }
-
-            public PackagePropertiesPart GetUnderlyingProperties()
-            {
-                return part;
-            }
-        }
-
-        /**
-         * Extended document properties
-         */
-        public class ExtendedProperties
-        {
-            public ExtendedPropertiesDocument props;
-            internal ExtendedProperties(ExtendedPropertiesDocument props)
-            {
-                this.props = props;
-            }
-
-            public CT_ExtendedProperties GetUnderlyingProperties()
-            {
-                return props.GetProperties();
-            }
-        }
-
-        /**
-         *  Custom document properties
-         */
-        public class CustomProperties
-        {
-            /**
-             *  Each custom property element Contains an fmtid attribute
-             *  with the same GUID value ({D5CDD505-2E9C-101B-9397-08002B2CF9AE}).
-             */
-            public static String FORMAT_ID = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
-
-            public CustomPropertiesDocument props;
-            internal CustomProperties(CustomPropertiesDocument props)
-            {
-                this.props = props;
-            }
-
-            public CT_CustomProperties GetUnderlyingProperties()
-            {
-                return props.GetProperties();
-            }
-
-            /**
-             * Add a new property
-             *
-             * @param name the property name
-             * @throws IllegalArgumentException if a property with this name already exists
-             */
-            private CT_Property Add(String name)
-            {
-                if (Contains(name))
-                {
-                    throw new ArgumentException("A property with this name " +
-                            "already exists in the custom properties");
-                }
-
-                CT_Property p = props.GetProperties().AddNewProperty();
-                int pid = NextPid();
-                p.pid = pid;
-                p.fmtid = FORMAT_ID;
-                p.name = name;
-                return p;
-            }
-
-            /**
-             * Add a new string property
-             *
-             * @throws IllegalArgumentException if a property with this name already exists
-             */
-            public void AddProperty(String name, String value)
-            {
-                CT_Property p = Add(name);
-                p.ItemElementName = ItemChoiceType.lpwstr;
-                p.Item = value;
-            }
-
-            /**
-             * Add a new double property
-             *
-             * @throws IllegalArgumentException if a property with this name already exists
-             */
-            public void AddProperty(String name, double value)
-            {
-                CT_Property p = Add(name);
-                p.ItemElementName = ItemChoiceType.r8;
-                p.Item = value;
-            }
-
-            /**
-             * Add a new integer property
-             *
-             * @throws IllegalArgumentException if a property with this name already exists
-             */
-            public void AddProperty(String name, int value)
-            {
-                CT_Property p = Add(name);
-                p.ItemElementName = ItemChoiceType.i4;
-                p.Item = value;
-            }
-
-            /**
-             * Add a new bool property
-             *
-             * @throws IllegalArgumentException if a property with this name already exists
-             */
-            public void AddProperty(String name, bool value)
-            {
-                CT_Property p = Add(name);
-                p.ItemElementName = ItemChoiceType.@bool;
-                p.Item = value;
-            }
-
-            /**
-             * Generate next id that uniquely relates a custom property
-             *
-             * @return next property id starting with 2
-             */
-            protected int NextPid()
-            {
-                int propid = 1;
-                foreach (CT_Property p in props.GetProperties().GetPropertyList())
-                {
-                    if (p.pid > propid) propid = p.pid;
-                }
-                return propid + 1;
-            }
-
-            /**
-             * Check if a property with this name already exists in the collection of custom properties
-             *
-             * @param name the name to check
-             * @return whether a property with the given name exists in the custom properties
-             */
-            public bool Contains(String name)
-            {
-                foreach (CT_Property p in props.GetProperties().GetPropertyList())
-                {
-                    if (p.name.Equals(name)) return true;
-                }
-                return false;
-            }
-        }
 
     }
 

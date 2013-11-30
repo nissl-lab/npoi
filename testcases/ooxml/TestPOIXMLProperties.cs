@@ -33,14 +33,14 @@ namespace NPOI
     public class TestPOIXMLProperties
     {
         private POIXMLProperties _props;
-        private NPOI.POIXMLProperties.CoreProperties _coreProperties;
+        private CoreProperties _coreProperties;
 
         [SetUp]
         public void SetUp()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
             _props = sampleDoc.GetProperties();
-            _coreProperties = _props.GetCoreProperties();
+            _coreProperties = _props.CoreProperties;
             Assert.IsNotNull(_props);
         }
         [Test]
@@ -50,8 +50,8 @@ namespace NPOI
             POIXMLProperties props = workbook.GetProperties();
             Assert.IsNotNull(props);
 
-            NPOI.POIXMLProperties.ExtendedProperties properties =
-                    props.GetExtendedProperties();
+            ExtendedProperties properties =
+                    props.ExtendedProperties;
 
             CT_ExtendedProperties
                     ctProps = properties.GetUnderlyingProperties();
@@ -75,8 +75,8 @@ namespace NPOI
 
             POIXMLProperties newProps = newWorkbook.GetProperties();
             Assert.IsNotNull(newProps);
-            NPOI.POIXMLProperties.ExtendedProperties newProperties =
-                    newProps.GetExtendedProperties();
+            ExtendedProperties newProperties =
+                    newProps.ExtendedProperties;
 
             CT_ExtendedProperties
                     newCtProps = newProperties.GetUnderlyingProperties();
@@ -96,7 +96,7 @@ namespace NPOI
         {
             POIXMLDocument wb = new XSSFWorkbook();
 
-            POIXMLProperties.CustomProperties customProps = wb.GetProperties().GetCustomProperties();
+            CustomProperties customProps = wb.GetProperties().CustomProperties;
             customProps.AddProperty("test-1", "string val");
             customProps.AddProperty("test-2", 1974);
             customProps.AddProperty("test-3", 36.6);
@@ -114,8 +114,8 @@ namespace NPOI
 
             wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb);
             CT_CustomProperties ctProps =
-                    wb.GetProperties().GetCustomProperties().GetUnderlyingProperties();
-            Assert.AreEqual(4, ctProps.sizeOfPropertyArray());
+                    wb.GetProperties().CustomProperties.GetUnderlyingProperties();
+            Assert.AreEqual(6, ctProps.sizeOfPropertyArray());
             CT_Property p;
 
             p = ctProps.GetPropertyArray(0);
@@ -141,50 +141,60 @@ namespace NPOI
             Assert.AreEqual("test-4", p.name);
             Assert.AreEqual(true, p.Item);
             Assert.AreEqual(5, p.pid);
+
+            p = ctProps.GetPropertyArray(4);
+            Assert.AreEqual("Generator", p.name);
+            Assert.AreEqual("NPOI", p.Item);
+            Assert.AreEqual(6, p.pid);
+
+            p = ctProps.GetPropertyArray(5);
+            Assert.AreEqual("Generator Version", p.name);
+            Assert.AreEqual("2.0.5", p.Item);
+            Assert.AreEqual(7, p.pid);
         }
         [Ignore]
         public void TestDocumentProperties()
         {
-            String category = _coreProperties.GetCategory();
+            String category = _coreProperties.Category;
             Assert.AreEqual("test", category);
             String contentStatus = "Draft";
             _coreProperties.SetContentStatus(contentStatus);
             Assert.AreEqual("Draft", contentStatus);
-            DateTime? Created = _coreProperties.GetCreated();
+            DateTime? Created = _coreProperties.Created;
             // the original file Contains a following value: 2009-07-20T13:12:00Z
             Assert.IsTrue(DateTimeEqualToUTCString(Created, "2009-07-20T13:12:00Z"));
-            String creator = _coreProperties.GetCreator();
+            String creator = _coreProperties.Creator;
             Assert.AreEqual("Paolo Mottadelli", creator);
-            String subject = _coreProperties.GetSubject();
+            String subject = _coreProperties.Subject;
             Assert.AreEqual("Greetings", subject);
-            String title = _coreProperties.GetTitle();
+            String title = _coreProperties.Title;
             Assert.AreEqual("Hello World", title);
         }
 
         public void TestTransitiveSetters()
         {
             XWPFDocument doc = new XWPFDocument();
-            NPOI.POIXMLProperties.CoreProperties cp = doc.GetProperties().GetCoreProperties();
+            CoreProperties cp = doc.GetProperties().CoreProperties;
 
             DateTime dateCreated = new DateTime(2010, 6, 15, 10, 0, 0);
-            cp.SetCreated(new DateTime(2010, 6, 15, 10, 0, 0));
-            Assert.AreEqual(dateCreated.ToString(), cp.GetCreated().ToString());
+            cp.Created = new DateTime(2010, 6, 15, 10, 0, 0);
+            Assert.AreEqual(dateCreated.ToString(), cp.Created.ToString());
 
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-            cp = doc.GetProperties().GetCoreProperties();
-            DateTime? dt3 = cp.GetCreated();
+            cp = doc.GetProperties().CoreProperties;
+            DateTime? dt3 = cp.Created;
             Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
         }
         [Ignore]
         public void TestGetSetRevision()
         {
-            String revision = _coreProperties.GetRevision();
+            String revision = _coreProperties.Revision;
             Assert.IsTrue(Int32.Parse(revision) > 1, "Revision number is 1");
-            _coreProperties.SetRevision("20");
-            Assert.AreEqual("20", _coreProperties.GetRevision());
-            _coreProperties.SetRevision("20xx");
-            Assert.AreEqual("20", _coreProperties.GetRevision());
+            _coreProperties.Revision = "20";
+            Assert.AreEqual("20", _coreProperties.Revision);
+            _coreProperties.Revision = "20xx";
+            Assert.AreEqual("20", _coreProperties.Revision);
         }
 
         public static bool DateTimeEqualToUTCString(DateTime? dateTime, String utcString)

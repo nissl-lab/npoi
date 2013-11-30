@@ -49,13 +49,13 @@ namespace NPOI.XSSF.UserModel
 
             // Check the titles
             XSSFChart chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            Assert.AreEqual(null, chart.GetTitle());
+            Assert.AreEqual(null, chart.Title);
 
             chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(1)];
-            Assert.AreEqual("Pie Chart Title Thingy", chart.GetTitle().String);
+            Assert.AreEqual("Pie Chart Title Thingy", chart.Title.String);
 
             chart = (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            Assert.AreEqual("Sheet 3 Chart with Title", chart.GetTitle().String);
+            Assert.AreEqual("Sheet 3 Chart with Title", chart.Title.String);
         }
         [Test]
         public void TestAddChartsToNewWorkbook()

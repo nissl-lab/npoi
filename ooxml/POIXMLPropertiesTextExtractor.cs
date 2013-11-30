@@ -80,7 +80,7 @@ namespace NPOI
         {
             StringBuilder text = new StringBuilder();
             PackagePropertiesPart props =
-                Document.GetProperties().GetCoreProperties().GetUnderlyingProperties();
+                Document.GetProperties().CoreProperties.GetUnderlyingProperties();
 
             AppendIfPresent(text, "Category", props.GetCategoryProperty());
             AppendIfPresent(text, "Category", props.GetCategoryProperty());
@@ -113,7 +113,7 @@ namespace NPOI
         {
             StringBuilder text = new StringBuilder();
             CT_ExtendedProperties
-                props = Document.GetProperties().GetExtendedProperties().GetUnderlyingProperties();
+                props = Document.GetProperties().ExtendedProperties.GetUnderlyingProperties();
 
             AppendIfPresent(text, "Application", props.Application);
             AppendIfPresent(text, "AppVersion", props.AppVersion);
@@ -140,7 +140,7 @@ namespace NPOI
         public String GetCustomPropertiesText()
         {
             StringBuilder text = new StringBuilder();
-            CT_CustomProperties props = Document.GetProperties().GetCustomProperties().GetUnderlyingProperties();
+            CT_CustomProperties props = Document.GetProperties().CustomProperties.GetUnderlyingProperties();
 
             List<CT_Property> properties = props.GetPropertyList();
             foreach (CT_Property property in properties)

@@ -326,7 +326,7 @@ namespace NPOI.XSSF.UserModel
             bv.activeTab = 0;
             workbook.AddNewSheets();
 
-            POIXMLProperties.ExtendedProperties expProps = GetProperties().GetExtendedProperties();
+            ExtendedProperties expProps = GetProperties().ExtendedProperties;
             CT_ExtendedProperties ctExtendedProp= expProps.GetUnderlyingProperties();
             ctExtendedProp.Application = DOCUMENT_CREATOR;
             ctExtendedProp.DocSecurity = 0;
