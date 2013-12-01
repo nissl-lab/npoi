@@ -12,7 +12,6 @@ used to create search engines).
 *  NPOI Website *
 ==================
 https://github.com/tonyqus/npoi/ (Latest source code available)
-http://npoi.googlecode.com (No latest source code available)
 http://npoi.codeplex.com (No latest source code available)
 http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
 
@@ -27,7 +26,7 @@ medium trust environment in ASP.NET
 =================
 *  NPOI on SNS  *
 =================
-QQÈº: 124527967, 116053476, 78142590
+QQÈº: 189925337
 Twitter: http://twitter.com/tonyqus 
 ÐÂÀËÎ¢²©: http://t.sina.com.cn/npoi 
 
@@ -86,11 +85,11 @@ Main contribution: NPOIFS/POIFS
 
 NPOI 2.0
 --------------------------------------------------------------------------------
-Tony Qu - developer
+Tony Qu - chief developer
 -------------------------------
 From: Shanghai, China
 Time Zone: GMT+8
-Main Contribution: OpenXml4Net, OpenXmlFormats, NPOI.XSSF implementation
+Main Contribution: OpenXml4Net, OpenXmlFormats, NPOI.XSSF, NPOI.XWPF implementation
 
 Antony - developer
 ------------------------------
