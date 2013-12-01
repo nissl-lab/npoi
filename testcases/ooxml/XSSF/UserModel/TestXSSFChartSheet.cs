@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, sheet.NumberOfComments);
             Assert.AreEqual(0, sheet.NumHyperlinks);
             Assert.AreEqual(0, sheet.NumMergedRegions);
-            Assert.AreEqual(null, sheet.GetActiveCell());
+            Assert.AreEqual(null, sheet.ActiveCell);
             Assert.AreEqual(true, sheet.Autobreaks);
             Assert.AreEqual(null, sheet.GetCellComment(0, 0));
             Assert.AreEqual(0, sheet.ColumnBreaks.Length);

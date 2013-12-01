@@ -221,7 +221,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
             sheet.SetActiveCell("R5");
 
-            Assert.AreEqual("R5", sheet.GetActiveCell());
+            Assert.AreEqual("R5", sheet.ActiveCell);
 
         }
         [Test]
@@ -236,8 +236,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(ST_Pane.bottomRight, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.activePane);
             sheet.CreateFreezePane(3, 6, 10, 10);
             Assert.AreEqual(3.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.xSplit);
-            //    Assert.AreEqual(10, sheet.GetTopRow());
-            //    Assert.AreEqual(10, sheet.GetLeftCol());
+            Assert.AreEqual(10, sheet.TopRow);
+            Assert.AreEqual(10, sheet.LeftCol);
             sheet.CreateSplitPane(4, 8, 12, 12, PanePosition.LowerRight);
             Assert.AreEqual(8.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.ySplit);
             Assert.AreEqual(ST_Pane.bottomRight, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.activePane);

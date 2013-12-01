@@ -1090,20 +1090,10 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Called when this cell is modified.
-         * <p>
-         * The purpose of this method is to validate the cell state prior to modification.
-         * </p>
-         *
-         * @see #setCellType(int)
-         * @see #setCellFormula(String)
-         * @see XSSFRow#RemoveCell(NPOI.ss.usermodel.Cell)
-         * @see NPOI.xssf.usermodel.XSSFSheet#RemoveRow(NPOI.ss.usermodel.Row)
-         * @see NPOI.xssf.usermodel.XSSFSheet#ShiftRows(int, int, int)
-         * @see NPOI.xssf.usermodel.XSSFSheet#AddMergedRegion(NPOI.ss.util.CellRangeAddress)
-         * @throws InvalidOperationException if modification is not allowed
-         */
+        /// <summary>
+        /// Called when this cell is modified.The purpose of this method is to validate the cell state prior to modification.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if modification is not allowed</exception>
         internal void NotifyArrayFormulaChanging()
         {
             CellReference ref1 = new CellReference(this);
@@ -1117,7 +1107,10 @@ namespace NPOI.XSSF.UserModel
 
         public bool IsMergedCell
         {
-            get { throw new NotImplementedException(); }
+            get {
+                return this.Sheet.IsMergedRegion(new CellRangeAddress(this.RowIndex,this.ColumnIndex,this.RowIndex,this.ColumnIndex));
+            }
+            
         }
 
         #endregion

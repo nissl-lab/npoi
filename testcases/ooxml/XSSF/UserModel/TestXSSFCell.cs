@@ -199,6 +199,27 @@ namespace NPOI.XSSF.UserModel
             wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateFormulaCell(cell);
             Assert.AreEqual(36, cell.ErrorCellValue);
         }
+        [Test]
+        public void TestIsMergedCell()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(5);
+            ICell cell5 = row.CreateCell(5);
+            ICell cell6 = row.CreateCell(6);
+            ICell cell8 = row.CreateCell(8);
+
+            Assert.IsFalse(cell5.IsMergedCell);
+            Assert.IsFalse(cell6.IsMergedCell);
+            Assert.IsFalse(cell8.IsMergedCell);
+            
+            sheet.AddMergedRegion(new SS.Util.CellRangeAddress(5, 6, 5, 6));   //region with 4 cells
+
+            Assert.IsTrue(cell5.IsMergedCell);
+            Assert.IsTrue(cell6.IsMergedCell);
+            Assert.IsFalse(cell8.IsMergedCell);
+
+        }
     }
 
 }

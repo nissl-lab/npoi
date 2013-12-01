@@ -275,7 +275,9 @@
     <Compile Include="HPSF\Basic\Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="npoi.snk" />
     <None Include="POIFS\Data\excel_with_embeded.xls" />
     <None Include="POIFS\Data\ppt_with_embeded.ppt" />

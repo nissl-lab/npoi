@@ -175,7 +175,7 @@ namespace NPOI.OpenXml4Net.Util
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value)
         {
-            WriteAttribute(sw, attributeName, value, false);
+            WriteAttribute(sw, attributeName, value, true);
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value, bool writeIfBlank)
         {

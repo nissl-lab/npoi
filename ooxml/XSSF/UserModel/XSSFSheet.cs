@@ -1059,19 +1059,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public short LeftCol
-        {
-            get
-            {
-                String cellRef = worksheet.sheetViews.GetSheetViewArray(0).topLeftCell;
-                CellReference cellReference = new CellReference(cellRef);
-                return cellReference.Col;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         /**
          * Gets the size of the margin in inches.
@@ -1393,11 +1380,9 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        /**
-         * A flag indicating whether scenarios are locked when the sheet is protected.
-         *
-         * @return true => protection enabled; false => protection disabled
-         */
+        /// <summary>
+        /// A flag indicating whether scenarios are locked when the sheet is protected.
+        /// </summary>
         public bool ScenarioProtect
         {
             get
@@ -1406,18 +1391,27 @@ namespace NPOI.XSSF.UserModel
                     && (bool)worksheet.sheetProtection.scenarios;
             }
         }
-
-        /**
-         * The top row in the visible view when the sheet is
-         * first viewed after opening it in a viewer
-         *
-         * @return integer indicating the rownum (0 based) of the top row
-         */
+        public short LeftCol
+        {
+            get
+            {
+                String cellRef = GetPane().topLeftCell;
+                CellReference cellReference = new CellReference(cellRef);
+                return cellReference.Col;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+        /// <summary>
+        /// The top row in the visible view when the sheet is first viewed after opening it in a viewer
+        /// </summary>
         public short TopRow
         {
             get
             {
-                String cellRef = GetSheetTypeSheetView().topLeftCell;
+                String cellRef = GetPane().topLeftCell;
                 CellReference cellReference = new CellReference(cellRef);
                 return (short)cellReference.Row;
             }
@@ -1793,17 +1787,25 @@ namespace NPOI.XSSF.UserModel
                 {
                     // Change the current Setting
                     CT_SheetCalcPr calc = worksheet.sheetCalcPr;
-                    calc.fullCalcOnLoad = (value);
+                    calc.fullCalcOnLoad = value;
                 }
-                else if (value)
+                else
                 {
                     // Add the Calc block and set it
                     CT_SheetCalcPr calc = worksheet.AddNewSheetCalcPr();
-                    calc.fullCalcOnLoad = (value);
-                }
-                if (value && calcPr != null && calcPr.calcMode == ST_CalcMode.manual)
-                {
-                    calcPr.calcMode=(ST_CalcMode.auto);
+                    calc.fullCalcOnLoad = value;
+                    if (calcPr == null)
+                    {
+                        calcPr=(Workbook as XSSFWorkbook).GetCTWorkbook().AddNewCalcPr();
+                    }
+                    if (value && calcPr.calcMode == ST_CalcMode.manual)
+                    {
+                        calcPr.calcMode = ST_CalcMode.auto;
+                    }
+                    else if (!value && calcPr.calcMode == ST_CalcMode.auto)
+                    {
+                        calcPr.calcMode = ST_CalcMode.manual;
+                    }
                 }
             }
         }
@@ -2867,18 +2869,24 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the location of the active cell.
          */
-        public String GetActiveCell()
+        public String ActiveCell
         {
-            return GetSheetTypeSelection().activeCell;
+            get
+            {
+                return GetSheetTypeSelection().activeCell;
+            }
         }
-
-
-        public void SetActiveCell(string value)
+        public void SetActiveCell(string cellref)
         {
             CT_Selection ctsel = GetSheetTypeSelection();
-            ctsel.activeCell = (value);
-            ctsel.SetSqref(new string[] { value });
+                ctsel.activeCell = cellref;
+                ctsel.SetSqref(new string[] { cellref }); 
+        }
 
+        public void SetActiveCell(int row, int column)
+        {
+            CellReference cellref = new CellReference(row, column);
+            SetActiveCell(cellref.FormatAsString());
         }
         /**
          * Does this sheet have any comments on it? We need to know,
@@ -3042,7 +3050,7 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
-        internal virtual void Write(Stream out1)
+        internal virtual void Write(Stream stream)
         {
 
             if (worksheet.sizeOfColsArray() == 1)
@@ -3086,151 +3094,199 @@ namespace NPOI.XSSF.UserModel
             map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-            new WorksheetDocument(worksheet).Save(out1);
+            new WorksheetDocument(worksheet).Save(stream);
         }
 
         /**
          * @return true when Autofilters are locked and the sheet is protected.
          */
-        public bool IsAutoFilterLocked()
+        public bool IsAutoFilterLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.autoFilter;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.autoFilter;
+            }
         }
 
         /**
          * @return true when Deleting columns is locked and the sheet is protected.
          */
-        public bool IsDeleteColumnsLocked()
+        public bool IsDeleteColumnsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.deleteColumns;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.deleteColumns;
+            }
         }
 
         /**
          * @return true when Deleting rows is locked and the sheet is protected.
          */
-        public bool IsDeleteRowsLocked()
+        public bool IsDeleteRowsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.deleteRows;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.deleteRows;
+            }
         }
 
         /**
          * @return true when Formatting cells is locked and the sheet is protected.
          */
-        public bool IsFormatCellsLocked()
+        public bool IsFormatCellsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.formatCells;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.formatCells;
+            }
         }
 
         /**
          * @return true when Formatting columns is locked and the sheet is protected.
          */
-        public bool IsFormatColumnsLocked()
+        public bool IsFormatColumnsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.formatColumns;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.formatColumns;
+            }
         }
 
         /**
          * @return true when Formatting rows is locked and the sheet is protected.
          */
-        public bool IsFormatRowsLocked()
+        public bool IsFormatRowsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.formatRows;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.formatRows;
+            }
         }
 
         /**
          * @return true when Inserting columns is locked and the sheet is protected.
          */
-        public bool IsInsertColumnsLocked()
+        public bool IsInsertColumnsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.insertColumns;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.insertColumns;
+            }
         }
 
         /**
          * @return true when Inserting hyperlinks is locked and the sheet is protected.
          */
-        public bool IsInsertHyperlinksLocked()
+        public bool IsInsertHyperlinksLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.insertHyperlinks;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.insertHyperlinks;
+            }
         }
 
         /**
          * @return true when Inserting rows is locked and the sheet is protected.
          */
-        public bool IsInsertRowsLocked()
+        public bool IsInsertRowsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.insertRows;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.insertRows;
+            }
         }
 
         /**
          * @return true when Pivot tables are locked and the sheet is protected.
          */
-        public bool IsPivotTablesLocked()
+        public bool IsPivotTablesLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.pivotTables;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.pivotTables;
+            }
         }
 
         /**
          * @return true when Sorting is locked and the sheet is protected.
          */
-        public bool IsSortLocked()
+        public bool IsSortLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.sort;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.sort;
+            }
         }
 
         /**
          * @return true when Objects are locked and the sheet is protected.
          */
-        public bool IsObjectsLocked()
+        public bool IsObjectsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.objects;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.objects;
+            }
         }
 
         /**
          * @return true when Scenarios are locked and the sheet is protected.
          */
-        public bool IsScenariosLocked()
+        public bool IsScenariosLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.scenarios;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.scenarios;
+            }
         }
 
         /**
          * @return true when Selection of locked cells is locked and the sheet is protected.
          */
-        public bool IsSelectLockedCellsLocked()
+        public bool IsSelectLockedCellsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.selectLockedCells;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.selectLockedCells;
+            }
         }
 
         /**
          * @return true when Selection of unlocked cells is locked and the sheet is protected.
          */
-        public bool IsSelectUnlockedCellsLocked()
+        public bool IsSelectUnlockedCellsLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && worksheet.sheetProtection.selectUnlockedCells;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && worksheet.sheetProtection.selectUnlockedCells;
+            }
         }
 
         /**
          * @return true when Sheet is Protected.
          */
-        public bool IsSheetLocked()
+        public bool IsSheetLocked
         {
-            CreateProtectionFieldIfNotPresent();
-            return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.sheet;
+            get
+            {
+                CreateProtectionFieldIfNotPresent();
+                return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.sheet;
+            }
         }
 
         /**
@@ -3676,11 +3732,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                throw new NotImplementedException();
+                return IsSelected;
             }
-            set
+            set 
             {
-                throw new NotImplementedException();
+                IsSelected = value;
             }
         }
 
@@ -3688,14 +3744,9 @@ namespace NPOI.XSSF.UserModel
         {
             throw new NotImplementedException();
         }
-        public void SetActive(bool sel)
+        public void SetActive(bool value)
         {
-            throw new NotImplementedException();
-        }
-
-        public void SetActiveCell(int row, int column)
-        {
-            throw new NotImplementedException();
+            this.IsSelected = value;
         }
 
         public void SetActiveCellRange(List<CellRangeAddress8Bit> cellranges, int activeRange, int activeRow, int activeColumn)
