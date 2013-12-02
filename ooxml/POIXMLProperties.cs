@@ -46,21 +46,27 @@ namespace NPOI
                 part.SetCategoryProperty(value);
             }
         }
-        public String GetContentStatus()
+        public String ContentStatus
         {
-            return part.GetContentStatusProperty();
+            get
+            {
+                return part.GetContentStatusProperty();
+            }
+            set 
+            {
+                part.SetContentStatusProperty(value);
+            }
         }
-        public void SetContentStatus(String contentStatus)
+        public String ContentType
         {
-            part.SetContentStatusProperty(contentStatus);
-        }
-        public String GetContentType()
-        {
-            return part.GetContentTypeProperty();
-        }
-        public void SetContentType(String contentType)
-        {
-            part.SetContentTypeProperty(contentType);
+            get
+            {
+                return part.GetContentTypeProperty();
+            }
+            set 
+            {
+                part.SetContentTypeProperty(value);
+            }
         }
         public DateTime? Created
         {
