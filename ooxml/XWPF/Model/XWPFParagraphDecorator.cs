@@ -39,13 +39,16 @@ namespace NPOI.XWPF.Model
             this.nextDecorator = nextDecorator;
         }
 
-        public virtual String GetText()
+        public virtual String Text
         {
-            if (nextDecorator != null)
+            get
             {
-                return nextDecorator.GetText();
+                if (nextDecorator != null)
+                {
+                    return nextDecorator.Text;
+                }
+                return paragraph.Text;
             }
-            return paragraph.GetText();
         }
     }
 

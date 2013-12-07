@@ -45,8 +45,8 @@ namespace NPOI.XWPF.UserModel
 
             CT_SdtBlock block = doc.Document.body.AddNewSdt();
 
-            Assert.IsNull(p.GetStyle());
-            p.SetStyle(HEADING1);
+            Assert.IsNull(p.Style);
+            p.Style = HEADING1;
             Assert.AreEqual(HEADING1, p.GetCTP().pPr.pStyle.val);
 
             doc.CreateTOC();

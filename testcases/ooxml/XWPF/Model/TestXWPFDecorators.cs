@@ -53,11 +53,11 @@ namespace NPOI.XWPF.Model
 
             // Simple text
             ps = simple.Paragraphs[(0)];
-            Assert.AreEqual("I am a test document", ps.GetParagraphText());
+            Assert.AreEqual("I am a test document", ps.ParagraphText);
             Assert.AreEqual(1, ps.Runs.Count);
 
             ph = hyperlink.Paragraphs[(4)];
-            Assert.AreEqual("We have a hyperlink here, and another.", ph.GetParagraphText());
+            Assert.AreEqual("We have a hyperlink here, and another.", ph.ParagraphText);
             Assert.AreEqual(3, ph.Runs.Count);
 
 
@@ -75,20 +75,20 @@ namespace NPOI.XWPF.Model
             // You probably don't want to still be using it...
             Assert.AreEqual(
                   "I am a test document",
-                  (new XWPFHyperlinkDecorator(ps, null, false)).GetText()
+                  (new XWPFHyperlinkDecorator(ps, null, false)).Text
             );
             Assert.AreEqual(
                   "I am a test document",
-                  (new XWPFHyperlinkDecorator(ps, null, true)).GetText()
+                  (new XWPFHyperlinkDecorator(ps, null, true)).Text
             );
 
             Assert.AreEqual(
                   "We have a hyperlink here, and another.hyperlink",
-                  (new XWPFHyperlinkDecorator(ph, null, false)).GetText()
+                  (new XWPFHyperlinkDecorator(ph, null, false)).Text
             );
             Assert.AreEqual(
                   "We have a hyperlink here, and another.hyperlink <http://poi.apache.org/>",
-                  (new XWPFHyperlinkDecorator(ph, null, true)).GetText()
+                  (new XWPFHyperlinkDecorator(ph, null, true)).Text
             );
         }
 

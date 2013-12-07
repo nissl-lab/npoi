@@ -143,11 +143,11 @@ namespace NPOI.XWPF.Model
 
             Assert.AreEqual(
                 "I am the header on the first page, and I" + '\u2019' + "m nice and simple\n",
-                policy.GetFirstPageHeader().GetText()
+                policy.GetFirstPageHeader().Text
             );
             Assert.AreEqual(
                     "First header column!\tMid header\tRight header!\n",
-                    policy.GetDefaultHeader().GetText()
+                    policy.GetDefaultHeader().Text
             );
 
 
@@ -156,11 +156,11 @@ namespace NPOI.XWPF.Model
 
             Assert.AreEqual(
                 "[ODD Page Header text]\n\n",
-                policy.GetDefaultHeader().GetText()
+                policy.GetDefaultHeader().Text
             );
             Assert.AreEqual(
                 "[This is an Even Page, with a Header]\n\n",
-                policy.GetEvenPageHeader().GetText()
+                policy.GetEvenPageHeader().Text
             );
         }
     }

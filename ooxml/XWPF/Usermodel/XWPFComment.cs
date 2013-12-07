@@ -41,23 +41,32 @@ namespace NPOI.XWPF.UserModel
             foreach(CT_P ctp in comment.GetPList())
             {
                 XWPFParagraph p = new XWPFParagraph(ctp, document);
-                text.Append(p.GetText());
+                text.Append(p.Text);
             }
         }
 
-        public String GetId()
+        public String Id
         {
-            return id;
+            get
+            {
+                return id;
+            }
         }
 
-        public String GetAuthor()
+        public String Author
         {
-            return author;
+            get
+            {
+                return author;
+            }
         }
 
-        public String GetText()
+        public String Text
         {
-            return text.ToString();
+            get
+            {
+                return text.ToString();
+            }
         }
     }
 

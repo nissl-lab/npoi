@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     using System.Xml;
     using NPOI.XWPF.Model;
     using System.Xml.Serialization;
+    using System.Diagnostics;
 
     /**
      * Experimental class to do low level Processing
@@ -432,7 +433,7 @@ namespace NPOI.XWPF.UserModel
             while (iter.MoveNext())
             {
                 XWPFComment comment = iter.Current;
-                if (comment.GetId().Equals(id))
+                if (comment.Id.Equals(id))
                     return comment;
             }
 
@@ -474,7 +475,7 @@ namespace NPOI.XWPF.UserModel
          * Returns the styles object used
          */
 
-        public CT_Styles GetStyle()
+        public CT_Styles GetCTStyle()
         {
             PackagePart[] parts;
             try {
@@ -987,18 +988,18 @@ namespace NPOI.XWPF.UserModel
             TOC toc = new TOC(block);
             foreach (XWPFParagraph par in paragraphs)
             {
-                String parStyle = par.GetStyle();
+                String parStyle = par.Style;
                 if (parStyle != null && parStyle.Substring(0, 7).Equals("Heading"))
                 {
                     try
                     {
                         int level = Int32.Parse(parStyle.Substring("Heading".Length));
-                        toc.AddRow(level, par.GetText(), 1, "112723803");
+                        toc.AddRow(level, par.Text, 1, "112723803");
                     }
                     catch (FormatException e)
                     {
                         //e.PrintStackTrace();
-                        System.Console.Write(e.StackTrace);
+                        Debug.Write(e.StackTrace);
                     }
                 }
             }
@@ -1485,9 +1486,12 @@ namespace NPOI.XWPF.UserModel
          *
          * @see NPOI.XWPF.UserModel.IBody#getPartType()
          */
-        public BodyType GetPartType()
+        public BodyType PartType
         {
-            return BodyType.DOCUMENT;
+            get
+            {
+                return BodyType.DOCUMENT;
+            }
         }
 
         /**

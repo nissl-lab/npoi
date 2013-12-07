@@ -114,7 +114,7 @@ namespace NPOI.XWPF.UserModel
                         if (rowText.Length > 0) {
                             rowText.Append('\t');
                         }
-                        rowText.Append(p.GetText());
+                        rowText.Append(p.Text);
                     }
                 }
                 if (rowText.Length > 0) {
@@ -164,9 +164,12 @@ namespace NPOI.XWPF.UserModel
         /**
          * @return text
          */
-        public String GetText()
+        public String Text
         {
-            return text.ToString();
+            get
+            {
+                return text.ToString();
+            }
         }
 
         public void AddNewRowBetween(int start, int end)
@@ -727,9 +730,12 @@ namespace NPOI.XWPF.UserModel
          * returns the partType of the bodyPart which owns the bodyElement
          * @see NPOI.XWPF.UserModel.IBody#getPartType()
          */
-        public BodyType GetPartType()
+        public BodyType PartType
         {
-            return part.GetPartType();
+            get
+            {
+                return part.PartType;
+            }
         }
 
         /**

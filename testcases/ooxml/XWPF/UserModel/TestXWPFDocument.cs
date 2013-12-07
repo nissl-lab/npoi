@@ -63,13 +63,13 @@ namespace NPOI.XWPF.UserModel
             // Check it has key parts
             Assert.IsNotNull(xml.Document);
             Assert.IsNotNull(xml.Document.body);
-            Assert.IsNotNull(xml.GetStyle());
+            Assert.IsNotNull(xml.GetStyles());
 
             // Complex file
             xml = XWPFTestDataSamples.OpenSampleDocument("IllustrativeCases.docx");
             Assert.IsNotNull(xml.Document);
             Assert.IsNotNull(xml.Document.body);
-            Assert.IsNotNull(xml.GetStyle());
+            Assert.IsNotNull(xml.GetStyles());
         }
 
         [Test]

@@ -127,8 +127,8 @@ namespace NPOI.XWPF.UserModel
             }
 
             Assert.AreEqual(2, paras.Length);
-            Assert.AreEqual("First paragraph for the footer", paras[0].GetText());
-            Assert.AreEqual("Second paragraph for the footer", paras[1].GetText());
+            Assert.AreEqual("First paragraph for the footer", paras[0].Text);
+            Assert.AreEqual("Second paragraph for the footer", paras[1].Text);
         }
 
         [Test]

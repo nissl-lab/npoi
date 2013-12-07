@@ -386,9 +386,12 @@ namespace NPOI.XWPF.UserModel
         /** 
          * @see NPOI.XWPF.UserModel.IBody#getPartType()
          */
-        public BodyType GetPartType()
+        public BodyType PartType
         {
-            return BodyType.TABLECELL;
+            get
+            {
+                return BodyType.TABLECELL;
+            }
         }
 
 
@@ -452,7 +455,7 @@ namespace NPOI.XWPF.UserModel
             StringBuilder text = new StringBuilder();
             foreach (XWPFParagraph p in paragraphs)
             {
-                text.Append(p.GetText());
+                text.Append(p.Text);
             }
             return text.ToString();
         }

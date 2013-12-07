@@ -136,7 +136,7 @@ namespace NPOI.XWPF.Extractor
                 IEnumerator<XWPFTable> j = document.GetTablesEnumerator();
                 while (j.MoveNext())
                 {
-                    text.Append(((XWPFTable)j.Current).GetText()).Append('\n');
+                    text.Append(((XWPFTable)j.Current).Text).Append('\n');
                 }
 
                 // Finish up with all the footers
@@ -150,15 +150,15 @@ namespace NPOI.XWPF.Extractor
         {
             if (hfPolicy.GetFirstPageFooter() != null)
             {
-                text.Append(hfPolicy.GetFirstPageFooter().GetText());
+                text.Append(hfPolicy.GetFirstPageFooter().Text);
             }
             if (hfPolicy.GetEvenPageFooter() != null)
             {
-                text.Append(hfPolicy.GetEvenPageFooter().GetText());
+                text.Append(hfPolicy.GetEvenPageFooter().Text);
             }
             if (hfPolicy.GetDefaultFooter() != null)
             {
-                text.Append(hfPolicy.GetDefaultFooter().GetText());
+                text.Append(hfPolicy.GetDefaultFooter().Text);
             }
         }
 
@@ -166,15 +166,15 @@ namespace NPOI.XWPF.Extractor
         {
             if (hfPolicy.GetFirstPageHeader() != null)
             {
-                text.Append(hfPolicy.GetFirstPageHeader().GetText());
+                text.Append(hfPolicy.GetFirstPageHeader().Text);
             }
             if (hfPolicy.GetEvenPageHeader() != null)
             {
-                text.Append(hfPolicy.GetEvenPageHeader().GetText());
+                text.Append(hfPolicy.GetEvenPageHeader().Text);
             }
             if (hfPolicy.GetDefaultHeader() != null)
             {
-                text.Append(hfPolicy.GetDefaultHeader().GetText());
+                text.Append(hfPolicy.GetDefaultHeader().Text);
             }
         }
     }

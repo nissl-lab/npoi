@@ -48,7 +48,7 @@ namespace NPOI.XWPF.UserModel
          * DOCUMENT, HEADER, FOOTER,	FOOTNOTE, 
          * @return the PartType of the body
          */
-        BodyType GetPartType();
+        BodyType PartType { get; }
 
         /**
          * Returns an Iterator with paragraphs and tables, 

@@ -233,7 +233,7 @@ namespace NPOI.XWPF.UserModel
 
             // First paragraph is simple
             p = doc.GetParagraphArray(0);
-            Assert.AreEqual("This is a test document.", p.GetText());
+            Assert.AreEqual("This is a test document.", p.Text);
             Assert.AreEqual(2, p.Runs.Count);
 
             run = p.Runs[0];
@@ -253,7 +253,7 @@ namespace NPOI.XWPF.UserModel
 
             // Next paragraph is all in one style, but a different one
             p = doc.GetParagraphArray(1);
-            Assert.AreEqual("This bit is in bold and italic", p.GetText());
+            Assert.AreEqual("This bit is in bold and italic", p.Text);
             Assert.AreEqual(1, p.Runs.Count);
 
             run = p.Runs[0];
@@ -267,7 +267,7 @@ namespace NPOI.XWPF.UserModel
 
             // Back to normal
             p = doc.GetParagraphArray(2);
-            Assert.AreEqual("Back to normal", p.GetText());
+            Assert.AreEqual("Back to normal", p.Text);
             Assert.AreEqual(1, p.Runs.Count);
 
             run = p.Runs[(0)];
@@ -280,7 +280,7 @@ namespace NPOI.XWPF.UserModel
 
             // Different styles in one paragraph
             p = doc.GetParagraphArray(3);
-            Assert.AreEqual("This contains BOLD, ITALIC and BOTH, as well as RED and YELLOW text.", p.GetText());
+            Assert.AreEqual("This contains BOLD, ITALIC and BOTH, as well as RED and YELLOW text.", p.Text);
             Assert.AreEqual(11, p.Runs.Count);
 
             run = p.Runs[(0)];

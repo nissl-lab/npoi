@@ -135,35 +135,38 @@ namespace NPOI.XWPF.UserModel
          * Returns the textual content of the header/footer,
          *  by flattening out the text of its paragraph(s)
          */
-        public String GetText()
+        public String Text
         {
-            StringBuilder t = new StringBuilder();
-
-            for (int i = 0; i < paragraphs.Count; i++)
+            get
             {
-                if (!paragraphs[(i)].IsEmpty)
+                StringBuilder t = new StringBuilder();
+
+                for (int i = 0; i < paragraphs.Count; i++)
                 {
-                    String text = paragraphs[(i)].GetText();
+                    if (!paragraphs[(i)].IsEmpty)
+                    {
+                        String text = paragraphs[i].Text;
+                        if (text != null && text.Length > 0)
+                        {
+                            t.Append(text);
+                            t.Append('\n');
+                        }
+                    }
+                }
+
+                IList<XWPFTable> tables = this.Tables;
+                for (int i = 0; i < tables.Count; i++)
+                {
+                    String text = tables[(i)].Text;
                     if (text != null && text.Length > 0)
                     {
                         t.Append(text);
                         t.Append('\n');
                     }
                 }
-            }
 
-            IList<XWPFTable> tables = this.Tables;
-            for (int i = 0; i < tables.Count; i++)
-            {
-                String text = tables[(i)].GetText();
-                if (text != null && text.Length > 0)
-                {
-                    t.Append(text);
-                    t.Append('\n');
-                }
+                return t.ToString();
             }
-
-            return t.ToString();
         }
 
         /**
@@ -462,9 +465,12 @@ namespace NPOI.XWPF.UserModel
         }*/
 
 
-        public POIXMLDocumentPart GetOwner()
+        public POIXMLDocumentPart Owner
         {
-            return this;
+            get
+            {
+                return this;
+            }
         }
 
         /**
@@ -605,9 +611,12 @@ namespace NPOI.XWPF.UserModel
         #region IBody ≥…‘±
 
 
-        public virtual BodyType GetPartType()
+        public virtual BodyType PartType
         {
-            throw new NotImplementedException();
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public XWPFParagraph InsertNewParagraph(System.Xml.XmlDocument cursor)

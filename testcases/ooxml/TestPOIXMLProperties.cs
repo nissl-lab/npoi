@@ -158,7 +158,7 @@ namespace NPOI
             String category = _coreProperties.Category;
             Assert.AreEqual("test", category);
             String contentStatus = "Draft";
-            _coreProperties.SetContentStatus(contentStatus);
+            _coreProperties.ContentStatus = contentStatus;
             Assert.AreEqual("Draft", contentStatus);
             DateTime? Created = _coreProperties.Created;
             // the original file Contains a following value: 2009-07-20T13:12:00Z

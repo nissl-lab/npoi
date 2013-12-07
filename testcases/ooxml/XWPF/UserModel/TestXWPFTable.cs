@@ -74,7 +74,7 @@ namespace NPOI.XWPF.UserModel
             text.Value = ("finally I can Write!");
 
             XWPFTable xtab = new XWPFTable(table, doc);
-            Assert.AreEqual("finally I can Write!\n", xtab.GetText());
+            Assert.AreEqual("finally I can Write!\n", xtab.Text);
         }
 
 

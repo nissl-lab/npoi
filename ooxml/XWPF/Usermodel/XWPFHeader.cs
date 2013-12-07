@@ -28,8 +28,7 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFHeader : XWPFHeaderFooter
     {
-        public XWPFHeader()
-            //: base()
+        public XWPFHeader():base()
         {
             headerFooter = new CT_Hdr();
             ReadHdrFtr();
@@ -38,7 +37,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFHeader(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
             : base(parent, part, rel)
         {
-            ;
+            
         }
 
         public XWPFHeader(XWPFDocument doc, CT_HdrFtr hdrFtr)
@@ -74,10 +73,9 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * save and Commit footer
-         */
-
+        /// <summary>
+        /// Save and commit footer
+        /// </summary>
         protected override void Commit()
         {
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -101,11 +99,10 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * Reads the document
-         * @throws IOException 
-         */
 
+        /// <summary>
+        /// Read the document
+        /// </summary>
         internal override void OnDocumentRead()
         {
             base.OnDocumentRead();
@@ -136,14 +133,15 @@ namespace NPOI.XWPF.UserModel
                 throw new POIXMLException(e);
             }
         }
-
-        /**
-         * Get the PartType of the body
-         * @see NPOI.XWPF.UserModel.IBody#getPartType()
-         */
-        public override BodyType GetPartType()
+        /// <summary>
+        /// Get the PartType of the body
+        /// </summary>
+        public override BodyType PartType
         {
-            return BodyType.HEADER;
+            get
+            {
+                return BodyType.HEADER;
+            }
         }
-    }//end class
+    }
 }

@@ -49,7 +49,7 @@ namespace NPOI.XWPF.UserModel
             XWPFParagraph p = ps[(0)];
 
             Assert.AreEqual(5, p.GetCTP().GetRList().Count);
-            Assert.AreEqual("First header column!\tMid header\tRight header!", p.GetText());
+            Assert.AreEqual("First header column!\tMid header\tRight header!", p.Text);
         }
 
         /**
@@ -66,19 +66,19 @@ namespace NPOI.XWPF.UserModel
             Assert.IsFalse(ps[(0)].IsEmpty);
             Assert.AreEqual(
                     "This is a sample word document. It has two pages. It has a three column heading, but no footer.",
-                    ps[(0)].GetText());
+                    ps[(0)].Text);
 
             Assert.IsTrue(ps[1].IsEmpty);
-            Assert.AreEqual("", ps[1].GetText());
+            Assert.AreEqual("", ps[1].Text);
 
             Assert.IsFalse(ps[2].IsEmpty);
-            Assert.AreEqual("HEADING TEXT", ps[2].GetText());
+            Assert.AreEqual("HEADING TEXT", ps[2].Text);
 
             Assert.IsTrue(ps[3].IsEmpty);
-            Assert.AreEqual("", ps[3].GetText());
+            Assert.AreEqual("", ps[3].Text);
 
             Assert.IsFalse(ps[4].IsEmpty);
-            Assert.AreEqual("More on page one", ps[4].GetText());
+            Assert.AreEqual("More on page one", ps[4].Text);
         }
 
         [Test]
@@ -134,13 +134,13 @@ namespace NPOI.XWPF.UserModel
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            Assert.AreEqual(-1, p.GetSpacingAfter());
+            Assert.AreEqual(-1, p.SpacingAfter);
 
             CT_Spacing spacing = ppr.AddNewSpacing();
             spacing.after = 10;
-            Assert.AreEqual(10, p.GetSpacingAfter());
+            Assert.AreEqual(10, p.SpacingAfter);
 
-            p.SetSpacingAfter(100);
+            p.SpacingAfter = 100;
             Assert.AreEqual(100, (int)spacing.after);
         }
 
@@ -159,7 +159,7 @@ namespace NPOI.XWPF.UserModel
             spacing.lineRule = (ST_LineSpacingRule.atLeast);
             Assert.AreEqual(LineSpacingRule.ATLEAST, p.GetSpacingLineRule());
 
-            p.SetSpacingAfter(100);
+            p.SpacingAfter = 100;
             Assert.AreEqual(100, (int)spacing.after);
         }
 
@@ -169,18 +169,18 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual(-1, p.GetIndentationLeft());
+            Assert.AreEqual(-1, p.IndentationLeft);
 
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            Assert.AreEqual(-1, p.GetIndentationLeft());
+            Assert.AreEqual(-1, p.IndentationLeft);
 
             CT_Ind ind = ppr.AddNewInd();
             ind.left = "10";
-            Assert.AreEqual(10, p.GetIndentationLeft());
+            Assert.AreEqual(10, p.IndentationLeft);
 
-            p.SetIndentationLeft(100);
+            p.IndentationLeft = 100;
             Assert.AreEqual(100, int.Parse(ind.left));
         }
 
@@ -242,7 +242,7 @@ namespace NPOI.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("bookmarks.docx");
             XWPFParagraph paragraph = doc.Paragraphs[0];
-            Assert.AreEqual("Sample Word Document", paragraph.GetText());
+            Assert.AreEqual("Sample Word Document", paragraph.Text);
             Assert.AreEqual(1, paragraph.GetCTP().SizeOfBookmarkStartArray());
             Assert.AreEqual(0, paragraph.GetCTP().SizeOfBookmarkEndArray());
             CT_Bookmark ctBookmark = paragraph.GetCTP().GetBookmarkStartArray(0);
@@ -291,13 +291,13 @@ namespace NPOI.XWPF.UserModel
             XWPFRun r;
 
             // Text paragraphs
-            Assert.AreEqual("Sheet with various pictures", doc.Paragraphs[0].GetText());
-            Assert.AreEqual("(jpeg, png, wmf, emf and pict) ", doc.Paragraphs[1].GetText());
+            Assert.AreEqual("Sheet with various pictures", doc.Paragraphs[0].Text);
+            Assert.AreEqual("(jpeg, png, wmf, emf and pict) ", doc.Paragraphs[1].Text);
 
             // Spacer ones
-            Assert.AreEqual("", doc.Paragraphs[2].GetText());
-            Assert.AreEqual("", doc.Paragraphs[3].GetText());
-            Assert.AreEqual("", doc.Paragraphs[4].GetText());
+            Assert.AreEqual("", doc.Paragraphs[2].Text);
+            Assert.AreEqual("", doc.Paragraphs[3].Text);
+            Assert.AreEqual("", doc.Paragraphs[4].Text);
 
             // Image one
             p = doc.Paragraphs[5];
@@ -341,7 +341,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
             // Final spacer
-            Assert.AreEqual("", doc.Paragraphs[(6)].GetText());
+            Assert.AreEqual("", doc.Paragraphs[(6)].Text);
 
 
             // Look in detail at one

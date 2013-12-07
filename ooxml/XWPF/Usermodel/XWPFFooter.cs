@@ -137,9 +137,12 @@ namespace NPOI.XWPF.UserModel
          * Get the PartType of the body
          * @see NPOI.XWPF.UserModel.IBody#getPartType()
          */
-        public override BodyType GetPartType()
+        public override BodyType PartType
         {
-            return BodyType.FOOTER;
+            get
+            {
+                return BodyType.FOOTER;
+            }
         }
     }
 

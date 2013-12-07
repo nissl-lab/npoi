@@ -31,7 +31,7 @@ namespace NPOI.XWPF.UserModel
             get;
         }
         POIXMLDocumentPart GetPart();
-        BodyType GetPartType();
+        BodyType PartType { get; }
         BodyElementType ElementType
         {
             get;

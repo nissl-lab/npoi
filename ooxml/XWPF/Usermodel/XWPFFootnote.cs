@@ -65,10 +65,10 @@ namespace NPOI.XWPF.UserModel
 
         public IList<XWPFTable> Tables
         {
-			get
-			{
-				return tables;
-			}
+            get
+            {
+                return tables;
+            }
         }
 
         public IList<XWPFPictureData> Pictures
@@ -97,11 +97,11 @@ namespace NPOI.XWPF.UserModel
             ctFtnEdn = footnote;
         }
 
-        /**
-         * @param position in table array
-         * @return The table at position pos
-         * @see NPOI.XWPF.UserModel.IBody#getTableArray(int)
-         */
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="pos">position in table array</param>
+        /// <returns>The table at position pos</returns>
         public XWPFTable GetTableArray(int pos)
         {
             if (pos > 0 && pos < tables.Count)
@@ -111,12 +111,11 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
-        /**
-         * inserts an existing XWPFTable to the arrays bodyElements and tables
-         * @param pos
-         * @param table
-         * @see NPOI.XWPF.UserModel.IBody#insertTable(int pos, XWPFTable table)
-         */
+        /// <summary>
+        /// inserts an existing XWPFTable to the arrays bodyElements and tables
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="table"></param>
         public void InsertTable(int pos, XWPFTable table)
         {
             bodyElements.Insert(pos, table);
@@ -165,39 +164,33 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
-
-        /**
-         * Returns the paragraph that holds
-         *  the text of the header or footer.
-         * @see NPOI.XWPF.UserModel.IBody#getParagraphArray(int pos)
-         */
+        /// <summary>
+        /// Returns the paragraph that holds the text of the header or footer.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
         public XWPFParagraph GetParagraphArray(int pos)
         {
 
-            return paragraphs[(pos)];
+            return paragraphs[pos];
         }
 
-        /**
-         * Get the TableCell which belongs to the TableCell
-         * @param cell
-         * @see NPOI.XWPF.UserModel.IBody#getTableCell(CTTc cell)
-         */
+        /// <summary>
+        /// Get the TableCell which belongs to the TableCell
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns></returns>
         public XWPFTableCell GetTableCell(CT_Tc cell)
         {
-            /*XmlCursor cursor = cell.NewCursor();
-            cursor.ToParent();
-            XmlObject o = cursor.Object;
-            if(!(o is CTRow)){
+            object obj = cell.Parent;
+            if (!(obj is CT_Row))
                 return null;
-            }
-            CTRow row = (CTRow)o;
-            cursor.ToParent();
-            o = cursor.Object;
-            cursor.Dispose();
-            if(! (o is CTTbl)){
+
+            CT_Row row = (CT_Row)obj;
+            if (!(row.Parent is CT_Tbl))
                 return null;
-            }
-            CTTbl tbl = (CTTbl) o;
+
+            CT_Tbl tbl = (CT_Tbl)row.Parent;
             XWPFTable table = GetTable(tbl);
             if(table == null){
                 return null;
@@ -206,8 +199,7 @@ namespace NPOI.XWPF.UserModel
             if(row == null){
                 return null;
             }
-            return tableRow.GetTableCell(cell);*/
-            throw new NotImplementedException();
+            return tableRow.GetTableCell(cell);
         }
 
         /**
@@ -225,9 +217,12 @@ namespace NPOI.XWPF.UserModel
             throw new NotImplementedException();
         }
 
-        public POIXMLDocumentPart GetOwner()
+        public POIXMLDocumentPart Owner
         {
-            return footnotes;
+            get
+            {
+                return footnotes;
+            }
         }
 
         /**
@@ -364,30 +359,23 @@ namespace NPOI.XWPF.UserModel
          * Get the PartType of the body
          * @see NPOI.XWPF.UserModel.IBody#getPartType()
          */
-        public BodyType GetPartType()
+        public BodyType PartType
         {
-            return BodyType.FOOTNOTE;
+            get
+            {
+                return BodyType.FOOTNOTE;
+            }
         }
-
-        #region IEnumerator<XWPFParagraph> 成员
 
         public XWPFParagraph Current
         {
             get { throw new NotImplementedException(); }
         }
 
-        #endregion
-
-        #region IDisposable 成员
-
         public void Dispose()
         {
             throw new NotImplementedException();
         }
-
-        #endregion
-
-        #region IEnumerator 成员
 
         object System.Collections.IEnumerator.Current
         {
@@ -403,7 +391,5 @@ namespace NPOI.XWPF.UserModel
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }

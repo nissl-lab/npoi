@@ -37,9 +37,9 @@ namespace NPOI.xwpf.UserModel
             XWPFParagraph p = doc.GetParagraphArray(0);
             //About NPOI: because the serializer bug(the CT_Run contains whitespace will discard the whitespace),
             //Text is "CarnegieMellonUniversitySchool of Computer Science"
-            Assert.IsTrue(p.GetText().Contains("Carnegie Mellon University School of Computer Science"));
+            Assert.IsTrue(p.Text.Contains("Carnegie Mellon University School of Computer Science"));
             p = doc.GetParagraphArray(2);
-            Assert.IsTrue(p.GetText().Contains("Alice's Adventures"));
+            Assert.IsTrue(p.Text.Contains("Alice's Adventures"));
         }
     }
 

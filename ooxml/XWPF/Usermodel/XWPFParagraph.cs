@@ -79,7 +79,7 @@ namespace NPOI.XWPF.UserModel
                                     footnoteText.Append("\n");
                                     first = false;
                                 }
-                                footnoteText.Append(p.GetText());
+                                footnoteText.Append(p.Text);
                             }
 
                             footnoteText.Append("]");
@@ -207,14 +207,18 @@ namespace NPOI.XWPF.UserModel
          * Return the textual content of the paragraph, including text from pictures
          * in it.
          */
-        public String GetText()
+        public String Text
         {
-            StringBuilder out1 = new StringBuilder();
-            foreach(XWPFRun run in runs) {
-                out1.Append(run.ToString());
+            get
+            {
+                StringBuilder out1 = new StringBuilder();
+                foreach (XWPFRun run in runs)
+                {
+                    out1.Append(run.ToString());
+                }
+                out1.Append(footnoteText);
+                return out1.ToString();
             }
-            out1.Append(footnoteText);
-            return out1.ToString();
         }
 
         /**
@@ -222,17 +226,20 @@ namespace NPOI.XWPF.UserModel
          * if not, null will be returned     
          * @return		styleID as String
          */
-        public String GetStyleID()
+        public String StyleID
         {
-            if (paragraph.pPr != null)
+            get
             {
-                if (paragraph.pPr.pStyle != null)
+                if (paragraph.pPr != null)
                 {
-                    if (paragraph.pPr.pStyle.val != null)
-                        return paragraph.pPr.pStyle.val;
+                    if (paragraph.pPr.pStyle != null)
+                    {
+                        if (paragraph.pPr.pStyle.val != null)
+                            return paragraph.pPr.pStyle.val;
+                    }
                 }
+                return null;
             }
-            return null;
         }
         /**
          * If style exist for this paragraph
@@ -294,13 +301,17 @@ namespace NPOI.XWPF.UserModel
          * Returns the text of the paragraph, but not of any objects in the
          * paragraph
          */
-        public String GetParagraphText()
+        public String ParagraphText
         {
-            StringBuilder out1 = new StringBuilder();
-            foreach(XWPFRun run in runs) {
-                out1.Append(run.ToString());
+            get
+            {
+                StringBuilder out1 = new StringBuilder();
+                foreach (XWPFRun run in runs)
+                {
+                    out1.Append(run.ToString());
+                }
+                return out1.ToString();
             }
-            return out1.ToString();
         }
 
         /**
@@ -749,52 +760,42 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsPageBreak
         {
-			get
-			{
-				CT_PPr ppr = GetCTPPr();
-				CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
-						.pageBreakBefore : null;
-				if (ct_pageBreak != null
-						&& ct_pageBreak.val)
-				{
-					return true;
-				}
-				return false;
-			}
-        }
-
-        /**
-         * Specifies the spacing that should be Added After the last line in this
-         * paragraph in the document in absolute units.
-         * <p>
-         * If the AfterLines attribute or the AfterAutoSpacing attribute is also
-         * specified, then this attribute value is ignored.
-         * </p>
-         *
-         * @param spaces -
-         *               a positive whole number, whose contents consist of a
-         *               measurement in twentieths of a point.
-         */
-        public void SetSpacingAfter(int spaces)
-        {
-            CT_Spacing spacing = GetCTSpacing(true);
-            if (spacing != null)
+            get
             {
-                //BigInteger bi = new BigInteger(spaces);
-                spacing.after = (ulong)spaces;
+                CT_PPr ppr = GetCTPPr();
+                CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+                        .pageBreakBefore : null;
+                if (ct_pageBreak != null
+                        && ct_pageBreak.val)
+                {
+                    return true;
+                }
+                return false;
             }
         }
-
+        
         /**
          * Specifies the spacing that should be Added After the last line in this
          * paragraph in the document in absolute units.
          *
          * @return int - value representing the spacing After the paragraph
          */
-        public int GetSpacingAfter()
+        public int SpacingAfter
         {
-            CT_Spacing spacing = GetCTSpacing(false);
-            return (spacing != null && spacing.IsSetAfter()) ? (int)spacing.after : -1;
+            get
+            {
+                CT_Spacing spacing = GetCTSpacing(false);
+                return (spacing != null && spacing.IsSetAfter()) ? (int)spacing.after : -1;
+            }
+            set 
+            {
+                CT_Spacing spacing = GetCTSpacing(true);
+                if (spacing != null)
+                {
+                    //BigInteger bi = new BigInteger(spaces);
+                    spacing.after = (ulong)value;
+                }
+            }
         }
 
         /**
@@ -942,53 +943,22 @@ namespace NPOI.XWPF.UserModel
          * positive values Move the text inside the text margin.
          * </p>
          *
-         * @param indentation
-         */
-        public void SetIndentationLeft(int indentation)
-        {
-            CT_Ind indent = GetCTInd(true);
-            //BigInteger bi = new BigInteger("" + indentation);
-            indent.left = indentation.ToString();
-        }
-
-        /**
-         * Specifies the indentation which shall be placed between the left text
-         * margin for this paragraph and the left edge of that paragraph's content
-         * in a left to right paragraph, and the right text margin and the right
-         * edge of that paragraph's text in a right to left paragraph
-         * <p>
-         * If this attribute is omitted, its value shall be assumed to be zero.
-         * Negative values are defined such that the text is Moved past the text margin,
-         * positive values Move the text inside the text margin.
-         * </p>
-         *
          * @return indentation or null if indentation is not Set
          */
-        public int GetIndentationLeft()
+        public int IndentationLeft
         {
-            CT_Ind indentation = GetCTInd(false);
-            return (indentation != null && indentation.IsSetLeft()) ? int.Parse(indentation.left)
-                    : -1;
-        }
-
-        /**
-         * Specifies the indentation which shall be placed between the right text
-         * margin for this paragraph and the right edge of that paragraph's content
-         * in a left to right paragraph, and the right text margin and the right
-         * edge of that paragraph's text in a right to left paragraph
-         * <p>
-         * If this attribute is omitted, its value shall be assumed to be zero.
-         * Negative values are defined such that the text is Moved past the text margin,
-         * positive values Move the text inside the text margin.
-         * </p>
-         *
-         * @param indentation
-         */
-        public void SetIndentationRight(int indentation)
-        {
-            CT_Ind indent = GetCTInd(true);
-            //BigInteger bi = new BigInteger("" + indentation);
-            indent.right = (indentation.ToString());
+            get
+            {
+                CT_Ind indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetLeft()) ? int.Parse(indentation.left)
+                        : -1;
+            }
+            set 
+            {
+                CT_Ind indent = GetCTInd(true);
+                //BigInteger bi = new BigInteger("" + indentation);
+                indent.left = value.ToString();            
+            }
         }
 
         /**
@@ -1005,32 +975,20 @@ namespace NPOI.XWPF.UserModel
          * @return indentation or null if indentation is not Set
          */
 
-        public int GetIndentationRight()
+        public int IndentationRight
         {
-            CT_Ind indentation = GetCTInd(false);
-            return (indentation != null && indentation.IsSetRight()) ? int.Parse(indentation.right)
-                    : -1;
-        }
-
-        /**
-         * Specifies the indentation which shall be Removed from the first line of
-         * the parent paragraph, by moving the indentation on the first line back
-         * towards the beginning of the direction of text flow.
-         * This indentation is specified relative to the paragraph indentation which is specified for
-         * all other lines in the parent paragraph.
-         * <p>
-         * The firstLine and hanging attributes are mutually exclusive, if both are specified, then the
-         * firstLine value is ignored.
-         * </p>
-         *
-         * @param indentation
-         */
-
-        public void SetIndentationHanging(int indentation)
-        {
-            CT_Ind indent = GetCTInd(true);
-            //BigInteger bi = new BigInteger("" + indentation);
-            indent.hanging = (ulong)indentation;
+            get
+            {
+                CT_Ind indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetRight()) ? int.Parse(indentation.right)
+                        : -1;
+            }
+            set 
+            {
+                CT_Ind indent = GetCTInd(true);
+                //BigInteger bi = new BigInteger("" + indentation);
+                indent.right = value.ToString();
+            }
         }
 
         /**
@@ -1046,32 +1004,21 @@ namespace NPOI.XWPF.UserModel
          *
          * @return indentation or null if indentation is not Set
          */
-        public int GetIndentationHanging()
+        public int IndentationHanging
         {
-            CT_Ind indentation = GetCTInd(false);
-            return (indentation != null && indentation.IsSetHanging()) ? (int)indentation.hanging : -1;
+            get
+            {
+                CT_Ind indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetHanging()) ? (int)indentation.hanging : -1;
+            }
+            set 
+            {
+                CT_Ind indent = GetCTInd(true);
+                //BigInteger bi = new BigInteger("" + indentation);
+                indent.hanging = (ulong)value;            
+            }
         }
 
-        /**
-         * Specifies the Additional indentation which shall be applied to the first
-         * line of the parent paragraph. This Additional indentation is specified
-         * relative to the paragraph indentation which is specified for all other
-         * lines in the parent paragraph.
-         * The firstLine and hanging attributes are
-         * mutually exclusive, if both are specified, then the firstLine value is
-         * ignored.
-         * If the firstLineChars attribute is also specified, then this
-         * value is ignored. If this attribute is omitted, then its value shall be
-         * assumed to be zero (if needed).
-         *
-         * @param indentation
-         */
-        public void SetIndentationFirstLine(int indentation)
-        {
-            CT_Ind indent = GetCTInd(true);
-            //BigInteger bi = new BigInteger("" + indentation);
-            indent.firstLine = (ulong)indentation;
-        }
 
         /**
          * Specifies the Additional indentation which shall be applied to the first
@@ -1088,11 +1035,20 @@ namespace NPOI.XWPF.UserModel
          *
          * @return indentation or null if indentation is not Set
          */
-        public int GetIndentationFirstLine()
+        public int IndentationFirstLine
         {
-            CT_Ind indentation = GetCTInd(false);
-            return (indentation != null && indentation.IsSetFirstLine()) ? (int)indentation.firstLine
-                    : -1;
+            get
+            {
+                CT_Ind indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetFirstLine()) ? (int)indentation.firstLine
+                        : -1;
+            }
+            set 
+            {
+                CT_Ind indent = GetCTInd(true);
+                //BigInteger bi = new BigInteger("" + indentation);
+                indent.firstLine = (ulong)value;
+            }
         }
 
 
@@ -1106,47 +1062,44 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsWordWrap
         {
-			get
-			{
-				CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-						.wordWrap : null;
-				if (wordWrap != null)
-				{
-					return wordWrap.val;
-				}
-				return false;
-			}
-			set 
-			{
-				CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-			.wordWrap : GetCTPPr().AddNewWordWrap();
-				if (value)
-					wordWrap.val = true;
-				else
-					wordWrap.UnSetVal();
-			}
-        }
-
-        /**
-         * This method provides a style to the paragraph
-         * This is useful when, e.g. an Heading style has to be assigned
-         * @param newStyle
-         */
-        public void SetStyle(String newStyle)
-        {
-            CT_PPr pr = GetCTPPr();
-            CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
-            style.val = (newStyle);
+            get
+            {
+                CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
+                        .wordWrap : null;
+                if (wordWrap != null)
+                {
+                    return wordWrap.val;
+                }
+                return false;
+            }
+            set
+            {
+                CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
+            .wordWrap : GetCTPPr().AddNewWordWrap();
+                if (value)
+                    wordWrap.val = true;
+                else
+                    wordWrap.UnSetVal();
+            }
         }
 
         /**
          * @return  the style of the paragraph
          */
-        public String GetStyle()
+        public String Style
         {
-            CT_PPr pr = GetCTPPr();
-            CT_String style = pr.IsSetPStyle() ? pr.pStyle : null;
-            return style != null ? style.val : null;
+            get
+            {
+                CT_PPr pr = GetCTPPr();
+                CT_String style = pr.IsSetPStyle() ? pr.pStyle : null;
+                return style != null ? style.val : null;
+            }
+            set 
+            {
+                CT_PPr pr = GetCTPPr();
+                CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
+                style.val = value;
+            }
         }
 
         /**
@@ -1401,9 +1354,12 @@ namespace NPOI.XWPF.UserModel
          * 
          * @see NPOI.XWPF.UserModel.IBody#getPartType()
          */
-        public BodyType GetPartType()
+        public BodyType PartType
         {
-            return part.GetPartType();
+            get
+            {
+                return part.PartType;
+            }
         }
 
         /**
