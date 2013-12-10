@@ -1695,9 +1695,9 @@ namespace NPOI.HSSF.UserModel
             InitDrawings();
 
             byte[] uid;
-            using (MD5 md5 = MD5.Create())
+            using (var hasher = SHA256.Create())
             {
-                uid = md5.ComputeHash(pictureData);
+                uid = hasher.ComputeHash(pictureData);
             }
             EscherBitmapBlip blipRecord = new EscherBitmapBlip();
             blipRecord.RecordId = (short)(EscherBitmapBlip.RECORD_ID_START + format);
