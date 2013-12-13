@@ -102,19 +102,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
-            XmlHelper.WriteAttribute(sw, "fontId", this.fontId);
-            XmlHelper.WriteAttribute(sw, "fillId", this.fillId);
-            XmlHelper.WriteAttribute(sw, "borderId", this.borderId);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId, true);
+            XmlHelper.WriteAttribute(sw, "fontId", this.fontId, true);
+            XmlHelper.WriteAttribute(sw, "fillId", this.fillId, true);
+            XmlHelper.WriteAttribute(sw, "borderId", this.borderId, true);
             XmlHelper.WriteAttribute(sw, "xfId", this.xfId);
-            XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix);
-            XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton);
-            XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
-            XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont);
-            XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill);
-            XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder);
-            XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment);
-            XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection);
+            XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix,false);
+			XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
+			XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat, false);
+			XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
+			XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill, false);
+			XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder, false);
+			XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment, false);
+			XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection, false);
             sw.Write(">");
             if (this.alignment != null)
                 this.alignment.Write(sw, "alignment");

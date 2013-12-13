@@ -64,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            XmlHelper.WriteAttribute(sw, "xfId", this.xfId);
+            XmlHelper.WriteAttribute(sw, "xfId", this.xfId, true);
             XmlHelper.WriteAttribute(sw, "builtinId", this.builtinId);
             XmlHelper.WriteAttribute(sw, "iLevel", this.iLevel);
             XmlHelper.WriteAttribute(sw, "hidden", this.hidden);

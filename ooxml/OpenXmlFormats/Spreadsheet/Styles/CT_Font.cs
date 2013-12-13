@@ -116,6 +116,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.condense.Write(sw, "condense");
             if (this.extend != null)
                 this.extend.Write(sw, "extend");
+			if (this.sz != null)
+			{
+				foreach (CT_FontSize x in this.sz)
+				{
+					x.Write(sw, "sz");
+				}
+			}
+			if (this.color != null)
+			{
+				foreach (CT_Color x in this.color)
+				{
+					x.Write(sw, "color");
+				}
+			}
             if (this.name != null)
             {
                 foreach (CT_FontName x in this.name)
@@ -123,6 +137,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "name");
                 }
             }
+			if (this.family != null)
+			{
+				foreach (CT_IntProperty x in this.family)
+				{
+					x.Write(sw, "family");
+				}
+			}
             if (this.charset != null)
             {
                 foreach (CT_IntProperty x in this.charset)
@@ -130,13 +151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "charset");
                 }
             }
-            if (this.family != null)
-            {
-                foreach (CT_IntProperty x in this.family)
-                {
-                    x.Write(sw, "family");
-                }
-            }
+
             if (this.b != null)
             {
                 foreach (CT_BooleanProperty x in this.b)
@@ -158,20 +173,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "strike");
                 }
             }
-            if (this.color != null)
-            {
-                foreach (CT_Color x in this.color)
-                {
-                    x.Write(sw, "color");
-                }
-            }
-            if (this.sz != null)
-            {
-                foreach (CT_FontSize x in this.sz)
-                {
-                    x.Write(sw, "sz");
-                }
-            }
+
+
             if (this.u != null)
             {
                 foreach (CT_UnderlineProperty x in this.u)
