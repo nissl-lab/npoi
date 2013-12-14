@@ -16,7 +16,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_Color colorField;
 
-        private ST_BorderStyle styleField;
+        private ST_BorderStyle styleField= ST_BorderStyle.none;
         public static CT_BorderPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -37,7 +37,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "style", this.style.ToString());
+            if(this.style!= ST_BorderStyle.none)
+                XmlHelper.WriteAttribute(sw, "style", this.style.ToString());
             sw.Write(">");
             if (this.color != null)
                 this.color.Write(sw, "color");

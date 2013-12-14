@@ -155,7 +155,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "alignment", this.alignment.ToString());
+            if(this.alignment!= ST_PhoneticAlignment.left)
+                XmlHelper.WriteAttribute(sw, "alignment", this.alignment.ToString());
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }

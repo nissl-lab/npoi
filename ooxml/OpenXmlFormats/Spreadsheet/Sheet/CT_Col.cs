@@ -274,13 +274,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "min", this.min);
             XmlHelper.WriteAttribute(sw, "max", this.max);
             XmlHelper.WriteAttribute(sw, "width", this.width);
-            XmlHelper.WriteAttribute(sw, "style", this.style);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            XmlHelper.WriteAttribute(sw, "bestFit", this.bestFit);
-            XmlHelper.WriteAttribute(sw, "customWidth", this.customWidth);
-            XmlHelper.WriteAttribute(sw, "phonetic", this.phonetic);
+            XmlHelper.WriteAttribute(sw, "style", this.style,true);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden,false);
+            XmlHelper.WriteAttribute(sw, "bestFit", this.bestFit,false);
+            XmlHelper.WriteAttribute(sw, "customWidth", this.customWidth,false);
+            XmlHelper.WriteAttribute(sw, "phonetic", this.phonetic,false);
             XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
-            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed);
+            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed,false);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }

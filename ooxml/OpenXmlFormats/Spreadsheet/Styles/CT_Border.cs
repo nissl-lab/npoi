@@ -104,9 +104,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "diagonalUp", this.diagonalUp);
-            XmlHelper.WriteAttribute(sw, "diagonalDown", this.diagonalDown);
-            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            XmlHelper.WriteAttribute(sw, "diagonalUp", this.diagonalUp, false);
+            XmlHelper.WriteAttribute(sw, "diagonalDown", this.diagonalDown, false);
+            XmlHelper.WriteAttribute(sw, "outline", this.outline, false);
             sw.Write(">");
             if (this.left != null)
                 this.left.Write(sw, "left");

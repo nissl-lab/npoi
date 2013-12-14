@@ -799,22 +799,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "date1904", this.date1904);
-            XmlHelper.WriteAttribute(sw, "showObjects", this.showObjects.ToString());
-            XmlHelper.WriteAttribute(sw, "showBorderUnselectedTables", this.showBorderUnselectedTables);
+            if(this.showObjects!= ST_Objects.all)
+                XmlHelper.WriteAttribute(sw, "showObjects", this.showObjects.ToString());
+            XmlHelper.WriteAttribute(sw, "showBorderUnselectedTables", this.showBorderUnselectedTables,false);
             XmlHelper.WriteAttribute(sw, "filterPrivacy", this.filterPrivacy);
-            XmlHelper.WriteAttribute(sw, "promptedSolutions", this.promptedSolutions);
-            XmlHelper.WriteAttribute(sw, "showInkAnnotation", this.showInkAnnotation);
-            XmlHelper.WriteAttribute(sw, "backupFile", this.backupFile);
-            XmlHelper.WriteAttribute(sw, "saveExternalLinkValues", this.saveExternalLinkValues);
-            XmlHelper.WriteAttribute(sw, "updateLinks", this.updateLinks.ToString());
+            XmlHelper.WriteAttribute(sw, "promptedSolutions", this.promptedSolutions, false);
+            XmlHelper.WriteAttribute(sw, "showInkAnnotation", this.showInkAnnotation,false);
+            XmlHelper.WriteAttribute(sw, "backupFile", this.backupFile, false);
+            XmlHelper.WriteAttribute(sw, "saveExternalLinkValues", this.saveExternalLinkValues, false);
+            if(this.updateLinks!= ST_UpdateLinks.userSet)
+                XmlHelper.WriteAttribute(sw, "updateLinks", this.updateLinks.ToString());
             XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
-            XmlHelper.WriteAttribute(sw, "hidePivotFieldList", this.hidePivotFieldList);
-            XmlHelper.WriteAttribute(sw, "showPivotChartFilter", this.showPivotChartFilter);
-            XmlHelper.WriteAttribute(sw, "allowRefreshQuery", this.allowRefreshQuery);
+            XmlHelper.WriteAttribute(sw, "hidePivotFieldList", this.hidePivotFieldList, false);
+            XmlHelper.WriteAttribute(sw, "showPivotChartFilter", this.showPivotChartFilter, false);
+            XmlHelper.WriteAttribute(sw, "allowRefreshQuery", this.allowRefreshQuery, false);
             XmlHelper.WriteAttribute(sw, "publishItems", this.publishItems);
-            XmlHelper.WriteAttribute(sw, "checkCompatibility", this.checkCompatibility);
-            XmlHelper.WriteAttribute(sw, "autoCompressPictures", this.autoCompressPictures);
-            XmlHelper.WriteAttribute(sw, "refreshAllConnections", this.refreshAllConnections);
+            XmlHelper.WriteAttribute(sw, "checkCompatibility", this.checkCompatibility, false);
+            XmlHelper.WriteAttribute(sw, "autoCompressPictures", this.autoCompressPictures, false);
+            XmlHelper.WriteAttribute(sw, "refreshAllConnections", this.refreshAllConnections, false);
             XmlHelper.WriteAttribute(sw, "defaultThemeVersion", this.defaultThemeVersion);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));

@@ -107,11 +107,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "visibility", this.visibility.ToString());
+            if(this.visibility!= ST_Visibility.visible)
+                XmlHelper.WriteAttribute(sw, "visibility", this.visibility.ToString());
             XmlHelper.WriteAttribute(sw, "minimized", this.minimized);
-            XmlHelper.WriteAttribute(sw, "showHorizontalScroll", this.showHorizontalScroll);
-            XmlHelper.WriteAttribute(sw, "showVerticalScroll", this.showVerticalScroll);
-            XmlHelper.WriteAttribute(sw, "showSheetTabs", this.showSheetTabs);
+            XmlHelper.WriteAttribute(sw, "showHorizontalScroll", this.showHorizontalScroll,false);
+            XmlHelper.WriteAttribute(sw, "showVerticalScroll", this.showVerticalScroll,false);
+            XmlHelper.WriteAttribute(sw, "showSheetTabs", this.showSheetTabs,false);
             XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow);
             XmlHelper.WriteAttribute(sw, "yWindow", this.yWindow);
             XmlHelper.WriteAttribute(sw, "windowWidth", this.windowWidth);

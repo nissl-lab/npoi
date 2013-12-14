@@ -179,7 +179,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "count", this.count, true);
             XmlHelper.WriteAttribute(sw, "defaultTableStyle", this.defaultTableStyle);
             XmlHelper.WriteAttribute(sw, "defaultPivotStyle", this.defaultPivotStyle);
             sw.Write(">");

@@ -534,9 +534,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_SheetView ctObj = new CT_SheetView();
             ctObj.windowProtection = XmlHelper.ReadBool(node.Attributes["windowProtection"]);
             ctObj.showFormulas = XmlHelper.ReadBool(node.Attributes["showFormulas"]);
-            ctObj.showGridLines = XmlHelper.ReadBool(node.Attributes["showGridLines"]);
-            ctObj.showRowColHeaders = XmlHelper.ReadBool(node.Attributes["showRowColHeaders"]);
-            ctObj.showZeros = XmlHelper.ReadBool(node.Attributes["showZeros"]);
+            if (node.Attributes["showGridLines"] == null)
+                ctObj.showGridLines = true;
+            else
+                ctObj.showGridLines = XmlHelper.ReadBool(node.Attributes["showGridLines"]);
+            if (node.Attributes["showRowColHeaders"] == null)
+                ctObj.showRowColHeaders = true;
+            else
+                ctObj.showRowColHeaders = XmlHelper.ReadBool(node.Attributes["showRowColHeaders"]);
+            if (node.Attributes["showZeros"] == null)
+                ctObj.showZeros = true;
+            else
+                ctObj.showZeros = XmlHelper.ReadBool(node.Attributes["showZeros"]);
             ctObj.rightToLeft = XmlHelper.ReadBool(node.Attributes["rightToLeft"]);
             ctObj.tabSelected = XmlHelper.ReadBool(node.Attributes["tabSelected"]);
             ctObj.showRuler = XmlHelper.ReadBool(node.Attributes["showRuler"]);
@@ -573,18 +582,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "windowProtection", this.windowProtection);
-            XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas);
+            XmlHelper.WriteAttribute(sw, "windowProtection", this.windowProtection, false);
+            XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas, false);
             XmlHelper.WriteAttribute(sw, "showGridLines", this.showGridLines);
             XmlHelper.WriteAttribute(sw, "showRowColHeaders", this.showRowColHeaders);
             XmlHelper.WriteAttribute(sw, "showZeros", this.showZeros);
-            XmlHelper.WriteAttribute(sw, "rightToLeft", this.rightToLeft);
-            XmlHelper.WriteAttribute(sw, "tabSelected", this.tabSelected);
-            XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler);
-            XmlHelper.WriteAttribute(sw, "showOutlineSymbols", this.showOutlineSymbols);
-            XmlHelper.WriteAttribute(sw, "defaultGridColor", this.defaultGridColor);
+            XmlHelper.WriteAttribute(sw, "rightToLeft", this.rightToLeft, false);
+            XmlHelper.WriteAttribute(sw, "tabSelected", this.tabSelected,false);
+            XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler,false);
+            XmlHelper.WriteAttribute(sw, "showOutlineSymbols", this.showOutlineSymbols, false);
+            XmlHelper.WriteAttribute(sw, "defaultGridColor", this.defaultGridColor, false);
             XmlHelper.WriteAttribute(sw, "showWhiteSpace", this.showWhiteSpace);
-            XmlHelper.WriteAttribute(sw, "view", this.view.ToString());
+            if(this.view !=  ST_SheetViewType.normal)
+                XmlHelper.WriteAttribute(sw, "view", this.view.ToString());
             XmlHelper.WriteAttribute(sw, "topLeftCell", this.topLeftCell);
             XmlHelper.WriteAttribute(sw, "colorId", this.colorId);
             XmlHelper.WriteAttribute(sw, "zoomScale", this.zoomScale);
@@ -2666,9 +2676,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "defaultColWidth", this.defaultColWidth);
             XmlHelper.WriteAttribute(sw, "defaultRowHeight", this.defaultRowHeight);
             XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight);
-            XmlHelper.WriteAttribute(sw, "zeroHeight", this.zeroHeight);
-            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop);
-            XmlHelper.WriteAttribute(sw, "thickBottom", this.thickBottom);
+            XmlHelper.WriteAttribute(sw, "zeroHeight", this.zeroHeight,false);
+            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop,false);
+            XmlHelper.WriteAttribute(sw, "thickBottom", this.thickBottom,false);
             XmlHelper.WriteAttribute(sw, "outlineLevelRow", this.outlineLevelRow);
             XmlHelper.WriteAttribute(sw, "outlineLevelCol", this.outlineLevelCol);
             sw.Write(">");
@@ -4731,7 +4741,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.colorId = XmlHelper.ReadUInt(node.Attributes["colorId"]);
             ctObj.showPageBreaks = XmlHelper.ReadBool(node.Attributes["showPageBreaks"]);
             ctObj.showFormulas = XmlHelper.ReadBool(node.Attributes["showFormulas"]);
-            ctObj.showGridLines = XmlHelper.ReadBool(node.Attributes["showGridLines"]);
+            if (node.Attributes["showGridLines"] == null)
+                ctObj.showGridLines = true;
+            else
+                ctObj.showGridLines = XmlHelper.ReadBool(node.Attributes["showGridLines"]);
+            
             ctObj.showRowCol = XmlHelper.ReadBool(node.Attributes["showRowCol"]);
             ctObj.outlineSymbols = XmlHelper.ReadBool(node.Attributes["outlineSymbols"]);
             ctObj.zeroValues = XmlHelper.ReadBool(node.Attributes["zeroValues"]);
@@ -4782,22 +4796,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "guid", this.guid);
             XmlHelper.WriteAttribute(sw, "scale", this.scale);
             XmlHelper.WriteAttribute(sw, "colorId", this.colorId);
-            XmlHelper.WriteAttribute(sw, "showPageBreaks", this.showPageBreaks);
-            XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas);
-            XmlHelper.WriteAttribute(sw, "showGridLines", this.showGridLines);
-            XmlHelper.WriteAttribute(sw, "showRowCol", this.showRowCol);
+            XmlHelper.WriteAttribute(sw, "showPageBreaks", this.showPageBreaks, false);
+            XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas, false);
+            XmlHelper.WriteAttribute(sw, "showGridLines", this.showGridLines, false);
+            XmlHelper.WriteAttribute(sw, "showRowCol", this.showRowCol, false);
             XmlHelper.WriteAttribute(sw, "outlineSymbols", this.outlineSymbols);
             XmlHelper.WriteAttribute(sw, "zeroValues", this.zeroValues);
-            XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage);
-            XmlHelper.WriteAttribute(sw, "printArea", this.printArea);
-            XmlHelper.WriteAttribute(sw, "filter", this.filter);
-            XmlHelper.WriteAttribute(sw, "showAutoFilter", this.showAutoFilter);
-            XmlHelper.WriteAttribute(sw, "hiddenRows", this.hiddenRows);
-            XmlHelper.WriteAttribute(sw, "hiddenColumns", this.hiddenColumns);
+            XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage, false);
+            XmlHelper.WriteAttribute(sw, "printArea", this.printArea, false);
+            XmlHelper.WriteAttribute(sw, "filter", this.filter, false);
+            XmlHelper.WriteAttribute(sw, "showAutoFilter", this.showAutoFilter, false);
+            XmlHelper.WriteAttribute(sw, "hiddenRows", this.hiddenRows, false);
+            XmlHelper.WriteAttribute(sw, "hiddenColumns", this.hiddenColumns, false);
             XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
-            XmlHelper.WriteAttribute(sw, "filterUnique", this.filterUnique);
+            XmlHelper.WriteAttribute(sw, "filterUnique", this.filterUnique, false);
             XmlHelper.WriteAttribute(sw, "view", this.view.ToString());
-            XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler);
+            XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler, false);
             XmlHelper.WriteAttribute(sw, "topLeftCell", this.topLeftCell);
             sw.Write(">");
             if (this.pane != null)

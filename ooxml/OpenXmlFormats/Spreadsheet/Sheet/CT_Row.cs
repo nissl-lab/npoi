@@ -80,15 +80,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "spans", this.spans);
             XmlHelper.WriteAttribute(sw, "s", this.s);
-            XmlHelper.WriteAttribute(sw, "customFormat", this.customFormat);
+            XmlHelper.WriteAttribute(sw, "customFormat", this.customFormat,false);
             if(this.ht>=0)
                 XmlHelper.WriteAttribute(sw, "ht", this.ht);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden,false);
+            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight,false);
             XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
-            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed);
-            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop);
-            XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot);
+            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed, false);
+            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop,false);
+            XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot,false);
             XmlHelper.WriteAttribute(sw, "ph", this.ph);
             sw.Write(">");
             if (this.extLst != null)
