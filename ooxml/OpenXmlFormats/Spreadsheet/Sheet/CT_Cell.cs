@@ -69,10 +69,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "s", this.s);
-            XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
+            if(this.t!= ST_CellType.n)
+                XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "cm", this.cm);
             XmlHelper.WriteAttribute(sw, "vm", this.vm);
-            XmlHelper.WriteAttribute(sw, "ph", this.ph);
+            XmlHelper.WriteAttribute(sw, "ph", this.ph, false);
             sw.Write(">");
             if (this.f != null)
                 this.f.Write(sw, "f");

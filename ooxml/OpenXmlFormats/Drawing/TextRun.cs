@@ -34,11 +34,13 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_RegularTextRun ctObj = new CT_RegularTextRun();
-            ctObj.t = XmlHelper.ReadString(node.Attributes["t"]);
+            
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rPr")
                     ctObj.rPr = CT_TextCharacterProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "t")
+                    ctObj.t = childNode.InnerText;
             }
             return ctObj;
         }
@@ -48,10 +50,15 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "t", this.t);
             sw.Write(">");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
+            if(this.t !=null)
+            {
+                sw.Write("<a:t>");
+                sw.Write(XmlHelper.EncodeXml(t));
+                sw.Write("</a:t>");
+            }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 

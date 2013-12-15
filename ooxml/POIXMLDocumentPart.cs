@@ -205,10 +205,10 @@ using System.Xml;
             using (StreamReader sr = new StreamReader(xmlStream))
             {
                 string xml = sr.ReadToEnd();
+                System.Diagnostics.Debug.Write(xml);
                 xmlDoc.LoadXml(xml);
             }
             
-            //xmlDoc.Load(xmlStream);
             return xmlDoc;
         }
 

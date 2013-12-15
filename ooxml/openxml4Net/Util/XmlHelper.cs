@@ -181,7 +181,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             if (value == false && !writeIfBlank)
                 return;
-            WriteAttribute(sw, attributeName, value? "1" : "0");
+            WriteAttribute(sw, attributeName, value ? "1" : "0");
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, double value)
         {
@@ -191,7 +191,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             if (value == 0.0 && !writeIfBlank)
                 return;
-            WriteAttribute(sw, attributeName, value==0.0?"0":value.ToString());
+            WriteAttribute(sw, attributeName, value == 0.0 ? "0" : value.ToString());
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, int value, bool writeIfBlank)
         {
@@ -229,7 +229,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             //Disable entity parsing (to aviod xmlbombs, External Entity Attacks etc).
-			settings.ProhibitDtd=true;
+            settings.ProhibitDtd = true;
 
             XmlReader reader = XmlReader.Create(stream, settings);
             xmlDoc.Load(reader);
@@ -242,7 +242,7 @@ namespace NPOI.OpenXml4Net.Util
 
         public static byte[] ReadBytes(XmlAttribute attr)
         {
-            if (attr == null||string.IsNullOrEmpty(attr.Value))
+            if (attr == null || string.IsNullOrEmpty(attr.Value))
                 return null;
 
             int NumberChars = attr.Value.Length;
@@ -250,6 +250,54 @@ namespace NPOI.OpenXml4Net.Util
             for (int i = 0; i < NumberChars; i += 2)
                 bytes[i / 2] = Convert.ToByte(attr.Value.Substring(i, 2), 16);
             return bytes;
+        }
+
+        public static sbyte ReadSByte(XmlAttribute attr)
+        {
+            if (attr == null)
+                return 0;
+
+            sbyte i;
+            if (sbyte.TryParse(attr.Value, out i))
+            {
+                return i;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public static ushort ReadUShort(XmlAttribute attr)
+        {
+            if (attr == null)
+                return 0;
+
+            ushort i;
+            if (ushort.TryParse(attr.Value, out i))
+            {
+                return i;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public static byte ReadByte(XmlAttribute attr)
+        {
+            if (attr == null)
+                return 0;
+
+            byte i;
+            if (byte.TryParse(attr.Value, out i))
+            {
+                return i;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

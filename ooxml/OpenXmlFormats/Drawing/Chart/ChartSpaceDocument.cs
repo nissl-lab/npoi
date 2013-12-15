@@ -4,24 +4,25 @@ using System.Text;
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using System.IO;
+using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Drawing
 {
     public class ChartSpaceDocument
     {
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_ChartSpace));
         CT_ChartSpace chartSpace = null;
 
         public ChartSpaceDocument()
         {
+            chartSpace = new CT_ChartSpace();
         }
         public ChartSpaceDocument(CT_ChartSpace chartspace)
         {
             this.chartSpace = chartspace;
         }
-        public static ChartSpaceDocument Parse(Stream stream)
+        public static ChartSpaceDocument Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceMgr)
         {
-            CT_ChartSpace obj = (CT_ChartSpace)serializer.Deserialize(stream);
+            CT_ChartSpace obj = CT_ChartSpace.Parse(xmldoc.DocumentElement, namespaceMgr);
             return new ChartSpaceDocument(obj);
         }
         public CT_ChartSpace GetChartSpace()
@@ -34,7 +35,7 @@ namespace NPOI.OpenXmlFormats.Drawing
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, chartSpace);
+            chartSpace.Write(stream);
         }
     }
 }

@@ -43,7 +43,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "sheetId", this.sheetId);
-            XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
+            if(state!= ST_SheetState.visible)
+                XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));

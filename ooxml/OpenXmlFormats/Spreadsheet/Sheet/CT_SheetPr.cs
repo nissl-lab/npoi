@@ -70,15 +70,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "syncHorizontal", this.syncHorizontal);
-            XmlHelper.WriteAttribute(sw, "syncVertical", this.syncVertical);
+            XmlHelper.WriteAttribute(sw, "syncHorizontal", this.syncHorizontal, false);
+            XmlHelper.WriteAttribute(sw, "syncVertical", this.syncVertical, false);
             XmlHelper.WriteAttribute(sw, "syncRef", this.syncRef);
-            XmlHelper.WriteAttribute(sw, "transitionEvaluation", this.transitionEvaluation);
-            XmlHelper.WriteAttribute(sw, "transitionEntry", this.transitionEntry);
-            XmlHelper.WriteAttribute(sw, "published", this.published);
+            XmlHelper.WriteAttribute(sw, "transitionEvaluation", this.transitionEvaluation, false);
+            XmlHelper.WriteAttribute(sw, "transitionEntry", this.transitionEntry, false);
+            XmlHelper.WriteAttribute(sw, "published", this.published, false);
             XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
-            XmlHelper.WriteAttribute(sw, "filterMode", this.filterMode);
-            XmlHelper.WriteAttribute(sw, "enableFormatConditionsCalculation", this.enableFormatConditionsCalculation);
+            XmlHelper.WriteAttribute(sw, "filterMode", this.filterMode,false);
+            XmlHelper.WriteAttribute(sw, "enableFormatConditionsCalculation", this.enableFormatConditionsCalculation, false);
             sw.Write(">");
             if (this.tabColor != null)
                 this.tabColor.Write(sw, "tabColor");

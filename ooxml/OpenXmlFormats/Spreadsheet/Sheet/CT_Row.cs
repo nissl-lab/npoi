@@ -89,7 +89,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed, false);
             XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop,false);
             XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot,false);
-            XmlHelper.WriteAttribute(sw, "ph", this.ph);
+            XmlHelper.WriteAttribute(sw, "ph", this.ph, false);
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");

@@ -573,12 +573,12 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
-            XmlHelper.WriteAttribute(sw, "noDrilldown", this.noDrilldown);
-            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
-            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
-            XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
-            XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
+            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp, false);
+            XmlHelper.WriteAttribute(sw, "noDrilldown", this.noDrilldown, false);
+            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect, false);
+            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect, false);
+            XmlHelper.WriteAttribute(sw, "noMove", this.noMove, false);
+            XmlHelper.WriteAttribute(sw, "noResize", this.noResize, false);
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
@@ -884,7 +884,7 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "txBox", this.txBox);
+            XmlHelper.WriteAttribute(sw, "txBox", this.txBox, false);
             sw.Write(">");
             if (this.spLocks != null)
                 this.spLocks.Write(sw, "spLocks");
@@ -1360,17 +1360,17 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
-            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
-            XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
-            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
-            XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
-            XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
-            XmlHelper.WriteAttribute(sw, "noEditPoints", this.noEditPoints);
-            XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles);
-            XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads);
-            XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
-            XmlHelper.WriteAttribute(sw, "noTextEdit", this.noTextEdit);
+            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp, false);
+            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect, false);
+            XmlHelper.WriteAttribute(sw, "noRot", this.noRot, false);
+            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect, false);
+            XmlHelper.WriteAttribute(sw, "noMove", this.noMove, false);
+            XmlHelper.WriteAttribute(sw, "noResize", this.noResize, false);
+            XmlHelper.WriteAttribute(sw, "noEditPoints", this.noEditPoints, false);
+            XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles, false);
+            XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads, false);
+            XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType, false);
+            XmlHelper.WriteAttribute(sw, "noTextEdit", this.noTextEdit, false);
             sw.Write(">");
             if(this.extLst!=null)
                 this.extLst.Write(sw, "extLst");
@@ -1780,7 +1780,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_OfficeArtExtensionList extLstField = null;
 
-        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.NONE;
+        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.none;
 
 
         public CT_PresetGeometry2D AddNewPrstGeom()
@@ -2034,7 +2034,7 @@ namespace NPOI.OpenXmlFormats.Dml
         [XmlIgnore]
         public bool bwModeSpecified
         {
-            get { return ST_BlackWhiteMode.NONE != this.bwModeField; }
+            get { return ST_BlackWhiteMode.none != this.bwModeField; }
         }
 
         public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)

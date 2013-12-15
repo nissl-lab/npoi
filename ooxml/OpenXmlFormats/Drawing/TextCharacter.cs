@@ -401,7 +401,9 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.lang = XmlHelper.ReadString(node.Attributes["lang"]);
             ctObj.altLang = XmlHelper.ReadString(node.Attributes["altLang"]);
             ctObj.sz = XmlHelper.ReadInt(node.Attributes["sz"]);
+            if (node.Attributes["b"] != null)
             ctObj.b = XmlHelper.ReadBool(node.Attributes["b"]);
+            if (node.Attributes["i"] != null)
             ctObj.i = XmlHelper.ReadBool(node.Attributes["i"]);
             if (node.Attributes["u"] != null)
                 ctObj.u = (ST_TextUnderlineType)Enum.Parse(typeof(ST_TextUnderlineType), node.Attributes["u"].Value);
@@ -414,9 +416,11 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.normalizeH = XmlHelper.ReadBool(node.Attributes["normalizeH"]);
             ctObj.baseline = XmlHelper.ReadInt(node.Attributes["baseline"]);
             ctObj.noProof = XmlHelper.ReadBool(node.Attributes["noProof"]);
-            ctObj.dirty = XmlHelper.ReadBool(node.Attributes["dirty"]);
+            if (node.Attributes["dirty"]!=null)
+                ctObj.dirty = XmlHelper.ReadBool(node.Attributes["dirty"]);
             ctObj.err = XmlHelper.ReadBool(node.Attributes["err"]);
-            ctObj.smtClean = XmlHelper.ReadBool(node.Attributes["smtClean"]);
+            if (node.Attributes["smtClean"] != null)
+                ctObj.smtClean = XmlHelper.ReadBool(node.Attributes["smtClean"]);
             ctObj.smtId = XmlHelper.ReadUInt(node.Attributes["smtId"]);
             ctObj.bmk = XmlHelper.ReadString(node.Attributes["bmk"]);
             foreach (XmlNode childNode in node.ChildNodes)
@@ -472,23 +476,30 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "kumimoji", this.kumimoji);
+            XmlHelper.WriteAttribute(sw, "kumimoji", this.kumimoji, false);
             XmlHelper.WriteAttribute(sw, "lang", this.lang);
             XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
             XmlHelper.WriteAttribute(sw, "sz", this.sz);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            XmlHelper.WriteAttribute(sw, "i", this.i);
-            XmlHelper.WriteAttribute(sw, "u", this.u.ToString());
-            XmlHelper.WriteAttribute(sw, "strike", this.strike.ToString());
+            if(b)
+                XmlHelper.WriteAttribute(sw, "b", this.b);
+            if(i)
+                XmlHelper.WriteAttribute(sw, "i", this.i);
+            if(this.u!= ST_TextUnderlineType.none)
+                XmlHelper.WriteAttribute(sw, "u", this.u.ToString());
+            if(strike!= ST_TextStrikeType.noStrike)
+                XmlHelper.WriteAttribute(sw, "strike", this.strike.ToString());
             XmlHelper.WriteAttribute(sw, "kern", this.kern);
-            XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
+            if(this.cap!= ST_TextCapsType.none)
+                XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
             XmlHelper.WriteAttribute(sw, "spc", this.spc);
-            XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH);
+            XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH, false);
             XmlHelper.WriteAttribute(sw, "baseline", this.baseline);
-            XmlHelper.WriteAttribute(sw, "noProof", this.noProof);
-            XmlHelper.WriteAttribute(sw, "dirty", this.dirty);
-            XmlHelper.WriteAttribute(sw, "err", this.err);
-            XmlHelper.WriteAttribute(sw, "smtClean", this.smtClean);
+            XmlHelper.WriteAttribute(sw, "noProof", this.noProof, false);
+            if (!dirty)
+                XmlHelper.WriteAttribute(sw, "dirty", this.dirty);
+            XmlHelper.WriteAttribute(sw, "err", this.err, false);
+            if(!smtClean)
+                XmlHelper.WriteAttribute(sw, "smtClean", this.smtClean);
             XmlHelper.WriteAttribute(sw, "smtId", this.smtId);
             XmlHelper.WriteAttribute(sw, "bmk", this.bmk);
             sw.Write(">");
@@ -539,27 +550,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TextCharacterProperties()
         {
-            //this.extLstField = new CT_OfficeArtExtensionList();
-            //this.hlinkMouseOverField = new CT_Hyperlink();
-            //this.hlinkClickField = new CT_Hyperlink();
-            //this.symField = new CT_TextFont();
-            //this.csField = new CT_TextFont();
-            //this.eaField = new CT_TextFont();
-            //this.latinField = new CT_TextFont();
-            //this.uFillField = new CT_TextUnderlineFillGroupWrapper();
-            //this.uFillTxField = new CT_TextUnderlineFillFollowText();
-            //this.uLnField = new CT_LineProperties();
-            //this.uLnTxField = new CT_TextUnderlineLineFollowText();
-            //this.highlightField = new CT_Color();
-            //this.effectDagField = new CT_EffectContainer();
-            //this.effectLstField = new CT_EffectList();
-            //this.grpFillField = new CT_GroupFillProperties();
-            //this.pattFillField = new CT_PatternFillProperties();
-            //this.blipFillField = new CT_BlipFillProperties();
-            //this.gradFillField = new CT_GradientFillProperties();
-            //this.solidFillField = new CT_SolidColorFillProperties();
-            //this.noFillField = new CT_NoFillProperties();
-            //this.lnField = new CT_LineProperties();
+            this.strike = ST_TextStrikeType.noStrike;
             this.dirtyField = true;
             this.errField = false;
             this.smtCleanField = true;

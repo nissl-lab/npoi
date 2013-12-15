@@ -108,11 +108,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetStyle()
         {
-            return this.styleSpecifiedField;
+            return this.styleField!=null;
         }
         public bool IsSetWidth()
         {
-            return this.widthSpecifiedField;
+            return this.widthField>0;
         }
         public bool IsSetCollapsed()
         {
@@ -247,6 +247,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return this.collapsedSpecifiedField; }
             set { this.collapsedSpecifiedField = value; }
+        }
+
+        public CT_Col()
+        {
+            
         }
 
         public static CT_Col Parse(XmlNode node, XmlNamespaceManager namespaceManager)

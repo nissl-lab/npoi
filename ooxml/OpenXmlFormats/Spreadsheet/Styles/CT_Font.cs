@@ -19,7 +19,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //    new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
 
         // all elements are optional
-        private List<CT_FontName> nameField = null; // name of the font
+        private CT_FontName nameField = null; // name of the font
         private List<CT_IntProperty> charsetField = null;
         private List<CT_IntProperty> familyField = null; // family of the font
         private List<CT_BooleanProperty> bField = null; // typeface bold
@@ -37,17 +37,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Font()
         {
-            //this.nameField = new List<CT_FontName>();
-            //this.szField = new List<CT_FontSize>();
-            //this.colorField = new List<CT_Color>();
-            //this.familyField = new List<CT_IntProperty>();
-            //this.charsetField = new List<CT_IntProperty>();
-            //this.uField = new List<CT_UnderlineProperty>();
-            //this.bField = new List<CT_BooleanProperty>();
-            //this.iField = new List<CT_BooleanProperty>();
-            //this.vertAlignField = new List<CT_VerticalAlignFontProperty>();
-            //this.schemeField = new List<CT_FontScheme>();
-            //this.strikeField = new List<CT_BooleanProperty>();
         }
 
         public static CT_Font Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -55,7 +44,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_Font ctObj = new CT_Font();
-            ctObj.name = new List<CT_FontName>();
             ctObj.charset = new List<CT_IntProperty>();
             ctObj.family = new List<CT_IntProperty>();
             ctObj.b = new List<CT_BooleanProperty>();
@@ -77,7 +65,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 else if (childNode.LocalName == "extend")
                     ctObj.extend = CT_BooleanProperty.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "name")
-                    ctObj.name.Add(CT_FontName.Parse(childNode, namespaceManager));
+                    ctObj.name= CT_FontName.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "charset")
                     ctObj.charset.Add(CT_IntProperty.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "family")
@@ -108,50 +96,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             sw.Write(">");
-            if (this.outline != null)
-                this.outline.Write(sw, "outline");
-            if (this.shadow != null)
-                this.shadow.Write(sw, "shadow");
-            if (this.condense != null)
-                this.condense.Write(sw, "condense");
-            if (this.extend != null)
-                this.extend.Write(sw, "extend");
-			if (this.sz != null)
-			{
-				foreach (CT_FontSize x in this.sz)
-				{
-					x.Write(sw, "sz");
-				}
-			}
-			if (this.color != null)
-			{
-				foreach (CT_Color x in this.color)
-				{
-					x.Write(sw, "color");
-				}
-			}
-            if (this.name != null)
-            {
-                foreach (CT_FontName x in this.name)
-                {
-                    x.Write(sw, "name");
-                }
-            }
-			if (this.family != null)
-			{
-				foreach (CT_IntProperty x in this.family)
-				{
-					x.Write(sw, "family");
-				}
-			}
-            if (this.charset != null)
-            {
-                foreach (CT_IntProperty x in this.charset)
-                {
-                    x.Write(sw, "charset");
-                }
-            }
-
             if (this.b != null)
             {
                 foreach (CT_BooleanProperty x in this.b)
@@ -166,14 +110,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "i");
                 }
             }
-            if (this.strike != null)
-            {
-                foreach (CT_BooleanProperty x in this.strike)
-                {
-                    x.Write(sw, "strike");
-                }
-            }
-
 
             if (this.u != null)
             {
@@ -182,6 +118,56 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "u");
                 }
             }
+            if (this.sz != null)
+            {
+                foreach (CT_FontSize x in this.sz)
+                {
+                    x.Write(sw, "sz");
+                }
+            }
+
+            if (this.color != null)
+            {
+                foreach (CT_Color x in this.color)
+                {
+                    x.Write(sw, "color");
+                }
+            }
+            if (this.name != null)
+                this.name.Write(sw, "name");
+
+            if (this.family != null)
+            {
+                foreach (CT_IntProperty x in this.family)
+                {
+                    x.Write(sw, "family");
+                }
+            }
+            if (this.charset != null)
+            {
+                foreach (CT_IntProperty x in this.charset)
+                {
+                    x.Write(sw, "charset");
+                }
+            }
+
+            if (this.strike != null)
+            {
+                foreach (CT_BooleanProperty x in this.strike)
+                {
+                    x.Write(sw, "strike");
+                }
+            }
+            if (this.outline != null)
+                this.outline.Write(sw, "outline");
+            if (this.shadow != null)
+                this.shadow.Write(sw, "shadow");
+            if (this.condense != null)
+                this.condense.Write(sw, "condense");
+            if (this.extend != null)
+                this.extend.Write(sw, "extend");
+
+
             if (this.vertAlign != null)
             {
                 foreach (CT_VerticalAlignFontProperty x in this.vertAlign)
@@ -210,7 +196,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //}
         #region name
         [XmlElement]
-        public List<CT_FontName> name
+        public CT_FontName name
         {
             get { return this.nameField; }
             set { this.nameField = value; }
@@ -219,23 +205,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             if (this.nameField == null)
                 return 0;
-            return this.nameField.Count;
+            return 1;
         }
         public CT_FontName AddNewName()
         {
-            if (this.nameField == null)
-                this.nameField = new List<CT_FontName>();
-            CT_FontName fn = new CT_FontName();
-            this.nameField.Add(fn);
-            return fn;
-        }
-        public void SetNameArray(int index, CT_FontName value)
-        {
-            this.nameField[index] = value;
-        }
-        public CT_FontName GetNameArray(int index)
-        {
-            return this.nameField[index];
+            this.nameField = new CT_FontName();
+            return this.nameField;
         }
         #endregion name
 
@@ -700,11 +675,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
             if (this.name!=null)
             {
-                foreach (CT_FontName ctFontName in this.name)
-                {
-                    CT_FontName newName = ctFont.AddNewName();
-                    newName.val = ctFontName.val;
-                }
+                  CT_FontName newName = ctFont.AddNewName();
+                    newName.val = this.name.val;
             }
             if (this.charset!=null)
             {

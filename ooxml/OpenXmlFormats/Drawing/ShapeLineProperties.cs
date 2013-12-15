@@ -27,17 +27,12 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_LineEndProperties
     {
 
-        private ST_LineEndType typeField;
+        private ST_LineEndType typeField= ST_LineEndType.none;
 
-        private bool typeFieldSpecified;
+        private ST_LineEndWidth wField= ST_LineEndWidth.sm;
 
-        private ST_LineEndWidth wField;
+        private ST_LineEndLength lenField= ST_LineEndLength.sm;
 
-        private bool wFieldSpecified;
-
-        private ST_LineEndLength lenField;
-
-        private bool lenFieldSpecified;
         public static CT_LineEndProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -57,9 +52,12 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "w", this.w.ToString());
-            XmlHelper.WriteAttribute(sw, "len", this.len.ToString());
+            if(this.type!= ST_LineEndType.none)
+                XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            if (this.w != ST_LineEndWidth.sm)
+                XmlHelper.WriteAttribute(sw, "w", this.w.ToString());
+            if (this.len != ST_LineEndLength.sm)
+                XmlHelper.WriteAttribute(sw, "len", this.len.ToString());
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -77,18 +75,6 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlIgnore]
-        public bool typeSpecified
-        {
-            get
-            {
-                return this.typeFieldSpecified;
-            }
-            set
-            {
-                this.typeFieldSpecified = value;
-            }
-        }
 
         [XmlAttribute]
         public ST_LineEndWidth w
@@ -100,19 +86,6 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.wField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool wSpecified
-        {
-            get
-            {
-                return this.wFieldSpecified;
-            }
-            set
-            {
-                this.wFieldSpecified = value;
             }
         }
 
@@ -129,18 +102,6 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlIgnore]
-        public bool lenSpecified
-        {
-            get
-            {
-                return this.lenFieldSpecified;
-            }
-            set
-            {
-                this.lenFieldSpecified = value;
-            }
-        }
     }
 
     

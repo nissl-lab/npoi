@@ -16,7 +16,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_Color colorField;
 
-        private ST_BorderStyle styleField= ST_BorderStyle.none;
+        private ST_BorderStyle styleField;
         public static CT_BorderPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -49,7 +49,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_BorderPr()
         {
             //this.colorField = new CT_Color();
-            //this.styleField = ST_BorderStyle.none;
+            this.styleField = ST_BorderStyle.none;
         }
         public void SetColor(CT_Color color)
         {

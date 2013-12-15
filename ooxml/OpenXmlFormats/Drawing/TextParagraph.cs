@@ -391,8 +391,6 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
-            if (this.endParaRPr != null)
-                this.endParaRPr.Write(sw, "endParaRPr");
             if (this.r != null)
             {
                 foreach (CT_RegularTextRun x in this.r)
@@ -414,6 +412,8 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "fld");
                 }
             }
+            if (this.endParaRPr != null)
+                this.endParaRPr.Write(sw, "endParaRPr");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
@@ -604,6 +604,12 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool hangingPunctField;
 
         private bool hangingPunctFieldSpecified;
+
+        public CT_TextParagraphProperties()
+        { 
+            this.algn = ST_TextAlignType.l;
+        }
+
         public static CT_TextParagraphProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -674,11 +680,12 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "indent", this.indent);
             XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             XmlHelper.WriteAttribute(sw, "defTabSz", this.defTabSz);
-            XmlHelper.WriteAttribute(sw, "rtl", this.rtl);
-            XmlHelper.WriteAttribute(sw, "eaLnBrk", this.eaLnBrk);
-            XmlHelper.WriteAttribute(sw, "fontAlgn", this.fontAlgn.ToString());
-            XmlHelper.WriteAttribute(sw, "latinLnBrk", this.latinLnBrk);
-            XmlHelper.WriteAttribute(sw, "hangingPunct", this.hangingPunct);
+            XmlHelper.WriteAttribute(sw, "rtl", this.rtl, false);
+            XmlHelper.WriteAttribute(sw, "eaLnBrk", this.eaLnBrk, false);
+            if(this.fontAlgn!= ST_TextFontAlignType.auto)
+                XmlHelper.WriteAttribute(sw, "fontAlgn", this.fontAlgn.ToString());
+            XmlHelper.WriteAttribute(sw, "latinLnBrk", this.latinLnBrk, false);
+            XmlHelper.WriteAttribute(sw, "hangingPunct", this.hangingPunct, false);
             sw.Write(">");
             if (this.lnSpc != null)
                 this.lnSpc.Write(sw, "lnSpc");
@@ -721,28 +728,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
-
-        public CT_TextParagraphProperties()
-        {
-            //this.extLstField = new CT_OfficeArtExtensionList();
-            //this.defRPrField = new CT_TextCharacterProperties();
-            //this.tabLstField = new List<CT_TextTabStop>();
-            //this.buBlipField = new CT_TextBlipBullet();
-            //this.buCharField = new CT_TextCharBullet();
-            //this.buAutoNumField = new CT_TextAutonumberBullet();
-            //this.buNoneField = new CT_TextNoBullet();
-            //this.buFontField = new CT_TextFont();
-            //this.buFontTxField = new CT_TextBulletTypefaceFollowText();
-            //this.buSzPtsField = new CT_TextBulletSizePoint();
-            //this.buSzPctField = new CT_TextBulletSizePercent();
-            //this.buSzTxField = new CT_TextBulletSizeFollowText();
-            //this.buClrField = new CT_Color();
-            //this.buClrTxField = new CT_TextBulletColorFollowText();
-            //this.spcAftField = new CT_TextSpacing();
-            //this.spcBefField = new CT_TextSpacing();
-            //this.lnSpcField = new CT_TextSpacing();
-        }
-
+        
         [XmlElement(Order = 0)]
         public CT_TextSpacing lnSpc
         {

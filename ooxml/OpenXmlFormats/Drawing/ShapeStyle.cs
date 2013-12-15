@@ -61,7 +61,7 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "idx", this.idx);
+            XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write(">");
             if (this.scrgbClr != null)
                 this.scrgbClr.Write(sw, "scrgbClr");

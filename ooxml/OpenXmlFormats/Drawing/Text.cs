@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -104,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
@@ -308,7 +309,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
@@ -369,7 +370,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
@@ -378,7 +379,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
@@ -387,7 +388,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -487,6 +488,8 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_TextBodyProperties()
         {
             this.uprightField = false;
+            this.vert = ST_TextVerticalType.horz;
+            this.wrap = ST_TextWrappingType.none;
         }
         public static CT_TextBodyProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -548,8 +551,10 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "spcFirstLastPara", this.spcFirstLastPara);
             XmlHelper.WriteAttribute(sw, "vertOverflow", this.vertOverflow.ToString());
             XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflow.ToString());
-            XmlHelper.WriteAttribute(sw, "vert", this.vert.ToString());
-            XmlHelper.WriteAttribute(sw, "wrap", this.wrap.ToString());
+            if(this.vert!= ST_TextVerticalType.horz)
+                XmlHelper.WriteAttribute(sw, "vert", this.vert.ToString());
+            if(this.wrap!= ST_TextWrappingType.none)
+                XmlHelper.WriteAttribute(sw, "wrap", this.wrap.ToString());
             XmlHelper.WriteAttribute(sw, "lIns", this.lIns);
             XmlHelper.WriteAttribute(sw, "tIns", this.tIns);
             XmlHelper.WriteAttribute(sw, "rIns", this.rIns);
@@ -557,10 +562,10 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "numCol", this.numCol);
             XmlHelper.WriteAttribute(sw, "spcCol", this.spcCol);
             XmlHelper.WriteAttribute(sw, "rtlCol", this.rtlCol);
-            XmlHelper.WriteAttribute(sw, "fromWordArt", this.fromWordArt);
+            XmlHelper.WriteAttribute(sw, "fromWordArt", this.fromWordArt, false);
             XmlHelper.WriteAttribute(sw, "anchor", this.anchor.ToString());
-            XmlHelper.WriteAttribute(sw, "anchorCtr", this.anchorCtr);
-            XmlHelper.WriteAttribute(sw, "forceAA", this.forceAA);
+            XmlHelper.WriteAttribute(sw, "anchorCtr", this.anchorCtr, false);
+            XmlHelper.WriteAttribute(sw, "forceAA", this.forceAA, false);
             XmlHelper.WriteAttribute(sw, "upright", this.upright);
             XmlHelper.WriteAttribute(sw, "compatLnSpc", this.compatLnSpc);
             sw.Write(">");
@@ -1204,7 +1209,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable=true)]
@@ -1292,7 +1297,20 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.lstStyleField = value;
             }
         }
-        
+        public override string ToString()
+        {
+            if (p == null||p.Count==0)
+                return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            foreach (CT_TextParagraph tp in p)
+            {
+                foreach (CT_RegularTextRun tr in tp.r)
+                {
+                    sb.Append(tr.t);
+                }
+            }
+            return sb.ToString();
+        }
     
         [XmlElement("p")]
         public List<CT_TextParagraph> p {

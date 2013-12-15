@@ -40,8 +40,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             CleanColumns();
         }
 
-        //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        public void CleanColumns()
+       public void CleanColumns()
         {
             this.newCols = new CT_Cols();
             List<CT_Cols> colsArray = worksheet.GetColsArray();

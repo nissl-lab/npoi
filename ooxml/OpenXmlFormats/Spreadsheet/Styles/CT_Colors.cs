@@ -26,14 +26,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_Colors ctObj = new CT_Colors();
-            ctObj.indexedColors = new List<CT_RgbColor>();
-            ctObj.mruColors = new List<CT_Color>();
+            
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "indexedColors")
-                    ctObj.indexedColors.Add(CT_RgbColor.Parse(childNode, namespaceManager));
+                {
+                    ctObj.indexedColors = new List<CT_RgbColor>();
+                    foreach (XmlNode c2Node in childNode.ChildNodes)
+                    {
+                        ctObj.indexedColors.Add(CT_RgbColor.Parse(childNode, namespaceManager));
+                    }
+                }
                 else if (childNode.LocalName == "mruColors")
-                    ctObj.mruColors.Add(CT_Color.Parse(childNode, namespaceManager));
+                {
+                    ctObj.mruColors = new List<CT_Color>();
+                    foreach (XmlNode c2Node in childNode.ChildNodes)
+                    {
+                        ctObj.mruColors.Add(CT_Color.Parse(c2Node, namespaceManager));
+                    }
+                }
             }
             return ctObj;
         }
@@ -45,17 +56,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}>", nodeName));
             if (this.indexedColors != null)
             {
+                sw.Write("<indexedColors>");
                 foreach (CT_RgbColor x in this.indexedColors)
                 {
-                    x.Write(sw, "indexedColors");
+                    x.Write(sw, "rgbColor");
                 }
+                sw.Write("</indexedColors>");
             }
             if (this.mruColors != null)
             {
+                sw.Write("<mruColors>");
                 foreach (CT_Color x in this.mruColors)
                 {
-                    x.Write(sw, "mruColors");
+                    x.Write(sw, "color");
                 }
+                sw.Write("</mruColors>");
             }
             sw.Write(string.Format("</{0}>", nodeName));
         }
@@ -341,7 +356,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "auto", this.auto);
+            XmlHelper.WriteAttribute(sw, "auto", this.auto,false);
             XmlHelper.WriteAttribute(sw, "indexed", this.indexed);
             XmlHelper.WriteAttribute(sw, "rgb", this.rgb);
             XmlHelper.WriteAttribute(sw, "theme", this.theme);
