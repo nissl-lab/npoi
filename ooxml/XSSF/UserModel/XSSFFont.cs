@@ -277,12 +277,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CT_FontName name = _ctFont.sizeOfNameArray() == 0 ? null : _ctFont.GetNameArray(0);
+                CT_FontName name = _ctFont.name;
                 return name == null ? DEFAULT_FONT_NAME : name.val;
             }
             set 
             {
-                CT_FontName fontName = _ctFont.sizeOfNameArray() == 0 ? _ctFont.AddNewName() : _ctFont.GetNameArray(0);
+                CT_FontName fontName = _ctFont.name==null?_ctFont.AddNewName():_ctFont.name;
                 fontName.val = value == null ? DEFAULT_FONT_NAME : value;
             }
         }

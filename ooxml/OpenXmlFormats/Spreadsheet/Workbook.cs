@@ -798,11 +798,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "date1904", this.date1904);
+            XmlHelper.WriteAttribute(sw, "date1904", this.date1904, false);
             if(this.showObjects!= ST_Objects.all)
                 XmlHelper.WriteAttribute(sw, "showObjects", this.showObjects.ToString());
             XmlHelper.WriteAttribute(sw, "showBorderUnselectedTables", this.showBorderUnselectedTables,false);
-            XmlHelper.WriteAttribute(sw, "filterPrivacy", this.filterPrivacy);
+            XmlHelper.WriteAttribute(sw, "filterPrivacy", this.filterPrivacy, false);
             XmlHelper.WriteAttribute(sw, "promptedSolutions", this.promptedSolutions, false);
             XmlHelper.WriteAttribute(sw, "showInkAnnotation", this.showInkAnnotation,false);
             XmlHelper.WriteAttribute(sw, "backupFile", this.backupFile, false);
@@ -813,7 +813,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "hidePivotFieldList", this.hidePivotFieldList, false);
             XmlHelper.WriteAttribute(sw, "showPivotChartFilter", this.showPivotChartFilter, false);
             XmlHelper.WriteAttribute(sw, "allowRefreshQuery", this.allowRefreshQuery, false);
-            XmlHelper.WriteAttribute(sw, "publishItems", this.publishItems);
+            XmlHelper.WriteAttribute(sw, "publishItems", this.publishItems, false);
             XmlHelper.WriteAttribute(sw, "checkCompatibility", this.checkCompatibility, false);
             XmlHelper.WriteAttribute(sw, "autoCompressPictures", this.autoCompressPictures, false);
             XmlHelper.WriteAttribute(sw, "refreshAllConnections", this.refreshAllConnections, false);

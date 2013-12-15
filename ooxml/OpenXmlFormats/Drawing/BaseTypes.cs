@@ -22,12 +22,12 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_OfficeArtExtension
     {
 
-        private System.Xml.XmlElement anyField; // 1..1
+        private string anyField; // 1..1
 
         private string uriField = null;
         private bool uriSpecifiedField;
-        [XmlAnyElement(Order = 0)]
-        public System.Xml.XmlElement Any
+        [XmlText]
+        public string Any
         {
             get
             {
@@ -50,13 +50,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.uriField = value;
             }
         }
-        [XmlIgnore]
-        public bool uriSpecified
-        {
-            get { return (null != uriField); }
-            set { uriSpecifiedField = value; }
-        }
-
 
         public static CT_OfficeArtExtension Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -64,6 +57,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_OfficeArtExtension ctObj = new CT_OfficeArtExtension();
             ctObj.uri = XmlHelper.ReadString(node.Attributes["uri"]);
+            ctObj.Any = node.InnerXml.Replace(" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"","");
             return ctObj;
         }
 
@@ -74,8 +68,8 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "uri", this.uri);
             sw.Write(">");
-            //if (this.Any != null)
-            //    this.Any.Write(sw, "Any");
+            if (!string.IsNullOrEmpty(this.anyField))
+                sw.Write(this.anyField);
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
@@ -399,7 +393,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_ScRgbColor
     {
 
-        //private List<object> itemsField;
+        private List<string> itemsValueField;
 
         private List<EG_ColorTransform> itemsElementNameField;
 
@@ -412,7 +406,7 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_ScRgbColor()
         {
             this.itemsElementNameField = new List<EG_ColorTransform>();
-            //this.itemsField = new List<object>();
+            this.itemsValueField = new List<string>();
         }
         public static CT_ScRgbColor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -422,7 +416,6 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.r = XmlHelper.ReadInt(node.Attributes["r"]);
             ctObj.g = XmlHelper.ReadInt(node.Attributes["g"]);
             ctObj.b = XmlHelper.ReadInt(node.Attributes["b"]);
-            ctObj.ItemsElementName = new List<EG_ColorTransform>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "alpha")
@@ -481,6 +474,11 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.ItemsElementName.Add(EG_ColorTransform.shade);
                 else if (childNode.LocalName == "tint")
                     ctObj.ItemsElementName.Add(EG_ColorTransform.tint);
+
+                if (childNode.Attributes["val"] != null)
+                    ctObj.itemsValueField.Add(childNode.Attributes["val"].Value);
+                else
+                    ctObj.itemsValueField.Add(null);
             }
             return ctObj;
         }
@@ -495,9 +493,15 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.ItemsElementName != null)
             {
-                foreach (EG_ColorTransform x in this.ItemsElementName)
+                for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
-                    sw.Write(string.Format("<a:{0}/>", x));
+                    EG_ColorTransform x = itemsElementNameField[i];
+                    string value = itemsValueField[i];
+
+                    sw.Write(string.Format("<a:{0}", x));
+                    if (value != null)
+                        sw.Write(" val=\"" + value + "\"");
+                    sw.Write("/>");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -653,6 +657,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_SRgbColor
     {
+        private List<string> itemsValueField;
         private List<EG_ColorTransform> itemsElementNameField;
 
         private byte[] valField;
@@ -660,6 +665,7 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_SRgbColor()
         {
             this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsValueField = new List<string>();
         }
 
         [XmlIgnore]
@@ -694,7 +700,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_SRgbColor ctObj = new CT_SRgbColor();
             ctObj.val = XmlHelper.ReadBytes(node.Attributes["val"]);
-            ctObj.ItemsElementName = new List<EG_ColorTransform>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "alpha")
@@ -753,6 +758,11 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.ItemsElementName.Add(EG_ColorTransform.shade);
                 else if (childNode.LocalName == "tint")
                     ctObj.ItemsElementName.Add(EG_ColorTransform.tint);
+
+                if (childNode.Attributes["val"] != null)
+                    ctObj.itemsValueField.Add(childNode.Attributes["val"].Value);
+                else
+                    ctObj.itemsValueField.Add(null);
             }
             return ctObj;
         }
@@ -766,9 +776,15 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.ItemsElementName != null)
             {
-                foreach (EG_ColorTransform x in this.ItemsElementName)
+                for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
-                    sw.Write(string.Format("<a:{0}/>", x));
+                    EG_ColorTransform x = itemsElementNameField[i];
+                    string value = itemsValueField[i];
+
+                    sw.Write(string.Format("<a:{0}", x));
+                    if (value != null)
+                        sw.Write(" val=\"" + value + "\"");
+                    sw.Write("/>");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -782,7 +798,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_HslColor
     {
 
-        //private List<object> itemsField;
+        private List<string> itemsValueField;
 
         private List<EG_ColorTransform> itemsElementNameField;
 
@@ -795,7 +811,7 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_HslColor()
         {
             this.itemsElementNameField = new List<EG_ColorTransform>();
-            //this.itemsField = new List<object>();
+            this.itemsValueField = new List<string>();
         }
 
         [XmlElement("ItemsElementName", Order = 1)]
@@ -859,7 +875,6 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.hue = XmlHelper.ReadInt(node.Attributes["hue"]);
             ctObj.sat = XmlHelper.ReadInt(node.Attributes["sat"]);
             ctObj.lum = XmlHelper.ReadInt(node.Attributes["lum"]);
-            ctObj.ItemsElementName = new List<EG_ColorTransform>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "alpha")
@@ -918,6 +933,11 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.ItemsElementName.Add(EG_ColorTransform.shade);
                 else if (childNode.LocalName == "tint")
                     ctObj.ItemsElementName.Add(EG_ColorTransform.tint);
+
+                if (childNode.Attributes["val"] != null)
+                    ctObj.itemsValueField.Add(childNode.Attributes["val"].Value);
+                else
+                    ctObj.itemsValueField.Add(null);
             }
             return ctObj;
         }
@@ -933,9 +953,15 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.ItemsElementName != null)
             {
-                foreach (EG_ColorTransform x in this.ItemsElementName)
+                for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
-                    sw.Write(string.Format("<a:{0}/>", x));
+                    EG_ColorTransform x = itemsElementNameField[i];
+                    string value = itemsValueField[i];
+
+                    sw.Write(string.Format("<a:{0}", x));
+                    if (value != null)
+                        sw.Write(" val=\"" + value + "\"");
+                    sw.Write("/>");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -949,7 +975,7 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_SystemColor
     {
 
-        //private List<object> itemsField;
+        private List<string> itemsValueField;
 
         private List<EG_ColorTransform> itemsElementNameField;
 
@@ -957,6 +983,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private byte[] lastClrField;
 
+        public CT_SystemColor()
+        {
+            this.ItemsElementName = new List<EG_ColorTransform>();
+            this.itemsValueField = new List<string>();
+        }
 
         public static CT_SystemColor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -966,7 +997,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_SystemColorVal)Enum.Parse(typeof(ST_SystemColorVal), node.Attributes["val"].Value);
             ctObj.lastClr = XmlHelper.ReadBytes(node.Attributes["lastClr"]);
-            ctObj.ItemsElementName = new List<EG_ColorTransform>();
+
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "alpha")
@@ -1025,6 +1056,11 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.ItemsElementName.Add(EG_ColorTransform.shade);
                 else if (childNode.LocalName == "tint")
                     ctObj.ItemsElementName.Add(EG_ColorTransform.tint);
+
+                if (childNode.Attributes["val"]!=null)
+                    ctObj.itemsValueField.Add(childNode.Attributes["val"].Value);
+                else
+                    ctObj.itemsValueField.Add(null);
             }
             return ctObj;
         }
@@ -1037,19 +1073,18 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.ItemsElementName != null)
             {
-                foreach (EG_ColorTransform x in this.ItemsElementName)
+                for (int i = 0; i < itemsElementNameField.Count;i++ )
                 {
-                    sw.Write(string.Format("<a:{0}/>", x));
+                    EG_ColorTransform x = itemsElementNameField[i];
+                    string value = itemsValueField[i];
+
+                    sw.Write(string.Format("<a:{0}", x));
+                    if(value!=null)
+                        sw.Write(" val=\""+value+"\"");
+                    sw.Write("/>");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
-        }
-
-
-        public CT_SystemColor()
-        {
-            this.itemsElementNameField = new List<EG_ColorTransform>();
-            //this.itemsField = new List<object>();
         }
         [XmlIgnore]
         public List<EG_ColorTransform> ItemsElementName
@@ -1194,7 +1229,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_SchemeColor
     {
-
+        private List<string> itemsValueField;
         private List<EG_ColorTransform> itemsElementNameField;
 
         private ST_SchemeColorVal valField;
@@ -1202,6 +1237,7 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_SchemeColor()
         {
             this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsValueField = new List<string>();
         }
 
         public CT_PositiveFixedPercentage AddNewShade()
@@ -1217,7 +1253,6 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_SchemeColor ctObj = new CT_SchemeColor();
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_SchemeColorVal)Enum.Parse(typeof(ST_SchemeColorVal), node.Attributes["val"].Value);
-            ctObj.ItemsElementName = new List<EG_ColorTransform>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "alpha")
@@ -1276,6 +1311,11 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.ItemsElementName.Add(EG_ColorTransform.shade);
                 else if (childNode.LocalName == "tint")
                     ctObj.ItemsElementName.Add(EG_ColorTransform.tint);
+
+                if (childNode.Attributes["val"] != null)
+                    ctObj.itemsValueField.Add(childNode.Attributes["val"].Value);
+                else
+                    ctObj.itemsValueField.Add(null);
             }
             return ctObj;
         }
@@ -1288,9 +1328,15 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.ItemsElementName != null)
             {
-                foreach (EG_ColorTransform x in this.ItemsElementName)
+                for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
-                    sw.Write(string.Format("<a:{0}/>", x));
+                    EG_ColorTransform x = itemsElementNameField[i];
+                    string value = itemsValueField[i];
+
+                    sw.Write(string.Format("<a:{0}", x));
+                    if (value != null)
+                        sw.Write(" val=\"" + value + "\"");
+                    sw.Write("/>");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -1386,6 +1432,7 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_PresetColor
     {
+        private List<string> itemsValueField;
         private List<EG_ColorTransform> itemsElementNameField;
 
         private ST_PresetColorVal valField;
@@ -1395,6 +1442,7 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_PresetColor()
         {
             this.itemsElementNameField = new List<EG_ColorTransform>();
+            this.itemsValueField = new List<string>();
         }
 
         [XmlIgnore]
@@ -1443,7 +1491,6 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_PresetColor ctObj = new CT_PresetColor();
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_PresetColorVal)Enum.Parse(typeof(ST_PresetColorVal), node.Attributes["val"].Value);
-            ctObj.ItemsElementName = new List<EG_ColorTransform>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "alpha")
@@ -1502,6 +1549,11 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.ItemsElementName.Add(EG_ColorTransform.shade);
                 else if (childNode.LocalName == "tint")
                     ctObj.ItemsElementName.Add(EG_ColorTransform.tint);
+
+                if (childNode.Attributes["val"] != null)
+                    ctObj.itemsValueField.Add(childNode.Attributes["val"].Value);
+                else
+                    ctObj.itemsValueField.Add(null);
             }
             return ctObj;
         }
@@ -1515,9 +1567,15 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.ItemsElementName != null)
             {
-                foreach (EG_ColorTransform x in this.ItemsElementName)
+                for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
-                    sw.Write(string.Format("<a:{0}/>", x));
+                    EG_ColorTransform x = itemsElementNameField[i];
+                    string value = itemsValueField[i];
+
+                    sw.Write(string.Format("<a:{0}", x));
+                    if (value != null)
+                        sw.Write(" val=\"" + value + "\"");
+                    sw.Write("/>");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -2087,8 +2145,8 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV);
+            XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
+            XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
             sw.Write(">");
             if (this.off != null)
                 this.off.Write(sw, "off");
@@ -2235,8 +2293,8 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV);
+            XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
+            XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
             sw.Write(">");
             if (this.off != null)
                 this.off.Write(sw, "off");
@@ -3173,7 +3231,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
     public enum ST_BlackWhiteMode
     {
-        NONE,
+        none,
 
         clr,
 

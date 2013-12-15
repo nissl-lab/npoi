@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
                 geom.prst = (ST_ShapeType.rect);
                 geom.AddNewAvLst();
 
-                CT_ShapeStyle style = shape.AddNewStyle();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeStyle style = shape.AddNewStyle();
                 CT_SchemeColor scheme = style.AddNewLnRef().AddNewSchemeClr();
                 scheme.val = (ST_SchemeColorVal.accent1);
                 scheme.AddNewShade().val = 50000;
@@ -101,7 +101,7 @@ namespace NPOI.XSSF.UserModel
                 fontRef.idx = (ST_FontCollectionIndex.minor);
                 fontRef.AddNewSchemeClr().val = (ST_SchemeColorVal.lt1);
 
-                CT_TextBody body = shape.AddNewTxBody();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody body = shape.AddNewTxBody();
                 CT_TextBodyProperties bodypr = body.AddNewBodyPr();
                 bodypr.anchor = (ST_TextAnchoringType.ctr);
                 bodypr.rtlCol = (false);

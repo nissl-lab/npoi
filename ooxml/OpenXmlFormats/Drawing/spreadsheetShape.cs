@@ -2,8 +2,8 @@
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -64,19 +64,19 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "macro", this.macro);
-            XmlHelper.WriteAttribute(sw, "textlink", this.textlink);
-            XmlHelper.WriteAttribute(sw, "fLocksText", this.fLocksText);
-            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
+            XmlHelper.WriteAttribute(sw, "macro", this.macro, true);
+            XmlHelper.WriteAttribute(sw, "textlink", this.textlink,true);
+            XmlHelper.WriteAttribute(sw, "fLocksText", this.fLocksText, false);
+            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished, false);
             sw.Write(">");
             if (this.nvSpPr != null)
                 this.nvSpPr.Write(sw, "nvSpPr");
             if (this.spPr != null)
                 this.spPr.Write(sw, "spPr");
-            if (this.txBody != null)
-                this.txBody.Write(sw, "txBody");
             if (this.style != null)
                 this.style.Write(sw, "style");
+            if (this.txBody != null)
+                this.txBody.Write(sw, "txBody");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
 
@@ -176,6 +176,250 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     }
 
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_TextBody
+    {
+
+        private CT_TextBodyProperties bodyPrField;
+
+        private CT_TextListStyle lstStyleField;
+
+        private List<CT_TextParagraph> pField;
+
+        public static CT_TextBody Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TextBody ctObj = new CT_TextBody();
+            ctObj.p = new List<CT_TextParagraph>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "bodyPr")
+                    ctObj.bodyPr = CT_TextBodyProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "lstStyle")
+                    ctObj.lstStyle = CT_TextListStyle.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "p")
+                    ctObj.p.Add(CT_TextParagraph.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            sw.Write(">");
+            if (this.bodyPr != null)
+                this.bodyPr.Write(sw, "bodyPr");
+            if (this.lstStyle != null)
+                this.lstStyle.Write(sw, "lstStyle");
+            foreach (CT_TextParagraph x in this.p)
+            {
+                x.Write(sw, "p");
+            }
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
+        }
+
+        public void SetPArray(CT_TextParagraph[] array)
+        {
+            pField = new List<CT_TextParagraph>(array);
+        }
+        public CT_TextParagraph AddNewP()
+        {
+            if (this.pField == null)
+                pField = new List<CT_TextParagraph>();
+            CT_TextParagraph tp = new CT_TextParagraph();
+            pField.Add(tp);
+            return tp;
+        }
+        public CT_TextBodyProperties AddNewBodyPr()
+        {
+            this.bodyPrField = new CT_TextBodyProperties();
+            return this.bodyPrField;
+        }
+        public CT_TextListStyle AddNewLstStyle()
+        {
+            this.lstStyleField = new CT_TextListStyle();
+            return this.lstStyleField;
+        }
+
+        public CT_TextBodyProperties bodyPr
+        {
+            get
+            {
+                return this.bodyPrField;
+            }
+            set
+            {
+                this.bodyPrField = value;
+            }
+        }
+
+
+        public CT_TextListStyle lstStyle
+        {
+            get
+            {
+                return this.lstStyleField;
+            }
+            set
+            {
+                this.lstStyleField = value;
+            }
+        }
+        public override string ToString()
+        {
+            if (p == null || p.Count == 0)
+                return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            foreach (CT_TextParagraph tp in p)
+            {
+                foreach (CT_RegularTextRun tr in tp.r)
+                {
+                    sb.Append(tr.t);
+                }
+            }
+            return sb.ToString();
+        }
+
+        [XmlElement("p")]
+        public List<CT_TextParagraph> p
+        {
+            get
+            {
+                return this.pField;
+            }
+            set
+            {
+                this.pField = value;
+            }
+        }
+    }
+
+    [Serializable]
+    [System.ComponentModel.DesignerCategory("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
+    public class CT_ShapeStyle
+    {
+
+        private CT_StyleMatrixReference lnRefField;
+
+        private CT_StyleMatrixReference fillRefField;
+
+        private CT_StyleMatrixReference effectRefField;
+
+        private CT_FontReference fontRefField;
+        public static CT_ShapeStyle Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ShapeStyle ctObj = new CT_ShapeStyle();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "lnRef")
+                    ctObj.lnRef = CT_StyleMatrixReference.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fillRef")
+                    ctObj.fillRef = CT_StyleMatrixReference.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "effectRef")
+                    ctObj.effectRef = CT_StyleMatrixReference.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "fontRef")
+                    ctObj.fontRef = CT_FontReference.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            sw.Write(">");
+            if (this.lnRef != null)
+                this.lnRef.Write(sw, "lnRef");
+            if (this.fillRef != null)
+                this.fillRef.Write(sw, "fillRef");
+            if (this.effectRef != null)
+                this.effectRef.Write(sw, "effectRef");
+            if (this.fontRef != null)
+                this.fontRef.Write(sw, "fontRef");
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
+        }
+
+        public CT_StyleMatrixReference AddNewFillRef()
+        {
+            this.fillRefField = new CT_StyleMatrixReference();
+            return this.fillRefField;
+        }
+        public CT_StyleMatrixReference AddNewLnRef()
+        {
+            this.lnRefField = new CT_StyleMatrixReference();
+            return this.lnRefField;
+        }
+        public CT_FontReference AddNewFontRef()
+        {
+            this.fontRefField = new CT_FontReference();
+            return this.fontRefField;
+        }
+        public CT_StyleMatrixReference AddNewEffectRef()
+        {
+            this.effectRefField = new CT_StyleMatrixReference();
+            return this.effectRefField;
+        }
+        [XmlElement(Order = 0)]
+        public CT_StyleMatrixReference lnRef
+        {
+            get
+            {
+                return this.lnRefField;
+            }
+            set
+            {
+                this.lnRefField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_StyleMatrixReference fillRef
+        {
+            get
+            {
+                return this.fillRefField;
+            }
+            set
+            {
+                this.fillRefField = value;
+            }
+        }
+
+        [XmlElement(Order = 2)]
+        public CT_StyleMatrixReference effectRef
+        {
+            get
+            {
+                return this.effectRefField;
+            }
+            set
+            {
+                this.effectRefField = value;
+            }
+        }
+
+        [XmlElement(Order = 3)]
+        public CT_FontReference fontRef
+        {
+            get
+            {
+                return this.fontRefField;
+            }
+            set
+            {
+                this.fontRefField = value;
+            }
+        }
+    }
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_ShapeNonVisual
@@ -246,7 +490,90 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
 
     }
+    [Serializable]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualDrawingShapeProps
+    {
 
+        private CT_ShapeLocking spLocksField;
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        private bool txBoxField;
+        public static CT_NonVisualDrawingShapeProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualDrawingShapeProps ctObj = new CT_NonVisualDrawingShapeProps();
+            ctObj.txBox = XmlHelper.ReadBool(node.Attributes["txBox"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "spLocks")
+                    ctObj.spLocks = CT_ShapeLocking.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<xdr:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "txBox", this.txBox, false);
+            sw.Write(">");
+            if (this.spLocks != null)
+                this.spLocks.Write(sw, "spLocks");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</xdr:{0}>", nodeName));
+        }
+
+
+
+        [XmlElement(Order = 0)]
+        public CT_ShapeLocking spLocks
+        {
+            get
+            {
+                return this.spLocksField;
+            }
+            set
+            {
+                this.spLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool txBox
+        {
+            get
+            {
+                return this.txBoxField;
+            }
+            set
+            {
+                this.txBoxField = value;
+            }
+        }
+    }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_GroupShape

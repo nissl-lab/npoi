@@ -49,8 +49,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV);
+            XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
+            XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
             sw.Write(">");
             if (this.off != null)
                 this.off.Write(sw, "off");
@@ -138,6 +138,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             }
         }
     }
+
     [Serializable]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
@@ -172,7 +173,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "descr", this.descr);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden, false);
             sw.Write(">");
             if (this.hlinkClick != null)
                 this.hlinkClick.Write(sw, "hlinkClick");
@@ -741,7 +742,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         private CT_OfficeArtExtensionList extLstField = null;
 
-        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.NONE;
+        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.none;
 
 
         public CT_PresetGeometry2D AddNewPrstGeom()
@@ -995,7 +996,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         [XmlIgnore]
         public bool bwModeSpecified
         {
-            get { return ST_BlackWhiteMode.NONE != this.bwModeField; }
+            get { return ST_BlackWhiteMode.none != this.bwModeField; }
         }
 
         public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -1046,7 +1047,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
-            if(bwMode!= ST_BlackWhiteMode.NONE)
+            if(bwMode!= ST_BlackWhiteMode.none)
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
@@ -1175,8 +1176,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "macro", this.macro);
-            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
+            XmlHelper.WriteAttribute(sw, "macro", this.macro, true);
+            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished, false);
             sw.Write(">");
             if (this.nvGraphicFramePr != null)
                 this.nvGraphicFramePr.Write(sw, "nvGraphicFramePr");
@@ -1399,8 +1400,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "fLocksWithSheet", this.fLocksWithSheet);
-            XmlHelper.WriteAttribute(sw, "fPrintsWithSheet", this.fPrintsWithSheet);
+            XmlHelper.WriteAttribute(sw, "fLocksWithSheet", this.fLocksWithSheet, false);
+            XmlHelper.WriteAttribute(sw, "fPrintsWithSheet", this.fPrintsWithSheet,false);
             sw.Write(">");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
@@ -2071,8 +2072,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "macro", this.macro);
-            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
+            XmlHelper.WriteAttribute(sw, "macro", this.macro, true);
+            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished,false);
             sw.Write(">");
             if (this.nvCxnSpPr != null)
                 this.nvCxnSpPr.Write(sw, "nvCxnSpPr");

@@ -74,7 +74,7 @@ namespace NPOI.XSSF.UserModel
                 geom.prst = (ST_ShapeType.line);
                 geom.AddNewAvLst();
 
-                CT_ShapeStyle style = shape.AddNewStyle();
+                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeStyle style = shape.AddNewStyle();
                 CT_SchemeColor scheme = style.AddNewLnRef().AddNewSchemeClr();
                 scheme.val = (ST_SchemeColorVal.accent1);
                 style.lnRef.idx = (1);

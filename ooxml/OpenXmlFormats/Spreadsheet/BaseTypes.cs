@@ -179,7 +179,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Extension
     {
 
-        private System.Xml.XmlElement anyField;
+        private string anyField;
 
         private string uriField = null;
 
@@ -189,11 +189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Extension ctObj = new CT_Extension();
             ctObj.uri = XmlHelper.ReadString(node.Attributes["uri"]);
-            //foreach (XmlNode childNode in node.ChildNodes)
-            //{
-            //    if (childNode.LocalName == "Any")
-            //        ctObj.Any = XmlElement.Parse(childNode, namespaceManager);
-            //}
+            ctObj.Any = node.InnerXml;
             return ctObj;
         }
 
@@ -204,14 +200,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "uri", this.uri);
             sw.Write(">");
-            //if (this.Any != null)
-            //    this.Any.Write(sw, "Any");
+            if (this.Any != null)
+                sw.Write(this.Any);
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
 
-        [XmlAnyElement(Order = 0)]
-        public System.Xml.XmlElement Any
+        [XmlText]
+        public string Any
         {
             get
             {

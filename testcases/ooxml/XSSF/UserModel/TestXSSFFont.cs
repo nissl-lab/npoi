@@ -109,14 +109,14 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Font ctFont = new CT_Font();
             CT_FontName fname = ctFont.AddNewName();
-            fname.val = ("Arial");
-            ctFont.SetNameArray(0, fname);
+            fname.val = "Arial";
+            ctFont.name =  fname;
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
             Assert.AreEqual("Arial", xssfFont.FontName);
 
-            xssfFont.FontName = ("Courier");
-            Assert.AreEqual("Courier", ctFont.GetNameArray(0).val);
+            xssfFont.FontName = "Courier";
+            Assert.AreEqual("Courier", ctFont.name.val);
         }
         [Test]
         public void TestItalic()

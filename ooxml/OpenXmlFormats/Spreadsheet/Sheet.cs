@@ -297,8 +297,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "autoPageBreaks", this.autoPageBreaks);
-            XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage);
+            XmlHelper.WriteAttribute(sw, "autoPageBreaks", this.autoPageBreaks,false);
+            XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage,false);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
@@ -551,7 +551,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.showRuler = XmlHelper.ReadBool(node.Attributes["showRuler"]);
             ctObj.showOutlineSymbols = XmlHelper.ReadBool(node.Attributes["showOutlineSymbols"]);
             ctObj.defaultGridColor = XmlHelper.ReadBool(node.Attributes["defaultGridColor"]);
-            ctObj.showWhiteSpace = XmlHelper.ReadBool(node.Attributes["showWhiteSpace"]);
+            if (node.Attributes["showWhiteSpace"] == null)
+                ctObj.showWhiteSpace = true;
+            else
+                ctObj.showWhiteSpace = XmlHelper.ReadBool(node.Attributes["showWhiteSpace"]);
             if (node.Attributes["view"] != null)
                 ctObj.view = (ST_SheetViewType)Enum.Parse(typeof(ST_SheetViewType), node.Attributes["view"].Value);
             ctObj.topLeftCell = XmlHelper.ReadString(node.Attributes["topLeftCell"]);
@@ -584,15 +587,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "windowProtection", this.windowProtection, false);
             XmlHelper.WriteAttribute(sw, "showFormulas", this.showFormulas, false);
+            if (!this.showGridLines)
             XmlHelper.WriteAttribute(sw, "showGridLines", this.showGridLines);
-            XmlHelper.WriteAttribute(sw, "showRowColHeaders", this.showRowColHeaders);
-            XmlHelper.WriteAttribute(sw, "showZeros", this.showZeros);
+            if(!this.showRowColHeaders)
+                XmlHelper.WriteAttribute(sw, "showRowColHeaders", this.showRowColHeaders);
+            if (!this.showZeros)
+                XmlHelper.WriteAttribute(sw, "showZeros", this.showZeros);
             XmlHelper.WriteAttribute(sw, "rightToLeft", this.rightToLeft, false);
             XmlHelper.WriteAttribute(sw, "tabSelected", this.tabSelected,false);
             XmlHelper.WriteAttribute(sw, "showRuler", this.showRuler,false);
             XmlHelper.WriteAttribute(sw, "showOutlineSymbols", this.showOutlineSymbols, false);
             XmlHelper.WriteAttribute(sw, "defaultGridColor", this.defaultGridColor, false);
-            XmlHelper.WriteAttribute(sw, "showWhiteSpace", this.showWhiteSpace);
+            if (!this.showWhiteSpace)
+                XmlHelper.WriteAttribute(sw, "showWhiteSpace", this.showWhiteSpace);
             if(this.view !=  ST_SheetViewType.normal)
                 XmlHelper.WriteAttribute(sw, "view", this.view.ToString());
             XmlHelper.WriteAttribute(sw, "topLeftCell", this.topLeftCell);
@@ -1198,7 +1205,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "pane", this.pane.ToString());
+            if(this.pane!= ST_Pane.topLeft)
+                XmlHelper.WriteAttribute(sw, "pane", this.pane.ToString());
             XmlHelper.WriteAttribute(sw, "activeCell", this.activeCell);
             XmlHelper.WriteAttribute(sw, "activeCellId", this.activeCellId);
             XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
@@ -2675,7 +2683,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "baseColWidth", this.baseColWidth);
             XmlHelper.WriteAttribute(sw, "defaultColWidth", this.defaultColWidth);
             XmlHelper.WriteAttribute(sw, "defaultRowHeight", this.defaultRowHeight);
-            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight);
+            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight,false);
             XmlHelper.WriteAttribute(sw, "zeroHeight", this.zeroHeight,false);
             XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop,false);
             XmlHelper.WriteAttribute(sw, "thickBottom", this.thickBottom,false);
@@ -2734,6 +2742,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_CellFormula ctObj = new CT_CellFormula();
             if (node.Attributes["t"] != null)
                 ctObj.t = (ST_CellFormulaType)Enum.Parse(typeof(ST_CellFormulaType), node.Attributes["t"].Value);
+            else
+                ctObj.t = ST_CellFormulaType.normal;
             ctObj.aca = XmlHelper.ReadBool(node.Attributes["aca"]);
             ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
             ctObj.dt2D = XmlHelper.ReadBool(node.Attributes["dt2D"]);
@@ -2754,20 +2764,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
-            XmlHelper.WriteAttribute(sw, "aca", this.aca);
+            if(this.t != ST_CellFormulaType.normal)
+                XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
+            XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D);
-            XmlHelper.WriteAttribute(sw, "dtr", this.dtr);
-            XmlHelper.WriteAttribute(sw, "del1", this.del1);
-            XmlHelper.WriteAttribute(sw, "del2", this.del2);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, false);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, false);
+            XmlHelper.WriteAttribute(sw, "del1", this.del1, false);
+            XmlHelper.WriteAttribute(sw, "del2", this.del2, false);
             XmlHelper.WriteAttribute(sw, "r1", this.r1);
             XmlHelper.WriteAttribute(sw, "r2", this.r2);
-            XmlHelper.WriteAttribute(sw, "ca", this.ca);
-            XmlHelper.WriteAttribute(sw, "si", this.si);
-            XmlHelper.WriteAttribute(sw, "bx", this.bx);
+            XmlHelper.WriteAttribute(sw, "ca", this.ca, false);
+            XmlHelper.WriteAttribute(sw, "si", this.si, true);
+            XmlHelper.WriteAttribute(sw, "bx", this.bx, false);
             sw.Write(">");
-            sw.Write("<![CDATA[{0}]]>", this.valueField);
+            if (!string.IsNullOrEmpty(this.valueField))
+            {
+                sw.Write(XmlHelper.EncodeXml(this.valueField));
+            }
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
@@ -5345,11 +5359,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PageSetup()
         {
-            this.paperSizeField = ((uint)(1));
-            this.scaleField = ((uint)(100));
-            this.firstPageNumberField = ((uint)(1));
-            this.fitToWidthField = ((uint)(1));
-            this.fitToHeightField = ((uint)(1));
+            this.paperSizeField = (uint)1;
+            this.scaleField = (uint)100;
+            this.firstPageNumberField = (uint)1;
+            this.fitToWidthField = (uint)1;
+            this.fitToHeightField = (uint)1;
             this.pageOrderField = ST_PageOrder.downThenOver;
             this.orientationField = ST_Orientation.@default;
             this.usePrinterDefaultsField = true;
@@ -5358,9 +5372,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.cellCommentsField = ST_CellComments.none;
             this.useFirstPageNumberField = false;
             this.errorsField = ST_PrintError.displayed;
-            this.horizontalDpiField = ((uint)(600));
-            this.verticalDpiField = ((uint)(600));
-            this.copiesField = ((uint)(1));
+            this.horizontalDpiField = (uint)600;
+            this.verticalDpiField = (uint)600;
+            this.copiesField = (uint)1;
         }
         [XmlAttribute]
         [DefaultValue(typeof(uint), "1")]
@@ -5597,7 +5611,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 ctObj.pageOrder = (ST_PageOrder)Enum.Parse(typeof(ST_PageOrder), node.Attributes["pageOrder"].Value);
             if (node.Attributes["orientation"] != null)
                 ctObj.orientation = (ST_Orientation)Enum.Parse(typeof(ST_Orientation), node.Attributes["orientation"].Value);
-            ctObj.usePrinterDefaults = XmlHelper.ReadBool(node.Attributes["usePrinterDefaults"]);
+            if (node.Attributes["usePrinterDefaults"] == null)
+                ctObj.usePrinterDefaults = true;
+            else
+                ctObj.usePrinterDefaults = XmlHelper.ReadBool(node.Attributes["usePrinterDefaults"]);
             ctObj.blackAndWhite = XmlHelper.ReadBool(node.Attributes["blackAndWhite"]);
             ctObj.draft = XmlHelper.ReadBool(node.Attributes["draft"]);
             if (node.Attributes["cellComments"] != null)
@@ -5622,14 +5639,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "firstPageNumber", this.firstPageNumber);
             XmlHelper.WriteAttribute(sw, "fitToWidth", this.fitToWidth);
             XmlHelper.WriteAttribute(sw, "fitToHeight", this.fitToHeight);
-            XmlHelper.WriteAttribute(sw, "pageOrder", this.pageOrder.ToString());
+            if(pageOrder!= ST_PageOrder.downThenOver)
+                XmlHelper.WriteAttribute(sw, "pageOrder", this.pageOrder.ToString());
             XmlHelper.WriteAttribute(sw, "orientation", this.orientation.ToString());
-            XmlHelper.WriteAttribute(sw, "usePrinterDefaults", this.usePrinterDefaults);
-            XmlHelper.WriteAttribute(sw, "blackAndWhite", this.blackAndWhite);
-            XmlHelper.WriteAttribute(sw, "draft", this.draft);
-            XmlHelper.WriteAttribute(sw, "cellComments", this.cellComments.ToString());
-            XmlHelper.WriteAttribute(sw, "useFirstPageNumber", this.useFirstPageNumber);
-            XmlHelper.WriteAttribute(sw, "errors", this.errors.ToString());
+            if (!this.usePrinterDefaults)
+                XmlHelper.WriteAttribute(sw, "usePrinterDefaults", this.usePrinterDefaults);
+            XmlHelper.WriteAttribute(sw, "blackAndWhite", this.blackAndWhite, false);
+            XmlHelper.WriteAttribute(sw, "draft", this.draft, false);
+            if(this.cellComments!= ST_CellComments.none)
+                XmlHelper.WriteAttribute(sw, "cellComments", this.cellComments.ToString());
+            XmlHelper.WriteAttribute(sw, "useFirstPageNumber", this.useFirstPageNumber, false);
+            if(errors!= ST_PrintError.displayed)
+                XmlHelper.WriteAttribute(sw, "errors", this.errors.ToString());
             XmlHelper.WriteAttribute(sw, "horizontalDpi", this.horizontalDpi);
             XmlHelper.WriteAttribute(sw, "verticalDpi", this.verticalDpi);
             XmlHelper.WriteAttribute(sw, "copies", this.copies);
@@ -9041,19 +9062,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Chartsheet()
         {
-            //this.extLstField = new CT_ExtensionList();
-            //this.webPublishItemsField = new CT_WebPublishItems();
-            //this.pictureField = new CT_SheetBackgroundPicture();
-            //this.legacyDrawingHFField = new CT_LegacyDrawing();
-            //this.legacyDrawingField = new CT_LegacyDrawing();
-            //this.drawingField = new CT_Drawing();
-            //this.headerFooterField = new CT_HeaderFooter();
-            //this.pageSetupField = new CT_CsPageSetup();
-            //this.pageMarginsField = new CT_PageMargins();
-            //this.customSheetViewsField = new List<CT_CustomChartsheetView>();
-            //this.sheetProtectionField = new CT_ChartsheetProtection();
-            //this.sheetViewsField = new CT_ChartsheetViews();
-            //this.sheetPrField = new CT_ChartsheetPr();
         }
         public void Save(Stream stream)
         {

@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     {
                         sw.Write("<si><t>");
                     }
-                    ExcelEncodeString(sw, SecurityElement.Escape(t));
+                    ExcelEncodeString(sw,NPOI.OpenXml4Net.Util.XmlHelper.EncodeXml(t));
                     sw.Write("</t></si>");
                 }
             }

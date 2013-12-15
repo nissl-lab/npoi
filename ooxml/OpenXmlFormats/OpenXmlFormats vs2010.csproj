@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
     <AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -90,14 +90,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawing\ChartDrawing.cs" />
-    <Compile Include="Drawing\ChartSpaceDocument.cs" />
+    <Compile Include="Drawing\Chart\ChartSpaceDocument.cs" />
+    <Compile Include="Drawing\Chart\AreaChart.cs" />
+    <Compile Include="Drawing\Chart\BubbleChart.cs" />
+    <Compile Include="Drawing\Chart\BarChart.cs" />
+    <Compile Include="Drawing\Chart\RadarChart.cs" />
+    <Compile Include="Drawing\Chart\PieChart.cs" />
+    <Compile Include="Drawing\Chart\ScatterChart.cs" />
+    <Compile Include="Drawing\Chart\SurfaceChart.cs" />
+    <Compile Include="Drawing\Chart\LineChart.cs" />
     <Compile Include="Drawing\DiagramColorTransform.cs" />
     <Compile Include="Drawing\DiagramDataModel.cs" />
     <Compile Include="Drawing\DiagramDefinition.cs" />
     <Compile Include="Drawing\DiagramElementPropertySet.cs" />
     <Compile Include="Drawing\DiagramLayoutVariables.cs" />
     <Compile Include="Drawing\DiagramStyleDefinition.cs" />
-    <Compile Include="Drawing\Chart.cs" />
+    <Compile Include="Drawing\Chart\Chart.cs" />
     <Compile Include="Drawing\Gvml.cs" />
     <Compile Include="Drawing\AudioVideo.cs" />
     <Compile Include="Drawing\GraphicalObjectFormat.cs" />

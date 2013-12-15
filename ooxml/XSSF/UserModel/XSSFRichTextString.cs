@@ -339,7 +339,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             if (ctFont.sizeOfSzArray() > 0) pr.AddNewSz().val = (ctFont.GetSzArray(0).val);
-            if (ctFont.sizeOfNameArray() > 0) pr.AddNewRFont().val = (ctFont.GetNameArray(0).val);
+            if (ctFont.sizeOfNameArray() > 0) pr.AddNewRFont().val = (ctFont.name.val);
             if (ctFont.sizeOfFamilyArray() > 0) pr.AddNewFamily().val =(ctFont.GetFamilyArray(0).val);
             if (ctFont.sizeOfSchemeArray() > 0) pr.AddNewScheme().val = (ctFont.GetSchemeArray(0).val);
             if (ctFont.sizeOfCharsetArray() > 0) pr.AddNewCharset().val = (ctFont.GetCharsetArray(0).val);

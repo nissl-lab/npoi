@@ -79,7 +79,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
 
                 if (rField ==null || rField.Count==0)
-                    this.xmltext = "<r><t xml:space=\"preserve\">"+value+"</t></r>";
+                    this.xmltext = "<r><t xml:space=\"preserve\">"+XmlHelper.EncodeXml(value)+"</t></r>";
                 this.tField = value;
             }
         }
@@ -162,7 +162,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                             if (r.t != null)
                             {
                                 sw.Write("<t xml:space=\"preserve\">");
-                                sw.Write(r.t);
+                                sw.Write(XmlHelper.EncodeXml(r.t));
                                 sw.Write("</t>");
                             }
                             sw.Write("</r>");
