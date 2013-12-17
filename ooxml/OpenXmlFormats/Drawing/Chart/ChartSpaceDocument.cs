@@ -6,7 +6,7 @@ using NPOI.OpenXmlFormats.Dml.Chart;
 using System.IO;
 using System.Xml;
 
-namespace NPOI.OpenXmlFormats.Drawing
+namespace NPOI.OpenXmlFormats.Dml
 {
     public class ChartSpaceDocument
     {

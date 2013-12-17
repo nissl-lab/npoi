@@ -29,8 +29,8 @@ namespace NPOI.XSSF.UserModel
     using System.Text;
     using NPOI.SS.UserModel.Charts;
     using NPOI.XSSF.UserModel.Charts;
-    using NPOI.OpenXmlFormats.Drawing;
     using System.Xml.Serialization;
+    using NPOI.OpenXmlFormats.Dml;
 
     /**
      * Represents a SpreadsheetML Chart
