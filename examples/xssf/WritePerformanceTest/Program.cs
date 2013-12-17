@@ -9,6 +9,7 @@ using System.Text;
 
 namespace WritePerformanceTest
 {
+    /*
 class Program
 {
     static void Main(string[] args)
@@ -47,5 +48,33 @@ class Program
         //prompt user so we do not close the window with our data :)
         System.Console.Read();
     }
-}
+}*/
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IWorkbook workbook = new XSSFWorkbook();
+            ISheet sheet1 = workbook.CreateSheet("Sheet1");
+            sheet1.CreateRow(0).CreateCell(0).SetCellValue("This is a Sample");
+            int x = 1;
+
+            Console.WriteLine("Start at " + DateTime.Now.ToString());
+            for (int i = 1; i <= 70000; i++)
+            {
+                IRow row = sheet1.CreateRow(i);
+                for (int j = 0; j < 15; j++)
+                {
+                    row.CreateCell(j).SetCellValue(x++);
+                }
+            }
+            Console.WriteLine("End at " + DateTime.Now.ToString());
+
+            FileStream sw = File.Create("test.xls");
+            workbook.Write(sw);
+            sw.Close();
+
+            Console.Read();
+        }
+    }
 }
