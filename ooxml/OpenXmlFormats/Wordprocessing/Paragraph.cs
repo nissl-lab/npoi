@@ -826,6 +826,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		{
 			sw.Write(string.Format("<w:{0}", nodeName));
 			sw.Write(">");
+            if (this.spacing != null)
+                this.spacing.Write(sw, "spacing");
 			if (this.rPr != null)
 				this.rPr.Write(sw, "rPr");
 			if (this.sectPr != null)
@@ -872,10 +874,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 				this.adjustRightInd.Write(sw, "adjustRightInd");
 			if (this.snapToGrid != null)
 				this.snapToGrid.Write(sw, "snapToGrid");
-			if (this.spacing != null)
-				this.spacing.Write(sw, "spacing");
-			if (this.ind != null)
-				this.ind.Write(sw, "ind");
 			if (this.contextualSpacing != null)
 				this.contextualSpacing.Write(sw, "contextualSpacing");
 			if (this.mirrorIndents != null)
@@ -898,11 +896,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 				this.cnfStyle.Write(sw, "cnfStyle");
 			if (this.tabs != null)
 			{
-				foreach (CT_TabStop x in this.tabs)
-				{
-					x.Write(sw, "tabs");
-				}
+                sw.Write("<w:tabs>");
+                foreach (CT_TabStop x in this.tabs)
+                {
+                    x.Write(sw, "tab");
+                }
+                sw.Write("</w:tabs>");
 			}
+            if (this.ind != null)
+                this.ind.Write(sw, "ind");
 			sw.Write(string.Format("</w:{0}>", nodeName));
 		}
 
@@ -1060,50 +1062,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 		public CT_ParaRPr()
 		{
-			//this.rPrChangeField = new CT_ParaRPrChange();
-			//this.oMathField = new CT_OnOff();
-			//this.specVanishField = new CT_OnOff();
-			//this.eastAsianLayoutField = new CT_EastAsianLayout();
-			//this.langField = new CT_Language();
-			//this.emField = new CT_Em();
-			//this.csField = new CT_OnOff();
-			//this.rtlField = new CT_OnOff();
-			//this.vertAlignField = new CT_VerticalAlignRun();
-			//this.fitTextField = new CT_FitText();
-			//this.shdField = new CT_Shd();
-			//this.bdrField = new CT_Border();
-			//this.effectField = new CT_TextEffect();
-			//this.uField = new CT_Underline();
-			//this.highlightField = new CT_Highlight();
-			//this.szCsField = new CT_HpsMeasure();
-			//this.szField = new CT_HpsMeasure();
-			//this.positionField = new CT_SignedHpsMeasure();
-			//this.kernField = new CT_HpsMeasure();
-			//this.wField = new CT_TextScale();
-			//this.spacingField = new CT_SignedTwipsMeasure();
-			//this.colorField = new CT_Color();
-			//this.webHiddenField = new CT_OnOff();
-			//this.vanishField = new CT_OnOff();
-			//this.snapToGridField = new CT_OnOff();
-			//this.noProofField = new CT_OnOff();
-			//this.imprintField = new CT_OnOff();
-			//this.embossField = new CT_OnOff();
-			//this.shadowField = new CT_OnOff();
-			//this.outlineField = new CT_OnOff();
-			//this.dstrikeField = new CT_OnOff();
-			//this.strikeField = new CT_OnOff();
-			//this.smallCapsField = new CT_OnOff();
-			//this.capsField = new CT_OnOff();
-			//this.iCsField = new CT_OnOff();
-			//this.iField = new CT_OnOff();
-			//this.bCsField = new CT_OnOff();
-			//this.bField = new CT_OnOff();
-			//this.rFontsField = new CT_Fonts();
-			//this.rStyleField = new CT_String();
-			//this.moveToField = new CT_TrackChange();
-			//this.moveFromField = new CT_TrackChange();
-			//this.delField = new CT_TrackChange();
-			//this.insField = new CT_TrackChange();
+
 		}
 
 		[XmlElement(Order = 0)]
@@ -3582,10 +3541,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 			XmlHelper.WriteAttribute(sw, "w:rightChars", this.rightChars);
 			XmlHelper.WriteAttribute(sw, "w:hanging", this.hanging);
 			XmlHelper.WriteAttribute(sw, "w:hangingChars", this.hangingChars);
-			XmlHelper.WriteAttribute(sw, "w:firstLine", this.firstLine);
+			XmlHelper.WriteAttribute(sw, "w:firstLine", this.firstLine,true);
 			XmlHelper.WriteAttribute(sw, "w:firstLineChars", this.firstLineChars);
-			sw.Write(">");
-			sw.Write(string.Format("</w:{0}>", nodeName));
+			sw.Write("/>");
 		}
 
 
@@ -5259,8 +5217,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 		internal void Write(StreamWriter sw, string nodeName)
 		{
-			sw.Write(string.Format("<w:{0}", nodeName));
-			sw.Write(">");
+			sw.Write(string.Format("<w:{0}>", nodeName));
 			if (this.ins != null)
 				this.ins.Write(sw, "ins");
 			if (this.del != null)
@@ -5808,39 +5765,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 		public CT_PPrBase()
 		{
-			//this.cnfStyleField = new CT_Cnf();
-			//this.divIdField = new CT_DecimalNumber();
-			//this.outlineLvlField = new CT_DecimalNumber();
-			//this.textboxTightWrapField = new CT_TextboxTightWrap();
-			//this.textAlignmentField = new CT_TextAlignment();
-			//this.textDirectionField = new CT_TextDirection();
-			//this.jcField = new CT_Jc();
-			//this.suppressOverlapField = new CT_OnOff();
-			//this.mirrorIndentsField = new CT_OnOff();
-			//this.contextualSpacingField = new CT_OnOff();
-			//this.indField = new CT_Ind();
-			//this.spacingField = new CT_Spacing();
-			//this.snapToGridField = new CT_OnOff();
-			//this.adjustRightIndField = new CT_OnOff();
-			//this.bidiField = new CT_OnOff();
-			//this.autoSpaceDNField = new CT_OnOff();
-			//this.autoSpaceDEField = new CT_OnOff();
-			//this.topLinePunctField = new CT_OnOff();
-			//this.overflowPunctField = new CT_OnOff();
-			//this.wordWrapField = new CT_OnOff();
-			//this.kinsokuField = new CT_OnOff();
-			//this.suppressAutoHyphensField = new CT_OnOff();
-			//this.tabsField = new List<CT_TabStop>();
-			//this.shdField = new CT_Shd();
-			//this.pBdrField = new CT_PBdr();
-			//this.suppressLineNumbersField = new CT_OnOff();
-			//this.numPrField = new CT_NumPr();
-			//this.widowControlField = new CT_OnOff();
-			//this.framePrField = new CT_FramePr();
-			//this.pageBreakBeforeField = new CT_OnOff();
-			//this.keepLinesField = new CT_OnOff();
-			//this.keepNextField = new CT_OnOff();
-			//this.pStyleField = new CT_String();
+
 		}
 		public static CT_PPrBase Parse(XmlNode node, XmlNamespaceManager namespaceManager)
 		{
@@ -5992,10 +5917,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 				this.cnfStyle.Write(sw, "cnfStyle");
 			if (this.tabs != null)
 			{
+                sw.Write("<w:tabs>");
 				foreach (CT_TabStop x in this.tabs)
 				{
-					x.Write(sw, "tabs");
+					x.Write(sw, "tab");
 				}
+                sw.Write("</w:tabs>");
 			}
 			sw.Write(string.Format("</w:{0}>", nodeName));
 		}

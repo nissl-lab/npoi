@@ -462,6 +462,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool csthemeFieldSpecified;
 
+        public CT_Fonts()
+        {
+            this.hintField = ST_Hint.@default;
+            this.csthemeField = ST_Theme.majorEastAsia;
+            this.eastAsiaThemeField = ST_Theme.majorEastAsia;
+            this.hAnsiThemeField = ST_Theme.majorEastAsia;
+            this.asciiThemeField = ST_Theme.majorEastAsia;
+        }
+
+
         public static CT_Fonts Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -494,12 +504,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:hAnsi", this.hAnsi);
             XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
             XmlHelper.WriteAttribute(sw, "w:cs", this.cs);
-            XmlHelper.WriteAttribute(sw, "w:asciiTheme", this.asciiTheme.ToString());
-            XmlHelper.WriteAttribute(sw, "w:hAnsiTheme", this.hAnsiTheme.ToString());
-            XmlHelper.WriteAttribute(sw, "w:eastAsiaTheme", this.eastAsiaTheme.ToString());
-            XmlHelper.WriteAttribute(sw, "w:cstheme", this.cstheme.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            if (this.asciiTheme != ST_Theme.majorEastAsia)
+                XmlHelper.WriteAttribute(sw, "w:asciiTheme", this.asciiTheme.ToString());
+            if (this.hAnsiTheme != ST_Theme.majorEastAsia)
+                XmlHelper.WriteAttribute(sw, "w:hAnsiTheme", this.hAnsiTheme.ToString());
+            if(this.eastAsiaTheme != ST_Theme.majorEastAsia)
+                XmlHelper.WriteAttribute(sw, "w:eastAsiaTheme", this.eastAsiaTheme.ToString());
+            if (this.cstheme != ST_Theme.majorEastAsia)
+                XmlHelper.WriteAttribute(sw, "w:cstheme", this.cstheme.ToString());
+            sw.Write("/>");
         }
 
 

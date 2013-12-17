@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF.Util;
     using NPOI.OpenXmlFormats.Dml;
     using System.Xml.Serialization;
+    using NPOI.OpenXmlFormats.Dml.WordProcessing;
     /**
      * XWPFrun.object defines a region of text with a common Set of properties
      *
@@ -51,8 +52,8 @@ namespace NPOI.XWPF.UserModel
              * reserve already occupied Drawing ids, so reserving new ids later will
              * not corrupt the document
              */
-            IList<NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing> drawingList = r.GetDrawingList();
-            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing ctDrawing in drawingList)
+            IList<CT_Drawing> drawingList = r.GetDrawingList();
+            foreach (CT_Drawing ctDrawing in drawingList)
             {
                 List<CT_Anchor> anchorList = ctDrawing.GetAnchorList();
                 foreach (CT_Anchor anchor in anchorList)
@@ -75,12 +76,13 @@ namespace NPOI.XWPF.UserModel
             //// Look for any text in any of our pictures or Drawings
             StringBuilder text = new StringBuilder();
             List<object> pictTextObjs = new List<object>();
-            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Picture pic in r.GetPictList())
+            foreach (CT_Picture pic in r.GetPictList())
                 pictTextObjs.Add(pic);
-            foreach (NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing draw in drawingList)
+            foreach (CT_Drawing draw in drawingList)
                 pictTextObjs.Add(draw);
             foreach (object o in pictTextObjs)
             {
+                //todo:: imlement this
                 //XmlObject[] t = o.SelectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' .//w:t");
                 //for (int m = 0; m < t.Length; m++)
                 //{
@@ -131,9 +133,9 @@ namespace NPOI.XWPF.UserModel
                 //    pictures.Add((NPOI.OpenXmlFormats.Dml.CT_Picture)pict);
                 //}
             //}
-            if (o is NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing)
+            if (o is CT_Drawing)
             {
-                NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing drawing = o as NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing;
+                CT_Drawing drawing = o as CT_Drawing;
                 if (drawing.inline!=null)
                 {
                     foreach (CT_Inline inline in drawing.inline)
@@ -694,7 +696,7 @@ namespace NPOI.XWPF.UserModel
             XWPFPictureData picData = (XWPFPictureData)doc.GetRelationById(relationId);
 
             // Create the Drawing entry for it
-                NPOI.OpenXmlFormats.Wordprocessing.CT_Drawing Drawing = run.AddNewDrawing();
+                CT_Drawing Drawing = run.AddNewDrawing();
                 CT_Inline inline = Drawing.AddNewInline();
 
                 // Do the fiddly namespace bits on the inline
@@ -721,14 +723,14 @@ namespace NPOI.XWPF.UserModel
                 inline.distB = (0);
                 inline.distL = (0);
 
-                CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
+                NPOI.OpenXmlFormats.Dml.WordProcessing.CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
                 long id = Paragraph.Document.DrawingIdManager.ReserveNew();
                 docPr.id = (uint)(id);
                 /* This name is not visible in Word 2010 anywhere. */
                 docPr.name = ("Drawing " + id);
                 docPr.descr = (filename);
 
-                CT_PositiveSize2D extent = inline.AddNewExtent();
+                NPOI.OpenXmlFormats.Dml.WordProcessing.CT_PositiveSize2D extent = inline.AddNewExtent();
                 extent.cx = (width);
                 extent.cy = (height);
 
@@ -740,7 +742,7 @@ namespace NPOI.XWPF.UserModel
                 // Set it up
                 NPOI.OpenXmlFormats.Dml.Picture.CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();
 
-                CT_NonVisualDrawingProps cNvPr = nvPicPr.AddNewCNvPr();
+                NPOI.OpenXmlFormats.Dml.CT_NonVisualDrawingProps cNvPr = nvPicPr.AddNewCNvPr();
                 /* use "0" for the id. See ECM-576, 20.2.2.3 */
                 cNvPr.id = (0);
                 /* This name is not visible in Word 2010 anywhere */
@@ -762,7 +764,7 @@ namespace NPOI.XWPF.UserModel
                 off.x = (0);
                 off.y = (0);
 
-                CT_PositiveSize2D ext = xfrm.AddNewExt();
+                NPOI.OpenXmlFormats.Dml.CT_PositiveSize2D ext = xfrm.AddNewExt();
                 ext.cx = (width);
                 ext.cy = (height);
 

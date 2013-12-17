@@ -17,6 +17,7 @@ using NPOI.OpenXmlFormats.Dml;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
 using System.Xml;
+using NPOI.OpenXmlFormats.Dml.WordProcessing;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -1520,107 +1521,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
         numbering,
-    }
-
-
-
-
-
-
-
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
-    public class CT_Drawing
-    {
-
-        public CT_Drawing()
-        {
-            
-        }
-        public static CT_Drawing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_Drawing ctObj = new CT_Drawing();
-            ctObj.anchor = new List<CT_Anchor>();
-            ctObj.inline = new List<CT_Inline>();
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "anchor")
-                    ctObj.anchor.Add(CT_Anchor.Parse(childNode, namespaceManager));
-                else if (childNode.LocalName == "inline")
-                    ctObj.inline.Add(CT_Inline.Parse(childNode, namespaceManager));
-            }
-            return ctObj;
-        }
-
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
-            if (this.anchor != null)
-            {
-                foreach (CT_Anchor x in this.anchor)
-                {
-                    x.Write(sw, "anchor");
-                }
-            }
-            if (this.inline != null)
-            {
-                foreach (CT_Inline x in this.inline)
-                {
-                    x.Write(sw, "inline");
-                }
-            }
-            sw.Write(string.Format("</w:{0}>", nodeName));
-        }
-
-        List<CT_Anchor> anchorField;
-        public List<CT_Anchor> anchor
-        {
-            get { return this.anchorField; }
-            set { this.anchorField = value; }
-        }
-
-        List<CT_Inline> inlineField;
-        public List<CT_Inline> inline
-        {
-            get { return this.inlineField; }
-            set { this.inlineField = value; }
-        }
-
-
-
-        public CT_Inline AddNewInline()
-        {
-            CT_Inline inlineObj = new CT_Inline();
-            if (this.inlineField == null)
-                this.inlineField = new List<CT_Inline>();
-            this.inlineField.Add(inlineObj);
-            return inlineObj;
-        }
-
-        public List<CT_Anchor> GetAnchorList()
-        {
-            return this.anchor;
-        }
-
-        public List<CT_Inline> GetInlineList()
-        {
-            return this.inline;
-        }
-
-        public CT_Inline GetInlineArray(int p)
-        {
-            lock (this)
-            {
-                return this.inline[p];
-            }
-        }
     }
 
 

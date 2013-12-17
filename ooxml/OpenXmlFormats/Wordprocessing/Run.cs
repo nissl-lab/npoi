@@ -6,6 +6,7 @@ using NPOI.OpenXmlFormats.Shared;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
 using System.Collections;
+using NPOI.OpenXmlFormats.Dml.WordProcessing;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -1406,8 +1407,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
 

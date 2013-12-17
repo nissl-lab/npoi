@@ -13,6 +13,7 @@ using System.Collections;
 using System.IO;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXmlFormats.Dml.WordProcessing;
 
 namespace NPOI.OpenXmlFormats.Shared
 {

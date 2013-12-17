@@ -8,13 +8,330 @@
 using NPOI.OpenXml4Net.Util;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace NPOI.OpenXmlFormats.Dml
+namespace NPOI.OpenXmlFormats.Dml.WordProcessing
 {
-   
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
+    public class CT_Drawing
+    {
+
+        public CT_Drawing()
+        {
+
+        }
+        public static CT_Drawing Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Drawing ctObj = new CT_Drawing();
+            ctObj.anchor = new List<CT_Anchor>();
+            ctObj.inline = new List<CT_Inline>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "anchor")
+                    ctObj.anchor.Add(CT_Anchor.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "inline")
+                    ctObj.inline.Add(CT_Inline.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(">");
+            if (this.anchor != null)
+            {
+                foreach (CT_Anchor x in this.anchor)
+                {
+                    x.Write(sw, "anchor");
+                }
+            }
+            if (this.inline != null)
+            {
+                foreach (CT_Inline x in this.inline)
+                {
+                    x.Write(sw, "inline");
+                }
+            }
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+        List<CT_Anchor> anchorField;
+        public List<CT_Anchor> anchor
+        {
+            get { return this.anchorField; }
+            set { this.anchorField = value; }
+        }
+
+        List<CT_Inline> inlineField;
+        public List<CT_Inline> inline
+        {
+            get { return this.inlineField; }
+            set { this.inlineField = value; }
+        }
+
+
+
+        public CT_Inline AddNewInline()
+        {
+            CT_Inline inlineObj = new CT_Inline();
+            if (this.inlineField == null)
+                this.inlineField = new List<CT_Inline>();
+            this.inlineField.Add(inlineObj);
+            return inlineObj;
+        }
+
+        public List<CT_Anchor> GetAnchorList()
+        {
+            return this.anchor;
+        }
+
+        public List<CT_Inline> GetInlineList()
+        {
+            return this.inline;
+        }
+
+        public CT_Inline GetInlineArray(int p)
+        {
+            lock (this)
+            {
+                return this.inline[p];
+            }
+        }
+    }
+
+
+
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot("inline", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = false)]
+    public class CT_PositiveSize2D
+    {
+
+        private long cxField;
+
+        private long cyField;
+        public static CT_PositiveSize2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PositiveSize2D ctObj = new CT_PositiveSize2D();
+            ctObj.cx = XmlHelper.ReadLong(node.Attributes["cx"]);
+            ctObj.cy = XmlHelper.ReadLong(node.Attributes["cy"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "cx", this.cx, true);
+            XmlHelper.WriteAttribute(sw, "cy", this.cy, true);
+            sw.Write(">");
+            sw.Write(string.Format("</wp:{0}>", nodeName));
+        }
+
+        [XmlAttribute]
+        public long cx
+        {
+            get
+            {
+                return this.cxField;
+            }
+            set
+            {
+                this.cxField = value;
+            }
+        }
+        [XmlAttribute]
+        public long cy
+        {
+            get
+            {
+                return this.cyField;
+            }
+            set
+            {
+                this.cyField = value;
+            }
+        }
+    }
+    [Serializable]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
+    public class CT_NonVisualDrawingProps
+    {
+        public static CT_NonVisualDrawingProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualDrawingProps ctObj = new CT_NonVisualDrawingProps();
+            ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.descr = XmlHelper.ReadString(node.Attributes["descr"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "hlinkClick")
+                    ctObj.hlinkClick = CT_Hyperlink.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "hlinkHover")
+                    ctObj.hlinkHover = CT_Hyperlink.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "descr", this.descr);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            sw.Write(">");
+            if (this.hlinkClick != null)
+                this.hlinkClick.Write(sw, "hlinkClick");
+            if (this.hlinkHover != null)
+                this.hlinkHover.Write(sw, "hlinkHover");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</wp:{0}>", nodeName));
+        }
+
+        private CT_Hyperlink hlinkClickField = null;
+
+        private CT_Hyperlink hlinkHoverField = null;
+
+        private CT_OfficeArtExtensionList extLstField = null;
+
+        private uint idField;
+
+        private string nameField = null;
+
+        private string descrField;
+
+        private bool? hiddenField = null;
+
+        [XmlElement(Order = 0)]
+        public CT_Hyperlink hlinkClick
+        {
+            get
+            {
+                return this.hlinkClickField;
+            }
+            set
+            {
+                this.hlinkClickField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_Hyperlink hlinkHover
+        {
+            get
+            {
+                return this.hlinkHoverField;
+            }
+            set
+            {
+                this.hlinkHoverField = value;
+            }
+        }
+
+        [XmlElement(Order = 2)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public uint id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+
+        [XmlAttribute]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+
+        [XmlAttribute]
+        [DefaultValue("")]
+        public string descr
+        {
+            get
+            {
+                return null == this.descrField ? "" : descrField;
+            }
+            set
+            {
+                this.descrField = value;
+            }
+        }
+        [XmlIgnore]
+        public bool descrSpecified
+        {
+            get { return (null != descrField); }
+        }
+        [XmlAttribute]
+        [DefaultValue(false)]
+        public bool hidden
+        {
+            get
+            {
+                return null == this.hiddenField ? false : (bool)hiddenField;
+            }
+            set
+            {
+                this.hiddenField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool hiddenSpecified
+        {
+            get { return (null != hiddenField); }
+        }
+    }
+
     [Serializable]
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
@@ -1132,7 +1449,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
-    public partial class CT_WrapNone
+    public class CT_WrapNone
     {
     }
 
@@ -1141,7 +1458,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
-    public partial class CT_WrapSquare
+    public class CT_WrapSquare
     {
 
         private CT_EffectExtent effectExtentField;
@@ -1327,7 +1644,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
-    public partial class CT_WrapThrough
+    public class CT_WrapThrough
     {
 
         private CT_WrapPath wrapPolygonField;
@@ -1434,7 +1751,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
-    public partial class CT_WrapPath
+    public class CT_WrapPath
     {
 
         private CT_Point2D startField;
@@ -1511,7 +1828,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
-    public partial class CT_WrapTight
+    public class CT_WrapTight
     {
 
         private CT_WrapPath wrapPolygonField;
@@ -1618,7 +1935,7 @@ namespace NPOI.OpenXmlFormats.Dml
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
-    public partial class CT_WrapTopBottom
+    public class CT_WrapTopBottom
     {
 
         private CT_EffectExtent effectExtentField;

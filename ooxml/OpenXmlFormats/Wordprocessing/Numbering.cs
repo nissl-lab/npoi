@@ -485,8 +485,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
 
@@ -1184,8 +1183,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private ST_MultiLevelType valField;
@@ -1321,7 +1319,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:ilvl", this.ilvl);
             XmlHelper.WriteAttribute(sw, "w:tplc", this.tplc);
-            XmlHelper.WriteAttribute(sw, "w:tentative", this.tentative.ToString());
+            if(this.tentative!= ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:tentative", this.tentative.ToString());
             sw.Write(">");
             if (this.start != null)
                 this.start.Write(sw, "start");
@@ -1583,10 +1582,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write("/>");
         }
 
         private ST_LevelSuffix valField;
@@ -1631,7 +1629,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string valField;
 
-        private ST_OnOff nullField;
+        private ST_OnOff nullField= ST_OnOff.off;
 
         private bool nullFieldSpecified;
 
@@ -1652,9 +1650,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
-            XmlHelper.WriteAttribute(sw, "w:null", this.@null.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            if(this.@null!= ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:null", this.@null.ToString());
+            sw.Write("/>");
         }
 
 
