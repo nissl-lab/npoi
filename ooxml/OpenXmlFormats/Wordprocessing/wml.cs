@@ -845,8 +845,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
             XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
             XmlHelper.WriteAttribute(sw, "w:bidi", this.bidi);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
 

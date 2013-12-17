@@ -222,19 +222,10 @@ namespace NPOI.XWPF.UserModel
                   FootnotesDocument footnotesDocument = FootnotesDocument.Parse(xmldoc, NamespaceManager);
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
-
-                  foreach (CT_FtnEdn ctFtnEdn in footnotesDocument.Footnotes.footnote)
-                  {
-                     this.footnotes.AddFootnote(ctFtnEdn);
-                  }
+                  
                } else if (relation.Equals(XWPFRelation.ENDNOTE.Relation)){
                    XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
                    EndnotesDocument endnotesDocument = EndnotesDocument.Parse(xmldoc, NamespaceManager);
-
-                  foreach(CT_FtnEdn ctFtnEdn in endnotesDocument.Endnotes.endnote) 
-                  {
-                     this.endnotes.Add(int.Parse(ctFtnEdn.id), new XWPFFootnote(this, ctFtnEdn));
-                  }
                }
             }
         }

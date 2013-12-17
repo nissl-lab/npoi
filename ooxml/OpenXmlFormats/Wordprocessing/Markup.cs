@@ -69,7 +69,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 			ctObj.colLast = XmlHelper.ReadString(node.Attributes["w:colLast"]);
 			if (node.Attributes["w:displacedByCustomXml"] != null)
 				ctObj.displacedByCustomXml = (ST_DisplacedByCustomXml)Enum.Parse(typeof(ST_DisplacedByCustomXml), node.Attributes["w:displacedByCustomXml"].Value);
-			ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+			ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
 			return ctObj;
 		}
 
@@ -78,13 +78,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 		internal void Write(StreamWriter sw, string nodeName)
 		{
 			sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:id", this.id);
 			XmlHelper.WriteAttribute(sw, "w:name", this.name);
 			XmlHelper.WriteAttribute(sw, "w:colFirst", this.colFirst);
 			XmlHelper.WriteAttribute(sw, "w:colLast", this.colLast);
-			XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
-			XmlHelper.WriteAttribute(sw, "r:id", this.id);
-			sw.Write(">");
-			sw.Write(string.Format("</w:{0}>", nodeName));
+            if (this.displacedByCustomXml!= ST_DisplacedByCustomXml.next)
+			    XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
+			sw.Write("/>");
 		}
 
         private string nameField;
@@ -126,7 +126,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.colLast = XmlHelper.ReadString(node.Attributes["w:colLast"]);
             if (node.Attributes["w:displacedByCustomXml"] != null)
                 ctObj.displacedByCustomXml = (ST_DisplacedByCustomXml)Enum.Parse(typeof(ST_DisplacedByCustomXml), node.Attributes["w:displacedByCustomXml"].Value);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
             return ctObj;
         }
 
@@ -141,9 +141,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:colFirst", this.colFirst);
             XmlHelper.WriteAttribute(sw, "w:colLast", this.colLast);
             XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
-            XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:id", this.id);
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -909,8 +908,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         public string id
@@ -955,10 +953,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
+            if (this.displacedByCustomXml!= ST_DisplacedByCustomXml.next)
+                XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private ST_DisplacedByCustomXml displacedByCustomXmlField;

@@ -1050,33 +1050,34 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
             sw.Write(">");
+            int i = 0;
             foreach (object o in this.Items)
             {
-                if (o is CT_TrackChange)
+                if (o is CT_TrackChange&& this.itemsElementNameField[i]== ItemsChoiceType7.customXmlDelRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlDelRangeStart");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType7.moveToRangeEnd)
                     ((CT_MarkupRange)o).Write(sw, "moveToRangeEnd");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlMoveFromRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlMoveFromRangeEnd");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.ins)
                     ((CT_RunTrackChange)o).Write(sw, "ins");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlDelRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlDelRangeEnd");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlInsRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlInsRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlInsRangeStart");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.moveTo)
                     ((CT_RunTrackChange)o).Write(sw, "moveTo");
-                else if (o is CT_MoveBookmark)
+                else if (o is CT_MoveBookmark && this.itemsElementNameField[i] == ItemsChoiceType7.moveToRangeStart)
                     ((CT_MoveBookmark)o).Write(sw, "moveToRangeStart");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlMoveFromRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlMoveFromRangeStart");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlMoveToRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlMoveToRangeEnd");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.customXmlMoveToRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlMoveToRangeStart");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.del)
                     ((CT_RunTrackChange)o).Write(sw, "del");
                 else if (o is CT_P)
                     ((CT_P)o).Write(sw, "p");
@@ -1088,13 +1089,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_ProofErr)o).Write(sw, "proofErr");
                 else if (o is CT_SdtBlock)
                     ((CT_SdtBlock)o).Write(sw, "sdt");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType7.moveFrom)
                     ((CT_RunTrackChange)o).Write(sw, "moveFrom");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType7.moveFromRangeEnd)
                     ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
                 else if (o is CT_Tbl)
                     ((CT_Tbl)o).Write(sw, "tbl");
-                else if (o is CT_MoveBookmark)
+                else if (o is CT_MoveBookmark && this.itemsElementNameField[i] == ItemsChoiceType7.moveFromRangeStart)
                     ((CT_MoveBookmark)o).Write(sw, "moveFromRangeStart");
                 else if (o is CT_OMath)
                     ((CT_OMath)o).Write(sw, "oMath");
@@ -1102,16 +1103,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_OMathPara)o).Write(sw, "oMathPara");
                 else if (o is CT_AltChunk)
                     ((CT_AltChunk)o).Write(sw, "altChunk");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType7.bookmarkEnd)
                     ((CT_MarkupRange)o).Write(sw, "bookmarkEnd");
-                else if (o is CT_Bookmark)
+                else if (o is CT_Bookmark && this.itemsElementNameField[i] == ItemsChoiceType7.bookmarkStart)
                     ((CT_Bookmark)o).Write(sw, "bookmarkStart");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType7.commentRangeEnd)
                     ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType7.commentRangeStart)
                     ((CT_MarkupRange)o).Write(sw, "commentRangeStart");
                 else if (o is CT_CustomXmlBlock)
                     ((CT_CustomXmlBlock)o).Write(sw, "customXml");
+                i++;
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }

@@ -1047,7 +1047,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_Ind indent = GetCTInd(true);
                 //BigInteger bi = new BigInteger("" + indentation);
-                indent.firstLine = (ulong)value;
+                indent.firstLine = (long)value;
             }
         }
 

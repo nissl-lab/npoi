@@ -1573,8 +1573,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_LevelSuffix ctObj = new CT_LevelSuffix();
-            if (node.Attributes["val"] != null)
-                ctObj.val = (ST_LevelSuffix)Enum.Parse(typeof(ST_LevelSuffix), node.Attributes["val"].Value);
+            if (node.Attributes["w:val"] != null)
+                ctObj.val = (ST_LevelSuffix)Enum.Parse(typeof(ST_LevelSuffix), node.Attributes["w:val"].Value);
             return ctObj;
         }
 
@@ -1608,14 +1608,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_LevelSuffix
     {
-
-    
         tab,
-
-    
         space,
-
-    
         nothing,
     }
 
@@ -1854,13 +1848,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
-            XmlHelper.WriteAttribute(sw, "w:locked", this.locked.ToString());
+            if (locked != ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:locked", this.locked.ToString());
+            if(this.semiHidden== ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:semiHidden", "0");
+            else
+                XmlHelper.WriteAttribute(sw, "w:semiHidden", "1");
             XmlHelper.WriteAttribute(sw, "w:uiPriority", this.uiPriority);
-            XmlHelper.WriteAttribute(sw, "w:semiHidden", this.semiHidden.ToString());
-            XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", this.unhideWhenUsed.ToString());
-            XmlHelper.WriteAttribute(sw, "w:qFormat", this.qFormat.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            if (this.unhideWhenUsed == ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", "0");
+            else
+                XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", "1");
+            if (qFormat != ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:qFormat", this.qFormat.ToString());
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

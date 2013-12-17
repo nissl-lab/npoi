@@ -47,10 +47,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:w", this.w);
             XmlHelper.WriteAttribute(sw, "w:h", this.h);
-            XmlHelper.WriteAttribute(sw, "w:orient", this.orient.ToString());
+            if( this.orientField!= ST_PageOrientation.portrait)
+                XmlHelper.WriteAttribute(sw, "w:orient", this.orient.ToString());
             XmlHelper.WriteAttribute(sw, "w:code", this.code);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

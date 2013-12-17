@@ -58,8 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "w", this.w.ToString());
             if (this.len != ST_LineEndLength.sm)
                 XmlHelper.WriteAttribute(sw, "len", this.len.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

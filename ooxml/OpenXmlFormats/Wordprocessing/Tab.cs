@@ -125,8 +125,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
-            XmlHelper.WriteAttribute(sw, "w:pos", this.pos);
+            if(this.leader!= ST_TabTlc.none)
+                XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
+            XmlHelper.WriteAttribute(sw, "w:pos", this.pos, true);
             sw.Write("/>");
         }
 

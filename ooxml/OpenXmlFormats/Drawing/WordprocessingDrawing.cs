@@ -139,8 +139,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             sw.Write(string.Format("<wp:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "cx", this.cx, true);
             XmlHelper.WriteAttribute(sw, "cy", this.cy, true);
-            sw.Write(">");
-            sw.Write(string.Format("</wp:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -203,7 +202,8 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "descr", this.descr);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            if(this.hidden)
+                XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
             sw.Write(">");
             if (this.hlinkClick != null)
                 this.hlinkClick.Write(sw, "hlinkClick");
@@ -331,7 +331,74 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             get { return (null != hiddenField); }
         }
     }
+    [Serializable]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
+    [XmlRoot("inline", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = false)]
+    public class CT_NonVisualGraphicFrameProperties
+    {
 
+        private CT_GraphicalObjectFrameLocking graphicFrameLocksField;
+
+        private CT_OfficeArtExtensionList extLstField;
+
+        public CT_NonVisualGraphicFrameProperties()
+        {
+        }
+        public static CT_NonVisualGraphicFrameProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_NonVisualGraphicFrameProperties ctObj = new CT_NonVisualGraphicFrameProperties();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "graphicFrameLocks")
+                    ctObj.graphicFrameLocks = CT_GraphicalObjectFrameLocking.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            sw.Write(">");
+            if (this.graphicFrameLocks != null)
+                this.graphicFrameLocks.Write(sw, "graphicFrameLocks");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</wp:{0}>", nodeName));
+        }
+
+        [XmlElement(Order = 0)]
+        public CT_GraphicalObjectFrameLocking graphicFrameLocks
+        {
+            get
+            {
+                return this.graphicFrameLocksField;
+            }
+            set
+            {
+                this.graphicFrameLocksField = value;
+            }
+        }
+
+        [XmlElement(Order = 1)]
+        public CT_OfficeArtExtensionList extLst
+        {
+            get
+            {
+                return this.extLstField;
+            }
+            set
+            {
+                this.extLstField = value;
+            }
+        }
+    }
     [Serializable]
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
@@ -345,7 +412,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
 
         private CT_NonVisualDrawingProps docPrField;
 
-        private CT_NonVisualGraphicFrameProperties cNvGraphicFramePrField;
+        private NPOI.OpenXmlFormats.Dml.WordProcessing.CT_NonVisualGraphicFrameProperties cNvGraphicFramePrField;
 
         private CT_GraphicalObject graphicField;
 
@@ -395,10 +462,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "wp:distT", this.distT);
-            XmlHelper.WriteAttribute(sw, "wp:distB", this.distB);
-            XmlHelper.WriteAttribute(sw, "wp:distL", this.distL);
-            XmlHelper.WriteAttribute(sw, "wp:distR", this.distR);
+            XmlHelper.WriteAttribute(sw, "distT", this.distT, true);
+            XmlHelper.WriteAttribute(sw, "distB", this.distB, true);
+            XmlHelper.WriteAttribute(sw, "distL", this.distL, true);
+            XmlHelper.WriteAttribute(sw, "distR", this.distR, true);
             sw.Write(">");
             if (this.extent != null)
                 this.extent.Write(sw, "extent");
@@ -629,10 +696,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             if (node == null)
                 return null;
             CT_EffectExtent ctObj = new CT_EffectExtent();
-            ctObj.l = XmlHelper.ReadLong(node.Attributes["wp:l"]);
-            ctObj.t = XmlHelper.ReadLong(node.Attributes["wp:t"]);
-            ctObj.r = XmlHelper.ReadLong(node.Attributes["wp:r"]);
-            ctObj.b = XmlHelper.ReadLong(node.Attributes["wp:b"]);
+            ctObj.l = XmlHelper.ReadLong(node.Attributes["l"]);
+            ctObj.t = XmlHelper.ReadLong(node.Attributes["t"]);
+            ctObj.r = XmlHelper.ReadLong(node.Attributes["r"]);
+            ctObj.b = XmlHelper.ReadLong(node.Attributes["b"]);
             return ctObj;
         }
 
@@ -641,10 +708,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "wp:l", this.l);
-            XmlHelper.WriteAttribute(sw, "wp:t", this.t);
-            XmlHelper.WriteAttribute(sw, "wp:r", this.r);
-            XmlHelper.WriteAttribute(sw, "wp:b", this.b);
+            XmlHelper.WriteAttribute(sw, "l", this.l, true);
+            XmlHelper.WriteAttribute(sw, "t", this.t, true);
+            XmlHelper.WriteAttribute(sw, "r", this.r, true);
+            XmlHelper.WriteAttribute(sw, "b", this.b, true);
             sw.Write(">");
             sw.Write(string.Format("</wp:{0}>", nodeName));
         }

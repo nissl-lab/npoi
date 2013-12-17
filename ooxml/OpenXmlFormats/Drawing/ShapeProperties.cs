@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace NPOI.OpenXmlFormats.Dml
 {
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -254,7 +254,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -518,7 +518,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -685,7 +685,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -851,7 +851,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -938,7 +938,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1053,7 +1053,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1155,7 +1155,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1229,7 +1229,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1301,7 +1300,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1561,7 +1560,7 @@ namespace NPOI.OpenXmlFormats.Dml
     }
 
     [Serializable]
-    [DebuggerStepThrough]
+    
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]

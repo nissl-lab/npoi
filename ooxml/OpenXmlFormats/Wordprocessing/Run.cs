@@ -529,59 +529,60 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
-            XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             sw.Write(">");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
+            int i = 0;
             foreach (object o in this.Items)
             {
-                if (o is CT_Text)
+                if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.instrText)
                     ((CT_Text)o).Write(sw, "instrText");
                 else if (o is CT_Object)
                     ((CT_Object)o).Write(sw, "object");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.pgNum)
                     sw.Write("<w:pgNum/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.annotationRef)
                     sw.Write("<w:annotationRef/>");
                 else if (o is CT_Br)
                     ((CT_Br)o).Write(sw, "br");
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "w:commentReference");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.continuationSeparator)
                     sw.Write("<w:continuationSeparator/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.cr)
                     sw.Write("<w:cr/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.dayLong)
                     sw.Write("<w:dayLong/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.dayShort)
                     sw.Write("<w:dayShort/>");
-                else if (o is CT_Text)
+                else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.delInstrText)
                     ((CT_Text)o).Write(sw, "delInstrText");
-                else if (o is CT_Text)
+                else if (o is CT_Text && this.ItemsElementName[i] == RunItemsChoiceType.delText)
                     ((CT_Text)o).Write(sw, "delText");
                 else if (o is CT_Drawing)
                     ((CT_Drawing)o).Write(sw, "drawing");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.endnoteRef)
                     sw.Write("<w:endnoteRef/>");
                 else if (o is CT_FtnEdnRef)
                     ((CT_FtnEdnRef)o).Write(sw, "endnoteReference");
                 else if (o is CT_FldChar)
                     ((CT_FldChar)o).Write(sw, "fldChar");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.footnoteRef)
                     sw.Write("<w:footnoteRef/>");
                 else if (o is CT_FtnEdnRef)
                     ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.lastRenderedPageBreak)
                     sw.Write("<w:lastRenderedPageBreak/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthLong)
                     sw.Write("<w:monthLong/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthShort)
                     sw.Write("<w:monthShort/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.noBreakHyphen)
                     sw.Write("<w:noBreakHyphen/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.yearLong)
                     sw.Write("<w:yearLong/>");
                 else if (o is CT_Picture)
                     ((CT_Picture)o).Write(sw, "pict");
@@ -589,18 +590,19 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_PTab)o).Write(sw, "ptab");
                 else if (o is CT_Ruby)
                     ((CT_Ruby)o).Write(sw, "ruby");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.separator)
                     sw.Write("<w:separator/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.softHyphen)
                     sw.Write("<w:softHyphen/>");
                 else if (o is CT_Sym)
                     ((CT_Sym)o).Write(sw, "sym");
-                else if (o is CT_Text)
+                else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.t)
                     ((CT_Text)o).Write(sw, "t");
                 else if (o is CT_Empty)
                     sw.Write("<w:tab/>");
                 else if (o is CT_Empty)
                     sw.Write("<w:yearShort/>");
+                i++;
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
@@ -1146,6 +1148,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
+            int i = 0;
             foreach (object o in this.Items)
             {
                 if (o is CT_OMath)
@@ -1156,50 +1159,51 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_ProofErr)o).Write(sw, "proofErr");
                 else if (o is CT_Perm)
                     ((CT_Perm)o).Write(sw, "permEnd");
-                else if (o is CT_MoveBookmark)
+                else if (o is CT_MoveBookmark && this.itemsElementNameField[i] == ItemsChoiceType16.moveToRangeStart)
                     ((CT_MoveBookmark)o).Write(sw, "moveToRangeStart");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType16.moveToRangeEnd)
                     ((CT_MarkupRange)o).Write(sw, "moveToRangeEnd");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange&& this.itemsElementNameField[i]== ItemsChoiceType16.moveTo)
                     ((CT_RunTrackChange)o).Write(sw, "moveTo");
-                else if (o is CT_MoveBookmark)
-                    ((CT_MoveBookmark)o).Write(sw, "moveFromRangeStart");
-                else if (o is CT_MarkupRange)
-                    ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.moveFrom)
                     ((CT_RunTrackChange)o).Write(sw, "moveFrom");
-                else if (o is CT_Markup)
+                else if (o is CT_MoveBookmark && this.itemsElementNameField[i] == ItemsChoiceType16.moveFromRangeStart)
+                    ((CT_MoveBookmark)o).Write(sw, "moveFromRangeStart");
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType16.moveFromRangeEnd)
+                    ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlInsRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlInsRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlInsRangeStart");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlMoveFromRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlMoveFromRangeEnd");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlMoveFromRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlMoveFromRangeStart");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlMoveToRangeEnd)
                     ((CT_Markup)o).Write(sw, "customXmlMoveToRangeEnd");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlMoveToRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlMoveToRangeStart");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.del)
                     ((CT_RunTrackChange)o).Write(sw, "del");
-                else if (o is CT_RunTrackChange)
+                else if (o is CT_RunTrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.ins)
                     ((CT_RunTrackChange)o).Write(sw, "ins");
-                else if (o is CT_TrackChange)
+                else if (o is CT_TrackChange && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlDelRangeStart)
                     ((CT_TrackChange)o).Write(sw, "customXmlDelRangeStart");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_Markup && this.itemsElementNameField[i] == ItemsChoiceType16.customXmlDelRangeEnd)
+                    ((CT_Markup)o).Write(sw, "customXmlDelRangeEnd");
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType16.commentRangeStart)
                     ((CT_MarkupRange)o).Write(sw, "commentRangeStart");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType16.commentRangeEnd)
                     ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
                 else if (o is CT_Bookmark)
                     ((CT_Bookmark)o).Write(sw, "bookmarkStart");
-                else if (o is CT_MarkupRange)
+                else if (o is CT_MarkupRange && this.itemsElementNameField[i] == ItemsChoiceType16.bookmarkEnd)
                     ((CT_MarkupRange)o).Write(sw, "bookmarkEnd");
                 else if (o is CT_OMathPara)
                     ((CT_OMathPara)o).Write(sw, "oMathPara");
-                else if (o is CT_Markup)
-                    ((CT_Markup)o).Write(sw, "customXmlDelRangeEnd");
                 else if (o is CT_R)
                     ((CT_R)o).Write(sw, "r");
+                i++;
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
@@ -1555,8 +1559,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
 

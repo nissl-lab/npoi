@@ -624,9 +624,11 @@ namespace NPOI.OpenXmlFormats.Shared
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<m:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</m:{0}>", nodeName));
+            if(this.val== ST_OnOff.off||this.val== ST_OnOff.Value0)
+                XmlHelper.WriteAttribute(sw, "m:val", "0");
+            else
+                XmlHelper.WriteAttribute(sw, "m:val", "1");
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -1865,7 +1867,7 @@ namespace NPOI.OpenXmlFormats.Shared
                 }
                 else if (childNode.LocalName == "t")
                 {
-                    ctObj.Items.Add(CT_Text.Parse(childNode, namespaceManager));
+                    ctObj.Items.Add(CT_Text1.Parse(childNode, namespaceManager));
                     ctObj.ItemsElementName.Add(ItemsChoiceType6.t);
                 }
                 else if (childNode.LocalName == "yearLong")
@@ -1896,6 +1898,7 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             sw.Write(">");
+            int i=0;
             foreach (object o in this.Items)
             {
                 if (o is CT_FtnEdnRef)
@@ -1920,9 +1923,9 @@ namespace NPOI.OpenXmlFormats.Shared
                     sw.Write("<lastRenderedPageBreak/>");
                 else if (o is CT_FtnEdnRef)
                     ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
-                else if (o is CT_Text)
+                else if ((o is CT_Text) && this.ItemsElementName[i] == ItemsChoiceType6.delInstrText)
                     ((CT_Text)o).Write(sw, "delInstrText");
-                else if (o is CT_Text)
+                else if (o is CT_Text && this.ItemsElementName[i] == ItemsChoiceType6.delText)
                     ((CT_Text)o).Write(sw, "delText");
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "commentReference");
@@ -1960,10 +1963,11 @@ namespace NPOI.OpenXmlFormats.Shared
                     sw.Write("<yearLong/>");
                 else if (o is CT_Empty)
                     sw.Write("<yearShort/>");
-                else if (o is CT_Text)
+                else if (o is CT_Text && this.ItemsElementName[i] == ItemsChoiceType6.instrText)
                     ((CT_Text)o).Write(sw, "instrText");
                 else if (o is CT_Empty)
                     sw.Write("<footnoteRef/>");
+                i++;
             }
             sw.Write(string.Format("</m:{0}", nodeName));
         }

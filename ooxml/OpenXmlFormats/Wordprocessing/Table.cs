@@ -1028,8 +1028,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:w", this.w);
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
@@ -1190,21 +1189,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TblPrBase()
         {
-            //this.tblLookField = new CT_ShortHexNumber();
-            //this.tblCellMarField = new CT_TblCellMar();
-            //this.tblLayoutField = new CT_TblLayoutType();
-            //this.shdField = new CT_Shd();
-            //this.tblBordersField = new CT_TblBorders();
-            //this.tblIndField = new CT_TblWidth();
-            //this.tblCellSpacingField = new CT_TblWidth();
-            //this.jcField = new CT_Jc();
-            //this.tblWField = new CT_TblWidth();
-            //this.tblStyleColBandSizeField = new CT_DecimalNumber();
-            //this.tblStyleRowBandSizeField = new CT_DecimalNumber();
-            //this.bidiVisualField = new CT_OnOff();
-            //this.tblOverlapField = new CT_TblOverlap();
-            //this.tblpPrField = new CT_TblPPr();
-            //this.tblStyleField = new CT_String();
         }
         public static CT_TblPrBase Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -5260,10 +5244,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:equalWidth", this.equalWidth.ToString());
+            if(this.equalWidth!= ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:equalWidth", this.equalWidth.ToString());
             XmlHelper.WriteAttribute(sw, "w:space", this.space);
             XmlHelper.WriteAttribute(sw, "w:num", this.num);
-            XmlHelper.WriteAttribute(sw, "w:sep", this.sep.ToString());
+            if(this.sep!= ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:sep", this.sep.ToString());
             sw.Write(">");
             if (this.col != null)
             {
