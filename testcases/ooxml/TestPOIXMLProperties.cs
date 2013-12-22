@@ -149,7 +149,7 @@ namespace NPOI
 
             p = ctProps.GetPropertyArray(5);
             Assert.AreEqual("Generator Version", p.name);
-            Assert.AreEqual("2.0.5", p.Item);
+            Assert.AreEqual("2.0.6", p.Item);
             Assert.AreEqual(7, p.pid);
         }
         [Ignore]
