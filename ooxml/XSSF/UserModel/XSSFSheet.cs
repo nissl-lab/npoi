@@ -3742,8 +3742,24 @@ namespace NPOI.XSSF.UserModel
 
         public bool IsMergedRegion(CellRangeAddress mergedRegion)
         {
-            throw new NotImplementedException();
-        }
+            if (worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
+                return false;
+            foreach (CT_MergeCell mc in worksheet.mergeCells.mergeCell)
+            {
+                if (!string.IsNullOrEmpty(mc.@ref))
+                {
+                    CellRangeAddress range = CellRangeAddress.ValueOf(mc.@ref);
+                    if (range.FirstColumn <= mergedRegion.FirstColumn
+                     && range.LastColumn >= mergedRegion.LastColumn
+                     && range.FirstRow <= mergedRegion.FirstRow
+                     && range.LastRow >= mergedRegion.LastRow)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+            }
         public void SetActive(bool value)
         {
             this.IsSelected = value;

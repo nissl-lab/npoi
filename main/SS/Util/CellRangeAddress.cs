@@ -32,15 +32,6 @@ namespace NPOI.SS.Util
             }
             return in1.ReadUShort();
         }
-        [Obsolete]
-        public int Serialize(int offset, byte[] data)
-        {
-            LittleEndian.PutUShort(data, offset + 0, FirstRow);
-            LittleEndian.PutUShort(data, offset + 2, LastRow);
-            LittleEndian.PutUShort(data, offset + 4, FirstColumn);
-            LittleEndian.PutUShort(data, offset + 6, LastColumn);
-            return ENCODED_SIZE;
-        }
         public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(FirstRow);
