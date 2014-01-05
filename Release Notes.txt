@@ -1,3 +1,8 @@
+2.0 RC [v2.0.6] (Jan. 5, 2014)
+a. fix a lot of xml serialization issue for OOXML (2.0.5 will corrupt some xlsx and docx files)
+b. implement XSSFCell.IsMergedCell
+c. IWorkbook implements IList<ISheet>
+
 2.0 Beta 2 [v2.0.5] (Dec, 2013)
 New features
 a. Support Scatter chart in XSSF (xlsx) (other chart types are not supported yet)
