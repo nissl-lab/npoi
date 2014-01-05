@@ -1948,5 +1948,79 @@ namespace NPOI.HSSF.UserModel
                 return directory;
             }
         }
+
+        public int IndexOf(ISheet item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(int index, ISheet item)
+        {
+            this._sheets.Insert(index, (HSSFSheet)item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            this._sheets.RemoveAt(index);
+        }
+
+        public ISheet this[int index]
+        {
+            get
+            {
+                return this.GetSheetAt(index);
+            }
+            set
+            {
+                if (this._sheets[index] != null)
+                {
+                    this._sheets[index] = (HSSFSheet)value;
+                }
+                else
+                {
+                    this._sheets.Insert(index, (HSSFSheet)value);
+                }
+            }
+        }
+
+        public void Add(ISheet item)
+        {
+            this._sheets.Add((HSSFSheet)item);
+        }
+
+        public void Clear()
+        {
+            this._sheets.Clear();
+        }
+
+        public bool Contains(ISheet item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(ISheet[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count
+        {
+            get { return this.NumberOfSheets; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public bool Remove(ISheet item)
+        {
+            return this._sheets.Remove((HSSFSheet)item);
+        }
+
+        IEnumerator<ISheet> IEnumerable<ISheet>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

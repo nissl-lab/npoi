@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
      * will construct whether they are Reading or writing a workbook.  It is also the
      * top level object for creating new sheets/etc.
      */
-    public class XSSFWorkbook : POIXMLDocument, IWorkbook, IList<XSSFSheet>
+    public class XSSFWorkbook : POIXMLDocument, IWorkbook
     {
         private static Regex COMMA_PATTERN = new Regex(",");
 
@@ -1916,79 +1916,86 @@ namespace NPOI.XSSF.UserModel
 
         #region IList<XSSFSheet> Members
 
-        public int IndexOf(XSSFSheet item)
+        public int IndexOf(ISheet item)
         {
             throw new NotImplementedException();
         }
 
-        public void Insert(int index, XSSFSheet item)
+        public void Insert(int index, ISheet item)
         {
-            throw new NotImplementedException();
+            this.sheets.Insert(index, (XSSFSheet)item);
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            this.sheets.RemoveAt(index);
         }
 
-        public XSSFSheet this[int index]
+        public ISheet this[int index]
         {
             get
             {
-                throw new NotImplementedException();
+                return this.GetSheetAt(index);
             }
             set
             {
-                throw new NotImplementedException();
+                if (this.sheets[index] != null)
+                {
+                    this.sheets[index] = (XSSFSheet)value;
+                }
+                else
+                {
+                    this.sheets.Insert(index, (XSSFSheet)value);
+                }
             }
         }
 
         #endregion
 
-        #region ICollection<XSSFSheet> Members
+        #region ICollection<ISheet> Members
 
-        public void Add(XSSFSheet item)
+        public void Add(ISheet item)
         {
-            throw new NotImplementedException();
+            this.sheets.Add((XSSFSheet)item);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.sheets.Clear();
         }
 
-        public bool Contains(XSSFSheet item)
+        public bool Contains(ISheet item)
         {
             throw new NotImplementedException();
         }
 
-        public void CopyTo(XSSFSheet[] array, int arrayIndex)
+        public void CopyTo(ISheet[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
         public int Count
         {
-            get { throw new NotImplementedException(); }
+            get { return this.NumberOfSheets; }
         }
 
         public bool IsReadOnly
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
-        public bool Remove(XSSFSheet item)
+        public bool Remove(ISheet item)
         {
-            throw new NotImplementedException();
+            return this.sheets.Remove((XSSFSheet)item);
         }
 
         #endregion
 
-        #region IEnumerable<XSSFSheet> Members
+        #region IEnumerable<ISheet> Members
 
-        IEnumerator<XSSFSheet> IEnumerable<XSSFSheet>.GetEnumerator()
+        IEnumerator<ISheet> IEnumerable<ISheet>.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return ((IList<ISheet>)this.sheets).GetEnumerator();
         }
 
         #endregion
