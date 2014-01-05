@@ -9,7 +9,7 @@ using System.Security;
 [assembly: AssemblyTitle("NPOI OpenXmlFormats")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("NPOI team, https://code.google.com/p/npoi/")]
+[assembly: AssemblyCompany("DotX")]
 [assembly: AssemblyProduct("NPOI")]
 [assembly: AssemblyCopyright("Apache 2.0")]
 [assembly: AssemblyTrademark("NPOI")]
