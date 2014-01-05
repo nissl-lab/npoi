@@ -424,8 +424,8 @@ namespace NPOI.OpenXml4Net.OPC
             ThrowExceptionIfReadOnly();
             ZipOutputStream zos = null;
 
-            //try
-            //{
+            try
+            {
                 if (!(outputStream is ZipOutputStream))
                     zos = new ZipOutputStream(outputStream);
                 else
@@ -500,13 +500,12 @@ namespace NPOI.OpenXml4Net.OPC
                     }
                 }
                 zos.Close();
-            //}
-            //catch (Exception e)
-            //{
-            //    logger
-            //            .Log(POILogger.ERROR,"Fail to save: an error occurs while saving the package : "
-            //                    + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                logger.Log(POILogger.ERROR, "fail to save: an error occurs while saving the package : "
+                                + e.Message);
+            }
         }
 
         /**
