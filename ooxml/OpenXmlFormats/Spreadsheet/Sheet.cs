@@ -5185,12 +5185,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "left", this.left);
-            XmlHelper.WriteAttribute(sw, "right", this.right);
-            XmlHelper.WriteAttribute(sw, "top", this.top);
-            XmlHelper.WriteAttribute(sw, "bottom", this.bottom);
-            XmlHelper.WriteAttribute(sw, "header", this.header);
-            XmlHelper.WriteAttribute(sw, "footer", this.footer);
+            XmlHelper.WriteAttribute(sw, "left", this.left, true);
+            XmlHelper.WriteAttribute(sw, "right", this.right, true);
+            XmlHelper.WriteAttribute(sw, "top", this.top,true);
+            XmlHelper.WriteAttribute(sw, "bottom", this.bottom, true);
+            XmlHelper.WriteAttribute(sw, "header", this.header, true);
+            XmlHelper.WriteAttribute(sw, "footer", this.footer, true);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
