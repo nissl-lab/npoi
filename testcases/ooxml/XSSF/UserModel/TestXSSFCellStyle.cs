@@ -287,7 +287,7 @@ namespace NPOI.XSSF.UserModel
         {
             //defaults
             Assert.AreEqual(IndexedColors.Black.Index, cellStyle.BottomBorderColor);
-            Assert.IsNull(cellStyle.GetBottomBorderXSSFColor());
+            Assert.IsNull(cellStyle.BottomBorderXSSFColor);
 
             int num = stylesTable.GetBorders().Count;
 
@@ -296,7 +296,7 @@ namespace NPOI.XSSF.UserModel
             //setting indexed color
             cellStyle.BottomBorderColor = (IndexedColors.BlueGrey.Index);
             Assert.AreEqual(IndexedColors.BlueGrey.Index, cellStyle.BottomBorderColor);
-            clr = cellStyle.GetBottomBorderXSSFColor();
+            clr = cellStyle.BottomBorderXSSFColor;
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
             Assert.AreEqual(IndexedColors.BlueGrey.Index, clr.Indexed);
             //a new border was Added to the styles table
@@ -313,22 +313,22 @@ namespace NPOI.XSSF.UserModel
             num = stylesTable.GetBorders().Count;
             clr = new XSSFColor(Color.Cyan);
             cellStyle.SetBottomBorderColor(clr);
-            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.GetBottomBorderXSSFColor().GetCTColor().ToString());
-            byte[] rgb = cellStyle.GetBottomBorderXSSFColor().GetRgb();
+            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.BottomBorderXSSFColor.GetCTColor().ToString());
+            byte[] rgb = cellStyle.BottomBorderXSSFColor.GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
             Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetBottomBorderColor(null);
-            Assert.IsNull(cellStyle.GetBottomBorderXSSFColor());
+            Assert.IsNull(cellStyle.BottomBorderXSSFColor);
         }
         [Test]
         public void TestGetSetTopBorderColor()
         {
             //defaults
             Assert.AreEqual(IndexedColors.Black.Index, cellStyle.TopBorderColor);
-            Assert.IsNull(cellStyle.GetTopBorderXSSFColor());
+            Assert.IsNull(cellStyle.TopBorderXSSFColor);
 
             int num = stylesTable.GetBorders().Count;
 
@@ -337,7 +337,7 @@ namespace NPOI.XSSF.UserModel
             //setting indexed color
             cellStyle.TopBorderColor = (IndexedColors.BlueGrey.Index);
             Assert.AreEqual(IndexedColors.BlueGrey.Index, cellStyle.TopBorderColor);
-            clr = cellStyle.GetTopBorderXSSFColor();
+            clr = cellStyle.TopBorderXSSFColor;
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
             Assert.AreEqual(IndexedColors.BlueGrey.Index, clr.Indexed);
             //a new border was added to the styles table
@@ -354,22 +354,22 @@ namespace NPOI.XSSF.UserModel
             num = stylesTable.GetBorders().Count;
             clr = new XSSFColor(Color.Cyan);
             cellStyle.SetTopBorderColor(clr);
-            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.GetTopBorderXSSFColor().GetCTColor().ToString());
-            byte[] rgb = cellStyle.GetTopBorderXSSFColor().GetRgb();
+            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.TopBorderXSSFColor.GetCTColor().ToString());
+            byte[] rgb = cellStyle.TopBorderXSSFColor.GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0], rgb[1], rgb[2]).ToArgb());
             //another border was added to the styles table
             Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetTopBorderColor(null);
-            Assert.IsNull(cellStyle.GetTopBorderXSSFColor());
+            Assert.IsNull(cellStyle.TopBorderXSSFColor);
         }
         [Test]
         public void TestGetSetLeftBorderColor()
         {
             //defaults
             Assert.AreEqual(IndexedColors.Black.Index, cellStyle.LeftBorderColor);
-            Assert.IsNull(cellStyle.GetLeftBorderXSSFColor());
+            Assert.IsNull(cellStyle.LeftBorderXSSFColor);
 
             int num = stylesTable.GetBorders().Count;
 
@@ -378,7 +378,7 @@ namespace NPOI.XSSF.UserModel
             //setting indexed color
             cellStyle.LeftBorderColor = (IndexedColors.BlueGrey.Index);
             Assert.AreEqual(IndexedColors.BlueGrey.Index, cellStyle.LeftBorderColor);
-            clr = cellStyle.GetLeftBorderXSSFColor();
+            clr = cellStyle.LeftBorderXSSFColor;
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
             Assert.AreEqual(IndexedColors.BlueGrey.Index, clr.Indexed);
             //a new border was Added to the styles table
@@ -395,22 +395,22 @@ namespace NPOI.XSSF.UserModel
             num = stylesTable.GetBorders().Count;
             clr = new XSSFColor(Color.Cyan);
             cellStyle.SetLeftBorderColor(clr);
-            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.GetLeftBorderXSSFColor().GetCTColor().ToString());
-            byte[] rgb = cellStyle.GetLeftBorderXSSFColor().GetRgb();
+            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.LeftBorderXSSFColor.GetCTColor().ToString());
+            byte[] rgb = cellStyle.LeftBorderXSSFColor.GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
             Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetLeftBorderColor(null);
-            Assert.IsNull(cellStyle.GetLeftBorderXSSFColor());
+            Assert.IsNull(cellStyle.LeftBorderXSSFColor);
         }
         [Test]
         public void TestGetSetRightBorderColor()
         {
             //defaults
             Assert.AreEqual(IndexedColors.Black.Index, cellStyle.RightBorderColor);
-            Assert.IsNull(cellStyle.GetRightBorderXSSFColor());
+            Assert.IsNull(cellStyle.RightBorderXSSFColor);
 
             int num = stylesTable.GetBorders().Count;
 
@@ -419,7 +419,7 @@ namespace NPOI.XSSF.UserModel
             //setting indexed color
             cellStyle.RightBorderColor = (IndexedColors.BlueGrey.Index);
             Assert.AreEqual(IndexedColors.BlueGrey.Index, cellStyle.RightBorderColor);
-            clr = cellStyle.GetRightBorderXSSFColor();
+            clr = cellStyle.RightBorderXSSFColor;
             Assert.IsTrue(clr.GetCTColor().IsSetIndexed());
             Assert.AreEqual(IndexedColors.BlueGrey.Index, clr.Indexed);
             //a new border was Added to the styles table
@@ -436,15 +436,15 @@ namespace NPOI.XSSF.UserModel
             num = stylesTable.GetBorders().Count;
             clr = new XSSFColor(Color.Cyan);
             cellStyle.SetRightBorderColor(clr);
-            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.GetRightBorderXSSFColor().GetCTColor().ToString());
-            byte[] rgb = cellStyle.GetRightBorderXSSFColor().GetRgb();
+            Assert.AreEqual(clr.GetCTColor().ToString(), cellStyle.RightBorderXSSFColor.GetCTColor().ToString());
+            byte[] rgb = cellStyle.RightBorderXSSFColor.GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was Added to the styles table
             Assert.AreEqual(num, stylesTable.GetBorders().Count);
 
             //passing null unsets the color
             cellStyle.SetRightBorderColor(null);
-            Assert.IsNull(cellStyle.GetRightBorderXSSFColor());
+            Assert.IsNull(cellStyle.RightBorderXSSFColor);
         }
 
 
@@ -620,39 +620,41 @@ namespace NPOI.XSSF.UserModel
         public void TestGetSetAlignement()
         {
             Assert.IsTrue(!cellStyle.GetCellAlignment().GetCTCellAlignment().horizontalSpecified);
-            Assert.AreEqual(HorizontalAlignment.General, cellStyle.GetAlignmentEnum());
+            Assert.AreEqual(HorizontalAlignment.General, cellStyle.Alignment);
 
             cellStyle.Alignment = HorizontalAlignment.Left;
             Assert.AreEqual(HorizontalAlignment.Left, cellStyle.Alignment);
-            Assert.AreEqual(HorizontalAlignment.Left, cellStyle.GetAlignmentEnum());
             Assert.AreEqual(ST_HorizontalAlignment.left, cellStyle.GetCellAlignment().GetCTCellAlignment().horizontal);
 
             cellStyle.Alignment = (HorizontalAlignment.Justify);
             Assert.AreEqual(HorizontalAlignment.Justify, cellStyle.Alignment);
-            Assert.AreEqual(HorizontalAlignment.Justify, cellStyle.GetAlignmentEnum());
             Assert.AreEqual(ST_HorizontalAlignment.justify, cellStyle.GetCellAlignment().GetCTCellAlignment().horizontal);
 
             cellStyle.Alignment = (HorizontalAlignment.Center);
             Assert.AreEqual(HorizontalAlignment.Center, cellStyle.Alignment);
-            Assert.AreEqual(HorizontalAlignment.Center, cellStyle.GetAlignmentEnum());
             Assert.AreEqual(ST_HorizontalAlignment.center, cellStyle.GetCellAlignment().GetCTCellAlignment().horizontal);
         }
         [Test]
         public void TestGetSetVerticalAlignment()
         {
-            Assert.AreEqual(VerticalAlignment.Bottom, cellStyle.GetVerticalAlignmentEnum());
             Assert.AreEqual(VerticalAlignment.Bottom, cellStyle.VerticalAlignment);
             Assert.IsTrue(!cellStyle.GetCellAlignment().GetCTCellAlignment().verticalSpecified);
 
+            cellStyle.VerticalAlignment = (VerticalAlignment.Top);
+            Assert.AreEqual(VerticalAlignment.Top, cellStyle.VerticalAlignment);
+            Assert.AreEqual(ST_VerticalAlignment.top, cellStyle.GetCellAlignment().GetCTCellAlignment().vertical);
+
             cellStyle.VerticalAlignment = (VerticalAlignment.Center);
             Assert.AreEqual(VerticalAlignment.Center, cellStyle.VerticalAlignment);
-            Assert.AreEqual(VerticalAlignment.Center, cellStyle.GetVerticalAlignmentEnum());
             Assert.AreEqual(ST_VerticalAlignment.center, cellStyle.GetCellAlignment().GetCTCellAlignment().vertical);
 
             cellStyle.VerticalAlignment = VerticalAlignment.Justify;
             Assert.AreEqual(VerticalAlignment.Justify, cellStyle.VerticalAlignment);
-            Assert.AreEqual(VerticalAlignment.Justify, cellStyle.GetVerticalAlignmentEnum());
             Assert.AreEqual(ST_VerticalAlignment.justify, cellStyle.GetCellAlignment().GetCTCellAlignment().vertical);
+
+            cellStyle.VerticalAlignment = (VerticalAlignment.Bottom);
+            Assert.AreEqual(VerticalAlignment.Bottom, cellStyle.VerticalAlignment);
+            Assert.AreEqual(ST_VerticalAlignment.bottom, cellStyle.GetCellAlignment().GetCTCellAlignment().vertical);
         }
         [Test]
         public void TestGetSetWrapText()

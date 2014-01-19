@@ -816,7 +816,7 @@ namespace NPOI.XSSF.UserModel
             // Border from a theme, brown
             XSSFCell cellT = row.GetCell(0) as XSSFCell;
             XSSFCellStyle styleT = cellT.CellStyle as XSSFCellStyle;
-            XSSFColor colorT = styleT.GetBottomBorderXSSFColor();
+            XSSFColor colorT = styleT.BottomBorderXSSFColor;
 
             Assert.AreEqual(5, colorT.GetTheme());
             Assert.AreEqual("FFC0504D", colorT.GetARGBHex());
@@ -824,7 +824,7 @@ namespace NPOI.XSSF.UserModel
             // Border from a style direct, red
             XSSFCell cellS = row.GetCell(1) as XSSFCell;
             XSSFCellStyle styleS = cellS.CellStyle as XSSFCellStyle;
-            XSSFColor colorS = styleS.GetBottomBorderXSSFColor();
+            XSSFColor colorS = styleS.BottomBorderXSSFColor;
 
             Assert.AreEqual(0, colorS.GetTheme());
             Assert.AreEqual("FFFF0000", colorS.GetARGBHex());

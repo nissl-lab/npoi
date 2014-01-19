@@ -109,11 +109,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public bool IsSetHorizontal()
         {
-            return this.horizontalField != ST_HorizontalAlignment.general;
+            return this.horizontalFieldSpecified;
         }
         public bool IsSetVertical()
         {
-            return this.verticalField != ST_VerticalAlignment.top;
+            return this.verticalFieldSpecified;
         }
 
         [XmlAttribute]
@@ -127,6 +127,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.horizontalField = value;
+                this.horizontalFieldSpecified = true;
             }
         }
         [XmlIgnore]
@@ -152,6 +153,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.verticalField = value;
+                this.verticalFieldSpecified = true;
             }
         }
 
@@ -177,6 +179,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.textRotationField = value;
+                this.textRotationFieldSpecified = true;
             }
         }
 
@@ -202,6 +205,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.wrapTextField = value;
+                this.wrapTextSpecified = true;
             }
         }
 
@@ -227,6 +231,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.indentField = value;
+                this.indentSpecified = true;
             }
         }
 
@@ -252,6 +257,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.relativeIndentField = value;
+                this.relativeIndentSpecified = true;
             }
         }
 
@@ -277,6 +283,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.justifyLastLineField = value;
+                this.justifyLastLineSpecified = true;
             }
         }
 
@@ -302,6 +309,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.shrinkToFitField = value;
+                this.shrinkToFitSpecified = true;
             }
         }
 
@@ -327,6 +335,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.readingOrderField = value;
+                this.readingOrderSpecified = true;
             }
         }
 
