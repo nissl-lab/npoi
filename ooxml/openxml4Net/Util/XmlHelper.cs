@@ -191,14 +191,14 @@ namespace NPOI.OpenXml4Net.Util
         {
             if (value == 0.0 && !writeIfBlank)
                 return;
-            WriteAttribute(sw, attributeName, value == 0.0 ? "0" : value.ToString());
+            WriteAttribute(sw, attributeName, value == 0.0 ? "0" : value.ToString(CultureInfo.InvariantCulture));
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, int value, bool writeIfBlank)
         {
             if (value == 0 && !writeIfBlank)
                 return;
 
-            WriteAttribute(sw, attributeName, value.ToString());
+            WriteAttribute(sw, attributeName, value.ToString(CultureInfo.InvariantCulture));
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, int value)
         {
