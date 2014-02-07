@@ -57,6 +57,13 @@ namespace NPOI.HSSF.Record
                 // TODO - Current examples(3) from junits only have zero Length username. 
                 field_3_username_unicode_options = (byte)in1.ReadByte();
                 field_3_username_value = in1.ReadCompressedUnicode(nameLen);
+                
+                if (field_3_username_value == null)
+                {
+                   // In some cases the user name can be null after reading from
+                   // the input stream so we make sure this has a value
+                   field_3_username_value = "";
+                }
             }
             else
             {
