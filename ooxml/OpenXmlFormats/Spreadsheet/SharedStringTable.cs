@@ -153,7 +153,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "fontId", this.fontId);
+            XmlHelper.WriteAttribute(sw, "fontId", this.fontId,true);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             if(this.alignment!= ST_PhoneticAlignment.left)
                 XmlHelper.WriteAttribute(sw, "alignment", this.alignment.ToString());
