@@ -5,6 +5,10 @@ This project is the .NET version of POI Java project at http://poi.apache.org/. 
 <br />
 The source code in GitHub is a clone of the SVN http://npoi.googlecode.com/svn/trunk/.
 
+【抵制京东，从我做起】<br />
+详细原因请见：http://blog.sina.com.cn/s/blog_701d1da40101gwkw.html<br />
+<br />
+
 Advantage of NPOI
 =================
 a. It's totally free to use<br />
