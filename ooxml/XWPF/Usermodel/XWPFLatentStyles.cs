@@ -47,8 +47,8 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (CT_LsdException lsd in latentStyles.lsdException)
             {
-                if (lsd.name.Equals(latentStyleID)) ;
-                return true;
+                if (lsd.name.Equals(latentStyleID))
+                    return true;
             }
             return false;
         }
