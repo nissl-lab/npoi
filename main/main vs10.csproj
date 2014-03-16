@@ -195,6 +195,7 @@
     </Compile>
     <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
+    <Compile Include="SS\Formula\Atp\IfError.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
