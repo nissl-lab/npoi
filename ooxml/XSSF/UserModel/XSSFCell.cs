@@ -90,6 +90,14 @@ namespace NPOI.XSSF.UserModel
             {
                 _cellNum = new CellReference(cell.r).Col;
             }
+            else
+            {
+                int prevNum = row.LastCellNum;
+                if (prevNum != -1)
+                {
+                    _cellNum = row.GetCell(prevNum - 1).ColumnIndex + 1;
+                }
+            }
             _sharedStringSource = ((XSSFWorkbook)row.Sheet.Workbook).GetSharedStringSource();
             _stylesSource = ((XSSFWorkbook)row.Sheet.Workbook).GetStylesSource();
         }
@@ -532,7 +540,12 @@ namespace NPOI.XSSF.UserModel
         /// <returns>A1 style reference to the location of this cell</returns>
         public String GetReference()
         {
-            return _cell.r;
+            String ref1 = _cell.r;
+            if (ref1 == null)
+            {
+                return new CellReference(this).FormatAsString();
+            }
+            return ref1;
         }
 
         /// <summary>
@@ -715,7 +728,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         public void SetAsActiveCell()
         {
-            ((XSSFSheet)Sheet).SetActiveCell(_cell.r);
+            ((XSSFSheet)Sheet).SetActiveCell(GetReference());
         }
 
         /// <summary>
@@ -926,7 +939,7 @@ namespace NPOI.XSSF.UserModel
             IComment comment = this.CellComment;
             if (comment != null)
             {
-                String ref1 = _cell.r;
+                String ref1 = GetReference();
                 XSSFSheet sh = (XSSFSheet)Sheet;
                 sh.GetCommentsTable(false).RemoveComment(ref1);
                 sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
@@ -1055,7 +1068,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFCell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
                 if (cell == null)
                 {
-                    throw new InvalidOperationException("Cell " + _cell.r
+                    throw new InvalidOperationException("Cell " + GetReference()
                             + " is not part of an array formula.");
                 }
                 String formulaRef = cell._cell.f.@ref;
