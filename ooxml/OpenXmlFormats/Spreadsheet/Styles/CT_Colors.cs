@@ -34,7 +34,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     ctObj.indexedColors = new List<CT_RgbColor>();
                     foreach (XmlNode c2Node in childNode.ChildNodes)
                     {
-                        ctObj.indexedColors.Add(CT_RgbColor.Parse(childNode, namespaceManager));
+                        ctObj.indexedColors.Add(CT_RgbColor.Parse(c2Node, namespaceManager));
                     }
                 }
                 else if (childNode.LocalName == "mruColors")
