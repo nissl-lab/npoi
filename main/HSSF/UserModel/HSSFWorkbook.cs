@@ -517,7 +517,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Gets or sets the tab whose data is actually seen when the sheet is opened.
+        /// Gets the tab whose data is actually seen when the sheet is opened.
         /// This may be different from the "selected sheet" since excel seems to
         /// allow you to show the data of one sheet when another Is seen "selected"
         /// in the tabs (at the bottom).
@@ -529,6 +529,14 @@ namespace NPOI.HSSF.UserModel
                 return workbook.WindowOne.ActiveSheetIndex;
             }
         }
+
+        /// <summary>
+        /// Sets the tab whose data is actually seen when the sheet is opened.
+        /// This may be different from the "selected sheet" since excel seems to
+        /// allow you to show the data of one sheet when another Is seen "selected"
+        /// in the tabs (at the bottom).
+        /// <param name="index">The sheet number(0 based).</param>
+        /// </summary>
         public void SetActiveSheet(int index)
         {
 

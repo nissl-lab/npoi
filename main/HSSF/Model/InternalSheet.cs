@@ -1484,7 +1484,7 @@ namespace NPOI.HSSF.Model
 
 
         /// <summary>
-        /// Gets or sets the active cell col.
+        /// Gets the active cell col.
         /// </summary>
         /// <value>the active column index</value>
         /// @see org.apache.poi.hssf.record.SelectionRecord
