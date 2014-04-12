@@ -1,10 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41A0D04F-B087-4F46-86A9-FE12D300A9AF}"
-	ProjectSection(SolutionItems) = preProject
-		OOXML.TestRunConfig.testrunconfig = OOXML.TestRunConfig.testrunconfig
-		OOXML.vsmdi = OOXML.vsmdi
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOXML vs2010", "..\..\ooxml\OOXML vs2010.csproj", "{6BEED965-B9A0-4FFA-B96D-0F380A97331A}"
 EndProject
@@ -21,9 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOXML4Net.Testcases vs2010", "..\..\testcases\openxml4net\OOXML4Net.Testcases vs2010.csproj", "{F5A6FF78-2C51-44E8-9E31-CD1B3EF784E9}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = OOXML.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		.net 2 Release|Any CPU = .net 2 Release|Any CPU
 		.net 4 Release|Any CPU = .net 4 Release|Any CPU
