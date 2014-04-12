@@ -195,8 +195,8 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch Drawing = sheet.DrawingPatriarch as HSSFPatriarch;
             Assert.AreEqual(1, Drawing.Children.Count);
             HSSFTextbox textbox = (HSSFTextbox)Drawing.Children[0];
-            Assert.AreEqual(textbox.HorizontalAlignment, HorizontalAlignment.Left);
-            Assert.AreEqual(textbox.VerticalAlignment, VerticalAlignment.Top);
+            Assert.AreEqual(HorizontalAlignment.Left, textbox.HorizontalAlignment);
+            Assert.AreEqual(VerticalAlignment.Center, textbox.VerticalAlignment);
             Assert.AreEqual(textbox.MarginTop, 0);
             Assert.AreEqual(textbox.MarginBottom, 3600000);
             Assert.AreEqual(textbox.MarginLeft, 3600000);
