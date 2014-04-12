@@ -4003,6 +4003,85 @@ namespace NPOI.XSSF.UserModel
             }
             return null;
         }
+
+        public ISheet CopySheet(String Name)
+        {
+            return CopySheet(Name, true);
+        }
+
+        public ISheet CopySheet(String name, Boolean copyStyle)
+        {
+            String newName = SheetUtil.GetUniqueSheetName(this.Workbook, name);
+            XSSFSheet newSheet = (XSSFSheet)this.Workbook.CreateSheet(newName);
+            try
+            {
+                using (MemoryStream out1 = new MemoryStream())
+                {
+                    this.Write(out1);
+                    newSheet.Read(new MemoryStream(out1.ToArray()));
+                }
+            }
+            catch (IOException e)
+            {
+                throw new POIXMLException("Failed to clone sheet", e);
+            }
+
+            CT_Worksheet ct = newSheet.GetCTWorksheet();
+            if (ct.IsSetLegacyDrawing())
+            {
+                logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
+                ct.UnsetLegacyDrawing();
+            }
+            if (ct.IsSetPageSetup())
+            {
+                logger.Log(POILogger.WARN, "Cloning sheets with page setup is not yet supported.");
+                ct.UnsetPageSetup();
+            }
+            newSheet.IsSelected = false;
+
+            // copy sheet's relations
+            List<POIXMLDocumentPart> rels = this.GetRelations();
+            // if the sheet being cloned has a drawing then rememebr it and re-create tpoo
+            XSSFDrawing dg = null;
+            foreach (POIXMLDocumentPart r in rels)
+            {
+                // do not copy the drawing relationship, it will be re-created
+                if (r is XSSFDrawing)
+                {
+                    dg = (XSSFDrawing)r;
+                    continue;
+                }
+                PackageRelationship rel = r.GetPackageRelationship();
+                newSheet.GetPackagePart().AddRelationship(
+                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
+                newSheet.AddRelation(rel.Id, r);
+            }
+            // clone the sheet drawing alongs with its relationships
+            if (dg != null)
+            {
+                if (ct.IsSetDrawing())
+                {
+                    // unset the existing reference to the drawing,
+                    // so that subsequent call of clonedSheet.createDrawingPatriarch() will create a new one
+                    ct.UnsetDrawing();
+                }
+                XSSFDrawing clonedDg = newSheet.CreateDrawingPatriarch() as XSSFDrawing;
+                // copy drawing contents
+                clonedDg.GetCTDrawing().Set(dg.GetCTDrawing());
+
+                // Clone drawing relations
+                List<POIXMLDocumentPart> srcRels = (newSheet.CreateDrawingPatriarch() as XSSFDrawing).GetRelations();
+                foreach (POIXMLDocumentPart rel in srcRels)
+                {
+                    PackageRelationship relation = rel.GetPackageRelationship();
+                    (newSheet.CreateDrawingPatriarch() as XSSFDrawing)
+                            .GetPackagePart()
+                            .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
+                                    relation.RelationshipType, relation.Id);
+                }
+            }
+            return newSheet;
+        }
     }
 
 }

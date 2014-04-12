@@ -35,13 +35,12 @@ namespace NPOI.Util
     public class CommonsLogger : POILogger
     {
 
-        private static LogFactory _creator = LogFactory.Factory;
-        private Log log = null;
+        private POILogger logger = null;
 
 
         public void Initialize(String cat)
         {
-            this.log = _creator.GetInstance(cat);
+            this.logger = POILogFactory.GetLogger(cat);
         }
 
         /**
@@ -54,119 +53,46 @@ namespace NPOI.Util
         {
             if (level == FATAL)
             {
-                if (log.IsFatalEnabled())
+                if (logger.IsFatalEnabled())
                 {
-                    log.Fatal(obj1);
+                    logger.Fatal(obj1);
                 }
             }
             else if (level == ERROR)
             {
-                if (log.IsErrorEnabled())
+                if (logger.IsErrorEnabled())
                 {
-                    log.Error(obj1);
+                    logger.Error(obj1);
                 }
             }
             else if (level == WARN)
             {
-                if (log.IsWarnEnabled())
+                if (logger.IsWarnEnabled())
                 {
-                    log.Warn(obj1);
+                    logger.Warn(obj1);
                 }
             }
             else if (level == INFO)
             {
-                if (log.IsInfoEnabled())
+                if (logger.IsInfoEnabled())
                 {
-                    log.Info(obj1);
+                    logger.Info(obj1);
                 }
             }
             else if (level == DEBUG)
             {
-                if (log.IsDebugEnabled())
+                if (logger.IsDebugEnabled())
                 {
-                    log.Debug(obj1);
+                    logger.Debug(obj1);
                 }
             }
             else
             {
-                if (log.IsTraceEnabled())
+                if (logger.IsTraceEnabled())
                 {
-                    log.Trace(obj1);
+                    logger.Trace(obj1);
                 }
             }
-        }
-
-        /**
-         * Log a message
-         *
-         * @param level One of DEBUG, INFO, WARN, ERROR, FATAL
-         * @param obj1 The object to log.  This is Converted to a string.
-         * @param exception An exception to be logged
-         */
-        public void log(int level, Object obj1,
-                        Throwable exception)
-        {
-            if (level == FATAL)
-            {
-                if (log.IsFatalEnabled())
-                {
-                    if (obj1 != null)
-                        log.Fatal(obj1, exception);
-                    else
-                        log.Fatal(exception);
-                }
-            }
-            else if (level == ERROR)
-            {
-                if (log.IsErrorEnabled())
-                {
-                    if (obj1 != null)
-                        log.Error(obj1, exception);
-                    else
-                        log.Error(exception);
-                }
-            }
-            else if (level == WARN)
-            {
-                if (log.IsWarnEnabled())
-                {
-                    if (obj1 != null)
-                        log.Warn(obj1, exception);
-                    else
-                        log.Warn(exception);
-                }
-            }
-            else if (level == INFO)
-            {
-                if (log.IsInfoEnabled())
-                {
-                    if (obj1 != null)
-                        log.Info(obj1, exception);
-                    else
-                        log.Info(exception);
-                }
-            }
-            else if (level == DEBUG)
-            {
-                if (log.IsDebugEnabled())
-                {
-                    if (obj1 != null)
-                        log.Debug(obj1, exception);
-                    else
-                        log.Debug(exception);
-                }
-            }
-            else
-            {
-                if (log.IsTraceEnabled())
-                {
-                    if (obj1 != null)
-                        log.Trace(obj1, exception);
-                    else
-                        log.Trace(exception);
-                }
-            }
-
         }
 
         /**
@@ -179,35 +105,35 @@ namespace NPOI.Util
         {
             if (level == FATAL)
             {
-                if (log.IsFatalEnabled())
+                if (logger.IsFatalEnabled())
                 {
                     return true;
                 }
             }
             else if (level == ERROR)
             {
-                if (log.IsErrorEnabled())
+                if (logger.IsErrorEnabled())
                 {
                     return true;
                 }
             }
             else if (level == WARN)
             {
-                if (log.IsWarnEnabled())
+                if (logger.IsWarnEnabled())
                 {
                     return true;
                 }
             }
             else if (level == INFO)
             {
-                if (log.IsInfoEnabled())
+                if (logger.IsInfoEnabled())
                 {
                     return true;
                 }
             }
             else if (level == DEBUG)
             {
-                if (log.IsDebugEnabled())
+                if (logger.IsDebugEnabled())
                 {
                     return true;
                 }

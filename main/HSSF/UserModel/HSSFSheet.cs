@@ -2505,27 +2505,27 @@ namespace NPOI.HSSF.UserModel
          * and modified (adding styles copying)
          * modified by Philipp Lopmeier (replacing deprecated classes and methods, using generic types)
          */
-        public HSSFSheet CopySheet()
+        public ISheet CopySheet()
         {
             return CopySheet(string.Concat(SheetName, " - Copy"), true);
         }
-
-        public HSSFSheet CopySheet(String Name)
-        {
-            return CopySheet(Name, true);
-        }
-
-        public HSSFSheet CopySheet(Boolean CopyStyle)
+        public ISheet CopySheet(Boolean CopyStyle)
         {
             return CopySheet(string.Concat(SheetName, " - Copy"), CopyStyle);
         }
 
-        public HSSFSheet CopySheet(String Name, Boolean CopyStyle)
+        public ISheet CopySheet(String Name)
+        {
+            return CopySheet(Name, true);
+        }
+
+
+        public ISheet CopySheet(String Name, Boolean copyStyle)
         {
             int maxColumnNum = 0;
             HSSFSheet newSheet = (HSSFSheet)Workbook.CreateSheet(Name);
             newSheet._sheet = Sheet.CloneSheet();
-            IDictionary<Int32, HSSFCellStyle> styleMap = (CopyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
+            IDictionary<Int32, HSSFCellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
             for (int i = FirstRowNum; i <= LastRowNum; i++)
             {
                 HSSFRow srcRow = (HSSFRow)GetRow(i);
@@ -2769,7 +2769,7 @@ namespace NPOI.HSSF.UserModel
                     {
                         newCell = (HSSFCell)destRow.CreateCell(j);
                     }
-                    CopyCell(oldCell, newCell, styleMap, paletteMap, keepFormulas);
+                    HSSFCellUtil.CopyCell(oldCell, newCell, styleMap, paletteMap, keepFormulas);
                     CellRangeAddress mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
                     if (mergedRegion != null)
                     {
@@ -2785,126 +2785,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private static void CopyCell(HSSFCell oldCell, HSSFCell newCell, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, Boolean keepFormulas)
-        {
-            if (styleMap != null)
-            {
-                if (oldCell.CellStyle != null)
-                {
-                    if (oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
-                    {
-                        newCell.CellStyle = oldCell.CellStyle;
-                    }
-                    else
-                    {
-                        int styleHashCode = oldCell.CellStyle.GetHashCode();
-                        if (styleMap.ContainsKey(styleHashCode))
-                        {
-                            newCell.CellStyle = styleMap[styleHashCode];
-                        }
-                        else
-                        {
-                            HSSFCellStyle newCellStyle = (HSSFCellStyle)newCell.Sheet.Workbook.CreateCellStyle();
-                            newCellStyle.CloneStyleFrom(oldCell.CellStyle);
-                            RemapCellStyle(newCellStyle, paletteMap); //Clone copies as-is, we need to remap colors manually
-                            newCell.CellStyle = newCellStyle;
-                            //Clone of cell style always clones the font. This makes my life easier
-                            IFont theFont = newCellStyle.GetFont(newCell.Sheet.Workbook);
-                            if (theFont.Color > 0 && paletteMap.ContainsKey(theFont.Color))
-                            {
-                                theFont.Color = paletteMap[theFont.Color]; //Remap font color
-                            }
-                            styleMap.Add(styleHashCode, newCellStyle);
-                        }
-                    }
-                }
-                else
-                {
-                    newCell.CellStyle = null;
-                }
-            }
-            switch (oldCell.CellType)
-            {
-                case NPOI.SS.UserModel.CellType.String:
-                    newCell.SetCellValue(oldCell.StringCellValue);
-                    break;
-                case NPOI.SS.UserModel.CellType.Numeric:
-					newCell.SetCellValue(oldCell.NumericCellValue);
-                    break;
-                case NPOI.SS.UserModel.CellType.Blank:
-                    newCell.SetCellType(NPOI.SS.UserModel.CellType.Blank);
-                    break;
-                case NPOI.SS.UserModel.CellType.Boolean:
-                    newCell.SetCellValue(oldCell.BooleanCellValue);
-                    break;
-                case NPOI.SS.UserModel.CellType.Error:
-                    newCell.SetCellValue(oldCell.ErrorCellValue);
-                    break;
-                case NPOI.SS.UserModel.CellType.Formula:
-                    if (keepFormulas)
-                    {
-                        newCell.SetCellType(CellType.Formula);
-                        newCell.CellFormula = oldCell.CellFormula;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            newCell.SetCellType(CellType.Numeric);
-                            newCell.SetCellValue(oldCell.NumericCellValue);
-                        }
-                        catch (Exception ex)
-                        {
-                            try
-                            {
-                                newCell.SetCellType(CellType.String);
-                                newCell.SetCellValue(oldCell.StringCellValue);
-                            }
-                            catch (Exception exInner)
-                            {
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Translate color palette entries from the source to the destination sheet
-        /// </summary>
-        private static void RemapCellStyle(HSSFCellStyle stylish, Dictionary<short, short> paletteMap)
-        {
-            if (paletteMap.ContainsKey(stylish.BorderDiagonalColor))
-            {
-                stylish.BorderDiagonalColor = paletteMap[stylish.BorderDiagonalColor];
-            }
-            if (paletteMap.ContainsKey(stylish.BottomBorderColor))
-            {
-                stylish.BottomBorderColor = paletteMap[stylish.BottomBorderColor];
-            }
-            if (paletteMap.ContainsKey(stylish.FillBackgroundColor))
-            {
-                stylish.FillBackgroundColor = paletteMap[stylish.FillBackgroundColor];
-            }
-            if (paletteMap.ContainsKey(stylish.FillForegroundColor))
-            {
-                stylish.FillForegroundColor = paletteMap[stylish.FillForegroundColor];
-            }
-            if (paletteMap.ContainsKey(stylish.LeftBorderColor))
-            {
-                stylish.LeftBorderColor = paletteMap[stylish.LeftBorderColor];
-            }
-            if (paletteMap.ContainsKey(stylish.RightBorderColor))
-            {
-                stylish.RightBorderColor = paletteMap[stylish.RightBorderColor];
-            }
-            if (paletteMap.ContainsKey(stylish.TopBorderColor))
-            {
-                stylish.TopBorderColor = paletteMap[stylish.TopBorderColor];
-            }
-        }
 
         public static CellRangeAddress GetMergedRegion(HSSFSheet sheet, int rowNum, short cellNum)
         {
