@@ -868,7 +868,7 @@ namespace NPOI.XSSF.UserModel
             CT_CellAlignment align = _cellXf.alignment;
             if (align != null && align.IsSetVertical())
             {
-                return (VerticalAlignment)(align.vertical + 1);
+                return (VerticalAlignment)align.vertical;
             }
             return VerticalAlignment.Bottom;
         }

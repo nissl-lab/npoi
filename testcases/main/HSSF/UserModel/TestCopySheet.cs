@@ -16,7 +16,7 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheetA = book.CreateSheet("Sheet A") as HSSFSheet;
             sheetA.CreateRow(0).CreateCell(0).SetCellValue("Test case item 1");
             sheetA.CreateRow(1).CreateCell(0).SetCellValue("Test case item 2");
-            HSSFSheet sheetB = sheetA.CopySheet("Sheet B", false);
+            ISheet sheetB = sheetA.CopySheet("Sheet B", false);
             //Ensure cell values were copied
             Assert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, sheetB.GetRow(0).GetCell(0).StringCellValue);
             Assert.AreEqual(sheetA.GetRow(1).GetCell(0).StringCellValue, sheetB.GetRow(1).GetCell(0).StringCellValue);

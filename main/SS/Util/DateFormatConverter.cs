@@ -24,7 +24,7 @@ using NPOI.Util;
 namespace NPOI.SS.Util
 {
     /**
-     *  Convert java DateFormat patterns into Excel custom number formats.
+     *  Convert DateFormat patterns into Excel custom number formats.
      *  For example, to format a date in excel using the "dd MMMM, yyyy" pattern and Japanese
      *  locale, use the following code:
      *
@@ -392,82 +392,22 @@ namespace NPOI.SS.Util
             return result.ToString().Trim();
         }
 
-        public static string GetJavaDatePattern(int style, CultureInfo locale)
+        public static string GetDatePattern(int style, CultureInfo locale)
         {
-            //DateFormat df = DateFormat.getDateInstance(style, locale);
-            //if (df is SimpleDateFormat)
-            //{
-            //    return ((SimpleDateFormat)df).toPattern();
-            //}
-            //else
-            //{
-            //    switch (style)
-            //    {
-            //        case DateFormat.SHORT:
-            //            return "d/MM/yy";
-            //        case DateFormat.MEDIUM:
-            //            return "MMM d, yyyy";
-            //        case DateFormat.LONG:
-            //            return "MMMM d, yyyy";
-            //        case DateFormat.FULL:
-            //            return "dddd, MMMM d, yyyy";
-            //        default:
-            //            return "MMM d, yyyy";
-            //    }
-            //}
-            throw new NotImplementedException("DateFormatConverter.GetJavaDatePattern(int, CultureInfo)");
+            string pattern = DateFormat.GetDatePattern(style, locale);
+            return pattern;
         }
 
-        public static string GetJavaTimePattern(int style, CultureInfo locale)
+        public static string GetTimePattern(int style, CultureInfo locale)
         {
-            //DateFormat df = DateFormat.getTimeInstance(style, locale);
-            //if (df is SimpleDateFormat)
-            //{
-            //    return ((SimpleDateFormat)df).toPattern();
-            //}
-            //else
-            //{
-            //    switch (style)
-            //    {
-            //        case DateFormat.SHORT:
-            //            return "h:mm a";
-            //        case DateFormat.MEDIUM:
-            //            return "h:mm:ss a";
-            //        case DateFormat.LONG:
-            //            return "h:mm:ss a";
-            //        case DateFormat.FULL:
-            //            return "h:mm:ss a";
-            //        default:
-            //            return "h:mm:ss a";
-            //    }
-            //}
-            throw new NotImplementedException("DateFormatConverter.GetJavaTimePattern(int, CultureInfo)");
+            string pattern = DateFormat.GetTimePattern(style, locale);
+            return pattern;
         }
 
-        public static string GetJavaDateTimePattern(int style, CultureInfo locale)
+        public static string GetDateTimePattern(int style, CultureInfo locale)
         {
-            //DateFormat df = DateFormat.GetDateTimeInstance(style, style, locale);
-            //if (df is SimpleDateFormat)
-            //{
-            //    return ((SimpleDateFormat)df).ToString();
-            //}
-            //else
-            //{
-            //    switch (style)
-            //    {
-            //        case DateFormat.SHORT:
-            //            return "M/d/yy h:mm a";
-            //        case DateFormat.MEDIUM:
-            //            return "MMM d, yyyy h:mm:ss a";
-            //        case DateFormat.LONG:
-            //            return "MMMM d, yyyy h:mm:ss a";
-            //        case DateFormat.FULL:
-            //            return "dddd, MMMM d, yyyy h:mm:ss a";
-            //        default:
-            //            return "MMM d, yyyy h:mm:ss a";
-            //    }
-            //}
-            throw new NotImplementedException("DateFormatConverter.GetJavaDateTimePattern(int, CultureInfo)");
+            string pattern= DateFormat.GetDateTimePattern(style, style, locale);
+            return pattern;
         }
 
     }
@@ -480,53 +420,24 @@ namespace NPOI.SS.Util
         public const int SHORT = 3;
         public const int DEFAULT = MEDIUM;
 
-        public static string GetDateTimeInstance(int dateStyle, int timeStyle, CultureInfo locale)
+        public static string GetDateTimePattern(int dateStyle, int timeStyle, CultureInfo locale)
         {
             DateTimeFormatInfo dfi = locale.DateTimeFormat;
-            string datePattern = string.Empty;
-            string timePattern = string.Empty;
-            switch (dateStyle)
-            {
-                case DateFormat.SHORT:
-                    datePattern = dfi.ShortDatePattern.Replace("yyyy", "yy").Replace("YYYY", "YY");
-                    break;
-                case DateFormat.MEDIUM:
-                    datePattern = dfi.ShortDatePattern;
-                    break;
-                case DateFormat.LONG:
-                    datePattern = dfi.LongDatePattern.Replace("dddd,", "").Trim();
-                    break;
-                case DateFormat.FULL:
-                    datePattern = dfi.LongDatePattern;
-                    break;
-                default:
-                    datePattern = dfi.ShortDatePattern;
-                    break;
-            }
-            switch (timeStyle)
-            {
-                case DateFormat.SHORT:
-                    timePattern = dfi.ShortTimePattern;// "M/d/yy h:mm a";
-                    break;
-                case DateFormat.MEDIUM:
-                case DateFormat.LONG:
-                case DateFormat.FULL:
-                default:
-                    timePattern = dfi.LongTimePattern;
-                    break;
-            }
+            string datePattern = GetDatePattern(dateStyle,locale);
+            string timePattern = GetTimePattern(timeStyle, locale);
+
             if (locale.TextInfo.IsRightToLeft)
                 return timePattern + " " + datePattern;//Is this right???
             else
                 return datePattern + " " + timePattern;
         }
-        public static string GetDateInstance(int dateStyle, CultureInfo locale)
+        public static string GetDatePattern(int dateStyle, CultureInfo locale)
         {
             DateTimeFormatInfo dfi = locale.DateTimeFormat;
             switch (dateStyle)
             {
                 case DateFormat.SHORT:
-                    return dfi.ShortDatePattern.Replace("yyyy","yy").Replace("YYYY","YY");
+                    return dfi.ShortDatePattern.Replace("yyyy", "yy").Replace("YYYY", "YY");
                 case DateFormat.MEDIUM:
                     return dfi.ShortDatePattern;
                 case DateFormat.LONG:
@@ -537,13 +448,13 @@ namespace NPOI.SS.Util
                     return dfi.ShortDatePattern;
             }
         }
-        public static string GetTimeInstance(int timeStyle, CultureInfo locale)
+        public static string GetTimePattern(int timeStyle, CultureInfo locale)
         {
             DateTimeFormatInfo dfi = locale.DateTimeFormat;
             switch (timeStyle)
             {
                 case DateFormat.SHORT:
-                    return dfi.ShortTimePattern;// "M/d/yy h:mm a";
+                    return dfi.ShortTimePattern;
                 case DateFormat.MEDIUM:
                 case DateFormat.LONG:
                 case DateFormat.FULL:

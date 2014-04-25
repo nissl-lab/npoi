@@ -772,6 +772,21 @@ namespace NPOI.SS.UserModel
         /// returned.
         /// </summary>
         CellRangeAddress RepeatingColumns { get; set; }
+
+        /// <summary>
+        /// Copy sheet with a new name
+        /// </summary>
+        /// <param name="Name">new sheet name</param>
+        /// <returns>cloned sheet</returns>
+        ISheet CopySheet(String Name);
+
+        /// <summary>
+        /// Copy sheet with a new name
+        /// </summary>
+        /// <param name="Name">new sheet name</param>
+        /// <param name="copyStyle">whether to copy styles</param>
+        /// <returns>cloned sheet</returns>
+        ISheet CopySheet(String Name, Boolean copyStyle);
     }
 
 }

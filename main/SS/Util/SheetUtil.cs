@@ -80,7 +80,95 @@ namespace NPOI.SS.Util
                 }
             }
         }
+        public static IRow CopyRow(ISheet sourceSheet, int sourceRowIndex, ISheet targetSheet, int targetRowIndex)
+        {
+            // Get the source / new row
+            IRow newRow = targetSheet.GetRow(targetRowIndex);
+            IRow sourceRow = sourceSheet.GetRow(sourceRowIndex);
 
+            // If the row exist in destination, push down all rows by 1 else create a new row
+            if (newRow != null)
+            {
+                targetSheet.RemoveRow(newRow);
+            }
+            newRow = targetSheet.CreateRow(targetRowIndex);
+            if (sourceRow == null)
+                throw new ArgumentNullException("source row doesn't exist");
+            // Loop through source columns to add to new row
+            for (int i = sourceRow.FirstCellNum; i < sourceRow.LastCellNum; i++)
+            {
+                // Grab a copy of the old/new cell
+                ICell oldCell = sourceRow.GetCell(i);
+
+                // If the old cell is null jump to next cell
+                if (oldCell == null)
+                {
+                    continue;
+                }
+                ICell newCell = newRow.CreateCell(i);
+
+                if (oldCell.CellStyle != null)
+                {
+                    // apply style from old cell to new cell 
+                    newCell.CellStyle = oldCell.CellStyle;
+                }
+
+                // If there is a cell comment, copy
+                if (oldCell.CellComment != null)
+                {
+                    newCell.CellComment = oldCell.CellComment;
+                }
+
+                // If there is a cell hyperlink, copy
+                if (oldCell.Hyperlink != null)
+                {
+                    newCell.Hyperlink = oldCell.Hyperlink;
+                }
+
+                // Set the cell data type
+                newCell.SetCellType(oldCell.CellType);
+
+                // Set the cell data value
+                switch (oldCell.CellType)
+                {
+                    case CellType.Blank:
+                        newCell.SetCellValue(oldCell.StringCellValue);
+                        break;
+                    case CellType.Boolean:
+                        newCell.SetCellValue(oldCell.BooleanCellValue);
+                        break;
+                    case CellType.Error:
+                        newCell.SetCellErrorValue(oldCell.ErrorCellValue);
+                        break;
+                    case CellType.Formula:
+                        newCell.SetCellFormula(oldCell.CellFormula);
+                        break;
+                    case CellType.Numeric:
+                        newCell.SetCellValue(oldCell.NumericCellValue);
+                        break;
+                    case CellType.String:
+                        newCell.SetCellValue(oldCell.RichStringCellValue);
+                        break;
+                }
+            }
+
+            // If there are are any merged regions in the source row, copy to new row
+            for (int i = 0; i < sourceSheet.NumMergedRegions; i++)
+            {
+                CellRangeAddress cellRangeAddress = sourceSheet.GetMergedRegion(i);
+                if (cellRangeAddress.FirstRow == sourceRow.RowNum)
+                {
+                    CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
+                            (newRow.RowNum +
+                                    (cellRangeAddress.LastRow - cellRangeAddress.FirstRow
+                                            )),
+                            cellRangeAddress.FirstColumn,
+                            cellRangeAddress.LastColumn);
+                    targetSheet.AddMergedRegion(newCellRangeAddress);
+                }
+            }
+            return newRow;           
+        }
         public static IRow CopyRow(ISheet sheet, int sourceRowIndex, int targetRowIndex)
         {
             if (sourceRowIndex == targetRowIndex)
@@ -448,7 +536,7 @@ namespace NPOI.SS.Util
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
-        public static Font IFont2Font(IFont font1)
+        internal static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
             if (font1.Boldweight == (short)FontBoldWeight.Bold)
@@ -475,5 +563,51 @@ namespace NPOI.SS.Util
             return false;
         }
 
+        /**
+         * Generate a valid sheet name based on the existing one. Used when cloning sheets.
+         *
+         * @param srcName the original sheet name to
+         * @return clone sheet name
+         */
+        public static String GetUniqueSheetName(IWorkbook wb, String srcName)
+        {
+            int uniqueIndex = 2;
+            String baseName = srcName;
+            int bracketPos = srcName.LastIndexOf('(');
+            if (bracketPos > 0 && srcName.EndsWith(")"))
+            {
+                String suffix = srcName.Substring(bracketPos + 1, srcName.Length - bracketPos - 2);
+                try
+                {
+                    uniqueIndex = Int32.Parse(suffix.Trim());
+                    uniqueIndex++;
+                    baseName = srcName.Substring(0, bracketPos).Trim();
+                }
+                catch (FormatException)
+                {
+                    // contents of brackets not numeric
+                }
+            }
+            while (true)
+            {
+                // Try and find the next sheet name that is unique
+                String index = (uniqueIndex++).ToString();
+                String name;
+                if (baseName.Length + index.Length + 2 < 31)
+                {
+                    name = baseName + " (" + index + ")";
+                }
+                else
+                {
+                    name = baseName.Substring(0, 31 - index.Length - 2) + "(" + index + ")";
+                }
+
+                //If the sheet name is unique, then Set it otherwise Move on to the next number.
+                if (wb.GetSheetIndex(name) == -1)
+                {
+                    return name;
+                }
+            }
+        }
     }
 }

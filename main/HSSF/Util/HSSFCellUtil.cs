@@ -21,6 +21,7 @@ namespace NPOI.HSSF.Util
     using System.Collections;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Various utility functions that make working with a cells and rows easier.  The various
@@ -100,9 +101,9 @@ namespace NPOI.HSSF.Util
         /// <param name="rowCounter">The 0 based row number</param>
         /// <param name="sheet">The sheet that the row is part of.</param>
         /// <returns>The row indicated by the rowCounter</returns>
-        public static NPOI.SS.UserModel.IRow GetRow(int rowCounter, HSSFSheet sheet)
+        public static IRow GetRow(int rowCounter, HSSFSheet sheet)
         {
-            NPOI.SS.UserModel.IRow row = sheet.GetRow(rowCounter);
+            IRow row = sheet.GetRow(rowCounter);
             if (row == null)
             {
                 row = sheet.CreateRow(rowCounter);
@@ -118,9 +119,9 @@ namespace NPOI.HSSF.Util
         /// <param name="row">The row that the cell is part of</param>
         /// <param name="column">The column index that the cell is in.</param>
         /// <returns>The cell indicated by the column.</returns>
-        public static NPOI.SS.UserModel.ICell GetCell(NPOI.SS.UserModel.IRow row, int column)
+        public static ICell GetCell(IRow row, int column)
         {
-            NPOI.SS.UserModel.ICell cell = row.GetCell(column);
+            ICell cell = row.GetCell(column);
 
             if (cell == null)
             {
@@ -138,9 +139,9 @@ namespace NPOI.HSSF.Util
         /// <param name="value">The value of the cell</param>
         /// <param name="style">If the style is not null, then Set</param>
         /// <returns>A new HSSFCell</returns>
-        public static NPOI.SS.UserModel.ICell CreateCell(NPOI.SS.UserModel.IRow row, int column, String value, HSSFCellStyle style)
+        public static ICell CreateCell(IRow row, int column, String value, HSSFCellStyle style)
         {
-            NPOI.SS.UserModel.ICell cell = GetCell(row, column);
+            ICell cell = GetCell(row, column);
 
             cell.SetCellValue(new HSSFRichTextString(value));
             if (style != null)
@@ -159,11 +160,125 @@ namespace NPOI.HSSF.Util
         /// <param name="column">the column index to Create the cell in</param>
         /// <param name="value">The value of the cell</param>
         /// <returns>A new HSSFCell.</returns>
-        public static NPOI.SS.UserModel.ICell CreateCell(NPOI.SS.UserModel.IRow row, int column, String value)
+        public static ICell CreateCell(IRow row, int column, String value)
         {
             return CreateCell(row, column, value, null);
         }
 
+        /// <summary>
+        /// Translate color palette entries from the source to the destination sheet
+        /// </summary>
+        private static void RemapCellStyle(HSSFCellStyle stylish, Dictionary<short, short> paletteMap)
+        {
+            if (paletteMap.ContainsKey(stylish.BorderDiagonalColor))
+            {
+                stylish.BorderDiagonalColor = paletteMap[stylish.BorderDiagonalColor];
+            }
+            if (paletteMap.ContainsKey(stylish.BottomBorderColor))
+            {
+                stylish.BottomBorderColor = paletteMap[stylish.BottomBorderColor];
+            }
+            if (paletteMap.ContainsKey(stylish.FillBackgroundColor))
+            {
+                stylish.FillBackgroundColor = paletteMap[stylish.FillBackgroundColor];
+            }
+            if (paletteMap.ContainsKey(stylish.FillForegroundColor))
+            {
+                stylish.FillForegroundColor = paletteMap[stylish.FillForegroundColor];
+            }
+            if (paletteMap.ContainsKey(stylish.LeftBorderColor))
+            {
+                stylish.LeftBorderColor = paletteMap[stylish.LeftBorderColor];
+            }
+            if (paletteMap.ContainsKey(stylish.RightBorderColor))
+            {
+                stylish.RightBorderColor = paletteMap[stylish.RightBorderColor];
+            }
+            if (paletteMap.ContainsKey(stylish.TopBorderColor))
+            {
+                stylish.TopBorderColor = paletteMap[stylish.TopBorderColor];
+            }
+        }
+
+        public static void CopyCell(HSSFCell oldCell, HSSFCell newCell, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, Boolean keepFormulas)
+        {
+            if (styleMap != null)
+            {
+                if (oldCell.CellStyle != null)
+                {
+                    if (oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
+                    {
+                        newCell.CellStyle = oldCell.CellStyle;
+                    }
+                    else
+                    {
+                        int styleHashCode = oldCell.CellStyle.GetHashCode();
+                        if (styleMap.ContainsKey(styleHashCode))
+                        {
+                            newCell.CellStyle = styleMap[styleHashCode];
+                        }
+                        else
+                        {
+                            HSSFCellStyle newCellStyle = (HSSFCellStyle)newCell.Sheet.Workbook.CreateCellStyle();
+                            newCellStyle.CloneStyleFrom(oldCell.CellStyle);
+                            RemapCellStyle(newCellStyle, paletteMap); //Clone copies as-is, we need to remap colors manually
+                            newCell.CellStyle = newCellStyle;
+                            //Clone of cell style always clones the font. This makes my life easier
+                            IFont theFont = newCellStyle.GetFont(newCell.Sheet.Workbook);
+                            if (theFont.Color > 0 && paletteMap.ContainsKey(theFont.Color))
+                            {
+                                theFont.Color = paletteMap[theFont.Color]; //Remap font color
+                            }
+                            styleMap.Add(styleHashCode, newCellStyle);
+                        }
+                    }
+                }
+                else
+                {
+                    newCell.CellStyle = null;
+                }
+            }
+            switch (oldCell.CellType)
+            {
+                case CellType.String:
+                    newCell.SetCellValue(oldCell.StringCellValue);
+                    break;
+                case CellType.Numeric:
+                    newCell.SetCellValue(oldCell.NumericCellValue);
+                    break;
+                case CellType.Blank:
+                    newCell.SetCellType(CellType.Blank);
+                    break;
+                case CellType.Boolean:
+                    newCell.SetCellValue(oldCell.BooleanCellValue);
+                    break;
+                case CellType.Error:
+                    newCell.SetCellValue(oldCell.ErrorCellValue);
+                    break;
+                case CellType.Formula:
+                    if (keepFormulas)
+                    {
+                        newCell.SetCellType(CellType.Formula);
+                        newCell.CellFormula = oldCell.CellFormula;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            newCell.SetCellType(CellType.Numeric);
+                            newCell.SetCellValue(oldCell.NumericCellValue);
+                        }
+                        catch (Exception ex)
+                        {
+                            newCell.SetCellType(CellType.String);
+                            newCell.SetCellValue(oldCell.ToString());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /// <summary>
         /// Take a cell, and align it.
@@ -222,10 +337,10 @@ namespace NPOI.HSSF.Util
          *@param  cell                   The cell that needs it's style changes
          *@exception  NestableException  Thrown if an error happens.
          */
-        public static void SetCellStyleProperty(NPOI.SS.UserModel.ICell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
+        public static void SetCellStyleProperty(ICell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
         {
-            NPOI.SS.UserModel.ICellStyle originalStyle = cell.CellStyle;
-            NPOI.SS.UserModel.ICellStyle newStyle = null;
+            ICellStyle originalStyle = cell.CellStyle;
+            ICellStyle newStyle = null;
             Hashtable values = GetFormatProperties(originalStyle);
             values[propertyName] = propertyValue;
 
@@ -235,7 +350,7 @@ namespace NPOI.HSSF.Util
 
             for (short i = 0; i < numberCellStyles; i++)
             {
-                NPOI.SS.UserModel.ICellStyle wbStyle = workbook.GetCellStyleAt(i);
+                ICellStyle wbStyle = workbook.GetCellStyleAt(i);
                 Hashtable wbStyleMap = GetFormatProperties(wbStyle);
 
                 // if (wbStyleMap.Equals(values))
@@ -260,7 +375,7 @@ namespace NPOI.HSSF.Util
         /// </summary>
         /// <param name="style">cell style</param>
         /// <returns>map of format properties (String -&gt; Object)</returns>
-        private static Hashtable GetFormatProperties(NPOI.SS.UserModel.ICellStyle style)
+        private static Hashtable GetFormatProperties(ICellStyle style)
         {
             Hashtable properties = new Hashtable();
             PutShort(properties, ALIGNMENT, (short)style.Alignment);
@@ -293,18 +408,18 @@ namespace NPOI.HSSF.Util
         /// <param name="workbook">The parent workbook.</param>
         /// <param name="properties">The map of format properties (String -&gt; Object).</param>
         private static void SetFormatProperties(
-                NPOI.SS.UserModel.ICellStyle style, HSSFWorkbook workbook, Hashtable properties)
+                ICellStyle style, HSSFWorkbook workbook, Hashtable properties)
         {
-            style.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)GetShort(properties, ALIGNMENT);
-            style.BorderBottom = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_BOTTOM);
-            style.BorderLeft = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_LEFT);
-            style.BorderRight = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_RIGHT);
-            style.BorderTop = (NPOI.SS.UserModel.BorderStyle)GetShort(properties, BORDER_TOP);
+            style.Alignment = (HorizontalAlignment)GetShort(properties, ALIGNMENT);
+            style.BorderBottom = (BorderStyle)GetShort(properties, BORDER_BOTTOM);
+            style.BorderLeft = (BorderStyle)GetShort(properties, BORDER_LEFT);
+            style.BorderRight = (BorderStyle)GetShort(properties, BORDER_RIGHT);
+            style.BorderTop = (BorderStyle)GetShort(properties, BORDER_TOP);
             style.BottomBorderColor = (GetShort(properties, BOTTOM_BORDER_COLOR));
             style.DataFormat = (GetShort(properties, DATA_FORMAT));
             style.FillBackgroundColor = (GetShort(properties, FILL_BACKGROUND_COLOR));
             style.FillForegroundColor = (GetShort(properties, FILL_FOREGROUND_COLOR));
-            style.FillPattern = (NPOI.SS.UserModel.FillPattern)GetShort(properties, FILL_PATTERN);
+            style.FillPattern = (FillPattern)GetShort(properties, FILL_PATTERN);
             style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
             style.IsHidden = (GetBoolean(properties, HIDDEN));
             style.Indention = (GetShort(properties, INDENTION));
@@ -313,7 +428,7 @@ namespace NPOI.HSSF.Util
             style.RightBorderColor = (GetShort(properties, RIGHT_BORDER_COLOR));
             style.Rotation = (GetShort(properties, ROTATION));
             style.TopBorderColor = (GetShort(properties, TOP_BORDER_COLOR));
-            style.VerticalAlignment = (NPOI.SS.UserModel.VerticalAlignment)GetShort(properties, VERTICAL_ALIGNMENT);
+            style.VerticalAlignment = (VerticalAlignment)GetShort(properties, VERTICAL_ALIGNMENT);
             style.WrapText = (GetBoolean(properties, WRAP_TEXT));
         }
 
