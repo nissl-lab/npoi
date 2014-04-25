@@ -779,7 +779,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("52348.xlsx");
             StylesTable st = workbook.GetStylesSource();
-            Assert.AreEqual(0, st.GetStyleXfsSize());
+            Assert.AreEqual(0, st.StyleXfsSize);
 
 
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle; // no exception at this point

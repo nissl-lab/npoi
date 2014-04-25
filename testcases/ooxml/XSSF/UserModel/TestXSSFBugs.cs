@@ -577,7 +577,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("styles.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);
-            Assert.AreEqual(10, wb.GetStylesSource().GetNumCellStyles());
+            Assert.AreEqual(10, wb.GetStylesSource().NumCellStyles);
 
             MemoryStream b1 = new MemoryStream();
             MemoryStream b2 = new MemoryStream();
@@ -593,7 +593,7 @@ namespace NPOI.XSSF.UserModel
                 MemoryStream bais = new MemoryStream(data);
                 wb = new XSSFWorkbook(bais);
                 Assert.AreEqual(3, wb.NumberOfSheets);
-                Assert.AreEqual(10, wb.GetStylesSource().GetNumCellStyles());
+                Assert.AreEqual(10, wb.GetStylesSource().NumCellStyles);
             }
         }
 
@@ -818,7 +818,7 @@ namespace NPOI.XSSF.UserModel
             XSSFCellStyle styleT = cellT.CellStyle as XSSFCellStyle;
             XSSFColor colorT = styleT.BottomBorderXSSFColor;
 
-            Assert.AreEqual(5, colorT.GetTheme());
+            Assert.AreEqual(5, colorT.Theme);
             Assert.AreEqual("FFC0504D", colorT.GetARGBHex());
 
             // Border from a style direct, red
@@ -826,7 +826,7 @@ namespace NPOI.XSSF.UserModel
             XSSFCellStyle styleS = cellS.CellStyle as XSSFCellStyle;
             XSSFColor colorS = styleS.BottomBorderXSSFColor;
 
-            Assert.AreEqual(0, colorS.GetTheme());
+            Assert.AreEqual(0, colorS.Theme);
             Assert.AreEqual("FFFF0000", colorS.GetARGBHex());
         }
 
@@ -845,9 +845,8 @@ namespace NPOI.XSSF.UserModel
             // Column 1 has a font with regular colours
             XSSFCell cr = r.GetCell(1) as XSSFCell;
             XSSFFont fr = wb.GetFontAt(cr.CellStyle.FontIndex) as XSSFFont;
-            XSSFColor colr = fr.GetXSSFColor();
-            // No theme, has colours
-            Assert.AreEqual(0, colr.GetTheme());
+            XSSFColor colr = fr.GetXSSFColor();            // No theme, has colours
+            Assert.AreEqual(0, colr.Theme);
             Assert.IsNotNull(colr.GetRgb());
 
             // Column 0 has a font with colours from a theme
@@ -855,8 +854,8 @@ namespace NPOI.XSSF.UserModel
             XSSFFont ft = wb.GetFontAt(ct.CellStyle.FontIndex) as XSSFFont;
             XSSFColor colt = ft.GetXSSFColor();
             // Has a theme, which has the colours on it
-            Assert.AreEqual(9, colt.GetTheme());
-            XSSFColor themeC = wb.GetTheme().GetThemeColor(colt.GetTheme());
+            Assert.AreEqual(9, colt.Theme);
+            XSSFColor themeC = wb.GetTheme().GetThemeColor(colt.Theme);
             Assert.IsNotNull(themeC.GetRgb());
             Assert.IsNotNull(colt.GetRgb());
             Assert.AreEqual(themeC.GetARGBHex(), colt.GetARGBHex()); // The same colour
@@ -1227,8 +1226,8 @@ namespace NPOI.XSSF.UserModel
 
             // Ensure we Get the right colours for these themes
             // TODO fix
-            //       Assert.AreEqual("FFEEECE1", wb.GetTheme().GetThemeColor(2).GetARGBHex());
-            //       Assert.AreEqual("FF1F497D", wb.GetTheme().GetThemeColor(3).GetARGBHex());
+            //       Assert.AreEqual("FFEEECE1", wb.Theme.GetThemeColor(2).GetARGBHex());
+            //       Assert.AreEqual("FF1F497D", wb.Theme.GetThemeColor(3).GetARGBHex());
 
             // Finally check the colours on the styles
             // TODO fix

@@ -320,30 +320,30 @@ namespace NPOI.XSSF.Model
             return fills.Count - 1;
         }
 
-        public CT_Xf GetCellXfAt(int idx)
+        internal CT_Xf GetCellXfAt(int idx)
         {
             return xfs[idx];
         }
-        public int PutCellXf(CT_Xf cellXf)
+        internal int PutCellXf(CT_Xf cellXf)
         {
             xfs.Add(cellXf);
             return xfs.Count;
         }
-        public void ReplaceCellXfAt(int idx, CT_Xf cellXf)
+        internal void ReplaceCellXfAt(int idx, CT_Xf cellXf)
         {
             xfs[idx] = cellXf;
         }
 
-        public CT_Xf GetCellStyleXfAt(int idx)
+        internal CT_Xf GetCellStyleXfAt(int idx)
         {
             return styleXfs[idx];
         }
-        public int PutCellStyleXf(CT_Xf cellStyleXf)
+        internal int PutCellStyleXf(CT_Xf cellStyleXf)
         {
             styleXfs.Add(cellStyleXf);
             return styleXfs.Count;
         }
-        public void ReplaceCellStyleXfAt(int idx, CT_Xf cellStyleXf)
+        internal void ReplaceCellStyleXfAt(int idx, CT_Xf cellStyleXf)
         {
             styleXfs[idx] = cellStyleXf;
         }
@@ -351,45 +351,60 @@ namespace NPOI.XSSF.Model
         /**
          * get the size of cell styles
          */
-        public int GetNumCellStyles()
+        public int NumCellStyles
         {
-            // Each cell style has a unique xfs entry
-            // Several might share the same styleXfs entry
-            return xfs.Count;
+            get
+            {
+                // Each cell style has a unique xfs entry
+                // Several might share the same styleXfs entry
+                return xfs.Count;
+            }
         }
 
         /**
          * For unit testing only
          */
-        public int GetNumberFormatSize()
+        internal int NumberFormatSize
         {
-            return numberFormats.Count;
+            get
+            {
+                return numberFormats.Count;
+            }
         }
 
         /**
          * For unit testing only
          */
-        public int GetXfsSize()
+        internal int XfsSize
         {
-            return xfs.Count;
+            get
+            {
+                return xfs.Count;
+            }
         }
         /**
          * For unit testing only
          */
-        public int GetStyleXfsSize()
+        internal int StyleXfsSize
         {
-            return styleXfs.Count;
+            get
+            {
+                return styleXfs.Count;
+            }
         }
         /**
          * For unit testing only!
          */
-        public CT_Stylesheet GetCTStylesheet()
+        internal CT_Stylesheet GetCTStylesheet()
         {
             return doc.GetStyleSheet();
         }
-        public int GetDXfsSize()
+        internal int DXfsSize
         {
-            return dxfs.Count;
+            get
+            {
+                return dxfs.Count;
+            }
         }
 
 

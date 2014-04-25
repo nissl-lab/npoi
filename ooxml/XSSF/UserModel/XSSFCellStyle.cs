@@ -1262,7 +1262,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Xf xf = (CT_Xf)_cellXf.Copy();
 
-            int xfSize = _stylesSource.GetStyleXfsSize();
+            int xfSize = _stylesSource.StyleXfsSize;
             int indexXf = _stylesSource.PutCellXf(xf);
             return new XSSFCellStyle(indexXf - 1, xfSize - 1, _stylesSource, _theme);
         }

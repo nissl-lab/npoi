@@ -543,7 +543,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFCellStyle style = null;
-                if ((null != _stylesSource) && (_stylesSource.GetNumCellStyles() > 0))
+                if ((null != _stylesSource) && (_stylesSource.NumCellStyles > 0))
                 {
                     long idx = _cell.IsSetS() ? _cell.s : 0;
                     style = _stylesSource.GetStyleAt((int)idx);

@@ -451,7 +451,7 @@ namespace NPOI.XSSF.UserModel
                 if (!IsFormatted) return null;
 
                 StylesTable stylesSource = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource();
-                if (stylesSource.GetNumCellStyles() > 0)
+                if (stylesSource.NumCellStyles > 0)
                 {
                     return stylesSource.GetStyleAt((int)_row.s);
                 }

@@ -832,7 +832,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(stylesSource).GetNumCellStyles();
+                return (short)(stylesSource).NumCellStyles;
             }
         }
 

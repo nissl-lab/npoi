@@ -122,7 +122,7 @@ namespace NPOI.XSSF.Model
             }
 
             // Get the theme colour
-            XSSFColor themeColor = GetThemeColor(color.GetTheme());
+            XSSFColor themeColor = GetThemeColor(color.Theme);
             // Set the raw colour, not the adjusted one
             // Do a raw Set, no adjusting at the XSSFColor layer either
             color.GetCTColor().SetRgb(themeColor.GetCTColor().GetRgb());

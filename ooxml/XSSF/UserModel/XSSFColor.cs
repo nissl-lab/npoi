@@ -278,19 +278,18 @@ namespace NPOI.XSSF.UserModel
          * Index into the <clrScheme> collection, referencing a particular <sysClr> or
          *  <srgbClr> value expressed in the Theme part.
          */
-        public int GetTheme()
+        public int Theme
         {
-            return ctColor.themeSpecified ? (int)ctColor.theme : (int)0;
+            get
+            {
+                return ctColor.themeSpecified ? (int)ctColor.theme : (int)0;
+            }
+            set 
+            {
+                ctColor.theme = (uint)value;
+            }
         }
 
-        /**
-         * Index into the <clrScheme> collection, referencing a particular <sysClr> or
-         *  <srgbClr> value expressed in the Theme part.
-         */
-        public void SetTheme(int theme)
-        {
-            ctColor.theme = (uint)theme;
-        }
 
         /**
          * Specifies the tint value applied to the ctColor.

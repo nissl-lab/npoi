@@ -409,6 +409,5 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="toopack">the toolpack to register</param>
         void AddToolPack(UDFFinder toopack);
-
     }
 }
