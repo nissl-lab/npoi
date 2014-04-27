@@ -107,6 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SS\Converter\ExcelToHtmlConverter.cs" />
     <Compile Include="SS\Converter\ExcelToHtmlUtils.cs" />
+    <Compile Include="SS\UserModel\IndexedColors.cs" />
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />

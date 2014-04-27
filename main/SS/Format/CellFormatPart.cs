@@ -84,7 +84,7 @@ namespace NPOI.SS.Format
                 String name = type.Name;
                 if (name.Equals(name.ToUpper()))
                 {
-                    short[] rgb = hc.GetTriplet();
+                    byte[] rgb = hc.RGB;
                     Color c = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
                     if (!NAMED_COLORS.ContainsKey(name))
                     {

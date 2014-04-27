@@ -500,7 +500,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? _ctFont.AddNewColor() : _ctFont.GetColorArray(0);
-                ctColor.SetRgb(color.GetRgb());
+                ctColor.SetRgb(color.RGB);
             }
         }
 
