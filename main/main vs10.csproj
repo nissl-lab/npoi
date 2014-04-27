@@ -115,8 +115,6 @@
     <Compile Include="HPSF\VariantBool.cs" />
     <Compile Include="HPSF\Vector.cs" />
     <Compile Include="HPSF\VersionedStream.cs" />
-    <Compile Include="HSSF\Converter\ExcelToHtmlConverter.cs" />
-    <Compile Include="HSSF\Converter\ExcelToHtmlUtils.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AttachedLabelAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxesAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxisParentAggregate.cs" />
@@ -1069,7 +1067,6 @@
     <Compile Include="SS\UserModel\HeaderFooter.cs" />
     <Compile Include="SS\UserModel\HorizontalAlignment.cs" />
     <Compile Include="SS\UserModel\Hyperlink.cs" />
-    <Compile Include="SS\UserModel\IndexedColors.cs" />
     <Compile Include="SS\UserModel\LineStyle.cs" />
     <Compile Include="SS\UserModel\Name.cs" />
     <Compile Include="SS\UserModel\PageOrder.cs" />

@@ -165,7 +165,7 @@ namespace NPOI.SS.Converter
             StringBuilder stringBuilder = new StringBuilder(7);
             stringBuilder.Append('#');
 
-            byte[] rgb = color.GetRgb();
+            byte[] rgb = color.RGB;
             foreach (byte s in rgb)
             {
                 stringBuilder.Append(s.ToString("x2"));
@@ -190,7 +190,7 @@ namespace NPOI.SS.Converter
         {
             StringBuilder stringBuilder = new StringBuilder(7);
             stringBuilder.Append('#');
-            foreach (short s in color.GetTriplet())
+            foreach (byte s in color.RGB)
             {
                 //if (s < 10)
                 //    stringBuilder.Append('0');

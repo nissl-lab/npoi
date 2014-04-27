@@ -122,26 +122,32 @@ namespace NPOI.XSSF.UserModel
                 return rgb;
             }
         }
-
+        public byte[] GetRgb()
+        { 
+            return this.RGB;
+        }
         /**
          * Standard Red Green Blue ctColor value (RGB).
          * If there was an A (Alpha) value, it will be stripped.
          */
-        public byte[] GetRgb()
+        public byte[] RGB
         {
-            byte[] rgb = GetRGBOrARGB();
-            if (rgb == null) return null;
+            get
+            {
+                byte[] rgb = GetRGBOrARGB();
+                if (rgb == null) return null;
 
-            if (rgb.Length == 4)
-            {
-                // Need to trim off the alpha
-                byte[] tmp = new byte[3];
-                Array.Copy(rgb, 1, tmp, 0, 3);
-                return tmp;
-            }
-            else
-            {
-                return rgb;
+                if (rgb.Length == 4)
+                {
+                    // Need to trim off the alpha
+                    byte[] tmp = new byte[3];
+                    Array.Copy(rgb, 1, tmp, 0, 3);
+                    return tmp;
+                }
+                else
+                {
+                    return rgb;
+                }
             }
         }
 

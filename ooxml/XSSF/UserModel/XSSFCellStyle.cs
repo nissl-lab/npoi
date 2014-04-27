@@ -1272,7 +1272,7 @@ namespace NPOI.XSSF.UserModel
 
         public IFont GetFont(IWorkbook parentWorkbook)
         {
-            throw new NotImplementedException();
+            return this.GetFont();
         }
 
         public bool ShrinkToFit

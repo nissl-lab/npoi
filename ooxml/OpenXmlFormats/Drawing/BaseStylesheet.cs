@@ -55,19 +55,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_ColorScheme()
         {
-            //this.extLstField = new CT_OfficeArtExtensionList();
-            //this.folHlinkField = new CT_Color();
-            //this.hlinkField = new CT_Color();
-            //this.accent6Field = new CT_Color();
-            //this.accent5Field = new CT_Color();
-            //this.accent4Field = new CT_Color();
-            //this.accent3Field = new CT_Color();
-            //this.accent2Field = new CT_Color();
-            //this.accent1Field = new CT_Color();
-            //this.lt2Field = new CT_Color();
-            //this.dk2Field = new CT_Color();
-            //this.lt1Field = new CT_Color();
-            //this.dk1Field = new CT_Color();
         }
         public static CT_ColorScheme Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {

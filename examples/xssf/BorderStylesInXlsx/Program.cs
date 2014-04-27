@@ -4,7 +4,6 @@ using System.Text;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.IO;
-using NPOI.HSSF.Util;
 
 namespace NPOI.Examples.XSSF.BorderStylesInXlsx
 {
@@ -22,18 +21,18 @@ namespace NPOI.Examples.XSSF.BorderStylesInXlsx
             // Style the cell with borders all around.
             ICellStyle style = workbook.CreateCellStyle();
             style.BorderBottom = BorderStyle.Thin;
-            style.BottomBorderColor = HSSFColor.Black.Index;
+            style.BottomBorderColor = IndexedColors.Black.Index;
             style.BorderLeft = BorderStyle.DashDotDot;
-            style.LeftBorderColor = HSSFColor.Green.Index;
+            style.LeftBorderColor = IndexedColors.Green.Index;
             style.BorderRight = BorderStyle.Hair;
-            style.RightBorderColor = HSSFColor.Blue.Index;
+            style.RightBorderColor = IndexedColors.Blue.Index;
             style.BorderTop = BorderStyle.MediumDashed;
-            style.TopBorderColor = HSSFColor.Orange.Index;
+            style.TopBorderColor = IndexedColors.Orange.Index;
 
             //create border diagonal
             style.BorderDiagonalLineStyle = BorderStyle.Medium; //this property must be set before BorderDiagonal and BorderDiagonalColor
             style.BorderDiagonal = BorderDiagonal.Forward;
-            style.BorderDiagonalColor = HSSFColor.Gold.Index;
+            style.BorderDiagonalColor = IndexedColors.Gold.Index;
 
             cell.CellStyle = style;
             // Create a cell and put a value in it.
@@ -42,7 +41,7 @@ namespace NPOI.Examples.XSSF.BorderStylesInXlsx
             ICellStyle style2 = workbook.CreateCellStyle();
             style2.BorderDiagonalLineStyle = BorderStyle.Medium;
             style2.BorderDiagonal = BorderDiagonal.Backward;
-            style2.BorderDiagonalColor = HSSFColor.Red.Index;
+            style2.BorderDiagonalColor = IndexedColors.Red.Index;
             cell2.CellStyle = style2;
 
             FileStream sw = File.Create("test.xlsx");

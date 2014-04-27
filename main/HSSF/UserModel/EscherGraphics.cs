@@ -311,7 +311,7 @@ namespace NPOI.HSSF.UserModel
             bool bold = font.Bold;
             bool italic = font.Italic;
             HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)NPOI.SS.UserModel.FontBoldWeight.Bold : (short)NPOI.SS.UserModel.FontBoldWeight.Normal,
-                        hssfColor.GetIndex(),
+                        hssfColor.Indexed,
                         (short)(font.Size * 20),
                         font.Name,
                         italic,
@@ -323,7 +323,7 @@ namespace NPOI.HSSF.UserModel
             {
                 hssfFont = (HSSFFont)workbook.CreateFont();
                 hssfFont.Boldweight = (short)(bold ? NPOI.SS.UserModel.FontBoldWeight.Bold : 0);
-                hssfFont.Color = (hssfColor.GetIndex());
+                hssfFont.Color = (hssfColor.Indexed);
                 hssfFont.FontHeight = ((short)(font.Size * 20));
                 hssfFont.FontName = font.Name;
                 hssfFont.IsItalic = (italic);

@@ -113,9 +113,9 @@ namespace NPOI.SS.Converter
             get { return useDivsToSpan; }
             set { useDivsToSpan = value; }
         }
-        public static XmlDocument Process(string xlsFile)
+        public static XmlDocument Process(string excelFile)
         {
-            IWorkbook workbook = ExcelToHtmlUtils.LoadXls(xlsFile);
+            IWorkbook workbook = WorkbookFactory.Create(excelFile);
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
             excelToHtmlConverter.ProcessWorkbook(workbook);
             return excelToHtmlConverter.Document;
@@ -661,13 +661,13 @@ namespace NPOI.SS.Converter
                     //HSSFColor.
                     HSSFColor foregroundColor = palette.GetColor(cellStyle.FillForegroundColor);
                     if (foregroundColor != null)
-                        style.Append("background-color: " + ExcelToHtmlUtils.GetColor(foregroundColor) + "; ");
+                        style.AppendFormat("background-color:{0}; ", ExcelToHtmlUtils.GetColor(foregroundColor));
                 }
                 else
                 {
                     HSSFColor backgroundColor = palette.GetColor(cellStyle.FillBackgroundColor);
                     if (backgroundColor != null)
-                        style.Append("background-color: " + ExcelToHtmlUtils.GetColor(backgroundColor) + "; ");
+                        style.AppendFormat("background-color:{0}; ", ExcelToHtmlUtils.GetColor(backgroundColor));
                 }
             }
             else
@@ -682,17 +682,37 @@ namespace NPOI.SS.Converter
                 }
                 else if (cellStyle.FillPattern == FillPattern.SolidForeground)
                 {
-                    //cellStyle.
-                    //HSSFColor.
-                    XSSFColor foregroundColor = tt.GetThemeColor(cellStyle.FillForegroundColor);
-                    if (foregroundColor != null)
-                        style.Append("background-color: " + ExcelToHtmlUtils.GetColor(foregroundColor) + "; ");
+                    //cellStyle
+                    IndexedColors clr=IndexedColors.ValueOf(cellStyle.FillForegroundColor);
+                    string hexstring=null;
+                    if(clr!=null)
+                    {
+                        hexstring=clr.HexString;
+                    }else
+                    {
+                        XSSFColor foregroundColor = (XSSFColor)cellStyle.FillForegroundColorColor;
+                        if (foregroundColor != null)
+                        hexstring = ExcelToHtmlUtils.GetColor(foregroundColor);
+                    }
+                    if (hexstring != null)
+                        style.AppendFormat("background-color:{0}; ",hexstring);
                 }
                 else
                 {
-                    XSSFColor backgroundColor = tt.GetThemeColor(cellStyle.FillBackgroundColor);
-                    if (backgroundColor != null)
-                        style.Append("background-color: " + ExcelToHtmlUtils.GetColor(backgroundColor) + "; ");
+                    IndexedColors clr = IndexedColors.ValueOf(cellStyle.FillBackgroundColor);
+                    string hexstring = null;
+                    if (clr != null)
+                    {
+                        hexstring = clr.HexString;
+                    }
+                    else
+                    {
+                        XSSFColor backgroundColor = (XSSFColor)cellStyle.FillBackgroundColorColor;
+                        if(backgroundColor!=null)
+                            hexstring = ExcelToHtmlUtils.GetColor(backgroundColor);
+                    }
+                    if (hexstring != null)
+                        style.AppendFormat("background-color:{0}; ", hexstring);
                 }
 
             }
@@ -730,14 +750,23 @@ namespace NPOI.SS.Converter
             }
             else 
             {
-                XSSFColor color = ((XSSFWorkbook)workbook).GetStylesSource().GetTheme().GetThemeColor(borderColor);
-                if (color != null)
+                IndexedColors clr = IndexedColors.ValueOf(borderColor);
+                if (clr != null)
                 {
-                    borderStyle.Append(' ');
-                    borderStyle.Append(ExcelToHtmlUtils.GetColor(color));
+                   borderStyle.Append(' ');
+                   borderStyle.Append(clr.HexString);
+                }
+                else
+                {
+                    XSSFColor color = ((XSSFWorkbook)workbook).GetStylesSource().GetTheme().GetThemeColor(borderColor);
+                    if (color != null)
+                    {
+                        borderStyle.Append(' ');
+                        borderStyle.Append(ExcelToHtmlUtils.GetColor(color));
+                    }
                 }
             }
-            style.Append("border-" + type + ": " + borderStyle + "; ");
+            style.AppendFormat("border-{0}: {1}; ",type, borderStyle);
         }
 
         void BuildStyle_Font(IWorkbook workbook, StringBuilder style,
@@ -758,22 +787,33 @@ namespace NPOI.SS.Converter
             {
                 HSSFColor fontColor = ((HSSFWorkbook)workbook).GetCustomPalette().GetColor(font.Color);
                 if (fontColor != null)
-                    style.Append("color: " + ExcelToHtmlUtils.GetColor(fontColor) + "; ");
+                    style.AppendFormat("color:{0}; " ,ExcelToHtmlUtils.GetColor(fontColor) );
             }
             else
             {
-                StylesTable st = ((XSSFWorkbook)workbook).GetStylesSource();
-                XSSFColor fontColor = null;
-                if (st != null&&st.GetTheme()!=null)
+                IndexedColors clr = IndexedColors.ValueOf(font.Color);
+                string hexstring = null;
+                if (clr != null)
                 {
-                    fontColor = st.GetTheme().GetThemeColor(font.Color);
+                    hexstring = clr.HexString;
                 }
                 else
                 {
-                    fontColor = ((XSSFFont)font).GetXSSFColor();
+                    StylesTable st = ((XSSFWorkbook)workbook).GetStylesSource();
+                    XSSFColor fontColor = null;
+                    if (st != null && st.GetTheme() != null)
+                    {
+                        fontColor = st.GetTheme().GetThemeColor(font.Color);
+                    }
+                    else
+                    {
+                        fontColor = ((XSSFFont)font).GetXSSFColor();
+                    }
+                    if (fontColor != null)
+                        hexstring = ExcelToHtmlUtils.GetColor(fontColor);
                 }
-                if (fontColor != null)
-                    style.Append("color: " + ExcelToHtmlUtils.GetColor(fontColor) + "; ");
+                if (hexstring != null)
+                    style.AppendFormat("color:{0}; ", hexstring);
             }
             if (font.FontHeightInPoints != 0)
                 style.Append("font-size: " + font.FontHeightInPoints + "pt; ");

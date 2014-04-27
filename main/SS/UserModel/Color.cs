@@ -2,5 +2,7 @@
 {
     public interface IColor
     {
+        short Indexed { get; }
+        byte[] RGB { get; }
     }
 }
