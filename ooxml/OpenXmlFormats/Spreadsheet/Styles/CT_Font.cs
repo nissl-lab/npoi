@@ -111,6 +111,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
             }
 
+            if (this.vertAlign != null)
+            {
+                foreach (CT_VerticalAlignFontProperty x in this.vertAlign)
+                {
+                    x.Write(sw, "vertAlign");
+                }
+            }
             if (this.u != null)
             {
                 foreach (CT_UnderlineProperty x in this.u)
@@ -168,13 +175,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extend.Write(sw, "extend");
 
 
-            if (this.vertAlign != null)
-            {
-                foreach (CT_VerticalAlignFontProperty x in this.vertAlign)
-                {
-                    x.Write(sw, "vertAlign");
-                }
-            }
             if (this.scheme != null)
             {
                 foreach (CT_FontScheme x in this.scheme)

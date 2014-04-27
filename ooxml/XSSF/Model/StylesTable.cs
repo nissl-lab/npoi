@@ -433,7 +433,8 @@ namespace NPOI.XSSF.Model
                 ctFmt.numFmtId = (uint)fmt.Key;
                 ctFmt.formatCode = fmt.Value;
             }
-            styleSheet.numFmts = (ctFormats);
+            if (ctFormats.count>0)
+                styleSheet.numFmts = ctFormats;
 
             // Fonts
             CT_Fonts ctFonts = new CT_Fonts();
