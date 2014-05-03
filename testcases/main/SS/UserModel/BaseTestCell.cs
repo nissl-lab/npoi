@@ -23,6 +23,7 @@ namespace TestCases.SS.UserModel
     using TestCases.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.HSSF.Util;
 
     /**
      * Common superclass for testing implementatiosn of
@@ -196,7 +197,7 @@ namespace TestCases.SS.UserModel
             ICellStyle cs = wb.CreateCellStyle();
             IFont f = wb.CreateFont();
             f.FontHeightInPoints = 20;
-            f.Color = (IndexedColors.Red.Index);
+            f.Color = (HSSFColor.Red.Index);
             f.Boldweight = (int)FontBoldWeight.Bold;
             f.FontName = "Arial Unicode MS";
             cs.FillBackgroundColor = 3;

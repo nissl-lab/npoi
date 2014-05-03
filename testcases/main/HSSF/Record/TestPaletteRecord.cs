@@ -48,10 +48,10 @@ namespace TestCases.HSSF.Record
             {
                 int index = (int)indexes.Current;
                 HSSFColor c = (HSSFColor)colors[index];
-                short[] rgbTriplet = c.GetTriplet();
+                byte[] rgbTriplet = c.GetTriplet();
                 byte[] paletteTriplet = palette.GetColor((short)index);
                 String msg = "Expected HSSFColor constant to match PaletteRecord at index 0x"
-                    + NPOI.Util.StringUtil.ToHexString(c.GetIndex());
+                    + NPOI.Util.StringUtil.ToHexString(c.Indexed);
                 Assert.AreEqual(rgbTriplet[0], paletteTriplet[0] & 0xff,msg);
                 Assert.AreEqual(rgbTriplet[1], paletteTriplet[1] & 0xff,msg);
                 Assert.AreEqual(rgbTriplet[2], paletteTriplet[2] & 0xff,msg);

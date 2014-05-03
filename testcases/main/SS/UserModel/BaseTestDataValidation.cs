@@ -26,6 +26,7 @@ namespace TestCases.SS.UserModel
     using NPOI.Util;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
+    using NPOI.HSSF.Util;
 
     /**
      * Class for Testing Excel's data validation mechanism
@@ -218,7 +219,7 @@ namespace TestCases.SS.UserModel
 
                 _style_1 = CreateStyle(wb, HorizontalAlignment.Left);
                 _style_2 = CreateStyle(wb, HorizontalAlignment.Center);
-                _style_3 = CreateStyle(wb, HorizontalAlignment.Center, IndexedColors.Grey25Percent.Index, true);
+                _style_3 = CreateStyle(wb, HorizontalAlignment.Center, HSSFColor.Grey25Percent.Index, true);
                 _style_4 = CreateHeaderStyle(wb);
             }
 
@@ -238,40 +239,40 @@ namespace TestCases.SS.UserModel
                 cellStyle.VerticalAlignment = (/*setter*/VerticalAlignment.Center);
                 cellStyle.Alignment = (/*setter*/h_align);
                 cellStyle.BorderLeft = (/*setter*/BorderStyle.Thin);
-                cellStyle.LeftBorderColor = (/*setter*/IndexedColors.Black.Index);
+                cellStyle.LeftBorderColor = (/*setter*/HSSFColor.Black.Index);
                 cellStyle.BorderTop = (/*setter*/BorderStyle.Thin);
-                cellStyle.TopBorderColor = (/*setter*/IndexedColors.Black.Index);
+                cellStyle.TopBorderColor = (/*setter*/HSSFColor.Black.Index);
                 cellStyle.BorderRight = (/*setter*/BorderStyle.Thin);
-                cellStyle.RightBorderColor = (/*setter*/IndexedColors.Black.Index);
+                cellStyle.RightBorderColor = (/*setter*/HSSFColor.Black.Index);
                 cellStyle.BorderBottom = (/*setter*/BorderStyle.Thin);
-                cellStyle.BottomBorderColor = (/*setter*/IndexedColors.Black.Index);
+                cellStyle.BottomBorderColor = (/*setter*/HSSFColor.Black.Index);
 
                 return cellStyle;
             }
 
             private static ICellStyle CreateStyle(IWorkbook wb, HorizontalAlignment h_align)
             {
-                return CreateStyle(wb, h_align, IndexedColors.White.Index, false);
+                return CreateStyle(wb, h_align, HSSFColor.White.Index, false);
             }
             private static ICellStyle CreateHeaderStyle(IWorkbook wb)
             {
                 IFont font = wb.CreateFont();
-                font.Color = (/*setter*/ IndexedColors.White.Index);
+                font.Color = (/*setter*/ HSSFColor.White.Index);
                 font.Boldweight = (short)(/*setter*/FontBoldWeight.Bold);
 
                 ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.FillForegroundColor = (/*setter*/IndexedColors.BlueGrey.Index);
+                cellStyle.FillForegroundColor = (/*setter*/HSSFColor.BlueGrey.Index);
                 cellStyle.FillPattern = (/*setter*/FillPattern.SolidForeground);
                 cellStyle.Alignment = (/*setter*/HorizontalAlignment.Center);
                 cellStyle.VerticalAlignment = (/*setter*/VerticalAlignment.Center);
                 cellStyle.BorderLeft = (/*setter*/BorderStyle.Thin);
-                cellStyle.LeftBorderColor = (/*setter*/IndexedColors.White.Index);
+                cellStyle.LeftBorderColor = (/*setter*/HSSFColor.White.Index);
                 cellStyle.BorderTop = (/*setter*/BorderStyle.Thin);
-                cellStyle.TopBorderColor = (/*setter*/IndexedColors.White.Index);
+                cellStyle.TopBorderColor = (/*setter*/HSSFColor.White.Index);
                 cellStyle.BorderRight = (/*setter*/BorderStyle.Thin);
-                cellStyle.RightBorderColor = (/*setter*/IndexedColors.White.Index);
+                cellStyle.RightBorderColor = (/*setter*/HSSFColor.White.Index);
                 cellStyle.BorderBottom = (/*setter*/BorderStyle.Thin);
-                cellStyle.BottomBorderColor = (/*setter*/IndexedColors.White.Index);
+                cellStyle.BottomBorderColor = (/*setter*/HSSFColor.White.Index);
                 cellStyle.SetFont(font);
                 return cellStyle;
             }

@@ -73,8 +73,8 @@ namespace TestCases.HSSF.UserModel
             palette = book.GetCustomPalette();
             HSSFColor color = palette.GetColor(HSSFColor.Coral.Index);  //unmodified
             Assert.IsNotNull(color, "Unexpected null in custom palette (unmodified index)");
-            short[] expectedRGB = HSSFColor.Coral.Triplet;
-            short[] actualRGB = color.GetTriplet();
+            byte[] expectedRGB = HSSFColor.Coral.Triplet;
+            byte[] actualRGB = color.RGB;
             String msg = "Expected palette position to remain unmodified";
             Assert.AreEqual(expectedRGB[0], actualRGB[0], msg);
             Assert.AreEqual(expectedRGB[1], actualRGB[1], msg);
@@ -82,7 +82,7 @@ namespace TestCases.HSSF.UserModel
 
             color = palette.GetColor((short)0x12);
             Assert.IsNotNull(color, "Unexpected null in custom palette (modified)");
-            actualRGB = color.GetTriplet();
+            actualRGB = color.RGB;
             msg = "Expected palette modification to be preserved across save";
             Assert.AreEqual((short)101, actualRGB[0], msg);
             Assert.AreEqual((short)230, actualRGB[1], msg);
@@ -220,8 +220,8 @@ namespace TestCases.HSSF.UserModel
         {
             public void Compare(HSSFColor expected, HSSFColor palette)
             {
-                short[] s1 = expected.GetTriplet();
-                short[] s2 = palette.GetTriplet();
+                byte[] s1 = expected.RGB;
+                byte[] s2 = palette.RGB;
                 Assert.AreEqual(s1[0], s2[0]);
                 Assert.AreEqual(s1[1], s2[1]);
                 Assert.AreEqual(s1[2], s2[2]);

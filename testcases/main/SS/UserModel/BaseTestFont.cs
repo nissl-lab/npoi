@@ -19,6 +19,7 @@ using NUnit.Framework;
 using NPOI.SS.UserModel;
 using System;
 using NPOI.HSSF.Record.CF;
+using NPOI.HSSF.Util;
 namespace TestCases.SS.UserModel
 {
 
@@ -103,7 +104,7 @@ namespace TestCases.SS.UserModel
             IFont font = wb.CreateFont();
             font.Boldweight = (short)(FontBoldWeight.Bold);
             font.IsStrikeout = (true);
-            font.Color = (IndexedColors.Yellow.Index);
+            font.Color = (HSSFColor.Yellow.Index);
             font.FontName = ("Courier");
             short font1Idx = font.Index;
             wb.CreateCellStyle().SetFont(font);
@@ -121,7 +122,7 @@ namespace TestCases.SS.UserModel
             short idx = s1.GetRow(0).GetCell(0).CellStyle.FontIndex;
             IFont fnt = wb.GetFontAt(idx);
             Assert.IsNotNull(fnt);
-            Assert.AreEqual(IndexedColors.Yellow.Index, fnt.Color);
+            Assert.AreEqual(HSSFColor.Yellow.Index, fnt.Color);
             Assert.AreEqual("Courier", fnt.FontName);
 
             // Now add an orphaned one
