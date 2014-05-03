@@ -453,7 +453,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
+            if(!preferRelativeResize)
+                XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
             sw.Write(">");
             if (this.picLocks != null)
                 this.picLocks.Write(sw, "picLocks");
@@ -466,11 +467,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         private CT_OfficeArtExtensionList extLstField = null;
 
-        private bool? preferRelativeResizeField = null;
+        private bool preferRelativeResizeField = true;
 
         public CT_NonVisualPictureProperties()
         {
-            this.preferRelativeResizeField = true;
         }
 
         public CT_PictureLocking AddNewPicLocks()
@@ -506,23 +506,16 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
 
         [XmlAttribute]
-        [DefaultValue(true)]
         public bool preferRelativeResize
         {
             get
             {
-                return null == this.preferRelativeResizeField ? true : (bool)preferRelativeResizeField;
+                return this.preferRelativeResizeField;
             }
             set
             {
                 this.preferRelativeResizeField = value;
             }
-        }
-
-        [XmlIgnore]
-        public bool preferRelativeResizeSpecified
-        {
-            get { return (null != preferRelativeResizeField); }
         }
     }
     [Serializable]

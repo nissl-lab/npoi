@@ -801,12 +801,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "date1904", this.date1904, false);
             if(this.showObjects!= ST_Objects.all)
                 XmlHelper.WriteAttribute(sw, "showObjects", this.showObjects.ToString());
-            XmlHelper.WriteAttribute(sw, "showBorderUnselectedTables", this.showBorderUnselectedTables,false);
+            if (!showBorderUnselectedTables)
+                XmlHelper.WriteAttribute(sw, "showBorderUnselectedTables", this.showBorderUnselectedTables);
             XmlHelper.WriteAttribute(sw, "filterPrivacy", this.filterPrivacy, false);
             XmlHelper.WriteAttribute(sw, "promptedSolutions", this.promptedSolutions, false);
-            XmlHelper.WriteAttribute(sw, "showInkAnnotation", this.showInkAnnotation,false);
+            if (!showInkAnnotationField)
+                XmlHelper.WriteAttribute(sw, "showInkAnnotation", this.showInkAnnotation);
             XmlHelper.WriteAttribute(sw, "backupFile", this.backupFile, false);
-            XmlHelper.WriteAttribute(sw, "saveExternalLinkValues", this.saveExternalLinkValues, false);
+            if (!saveExternalLinkValues)
+                XmlHelper.WriteAttribute(sw, "saveExternalLinkValues", this.saveExternalLinkValues);
             if(this.updateLinks!= ST_UpdateLinks.userSet)
                 XmlHelper.WriteAttribute(sw, "updateLinks", this.updateLinks.ToString());
             XmlHelper.WriteAttribute(sw, "codeName", this.codeName);

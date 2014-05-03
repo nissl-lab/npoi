@@ -110,9 +110,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if(this.visibility!= ST_Visibility.visible)
                 XmlHelper.WriteAttribute(sw, "visibility", this.visibility.ToString());
             XmlHelper.WriteAttribute(sw, "minimized", this.minimized, false);
-            XmlHelper.WriteAttribute(sw, "showHorizontalScroll", this.showHorizontalScroll,false);
-            XmlHelper.WriteAttribute(sw, "showVerticalScroll", this.showVerticalScroll,false);
-            XmlHelper.WriteAttribute(sw, "showSheetTabs", this.showSheetTabs,false);
+            if (!this.showHorizontalScroll)
+                XmlHelper.WriteAttribute(sw, "showHorizontalScroll", this.showHorizontalScroll);
+            if (!this.showVerticalScroll)
+                XmlHelper.WriteAttribute(sw, "showVerticalScroll", this.showVerticalScroll);
+            if(!this.showSheetTabs)
+                XmlHelper.WriteAttribute(sw, "showSheetTabs", this.showSheetTabs);
             XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow);
             XmlHelper.WriteAttribute(sw, "yWindow", this.yWindow);
             XmlHelper.WriteAttribute(sw, "windowWidth", this.windowWidth);
@@ -120,7 +123,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "tabRatio", this.tabRatio);
             XmlHelper.WriteAttribute(sw, "firstSheet", this.firstSheet);
             XmlHelper.WriteAttribute(sw, "activeTab", this.activeTab);
-            XmlHelper.WriteAttribute(sw, "autoFilterDateGrouping", this.autoFilterDateGrouping, false);
+            if (!this.autoFilterDateGrouping)
+                XmlHelper.WriteAttribute(sw, "autoFilterDateGrouping", this.autoFilterDateGrouping);
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");

@@ -46,7 +46,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "macro", this.macro);
-            XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
+            if (this.fPublished)
+                XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
             sw.Write(">");
             if (this.nvPicPr != null)
                 this.nvPicPr.Write(sw, "nvPicPr");

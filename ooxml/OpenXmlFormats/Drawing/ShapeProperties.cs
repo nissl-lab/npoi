@@ -329,17 +329,28 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
-            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
-            XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
-            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
-            XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
-            XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
-            XmlHelper.WriteAttribute(sw, "noEditPoints", this.noEditPoints);
-            XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles);
-            XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads);
-            XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
-            XmlHelper.WriteAttribute(sw, "noCrop", this.noCrop);
+            if(noGrp)
+                XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
+            if (noSelect)
+                XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
+            if (noRot)
+                XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
+            if (noChangeAspect)
+                XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
+            if (noMove)
+                XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
+            if (noResize)
+                XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
+            if (noEditPoints)
+                XmlHelper.WriteAttribute(sw, "noEditPoints", this.noEditPoints);
+            if (noAdjustHandles)
+                XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles);
+            if (noChangeArrowheads)
+                XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads);
+            if (noChangeShapeType)
+                XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
+            if (noCrop)
+                XmlHelper.WriteAttribute(sw, "noCrop", this.noCrop);
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
@@ -1080,7 +1091,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
+            if (!preferRelativeResize)
+                XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
             sw.Write(">");
             if (this.picLocks != null)
                 this.picLocks.Write(sw, "picLocks");
@@ -1093,11 +1105,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_OfficeArtExtensionList extLstField = null;
 
-        private bool? preferRelativeResizeField = null;
+        private bool preferRelativeResizeField = true;
 
         public CT_NonVisualPictureProperties()
         {
-            this.preferRelativeResizeField = true;
         }
 
         public CT_PictureLocking AddNewPicLocks()
@@ -1133,23 +1144,16 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [XmlAttribute]
-        [DefaultValue(true)]
         public bool preferRelativeResize
         {
             get
             {
-                return null == this.preferRelativeResizeField ? true : (bool)preferRelativeResizeField;
+                return preferRelativeResizeField;
             }
             set
             {
                 this.preferRelativeResizeField = value;
             }
-        }
-
-        [XmlIgnore]
-        public bool preferRelativeResizeSpecified
-        {
-            get { return (null != preferRelativeResizeField); }
         }
     }
 

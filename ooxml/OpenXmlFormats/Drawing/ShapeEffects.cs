@@ -60,7 +60,8 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0} xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"", nodeName));
             XmlHelper.WriteAttribute(sw, "r:embed", this.embed);
             XmlHelper.WriteAttribute(sw, "r:link", this.link);
-            XmlHelper.WriteAttribute(sw, "cstate", this.cstate.ToString());
+            if(cstate!= ST_BlipCompression.none)
+                XmlHelper.WriteAttribute(sw, "cstate", this.cstate.ToString());
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
