@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateEmptyWorkbook", "xssf\CreateEmptyWorkbook\CreateEmptyWorkbook.csproj", "{AFBE86E3-EDBE-45B4-8950-8B883102A47F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetCellValuesInXlsx", "xssf\SetCellValuesInXlsx\SetCellValuesInXlsx.csproj", "{D49F896A-A2E1-4C28-ACB7-73FB2910626D}"
@@ -48,6 +50,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCustomProperties", "xssf\CreateCustomProperties\CreateCustomProperties.csproj", "{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonthlySalaryReport", "xssf\MonthlySalaryReport\MonthlySalaryReport.csproj", "{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadXlsx", "xssf\DownloadXlsx\DownloadXlsx.csproj", "{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -299,6 +303,16 @@ Global
 		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
