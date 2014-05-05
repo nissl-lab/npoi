@@ -29,7 +29,7 @@ namespace MonthlySalaryReport
             GenerateRow(s1, row++, "Amy", "Huang", 8000, 11.0/100);
             GenerateRow(s1, row++, "Tomos", "Johnson", 6000, 9.0/100);
             GenerateRow(s1, row++, "Macro", "Jeep", 12000, 15.0/100);
-            s1.ForceFormulaRecalculation = false;
+            s1.ForceFormulaRecalculation = true;
 
             FileStream fs = File.Create("test.xlsx");
             wb.Write(fs);
