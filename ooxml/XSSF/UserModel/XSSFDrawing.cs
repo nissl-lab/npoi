@@ -145,6 +145,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.Set(XSSFPicture.Prototype());
 
             ctShape.nvPicPr.cNvPr.id = (uint)shapeId;
+            ctShape.nvPicPr.cNvPr.name = "Picture " + shapeId;
 
             XSSFPicture shape = new XSSFPicture(this, ctShape);
             shape.anchor = anchor;

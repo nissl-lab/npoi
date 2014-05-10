@@ -82,8 +82,7 @@ namespace NPOI.XSSF.UserModel
 
         internal static CT_Picture Prototype()
         {
-            if (prototype == null)
-            {
+
                 CT_Picture pic = new CT_Picture();
                 CT_PictureNonVisual nvpr = pic.AddNewNvPicPr();
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvProps = nvpr.AddNewCNvPr();
@@ -115,7 +114,6 @@ namespace NPOI.XSSF.UserModel
                 prstGeom.AddNewAvLst();
 
                 prototype = pic;
-            }
             return prototype;
         }
 
