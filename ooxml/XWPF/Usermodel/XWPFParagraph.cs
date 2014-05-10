@@ -305,25 +305,29 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder out1 = new StringBuilder();
+                StringBuilder text = new StringBuilder();
                 foreach (XWPFRun run in runs)
                 {
-                    out1.Append(run.ToString());
+                    text.Append(run.ToString());
                 }
-                return out1.ToString();
+                return text.ToString();
             }
         }
 
         /**
          * Returns any text from any suitable pictures in the paragraph
          */
-        public String GetPictureText()
+        public String PictureText
         {
-            StringBuilder out1 = new StringBuilder();
-            foreach(XWPFRun run in runs) {
-                out1.Append(run.GetPictureText());
+            get
+            {
+                StringBuilder text = new StringBuilder();
+                foreach (XWPFRun run in runs)
+                {
+                    text.Append(run.GetPictureText());
+                }
+                return text.ToString();
             }
-            return out1.ToString();
         }
 
         /**
@@ -363,31 +367,19 @@ namespace NPOI.XWPF.UserModel
          *
          * @return the paragraph alignment of this paragraph.
          */
-        public ParagraphAlignment GetAlignment()
+        public ParagraphAlignment Alignment
         {
-            CT_PPr pr = GetCTPPr();
-            return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
-        }
-
-        /**
-         * Specifies the paragraph alignment which shall be applied to text in this
-         * paragraph.
-         * <p>
-         * <p>
-         * If this element is not Set on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no alignment is applied to the
-         * paragraph.
-         * </p>
-         *
-         * @param align the paragraph alignment to apply to this paragraph.
-         */
-        public void SetAlignment(ParagraphAlignment align)
-        {
-            CT_PPr pr = GetCTPPr();
-            CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
-            jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>(align);
+            get
+            {
+                CT_PPr pr = GetCTPPr();
+                return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
+            }
+            set 
+            {
+                CT_PPr pr = GetCTPPr();
+                CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
+                jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>(value);
+            }
         }
 
         /**
@@ -408,189 +400,82 @@ namespace NPOI.XWPF.UserModel
          *
          * @return the vertical alignment of this paragraph.
          */
-        public TextAlignment GetVerticalAlignment()
+        public TextAlignment VerticalAlignment
         {
-            CT_PPr pr = GetCTPPr();
-            return (pr == null || !pr.IsSetTextAlignment()) ? TextAlignment.AUTO
-                    : EnumConverter.ValueOf<TextAlignment, ST_TextAlignment>(pr.textAlignment.val);
-        }
-
-        /**
-         * Specifies the text vertical alignment which shall be applied to text in
-         * this paragraph.
-         * <p>
-         * If the line height (before any Added spacing) is larger than one or more
-         * characters on the line, all characters will be aligned to each other as
-         * specified by this element.
-         * </p>
-         * <p>
-         * If this element is omitted on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then the vertical alignment of all
-         * characters on the line shall be automatically determined by the consumer.
-         * </p>
-         *
-         * @param valign the paragraph vertical alignment to apply to this
-         *               paragraph.
-         */
-        public void SetVerticalAlignment(TextAlignment valign)
-        {
-            CT_PPr pr = GetCTPPr();
-            CT_TextAlignment textAlignment = pr.IsSetTextAlignment() ? pr
-                    .textAlignment : pr.AddNewTextAlignment();
-            //STTextAlignment.Enum en = STTextAlignment.Enum
-            //        .forInt(valign.Value);
-            textAlignment.val = EnumConverter.ValueOf<ST_TextAlignment, TextAlignment>(valign);
-        }
-
-        /**
-         * Specifies the border which shall be displayed above a Set of paragraphs
-         * which have the same Set of paragraph border Settings.
-         * <p>
-         * <p>
-         * To determine if any two adjoining paragraphs shall have an individual top
-         * and bottom border or a between border, the Set of borders on the two
-         * adjoining paragraphs are Compared. If the border information on those two
-         * paragraphs is identical for all possible paragraphs borders, then the
-         * between border is displayed. Otherwise, the paragraph shall use its
-         * bottom border and the following paragraph shall use its top border,
-         * respectively. If this border specifies a space attribute, that value
-         * determines the space above the text (ignoring any spacing above) which
-         * should be left before this border is Drawn, specified in points.
-         * </p>
-         * <p>
-         * If this element is omitted on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no between border shall be applied
-         * above identical paragraphs.
-         * </p>
-         * <b>This border can only be a line border.</b>
-         *
-         * @param border
-         * @see Borders for a list of all types of borders
-         */
-        public void SetBorderTop(Borders border)
-        {
-            CT_PBdr ct = GetCTPBrd(true);
-
-            CT_Border pr = (ct != null && ct.IsSetTop()) ? ct.top : ct.AddNewTop();
-            if (border == Borders.NONE)
-                ct.UnsetTop();
-            else
-                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
-        }
-
-        /**
-         * Specifies the border which shall be displayed above a Set of paragraphs
-         * which have the same Set of paragraph border Settings.
-         *
-         * @return paragraphBorder - the top border for the paragraph
-         * @see #setBorderTop(Borders)
-         * @see Borders a list of all types of borders
-         */
-        public Borders GetBorderTop()
-        {
-            CT_PBdr border = GetCTPBrd(false);
-            CT_Border ct = null;
-            if (border != null)
+            get
             {
-                ct = border.top;
+                CT_PPr pr = GetCTPPr();
+                return (pr == null || !pr.IsSetTextAlignment()) ? TextAlignment.AUTO
+                        : EnumConverter.ValueOf<TextAlignment, ST_TextAlignment>(pr.textAlignment.val);
             }
-            ST_Border ptrn = (ct != null) ? ct.val : ST_Border.none;
-            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
+            set 
+            {
+                CT_PPr pr = GetCTPPr();
+                CT_TextAlignment textAlignment = pr.IsSetTextAlignment() ? pr
+                        .textAlignment : pr.AddNewTextAlignment();
+                //STTextAlignment.Enum en = STTextAlignment.Enum
+                //        .forInt(valign.Value);
+                textAlignment.val = EnumConverter.ValueOf<ST_TextAlignment, TextAlignment>(value);
+            }
         }
 
-        /**
- * 
- * <p>
-
- * </p>
- * <p>
- * If this element is omitted on a given paragraph, its value is determined
- * by the Setting previously Set at any level of the style hierarchy (i.e.
- * that previous Setting remains unChanged). If this Setting is never
- * specified in the style hierarchy, then no between border shall be applied
- * below identical paragraphs.
- * </p>
- * <b>This border can only be a line border.</b>
- */
         /// <summary>
-        /// Specifies the border which shall be displayed below a Set of paragraphs
-        /// which have the same Set of paragraph border Settings.
+        /// the top border for the paragraph
         /// </summary>
-        /// <param name="border">a list of all types of borders</param>
-        /// <remarks>
-        ///  To determine if any two adjoining paragraphs shall have an individual top
-        /// and bottom border or a between border, the Set of borders on the two
-        /// adjoining paragraphs are Compared. If the border information on those two
-        /// paragraphs is identical for all possible paragraphs borders, then the
-        /// between border is displayed. Otherwise, the paragraph shall use its
-        /// bottom border and the following paragraph shall use its top border,
-        /// respectively. If this border specifies a space attribute, that value
-        /// determines the space After the bottom of the text (ignoring any space
-        /// below) which should be left before this border is Drawn, specified in
-        /// points.
-        /// </remarks>
-        public void SetBorderBottom(Borders border)
+        public Borders BorderTop
         {
-            CT_PBdr ct = GetCTPBrd(true);
-            CT_Border pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
-            if (border == Borders.NONE)
-                ct.UnsetBottom();
-            else
-                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
+            get
+            {
+                CT_PBdr border = GetCTPBrd(false);
+                CT_Border ct = null;
+                if (border != null)
+                {
+                    ct = border.top;
+                }
+                ST_Border ptrn = (ct != null) ? ct.val : ST_Border.none;
+                return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
+            }
+            set 
+            {
+                CT_PBdr ct = GetCTPBrd(true);
+
+                CT_Border pr = (ct != null && ct.IsSetTop()) ? ct.top : ct.AddNewTop();
+                if (value == Borders.NONE)
+                    ct.UnsetTop();
+                else
+                    pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
+            }
         }
+
+
 
         /// <summary>
         ///Specifies the border which shall be displayed below a Set of
         /// paragraphs which have the same Set of paragraph border Settings.
         /// </summary>
         /// <returns>the bottom border for the paragraph</returns>
-        public Borders GetBorderBottom()
+        public Borders BorderBottom
         {
-            CT_PBdr border = GetCTPBrd(false);
-            CT_Border ct = null;
-            if (border != null)
+            get
             {
-                ct = border.bottom;
+                CT_PBdr border = GetCTPBrd(false);
+                CT_Border ct = null;
+                if (border != null)
+                {
+                    ct = border.bottom;
+                }
+                ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+                return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
             }
-            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
-            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
-
-        }
-
-        /**
-         * Specifies the border which shall be displayed on the left side of the
-         * page around the specified paragraph.
-         * <p>
-         * To determine if any two adjoining paragraphs should have a left border
-         * which spans the full line height or not, the left border shall be Drawn
-         * between the top border or between border at the top (whichever would be
-         * rendered for the current paragraph), and the bottom border or between
-         * border at the bottom (whichever would be rendered for the current
-         * paragraph).
-         * </p>
-         * <p>
-         * If this element is omitted on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no left border shall be applied.
-         * </p>
-         * <b>This border can only be a line border.</b>
-         *
-         * @param border
-         * @see Borders for a list of all possible borders
-         */
-        public void SetBorderLeft(Borders border)
-        {
-            CT_PBdr ct = GetCTPBrd(true);
-            CT_Border pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
-            if (border == Borders.NONE)
-                ct.UnsetLeft();
-            else
-                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
+            set 
+            {
+                CT_PBdr ct = GetCTPBrd(true);
+                CT_Border pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
+                if (value == Borders.NONE)
+                    ct.UnsetBottom();
+                else
+                    pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
+            }
 
         }
 
@@ -599,49 +484,30 @@ namespace NPOI.XWPF.UserModel
         /// page around the specified paragraph.
         /// </summary>
         /// <returns>the left border for the paragraph</returns>
-        public Borders GetBorderLeft()
+        public Borders BorderLeft
         {
-            CT_PBdr border = GetCTPBrd(false);
-            CT_Border ct = null;
-            if (border != null)
+            get
             {
-                ct = border.left;
+                CT_PBdr border = GetCTPBrd(false);
+                CT_Border ct = null;
+                if (border != null)
+                {
+                    ct = border.left;
+                }
+                ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+                return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
             }
-            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
-            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
+            set 
+            {
+                CT_PBdr ct = GetCTPBrd(true);
+                CT_Border pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
+                if (value == Borders.NONE)
+                    ct.UnsetLeft();
+                else
+                    pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
+            }
         }
 
-        /**
-         * Specifies the border which shall be displayed on the right side of the
-         * page around the specified paragraph.
-         * <p>
-         * To determine if any two adjoining paragraphs should have a right border
-         * which spans the full line height or not, the right border shall be Drawn
-         * between the top border or between border at the top (whichever would be
-         * rendered for the current paragraph), and the bottom border or between
-         * border at the bottom (whichever would be rendered for the current
-         * paragraph).
-         * </p>
-         * <p>
-         * If this element is omitted on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no right border shall be applied.
-         * </p>
-         * <b>This border can only be a line border.</b>
-         *
-         * @param border
-         * @see Borders for a list of all possible borders
-         */
-        public void SetBorderRight(Borders border)
-        {
-            CT_PBdr ct = GetCTPBrd(true);
-            CT_Border pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
-            if (border == Borders.NONE)
-                ct.UnsetRight();
-            else
-                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
-        }
 
         /**
          * Specifies the border which shall be displayed on the right side of the
@@ -651,52 +517,28 @@ namespace NPOI.XWPF.UserModel
          * @see #setBorderRight(Borders)
          * @see Borders for a list of all possible borders
          */
-        public Borders GetBorderRight()
+        public Borders BorderRight
         {
-            CT_PBdr border = GetCTPBrd(false);
-            CT_Border ct = null;
-            if (border != null)
+            get
             {
-                ct = border.right;
+                CT_PBdr border = GetCTPBrd(false);
+                CT_Border ct = null;
+                if (border != null)
+                {
+                    ct = border.right;
+                }
+                ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+                return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
             }
-            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
-            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
-        }
-
-        /**
-         * Specifies the border which shall be displayed between each paragraph in a
-         * Set of paragraphs which have the same Set of paragraph border Settings.
-         * <p>
-         * To determine if any two adjoining paragraphs should have a between border
-         * or an individual top and bottom border, the Set of borders on the two
-         * adjoining paragraphs are Compared. If the border information on those two
-         * paragraphs is identical for all possible paragraphs borders, then the
-         * between border is displayed. Otherwise, each paragraph shall use its
-         * bottom and top border, respectively. If this border specifies a space
-         * attribute, that value is ignored - this border is always located at the
-         * bottom of each paragraph with an identical following paragraph, taking
-         * into account any space After the line pitch.
-         * </p>
-         * <p>
-         * If this element is omitted on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no between border shall be applied
-         * between identical paragraphs.
-         * </p>
-         * <b>This border can only be a line border.</b>
-         *
-         * @param border
-         * @see Borders for a list of all possible borders
-         */
-        public void SetBorderBetween(Borders border)
-        {
-            CT_PBdr ct = GetCTPBrd(true);
-            CT_Border pr = ct.IsSetBetween() ? ct.between : ct.AddNewBetween();
-            if (border == Borders.NONE)
-                ct.UnsetBetween();
-            else
-                pr.val = EnumConverter.ValueOf<ST_Border, Borders>(border);
+            set 
+            {
+                CT_PBdr ct = GetCTPBrd(true);
+                CT_Border pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
+                if (value == Borders.NONE)
+                    ct.UnsetRight();
+                else
+                    pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
+            }
         }
 
         /**
@@ -707,40 +549,28 @@ namespace NPOI.XWPF.UserModel
          * @see #setBorderBetween(Borders)
          * @see Borders for a list of all possible borders
          */
-        public Borders GetBorderBetween()
+        public Borders BorderBetween
         {
-            CT_PBdr border = GetCTPBrd(false);
-            CT_Border ct = null;
-            if (border != null)
+            get
             {
-                ct = border.between;
+                CT_PBdr border = GetCTPBrd(false);
+                CT_Border ct = null;
+                if (border != null)
+                {
+                    ct = border.between;
+                }
+                ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
+                return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
             }
-            ST_Border ptrn = ct != null ? ct.val : ST_Border.none;
-            return EnumConverter.ValueOf<Borders, ST_Border>(ptrn);
-        }
-
-        /**
-         * Specifies that when rendering this document in a paginated
-         * view, the contents of this paragraph are rendered on the start of a new
-         * page in the document.
-         * <p>
-         * If this element is omitted on a given paragraph,
-         * its value is determined by the Setting previously Set at any level of the
-         * style hierarchy (i.e. that previous Setting remains unChanged). If this
-         * Setting is never specified in the style hierarchy, then this property
-         * shall not be applied. Since the paragraph is specified to start on a new
-         * page, it begins page two even though it could have fit on page one.
-         * </p>
-         *
-         * @param pageBreak -
-         *                  bool value
-         */
-        public void SetPageBreak(bool pageBreak)
-        {
-            CT_PPr ppr = GetCTPPr();
-            CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
-                    .pageBreakBefore : ppr.AddNewPageBreakBefore();
-                ct_pageBreak.val =pageBreak;
+            set 
+            {
+                CT_PBdr ct = GetCTPBrd(true);
+                CT_Border pr = ct.IsSetBetween() ? ct.between : ct.AddNewBetween();
+                if (value == Borders.NONE)
+                    ct.UnsetBetween();
+                else
+                    pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
+            }
         }
 
         /**
@@ -772,6 +602,13 @@ namespace NPOI.XWPF.UserModel
                 }
                 return false;
             }
+            set 
+            {
+                CT_PPr ppr = GetCTPPr();
+                CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+                        .pageBreakBefore : ppr.AddNewPageBreakBefore();
+                ct_pageBreak.val = value;
+            }
         }
         
         /**
@@ -798,29 +635,6 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * Specifies the spacing that should be Added After the last line in this
-         * paragraph in the document in line units.
-         * <b>The value of this attribute is
-         * specified in one hundredths of a line.
-         * </b>
-         * <p>
-         * If the AfterAutoSpacing attribute
-         * is also specified, then this attribute value is ignored. If this Setting
-         * is never specified in the style hierarchy, then its value shall be zero
-         * (if needed)
-         * </p>
-         *
-         * @param spaces -
-         *               a positive whole number, whose contents consist of a
-         *               measurement in twentieths of a
-         */
-        public void SetSpacingAfterLines(int spaces)
-        {
-            CT_Spacing spacing = GetCTSpacing(true);
-            //BigInteger bi = new BigInteger("" + spaces);
-            spacing.afterLines = (spaces.ToString());
-        }
 
 
         /**
@@ -830,28 +644,19 @@ namespace NPOI.XWPF.UserModel
          * @return bigint - value representing the spacing After the paragraph
          * @see #setSpacingAfterLines(int)
          */
-        public int GetSpacingAfterLines()
+        public int SpacingAfterLines
         {
-            CT_Spacing spacing = GetCTSpacing(false);
-            return (spacing != null && spacing.IsSetAfterLines()) ? int.Parse(spacing.afterLines) : -1;
-        }
-
-
-        /**
-         * Specifies the spacing that should be Added above the first line in this
-         * paragraph in the document in absolute units.
-         * <p>
-         * If the beforeLines attribute or the beforeAutoSpacing attribute is also
-         * specified, then this attribute value is ignored.
-         * </p>
-         *
-         * @param spaces
-         */
-        public void SetSpacingBefore(int spaces)
-        {
-            CT_Spacing spacing = GetCTSpacing(true);
-            //BigInteger bi = new BigInteger("" + spaces);
-            spacing.before = (ulong)spaces;
+            get
+            {
+                CT_Spacing spacing = GetCTSpacing(false);
+                return (spacing != null && spacing.IsSetAfterLines()) ? int.Parse(spacing.afterLines) : -1;
+            }
+            set 
+            {
+                CT_Spacing spacing = GetCTSpacing(true);
+                //BigInteger bi = new BigInteger("" + spaces);
+                spacing.afterLines = value.ToString();
+            }
         }
 
         /**
@@ -861,30 +666,21 @@ namespace NPOI.XWPF.UserModel
          * @return the spacing that should be Added above the first line
          * @see #setSpacingBefore(int)
          */
-        public int GetSpacingBefore()
+        public int SpacingBefore
         {
-            CT_Spacing spacing = GetCTSpacing(false);
-            return (spacing != null && spacing.IsSetBefore()) ? (int)spacing.before : -1;
+            get
+            {
+                CT_Spacing spacing = GetCTSpacing(false);
+                return (spacing != null && spacing.IsSetBefore()) ? (int)spacing.before : -1;
+            }
+            set 
+            {
+                CT_Spacing spacing = GetCTSpacing(true);
+                //BigInteger bi = new BigInteger("" + spaces);
+                spacing.before = (ulong)value;
+            }
         }
 
-        /**
-         * Specifies the spacing that should be Added before the first line in this
-         * paragraph in the document in line units. <b> The value of this attribute
-         * is specified in one hundredths of a line. </b>
-         * <p>
-         * If the beforeAutoSpacing attribute is also specified, then this attribute
-         * value is ignored. If this Setting is never specified in the style
-         * hierarchy, then its value shall be zero.
-         * </p>
-         *
-         * @param spaces
-         */
-        public void SetSpacingBeforeLines(int spaces)
-        {
-            CT_Spacing spacing = GetCTSpacing(true);
-            //BigInteger bi = new BigInteger("" + spaces);
-            spacing.beforeLines = spaces.ToString();
-        }
 
         /**
          * Specifies the spacing that should be Added before the first line in this paragraph in the
@@ -894,25 +690,20 @@ namespace NPOI.XWPF.UserModel
          * @return the spacing that should be Added before the first line in this paragraph
          * @see #setSpacingBeforeLines(int)
          */
-        public int GetSpacingBeforeLines()
+        public int SpacingBeforeLines
         {
-            CT_Spacing spacing = GetCTSpacing(false);
-            return (spacing != null && spacing.IsSetBeforeLines()) ? int.Parse(spacing.beforeLines) : -1;
-        }
+            get
+            {
+                CT_Spacing spacing = GetCTSpacing(false);
+                return (spacing != null && spacing.IsSetBeforeLines()) ? int.Parse(spacing.beforeLines) : -1;
+            }
 
-
-        /**
-         * Specifies how the spacing between lines is calculated as stored in the
-         * line attribute. If this attribute is omitted, then it shall be assumed to
-         * be of a value auto if a line attribute value is present.
-         *
-         * @param rule
-         * @see LineSpacingRule
-         */
-        public void SetSpacingLineRule(LineSpacingRule rule)
-        {
-            CT_Spacing spacing = GetCTSpacing(true);
-            spacing.lineRule = EnumConverter.ValueOf<ST_LineSpacingRule, LineSpacingRule>(rule);
+            set 
+            {
+                CT_Spacing spacing = GetCTSpacing(true);
+                //BigInteger bi = new BigInteger("" + spaces);
+                spacing.beforeLines = value.ToString();
+            }
         }
 
         /**
@@ -924,11 +715,19 @@ namespace NPOI.XWPF.UserModel
          * @see LineSpacingRule
          * @see #setSpacingLineRule(LineSpacingRule)
          */
-        public LineSpacingRule GetSpacingLineRule()
+        public LineSpacingRule SpacingLineRule
         {
-            CT_Spacing spacing = GetCTSpacing(false);
-            return (spacing != null && spacing.IsSetLineRule()) ? 
-                EnumConverter.ValueOf<LineSpacingRule,ST_LineSpacingRule>(spacing.lineRule) : LineSpacingRule.AUTO;
+            get
+            {
+                CT_Spacing spacing = GetCTSpacing(false);
+                return (spacing != null && spacing.IsSetLineRule()) ?
+                    EnumConverter.ValueOf<LineSpacingRule, ST_LineSpacingRule>(spacing.lineRule) : LineSpacingRule.AUTO;
+            }
+            set 
+            {
+                CT_Spacing spacing = GetCTSpacing(true);
+                spacing.lineRule = EnumConverter.ValueOf<ST_LineSpacingRule, LineSpacingRule>(value);
+            }
         }
 
 
@@ -1146,7 +945,7 @@ namespace NPOI.XWPF.UserModel
          * Get a <b>copy</b> of the currently used CTPPr, if none is used, return
          * a new instance.
          */
-        public CT_PPr GetCTPPr()
+        internal CT_PPr GetCTPPr()
         {
             CT_PPr pr = paragraph.pPr == null ? paragraph.AddNewPPr()
                     : paragraph.pPr;
@@ -1167,13 +966,13 @@ namespace NPOI.XWPF.UserModel
             paragraph.SetRArray(pos, Run);
         }
 
-        /**
-         * this methods parse the paragraph and search for the string searched.
-         * If it Finds the string, it will return true and the position of the String
-         * will be saved in the parameter startPos.
-         * @param searched
-         * @param startPos
-         */
+        /// <summary>
+        /// this methods parse the paragraph and search for the string searched. 
+        /// If it finds the string, it will return true and the position of the String will be saved in the parameter startPos.
+        /// </summary>
+        /// <param name="searched"></param>
+        /// <param name="startPos"></param>
+        /// <returns></returns>
         public TextSegement SearchText(String searched, PositionInParagraph startPos)
         {
 
@@ -1243,11 +1042,11 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
-        /**
-         * insert a new Run in RunArray
-         * @param pos
-         * @return  the inserted run
-         */
+        /// <summary>
+        /// insert a new Run in RunArray
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns>the inserted run</returns>
         public XWPFRun InsertNewRun(int pos)
         {
             if (pos >= 0 && pos <= paragraph.SizeOfRArray())
@@ -1268,36 +1067,35 @@ namespace NPOI.XWPF.UserModel
          */
         public String GetText(TextSegement segment)
         {
-            //int RunBegin = segment.BeginRun;
-            //int textBegin = segment.BeginText;
-            //int charBegin = segment.BeginChar;
-            //int RunEnd = segment.EndRun;
-            //int textEnd = segment.EndText;
-            //int charEnd = segment.EndChar;
-            //StringBuilder out1 = new StringBuilder();
-            //for (int i = RunBegin; i <= RunEnd; i++)
-            //{
-            //    int startText = 0, endText = paragraph.GetRArray(i).TList.Size() - 1;
-            //    if (i == RunBegin)
-            //        startText = textBegin;
-            //    if (i == RunEnd)
-            //        endText = textEnd;
-            //    for (int j = startText; j <= endText; j++)
-            //    {
-            //        String tmpText = paragraph.GetRArray(i).GetTArray(j).StringValue;
-            //        int startChar = 0, endChar = tmpText.Length() - 1;
-            //        if ((j == textBegin) && (i == RunBegin))
-            //            startChar = charBegin;
-            //        if ((j == textEnd) && (i == RunEnd))
-            //        {
-            //            endChar = charEnd;
-            //        }
-            //        out1.Append(tmpText.Substring(startChar, endChar + 1));
+            int RunBegin = segment.BeginRun;
+            int textBegin = segment.BeginText;
+            int charBegin = segment.BeginChar;
+            int RunEnd = segment.EndRun;
+            int textEnd = segment.EndText;
+            int charEnd = segment.EndChar;
+            StringBuilder text = new StringBuilder();
+            for (int i = RunBegin; i <= RunEnd; i++)
+            {
+                int startText = 0, endText = paragraph.GetRList()[i].GetTList().Count - 1;
+                if (i == RunBegin)
+                    startText = textBegin;
+                if (i == RunEnd)
+                    endText = textEnd;
+                for (int j = startText; j <= endText; j++)
+                {
+                    String tmpText = paragraph.GetRList()[i].GetTArray(j).Value;
+                    int startChar = 0, endChar = tmpText.Length - 1;
+                    if ((j == textBegin) && (i == RunBegin))
+                        startChar = charBegin;
+                    if ((j == textEnd) && (i == RunEnd))
+                    {
+                        endChar = charEnd;
+                    }
+                    text.Append(tmpText.Substring(startChar, endChar-startChar+1));
 
-            //    }
-            //}
-            //return out1.ToString();
-            throw new NotImplementedException();
+                }
+            }
+            return text.ToString();
         }
 
         /**

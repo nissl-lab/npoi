@@ -989,7 +989,6 @@ namespace NPOI.XWPF.UserModel
                     }
                     catch (FormatException e)
                     {
-                        //e.PrintStackTrace();
                         Debug.Write(e.StackTrace);
                     }
                 }

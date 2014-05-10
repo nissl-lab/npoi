@@ -6176,12 +6176,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            XmlHelper.WriteAttribute(sw, "priority", this.priority);
-            XmlHelper.WriteAttribute(sw, "stopIfTrue", this.stopIfTrue);
-            XmlHelper.WriteAttribute(sw, "aboveAverage", this.aboveAverage);
-            XmlHelper.WriteAttribute(sw, "percent", this.percent);
-            XmlHelper.WriteAttribute(sw, "bottom", this.bottom);
+            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId, true);
+            XmlHelper.WriteAttribute(sw, "priority", this.priority, true);
+            if(this.stopIfTrue)
+                XmlHelper.WriteAttribute(sw, "stopIfTrue", this.stopIfTrue);
+            if (!this.aboveAverageField)
+                XmlHelper.WriteAttribute(sw, "aboveAverage", this.aboveAverage,true);
+            if (this.percent)
+                XmlHelper.WriteAttribute(sw, "percent", this.percent);
+            if (this.bottom)
+                XmlHelper.WriteAttribute(sw, "bottom", this.bottom);
             if(this.@operator!=null)
                 XmlHelper.WriteAttribute(sw, "operator", this.@operator.ToString());
             XmlHelper.WriteAttribute(sw, "text", this.text);
@@ -6189,7 +6193,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "timePeriod", this.timePeriod.ToString());
             XmlHelper.WriteAttribute(sw, "rank", this.rank);
             XmlHelper.WriteAttribute(sw, "stdDev", this.stdDev);
-            XmlHelper.WriteAttribute(sw, "equalAverage", this.equalAverage);
+            if (equalAverageField)
+                XmlHelper.WriteAttribute(sw, "equalAverage", this.equalAverage);
             sw.Write(">");
             if (this.colorScale != null)
                 this.colorScale.Write(sw, "colorScale");
@@ -6203,7 +6208,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 foreach (String x in this.formula)
                 {
-                    sw.Write(string.Format("<formula>{0}</formula>", x));
+                    sw.Write(string.Format("<formula>{0}</formula>",  XmlHelper.EncodeXml(x)));
                 }
             }
             sw.Write(string.Format("</{0}>", nodeName));
@@ -6212,7 +6217,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public bool IsSetDxfId()
         {
-            return this.dxfId >=0;
+            return this.dxfIdFieldSpecified;
         }
         public void AddFormula(string formula)
         {

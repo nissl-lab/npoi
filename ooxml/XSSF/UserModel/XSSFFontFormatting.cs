@@ -82,8 +82,9 @@ namespace NPOI.XSSF.UserModel
                 _font.SetColorArray(null);
                 if (value != -1)
                 {
-                    _font.AddNewColor().indexed = (uint)(value);
-                    _font.AddNewColor().indexedSpecified = true;
+                    var clr=_font.AddNewColor();
+                    clr.indexed = (uint)(value);
+                    clr.indexedSpecified = true;
                 }
             }
         }

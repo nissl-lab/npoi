@@ -33,7 +33,7 @@ namespace NPOI.XSSF.UserModel
         private XSSFSheet _sh;
 
         /*package*/
-        internal XSSFConditionalFormattingRule(XSSFSheet sh)
+        public XSSFConditionalFormattingRule(XSSFSheet sh)
         {
             _cfRule = new CT_CfRule();
             _sh = sh;
