@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "POIFS", "POIFS", "{53F9DAC5-B742-4C7D-AEEA-4E308C4CD86F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkbookAndSheet", "WorkbookAndSheet", "{1F00CC11-B4C9-4061-AC73-4B54DDD55C3F}"

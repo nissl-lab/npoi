@@ -19,7 +19,8 @@ namespace CreateCustomProperties
             POIXMLProperties props = workbook.GetProperties();
             props.CoreProperties.Creator = "NPOI 2.0.5";
             props.CoreProperties.Created = DateTime.Now;
-            props.CustomProperties.AddProperty("NPOI Team", "Hello World!");
+            if (!props.CustomProperties.Contains("NPOI Team"))
+                props.CustomProperties.AddProperty("NPOI Team", "Hello World!");
 
             FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);
