@@ -77,7 +77,6 @@
   <ItemGroup>
     <Content Include="DownloadExcel.aspx" />
     <Content Include="favicon.ico" />
-    <Content Include="packages.config" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
