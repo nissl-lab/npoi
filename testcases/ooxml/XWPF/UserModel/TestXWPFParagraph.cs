@@ -82,13 +82,13 @@ namespace NPOI.XWPF.UserModel
         }
 
         [Test]
-        public void TestSetGetBorderTop()
+        public void TestSetBorderTop()
         {
             //new clean instance of paragraph
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual(ST_Border.none, EnumConverter.ValueOf<ST_Border, Borders>(p.GetBorderTop()));
+            Assert.AreEqual(ST_Border.none, EnumConverter.ValueOf<ST_Border, Borders>(p.BorderTop));
 
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
@@ -99,28 +99,28 @@ namespace NPOI.XWPF.UserModel
             borderTop.val = (ST_Border.@double);
             bdr.top = (borderTop);
 
-            Assert.AreEqual(Borders.DOUBLE, p.GetBorderTop());
-            p.SetBorderTop (Borders.SINGLE);
+            Assert.AreEqual(Borders.DOUBLE, p.BorderTop);
+            p.BorderTop = (Borders.SINGLE);
             Assert.AreEqual(ST_Border.single, borderTop.val);
         }
 
         [Test]
-        public void TestSetGetAlignment()
+        public void TestSetAlignment()
         {
             //new clean instance of paragraph
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual(ParagraphAlignment.LEFT, p.GetAlignment());
+            Assert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
 
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
             CT_Jc align = ppr.AddNewJc();
             align.val = (ST_Jc.center);
-            Assert.AreEqual(ParagraphAlignment.CENTER, p.GetAlignment());
+            Assert.AreEqual(ParagraphAlignment.CENTER, p.Alignment);
 
-            p.SetAlignment (ParagraphAlignment.BOTH);
+            p.Alignment = (ParagraphAlignment.BOTH);
             Assert.AreEqual((int)ST_Jc.both, (int)ppr.jc.val);
         }
 
@@ -153,11 +153,11 @@ namespace NPOI.XWPF.UserModel
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            Assert.AreEqual(LineSpacingRule.AUTO, p.GetSpacingLineRule());
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
 
             CT_Spacing spacing = ppr.AddNewSpacing();
             spacing.lineRule = (ST_LineSpacingRule.atLeast);
-            Assert.AreEqual(LineSpacingRule.ATLEAST, p.GetSpacingLineRule());
+            Assert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
 
             p.SpacingAfter = 100;
             Assert.AreEqual(100, (int)spacing.after);
@@ -196,9 +196,9 @@ namespace NPOI.XWPF.UserModel
 
             CT_TextAlignment txtAlign = ppr.AddNewTextAlignment();
             txtAlign.val = (ST_TextAlignment.center);
-            Assert.AreEqual(TextAlignment.CENTER, p.GetVerticalAlignment());
+            Assert.AreEqual(TextAlignment.CENTER, p.VerticalAlignment);
 
-            p.SetVerticalAlignment (TextAlignment.BOTTOM);
+            p.VerticalAlignment= (TextAlignment.BOTTOM);
             Assert.AreEqual(ST_TextAlignment.bottom, ppr.textAlignment.val);
         }
 
@@ -233,7 +233,7 @@ namespace NPOI.XWPF.UserModel
             pageBreak.val = false;
             Assert.AreEqual(false, p.IsPageBreak);
 
-            p.SetPageBreak (true);
+            p.IsPageBreak = (true);
             Assert.AreEqual(true, ppr.pageBreakBefore.val);
         }
 
