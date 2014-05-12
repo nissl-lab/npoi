@@ -80,8 +80,8 @@ namespace NPOI.XWPF.UserModel
                 pictTextObjs.Add(pic);
             foreach (CT_Drawing draw in drawingList)
                 pictTextObjs.Add(draw);
-            foreach (object o in pictTextObjs)
-            {
+            //foreach (object o in pictTextObjs)
+            //{
                 //todo:: imlement this
                 //XmlObject[] t = o.SelectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' .//w:t");
                 //for (int m = 0; m < t.Length; m++)
@@ -97,7 +97,7 @@ namespace NPOI.XWPF.UserModel
                 //        }
                 //    }
                 //}
-            }
+            //}
             pictureText = text.ToString();
 
             // Do we have any embedded pictures?
@@ -711,11 +711,12 @@ namespace NPOI.XWPF.UserModel
                 //inline.Set((xml));
 
                 XmlDocument xmlDoc = new XmlDocument();
-                XmlElement el = xmlDoc.CreateElement("pic", "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
+                //XmlElement el = xmlDoc.CreateElement("pic", "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
 
                 inline.graphic = new CT_GraphicalObject();
                 inline.graphic.graphicData = new CT_GraphicalObjectData();
-                inline.graphic.graphicData.AddPicElement(el.OuterXml);
+                inline.graphic.graphicData.uri = "http://schemas.openxmlformats.org/drawingml/2006/picture";
+
 
                 // Setup the inline
                 inline.distT = (0);
@@ -735,9 +736,7 @@ namespace NPOI.XWPF.UserModel
                 extent.cy = (height);
 
                 // Grab the picture object
-                CT_GraphicalObject graphic = inline.graphic;
-                CT_GraphicalObjectData graphicData = graphic.graphicData;
-                NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pic = GetCTPictures(graphicData)[(0)];
+                NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pic = new OpenXmlFormats.Dml.Picture.CT_Picture();
 
                 // Set it up
                 NPOI.OpenXmlFormats.Dml.Picture.CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();
@@ -772,6 +771,16 @@ namespace NPOI.XWPF.UserModel
                 prstGeom.prst = (ST_ShapeType.rect);
                 prstGeom.AddNewAvLst();
 
+                using (var ms = new MemoryStream())
+                {
+                    StreamWriter sw = new StreamWriter(ms);
+                    pic.Write(sw, "pic:pic");
+                    sw.Flush();
+                    ms.Position = 0;
+                    var sr = new StreamReader(ms);
+                    var picXml = sr.ReadToEnd();
+                    inline.graphic.graphicData.AddPicElement(picXml);
+                }
                 // Finish up
                 XWPFPicture xwpfPicture = new XWPFPicture(pic, this);
                 pictures.Add(xwpfPicture);

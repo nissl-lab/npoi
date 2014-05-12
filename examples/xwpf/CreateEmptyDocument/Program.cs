@@ -13,9 +13,10 @@ namespace CreateEmptyDocument
         {
             XWPFDocument doc = new XWPFDocument();
             doc.CreateParagraph();
-            FileStream sw = File.OpenWrite("blank.docx");
-            doc.Write(sw);
-            sw.Close();
+            using (FileStream sw = File.Create("blank.docx"))
+            {
+                doc.Write(sw);
+            }
         }
     }
 }
