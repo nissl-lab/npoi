@@ -275,6 +275,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.themeField = value;
+                this.themeSpecifiedField = true;
             }
         }
         bool themeSpecifiedField;
@@ -357,12 +358,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "auto", this.auto,false);
-            XmlHelper.WriteAttribute(sw, "indexed", this.indexed, true);
-            XmlHelper.WriteAttribute(sw, "rgb", this.rgb);
-            XmlHelper.WriteAttribute(sw, "theme", this.theme);
-            XmlHelper.WriteAttribute(sw, "tint", this.tint);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (indexedSpecified)
+                XmlHelper.WriteAttribute(sw, "indexed", this.indexed, true);
+            if(rgbSpecified)
+                XmlHelper.WriteAttribute(sw, "rgb", this.rgb);
+            if (themeSpecified)
+                XmlHelper.WriteAttribute(sw, "theme", this.theme, true);
+            if(tintSpecified)
+                XmlHelper.WriteAttribute(sw, "tint", this.tint);
+            sw.Write("/>");
         }
 
 

@@ -94,17 +94,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "horizontal", this.horizontal.ToString());
+            if(this.horizontal!= ST_HorizontalAlignment.general)
+                XmlHelper.WriteAttribute(sw, "horizontal", this.horizontal.ToString());
             XmlHelper.WriteAttribute(sw, "vertical", this.vertical.ToString());
             XmlHelper.WriteAttribute(sw, "textRotation", this.textRotation);
-            XmlHelper.WriteAttribute(sw, "wrapText", this.wrapText);
+            if(this.wrapText)
+                XmlHelper.WriteAttribute(sw, "wrapText", this.wrapText);
             XmlHelper.WriteAttribute(sw, "indent", this.indent);
             XmlHelper.WriteAttribute(sw, "relativeIndent", this.relativeIndent);
-            XmlHelper.WriteAttribute(sw, "justifyLastLine", this.justifyLastLine);
-            XmlHelper.WriteAttribute(sw, "shrinkToFit", this.shrinkToFit);
+            if (justifyLastLine)
+                XmlHelper.WriteAttribute(sw, "justifyLastLine", this.justifyLastLine);
+            if(shrinkToFit)
+                XmlHelper.WriteAttribute(sw, "shrinkToFit", this.shrinkToFit);
             XmlHelper.WriteAttribute(sw, "readingOrder", this.readingOrder);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         public bool IsSetHorizontal()

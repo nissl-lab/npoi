@@ -28,8 +28,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     {
         sw.Write(string.Format("<{0}", nodeName));
         XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-        sw.Write(">");
-        sw.Write(string.Format("</{0}>", nodeName));
+        sw.Write("/>");
     }
 
 

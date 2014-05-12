@@ -67,13 +67,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "patternType", this.patternType.ToString());
-            sw.Write(">");
-            if (this.fgColor != null)
-                this.fgColor.Write(sw, "fgColor");
-            if (this.bgColor != null)
-                this.bgColor.Write(sw, "bgColor");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if(this.patternType!= ST_PatternType.none)
+                XmlHelper.WriteAttribute(sw, "patternType", this.patternType.ToString());
+            if (this.fgColor == null && this.bgColor == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.fgColor != null)
+                    this.fgColor.Write(sw, "fgColor");
+                if (this.bgColor != null)
+                    this.bgColor.Write(sw, "bgColor");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         [XmlElement]

@@ -106,23 +106,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId, true);
             XmlHelper.WriteAttribute(sw, "fillId", this.fillId, true);
             XmlHelper.WriteAttribute(sw, "borderId", this.borderId, true);
-            XmlHelper.WriteAttribute(sw, "xfId", this.xfId,true);
+            if(this.applyFill)
+                XmlHelper.WriteAttribute(sw, "xfId", this.xfId, true);
             XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix,false);
 			XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
-			XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat, false);
-			XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
-			XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill, false);
-			XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder, false);
-			XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment, false);
-			XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection, false);
-            sw.Write(">");
-            if (this.alignment != null)
-                this.alignment.Write(sw, "alignment");
-            if (this.protection != null)
-                this.protection.Write(sw, "protection");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+
+            XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
+            if (this.borderId == 0)
+                XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder, true);
+            XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
+            XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill, true);
+            XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment, true);
+            XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection, true);
+            if (this.alignment == null && this.protection == null && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.alignment != null)
+                    this.alignment.Write(sw, "alignment");
+                if (this.protection != null)
+                    this.protection.Write(sw, "protection");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         //public override string ToString()

@@ -40,10 +40,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "locked", this.locked);
+            if(this.locked)
+                XmlHelper.WriteAttribute(sw, "locked", this.locked);
             XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

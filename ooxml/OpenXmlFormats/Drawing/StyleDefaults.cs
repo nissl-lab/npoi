@@ -62,7 +62,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             sw.Write(">");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "a:spPr");
             if (this.bodyPr != null)
                 this.bodyPr.Write(sw, "bodyPr");
             if (this.lstStyle != null)

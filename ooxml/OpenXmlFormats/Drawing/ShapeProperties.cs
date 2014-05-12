@@ -727,11 +727,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "id", this.id);
+            sw.Write(string.Format("<pic:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "descr", this.descr);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            if(this.hidden)
+                XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
             sw.Write(">");
             if (this.hlinkClick != null)
                 this.hlinkClick.Write(sw, "hlinkClick");
@@ -739,7 +740,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.hlinkHover.Write(sw, "hlinkHover");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write(string.Format("</pic:{0}>", nodeName));
         }
 
         private CT_Hyperlink hlinkClickField = null;
@@ -1090,7 +1091,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(string.Format("<pic:{0}", nodeName));
             if (!preferRelativeResize)
                 XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
             sw.Write(">");
@@ -1098,7 +1099,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.picLocks.Write(sw, "picLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write(string.Format("</pic:{0}>", nodeName));
         }
 
         private CT_PictureLocking picLocksField = null;
@@ -2087,8 +2088,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
+            sw.Write(string.Format("<{0}", nodeName));
+            if(this.bwMode!= ST_BlackWhiteMode.none)
+                XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "xfrm");
@@ -2103,7 +2105,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.gradFill != null)
                 this.gradFill.Write(sw, "gradFill");
             if (this.blipFill != null)
-                this.blipFill.Write(sw, "blipFill");
+                this.blipFill.Write(sw, "a:blipFill");
             if (this.pattFill != null)
                 this.pattFill.Write(sw, "pattFill");
             if (this.grpFill != null)
@@ -2120,7 +2122,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.sp3d.Write(sw, "sp3d");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
     }
@@ -2195,7 +2197,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
+            if(this.bwMode!= ST_BlackWhiteMode.none)
+                XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "xfrm");
@@ -2206,7 +2209,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.gradFill != null)
                 this.gradFill.Write(sw, "gradFill");
             if (this.blipFill != null)
-                this.blipFill.Write(sw, "blipFill");
+                this.blipFill.Write(sw, "a:blipFill");
             if (this.pattFill != null)
                 this.pattFill.Write(sw, "pattFill");
             if (this.grpFill != null)

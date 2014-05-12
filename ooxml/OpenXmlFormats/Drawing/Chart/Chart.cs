@@ -3833,8 +3833,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("<c:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode);
             XmlHelper.WriteAttribute(sw, "sourceLinked", this.sourceLinked, false);
-            sw.Write(">");
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -12231,7 +12230,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.gradFill != null)
                 this.gradFill.Write(sw, "gradFill");
             if (this.blipFill != null)
-                this.blipFill.Write(sw, "blipFill");
+                this.blipFill.Write(sw, "a:blipFill");
             if (this.pattFill != null)
                 this.pattFill.Write(sw, "pattFill");
             if (this.grpFill != null)

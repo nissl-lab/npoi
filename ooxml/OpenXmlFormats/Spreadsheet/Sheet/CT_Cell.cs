@@ -66,24 +66,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            
+
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "s", this.s);
-            if(this.t!= ST_CellType.n)
+            if (this.t != ST_CellType.n)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "cm", this.cm);
             XmlHelper.WriteAttribute(sw, "vm", this.vm);
             XmlHelper.WriteAttribute(sw, "ph", this.ph, false);
-            sw.Write(">");
-            if (this.f != null)
-                this.f.Write(sw, "f");
-            if (this.v != null)
-                sw.Write(string.Format("<v>{0}</v>", this.v));
-            if (this.@is != null)
-                this.@is.Write(sw, "is");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.f == null
+                && this.v == null
+                && this.@is == null
+                && this.extLstField == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.f != null)
+                    this.f.Write(sw, "f");
+                if (this.v != null)
+                    sw.Write(string.Format("<v>{0}</v>", this.v));
+                if (this.@is != null)
+                    this.@is.Write(sw, "is");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
 

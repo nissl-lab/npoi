@@ -265,6 +265,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.bestFit = XmlHelper.ReadBool(node.Attributes["bestFit"]);
+            ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes["outlineLevel"]);
             ctObj.customWidth = XmlHelper.ReadBool(node.Attributes["customWidth"]);
             ctObj.phonetic = XmlHelper.ReadBool(node.Attributes["phonetic"]);
             ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);
@@ -286,8 +287,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "phonetic", this.phonetic,false);
             XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
             XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed,false);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
 

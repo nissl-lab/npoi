@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml.Picture
@@ -56,11 +57,23 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             spPrField = new CT_ShapeProperties();
             return this.spPrField;
         }
-
-        //public void Set(CT_Picture pict)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0} xmlns:pic=\"{1}\">", nodeName, "http://schemas.openxmlformats.org/drawingml/2006/picture"));
+            if (this.nvPicPr != null)
+            {
+                this.nvPicPr.Write(sw, "pic:nvPicPr");
+            }
+            if (this.blipFill != null)
+            {
+                this.blipFill.Write(sw, "pic:blipFill");
+            }
+            if (this.spPr != null)
+            {
+                this.spPr.Write(sw, "pic:spPr");
+            }
+            sw.Write(string.Format("</{0}>",nodeName));
+        }
 
     }
 
@@ -99,6 +112,20 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
         {
             get { return this.cNvPicPrField; }
             set { this.cNvPicPrField = value; }
+        }
+
+        internal void Write(StreamWriter sw, string p)
+        {
+            sw.Write(string.Format("<{0}>",p));
+            if (this.cNvPr!=null)
+            {
+                this.cNvPr.Write(sw, "cNvPr");
+            }
+            if (this.cNvPicPr != null)
+            {
+                this.cNvPicPr.Write(sw, "cNvPicPr");
+            }
+            sw.Write(string.Format("</{0}>", p));
         }
     }
 
