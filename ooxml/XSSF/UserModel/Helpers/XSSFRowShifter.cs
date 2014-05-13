@@ -165,6 +165,12 @@ namespace NPOI.XSSF.UserModel.Helpers
                         if (ShiftedFormula != null)
                         {
                             f.Value = (ShiftedFormula);
+                            if (f.t == ST_CellFormulaType.shared)
+                            {
+                                int si = (int)f.si;
+                                CT_CellFormula sf = ((XSSFSheet)row.Sheet).GetSharedFormula(si);
+                                sf.Value = (ShiftedFormula);
+                            }
                         }
                     }
 

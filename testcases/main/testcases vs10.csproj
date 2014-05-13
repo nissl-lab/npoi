@@ -152,6 +152,7 @@
     <Compile Include="POIFS\Storage\TestHeaderBlockWriting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SS\Formula\Atp\TestDateParser.cs" />
+    <Compile Include="SS\Formula\Atp\TestIfError.cs" />
     <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
