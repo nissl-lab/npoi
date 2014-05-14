@@ -281,17 +281,17 @@ namespace TestCases.SS.UserModel
 
             sheet1.ShiftRows(0, 1, 2);  //shift down the top row on Sheet1.
             name1 = wb.GetNameAt(0);
-            Assert.AreEqual("Sheet1!$A$3+Sheet1!$B$3", name1.RefersToFormula);
+            Assert.AreEqual( name1.RefersToFormula,"Sheet1!$A$3+Sheet1!$B$3");
 
             name2 = wb.GetNameAt(1);
-            Assert.AreEqual("Sheet1!$A$3", name2.RefersToFormula);
+            Assert.AreEqual( name2.RefersToFormula,"Sheet1!$A$3");
 
             //name3 and name4 refer to Sheet2 and should not be affected
             name3 = wb.GetNameAt(2);
-            Assert.AreEqual("Sheet2!$A$1", name3.RefersToFormula);
+            Assert.AreEqual( name3.RefersToFormula,"Sheet2!$A$1");
 
             name4 = wb.GetNameAt(3);
-            Assert.AreEqual("A1", name4.RefersToFormula);
+            Assert.AreEqual( name4.RefersToFormula,"A1");
         }
         [Test]
         public void TestShiftWithMergedRegions()
@@ -302,13 +302,13 @@ namespace TestCases.SS.UserModel
             row.CreateCell(0).SetCellValue(1.1);
             row.CreateCell(1).SetCellValue(2.2);
             CellRangeAddress region = new CellRangeAddress(0, 0, 0, 2);
-            Assert.AreEqual("A1:C1", region.FormatAsString());
+            Assert.AreEqual( region.FormatAsString(),"A1:C1");
 
             sheet.AddMergedRegion(region);
 
             sheet.ShiftRows(0, 1, 2);
             region = sheet.GetMergedRegion(0);
-            Assert.AreEqual("A3:C3", region.FormatAsString());
+            Assert.AreEqual( region.FormatAsString(),"A3:C3");
         }
 
         /**
@@ -387,5 +387,62 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
             Assert.AreEqual(expectedFormula, cell.CellFormula);
         }
+        [Test]
+        public void TestShiftSharedFormulasBug54206() {
+        IWorkbook wb = _testDataProvider.OpenSampleWorkbook("54206." + _testDataProvider.StandardFileNameExtension);
+
+        ISheet sheet = wb.GetSheetAt(0);
+        Assert.AreEqual( sheet.GetRow(3).GetCell(6).CellFormula,"SUMIF($B$19:$B$82,$B4,G$19:G$82)");
+        Assert.AreEqual( sheet.GetRow(3).GetCell(7).CellFormula,"SUMIF($B$19:$B$82,$B4,H$19:H$82)");
+        Assert.AreEqual( sheet.GetRow(3).GetCell(8).CellFormula,"SUMIF($B$19:$B$82,$B4,I$19:I$82)");
+
+        Assert.AreEqual( sheet.GetRow(14).GetCell(6).CellFormula,"SUMIF($B$19:$B$82,$B15,G$19:G$82)");
+        Assert.AreEqual( sheet.GetRow(14).GetCell(7).CellFormula,"SUMIF($B$19:$B$82,$B15,H$19:H$82)");
+        Assert.AreEqual( sheet.GetRow(14).GetCell(8).CellFormula,"SUMIF($B$19:$B$82,$B15,I$19:I$82)");
+
+        // now the whole block G4L:15
+        for(int i = 3; i <= 14; i++){
+            for(int j = 6; j <= 8; j++){
+                String col = CellReference.ConvertNumToColString(j);
+                String expectedFormula = "SUMIF($B$19:$B$82,$B"+(i+1)+","+col+"$19:"+col+"$82)";
+                Assert.AreEqual(expectedFormula, sheet.GetRow(i).GetCell(j).CellFormula);
+            }
+        }
+
+        Assert.AreEqual( sheet.GetRow(23).GetCell(9).CellFormula,"SUM(G24:I24)");
+        Assert.AreEqual( sheet.GetRow(24).GetCell(9).CellFormula,"SUM(G25:I25)");
+        Assert.AreEqual( sheet.GetRow(25).GetCell(9).CellFormula,"SUM(G26:I26)");
+
+        sheet.ShiftRows(24, sheet.LastRowNum, 4, true, false);
+
+        Assert.AreEqual( sheet.GetRow(3).GetCell(6).CellFormula,"SUMIF($B$19:$B$86,$B4,G$19:G$86)");
+        Assert.AreEqual( sheet.GetRow(3).GetCell(7).CellFormula,"SUMIF($B$19:$B$86,$B4,H$19:H$86)");
+        Assert.AreEqual( sheet.GetRow(3).GetCell(8).CellFormula,"SUMIF($B$19:$B$86,$B4,I$19:I$86)");
+
+        Assert.AreEqual( sheet.GetRow(14).GetCell(6).CellFormula,"SUMIF($B$19:$B$86,$B15,G$19:G$86)");
+        Assert.AreEqual( sheet.GetRow(14).GetCell(7).CellFormula,"SUMIF($B$19:$B$86,$B15,H$19:H$86)");
+        Assert.AreEqual( sheet.GetRow(14).GetCell(8).CellFormula,"SUMIF($B$19:$B$86,$B15,I$19:I$86)");
+
+        // now the whole block G4L:15
+        for(int i = 3; i <= 14; i++){
+            for(int j = 6; j <= 8; j++){
+                String col = CellReference.ConvertNumToColString(j);
+                String expectedFormula = "SUMIF($B$19:$B$86,$B"+(i+1)+","+col+"$19:"+col+"$86)";
+                Assert.AreEqual(expectedFormula, sheet.GetRow(i).GetCell(j).CellFormula);
+            }
+        }
+
+        Assert.AreEqual( sheet.GetRow(23).GetCell(9).CellFormula,"SUM(G24:I24)");
+
+        // shifted rows
+        Assert.IsTrue( sheet.GetRow(24) == null || sheet.GetRow(24).GetCell(9) == null);
+        Assert.IsTrue(sheet.GetRow(25) == null || sheet.GetRow(25).GetCell(9) == null);
+        Assert.IsTrue(sheet.GetRow(26) == null || sheet.GetRow(26).GetCell(9) == null);
+        Assert.IsTrue(sheet.GetRow(27) == null || sheet.GetRow(27).GetCell(9) == null);
+
+        Assert.AreEqual( sheet.GetRow(28).GetCell(9).CellFormula,"SUM(G29:I29)");
+        Assert.AreEqual( sheet.GetRow(29).GetCell(9).CellFormula,"SUM(G30:I30)");
+
+    }
     }
 }

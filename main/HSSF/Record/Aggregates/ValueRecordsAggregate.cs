@@ -312,11 +312,13 @@ namespace NPOI.HSSF.Record.Aggregates
                     CellValueRecordInterface cell = rowCells[j];
                     if (cell is FormulaRecordAggregate)
                     {
-                        FormulaRecord fr = ((FormulaRecordAggregate)cell).FormulaRecord;
-                        Ptg[] ptgs = fr.ParsedExpression; // needs clone() inside this getter?
+                        FormulaRecordAggregate fra = (FormulaRecordAggregate)cell;
+                        Ptg[] ptgs = fra.FormulaTokens; // needs clone() inside this getter?
+                        Ptg[] ptgs2 = ((FormulaRecordAggregate)cell).FormulaRecord.ParsedExpression; // needs clone() inside this getter?
+
                         if (shifter.AdjustFormula(ptgs, currentExternSheetIndex))
                         {
-                            fr.ParsedExpression = (ptgs);
+                            fra.SetParsedExpression(ptgs);
                         }
                     }
                 }

@@ -282,7 +282,9 @@ namespace NPOI.POIFS.FileSystem
             {
                 ReadBAT(fatAt, loopDetector);
             }
-
+            // Work out how many FAT blocks remain in the XFATs
+            int remainingFATs = _header.BATCount - _header.BATArray.Length;
+       
             // Now read the XFAT blocks, and the FATs within them
             BATBlock xfat;
             int nextAt = _header.XBATIndex;
@@ -294,13 +296,15 @@ namespace NPOI.POIFS.FileSystem
                 xfat.OurBlockIndex = nextAt;
                 nextAt = xfat.GetValueAt(bigBlockSize.GetXBATEntriesPerBlock());
                 _xbat_blocks.Add(xfat);
-
-                for (int j = 0; j < bigBlockSize.GetXBATEntriesPerBlock(); j++)
+                // Process all the (used) FATs from this XFAT
+                int xbatFATs = Math.Min(remainingFATs, bigBlockSize.GetXBATEntriesPerBlock());
+                for(int j=0; j<xbatFATs; j++) 
                 {
                     int fatAt = xfat.GetValueAt(j);
                     if (fatAt == POIFSConstants.UNUSED_BLOCK || fatAt == POIFSConstants.END_OF_CHAIN) break;
                     ReadBAT(fatAt, loopDetector);
                 }
+                remainingFATs -= xbatFATs;
             }
 
             // We're now able to load steams

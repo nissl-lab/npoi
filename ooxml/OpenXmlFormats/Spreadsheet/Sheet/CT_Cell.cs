@@ -141,7 +141,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return isField != null;
         }
-
+        public bool IsSetR()
+        {
+            return rField != null;
+        }
         public void unsetF()
         {
             this.fField = null;
@@ -165,7 +168,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.isField = null;
         }
-
+        public void unsetR()
+        {
+            this.rField = null;
+        }
         [XmlElement]
         public CT_CellFormula f
         {
