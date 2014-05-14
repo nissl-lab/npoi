@@ -18,12 +18,6 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-
-
-
-
-
-
     using NUnit.Framework;
 
     using NPOI.XWPF;

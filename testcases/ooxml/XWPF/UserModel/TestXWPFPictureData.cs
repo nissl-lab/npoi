@@ -147,10 +147,5 @@ namespace NPOI.XWPF.UserModel
                 }
             }
         }
-
-        private void process(XWPFParagraph paragraph)
-        {
-
-        }
     }
 }

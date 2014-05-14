@@ -6993,7 +6993,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_IconSet ctObj = new CT_IconSet();
             if (node.Attributes["iconSet"] != null)
-                ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), node.Attributes["iconSet"].Value);
+                ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), "Item"+node.Attributes["iconSet"].Value);
             ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
             ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
             ctObj.reverse = XmlHelper.ReadBool(node.Attributes["reverse"]);

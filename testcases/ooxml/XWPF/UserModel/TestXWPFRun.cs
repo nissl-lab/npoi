@@ -123,9 +123,9 @@ namespace NPOI.XWPF.UserModel
             rpr.AddNewVertAlign().val = (ST_VerticalAlignRun.subscript);
 
             XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(VerticalAlign.SUBSCRIPT, run.GetSubscript());
+            Assert.AreEqual(VerticalAlign.SUBSCRIPT, run.Subscript);
 
-            run.SetSubscript(VerticalAlign.BASELINE);
+            run.Subscript = (VerticalAlign.BASELINE);
             Assert.AreEqual(ST_VerticalAlignRun.baseline, rpr.vertAlign.val);
         }
 
@@ -137,9 +137,9 @@ namespace NPOI.XWPF.UserModel
             rpr.AddNewRFonts().ascii = ("Times New Roman");
 
             XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual("Times New Roman", run.GetFontFamily());
+            Assert.AreEqual("Times New Roman", run.FontFamily);
 
-            run.SetFontFamily("Verdana");
+            run.FontFamily = ("Verdana");
             Assert.AreEqual("Verdana", rpr.rFonts.ascii);
         }
 
@@ -153,7 +153,7 @@ namespace NPOI.XWPF.UserModel
             XWPFRun run = new XWPFRun(ctRun, p);
             Assert.AreEqual(7, run.FontSize);
 
-            run.SetFontSize(24);
+            run.FontSize = (24);
             Assert.AreEqual(48, (int)rpr.sz.val);
         }
 
@@ -419,7 +419,7 @@ namespace NPOI.XWPF.UserModel
                         String text = run.GetText(0);
                         if (text != null)
                         {
-                            run.SetFontFamily("Times New Roman");
+                            run.FontFamily = ("Times New Roman");
                         }
                     }
                 }
