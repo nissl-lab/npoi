@@ -8,14 +8,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ScatterChart
+namespace LineChart
 {
     class Program
     {
         static void Main(string[] args)
         {
             IWorkbook wb = new XSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("Sheet 1");
+            ISheet sheet = wb.CreateSheet("linechart");
             int NUM_OF_ROWS = 3;
             int NUM_OF_COLUMNS = 10;
 
@@ -37,11 +37,12 @@ namespace ScatterChart
 
             IChart chart = drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();
-            legend.Position = (LegendPosition.TopRight);
+            legend.Position = LegendPosition.TopRight;
 
-            IScatterChartData<double, double> data = chart.GetChartDataFactory().CreateScatterChartData<double, double>();
+            ILineChartData<double, double> data = chart.GetChartDataFactory().CreateLineChartData<double, double>();
 
-            IValueAxis bottomAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Bottom);
+            // Use a category axis for the bottom axis.
+            IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateCategoryAxis(AxisPosition.Bottom);
             IValueAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Left);
             leftAxis.SetCrosses(AxisCrosses.AutoZero);
 
@@ -54,12 +55,13 @@ namespace ScatterChart
             s1.SetTitle("title1");
             var s2 = data.AddSerie(xs, ys2);
             s2.SetTitle("title2");
+
             chart.Plot(data, bottomAxis, leftAxis);
 
-            // Write the output to a file
-            FileStream sw = File.Create("test.xlsx");
-            wb.Write(sw);
-            sw.Close();
+            using (FileStream fs =File.Create("test.xlsx"))
+            {
+                wb.Write(fs);
+            }
         }
     }
 }
