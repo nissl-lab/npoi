@@ -614,8 +614,12 @@
     <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
+    <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartSerie.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartSerie.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />

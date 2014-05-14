@@ -305,6 +305,36 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public CT_UnsignedInt AddNewIdx()
+        {
+            this.idxField = new CT_UnsignedInt();
+            return this.idxField;
+        }
+
+        public CT_UnsignedInt AddNewOrder()
+        {
+            this.orderField = new CT_UnsignedInt();
+            return this.orderField;
+        }
+
+        public CT_Marker AddNewMarker()
+        {
+            this.markerField = new CT_Marker();
+            return this.markerField;
+        }
+
+        public CT_AxDataSource AddNewCat()
+        {
+            this.catField = new CT_AxDataSource();
+            return this.catField;
+        }
+
+        public CT_NumDataSource AddNewVal()
+        {
+            this.valField = new CT_NumDataSource();
+            return this.valField;
+        }
     }
 
 
@@ -1128,6 +1158,32 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_LineSer AddNewSer()
+        {
+            CT_LineSer newSer = new  CT_LineSer();
+            if (this.serField == null)
+            {
+                this.serField = new List<CT_LineSer>();
+            }
+            this.serField.Add(newSer);
+            return newSer;
+        }
+
+        public CT_Boolean AddNewVaryColors()
+        {
+            this.varyColorsField = new CT_Boolean();
+            return this.varyColorsField;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            CT_UnsignedInt si = new CT_UnsignedInt();
+            if (this.axIdField == null)
+                this.axIdField = new List<CT_UnsignedInt>();
+            axIdField.Add(si);
+            return si;
         }
     }
 

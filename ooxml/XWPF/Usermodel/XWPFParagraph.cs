@@ -324,7 +324,7 @@ namespace NPOI.XWPF.UserModel
                 StringBuilder text = new StringBuilder();
                 foreach (XWPFRun run in runs)
                 {
-                    text.Append(run.GetPictureText());
+                    text.Append(run.PictureText);
                 }
                 return text.ToString();
             }

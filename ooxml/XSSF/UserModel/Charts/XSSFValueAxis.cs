@@ -60,7 +60,20 @@ namespace NPOI.XSSF.UserModel.Charts
             return ToCrossBetween(ctValAx.crossBetween.val);
         }
 
+        protected override CT_Boolean GetDelete()
+        {
+            return ctValAx.delete;
+        }
 
+        protected override CT_TickMark GetMajorCTTickMark()
+        {
+            return ctValAx.majorTickMark;
+        }
+
+        protected override CT_TickMark GetMinorCTTickMark()
+        {
+            return ctValAx.minorTickMark;
+        }
         protected override CT_AxPos GetCTAxPos()
         {
             return ctValAx.axPos;

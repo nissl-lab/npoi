@@ -578,7 +578,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
-            XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            if(rotWithShape)
+                XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
             sw.Write(">");
             if (this.blip != null)
                 this.blip.Write(sw, "blip");

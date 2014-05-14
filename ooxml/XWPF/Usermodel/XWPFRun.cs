@@ -302,9 +302,12 @@ namespace NPOI.XWPF.UserModel
         /**
          * Returns text embedded in pictures
          */
-        public String GetPictureText()
+        public String PictureText
         {
-            return pictureText;
+            get
+            {
+                return pictureText;
+            }
         }
 
         /**
@@ -452,35 +455,22 @@ namespace NPOI.XWPF.UserModel
          * @return VerticalAlign
          * @see VerticalAlign all possible value that could be Applyed to this run
          */
-        public VerticalAlign GetSubscript()
+        public VerticalAlign Subscript
         {
-            CT_RPr pr = run.rPr;
-            return (pr != null && pr.IsSetVertAlign()) ?
-                EnumConverter.ValueOf<VerticalAlign, ST_VerticalAlignRun>(pr.vertAlign.val) : VerticalAlign.BASELINE;
+            get
+            {
+                CT_RPr pr = run.rPr;
+                return (pr != null && pr.IsSetVertAlign()) ?
+                    EnumConverter.ValueOf<VerticalAlign, ST_VerticalAlignRun>(pr.vertAlign.val) : VerticalAlign.BASELINE;
+            }
+            set 
+            {
+                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_VerticalAlignRun ctValign = pr.IsSetVertAlign() ? pr.vertAlign : pr.AddNewVertAlign();
+                ctValign.val = EnumConverter.ValueOf<ST_VerticalAlignRun, VerticalAlign>(value);
+            }
         }
 
-        /**
-         * Specifies the alignment which shall be applied to the contents of this
-         * run.in relation to the default appearance of the run.s text. This allows
-         * the text to be repositioned as subscript or superscript without altering
-         * the font size of the run.properties.
-         * <p/>
-         * If this element is not present, the default value is to leave the
-         * formatting applied at previous level in the style hierarchy. If this
-         * element is never applied in the style hierarchy, then the text shall not
-         * be subscript or superscript relative to the default baseline location for
-         * the contents of this run.
-         * </p>
-         *
-         * @param valign
-         * @see VerticalAlign
-         */
-        public void SetSubscript(VerticalAlign valign)
-        {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-            CT_VerticalAlignRun ctValign = pr.IsSetVertAlign() ? pr.vertAlign : pr.AddNewVertAlign();
-            ctValign.val = EnumConverter.ValueOf<ST_VerticalAlignRun, VerticalAlign>(valign);
-        }
 
         /**
          * Specifies the fonts which shall be used to display the text contents of
@@ -489,26 +479,22 @@ namespace NPOI.XWPF.UserModel
          *
          * @return a string representing the font family
          */
-        public String GetFontFamily()
+        public String FontFamily
         {
-            CT_RPr pr = run.rPr;
-            return (pr != null && pr.IsSetRFonts()) ? pr.rFonts.ascii
-                    : null;
+            get
+            {
+                CT_RPr pr = run.rPr;
+                return (pr != null && pr.IsSetRFonts()) ? pr.rFonts.ascii
+                        : null;
+            }
+            set 
+            {
+                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_Fonts fonts = pr.IsSetRFonts() ? pr.rFonts : pr.AddNewRFonts();
+                fonts.ascii = value;
+            }
         }
 
-        /**
-         * Specifies the fonts which shall be used to display the text contents of
-         * this run. Specifies a font which shall be used to format all characters
-         * in the ASCII range (0 - 127) within the parent run
-         *
-         * @param fontFamily
-         */
-        public void SetFontFamily(String fontFamily)
-        {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-            CT_Fonts fonts = pr.IsSetRFonts() ? pr.rFonts : pr.AddNewRFonts();
-            fonts.ascii=(fontFamily);
-        }
 
         /**
          * Specifies the font size which shall be applied to all non complex script
@@ -523,25 +509,12 @@ namespace NPOI.XWPF.UserModel
 				CT_RPr pr = run.rPr;
 				return (pr != null && pr.IsSetSz()) ? (int)pr.sz.val / 2 : -1;
 			}
-        }
-
-        /**
-         * Specifies the font size which shall be applied to all non complex script
-         * characters in the contents of this run.when displayed.
-         * <p/>
-         * If this element is not present, the default value is to leave the value
-         * applied at previous level in the style hierarchy. If this element is
-         * never applied in the style hierarchy, then any appropriate font size may
-         * be used for non complex script characters.
-         * </p>
-         *
-         * @param size
-         */
-        public void SetFontSize(int size)
-        {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-            CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
-            ctSize.val = (ulong)size * 2;
+            set 
+            {
+                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
+                ctSize.val = (ulong)value * 2;
+            }
         }
 
         /**

@@ -194,7 +194,19 @@ namespace NPOI.XSSF.UserModel
             axis.Add(valueAxis);
             return valueAxis;
         }
-
+        public IChartAxis CreateCategoryAxis(AxisPosition pos)
+        {
+            long id = axis.Count + 1;
+            XSSFCategoryAxis categoryAxis = new XSSFCategoryAxis(this, id, pos);
+            if (axis.Count == 1)
+            {
+                IChartAxis ax = axis[0];
+                ax.CrossAxis(categoryAxis);
+                categoryAxis.CrossAxis(ax);
+            }
+            axis.Add(categoryAxis);
+            return categoryAxis;
+        }
         public List<IChartAxis> GetAxis()
         {
             if (axis.Count == 0 && HasAxis())

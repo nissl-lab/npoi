@@ -190,6 +190,9 @@ namespace NPOI.XSSF.UserModel.Charts
         protected abstract CT_NumFmt GetCTNumFmt();
         protected abstract CT_Scaling GetCTScaling();
         protected abstract CT_Crosses GetCTCrosses();
+        protected abstract CT_Boolean GetDelete();
+        protected abstract CT_TickMark GetMajorCTTickMark();
+        protected abstract CT_TickMark GetMinorCTTickMark();
 
         private static ST_Orientation fromAxisOrientation(AxisOrientation orientation)
         {
@@ -260,6 +263,61 @@ namespace NPOI.XSSF.UserModel.Charts
                 case ST_AxPos.t: return AxisPosition.Top;
                 default: return AxisPosition.Bottom;
             }
+        }
+        private static ST_TickMark fromAxisTickMark(AxisTickMark tickMark)
+        {
+            switch (tickMark)
+            {
+                case AxisTickMark.None: return ST_TickMark.none;
+                case AxisTickMark.In: return ST_TickMark.@in;
+                case AxisTickMark.Out: return ST_TickMark.@out;
+                case AxisTickMark.Cross: return ST_TickMark.cross;
+                default:
+                    throw new ArgumentException("Unknown AxisTickMark: " + tickMark);
+            }
+        }
+
+        private static AxisTickMark toAxisTickMark(CT_TickMark ctTickMark)
+        {
+            switch (ctTickMark.val)
+            {
+                case ST_TickMark.none: return AxisTickMark.None;
+                case ST_TickMark.@in: return AxisTickMark.In;
+                case ST_TickMark.@out: return AxisTickMark.Out;
+                case ST_TickMark.cross: return AxisTickMark.Cross;
+                default: return AxisTickMark.Cross;
+            }
+        }
+        public bool IsVisible
+        {
+            get
+            {
+                return GetDelete().val==1;
+            }
+            set 
+            {
+                GetDelete().val = value?1:0;
+            }
+        }
+
+        public AxisTickMark GetMajorTickMark()
+        {
+            return toAxisTickMark(GetMajorCTTickMark());
+        }
+
+        public void SetMajorTickMark(AxisTickMark tickMark)
+        {
+            GetMajorCTTickMark().val = fromAxisTickMark(tickMark);
+        }
+
+        public AxisTickMark GetMinorTickMark()
+        {
+            return toAxisTickMark(GetMinorCTTickMark());
+        }
+
+        public void SetMinorTickMark(AxisTickMark tickMark)
+        {
+            GetMinorCTTickMark().val =fromAxisTickMark(tickMark);
         }
     }
 

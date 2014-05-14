@@ -25,7 +25,7 @@ namespace NPOI.SS.UserModel.Charts
      * @author Roman Kashitsyn
      */
 
-    public interface IScatterChartSerie<Tx, Ty>
+    public interface IScatterChartSerie<Tx, Ty> : IChartSerie
     {
 
         /**

@@ -42,11 +42,10 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             series = new List<IScatterChartSerie<Tx, Ty>>();
         }
-
         /**
-         * Package private ScatterChartSerie implementation.
-         */
-        public class Serie : IScatterChartSerie<Tx, Ty>
+ * Package private ScatterChartSerie implementation.
+ */
+        internal class Serie : AbstractXSSFChartSerie, IScatterChartSerie<Tx, Ty>
         {
             private int id;
             private int order;
@@ -59,7 +58,7 @@ namespace NPOI.XSSF.UserModel.Charts
             private IChartDataSource<Tx> xs;
             private IChartDataSource<Ty> ys;
 
-            internal Serie(int id, int order, 
+            internal Serie(int id, int order,
                 IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
                 : base()
             {
@@ -71,15 +70,6 @@ namespace NPOI.XSSF.UserModel.Charts
                 this.ys = ys;
             }
 
-            /*public void SetXValues(DataMarker marker)
-            {
-                xMarker = marker;
-            }
-
-            public void SetYValues(DataMarker marker)
-            {
-                yMarker = marker;
-            }*/
             /**
              * Returns data source used for X axis values.
              * @return data source used for X axis values
@@ -106,68 +96,25 @@ namespace NPOI.XSSF.UserModel.Charts
                 this.useCache = useCache;
             }
 
-            /// <summary>
-            /// Returns last calculated number cache for X axis.
-            /// </summary>
-            //internal XSSFNumberCache LastCaculatedXCache
-            //{
-            //    get
-            //    {
-            //        return lastCaclulatedXCache;
-            //    }
-            //}
-            /// <summary>
-            /// Returns last calculated number cache for Y axis.
-            /// </summary>
-            //internal XSSFNumberCache LastCalculatedYCache
-            //{
-            //    get
-            //    {
-            //        return lastCalculatedYCache;
-            //    }
-            //}
 
             internal void AddToChart(CT_ScatterChart ctScatterChart)
             {
                 CT_ScatterSer scatterSer = ctScatterChart.AddNewSer();
-                scatterSer.AddNewIdx().val= (uint)this.id;
+                scatterSer.AddNewIdx().val = (uint)this.id;
                 scatterSer.AddNewOrder().val = (uint)this.order;
 
-                /* TODO: add some logic to automatically recognize cell
-                 * types and choose appropriate data representation for
-                 * X axis.
-                 */
-                /*CT_AxDataSource xVal = scatterSer.AddNewXVal();
-                CT_NumRef xNumRef = xVal.AddNewNumRef();
-                xNumRef.f = (xMarker.FormatAsString());
-
-                CT_NumDataSource yVal = scatterSer.AddNewYVal();
-                CT_NumRef yNumRef = yVal.AddNewNumRef();
-                yNumRef.f = (yMarker.FormatAsString());
-
-                if (useCache)
-                {
-                    // We can not store cache since markers are not immutable
-                    XSSFNumberCache.BuildCache(xMarker, xNumRef);
-                    lastCalculatedYCache = XSSFNumberCache.BuildCache(yMarker, yNumRef);
-                }
-                */
                 CT_AxDataSource xVal = scatterSer.AddNewXVal();
                 XSSFChartUtil.BuildAxDataSource<Tx>(xVal, xs);
                 CT_NumDataSource yVal = scatterSer.AddNewYVal();
                 XSSFChartUtil.BuildNumDataSource<Ty>(yVal, ys);
+
+                if (IsTitleSet)
+                {
+                    scatterSer.tx = this.GetCTSerTx();
+                }
             }
         }
 
-        /*public IScatterChartSerie AddSerie(DataMarker xMarker, DataMarker yMarker)
-        {
-            int numOfSeries = series.Count;
-            Serie newSerie = new Serie(numOfSeries, numOfSeries);
-            newSerie.SetXValues(xMarker);
-            newSerie.SetYValues(yMarker);
-            series.Add(newSerie);
-            return newSerie;
-        }*/
         public IScatterChartSerie<Tx,Ty> AddSerie(IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
         {
             if (!ys.IsNumeric)

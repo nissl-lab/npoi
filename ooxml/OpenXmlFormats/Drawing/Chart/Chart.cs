@@ -5265,6 +5265,71 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public CT_NumFmt AddNewNumFmt()
+        {
+            this.numFmtField = new CT_NumFmt();
+            return numFmtField;
+        }
+
+        public bool IsSetNumFmt()
+        {
+            return this.numFmtField != null;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            this.axIdField = new CT_UnsignedInt();
+            return this.axIdField;
+        }
+
+        public CT_AxPos AddNewAxPos()
+        {
+            this.axPosField = new CT_AxPos();
+            return this.axPosField;
+        }
+
+        public CT_Scaling AddNewScaling()
+        {
+            this.scalingField = new CT_Scaling();
+            return this.scalingField;
+        }
+
+        public CT_Crosses AddNewCrosses()
+        {
+            this.crossesField = new CT_Crosses();
+            return this.crossesField;
+        }
+
+        public CT_UnsignedInt AddNewCrossAx()
+        {
+            this.crossAxField = new CT_UnsignedInt();
+            return this.crossAxField;
+        }
+
+        public CT_TickLblPos AddNewTickLblPos()
+        {
+            this.tickLblPosField = new CT_TickLblPos();
+            return this.tickLblPosField;
+        }
+
+        public CT_Boolean AddNewDelete()
+        {
+            this.deleteField = new CT_Boolean();
+            return this.deleteField;
+        }
+
+        public CT_TickMark AddNewMajorTickMark()
+        {
+            this.majorTickMarkField = new CT_TickMark();
+            return this.majorTickMarkField;
+        }
+
+        public CT_TickMark AddNewMinorTickMark()
+        {
+            this.minorTickMarkField = new CT_TickMark();
+            return this.minorTickMarkField;
+        }
     }
 
 
@@ -6103,6 +6168,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+
+        public CT_StrRef AddNewStrRef()
+        {
+            this.strRefField = new CT_StrRef();
+            return this.strRefField;
+        }
     }
 
 
@@ -6418,6 +6489,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_MarkerStyle AddNewSymbol()
+        {
+            this.symbolField = new CT_MarkerStyle();
+            return this.symbolField;
         }
     }
 
@@ -10375,6 +10452,24 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_LineChart AddNewLineChart()
+        {
+            CT_LineChart ctchart = new CT_LineChart();
+            if(this.lineChartField==null)
+                this.lineChartField = new List<CT_LineChart>();
+            lineChartField.Add(ctchart);
+            return ctchart;
+        }
+
+        public CT_CatAx AddNewCatAx()
+        {
+            CT_CatAx newax = new CT_CatAx();
+            if(this.catAxField==null)
+                this.catAxField = new List<CT_CatAx>();
+            this.catAxField.Add(newax);
+            return newax;
         }
     }
 
