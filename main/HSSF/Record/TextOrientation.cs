@@ -23,4 +23,19 @@ namespace NPOI.HSSF.Record
 		RotRight,
 		RotLeft
 	}
+
+    public enum HorizontalTextAlignment:int 
+    {
+        Left=1,
+        Center=2,
+        Right=3,
+        Justify = 4
+    }
+    public enum VerticalTextAlignment:int
+    {
+        Top = 1,
+        Center = 2,
+        Bottom = 3,
+        Justify = 4
+    }
 }

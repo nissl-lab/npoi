@@ -63,8 +63,8 @@ namespace TestCases.HSSF.Record
         public void TestLoad()
         {
             TextObjectRecord record = new TextObjectRecord(TestcaseRecordInputStream.Create(data));
-            Assert.AreEqual(HorizontalAlignment.Center, record.HorizontalTextAlignment);
-            Assert.AreEqual(VerticalAlignment.Justify, record.VerticalTextAlignment);
+            Assert.AreEqual(HorizontalTextAlignment.Center, record.HorizontalTextAlignment);
+            Assert.AreEqual(VerticalTextAlignment.Justify, record.VerticalTextAlignment);
             Assert.AreEqual(true, record.IsTextLocked);
             Assert.AreEqual(TextOrientation.RotRight, record.TextOrientation);
 
@@ -80,8 +80,8 @@ namespace TestCases.HSSF.Record
             str.ApplyFont(0, 2, (short)0x0018);
             str.ApplyFont(2, 2, (short)0x0320);
 
-            record.HorizontalTextAlignment = HorizontalAlignment.Center;
-            record.VerticalTextAlignment = VerticalAlignment.Justify;
+            record.HorizontalTextAlignment = HorizontalTextAlignment.Center;
+            record.VerticalTextAlignment = VerticalTextAlignment.Justify;
             record.IsTextLocked = (true);
             record.TextOrientation = TextOrientation.RotRight;
             record.Str = (str);

@@ -57,8 +57,9 @@ namespace TestCases.HSSF.Record
             TextObjectRecord record = new TextObjectRecord(is1);
 
             Assert.AreEqual(TextObjectRecord.sid, record.Sid);
-            Assert.AreEqual(HorizontalAlignment.Left, record.HorizontalTextAlignment);
-            Assert.AreEqual(VerticalAlignment.Top, record.VerticalTextAlignment);
+            Assert.AreEqual(HorizontalTextAlignment.Left, record.HorizontalTextAlignment);
+            Assert.AreEqual(VerticalTextAlignment.Top, record.VerticalTextAlignment);
+            Assert.IsTrue(record.IsTextLocked);
             Assert.AreEqual(TextOrientation.None, record.TextOrientation);
             Assert.AreEqual("Hello, World!", record.Str.String);
         }
@@ -69,8 +70,8 @@ namespace TestCases.HSSF.Record
 
             TextObjectRecord record = new TextObjectRecord();
             record.Str = (/*setter*/str);
-            record.HorizontalTextAlignment = (/*setter*/ HorizontalAlignment.Left);
-            record.VerticalTextAlignment = (/*setter*/ VerticalAlignment.Top);
+            record.HorizontalTextAlignment = (/*setter*/ HorizontalTextAlignment.Left);
+            record.VerticalTextAlignment = (/*setter*/ VerticalTextAlignment.Top);
             record.IsTextLocked = (/*setter*/ true);
             record.TextOrientation = (/*setter*/ TextOrientation.None);
 
