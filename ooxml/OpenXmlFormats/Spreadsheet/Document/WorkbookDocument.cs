@@ -19,11 +19,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public static WorkbookDocument Parse(XmlDocument xmlDoc, XmlNamespaceManager NameSpaceManager)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             CT_Workbook obj = CT_Workbook.Parse(xmlDoc.DocumentElement, NameSpaceManager);
-            sw.Stop();
-            Debug.WriteLine("CT_Workbook parse time: " + sw.ElapsedMilliseconds + "ms");
             return new WorkbookDocument(obj);
         }
         public WorkbookDocument(CT_Workbook workbook)
@@ -39,14 +35,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             using (StreamWriter sw1 = new StreamWriter(stream))
             {
                 workbook.Write(sw1);
             }
-            sw.Stop();
-            Debug.WriteLine("CT_Workbook write time: " + sw.ElapsedMilliseconds + "ms");
         }
     }
 }

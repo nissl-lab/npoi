@@ -358,9 +358,11 @@ namespace TestCases.OPC
         [Test]
         public void TestTrailingSpacesInURI_53282()
         {
-            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("53282.xlsx");
-            OPCPackage pkg = OPCPackage.Open(is1);
-            is1.Close();
+            OPCPackage pkg = null;
+            using (Stream stream = OpenXml4NetTestDataSamples.OpenSampleStream("53282.xlsx"))
+            {
+                pkg = OPCPackage.Open(stream);
+            }
 
             PackageRelationshipCollection sheetRels = pkg.GetPartsByName(new Regex("/xl/worksheets/sheet1.xml"))[0].Relationships;
             Assert.AreEqual(3, sheetRels.Size);

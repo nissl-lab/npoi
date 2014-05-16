@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
             {
                 PackageRelationship rel = rels.GetRelationship(i);
                 if (rel.TargetUri.IsAbsoluteUri&&rel.TargetUri.IsFile)
-                    Assert.AreEqual(urls[i],rel.TargetUri.LocalPath);
+                    Assert.AreEqual(urls[i].Replace("file:///","").Replace("/","\\"),rel.TargetUri.LocalPath);
                 else
                     // there should be a relationship for each URL
                     Assert.AreEqual(urls[i], rel.TargetUri.ToString());
@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel
             {
                 PackageRelationship rel = rels.GetRelationship(i);
                 if (rel.TargetUri.IsAbsoluteUri && rel.TargetUri.IsFile)
-                    Assert.AreEqual(urls[i], rel.TargetUri.LocalPath);
+                    Assert.AreEqual(urls[i].Replace("file:///", "").Replace("/", "\\"), rel.TargetUri.LocalPath);
                 else
                     // there should be a relationship for each URL
                     Assert.AreEqual(urls[i], rel.TargetUri.ToString());

@@ -138,7 +138,7 @@ namespace NPOI.XSSF.UserModel
             drawing1 = sheet1.CreateDrawingPatriarch() as XSSFDrawing;
             XSSFPicture shape11 = (XSSFPicture)drawing1.GetShapes()[0];
             Assert.IsTrue(Arrays.Equals(shape1.PictureData.Data, shape11.PictureData.Data));
-            XSSFPicture shape22 = (XSSFPicture)drawing1.GetShapes()[0];
+            XSSFPicture shape22 = (XSSFPicture)drawing1.GetShapes()[1];
             Assert.IsTrue(Arrays.Equals(shape2.PictureData.Data, shape22.PictureData.Data));
 
             sheet2 = wb.GetSheetAt(1) as XSSFSheet;

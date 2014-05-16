@@ -196,7 +196,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, Drawing.Children.Count);
             HSSFTextbox textbox = (HSSFTextbox)Drawing.Children[0];
             Assert.AreEqual(HorizontalTextAlignment.Left, textbox.HorizontalAlignment);
-            Assert.AreEqual(VerticalTextAlignment.Center, textbox.VerticalAlignment);
+            Assert.AreEqual(VerticalTextAlignment.Top, textbox.VerticalAlignment);
             Assert.AreEqual(textbox.MarginTop, 0);
             Assert.AreEqual(textbox.MarginBottom, 3600000);
             Assert.AreEqual(textbox.MarginLeft, 3600000);
