@@ -12,14 +12,14 @@
     <AssemblyName>NPOI.OOXML</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\main\npoi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\solution\Lib\OOXML\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\solution\Lib\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -41,21 +41,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="POIXMLDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIXMLDocument.cs" />
     <Compile Include="POIXMLDocumentPart.cs" />
     <Compile Include="POIXmlException.cs" />
     <Compile Include="POIXMLFactory.cs" />
-    <Compile Include="POIXMLProperties.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIXMLProperties.cs" />
     <Compile Include="POIXMLPropertiesTextExtractor.cs" />
     <Compile Include="POIXMLRelation.cs" />
-    <Compile Include="POIXMLTextExtractor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfoDotnet2.cs" />
+    <Compile Include="POIXMLTextExtractor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SS\Converter\ExcelToHtmlConverter.cs" />
+    <Compile Include="SS\Converter\ExcelToHtmlUtils.cs" />
+    <Compile Include="SS\UserModel\IndexedColors.cs" />
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
@@ -71,16 +68,29 @@
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
-    <Compile Include="XSSF\Model\ThemesTable.cs">
+    <Compile Include="XSSF\Model\ThemesTable.cs" />
+    <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSerie.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs" />
-    <Compile Include="XSSF\UserModel\Charts\XSSFChartDataFactory.cs" />
-    <Compile Include="XSSF\UserModel\Charts\XSSFChartLegend.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartDataFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFChartLegend.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XSSF\UserModel\Charts\XSSFChartUtil.cs" />
-    <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs" />
-    <Compile Include="XSSF\UserModel\Charts\XSSFScatterChartData.cs" />
-    <Compile Include="XSSF\UserModel\Charts\XSSFValueAxis.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFLineChartData.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFScatterChartData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFValueAxis.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellAlignment.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellFill.cs" />
@@ -110,9 +120,7 @@
     <Compile Include="XSSF\UserModel\XSSFDataValidation.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidationConstraint.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidationHelper.cs" />
-    <Compile Include="XSSF\UserModel\XSSFDialogsheet.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\UserModel\XSSFDialogsheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationSheet.cs" />
@@ -143,15 +151,11 @@
     <Compile Include="XSSF\UserModel\XSSFSheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFSheetConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFSimpleShape.cs" />
-    <Compile Include="XSSF\UserModel\XSSFTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\UserModel\XSSFTable.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
     <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
-    <Compile Include="XSSF\Util\CTColComparator.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="XSSF\Util\CTColComparator.cs" />
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />
     <Compile Include="XWPF\Extractor\XWPFWordExtractor.cs" />
@@ -160,7 +164,6 @@
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
     <Compile Include="XWPF\Model\XWPFHyperlinkDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
-    <Compile Include="XWPF\Util\EnumConverter.cs" />
     <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
     <Compile Include="XWPF\Usermodel\BodyType.cs" />
     <Compile Include="XWPF\Usermodel\Borders.cs" />
@@ -202,6 +205,7 @@
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
+    <Compile Include="XWPF\Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">
@@ -219,6 +223,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
+<ItemGroup>
+	<None Include="..\main\npoi.snk">
+	      <Link>npoi.snk</Link>
+	 </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

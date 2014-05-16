@@ -35,19 +35,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>Lib\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HPSF\Array.cs" />
     <Compile Include="HPSF\Blob.cs" />
     <Compile Include="HPSF\ClipboardData.cs" />
@@ -64,11 +66,6 @@
     <Compile Include="HPSF\VariantBool.cs" />
     <Compile Include="HPSF\Vector.cs" />
     <Compile Include="HPSF\VersionedStream.cs" />
-    <Compile Include="HSSF\Converter\ExcelToHtmlConverter.cs" />
-    <Compile Include="HSSF\Converter\ExcelToHtmlUtils.cs" />
-    <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
-    <Compile Include="HSSF\Model\InternalChart.cs" />
-    <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AttachedLabelAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxesAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxisParentAggregate.cs" />
@@ -94,35 +91,31 @@
     <Compile Include="HSSF\Record\Aggregates\Chart\ShapePropsAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\SSAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\TextPropsAggregate.cs" />
-    <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
-    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="HSSF\Record\Chart\AlRunsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisLineRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\Chart3dRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\CrtLayout12ARecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HSSF\Record\Chart\CrtLayout12Record.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\Chart3DBarShapeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtLineRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtMlFrtContinueRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\CrtMlFrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataLabExtContentsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DataLabExtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DefaultTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DropBarRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\EndBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Fbi2Record.cs" />
+    <Compile Include="HSSF\Record\Chart\FbiRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\FontXRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FrtFontListRecord.cs" />
     <Compile Include="HSSF\Record\Chart\GelFrameRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\IFmtRecordRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LegendExceptionRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\MarkerFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PicFRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\PieFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\PieRecord.cs" />
     <Compile Include="HSSF\Record\Chart\RadarAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\RadarRecord.cs" />
     <Compile Include="HSSF\Record\Chart\RichTextStreamRecord.cs" />
@@ -131,33 +124,68 @@
     <Compile Include="HSSF\Record\Chart\SerAuxTrendRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SerFmtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SerParentRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ShapePropsStreamRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ShtPropsRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\StartBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SurfRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TextPropsStreamRecord.cs" />
     <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
+    <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
+    <Compile Include="HSSF\Record\DConRefRecord.cs" />
+    <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
+    <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
+    <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
+    <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
+    <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
+    <Compile Include="POIUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
+    <Compile Include="SS\Formula\Atp\DateParser.cs" />
+    <Compile Include="SS\Formula\Atp\IfError.cs" />
+    <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
+    <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Errortype.cs" />
+    <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
+    <Compile Include="SS\Formula\Functions\Rank.cs" />
+    <Compile Include="SS\Formula\Functions\Rate.cs" />
+    <Compile Include="SS\Formula\Functions\Sumifs.cs" />
+    <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
+    <Compile Include="SS\HtmlDocumentFacade.cs" />
+    <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
+    <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
+    <Compile Include="HSSF\Record\Aggregates\WorksheetProtectionBlock.cs" />
+    <Compile Include="HSSF\Record\AutoFilter\AutoFilterRecord.cs" />
+    <Compile Include="HSSF\Record\AutoFilter\FilterModeRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\Chart3dRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CrtLayout12ARecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HSSF\Record\Chart\CrtLayout12Record.cs" />
+    <Compile Include="HSSF\Record\Chart\CrtMlFrtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\MarkerFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\PieFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\PieRecord.cs" />
     <Compile Include="HSSF\Record\Common\FeatFormulaErr2.cs" />
     <Compile Include="HSSF\Record\Common\FeatProtection.cs" />
     <Compile Include="HSSF\Record\Common\FeatSmartTag.cs" />
     <Compile Include="HSSF\Record\Common\FtrHeader.cs" />
     <Compile Include="HSSF\Record\Common\SharedFeature.cs" />
     <Compile Include="HSSF\Record\Common\UnicodeString.cs" />
-    <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\Cont\ContinuableRecordInput.cs" />
-    <Compile Include="HSSF\Record\DConRefRecord.cs" />
     <Compile Include="HSSF\Record\FeatHdrRecord.cs" />
     <Compile Include="HSSF\Record\FeatRecord.cs" />
     <Compile Include="HSSF\Record\FtCblsSubRecord.cs" />
-    <Compile Include="HSSF\Record\RowDataRecord.cs" />
     <Compile Include="HSSF\Record\SheetExtRecord.cs" />
     <Compile Include="HSSF\Structure.cs" />
     <Compile Include="HSSF\UserModel\DVConstraint.cs" />
-    <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataFormatter.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidation.cs" />
     <Compile Include="HSSF\UserModel\HSSFDataValidationHelper.cs" />
     <Compile Include="HSSF\UserModel\HSSFDateUtil.cs" />
-    <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
-    <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
     <Compile Include="HSSF\Util\LazilyConcatenatedByteArray.cs" />
     <Compile Include="OldFileFormatException.cs" />
     <Compile Include="DDF\DefaultEscherRecordFactory.cs" />
@@ -303,61 +331,45 @@
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
     <Compile Include="HSSF\Record\Chart\AreaFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AreaRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisLineRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisParentRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BarRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BeginRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatLabRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\Chart3DBarShapeRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\EndBlockRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ChartEndBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartEndObjectRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartFRTInfoRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\StartBlockRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ChartStartBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ChartStartObjectRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AlRunsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtLinkRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\DataLabExtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DataLabelExtensionRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\DefaultTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\EndRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\FbiRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\FontXRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\FontBasisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FrameRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LegendRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\IFmtRecordRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\NumberFormatIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectLinkRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PlotAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PlotGrowthRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PosRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\SerToCrtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SeriesChartGroupIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesIndexRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\SeriesLabelsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesListRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\SeriesToChartGroupRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\ShtPropsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TickRecord.cs" />
     <Compile Include="HSSF\Record\Chart\UnitsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\ValueRangeRecord.cs" />
     <Compile Include="HSSF\Record\CodepageRecord.cs" />
     <Compile Include="HSSF\Record\ColumnInfoRecord.cs" />
-    <Compile Include="POIFS\Crypt\AgileDecryptor.cs" />
-    <Compile Include="POIFS\Crypt\Decryptor.cs" />
-    <Compile Include="POIFS\Crypt\EcmaDecryptor.cs" />
-    <Compile Include="POIFS\Crypt\EncryptionHeader.cs" />
-    <Compile Include="POIFS\Crypt\EncryptionInfo.cs" />
-    <Compile Include="POIFS\Crypt\EncryptionVerifier.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSWriterEvent.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSWriterEventArgs.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSWriterListener.cs" />
@@ -365,41 +377,32 @@
     <Compile Include="POIFS\FileSystem\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DocumentInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DocumentOutputStream.cs" />
-    <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
-    <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentInputStream.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
+    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
-    <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
-    <Compile Include="SS\Formula\Atp\DateParser.cs" />
-    <Compile Include="SS\Formula\Atp\EDate.cs" />
-    <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
-    <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
-    <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
-    <Compile Include="SS\Formula\Functions\Errortype.cs" />
-    <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
-    <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
-    <Compile Include="SS\Formula\Functions\Rank.cs" />
-    <Compile Include="SS\Formula\Functions\Rate.cs" />
-    <Compile Include="SS\Formula\Functions\Sumifs.cs" />
-    <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
-    <Compile Include="SS\HtmlDocumentFacade.cs" />
-    <Compile Include="SS\UserModel\BorderDiagonal.cs" />
-    <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
-    <Compile Include="SS\UserModel\Charts\DataSources.cs" />
-    <Compile Include="SS\Util\DateFormatConverter.cs" />
-    <Compile Include="Util\ByteArrayInputStream.cs" />
-    <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
     <Compile Include="POIFS\property\NPropertyTable.cs" />
     <Compile Include="POIFS\property\PropertyTableBase.cs" />
-    <Compile Include="SS\Extractor\ExcelExtractor.cs" />
     <Compile Include="POIFS\Storage\HeaderBlock.cs" />
+    <Compile Include="SS\Extractor\ExcelExtractor.cs" />
+    <Compile Include="SS\Format\CellDateFormatter.cs" />
+    <Compile Include="SS\Format\CellElapsedFormatter.cs" />
+    <Compile Include="SS\Format\CellFormat.cs" />
+    <Compile Include="SS\Format\CellFormatCondition.cs" />
+    <Compile Include="SS\Format\CellFormatPart.cs" />
+    <Compile Include="SS\Format\CellFormatResult.cs" />
+    <Compile Include="SS\Format\CellFormatter.cs" />
+    <Compile Include="SS\Format\CellFormatType.cs" />
+    <Compile Include="SS\Format\CellGeneralFormatter.cs" />
+    <Compile Include="SS\Format\CellNumberFormatter.cs" />
+    <Compile Include="SS\Format\CellTextFormatter.cs" />
+    <Compile Include="SS\Formula\Atp\EDate.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
@@ -551,23 +554,30 @@
     <Compile Include="POIFS\Dev\POIFSViewEngine.cs" />
     <Compile Include="POIFS\Dev\POIFSViewer.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSReader.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSReaderEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\EventFileSystem\POIFSReaderEvent.cs" />
     <Compile Include="POIFS\EventFileSystem\POIFSReaderEventArgs.cs" />
-    <Compile Include="POIFS\EventFileSystem\POIFSReaderListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POIFS\EventFileSystem\POIFSReaderRegistry.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="POIFS\EventFileSystem\POIFSReaderListener.cs" />
+    <Compile Include="POIFS\EventFileSystem\POIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\BATManaged.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationCell.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationSheet.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluationWorkbook.cs" />
     <Compile Include="SS\Formula\Eval\Forked\ForkedEvaluator.cs" />
+    <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
+    <Compile Include="SS\UserModel\BorderDiagonal.cs" />
+    <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\DataSources.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartSerie.cs" />
+    <Compile Include="SS\UserModel\FontUnderline.cs" />
+    <Compile Include="SS\Util\DataMarker.cs" />
+    <Compile Include="SS\Util\DateFormatConverter.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
+    <Compile Include="Util\ByteArrayInputStream.cs" />
+    <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
@@ -579,7 +589,6 @@
     <Compile Include="POIFS\FileSystem\OfficeXmlFileException.cs" />
     <Compile Include="POIFS\FileSystem\Ole10Native.cs" />
     <Compile Include="POIFS\FileSystem\Ole10NativeException.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentPath.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentReader.cs" />
     <Compile Include="POIFS\FileSystem\POIFSDocumentWriter.cs" />
@@ -670,7 +679,6 @@
     <Compile Include="HSSF\Util\HSSFColor.cs" />
     <Compile Include="HSSF\Util\RangeAddress.cs" />
     <Compile Include="HSSF\Util\RKUtil.cs" />
-    <Compile Include="POIUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SS\Formula\Atp\AnalysisToolPak.cs" />
     <Compile Include="SS\Formula\Atp\MRound.cs" />
@@ -1002,15 +1010,12 @@
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
     <Compile Include="SS\UserModel\ErrorConstants.cs" />
-    <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs" />
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />
     <Compile Include="SS\UserModel\FontFamily.cs" />
     <Compile Include="SS\UserModel\FontFormatting.cs" />
     <Compile Include="SS\UserModel\FontScheme.cs" />
-    <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\Footer.cs" />
     <Compile Include="SS\UserModel\FormulaError.cs" />
     <Compile Include="SS\UserModel\FormulaEvaluator.cs" />
@@ -1018,7 +1023,6 @@
     <Compile Include="SS\UserModel\HeaderFooter.cs" />
     <Compile Include="SS\UserModel\HorizontalAlignment.cs" />
     <Compile Include="SS\UserModel\Hyperlink.cs" />
-    <Compile Include="SS\UserModel\IndexedColors.cs" />
     <Compile Include="SS\UserModel\LineStyle.cs" />
     <Compile Include="SS\UserModel\Name.cs" />
     <Compile Include="SS\UserModel\PageOrder.cs" />
@@ -1048,14 +1052,11 @@
     <Compile Include="SS\Util\Cellwalk\CellHandler.cs" />
     <Compile Include="SS\Util\Cellwalk\CellWalk.cs" />
     <Compile Include="SS\Util\Cellwalk\CellWalkContext.cs" />
-    <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\ExpandedDouble.cs" />
     <Compile Include="SS\Util\Format.cs" />
     <Compile Include="SS\Util\IEEEDouble.cs" />
     <Compile Include="SS\Util\MutableFPNumber.cs" />
-    <Compile Include="SS\Util\NormalisedDecimal.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Util\NormalisedDecimal.cs" />
     <Compile Include="SS\Util\NumberComparer.cs" />
     <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
@@ -1063,9 +1064,7 @@
     <Compile Include="SS\Util\RegionUtil.cs" />
     <Compile Include="SS\Util\SheetBuilder.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
-    <Compile Include="SS\Util\SheetUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SS\Util\SheetUtil.cs" />
     <Compile Include="SS\Util\SSCellRange.cs" />
     <Compile Include="SS\Util\WorkbookUtil.cs" />
     <Compile Include="Util\Arrays.cs" />
@@ -1113,17 +1112,6 @@
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\SystemOutLogger.cs" />
     <Compile Include="Util\TempFile.cs" />
-    <Compile Include="SS\Format\CellDateFormatter.cs" />
-    <Compile Include="SS\Format\CellElapsedFormatter.cs" />
-    <Compile Include="SS\Format\CellFormat.cs" />
-    <Compile Include="SS\Format\CellFormatCondition.cs" />
-    <Compile Include="SS\Format\CellFormatPart.cs" />
-    <Compile Include="SS\Format\CellFormatResult.cs" />
-    <Compile Include="SS\Format\CellFormatter.cs" />
-    <Compile Include="SS\Format\CellFormatType.cs" />
-    <Compile Include="SS\Format\CellGeneralFormatter.cs" />
-    <Compile Include="SS\Format\CellNumberFormatter.cs" />
-    <Compile Include="SS\Format\CellTextFormatter.cs" />
     <Compile Include="Util\ULongField.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />

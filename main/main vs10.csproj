@@ -1178,9 +1178,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lib\Ionic.Zip.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="HSSF\Dev\" />
   </ItemGroup>
   <ItemGroup>
