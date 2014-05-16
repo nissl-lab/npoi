@@ -97,7 +97,7 @@ namespace NPOI.SS.UserModel
             {
                 return new XSSFWorkbook(OPCPackage.Open(inputStream));
             }
-            throw new ArgumentException("Your InputStream was neither an OLE2 stream, nor an OOXML stream.");
+            throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
         /**
     * Creates the appropriate HSSFWorkbook / XSSFWorkbook from
@@ -112,20 +112,18 @@ namespace NPOI.SS.UserModel
             FileStream fStream = null;
             try
             {
-                fStream = new FileStream(file, FileMode.Open, FileAccess.Read);
-                NPOIFSFileSystem fs = new NPOIFSFileSystem(fStream);
-                IWorkbook wb = new HSSFWorkbook(fs.Root, true);
-                return wb;
+                using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                {
+                    IWorkbook wb = new HSSFWorkbook(fStream);
+                    return wb;
+                }
             }
             catch (OfficeXmlFileException e)
             {
-                OPCPackage pkg = OPCPackage.Open(file);
-                return new XSSFWorkbook(pkg);
-            }
-            finally
-            {
-                if (fStream != null)
-                    fStream.Close();
+                using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                {
+                    return new XSSFWorkbook(fStream);
+                }
             }
         }
         /// <summary>
