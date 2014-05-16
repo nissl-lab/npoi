@@ -50,7 +50,6 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public class HSSFCell : ICell
     {
-
         public const short ENCODING_UNCHANGED = -1;
         public const short ENCODING_COMPRESSED_UNICODE = 0;
         public const short ENCODING_UTF_16 = 1;
@@ -62,7 +61,6 @@ namespace NPOI.HSSF.UserModel
         private HSSFSheet sheet;
         private CellValueRecordInterface record;
         private IComment comment;
-
 
         private const string FILE_FORMAT_NAME = "BIFF8";
         public static readonly int LAST_COLUMN_NUMBER = SpreadsheetVersion.EXCEL97.LastColumnIndex; // 2^8 - 1
@@ -486,6 +484,12 @@ namespace NPOI.HSSF.UserModel
         
         }
 
+        public void SetCellValue(double value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
+        }
+
         /// <summary>
         /// Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as
         /// a date.
@@ -496,6 +500,12 @@ namespace NPOI.HSSF.UserModel
         public void SetCellValue(DateTime value)
         {
             SetCellValue(DateUtil.GetExcelDate(value, this.book.Workbook.IsUsing1904DateWindowing));
+        }
+
+        public void SetCellValue(DateTime value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
         }
 
 
@@ -512,14 +522,21 @@ namespace NPOI.HSSF.UserModel
             HSSFRichTextString str = new HSSFRichTextString(value);
             SetCellValue(str);
         }
+
+        public void SetCellValue(String value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
+        }
+
         /**
- * set a error value for the cell
- *
- * @param errorCode the error value to set this cell to.  For formulas we'll set the
- *        precalculated value , for errors we'll set
- *        its value. For other types we will change the cell to an error
- *        cell and set its value.
- */
+         * set a error value for the cell
+         *
+         * @param errorCode the error value to set this cell to.  For formulas we'll set the
+         *        precalculated value , for errors we'll set
+         *        its value. For other types we will change the cell to an error
+         *        cell and set its value.
+         */
         public void SetCellErrorValue(byte errorCode)
         {
             int row = record.Row;
@@ -591,10 +608,16 @@ namespace NPOI.HSSF.UserModel
             stringValue.UnicodeString = book.Workbook.GetSSTString(index);
         }
 
+        public void SetCellValue(IRichTextString value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
+        }
+
         /**
- * Should be called any time that a formula could potentially be deleted.
- * Does nothing if this cell currently does not hold a formula
- */
+         * Should be called any time that a formula could potentially be deleted.
+         * Does nothing if this cell currently does not hold a formula
+         */
         private void NotifyFormulaChanging()
         {
             if (record is FormulaRecordAggregate)
@@ -840,6 +863,13 @@ namespace NPOI.HSSF.UserModel
                     break;
             }
         }
+
+        public void SetCellValue(bool value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
+        }
+
         /// <summary>
         /// Chooses a new bool value for the cell when its type is changing.
         /// Usually the caller is calling SetCellType() with the intention of calling
@@ -850,7 +880,6 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         private bool ConvertCellValueToBoolean()
         {
-
             switch (cellType)
             {
                 case CellType.Boolean:

@@ -45,7 +45,6 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFCell : ICell
     {
-
         private static String FALSE_AS_STRING = "0";
         private static String TRUE_AS_STRING = "1";
 
@@ -186,6 +185,12 @@ namespace NPOI.XSSF.UserModel
             _cell.v = (value ? TRUE_AS_STRING : FALSE_AS_STRING);
         }
 
+        public void SetCellValue(bool value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
+        }
+
         /**
          * Get the value of the cell as a number.
          * <p>
@@ -258,6 +263,12 @@ namespace NPOI.XSSF.UserModel
                 _cell.t = (ST_CellType.n);
                 _cell.v = (value.ToString());
             }
+        }
+
+        public void SetCellValue(double value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
         }
 
         /**
@@ -365,6 +376,12 @@ namespace NPOI.XSSF.UserModel
             SetCellValue(str == null ? null : new XSSFRichTextString(str));
         }
 
+        public void SetCellValue(String str, ICellStyle style)
+        {
+            SetCellValue(str);
+            CellStyle = style;
+        }
+
         /**
          * Set a string value for the cell.
          *
@@ -403,6 +420,12 @@ namespace NPOI.XSSF.UserModel
                     }
                     break;
             }
+        }
+
+        public void SetCellValue(IRichTextString str, ICellStyle style)
+        {
+            SetCellValue(str);
+            CellStyle = style;
         }
 
         /// <summary>
@@ -673,6 +696,13 @@ namespace NPOI.XSSF.UserModel
             bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
+
+        public void SetCellValue(DateTime value, ICellStyle style)
+        {
+            SetCellValue(value);
+            CellStyle = style;
+        }
+
         /// <summary>
         /// Returns the error message, such as #VALUE!
         /// </summary>
