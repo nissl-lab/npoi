@@ -1121,7 +1121,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsMergedCell
         {
             get {
-                return this.Sheet.IsMergedRegion(new CellRangeAddress(this.RowIndex,this.ColumnIndex,this.RowIndex,this.ColumnIndex));
+                return this.Sheet.IsMergedRegion(new CellRangeAddress(this.RowIndex, this.RowIndex, this.ColumnIndex, this.ColumnIndex));
             }
             
         }
