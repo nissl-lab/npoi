@@ -519,7 +519,7 @@ namespace NPOI.SS.UserModel
                     char c = sb[i];
                     if (c == '_' || c == '*' || c == '?')
                     {
-                        if (i > 0 && sb[(i - 1)] == '\\')
+                        if (i > 0 && sb[i - 1] == '\\')
                         {
                             // It's escaped, don't worry
                             continue;
@@ -543,6 +543,7 @@ namespace NPOI.SS.UserModel
                             }
                             // Remove the character too
                             sb.Remove(i, 1);
+                            i--;
                         }
                     }
                 }
@@ -558,7 +559,7 @@ namespace NPOI.SS.UserModel
                     char c = sb[i];
                     if (c == '_' || c == '*')
                     {
-                        if (i > 0 && sb[(i - 1)] == '\\')
+                        if (i > 0 && sb[i - 1] == '\\')
                         {
                             // It's escaped, don't worry
                             continue;
@@ -572,6 +573,7 @@ namespace NPOI.SS.UserModel
                         }
                         // Remove the _ too
                         sb.Remove(i, 1);
+                        i--;
                     }
                 }
             }
@@ -580,7 +582,7 @@ namespace NPOI.SS.UserModel
             //  quoting and scientific notation
             for (int i = 0; i < sb.Length; i++)
             {
-                char c = sb[(i)];
+                char c = sb[i];
                 // remove quotes and back slashes
                 if (c == '\\' || c == '"')
                 {
@@ -589,7 +591,7 @@ namespace NPOI.SS.UserModel
 
                     // for scientific/engineering notation
                 }
-                else if (c == '+' && i > 0 && sb[(i - 1)] == 'E')
+                else if (c == '+' && i > 0 && sb[i - 1] == 'E')
                 {
                     sb.Remove(i, 1);
                     i--;
@@ -600,42 +602,6 @@ namespace NPOI.SS.UserModel
         }
         private FormatBase CreateNumberFormat(String formatStr, double cellValue)
         {
-            //StringBuilder sb = new StringBuilder(formatStr);
-            //for (int i = 0; i < sb.Length; i++)
-            //{
-            //    char c = sb[i];
-            //    //handle (#,##0_);
-            //    if (c == '(')
-            //    {
-            //        int idx = sb.ToString().IndexOf(")", i);
-            //        if (idx > -1 && sb[idx - 1] == '_')
-            //        {
-            //            sb.Remove(idx, 1);
-            //            sb.Remove(idx - 1, 1);
-            //            sb.Remove(i, 1);
-            //            i--;
-            //        }
-            //    }
-            //    else if (c == ')' && i > 0 && sb[i - 1] == '_')
-            //    {
-            //        sb.Remove(i, 1);
-            //        sb.Remove(i - 1, 1);
-            //        i--;
-            //        // remove quotes and back slashes
-            //    }
-            //    else if (c == '\\' || c == '"')
-            //    {
-            //        sb.Remove(i, 1);
-            //        i--;
-
-            //        // for scientific/engineering notation
-            //    }
-            //    else if (c == '+' && i > 0 && sb[i - 1] == 'E')
-            //    {
-            //        sb.Remove(i, 1);
-            //        i--;
-            //    }
-            //}
             String format = cleanFormatForNumber(formatStr);
             try
             {
