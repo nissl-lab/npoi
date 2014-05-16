@@ -8,6 +8,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
     using System.Xml.Serialization;
 
 
@@ -15,6 +17,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     //[XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_CommentList
     {
+        public static CT_CommentList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CommentList ctObj = new CT_CommentList();
+            ctObj.comment = new List<CT_Comment>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "comment")
+                    ctObj.comment.Add(CT_Comment.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}>", nodeName));
+            if (this.comment != null)
+            {
+                foreach (CT_Comment x in this.comment)
+                {
+                    x.Write(sw, "comment");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Comment> commentField = null; // optional field [0..*]
 

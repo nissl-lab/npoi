@@ -201,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.indexedField = value;
-                this.indexedSpecifiedField = indexed != 0;
+                this.indexedSpecifiedField = true;
             }
         }
         bool indexedSpecifiedField = false;

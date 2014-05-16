@@ -35,10 +35,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            if(this.t!=null)
-                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>", t));
-            sw.Write(">");
+            sw.Write(string.Format("<{0}>", nodeName));
+            if (this.t != null)
+                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>",XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
             if (this.phoneticPr != null)
                 this.phoneticPr.Write(sw, "phoneticPr");
             if (this.r != null)
@@ -77,9 +76,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             set
             {
-
-                if (rField ==null || rField.Count==0)
-                    this.xmltext = "<r><t xml:space=\"preserve\">"+XmlHelper.EncodeXml(value)+"</t></r>";
                 this.tField = value;
             }
         }

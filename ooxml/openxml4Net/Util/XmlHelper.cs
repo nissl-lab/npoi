@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace NPOI.OpenXml4Net.Util
@@ -168,6 +169,66 @@ namespace NPOI.OpenXml4Net.Util
             {
                 return false;
             }
+        }
+        public static string ExcelEncodeString(string t)
+        {
+            StringWriter sw = new StringWriter();
+            if (Regex.IsMatch(t, "(_x[0-9A-F]{4,4}_)"))
+            {
+                Match match = Regex.Match(t, "(_x[0-9A-F]{4,4}_)");
+                int indexAdd = 0;
+                while (match.Success)
+                {
+                    t = t.Insert(match.Index + indexAdd, "_x005F");
+                    indexAdd += 6;
+                    match = match.NextMatch();
+                }
+            }
+            for (int i = 0; i < t.Length; i++)
+            {
+                if (t[i] <= 0x1f && t[i] != '\t' && t[i] != '\n' && t[i] != '\r') //Not Tab, CR or LF
+                {
+                    sw.Write("_x00{0}_", (t[i] < 0xa ? "0" : "") + ((int)t[i]).ToString("X"));
+                }
+                else
+                {
+                    sw.Write(t[i]);
+                }
+            }
+            return sw.ToString();
+        }
+        public static string ExcelDecodeString(string t)
+        {
+            Match match = Regex.Match(t, "(_x005F|_x[0-9A-F]{4,4}_)");
+            if (!match.Success) return t;
+
+            bool useNextValue = false;
+            StringBuilder ret = new StringBuilder();
+            int prevIndex = 0;
+            while (match.Success)
+            {
+                if (prevIndex < match.Index) ret.Append(t.Substring(prevIndex, match.Index - prevIndex));
+                if (!useNextValue && match.Value == "_x005F")
+                {
+                    useNextValue = true;
+                }
+                else
+                {
+                    if (useNextValue)
+                    {
+                        ret.Append(match.Value);
+                        useNextValue = false;
+                    }
+                    else
+                    {
+                        ret.Append((char)int.Parse(match.Value.Substring(2, 4)));
+                    }
+                }
+                prevIndex = match.Index + match.Length;
+                match = match.NextMatch();
+            }
+            ret.Append(t.Substring(prevIndex, t.Length - prevIndex));
+            return ret.ToString();
         }
         public static string EncodeXml(string xml)
         {

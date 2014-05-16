@@ -1789,44 +1789,19 @@ namespace NPOI.XSSF.UserModel
                     CT_SheetCalcPr calc = worksheet.sheetCalcPr;
                     calc.fullCalcOnLoad = value;
                 }
-                else
+                else if(value)
                 {
                     // Add the Calc block and set it
                     CT_SheetCalcPr calc = worksheet.AddNewSheetCalcPr();
                     calc.fullCalcOnLoad = value;
-                    if (calcPr == null)
-                    {
-                        calcPr=(Workbook as XSSFWorkbook).GetCTWorkbook().AddNewCalcPr();
-                    }
-                    if (value && calcPr.calcMode == ST_CalcMode.manual)
-                    {
-                        calcPr.calcMode = ST_CalcMode.auto;
-                    }
-                    else if (!value && calcPr.calcMode == ST_CalcMode.auto)
-                    {
-                        calcPr.calcMode = ST_CalcMode.manual;
-                    }
+                }
+
+                if (value && calcPr!=null&& calcPr.calcMode == ST_CalcMode.manual)
+                {
+                    calcPr.calcMode = ST_CalcMode.auto;
                 }
             }
         }
-
-        //    /**
-        //     * @return an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
-        //     * be the third row if say for instance the second row is undefined.
-        //     * Call GetRowNum() on each row if you care which one it is.
-        //     */
-        //    public Iterator<Row> rowIterator() {
-        //    return (Iterator<Row>)(Iterator<? : Row>) _rows.values().iterator();
-        //}
-
-        //    /**
-        //     * Alias for {@link #rowIterator()} to
-        //     *  allow foreach loops
-        //     */
-        //    public Iterator<Row> iterator()
-        //    {
-        //        return rowIterator();
-        //    }
 
         /**
          * Flag indicating whether the sheet displays Automatic Page Breaks.

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -25,7 +27,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //{
         //    this.textField = new CT_Rst();
         //}
-
+        public static CT_Comment Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Comment ctObj = new CT_Comment();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            if (node.Attributes["authorId"] != null)
+                ctObj.authorId = XmlHelper.ReadUInt(node.Attributes["authorId"]);
+            ctObj.guid = XmlHelper.ReadString(node.Attributes["guid"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "text")
+                    ctObj.text = CT_Rst.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            XmlHelper.WriteAttribute(sw, "authorId", this.authorId, true);
+            XmlHelper.WriteAttribute(sw, "guid", this.guid);
+            sw.Write(">");
+            if (this.text != null)
+                this.text.Write(sw, "text");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
         [XmlElement("text")]
         public CT_Rst text
         {

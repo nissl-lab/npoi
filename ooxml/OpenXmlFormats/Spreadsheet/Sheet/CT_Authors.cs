@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPOI.OpenXml4Net.Util;
+using System;
 using System.Collections.Generic;
-
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -50,5 +52,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.authorField = value;
             }
         }
+        public static CT_Authors Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Authors ctObj = new CT_Authors();
+            ctObj.author = new List<String>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "author")
+                    ctObj.author.Add(childNode.InnerText);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}>", nodeName));
+            if (this.author != null)
+            {
+                foreach (String x in this.author)
+                {
+                    sw.Write(string.Format("<author>{0}</author>", XmlHelper.EncodeXml(x)));
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 }
