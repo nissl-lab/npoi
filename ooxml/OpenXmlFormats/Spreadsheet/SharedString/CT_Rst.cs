@@ -102,11 +102,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public string XmlText
         {
             get {
-                if (rField != null && rField.Count > 0)
+                StringBuilder sb = new StringBuilder();
+                using (StringWriter sw = new StringWriter(sb))
                 {
-                    StringBuilder sb = new StringBuilder();
-                    using( StringWriter sw = new StringWriter(sb))
+                    if (rField != null && rField.Count > 0)
                     {
+
                         foreach (CT_RElt r in rField)
                         {
                             sw.Write("<r>");
@@ -123,7 +124,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                                 }
                                 if (r.rPr.u != null)
                                 {
-                                    sw.Write("<u val=\""+ r.rPr.u.val +"\"/>");
+                                    sw.Write("<u val=\"" + r.rPr.u.val + "\"/>");
                                 }
                                 if (r.rPr.color != null && r.rPr.color.theme > 0)
                                 {
@@ -163,8 +164,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                             }
                             sw.Write("</r>");
                         }
-                        xmltext = sb.ToString();
                     }
+
+                    if (this.t != null)
+                    {
+                        sw.Write("<t>");
+                        sw.Write(XmlHelper.EncodeXml(this.t));
+                        sw.Write("</t>");
+                    }
+                    xmltext = sb.ToString();
                 }
                 return xmltext; 
             }

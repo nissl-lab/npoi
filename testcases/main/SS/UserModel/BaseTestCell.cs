@@ -221,11 +221,11 @@ namespace TestCases.SS.UserModel
             cs = c.CellStyle;
 
             Assert.IsNotNull(cs, "Formula Cell Style");
-            Assert.IsTrue((cs.FontIndex == f.Index), "Font Index Matches");
-            Assert.IsTrue((cs.BorderTop == BorderStyle.Thin), "Top Border");
-            Assert.IsTrue((cs.BorderLeft == BorderStyle.Thin), "Left Border");
-            Assert.IsTrue((cs.BorderRight == BorderStyle.Thin), "Right Border");
-            Assert.IsTrue((cs.BorderBottom == BorderStyle.Thin), "Bottom Border");
+            Assert.AreEqual(f.Index, cs.FontIndex, "Font Index Matches");
+            Assert.AreEqual(BorderStyle.Thin, cs.BorderTop , "Top Border");
+            Assert.AreEqual(BorderStyle.Thin, cs.BorderLeft, "Left Border");
+            Assert.AreEqual(BorderStyle.Thin, cs.BorderRight, "Right Border");
+            Assert.AreEqual(BorderStyle.Thin, cs.BorderBottom, "Bottom Border");
         }
 
         /**tests the ToString() method of HSSFCell*/
