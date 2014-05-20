@@ -57,29 +57,41 @@ namespace NPOI.XWPF.UserModel
                 CT_R r = run.GetCTR();
                 if (document != null)
                 {
-                    foreach (object o in r.Items)
+                    for (int i = 0; i < r.Items.Count; i++)
                     {
+                        object o = r.Items[i];
                         if (o is CT_FtnEdnRef)
                         {
                             CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
                             footnoteText.Append("[").Append(ftn.id).Append(": ");
-                            
-                            XWPFFootnote footnote = document.GetFootnoteByID(int.Parse(ftn.id));
-                            if (footnote == null)
-                                footnote = document.GetEndnoteByID(int.Parse(ftn.id));
-                               //ftn.DomNode.LocalName.Equals("footnoteReference") ?
-                               //      document.GetFootnoteByID(ftn.Id.IntValue()) :
-                               //      document.GetEndnoteByID(ftn.Id.IntValue());
 
-                            bool first = true;
-                            foreach (XWPFParagraph p in footnote.Paragraphs)
+                            XWPFFootnote footnote = null;
+
+                            if (r.ItemsElementName.Count > i && r.ItemsElementName[i] == RunItemsChoiceType.endnoteReference)
                             {
-                                if (!first)
+                                footnote = document.GetEndnoteByID(int.Parse(ftn.id));
+                                if (footnote == null)
+                                    footnote = document.GetFootnoteByID(int.Parse(ftn.id));
+                            }
+                            else
+                            {
+                                footnote = document.GetFootnoteByID(int.Parse(ftn.id));
+                                if (footnote == null)
+                                    footnote = document.GetEndnoteByID(int.Parse(ftn.id));
+                            }
+
+                            if (footnote != null)
+                            {
+                                bool first = true;
+                                foreach (XWPFParagraph p in footnote.Paragraphs)
                                 {
-                                    footnoteText.Append("\n");
-                                    first = false;
+                                    if (!first)
+                                    {
+                                        footnoteText.Append("\n");
+                                        first = false;
+                                    }
+                                    footnoteText.Append(p.Text);
                                 }
-                                footnoteText.Append(p.Text);
                             }
 
                             footnoteText.Append("]");

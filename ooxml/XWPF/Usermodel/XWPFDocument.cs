@@ -218,14 +218,20 @@ namespace NPOI.XWPF.UserModel
             foreach(POIXMLDocumentPart p in GetRelations()){
                String relation = p.GetPackageRelationship().RelationshipType;
                if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
-                   XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
-                  FootnotesDocument footnotesDocument = FootnotesDocument.Parse(xmldoc, NamespaceManager);
+                   //XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
+                  //FootnotesDocument footnotesDocument = FootnotesDocument.Parse(xmldoc, NamespaceManager);
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
-                  
-               } else if (relation.Equals(XWPFRelation.ENDNOTE.Relation)){
+
+               }
+               else if (relation.Equals(XWPFRelation.ENDNOTE.Relation))
+               {
                    XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
                    EndnotesDocument endnotesDocument = EndnotesDocument.Parse(xmldoc, NamespaceManager);
+                   foreach (CT_FtnEdn ctFtnEdn in endnotesDocument.Endnotes.endnote)
+                   {
+                       endnotes.Add(Int32.Parse(ctFtnEdn.id), new XWPFFootnote(this, ctFtnEdn));
+                   }
                }
             }
         }
@@ -399,7 +405,7 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote GetEndnoteByID(int id)
         {
-            if (endnotes == null) 
+            if (endnotes == null || !endnotes.ContainsKey(id)) 
                 return null;
             return endnotes[id];
         }
