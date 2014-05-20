@@ -143,7 +143,172 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
     }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_TableStyleInfo
+    {
 
+        private string nameField;
+
+        private bool showFirstColumnField;
+
+        private bool showFirstColumnFieldSpecified;
+
+        private bool showLastColumnField;
+
+        private bool showLastColumnFieldSpecified;
+
+        private bool showRowStripesField;
+
+        private bool showRowStripesFieldSpecified;
+
+        private bool showColumnStripesField;
+
+        private bool showColumnStripesFieldSpecified;
+
+        public static CT_TableStyleInfo Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_TableStyleInfo ctObj = new CT_TableStyleInfo();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            if (node.Attributes["showFirstColumn"] != null)
+                ctObj.showFirstColumn = XmlHelper.ReadBool(node.Attributes["showFirstColumn"]);
+            if (node.Attributes["showLastColumn"] != null)
+                ctObj.showLastColumn = XmlHelper.ReadBool(node.Attributes["showLastColumn"]);
+            if (node.Attributes["showRowStripes"] != null)
+                ctObj.showRowStripes = XmlHelper.ReadBool(node.Attributes["showRowStripes"]);
+            if (node.Attributes["showColumnStripes"] != null)
+                ctObj.showColumnStripes = XmlHelper.ReadBool(node.Attributes["showColumnStripes"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "showFirstColumn", this.showFirstColumn);
+            XmlHelper.WriteAttribute(sw, "showLastColumn", this.showLastColumn);
+            XmlHelper.WriteAttribute(sw, "showRowStripes", this.showRowStripes);
+            XmlHelper.WriteAttribute(sw, "showColumnStripes", this.showColumnStripes);
+            sw.Write("/>");
+        }
+
+        [XmlAttribute]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+        [XmlAttribute]
+        public bool showFirstColumn
+        {
+            get
+            {
+                return this.showFirstColumnField;
+            }
+            set
+            {
+                this.showFirstColumnField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool showFirstColumnSpecified
+        {
+            get
+            {
+                return this.showFirstColumnFieldSpecified;
+            }
+            set
+            {
+                this.showFirstColumnFieldSpecified = value;
+            }
+        }
+        [XmlAttribute]
+        public bool showLastColumn
+        {
+            get
+            {
+                return this.showLastColumnField;
+            }
+            set
+            {
+                this.showLastColumnField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool showLastColumnSpecified
+        {
+            get
+            {
+                return this.showLastColumnFieldSpecified;
+            }
+            set
+            {
+                this.showLastColumnFieldSpecified = value;
+            }
+        }
+        [XmlAttribute]
+        public bool showRowStripes
+        {
+            get
+            {
+                return this.showRowStripesField;
+            }
+            set
+            {
+                this.showRowStripesField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool showRowStripesSpecified
+        {
+            get
+            {
+                return this.showRowStripesFieldSpecified;
+            }
+            set
+            {
+                this.showRowStripesFieldSpecified = value;
+            }
+        }
+        [XmlAttribute]
+        public bool showColumnStripes
+        {
+            get
+            {
+                return this.showColumnStripesField;
+            }
+            set
+            {
+                this.showColumnStripesField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool showColumnStripesSpecified
+        {
+            get
+            {
+                return this.showColumnStripesFieldSpecified;
+            }
+            set
+            {
+                this.showColumnStripesFieldSpecified = value;
+            }
+        }
+    }
     public class CT_TableStyles
     {
 

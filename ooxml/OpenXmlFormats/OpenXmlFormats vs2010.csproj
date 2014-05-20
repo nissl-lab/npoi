@@ -130,6 +130,7 @@
     <Compile Include="ExtendedPropertiesDocument.cs" />
     <Compile Include="Shared\Math.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Dxfs.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Table.cs" />
     <Compile Include="Spreadsheet\Styles\CT_TableStyles.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Border.cs" />
     <Compile Include="Spreadsheet\Styles\CT_BorderPr.cs" />
