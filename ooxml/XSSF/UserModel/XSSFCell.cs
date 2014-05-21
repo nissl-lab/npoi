@@ -256,7 +256,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 _cell.t = (ST_CellType.n);
-                _cell.v = (value.ToString());
+                _cell.v = (value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
