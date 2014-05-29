@@ -431,6 +431,7 @@ namespace NPOI.OpenXml4Net.OPC
                 else
                     zos = (ZipOutputStream)outputStream;
 
+                zos.UseZip64 = UseZip64.Off;
                 // If the core properties part does not exist in the part list,
                 // we save it as well
                 if (this.GetPartsByRelationshipType(
