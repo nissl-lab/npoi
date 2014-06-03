@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Util
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
+    using NPOI.HSSF.Record;
 
     /// <summary>
     /// Various utility functions that make working with a cells and rows easier.  The various
@@ -241,7 +242,29 @@ namespace NPOI.HSSF.Util
             switch (oldCell.CellType)
             {
                 case CellType.String:
-                    newCell.SetCellValue(oldCell.StringCellValue);
+                   HSSFRichTextString rts= oldCell.RichStringCellValue as HSSFRichTextString;
+                    newCell.SetCellValue(rts);
+                    if(rts!=null)
+                    {
+                        for (int j = 0; j < rts.NumFormattingRuns; j++)
+                        {
+                            short fontIndex = rts.GetFontOfFormattingRun(j);
+                            int startIndex = rts.GetIndexOfFormattingRun(j);
+                            int endIndex = 0;
+                            if (j + 1 == rts.NumFormattingRuns)
+                            {
+                                endIndex = rts.Length;
+                            }
+                            else
+                            {
+                                endIndex = rts.GetIndexOfFormattingRun(j+1);
+                            }
+                            FontRecord fr = newCell.BoundWorkbook.CreateNewFont();
+                            fr.CloneStyleFrom(oldCell.BoundWorkbook.GetFontRecordAt(fontIndex));
+                            HSSFFont font = new HSSFFont((short)(newCell.BoundWorkbook.GetFontIndex(fr)), fr);
+                            newCell.RichStringCellValue.ApplyFont(startIndex,endIndex, font);
+                        }
+                    }
                     break;
                 case CellType.Numeric:
                     newCell.SetCellValue(oldCell.NumericCellValue);
