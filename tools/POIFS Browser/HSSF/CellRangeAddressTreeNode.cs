@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Collections;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Util;
+using NPOI.Util;
 
 namespace NPOI.Tools.POIFSBrowser
 {
@@ -40,8 +41,10 @@ namespace NPOI.Tools.POIFSBrowser
 
          public override byte[] GetBytes()
          {
+
              byte[] bytes = new byte[NPOI.SS.Util.CellRangeAddress.ENCODED_SIZE];
-             this.Record.Serialize(0, bytes);
+             ILittleEndianOutput leo = new LittleEndianByteArrayOutputStream(bytes, 0);
+             this.Record.Serialize(leo);
              return bytes;
          }
 

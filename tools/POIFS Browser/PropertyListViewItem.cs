@@ -81,7 +81,7 @@ namespace NPOI.Tools.POIFSBrowser
                 propertyListViewItems[i] =tmp ;
             }
 
-            Array.Sort(propertyListViewItems);
+            System.Array.Sort(propertyListViewItems);
 
             return propertyListViewItems;
         }

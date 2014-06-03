@@ -187,7 +187,7 @@ namespace NPOI.Tools.POIFSBrowser
                             if (iterator1.Current is BOFRecord)
                             {
                                 BOFRecord bof = (BOFRecord)iterator1.Current;
-                                if (bof.Type == BOFRecord.TYPE_CHART)
+                                if (bof.Type == BOFRecordType.Chart)
                                 {
                                     string chartTitle = string.Format("Chart {0}" , chartIndex);
                                     TreeNode chartnode = sheetnode.Nodes.Add(chartTitle, chartTitle, "Folder", "Folder");
