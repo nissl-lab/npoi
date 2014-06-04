@@ -292,19 +292,6 @@ namespace NPOI.XWPF.Model
 
         private XmlSerializerNamespaces Commit(XWPFHeaderFooter wrapper)
         {
-        //    XmlOptions xmlOptions = new XmlOptions(wrapper.DEFAULT_XML_OPTIONS);
-        //    Dictionary<String, String> map = new Dictionary<String, String>();
-        //    map.Put("http://schemas.Openxmlformats.org/officeDocument/2006/math", "m");
-        //    map.Put("urn:schemas-microsoft-com:office:office", "o");
-        //    map.Put("http://schemas.Openxmlformats.org/officeDocument/2006/relationships", "r");
-        //    map.Put("urn:schemas-microsoft-com:vml", "v");
-        //    map.Put("http://schemas.Openxmlformats.org/markup-compatibility/2006", "ve");
-        //    map.Put("http://schemas.Openxmlformats.org/wordProcessingml/2006/main", "w");
-        //    map.Put("urn:schemas-microsoft-com:office:word", "w10");
-        //    map.Put("http://schemas.microsoft.com/office/word/2006/wordml", "wne");
-        //    map.Put("http://schemas.Openxmlformats.org/drawingml/2006/wordProcessingDrawing", "wp");
-        //    xmlOptions.SaveSuggestedPrefixes=(map);
-        //    return xmlOptions;
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
                 new XmlQualifiedName("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"),
