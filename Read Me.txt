@@ -12,7 +12,7 @@ used to create search engines).
 *  NPOI Website *
 ==================
 https://github.com/tonyqus/npoi/ (Latest source code available)
-http://npoi.codeplex.com (No latest source code available)
+http://npoi.codeplex.com (Official portal)
 http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
 
 ======================
@@ -20,16 +20,16 @@ http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
 ======================
 VS2010 with .NET 2.0 or .NET 4.0
 VS2005 or VS2008 with .NET 2.0 Runtime (SP1) 
-vs2003 with .NET 1.1 
 medium trust environment in ASP.NET
 
 =================
 *  NPOI on SNS  *
 =================
-QQ群: 189925337
 Twitter: http://twitter.com/tonyqus 
-新浪微博: http://t.sina.com.cn/npoi 
 User Group[Linkedin]: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
+新浪微博: http://t.sina.com.cn/npoi 
+企业客户QQ群: 116053476
+个人客户QQ群：20144214
 
 ================
 * Team Members *
@@ -115,6 +115,12 @@ Paul Kratt - developer
 From: Greater Milwaukee Area, Wisconsin, USA
 Time Zone: GMT
 Main contribution: CopyTo, CopySheet functions in HSSFSheet
+
+NPOI 2.1
+--------------------------------------------------------------------------------
+Tony Qu - main contributor
+Antony - fix some poi bugs
+
 
 ==================
 * How to join us *

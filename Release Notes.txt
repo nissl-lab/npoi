@@ -1,4 +1,32 @@
-2.0 RC [v2.0.6] (Jan. 5, 2014)
+2.1 (Jun., 2014) 
+New Features
+a. XSSFSheet.CopySheet
+b. Excel2Html for XSSF
+c. insert picture in word 2007
+d. Implement IfError function in formula engine
+
+Bug Fixes
+a. fix conditional formatting issue
+b. fix ctFont order issue
+c. fix vertical alignment issue in XSSF
+d. add IndexedColors to NPOI.SS.UserModel
+e. fix decimal point issue in non-English culture
+f. fix SetMargin issue in XSSF
+g.fix multiple images insert issue in XSSF
+h.fix rich text style missing issue in XSSF
+i. fix cell comment shape (big arrow) in XSSF
+j. WorkbookFactory for Excel 2007 doesn't occupy file.
+k. fix XSSFCell.IsMergedCell
+l. fix incorrect page margin value due to different culture
+m. fix HSSFSheet.CopyTo doesn't copy rich text in cells
+
+New examples
+a. XSSF.DownloadXlsx
+b. XSSF.ConditionFormats
+c. XSSF.LineChart
+d. XWPF.InsertPicturesInWord
+
+2.0 [v2.0.6] (Jan., 2014)
 a. fix a lot of xml serialization issue for OOXML (2.0.5 will corrupt some xlsx and docx files)
 b. implement XSSFCell.IsMergedCell
 c. IWorkbook implements IList<ISheet>
