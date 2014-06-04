@@ -3,7 +3,6 @@ using NPOI.SS.UserModel.Charts;
 using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace NPOI.XSSF.UserModel.Charts
