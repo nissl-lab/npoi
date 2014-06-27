@@ -80,6 +80,12 @@ namespace NPOI.XWPF.UserModel
             : this(table, part)
         {
 
+            CT_TblGrid ctTblGrid = table.AddNewTblGrid();
+            for (int j = 0; j < col; j++)
+            {
+                CT_TblGridCol ctGridCol= ctTblGrid.AddNewGridCol();
+                ctGridCol.w = 300;
+            }
             for (int i = 0; i < row; i++)
             {
                 XWPFTableRow tabRow = (GetRow(i) == null) ? CreateRow() : GetRow(i);
@@ -91,6 +97,19 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
+        }
+
+        public void SetColumnWidth(int columnIndex, ulong width)
+        {
+            if (this.ctTbl.tblGrid == null)
+                return;
+
+            if (columnIndex > this.ctTbl.tblGrid.gridCol.Count)
+            {
+                throw new ArgumentOutOfRangeException(string.Format("Column index {0} doesn't exist.", columnIndex));
+            }
+            this.ctTbl.tblGrid.gridCol[columnIndex].w = width;
+
         }
 
         public XWPFTable(CT_Tbl table, IBody part)
@@ -237,6 +256,7 @@ namespace NPOI.XWPF.UserModel
 				CT_TblWidth tblWidth = tblPr.IsSetTblW() ? tblPr.tblW : tblPr
 						.AddNewTblW();
 				tblWidth.w = value.ToString();
+                tblWidth.type = ST_TblWidth.pct;
 			}
         }
 

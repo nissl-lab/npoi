@@ -197,7 +197,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Background()
         {
-            this.themeColorField = ST_ThemeColor.dark1;
+            this.themeColorField = ST_ThemeColor.none;
         }
 
         public static CT_Background Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -219,7 +219,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            if(themeColorField!= ST_ThemeColor.dark1)
+            if(themeColorField!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
             XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
             XmlHelper.WriteAttribute(sw, "w:themeShade", this.themeShade);

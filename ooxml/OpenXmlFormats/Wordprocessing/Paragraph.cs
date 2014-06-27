@@ -899,6 +899,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.suppressOverlap.Write(sw, "suppressOverlap");
             if (this.jc != null)
                 this.jc.Write(sw, "jc");
+            if (this.outlineLvl != null)
+                this.outlineLvl.Write(sw, "outlineLvl");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             if (this.textDirection != null)
@@ -907,8 +909,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.textAlignment.Write(sw, "textAlignment");
             if (this.textboxTightWrap != null)
                 this.textboxTightWrap.Write(sw, "textboxTightWrap");
-            if (this.outlineLvl != null)
-                this.outlineLvl.Write(sw, "outlineLvl");
             if (this.divId != null)
                 this.divId.Write(sw, "divId");
             if (this.cnfStyle != null)

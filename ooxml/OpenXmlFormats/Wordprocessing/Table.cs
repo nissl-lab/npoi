@@ -810,8 +810,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:w", this.w);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -826,24 +825,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.wField = value;
             }
         }
-
-        [XmlIgnore]
-        public bool wSpecified
-        {
-            get
-            {
-                return this.wFieldSpecified;
-            }
-            set
-            {
-                this.wFieldSpecified = value;
-            }
-        }
     }
     [XmlInclude(typeof(CT_TblGrid))]
-
     [Serializable]
-
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TblGridBase
@@ -1859,7 +1843,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ulong valField;
 
 
-        private ST_HeightRule hRuleField;
+        private ST_HeightRule hRuleField= ST_HeightRule.auto;
 
         public static CT_Height Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -1878,9 +1862,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
-            XmlHelper.WriteAttribute(sw, "w:hRule", this.hRule.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            if(this.hRule!= ST_HeightRule.auto)
+                XmlHelper.WriteAttribute(sw, "w:hRule", this.hRule.ToString());
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -4654,7 +4638,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
-
+        public CT_TblWidth AddNewTcW()
+        {
+            this.tcW = new CT_TblWidth();
+            return this.tcW;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -4755,19 +4743,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TcPrBase()
         {
-            this.hideMarkField = new CT_OnOff();
-            this.vAlignField = new CT_VerticalJc();
-            this.tcFitTextField = new CT_OnOff();
-            this.textDirectionField = new CT_TextDirection();
-            this.tcMarField = new CT_TcMar();
-            this.noWrapField = new CT_OnOff();
-            this.shdField = new CT_Shd();
-            this.tcBordersField = new CT_TcBorders();
-            this.vMergeField = new CT_VMerge();
-            this.hMergeField = new CT_HMerge();
-            this.gridSpanField = new CT_DecimalNumber();
-            this.tcWField = new CT_TblWidth();
-            this.cnfStyleField = new CT_Cnf();
         }
 
         [XmlElement(Order = 0)]

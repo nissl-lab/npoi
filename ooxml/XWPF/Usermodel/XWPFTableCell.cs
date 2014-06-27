@@ -413,9 +413,9 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTableArray(int pos)
         {
-            if (pos > 0 && pos < tables.Count)
+            if (pos >=0 && pos < tables.Count)
             {
-                return tables[(pos)];
+                return tables[pos];
             }
             return null;
         }

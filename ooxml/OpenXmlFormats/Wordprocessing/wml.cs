@@ -433,7 +433,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
     public enum ST_ThemeColor
     {
-
+        none,
 
         dark1,
 
@@ -471,8 +471,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         followedHyperlink,
 
 
-        none,
-
+        
 
         background1,
 
