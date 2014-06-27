@@ -454,11 +454,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                throw new System.NotImplementedException();
+                return (DisplayCellErrorType)pageSetup.errors;
             }
             set
             {
-                throw new System.NotImplementedException();
+                pageSetup.errors = (ST_PrintError)value;
             }
         }
 
@@ -466,6 +466,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                
                 throw new System.NotImplementedException();
             }
             set
