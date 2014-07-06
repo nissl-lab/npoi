@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{23FA6A1A-0C66-4A3B-B9E6-9B6EC07EE190}</ProjectGuid>
+    <ProjectGuid>{E628794B-F889-4462-BACD-8531A1F4AEEE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ApplyTableInXlsx</RootNamespace>
-    <AssemblyName>ApplyTableInXlsx</AssemblyName>
+    <RootNamespace>SetRowStyle</RootNamespace>
+    <AssemblyName>SetRowStyle</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,17 +32,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\solution\Lib\.net2\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net2\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net2\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net2\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\.net2\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
