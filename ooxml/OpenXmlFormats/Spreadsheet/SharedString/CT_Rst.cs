@@ -38,8 +38,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}>", nodeName));
             if (this.t != null)
                 sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>",XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
-            if (this.phoneticPr != null)
-                this.phoneticPr.Write(sw, "phoneticPr");
+
             if (this.r != null)
             {
                 foreach (CT_RElt x in this.r)
@@ -54,6 +53,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "rPh");
                 }
             }
+            if (this.phoneticPr != null)
+                this.phoneticPr.Write(sw, "phoneticPr");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 

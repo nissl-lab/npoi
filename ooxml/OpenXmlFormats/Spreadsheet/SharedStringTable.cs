@@ -113,8 +113,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "t", this.t);
             XmlHelper.WriteAttribute(sw, "sb", this.sb);
             XmlHelper.WriteAttribute(sw, "eb", this.eb);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
     }
@@ -157,8 +156,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             if(this.alignment!= ST_PhoneticAlignment.left)
                 XmlHelper.WriteAttribute(sw, "alignment", this.alignment.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
 

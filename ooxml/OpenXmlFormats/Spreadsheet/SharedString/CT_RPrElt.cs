@@ -79,12 +79,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             sw.Write(">");
+            if (this.sz != null)
+                this.sz.Write(sw, "sz");
+            if (this.color != null)
+                this.color.Write(sw, "color");
             if (this.rFont != null)
                 this.rFont.Write(sw, "rFont");
-            if (this.charset != null)
-                this.charset.Write(sw, "charset");
             if (this.family != null)
                 this.family.Write(sw, "family");
+            if (this.charset != null)
+                this.charset.Write(sw, "charset");
             if (this.b != null)
                 this.b.Write(sw, "b");
             if (this.i != null)
@@ -99,10 +103,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.condense.Write(sw, "condense");
             if (this.extend != null)
                 this.extend.Write(sw, "extend");
-            if (this.color != null)
-                this.color.Write(sw, "color");
-            if (this.sz != null)
-                this.sz.Write(sw, "sz");
             if (this.u != null)
                 this.u.Write(sw, "u");
             if (this.vertAlign != null)

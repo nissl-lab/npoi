@@ -219,9 +219,7 @@ namespace NPOI.XSSF.Model
             //options.SetSaveCDataEntityCountThreshold(-1);
             CT_Sst sst = _sstDoc.GetSst();
             sst.count = count;
-           sst.countSpecified = true;
            sst.uniqueCount = uniqueCount;
-           sst.uniqueCountSpecified = true;
 
            //re-create the sst table every time saving a workbook
            _sstDoc.Save(out1);

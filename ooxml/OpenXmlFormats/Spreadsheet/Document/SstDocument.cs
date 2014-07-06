@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NPOI.OpenXml4Net.Util;
+using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Text;
@@ -36,6 +37,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 SstDocument sstDoc=new SstDocument();
                 sstDoc.AddNewSst();
+                CT_Sst sst = sstDoc.GetSst();
+                sst.count = XmlHelper.ReadInt(xml.DocumentElement.Attributes["count"]);
+                sst.uniqueCount = XmlHelper.ReadInt(xml.DocumentElement.Attributes["uniqueCount"]);
 
                 XmlNodeList nl = xml.SelectNodes("//d:sst/d:si", namespaceManager);
                 if (nl != null)
