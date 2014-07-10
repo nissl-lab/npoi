@@ -1262,7 +1262,7 @@ namespace NPOI.XWPF.UserModel
                 while (iter.MoveNext() && xwpfPicData == null)
                 {
                     XWPFPictureData curElem = iter.Current;
-                    if (Arrays.Equals(pictureData, curElem.GetData()))
+                    if (Arrays.Equals(pictureData, curElem.Data))
                     {
                         xwpfPicData = curElem;
                     }

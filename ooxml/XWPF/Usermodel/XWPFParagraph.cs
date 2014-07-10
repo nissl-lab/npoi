@@ -552,7 +552,51 @@ namespace NPOI.XWPF.UserModel
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
             }
         }
+        public ST_Shd FillPattern
+        {
+            get 
+            {
+                if (!this.GetCTPPr().IsSetShd())
+                    return ST_Shd.nil;
 
+                return this.GetCTPPr().shd.val;
+            }
+            set 
+            {
+                CT_Shd ctShd = null;
+                if (!this.GetCTPPr().IsSetShd())
+                {
+                    ctShd = this.GetCTPPr().AddNewShd();
+                }
+                else
+                {
+                    ctShd = this.GetCTPPr().shd;
+                }
+                ctShd.val = value;
+            }
+        }
+        public string FillBackgroundColor
+        {
+            get {
+                if (!this.GetCTPPr().IsSetShd())
+                    return null;
+
+                return this.GetCTPPr().shd.fill;
+            }
+            set {
+                CT_Shd ctShd = null;
+                if (!this.GetCTPPr().IsSetShd())
+                {
+                    ctShd = this.GetCTPPr().AddNewShd();
+                }
+                else
+                {
+                    ctShd = this.GetCTPPr().shd;
+                }
+                ctShd.color = "auto";
+                ctShd.fill = value;
+            }
+        }
         /**
          * Specifies the border which shall be displayed between each paragraph in a
          * Set of paragraphs which have the same Set of paragraph border Settings.

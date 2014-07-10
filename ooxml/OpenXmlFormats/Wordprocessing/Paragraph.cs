@@ -6408,6 +6408,19 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 				this.pStyleField = new CT_String();
 			return pStyleField;
 		}
+
+        public bool IsSetShd()
+        {
+            return this.shdField != null;
+        }
+        public CT_Shd AddNewShd()
+        {
+            if (this.shdField == null)
+            {
+                this.shdField = new CT_Shd();
+            }
+            return this.shdField;
+        }
 		public bool IsSetJc()
 		{
 			return this.jcField != null;
