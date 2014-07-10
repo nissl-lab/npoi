@@ -14,56 +14,52 @@ namespace SimpleDocument
             XWPFDocument doc = new XWPFDocument();
 
             XWPFParagraph p1 = doc.CreateParagraph();
-            p1.SetAlignment(ParagraphAlignment.CENTER);
-            p1.SetBorderBottom(Borders.DOUBLE);
-            p1.SetBorderTop(Borders.DOUBLE);
+            p1.Alignment = ParagraphAlignment.CENTER;
+            p1.BorderBottom = Borders.DOUBLE;
+            p1.BorderTop = Borders.DOUBLE;
 
-            p1.SetBorderRight(Borders.DOUBLE);
-            p1.SetBorderLeft(Borders.DOUBLE);
-            p1.SetBorderBetween(Borders.SINGLE);
+            p1.BorderRight = Borders.DOUBLE;
+            p1.BorderLeft = Borders.DOUBLE;
+            p1.BorderBetween = Borders.SINGLE;
 
-            p1.SetVerticalAlignment(TextAlignment.TOP);
+            p1.VerticalAlignment = TextAlignment.TOP;
 
             XWPFRun r1 = p1.CreateRun();
-            r1.SetBold(true);
             r1.SetText("The quick brown fox");
             r1.SetBold(true);
-            r1.SetFontFamily("Courier");
+            r1.FontFamily = "Courier";
             r1.SetUnderline(UnderlinePatterns.DotDotDash);
             r1.SetTextPosition(100);
 
             XWPFParagraph p2 = doc.CreateParagraph();
-            p2.SetAlignment(ParagraphAlignment.RIGHT);
+            p2.Alignment = ParagraphAlignment.RIGHT;
 
             //BORDERS
-            p2.SetBorderBottom(Borders.DOUBLE);
-            p2.SetBorderTop(Borders.DOUBLE);
-            p2.SetBorderRight(Borders.DOUBLE);
-            p2.SetBorderLeft(Borders.DOUBLE);
-            p2.SetBorderBetween(Borders.SINGLE);
+            p2.BorderBottom = Borders.DOUBLE;
+            p2.BorderTop = Borders.DOUBLE;
+            p2.BorderRight = Borders.DOUBLE;
+            p2.BorderLeft = Borders.DOUBLE;
+            p2.BorderBetween = Borders.SINGLE;
 
             XWPFRun r2 = p2.CreateRun();
             r2.SetText("jumped over the lazy dog");
             r2.SetStrike(true);
-            r2.SetFontSize(20);
+            r2.FontSize = 20;
+           
 
             XWPFRun r3 = p2.CreateRun();
             r3.SetText("and went away");
             r3.SetStrike(true);
-            r3.SetFontSize(20);
-            r3.SetSubscript(VerticalAlign.SUPERSCRIPT);
-
+            r3.FontSize = 20;
+            r3.Subscript = VerticalAlign.SUPERSCRIPT;
+            r3.SetColor("FF0000");
 
             XWPFParagraph p3 = doc.CreateParagraph();
-            p3.SetWordWrap(true);
-            p3.SetPageBreak(true);
-
-            //p3.SetAlignment(ParagraphAlignment.DISTRIBUTE);
-            p3.SetAlignment(ParagraphAlignment.BOTH);
-            p3.SetSpacingLineRule(LineSpacingRule.EXACT);
-
-            p3.SetIndentationFirstLine(600);
-
+            p3.IsWordWrap = true;
+            p3.IsPageBreak = true;
+            p3.Alignment = ParagraphAlignment.BOTH;
+            p3.SpacingLineRule = LineSpacingRule.EXACT;
+            p3.IndentationFirstLine = 600;
 
             XWPFRun r4 = p3.CreateRun();
             r4.SetTextPosition(20);
@@ -79,7 +75,7 @@ namespace SimpleDocument
                     + "Devoutly to be wish'd. To die, to sleep; "
                     + "To sleep: perchance to dream: ay, there's the rub; "
                     + ".......");
-            r4.SetItalic(true);
+            r4.IsItalic = true;
             //This would imply that this break shall be treated as a simple line break, and break the line after that word:
 
             XWPFRun r5 = p3.CreateRun();

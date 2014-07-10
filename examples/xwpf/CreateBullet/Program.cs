@@ -22,8 +22,8 @@ namespace CreateBullet
             XWPFRun r0 = p0.CreateRun();
             r0.SetText("simple bullet");
             r0.SetBold(true);
-            r0.SetFontFamily("Courier");
-            r0.SetFontSize(12);
+            r0.FontFamily = "Courier";
+            r0.FontSize = 12;
 
             XWPFParagraph p1 = doc.CreateParagraph();
             XWPFRun r1 = p1.CreateRun();
@@ -55,8 +55,8 @@ namespace CreateBullet
             r1 = p1.CreateRun();
             r1.SetText("multi level bullet");
             r1.SetBold(true);
-            r1.SetFontFamily("Courier");
-            r1.SetFontSize(12);
+            r1.FontFamily = "Courier";
+            r1.FontSize =12 ;
 
             p1 = doc.CreateParagraph();
             r1 = p1.CreateRun();

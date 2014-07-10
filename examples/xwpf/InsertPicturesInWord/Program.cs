@@ -25,7 +25,6 @@ namespace InsertPicturesInWord
             XWPFRun r2 = p2.CreateRun();
             r2.SetText("test");
 
-            var img = Image.FromFile("../../image/HumpbackWhale.jpg");
 
             var widthEmus = (int)(400.0 * 9525);
             var heightEmus = (int)(300.0 * 9525);
