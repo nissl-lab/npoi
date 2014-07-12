@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D49F896A-A2E1-4C28-ACB7-73FB2910626D}</ProjectGuid>
+    <ProjectGuid>{4D81B9A9-14B6-4506-A7F4-59289886D822}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SetCellValuesInXlsx</RootNamespace>
-    <AssemblyName>SetCellValuesInXlsx</AssemblyName>
+    <RootNamespace>SetIsRightToLeftInXlsx</RootNamespace>
+    <AssemblyName>SetIsRightToLeftInXlsx</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

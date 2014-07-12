@@ -1,5 +1,8 @@
-﻿Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateEmptyWorkbook", "xssf\CreateEmptyWorkbook\CreateEmptyWorkbook.csproj", "{AFBE86E3-EDBE-45B4-8950-8B883102A47F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetCellValuesInXlsx", "xssf\SetCellValuesInXlsx\SetCellValuesInXlsx.csproj", "{D49F896A-A2E1-4C28-ACB7-73FB2910626D}"
@@ -55,6 +58,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UseCase", "UseCase", "{219097C8-95A0-479C-A713-8D4EB842C2FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConditionalFormats", "xssf\ConditionalFormats\ConditionalFormats.csproj", "{CFA33A5A-DA93-48BE-B513-6FCDA5447B9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetIsRightToLeftInXlsx", "xssf\SetIsRightToLeftInXlsx\SetIsRightToLeftInXlsx.csproj", "{4D81B9A9-14B6-4506-A7F4-59289886D822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -326,14 +331,24 @@ Global
 		{CFA33A5A-DA93-48BE-B513-6FCDA5447B9F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CFA33A5A-DA93-48BE-B513-6FCDA5447B9F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CFA33A5A-DA93-48BE-B513-6FCDA5447B9F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Debug|x86.ActiveCfg = Debug|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Debug|x86.Build.0 = Debug|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Release|Any CPU.ActiveCfg = Release|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Release|x86.ActiveCfg = Release|x86
+		{4D81B9A9-14B6-4506-A7F4-59289886D822}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{A3103D4C-7334-4B70-9524-E57105EB5E55} = {219097C8-95A0-479C-A713-8D4EB842C2FF}
 		{ED6DC363-2017-4004-AF44-2AA171709EFC} = {FB96FC42-FB38-4F3B-9BA2-ACE24653CE0D}
 		{87009589-28B8-4F63-A50D-A0C599E01A1E} = {FB96FC42-FB38-4F3B-9BA2-ACE24653CE0D}
 		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7} = {219097C8-95A0-479C-A713-8D4EB842C2FF}
-		{A3103D4C-7334-4B70-9524-E57105EB5E55} = {219097C8-95A0-479C-A713-8D4EB842C2FF}
 	EndGlobalSection
 EndGlobal

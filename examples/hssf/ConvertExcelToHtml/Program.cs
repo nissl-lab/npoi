@@ -15,11 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Converter;
+using NPOI.HSSF.UserModel;
+using System;
 using System.IO;
 
 namespace NPOI.Examples.ConvertExcelToHtml
@@ -33,7 +31,6 @@ namespace NPOI.Examples.ConvertExcelToHtml
             string fileName = "19599-1.xls";
             fileName = Path.Combine(Environment.CurrentDirectory, fileName);
             workbook = ExcelToHtmlUtils.LoadXls(fileName);
-
 
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
 
