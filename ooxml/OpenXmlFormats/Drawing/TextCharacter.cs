@@ -47,6 +47,8 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_TextFont ctObj = new CT_TextFont();
             ctObj.typeface = XmlHelper.ReadString(node.Attributes["typeface"]);
             ctObj.panose = XmlHelper.ReadBytes(node.Attributes["panose"]);
+            if (node.Attributes["charset"]!=null)
+                ctObj.charsetField = XmlHelper.ReadSByte(node.Attributes["charset"]);
             return ctObj;
         }
 
@@ -58,9 +60,9 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "typeface", this.typeface);
             XmlHelper.WriteAttribute(sw, "panose", this.panose);
             XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
-            XmlHelper.WriteAttribute(sw, "charset", this.charset);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            if(charsetField!=(sbyte)1)
+                XmlHelper.WriteAttribute(sw, "charset", this.charset);
+            sw.Write("/>");
         }
 
 
@@ -383,11 +385,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private bool noProofFieldSpecified;
 
-        private bool dirtyField;
+        private bool dirtyField=true;
 
         private bool errField;
 
-        private bool smtCleanField;
+        private bool smtCleanField=true;
 
         private uint smtIdField;
 
@@ -498,7 +500,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (!dirty)
                 XmlHelper.WriteAttribute(sw, "dirty", this.dirty);
             XmlHelper.WriteAttribute(sw, "err", this.err, false);
-            if(!smtClean)
+            if (!smtCleanField)
                 XmlHelper.WriteAttribute(sw, "smtClean", this.smtClean);
             XmlHelper.WriteAttribute(sw, "smtId", this.smtId);
             XmlHelper.WriteAttribute(sw, "bmk", this.bmk);

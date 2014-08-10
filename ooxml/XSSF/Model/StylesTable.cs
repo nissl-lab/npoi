@@ -466,8 +466,6 @@ namespace NPOI.XSSF.Model
             CT_Borders ctBorders = new CT_Borders();
             ctBorders.SetBorderArray(ctb);
             ctBorders.count = (uint)ctb.Count;
-            if (ctBorders.count > 0)
-                ctBorders.countSpecified = true;
             styleSheet.borders = ctBorders;
 
             // Xfs

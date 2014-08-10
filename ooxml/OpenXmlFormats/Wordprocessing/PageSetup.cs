@@ -207,8 +207,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:header", this.header);
             XmlHelper.WriteAttribute(sw, "w:footer", this.footer);
             XmlHelper.WriteAttribute(sw, "w:gutter", this.gutter);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]

@@ -6131,8 +6131,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.dataBarField = new CT_DataBar();
             //this.colorScaleField = new CT_ColorScale();
             //this.formulaField = new List<string>();
+            this.dxfIdSpecified = false;
             this.stopIfTrueField = false;
-            this.aboveAverageField = false;
+            this.aboveAverageField = true;
             this.percentField = false;
             this.bottomField = false;
             this.equalAverageField = false;
@@ -6144,10 +6145,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_CfRule ctObj = new CT_CfRule();
             if (node.Attributes["type"] != null)
                 ctObj.type = (ST_CfType)Enum.Parse(typeof(ST_CfType), node.Attributes["type"].Value);
-            ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
+            if(node.Attributes["dxfId"]!=null)
+            {
+                ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
+                ctObj.dxfIdFieldSpecified = true;
+            }
             ctObj.priority = XmlHelper.ReadInt(node.Attributes["priority"]);
             ctObj.stopIfTrue = XmlHelper.ReadBool(node.Attributes["stopIfTrue"]);
-            ctObj.aboveAverage = XmlHelper.ReadBool(node.Attributes["aboveAverage"]);
+            if (node.Attributes["aboveAverage"]!=null)
+                ctObj.aboveAverage = XmlHelper.ReadBool(node.Attributes["aboveAverage"]);
             ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
             ctObj.bottom = XmlHelper.ReadBool(node.Attributes["bottom"]);
             if (node.Attributes["operator"] != null)
@@ -6181,11 +6187,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId, true);
+            if (dxfIdSpecified)
+                XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId, true);
             XmlHelper.WriteAttribute(sw, "priority", this.priority, true);
             if(this.stopIfTrue)
                 XmlHelper.WriteAttribute(sw, "stopIfTrue", this.stopIfTrue);
-            XmlHelper.WriteAttribute(sw, "aboveAverage", this.aboveAverage,true);
+            if (this.aboveAverage)
+                XmlHelper.WriteAttribute(sw, "aboveAverage", this.aboveAverage,true);
             if (this.percent)
                 XmlHelper.WriteAttribute(sw, "percent", this.percent);
             if (this.bottom)

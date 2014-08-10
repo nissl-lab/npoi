@@ -2924,6 +2924,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:rsidSect", this.rsidSect);
 			XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
 			sw.Write(">");
+            if (this.headerReference != null)
+            {
+                foreach (CT_HdrFtrRef x in this.headerReference)
+                {
+                    x.Write(sw, "headerReference");
+                }
+            }
+            if (this.footerReference != null)
+            {
+                foreach (CT_HdrFtrRef x in this.footerReference)
+                {
+                    x.Write(sw, "footerReference");
+                }
+            }
 			if (this.footnotePr != null)
 				this.footnotePr.Write(sw, "footnotePr");
 			if (this.endnotePr != null)
@@ -2964,20 +2978,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 				this.printerSettings.Write(sw, "printerSettings");
 			if (this.sectPrChange != null)
 				this.sectPrChange.Write(sw, "sectPrChange");
-			if (this.footerReference != null)
-			{
-				foreach (CT_HdrFtrRef x in this.footerReference)
-				{
-					x.Write(sw, "footerReference");
-				}
-			}
-			if (this.headerReference != null)
-			{
-				foreach (CT_HdrFtrRef x in this.headerReference)
-				{
-					x.Write(sw, "headerReference");
-				}
-			}
 			sw.Write(string.Format("</w:{0}>", nodeName));
 		}
 

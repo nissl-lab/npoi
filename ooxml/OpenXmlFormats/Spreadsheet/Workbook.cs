@@ -339,7 +339,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "calcId", this.calcId);
-            XmlHelper.WriteAttribute(sw, "calcMode", this.calcMode.ToString());
+            if(calcMode== ST_CalcMode.auto)
+                XmlHelper.WriteAttribute(sw, "calcMode", this.calcMode.ToString());
             XmlHelper.WriteAttribute(sw, "fullCalcOnLoad", this.fullCalcOnLoad);
             XmlHelper.WriteAttribute(sw, "refMode", this.refMode.ToString());
             XmlHelper.WriteAttribute(sw, "iterate", this.iterate);

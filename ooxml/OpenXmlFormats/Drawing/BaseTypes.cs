@@ -487,9 +487,9 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "r", this.r);
-            XmlHelper.WriteAttribute(sw, "g", this.g);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
+            XmlHelper.WriteAttribute(sw, "r", this.r, true);
+            XmlHelper.WriteAttribute(sw, "g", this.g, true);
+            XmlHelper.WriteAttribute(sw, "b", this.b, true);
             sw.Write(">");
             if (this.ItemsElementName != null)
             {

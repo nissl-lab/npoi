@@ -506,8 +506,7 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</m:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -578,8 +577,7 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "m:val", this.val, true);
-            sw.Write(">");
-            sw.Write(string.Format("</m:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private uint valField;
@@ -809,8 +807,7 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</m:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

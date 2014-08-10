@@ -739,8 +739,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "fmla", this.fmla);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(DataType = "token")]
@@ -894,11 +893,11 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_GeomGuideList
     {
 
-        private CT_GeomGuide[] gdField;
+        private List<CT_GeomGuide> gdField;
 
 
         [XmlElement("gd", Order = 0)]
-        public CT_GeomGuide[] gd
+        public List<CT_GeomGuide> gd
         {
             get
             {
@@ -908,6 +907,37 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.gdField = value;
             }
+        }
+
+        internal static CT_GeomGuideList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_GeomGuideList avLst = new CT_GeomGuideList();
+            avLst.gdField = new List<CT_GeomGuide>();
+            if (node.ChildNodes != null)
+            {
+                foreach (XmlNode childNode in node.ChildNodes)
+                {
+                    if (childNode.LocalName == "gd")
+                        avLst.gdField.Add(CT_GeomGuide.Parse(childNode, namespaceManager));
+                }
+            }
+            return avLst;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write("<a:{0}>", nodeName);
+            if (this.gdField != null)
+            {
+                foreach (CT_GeomGuide gg in gdField)
+                {
+                    gg.Write(sw, "gd");
+                }
+            }
+            sw.Write("</a:{0}>", nodeName);
+
         }
     }
 
@@ -949,8 +979,7 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "t", this.t);
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "b", this.b);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -1353,11 +1382,11 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_ConnectionSiteList
     {
 
-        private CT_ConnectionSite[] cxnField;
+        private List<CT_ConnectionSite> cxnField;
 
 
-        [XmlElement("cxn", Order = 0)]
-        public CT_ConnectionSite[] cxn
+        //[XmlElement("cxn", Order = 0)]
+        public List<CT_ConnectionSite> cxn
         {
             get
             {
@@ -1367,6 +1396,33 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.cxnField = value;
             }
+        }
+        internal static CT_ConnectionSiteList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_ConnectionSiteList cxnLst = new CT_ConnectionSiteList();
+            cxnLst.cxnField = new List<CT_ConnectionSite>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "cxn")
+                    cxnLst.cxnField.Add(CT_ConnectionSite.Parse(childNode, namespaceManager));
+            }
+            return cxnLst;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write("<a:{0}>", nodeName);
+            if (this.cxnField != null)
+            {
+                foreach (CT_ConnectionSite gg in cxnField)
+                {
+                    gg.Write(sw, "cxn");
+                }
+            }
+            sw.Write("</a:{0}>", nodeName);
+
         }
     }
 
@@ -1399,8 +1455,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "idx", this.idx);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
 
@@ -1810,11 +1865,11 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_Path2DList
     {
 
-        private CT_Path2D[] pathField;
+        private List<CT_Path2D> pathField;
 
 
-        [XmlElement("path", Order = 0)]
-        public CT_Path2D[] path
+        //[XmlElement("path", Order = 0)]
+        public List<CT_Path2D> path
         {
             get
             {
@@ -1824,6 +1879,34 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.pathField = value;
             }
+        }
+
+        internal static CT_Path2DList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_Path2DList pathList = new CT_Path2DList();
+            pathList.path = new List<CT_Path2D>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "path")
+                    pathList.pathField.Add(CT_Path2D.Parse(childNode, namespaceManager));
+            }
+            return pathList;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write("<a:{0}>", nodeName);
+            if (this.pathField != null)
+            {
+                foreach (CT_Path2D gg in pathField)
+                {
+                    gg.Write(sw, "path");
+                }
+            }
+            sw.Write("</a:{0}>", nodeName);
+
         }
     }
 
@@ -1836,17 +1919,14 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_PresetGeometry2D
     {
 
-        private List<CT_GeomGuide> avLstField = new List<CT_GeomGuide>();
+        private CT_GeomGuideList avLstField;
 
         private ST_ShapeType prstField;
 
-        public CT_GeomGuide AddNewAvLst()
+        public CT_GeomGuideList AddNewAvLst()
         {
-            if (this.avLstField == null)
-                this.avLstField = new List<CT_GeomGuide>();
-            CT_GeomGuide geomGuideNode = new CT_GeomGuide();
-            avLstField.Add(geomGuideNode);
-            return geomGuideNode;
+            this.avLstField = new CT_GeomGuideList();
+            return this.avLstField;
         }
 
         public static CT_PresetGeometry2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -1856,11 +1936,15 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_PresetGeometry2D ctObj = new CT_PresetGeometry2D();
             if (node.Attributes["prst"] != null)
                 ctObj.prst = (ST_ShapeType)Enum.Parse(typeof(ST_ShapeType), node.Attributes["prst"].Value);
-            ctObj.avLst = new List<CT_GeomGuide>();
-            foreach (XmlNode childNode in node.ChildNodes)
+            if (node.ChildNodes != null)
             {
-                if (childNode.LocalName == "avLst")
-                    ctObj.avLst.Add(CT_GeomGuide.Parse(childNode, namespaceManager));
+                foreach (XmlNode childNode in node.ChildNodes)
+                {
+                    if (childNode.LocalName == "avLst")
+                    {
+                        ctObj.avLstField = CT_GeomGuideList.Parse(childNode, namespaceManager);
+                    }
+                }
             }
             return ctObj;
         }
@@ -1874,10 +1958,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.avLst != null)
             {
-                foreach (CT_GeomGuide x in this.avLst)
-                {
-                    x.Write(sw, "avLst");
-                }
+                avLst.Write(sw, "avLst");
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -1885,8 +1966,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
         //        [XmlArray(Order = 0)]
-        //[XmlArrayItem("avLst", IsNullable = false)]
-        public List<CT_GeomGuide> avLst
+        public CT_GeomGuideList avLst
         {
             get
             {
@@ -1894,7 +1974,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
-                this.avLstField = new List<CT_GeomGuide>(value);
+                this.avLstField =value;
             }
         }
 
@@ -1996,41 +2076,37 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_CustomGeometry2D
     {
 
-        private List<CT_GeomGuide> avLstField;
+        private CT_GeomGuideList avLstField;
 
-        private List<CT_GeomGuide> gdLstField;
+        private CT_GeomGuideList gdLstField;
 
         private List<object> ahLstField;
 
-        private List<CT_ConnectionSite> cxnLstField;
+        private CT_ConnectionSiteList cxnLstField;
 
         private CT_GeomRect rectField;
 
-        private List<CT_Path2D> pathLstField;
+        private CT_Path2DList pathLstField;
         public static CT_CustomGeometry2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_CustomGeometry2D ctObj = new CT_CustomGeometry2D();
-            ctObj.avLst = new List<CT_GeomGuide>();
-            ctObj.gdLst = new List<CT_GeomGuide>();
             ctObj.ahLst = new List<Object>();
-            ctObj.cxnLst = new List<CT_ConnectionSite>();
-            ctObj.pathLst = new List<CT_Path2D>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rect")
                     ctObj.rect = CT_GeomRect.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "avLst")
-                    ctObj.avLst.Add(CT_GeomGuide.Parse(childNode, namespaceManager));
+                    ctObj.avLst = CT_GeomGuideList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "gdLst")
-                    ctObj.gdLst.Add(CT_GeomGuide.Parse(childNode, namespaceManager));
+                    ctObj.gdLst = CT_GeomGuideList.Parse(childNode, namespaceManager);
                 //else if (childNode.LocalName == "ahLst")
                 //    ctObj.ahLst.Add(Object.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "cxnLst")
-                    ctObj.cxnLst.Add(CT_ConnectionSite.Parse(childNode, namespaceManager));
+                    ctObj.cxnLst = CT_ConnectionSiteList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "pathLst")
-                    ctObj.pathLst.Add(CT_Path2D.Parse(childNode, namespaceManager));
+                    ctObj.pathLst = CT_Path2DList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -2045,38 +2121,26 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rect.Write(sw, "rect");
             if (this.avLst != null)
             {
-                foreach (CT_GeomGuide x in this.avLst)
-                {
-                    x.Write(sw, "avLst");
-                }
+                this.avLst.Write(sw, "avList");
             }
             if (this.gdLst != null)
             {
-                foreach (CT_GeomGuide x in this.gdLst)
-                {
-                    x.Write(sw, "gdLst");
-                }
+                this.gdLst.Write(sw, "gdLst");
             }
             if (this.cxnLst != null)
             {
-                foreach (CT_ConnectionSite x in this.cxnLst)
-                {
-                    x.Write(sw, "cxnLst");
-                }
+                this.cxnLstField.Write(sw, "cxnLst");
             }
             if (this.pathLst != null)
             {
-                foreach (CT_Path2D x in this.pathLst)
-                {
-                    x.Write(sw, "pathLst");
-                }
+                this.pathLstField.Write(sw, "pathLst");
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlArray(Order = 0)]
-        [XmlArrayItem("gd", IsNullable = false)]
-        public List<CT_GeomGuide> avLst
+        //[XmlArrayItem("gd", IsNullable = false)]
+        public CT_GeomGuideList avLst
         {
             get
             {
@@ -2089,8 +2153,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [XmlArray(Order = 1)]
-        [XmlArrayItem("gd", IsNullable = false)]
-        public List<CT_GeomGuide> gdLst
+        //[XmlArrayItem("gd", IsNullable = false)]
+        public CT_GeomGuideList gdLst
         {
             get
             {
@@ -2118,8 +2182,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [XmlArray(Order = 3)]
-        [XmlArrayItem("cxn", IsNullable = false)]
-        public List<CT_ConnectionSite> cxnLst
+        //[XmlArrayItem("cxn", IsNullable = false)]
+        public CT_ConnectionSiteList cxnLst
         {
             get
             {
@@ -2145,8 +2209,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [XmlArray(Order = 5)]
-        [XmlArrayItem("path", IsNullable = false)]
-        public List<CT_Path2D> pathLst
+        //[XmlArrayItem("path", IsNullable = false)]
+        public CT_Path2DList pathLst
         {
             get
             {

@@ -1824,6 +1824,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_OnOff qFormatField;
 
         private bool qFormatFieldSpecified;
+        public CT_LsdException()
+        {
+            semiHidden = ST_OnOff.off;
+            unhideWhenUsed = ST_OnOff.off;
+            locked = ST_OnOff.off;
+        }
+
         public static CT_LsdException Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -1850,14 +1857,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             if (locked != ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:locked", this.locked.ToString());
-            if(this.semiHidden== ST_OnOff.off)
-                XmlHelper.WriteAttribute(sw, "w:semiHidden", "0");
-            else
+            if(this.semiHidden== ST_OnOff.on)
                 XmlHelper.WriteAttribute(sw, "w:semiHidden", "1");
             XmlHelper.WriteAttribute(sw, "w:uiPriority", this.uiPriority);
-            if (this.unhideWhenUsed == ST_OnOff.off)
-                XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", "0");
-            else
+            if (this.unhideWhenUsed == ST_OnOff.on)
                 XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", "1");
             if (qFormat != ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:qFormat", this.qFormat.ToString());

@@ -40,8 +40,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private int valField;
@@ -85,9 +84,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            XmlHelper.WriteAttribute(sw, "val", this.val, true);
+            sw.Write("/>");
         }
 
         private int valField;
@@ -143,8 +141,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "pos", this.pos);
             XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -247,6 +244,31 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tabField = value;
             }
         }
+
+        internal void Write(StreamWriter sw, string p)
+        {
+            sw.Write("<a:{0}>", p);
+            if (this.tab != null)
+            {
+                foreach (CT_TextTabStop tts in tab)
+                {
+                    tts.Write(sw, "tab");
+                }
+            }
+            sw.Write("</a:{0}>", p);
+        }
+
+        internal static CT_TextTabStopList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_TextTabStopList ttsl = new CT_TextTabStopList();
+            ttsl.tab = new List<CT_TextTabStop>();
+            foreach (XmlNode childNode in node)
+            {
+                if(childNode.LocalName=="tab")
+                    ttsl.tab.Add(CT_TextTabStop.Parse(childNode, namespaceManager));
+            }
+            return ttsl;
+        }
     }
 
 
@@ -282,8 +304,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<a:{0}>", nodeName));
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -331,8 +352,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<a:{0}>", nodeName));
             if (this.spcPct != null)
                 this.spcPct.Write(sw, "spcPct");
             if (this.spcPts != null)
@@ -555,7 +575,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_TextBlipBullet buBlipField;
 
-        private List<CT_TextTabStop> tabLstField;
+        private CT_TextTabStopList tabLstField;
 
         private CT_TextCharacterProperties defRPrField;
 
@@ -628,7 +648,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 ctObj.fontAlgn = (ST_TextFontAlignType)Enum.Parse(typeof(ST_TextFontAlignType), node.Attributes["fontAlgn"].Value);
             ctObj.latinLnBrk = XmlHelper.ReadBool(node.Attributes["latinLnBrk"]);
             ctObj.hangingPunct = XmlHelper.ReadBool(node.Attributes["hangingPunct"]);
-            ctObj.tabLst = new List<CT_TextTabStop>();
+  
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "lnSpc")
@@ -664,7 +684,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 else if (childNode.LocalName == "extLst")
                     ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "tabLst")
-                    ctObj.tabLst.Add(CT_TextTabStop.Parse(childNode, namespaceManager));
+                    ctObj.tabLst = CT_TextTabStopList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -715,17 +735,14 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.buChar.Write(sw, "buChar");
             if (this.buBlip != null)
                 this.buBlip.Write(sw, "buBlip");
+            if (this.tabLstField != null)
+            {
+                this.tabLstField.Write(sw, "tabLst");
+            }
             if (this.defRPr != null)
                 this.defRPr.Write(sw, "defRPr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            if (this.tabLst!= null)
-            {
-                foreach (CT_TextTabStop x in this.tabLst)
-                {
-                    x.Write(sw, "tabLst");
-                }
-            }
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
         
@@ -912,7 +929,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [XmlElement(Order = 14)]
-        public List<CT_TextTabStop> tabLst
+        public CT_TextTabStopList tabLst
         {
             get
             {

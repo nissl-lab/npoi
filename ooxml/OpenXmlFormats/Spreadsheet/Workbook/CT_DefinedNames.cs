@@ -85,15 +85,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "description", this.description);
             XmlHelper.WriteAttribute(sw, "help", this.help);
             XmlHelper.WriteAttribute(sw, "statusBar", this.statusBar);
-            XmlHelper.WriteAttribute(sw, "localSheetId", this.localSheetId, true);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            XmlHelper.WriteAttribute(sw, "function", this.function);
-            XmlHelper.WriteAttribute(sw, "vbProcedure", this.vbProcedure);
-            XmlHelper.WriteAttribute(sw, "xlm", this.xlm);
+            if (localSheetIdFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "localSheetId", this.localSheetId, true);
+            if(hidden)
+                XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            if (function)
+                XmlHelper.WriteAttribute(sw, "function", this.function);
+            if (vbProcedure)
+                XmlHelper.WriteAttribute(sw, "vbProcedure", this.vbProcedure);
+            if(xlm)
+                XmlHelper.WriteAttribute(sw, "xlm", this.xlm);
             XmlHelper.WriteAttribute(sw, "functionGroupId", this.functionGroupId);
             XmlHelper.WriteAttribute(sw, "shortcutKey", this.shortcutKey);
-            XmlHelper.WriteAttribute(sw, "publishToServer", this.publishToServer);
-            XmlHelper.WriteAttribute(sw, "workbookParameter", this.workbookParameter);
+            if (publishToServerField)
+                XmlHelper.WriteAttribute(sw, "publishToServer", this.publishToServer);
+            if (workbookParameterField)
+                XmlHelper.WriteAttribute(sw, "workbookParameter", this.workbookParameter);
             sw.Write(">");
             sw.Write(string.Format("<![CDATA[{0}]]>", this.Value));
             sw.Write(string.Format("</{0}>", nodeName));
@@ -199,6 +206,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.localSheetIdField = value;
+                this.localSheetIdFieldSpecified = true;
             }
         }
 

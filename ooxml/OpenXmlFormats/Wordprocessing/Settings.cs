@@ -2533,10 +2533,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            if (this.val!= ST_Zoom.none)
+                XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             XmlHelper.WriteAttribute(sw, "w:percent", this.percent);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private ST_Zoom valField;
@@ -4190,9 +4190,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string cryptProviderTypeExtSourceField;
 
-        private byte[] hashField;
+        private string hashField;
 
-        private byte[] saltField;
+        private string saltField;
         public static CT_DocProtect Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -4217,8 +4217,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.algIdExtSource = XmlHelper.ReadString(node.Attributes["w:algIdExtSource"]);
             ctObj.cryptProviderTypeExt = XmlHelper.ReadBytes(node.Attributes["w:cryptProviderTypeExt"]);
             ctObj.cryptProviderTypeExtSource = XmlHelper.ReadString(node.Attributes["w:cryptProviderTypeExtSource"]);
-            ctObj.hash = XmlHelper.ReadBytes(node.Attributes["w:hash"]);
-            ctObj.salt = XmlHelper.ReadBytes(node.Attributes["w:salt"]);
+            ctObj.hash = XmlHelper.ReadString(node.Attributes["w:hash"]);
+            ctObj.salt = XmlHelper.ReadString(node.Attributes["w:salt"]);
             return ctObj;
         }
 
@@ -4242,8 +4242,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:cryptProviderTypeExtSource", this.cryptProviderTypeExtSource);
             XmlHelper.WriteAttribute(sw, "w:hash", this.hash);
             XmlHelper.WriteAttribute(sw, "w:salt", this.salt);
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -4496,7 +4495,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "base64Binary")]
-        public byte[] hash
+        public string hash
         {
             get
             {
@@ -4509,7 +4508,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "base64Binary")]
-        public byte[] salt
+        public string salt
         {
             get
             {
@@ -4571,8 +4570,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -6299,8 +6297,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:accent6", this.accent6.ToString());
             XmlHelper.WriteAttribute(sw, "w:hyperlink", this.hyperlink.ToString());
             XmlHelper.WriteAttribute(sw, "w:followedHyperlink", this.followedHyperlink.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

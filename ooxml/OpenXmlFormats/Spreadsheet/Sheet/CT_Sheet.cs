@@ -65,6 +65,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             CT_Sheet obj = new CT_Sheet();
             obj.idField = this.idField;
+            obj.sheetIdField = this.sheetIdField;
             obj.nameField = this.nameField;
             obj.stateField = this.stateField;
             return obj;

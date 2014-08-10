@@ -2995,31 +2995,44 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
-            foreach (object o in this.Items)
+            for (int i = 0; i < this.Items.Count; i++)
             {
-                if (o is CT_DecimalNumber)
+                object o = this.Items[i];
+                if (o is CT_DecimalNumber
+                    && this.ItemsElementName[i] == ItemsChoiceType2.gridBefore)
                     ((CT_DecimalNumber)o).Write(sw, "gridBefore");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff
+                    && this.ItemsElementName[i] == ItemsChoiceType2.cantSplit)
                     ((CT_OnOff)o).Write(sw, "cantSplit");
-                else if (o is CT_Cnf)
+                else if (o is CT_Cnf
+                    && this.ItemsElementName[i] == ItemsChoiceType2.cnfStyle)
                     ((CT_Cnf)o).Write(sw, "cnfStyle");
-                else if (o is CT_DecimalNumber)
+                else if (o is CT_DecimalNumber
+                    && this.ItemsElementName[i] == ItemsChoiceType2.divId)
                     ((CT_DecimalNumber)o).Write(sw, "divId");
-                else if (o is CT_DecimalNumber)
+                else if (o is CT_DecimalNumber
+                    && this.ItemsElementName[i] == ItemsChoiceType2.gridAfter)
                     ((CT_DecimalNumber)o).Write(sw, "gridAfter");
-                else if (o is CT_Height)
+                else if (o is CT_Height
+                    && this.ItemsElementName[i] == ItemsChoiceType2.trHeight)
                     ((CT_Height)o).Write(sw, "trHeight");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff
+                    && this.ItemsElementName[i] == ItemsChoiceType2.hidden)
                     ((CT_OnOff)o).Write(sw, "hidden");
-                else if (o is CT_TblWidth)
+                else if (o is CT_TblWidth
+                    && this.ItemsElementName[i] == ItemsChoiceType2.tblCellSpacing)
                     ((CT_TblWidth)o).Write(sw, "tblCellSpacing");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff
+                    && this.ItemsElementName[i] == ItemsChoiceType2.tblHeader)
                     ((CT_OnOff)o).Write(sw, "tblHeader");
-                else if (o is CT_Jc)
+                else if (o is CT_Jc
+                    && this.ItemsElementName[i] == ItemsChoiceType2.jc)
                     ((CT_Jc)o).Write(sw, "jc");
-                else if (o is CT_TblWidth)
+                else if (o is CT_TblWidth
+                    && this.ItemsElementName[i] == ItemsChoiceType2.wAfter)
                     ((CT_TblWidth)o).Write(sw, "wAfter");
-                else if (o is CT_TblWidth)
+                else if (o is CT_TblWidth
+                    && this.ItemsElementName[i] == ItemsChoiceType2.wBefore)
                     ((CT_TblWidth)o).Write(sw, "wBefore");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
@@ -3905,31 +3918,44 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.del.Write(sw, "del");
             if (this.trPrChange != null)
                 this.trPrChange.Write(sw, "trPrChange");
-            foreach (object o in this.Items)
+            for (int i=0;i<this.Items.Count;i++)
             {
-                if (o is CT_DecimalNumber)
+                object o = this.Items[i];
+                if (o is CT_DecimalNumber 
+                    &&this.ItemsElementName[i]== ItemsChoiceType2.gridBefore)
                     ((CT_DecimalNumber)o).Write(sw, "gridBefore");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff
+                    && this.ItemsElementName[i] == ItemsChoiceType2.cantSplit)
                     ((CT_OnOff)o).Write(sw, "cantSplit");
-                else if (o is CT_Cnf)
+                else if (o is CT_Cnf
+                    && this.ItemsElementName[i] == ItemsChoiceType2.cnfStyle)
                     ((CT_Cnf)o).Write(sw, "cnfStyle");
-                else if (o is CT_DecimalNumber)
+                else if (o is CT_DecimalNumber
+                    && this.ItemsElementName[i] == ItemsChoiceType2.divId)
                     ((CT_DecimalNumber)o).Write(sw, "divId");
-                else if (o is CT_DecimalNumber)
+                else if (o is CT_DecimalNumber
+                    && this.ItemsElementName[i] == ItemsChoiceType2.gridAfter)
                     ((CT_DecimalNumber)o).Write(sw, "gridAfter");
-                else if (o is CT_Height)
+                else if (o is CT_Height
+                    && this.ItemsElementName[i] == ItemsChoiceType2.trHeight)
                     ((CT_Height)o).Write(sw, "trHeight");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff
+                    && this.ItemsElementName[i] == ItemsChoiceType2.hidden)
                     ((CT_OnOff)o).Write(sw, "hidden");
-                else if (o is CT_TblWidth)
+                else if (o is CT_TblWidth
+                    && this.ItemsElementName[i] == ItemsChoiceType2.tblCellSpacing)
                     ((CT_TblWidth)o).Write(sw, "tblCellSpacing");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff
+                    && this.ItemsElementName[i] == ItemsChoiceType2.tblHeader)
                     ((CT_OnOff)o).Write(sw, "tblHeader");
-                else if (o is CT_Jc)
+                else if (o is CT_Jc
+                    && this.ItemsElementName[i] == ItemsChoiceType2.jc)
                     ((CT_Jc)o).Write(sw, "jc");
-                else if (o is CT_TblWidth)
+                else if (o is CT_TblWidth
+                    && this.ItemsElementName[i] == ItemsChoiceType2.wAfter)
                     ((CT_TblWidth)o).Write(sw, "wAfter");
-                else if (o is CT_TblWidth)
+                else if (o is CT_TblWidth
+                    && this.ItemsElementName[i] == ItemsChoiceType2.wBefore)
                     ((CT_TblWidth)o).Write(sw, "wBefore");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
@@ -4948,6 +4974,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.hMerge = new CT_HMerge();
             return this.hMerge;
         }
+        public CT_DecimalNumber AddNewGridspan()
+        {
+            this.gridSpanField = new CT_DecimalNumber();
+            return this.gridSpanField;
+        }
     }
 
     [Serializable]
@@ -5027,7 +5058,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_VMerge
     {
-
+        public CT_VMerge()
+        {
+            this.valField = ST_Merge.@continue;
+        }
         private ST_Merge valField;
 
         private bool valFieldSpecified;
@@ -5046,9 +5080,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            if(valField != ST_Merge.@continue)
+                XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -5193,6 +5227,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_Columns()
         {
             //this.colField = new List<CT_Column>();
+            this.equalWidthField = ST_OnOff.off;
+            this.sepField = ST_OnOff.off;
         }
         public static CT_Columns Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -5613,7 +5649,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
-
+        public void RemoveTc(int pos)
+        {
+            RemoveObject(ItemsChoiceTableRowType.tc, pos);
+        }
         [XmlElement(Order = 0)]
         public CT_TblPrEx tblPrEx
         {

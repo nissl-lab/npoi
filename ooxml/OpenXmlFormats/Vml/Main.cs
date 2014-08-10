@@ -101,6 +101,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_Textbox textboxField;
         private CT_TextPath textpathField;
         private CT_Empty iscommentField;
+        private CT_Lock lockField;
 
         /*[XmlElement("textdata", typeof(CT_Rel), Namespace = "urn:schemas-microsoft-com:office:powerpoint")]
         [XmlElement("anchorlock", typeof(CT_AnchorLock), Namespace = "urn:schemas-microsoft-com:office:word")]
@@ -115,6 +116,13 @@ namespace NPOI.OpenXmlFormats.Vml
             get { return this.iscommentField; }
             set { this.iscommentField = value; }
         }
+        [XmlElement]
+        public CT_Stroke stroke
+        {
+            get { return this.strokeField; }
+            set { this.strokeField = value; }
+        }
+
 
         [XmlElement(Namespace="urn:schemas-microsoft-com:office:word")]
         public CT_Wrap wrap
@@ -152,12 +160,19 @@ namespace NPOI.OpenXmlFormats.Vml
             get { return this.imagedataField; }
             set { this.imagedataField = value; }
         }
-        [XmlElement]
-        public CT_Stroke stroke
+        [XmlElement(ElementName = "lock", Namespace = "urn:schemas-microsoft-com:office:office")]
+        public CT_Lock @lock
         {
-            get { return this.strokeField; }
-            set { this.strokeField = value; }
+            get
+            {
+                return this.lockField;
+            }
+            set
+            {
+                this.lockField = value;
+            }
         }
+
         [XmlElement]
         public CT_Shadow shadow
         {
@@ -571,7 +586,12 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public partial class CT_ImageData {
-        
+
+
+        private string relidField;
+        private string titleField;
+        private string oleidField;
+        private string movieField;
         private string idField;
         
         private string srcField;
@@ -806,6 +826,54 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.hrefField = value;
+            }
+        }
+
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string relid
+        {
+            get
+            {
+                return this.relidField;
+            }
+            set
+            {
+                this.relidField = value;
+            }
+        }
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string title
+        {
+            get
+            {
+                return this.titleField;
+            }
+            set
+            {
+                this.titleField = value;
+            }
+        }
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string movie
+        {
+            get
+            {
+                return this.movieField;
+            }
+            set
+            {
+                this.movieField = value;
+            }
+        }
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string oleid
+        {
+            get {
+                return this.oleidField;
+            }
+            set 
+            {
+                this.oleidField = value;
             }
         }
     }
@@ -1124,7 +1192,7 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.connectanglesFieldSpecified = value;
             }
         }
-        [XmlAttribute]
+        [XmlAttribute(Namespace="urn:schemas-microsoft-com:office:office")]
         public ST_TrueFalse extrusionok
         {
             get
@@ -2318,7 +2386,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private List<CT_AnchorLock> anchorlockField;
 
-        private List<CT_Lock> lockField = new List<CT_Lock>();
+        private CT_Lock lockField;
         
         private List<CT_Border> bordertopField;
         
@@ -2334,6 +2402,9 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string adjField;
         private string idField;
+        private ST_TrueFalse filledField;
+        private ST_TrueFalse strokedField;
+        private ST_TrueFalse preferrelativeField;
         private string styleField;
         private float sptField;
         private string coordsizeField;
@@ -2346,8 +2417,43 @@ namespace NPOI.OpenXmlFormats.Vml
             CT_Shapetype obj = (CT_Shapetype)serializer.Deserialize(tr);
             return obj;
         }
-
+        [XmlAttribute]
+        public ST_TrueFalse stroked
+        {
+            get
+            {
+                return this.strokedField;
+            }
+            set
+            {
+                this.strokedField = value;
+            }
+        }
+        [XmlAttribute]
+        public ST_TrueFalse filled
+        {
+            get
+            {
+                return this.filledField;
+            }
+            set
+            {
+                this.filledField = value;
+            }
+        }
         [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public ST_TrueFalse preferrelative
+        {
+            get
+            {
+                return this.preferrelativeField;
+            }
+            set
+            {
+                this.preferrelativeField = value;
+            }
+        }
+        [XmlAttribute]
         public string coordsize
         {
             get
@@ -2385,15 +2491,18 @@ namespace NPOI.OpenXmlFormats.Vml
                 this.idField = value;
             }
         }
-        
-        [XmlElement("path")]
-        public CT_Path path {
-            get {
-                return this.pathField;
-            }
-            set {
 
-                this.pathField = value;
+
+        [XmlElement("stroke")]
+        public CT_Stroke stroke
+        {
+            get
+            {
+                return this.strokeField;
+            }
+            set
+            {
+                this.strokeField = value;
             }
         }
 
@@ -2448,16 +2557,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
         
-        
-        [XmlElement("stroke")]
-        public CT_Stroke stroke {
-            get {
-                return this.strokeField;
-            }
-            set {
-                this.strokeField = value;
-            }
-        }
+
         
         
         //[XmlElement("shadow")]
@@ -2531,19 +2631,30 @@ namespace NPOI.OpenXmlFormats.Vml
         //    }
         //}
 
-        [XmlElement("lock", Namespace = "urn:schemas-microsoft-com:office:word")]
-        public CT_Lock[] @lock
+        [XmlElement("path")]
+        public CT_Path path
         {
             get
             {
-                return this.lockField.ToArray();
+                return this.pathField;
             }
             set
             {
-                if (value == null)
-                    this.lockField = new List<CT_Lock>();
-                else
-                    this.lockField = new List<CT_Lock>(value);
+
+                this.pathField = value;
+            }
+        }
+
+        [XmlElement("lock", Namespace = "urn:schemas-microsoft-com:office:office")]
+        public CT_Lock @lock
+        {
+            get
+            {
+                return this.lockField;
+            }
+            set
+            {
+                    this.lockField = value;
             }
         }
         
@@ -2695,11 +2806,8 @@ namespace NPOI.OpenXmlFormats.Vml
 
         public CT_Lock AddNewLock()
         {
-            if (this.lockField == null)
-                this.lockField = new List<CT_Lock>();
-            CT_Lock obj = new CT_Lock();
-            this.lockField.Add(obj);
-            return obj;
+            CT_Lock lockField = new CT_Lock();
+            return lockField;
         }
     }
     
