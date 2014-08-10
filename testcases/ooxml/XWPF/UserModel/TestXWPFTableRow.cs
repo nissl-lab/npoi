@@ -43,8 +43,8 @@ namespace NPOI.XWPF.UserModel
             XWPFTableRow tr = table.GetRow(0);
             Assert.IsNotNull(tr);
 
-            tr.SetCantSplitRow(true);
-            bool isCant = tr.IsCantSplitRow();
+            tr.IsCantSplitRow = true;
+            bool isCant = tr.IsCantSplitRow;
             //assert(isCant);
             Assert.IsTrue(isCant);
         }
@@ -59,8 +59,8 @@ namespace NPOI.XWPF.UserModel
             XWPFTableRow tr = table.GetRow(0);
             Assert.IsNotNull(tr);
 
-            tr.SetRepeatHeader(true);
-            bool isRpt = tr.IsRepeatHeader();
+            tr.IsRepeatHeader =true;
+            bool isRpt = tr.IsRepeatHeader;
             //assert(isRpt);
             Assert.IsTrue(isRpt);
         }

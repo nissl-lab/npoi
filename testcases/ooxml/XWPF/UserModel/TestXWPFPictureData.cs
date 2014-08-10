@@ -39,7 +39,7 @@ namespace NPOI.XWPF.UserModel
             String[] ext = { "wmf", "png", "emf", "emf", "jpeg" };
             for (int i = 0; i < pictures.Count; i++)
             {
-                Assert.AreEqual(ext[i], pictures[(i)].suggestFileExtension());
+                Assert.AreEqual(ext[i], pictures[(i)].SuggestFileExtension());
             }
 
             int num = pictures.Count;
@@ -50,8 +50,8 @@ namespace NPOI.XWPF.UserModel
             // picture list was updated
             Assert.AreEqual(num + 1, pictures.Count);
             XWPFPictureData pict = (XWPFPictureData)sampleDoc.GetRelationById(relationId);
-            Assert.AreEqual("jpeg", pict.suggestFileExtension());
-            Assert.IsTrue(Arrays.Equals(pictureData, pict.GetData()));
+            Assert.AreEqual("jpeg", pict.SuggestFileExtension());
+            Assert.IsTrue(Arrays.Equals(pictureData, pict.Data));
         }
         [Test]
         public void TestPictureInHeader()
@@ -89,8 +89,8 @@ namespace NPOI.XWPF.UserModel
             String relationId = doc.AddPictureData(jpegData, (int)PictureType.JPEG);
             Assert.AreEqual(1, pictures.Count);
             XWPFPictureData jpgPicData = (XWPFPictureData)doc.GetRelationById(relationId);
-            Assert.AreEqual("jpeg", jpgPicData.suggestFileExtension());
-            Assert.IsTrue(Arrays.Equals(jpegData, jpgPicData.GetData()));
+            Assert.AreEqual("jpeg", jpgPicData.SuggestFileExtension());
+            Assert.IsTrue(Arrays.Equals(jpegData, jpgPicData.Data));
 
             // Ensure it now has one
             Assert.AreEqual(14, doc.GetPackagePart().Relationships.Size);
@@ -112,7 +112,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("/word/media/image1.jpeg", jpegRel.TargetUri.OriginalString);
 
             XWPFPictureData pictureDataByID = doc.GetPictureDataByID(jpegRel.Id);
-            byte[] newJPEGData = pictureDataByID.GetData();
+            byte[] newJPEGData = pictureDataByID.Data;
             Assert.AreEqual(newJPEGData.Length, jpegData.Length);
             for (int i = 0; i < newJPEGData.Length; i++)
             {
@@ -141,7 +141,7 @@ namespace NPOI.XWPF.UserModel
                         {
                             System.Console.WriteLine(picture.GetCTPicture());
                             XWPFPictureData data = picture.GetPictureData();
-                            if (data != null) System.Console.WriteLine(data.GetFileName());
+                            if (data != null) System.Console.WriteLine(data.FileName);
                         }
                     }
                 }

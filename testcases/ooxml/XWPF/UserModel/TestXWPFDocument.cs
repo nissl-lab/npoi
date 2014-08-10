@@ -139,7 +139,7 @@ namespace NPOI.XWPF.UserModel
             byte[] jpeg = XWPFTestDataSamples.GetImage("nature1.jpg");
             String relationId = doc.AddPictureData(jpeg, (int)PictureType.JPEG);
 
-            byte[] newJpeg = ((XWPFPictureData)doc.GetRelationById(relationId)).GetData();
+            byte[] newJpeg = ((XWPFPictureData)doc.GetRelationById(relationId)).Data;
             Assert.AreEqual(newJpeg.Length, jpeg.Length);
             for (int i = 0; i < jpeg.Length; i++)
             {

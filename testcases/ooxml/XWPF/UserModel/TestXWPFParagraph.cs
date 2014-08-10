@@ -307,31 +307,31 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image1.wmf", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
+            Assert.AreEqual("image1.wmf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[1];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image2.png", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
+            Assert.AreEqual("image2.png", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[2];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image3.emf", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
+            Assert.AreEqual("image3.emf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[3];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image4.emf", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
+            Assert.AreEqual("image4.emf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[4];
             Assert.AreEqual("", r.ToString());
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
             Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image5.jpeg", r.GetEmbeddedPictures()[0].GetPictureData().GetFileName());
+            Assert.AreEqual("image5.jpeg", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[5];
             //Is there a bug about XmlSerializer? it can not Deserialize the tag which inner text is only one whitespace

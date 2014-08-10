@@ -48,9 +48,9 @@ namespace NPOI.XWPF.UserModel
 
         // Create a map from this XWPF-level enum to the STBorder.Enum values
         public enum XWPFBorderType { NIL, NONE, SINGLE, THICK, DOUBLE, DOTTED, DASHED, DOT_DASH };
-        private static Dictionary<XWPFBorderType, ST_Border> xwpfBorderTypeMap;
+        internal static Dictionary<XWPFBorderType, ST_Border> xwpfBorderTypeMap;
         // Create a map from the STBorder.Enum values to the XWPF-level enums
-        private static Dictionary<ST_Border, XWPFBorderType> stBorderTypeMap;
+        internal static Dictionary<ST_Border, XWPFBorderType> stBorderTypeMap;
 
         protected IBody part;
         static XWPFTable()
@@ -142,7 +142,7 @@ namespace NPOI.XWPF.UserModel
                 }
             }
         }
-
+        
         private void CreateEmptyTable(CT_Tbl table)
         {
             // MINIMUM ELEMENTS FOR A TABLE
@@ -520,6 +520,46 @@ namespace NPOI.XWPF.UserModel
 				CT_DecimalNumber colSize = tblPr.IsSetTblStyleColBandSize() ? tblPr.tblStyleColBandSize : tblPr.AddNewTblStyleColBandSize();
 				colSize.val = value.ToString();
 			}
+        }
+        public void SetTopBorder(XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TblPr tblPr = GetTrPr();
+            CT_TblBorders ctb = tblPr.IsSetTblBorders() ? tblPr.tblBorders : tblPr.AddNewTblBorders();
+            CT_Border b = ctb.top!=null ? ctb.top : ctb.AddNewTop();
+            b.val = xwpfBorderTypeMap[type];
+            b.sz = (ulong)size;
+            b.space = (ulong)space;
+            b.color = (rgbColor);
+        }
+        public void SetBottomBorder(XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TblPr tblPr = GetTrPr();
+            CT_TblBorders ctb = tblPr.IsSetTblBorders() ? tblPr.tblBorders : tblPr.AddNewTblBorders();
+            CT_Border b = ctb.bottom != null ? ctb.bottom : ctb.AddNewBottom();
+            b.val = xwpfBorderTypeMap[type];
+            b.sz = (ulong)size;
+            b.space = (ulong)space;
+            b.color = (rgbColor);
+        }
+        public void SetLeftBorder(XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TblPr tblPr = GetTrPr();
+            CT_TblBorders ctb = tblPr.IsSetTblBorders() ? tblPr.tblBorders : tblPr.AddNewTblBorders();
+            CT_Border b = ctb.left != null ? ctb.left : ctb.AddNewLeft();
+            b.val = xwpfBorderTypeMap[type];
+            b.sz = (ulong)size;
+            b.space = (ulong)space;
+            b.color = (rgbColor);
+        }
+        public void SetRightBorder(XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TblPr tblPr = GetTrPr();
+            CT_TblBorders ctb = tblPr.IsSetTblBorders() ? tblPr.tblBorders : tblPr.AddNewTblBorders();
+            CT_Border b = ctb.right != null ? ctb.right : ctb.AddNewRight();
+            b.val = xwpfBorderTypeMap[type];
+            b.sz = (ulong)size;
+            b.space = (ulong)space;
+            b.color = (rgbColor);
         }
         public void SetInsideHBorder(XWPFBorderType type, int size, int space, String rgbColor)
         {

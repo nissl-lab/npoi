@@ -134,8 +134,8 @@ namespace NPOI.XWPF.UserModel
 
             XWPFTable xtab = new XWPFTable(table, doc);
             XWPFTableRow row = xtab.CreateRow();
-            row.SetHeight(20);
-            Assert.AreEqual(20, row.GetHeight());
+            row.Height = (20);
+            Assert.AreEqual(20, row.Height);
         }
         [Test]
         public void TestSetGetMargins()

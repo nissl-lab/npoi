@@ -194,6 +194,22 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
+        public void SetBorderBottom(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TcPr ctTcPr = null;
+            if (!GetCTTc().IsSetTcPr())
+            {
+                ctTcPr = GetCTTc().AddNewTcPr();
+            }
+            CT_TcBorders borders = ctTcPr.AddNewTcBorders();
+            borders.bottom = new CT_Border();
+            CT_Border b = borders.bottom;
+            b.val = XWPFTable.xwpfBorderTypeMap[type];
+            b.sz = (ulong)size;
+            b.space = (ulong)space;
+            b.color = (rgbColor);
+        }
+
         public void SetText(String text)
         {
             CT_P ctP = (ctTc.SizeOfPArray() == 0) ? ctTc.AddNewP() : ctTc.GetPArray(0);
