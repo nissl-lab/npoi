@@ -804,12 +804,11 @@ namespace NPOI.XSSF.UserModel
             return sheets[index];
         }
 
-        /**
-         * Returns the index of the sheet by his name (case insensitive match)
-         *
-         * @param name the sheet name
-         * @return index of the sheet (0 based) or <tt>-1</tt if not found
-         */
+        /// <summary>
+        /// Returns the index of the sheet by his name (case insensitive match)
+        /// </summary>
+        /// <param name="name">the sheet name</param>
+        /// <returns>index of the sheet (0 based) or -1 if not found</returns>
         public int GetSheetIndex(String name)
         {
             for (int i = 0; i < sheets.Count; ++i)
@@ -942,12 +941,20 @@ namespace NPOI.XSSF.UserModel
         public void RemoveSheetAt(int index)
         {
             ValidateSheetIndex(index);
-
+            bool changeActiveTab = false;
+            if (ActiveSheetIndex>index)
+            {
+                changeActiveTab = true;
+            }
             OnSheetDelete(index);
 
             XSSFSheet sheet = (XSSFSheet)GetSheetAt(index);
             RemoveRelation(sheet);
             sheets.RemoveAt(index);
+            if (changeActiveTab)
+            {
+                SetActiveSheet(0);
+            }
         }
 
         /**
@@ -1767,6 +1774,7 @@ namespace NPOI.XSSF.UserModel
         {
             ValidateSheetIndex(sheetIndex);
 
+            
             foreach (CT_BookView arrayBook in workbook.bookViews.workbookView)
             {
                 arrayBook.activeTab = (uint)(sheetIndex);
@@ -1813,7 +1821,7 @@ namespace NPOI.XSSF.UserModel
 
         public void RemoveAt(int index)
         {
-            this.sheets.RemoveAt(index);
+            this.RemoveSheetAt(index);
         }
 
         public ISheet this[int index]
@@ -1871,6 +1879,7 @@ namespace NPOI.XSSF.UserModel
 
         public bool Remove(ISheet item)
         {
+
             return this.sheets.Remove((XSSFSheet)item);
         }
 
