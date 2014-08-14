@@ -50,10 +50,8 @@ namespace ScatterChart
             IChartDataSource<double> ys2 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(2, 2, 0, NUM_OF_COLUMNS - 1));
 
 
-            var s1 = data.AddSerie(xs, ys1);
-            s1.SetTitle("title1");
-            var s2 = data.AddSerie(xs, ys2);
-            s2.SetTitle("title2");
+            data.AddSerie(xs, ys1);
+            data.AddSerie(xs, ys2);
             chart.Plot(data, bottomAxis, leftAxis);
 
             // Write the output to a file
