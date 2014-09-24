@@ -977,6 +977,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(">");
             if (this.grouping != null)
                 this.grouping.Write(sw, "grouping");
+            if (this.varyColors != null)
+                this.varyColors.Write(sw, "varyColors");
             if (this.ser != null)
             {
                 foreach (CT_LineSer x in this.ser)
@@ -984,8 +986,6 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "ser");
                 }
             }
-            if (this.varyColors != null)
-                this.varyColors.Write(sw, "varyColors");
             if (this.dLbls != null)
                 this.dLbls.Write(sw, "dLbls");
             if (this.dropLines != null)
@@ -1159,7 +1159,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
-
+        public CT_Grouping AddNewGrouping()
+        {
+            this.groupingField = new CT_Grouping();
+            return this.groupingField;
+        }
         public CT_LineSer AddNewSer()
         {
             CT_LineSer newSer = new  CT_LineSer();

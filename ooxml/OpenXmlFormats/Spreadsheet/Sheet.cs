@@ -5880,8 +5880,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_HeaderFooter ctObj = new CT_HeaderFooter();
             ctObj.differentOddEven = XmlHelper.ReadBool(node.Attributes["differentOddEven"]);
             ctObj.differentFirst = XmlHelper.ReadBool(node.Attributes["differentFirst"]);
-            ctObj.scaleWithDoc = XmlHelper.ReadBool(node.Attributes["scaleWithDoc"]);
-            ctObj.alignWithMargins = XmlHelper.ReadBool(node.Attributes["alignWithMargins"]);
+            if (node.Attributes["scaleWithDoc"]!=null)
+                ctObj.scaleWithDoc = XmlHelper.ReadBool(node.Attributes["scaleWithDoc"]);
+            if (node.Attributes["alignWithMargins"] != null)
+                ctObj.alignWithMargins = XmlHelper.ReadBool(node.Attributes["alignWithMargins"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "oddHeader")
@@ -5905,10 +5907,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "differentOddEven", this.differentOddEven);
-            XmlHelper.WriteAttribute(sw, "differentFirst", this.differentFirst);
-            XmlHelper.WriteAttribute(sw, "scaleWithDoc", this.scaleWithDoc);
-            XmlHelper.WriteAttribute(sw, "alignWithMargins", this.alignWithMargins);
+            if (differentOddEven)
+                XmlHelper.WriteAttribute(sw, "differentOddEven", this.differentOddEven);
+            if (differentFirst)
+                XmlHelper.WriteAttribute(sw, "differentFirst", this.differentFirst);
+            if(!scaleWithDoc)
+                XmlHelper.WriteAttribute(sw, "scaleWithDoc", this.scaleWithDoc);
+            if (!alignWithMargins)
+                XmlHelper.WriteAttribute(sw, "alignWithMargins", this.alignWithMargins);
             sw.Write(">");
             if (this.oddHeader != null)
                 sw.Write(string.Format("<oddHeader><![CDATA[{0}]]></oddHeader>", this.oddHeader));

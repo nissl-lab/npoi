@@ -47,6 +47,7 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_TextFont ctObj = new CT_TextFont();
             ctObj.typeface = XmlHelper.ReadString(node.Attributes["typeface"]);
             ctObj.panose = XmlHelper.ReadBytes(node.Attributes["panose"]);
+            ctObj.pitchFamily = XmlHelper.ReadSByte(node.Attributes["pitchFamily"]);
             if (node.Attributes["charset"]!=null)
                 ctObj.charsetField = XmlHelper.ReadSByte(node.Attributes["charset"]);
             return ctObj;
@@ -482,8 +483,7 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "lang", this.lang);
             XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
             XmlHelper.WriteAttribute(sw, "sz", this.sz);
-            if(b)
-                XmlHelper.WriteAttribute(sw, "b", this.b);
+            XmlHelper.WriteAttribute(sw, "b", this.b);
             if(i)
                 XmlHelper.WriteAttribute(sw, "i", this.i);
             if(this.u!= ST_TextUnderlineType.none)

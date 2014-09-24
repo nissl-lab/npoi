@@ -55,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if (this.off != null)
                 this.off.Write(sw, "off");
             if (this.ext != null)
-                this.ext.Write(sw, "ext");
+                this.ext.Write(sw, "a:ext");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
 
@@ -1351,8 +1351,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             return sb.ToString();
         }
 
-        internal void Write(StreamWriter sw)
+        internal void Write(StreamWriter sw, string nodeName)
         {
+            sw.Write(string.Format("<{0}>", nodeName));
             sw.Write("<xdr:col>");
             sw.Write(this.col.ToString());
             sw.Write("</xdr:col>");
@@ -1365,6 +1366,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write("<xdr:rowOff>");
             sw.Write(this.rowOff.ToString());
             sw.Write("</xdr:rowOff>");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
     }
     public enum ST_EditAs
@@ -1379,6 +1381,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_AnchorClientData
     {
+        
         public static CT_AnchorClientData Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -1399,9 +1402,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write(">");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
-
         bool _fLocksWithSheet;
         bool _fPrintsWithSheet;
+
         [XmlAttribute]
         public bool fLocksWithSheet
         {
@@ -1514,7 +1517,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public static CT_Drawing Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceManager)
         {
-            XmlNodeList cellanchorNodes = xmldoc.SelectNodes("//*",namespaceManager);
+            XmlNodeList cellanchorNodes = xmldoc.SelectNodes("/xdr:wsDr/*", namespaceManager);
             CT_Drawing ctDrawing = new CT_Drawing();
             foreach (XmlNode node in cellanchorNodes)
             {
@@ -1537,7 +1540,6 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             return ctDrawing;
         }
     }
-
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
     public class CT_LegacyDrawing
@@ -1619,13 +1621,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return pictureField; }
             set { pictureField = value; }
         }
-
+         
         public void Write(StreamWriter sw)
         {
             sw.Write("<xdr:oneCellAnchor>");
-            sw.Write("<xdr:from>");
-            this.from.Write(sw);
-            sw.Write("</xdr:from>");
+            this.from.Write(sw, "xdr:from");
+            this.ext.Write(sw, "xdr:ext");
             if (this.sp != null)
                 sp.Write(sw, "sp");
             else if (this.connector != null)
@@ -1636,12 +1637,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.graphicalObjectField.Write(sw, "graphicFrame");
             else if (this.pictureField != null)
                 this.picture.Write(sw, "pic");
-            sw.Write("</xdr:oneCellAnchor>");
-
             if (this.clientData != null)
-            {
                 this.clientData.Write(sw, "clientData");
-            }
+            sw.Write("</xdr:oneCellAnchor>");
         }
 
         internal static CT_OneCellAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -1652,6 +1650,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 if (childNode.LocalName == "from")
                 {
                     oneCellAnchor.from = CT_Marker.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "ext")
+                {
+                    oneCellAnchor.ext = CT_PositiveSize2D.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "sp")
                 {
@@ -1960,12 +1962,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if(this.editAsField!= ST_EditAs.NONE)
                 sw.Write(string.Format(" editAs=\"{0}\"",this.editAsField.ToString()));
             sw.Write(">");
-            sw.Write("<xdr:from>");
-            this.from.Write(sw);
-            sw.Write("</xdr:from>");
-            sw.Write("<xdr:to>");
-            this.to.Write(sw);
-            sw.Write("</xdr:to>");
+            this.from.Write(sw, "xdr:from");
+            this.to.Write(sw, "xdr:to");
             if (this.sp != null)
                 sp.Write(sw, "sp");
             else if (this.connector != null)

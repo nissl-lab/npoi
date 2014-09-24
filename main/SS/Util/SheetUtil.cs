@@ -571,6 +571,10 @@ namespace NPOI.SS.Util
          */
         public static String GetUniqueSheetName(IWorkbook wb, String srcName)
         {
+            if (wb.GetSheetIndex(srcName) == -1)
+            {
+                return srcName;
+            }
             int uniqueIndex = 2;
             String baseName = srcName;
             int bracketPos = srcName.LastIndexOf('(');

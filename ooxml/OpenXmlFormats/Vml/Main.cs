@@ -9,6 +9,7 @@ using NPOI.OpenXmlFormats.Vml.Presentation;
 using System.IO;
 using System.Xml;
 using System.Text;
+using System.ComponentModel;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
@@ -42,6 +43,7 @@ namespace NPOI.OpenXmlFormats.Vml
             set { wrapcoordsField = value; }
         }
         [XmlAttribute]
+        [DefaultValue(ST_TrueFalse.t)]
         public ST_TrueFalse stroked
         {
             get { return strokedField; }
@@ -79,6 +81,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
 
         [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        [DefaultValue(ST_InsetMode.auto)]
         public ST_InsetMode insetmode
         {
             get { return insetmodeField; }

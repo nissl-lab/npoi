@@ -202,13 +202,13 @@ using System.Xml;
         public static XmlDocument ConvertStreamToXml(Stream xmlStream)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            using (StreamReader sr = new StreamReader(xmlStream))
-            {
-                string xml = sr.ReadToEnd();
-                System.Diagnostics.Debug.Write(xml);
-                xmlDoc.LoadXml(xml);
-            }
-            
+            //using (StreamReader sr = new StreamReader(xmlStream))
+            //{
+            //    string xml = sr.ReadToEnd();
+            //    System.Diagnostics.Debug.Write(xml);
+            //    xmlDoc.LoadXml(xml);
+            //}
+            xmlDoc.Load(xmlStream);
             return xmlDoc;
         }
 

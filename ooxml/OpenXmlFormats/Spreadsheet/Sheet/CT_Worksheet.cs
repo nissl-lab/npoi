@@ -980,7 +980,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void UnsetPageSetup()
         {
-            throw new NotImplementedException();
+            this.pageSetup = null;
         }
     }
 

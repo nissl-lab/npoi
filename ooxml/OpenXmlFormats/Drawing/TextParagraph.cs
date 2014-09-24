@@ -641,6 +641,8 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.indent = XmlHelper.ReadInt(node.Attributes["indent"]);
             if (node.Attributes["algn"] != null)
                 ctObj.algn = (ST_TextAlignType)Enum.Parse(typeof(ST_TextAlignType), node.Attributes["algn"].Value);
+            else
+                ctObj.algn = ST_TextAlignType.l;
             ctObj.defTabSz = XmlHelper.ReadInt(node.Attributes["defTabSz"]);
             ctObj.rtl = XmlHelper.ReadBool(node.Attributes["rtl"]);
             ctObj.eaLnBrk = XmlHelper.ReadBool(node.Attributes["eaLnBrk"]);
@@ -696,9 +698,10 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "marL", this.marL);
             XmlHelper.WriteAttribute(sw, "marR", this.marR);
-            XmlHelper.WriteAttribute(sw, "lvl", this.lvl);
+            XmlHelper.WriteAttribute(sw, "lvl", this.lvl, true);
             XmlHelper.WriteAttribute(sw, "indent", this.indent);
-            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            if(algn!= ST_TextAlignType.l)
+                XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             XmlHelper.WriteAttribute(sw, "defTabSz", this.defTabSz);
             XmlHelper.WriteAttribute(sw, "rtl", this.rtl, false);
             XmlHelper.WriteAttribute(sw, "eaLnBrk", this.eaLnBrk, false);

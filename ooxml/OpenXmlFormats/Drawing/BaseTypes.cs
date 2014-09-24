@@ -318,11 +318,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "cx", this.cx, true);
             XmlHelper.WriteAttribute(sw, "cy", this.cy, true);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -2152,7 +2151,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.off != null)
                 this.off.Write(sw, "off");
             if (this.ext != null)
-                this.ext.Write(sw, "ext");
+                this.ext.Write(sw, "a:ext");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
@@ -2300,11 +2299,11 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.off != null)
                 this.off.Write(sw, "off");
             if (this.ext != null)
-                this.ext.Write(sw, "ext");
+                this.ext.Write(sw, "a:ext");
             if (this.chOff != null)
                 this.chOff.Write(sw, "chOff");
             if (this.chExt != null)
-                this.chExt.Write(sw, "chExt");
+                this.chExt.Write(sw, "a:chExt");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
