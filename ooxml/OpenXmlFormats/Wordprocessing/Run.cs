@@ -538,51 +538,69 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             int i = 0;
             foreach (object o in this.Items)
             {
-                if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.instrText)
+                //if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.instrText)
+                if ((o is CT_Text) && this.itemsElementNameField[i] == RunItemsChoiceType.instrText)
                     ((CT_Text)o).Write(sw, "instrText");
                 else if (o is CT_Object)
                     ((CT_Object)o).Write(sw, "object");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.pgNum)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.pgNum)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.pgNum)
                     sw.Write("<w:pgNum/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.annotationRef)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.annotationRef)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.annotationRef)
                     sw.Write("<w:annotationRef/>");
                 else if (o is CT_Br)
                     ((CT_Br)o).Write(sw, "br");
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "w:commentReference");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.continuationSeparator)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.continuationSeparator)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.continuationSeparator)
                     sw.Write("<w:continuationSeparator/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.cr)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.cr)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.cr)
                     sw.Write("<w:cr/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.dayLong)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.dayLong)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.dayLong)
                     sw.Write("<w:dayLong/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.dayShort)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.dayShort)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.dayShort)
                     sw.Write("<w:dayShort/>");
-                else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.delInstrText)
+                //else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.delInstrText)
+                else if ((o is CT_Text) && this.itemsElementNameField[i] == RunItemsChoiceType.delInstrText)
                     ((CT_Text)o).Write(sw, "delInstrText");
-                else if (o is CT_Text && this.ItemsElementName[i] == RunItemsChoiceType.delText)
+                //else if (o is CT_Text && this.ItemsElementName[i] == RunItemsChoiceType.delText)
+                else if (o is CT_Text && this.itemsElementNameField[i] == RunItemsChoiceType.delText)
                     ((CT_Text)o).Write(sw, "delText");
                 else if (o is CT_Drawing)
                     ((CT_Drawing)o).Write(sw, "drawing");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.endnoteRef)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.endnoteRef)
+                 else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.endnoteRef)
                     sw.Write("<w:endnoteRef/>");
-                else if (o is CT_FtnEdnRef)
+                //else if (o is CT_FtnEdnRef)
+                else if (o is CT_FtnEdnRef && this.itemsElementNameField[i] == RunItemsChoiceType.endnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "endnoteReference");
                 else if (o is CT_FldChar)
                     ((CT_FldChar)o).Write(sw, "fldChar");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.footnoteRef)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.footnoteRef)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.footnoteRef)
                     sw.Write("<w:footnoteRef/>");
-                else if (o is CT_FtnEdnRef)
+                //else if (o is CT_FtnEdnRef)
+                else if (o is CT_FtnEdnRef && this.itemsElementNameField[i] == RunItemsChoiceType.footnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.lastRenderedPageBreak)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.lastRenderedPageBreak)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.lastRenderedPageBreak)
                     sw.Write("<w:lastRenderedPageBreak/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthLong)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthLong)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.monthLong)
                     sw.Write("<w:monthLong/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthShort)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthShort)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.monthShort)
                     sw.Write("<w:monthShort/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.noBreakHyphen)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.noBreakHyphen)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.noBreakHyphen)
                     sw.Write("<w:noBreakHyphen/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.yearLong)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.yearLong)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.yearLong)
                     sw.Write("<w:yearLong/>");
                 else if (o is CT_Picture)
                     ((CT_Picture)o).Write(sw, "pict");
@@ -590,13 +608,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_PTab)o).Write(sw, "ptab");
                 else if (o is CT_Ruby)
                     ((CT_Ruby)o).Write(sw, "ruby");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.separator)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.separator)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.separator)
                     sw.Write("<w:separator/>");
-                else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.softHyphen)
+                //else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.softHyphen)
+                else if (o is CT_Empty && this.itemsElementNameField[i] == RunItemsChoiceType.softHyphen)
                     sw.Write("<w:softHyphen/>");
                 else if (o is CT_Sym)
                     ((CT_Sym)o).Write(sw, "sym");
-                else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.t)
+                //else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.t)
+                else if ((o is CT_Text) && this.itemsElementNameField[i] == RunItemsChoiceType.t)
                     ((CT_Text)o).Write(sw, "t");
                 else if (o is CT_Empty)
                     sw.Write("<w:tab/>");
