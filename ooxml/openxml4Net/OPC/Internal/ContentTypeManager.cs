@@ -397,7 +397,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
                     // Overriden content types
                     //iterator.Current.MoveToNext();
-                    Uri uri = new Uri(iterator.Current.GetAttribute(PART_NAME_ATTRIBUTE_NAME, xpathnav.NamespaceURI),UriKind.RelativeOrAbsolute);
+                    Uri uri = PackagingUriHelper.ParseUri(iterator.Current.GetAttribute(PART_NAME_ATTRIBUTE_NAME, xpathnav.NamespaceURI), UriKind.RelativeOrAbsolute);
                     PackagePartName partName = PackagingUriHelper
                             .CreatePartName(uri);
                     String contentType = iterator.Current.GetAttribute(CONTENT_TYPE_ATTRIBUTE_NAME, xpathnav.NamespaceURI);
