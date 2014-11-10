@@ -1932,13 +1932,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
+            int i;
             foreach (object o in this.Items)
             {
                 if (o is CT_Empty)
                     sw.Write("<richText/>");
-                else if (o is CT_SdtDocPart)
+                else if (o is CT_SdtDocPart && this.itemsElementNameField[i]  == ItemsChoiceType17.docPartList)
                     ((CT_SdtDocPart)o).Write(sw, "docPartList");
-                else if (o is CT_SdtDocPart)
+                else if (o is CT_SdtDocPart && this.itemsElementNameField[i] == ItemsChoiceType17.docPartObj)
                     ((CT_SdtDocPart)o).Write(sw, "docPartObj");
                 else if (o is CT_SdtDropDownList)
                     ((CT_SdtDropDownList)o).Write(sw, "dropDownList");
@@ -1976,6 +1977,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_SdtComboBox)o).Write(sw, "comboBox");
                 else if (o is CT_DataBinding)
                     ((CT_DataBinding)o).Write(sw, "dataBinding");
+                i++;
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
