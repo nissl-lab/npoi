@@ -82,7 +82,14 @@ namespace NPOI.XSSF.UserModel
                 else
                 {
                     Uri target = _externalRel.TargetUri;
-                    _location = target.ToString();
+                    try
+                    {
+                        _location = target.ToString();
+                    }
+                    catch (UriFormatException)
+                    {
+                        _location = target.OriginalString;
+                    }
 
                     // Try to figure out the type
                     if (_location.StartsWith("http://") || _location.StartsWith("https://")
