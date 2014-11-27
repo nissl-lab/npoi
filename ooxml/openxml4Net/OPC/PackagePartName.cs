@@ -99,7 +99,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri partURI;
             try
             {
-                partURI = new Uri(partName,UriKind.RelativeOrAbsolute);
+                partURI = PackagingUriHelper.ParseUri(partName, UriKind.RelativeOrAbsolute);
             }
             catch (UriFormatException)
             {

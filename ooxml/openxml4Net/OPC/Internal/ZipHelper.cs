@@ -122,7 +122,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 retVal = retVal.Substring(1);
             try
             {
-                return new Uri(retVal,UriKind.RelativeOrAbsolute);
+                return PackagingUriHelper.ParseUri(retVal, UriKind.RelativeOrAbsolute);
             }
             catch (UriFormatException)
             {

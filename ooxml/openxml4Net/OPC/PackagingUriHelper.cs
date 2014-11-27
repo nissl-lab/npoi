@@ -95,12 +95,12 @@ namespace NPOI.OpenXml4Net.OPC
             Uri uriPACKAGE_RELATIONSHIPS_ROOT_URI = null;
             Uri uriPACKAGE_PROPERTIES_URI = null;
 
-            uriPACKAGE_ROOT_URI = new Uri("/",UriKind.Relative);
-            uriPACKAGE_RELATIONSHIPS_ROOT_URI = new Uri(FORWARD_SLASH_CHAR
+            uriPACKAGE_ROOT_URI = ParseUri("/",UriKind.Relative);
+            uriPACKAGE_RELATIONSHIPS_ROOT_URI = ParseUri(FORWARD_SLASH_CHAR
                     + RELATIONSHIP_PART_SEGMENT_NAME + FORWARD_SLASH_CHAR
                     + RELATIONSHIP_PART_EXTENSION_NAME, UriKind.Relative);
-            packageRootUri = new Uri("/", UriKind.Relative);
-            uriPACKAGE_PROPERTIES_URI = new Uri(FORWARD_SLASH_CHAR
+            packageRootUri = ParseUri("/", UriKind.Relative);
+            uriPACKAGE_PROPERTIES_URI = ParseUri(FORWARD_SLASH_CHAR
                     + PACKAGE_PROPERTIES_SEGMENT_NAME + FORWARD_SLASH_CHAR
                     + PACKAGE_CORE_PROPERTIES_NAME, UriKind.Relative);
 
@@ -140,6 +140,20 @@ namespace NPOI.OpenXml4Net.OPC
                 return packageRootUri;
             }
         }
+
+        private static readonly bool IsMono = Type.GetType("Mono.Runtime") != null;
+        public static Uri ParseUri(string s, UriKind kind = UriKind.Absolute)
+        {
+            if (IsMono)
+            {
+                if (kind == UriKind.Absolute)
+                    throw new UriFormatException();
+                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith("/"))
+                    kind = UriKind.Relative;
+            }
+            return new Uri(s, kind);
+        }
+
 
         /**
          * Know if the specified Uri is a relationship part name.
@@ -207,7 +221,7 @@ namespace NPOI.OpenXml4Net.OPC
                     {
                         try
                         {
-                            return new Uri(path.Substring(0, num2));
+                            return ParseUri(path.Substring(0, num2));
                         }
                         catch (UriFormatException)
                         {
@@ -232,7 +246,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri retUri = null;
             try
             {
-                retUri = new Uri(Combine(prefix.OriginalString, suffix.OriginalString));
+                retUri = ParseUri(Combine(prefix.OriginalString, suffix.OriginalString));
             }
             catch (UriFormatException)
             {
@@ -299,7 +313,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     try
                     {
-                        targetURI = new Uri(path.Substring(1), UriKind.RelativeOrAbsolute);
+                        targetURI = ParseUri(path.Substring(1), UriKind.RelativeOrAbsolute);
                     }
                     catch (Exception)
                     {
@@ -346,7 +360,7 @@ namespace NPOI.OpenXml4Net.OPC
 
                 try
                 {
-                    return new Uri(retVal.ToString(),UriKind.RelativeOrAbsolute);
+                    return ParseUri(retVal.ToString(),UriKind.RelativeOrAbsolute);
                 }
                 catch (Exception)
                 {
@@ -405,7 +419,7 @@ namespace NPOI.OpenXml4Net.OPC
 
             try
             {
-                return new Uri(retVal.ToString(), UriKind.RelativeOrAbsolute);
+                return ParseUri(retVal.ToString(), UriKind.RelativeOrAbsolute);
             }
             catch (Exception)
             {
@@ -483,7 +497,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 path = Path.Combine(path, targetUri.OriginalString).Replace("\\", "/");
             }
-            return new Uri(path, UriKind.RelativeOrAbsolute);
+            return ParseUri(path, UriKind.RelativeOrAbsolute);
         }
 
         /**
@@ -494,7 +508,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri retUri = null;
             try
             {
-                retUri = new Uri(path,UriKind.RelativeOrAbsolute);
+                retUri = ParseUri(path,UriKind.RelativeOrAbsolute);
             }
             catch (UriFormatException)
             {
@@ -569,7 +583,7 @@ namespace NPOI.OpenXml4Net.OPC
             try
             {
                 partName = partName.Replace("\\","/");  //tolerate backslash - poi test49609
-                partNameURI = new Uri(partName,UriKind.Relative);
+                partNameURI = ParseUri(partName,UriKind.Relative);
             }
             catch (UriFormatException e)
             {
@@ -597,7 +611,7 @@ namespace NPOI.OpenXml4Net.OPC
             try
             {
                 newPartNameURI = ResolvePartUri(
-                        relativePart.PartName.URI, new Uri(partName,UriKind.RelativeOrAbsolute));
+                        relativePart.PartName.URI, ParseUri(partName,UriKind.RelativeOrAbsolute));
             }
             catch (UriFormatException e)
             {
@@ -776,7 +790,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 value += "/";
             }
-            return new Uri(value, UriKind.RelativeOrAbsolute);  //unicode character is not allowed in Uri class before .NET4.5
+            return ParseUri(value, UriKind.RelativeOrAbsolute);  //unicode character is not allowed in Uri class before .NET4.5
         }
 
            /**
