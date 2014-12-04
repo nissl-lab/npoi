@@ -4016,7 +4016,7 @@ namespace NPOI.XSSF.UserModel
 
             // copy sheet's relations
             List<POIXMLDocumentPart> rels = this.GetRelations();
-            // if the sheet being cloned has a drawing then rememebr it and re-create tpoo
+            // if the sheet being cloned has a drawing then remember it and re-create too
             XSSFDrawing dg = null;
             foreach (POIXMLDocumentPart r in rels)
             {
@@ -4031,7 +4031,7 @@ namespace NPOI.XSSF.UserModel
                     rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
                 newSheet.AddRelation(rel.Id, r);
             }
-            // clone the sheet drawing alongs with its relationships
+            // clone the sheet drawing along with its relationships
             if (dg != null)
             {
                 if (ct.IsSetDrawing())
@@ -4045,7 +4045,7 @@ namespace NPOI.XSSF.UserModel
                 clonedDg.GetCTDrawing().Set(dg.GetCTDrawing());
 
                 // Clone drawing relations
-                List<POIXMLDocumentPart> srcRels = (newSheet.CreateDrawingPatriarch() as XSSFDrawing).GetRelations();
+                List<POIXMLDocumentPart> srcRels = dg.GetRelations();
                 foreach (POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
