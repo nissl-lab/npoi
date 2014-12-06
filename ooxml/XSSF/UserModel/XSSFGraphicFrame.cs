@@ -63,8 +63,7 @@ namespace NPOI.XSSF.UserModel
          */
         public static CT_GraphicalObjectFrame Prototype()
         {
-            if (prototype == null)
-            {
+
                 CT_GraphicalObjectFrame graphicFrame = new CT_GraphicalObjectFrame();
 
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_GraphicalObjectFrameNonVisual nvGraphic = graphicFrame.AddNewNvGraphicFramePr();
@@ -87,7 +86,7 @@ namespace NPOI.XSSF.UserModel
                 CT_GraphicalObject graphic = graphicFrame.AddNewGraphic();
 
                 prototype = graphicFrame;
-            }
+            
             return prototype;
         }
 

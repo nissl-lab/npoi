@@ -112,7 +112,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 			XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
 
             XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
-            if (this.borderId == 0)
+            if (this.applyBorder)
                 XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder, true);
             XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
             XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill, true);

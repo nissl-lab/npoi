@@ -45,6 +45,8 @@ namespace NPOI.XSSF.UserModel.Charts
 
             internal void AddToChart(CT_LineChart ctLineChart) {
                 CT_LineSer ctLineSer = ctLineChart.AddNewSer();
+                CT_Grouping ctGrouping = ctLineChart.AddNewGrouping();
+                ctGrouping.val = ST_Grouping.standard;
                 ctLineSer.AddNewIdx().val= (uint)id;
                 ctLineSer.AddNewOrder().val = (uint)order;
 
