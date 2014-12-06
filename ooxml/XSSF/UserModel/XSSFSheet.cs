@@ -126,15 +126,15 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Read(Stream is1)
         {
-            //try
-            //{
-            XmlDocument doc = ConvertStreamToXml(is1);
-            worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
-            //}
-            //catch (XmlException e)
-            //{
-            //    throw new POIXMLException(e);
-            //}
+            try
+            {
+                XmlDocument doc = ConvertStreamToXml(is1);
+                worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
+            }
+            catch (XmlException e)
+            {
+                throw new POIXMLException(e);
+            }
 
             InitRows(worksheet);
             columnHelper = new ColumnHelper(worksheet);
@@ -3693,12 +3693,12 @@ namespace NPOI.XSSF.UserModel
             get { throw new NotImplementedException(); }
         }
 
-        public System.Collections.IEnumerator GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             return GetRowEnumerator();
         }
 
-        public System.Collections.IEnumerator GetRowEnumerator()
+        public IEnumerator GetRowEnumerator()
         {
             return _rows.Values.GetEnumerator();
         }

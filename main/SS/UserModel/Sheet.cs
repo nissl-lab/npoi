@@ -22,6 +22,7 @@ namespace NPOI.SS.UserModel
     using System.Collections.Generic;
 
     using NPOI.SS.Util;
+    using System.Collections;
 
     /// <summary>
     /// Indicate the position of the margin. One of left, right, top and bottom.
@@ -80,7 +81,7 @@ namespace NPOI.SS.UserModel
     /// The most common type of sheet is the worksheet, which is represented as a grid of cells. Worksheet cells can
     /// contain text, numbers, dates, and formulas. Cells can also be formatted.
     /// </remarks>
-    public interface ISheet //: IEnumerator<IRow>
+    public interface ISheet
     {
 
         /// <summary>
@@ -240,7 +241,7 @@ namespace NPOI.SS.UserModel
         /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
         /// if you care which one it is.
         /// </returns>
-        System.Collections.IEnumerator GetRowEnumerator();
+        IEnumerator GetRowEnumerator();
 
         /// <summary>
         /// Alias for GetRowEnumerator() to allow <c>foreach</c> loops.
@@ -251,7 +252,7 @@ namespace NPOI.SS.UserModel
         /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
         /// if you care which one it is.
         /// </returns>
-        System.Collections.IEnumerator GetEnumerator();
+        IEnumerator GetEnumerator();
 
         /// <summary>
         /// Gets the flag indicating whether the window should show 0 (zero) in cells Containing zero value.

@@ -53,7 +53,7 @@ namespace NPOI.SS.UserModel
     /// This interface is shared between the implementation specific to xls and xlsx.
     /// This way it is possible to access Excel workbooks stored in both formats.
     /// </summary>
-    public interface IWorkbook: IList<ISheet>
+    public interface IWorkbook
     {
 
         /// <summary>

@@ -2025,10 +2025,5 @@ namespace NPOI.HSSF.UserModel
         {
             return this._sheets.Remove((HSSFSheet)item);
         }
-
-        IEnumerator<ISheet> IEnumerable<ISheet>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

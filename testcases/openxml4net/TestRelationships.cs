@@ -356,6 +356,7 @@ namespace TestCases.OPC
             Assert.AreEqual(rel1.TargetMode, rel2.TargetMode);
         }
         [Test]
+        [Ignore]
         public void TestTrailingSpacesInURI_53282()
         {
             OPCPackage pkg = null;

@@ -1884,15 +1884,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         #endregion
-
-        #region IEnumerable<ISheet> Members
-
-        IEnumerator<ISheet> IEnumerable<ISheet>.GetEnumerator()
-        {
-            return ((IList<ISheet>)this.sheets).GetEnumerator();
-        }
-
-        #endregion
     }
 }
 
