@@ -1965,7 +1965,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
 
-        //        [XmlArray(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_GeomGuideList avLst
         {
             get
@@ -2121,7 +2121,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rect.Write(sw, "rect");
             if (this.avLst != null)
             {
-                this.avLst.Write(sw, "avList");
+                this.avLst.Write(sw, "avLst");
             }
             if (this.gdLst != null)
             {
@@ -2138,7 +2138,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
-        [XmlArray(Order = 0)]
+        [XmlElement(Order = 0)]
         //[XmlArrayItem("gd", IsNullable = false)]
         public CT_GeomGuideList avLst
         {
@@ -2152,7 +2152,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlArray(Order = 1)]
+        [XmlElement(Order = 1)]
         //[XmlArrayItem("gd", IsNullable = false)]
         public CT_GeomGuideList gdLst
         {
@@ -2181,7 +2181,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlArray(Order = 3)]
+        [XmlElement(Order = 3)]
         //[XmlArrayItem("cxn", IsNullable = false)]
         public CT_ConnectionSiteList cxnLst
         {
@@ -2208,7 +2208,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [XmlArray(Order = 5)]
+        [XmlElement(Order = 5)]
         //[XmlArrayItem("path", IsNullable = false)]
         public CT_Path2DList pathLst
         {
