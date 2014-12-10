@@ -59,8 +59,6 @@ namespace NPOI.XSSF.UserModel
          */
         internal static CT_Shape Prototype()
         {
-            if (prototype == null)
-            {
                 CT_Shape shape = new CT_Shape();
 
 
@@ -115,7 +113,7 @@ namespace NPOI.XSSF.UserModel
                 body.AddNewLstStyle();
 
                 prototype = shape;
-            }
+            
             return prototype;
         }
 
@@ -131,20 +129,16 @@ namespace NPOI.XSSF.UserModel
          * @return the shape type
          * @see NPOI.ss.usermodel.ShapeTypes
          */
-        public int GetShapeType()
+        public int ShapeType
         {
-            return (int)ctShape.spPr.prstGeom.prst;
-        }
-
-        /**
-         * Sets the shape types.
-         *
-         * @param type the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
-         * @see NPOI.ss.usermodel.ShapeTypes
-         */
-        public void SetShapeType(int type)
-        {
-            ctShape.spPr.prstGeom.prst = ((ST_ShapeType)(type));
+            get
+            {
+                return (int)ctShape.spPr.prstGeom.prst;
+            }
+            set 
+            {
+                ctShape.spPr.prstGeom.prst = ((ST_ShapeType)(value));
+            }
         }
 
         protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
@@ -166,7 +160,6 @@ namespace NPOI.XSSF.UserModel
                 rPr.lang = ("en-US");
                 rPr.sz = (1100);
                 r.t = str.String;
-
             }
             else
             {
@@ -233,10 +226,7 @@ namespace NPOI.XSSF.UserModel
                     HSSFColor indexed = HSSFColor.GetIndexHash()[(int)xlsColor.indexed] as HSSFColor;
                     if (indexed != null)
                     {
-                        byte[] rgb = new byte[3];
-                        rgb[0] = (byte)indexed.GetTriplet()[0];
-                        rgb[1] = (byte)indexed.GetTriplet()[1];
-                        rgb[2] = (byte)indexed.GetTriplet()[2];
+                        byte[] rgb = indexed.RGB;
                         CT_SRgbColor clr = fill.IsSetSrgbClr() ? fill.srgbClr : fill.AddNewSrgbClr();
                         clr.val = (rgb);
                     }

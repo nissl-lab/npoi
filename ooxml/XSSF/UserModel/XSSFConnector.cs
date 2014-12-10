@@ -52,8 +52,7 @@ namespace NPOI.XSSF.UserModel
          */
         public static CT_Connector Prototype()
         {
-            if (prototype == null)
-            {
+
                 CT_Connector shape = new CT_Connector();
                 CT_ConnectorNonVisual nv = shape.AddNewNvCxnSpPr();
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
@@ -92,7 +91,7 @@ namespace NPOI.XSSF.UserModel
                 fontRef.AddNewSchemeClr().val = (ST_SchemeColorVal.tx1);
 
                 prototype = shape;
-            }
+
             return prototype;
         }
 

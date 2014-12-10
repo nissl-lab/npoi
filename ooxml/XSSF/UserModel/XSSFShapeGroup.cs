@@ -53,8 +53,7 @@ namespace NPOI.XSSF.UserModel
          */
         internal static CT_GroupShape Prototype()
         {
-            if (prototype == null)
-            {
+
                 CT_GroupShape shape = new CT_GroupShape();
 
 
@@ -79,7 +78,6 @@ namespace NPOI.XSSF.UserModel
                 p4.y = (0);
 
                 prototype = shape;
-            }
             return prototype;
         }
 
@@ -165,7 +163,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public CT_GroupShape GetCT_GroupShape()
+        public CT_GroupShape GetCTGroupShape()
         {
             return ctGroup;
         }
