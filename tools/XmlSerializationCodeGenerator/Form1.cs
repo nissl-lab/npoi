@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Dml.Chart.CT_ChartSpace);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Vml.CT_Shape);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
             //treeView1.ExpandAll();
@@ -123,6 +123,7 @@ namespace XmlSerializationCodeGenerator
             var properties = t.GetProperties();
             foreach (var p in properties)
             {
+                //忽略Specified结尾的Property
                 if (p.Name.EndsWith("Specified"))
                     continue;
 
@@ -179,9 +180,18 @@ namespace XmlSerializationCodeGenerator
                     {
                         sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBool(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
                     }
+                    else if (p.PropertyType.Name == "Decimal")
+                    {
+                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadDecimal(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                    }
                     else if (p.PropertyType.IsEnum)
                     {
-                        sb.AppendLine(string.Format("\t\tctObj.{0} = ({1})Enum.Parse(typeof({1}), node.Attributes[\"{2}{0}\"].Value);", p.Name, p.PropertyType.Name, attributePrefix));
+                        if (p.PropertyType.Name == "ST_TrueFalse")
+                            sb.AppendLine(string.Format("\tctObj.{0} = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        else if (p.PropertyType.Name == "ST_TrueFalseBlank")
+                            sb.AppendLine(string.Format("\tctObj.{0} = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        else
+                            sb.AppendLine(string.Format("\t\tctObj.{0} = ({1})Enum.Parse(typeof({1}), node.Attributes[\"{2}{0}\"].Value);", p.Name, p.PropertyType.Name, attributePrefix));
                     }
                 }
                 else if (p.PropertyType.Name == "String")
@@ -313,7 +323,15 @@ namespace XmlSerializationCodeGenerator
                 {
                     if (p.PropertyType.IsEnum)
                     {
-                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0}.ToString());", p.Name, attributePrefix));
+                        if (p.PropertyType.Name == "ST_TrueFalse" || p.PropertyType.Name == "ST_TrueFalseBlank")
+                            sb.AppendLine(string.Format("\tNPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
+                        else if (p.PropertyType.Name == "ST_Ext")
+                        {
+                            sb.AppendLine("\tif(this.ext!=ST_Ext.NONE)");
+                            sb.AppendLine(string.Format("\t\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0}.ToString());", p.Name, attributePrefix));
+                        }
+                        else
+                            sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0}.ToString());", p.Name, attributePrefix));
                     }
                     else
                     {
@@ -437,6 +455,22 @@ namespace XmlSerializationCodeGenerator
             {
                 return "o:";
             }
+            else if (n == "urn:schemas-microsoft-com:office:word")
+            {
+                return "w:";
+            }
+            else if (n == "urn:schemas-microsoft-com:vml")
+            {
+                return "v:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:excel")
+            {
+                return "x:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:powerpoint")
+            {
+                return "p:";
+            }
             else if (n == "http://schemas.openxmlformats.org/officeDocument/2006/math")
             {
                 return "m:";
@@ -449,7 +483,7 @@ namespace XmlSerializationCodeGenerator
             {
                 return "c:";
             }
-            return "";
+            return ""; 
         }
         public string GetXmlPrefix(Type p)
         {
@@ -485,6 +519,22 @@ namespace XmlSerializationCodeGenerator
             {
                 return "o:";
             }
+            else if (n == "urn:schemas-microsoft-com:vml")
+            {
+                return "v:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:excel")
+            {
+                return "x:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:powerpoint")
+            {
+                return "p:";
+            }
+            else if (n == "urn:schemas-microsoft-com:office:word")
+            {
+                return "w:";
+            }
             else if (n == "http://schemas.openxmlformats.org/officeDocument/2006/math")
             {
                 return "m:";
@@ -497,7 +547,7 @@ namespace XmlSerializationCodeGenerator
             {
                 return "c:";
             }
-            return "w:";
+            return "";    
         }
 
         private void button3_Click(object sender, EventArgs e)
