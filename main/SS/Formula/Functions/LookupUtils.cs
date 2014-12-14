@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using System.Globalization;
+    using System.Text.RegularExpressions;
 
     /**
      * Common functionality used by VLOOKUP, HLOOKUP, LOOKUP and MATCH
@@ -132,18 +133,40 @@ namespace NPOI.SS.Formula.Functions
         }
         private class StringLookupComparer : LookupValueComparerBase
         {
-            private String _value;
 
-            public StringLookupComparer(StringEval se)
+            private String _value;
+            private Regex _wildCardPattern;
+            private bool _matchExact;
+            private bool _isMatchFunction;
+
+            public StringLookupComparer(StringEval se, bool matchExact, bool isMatchFunction)
                 : base(se)
             {
 
                 _value = se.StringValue;
+                _wildCardPattern = Countif.StringMatcher.GetWildCardPattern(_value);
+                _matchExact = matchExact;
+                _isMatchFunction = isMatchFunction;
             }
+
             protected override CompareResult CompareSameType(ValueEval other)
             {
                 StringEval se = (StringEval)other;
-                return CompareResult.ValueOf(String.Compare(_value, se.StringValue, StringComparison.OrdinalIgnoreCase));
+
+                String stringValue = se.StringValue;
+                if (_wildCardPattern != null)
+                {
+                    MatchCollection matcher = _wildCardPattern.Matches(stringValue);
+                    bool matches = matcher.Count > 0;
+
+                    if (_isMatchFunction ||
+                        !_matchExact)
+                    {
+                        return CompareResult.ValueOf(matches);
+                    }
+                }
+
+                return CompareResult.ValueOf(String.Compare(_value, stringValue, true));
             }
             protected override String GetValueAsString()
             {
@@ -315,11 +338,11 @@ namespace NPOI.SS.Formula.Functions
             throw new Exception("Unexpected eval type (" + valEval.GetType().Name + ")");
         }
 
-        public static int LookupIndexOfValue(ValueEval lookupValue, ValueVector vector, bool IsRangeLookup)
+        public static int LookupIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)
         {
-            LookupValueComparer lookupComparer = CreateLookupComparer(lookupValue);
+            LookupValueComparer lookupComparer = CreateLookupComparer(lookupValue, isRangeLookup, false);
             int result;
-            if (IsRangeLookup)
+            if (isRangeLookup)
             {
                 result = PerformBinarySearch(vector, lookupComparer);
             }
@@ -459,7 +482,7 @@ namespace NPOI.SS.Formula.Functions
             return maxIx - 1;
         }
 
-        public static LookupValueComparer CreateLookupComparer(ValueEval lookupValue)
+        public static LookupValueComparer CreateLookupComparer(ValueEval lookupValue, bool matchExact, bool isMatchFunction)
         {
 
             if (lookupValue == BlankEval.instance)
@@ -471,7 +494,7 @@ namespace NPOI.SS.Formula.Functions
             }
             if (lookupValue is StringEval)
             {
-                return new StringLookupComparer((StringEval)lookupValue);
+                return new StringLookupComparer((StringEval)lookupValue, matchExact, isMatchFunction);
             }
             if (lookupValue is NumberEval)
             {
@@ -537,7 +560,14 @@ namespace NPOI.SS.Formula.Functions
             }
             return Equal;
         }
-
+        public static CompareResult ValueOf(bool matches)
+        {
+            if (matches)
+            {
+                return Equal;
+            }
+            return LessThan;
+        }
         public bool IsTypeMismatch
         {
             get { return _isTypeMismatch; }
@@ -691,14 +721,14 @@ namespace NPOI.SS.Formula.Functions
     internal abstract class LookupValueComparerBase : LookupValueComparer
     {
 
-        private Type _tarGetType;
-        protected LookupValueComparerBase(ValueEval tarGetValue)
+        private Type _targetType;
+        protected LookupValueComparerBase(ValueEval targetValue)
         {
-            if (tarGetValue == null)
+            if (targetValue == null)
             {
-                throw new Exception("tarGetValue cannot be null");
+                throw new Exception("targetValue cannot be null");
             }
-            _tarGetType = tarGetValue.GetType();
+            _targetType = targetValue.GetType();
         }
         public CompareResult CompareTo(ValueEval other)
         {
@@ -706,13 +736,9 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new Exception("Compare to value cannot be null");
             }
-            if (_tarGetType != other.GetType())
+            if (_targetType != other.GetType())
             {
                 return CompareResult.TypeMismatch;
-            }
-            if (_tarGetType == typeof(StringEval))
-            {
-
             }
             return CompareSameType(other);
         }

@@ -57,7 +57,7 @@ namespace NPOI.SS.Formula.Functions
 
                 // collect pairs of ranges and criteria
                 AreaEval[] ae = new AreaEval[(args.Length - 1) / 2];
-                I_MatchPredicate[] mp = new I_MatchPredicate[ae.Length];
+                IMatchPredicate[] mp = new IMatchPredicate[ae.Length];
                 for (int i = 1, k = 0; i < args.Length; i += 2, k++)
                 {
                     ae[k] = ConvertRangeArg(args[i]);
@@ -101,7 +101,7 @@ namespace NPOI.SS.Formula.Functions
          *
          * @return the computed value
          */
-        private static double SumMatchingCells(AreaEval[] ranges, I_MatchPredicate[] predicates, AreaEval aeSum)
+        private static double SumMatchingCells(AreaEval[] ranges, IMatchPredicate[] predicates, AreaEval aeSum)
         {
             int height = aeSum.Height;
             int width = aeSum.Width;
@@ -116,7 +116,7 @@ namespace NPOI.SS.Formula.Functions
                     for (int i = 0; i < ranges.Length; i++)
                     {
                         AreaEval aeRange = ranges[i];
-                        I_MatchPredicate mp = predicates[i];
+                        IMatchPredicate mp = predicates[i];
 
                         if (!mp.Matches(aeRange.GetRelativeValue(r, c)))
                         {

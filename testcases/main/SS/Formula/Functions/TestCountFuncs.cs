@@ -150,7 +150,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestCriteriaPredicateNe_Bug46647()
         {
-            I_MatchPredicate mp = Countif.CreateCriteriaPredicate(new StringEval("<>aa"), 0, 0);
+            IMatchPredicate mp = Countif.CreateCriteriaPredicate(new StringEval("<>aa"), 0, 0);
             StringEval seA = new StringEval("aa"); // this should not match the criteria '<>aa'
             StringEval seB = new StringEval("bb"); // this should match
             if (mp.Matches(seA) && !mp.Matches(seB))
@@ -268,7 +268,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(expected, result, 0);
         }
 
-        private static I_MatchPredicate CreateCriteriaPredicate(ValueEval ev)
+        private static IMatchPredicate CreateCriteriaPredicate(ValueEval ev)
         {
             return Countif.CreateCriteriaPredicate(ev, 0, 0);
         }
@@ -287,7 +287,7 @@ namespace TestCases.SS.Formula.Functions
 
             AreaEval ev = EvalFactory.CreateAreaEval("A10:A12", new ValueEval[] { v0, v1, v2, });
 
-            I_MatchPredicate mp;
+            IMatchPredicate mp;
             mp = Countif.CreateCriteriaPredicate(ev, 9, srcColIx);
             ConfirmPredicate(true, mp, srcColIx);
             ConfirmPredicate(false, mp, "abc");
@@ -315,7 +315,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestCountifEmptyStringCriteria()
         {
-            I_MatchPredicate mp;
+            IMatchPredicate mp;
 
             // pred '=' matches blank cell but not empty string
             mp = CreateCriteriaPredicate(new StringEval("="));
@@ -335,7 +335,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestCountifComparisons()
         {
-            I_MatchPredicate mp;
+            IMatchPredicate mp;
 
             mp = CreateCriteriaPredicate(new StringEval(">5"));
             ConfirmPredicate(false, mp, 4);
@@ -378,7 +378,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestCountifErrorCriteria()
         {
-            I_MatchPredicate mp;
+            IMatchPredicate mp;
 
             mp = CreateCriteriaPredicate(new StringEval("#REF!"));
             ConfirmPredicate(false, mp, 4);
@@ -455,7 +455,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestWildCards()
         {
-            I_MatchPredicate mp;
+            IMatchPredicate mp;
 
             mp = CreateCriteriaPredicate(new StringEval("a*b"));
             ConfirmPredicate(false, mp, "abc");
@@ -488,7 +488,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestNotQuiteWildCards()
         {
-            I_MatchPredicate mp;
+            IMatchPredicate mp;
 
             // make sure special reg-ex chars are treated like normal chars
             mp = CreateCriteriaPredicate(new StringEval("a.b"));
@@ -509,16 +509,16 @@ namespace TestCases.SS.Formula.Functions
             ConfirmPredicate(true, mp, "a*c");
         }
 
-        private static void ConfirmPredicate(bool expectedResult, I_MatchPredicate matchPredicate, int value)
+        private static void ConfirmPredicate(bool expectedResult, IMatchPredicate matchPredicate, int value)
         {
             Assert.AreEqual(expectedResult, matchPredicate.Matches(new NumberEval(value)));
         }
-        private static void ConfirmPredicate(bool expectedResult, I_MatchPredicate matchPredicate, String value)
+        private static void ConfirmPredicate(bool expectedResult, IMatchPredicate matchPredicate, String value)
         {
             ValueEval ev = (value == null) ? BlankEval.instance : (ValueEval)new StringEval(value);
             Assert.AreEqual(expectedResult, matchPredicate.Matches(ev));
         }
-        private static void ConfirmPredicate(bool expectedResult, I_MatchPredicate matchPredicate, ErrorEval value)
+        private static void ConfirmPredicate(bool expectedResult, IMatchPredicate matchPredicate, ErrorEval value)
         {
             Assert.AreEqual(expectedResult, matchPredicate.Matches(value));
         }

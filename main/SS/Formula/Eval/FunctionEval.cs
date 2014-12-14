@@ -124,7 +124,7 @@ namespace NPOI.SS.Formula.Eval
             retval[27] = NumericFunction.ROUND; // ROUND
             retval[28] = new Lookup(); // LOOKUP
             retval[29] = new Index(); // INDEX
-            retval[30] = new NotImplementedFunction("REPT"); // REPT
+            retval[30] = new Rept(); // REPT
             retval[31] = TextFunction.MID; // MID
             retval[32] = TextFunction.LEN; // LEN
             retval[33] = new Value(); // VALUE
@@ -214,7 +214,7 @@ namespace NPOI.SS.Formula.Eval
             retval[118] = TextFunction.TRIM; // TRIM
             retval[119] = new Replace(); // Replace
             retval[120] = new Substitute(); // SUBSTITUTE
-            retval[121] = new NotImplementedFunction("CODE"); // CODE
+            retval[121] = new Code(); // CODE
             retval[122] = new NotImplementedFunction("NAMES"); // NAMES
             retval[123] = new NotImplementedFunction("DIRECTORY"); // DIRECTORY
             retval[124] = TextFunction.FIND; // Find

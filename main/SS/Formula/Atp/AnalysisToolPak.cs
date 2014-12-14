@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "BIN2DEC", null);
             r(m, "BIN2HEX", null);
             r(m, "BIN2OCT", null);
-            r(m, "COMPLEX", null);
+            r(m, "COMPLEX", Complex.Instance);
             r(m, "CONVERT", null);
             r(m, "COUNTIFS", null);
             r(m, "COUPDAYBS", null);

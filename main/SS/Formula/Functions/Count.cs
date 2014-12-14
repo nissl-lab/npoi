@@ -35,14 +35,14 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Count : Function
     {
-        private I_MatchPredicate _predicate;
+        private IMatchPredicate _predicate;
 
         public Count()
         {
             _predicate = defaultPredicate;
         }
 
-        private Count(I_MatchPredicate criteriaPredicate)
+        private Count(IMatchPredicate criteriaPredicate)
         {
             _predicate = criteriaPredicate;
         }
@@ -71,7 +71,7 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(temp);
         }
 
-        private class DefaultPredicate : I_MatchPredicate
+        private class DefaultPredicate : IMatchPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -91,7 +91,7 @@ namespace NPOI.SS.Formula.Functions
                 return false;
             }
         }
-        private static I_MatchPredicate defaultPredicate = new DefaultPredicate();
+        private static IMatchPredicate defaultPredicate = new DefaultPredicate();
         private class SubtotalPredicate : I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)
@@ -107,7 +107,7 @@ namespace NPOI.SS.Formula.Functions
 
         }
 
-        private static I_MatchPredicate subtotalPredicate = new SubtotalPredicate();
+        private static IMatchPredicate subtotalPredicate = new SubtotalPredicate();
         /**
      *  Create an instance of Count to use in {@link Subtotal}
      * <p>

@@ -70,13 +70,13 @@ namespace NPOI.SS.Formula.Functions
         {
 
             // TODO - junit to prove last arg must be srcColumnIndex and not srcRowIndex
-            I_MatchPredicate mp = Countif.CreateCriteriaPredicate(arg1, srcRowIndex, srcColumnIndex);
+            IMatchPredicate mp = Countif.CreateCriteriaPredicate(arg1, srcRowIndex, srcColumnIndex);
             double result = SumMatchingCells(aeRange, mp, aeSum);
             return new NumberEval(result);
 
         }
 
-        private static double SumMatchingCells(AreaEval aeRange, I_MatchPredicate mp, AreaEval aeSum)
+        private static double SumMatchingCells(AreaEval aeRange, IMatchPredicate mp, AreaEval aeSum)
         {
             int height = aeRange.Height;
             int width = aeRange.Width;
@@ -95,7 +95,7 @@ namespace NPOI.SS.Formula.Functions
 
 
 
-        private static double Accumulate(AreaEval aeRange, I_MatchPredicate mp, AreaEval aeSum, int relRowIndex,
+        private static double Accumulate(AreaEval aeRange, IMatchPredicate mp, AreaEval aeSum, int relRowIndex,
                 int relColIndex)
         {
             if (!mp.Matches(aeRange.GetRelativeValue(relRowIndex, relColIndex)))

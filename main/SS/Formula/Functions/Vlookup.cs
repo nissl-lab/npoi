@@ -90,18 +90,18 @@ namespace NPOI.SS.Formula.Functions
             return Evaluate(srcRowIndex, srcColumnIndex, arg0, arg1, arg2, DEFAULT_ARG3);
         }
 
-        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1,
-                ValueEval arg2, ValueEval arg3)
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookup_value, ValueEval table_array,
+                ValueEval col_index, ValueEval range_lookup)
         {
             try
             {
                 // Evaluation order:
                 // arg0 lookup_value, arg1 table_array, arg3 range_lookup, find lookup value, arg2 col_index, fetch result
-                ValueEval lookupValue = OperandResolver.GetSingleValue(arg0, srcRowIndex, srcColumnIndex);
-                TwoDEval tableArray = LookupUtils.ResolveTableArrayArg(arg1);
-                bool isRangeLookup = LookupUtils.ResolveRangeLookupArg(arg3, srcRowIndex, srcColumnIndex);
+                ValueEval lookupValue = OperandResolver.GetSingleValue(lookup_value, srcRowIndex, srcColumnIndex);
+                TwoDEval tableArray = LookupUtils.ResolveTableArrayArg(table_array);
+                bool isRangeLookup = LookupUtils.ResolveRangeLookupArg(range_lookup, srcRowIndex, srcColumnIndex);
                 int rowIndex = LookupUtils.LookupIndexOfValue(lookupValue, LookupUtils.CreateColumnVector(tableArray, 0), isRangeLookup);
-                int colIndex = LookupUtils.ResolveRowOrColIndexArg(arg2, srcRowIndex, srcColumnIndex);
+                int colIndex = LookupUtils.ResolveRowOrColIndexArg(col_index, srcRowIndex, srcColumnIndex);
                 ValueVector resultCol = CreateResultColumnVector(tableArray, colIndex);
                 return resultCol.GetItem(rowIndex);
             }

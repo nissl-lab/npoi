@@ -261,16 +261,7 @@ namespace NPOI.SS.Formula.Functions
 
         private static LookupValueComparer CreateLookupComparer(ValueEval lookupValue, bool matchExact)
         {
-            if (matchExact && lookupValue is StringEval)
-            {
-                String stringValue = ((StringEval)lookupValue).StringValue;
-                if (IsLookupValueWild(stringValue))
-                {
-                    throw new Exception("Wildcard lookup values '" + stringValue + "' not supported yet");
-                }
-
-            }
-            return LookupUtils.CreateLookupComparer(lookupValue);
+            return LookupUtils.CreateLookupComparer(lookupValue, matchExact, true);
         }
 
         private static bool IsLookupValueWild(String stringValue)

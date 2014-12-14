@@ -31,14 +31,14 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Counta : Function
     {
-        private I_MatchPredicate _predicate;
+        private IMatchPredicate _predicate;
 
         public Counta()
         {
             _predicate = defaultPredicate;
         }
 
-        private Counta(I_MatchPredicate criteriaPredicate)
+        private Counta(IMatchPredicate criteriaPredicate)
         {
             _predicate = criteriaPredicate;
         }
@@ -70,8 +70,8 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(temp);
         }
 
-        private static I_MatchPredicate defaultPredicate = new DefaultPredicate();
-        public class DefaultPredicate : I_MatchPredicate
+        private static IMatchPredicate defaultPredicate = new DefaultPredicate();
+        public class DefaultPredicate : IMatchPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -87,7 +87,7 @@ namespace NPOI.SS.Formula.Functions
                 return true;
             }
         }
-        private static I_MatchPredicate subtotalPredicate = new SubtotalPredicate();
+        private static IMatchPredicate subtotalPredicate = new SubtotalPredicate();
         public class SubtotalPredicate : I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)

@@ -52,8 +52,8 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(result);
         }
 
-        private static I_MatchPredicate predicate = new BlankPredicate();
-        private class BlankPredicate : I_MatchPredicate
+        private static IMatchPredicate predicate = new BlankPredicate();
+        private class BlankPredicate : IMatchPredicate
         {
             #region I_MatchPredicate 成员
 

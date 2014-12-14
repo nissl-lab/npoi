@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula.Atp
      *
      * @author Tomas Herceg
      */
-    class EDate : FreeRefFunction
+    public class EDate : FreeRefFunction
     {
 
         public static FreeRefFunction Instance = new EDate();

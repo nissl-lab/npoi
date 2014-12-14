@@ -22,11 +22,11 @@ namespace NPOI.SS.Formula.Functions
     /**
  * Common interface for the matching criteria.
  */
-    public interface I_MatchPredicate
+    public interface IMatchPredicate
     {
         bool Matches(ValueEval x);
     }
-    public interface I_MatchAreaPredicate : I_MatchPredicate
+    public interface I_MatchAreaPredicate : IMatchPredicate
     {
         bool Matches(TwoDEval x, int rowIndex, int columnIndex);
     }
@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.Functions
         /**
          * @return 1 if the evaluated cell matches the specified criteria
          */
-        public static int CountMatchingCell(RefEval refEval, I_MatchPredicate criteriaPredicate)
+        public static int CountMatchingCell(RefEval refEval, IMatchPredicate criteriaPredicate)
         {
             if (criteriaPredicate.Matches(refEval.InnerValueEval))
             {
@@ -55,7 +55,7 @@ namespace NPOI.SS.Formula.Functions
             }
             return 0;
         }
-        public static int CountArg(ValueEval eval, I_MatchPredicate criteriaPredicate)
+        public static int CountArg(ValueEval eval, IMatchPredicate criteriaPredicate)
         {
             if (eval == null)
             {
@@ -74,7 +74,7 @@ namespace NPOI.SS.Formula.Functions
         /**
 	 * @return the number of evaluated cells in the range that match the specified criteria
 	 */
-        public static int CountMatchingCellsInArea(TwoDEval areaEval, I_MatchPredicate criteriaPredicate)
+        public static int CountMatchingCellsInArea(TwoDEval areaEval, IMatchPredicate criteriaPredicate)
         {
             int result = 0;
 
