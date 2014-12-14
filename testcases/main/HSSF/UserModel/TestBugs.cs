@@ -2956,5 +2956,14 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("54016.xls");
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
+        [Test]
+        public void Bug49237()
+        {
+            HSSFWorkbook wb = OpenSample("49237.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+            ICellStyle rstyle = row.RowStyle;
+            Assert.AreEqual(rstyle.BorderBottom, BorderStyle.Double);
+        }
     }
 }

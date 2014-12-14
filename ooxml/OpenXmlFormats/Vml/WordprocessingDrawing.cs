@@ -1,14 +1,17 @@
+using NPOI.OpenXml4Net.Util;
 using System;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
 {
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=true)]
-    public partial class CT_Border {
+    public class CT_Border {
         
         private ST_BorderType typeField;
         
@@ -19,8 +22,31 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
         private ST_BorderShadow shadowField;
         
         private bool shadowFieldSpecified;
-        
-    
+
+        public static CT_Border Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Border ctObj = new CT_Border();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_BorderType)Enum.Parse(typeof(ST_BorderType), node.Attributes["type"].Value);
+            ctObj.width = XmlHelper.ReadString(node.Attributes["width"]);
+
+            ctObj.shadow = NPOI.OpenXmlFormats.Util.XmlHelper.ReadBorderShadow(node.Attributes["shadow"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            if(this.type!= ST_BorderType.none)
+                XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "width", this.width);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "shadow", this.shadow);
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
         [XmlAttribute]
         public ST_BorderType type {
             get {
@@ -185,11 +211,11 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=true)]
-    public partial class CT_Wrap {
+    public class CT_Wrap {
         
         private ST_WrapType typeField;
         
@@ -206,8 +232,37 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
         private ST_VerticalAnchor anchoryField;
         
         private bool anchoryFieldSpecified;
-        
-    
+
+        public static CT_Wrap Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Wrap ctObj = new CT_Wrap();
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_WrapType)Enum.Parse(typeof(ST_WrapType), node.Attributes["type"].Value);
+            if (node.Attributes["side"] != null)
+                ctObj.side = (ST_WrapSide)Enum.Parse(typeof(ST_WrapSide), node.Attributes["side"].Value);
+            if (node.Attributes["anchorx"] != null)
+                ctObj.anchorx = (ST_HorizontalAnchor)Enum.Parse(typeof(ST_HorizontalAnchor), node.Attributes["anchorx"].Value);
+            if (node.Attributes["anchory"] != null)
+                ctObj.anchory = (ST_VerticalAnchor)Enum.Parse(typeof(ST_VerticalAnchor), node.Attributes["anchory"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            if(this.type!=ST_WrapType.none)
+                XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "side", this.side.ToString());
+            XmlHelper.WriteAttribute(sw, "anchorx", this.anchorx.ToString());
+            XmlHelper.WriteAttribute(sw, "anchory", this.anchory.ToString());
+            sw.Write(">");
+            sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
         [XmlAttribute]
         public ST_WrapType type {
             get {
@@ -377,10 +432,10 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:word")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:word", IsNullable=true)]
-    public partial class CT_AnchorLock {
+    public class CT_AnchorLock {
     }
 }

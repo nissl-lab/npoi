@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
         private static Regex ptrn_shapeTypeId = new Regex("_x0000_[tm](\\d+)");
 
         private ArrayList _items = new ArrayList();
-        private int _shapeTypeId;
+        private int _shapeTypeId=202;
         private int _shapeId = 1024;
         /**
          * Create a new SpreadsheetML Drawing
@@ -125,12 +125,12 @@ namespace NPOI.XSSF.UserModel
                 string xmltext = nd.OuterXml;
                 if (nd.LocalName == QNAME_SHAPE_LAYOUT.Name)
                 {
-                    CT_ShapeLayout sl=CT_ShapeLayout.Parse(xmltext);
+                    CT_ShapeLayout sl=CT_ShapeLayout.Parse(nd, nsmgr);
                     _items.Add(sl);
                 }
                 else if (nd.LocalName == QNAME_SHAPE_TYPE.Name)
                 {
-                    CT_Shapetype st = CT_Shapetype.Parse(xmltext);
+                    CT_Shapetype st = CT_Shapetype.Parse(nd, nsmgr);
                                         String typeid = st.id;
                                         if (typeid != null)
                     {
@@ -142,7 +142,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else if (nd.LocalName == QNAME_SHAPE.Name)
                 {
-                    CT_Shape shape = CT_Shape.Parse(xmltext);
+                    CT_Shape shape = CT_Shape.Parse(nd, nsmgr);
                     String id = shape.id;
                     if (id != null)
                     {
@@ -167,27 +167,43 @@ namespace NPOI.XSSF.UserModel
 
         internal void Write(Stream out1)
         {
-            XmlWriter xw = XmlWriter.Create(out1);
-            xw.WriteStartElement("xml");
-            xw.WriteAttributeString("xmlns", "v",null, "urn:schemas-microsoft-com:vml");
-            xw.WriteAttributeString("xmlns", "o",null, "urn:schemas-microsoft-com:office:office");
-            xw.WriteAttributeString("xmlns", "x",null, "urn:schemas-microsoft-com:office:excel");
-           
-            for (int i = 0; i < _items.Count; i++)
+            using (StreamWriter sw = new StreamWriter(out1))
             {
-                object xc = _items[i];
-                if (xc is XmlNode)
-                {
-                    xw.WriteRaw(((XmlNode)xc).OuterXml.Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", "").Replace("&#xD;&#xA;", ""));
-                }
-                else
-                {
-                    xw.WriteRaw(xc.ToString().Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", "").Replace("&#xD;&#xA;",""));
-                }
-            }
+                sw.Write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                sw.Write("<xml");
+                sw.Write(" xmlns:v=\"urn:schemas-microsoft-com:vml\"");
+                sw.Write(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"");
+                sw.Write(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"");
+                sw.Write(" xmlns:w=\"urn:schemas-microsoft-com:office:word\"");
+                sw.Write(" xmlns:p=\"urn:schemas-microsoft-com:office:powerpoint\"");
+                sw.Write(">");
 
-            xw.WriteEndElement();
-            xw.Flush();
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    object xc = _items[i];
+                    if (xc is XmlNode)
+                    {
+                        sw.Write(((XmlNode)xc).OuterXml.Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", "").Replace("&#xD;&#xA;", ""));
+                    }
+                    else if (xc is CT_Shapetype)
+                    {
+                        ((CT_Shapetype)xc).Write(sw, "shapetype");
+                    }
+                    else if (xc is CT_ShapeLayout)
+                    {
+                        ((CT_ShapeLayout)xc).Write(sw, "shapelayout");               
+                    }
+                    else if (xc is CT_Shape)
+                    {
+                        ((CT_Shape)xc).Write(sw, "shape");
+                    }
+                    else
+                    {
+                        sw.Write(xc.ToString().Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", "").Replace("&#xD;&#xA;", ""));
+                    }
+                }
+                sw.Write("</xml>");
+            }
             //rootObject.save(out1);
         }
 
@@ -216,10 +232,11 @@ namespace NPOI.XSSF.UserModel
             shapetype.id= "_x0000_t" + _shapeTypeId;
             shapetype.coordsize="21600,21600";
             shapetype.spt=202;
+            //_shapeTypeId = 202;
             shapetype.path2 = ("m,l,21600r21600,l21600,xe");
             shapetype.AddNewStroke().joinstyle = (ST_StrokeJoinStyle.miter);
             CT_Path path = shapetype.AddNewPath();
-            path.gradientshapeok = ST_TrueFalse.t;
+            path.gradientshapeok = NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t;
             path.connecttype=(ST_ConnectType.rect);
             _items.Add(shapetype);
         }
@@ -229,15 +246,15 @@ namespace NPOI.XSSF.UserModel
             CT_Shape shape = new CT_Shape();
 
             shape.id = "_x0000_s" + (++_shapeId);
-            shape.type ="#_x0000_t" + (++_shapeTypeId);
+            shape.type ="#_x0000_t" + _shapeTypeId;
             shape.style="position:absolute; visibility:hidden";
             shape.fillcolor = ("#ffffe1");
             shape.insetmode = (ST_InsetMode.auto);
-            shape.AddNewFill().color=("#ffffe1");
+            shape.AddNewFill().color=("#ffffe1");   
             CT_Shadow shadow = shape.AddNewShadow();
-            shadow.on= ST_TrueFalse.t;
+            shadow.on= NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t;
             shadow.color = "black";
-            shadow.obscured = ST_TrueFalse.t;
+            shadow.obscured = NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t;
             shape.AddNewPath().connecttype = (ST_ConnectType.none);
             shape.AddNewTextbox().style = ("mso-direction-alt:auto");
             CT_ClientData cldata = shape.AddNewClientData();

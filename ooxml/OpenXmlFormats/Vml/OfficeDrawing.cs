@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Text;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Vml.Office
 {
@@ -13,11 +14,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_ShapeDefaults {
+    public class CT_ShapeDefaults {
         
         private CT_Fill fillField;
         
@@ -47,19 +48,19 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string styleField;
         
-        private ST_TrueFalse1 fill1Field;
+        private ST_TrueFalse fill1Field;
         
         private bool fill1FieldSpecified;
         
         private string fillcolorField;
         
-        private ST_TrueFalse1 stroke1Field;
+        private ST_TrueFalse stroke1Field;
         
         private bool stroke1FieldSpecified;
         
         private string strokecolorField;
         
-        private ST_TrueFalse1 allowincellField;
+        private ST_TrueFalse allowincellField;
         
         private bool allowincellFieldSpecified;
         
@@ -203,7 +204,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute("fill")]
-        public ST_TrueFalse1 fill1 {
+        public ST_TrueFalse fill1 {
             get {
                 return this.fill1Field;
             }
@@ -236,7 +237,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute("stroke")]
-        public ST_TrueFalse1 stroke1 {
+        public ST_TrueFalse stroke1 {
             get {
                 return this.stroke1Field;
             }
@@ -269,7 +270,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_TrueFalse1 allowincell {
+        public ST_TrueFalse allowincell {
             get {
                 return this.allowincellField;
             }
@@ -291,466 +292,14 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     }
     
 
-    [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
-    [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    public partial class CT_Fill {
-        
-        private string idField;
-        
-        private ST_FillType typeField;
-        
-        private bool typeFieldSpecified;
-        
-        private ST_TrueFalse onField;
-        
-        private bool onFieldSpecified;
-        
-        private string colorField;
-        
-        private string opacityField;
-        
-        private string color2Field;
-        
-        private string srcField;
-        
-        private string sizeField;
-        
-        private string originField;
-        
-        private string positionField;
-        
-        private ST_ImageAspect aspectField;
-        
-        private bool aspectFieldSpecified;
-        
-        private string colorsField;
-        
-        private decimal angleField;
-        
-        private bool angleFieldSpecified;
-        
-        private ST_TrueFalse alignshapeField;
-        
-        private bool alignshapeFieldSpecified;
-        
-        private string focusField;
-        
-        private string focussizeField;
-        
-        private string focuspositionField;
-        
-        private ST_FillMethod methodField;
-        
-        private bool methodFieldSpecified;
-        
-        private ST_TrueFalse recolorField;
-        
-        private bool recolorFieldSpecified;
-        
-        private ST_TrueFalse rotateField;
-        
-        private bool rotateFieldSpecified;
-        
-        private string id1Field;
 
-
-        [XmlAttribute]
-        public string id
-        {
-            get {
-                return this.idField;
-            }
-            set {
-                this.idField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_FillType type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool typeSpecified {
-            get {
-                return this.typeFieldSpecified;
-            }
-            set {
-                this.typeFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_TrueFalse on {
-            get {
-                return this.onField;
-            }
-            set {
-                this.onField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool onSpecified {
-            get {
-                return this.onFieldSpecified;
-            }
-            set {
-                this.onFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string color {
-            get {
-                return this.colorField;
-            }
-            set {
-                this.colorField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string opacity {
-            get {
-                return this.opacityField;
-            }
-            set {
-                this.opacityField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string color2 {
-            get {
-                return this.color2Field;
-            }
-            set {
-                this.color2Field = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string src {
-            get {
-                return this.srcField;
-            }
-            set {
-                this.srcField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string size {
-            get {
-                return this.sizeField;
-            }
-            set {
-                this.sizeField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string origin {
-            get {
-                return this.originField;
-            }
-            set {
-                this.originField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string position {
-            get {
-                return this.positionField;
-            }
-            set {
-                this.positionField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_ImageAspect aspect {
-            get {
-                return this.aspectField;
-            }
-            set {
-                this.aspectField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool aspectSpecified {
-            get {
-                return this.aspectFieldSpecified;
-            }
-            set {
-                this.aspectFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string colors {
-            get {
-                return this.colorsField;
-            }
-            set {
-                this.colorsField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public decimal angle {
-            get {
-                return this.angleField;
-            }
-            set {
-                this.angleField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool angleSpecified {
-            get {
-                return this.angleFieldSpecified;
-            }
-            set {
-                this.angleFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_TrueFalse alignshape {
-            get {
-                return this.alignshapeField;
-            }
-            set {
-                this.alignshapeField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool alignshapeSpecified {
-            get {
-                return this.alignshapeFieldSpecified;
-            }
-            set {
-                this.alignshapeFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string focus {
-            get {
-                return this.focusField;
-            }
-            set {
-                this.focusField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string focussize {
-            get {
-                return this.focussizeField;
-            }
-            set {
-                this.focussizeField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public string focusposition {
-            get {
-                return this.focuspositionField;
-            }
-            set {
-                this.focuspositionField = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_FillMethod method {
-            get {
-                return this.methodField;
-            }
-            set {
-                this.methodField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool methodSpecified {
-            get {
-                return this.methodFieldSpecified;
-            }
-            set {
-                this.methodFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_TrueFalse recolor {
-            get {
-                return this.recolorField;
-            }
-            set {
-                this.recolorField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool recolorSpecified {
-            get {
-                return this.recolorFieldSpecified;
-            }
-            set {
-                this.recolorFieldSpecified = value;
-            }
-        }
-        
-    
-        [XmlAttribute]
-        public ST_TrueFalse rotate {
-            get {
-                return this.rotateField;
-            }
-            set {
-                this.rotateField = value;
-            }
-        }
-        
-    
-        [XmlIgnore]
-        public bool rotateSpecified {
-            get {
-                return this.rotateFieldSpecified;
-            }
-            set {
-                this.rotateFieldSpecified = value;
-            }
-        }
-    }
-    
 
     [Serializable]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    public enum ST_FillType {
-        
-    
-        solid,
-        
-    
-        gradient,
-        
-    
-        gradientRadial,
-        
-    
-        tile,
-        
-    
-        pattern,
-        
-    
-        frame,
-    }
-    
 
-    [Serializable]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    public enum ST_TrueFalse {
-        
-    
-        t,
-        
-    
-        f,
-        
-    
-        @true,
-        
-    
-        @false,
-    }
-    
-
-    [Serializable]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    public enum ST_ImageAspect {
-        
-    
-        ignore,
-        
-    
-        atMost,
-        
-    
-        atLeast,
-    }
-    
-
-    [Serializable]
-    [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
-    public enum ST_FillMethod {
-        
-    
-        none,
-        
-    
-        linear,
-        
-    
-        sigma,
-        
-    
-        any,
-        
-    
-        [XmlEnum("linear sigma")]
-        linearsigma,
-    }
-    
-
-    [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Skew {
+    public class CT_Skew {
         
         private ST_Ext extField = ST_Ext.NONE;
         
@@ -758,7 +307,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string idField;
         
-        private ST_TrueFalse1 onField;
+        private ST_TrueFalse onField;
         
         private bool onFieldSpecified;
         
@@ -794,7 +343,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 on {
+        public ST_TrueFalse on {
             get {
                 return this.onField;
             }
@@ -852,7 +401,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     [Serializable]
     [XmlType(TypeName="ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot("ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
-    public enum ST_TrueFalse1 {
+    public enum ST_TrueFalse {
         t,
         f,
         @true,
@@ -861,17 +410,17 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Extrusion {
+    public class CT_Extrusion {
         
         private ST_Ext extField = ST_Ext.NONE;
         
         
         
-        private ST_TrueFalse1 onField;
+        private ST_TrueFalse onField;
         
         private bool onFieldSpecified;
         
@@ -901,11 +450,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private bool orientationangleFieldSpecified;
         
-        private ST_TrueFalse1 lockrotationcenterField;
+        private ST_TrueFalse lockrotationcenterField;
         
         private bool lockrotationcenterFieldSpecified;
         
-        private ST_TrueFalse1 autorotationcenterField;
+        private ST_TrueFalse autorotationcenterField;
         
         private bool autorotationcenterFieldSpecified;
         
@@ -927,7 +476,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string diffusityField;
         
-        private ST_TrueFalse1 metalField;
+        private ST_TrueFalse metalField;
         
         private bool metalFieldSpecified;
         
@@ -935,7 +484,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string facetField;
         
-        private ST_TrueFalse1 lightfaceField;
+        private ST_TrueFalse lightfaceField;
         
         private bool lightfaceFieldSpecified;
         
@@ -945,7 +494,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string lightlevelField;
         
-        private ST_TrueFalse1 lightharshField;
+        private ST_TrueFalse lightharshField;
         
         private bool lightharshFieldSpecified;
         
@@ -953,7 +502,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string lightlevel2Field;
         
-        private ST_TrueFalse1 lightharsh2Field;
+        private ST_TrueFalse lightharsh2Field;
         
         private bool lightharsh2FieldSpecified;
         
@@ -977,7 +526,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         }        
     
         [XmlAttribute]
-        public ST_TrueFalse1 on {
+        public ST_TrueFalse on {
             get {
                 return this.onField;
             }
@@ -1145,7 +694,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 lockrotationcenter {
+        public ST_TrueFalse lockrotationcenter {
             get {
                 return this.lockrotationcenterField;
             }
@@ -1167,7 +716,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 autorotationcenter {
+        public ST_TrueFalse autorotationcenter {
             get {
                 return this.autorotationcenterField;
             }
@@ -1288,7 +837,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 metal {
+        public ST_TrueFalse metal {
             get {
                 return this.metalField;
             }
@@ -1332,7 +881,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 lightface {
+        public ST_TrueFalse lightface {
             get {
                 return this.lightfaceField;
             }
@@ -1387,7 +936,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 lightharsh {
+        public ST_TrueFalse lightharsh {
             get {
                 return this.lightharshField;
             }
@@ -1431,7 +980,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 lightharsh2 {
+        public ST_TrueFalse lightharsh2 {
             get {
                 return this.lightharsh2Field;
             }
@@ -1512,17 +1061,17 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Callout {
+    public class CT_Callout {
         
         private ST_Ext extField = ST_Ext.NONE;
         
         
         
-        private ST_TrueFalse1 onField;
+        private ST_TrueFalse onField;
         
         private bool onFieldSpecified;
         
@@ -1534,7 +1083,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private bool angleFieldSpecified;
         
-        private ST_TrueFalse1 dropautoField;
+        private ST_TrueFalse dropautoField;
         
         private bool dropautoFieldSpecified;
         
@@ -1542,28 +1091,28 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string distanceField;
         
-        private ST_TrueFalse1 lengthspecifiedField;
+        private ST_TrueFalse lengthspecifiedField;
         
         private string lengthField;
         
-        private ST_TrueFalse1 accentbarField;
+        private ST_TrueFalse accentbarField;
         
         private bool accentbarFieldSpecified;
         
-        private ST_TrueFalse1 textborderField;
+        private ST_TrueFalse textborderField;
         
         private bool textborderFieldSpecified;
         
-        private ST_TrueFalse1 minusxField;
+        private ST_TrueFalse minusxField;
         
         private bool minusxFieldSpecified;
         
-        private ST_TrueFalse1 minusyField;
+        private ST_TrueFalse minusyField;
         
         private bool minusyFieldSpecified;
         
         public CT_Callout() {
-            this.lengthspecifiedField = ST_TrueFalse1.f;
+            this.lengthspecifiedField = ST_TrueFalse.f;
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "urn:schemas-microsoft-com:vml")]
@@ -1579,7 +1128,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         }
     
         [XmlAttribute]
-        public ST_TrueFalse1 on {
+        public ST_TrueFalse on {
             get {
                 return this.onField;
             }
@@ -1645,7 +1194,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 dropauto {
+        public ST_TrueFalse dropauto {
             get {
                 return this.dropautoField;
             }
@@ -1689,8 +1238,8 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        [DefaultValue(ST_TrueFalse1.f)]
-        public ST_TrueFalse1 lengthspecified {
+        [DefaultValue(ST_TrueFalse.f)]
+        public ST_TrueFalse lengthspecified {
             get {
                 return this.lengthspecifiedField;
             }
@@ -1712,7 +1261,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 accentbar {
+        public ST_TrueFalse accentbar {
             get {
                 return this.accentbarField;
             }
@@ -1734,7 +1283,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 textborder {
+        public ST_TrueFalse textborder {
             get {
                 return this.textborderField;
             }
@@ -1756,7 +1305,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 minusx {
+        public ST_TrueFalse minusx {
             get {
                 return this.minusxField;
             }
@@ -1778,7 +1327,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 minusy {
+        public ST_TrueFalse minusy {
             get {
                 return this.minusyField;
             }
@@ -1830,57 +1379,57 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Lock {
+    public class CT_Lock {
         
         private ST_Ext extField = ST_Ext.NONE;
         
         
         
-        private ST_TrueFalse1 positionField;
+        private ST_TrueFalse positionField;
         
         private bool positionFieldSpecified;
         
-        private ST_TrueFalse1 selectionField;
+        private ST_TrueFalse selectionField;
         
         private bool selectionFieldSpecified;
         
-        private ST_TrueFalse1 groupingField;
+        private ST_TrueFalse groupingField;
         
         private bool groupingFieldSpecified;
         
-        private ST_TrueFalse1 ungroupingField;
+        private ST_TrueFalse ungroupingField;
         
         private bool ungroupingFieldSpecified;
         
-        private ST_TrueFalse1 rotationField;
+        private ST_TrueFalse rotationField;
         
         private bool rotationFieldSpecified;
         
-        private ST_TrueFalse1 croppingField;
+        private ST_TrueFalse croppingField;
         
         private bool croppingFieldSpecified;
         
-        private ST_TrueFalse1 verticiesField;
+        private ST_TrueFalse verticiesField;
         
         private bool verticiesFieldSpecified;
         
-        private ST_TrueFalse1 adjusthandlesField;
+        private ST_TrueFalse adjusthandlesField;
         
         private bool adjusthandlesFieldSpecified;
         
-        private ST_TrueFalse1 textField;
+        private ST_TrueFalse textField;
         
         private bool textFieldSpecified;
         
-        private ST_TrueFalse1 aspectratioField;
+        private ST_TrueFalse aspectratioField;
         
         private bool aspectratioFieldSpecified;
         
-        private ST_TrueFalse1 shapetypeField;
+        private ST_TrueFalse shapetypeField;
         
         private bool shapetypeFieldSpecified;
 
@@ -1897,7 +1446,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         }
     
         [XmlAttribute]
-        public ST_TrueFalse1 position {
+        public ST_TrueFalse position {
             get {
                 return this.positionField;
             }
@@ -1919,7 +1468,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 selection {
+        public ST_TrueFalse selection {
             get {
                 return this.selectionField;
             }
@@ -1941,7 +1490,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 grouping {
+        public ST_TrueFalse grouping {
             get {
                 return this.groupingField;
             }
@@ -1963,7 +1512,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 ungrouping {
+        public ST_TrueFalse ungrouping {
             get {
                 return this.ungroupingField;
             }
@@ -1985,7 +1534,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 rotation {
+        public ST_TrueFalse rotation {
             get {
                 return this.rotationField;
             }
@@ -2007,7 +1556,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 cropping {
+        public ST_TrueFalse cropping {
             get {
                 return this.croppingField;
             }
@@ -2029,7 +1578,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 verticies {
+        public ST_TrueFalse verticies {
             get {
                 return this.verticiesField;
             }
@@ -2051,7 +1600,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 adjusthandles {
+        public ST_TrueFalse adjusthandles {
             get {
                 return this.adjusthandlesField;
             }
@@ -2073,7 +1622,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 text {
+        public ST_TrueFalse text {
             get {
                 return this.textField;
             }
@@ -2095,7 +1644,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 aspectratio {
+        public ST_TrueFalse aspectratio {
             get {
                 return this.aspectratioField;
             }
@@ -2117,7 +1666,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 shapetype {
+        public ST_TrueFalse shapetype {
             get {
                 return this.shapetypeField;
             }
@@ -2136,15 +1685,69 @@ namespace NPOI.OpenXmlFormats.Vml.Office
                 this.shapetypeFieldSpecified = value;
             }
         }
+
+        public static CT_Lock Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Lock ctObj = new CT_Lock();
+            if (node.Attributes["v:ext"] != null)
+                ctObj.ext = (ST_Ext)Enum.Parse(typeof(ST_Ext), node.Attributes["v:ext"].Value);
+            if (node.Attributes["position"] != null)
+                ctObj.position = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["position"]);
+            if (node.Attributes["selection"] != null)
+                ctObj.selection = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["selection"]);
+            if (node.Attributes["grouping"] != null)
+                ctObj.grouping = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["grouping"]);
+            if (node.Attributes["ungrouping"] != null)
+                ctObj.ungrouping = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["ungrouping"]);
+            if (node.Attributes["rotation"] != null)
+                ctObj.rotation = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["rotation"]);
+            if (node.Attributes["cropping"] != null)
+                ctObj.cropping = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["cropping"]);
+            if (node.Attributes["verticies"] != null)
+                ctObj.verticies = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["verticies"]);
+            if (node.Attributes["adjusthandles"] != null)
+                ctObj.adjusthandles = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["adjusthandles"]);
+            if (node.Attributes["text"] != null)
+                ctObj.text = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["text"]);
+            if (node.Attributes["aspectratio"] != null)
+                ctObj.aspectratio = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["aspectratio"]);
+            if (node.Attributes["shapetype"] != null)
+                ctObj.shapetype = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse(node.Attributes["shapetype"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            if(this.ext != ST_Ext.NONE)
+                XmlHelper.WriteAttribute(sw, "v:ext", this.ext.ToString());
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "position", this.position);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "selection", this.selection);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "grouping", this.grouping);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "ungrouping", this.ungrouping);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "rotation", this.rotation);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "cropping", this.cropping);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "verticies", this.verticies);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "adjusthandles", this.adjusthandles);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "text", this.text);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "aspectratio", this.aspectratio);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "shapetype", this.shapetype);
+            sw.Write(">");
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
     }
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_ColorMru {
+    public class CT_ColorMru {
         
         private ST_Ext extField = ST_Ext.NONE;
         
@@ -2177,11 +1780,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_ColorMenu {
+    public class CT_ColorMenu {
         
         private ST_Ext extField = ST_Ext.NONE;
         
@@ -2253,15 +1856,15 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Ink {
+    public class CT_Ink {
         
         private byte[] iField;
         
-        private ST_TrueFalse1 annotationField;
+        private ST_TrueFalse annotationField;
         
         private bool annotationFieldSpecified;
         
@@ -2278,7 +1881,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 annotation {
+        public ST_TrueFalse annotation {
             get {
                 return this.annotationField;
             }
@@ -2301,17 +1904,17 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_SignatureLine {
+    public class CT_SignatureLine {
         
         private ST_Ext extField = ST_Ext.NONE;
         
         
         
-        private ST_TrueFalse1 issignaturelineField;
+        private ST_TrueFalse issignaturelineField;
         
         private bool issignaturelineFieldSpecified;
         
@@ -2319,15 +1922,15 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string providField;
         
-        private ST_TrueFalse1 signinginstructionssetField;
+        private ST_TrueFalse signinginstructionssetField;
         
         private bool signinginstructionssetFieldSpecified;
         
-        private ST_TrueFalse1 allowcommentsField;
+        private ST_TrueFalse allowcommentsField;
         
         private bool allowcommentsFieldSpecified;
         
-        private ST_TrueFalse1 showsigndateField;
+        private ST_TrueFalse showsigndateField;
         
         private bool showsigndateFieldSpecified;
         
@@ -2356,7 +1959,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         }
     
         [XmlAttribute]
-        public ST_TrueFalse1 issignatureline {
+        public ST_TrueFalse issignatureline {
             get {
                 return this.issignaturelineField;
             }
@@ -2400,7 +2003,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 signinginstructionsset {
+        public ST_TrueFalse signinginstructionsset {
             get {
                 return this.signinginstructionssetField;
             }
@@ -2422,7 +2025,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 allowcomments {
+        public ST_TrueFalse allowcomments {
             get {
                 return this.allowcommentsField;
             }
@@ -2444,7 +2047,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 showsigndate {
+        public ST_TrueFalse showsigndate {
             get {
                 return this.showsigndateField;
             }
@@ -2533,7 +2136,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot("shapelayout",Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
@@ -2544,13 +2147,13 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         private CT_Rules rulesField = null;
         private ST_Ext extField = ST_Ext.NONE;
 
-        static XmlSerializer serializer = new XmlSerializer(typeof(CT_ShapeLayout), "urn:schemas-microsoft-com:office:office");
-        public static CT_ShapeLayout Parse(string xmltext)
-        {
-            TextReader tr = new StringReader(xmltext);
-            CT_ShapeLayout obj = (CT_ShapeLayout)serializer.Deserialize(tr);
-            return obj;
-        }
+        //static XmlSerializer serializer = new XmlSerializer(typeof(CT_ShapeLayout), "urn:schemas-microsoft-com:office:office");
+        //public static CT_ShapeLayout Parse(string xmltext)
+        //{
+        //    TextReader tr = new StringReader(xmltext);
+        //    CT_ShapeLayout obj = (CT_ShapeLayout)serializer.Deserialize(tr);
+        //    return obj;
+        //}
 
         public CT_IdMap AddNewIdmap()
         {
@@ -2591,36 +2194,72 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         {
             get { return ST_Ext.NONE != this.extField; }
         }
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
-            new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
-            new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")
-        });
+        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
+        //    new XmlQualifiedName("o", "urn:schemas-microsoft-com:office:office"),
+        //    new XmlQualifiedName("x", "urn:schemas-microsoft-com:office:excel"),
+        //    new XmlQualifiedName("v", "urn:schemas-microsoft-com:vml")
+        //});
 
-        public override string ToString()
+        //public override string ToString()
+        //{
+        //    using (StringWriter stringWriter = new StringWriter())
+        //    {
+        //        XmlWriterSettings settings = new XmlWriterSettings();
+
+        //        settings.Encoding = Encoding.UTF8;
+        //        settings.OmitXmlDeclaration = true;
+        //        using (XmlWriter writer = XmlWriter.Create(stringWriter, settings))
+        //        {
+        //            serializer.Serialize(writer, this, namespaces);
+        //        }
+        //        return stringWriter.ToString();
+        //    }
+        //}
+
+        public static CT_ShapeLayout Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            using (StringWriter stringWriter = new StringWriter())
+            if (node == null)
+                return null;
+            CT_ShapeLayout ctObj = new CT_ShapeLayout();
+            if (node.Attributes["v:ext"] != null)
+                ctObj.ext = (ST_Ext)Enum.Parse(typeof(ST_Ext), node.Attributes["v:ext"].Value);
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                XmlWriterSettings settings = new XmlWriterSettings();
-
-                settings.Encoding = Encoding.UTF8;
-                settings.OmitXmlDeclaration = true;
-                using (XmlWriter writer = XmlWriter.Create(stringWriter, settings))
-                {
-                    serializer.Serialize(writer, this, namespaces);
-                }
-                return stringWriter.ToString();
+                if (childNode.LocalName == "idmap")
+                    ctObj.idmap = CT_IdMap.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "regrouptable")
+                    ctObj.regrouptable = CT_RegroupTable.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rules")
+                    ctObj.rules = CT_Rules.Parse(childNode, namespaceManager);
             }
+            return ctObj;
         }
+
+
+
+        public void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "v:ext", this.ext.ToString());
+            sw.Write(">");
+            if (this.idmap != null)
+                this.idmap.Write(sw, "idmap");
+            if (this.regrouptable != null)
+                this.regrouptable.Write(sw, "regrouptable");
+            if (this.rules != null)
+                this.rules.Write(sw, "rules");
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
+
     }
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_IdMap
+    public class CT_IdMap
     {
         private ST_Ext extField = ST_Ext.NONE;
         private string dataField = null;
@@ -2648,16 +2287,71 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         {
             get { return null != this.dataField; }
         }
+
+        public static CT_IdMap Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_IdMap ctObj = new CT_IdMap();
+            if (node.Attributes["v:ext"] != null)
+                ctObj.ext = (ST_Ext)Enum.Parse(typeof(ST_Ext), node.Attributes["v:ext"].Value);
+            ctObj.data = XmlHelper.ReadString(node.Attributes["data"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "v:ext", this.ext.ToString());
+            XmlHelper.WriteAttribute(sw, "data", this.data);
+            sw.Write(">");
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
+
     }
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_RegroupTable
+    public class CT_RegroupTable
     {
+        public static CT_RegroupTable Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RegroupTable ctObj = new CT_RegroupTable();
+            if (node.Attributes["v:ext"] != null)
+                ctObj.ext = (ST_Ext)Enum.Parse(typeof(ST_Ext), node.Attributes["v:ext"].Value);
+            ctObj.entry = new List<CT_Entry>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "entry")
+                    ctObj.entry.Add(CT_Entry.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "v:ext", this.ext.ToString());
+            sw.Write(">");
+            if (this.entry != null)
+            {
+                foreach (CT_Entry x in this.entry)
+                {
+                    x.Write(sw, "entry");
+                }
+            }
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
+
+
         private List<CT_Entry> entryField = null; // 0..*
         private ST_Ext extField = ST_Ext.NONE;
 
@@ -2683,11 +2377,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_Entry
+    public class CT_Entry
     {
         private int? newField = null;
         private int? oldField = null;
@@ -2715,15 +2409,38 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         {
             get { return null != this.oldField; }
         }
+        public static CT_Entry Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Entry ctObj = new CT_Entry();
+            if (node.Attributes["new"] != null)
+                ctObj.@new = XmlHelper.ReadInt(node.Attributes["new"]);
+            if (node.Attributes["old"] != null)
+                ctObj.old = XmlHelper.ReadInt(node.Attributes["old"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "new", this.@new);
+            XmlHelper.WriteAttribute(sw, "old", this.old);
+            sw.Write(">");
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
+
     }
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_Rules
+    public class CT_Rules
     {
         private List<CT_R> rField = null; // 0..*
         private ST_Ext extField = ST_Ext.NONE;
@@ -2747,15 +2464,50 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         {
             get { return ST_Ext.NONE != this.extField; }
         }
+
+        public static CT_Rules Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Rules ctObj = new CT_Rules();
+            if (node.Attributes["v:ext"] != null)
+                ctObj.ext = (ST_Ext)Enum.Parse(typeof(ST_Ext), node.Attributes["v:ext"].Value);
+            ctObj.r = new List<CT_R>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "r")
+                    ctObj.r.Add(CT_R.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            if(this.ext!= ST_Ext.NONE)
+                XmlHelper.WriteAttribute(sw, "v:ext", this.ext.ToString());
+            sw.Write(">");
+            if (this.r != null)
+            {
+                foreach (CT_R x in this.r)
+                {
+                    x.Write(sw, "r");
+                }
+            }
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
+
     }
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_R
+    public class CT_R
     {
 
         private List<CT_Proxy> proxyField = null; // 0..*       
@@ -2813,15 +2565,57 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         {
             get { return null != this.idrefField; }
         }
+
+        public static CT_R Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_R ctObj = new CT_R();
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_RType)Enum.Parse(typeof(ST_RType), node.Attributes["type"].Value);
+            if (node.Attributes["how"] != null)
+                ctObj.how = (ST_How)Enum.Parse(typeof(ST_How), node.Attributes["how"].Value);
+            ctObj.idref = XmlHelper.ReadString(node.Attributes["idref"]);
+            ctObj.proxy = new List<CT_Proxy>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "proxy")
+                    ctObj.proxy.Add(CT_Proxy.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            if(this.type!=ST_RType.NONE)
+                XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            if (this.how != ST_How.NONE)
+                XmlHelper.WriteAttribute(sw, "how", this.how.ToString());
+            XmlHelper.WriteAttribute(sw, "idref", this.idref);
+            sw.Write(">");
+            if (this.proxy != null)
+            {
+                foreach (CT_Proxy x in this.proxy)
+                {
+                    x.Write(sw, "proxy");
+                }
+            }
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
     }
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_Proxy
+    public class CT_Proxy
     {
 
         private ST_TrueFalseBlank startField = ST_TrueFalseBlank.NONE;
@@ -2881,6 +2675,34 @@ namespace NPOI.OpenXmlFormats.Vml.Office
                 return null != this.connectlocField;
             }
         }
+
+        public static CT_Proxy Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Proxy ctObj = new CT_Proxy();
+            if (node.Attributes["start"] != null)
+                ctObj.start = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(node.Attributes["start"]);
+            if (node.Attributes["end"] != null)
+                ctObj.end = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(node.Attributes["end"]);
+            ctObj.idref = XmlHelper.ReadString(node.Attributes["idref"]);
+            if (node.Attributes["connectloc"] != null)
+                ctObj.connectloc = XmlHelper.ReadInt(node.Attributes["connectloc"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<o:{0}", nodeName));
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "start", this.start);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "end", this.end);
+            XmlHelper.WriteAttribute(sw, "idref", this.idref);
+            XmlHelper.WriteAttribute(sw, "connectloc", this.connectloc);
+            sw.Write(">");
+            sw.Write(string.Format("</o:{0}>", nodeName));
+        }
+
+
     }
 
 
@@ -2913,11 +2735,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Diagram {
+    public class CT_Diagram {
         
         private CT_RelationTable relationtableField;
         
@@ -2927,15 +2749,15 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string dgmstyleField;
         
-        private ST_TrueFalse1 autoformatField;
+        private ST_TrueFalse autoformatField;
         
         private bool autoformatFieldSpecified;
         
-        private ST_TrueFalse1 reverseField;
+        private ST_TrueFalse reverseField;
         
         private bool reverseFieldSpecified;
         
-        private ST_TrueFalse1 autolayoutField;
+        private ST_TrueFalse autolayoutField;
         
         private bool autolayoutFieldSpecified;
         
@@ -2985,7 +2807,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 autoformat {
+        public ST_TrueFalse autoformat {
             get {
                 return this.autoformatField;
             }
@@ -3007,7 +2829,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 reverse {
+        public ST_TrueFalse reverse {
             get {
                 return this.reverseField;
             }
@@ -3029,7 +2851,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 autolayout {
+        public ST_TrueFalse autolayout {
             get {
                 return this.autolayoutField;
             }
@@ -3107,11 +2929,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_RelationTable {
+    public class CT_RelationTable {
         
         private  List<CT_Relation> relField;
         
@@ -3146,11 +2968,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Relation {
+    public class CT_Relation {
         
         private ST_Ext extField = ST_Ext.NONE;
         
@@ -3210,11 +3032,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_OLEObject {
+    public class CT_OLEObject {
         
         private ST_OLELinkType linkTypeField;
         
@@ -3467,11 +3289,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:office", IsNullable = true)]
-    public partial class CT_Complex
+    public class CT_Complex
     {
 
         private ST_Ext extField = ST_Ext.NONE;
@@ -3493,17 +3315,17 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     }    
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_StrokeChild {
+    public class CT_StrokeChild {
         
         private ST_Ext extField = ST_Ext.NONE;
         
         
         
-        private ST_TrueFalse1 onField;
+        private ST_TrueFalse onField;
         
         private bool onFieldSpecified;
         
@@ -3533,7 +3355,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string dashstyleField;
         
-        private ST_TrueFalse1 insetpenField;
+        private ST_TrueFalse insetpenField;
         
         private bool insetpenFieldSpecified;
         
@@ -3549,7 +3371,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string imagesizeField;
         
-        private ST_TrueFalse1 imagealignshapeField;
+        private ST_TrueFalse imagealignshapeField;
         
         private bool imagealignshapeFieldSpecified;
         
@@ -3583,7 +3405,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
         private string titleField;
         
-        private ST_TrueFalse1 forcedashField;
+        private ST_TrueFalse forcedashField;
         
         private bool forcedashFieldSpecified;
 
@@ -3601,7 +3423,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         }       
     
         [XmlAttribute]
-        public ST_TrueFalse1 on {
+        public ST_TrueFalse on {
             get {
                 return this.onField;
             }
@@ -3766,7 +3588,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 insetpen {
+        public ST_TrueFalse insetpen {
             get {
                 return this.insetpenField;
             }
@@ -3854,7 +3676,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute]
-        public ST_TrueFalse1 imagealignshape {
+        public ST_TrueFalse imagealignshape {
             get {
                 return this.imagealignshapeField;
             }
@@ -4041,7 +3863,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         
     
         [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_TrueFalse1 forcedash {
+        public ST_TrueFalse forcedash {
             get {
                 return this.forcedashField;
             }
@@ -4064,11 +3886,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot(Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_ClipPath {
+    public class CT_ClipPath {
         
         private string vField;
         
@@ -4086,11 +3908,11 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(TypeName="CT_Fill", Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot("CT_Fill", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=true)]
-    public partial class CT_Fill1 {
+    public class CT_Fill {
         
         private ST_Ext extField = ST_Ext.NONE;
         

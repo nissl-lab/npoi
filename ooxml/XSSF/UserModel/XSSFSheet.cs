@@ -145,7 +145,7 @@ namespace NPOI.XSSF.UserModel
                 if (p is CommentsTable)
                 {
                     sheetComments = (CommentsTable)p;
-                    break;
+                    //break;
                 }
                 if (p is XSSFTable)
                 {
@@ -1396,6 +1396,8 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 String cellRef = GetPane().topLeftCell;
+                if (cellRef == null)
+                    return 0;
                 CellReference cellReference = new CellReference(cellRef);
                 return cellReference.Col;
             }
@@ -1412,6 +1414,8 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 String cellRef = GetPane().topLeftCell;
+                if (cellRef == null)
+                    return 0;
                 CellReference cellReference = new CellReference(cellRef);
                 return (short)cellReference.Row;
             }
@@ -3811,8 +3815,23 @@ namespace NPOI.XSSF.UserModel
                 SetRepeatingRowsAndColumns(rowRangeRef, value);
             }
         }
-
-
+        private CT_Pane Pane
+        {
+            get
+            {
+                if (GetDefaultSheetView().pane == null)
+                {
+                    GetDefaultSheetView().AddNewPane();
+                }
+                return GetDefaultSheetView().pane;
+            }
+        }
+        public void ShowInPane(int toprow, int leftcol)
+        {
+            CellReference cellReference = new CellReference(toprow, leftcol);
+            String cellRef = cellReference.FormatAsString();
+            Pane.topLeftCell = cellRef;
+        }
         private void SetRepeatingRowsAndColumns(
             CellRangeAddress rowDef, CellRangeAddress colDef)
         {
