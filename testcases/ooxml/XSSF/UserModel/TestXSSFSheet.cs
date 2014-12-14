@@ -28,6 +28,7 @@ using NPOI.XSSF;
 using NPOI.Util;
 using NPOI.HSSF.Record;
 using TestCases.SS.UserModel;
+using TestCases.HSSF;
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -287,9 +288,9 @@ namespace NPOI.XSSF.UserModel
             stylesTable.PutFont(font);
             CT_Xf cellStyleXf = new CT_Xf();
             cellStyleXf.fontId = (1);
-            cellStyleXf.fillId= 0;
-            cellStyleXf.borderId= 0;
-            cellStyleXf.numFmtId= 0;
+            cellStyleXf.fillId = 0;
+            cellStyleXf.borderId = 0;
+            cellStyleXf.numFmtId = 0;
             stylesTable.PutCellStyleXf(cellStyleXf);
             CT_Xf cellXf = new CT_Xf();
             cellXf.xfId = (1);
@@ -817,7 +818,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             //serialize and check again
-            wb = (XSSFWorkbook) XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet = (XSSFSheet)wb.GetSheetAt(0);
             cols = sheet.GetCTWorksheet().GetColsArray(0);
             Assert.AreEqual(5, cols.sizeOfColArray());
@@ -1122,7 +1123,7 @@ namespace NPOI.XSSF.UserModel
             // calcMode="manual" is unset when forceFormulaRecalculation=true
             CT_CalcPr calcPr = workbook.GetCTWorkbook().AddNewCalcPr();
             calcPr.calcMode = (ST_CalcMode.manual);
-            sheet.ForceFormulaRecalculation=(true);
+            sheet.ForceFormulaRecalculation = (true);
             Assert.AreEqual(ST_CalcMode.auto, calcPr.calcMode);
 
             // Check
@@ -1134,6 +1135,185 @@ namespace NPOI.XSSF.UserModel
             workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             sheet = (XSSFSheet)workbook.GetSheet("Sheet 1");
             Assert.AreEqual(false, sheet.ForceFormulaRecalculation);
+        }
+        [Test]
+        public void bug54607()
+        {
+            // run with the file provided in the Bug-Report
+            runGetTopRow("54607.xlsx", true, 1, 0, 0);
+            runGetLeftCol("54607.xlsx", true, 0, 0, 0);
+
+            // run with some other flie to see
+            runGetTopRow("54436.xlsx", true, 0);
+            runGetLeftCol("54436.xlsx", true, 0);
+            runGetTopRow("TwoSheetsNoneHidden.xlsx", true, 0, 0);
+            runGetLeftCol("TwoSheetsNoneHidden.xlsx", true, 0, 0);
+            runGetTopRow("TwoSheetsNoneHidden.xls", false, 0, 0);
+            runGetLeftCol("TwoSheetsNoneHidden.xls", false, 0, 0);
+        }
+
+        private void runGetTopRow(String file, bool isXSSF, params int[] topRows)
+        {
+            IWorkbook wb;
+            if (isXSSF)
+            {
+                wb = XSSFTestDataSamples.OpenSampleWorkbook(file);
+            }
+            else
+            {
+                wb = HSSFTestDataSamples.OpenSampleWorkbook(file);
+            }
+            for (int si = 0; si < wb.NumberOfSheets; si++)
+            {
+                ISheet sh = wb.GetSheetAt(si);
+                Assert.IsNotNull(sh.SheetName);
+                Assert.AreEqual(topRows[si], sh.TopRow, "Did not match for sheet " + si);
+            }
+
+            // for XSSF also test with SXSSF
+            //if(isXSSF) {
+            //    IWorkbook swb = new SXSSFWorkbook((XSSFWorkbook) wb);
+            //    for (int si = 0; si < swb.GetNumberOfSheets(); si++) {
+            //        ISheet sh = swb.GetSheetAt(si);
+            //        Assert.IsNotNull(sh.SheetName);
+            //        Assert.AreEqual("Did not match for sheet " + si, topRows[si], sh.GetTopRow());
+            //    }
+            //}
+        }
+
+        private void runGetLeftCol(String file, bool isXSSF, params int[] topRows)
+        {
+            IWorkbook wb;
+            if (isXSSF)
+            {
+                wb = XSSFTestDataSamples.OpenSampleWorkbook(file);
+            }
+            else
+            {
+                wb = HSSFTestDataSamples.OpenSampleWorkbook(file);
+            }
+            for (int si = 0; si < wb.NumberOfSheets; si++)
+            {
+                ISheet sh = wb.GetSheetAt(si);
+                Assert.IsNotNull(sh.SheetName);
+                Assert.AreEqual(topRows[si], sh.LeftCol, "Did not match for sheet " + si);
+            }
+
+            // for XSSF also test with SXSSF
+            //if (isXSSF)
+            //{
+            //    IWorkbook swb = new SXSSFWorkbook((XSSFWorkbook)wb);
+            //    for (int si = 0; si < swb.NumberOfSheets; si++)
+            //    {
+            //        ISheet sh = swb.GetSheetAt(si);
+            //        Assert.IsNotNull(sh.SheetName);
+            //        Assert.AreEqual("Did not match for sheet " + si, topRows[si], sh.GetLeftCol());
+            //    }
+            //}
+        }
+        const int ROW_COUNT = 40000;
+        [Test]
+        public void showInPaneManyRowsBug55248()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
+
+            sheet.ShowInPane(0, 0);
+
+            for (int i = ROW_COUNT / 2; i < ROW_COUNT; i++)
+            {
+                sheet.CreateRow(i);
+                sheet.ShowInPane(i, 0);
+                // this one fails: sheet.showInPane((short)i, 0);
+            }
+
+            int j = 0;
+            sheet.ShowInPane(j, j);
+
+            IWorkbook wb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            checkRowCount(wb);
+        }
+
+        //[Test]
+        //public void showInPaneManyRowsBug55248SXSSF() {
+        //    SXSSFWorkbook IWorkbook = new SXSSFWorkbook(new XSSFWorkbook());
+        //    SXSSFSheet sheet = (SXSSFSheet) IWorkbook.CreateSheet("ISheet 1");
+
+        //    sheet.showInPane(0, 0);
+
+        //    for(int i = ROW_COUNT/2;i < ROW_COUNT;i++) {
+        //        sheet.CreateRow(i);
+        //        sheet.showInPane(i, 0);
+        //        // this one fails: sheet.showInPane((short)i, 0);
+        //    }
+
+        //    int i = 0;
+        //    sheet.showInPane(i, i);
+
+        //    IWorkbook wb = SXSSFITestDataProvider.instance.writeOutAndReadBack(IWorkbook);
+        //    checkRowCount(wb);
+        //}
+
+        private void checkRowCount(IWorkbook wb)
+        {
+            Assert.IsNotNull(wb);
+            ISheet sh = wb.GetSheet("Sheet 1");
+            Assert.IsNotNull(sh);
+            Assert.AreEqual(ROW_COUNT - 1, sh.LastRowNum);
+        }
+
+        [Test]
+        public void bug55745()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55745.xlsx");
+            XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
+            List<XSSFTable> tables = sheet.GetTables();
+            /*System.out.println(tables.size());
+
+            for(XSSFTable table : tables) {
+                System.out.println("XPath: " + table.GetCommonXpath());
+                System.out.println("Name: " + table.GetName());
+                System.out.println("Mapped Cols: " + table.GetNumerOfMappedColumns());
+                System.out.println("Rowcount: " + table.GetRowCount());
+                System.out.println("End Cell: " + table.GetEndCellReference());
+                System.out.println("Start Cell: " + table.GetStartCellReference());
+            }*/
+            Assert.AreEqual(8, tables.Count, "Sheet should contain 8 tables");
+            Assert.IsNotNull(sheet.GetCommentsTable(false), "Sheet should contain a comments table");
+        }
+
+        [Test]
+        public void bug55723b()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            // stored with a special name
+            Assert.IsNull(wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, 0));
+
+            CellRangeAddress range = CellRangeAddress.ValueOf("A:B");
+            IAutoFilter filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+
+            // stored with a special name
+            XSSFName name = wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, 0);
+            Assert.IsNotNull(name);
+            Assert.AreEqual("Sheet0!$A:$B", name.RefersToFormula);
+
+            range = CellRangeAddress.ValueOf("B:C");
+            filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+
+            // stored with a special name
+            name = wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, 0);
+            Assert.IsNotNull(name);
+            Assert.AreEqual("Sheet0!$B:$C", name.RefersToFormula);
+        }
+
+        [Test]
+        public void bug51585()
+        {
+            XSSFTestDataSamples.OpenSampleWorkbook("51585.xlsx");
         }
     }
 }

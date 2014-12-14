@@ -61,7 +61,12 @@ namespace NPOI.HSSF.Record
         private static BitField zeroHeight = BitFieldFactory.GetInstance(0x20);
         private static BitField badFontHeight = BitFieldFactory.GetInstance(0x40);
         private static BitField formatted = BitFieldFactory.GetInstance(0x80);
-        private short field_8_xf_index;   // only if IsFormatted
+
+    private int field_8_option_flags;   // only if isFormatted
+    private static BitField          xfIndex       = BitFieldFactory.GetInstance(0xFFF);
+    private static BitField          topBorder     = BitFieldFactory.GetInstance(0x1000);
+    private static BitField          bottomBorder  = BitFieldFactory.GetInstance(0x2000);
+    private static BitField          phoeneticGuide  = BitFieldFactory.GetInstance(0x4000);
 
         public RowRecord(int rowNumber)
         {
@@ -73,7 +78,7 @@ namespace NPOI.HSSF.Record
             field_6_reserved = (short)0;
             field_7_option_flags = OPTION_BITS_ALWAYS_SET; // seems necessary for outlining
 
-            field_8_xf_index = (short)0xf;
+            field_8_option_flags = (short)0xf;
             SetEmpty();
         }
 
@@ -91,7 +96,7 @@ namespace NPOI.HSSF.Record
             field_5_optimize = in1.ReadShort();
             field_6_reserved = in1.ReadShort();
             field_7_option_flags = in1.ReadShort();
-            field_8_xf_index = in1.ReadShort();
+            field_8_option_flags = in1.ReadShort();
         }
 
         public void SetEmpty()
@@ -266,7 +271,10 @@ namespace NPOI.HSSF.Record
         }
 
         // end bitfields
-
+        public short OptionFlags2
+        {
+            get { return (short)this.field_8_option_flags; }
+        }
         /**
          * if the row is formatted then this is the index to the extended format record
          * @see org.apache.poi.hssf.record.ExtendedFormatRecord
@@ -275,10 +283,24 @@ namespace NPOI.HSSF.Record
 
         public short XFIndex
         {
-            get { return field_8_xf_index; }
-            set { field_8_xf_index = value; }
+            get { return xfIndex.GetShortValue((short)field_8_option_flags); }
+            set { field_8_option_flags = xfIndex.SetValue(field_8_option_flags, value); }
         }
-
+        public bool TopBorder
+        {
+            get { return topBorder.IsSet(field_8_option_flags); }
+            set { field_8_option_flags = topBorder.SetBoolean(field_8_option_flags, value); }
+        }
+        public bool BottomBorder
+        {
+            get { return bottomBorder.IsSet(field_8_option_flags); }
+            set { field_8_option_flags = bottomBorder.SetBoolean(field_8_option_flags, value); }
+        }
+        public bool PhoeneticGuide
+        {
+            get { return phoeneticGuide.IsSet(field_8_option_flags); }
+            set { field_8_option_flags = phoeneticGuide.SetBoolean(field_8_option_flags, value); }
+        }
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
@@ -308,8 +330,16 @@ namespace NPOI.HSSF.Record
                 .Append("\n");
             buffer.Append("        .formatted  = ").Append(Formatted)
                 .Append("\n");
-            buffer.Append("    .xFindex        = ")
+            buffer.Append("        .optionsflags2  = ").Append(StringUtil.ToHexString(OptionFlags2))
+    .Append("\n");
+            buffer.Append("        .xFindex    = ")
                 .Append(StringUtil.ToHexString(XFIndex)).Append("\n");
+            buffer.Append("        .topBorder  = ").Append(TopBorder)
+    .Append("\n");
+            buffer.Append("        .bottomBorder  = ").Append(BottomBorder)
+    .Append("\n");
+            buffer.Append("        .phoeneticGuide= ").Append(PhoeneticGuide)
+    .Append("\n");
             buffer.Append("[/ROW]\n");
             return buffer.ToString();
         }
@@ -391,7 +421,7 @@ namespace NPOI.HSSF.Record
             rec.field_5_optimize = field_5_optimize;
             rec.field_6_reserved = field_6_reserved;
             rec.field_7_option_flags = field_7_option_flags;
-            rec.field_8_xf_index = field_8_xf_index;
+            rec.field_8_option_flags = field_8_option_flags;
             return rec;
         }
     }
