@@ -1,7 +1,21 @@
-2.1 (Jun., 2014) 
+2.1.3 (Dec., 2014)
+Bug Fixes
+a. fix 2 charts insert in the same sheet issue
+b. fix a lot of Excel 2007 serialization issues
+c. fix some Word 2007 serialiation issues
+d. fix RemoteSheetAt bug
+e. support changing background in XWPF
+f. fix Uri-related issues on Mono
+
+New examples
+SetIsRightToLeftInXlsx - show how to use IsRightToLeft property
+ExtractPicturesFromXlsx - show how to extract pictures from Excel 2007 file
+SetRowStyle - show how to set whole row style with simple code
+
+2.1.1 (Jun., 2014) 
 New Features
 a. XSSFSheet.CopySheet
-b. Excel2Html for XSSF
+b. Excel2Html for XSSF and HSSF
 c. insert picture in word 2007
 d. Implement IfError function in formula engine
 
@@ -19,6 +33,7 @@ j. WorkbookFactory for Excel 2007 doesn't occupy file.
 k. fix XSSFCell.IsMergedCell
 l. fix incorrect page margin value due to different culture
 m. fix HSSFSheet.CopyTo doesn't copy rich text in cells
+n. fix scroll bar and tabs missing in previous 2.1 release
 
 New examples
 a. XSSF.DownloadXlsx

@@ -833,6 +833,8 @@ namespace NPOI.SS.UserModel
                     return cell.BooleanCellValue.ToString().ToUpper();
                 case CellType.Blank:
                     return "";
+                case CellType.Error:
+                    return FormulaError.ForInt(cell.ErrorCellValue).String;
             }
             throw new Exception("Unexpected celltype (" + cellType + ")");
         }

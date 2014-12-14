@@ -507,11 +507,25 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(" -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             Assert.AreEqual(" $-   ", dfUS.FormatRawCellContents(0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
         }
+        [Test]
+        public void TestErrors()
+        {
+            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
 
-        /**
-         * TODO Fix these so that they work
-         */
-        public void DISABLEDtestCustomFormats()
+            // Create a spreadsheet with some formula errors in it
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(0, CellType.Error);
+
+            c.SetCellErrorValue(FormulaError.DIV0.Code);
+            Assert.AreEqual(FormulaError.DIV0.String, dfUS.FormatCellValue(c));
+
+            c.SetCellErrorValue(FormulaError.REF.Code);
+            Assert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
+        }
+        [Test]
+        public void TestCustomFormats()
         {
             DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
             String fmt;
