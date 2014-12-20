@@ -36,11 +36,14 @@ namespace NPOI.SS.Util
     {
         public const string ALIGNMENT = "alignment";
         public const string BORDER_BOTTOM = "borderBottom";
+        public const string BORDER_DIAGONAL = "borderDiagonal";
         public const string BORDER_LEFT = "borderLeft";
         public const string BORDER_RIGHT = "borderRight";
         public const string BORDER_TOP = "borderTop";
         public const string BOTTOM_BORDER_COLOR = "bottomBorderColor";
         public const string DATA_FORMAT = "dataFormat";
+        public const string DIAGONAL_BORDER_COLOR = "diagonalBorderColor";
+        public const string DIAGONAL_BORDER_LINE_STYLE = "diagonalBorderLineStyle";
         public const string FILL_BACKGROUND_COLOR = "fillBackgroundColor";
         public const string FILL_FOREGROUND_COLOR = "fillForegroundColor";
         public const string FILL_PATTERN = "fillPattern";
@@ -51,6 +54,7 @@ namespace NPOI.SS.Util
         public const string LOCKED = "locked";
         public const string RIGHT_BORDER_COLOR = "rightBorderColor";
         public const string ROTATION = "rotation";
+        public const string SHRINK_TO_FIT = "shrinkToFit";
         public const string TOP_BORDER_COLOR = "topBorderColor";
         public const string VERTICAL_ALIGNMENT = "verticalAlignment";
         public const string WRAP_TEXT = "wrapText";
@@ -314,11 +318,14 @@ namespace NPOI.SS.Util
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
             PutShort(properties, ALIGNMENT, (short)style.Alignment);
             PutShort(properties, BORDER_BOTTOM, (short)style.BorderBottom);
+            PutShort(properties, BORDER_DIAGONAL, (short)style.BorderDiagonal);
             PutShort(properties, BORDER_LEFT, (short)style.BorderLeft);
             PutShort(properties, BORDER_RIGHT, (short)style.BorderRight);
             PutShort(properties, BORDER_TOP, (short)style.BorderTop);
             PutShort(properties, BOTTOM_BORDER_COLOR, style.BottomBorderColor);
             PutShort(properties, DATA_FORMAT, style.DataFormat);
+            PutShort(properties, DIAGONAL_BORDER_COLOR, style.BorderDiagonalColor);
+            PutShort(properties, DIAGONAL_BORDER_LINE_STYLE, (short)style.BorderDiagonalLineStyle);
             PutShort(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
             PutShort(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
             PutShort(properties, FILL_PATTERN, (short)style.FillPattern);
@@ -329,6 +336,7 @@ namespace NPOI.SS.Util
             PutBoolean(properties, LOCKED, style.IsLocked);
             PutShort(properties, RIGHT_BORDER_COLOR, style.RightBorderColor);
             PutShort(properties, ROTATION, style.Rotation);
+            PutBoolean(properties, SHRINK_TO_FIT, style.ShrinkToFit);
             PutShort(properties, TOP_BORDER_COLOR, style.TopBorderColor);
             PutShort(properties, VERTICAL_ALIGNMENT, (short)style.VerticalAlignment);
             PutBoolean(properties, WRAP_TEXT, style.WrapText);
@@ -347,6 +355,9 @@ namespace NPOI.SS.Util
         {
             style.Alignment = (HorizontalAlignment)GetShort(properties, ALIGNMENT);
             style.BorderBottom = (BorderStyle)GetShort(properties, BORDER_BOTTOM);
+            style.BorderDiagonalColor = GetShort(properties, DIAGONAL_BORDER_COLOR);
+            style.BorderDiagonal = (BorderDiagonal)GetShort(properties, BORDER_DIAGONAL);
+            style.BorderDiagonalLineStyle = (BorderStyle)GetShort(properties, DIAGONAL_BORDER_LINE_STYLE);
             style.BorderLeft = (BorderStyle)GetShort(properties, BORDER_LEFT);
             style.BorderRight = (BorderStyle)GetShort(properties, BORDER_RIGHT);
             style.BorderTop = (BorderStyle)GetShort(properties, BORDER_TOP);
@@ -362,6 +373,7 @@ namespace NPOI.SS.Util
             style.IsLocked = GetBoolean(properties, LOCKED);
             style.RightBorderColor = GetShort(properties, RIGHT_BORDER_COLOR);
             style.Rotation = GetShort(properties, ROTATION);
+            style.ShrinkToFit = GetBoolean(properties, SHRINK_TO_FIT);
             style.TopBorderColor = GetShort(properties, TOP_BORDER_COLOR);
             style.VerticalAlignment = (VerticalAlignment)GetShort(properties, VERTICAL_ALIGNMENT);
             style.WrapText = GetBoolean(properties, WRAP_TEXT);
