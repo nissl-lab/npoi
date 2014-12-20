@@ -1284,7 +1284,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-               GetCellAlignment().setShrinkToFit(shrinkToFit);
+               GetCTCellAlignment().shrinkToFit = value;
             }
         }
 
