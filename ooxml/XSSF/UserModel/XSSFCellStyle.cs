@@ -1279,11 +1279,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                throw new NotImplementedException();
+               CT_CellAlignment align = _cellXf.alignment;
+               return align != null && align.shrinkToFit;
             }
             set
             {
-                throw new NotImplementedException();
+               GetCellAlignment().setShrinkToFit(shrinkToFit);
             }
         }
 
