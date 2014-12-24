@@ -6,10 +6,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     public class ChartsheetDocument
     {
-        internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Chartsheet));
-        internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-            new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
-        CT_Chartsheet sheet = null;
+       CT_Chartsheet sheet = null;
 
         public ChartsheetDocument()
         {
@@ -18,9 +15,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.sheet = sheet;
         }
-        public static ChartsheetDocument Parse(Stream stream)
+        public static ChartsheetDocument Parse(XmlDocument xmldoc, XmlNamespaceManager nsmgr)
         {
-            CT_Chartsheet obj = (CT_Chartsheet)serializer.Deserialize(stream);
+            CT_Chartsheet obj = CT_Chartsheet.Parse(xmldoc, nsmgr);
             return new ChartsheetDocument(obj);
         }
         public CT_Chartsheet GetChartsheet()
@@ -33,7 +30,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            serializer.Serialize(stream, sheet, namespaces);
+            this.sheet.Write(stream);
         }
     }
 }

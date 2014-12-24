@@ -8666,9 +8666,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_WebPublishItems()
         {
-            this.webPublishItemField = new List<CT_WebPublishItem>();
+            //this.webPublishItemField = new List<CT_WebPublishItem>();
+        }
+        public static CT_WebPublishItems Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WebPublishItems ctObj = new CT_WebPublishItems();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.webPublishItem = new List<CT_WebPublishItem>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "webPublishItem")
+                    ctObj.webPublishItem.Add(CT_WebPublishItem.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
         }
 
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count, true);
+            sw.Write(">");
+            if (this.webPublishItem != null)
+            {
+                foreach (CT_WebPublishItem x in this.webPublishItem)
+                {
+                    x.Write(sw, "webPublishItem");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
         public List<CT_WebPublishItem> webPublishItem
         {
             get
@@ -8706,38 +8736,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public static CT_WebPublishItems Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_WebPublishItems ctObj = new CT_WebPublishItems();
-            ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
-            ctObj.webPublishItem = new List<CT_WebPublishItem>();
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "webPublishItem")
-                    ctObj.webPublishItem.Add(CT_WebPublishItem.Parse(childNode, namespaceManager));
-            }
-            return ctObj;
-        }
-
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.webPublishItem != null)
-            {
-                foreach (CT_WebPublishItem x in this.webPublishItem)
-                {
-                    x.Write(sw, "webPublishItem");
-                }
-            }
-            sw.Write(string.Format("</{0}>", nodeName));
-        }
-
     }
 
     [Serializable]
@@ -8765,7 +8763,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.autoRepublishField = false;
         }
+        public static CT_WebPublishItem Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WebPublishItem ctObj = new CT_WebPublishItem();
+            if (node.Attributes["id"] != null)
+                ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            ctObj.divId = XmlHelper.ReadString(node.Attributes["divId"]);
+            if (node.Attributes["sourceType"] != null)
+                ctObj.sourceType = (ST_WebSourceType)Enum.Parse(typeof(ST_WebSourceType), node.Attributes["sourceType"].Value);
+            ctObj.sourceRef = XmlHelper.ReadString(node.Attributes["sourceRef"]);
+            ctObj.sourceObject = XmlHelper.ReadString(node.Attributes["sourceObject"]);
+            ctObj.destinationFile = XmlHelper.ReadString(node.Attributes["destinationFile"]);
+            ctObj.title = XmlHelper.ReadString(node.Attributes["title"]);
+            if (node.Attributes["autoRepublish"] != null)
+                ctObj.autoRepublish = XmlHelper.ReadBool(node.Attributes["autoRepublish"]);
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "divId", this.divId);
+            XmlHelper.WriteAttribute(sw, "sourceType", this.sourceType.ToString());
+            XmlHelper.WriteAttribute(sw, "sourceRef", this.sourceRef);
+            XmlHelper.WriteAttribute(sw, "sourceObject", this.sourceObject);
+            XmlHelper.WriteAttribute(sw, "destinationFile", this.destinationFile);
+            XmlHelper.WriteAttribute(sw, "title", this.title);
+            if(autoRepublish)
+                XmlHelper.WriteAttribute(sw, "autoRepublish", this.autoRepublish);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
         public uint id
         {
             get
@@ -8863,39 +8896,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public static CT_WebPublishItem Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_WebPublishItem ctObj = new CT_WebPublishItem();
-            ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
-            ctObj.divId = XmlHelper.ReadString(node.Attributes["divId"]);
-            if (node.Attributes["sourceType"] != null)
-                ctObj.sourceType = (ST_WebSourceType)Enum.Parse(typeof(ST_WebSourceType), node.Attributes["sourceType"].Value);
-            ctObj.sourceRef = XmlHelper.ReadString(node.Attributes["sourceRef"]);
-            ctObj.sourceObject = XmlHelper.ReadString(node.Attributes["sourceObject"]);
-            ctObj.destinationFile = XmlHelper.ReadString(node.Attributes["destinationFile"]);
-            ctObj.title = XmlHelper.ReadString(node.Attributes["title"]);
-            ctObj.autoRepublish = XmlHelper.ReadBool(node.Attributes["autoRepublish"]);
-            return ctObj;
-        }
-
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "id", this.id);
-            XmlHelper.WriteAttribute(sw, "divId", this.divId);
-            XmlHelper.WriteAttribute(sw, "sourceType", this.sourceType.ToString());
-            XmlHelper.WriteAttribute(sw, "sourceRef", this.sourceRef);
-            XmlHelper.WriteAttribute(sw, "sourceObject", this.sourceObject);
-            XmlHelper.WriteAttribute(sw, "destinationFile", this.destinationFile);
-            XmlHelper.WriteAttribute(sw, "title", this.title);
-            XmlHelper.WriteAttribute(sw, "autoRepublish", this.autoRepublish);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
-        }
 
     }
 
@@ -9075,7 +9075,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_ChartsheetProtection sheetProtectionField;
 
-        private List<CT_CustomChartsheetView> customSheetViewsField;
+        private CT_CustomChartsheetViews customSheetViewsField;
 
         private CT_PageMargins pageMarginsField;
 
@@ -9098,10 +9098,83 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Chartsheet()
         {
         }
-        public void Save(Stream stream)
+        public static CT_Chartsheet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            throw new NotImplementedException();
+            if (node == null)
+                return null;
+            CT_Chartsheet ctObj = new CT_Chartsheet();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "sheetPr")
+                    ctObj.sheetPr = CT_ChartsheetPr.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetViews")
+                    ctObj.sheetViews = CT_ChartsheetViews.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetProtection")
+                    ctObj.sheetProtection = CT_ChartsheetProtection.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "customSheetViews")
+                    ctObj.customSheetViews = CT_CustomChartsheetViews.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageMargins")
+                    ctObj.pageMargins = CT_PageMargins.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageSetup")
+                    ctObj.pageSetup = CT_CsPageSetup.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "headerFooter")
+                    ctObj.headerFooter = CT_HeaderFooter.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "drawing")
+                    ctObj.drawing = CT_Drawing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "legacyDrawing")
+                    ctObj.legacyDrawing = CT_LegacyDrawing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "legacyDrawingHF")
+                    ctObj.legacyDrawingHF = CT_LegacyDrawing.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "picture")
+                    ctObj.picture = CT_SheetBackgroundPicture.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "webPublishItems")
+                    ctObj.webPublishItems = CT_WebPublishItems.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
         }
+
+
+
+        internal void Write(Stream stream)
+        {
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+                sw.Write("<chartsheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"");
+                sw.Write(" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"");
+                sw.Write(">");
+                if (this.sheetPr != null)
+                    this.sheetPr.Write(sw, "sheetPr");
+                if (this.sheetViews != null)
+                    this.sheetViews.Write(sw, "sheetViews");
+                if (this.sheetProtection != null)
+                    this.sheetProtection.Write(sw, "sheetProtection");
+                if (this.customSheetViews != null)
+                    this.customSheetViews.Write(sw, "customSheetViews");
+                if (this.pageMargins != null)
+                    this.pageMargins.Write(sw, "pageMargins");
+                if (this.pageSetup != null)
+                    this.pageSetup.Write(sw, "pageSetup");
+                if (this.headerFooter != null)
+                    this.headerFooter.Write(sw, "headerFooter");
+                if (this.drawing != null)
+                    this.drawing.Write(sw, "drawing");
+                if (this.legacyDrawing != null)
+                    this.legacyDrawing.Write(sw, "legacyDrawing");
+                if (this.legacyDrawingHF != null)
+                    this.legacyDrawingHF.Write(sw, "legacyDrawingHF");
+                if (this.picture != null)
+                    this.picture.Write(sw, "picture");
+                if (this.webPublishItems != null)
+                    this.webPublishItems.Write(sw, "webPublishItems");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write("</chartsheet>");
+            }
+        }
+
         [XmlElement]
         public CT_ChartsheetPr sheetPr
         {
@@ -9139,7 +9212,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlElement]
-        public List<CT_CustomChartsheetView> customSheetViews
+        public CT_CustomChartsheetViews customSheetViews
         {
             get
             {
@@ -9276,6 +9349,35 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.tabColorField = new CT_Color();
             this.publishedField = true;
         }
+        public static CT_ChartsheetPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ChartsheetPr ctObj = new CT_ChartsheetPr();
+            if (node.Attributes["published"] != null)
+                ctObj.published = XmlHelper.ReadBool(node.Attributes["published"]);
+            ctObj.codeName = XmlHelper.ReadString(node.Attributes["codeName"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "tabColor")
+                    ctObj.tabColor = CT_Color.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            if(!published)
+                XmlHelper.WriteAttribute(sw, "published", this.published);
+            XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
+            sw.Write(">");
+            if (this.tabColor != null)
+                this.tabColor.Write(sw, "tabColor");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         public CT_Color tabColor
         {
@@ -9326,8 +9428,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_ChartsheetViews()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.sheetViewField = new List<CT_ChartsheetView>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.sheetViewField = new List<CT_ChartsheetView>();
+        }
+        public static CT_ChartsheetViews Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ChartsheetViews ctObj = new CT_ChartsheetViews();
+            ctObj.sheetView = new List<CT_ChartsheetView>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "sheetView")
+                    ctObj.sheetView.Add(CT_ChartsheetView.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.sheetView != null)
+            {
+                foreach (CT_ChartsheetView x in this.sheetView)
+                {
+                    x.Write(sw, "sheetView");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         public List<CT_ChartsheetView> sheetView
@@ -9353,6 +9488,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
+
+
     }
 
     [Serializable]
@@ -9440,6 +9577,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zoomToFitField = value;
             }
         }
+        public static CT_ChartsheetView Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ChartsheetView ctObj = new CT_ChartsheetView();
+            if (node.Attributes["tabSelected"] != null)
+                ctObj.tabSelected = XmlHelper.ReadBool(node.Attributes["tabSelected"]);
+            if (node.Attributes["zoomScale"] != null)
+                ctObj.zoomScale = XmlHelper.ReadUInt(node.Attributes["zoomScale"]);
+            if (node.Attributes["workbookViewId"] != null)
+                ctObj.workbookViewId = XmlHelper.ReadUInt(node.Attributes["workbookViewId"]);
+            if (node.Attributes["zoomToFit"] != null)
+                ctObj.zoomToFit = XmlHelper.ReadBool(node.Attributes["zoomToFit"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            if(tabSelected)
+                XmlHelper.WriteAttribute(sw, "tabSelected", this.tabSelected);
+            if(zoomScale!=100)
+                XmlHelper.WriteAttribute(sw, "zoomScale", this.zoomScale);
+            XmlHelper.WriteAttribute(sw, "workbookViewId", this.workbookViewId);
+            if(zoomToFit)
+                XmlHelper.WriteAttribute(sw, "zoomToFit", this.zoomToFit);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -9496,6 +9672,32 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.objectsField = value;
             }
         }
+        public static CT_ChartsheetProtection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ChartsheetProtection ctObj = new CT_ChartsheetProtection();
+            if (node.Attributes["password"] != null)
+                ctObj.password = XmlHelper.ReadBytes(node.Attributes["password"]);
+            if (node.Attributes["content"] != null)
+                ctObj.content = XmlHelper.ReadBool(node.Attributes["content"]);
+            if (node.Attributes["objects"] != null)
+                ctObj.objects = XmlHelper.ReadBool(node.Attributes["objects"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "password", this.password);
+            if(content)
+                XmlHelper.WriteAttribute(sw, "content", this.content);
+            if(objects)
+                XmlHelper.WriteAttribute(sw, "objects", this.objects);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -9519,9 +9721,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CustomChartsheetView()
         {
-            this.headerFooterField = new CT_HeaderFooter();
-            this.pageSetupField = new CT_CsPageSetup();
-            this.pageMarginsField = new CT_PageMargins();
+            //this.headerFooterField = new CT_HeaderFooter();
+            //this.pageSetupField = new CT_CsPageSetup();
+            //this.pageMarginsField = new CT_PageMargins();
             this.scaleField = ((uint)(100));
             this.stateField = ST_SheetState.visible;
             this.zoomToFitField = false;
@@ -9613,6 +9815,53 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.zoomToFitField = value;
             }
         }
+        public static CT_CustomChartsheetView Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomChartsheetView ctObj = new CT_CustomChartsheetView();
+            ctObj.guid = XmlHelper.ReadString(node.Attributes["guid"]);
+            if (node.Attributes["scale"] != null)
+                ctObj.scale = XmlHelper.ReadUInt(node.Attributes["scale"]);
+            if (node.Attributes["state"] != null)
+                ctObj.state = (ST_SheetState)Enum.Parse(typeof(ST_SheetState), node.Attributes["state"].Value);
+            if (node.Attributes["zoomToFit"] != null)
+                ctObj.zoomToFit = XmlHelper.ReadBool(node.Attributes["zoomToFit"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pageMargins")
+                    ctObj.pageMargins = CT_PageMargins.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageSetup")
+                    ctObj.pageSetup = CT_CsPageSetup.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "headerFooter")
+                    ctObj.headerFooter = CT_HeaderFooter.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+
+            XmlHelper.WriteAttribute(sw, "guid", this.guid);
+            if(this.scale!=100)
+                XmlHelper.WriteAttribute(sw, "scale", this.scale);
+            if(this.state!= ST_SheetState.visible)
+                XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
+            if(this.zoomToFit)
+                XmlHelper.WriteAttribute(sw, "zoomToFit", this.zoomToFit);
+            sw.Write(">");
+            if (this.pageMargins != null)
+                this.pageMargins.Write(sw, "pageMargins");
+            if (this.pageSetup != null)
+                this.pageSetup.Write(sw, "pageSetup");
+            if (this.headerFooter != null)
+                this.headerFooter.Write(sw, "headerFooter");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]
@@ -9654,6 +9903,65 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.horizontalDpiField = ((uint)(600));
             this.verticalDpiField = ((uint)(600));
             this.copiesField = ((uint)(1));
+        }
+        public static CT_CsPageSetup Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CsPageSetup ctObj = new CT_CsPageSetup();
+            if (node.Attributes["paperSize"] != null)
+                ctObj.paperSize = XmlHelper.ReadUInt(node.Attributes["paperSize"]);
+            if (node.Attributes["firstPageNumber"] != null)
+                ctObj.firstPageNumber = XmlHelper.ReadUInt(node.Attributes["firstPageNumber"]);
+            if (node.Attributes["orientation"] != null)
+                ctObj.orientation = (ST_Orientation)Enum.Parse(typeof(ST_Orientation), node.Attributes["orientation"].Value);
+            if (node.Attributes["usePrinterDefaults"] != null)
+                ctObj.usePrinterDefaults = XmlHelper.ReadBool(node.Attributes["usePrinterDefaults"]);
+            if (node.Attributes["blackAndWhite"] != null)
+                ctObj.blackAndWhite = XmlHelper.ReadBool(node.Attributes["blackAndWhite"]);
+           
+            if (node.Attributes["draft"] != null)
+                ctObj.draft = XmlHelper.ReadBool(node.Attributes["draft"]);
+            if (node.Attributes["useFirstPageNumber"] != null)
+                ctObj.useFirstPageNumber = XmlHelper.ReadBool(node.Attributes["useFirstPageNumber"]);
+            if (node.Attributes["horizontalDpi"] != null)
+                ctObj.horizontalDpi = XmlHelper.ReadUInt(node.Attributes["horizontalDpi"]);
+            if (node.Attributes["verticalDpi"] != null)
+                ctObj.verticalDpi = XmlHelper.ReadUInt(node.Attributes["verticalDpi"]);
+            if (node.Attributes["copies"] != null)
+                ctObj.copies = XmlHelper.ReadUInt(node.Attributes["copies"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            if(paperSize!=1)
+                XmlHelper.WriteAttribute(sw, "paperSize", this.paperSize);
+            if(paperSize!=1)
+                XmlHelper.WriteAttribute(sw, "firstPageNumber", this.firstPageNumber);
+            if(orientation!= ST_Orientation.@default)
+                XmlHelper.WriteAttribute(sw, "orientation", this.orientation.ToString());
+            if (!usePrinterDefaults)
+                XmlHelper.WriteAttribute(sw, "usePrinterDefaults", this.usePrinterDefaults);
+            if(blackAndWhite)
+                XmlHelper.WriteAttribute(sw, "blackAndWhite", this.blackAndWhite);
+            if(draft)
+                XmlHelper.WriteAttribute(sw, "draft", this.draft);
+            if(useFirstPageNumber)
+                XmlHelper.WriteAttribute(sw, "useFirstPageNumber", this.useFirstPageNumber);
+            if(horizontalDpi!=600)
+                XmlHelper.WriteAttribute(sw, "horizontalDpi", this.horizontalDpi);
+            if (verticalDpi != 600)
+                XmlHelper.WriteAttribute(sw, "verticalDpi", this.verticalDpi);
+            if(this.copies!=1)
+                XmlHelper.WriteAttribute(sw, "copies", this.copies);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         [DefaultValue(typeof(uint), "1")]
@@ -10761,6 +11069,36 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.customSheetViewField = value;
             }
         }
+        public static CT_CustomChartsheetViews Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomChartsheetViews ctObj = new CT_CustomChartsheetViews();
+            ctObj.customSheetView = new List<CT_CustomChartsheetView>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "customSheetView")
+                    ctObj.customSheetView.Add(CT_CustomChartsheetView.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.customSheetView != null)
+            {
+                foreach (CT_CustomChartsheetView x in this.customSheetView)
+                {
+                    x.Write(sw, "customSheetView");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
     }
 
     [Serializable]

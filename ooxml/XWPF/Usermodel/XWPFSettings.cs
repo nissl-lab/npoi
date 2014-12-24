@@ -175,8 +175,8 @@ namespace NPOI.XWPF.UserModel
             Dictionary<String, String> map = new Dictionary<String, String>();
             map.Put("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w");
             xmlOptions.SaveSuggestedPrefixes=(map);*/
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-                new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")});
+            //XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
+            //    new XmlQualifiedName("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main")});
             PackagePart part = GetPackagePart();
             using (Stream out1 = part.GetOutputStream())
             {
@@ -198,15 +198,15 @@ namespace NPOI.XWPF.UserModel
 
         private void ReadFrom(Stream inputStream)
         {
-            //try
-            //{
+            try
+            {
                 XmlDocument xmldoc = ConvertStreamToXml(inputStream);
                 ctSettings = SettingsDocument.Parse(xmldoc,NamespaceManager).Settings;
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new Exception("SettingsDocument parse failed", e);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new Exception("SettingsDocument parse failed", e);
+            }
         }
 
     }

@@ -56,7 +56,8 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                chartsheet = ChartsheetDocument.Parse(is1).GetChartsheet();
+                XmlDocument doc = ConvertStreamToXml(is1);
+                chartsheet = ChartsheetDocument.Parse(doc, XSSFSheet.NamespaceManager).GetChartsheet();
             }
             catch (XmlException e)
             {
@@ -89,14 +90,7 @@ namespace NPOI.XSSF.UserModel
 
         internal override void Write(Stream out1)
         {
-            //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
-            //xmlOptions.SetSaveSyntheticDocumentElement(
-             //       new QName(CT_Chartsheet.type.GetName().GetNamespaceURI(), "chartsheet"));
-            Dictionary<String, String> map = new Dictionary<String, String>();
-            map[ST_RelationshipId.NamespaceURI]= "r";
-
-            chartsheet.Save(out1);
-
+            new ChartsheetDocument(this.chartsheet).Save(out1);
         }
 
         private static byte[] blankWorksheet()
