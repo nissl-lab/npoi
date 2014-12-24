@@ -1661,11 +1661,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
                 else if (childNode.LocalName == "pic")
                 {
-                    oneCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
+                    oneCellAnchor.picture = CT_Picture.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "cxnSp")
                 {
-                    oneCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                    oneCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "grpSp")
                 {
@@ -1723,11 +1723,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
                 else if (childNode.LocalName == "pic")
                 {
-                    absCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
+                    absCellAnchor.picture = CT_Picture.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "cxnSp")
                 {
-                    absCellAnchor.groupShape = CT_GroupShape.Parse(childNode, namespaceManager);
+                    absCellAnchor.connector = CT_Connector.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "grpSp")
                 {
