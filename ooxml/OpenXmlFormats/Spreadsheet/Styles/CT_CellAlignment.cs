@@ -39,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool horizontalFieldSpecified;
 
-        private ST_VerticalAlignment verticalField;
+        private ST_VerticalAlignment verticalField= ST_VerticalAlignment.center;
 
         private bool verticalFieldSpecified;
 
@@ -79,6 +79,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 ctObj.horizontal = (ST_HorizontalAlignment)Enum.Parse(typeof(ST_HorizontalAlignment), node.Attributes["horizontal"].Value);
             if (node.Attributes["vertical"] != null)
                 ctObj.vertical = (ST_VerticalAlignment)Enum.Parse(typeof(ST_VerticalAlignment), node.Attributes["vertical"].Value);
+            else
+                ctObj.vertical = ST_VerticalAlignment.center;
             ctObj.textRotation = XmlHelper.ReadLong(node.Attributes["textRotation"]);
             ctObj.wrapText = XmlHelper.ReadBool(node.Attributes["wrapText"]);
             ctObj.indent = XmlHelper.ReadLong(node.Attributes["indent"]);
