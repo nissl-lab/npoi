@@ -26,7 +26,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Vml.CT_Shape);
+            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Chartsheet);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
             //treeView1.ExpandAll();
@@ -425,7 +425,7 @@ namespace XmlSerializationCodeGenerator
             var a = p.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
             
             if (a.Length == 0)
-                return "w:";
+                return "";
             string n = ((XmlAttributeAttribute)a[0]).Namespace;
             if (n == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
             {
@@ -489,7 +489,7 @@ namespace XmlSerializationCodeGenerator
         {
             var a = p.GetCustomAttributes(typeof(XmlTypeAttribute), false);
             if (a.Length == 0)
-                return "w:";
+                return "";
             string n = ((XmlTypeAttribute)a[0]).Namespace;
             if (n == "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")
             {

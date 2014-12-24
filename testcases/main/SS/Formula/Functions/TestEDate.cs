@@ -34,8 +34,17 @@ namespace TestCases.SS.Formula.Functions
             int offset = 2;
             NumberEval result = (NumberEval)eDate.Evaluate(new ValueEval[] { new NumberEval(DateUtil.GetExcelDate(startDate)), new NumberEval(offset) }, null);
             DateTime resultDate = DateUtil.GetJavaDate(result.NumberValue);
-            Assert.AreEqual(resultDate, startDate.AddMonths(offset));
+            CompareDateTimes(resultDate, startDate.AddMonths(offset));
 
+        }
+        private void CompareDateTimes(DateTime a, DateTime b)
+        {
+            Assert.AreEqual(a.Year, b.Year);
+            Assert.AreEqual(a.Month, b.Month);
+            Assert.AreEqual(a.Day, b.Day);
+            Assert.AreEqual(a.Hour, b.Hour);
+            Assert.AreEqual(a.Minute, b.Minute);
+            Assert.AreEqual(a.Second, b.Second);
         }
         [Test]
         public void TestEDateDecrease()
@@ -46,7 +55,8 @@ namespace TestCases.SS.Formula.Functions
             NumberEval result = (NumberEval)eDate.Evaluate(new ValueEval[] { new NumberEval(DateUtil.GetExcelDate(startDate)), new NumberEval(offset) }, null);
             DateTime resultDate = DateUtil.GetJavaDate(result.NumberValue);
 
-            Assert.AreEqual(resultDate, startDate.AddMonths(offset));
+            CompareDateTimes(resultDate, startDate.AddMonths(offset));
+            
         }
     }
 }

@@ -47,8 +47,7 @@ namespace NPOI.SS.Formula.Atp
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
         {
-            DateTime date;
-            double numberOfMonths, result;
+            double result;
 
             if (args.Length != 2)
             {
@@ -57,12 +56,13 @@ namespace NPOI.SS.Formula.Atp
 
             try
             {
+                double startDateAsNumber = GetValue(args[0]);
+                NumberEval offsetInYearsValue = (NumberEval)args[1];
+                int offsetInMonthAsNumber = (int)offsetInYearsValue.NumberValue;
                 // resolve the arguments
-                date = DateUtil.GetJavaDate(OperandResolver.CoerceValueToDouble(OperandResolver.GetSingleValue(args[0], ec.RowIndex, ec.ColumnIndex)));
-                numberOfMonths = OperandResolver.CoerceValueToDouble(OperandResolver.GetSingleValue(args[1], ec.RowIndex, ec.ColumnIndex));
+                DateTime startDate = DateUtil.GetJavaDate(startDateAsNumber);
 
-                // calculate the result date (Excel rounds the second argument always to zero; but we have be careful about negative numbers)
-                DateTime resultDate = date.AddMonths((int)Math.Floor(Math.Abs(numberOfMonths)) * Math.Sign(numberOfMonths));
+                DateTime resultDate = startDate.AddMonths(offsetInMonthAsNumber);
                 result = DateUtil.GetExcelDate(resultDate);
                     
                 NumericFunction.CheckValue(result);
@@ -72,6 +72,19 @@ namespace NPOI.SS.Formula.Atp
             {
                 return e.GetErrorEval();
             }
+        }
+        private double GetValue(ValueEval arg)
+        {
+            if (arg is NumberEval)
+            {
+                return ((NumberEval)arg).NumberValue;
+            }
+            if (arg is RefEval)
+            {
+                ValueEval innerValueEval = ((RefEval)arg).InnerValueEval;
+                return ((NumberEval)innerValueEval).NumberValue;
+            }
+            throw new EvaluationException(ErrorEval.REF_INVALID);
         }
     }
 }
