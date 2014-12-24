@@ -23,6 +23,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     public enum ST_VerticalAlignment
     {
+        general,
         top,
         center,
         bottom,
@@ -94,9 +95,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            if(this.horizontal!= ST_HorizontalAlignment.general)
+            if(this.horizontal != ST_HorizontalAlignment.general)
                 XmlHelper.WriteAttribute(sw, "horizontal", this.horizontal.ToString());
-            XmlHelper.WriteAttribute(sw, "vertical", this.vertical.ToString());
+            if (this.vertical != ST_VerticalAlignment.general)
+                XmlHelper.WriteAttribute(sw, "vertical", this.vertical.ToString());
             XmlHelper.WriteAttribute(sw, "textRotation", this.textRotation);
             if(this.wrapText)
                 XmlHelper.WriteAttribute(sw, "wrapText", this.wrapText);
@@ -146,7 +148,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [DefaultValue(ST_VerticalAlignment.top)]
+        [DefaultValue(ST_VerticalAlignment.general)]
         public ST_VerticalAlignment vertical
         {
             get
