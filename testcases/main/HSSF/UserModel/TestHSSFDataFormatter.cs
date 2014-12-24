@@ -115,7 +115,7 @@ namespace TestCases.HSSF.UserModel
 				"0000.00000%",
 				"0.000E+00",
 				"0.00E+00",
-				"[BLACK]0.00;[COLOR 5]##.##",
+				"[BLACK]0.00;[COLOR 5]##.##"
 		};
 
             // invalid date formats -- will throw exception in DecimalFormat ctor
@@ -205,6 +205,15 @@ namespace TestCases.HSSF.UserModel
                 cell.CellFormula = (/*setter*/"SUM(12.25,12.25)/100");
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (/*setter*/format.GetFormat("##.00%;"));
+                cell.CellStyle = (/*setter*/cellStyle);
+            }
+
+            { // special cell
+                row = sheet.CreateRow(8);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue(1234567890.12345);
+                ICellStyle cellStyle = wb.CreateCellStyle();
+                cellStyle.DataFormat = format.GetFormat("#,##0.00 §â§å§Ò.;-#,##0.00 [$§â§å§Ò.-419]");
                 cell.CellStyle = (/*setter*/cellStyle);
             }
         }
@@ -334,6 +343,14 @@ namespace TestCases.HSSF.UserModel
             string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             Assert.AreEqual(formatter.FormatCellValue(cell, Evaluator), "24" + decimalSeparator + "50%");
 
+        }
+        [Test]
+        public void TestGetFormmatedCellValueWithSpecialSymbol()
+        {
+            IRow row = wb.GetSheetAt(0).GetRow(8);
+            ICell cell = row.GetCell(0);
+            log(formatter.FormatCellValue(cell));
+            Assert.AreEqual("1,234,567,890.12 §â§å§Ò.", formatter.FormatCellValue(cell));
         }
 
         /**
