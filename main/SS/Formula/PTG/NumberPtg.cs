@@ -48,7 +48,7 @@ namespace NPOI.SS.Formula.PTG
          *  @param value : String representation of a floating point number
          */
         public NumberPtg(String value)
-            : this(Double.Parse(value, CultureInfo.CurrentCulture))
+            : this(Double.Parse(value, CultureInfo.InvariantCulture))
         {
             
         }
