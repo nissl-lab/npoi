@@ -3623,12 +3623,12 @@ namespace NPOI.XSSF.UserModel
             if (name == null)
             {
                 name = wb.CreateBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
-                name.GetCTName().hidden = true;
-                CellReference r1 = new CellReference(SheetName, range.FirstRow, range.FirstColumn, true, true);
-                CellReference r2 = new CellReference(null, range.LastRow, range.LastColumn, true, true);
-                String fmla = r1.FormatAsString() + ":" + r2.FormatAsString();
-                name.RefersToFormula = fmla;
             }
+            name.GetCTName().hidden = true;
+            CellReference r1 = new CellReference(SheetName, range.FirstRow, range.FirstColumn, true, true);
+            CellReference r2 = new CellReference(null, range.LastRow, range.LastColumn, true, true);
+            String fmla = r1.FormatAsString() + ":" + r2.FormatAsString();
+            name.RefersToFormula = fmla;
 
             return new XSSFAutoFilter(this);
         }
