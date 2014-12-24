@@ -221,8 +221,6 @@
       <Name>main</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="npoi.snk" />
 <ItemGroup>
 	<None Include="..\main\npoi.snk">
 	      <Link>npoi.snk</Link>

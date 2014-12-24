@@ -1589,9 +1589,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:bottomFromText", this.bottomFromText);
             XmlHelper.WriteAttribute(sw, "w:vertAnchor", this.vertAnchor.ToString());
             XmlHelper.WriteAttribute(sw, "w:horzAnchor", this.horzAnchor.ToString());
-            XmlHelper.WriteAttribute(sw, "w:tblpXSpec", this.tblpXSpec.ToString());
+            if(this.tblpXSpecFieldSpecified)
+            	XmlHelper.WriteAttribute(sw, "w:tblpXSpec", this.tblpXSpec.ToString());
             XmlHelper.WriteAttribute(sw, "w:tblpX", this.tblpX);
-            XmlHelper.WriteAttribute(sw, "w:tblpYSpec", this.tblpYSpec.ToString());
+            if(this.tblpYSpecFieldSpecified)
+            	XmlHelper.WriteAttribute(sw, "w:tblpYSpec", this.tblpYSpec.ToString());
             XmlHelper.WriteAttribute(sw, "w:tblpY", this.tblpY);
             sw.Write(">");
             sw.Write(string.Format("</w:{0}>", nodeName));
@@ -1762,6 +1764,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
             set
             {
+            	tblpXSpecFieldSpecified = true;
                 this.tblpXSpecField = value;
             }
         }
@@ -1801,6 +1804,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
             set
             {
+            	tblpYSpecFieldSpecified = true;
                 this.tblpYSpecField = value;
             }
         }
