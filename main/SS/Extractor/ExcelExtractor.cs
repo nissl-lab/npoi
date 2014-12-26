@@ -22,24 +22,12 @@ namespace NPOI.SS.Extractor
      * Common interface for Excel text extractors, covering
      *  HSSF and XSSF
      */
-    public interface ExcelExtractor
+    public interface IExcelExtractor
     {
-        /**
-         * Should sheet names be included? Default is true
-         */
-        void SetIncludeSheetNames(bool includeSheetNames);
-
-        /**
-         * Should we return the formula itself, and not
-         *  the result it produces? Default is false
-         */
-        void SetFormulasNotResults(bool formulasNotResults);
-
-        /**
-         * Should cell comments be included? Default is false
-         */
-        void SetIncludeCellComments(bool includeCellComments);
-
+        bool IncludeCellComments { get; set; }
+        bool IncludeSheetNames { get; set; }
+        bool FormulasNotResults { get; set; }
+        bool IncludeHeaderFooter { get; set; }
         /**
          * Retreives the text contents of the file
          */

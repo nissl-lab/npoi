@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Extractor
     using NPOI;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Extractor;
 
     /// <summary>
     /// A text extractor for Excel files.
@@ -32,7 +33,7 @@ namespace NPOI.HSSF.Extractor
     /// indexing by something like Lucene, but not really
     /// intended for display to the user.
     /// </summary>
-    public class ExcelExtractor : POIOLE2TextExtractor
+    public class ExcelExtractor : POIOLE2TextExtractor, IExcelExtractor
     {
         private HSSFWorkbook wb;
         private HSSFDataFormatter _formatter;

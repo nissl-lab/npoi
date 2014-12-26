@@ -26,7 +26,7 @@ namespace NPOI.XSSF.Extractor
     /**
      * Helper class to extract text from an OOXML Excel file
      */
-    public class XSSFExcelExtractor : POIXMLTextExtractor, NPOI.SS.Extractor.ExcelExtractor
+    public class XSSFExcelExtractor : POIXMLTextExtractor, NPOI.SS.Extractor.IExcelExtractor
     {
         public static XSSFRelation[] SUPPORTED_TYPES = new XSSFRelation[] {
       XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
@@ -56,7 +56,66 @@ namespace NPOI.XSSF.Extractor
 
             this.workbook = workbook;
         }
-
+        /// <summary>
+        ///  Should header and footer be included? Default is true
+        /// </summary>
+        public bool IncludeHeaderFooter
+        {
+            get
+            {
+                return this.includeHeadersFooters;
+            }
+            set
+            {
+                this.includeHeadersFooters = value;
+            }
+        }
+        /// <summary>
+        /// Should sheet names be included? Default is true
+        /// </summary>
+        /// <value>if set to <c>true</c> [include sheet names].</value>
+        public bool IncludeSheetNames
+        {
+            get
+            {
+                return this.includeSheetNames;
+            }
+            set
+            {
+                this.includeSheetNames = value;
+            }
+        }
+        /// <summary>
+        /// Should we return the formula itself, and not
+        /// the result it produces? Default is false
+        /// </summary>
+        /// <value>if set to <c>true</c> [formulas not results].</value>
+        public bool FormulasNotResults
+        {
+            get
+            {
+                return this.formulasNotResults;
+            }
+            set
+            {
+                this.formulasNotResults = value;
+            }
+        }
+        /// <summary>
+        /// Should cell comments be included? Default is false
+        /// </summary>
+        /// <value>if set to <c>true</c> [include cell comments].</value>
+        public bool IncludeCellComments
+        {
+            get
+            {
+                return this.includeCellComments;
+            }
+            set
+            {
+                this.includeCellComments = value;
+            }
+        }
         /**
          * Should sheet names be included? Default is true
          */
