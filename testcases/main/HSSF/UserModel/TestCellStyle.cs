@@ -262,10 +262,13 @@ namespace TestCases.HSSF.UserModel
             Assert.AreNotEqual(18, clone.DataFormat);
 
             clone.CloneStyleFrom(orig);
-            Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
-            Assert.AreEqual(fnt , clone.GetFont(wb));
-            Assert.AreEqual(18,clone.DataFormat);
+            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            Assert.AreEqual(fnt, clone.GetFont(wb));
+            Assert.AreEqual(18, clone.DataFormat);
             Assert.AreEqual(5, wb.NumberOfFonts);
+
+            orig.Alignment = HorizontalAlignment.Left;
+            Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
         }
 
         /**

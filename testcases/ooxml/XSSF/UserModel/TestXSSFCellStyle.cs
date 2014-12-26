@@ -698,6 +698,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(fnt, clone.GetFont());
             Assert.AreEqual(18, clone.DataFormat);
             Assert.AreEqual(2, wb.NumberOfFonts);
+
+            clone.Alignment = HorizontalAlignment.Left;
+            clone.DataFormat = 17;
+            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            Assert.AreEqual(18, orig.DataFormat);
         }
         /**
          * Cloning one XSSFCellStyle onto Another, different XSSFWorkbooks

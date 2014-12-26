@@ -356,5 +356,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.readingOrderFieldSpecified = value;
             }
         }
+
+        internal CT_CellAlignment Copy()
+        {
+            CT_CellAlignment align = new CT_CellAlignment();
+            align.horizontal = this.horizontal;
+            align.vertical = this.vertical;
+            align.wrapText = this.wrapText;
+            align.shrinkToFit = this.shrinkToFit;
+            align.textRotation = this.textRotation;
+            align.justifyLastLine = this.justifyLastLine;
+            align.readingOrder = this.readingOrder;
+            align.relativeIndent = this.relativeIndent;
+            align.indent = this.indent;
+            return align;
+        }
     }
 }

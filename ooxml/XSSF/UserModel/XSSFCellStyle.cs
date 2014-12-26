@@ -130,16 +130,14 @@ namespace NPOI.XSSF.UserModel
                 if (src._stylesSource == _stylesSource)
                 {
                     // Nice and easy
-                    _cellXf = src.GetCoreXf();
-                    _cellStyleXf = src.GetStyleXf();
+                    _cellXf = src.GetCoreXf().Copy();
+                    _cellStyleXf = src.GetStyleXf().Copy();
                 }
                 else
                 {
                     // Copy the style
                     try
                     {
-
-
                         // Remove any children off the current style, to
                         //  avoid orphaned nodes
                         if (_cellXf.IsSetAlignment())

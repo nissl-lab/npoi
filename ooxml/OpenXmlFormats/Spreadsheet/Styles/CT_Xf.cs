@@ -47,20 +47,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Xf Copy()
         {
             CT_Xf obj = new CT_Xf();
-            obj.alignmentField = this.alignmentField;
-            obj.protectionField = this.protectionField;
+            if (this.alignment!=null)
+                obj.alignment = this.alignment.Copy();
+            obj.protection = this.protection;
             obj.extLstField = null == extLstField ? null : this.extLstField.Copy();
 
-            obj.applyAlignmentField = this.applyAlignmentField;
-            obj.applyBorderField = this.applyBorderField;
-            obj.applyFillField = this.applyFillField;
-            obj.applyFontField = this.applyFontField;
-            obj.applyNumberFormatField = this.applyNumberFormatField;
-            obj.applyProtectionField = this.applyProtectionField;
-            obj.borderIdField = this.borderIdField;
-            obj.fillIdField = this.fillIdField;
-            obj.fontIdField = this.fontIdField;
-            obj.numFmtIdField = this.numFmtIdField;
+            obj.applyAlignment = this.applyAlignment;
+            obj.applyBorder = this.applyBorder;
+            obj.applyFill = this.applyFill;
+            obj.applyFont = this.applyFont;
+            obj.applyNumberFormat = this.applyNumberFormat;
+            obj.applyProtection = this.applyProtection;
+            obj.borderId = this.borderId;
+            obj.fillId = this.fillId;
+            obj.fontId = this.fontId;
+            obj.numFmtId = this.numFmtId;
             obj.pivotButtonField = this.pivotButtonField;
             obj.quotePrefixField = this.quotePrefixField;
             obj.xfIdField = this.xfIdField;
