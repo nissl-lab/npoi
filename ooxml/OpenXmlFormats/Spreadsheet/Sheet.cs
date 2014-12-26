@@ -6251,6 +6251,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.bottom = src.bottom;
             this.percent = src.percent;
             this.dxfId = src.dxfId;
+            this.priority = src.priority;
             this.@operator = src.@operator;
             this.type = src.type;
             this.equalAverage = src.equalAverage;
