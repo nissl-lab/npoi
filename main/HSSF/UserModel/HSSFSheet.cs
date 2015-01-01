@@ -1878,7 +1878,7 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-            if (null == agg)
+            if (null == agg || null == agg.GetEscherContainer())
             {
                 int pos = _sheet.AggregateDrawingRecords(dm, false);
                 if (-1 == pos)
