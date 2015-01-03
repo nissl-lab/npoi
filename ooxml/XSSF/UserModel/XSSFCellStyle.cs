@@ -1344,9 +1344,9 @@ namespace NPOI.XSSF.UserModel
                 if (ct.diagonalDown == true && ct.diagonalUp == true)
                     return BorderDiagonal.Both;
                 else if (ct.diagonalDown == true)
-                    return BorderDiagonal.Forward;
-                else if (ct.diagonalUp == true)
                     return BorderDiagonal.Backward;
+                else if (ct.diagonalUp == true)
+                    return BorderDiagonal.Forward;
                 else
                     return BorderDiagonal.None;
             }
@@ -1362,17 +1362,17 @@ namespace NPOI.XSSF.UserModel
                 }
                 else if (value == BorderDiagonal.Forward)
                 {
-                    ct.diagonalDown = true;
-                    ct.diagonalDownSpecified = true;
-                    ct.diagonalUp = false;
-                    ct.diagonalUpSpecified = false;
-                }
-                else if (value == BorderDiagonal.Backward)
-                {
                     ct.diagonalDown = false;
                     ct.diagonalDownSpecified = false;
                     ct.diagonalUp = true;
                     ct.diagonalUpSpecified = true;
+                }
+                else if (value == BorderDiagonal.Backward)
+                {
+                    ct.diagonalDown = true;
+                    ct.diagonalDownSpecified = true;
+                    ct.diagonalUp = false;
+                    ct.diagonalUpSpecified = false;
                 }
                 else
                 {
