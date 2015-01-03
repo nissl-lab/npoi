@@ -168,9 +168,15 @@ namespace NPOI.HSSF.UserModel
         /// Creates new HSSFWorkbook from scratch (start here!)
         /// </summary>
         public HSSFWorkbook()
-            : this(InternalWorkbook.CreateWorkbook())
+            : this(Environment.UserName)
         {
 
+        }
+
+        public HSSFWorkbook(string username)
+            : this(InternalWorkbook.CreateWorkbook(username))
+        {
+            
         }
 
         public HSSFWorkbook(InternalWorkbook book)

@@ -96,7 +96,7 @@ namespace NPOI.HSSF.Model
          * holds the "boundsheet" records (aka bundlesheet) so that they can have their
          * reference to their "BOF" marker
          */
-        protected List<BoundSheetRecord> boundsheets ;
+        protected List<BoundSheetRecord> boundsheets;
 
         protected List<FormatRecord> formats;
 
@@ -311,11 +311,12 @@ namespace NPOI.HSSF.Model
             else
                 return null;
         }
+
         /**
          * Creates an empty workbook object with three blank sheets and all the empty
          * fields.  Use this to Create a workbook from scratch.
          */
-        public static InternalWorkbook CreateWorkbook()
+        public static InternalWorkbook CreateWorkbook(string username)
         {
             //if (log.Check(POILogger.DEBUG))
             //    log.Log(DEBUG, "creating new workbook from scratch");
@@ -328,7 +329,7 @@ namespace NPOI.HSSF.Model
             records.Add(new InterfaceHdrRecord(CODEPAGE));
             records.Add(CreateMMS());
             records.Add(InterfaceEndRecord.Instance);
-            records.Add(CreateWriteAccess());
+            records.Add(CreateWriteAccess(username));
             records.Add(CreateCodepage());
             records.Add(CreateDSF());
             records.Add(CreateTabId());
@@ -1289,19 +1290,18 @@ namespace NPOI.HSSF.Model
         }
 
         /**
-         * Creates the WriteAccess record containing the logged in user's name
+         * Creates the WriteAccess record containing the user's name
          * @see org.apache.poi.hssf.record.WriteAccessRecord
          * @see org.apache.poi.hssf.record.Record
          * @return record containing a WriteAccessRecord
          */
 
-        private static Record CreateWriteAccess()
+        private static Record CreateWriteAccess(string username)
         {
             WriteAccessRecord retval = new WriteAccessRecord();
             String defaultUserName = "NPOI";
             try
             {
-                String username = (Environment.UserName);
                 // Google App engine returns null for user.name, see Bug 53974
                 if (string.IsNullOrEmpty(username)) username = defaultUserName;
 
@@ -2843,23 +2843,20 @@ namespace NPOI.HSSF.Model
             }
         }
 
-        public WriteAccessRecord WriteAccess
+        public WriteAccessRecord WriteAccess(String username)
         {
-            get
+            if (this.writeAccess == null)
             {
-                if (this.writeAccess == null)
+                this.writeAccess = (WriteAccessRecord)CreateWriteAccess(username);
+                int i = 0;
+                for (i = 0;
+                        i < records.Count && !(records[i] is InterfaceEndRecord);
+                        i++)
                 {
-                    this.writeAccess = (WriteAccessRecord)CreateWriteAccess();
-                    int i = 0;
-                    for (i = 0;
-                         i < records.Count && !(records[i] is InterfaceEndRecord);
-                         i++)
-                    {
-                    }
-                    records.Add(i + 1, this.writeAccess);
                 }
-                return this.writeAccess;
+                records.Add(i + 1, this.writeAccess);
             }
+            return this.writeAccess;
         }
 
         public FileSharingRecord FileSharing
@@ -2906,7 +2903,7 @@ namespace NPOI.HSSF.Model
         {
             //int protIdx = -1;
             FileSharingRecord frec = FileSharing;
-            WriteAccessRecord waccess = WriteAccess;
+            WriteAccessRecord waccess = WriteAccess(username);
             WriteProtectRecord wprotect = WriteProtect;
             frec.ReadOnly=((short)1);
             frec.Password=(FileSharingRecord.HashPassword(password));
