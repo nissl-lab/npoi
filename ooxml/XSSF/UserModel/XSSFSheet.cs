@@ -211,7 +211,10 @@ namespace NPOI.XSSF.UserModel
                         hyperRel = hyperRels.GetRelationshipByID(hyperlink.id);
                     }
 
-                    hyperlinks.Add(new XSSFHyperlink(hyperlink, hyperRel));
+                    if (hyperRel != null)
+                    {
+                        hyperlinks.Add(new XSSFHyperlink(hyperlink, hyperRel));
+                    }
                 }
             }
             catch (InvalidFormatException e)
@@ -4026,11 +4029,6 @@ namespace NPOI.XSSF.UserModel
                 logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
                 ct.UnsetLegacyDrawing();
             }
-            if (ct.IsSetPageSetup())
-            {
-                logger.Log(POILogger.WARN, "Cloning sheets with page setup is not yet supported.");
-                ct.UnsetPageSetup();
-            }
             newSheet.IsSelected = false;
 
             // copy sheet's relations
@@ -4050,6 +4048,10 @@ namespace NPOI.XSSF.UserModel
                     rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
                 newSheet.AddRelation(rel.Id, r);
             }
+            
+            // copy hyperlinks
+            newSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
+            
             // clone the sheet drawing along with its relationships
             if (dg != null)
             {

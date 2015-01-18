@@ -1878,10 +1878,10 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-            if (null == agg)
+            if (null == agg || null == agg.GetEscherContainer())
             {
                 int pos = _sheet.AggregateDrawingRecords(dm, false);
-                if (-1 == pos)
+                if (-1 == pos || (agg = (EscherAggregate)_sheet.Records[(pos)]) == null || agg.GetEscherContainer() == null)
                 {
                     if (createIfMissing)
                     {
@@ -1896,7 +1896,6 @@ namespace NPOI.HSSF.UserModel
                         return null;
                     }
                 }
-                agg = (EscherAggregate)_sheet.Records[(pos)];
             }
             return new HSSFPatriarch(this, agg);
         }
