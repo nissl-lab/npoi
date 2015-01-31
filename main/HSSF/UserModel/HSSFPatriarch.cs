@@ -491,7 +491,10 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-
+        public List<HSSFShape> GetShapes()
+        {
+            return _shapes;
+        }
         public IEnumerator<HSSFShape> GetEnumerator()
         {
             return _shapes.GetEnumerator();

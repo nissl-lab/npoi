@@ -378,7 +378,7 @@ namespace NPOI.XSSF.UserModel
                 columnHelper.SetColBestFit(column, true);
             }
         }
-
+        XSSFDrawing drawing = null;
         /**
          * Create a new SpreadsheetML drawing. If this sheet already Contains a drawing - return that.
          *
@@ -386,7 +386,6 @@ namespace NPOI.XSSF.UserModel
          */
         public IDrawing CreateDrawingPatriarch()
         {
-            XSSFDrawing drawing = null;
             NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
             if (ctDrawing == null)
             {
@@ -3697,7 +3696,33 @@ namespace NPOI.XSSF.UserModel
 
         public IDrawing DrawingPatriarch
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                if (drawing == null)
+                {
+                    NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
+                    if (ctDrawing == null)
+                    {
+                        return null;
+                    }
+
+                    foreach (POIXMLDocumentPart p in GetRelations())
+                    {
+                        if (p is XSSFDrawing)
+                        {
+                            XSSFDrawing dr = (XSSFDrawing)p;
+                            String drId = dr.GetPackageRelationship().Id;
+                            if (drId.Equals(ctDrawing.id))
+                            {
+                                drawing = dr;
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+                return drawing;
+            }
         }
 
         public IEnumerator GetEnumerator()
