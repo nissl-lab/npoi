@@ -80,7 +80,7 @@ namespace NPOI.XWPF.UserModel
         }
 
         public XWPFDocument()
-            : base(newPackage())
+            : base(NewPackage())
         {
             OnDocumentCreate();
         }
@@ -239,7 +239,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Create a new WordProcessingML package and Setup the default minimal content
          */
-        protected static OPCPackage newPackage()
+        protected static OPCPackage NewPackage()
         {
              try {
                 OPCPackage pkg = OPCPackage.Create(new MemoryStream());

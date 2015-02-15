@@ -309,7 +309,11 @@ namespace NPOI.XWPF.UserModel
                 return pictureText;
             }
         }
-
+        public void ReplaceText(string oldText, string newText)
+        {
+            string text= this.Text.Replace(oldText, newText);
+            this.SetText(text);
+        }
         /**
          * Sets the text of this text run
          *
@@ -317,7 +321,44 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetText(String value)
         {
-            //SetText(value,run.TList.Size());
+            StringBuilder sb = new StringBuilder();
+            run.Items.Clear();
+            run.ItemsElementName.Clear();
+            char[] chars= value.ToCharArray();
+            for (int i = 0; i < chars.Length;i++ )
+            {
+                if (chars[i] == '\n')
+                {
+                    run.Items.Add(new CT_Text() { Value = sb.ToString() });
+                    run.ItemsElementName.Add(RunItemsChoiceType.instrText);
+                    sb.Clear();
+                    run.Items.Add(new CT_Br());
+                    run.ItemsElementName.Add(RunItemsChoiceType.br);
+                }
+                else if (chars[i] == '\t')
+                {
+                    run.Items.Add(new CT_Text() { Value = sb.ToString() });
+                    run.ItemsElementName.Add(RunItemsChoiceType.instrText);
+                    sb.Clear();
+                    run.Items.Add(new CT_PTab());
+                    run.ItemsElementName.Add(RunItemsChoiceType.ptab);
+                }
+                else
+                {
+                    sb.Append(chars[i]);
+                }
+
+            }
+            if (sb.Length > 0)
+            {
+                run.Items.Add(new CT_Text() { Value = sb.ToString() });
+                run.ItemsElementName.Add(RunItemsChoiceType.instrText);
+            }
+        }
+        
+
+        public void AppendText(String value)
+        {
             SetText(value, run.GetTList().Count);
         }
 
@@ -375,17 +416,87 @@ namespace NPOI.XWPF.UserModel
 				return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
 			}
         }
+        internal void InsertText(CT_Text text, int textIndex)
+        {
+            run.GetTList().Insert(textIndex, text);
+        }
 
+        /// <summary>
+        /// insert text at start index in the run
+        /// </summary>
+        /// <param name="text">insert text</param>
+        /// <param name="startIndex">start index of the insertion in the run text</param>
+        public void InsertText(string text, int startIndex)
+        { 
+           List<CT_Text> texts= run.GetTList();
+           int endPos = 0;
+           int startPos = 0;
+           for (int i = 0; i < texts.Count; i++)
+           {
+               startPos = endPos;
+               endPos += texts[i].Value.Length;
+               if (endPos > startIndex)
+               {
+                   texts[i].Value = texts[i].Value.Insert(startIndex - startPos, text);
+                   break;
+               }
+           }
+        }
+        public string Text
+        {
+            get {
+                StringBuilder text = new StringBuilder();
+
+                for (int i = 0; i < run.Items.Count;i++ )
+                {
+                    object o = run.Items[i];
+                    if (o is CT_Text)
+                    {
+                        if (!(run.ItemsElementName[i] == RunItemsChoiceType.instrText))
+                        {
+                            text.Append(((CT_Text)o).Value);
+                        }
+                    }
+
+                    if (o is CT_PTab)
+                    {
+                        text.Append("\t");
+                    }
+                    if (o is CT_Br)
+                    {
+                        text.Append("\n");
+                    }
+                    if (o is CT_Empty)
+                    {
+                        // Some inline text elements Get returned not as
+                        //  themselves, but as CTEmpty, owing to some odd
+                        //  defInitions around line 5642 of the XSDs
+                        // This bit works around it, and replicates the above
+                        //  rules for that case
+                        if (run.ItemsElementName[i] == RunItemsChoiceType.tab)
+                        {
+                            text.Append("\t");
+                        }
+                        if (run.ItemsElementName[i] == RunItemsChoiceType.br)
+                        {
+                            text.Append("\n");
+                        }
+                        if (run.ItemsElementName[i] == RunItemsChoiceType.cr)
+                        {
+                            text.Append("\n");
+                        }
+                    }
+                }
+                return text.ToString();
+            }
+        }
         /**
          * Specifies that the contents of this run.should be displayed along with an
          * underline appearing directly below the character heigh
-         * <p/>
-         * <p/>
          * If this element is not present, the default value is to leave the
          * formatting applied at previous level in the style hierarchy. If this
          * element is never applied in the style hierarchy, then an underline shall
          * not be applied to the contents of this run.
-         * </p>
          *
          * @param value -
          *              underline type
@@ -537,22 +648,18 @@ namespace NPOI.XWPF.UserModel
          * lowered for this run.in relation to the default baseline of the
          * surrounding non-positioned text. This allows the text to be repositioned
          * without altering the font size of the contents.
-         * <p/>
+         * 
          * If the val attribute is positive, then the parent run.shall be raised
          * above the baseline of the surrounding text by the specified number of
          * half-points. If the val attribute is negative, then the parent run.shall
          * be lowered below the baseline of the surrounding text by the specified
          * number of half-points.
-         * </p>
-         * <p/>
+         *         * 
          * If this element is not present, the default value is to leave the
          * formatting applied at previous level in the style hierarchy. If this
          * element is never applied in the style hierarchy, then the text shall not
          * be raised or lowered relative to the default baseline location for the
          * contents of this run.
-         * </p>
-         *
-         * @param val
          */
         public void SetTextPosition(int val)
         {
@@ -637,9 +744,9 @@ namespace NPOI.XWPF.UserModel
             run.AddNewCr();
         }
 
-        public void RemoveCarriageReturn()
+        public void RemoveCarriageReturn(int i)
         {
-            //TODO
+            throw new NotImplementedException();
         }
 
         /**
@@ -771,6 +878,7 @@ namespace NPOI.XWPF.UserModel
             return pictures;
         }
 
+        
         /**
          * Add the xml:spaces="preserve" attribute if the string has leading or trailing white spaces
          *
@@ -796,65 +904,7 @@ namespace NPOI.XWPF.UserModel
         {
             StringBuilder text = new StringBuilder();
 
-            // Grab the text and tabs of the text run
-            // Do so in a way that preserves the ordering
-            //XmlCursor c = run.NewCursor();
-            //c.SelectPath("./*");
-            //while (c.ToNextSelection())
-            int index=0;
-            foreach (object o in run.Items)
-            {
-
-                //XmlObject o = c.Object;
-                if (o is CT_Text)
-                {
-                    //String tagName = o.DomNode.NodeName;
-                    // Field Codes (w:instrText, defined in spec sec. 17.16.23)
-                    //  come up as instances of CTText, but we don't want them
-                    //  in the normal text output
-                    //if (!"w:instrText".Equals(tagName))
-                    if (!(run.ItemsElementName[index] == RunItemsChoiceType.instrText))
-                    {
-                        text.Append(((CT_Text)o).Value);
-                    }
-                }
-
-                if (o is CT_PTab)
-                {
-                    text.Append("\t");
-                }
-                if (o is CT_Br)
-                {
-                    text.Append("\n");
-                }
-                if (o is CT_Empty)
-                {
-                    // Some inline text elements Get returned not as
-                    //  themselves, but as CTEmpty, owing to some odd
-                    //  defInitions around line 5642 of the XSDs
-                    // This bit works around it, and replicates the above
-                    //  rules for that case
-                    //String tagName = o.DomNode.NodeName;
-                    if (run.ItemsElementName[index] == RunItemsChoiceType.tab)
-                    //if ("w:tab".Equals(tagName))
-                    {
-                        text.Append("\t");
-                    }
-                    if (run.ItemsElementName[index] == RunItemsChoiceType.br)
-                    //if ("w:br".Equals(tagName))
-                    {
-                        text.Append("\n");
-                    }
-                    if (run.ItemsElementName[index] == RunItemsChoiceType.cr)
-                    //if ("w:cr".Equals(tagName))
-                    {
-                        text.Append("\n");
-                    }
-                }
-                index++;
-            }
-
-            //c.Dispose();
+            text.Append(this.Text);
 
             // Any picture text?
             if (pictureText != null && pictureText.Length > 0)

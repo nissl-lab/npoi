@@ -1766,8 +1766,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlElement("alias", typeof(CT_String), Order = 0)]
-        [XmlElement("bibliography", typeof(
-            ), Order = 0)]
+        [XmlElement("bibliography", typeof(CT_Empty), Order = 0)]
         [XmlElement("citation", typeof(CT_Empty), Order = 0)]
         [XmlElement("comboBox", typeof(CT_SdtComboBox), Order = 0)]
         [XmlElement("dataBinding", typeof(CT_DataBinding), Order = 0)]

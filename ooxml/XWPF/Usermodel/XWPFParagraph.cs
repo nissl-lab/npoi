@@ -1021,7 +1021,18 @@ namespace NPOI.XWPF.UserModel
             paragraph.AddNewR();
             paragraph.SetRArray(pos, Run);
         }
-
+        /// <summary>
+        /// Replace text inside each run (cross run is not supported yet)
+        /// </summary>
+        /// <param name="oldText">target text</param>
+        /// <param name="newText">replacement text</param>
+        public void ReplaceText(string oldText,string newText)
+        {
+            for (int i = 0; i < this.runs.Count; i++)
+            {
+                this.runs[i].ReplaceText(oldText, newText);
+            }
+        }
         /// <summary>
         /// this methods parse the paragraph and search for the string searched. 
         /// If it finds the string, it will return true and the position of the String will be saved in the parameter startPos.
@@ -1037,10 +1048,10 @@ namespace NPOI.XWPF.UserModel
                 startChar = startPos.Char;
             int beginRunPos = 0, candCharPos = 0;
             bool newList = false;
-            for (int RunPos = startRun; RunPos < paragraph.GetRList().Count; RunPos++)
+            for (int runPos = startRun; runPos < paragraph.GetRList().Count; runPos++)
             {
                 int beginTextPos = 0, beginCharPos = 0, textPos = 0, charPos = 0;
-                CT_R ctRun = paragraph.GetRList()[RunPos];
+                CT_R ctRun = paragraph.GetRList()[runPos];
                 foreach(object o in ctRun.Items)
                 {
                     if (o is CT_Text)
@@ -1048,7 +1059,7 @@ namespace NPOI.XWPF.UserModel
                         if (textPos >= startText)
                         {
                             String candidate = ((CT_Text)o).Value;
-                            if (RunPos == startRun)
+                            if (runPos == startRun)
                                 charPos = startChar;
                             else
                                 charPos = 0;
@@ -1058,20 +1069,22 @@ namespace NPOI.XWPF.UserModel
                                 {
                                     beginTextPos = textPos;
                                     beginCharPos = charPos;
-                                    beginRunPos = RunPos;
+                                    beginRunPos = runPos;
                                     newList = true;
                                 }
                                 if (candidate[charPos] == searched[candCharPos])
                                 {
                                     if (candCharPos + 1 < searched.Length)
+                                    {
                                         candCharPos++;
+                                    }
                                     else if (newList)
                                     {
                                         TextSegement segement = new TextSegement();
                                         segement.BeginRun = (beginRunPos);
                                         segement.BeginText = (beginTextPos);
                                         segement.BeginChar = (beginCharPos);
-                                        segement.EndRun = (RunPos);
+                                        segement.EndRun = (runPos);
                                         segement.EndText = (textPos);
                                         segement.EndChar = (charPos);
                                         return segement;

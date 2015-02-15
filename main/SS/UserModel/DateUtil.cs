@@ -376,7 +376,7 @@ namespace NPOI.SS.UserModel
                 return true;
             }
 
-            // If we didn't Get a real string, it can't be
+            // If we didn't get a real string, it can't be
             if (formatString == null || formatString.Length == 0)
             {
                 return false;
