@@ -39,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool horizontalFieldSpecified;
 
-        private ST_VerticalAlignment verticalField= ST_VerticalAlignment.center;
+        private ST_VerticalAlignment verticalField = ST_VerticalAlignment.bottom;
 
         private bool verticalFieldSpecified;
 
@@ -79,8 +79,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 ctObj.horizontal = (ST_HorizontalAlignment)Enum.Parse(typeof(ST_HorizontalAlignment), node.Attributes["horizontal"].Value);
             if (node.Attributes["vertical"] != null)
                 ctObj.vertical = (ST_VerticalAlignment)Enum.Parse(typeof(ST_VerticalAlignment), node.Attributes["vertical"].Value);
-            else
-                ctObj.vertical = ST_VerticalAlignment.center;
             ctObj.textRotation = XmlHelper.ReadLong(node.Attributes["textRotation"]);
             ctObj.wrapText = XmlHelper.ReadBool(node.Attributes["wrapText"]);
             ctObj.indent = XmlHelper.ReadLong(node.Attributes["indent"]);
@@ -96,9 +94,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            if(this.horizontal!= ST_HorizontalAlignment.general)
+            if(this.horizontal != ST_HorizontalAlignment.general)
                 XmlHelper.WriteAttribute(sw, "horizontal", this.horizontal.ToString());
-            XmlHelper.WriteAttribute(sw, "vertical", this.vertical.ToString());
+            if (this.vertical != ST_VerticalAlignment.bottom)
+                XmlHelper.WriteAttribute(sw, "vertical", this.vertical.ToString());
             XmlHelper.WriteAttribute(sw, "textRotation", this.textRotation);
             if(this.wrapText)
                 XmlHelper.WriteAttribute(sw, "wrapText", this.wrapText);
@@ -148,7 +147,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlAttribute]
-        [DefaultValue(ST_VerticalAlignment.top)]
+        [DefaultValue(ST_VerticalAlignment.bottom)]
         public ST_VerticalAlignment vertical
         {
             get
