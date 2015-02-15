@@ -1895,52 +1895,53 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             sw.Write(">");
-            int i=0;
-            foreach (object o in this.Items)
+            for (int i=0;i<this.Items.Count;i++)
             {
-                if (o is CT_FtnEdnRef)
+                object o = Items[i];
+                ItemsChoiceType6 t= ItemsElementName[i];
+                if (o is CT_FtnEdnRef && t== ItemsChoiceType6.endnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "endnoteReference");
                 else if (o is CT_Drawing)
                     ((CT_Drawing)o).Write(sw, "drawing");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&&t== ItemsChoiceType6.tab)
                     sw.Write("<tab/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t == ItemsChoiceType6.dayLong)
                     sw.Write("<dayLong/>");
-                else if (o is CT_Text1)
+                else if (o is CT_Text1 && t== ItemsChoiceType6.t)
                     ((CT_Text1)o).Write(sw, "t");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t == ItemsChoiceType6.dayShort)
                     sw.Write("<dayShort/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType6.annotationRef)
                     sw.Write("<annotationRef/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType6.endnoteRef)
                     sw.Write("<endnoteRef/>");
                 else if (o is CT_FldChar)
                     ((CT_FldChar)o).Write(sw, "fldChar");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType6.lastRenderedPageBreak)
                     sw.Write("<lastRenderedPageBreak/>");
-                else if (o is CT_FtnEdnRef)
+                else if (o is CT_FtnEdnRef && t== ItemsChoiceType6.footnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
-                else if ((o is CT_Text) && this.ItemsElementName[i] == ItemsChoiceType6.delInstrText)
+                else if ((o is CT_Text) && t == ItemsChoiceType6.delInstrText)
                     ((CT_Text)o).Write(sw, "delInstrText");
-                else if (o is CT_Text && this.ItemsElementName[i] == ItemsChoiceType6.delText)
+                else if (o is CT_Text && t == ItemsChoiceType6.delText)
                     ((CT_Text)o).Write(sw, "delText");
-                else if (o is CT_Markup)
+                else if (o is CT_Markup&& t== ItemsChoiceType6.commentReference)
                     ((CT_Markup)o).Write(sw, "commentReference");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType6.monthLong)
                     sw.Write("<monthLong/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t==ItemsChoiceType6.monthShort)
                     sw.Write("<monthShort/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t== ItemsChoiceType6.continuationSeparator)
                     sw.Write("<continuationSeparator/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType6.cr)
                     sw.Write("<cr/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType6.noBreakHyphen)
                     sw.Write("<noBreakHyphen/>");
                 else if (o is CT_Object)
                     ((CT_Object)o).Write(sw, "object");
                 else if (o is CT_Br)
                     ((CT_Br)o).Write(sw, "br");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t==ItemsChoiceType6.pgNum)
                     sw.Write("<pgNum/>");
                 else if (o is CT_Picture)
                     ((CT_Picture)o).Write(sw, "pict");
@@ -1948,25 +1949,24 @@ namespace NPOI.OpenXmlFormats.Shared
                     ((CT_PTab)o).Write(sw, "ptab");
                 else if (o is CT_Ruby)
                     ((CT_Ruby)o).Write(sw, "ruby");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t==ItemsChoiceType6.separator)
                     sw.Write("<separator/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t==ItemsChoiceType6.softHyphen)
                     sw.Write("<softHyphen/>");
                 else if (o is CT_Sym)
                     ((CT_Sym)o).Write(sw, "sym");
-                else if (o is CT_Text)
+                else if (o is CT_Text && t== ItemsChoiceType6.t)
                     ((CT_Text)o).Write(sw, "t");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t==ItemsChoiceType6.yearLong)
                     sw.Write("<yearLong/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t==ItemsChoiceType6.yearShort)
                     sw.Write("<yearShort/>");
-                else if (o is CT_Text && this.ItemsElementName[i] == ItemsChoiceType6.instrText)
+                else if (o is CT_Text && t == ItemsChoiceType6.instrText)
                     ((CT_Text)o).Write(sw, "instrText");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t==ItemsChoiceType6.footnoteRef)
                     sw.Write("<footnoteRef/>");
-                i++;
             }
-            sw.Write(string.Format("</m:{0}", nodeName));
+            sw.Write(string.Format("</m:{0}>", nodeName));
         }
 
 

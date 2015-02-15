@@ -1766,7 +1766,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlElement("alias", typeof(CT_String), Order = 0)]
-        [XmlElement("bibliography", typeof(CT_Empty), Order = 0)]
+        [XmlElement("bibliography", typeof(
+            ), Order = 0)]
         [XmlElement("citation", typeof(CT_Empty), Order = 0)]
         [XmlElement("comboBox", typeof(CT_SdtComboBox), Order = 0)]
         [XmlElement("dataBinding", typeof(CT_DataBinding), Order = 0)]
@@ -1932,22 +1933,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
-            int i = 0;
-            foreach (object o in this.Items)
+            
+            for (int i=0;i<this.Items.Count;i++)
             {
-                if (o is CT_Empty)
+                object o = Items[i];
+                ItemsChoiceType17 t= this.itemsElementNameField[i];
+                if (o is CT_Empty && t== ItemsChoiceType17.richText)
                     sw.Write("<richText/>");
-                else if (o is CT_SdtDocPart&& this.itemsElementNameField[i]  == ItemsChoiceType17.docPartList)
+                else if (o is CT_SdtDocPart&& t  == ItemsChoiceType17.docPartList)
                     ((CT_SdtDocPart)o).Write(sw, "docPartList");
-                else if (o is CT_SdtDocPart&& this.itemsElementNameField[i] == ItemsChoiceType17.docPartObj)
+                else if (o is CT_SdtDocPart&& t == ItemsChoiceType17.docPartObj)
                     ((CT_SdtDocPart)o).Write(sw, "docPartObj");
                 else if (o is CT_SdtDropDownList)
                     ((CT_SdtDropDownList)o).Write(sw, "dropDownList");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType17.equation)
                     sw.Write("<equation/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& t== ItemsChoiceType17.group)
                     sw.Write("<group/>");
-                else if (o is CT_DecimalNumber)
+                else if (o is CT_DecimalNumber&& t== ItemsChoiceType17.id)
                     ((CT_DecimalNumber)o).Write(sw, "id");
                 else if (o is CT_Lock)
                     ((CT_Lock)o).Write(sw, "lock");
@@ -1957,27 +1960,27 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_Placeholder)o).Write(sw, "placeholder");
                 else if (o is CT_RPr)
                     ((CT_RPr)o).Write(sw, "rPr");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff && t== ItemsChoiceType17.showingPlcHdr)
                     ((CT_OnOff)o).Write(sw, "showingPlcHdr");
-                else if (o is CT_String)
+                else if (o is CT_String&& t== ItemsChoiceType17.tag)
                     ((CT_String)o).Write(sw, "tag");
-                else if (o is CT_OnOff)
+                else if (o is CT_OnOff && t== ItemsChoiceType17.temporary)
                     ((CT_OnOff)o).Write(sw, "temporary");
                 else if (o is CT_SdtText)
                     ((CT_SdtText)o).Write(sw, "text");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t== ItemsChoiceType17.picture)
                     sw.Write("<picture/>");
-                else if (o is CT_String)
+                else if (o is CT_String&& t== ItemsChoiceType17.alias)
                     ((CT_String)o).Write(sw, "alias");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t== ItemsChoiceType17.bibliography)
                     sw.Write("<bibliography/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty && t== ItemsChoiceType17.citation)
                     sw.Write("<citation/>");
                 else if (o is CT_SdtComboBox)
                     ((CT_SdtComboBox)o).Write(sw, "comboBox");
                 else if (o is CT_DataBinding)
                     ((CT_DataBinding)o).Write(sw, "dataBinding");
-                i++;
+                
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }

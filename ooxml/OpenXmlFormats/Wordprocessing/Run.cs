@@ -598,9 +598,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_Sym)o).Write(sw, "sym");
                 else if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.t)
                     ((CT_Text)o).Write(sw, "t");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& this.ItemsElementName[i]== RunItemsChoiceType.tab)
                     sw.Write("<w:tab/>");
-                else if (o is CT_Empty)
+                else if (o is CT_Empty&& this.ItemsElementName[i]== RunItemsChoiceType.yearShort)
                     sw.Write("<w:yearShort/>");
                 i++;
             }
