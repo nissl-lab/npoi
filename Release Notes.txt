@@ -1,3 +1,25 @@
+2.1.3.1 (Feb., 2015)
+Bug Fixes
+a. fix word serialization issues
+b. fix CloneStyleFrom issue
+c. Fix vertical alignment default value for XSSFCell
+d. fix setAutoFilter change range issue
+e. fix EDate function
+f. fix FormatException in FormulaParser
+g. fix Comment random Shape issue (comment serialization issue)
+h. fix not be able to unlock the cell issue 
+i. fix rowrecord xfindex issue in HSSF
+
+New feature
+a. Add ReplaceText to XWPFParagraph and XWPFRun
+b. adjust ExcelExtractor interface
+c. Improving comment missing handling in HSSFSheet
+d. copy hyperlink in CopySheet and fix some bugs
+e. Implement ChartSheet in OpenXmlFormats
+f. Implement shrinktofit for XSSF
+g. allow DataFormatter to handle Error cells
+h. Implement Excel functions:Complex, Code, Rept
+
 2.1.3 (Dec., 2014)
 Bug Fixes
 a. fix 2 charts insert in the same sheet issue

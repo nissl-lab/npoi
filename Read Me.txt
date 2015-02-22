@@ -12,7 +12,8 @@ used to create search engines).
 *  NPOI Website *
 ==================
 https://github.com/tonyqus/npoi/ (Latest source code available)
-http://npoi.codeplex.com (Official portal)
+http://npoi.googlecode.com (No latest source code available)
+http://npoi.codeplex.com (No latest source code available)
 http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
 
 ======================
@@ -20,6 +21,7 @@ http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
 ======================
 VS2010 with .NET 2.0 or .NET 4.0
 VS2005 or VS2008 with .NET 2.0 Runtime (SP1) 
+vs2003 with .NET 1.1 
 medium trust environment in ASP.NET
 
 =================
@@ -121,6 +123,9 @@ NPOI 2.1
 Tony Qu - main contributor
 Antony - fix some poi bugs
 
+Phil Rykoff - developer
+------------------------------
+Main contribution: XSSF bug fixing and feature implement
 
 ==================
 * How to join us *

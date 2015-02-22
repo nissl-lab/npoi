@@ -331,7 +331,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     run.Items.Add(new CT_Text() { Value = sb.ToString() });
                     run.ItemsElementName.Add(RunItemsChoiceType.instrText);
-                    sb.Clear();
+                    sb=sb.Remove(0,sb.Length);
                     run.Items.Add(new CT_Br());
                     run.ItemsElementName.Add(RunItemsChoiceType.br);
                 }
@@ -339,7 +339,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     run.Items.Add(new CT_Text() { Value = sb.ToString() });
                     run.ItemsElementName.Add(RunItemsChoiceType.instrText);
-                    sb.Clear();
+                    sb=sb.Remove(0, sb.Length);
                     run.Items.Add(new CT_PTab());
                     run.ItemsElementName.Add(RunItemsChoiceType.ptab);
                 }
