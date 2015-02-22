@@ -18,9 +18,9 @@
 using NPOI.Util;
 using System;
 using System.IO;
-using Ionic.Zip;
-using Ionic.Zlib;
 using NPOI.HWPF.Model;
+using System.IO.Compression;
+using ICSharpCode.SharpZipLib.Zip;
 namespace NPOI.HWPF.UserModel
 {
 
@@ -371,7 +371,7 @@ get{
               try
               {
 
-                  ZlibStream gzip = new ZlibStream(new MemoryStream(rawContent, 33, rawContent.Length - 33), CompressionMode.Decompress);
+                  ZipInputStream gzip = new ZipInputStream(new MemoryStream(rawContent, 33, rawContent.Length - 33));
                 MemoryStream out1 = new MemoryStream();
                 byte[] buf = new byte[4096];
                 int readBytes;

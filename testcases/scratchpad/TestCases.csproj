@@ -51,14 +51,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\Ionic.Zip.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\solution\Lib\.net2\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\solution\Lib\NPOI.dll</HintPath>
+    <Reference Include="NPOI">
+      <HintPath>..\..\solution\Lib\.net2\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\solution\Lib\nunit.framework.dll</HintPath>
@@ -68,7 +72,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HSSF\Converter\TestExcelToHtmlConverterSuite.cs" />
     <Compile Include="HWPF\Converter\AbstractWordUtilsTest.cs" />
     <Compile Include="HWPF\Converter\TestNumberFormatter.cs" />
     <Compile Include="HWPF\Converter\TestWordToHtmlConverter.cs" />
@@ -123,20 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\scratchpad\HSSF\HSSF.csproj">
-      <Project>{236BB091-2BEE-4594-A8AB-4E35ED17371D}</Project>
-      <Name>HSSF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\scratchpad\HWPF\HWPF.csproj">
-      <Project>{F040162E-F6F3-4B09-809B-3095A07A6687}</Project>
-      <Name>HWPF</Name>
-    </ProjectReference>
+    <None Include="npoi.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
     <Folder Include="HSLF\Util\" />
+    <Folder Include="HSSF\Converter\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -159,6 +154,16 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\scratchpad\HSLF\HSLF.csproj">
+      <Project>{eb09bcca-0b45-4984-b4e6-bad8c0a9f8a9}</Project>
+      <Name>HSLF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\scratchpad\HWPF\HWPF.csproj">
+      <Project>{f040162e-f6f3-4b09-809b-3095a07a6687}</Project>
+      <Name>HWPF</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
