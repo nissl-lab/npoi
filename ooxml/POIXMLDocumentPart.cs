@@ -38,16 +38,7 @@ using System.Xml;
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIXMLDocumentPart));
 
-        //public static XmlOptions DEFAULT_XML_OPTIONS;
-        //static POIXMLDocumentPart()
-        //{
-        //    DEFAULT_XML_OPTIONS = new XmlOptions();
-        //    DEFAULT_XML_OPTIONS.SetSaveOuter();
-        //    DEFAULT_XML_OPTIONS.SetUseDefaultNamespace();
-        //    DEFAULT_XML_OPTIONS.SetSaveAggressiveNamespaces();
-        //}
-
-
+ 
         private PackagePart packagePart;
         private PackageRelationship packageRel;
         private POIXMLDocumentPart parent;
@@ -202,13 +193,7 @@ using System.Xml;
         public static XmlDocument ConvertStreamToXml(Stream xmlStream)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            //using (StreamReader sr = new StreamReader(xmlStream))
-            //{
-            //    string xml = sr.ReadToEnd();
-            //    System.Diagnostics.Debug.Write(xml);
-            //    xmlDoc.LoadXml(xml);
-            //}
-            xmlDoc.Load(xmlStream);
+            NPOI.OpenXml4Net.Util.XmlHelper.LoadXmlSafe(xmlDoc, xmlStream);
             return xmlDoc;
         }
 
