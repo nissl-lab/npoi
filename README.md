@@ -1,7 +1,6 @@
 NPOI
 ====
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
-<br />
 
 Support and Service
 ===================
