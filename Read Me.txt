@@ -1,8 +1,7 @@
 ================
 * Introduction *
 ================
-This project is the .NET port of POI project at http://poi.apache.org/. POI is an open source java project 
-which can help you read/write xls, doc, ppt files. It has a wide application. 
+This project is the .NET port of POI project. With NPOI, you can read/write Excel and Word files easily. It has a wide application. 
 For example, you can use it a to generate a Excel report without Microsoft Office suite installed on your 
 server and more efficient than call Microsoft Excel ActiveX at background; you can also use it to extract 
 text from Office documents to help you implement full-text indexing feature (most of time this feature is 
@@ -12,9 +11,8 @@ used to create search engines).
 *  NPOI Website *
 ==================
 https://github.com/tonyqus/npoi/ (Latest source code available)
-http://npoi.googlecode.com (No latest source code available)
 http://npoi.codeplex.com (No latest source code available)
-http://tonyqus.sinaapp.com (Official Tutorial in Chinese)
+http://www.npoi.info (Official Tutorial in Chinese)
 
 ======================
 * System Requirement *
@@ -25,10 +23,11 @@ vs2003 with .NET 1.1
 medium trust environment in ASP.NET
 
 =================
-*  NPOI on SNS  *
+*  Neuzilla on SNS  *
 =================
 Twitter: http://twitter.com/tonyqus 
-User Group[Linkedin]: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
+Linkedin Homepage: http://www.linkedin.com/company/neuzilla
+Linkedin User Group: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
 新浪微博: http://t.sina.com.cn/npoi 
 企业客户QQ群: 116053476
 个人客户QQ群：20144214

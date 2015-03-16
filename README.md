@@ -1,14 +1,11 @@
 NPOI
 ====
-
-This project is the .NET version of POI Java project at http://poi.apache.org/. POI is an open source project which can help you read/write Office 2003/2007 files.<br />
+This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 <br />
-The source code in GitHub is a clone of the SVN http://npoi.googlecode.com/svn/trunk/.
 
 Support and Service
 ===================
-NPOI team provide support service for NPOI. For details of the price, you can contact support@neuzilla.com
-
+Neuzilla is the studio behind NPOI. For details, you can check http://blog.neuzilla.com <br />
 
 Advantage of NPOI
 =================
@@ -22,10 +19,12 @@ g. .Net 2.0 based even for xlsx and docx (though we also support .NET 4.0)<br />
 h. Real successful cases all over the world<br />
 i. huge amout of basic examples
 
-NPOI on SNS
+Neuzilla on SNS
 ============
-QQ Group: 20144214<br />
+Linkedin Homepage: http://www.linkedin.com/company/neuzilla <br/>
+Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
+QQ Group: 20144214<br />
 
 System Requirement
 ===================
