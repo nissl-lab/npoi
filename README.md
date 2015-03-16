@@ -4,7 +4,7 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 
 Support and Service
 ===================
-Neuzilla is the studio behind NPOI. For details, you can check http://blog.neuzilla.com <br />
+Neuzilla is the studio behind NPOI. For details, you can check http://www.linkedin.com/company/neuzilla <br />
 
 Advantage of NPOI
 =================
@@ -18,12 +18,17 @@ g. .Net 2.0 based even for xlsx and docx (though we also support .NET 4.0)<br />
 h. Real successful cases all over the world<br />
 i. huge amout of basic examples
 
+How to join
+============
+If you have passion to contribute code, please contact tony.qu@neuzilla.com
+
 Neuzilla on SNS
 ============
-Linkedin Homepage: http://www.linkedin.com/company/neuzilla <br/>
+Homepage: http://blog.neuzilla.com <br/>
 Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
 QQ Group: 20144214<br />
+Email: support@neuzilla.com
 
 System Requirement
 ===================

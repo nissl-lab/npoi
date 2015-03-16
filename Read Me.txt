@@ -129,4 +129,4 @@ Main contribution: XSSF bug fixing and feature implement
 ==================
 * How to join us *
 ==================
-If you are interested in this project and want to join me, please write mail to tonyqus (at) gmail.com
+If you are interested in this project and want to join me, please write mail to tony.qu@neuzilla.com
