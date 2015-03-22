@@ -5,7 +5,7 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 Support and Service
 ===================
 Neuzilla is the studio behind NPOI. For details, you can check http://www.linkedin.com/company/neuzilla <br />
-![官方微信公众号](https://raw.github.com/tonyqus/npoi/neuzilla_wechat_qrcode.jpg)
+![官方微信公众号](https://github.com/tonyqus/npoi/raw/master/neuzilla_wechat_qrcode.jpg)
 
 Advantage of NPOI
 =================
