@@ -233,5 +233,29 @@ namespace NPOI.HSSF.UserModel
         {
             get { return 1; }
         }
+
+        internal abstract HSSFShape CloneShape();
+
+        internal HSSFPatriarch Patriarch
+        {
+            get
+            {
+                return _patriarch;
+            }
+            set 
+            {
+                this._patriarch = value;
+            }
+        }
+
+        protected ObjRecord GetObjRecord()
+        {
+            return _objRecord;
+        }
+
+        protected EscherOptRecord GetOptRecord()
+        {
+            return _optRecord;
+        }
     }
 }
