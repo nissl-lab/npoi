@@ -101,6 +101,8 @@ namespace NPOI.SS.Util
                 newRow = sheet.CreateRow(targetRowIndex);
             }
 
+            newRow = sheet.GetRow(targetRowIndex);
+
             // Loop through source columns to add to new row
             for (int i = sourceRow.FirstCellNum; i < sourceRow.LastCellNum; i++)
             {

@@ -462,7 +462,12 @@ namespace NPOI.OpenXml4Net.OPC
                                             + defaultPartMarshaller);
                     }
                 }
-                zos.Close();
+              
+	//jacky: the stream should be close with its opener.
+	zos.Flush();
+	zos.Finish();
+	//zos.Close();
+	//end
             //}
             //catch (Exception e)
             //{

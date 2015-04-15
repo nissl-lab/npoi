@@ -2700,6 +2700,14 @@ namespace NPOI.XSSF.UserModel
             //    map.Add(r.RowNum, r);
             //}
             //_rows = map;
+            
+            //jacky: should create rows to keep consistent behavior with 2003
+            for (int i = startRow; i < startRow + n; i++)
+            {
+                        if (GetRow(i) == null)
+                                    CreateRow(i);
+            }
+            //end
         }
 
         /**
