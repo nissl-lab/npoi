@@ -115,9 +115,5 @@ namespace NPOI.HSSF.UserModel
         /// 	<c>true</c> if this instance is vertically flipped; otherwise, <c>false</c>.
         /// </value>
         public abstract bool IsVerticallyFlipped { get; }
-
-
-        internal abstract EscherRecord GetEscherAnchor();
-        protected abstract void CreateEscherAnchor();
     }
 }

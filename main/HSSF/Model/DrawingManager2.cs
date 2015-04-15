@@ -142,9 +142,6 @@ namespace NPOI.HSSF.Model
         {
             return dgg;
         }
-        public void IncrementDrawingsSaved()
-        {
-            dgg.DrawingsSaved = dgg.DrawingsSaved + 1;
-        }
+
     }
 }

@@ -616,7 +616,13 @@ namespace NPOI.HSSF.Record
             }
         }
 
-
+        /**
+         * Associates an escher record to an OBJ record or a TXO record.
+         */
+        public Object AssoicateShapeToObjRecord(EscherRecord r, Record objRecord)
+        {
+            return shapeToObj[r]= objRecord;
+        }
 
         public HSSFPatriarch Patriarch
         {
@@ -1073,43 +1079,7 @@ namespace NPOI.HSSF.Record
         {
             return ((Record)records[loc]).Sid;
         }
-        /// <summary>
-        /// Associates an escher record to an OBJ record or a TXO record.
-        /// </summary>
-        /// <param name="r">ClientData or Textbox record</param>
-        /// <param name="objRecord">Obj or TextObj record</param>
-        public void AssociateShapeToObjRecord(EscherRecord r, Record objRecord)
-        {
-            if(!shapeToObj.ContainsKey(r))
-                shapeToObj.Add(r, objRecord);
-            else
-                shapeToObj[r]= objRecord;
-        }
-        /// <summary>
-        /// Remove echerRecord and associated to it Obj or TextObj record
-        /// </summary>
-        /// <param name="rec">clientData or textbox record to be removed</param>
-        public void RemoveShapeToObjRecord(EscherRecord rec)
-        {
-            shapeToObj.Remove(rec);
-        }
-        internal void SetDgId(short dgId)
-        {
-            EscherContainerRecord dgContainer = GetEscherContainer();
-            EscherDgRecord dg = (EscherDgRecord)dgContainer.GetChildById(EscherDgRecord.RECORD_ID);
-            dg.Options = (short)(dgId << 4);
-        }
-        internal void SetMainSpRecordId(int shapeId)
-        {
-            EscherContainerRecord dgContainer = GetEscherContainer();
-            EscherContainerRecord spgrConatiner = (EscherContainerRecord)dgContainer.GetChildById(EscherContainerRecord.SPGR_CONTAINER);
-            EscherContainerRecord spContainer = (EscherContainerRecord)spgrConatiner.GetChild(0);
-            EscherSpRecord sp = (EscherSpRecord)spContainer.GetChildById(EscherSpRecord.RECORD_ID);
-            sp.ShapeId = (shapeId);
-        }
-        public void RemoveTailRecord(NoteRecord note)
-        {
-            tailRec.Remove(note.ShapeId);
-        }
+
+
     }
 }

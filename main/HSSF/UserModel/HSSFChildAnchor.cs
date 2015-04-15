@@ -19,120 +19,35 @@
 namespace NPOI.HSSF.UserModel
 {
     using NPOI.DDF;
-    using System;
 
     public class HSSFChildAnchor : HSSFAnchor
     {
-        private EscherChildAnchorRecord _escherChildAnchor;
-
-        public HSSFChildAnchor(EscherChildAnchorRecord escherChildAnchorRecord)
-        {
-            this._escherChildAnchor = escherChildAnchorRecord;
-        }
         public HSSFChildAnchor()
         {
-            _escherChildAnchor = new EscherChildAnchorRecord();
         }
 
         public HSSFChildAnchor(int dx1, int dy1, int dx2, int dy2):base(dx1, dy1, dx2, dy2)
         {
-            if (dx1 > dx2)
-            {
-                _isHorizontallyFlipped = true;
-            }
-            if (dy1 > dy2)
-            {
-                _isVerticallyFlipped = true;
-            }
+            
         }
 
         public void SetAnchor(int dx1, int dy1, int dx2, int dy2)
         {
-            this.Dx1 = Math.Min(dx1, dx2);
-            this.Dy1 = Math.Min(dy1, dy2);
-            this.Dx2 = Math.Max(dx1, dx2);
-            this.Dy2 = Math.Max(dy1, dy2);
+            this.Dx1 = dx1;
+            this.Dy1 = dy1;
+            this.Dx2 = dx2;
+            this.Dy2 = dy2;
         }
 
         public override bool IsHorizontallyFlipped
         {
-            get 
-            { 
-                return _isHorizontallyFlipped; 
-            }
+            get { return Dx1 > Dx2; }
         }
 
         public override bool IsVerticallyFlipped
         {
-            get 
-            { 
-                return _isVerticallyFlipped; 
-            }
+            get{return Dy1 > Dy2;}
         }
-        public override int Dx1
-        {
-            get
-            {
-                return _escherChildAnchor.Dx1;
-            }
-            set
-            {
-                _escherChildAnchor.Dx1 = (short)value;
-            }
-        }
-        public override int Dx2
-        {
-            get
-            {
-                return _escherChildAnchor.Dx2;
-            }
-            set
-            {
-                _escherChildAnchor.Dx2 = (short)value;
-            }
-        }
-        public override int Dy1
-        {
-            get
-            {
-                return _escherChildAnchor.Dy1;
-            }
-            set
-            {
-                _escherChildAnchor.Dy1 = (short)value;
-            }
-        }
-        public override int Dy2
-        {
-            get
-            {
-                return _escherChildAnchor.Dy2;
-            }
-            set
-            {
-                _escherChildAnchor.Dy2 = (short)value;
-            }
-        }
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
-            if (obj == this)
-                return true;
-            if (obj.GetType() != GetType())
-                return false;
-            HSSFChildAnchor anchor = (HSSFChildAnchor)obj;
 
-            return anchor.Dx1 == Dx1 && anchor.Dx2 == Dx2 && anchor.Dy1 == Dy1
-                    && anchor.Dy2 == Dy2;
-        }
-        internal override EscherRecord GetEscherAnchor()
-        {
-            return _escherChildAnchor;
-        }
-        protected override void CreateEscherAnchor()
-        {
-            _escherChildAnchor = new EscherChildAnchorRecord();
-        }
     }
 }
