@@ -3725,14 +3725,14 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<IRow> GetEnumerator()
         {
-            return GetRowEnumerator();
+            return _rows.Values.GetEnumerator();
         }
 
         public IEnumerator GetRowEnumerator()
         {
-            return _rows.Values.GetEnumerator();
+            return GetEnumerator();
         }
 
         public bool IsActive
@@ -4102,6 +4102,11 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             return newSheet;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 

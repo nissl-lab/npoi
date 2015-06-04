@@ -1897,7 +1897,7 @@ namespace NPOI.HSSF.UserModel
         /// foreach(ISheet sheet in workbook) ...
         /// </summary>
         /// <returns>Enumeration of all the sheets of this workbook</returns>
-        public IEnumerator GetEnumerator()
+        public IEnumerator<ISheet> GetEnumerator()
         {
             return _sheets.GetEnumerator();
         }
@@ -2024,6 +2024,11 @@ namespace NPOI.HSSF.UserModel
         public bool Remove(ISheet item)
         {
             return this._sheets.Remove((HSSFSheet)item);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
