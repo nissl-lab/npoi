@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  ====================================================================
  *    Licensed to the Apache Software Foundation (ASF) under one or more
  *    contributor license agreements.  See the NOTICE file distributed with
@@ -19,27 +19,27 @@
 
 namespace NPOI.SS.Formula.Functions
 {
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using System;
+
 
     /**
-     * Implementation of Excel function INTERCEPT()<p/>
+     * Implementation of Excel function SLOPE()<p/>
      *
-     * Calculates the INTERCEPT of the linear regression line that is used to predict y values from x values<br/>
+     * Calculates the SLOPE of the linear regression line that is used to predict y values from x values<br/>
      * (http://introcs.cs.princeton.edu/java/97data/LinearRegression.java.html)
      * <b>Syntax</b>:<br/>
-     * <b>INTERCEPT</b>(<b>arrayX</b>, <b>arrayY</b>)<p/>
+     * <b>SLOPE</b>(<b>arrayX</b>, <b>arrayY</b>)<p/>
      *
      *
      * @author Johan Karlsteen
      */
-    public class Intercept : Fixed2ArgFunction
+    public class Slope : Fixed2ArgFunction
     {
+
         private LinearRegressionFunction func;
-        public Intercept()
+        public Slope()
         {
-            func = new LinearRegressionFunction(LinearRegressionFunction.FUNCTION.INTERCEPT);
+            func = new LinearRegressionFunction(LinearRegressionFunction.FUNCTION.SLOPE);
         }
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex,
