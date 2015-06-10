@@ -201,6 +201,7 @@
     <Compile Include="SS\Formula\Functions\Complex.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
+    <Compile Include="SS\Formula\Functions\Intercept.cs" />
     <Compile Include="SS\Formula\Functions\Rank.cs" />
     <Compile Include="SS\Formula\Functions\Rate.cs" />
     <Compile Include="SS\Formula\Functions\Rept.cs" />
