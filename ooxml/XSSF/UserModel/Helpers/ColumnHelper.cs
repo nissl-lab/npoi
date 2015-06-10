@@ -125,7 +125,8 @@ namespace NPOI.XSSF.UserModel.Helpers
         public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col col)
         {
             bool colOverlaps = false;
-            for (int i = 0; i < cols.sizeOfColArray(); i++)
+            int sizeOfColArray = cols.sizeOfColArray();
+            for (int i = 0; i < sizeOfColArray; i++)
             {
                 CT_Col ithCol = cols.GetColArray(i);
                 long[] range1 = { ithCol.min, ithCol.max };

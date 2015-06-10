@@ -133,9 +133,11 @@ namespace NPOI.POIFS.Storage
                         + "POI only supports BIFF8 format");
                 }
 
+                // Give a generic error if the OLE2 signature isn't found
                 throw new IOException("Invalid header signature; read "
                                     + LongToHex(signature) + ", expected "
-                                    + LongToHex(_signature));
+                                    + LongToHex(_signature) + " - Your file appears "
+                                    + "not to be a valid OLE2 document");
             }
 
             if (_data[30] == 12)
