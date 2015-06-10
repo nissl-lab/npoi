@@ -32,6 +32,9 @@ namespace NPOI.HSSF.UserModel
         private const int FILL_TYPE_SOLID = 0;
         private const int FILL_TYPE_PICTURE = 3;
 
+        private const int GROUP_SHAPE_PROPERTY_DEFAULT_VALUE = 655362;
+        private const int GROUP_SHAPE_HIDDEN_MASK = 0x1000002;
+        private const int GROUP_SHAPE_NOT_HIDDEN_MASK = unchecked((int)0xFEFFFFFD);
 
         private NoteRecord _note = null;
 
@@ -88,7 +91,7 @@ namespace NPOI.HSSF.UserModel
             opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTRIGHT);
             opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTTOP);
             opt.RemoveEscherProperty(EscherProperties.TEXT__TEXTBOTTOM);
-            opt.SetEscherProperty(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, false, false, 655362));
+            opt.SetEscherProperty(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, false, false, GROUP_SHAPE_PROPERTY_DEFAULT_VALUE));
             return spContainer;
         }
 
@@ -150,6 +153,7 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 if (_note != null) _note.Flags = value ? NoteRecord.NOTE_VISIBLE : NoteRecord.NOTE_HIDDEN;
+                SetHidden(!value);
             }
         }
 
@@ -258,6 +262,19 @@ namespace NPOI.HSSF.UserModel
         {
             EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.FILL__PATTERNTEXTURE);
             return property == null ? 0 : property.PropertyValue;
+        }
+        private void SetHidden(bool value)
+        {
+            EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.GROUPSHAPE__PRINT);
+            // see http://msdn.microsoft.com/en-us/library/dd949807(v=office.12).aspx
+            if (value)
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, false, false, property.PropertyValue | GROUP_SHAPE_HIDDEN_MASK));
+            }
+            else
+            {
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, false, false, property.PropertyValue & GROUP_SHAPE_NOT_HIDDEN_MASK));
+            }
         }
     }
 }

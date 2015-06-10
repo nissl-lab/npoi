@@ -202,9 +202,11 @@
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
     <Compile Include="SS\Formula\Functions\Intercept.cs" />
+    <Compile Include="SS\Formula\Functions\LinearRegressionFunction.cs" />
     <Compile Include="SS\Formula\Functions\Rank.cs" />
     <Compile Include="SS\Formula\Functions\Rate.cs" />
     <Compile Include="SS\Formula\Functions\Rept.cs" />
+    <Compile Include="SS\Formula\Functions\Slope.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />

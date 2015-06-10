@@ -394,7 +394,7 @@ namespace NPOI.SS.Formula.Eval
             retval[312] = new NotImplementedFunction("PEARSON"); // PEARSON
             retval[313] = new NotImplementedFunction("RSQ"); // RSQ
             retval[314] = new NotImplementedFunction("STEYX"); // STEYX
-            retval[315] = new NotImplementedFunction("SLOPE"); // SLOPE
+            retval[315] = new Slope(); // SLOPE
             retval[316] = new NotImplementedFunction("TTEST"); // TTEST
             retval[317] = new NotImplementedFunction("PROB"); // PROB
             retval[318] = AggregateFunction.DEVSQ; // DEVSQ

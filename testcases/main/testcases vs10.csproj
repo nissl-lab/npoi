@@ -164,6 +164,7 @@
     <Compile Include="SS\Formula\Functions\TestMatchFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestRank.cs" />
     <Compile Include="SS\Formula\Functions\TestReptFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestSlope.cs" />
     <Compile Include="SS\Formula\Functions\TestSumifs.cs" />
     <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />

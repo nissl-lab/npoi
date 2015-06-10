@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  ====================================================================
  *    Licensed to the Apache Software Foundation (ASF) under one or more
  *    contributor license agreements.  See the NOTICE file distributed with
@@ -20,23 +20,19 @@
 namespace TestCases.SS.Formula.Functions
 {
 
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
     using NUnit.Framework;
     using System;
-    using TestCases.HSSF;
-    using NPOI.SS.Formula.Eval;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Formula.Functions;
-
     /**
-     * Test for Excel function INTERCEPT()
+     * Test for Excel function SLOPE()
      *
      * @author Johan Karlsteen
      */
     [TestFixture]
-    public class TestIntercept
+    public class TestSlope
     {
-        private static Function INTERCEPT = new Intercept();
+        private static Function SLOPE = new Slope();
 
         private static ValueEval invoke(Function function, ValueEval xArray, ValueEval yArray)
         {
@@ -59,7 +55,7 @@ namespace TestCases.SS.Formula.Functions
 
         private void ConfirmError(ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
         {
-            ConfirmError(INTERCEPT, xArray, yArray, expectedError);
+            ConfirmError(SLOPE, xArray, yArray, expectedError);
         }
         [Test]
         public void TestBasic()
@@ -72,7 +68,7 @@ namespace TestCases.SS.Formula.Functions
             new NumberEval(5+exp),
             new NumberEval(4+exp),
             new NumberEval(7+exp),
-            };
+        };
             ValueEval areaEvalY = CreateAreaEval(yValues);
 
             ValueEval[] xValues = {
@@ -82,10 +78,10 @@ namespace TestCases.SS.Formula.Functions
             new NumberEval(4),
             new NumberEval(5),
             new NumberEval(6),
-            };
+        };
             ValueEval areaEvalX = CreateAreaEval(xValues);
-            Confirm(INTERCEPT, areaEvalX, areaEvalY, -24516534.39905822);
-            // Excel 2010 gives -24516534.3990583
+            Confirm(SLOPE, areaEvalX, areaEvalY, 0.7752808988764045);
+            // Excel 2010 gives 0.775280898876405
         }
 
         /**
@@ -98,8 +94,8 @@ namespace TestCases.SS.Formula.Functions
             yValues[0] = new NumberEval(2.0); // Changes first element to 2
             ValueEval[] xValues = CreateMockNumberArray(100, 101); // [1,2,3,4,...,99,100]
 
-            Confirm(INTERCEPT, CreateAreaEval(xValues), CreateAreaEval(yValues), 51.74384236453202);
-            // Excel 2010 gives 51.74384236453200
+            Confirm(SLOPE, CreateAreaEval(xValues), CreateAreaEval(yValues), -1.231527093596059);
+            // Excel 2010 gives -1.23152709359606
         }
 
         private ValueEval[] CreateMockNumberArray(int size, double value)
@@ -151,24 +147,6 @@ namespace TestCases.SS.Formula.Functions
             ConfirmError(areaEvalX, areaEvalY, ErrorEval.NULL_INTERSECTION);
             ConfirmError(areaEvalY, areaEvalX, ErrorEval.REF_INVALID);
         }
-
-        /**
-         *  Example from
-         *  http://office.microsoft.com/en-us/excel-help/intercept-function-HP010062512.aspx?CTT=5&origin=HA010277524
-         */
-        [Test]
-        public void TestFromFile()
-        {
-
-            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("intercept.xls");
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-
-            ISheet example1 = wb.GetSheet("Example 1");
-            ICell a8 = example1.GetRow(7).GetCell(0);
-            Assert.AreEqual("INTERCEPT(A2:A6,B2:B6)", a8.CellFormula);
-            fe.Evaluate(a8);
-            Assert.AreEqual(0.048387097, a8.NumericCellValue, 0.000000001);
-
-        }
     }
+
 }

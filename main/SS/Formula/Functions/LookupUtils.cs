@@ -220,36 +220,36 @@ namespace NPOI.SS.Formula.Functions
          */
         public static int ResolveRowOrColIndexArg(ValueEval rowColIndexArg, int srcCellRow, int srcCellCol)
         {
-		    if(rowColIndexArg == null) {
-			    throw new ArgumentException("argument must not be null");
-		    }
-    		
-		    ValueEval veRowColIndexArg;
-		    try {
-			    veRowColIndexArg = OperandResolver.GetSingleValue(rowColIndexArg, srcCellRow, (short)srcCellCol);
-		    } catch (EvaluationException) {
-			    // All errors get translated to #REF!
-			    throw EvaluationException.InvalidRef();
-		    }
-		    int oneBasedIndex;
-		    if(veRowColIndexArg is StringEval) {
-			    StringEval se = (StringEval) veRowColIndexArg;
-			    String strVal = se.StringValue;
-			    Double dVal = OperandResolver.ParseDouble(strVal);
-			    if(Double.IsNaN(dVal)) {
-				    // String does not resolve to a number. Raise #REF! error.
-				    throw EvaluationException.InvalidRef();
-				    // This includes text booleans "TRUE" and "FALSE".  They are not valid.
-			    }
-			    // else - numeric value parses OK
-		    }
-		    // actual BoolEval values get interpreted as FALSE->0 and TRUE->1
-		    oneBasedIndex = OperandResolver.CoerceValueToInt(veRowColIndexArg);
-		    if (oneBasedIndex < 1) {
-			    // note this is asymmetric with the errors when the index is too large (#REF!)  
-			    throw EvaluationException.InvalidValue();
-		    }
-		    return oneBasedIndex - 1; // convert to zero based
+            if(rowColIndexArg == null) {
+                throw new ArgumentException("argument must not be null");
+            }
+            
+            ValueEval veRowColIndexArg;
+            try {
+                veRowColIndexArg = OperandResolver.GetSingleValue(rowColIndexArg, srcCellRow, (short)srcCellCol);
+            } catch (EvaluationException) {
+                // All errors get translated to #REF!
+                throw EvaluationException.InvalidRef();
+            }
+            int oneBasedIndex;
+            if(veRowColIndexArg is StringEval) {
+                StringEval se = (StringEval) veRowColIndexArg;
+                String strVal = se.StringValue;
+                Double dVal = OperandResolver.ParseDouble(strVal);
+                if(Double.IsNaN(dVal)) {
+                    // String does not resolve to a number. Raise #REF! error.
+                    throw EvaluationException.InvalidRef();
+                    // This includes text booleans "TRUE" and "FALSE".  They are not valid.
+                }
+                // else - numeric value parses OK
+            }
+            // actual BoolEval values get interpreted as FALSE->0 and TRUE->1
+            oneBasedIndex = OperandResolver.CoerceValueToInt(veRowColIndexArg);
+            if (oneBasedIndex < 1) {
+                // note this is asymmetric with the errors when the index is too large (#REF!)  
+                throw EvaluationException.InvalidValue();
+            }
+            return oneBasedIndex - 1; // convert to zero based
         }
 
 
@@ -265,13 +265,13 @@ namespace NPOI.SS.Formula.Functions
                 return (AreaEval)eval;
             }
 
-		    if(eval is RefEval) {
-			    RefEval refEval = (RefEval) eval;
-			    // Make this cell ref look like a 1x1 area ref.
+            if(eval is RefEval) {
+                RefEval refEval = (RefEval) eval;
+                // Make this cell ref look like a 1x1 area ref.
 
-			    // It doesn't matter if eval is a 2D or 3D ref, because that detail is never asked of AreaEval.
-			    return refEval.Offset(0, 0, 0, 0);
-		    }
+                // It doesn't matter if eval is a 2D or 3D ref, because that detail is never asked of AreaEval.
+                return refEval.Offset(0, 0, 0, 0);
+            }
             throw EvaluationException.InvalidValue();
         }
 
