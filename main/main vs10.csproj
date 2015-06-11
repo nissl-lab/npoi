@@ -457,7 +457,7 @@
     <Compile Include="SS\Format\CellGeneralFormatter.cs" />
     <Compile Include="SS\Format\CellNumberFormatter.cs" />
     <Compile Include="SS\Format\CellTextFormatter.cs" />
-    <Compile Include="SS\Formula\Atp\EDate.cs" />
+    <Compile Include="SS\Formula\Functions\EDate.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />

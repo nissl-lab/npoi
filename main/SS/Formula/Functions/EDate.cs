@@ -15,9 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Atp
+namespace NPOI.SS.Formula.Functions
 {
-    using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula.Eval;
     using System;
     using NPOI.SS.UserModel;
