@@ -112,7 +112,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return an iterator over cells in this row.
          */
-        public IEnumerator GetEnumerator()
+        public IEnumerator<ICell> GetEnumerator()
         {
             return CellIterator();
         }
@@ -635,6 +635,11 @@ namespace NPOI.XSSF.UserModel
         public ICell CopyCell(int sourceIndex, int targetIndex)
         {
             return CellUtil.CopyCell(this, sourceIndex, targetIndex);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion

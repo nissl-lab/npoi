@@ -53,7 +53,7 @@ namespace NPOI.SS.UserModel
     /// This interface is shared between the implementation specific to xls and xlsx.
     /// This way it is possible to access Excel workbooks stored in both formats.
     /// </summary>
-    public interface IWorkbook
+    public interface IWorkbook : IEnumerable<ISheet>
     {
 
         /// <summary>
@@ -158,14 +158,6 @@ namespace NPOI.SS.UserModel
         /// <param name="name">name of the sheet</param>
         /// <returns>Sheet with the name provided or null if it does not exist</returns>
         ISheet GetSheet(String name);
-
-        /// <summary>
-        /// Support foreach ISheet, e.g.
-        /// HSSFWorkbook workbook = new HSSFWorkbook();
-        /// foreach(ISheet sheet in workbook) ...
-        /// </summary>
-        /// <returns>Enumeration of all the sheets of this workbook</returns>
-        IEnumerator GetEnumerator();
 
         /// <summary>
         /// Removes sheet at the given index

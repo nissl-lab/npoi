@@ -81,7 +81,7 @@ namespace NPOI.SS.UserModel
     /// The most common type of sheet is the worksheet, which is represented as a grid of cells. Worksheet cells can
     /// contain text, numbers, dates, and formulas. Cells can also be formatted.
     /// </remarks>
-    public interface ISheet
+    public interface ISheet : IEnumerable<IRow>
     {
 
         /// <summary>
@@ -242,17 +242,6 @@ namespace NPOI.SS.UserModel
         /// if you care which one it is.
         /// </returns>
         IEnumerator GetRowEnumerator();
-
-        /// <summary>
-        /// Alias for GetRowEnumerator() to allow <c>foreach</c> loops.
-        /// </summary>
-        /// <returns>
-        /// an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
-        /// be the third row if say for instance the second row is undefined.
-        /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
-        /// if you care which one it is.
-        /// </returns>
-        IEnumerator GetEnumerator();
 
         /// <summary>
         /// Gets the flag indicating whether the window should show 0 (zero) in cells Containing zero value.

@@ -269,11 +269,6 @@ namespace NPOI.XSSF.UserModel
             throw new System.NotImplementedException();
         }
 
-        System.Collections.IEnumerator ISheet.GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
-
         bool ISheet.DisplayZeros
         {
             get
