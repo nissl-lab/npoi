@@ -360,7 +360,7 @@ namespace NPOI.SS.Formula.Functions
 
         /**
          * Finds first (lowest index) exact occurrence of specified value.
-         * @param lookupValue the value to be found in column or row vector
+         * @param lookupComparer the value to be found in column or row vector
          * @param vector the values to be searched. For VLOOKUP this Is the first column of the 
          * 	tableArray. For HLOOKUP this Is the first row of the tableArray. 
          * @return zero based index into the vector, -1 if value cannot be found
