@@ -42,8 +42,8 @@ namespace TestCase.OPC
         public void TestContentTypeValidation()
         {
             String[] contentTypesToTest = new String[] { "text/xml",
-				"application/pgp-key", "application/vnd.hp-PCLXL",
-				"application/vnd.lotus-1-2-3" };
+                "application/pgp-key", "application/vnd.hp-PCLXL",
+                "application/vnd.lotus-1-2-3" };
             for (int i = 0; i < contentTypesToTest.Length; ++i)
             {
                 new ContentType(contentTypesToTest[i]);
@@ -69,12 +69,12 @@ namespace TestCase.OPC
         public void TestContentTypeValidationFailure()
         {
             String[] contentTypesToTest = new String[] { "text/xml/app", "",
-				"test", "text(xml/xml", "text)xml/xml", "text<xml/xml",
-				"text>/xml", "text@/xml", "text,/xml", "text;/xml",
-				"text:/xml", "text\\/xml", "t/ext/xml", "t\"ext/xml",
-				"text[/xml", "text]/xml", "text?/xml", "tex=t/xml",
-				"te{xt/xml", "tex}t/xml", "te xt/xml",
-				"text" + (char) 9 + "/xml", "text xml", " text/xml " };
+                "test", "text(xml/xml", "text)xml/xml", "text<xml/xml",
+                "text>/xml", "text@/xml", "text,/xml", "text;/xml",
+                "text:/xml", "text\\/xml", "t/ext/xml", "t\"ext/xml",
+                "text[/xml", "text]/xml", "text?/xml", "tex=t/xml",
+                "te{xt/xml", "tex}t/xml", "te xt/xml",
+                "text" + (char) 9 + "/xml", "text xml", " text/xml " };
             for (int i = 0; i < contentTypesToTest.Length; ++i)
             {
                 try
@@ -89,7 +89,18 @@ namespace TestCase.OPC
                         + "' !");
             }
         }
-
+        /**
+        * Parameters are allowed, provides that they meet the
+        *  criteria of rule [01.2]
+        * Invalid parameters are verified as incorrect in 
+        *  {@link #testContentTypeParameterFailure()}
+        */
+        [Test]
+        public void TestContentTypeParam()
+        {
+            // TODO Review [01.2], then add tests for valid ones
+            // TODO See bug #55026
+        }
         /**
          * Check rule [O1.2]: Format designers might restrict the usage of
          * parameters for content types.
@@ -98,7 +109,7 @@ namespace TestCase.OPC
         public void TestContentTypeParameterFailure()
         {
             String[] contentTypesToTest = new String[] { "mail/toto;titi=tata",
-				"text/xml;a=b;c=d", "mail/toto;\"titi=tata\"" };
+                "text/xml;a=b;c=d", "mail/toto;\"titi=tata\"" };
             for (int i = 0; i < contentTypesToTest.Length; ++i)
             {
                 try
@@ -136,6 +147,16 @@ namespace TestCase.OPC
                 Assert.Fail("Must have fail for content type: '" + contentTypesToTest[i]
                         + "' !");
             }
+        }
+
+        /**
+         * Check that we can open a file where there are valid
+         *  parameters on a content type
+         */
+        [Test]
+        public void TestFileWithContentTypeParams()
+        {
+            // TODO Implement with ContentTypeHasParameters.ooxml
         }
     }
 }
