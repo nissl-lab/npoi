@@ -118,6 +118,50 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
         }
         [Test]
+        public void TestSimpleWildcardValuesString()
+        {
+            // Arrange
+            ValueEval[] values = {
+                new StringEval("Albert"),
+                new StringEval("Charles"),
+                new StringEval("Ed"),
+                new StringEval("Greg"),
+                new StringEval("Ian"),
+        };
+
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
+
+            // Note String comparisons are case insensitive
+            ConfirmInt(3, invokeMatch(new StringEval("e*"), ae, MATCH_EXACT));
+            ConfirmInt(3, invokeMatch(new StringEval("*d"), ae, MATCH_EXACT));
+
+            ConfirmInt(1, invokeMatch(new StringEval("Al*"), ae, MATCH_EXACT));
+            ConfirmInt(2, invokeMatch(new StringEval("Char*"), ae, MATCH_EXACT));
+
+            ConfirmInt(4, invokeMatch(new StringEval("*eg"), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new StringEval("G?eg"), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new StringEval("??eg"), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new StringEval("G*?eg"), ae, MATCH_EXACT));
+            ConfirmInt(4, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
+
+            ConfirmInt(5, invokeMatch(new StringEval("*Ian*"), ae, MATCH_EXACT));
+            ConfirmInt(5, invokeMatch(new StringEval("*Ian*"), ae, MATCH_LARGEST_LTE));
+        }
+        [Test]
+        public void TestTildeString()
+        {
+
+            ValueEval[] values = {
+                new StringEval("what?"),
+                new StringEval("all*")
+        };
+
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A2", values);
+
+            ConfirmInt(1, invokeMatch(new StringEval("what~?"), ae, MATCH_EXACT));
+            ConfirmInt(2, invokeMatch(new StringEval("all~*"), ae, MATCH_EXACT));
+        }
+        [Test]
         public void TestSimpleBoolean()
         {
 

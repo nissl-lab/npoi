@@ -31,6 +31,9 @@ namespace NPOI.XSSF.UserModel
     using NPOI.XSSF.UserModel.Extensions;
     using System.IO;
     using NPOI.XSSF.Model;
+using NPOI.SS.Formula;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.Formula.Eval;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -1416,7 +1419,25 @@ namespace NPOI.XSSF.UserModel
             // Assert
             Assert.AreEqual(259.0, a1Value, 0.0);
         }
+        private class Function54436 : Function
+        {
+            public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+            {
+                return ErrorEval.NA;
+            }
+        }
+        [Test]
+        public void Test54436()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("54436.xlsx");
+            if (!WorkbookEvaluator.GetSupportedFunctionNames().Contains("GETPIVOTDATA"))
+            {
+                Function func = new Function54436();
 
+                WorkbookEvaluator.RegisterFunction("GETPIVOTDATA", func);
+            }
+            workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+        }
     }
 
 }

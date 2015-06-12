@@ -161,7 +161,9 @@
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIndirectFunctionFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIntercept.cs" />
+    <Compile Include="SS\Formula\Functions\TestIPMT.cs" />
     <Compile Include="SS\Formula\Functions\TestMatchFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestPPMT.cs" />
     <Compile Include="SS\Formula\Functions\TestRank.cs" />
     <Compile Include="SS\Formula\Functions\TestReptFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestSlope.cs" />
@@ -402,7 +404,7 @@
     <Compile Include="HSSF\UserModel\TestSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestUnfixedBugs.cs" />
     <Compile Include="HSSF\UserModel\TestUnicodeWorkbook.cs" />
-    <Compile Include="HSSF\UserModel\TestUppercaseWorkbook.cs" />
+    <Compile Include="HSSF\UserModel\TestNonStandardWorkbookStreamNames.cs" />
     <Compile Include="HSSF\UserModel\TestWorkbook.cs" />
     <Compile Include="HSSF\UserModel\TestFormulaEvaluatorBugs.cs" />
     <Compile Include="HSSF\UserModel\TestFormulas.cs" />

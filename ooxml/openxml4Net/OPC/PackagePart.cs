@@ -679,7 +679,16 @@ namespace NPOI.OpenXml4Net.OPC
             }
             set { this.isDeleted = value; }
         }
-
+        /**
+         * @return The length of the part in bytes, or -1 if not known
+         */
+        public virtual long Size
+        {
+            get
+            {
+                return -1;
+            }
+        }
         public override String ToString()
         {
             return "Name: " + this.partName + " - Content Type: "

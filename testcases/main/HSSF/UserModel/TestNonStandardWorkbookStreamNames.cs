@@ -26,20 +26,21 @@ namespace TestCases.HSSF.UserModel
 
     /**
      * Tests for how HSSFWorkbook behaves with XLS files
-     *  with a WORKBOOK directory entry (instead of the more
-     *  usual, Workbook)
+     *  with a WORKBOOK or BOOK directory entry (instead of 
+     *  the more usual, Workbook)
      */
     [TestFixture]
-    public class TestUppercaseWorkbook
+    public class TestNonStandardWorkbookStreamNames
     {
 
         private String xlsA = "WORKBOOK_in_capitals.xls";
+        private String xlsB = "BOOK_in_capitals.xls";
 
         /**
          * Test that we can Open a file with WORKBOOK
          */
         [Test]
-        public void TestOpen()
+        public void TestOpenWORKBOOK()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(xlsA);
 
@@ -57,50 +58,91 @@ namespace TestCases.HSSF.UserModel
                 fs.Root.GetEntry("Workbook");
                 Assert.Fail();
             }
-            catch (FileNotFoundException) 
-            { 
-            
+            catch (FileNotFoundException)
+            {
+
             }
 
             // Try to Open the workbook
             HSSFWorkbook wb = new HSSFWorkbook(fs);
         }
+        /**
+        * Test that we can open a file with BOOK
+        */
+        [Test]
+        public void TestOpenBOOK()
+        {
+            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(xlsB);
 
+            POIFSFileSystem fs = new POIFSFileSystem(is1);
+
+            // Ensure that we have a BOOK entry
+            fs.Root.GetEntry("BOOK");
+            Assert.IsTrue(true);
+
+            // But not a Workbook one
+            try
+            {
+                fs.Root.GetEntry("Workbook");
+                Assert.Fail();
+            }
+            catch (FileNotFoundException e) { }
+            // And not a Summary one
+            try
+            {
+                fs.Root.GetEntry("\005SummaryInformation");
+                Assert.Fail();
+            }
+            catch (FileNotFoundException e) { }
+
+            // Try to open the workbook
+            HSSFWorkbook wb = new HSSFWorkbook(fs);
+        }
         /**
          * Test that when we Write out, we go back to the correct case
          */
         [Test]
         public void TestWrite()
         {
-            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(xlsA);
-            POIFSFileSystem fs = new POIFSFileSystem(is1);
-
-            // Open the workbook, not preserving nodes
-            HSSFWorkbook wb = new HSSFWorkbook(fs);
-            MemoryStream out1 = new MemoryStream();
-            wb.Write(out1);
-
-            // Check now
-            MemoryStream in1 = new MemoryStream(out1.ToArray());
-            POIFSFileSystem fs2 = new POIFSFileSystem(in1);
-
-            // Check that we have the new entries
-            fs2.Root.GetEntry("Workbook");
-            try
+            foreach (String file in new String[] { xlsA, xlsB })
             {
-                fs2.Root.GetEntry("WORKBOOK");
-                Assert.Fail();
-            }
-            catch (FileNotFoundException) { }
+                Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(file);
+                POIFSFileSystem fs = new POIFSFileSystem(is1);
 
-            // And it can be Opened
-            HSSFWorkbook wb2 = new HSSFWorkbook(fs2);
+                // Open the workbook, not preserving nodes
+                HSSFWorkbook wb = new HSSFWorkbook(fs);
+                MemoryStream out1 = new MemoryStream();
+                wb.Write(out1);
+
+                // Check now
+                MemoryStream in1 = new MemoryStream(out1.ToArray());
+                POIFSFileSystem fs2 = new POIFSFileSystem(in1);
+
+                // Check that we have the new entries
+                fs2.Root.GetEntry("Workbook");
+                try
+                {
+                    fs2.Root.GetEntry("BOOK");
+                    Assert.Fail();
+                }
+                catch (FileNotFoundException e) { }
+                try
+                {
+                    fs2.Root.GetEntry("WORKBOOK");
+                    Assert.Fail();
+                }
+                catch (FileNotFoundException) { }
+
+                // And it can be Opened
+                HSSFWorkbook wb2 = new HSSFWorkbook(fs2);
+            }
         }
 
         /**
          * Test that when we Write out preserving nodes, we go back to the
          *  correct case
          */
+        [Test]
         public void TestWritePreserve()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(xlsA);

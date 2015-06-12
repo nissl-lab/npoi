@@ -209,7 +209,8 @@ namespace NPOI.HSSF.UserModel
          */
         private static readonly string[] WORKBOOK_DIR_ENTRY_NAMES = {
             "Workbook", // as per BIFF8 spec
-            "WORKBOOK",
+            "WORKBOOK", // Typically from third party programs
+            "BOOK",     // Typically odd Crystal Reports exports
         };
 
 
@@ -1260,9 +1261,11 @@ namespace NPOI.HSSF.UserModel
                 {
                     // Don't Write out the old Workbook, we'll be doing our new one
                     excepts.Add("Workbook");
-                    // If the file had WORKBOOK instead of Workbook, we'll Write it
-                    //  out correctly shortly, so don't include the old one
-                    excepts.Add("WORKBOOK");
+                    // If the file had an "incorrect" name for the workbook stream,
+                    // don't write the old one as we'll use the correct name shortly
+                    foreach (String wrongName in WORKBOOK_DIR_ENTRY_NAMES) {
+                       excepts.Add(wrongName);
+                    }
 
                     // Copy over all the other nodes to our new poifs
                     POIUtils.CopyNodes(directory, fs.Root, excepts);
@@ -1359,7 +1362,7 @@ namespace NPOI.HSSF.UserModel
  * By default includes functions from the Excel Analysis Toolpack
  */
         [NonSerialized]
-        private UDFFinder _udfFinder = UDFFinder.DEFAULT;
+        private UDFFinder _udfFinder = new IndexedUDFFinder(UDFFinder.DEFAULT);
 
         /**
  * Register a new toolpack in this workbook.
@@ -1936,14 +1939,14 @@ namespace NPOI.HSSF.UserModel
         }
 
         /**
-	     * Changes an external referenced file to another file.
-	     * A formular in Excel which refers a cell in another file is saved in two parts: 
-	     * The referenced file is stored in an reference table. the row/cell information is saved separate.
-	     * This method invokation will only change the reference in the lookup-table itself.
-	     * @param oldUrl The old URL to search for and which is to be replaced
-	     * @param newUrl The URL replacement
-	     * @return true if the oldUrl was found and replaced with newUrl. Otherwise false
-	     */
+         * Changes an external referenced file to another file.
+         * A formular in Excel which refers a cell in another file is saved in two parts: 
+         * The referenced file is stored in an reference table. the row/cell information is saved separate.
+         * This method invokation will only change the reference in the lookup-table itself.
+         * @param oldUrl The old URL to search for and which is to be replaced
+         * @param newUrl The URL replacement
+         * @return true if the oldUrl was found and replaced with newUrl. Otherwise false
+         */
         public bool ChangeExternalReference(String oldUrl, String newUrl)
         {
             return workbook.ChangeExternalReference(oldUrl, newUrl);
