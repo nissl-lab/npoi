@@ -402,7 +402,7 @@
     <Compile Include="HSSF\UserModel\TestSheetShiftRows.cs" />
     <Compile Include="HSSF\UserModel\TestUnfixedBugs.cs" />
     <Compile Include="HSSF\UserModel\TestUnicodeWorkbook.cs" />
-    <Compile Include="HSSF\UserModel\TestUppercaseWorkbook.cs" />
+    <Compile Include="HSSF\UserModel\TestNonStandardWorkbookStreamNames.cs" />
     <Compile Include="HSSF\UserModel\TestWorkbook.cs" />
     <Compile Include="HSSF\UserModel\TestFormulaEvaluatorBugs.cs" />
     <Compile Include="HSSF\UserModel\TestFormulas.cs" />
