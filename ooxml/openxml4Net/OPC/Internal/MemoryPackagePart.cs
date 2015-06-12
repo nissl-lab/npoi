@@ -11,10 +11,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
     public class MemoryPackagePart : PackagePart
     {
         /**
- * Storage for the part data.
- */
+         * Storage for the part data.
+         */
         internal MemoryStream data;
-
+        /**
+         * Size of data.
+         */
+        protected long length;
         /**
          * Constructor.
          * 
@@ -76,10 +79,17 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return new MemoryPackagePartOutputStream(this);
         }
 
-
+        public override long Size
+        {
+            get
+            {
+                return length;
+            }
+        }
         public void Clear()
         {
             data = null;
+            length = 0;
         }
 
         public override bool Save(Stream os)
@@ -91,7 +101,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         {
             // Save it
             StreamHelper.CopyStream(ios, data);
-
+            length = data.Length;
             // All done
             return true;
         }

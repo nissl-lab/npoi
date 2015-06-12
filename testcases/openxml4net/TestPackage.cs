@@ -312,7 +312,7 @@ namespace TestCases.OPC
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
 
-            FileStream finp = new FileStream(originalFile, FileMode.Open,FileAccess.Read);
+            FileStream finp = new FileStream(originalFile, FileMode.Open, FileAccess.Read);
 
             OPCPackage p = OPCPackage.Open(finp);
 
@@ -514,7 +514,7 @@ namespace TestCases.OPC
 
         private static ContentTypeManager GetContentTypeManager(OPCPackage pkg)
         {
-            FieldInfo f = typeof(OPCPackage).GetField("contentTypeManager",BindingFlags.NonPublic|BindingFlags.Instance);
+            FieldInfo f = typeof(OPCPackage).GetField("contentTypeManager", BindingFlags.NonPublic | BindingFlags.Instance);
             //f.SetAccessible(true);
             return (ContentTypeManager)f.GetValue(pkg);
         }
@@ -537,6 +537,40 @@ namespace TestCases.OPC
             Assert.IsTrue(selected.ContainsKey("/word/styles.xml"));
             Assert.IsTrue(selected.ContainsKey("/word/theme/theme1.xml"));
             Assert.IsTrue(selected.ContainsKey("/word/webSettings.xml"));
+        }
+        [Test]
+        public void TestGetPartSize()
+        {
+            String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
+            OPCPackage pkg = OPCPackage.Open(filepath, PackageAccess.READ);
+
+            int checked1 = 0;
+            foreach (PackagePart part in pkg.GetParts())
+            {
+                // Can get the size of zip parts
+                if (part.PartName.Name.Equals("/word/document.xml"))
+                {
+                    checked1++;
+                    Assert.AreEqual(typeof(ZipPackagePart), part.GetType());
+                    Assert.AreEqual(6031L, part.Size);
+                }
+                if (part.PartName.Name.Equals("/word/fontTable.xml"))
+                {
+                    checked1++;
+                    Assert.AreEqual(typeof(ZipPackagePart), part.GetType());
+                    Assert.AreEqual(1312L, part.Size);
+                }
+
+                // But not from the others
+                if (part.PartName.Name.Equals("/docProps/core.xml"))
+                {
+                    checked1++;
+                    Assert.AreEqual(typeof(PackagePropertiesPart), part.GetType());
+                    Assert.AreEqual(-1, part.Size);
+                }
+            }
+            // Ensure we actually found the parts we want to check
+            Assert.AreEqual(3, checked1);
         }
         [Test]
         public void TestReplaceContentType()
