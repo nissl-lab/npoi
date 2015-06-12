@@ -118,7 +118,6 @@
     <Compile Include="XSSF\Model\CommentsTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XSSF\Model\IndexedUDFFinder.cs" />
     <Compile Include="XSSF\Model\MapInfo.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
@@ -292,12 +291,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-</ItemGroup>
-<ItemGroup>
-	<None Include="..\main\npoi.snk">
-	      <Link>npoi.snk</Link>
-	 </None>
-</ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\main\npoi.snk">
+      <Link>npoi.snk</Link>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

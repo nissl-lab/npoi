@@ -1362,7 +1362,7 @@ namespace NPOI.HSSF.UserModel
  * By default includes functions from the Excel Analysis Toolpack
  */
         [NonSerialized]
-        private UDFFinder _udfFinder = UDFFinder.DEFAULT;
+        private UDFFinder _udfFinder = new IndexedUDFFinder(UDFFinder.DEFAULT);
 
         /**
  * Register a new toolpack in this workbook.
