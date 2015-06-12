@@ -260,8 +260,8 @@ namespace NPOI.SS.Formula.Eval
             retval[164] = new NotImplementedFunction("MINVERSE"); // MINVERSE
             retval[165] = new NotImplementedFunction("MMULT"); // MMULT
             retval[166] = new NotImplementedFunction("FILES"); // FILES
-            retval[167] = new NotImplementedFunction("IPMT"); // IPMT
-            retval[168] = new NotImplementedFunction("PPMT"); // PPMT
+            retval[167] = new IPMT();
+            retval[168] = new PPMT();
             retval[169] = new Counta(); // COUNTA
             retval[170] = new NotImplementedFunction("CANCELKEY"); // CANCELKEY
             retval[175] = new NotImplementedFunction("INITIATE"); // INITIATE
