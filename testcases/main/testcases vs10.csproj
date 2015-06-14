@@ -158,6 +158,7 @@
     <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
     <Compile Include="SS\Formula\Functions\TestCode.cs" />
     <Compile Include="SS\Formula\Functions\TestComplex.cs" />
+    <Compile Include="SS\Formula\Functions\TestComplexFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestDec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\TestDelta.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
