@@ -28,7 +28,7 @@ namespace NPOI
     /// @see org.apache.poi.hslf.extractor.PowerPointExtractor
     /// @see org.apache.poi.hdgf.extractor.VisioTextExtractor
     /// @see org.apache.poi.hwpf.extractor.WordExtractor
-    public abstract class POITextExtractor
+    public abstract class POITextExtractor 
     {
         /** The POIDocument that's open */
         protected POIDocument document;
@@ -68,5 +68,7 @@ namespace NPOI
         /// </summary>
         /// <value>The metadata text extractor.</value>
         public abstract POITextExtractor MetadataTextExtractor{get;}
+
+        public virtual void Close() { }
     }
 }
