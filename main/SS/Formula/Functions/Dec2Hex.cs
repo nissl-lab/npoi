@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula.Functions
      *
      * @author cedric dot walter @ gmail dot com
      */
-    public class Dec2Hex : Var1or2ArgFunction
+    public class Dec2Hex : Var1or2ArgFunction, FreeRefFunction
     {
 
         private static long MinValue = -549755813888;
@@ -137,6 +137,15 @@ namespace NPOI.SS.Formula.Functions
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {
             return this.Evaluate(srcRowIndex, srcColumnIndex, arg0, new StringEval(String.Format("{0}",DEFAULT_PLACES_VALUE)));
+        }
+
+        public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+        {
+            if (args.Length != 2)
+            {
+                return ErrorEval.VALUE_INVALID;
+            }
+            return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
         }
     }
 }

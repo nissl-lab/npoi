@@ -200,6 +200,7 @@
     <Compile Include="SS\Formula\Functions\Code.cs" />
     <Compile Include="SS\Formula\Functions\Complex.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
+    <Compile Include="SS\Formula\Functions\Delta.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\Finance.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
