@@ -60,6 +60,26 @@ namespace NPOI.XWPF.UserModel
             string CompareAbstractNum = num.GetCTNum().abstractNumId.val;
             Assert.AreEqual(abstractNumId, CompareAbstractNum);
         }
-
+        [Test]
+        public void TestGetNumIlvl()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
+            string numIlvl = "0";
+            Assert.AreEqual(numIlvl, doc.Paragraphs[0].GetNumIlvl());
+            numIlvl = "1";
+            Assert.AreEqual(numIlvl, doc.Paragraphs[5].GetNumIlvl());
+        }
+        [Test]
+        public void TestGetNumFmt()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
+            Assert.AreEqual("bullet", doc.Paragraphs[0].GetNumFmt());
+            Assert.AreEqual("bullet", doc.Paragraphs[1].GetNumFmt());
+            Assert.AreEqual("bullet", doc.Paragraphs[2].GetNumFmt());
+            Assert.AreEqual("bullet", doc.Paragraphs[3].GetNumFmt());
+            Assert.AreEqual("decimal", doc.Paragraphs[4].GetNumFmt());
+            Assert.AreEqual("lowerLetter", doc.Paragraphs[5].GetNumFmt());
+            Assert.AreEqual("lowerRoman", doc.Paragraphs[6].GetNumFmt());
+        }
     }
 }

@@ -193,26 +193,26 @@ namespace NPOI.XWPF.UserModel
 
         public IList<XWPFRun> Runs
         {
-			get
-			{
-				return runs.AsReadOnly();
-			}
+            get
+            {
+                return runs.AsReadOnly();
+            }
         }
 
         public bool IsEmpty
         {
-			get
-			{
-				return paragraph.Items.Count == 0;
-			}
+            get
+            {
+                return paragraph.Items.Count == 0;
+            }
         }
 
         public XWPFDocument Document
         {
-			get
-			{
-				return document;
-			}
+            get
+            {
+                return document;
+            }
         }
 
         /**
@@ -271,7 +271,57 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
+        /**
+         * Returns Ilvl of the numeric style for this paragraph.
+         * Returns null if this paragraph does not have numeric style.
+         * @return Ilvl as BigInteger
+         */
+        public string GetNumIlvl()
+        {
+            if (paragraph.pPr != null)
+            {
+                if (paragraph.pPr.numPr != null)
+                {
+                    if (paragraph.pPr.numPr.ilvl != null)
+                        return paragraph.pPr.numPr.ilvl.val;
+                }
+            }
+            return null;
+        }
 
+        /**
+         * Returns numbering format for this paragraph, eg bullet or
+         *  lowerLetter.
+         * Returns null if this paragraph does not have numeric style.
+         */
+        public String GetNumFmt()
+        {
+            string numID = GetNumID();
+            XWPFNumbering numbering = document.GetNumbering();
+            if (numID != null && numbering != null)
+            {
+                XWPFNum num = numbering.GetNum(numID);
+                if (num != null)
+                {
+                    string ilvl = GetNumIlvl();
+                    string abstractNumId = num.GetCTNum().abstractNumId.val;
+                    CT_AbstractNum anum = numbering.GetAbstractNum(abstractNumId).GetAbstractNum();
+                    CT_Lvl level = null;
+                    for (int i = 0; i < anum.lvl.Count; i++)
+                    {
+                        CT_Lvl lvl = anum.lvl[i];
+                        if (lvl.ilvl.Equals(ilvl))
+                        {
+                            level = lvl;
+                            break;
+                        }
+                    }
+                    if (level != null)
+                        return level.numFmt.val.ToString();
+                }
+            }
+            return null;
+        }
         /**
          * SetNumID of Paragraph
          * @param numPos
@@ -349,10 +399,10 @@ namespace NPOI.XWPF.UserModel
          */
         public String FootnoteText
         {
-			get
-			{
-				return footnoteText.ToString();
-			}
+            get
+            {
+                return footnoteText.ToString();
+            }
         }
 
         /// <summary>
