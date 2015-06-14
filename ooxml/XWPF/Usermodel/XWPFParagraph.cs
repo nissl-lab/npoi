@@ -24,7 +24,11 @@ namespace NPOI.XWPF.UserModel
     using NPOI.Util;
     using System.Collections;
     /**
-     * Sketch of XWPF paragraph class
+     * <p>A Paragraph within a Document, Table, Header etc.</p> 
+     * 
+     * <p>A paragraph has a lot of styling information, but the
+     *  actual text (possibly along with more styling) is held on
+     *  the child {@link XWPFRun}s.</p>
      */
     public class XWPFParagraph : IBodyElement
     {

@@ -22,11 +22,8 @@ namespace NPOI.XWPF.UserModel
     using System.Text;
     using System.Xml;
     /**
-     * XWPFTableCell class.
-     *
-     * @author Gregg Morris (gregg dot morris at gmail dot com) - added XWPFVertAlign enum,
-     *         setColor(),
-     *         setVerticalAlignment()
+     * Represents a Cell within a {@link XWPFTable}. The
+     *  Cell is the thing that holds the actual content (paragraphs etc)
      */
     public class XWPFTableCell : IBody
     {
