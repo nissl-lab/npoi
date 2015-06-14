@@ -24,9 +24,8 @@ using NUnit.Framework;
 namespace TestCases.HSSF.UserModel
 {
     /**
- * @author Evgeniy Berlog
- * @date 13.07.12
- */
+    * Tests for the embedded object fetching support in HSSF
+    */
     [TestFixture]
     public class TestEmbeddedObjects
     {
@@ -40,6 +39,33 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(obj.GetObjectData());
             Assert.IsNotNull(obj.GetDirectory());
             Assert.IsNotNull(obj.OLE2ClassName);
+        }
+
+        /**
+         * Need to recurse into the shapes to find this one
+         * See https://github.com/apache/poi/pull/2
+         */
+        [Test]
+        public void TestReadNestedObject()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("WithCheckBoxes.xls");
+            IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
+            Assert.AreEqual(list.Count, 1);
+            HSSFObjectData obj = list[0];
+            Assert.IsNotNull(obj.GetObjectData());
+            Assert.IsNotNull(obj.OLE2ClassName);
+        }
+
+        /**
+         * One with large numbers of recursivly embedded resources
+         * See https://github.com/apache/poi/pull/2
+         */
+        [Test]
+        public void TestReadManyNestedObjects()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("45538_form_Header.xls");
+            IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
+            Assert.AreEqual(list.Count, 40);
         }
     }
 }

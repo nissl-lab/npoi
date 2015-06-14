@@ -1872,11 +1872,21 @@ namespace NPOI.HSSF.UserModel
             {
                 return;
             }
-            foreach (HSSFShape shape in patriarch.Children)
-            {
-                if (shape is HSSFObjectData)
-                {
-                    objects.Add((HSSFObjectData)shape);
+            GetAllEmbeddedObjects(patriarch, objects);
+        }
+
+        /// <summary>
+        /// Recursively iterates a shape container to get all embedded objects.
+        /// </summary>
+        /// <param name="parent">the parent.</param>
+        /// <param name="objects">the list of embedded objects to populate.</param>
+        private void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
+        {
+            foreach (HSSFShape shape in parent.Children) {
+                if (shape is HSSFObjectData) {
+                    objects.Add((HSSFObjectData) shape);
+                } else if (shape is HSSFShapeContainer) {
+                    GetAllEmbeddedObjects((HSSFShapeContainer) shape, objects);
                 }
             }
         }
