@@ -1847,7 +1847,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FtnEdnRef
     {
-
+        public XmlNode DomNode
+        {
+            get;
+            set;
+        }
         private ST_OnOff customMarkFollowsField;
 
         private bool customMarkFollowsFieldSpecified;
@@ -1861,6 +1865,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node.Attributes["w:customMarkFollows"] != null)
                 ctObj.customMarkFollows = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:customMarkFollows"].Value);
             ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
+            ctObj.DomNode = node;
             return ctObj;
         }
 
