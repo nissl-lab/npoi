@@ -26,7 +26,7 @@ namespace NPOI.XWPF.UserModel
      * <p>Specifies the contents of a table present in the document. A table is a set
      * of paragraphs (and other block-level content) arranged in rows and columns.</p>
      */
-    public class XWPFTable : IBodyElement
+    public class XWPFTable : IBodyElement, ISDTContents
     {
 
         protected StringBuilder text = new StringBuilder();
@@ -765,13 +765,16 @@ namespace NPOI.XWPF.UserModel
          * returns the part of the bodyElement
          * @see NPOI.XWPF.UserModel.IBody#getPart()
          */
-        public POIXMLDocumentPart GetPart()
+        public POIXMLDocumentPart Part
         {
-            if (part != null)
+            get
             {
-                return part.GetPart();
+                if (part != null)
+                {
+                    return part.Part;
+                }
+                return null;
             }
-            return null;
         }
 
         /**

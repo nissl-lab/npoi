@@ -123,10 +123,10 @@ namespace NPOI.XWPF.UserModel
          */
         public IList<XWPFTable> Tables
         {
-			get
-			{
-				return tables.AsReadOnly();
-			}
+            get
+            {
+                return tables.AsReadOnly();
+            }
         }
 
 
@@ -164,7 +164,13 @@ namespace NPOI.XWPF.UserModel
                         t.Append('\n');
                     }
                 }
-
+                foreach (IBodyElement bodyElement in BodyElements)
+                {
+                    if (bodyElement is XWPFSDT)
+                    {
+                        t.Append(((XWPFSDT)bodyElement).Content.Text + '\n');
+                    }
+                }
                 return t.ToString();
             }
         }
@@ -586,7 +592,6 @@ namespace NPOI.XWPF.UserModel
         {
             document = doc;
         }
-
         public XWPFDocument GetXWPFDocument()
         {
             if (document != null)
@@ -603,9 +608,12 @@ namespace NPOI.XWPF.UserModel
          * returns the Part, to which the body belongs, which you need for Adding relationship to other parts
          * @see NPOI.XWPF.UserModel.IBody#getPart()
          */
-        public POIXMLDocumentPart GetPart()
+        public POIXMLDocumentPart Part
         {
-            return this;
+            get
+            {
+                return this;
+            }
         }
 
         #region IBody ≥…‘±

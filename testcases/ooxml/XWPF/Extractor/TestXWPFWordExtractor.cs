@@ -82,17 +82,17 @@ namespace NPOI.XWPF.Extractor
             Assert.IsTrue(text.Length > 0);
 
             char euro = '\u20ac';
-            Debug.WriteLine("'"+text.Substring(text.Length - 40) + "'");
+            Debug.WriteLine("'" + text.Substring(text.Length - 40) + "'");
 
             //Check contents
             Assert.IsTrue(text.StartsWith(
                     "  \n(V) ILLUSTRATIVE CASES\n\n"
             ));
             Assert.IsTrue(text.Contains(
-                    "As well as gaining " + euro + "90 from child benefit increases, he will also receive the early childhood supplement of " + euro + "250 per quarter for Vincent for the full four quarters of the year.\n\n\n\n \n\n\n"
+                    "As well as gaining " + euro + "90 from child benefit increases, he will also receive the early childhood supplement of " + euro + "250 per quarter for Vincent for the full four quarters of the year.\n\n\n\n"// \n\n\n"
             ));
             Assert.IsTrue(text.EndsWith(
-                    "11.4%\t\t90\t\t\t\t\t250\t\t1,310\t\n\n"
+                    "11.4%\t\t90\t\t\t\t\t250\t\t1,310\t\n\n \n\n\n"
             ));
 
             // Check number of paragraphs
@@ -125,7 +125,7 @@ namespace NPOI.XWPF.Extractor
             );
 
             // One hyperlink is a real one, one is just to the top of page
-            extractor.SetFetchHyperlinks (true);
+            extractor.SetFetchHyperlinks(true);
             Assert.AreEqual(
                     "This is a test document.\nThis bit is in bold and italic\n" +
                     "Back to normal\n" +
@@ -321,6 +321,45 @@ namespace NPOI.XWPF.Extractor
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
             String text = extractor.Text;
             Assert.IsTrue(text.Length > 0);
+        }
+
+        /**
+         * Test for basic extraction of SDT content
+         * @throws IOException
+         */
+        [Test]
+        public void TestSimpleControlContent()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54849.docx");
+            String[] targs = new String[]{
+                "header_rich_text",
+                "rich_text",
+                "rich_text_pre_table\nrich_text_cell1\t\t\t\n\nrich_text_post_table",
+                "plain_text_no_newlines",
+                "plain_text_with_newlines1\nplain_text_with_newlines2\n",
+                "watermelon\n",
+                "dirt\n",
+                "4/16/2013\n",
+                "rich_text_in_paragraph_in_cell",
+                "footer_rich_text",
+                "footnote_sdt",
+                "endnote_sdt"
+        };
+            XWPFWordExtractor ex = new XWPFWordExtractor(doc);
+            String s = ex.Text.ToLower();
+            int hits = 0;
+
+            foreach (String targ in targs)
+            {
+                bool hit = false;
+                if (s.IndexOf(targ) > -1)
+                {
+                    hit = true;
+                    hits++;
+                }
+                Assert.AreEqual(true, hit, "controlled content loading-" + targ);
+            }
+            Assert.AreEqual(targs.Length, hits, "controlled content loading hit count");
         }
     }
 }

@@ -27,7 +27,7 @@ namespace NPOI.XWPF.UserModel
     {
         private CT_Hyperlink1 hyperlink;
 
-        public XWPFHyperlinkRun(CT_Hyperlink1 hyperlink, CT_R Run, XWPFParagraph p)
+        public XWPFHyperlinkRun(CT_Hyperlink1 hyperlink, CT_R Run, IRunBody p)
             : base(Run, p)
         {
             this.hyperlink = hyperlink;

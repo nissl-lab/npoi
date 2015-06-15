@@ -159,6 +159,11 @@ namespace NPOI.XWPF.UserModel
                 {
                     cells.Add(new XWPFTableCell(tableCell, this, table.Body));
                 }
+
+                //TODO: it is possible to have an SDT that contains a cell in within a row
+                //need to modify this code so that it pulls out SDT wrappers around cells, too.
+
+
                 this.tableCells = cells;
             }
             return tableCells;

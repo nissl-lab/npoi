@@ -126,6 +126,11 @@ namespace NPOI.XWPF.UserModel
                         tables.Add(t);
                         bodyElements.Add(t);
                     }
+                    if (o is CT_SdtBlock)
+                    {
+                        XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                        bodyElements.Add(c);
+                    }
                 }
             }
             catch (Exception e)

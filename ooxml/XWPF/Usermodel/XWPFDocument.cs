@@ -54,6 +54,7 @@ namespace NPOI.XWPF.UserModel
         protected List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
         protected List<XWPFParagraph> paragraphs = new List<XWPFParagraph>();
         protected List<XWPFTable> tables = new List<XWPFTable>();
+        protected List<XWPFSDT> contentControls = new List<XWPFSDT>();
         protected List<IBodyElement> bodyElements = new List<IBodyElement>();
         protected List<XWPFPictureData> pictures = new List<XWPFPictureData>();
         protected Dictionary<long, List<XWPFPictureData>> packagePictures = new Dictionary<long, List<XWPFPictureData>>();
@@ -111,6 +112,12 @@ namespace NPOI.XWPF.UserModel
                         XWPFTable t = new XWPFTable((CT_Tbl)o, this);
                         bodyElements.Add(t);
                         tables.Add(t);
+                    }
+                    else if (o is CT_SdtBlock)
+                    {
+                        XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                        bodyElements.Add(c);
+                        contentControls.Add(c);
                     }
                 }
                 // Sort out headers and footers
@@ -219,11 +226,8 @@ namespace NPOI.XWPF.UserModel
             foreach(POIXMLDocumentPart p in GetRelations()){
                String relation = p.GetPackageRelationship().RelationshipType;
                if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
-                   //XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
-                  //FootnotesDocument footnotesDocument = FootnotesDocument.Parse(xmldoc, NamespaceManager);
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
-
                }
                else if (relation.Equals(XWPFRelation.ENDNOTE.Relation))
                {
@@ -403,7 +407,13 @@ namespace NPOI.XWPF.UserModel
             if (footnotes == null) return null;
             return footnotes.GetFootnoteById(id);
         }
-
+        public Dictionary<int, XWPFFootnote> Endnotes
+        {
+            get
+            {
+                return endnotes;
+            }
+        }
         public XWPFFootnote GetEndnoteByID(int id)
         {
             if (endnotes == null || !endnotes.ContainsKey(id)) 
@@ -1471,9 +1481,12 @@ namespace NPOI.XWPF.UserModel
          * belongs.
          * @see NPOI.XWPF.UserModel.IBody#getPart()
          */
-        public POIXMLDocumentPart GetPart()
+        public POIXMLDocumentPart Part
         {
-            return this;
+            get
+            {
+                return this;
+            }
         }
 
 
@@ -1497,30 +1510,6 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableCell GetTableCell(CT_Tc cell)
         {
-            /*XmlCursor cursor = cell.NewCursor();
-            cursor.ToParent();
-            XmlObject o = cursor.Object;
-            if(!(o is CTRow)){
-                return null;
-            }
-            CTRow row = (CTRow)o;
-            cursor.ToParent();
-            o = cursor.Object;
-            cursor.Dispose();
-            if(! (o is CTTbl)){
-                return null;
-            }
-            CTTbl tbl = (CTTbl) o;
-            XWPFTable table = GetTable(tbl);
-            if(table == null){
-                return null;
-            }
-            XWPFTableRow tableRow = table.GetRow(row);
-            if(row == null){
-                return null;
-            }
-            return tableRow.GetTableCell(cell);
-             */
             if (cell == null|| !(cell.Parent is CT_Row))
                 return null;
 
