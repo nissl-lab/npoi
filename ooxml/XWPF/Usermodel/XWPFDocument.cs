@@ -28,15 +28,16 @@ namespace NPOI.XWPF.UserModel
     using System.Diagnostics;
 
     /**
-     * Experimental class to do low level Processing
-     *  of docx files.
-     *
-     * If you're using these low level classes, then you
-     *  will almost certainly need to refer to the OOXML
-     *  specifications from
+     * <p>High(ish) level class for working with .docx files.</p>
+     * 
+     * <p>This class tries to hide some of the complexity
+     *  of the underlying file format, but as it's not a 
+     *  mature and stable API yet, certain parts of the
+     *  XML structure come through. You'll therefore almost
+     *  certainly need to refer to the OOXML specifications
+     *  from
      *  http://www.ecma-international.org/publications/standards/Ecma-376.htm
-     *
-     * WARNING - APIs expected to change rapidly
+     *  at some point in your use.</p>
      */
     public class XWPFDocument : POIXMLDocument, Document, IBody
     {
@@ -290,10 +291,10 @@ namespace NPOI.XWPF.UserModel
 
         internal IdentifierManager DrawingIdManager
         {
-			get
-			{
-				return drawingIdManager;
-			}
+            get
+            {
+                return drawingIdManager;
+            }
         }
 
         /**
@@ -327,10 +328,10 @@ namespace NPOI.XWPF.UserModel
          */
         public IList<XWPFTable> Tables
         {
-			get
-			{
-				return tables.AsReadOnly();
-			}
+            get
+            {
+                return tables.AsReadOnly();
+            }
         }
 
         /**
@@ -351,10 +352,10 @@ namespace NPOI.XWPF.UserModel
          */
         public IList<XWPFFooter> FooterList
         {
-			get
-			{
-				return footers.AsReadOnly();
-			}
+            get
+            {
+                return footers.AsReadOnly();
+            }
         }
 
         public XWPFFooter GetFooterArray(int pos)

@@ -22,8 +22,9 @@ namespace NPOI.XWPF.UserModel
 
 
     /**
-     * @author gisellabronzetti
-     * @author gregg morris - added removeCell(), setCantSplitRow(), setRepeatHeader()
+     * A row within an {@link XWPFTable}. Rows mostly just have
+     *  sizings and stylings, the interesting content lives inside
+     *  the child {@link XWPFTableCell}s
      */
     public class XWPFTableRow
     {

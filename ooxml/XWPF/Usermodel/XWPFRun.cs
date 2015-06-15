@@ -180,10 +180,10 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph Paragraph
         {
-			get
-			{
-				return paragraph;
-			}
+            get
+            {
+                return paragraph;
+            }
         }
 
         /**
@@ -192,14 +192,14 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFDocument Document
         {
-			get
-			{
-				if (paragraph != null)
-				{
-					return paragraph.Document;
-				}
-				return null;
-			}
+            get
+            {
+                if (paragraph != null)
+                {
+                    return paragraph.Document;
+                }
+                return null;
+            }
         }
 
         /**
@@ -220,15 +220,15 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsBold
         {
-			get
-			{
-				CT_RPr pr = run.rPr;
-				if (pr == null || !pr.IsSetB())
-				{
-					return false;
-				}
-				return IsCTOnOff(pr.b);
-			}
+            get
+            {
+                CT_RPr pr = run.rPr;
+                if (pr == null || !pr.IsSetB())
+                {
+                    return false;
+                }
+                return IsCTOnOff(pr.b);
+            }
         }
 
         /**
@@ -385,19 +385,19 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsItalic
         {
-			get
-			{
-				CT_RPr pr = run.rPr;
-				if (pr == null || !pr.IsSetI())
-					return false;
-				return IsCTOnOff(pr.i);
-			}
-			set 
-			{
-				CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-				CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
-				italic.val = value;
-			}
+            get
+            {
+                CT_RPr pr = run.rPr;
+                if (pr == null || !pr.IsSetI())
+                    return false;
+                return IsCTOnOff(pr.i);
+            }
+            set 
+            {
+                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
+                italic.val = value;
+            }
         }
 
 
@@ -410,11 +410,11 @@ namespace NPOI.XWPF.UserModel
          */
         public UnderlinePatterns Underline
         {
-			get
-			{
-				CT_RPr pr = run.rPr;
-				return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
-			}
+            get
+            {
+                CT_RPr pr = run.rPr;
+                return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
+            }
         }
         internal void InsertText(CT_Text text, int textIndex)
         {
@@ -517,13 +517,13 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsStrike
         {
-			get
-			{
-				CT_RPr pr = run.rPr;
-				if (pr == null || !pr.IsSetStrike())
-					return false;
-				return IsCTOnOff(pr.strike);
-			}
+            get
+            {
+                CT_RPr pr = run.rPr;
+                if (pr == null || !pr.IsSetStrike())
+                    return false;
+                return IsCTOnOff(pr.strike);
+            }
         }
 
         /**
@@ -615,11 +615,11 @@ namespace NPOI.XWPF.UserModel
          */
         public int FontSize
         {
-			get
-			{
-				CT_RPr pr = run.rPr;
-				return (pr != null && pr.IsSetSz()) ? (int)pr.sz.val / 2 : -1;
-			}
+            get
+            {
+                CT_RPr pr = run.rPr;
+                return (pr != null && pr.IsSetSz()) ? (int)pr.sz.val / 2 : -1;
+            }
             set 
             {
                 CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
@@ -903,8 +903,54 @@ namespace NPOI.XWPF.UserModel
         public override String ToString()
         {
             StringBuilder text = new StringBuilder();
+            for (int i = 0; i < run.Items.Count; i++)
+            {
+                object o = run.Items[i];
+                if (o is CT_Text)
+                {
+                    if (!(run.ItemsElementName[i] == RunItemsChoiceType.instrText))
+                    {
+                        text.Append(((CT_Text)o).Value);
+                    }
+                }
 
-            text.Append(this.Text);
+                if (o is CT_PTab)
+                {
+                    text.Append("\t");
+                }
+                if (o is CT_Br)
+                {
+                    text.Append("\n");
+                }
+                if (o is CT_Empty)
+                {
+                    // Some inline text elements Get returned not as
+                    //  themselves, but as CTEmpty, owing to some odd
+                    //  defInitions around line 5642 of the XSDs
+                    // This bit works around it, and replicates the above
+                    //  rules for that case
+                    if (run.ItemsElementName[i] == RunItemsChoiceType.tab)
+                    {
+                        text.Append("\t");
+                    }
+                    if (run.ItemsElementName[i] == RunItemsChoiceType.br)
+                    {
+                        text.Append("\n");
+                    }
+                    if (run.ItemsElementName[i] == RunItemsChoiceType.cr)
+                    {
+                        text.Append("\n");
+                    }
+                }
+
+                if (o is CT_FtnEdnRef)
+                {
+                    CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
+                    String footnoteRef = ftn.DomNode.LocalName.Equals("footnoteReference") ?
+                        "[footnoteRef:" + ftn.id + "]" : "[endnoteRef:" + ftn.id + "]";
+                    text.Append(footnoteRef);
+                } 
+            }
 
             // Any picture text?
             if (pictureText != null && pictureText.Length > 0)

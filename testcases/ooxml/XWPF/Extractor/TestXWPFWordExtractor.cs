@@ -185,8 +185,9 @@ namespace NPOI.XWPF.Extractor
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("footnotes.docx");
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
-
+            String text = extractor.Text;
             Assert.IsTrue(extractor.Text.Contains("snoska"));
+            Assert.IsTrue(text.Contains("Eto ochen prostoy[footnoteRef:1] text so snoskoy"));
         }
 
 
@@ -215,8 +216,9 @@ namespace NPOI.XWPF.Extractor
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("endnotes.docx");
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
-
-            Assert.IsTrue(extractor.Text.Contains("XXX"));
+            string text = extractor.Text;
+            Assert.IsTrue(text.Contains("XXX"));
+            Assert.IsTrue(text.Contains("tilaka [endnoteRef:2]or 'tika'"));
         }
 
         [Test]
