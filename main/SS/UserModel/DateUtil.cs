@@ -439,8 +439,15 @@ namespace NPOI.SS.UserModel
             {
                 fs = fs.Substring(0, fs.IndexOf(';'));
             }
-            // Otherwise, Check it's only made up, in any case, of:
-            //  y m d h s - / , . :
+            // Ensure it has some date letters in it
+            // (Avoids false positives on the rest of pattern 3)
+            if (!Regex.Match(fs, "[yYmMdDhHsS]").Success)
+            {
+                return false;
+            }
+
+            // If we get here, check it's only made up, in any case, of:
+            //  y m d h s - \ / , . : [ ]
             // optionally followed by AM/PM
 
             // Delete any string literals.

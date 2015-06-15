@@ -22,6 +22,8 @@ namespace TestCases.SS.UserModel
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using System.Globalization;
 
     /**
      * Tests of {@link DataFormatter}
@@ -538,6 +540,40 @@ namespace TestCases.SS.UserModel
 
             fmt = "0 \"dollars and\" .00 \"cents\"";
             Assert.AreEqual("19 dollars and .99 cents", dfUS.FormatRawCellContents(19.99, -1, fmt));
+        }
+        /**
+         * ExcelStyleDateFormatter should work for Milliseconds too
+         */
+        [Test]
+        public void TestExcelStyleDateFormatterStringOnMillis()
+        {
+            // Test directly with the .000 style
+            SimpleDateFormat formatter1 = new ExcelStyleDateFormatter("ss.000");
+            CultureInfo culture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            DateTime dt = DateTime.Now.Date;
+            Assert.AreEqual("00.001", formatter1.Format(dt.AddMilliseconds(1L), culture));
+            Assert.AreEqual("00.010", formatter1.Format(dt.AddMilliseconds(10L), culture));
+            Assert.AreEqual("00.100", formatter1.Format(dt.AddMilliseconds(100L), culture));
+            Assert.AreEqual("01.000", formatter1.Format(dt.AddMilliseconds(1000L), culture));
+            Assert.AreEqual("01.001", formatter1.Format(dt.AddMilliseconds(1001L), culture));
+            Assert.AreEqual("10.000", formatter1.Format(dt.AddMilliseconds(10000L), culture));
+            Assert.AreEqual("10.001", formatter1.Format(dt.AddMilliseconds(10001L), culture));
+
+            // Test directly with the .SSS style
+            SimpleDateFormat formatter2 = new ExcelStyleDateFormatter("ss.fff");
+
+            Assert.AreEqual("00.001", formatter2.Format(dt.AddMilliseconds(1L), culture));
+            Assert.AreEqual("00.010", formatter2.Format(dt.AddMilliseconds(10L), culture));
+            Assert.AreEqual("00.100", formatter2.Format(dt.AddMilliseconds(100L), culture));
+            Assert.AreEqual("01.000", formatter2.Format(dt.AddMilliseconds(1000L), culture));
+            Assert.AreEqual("01.001", formatter2.Format(dt.AddMilliseconds(1001L), culture));
+            Assert.AreEqual("10.000", formatter2.Format(dt.AddMilliseconds(10000L), culture));
+            Assert.AreEqual("10.001", formatter2.Format(dt.AddMilliseconds(10001L), culture));
+
+
+            // Test via DataFormatter
+            DataFormatter dfUS = new DataFormatter(culture, true);
+            Assert.AreEqual("01.010", dfUS.FormatRawCellContents(0.0000116898, -1, "ss.000"));
         }
     }
 
