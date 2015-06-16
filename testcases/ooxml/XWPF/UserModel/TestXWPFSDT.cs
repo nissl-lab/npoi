@@ -99,7 +99,33 @@ namespace NPOI.XWPF.UserModel
             }
             Assert.AreEqual(false, found, "SDT as cell known failure");
         }
+        /**
+         * POI-55142 and Tika 1130
+         */
+        [Test]
+        public void TestNewLinesBetweenRuns()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug55142.docx");
+            List<XWPFSDT> sdts = extractAllSDTs(doc);
+            List<String> targs = new List<String>();
+            //these test newlines and tabs in paragraphs/body elements
+            targs.Add("Rich-text1 abcdefghi");
+            targs.Add("Rich-text2 abcd\t\tefgh");
+            targs.Add("Rich-text3 abcd\nefg");
+            targs.Add("Rich-text4 abcdefg");
+            targs.Add("Rich-text5 abcdefg\nhijk");
+            targs.Add("Plain-text1 abcdefg");
+            targs.Add("Plain-text2 abcdefg\nhijk\nlmnop");
+            //this tests consecutive runs within a cell (not a paragraph)
+            //this test case was triggered by Tika-1130
+            targs.Add("sdt_incell2 abcdefg");
 
+            for (int i = 0; i < sdts.Count; i++)
+            {
+                XWPFSDT sdt = sdts[i];
+                Assert.AreEqual(targs[i], sdt.Content.Text, targs[i]);
+            }
+        }
         private List<XWPFSDT> extractAllSDTs(XWPFDocument doc)
         {
 

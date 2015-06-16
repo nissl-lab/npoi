@@ -86,26 +86,31 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 StringBuilder text = new StringBuilder();
+                bool addNewLine = false;
                 for (int i = 0; i < bodyElements.Count; i++)
                 {
                     Object o = bodyElements[i];
                     if (o is XWPFParagraph)
                     {
                         text.Append(((XWPFParagraph)o).Text);
+                        addNewLine = true;
                     }
                     else if (o is XWPFTable)
                     {
                         text.Append(((XWPFTable)o).Text);
+                        addNewLine = true;
                     }
                     else if (o is XWPFSDT)
                     {
                         text.Append(((XWPFSDT)o).Content.Text);
+                        addNewLine = true;
                     }
                     else if (o is XWPFRun)
                     {
                         text.Append(((XWPFRun)o).ToString());
+                        addNewLine = false;
                     }
-                    if (i < bodyElements.Count - 1)
+                    if (addNewLine && i < bodyElements.Count-1)
                     {
                         text.Append("\n");
                     }
