@@ -49,6 +49,9 @@ namespace NPOI
 
             Assert.IsTrue(text.Contains("LastModifiedBy = Yury Batrakov"));
             Assert.IsTrue(cText.Contains("LastModifiedBy = Yury Batrakov"));
+
+            textExt.Close();
+            ext.Close();
         }
         [TestMethod]
         public void TestCore()
@@ -67,6 +70,8 @@ namespace NPOI
 
             Assert.IsTrue(text.Contains("LastModifiedBy = Yury Batrakov"));
             Assert.IsTrue(cText.Contains("LastModifiedBy = Yury Batrakov"));
+
+            ext.Close();
         }
         [TestMethod]
         public void TestExtended()
@@ -87,6 +92,8 @@ namespace NPOI
             Assert.IsTrue(text.Contains("Company = Mera"));
             Assert.IsTrue(eText.Contains("Application = Microsoft Excel"));
             Assert.IsTrue(eText.Contains("Company = Mera"));
+
+            ext.Close();
         }
 
         public void TestCustom()
@@ -113,6 +120,8 @@ namespace NPOI
             Assert.IsFalse(text.Contains("Created =")); // With date is null
             Assert.IsTrue(text.Contains("CreatedString = ")); // Via string is blank
             Assert.IsTrue(text.Contains("LastModifiedBy = IT Client Services"));
+
+            ext.Close();
         }
     }
 

@@ -30,7 +30,7 @@ namespace NPOI.XSSF.Extractor
      */
     public class XSSFEventBasedExcelExtractor : POIXMLTextExtractor
     {
-        private OPCPackage Container;
+        private OPCPackage container;
         private POIXMLProperties properties;
 
         private Locale locale;
@@ -46,7 +46,7 @@ namespace NPOI.XSSF.Extractor
             : base(null)
         {
 
-            this.Container = Container;
+            this.container = Container;
 
             properties = new POIXMLProperties(Container);
         }
@@ -78,7 +78,7 @@ namespace NPOI.XSSF.Extractor
 
         public OPCPackage GetPackage()
         {
-            return Container;
+            return container;
         }
 
         /**
@@ -150,8 +150,8 @@ namespace NPOI.XSSF.Extractor
         {
             try
             {
-                ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(Container);
-                XSSFReader xssfReader = new XSSFReader(Container);
+                ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(container);
+                XSSFReader xssfReader = new XSSFReader(container);
                 StylesTable styles = xssfReader.GetStylesTable();
                 XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator)xssfReader.GetSheetsData();
 
@@ -183,7 +183,15 @@ namespace NPOI.XSSF.Extractor
                 return null;
             }
         }
-
+        public void Close()
+        {
+            if (container != null)
+            {
+                container.Close();
+                container = null;
+            }
+            base.close();
+        }
         protected class SheetTextExtractor : SheetContentsHandler
         {
             private StringBuilder output;

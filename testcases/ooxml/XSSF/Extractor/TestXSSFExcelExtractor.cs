@@ -31,7 +31,7 @@ namespace NPOI.XSSF.Extractor
     {
 
 
-        private static XSSFExcelExtractor GetExtractor(String sampleName)
+        protected XSSFExcelExtractor GetExtractor(String sampleName)
         {
             return new XSSFExcelExtractor(XSSFTestDataSamples.OpenSampleWorkbook(sampleName));
         }
@@ -96,6 +96,7 @@ namespace NPOI.XSSF.Extractor
                     CHUNK2 +
                     "Sheet3\n"
                     , text);
+            extractor.Close();
         }
         [Test]
         public void TestGetComplexText()
@@ -112,6 +113,7 @@ namespace NPOI.XSSF.Extractor
                             "Avgtxfull\n" +
                             "\t(iii) AVERAGE TAX RATES ON ANNUAL"
             ));
+            extractor.Close();
         }
 
         /**
@@ -140,6 +142,8 @@ namespace NPOI.XSSF.Extractor
                 Assert.IsTrue(pattern.IsMatch(text));
                 
             }
+            ole2Extractor.Close();
+            ooxmlExtractor.Close();
         }
 
         /**
@@ -159,6 +163,7 @@ namespace NPOI.XSSF.Extractor
 
                    Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text from " + sampleName + "\n" + text);
                    Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
+                   extractor.Close();
                }
            }
 
@@ -181,6 +186,7 @@ namespace NPOI.XSSF.Extractor
             text = extractor.Text;
             Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
             Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
+            extractor.Close();
         }
         [Test]
         public void TestInlineStrings()
@@ -204,6 +210,7 @@ namespace NPOI.XSSF.Extractor
             // Formulas
             Assert.IsTrue(text.Contains("A2"), "Unable to find expected word in text\n" + text);
             Assert.IsTrue(text.Contains("A5-A$2"), "Unable to find expected word in text\n" + text);
+            extractor.Close();
         }
     }
 }

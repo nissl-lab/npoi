@@ -90,6 +90,20 @@ namespace NPOI
                 return new POIXMLPropertiesTextExtractor(_document);
             }
         }
+
+        public override void Close()
+        {
+            // e.g. XSSFEventBaseExcelExtractor passes a null-document
+            if (_document != null)
+            {
+                OPCPackage pkg = _document.Package;
+                if (pkg != null)
+                {
+                    pkg.Close();
+                }
+            }
+            base.Close();
+        }
     }
 
 }
