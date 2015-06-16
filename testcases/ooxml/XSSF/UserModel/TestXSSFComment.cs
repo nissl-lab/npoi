@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
             Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
 
-            CT_Comment ctComment = sheetComments.CreateComment();
+            CT_Comment ctComment = sheetComments.NewComment("A1");
             CT_Shape vmlShape = new CT_Shape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
@@ -68,7 +68,7 @@ namespace NPOI.XSSF.UserModel
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
-            CT_Comment ctComment = sheetComments.CreateComment();
+            CT_Comment ctComment = sheetComments.NewComment("A1");
             CT_Shape vmlShape = vml.newCommentShape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
@@ -87,7 +87,7 @@ namespace NPOI.XSSF.UserModel
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
-            CT_Comment ctComment = sheetComments.CreateComment();
+            CT_Comment ctComment = sheetComments.NewComment("A1");
             CT_Shape vmlShape = vml.newCommentShape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
@@ -161,7 +161,7 @@ namespace NPOI.XSSF.UserModel
         public void TestAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
-            CT_Comment ctComment = sheetComments.CreateComment();
+            CT_Comment ctComment = sheetComments.NewComment("A1");
 
             Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
