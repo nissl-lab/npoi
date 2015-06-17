@@ -1137,6 +1137,7 @@
     <Compile Include="Util\ByteField.cs" />
     <Compile Include="Util\Character.cs" />
     <Compile Include="Util\ClassID.cs" />
+    <Compile Include="Util\CodePageUtil.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
     <Compile Include="Util\Collections\ISet.cs" />

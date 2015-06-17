@@ -151,6 +151,7 @@
     <Compile Include="POIFS\Storage\TestBlockListImpl.cs" />
     <Compile Include="POIFS\Storage\TestHeaderBlockReading.cs" />
     <Compile Include="POIFS\Storage\TestHeaderBlockWriting.cs" />
+    <Compile Include="POITestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SS\Formula\Atp\TestDateParser.cs" />
     <Compile Include="SS\Formula\Atp\TestIfError.cs" />
