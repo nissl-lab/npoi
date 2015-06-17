@@ -18,6 +18,7 @@
 using NPOI.POIFS.FileSystem;
 using System.IO;
 using System;
+using System.Collections.Generic;
 namespace NPOI.HPSF
 {
 
@@ -39,10 +40,24 @@ namespace NPOI.HPSF
         {
 
         }
-
+        /**
+         * Write out, with any properties changes, but nothing else
+         */
         public override void Write(Stream out1)
         {
-            throw new InvalidOperationException("Unable to write, only for properties!");
+            POIFSFileSystem fs = new POIFSFileSystem();
+
+            // For tracking what we've written out, so far
+            List<String> excepts = new List<String>(1);
+
+            // Write out our HPFS properties, with any changes
+            WriteProperties(fs, excepts);
+        
+            // Copy over everything else unchanged
+            EntryUtils.CopyNodes(directory, fs.Root, excepts);
+        
+            // Save the resultant POIFSFileSystem to the output stream
+            fs.WriteFileSystem(out1);
         }
     }
 }

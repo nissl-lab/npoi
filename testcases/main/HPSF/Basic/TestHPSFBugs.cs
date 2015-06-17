@@ -24,6 +24,7 @@ namespace TestCases.HPSF.Basic
     using NPOI.SS.UserModel;
     using NPOI.POIFS.FileSystem;
     using NPOI.HPSF;
+    using NPOI;
 
     /**
      * Tests various bugs have been fixed
@@ -123,7 +124,17 @@ namespace TestCases.HPSF.Basic
 
 
             // Write out and read back, should still be valid
-            // TODO
+            POIDocument doc = new HPSFPropertiesOnlyDocument(fs);
+            MemoryStream baos = new MemoryStream();
+            doc.Write(baos);
+            MemoryStream bais = new MemoryStream(baos.ToArray());
+            doc = new HPSFPropertiesOnlyDocument(new POIFSFileSystem(bais));
+
+            // Check properties are still there
+            Assert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
+            Assert.AreEqual("", si.Title);
+            Assert.AreEqual("", si.Author);
+            Assert.AreEqual("Cour de Justice", dsi.Company);
         }
     }
 
