@@ -132,7 +132,7 @@ namespace NPOI.XSSF.Extractor
             this.formulasNotResults = formulasNotResults;
         }
         /**
-         * Should cell comments be included? Default is true
+         * Should cell comments be included? Default is false
          */
         public void SetIncludeCellComments(bool includeCellComments)
         {
