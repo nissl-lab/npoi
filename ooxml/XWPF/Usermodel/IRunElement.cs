@@ -1,7 +1,7 @@
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for Additional information regarding copyright ownership.
+   this work for additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -14,31 +14,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
 namespace NPOI.XWPF.UserModel
 {
-    using System;
-
     /**
-     * 9 Jan 2010
-     * @author Philipp Epp
-     *
+     * Common interface for things that can occur
+     *  where a run (text with common stylings) can,
+     *  eg {@link XWPFRun} or {@link XWPFSDT}.
+     * More methods to follow shortly!
      */
-    public interface IBodyElement
+    public interface IRunElement
     {
-        IBody Body
-        {
-            get;
-        }
-        POIXMLDocumentPart Part
-        {
-            get;
-        }
-        BodyType PartType { get; }
-        BodyElementType ElementType
-        {
-            get;
-        }
     }
-
 }

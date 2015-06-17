@@ -38,7 +38,10 @@ namespace NPOI.XWPF.UserModel
          * belongs.
          * @return the Part, to which the body belongs
          */
-        POIXMLDocumentPart GetPart();
+        POIXMLDocumentPart Part
+        {
+            get;
+        }
 
         /**
          * Get the PartType of the body, for example

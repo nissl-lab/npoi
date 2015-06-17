@@ -158,22 +158,26 @@ namespace NPOI.XSSF.Model
             return commentRefs[cellRef];
         }
 
-        public CT_Comment CreateComment()
+        /**
+         * This method is deprecated and should not be used any more as
+         * it overwrites the comment in Cell A1.
+         *
+         * @return
+         */
+        [Obsolete]
+        public CT_Comment NewComment() {
+            return NewComment("A1");
+        }
+
+        public CT_Comment NewComment(String ref1)
         {
             CT_Comment ct = comments.commentList.AddNewComment();
-            ct.@ref = "A1";
-            ct.authorId = 0;
+            ct.@ref = (ref1);
+            ct.authorId = (0);
 
             if (commentRefs != null)
             {
-                if (commentRefs.ContainsKey(ct.@ref))
-                {
-                    commentRefs[ct.@ref] = ct;
-                }
-                else
-                {
-                    commentRefs.Add(ct.@ref, ct);
-                }
+                commentRefs[ct.@ref] = ct;
             }
             return ct;
         }

@@ -24,6 +24,7 @@ using NPOI.XSSF.Model;
 using System.Collections.Generic;
 using System.Xml;
 using NPOI.OpenXmlFormats.Dml;
+using NPOI.SS.Util;
 
 
 namespace NPOI.XSSF.UserModel
@@ -278,9 +279,9 @@ namespace NPOI.XSSF.UserModel
                         ca.Col2 + ", 0, " + ca.Row2 + ", 0";
                 vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
-            XSSFComment shape = new XSSFComment(comments, comments.CreateComment(), vmlShape);
-            shape.Column = (ca.Col1);
-            shape.Row = (ca.Row1);
+            String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();
+            XSSFComment shape = new XSSFComment(comments, comments.NewComment(ref1), vmlShape);
+
             return shape;
         }
 

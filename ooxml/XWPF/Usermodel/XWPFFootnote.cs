@@ -30,27 +30,48 @@ namespace NPOI.XWPF.UserModel
 
         private CT_FtnEdn ctFtnEdn;
         private XWPFFootnotes footnotes;
+        private XWPFDocument document;
 
         public XWPFFootnote(CT_FtnEdn note, XWPFFootnotes xFootnotes)
         {
             footnotes = xFootnotes;
             ctFtnEdn = note;
-            foreach (CT_P p in ctFtnEdn.GetPList())	{
-               paragraphs.Add(new XWPFParagraph(p, this));
-            }
+            document = xFootnotes.GetXWPFDocument();
+            Init();
         }
 
         public XWPFFootnote(XWPFDocument document, CT_FtnEdn body)
         {
-            if (null != body)
+            ctFtnEdn = body;
+            this.document = document;
+            Init();
+        }
+        private void Init()
+        {
+            //copied from XWPFDocument...should centralize this code
+            //to avoid duplication       
+            foreach (object o in ctFtnEdn.Items)
             {
-                foreach (CT_P p in body.GetPList())
+
+                if (o is CT_P)
                 {
-                    paragraphs.Add(new XWPFParagraph(p, document));
+                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    bodyElements.Add(p);
+                    paragraphs.Add(p);
+                }
+                else if (o is CT_Tbl)
+                {
+                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    bodyElements.Add(t);
+                    tables.Add(t);
+                }
+                else if (o is CT_SdtBlock)
+                {
+                    XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                    bodyElements.Add(c);
                 }
             }
         }
-
         public IList<XWPFParagraph> Paragraphs
         {
             get
@@ -343,16 +364,19 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFDocument GetXWPFDocument()
         {
-            return footnotes.GetXWPFDocument();
+            return document;
         }
 
         /**
          * returns the Part, to which the body belongs, which you need for Adding relationship to other parts
          * @see NPOI.XWPF.UserModel.IBody#getPart()
          */
-        public POIXMLDocumentPart GetPart()
+        public POIXMLDocumentPart Part
         {
-            return footnotes;
+            get
+            {
+                return footnotes;
+            }
         }
 
         /**

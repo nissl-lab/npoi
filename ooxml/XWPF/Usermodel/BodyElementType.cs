@@ -31,9 +31,9 @@ namespace NPOI.XWPF.UserModel
      */
     public enum BodyElementType
     {
+        CONTENTCONTROL,
         PARAGRAPH,
         TABLE,
-
     }
 
 }

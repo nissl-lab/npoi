@@ -512,5 +512,17 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(valueToTest.TimeOfDay, returnedValue.TimeOfDay);
         }
+        /**
+         * DateUtil.isCellFormatted(Cell) should not true for a numeric cell 
+         * that's formatted as ".0000"
+         */
+        [Test]
+        public void TestBug54557()
+        {
+            string format = ".0000";
+            bool isDateFormat = HSSFDateUtil.IsADateFormat(165, format);
+
+            Assert.AreEqual(false, isDateFormat);
+        }
     }
 }

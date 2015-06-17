@@ -32,21 +32,22 @@ namespace NPOI.XWPF.UserModel
      * @author Yegor Kozlov
      * @author Gregg Morris (gregg dot morris at gmail dot com) - added getColor(), setColor()
      */
-    public class XWPFRun
+    public class XWPFRun : ISDTContents, IRunElement
     {
         private CT_R run;
         private String pictureText;
-        private XWPFParagraph paragraph;
+        //private XWPFParagraph paragraph;
+        private IRunBody parent;
         private List<XWPFPicture> pictures;
 
         /**
          * @param r the CT_R bean which holds the run.attributes
          * @param p the parent paragraph
          */
-        public XWPFRun(CT_R r, XWPFParagraph p)
+        public XWPFRun(CT_R r, IRunBody p)
         {
             this.run = r;
-            this.paragraph = p;
+            this.parent = p;
 
             /**
              * reserve already occupied Drawing ids, so reserving new ids later will
@@ -113,6 +114,13 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        /**
+         * @deprecated Use {@link XWPFRun#XWPFRun(CTR, IRunBody)}
+         */
+        [Obsolete("Use XWPFRun(CTR, IRunBody)")]
+        public XWPFRun(CT_R r, XWPFParagraph p) : this(r, (IRunBody)p)
+        {
+        }
         private List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
         {
             List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>(); 
@@ -175,14 +183,27 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
-         * Get the currenty referenced paragraph object
-         * @return current paragraph
+         * Get the currently referenced paragraph/SDT object
+         * @return current parent
+         */
+        public IRunBody Parent
+        {
+            get
+            {
+                return parent;
+            }
+        }
+        /**
+         * Get the currently referenced paragraph, or null if a SDT object
+         * @deprecated use {@link XWPFRun#getParent()} instead
          */
         public XWPFParagraph Paragraph
         {
             get
             {
-                return paragraph;
+                if (parent is XWPFParagraph)
+                    return (XWPFParagraph)parent;
+                return null;
             }
         }
 
@@ -194,9 +215,9 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                if (paragraph != null)
+                if (parent != null)
                 {
-                    return paragraph.Document;
+                    return parent.Document;
                 }
                 return null;
             }
@@ -769,7 +790,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height)
         {
-            XWPFDocument doc = paragraph.Document;
+            XWPFDocument doc = parent.Document;
 
             // Add the picture + relationship
             String relationId = doc.AddPictureData(pictureData, pictureType);
@@ -805,7 +826,7 @@ namespace NPOI.XWPF.UserModel
                 inline.distL = (0);
 
                 NPOI.OpenXmlFormats.Dml.WordProcessing.CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
-                long id = Paragraph.Document.DrawingIdManager.ReserveNew();
+                long id = parent.Document.DrawingIdManager.ReserveNew();
                 docPr.id = (uint)(id);
                 /* This name is not visible in Word 2010 anywhere. */
                 docPr.name = ("Drawing " + id);

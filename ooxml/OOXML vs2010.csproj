@@ -226,6 +226,9 @@
     <Compile Include="XWPF\Usermodel\Document.cs" />
     <Compile Include="XWPF\Usermodel\IBody.cs" />
     <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
+    <Compile Include="XWPF\Usermodel\IRunBody.cs" />
+    <Compile Include="XWPF\Usermodel\IRunElement.cs" />
+    <Compile Include="XWPF\Usermodel\ISDTContents.cs" />
     <Compile Include="XWPF\Usermodel\LineSpacingRule.cs" />
     <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs" />
     <Compile Include="XWPF\Usermodel\PositionInParagraph.cs" />
@@ -253,6 +256,8 @@
     <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
     <Compile Include="XWPF\Usermodel\XWPFRelation.cs" />
     <Compile Include="XWPF\Usermodel\XWPFRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDT.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDTContent.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
