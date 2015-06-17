@@ -496,7 +496,7 @@ namespace TestCases.HPSF.Basic
                     check(t, "\u00e4\u00f6\u00fc\u00c4\u00d6", cp);
                     check(t, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc", cp);
                     check(t, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df", cp);
-                    if (cp == (int)Constants.CP_UTF16 || cp == (int)Constants.CP_UTF8)
+                    if (cp == CodePageUtil.CP_UTF16 || cp == CodePageUtil.CP_UTF8)
                         check(t, "\u79D1\u5B78", cp);
                 }
                 catch (Exception ex)
@@ -770,7 +770,7 @@ namespace TestCases.HPSF.Basic
                 m[3] = "String 3";
                 s.Dictionary = (m);
                 s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
-                int codepage = (int)Constants.CP_UNICODE;
+                int codepage = CodePageUtil.CP_UNICODE;
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.GetStream(), "Test");
                 poiFs.WriteFileSystem(copy);

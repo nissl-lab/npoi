@@ -30,6 +30,7 @@ namespace NPOI.HPSF
     using System;
     using System.Collections;
     using NPOI.HPSF.Wellknown;
+    using NPOI.Util;
 
     /// <summary>
     /// Convenience class representing a DocumentSummary Information stream in a
@@ -517,7 +518,7 @@ namespace NPOI.HPSF
                 if (cpCodepage < 0)
                     cpCodepage = section.Codepage;
                 if (cpCodepage < 0)
-                    cpCodepage = (int)Constants.CP_UNICODE;
+                    cpCodepage = CodePageUtil.CP_UNICODE;
                 value.Codepage=cpCodepage;
                 section.Codepage=cpCodepage; //add codepage propertyset
                 section.Dictionary=dictionary; //generate dictionary propertyset

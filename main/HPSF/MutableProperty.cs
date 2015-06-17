@@ -28,6 +28,7 @@
 namespace NPOI.HPSF
 {
     using System.IO;
+    using NPOI.Util;
 
 
     /// <summary>
@@ -74,7 +75,7 @@ namespace NPOI.HPSF
             long variantType = this.Type;
 
             /* Ensure that wide strings are written if the codepage is Unicode. */
-            if (codepage == (int)Constants.CP_UNICODE && variantType == Variant.VT_LPSTR)
+            if (codepage == CodePageUtil.CP_UNICODE && variantType == Variant.VT_LPSTR)
                 variantType = Variant.VT_LPWSTR;
 
             length += TypeWriter.WriteUIntToStream(out1, (uint)variantType);
