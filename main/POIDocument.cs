@@ -72,14 +72,14 @@ namespace NPOI
             
         }
         /**
-	 * Will create whichever of SummaryInformation
-	 *  and DocumentSummaryInformation (HPSF) properties
-	 *  are not already part of your document.
-	 * This is normally useful when creating a new
-	 *  document from scratch.
-	 * If the information properties are already there,
-	 *  then nothing will happen.
-	 */
+     * Will create whichever of SummaryInformation
+     *  and DocumentSummaryInformation (HPSF) properties
+     *  are not already part of your document.
+     * This is normally useful when creating a new
+     *  document from scratch.
+     * If the information properties are already there,
+     *  then nothing will happen.
+     */
         public void CreateInformationProperties()
         {
             if (!initialized) ReadProperties();
