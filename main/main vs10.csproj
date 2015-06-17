@@ -108,6 +108,7 @@
     <Compile Include="HPSF\Decimal.cs" />
     <Compile Include="HPSF\Filetime.cs" />
     <Compile Include="HPSF\GUID.cs" />
+    <Compile Include="HPSF\HPSFPropertiesOnlyDocument.cs" />
     <Compile Include="HPSF\IndirectPropertyName.cs" />
     <Compile Include="HPSF\TypedPropertyValue.cs" />
     <Compile Include="HPSF\UnicodeString.cs" />
