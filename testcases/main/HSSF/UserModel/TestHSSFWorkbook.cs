@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
      *
      */
     [TestFixture]
-    public class TestHSSFWorkbook:BaseTestWorkbook
+    public class TestHSSFWorkbook : BaseTestWorkbook
     {
         public TestHSSFWorkbook()
             : base(HSSFITestDataProvider.Instance)
@@ -254,6 +254,9 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet4, false);
 
             wb.SetSelectedTab(1);
+            // see Javadoc, in this case selected means "active"
+            Assert.AreEqual(wb.ActiveSheetIndex, (short)wb.ActiveSheetIndex);
+
 
             // Demonstrate bug 44525:
             // Well... not quite, since isActive + isSelected were also Added in the same bug fix
@@ -591,7 +594,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, wb.Workbook.NumNames);
             nr = wb.Workbook.GetNameRecord(2);
             // TODO - render full row and full column refs properly
-            Assert.AreEqual("Sheet2!$A$1:$IV$1", HSSFFormulaParser.ToFormulaString(wb,nr.NameDefinition)); // 1:1
+            Assert.AreEqual("Sheet2!$A$1:$IV$1", HSSFFormulaParser.ToFormulaString(wb, nr.NameDefinition)); // 1:1
 
             try
             {
@@ -610,7 +613,7 @@ namespace TestCases.HSSF.UserModel
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             Assert.AreEqual(3, wb.Workbook.NumNames);
             nr = wb.Workbook.GetNameRecord(2);
-            Assert.AreEqual("Sheet2!E:F,Sheet2!$A$9:$IV$12", HSSFFormulaParser.ToFormulaString(wb,nr.NameDefinition)); // E:F,9:12
+            Assert.AreEqual("Sheet2!E:F,Sheet2!$A$9:$IV$12", HSSFFormulaParser.ToFormulaString(wb, nr.NameDefinition)); // E:F,9:12
         }
         /**
      * Test that the storage clsid property is preserved
@@ -848,6 +851,197 @@ namespace TestCases.HSSF.UserModel
         public void TestChangeSheetNameWithSharedFormulas()
         {
             ChangeSheetNameWithSharedFormulas("shared_formulas.xls");
+        }
+        [Test]
+        public void TestEmptyDirectoryNode()
+        {
+            try
+            {
+                Assert.IsNotNull(new HSSFWorkbook(new POIFSFileSystem()));
+                Assert.Fail("Should catch exception about invalid POIFSFileSystem");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.Contains("does not contain a BIFF8"), e.Message);
+            }
+        }
+        [Test]
+        public void TestSelectedSheetshort()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet1 = (HSSFSheet)wb.CreateSheet("Sheet1");
+            HSSFSheet sheet2 = (HSSFSheet)wb.CreateSheet("Sheet2");
+            HSSFSheet sheet3 = (HSSFSheet)wb.CreateSheet("Sheet3");
+            HSSFSheet sheet4 = (HSSFSheet)wb.CreateSheet("Sheet4");
+
+            ConfirmActiveSelected(sheet1, true);
+            ConfirmActiveSelected(sheet2, false);
+            ConfirmActiveSelected(sheet3, false);
+            ConfirmActiveSelected(sheet4, false);
+
+            wb.SetSelectedTab((short)1);
+
+            // see Javadoc, in this case selected means "active"
+            Assert.AreEqual(wb.ActiveSheetIndex, (short)wb.ActiveSheetIndex);
+
+            // Demonstrate bug 44525:
+            // Well... not quite, since isActive + isSelected were also Added in the same bug fix
+            if (sheet1.IsSelected)
+            {
+                //throw new AssertionFailedError("Identified bug 44523 a");
+                Assert.Fail("Identified bug 44523 a");
+            }
+            wb.SetActiveSheet(1);
+            if (sheet1.IsActive)
+            {
+                //throw new AssertionFailedError("Identified bug 44523 b");
+                Assert.Fail("Identified bug 44523 b");
+            }
+
+            ConfirmActiveSelected(sheet1, false);
+            ConfirmActiveSelected(sheet2, true);
+            ConfirmActiveSelected(sheet3, false);
+            ConfirmActiveSelected(sheet4, false);
+
+            Assert.AreEqual(0, wb.FirstVisibleTab);
+            //wb.DisplayedTab=((short)2);
+            //Assert.AreEqual(2, wb.FirstVisibleTab);
+            //Assert.AreEqual(2, wb.DisplayedTab);
+        }
+        [Test]
+        public void TestAddSheetTwice()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet1 = (HSSFSheet)wb.CreateSheet("Sheet1");
+            Assert.IsNotNull(sheet1);
+            try
+            {
+                wb.CreateSheet("Sheet1");
+                Assert.Fail("Should fail if we add the same sheet twice");
+            }
+            catch (ArgumentException e)
+            {
+                //Assert.IsTrue(e.Message.Contains("already Contains a sheet of this name"), e.Message);
+            }
+        }
+        [Test]
+        public void TestGetSheetIndex()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet1 = (HSSFSheet)wb.CreateSheet("Sheet1");
+            HSSFSheet sheet2 = (HSSFSheet)wb.CreateSheet("Sheet2");
+            HSSFSheet sheet3 = (HSSFSheet)wb.CreateSheet("Sheet3");
+            HSSFSheet sheet4 = (HSSFSheet)wb.CreateSheet("Sheet4");
+
+            Assert.AreEqual(0, wb.GetSheetIndex(sheet1));
+            Assert.AreEqual(1, wb.GetSheetIndex(sheet2));
+            Assert.AreEqual(2, wb.GetSheetIndex(sheet3));
+            Assert.AreEqual(3, wb.GetSheetIndex(sheet4));
+
+            // remove sheets
+            wb.RemoveSheetAt(0);
+            wb.RemoveSheetAt(2);
+
+            // ensure that sheets are Moved up and Removed sheets are not found any more
+            Assert.AreEqual(-1, wb.GetSheetIndex(sheet1));
+            Assert.AreEqual(0, wb.GetSheetIndex(sheet2));
+            Assert.AreEqual(1, wb.GetSheetIndex(sheet3));
+            Assert.AreEqual(-1, wb.GetSheetIndex(sheet4));
+        }
+        [Test]
+        public void TestExternSheetIndex()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            wb.CreateSheet("Sheet2");
+
+            Assert.AreEqual(0, wb.GetExternalSheetIndex(0));
+            Assert.AreEqual(1, wb.GetExternalSheetIndex(1));
+
+            //Assert.AreEqual("Sheet1", wb.FindSheetNameFromExternSheet(0));
+            //Assert.AreEqual("Sheet2", wb.FindSheetNameFromExternSheet(1));
+            ////Assert.AreEqual(null, wb.FindSheetNameFromExternSheet(2));
+
+            //Assert.AreEqual(0, wb.GetSheetIndexFromExternSheetIndex(0));
+            //Assert.AreEqual(1, wb.GetSheetIndexFromExternSheetIndex(1));
+            //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(2));
+            //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(100));
+        }
+
+        public void TestSSTString()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            //int sst = wb.AddSSTString("somestring");
+            //Assert.AreEqual("somestring", wb.GetSSTString(sst));
+            ////Assert.IsNull(wb.GetSSTString(sst+1));
+        }
+        [Test]
+        public void TestNames()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            try
+            {
+                wb.GetNameAt(0);
+                Assert.Fail("Fails without any defined names");
+            }
+            catch (ArgumentException e)
+            {
+                //Assert.IsTrue(e.Message.Contains("no defined names"), e.Message);
+            }
+
+            HSSFName name = (HSSFName)wb.CreateName();
+            Assert.IsNotNull(name);
+
+            Assert.IsNull(wb.GetName("somename"));
+
+            name.NameName = ("myname");
+            Assert.IsNotNull(wb.GetName("myname"));
+
+            Assert.AreEqual(0, wb.GetNameIndex(name));
+            Assert.AreEqual(0, wb.GetNameIndex("myname"));
+
+            try
+            {
+                wb.GetNameAt(5);
+                Assert.Fail("Fails without any defined names");
+            }
+            catch (ArgumentException e)
+            {
+                //Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
+            }
+
+            try
+            {
+                wb.GetNameAt(-3);
+                Assert.Fail("Fails without any defined names");
+            }
+            catch (ArgumentException e)
+            {
+                //Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
+            }
+        }
+        [Test]
+        public void TestTestMethods()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.InsertChartRecord();
+            //wb.dumpDrawingGroupRecords(true);
+            //wb.dumpDrawingGroupRecords(false);
+        }
+        [Test]
+        public void TestWriteProtection()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            Assert.IsFalse(wb.IsWriteProtected);
+
+            wb.WriteProtectWorkbook("mypassword", "myuser");
+            Assert.IsTrue(wb.IsWriteProtected);
+
+            wb.UnwriteProtectWorkbook();
+            Assert.IsFalse(wb.IsWriteProtected);
         }
     }
 }

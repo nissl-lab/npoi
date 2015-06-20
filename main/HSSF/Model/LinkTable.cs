@@ -277,8 +277,8 @@ namespace NPOI.HSSF.Model
             _workbookRecordList = workbookRecordList;
             _definedNames = new List<NameRecord>();
             _externalBookBlocks = new ExternalBookBlock[] {
-				new ExternalBookBlock(numberOfSheets),
-		    };
+                new ExternalBookBlock(numberOfSheets),
+            };
             _externSheetRecord = new ExternSheetRecord();
             _recordCount = 2;
 
@@ -463,7 +463,7 @@ namespace NPOI.HSSF.Model
 
         public int GetSheetIndexFromExternSheetIndex(int extRefIndex)
         {
-            if (extRefIndex >= _externSheetRecord.NumOfRefs)
+            if (extRefIndex >= _externSheetRecord.NumOfRefs || extRefIndex < 0)
             {
                 return -1;
             }
@@ -528,9 +528,9 @@ namespace NPOI.HSSF.Model
                 usSheetName = (String)ebr.SheetNames.GetValue(shIx);
             }
             return new String[] {
-				ebr.URL,
-				usSheetName,
-		    };
+                ebr.URL,
+                usSheetName,
+            };
         }
         public int CheckExternSheet(int sheetIndex)
         {
@@ -592,14 +592,14 @@ namespace NPOI.HSSF.Model
         }
 
         /**
-	     * Changes an external referenced file to another file.
-	     * A formular in Excel which refers a cell in another file is saved in two parts: 
-	     * The referenced file is stored in an reference table. the row/cell information is saved separate.
-	     * This method invokation will only change the reference in the lookup-table itself.
-	     * @param oldUrl The old URL to search for and which is to be replaced
-	     * @param newUrl The URL replacement
-	     * @return true if the oldUrl was found and replaced with newUrl. Otherwise false
-	     */
+         * Changes an external referenced file to another file.
+         * A formular in Excel which refers a cell in another file is saved in two parts: 
+         * The referenced file is stored in an reference table. the row/cell information is saved separate.
+         * This method invokation will only change the reference in the lookup-table itself.
+         * @param oldUrl The old URL to search for and which is to be replaced
+         * @param newUrl The URL replacement
+         * @return true if the oldUrl was found and replaced with newUrl. Otherwise false
+         */
         public bool ChangeExternalReference(String oldUrl, String newUrl)
         {
             foreach (ExternalBookBlock ex in _externalBookBlocks)

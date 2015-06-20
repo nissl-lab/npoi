@@ -70,33 +70,36 @@ namespace TestCases.HSSF.UserModel
          *
          */
         [Test]
-        public void TestWriteSheetSimple()  {
-        string            filepath = TempFile.GetTempFilePath("TestWriteSheetSimple",
-                                                    ".xls");
-        FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
-        HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
-        IRow          r    = null;
-        ICell         c    = null;
+        public void TestWriteSheetSimple()
+        {
+            string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple",
+                                                        ".xls");
+            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            ICell c = null;
 
-        for (int rownum = 0; rownum < 100; rownum++) {
-            r = s.CreateRow(rownum);
+            for (int rownum = 0; rownum < 100; rownum++)
+            {
+                r = s.CreateRow(rownum);
 
-            for (int cellnum = 0; cellnum < 50; cellnum += 2) {
-                c = r.CreateCell(cellnum);
-                c.SetCellValue(rownum * 10000 + cellnum
-                               + ((( double ) rownum / 1000)
-                                  + (( double ) cellnum / 10000)));
-                c = r.CreateCell(cellnum + 1);
-                c.SetCellValue(new HSSFRichTextString("TEST"));
+                for (int cellnum = 0; cellnum < 50; cellnum += 2)
+                {
+                    c = r.CreateCell(cellnum);
+                    c.SetCellValue(rownum * 10000 + cellnum
+                                   + (((double)rownum / 1000)
+                                      + ((double)cellnum / 10000)));
+                    c = r.CreateCell(cellnum + 1);
+                    c.SetCellValue(new HSSFRichTextString("TEST"));
+                }
             }
+            wb.Write(out1);
+            out1.Close();
+            sanityChecker.CheckHSSFWorkbook(wb);
+            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
         }
-        wb.Write(out1);
-        out1.Close();
-        sanityChecker.CheckHSSFWorkbook(wb);
-        Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-        Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
-    }
 
         /**
          * TEST NAME:  Test Write/Modify Sheet Simple <P>
@@ -211,17 +214,17 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
             short df = format.GetFormat("0.0");
-            cs.DataFormat=(df);
+            cs.DataFormat = (df);
 
             r = s.CreateRow(0);
             c = r.CreateCell(0);
-            c.CellStyle=(cs);
+            c.CellStyle = (cs);
             c.SetCellValue(1.25);
 
             wb.Write(out1);
             out1.Close();
 
-            FileStream stream = new FileStream(filepath,FileMode.OpenOrCreate);
+            FileStream stream = new FileStream(filepath, FileMode.OpenOrCreate);
             POIFSFileSystem fs = new POIFSFileSystem(stream);
             HSSFWorkbook workbook = new HSSFWorkbook(fs);
             NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
@@ -475,8 +478,13 @@ namespace TestCases.HSSF.UserModel
             BackupRecord record = workbook.BackupRecord;
 
             Assert.AreEqual(0, record.Backup);
-            wb.BackupFlag=(true);
+            Assert.IsFalse(wb.BackupFlag);
+            wb.BackupFlag = (true);
             Assert.AreEqual(1, record.Backup);
+            Assert.IsTrue(wb.BackupFlag);
+            wb.BackupFlag = (false);
+            Assert.AreEqual(0, record.Backup);
+            Assert.IsFalse(wb.BackupFlag);
         }
 
         private class RecordCounter : RecordVisitor
@@ -536,7 +544,7 @@ namespace TestCases.HSSF.UserModel
                 cell.SetCellValue(i);
             }
             sanityChecker.CheckHSSFWorkbook(workbook);
-            Assert.AreEqual( 32770, sheet.LastRowNum,"LAST ROW == 32770");
+            Assert.AreEqual(32770, sheet.LastRowNum, "LAST ROW == 32770");
             cell = sheet.GetRow(32770).GetCell(0);
             double lastVal = cell.NumericCellValue;
 
@@ -578,7 +586,7 @@ namespace TestCases.HSSF.UserModel
         public void TestNPOIBug6341()
         {
             {
-                HSSFWorkbook workbook = OpenSample("Simple.xls");           
+                HSSFWorkbook workbook = OpenSample("Simple.xls");
                 int i = workbook.ActiveSheetIndex;
             }
             {
@@ -586,7 +594,61 @@ namespace TestCases.HSSF.UserModel
                 int i = workbook.ActiveSheetIndex;
             }
             HSSFWorkbook workbook2 = OpenSample("blankworkbook.xls");
-            NPOI.SS.UserModel.ISheet sheet=workbook2.GetSheetAt(1);
+            NPOI.SS.UserModel.ISheet sheet = workbook2.GetSheetAt(1);
+        }
+        [Test]
+        public void TestRepeatingColsRowsMinusOne()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet("Test Print Titles");
+
+            IRow row = sheet.CreateRow(0);
+
+            ICell cell = row.CreateCell(1);
+            cell.SetCellValue(new HSSFRichTextString("hi"));
+
+
+            workbook.SetRepeatingRowsAndColumns(0, -1, 1, -1, 0);
+
+            FileInfo file = TempFile.CreateTempFile("testPrintTitlesA", ".xls");
+
+            FileStream fileOut = new FileStream(file.FullName, FileMode.Create, FileAccess.ReadWrite);
+            workbook.Write(fileOut);
+            fileOut.Close();
+            Assert.IsTrue(file.Exists, "file exists");
+        }
+
+        [Test]
+        public void testAddMergedRegionWithRegion()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet s = wb.CreateSheet();
+
+            for (int rownum = 0; rownum < 100; rownum++)
+            {
+                IRow r = s.CreateRow(rownum);
+
+                for (int cellnum = 0; cellnum < 50; cellnum += 2)
+                {
+                    ICell c = r.CreateCell(cellnum);
+                    c.SetCellValue(rownum * 10000 + cellnum
+                                   + (((double)rownum / 1000)
+                                      + ((double)cellnum / 10000)));
+                    c = r.CreateCell(cellnum + 1);
+                    c.SetCellValue(new HSSFRichTextString("TEST"));
+                }
+            }
+            s.AddMergedRegion(new CellRangeAddress(0, (short)0, 10, (short)10));
+            s.AddMergedRegion(new CellRangeAddress(30, 40, (short)5, (short)15));
+            sanityChecker.CheckHSSFWorkbook(wb);
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+            s = wb.GetSheetAt(0);
+            CellRangeAddress r1 = s.GetMergedRegion(0);
+            CellRangeAddress r2 = s.GetMergedRegion(1);
+
+            ConfirmRegion(new CellRangeAddress(0, 0, 10, 10), r1);
+            ConfirmRegion(new CellRangeAddress(30, 40, 5, 15), r2);
         }
     }
 }
