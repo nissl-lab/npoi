@@ -79,7 +79,7 @@ namespace TestCases.HPSF.Basic
                 Assert.AreEqual(ps.SectionCount, 2);
                 Section s = (Section)ps.Sections[1];
                 Assert.AreEqual(s.GetProperty(1),
-                                    (int)Constants.CP_UTF16);
+                                    CodePageUtil.CP_UTF16);
                 Assert.AreEqual(s.GetProperty(2),
                                     -96070278);
                 Assert.AreEqual(s.GetProperty(3),

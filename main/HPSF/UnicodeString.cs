@@ -30,6 +30,31 @@ namespace NPOI.HPSF
         public UnicodeString(byte[] data, int offset)
         {
             int length = LittleEndian.GetInt(data, offset);
+            int dataOffset = offset + LittleEndian.INT_SIZE;
+
+            if (!validLength(length, data, dataOffset))
+            {
+                // If the length looks wrong, this might be because the offset is sometimes expected 
+                // to be on a 4 byte boundary. Try checking with that if so, rather than blowing up with
+                // and  ArrayIndexOutOfBoundsException below
+                bool valid = false;
+                int past4byte = offset % 4;
+                if (past4byte != 0)
+                {
+                    offset = offset + past4byte;
+                    length = LittleEndian.GetInt(data, offset);
+                    dataOffset = offset + LittleEndian.INT_SIZE;
+
+                    valid = validLength(length, data, dataOffset);
+                }
+
+                if (!valid)
+                {
+                    throw new IllegalPropertySetDataException(
+                            "UnicodeString started at offset #" + offset +
+                            " is not NULL-terminated");
+                }
+            }
 
             if (length == 0)
             {
@@ -37,13 +62,34 @@ namespace NPOI.HPSF
                 return;
             }
 
-            _value = LittleEndian.GetByteArray(data, offset
-                    + LittleEndian.INT_SIZE, length * 2);
+            _value = LittleEndian.GetByteArray(data, dataOffset, length * 2);
+        }
 
-            if (_value[length * 2 - 1] != 0 || _value[length * 2 - 2] != 0)
-                throw new IllegalPropertySetDataException(
-                        "UnicodeString started at offset #" + offset
-                                + " is not NULL-terminated");
+        /**
+         * Checks to see if the specified length seems valid,
+         *  given the amount of data available still to read,
+         *  and the requirement that the string be NULL-terminated
+         */
+        bool validLength(int length, byte[] data, int offset)
+        {
+            if (length == 0)
+            {
+                return true;
+            }
+
+            int endOffset = offset + (length * 2);
+            if (endOffset <= data.Length)
+            {
+                // Data Length is OK, ensure it's null terminated too
+                if (data[endOffset - 1] == 0 && data[endOffset - 2] == 0)
+                {
+                    // Length looks plausible
+                    return true;
+                }
+            }
+
+            // Something's up/invalid with that length for the given data+offset
+            return false;
         }
 
         public int Size

@@ -232,7 +232,7 @@ namespace NPOI.HPSF
                                 b.Append(Encoding.UTF8.GetString(src, o, (int)sLength));
                                 break;
                             }
-                        case (int)Constants.CP_UNICODE:
+                        case CodePageUtil.CP_UNICODE:
                             {
                                 /* The Length is the number of characters, i.e. the number
                                  * of bytes is twice the number of the characters. */
@@ -257,7 +257,7 @@ namespace NPOI.HPSF
                     /* Strip 0x00 characters from the end of the string: */
                     while (b.Length > 0 && b[b.Length - 1] == 0x00)
                         b.Length = b.Length - 1;
-                    if (codepage == (int)Constants.CP_UNICODE)
+                    if (codepage == CodePageUtil.CP_UNICODE)
                     {
                         if (sLength % 2 == 1)
                             sLength++;

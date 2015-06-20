@@ -22,6 +22,9 @@ namespace TestCases.HPSF.Basic
     using NPOI.HSSF.UserModel;
     using System;
     using NPOI.SS.UserModel;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.HPSF;
+    using NPOI;
 
     /**
      * Tests various bugs have been fixed
@@ -29,6 +32,7 @@ namespace TestCases.HPSF.Basic
     [TestFixture]
     public class TestHPSFBugs
     {
+        private static POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
         /**
          * Ensure that we can create a new HSSF Workbook,
          *  then add some properties to it, save +
@@ -92,6 +96,45 @@ namespace TestCases.HPSF.Basic
             Assert.AreEqual("Resaved", wb.SummaryInformation.Comments);
             Assert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
             Assert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
+        }
+
+        /**
+        * Some files seem to want the length and data to be on a 4-byte boundary,
+        * and without that you'll hit an ArrayIndexOutOfBoundsException after
+        * reading junk
+        */
+        [Test]
+        public void Test54233()
+        {
+            DocumentInputStream dis;
+            POIFSFileSystem fs =
+                    new POIFSFileSystem(_samples.OpenResourceAsStream("TestNon4ByteBoundary.doc"));
+
+            dis = fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME);
+            SummaryInformation si = (SummaryInformation)PropertySetFactory.Create(dis);
+
+            dis = fs.CreateDocumentInputStream(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
+            DocumentSummaryInformation dsi = (DocumentSummaryInformation)PropertySetFactory.Create(dis);
+
+            // Test
+            Assert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
+            Assert.AreEqual("", si.Title);
+            Assert.AreEqual("", si.Author);
+            Assert.AreEqual("Cour de Justice", dsi.Company);
+
+
+            // Write out and read back, should still be valid
+            POIDocument doc = new HPSFPropertiesOnlyDocument(fs);
+            MemoryStream baos = new MemoryStream();
+            doc.Write(baos);
+            MemoryStream bais = new MemoryStream(baos.ToArray());
+            doc = new HPSFPropertiesOnlyDocument(new POIFSFileSystem(bais));
+
+            // Check properties are still there
+            Assert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
+            Assert.AreEqual("", si.Title);
+            Assert.AreEqual("", si.Author);
+            Assert.AreEqual("Cour de Justice", dsi.Company);
         }
     }
 

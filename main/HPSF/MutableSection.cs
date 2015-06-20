@@ -387,7 +387,7 @@ namespace NPOI.HPSF
                              * dictionary is present. In order To cope with this problem we
                              * Add the codepage property and Set it To Unicode. */
                             SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                                        (int)Constants.CP_UNICODE);
+                                        CodePageUtil.CP_UNICODE);
                         codepage = Codepage;
                     }
 
@@ -476,7 +476,7 @@ namespace NPOI.HPSF
                 if(value==null)
                     value = (String)dictionary[(int)key];
 
-                if (codepage == (int)Constants.CP_UNICODE)
+                if (codepage == CodePageUtil.CP_UNICODE)
                 {
                     /* Write the dictionary item in Unicode. */
                     int sLength = value.Length + 1;
@@ -621,7 +621,7 @@ namespace NPOI.HPSF
                     if (GetProperty(PropertyIDMap.PID_CODEPAGE) == null)
                     {
                         SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                                    (int)Constants.CP_UNICODE);
+                                    CodePageUtil.CP_UNICODE);
                     }
 
                 }

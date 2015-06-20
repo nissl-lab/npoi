@@ -24,7 +24,7 @@
  * Contributors:
  * 
  * ==============================================================*/
-
+using System;
 namespace NPOI.HPSF
 {
     /// <summary>
@@ -32,13 +32,13 @@ namespace NPOI.HPSF
     /// @author Rainer Klute klute@rainer-klute.de
     /// @since 2004-06-20
     /// </summary>
+    [Obsolete("use CodePageUtil")]
     public enum Constants
     {
         /// <summary>
         /// Allow accessing the Initial value.
         /// </summary>
         None = 0,
-
         /** Codepage 037, a special case */
          CP_037 = 37,
 

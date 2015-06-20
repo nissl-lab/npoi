@@ -51,7 +51,7 @@ namespace TestCases.HSSF.Record
             {
                 workbook.GetSheet(SHEET_NAME).AddValidationData(dataValidation);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 Assert.Fail("Identified bug 53972, PLV record breaks addDataValidation()");
             }

@@ -108,6 +108,7 @@
     <Compile Include="HPSF\Decimal.cs" />
     <Compile Include="HPSF\Filetime.cs" />
     <Compile Include="HPSF\GUID.cs" />
+    <Compile Include="HPSF\HPSFPropertiesOnlyDocument.cs" />
     <Compile Include="HPSF\IndirectPropertyName.cs" />
     <Compile Include="HPSF\TypedPropertyValue.cs" />
     <Compile Include="HPSF\UnicodeString.cs" />
@@ -1136,6 +1137,7 @@
     <Compile Include="Util\ByteField.cs" />
     <Compile Include="Util\Character.cs" />
     <Compile Include="Util\ClassID.cs" />
+    <Compile Include="Util\CodePageUtil.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
     <Compile Include="Util\Collections\ISet.cs" />

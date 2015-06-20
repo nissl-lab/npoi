@@ -45,12 +45,12 @@ namespace NPOI.HPSF.Extractor
 
         }
         public HPSFPropertiesExtractor(POIFSFileSystem fs)
-            : base(new PropertiesOnlyDocument(fs))
+            : base(new HPSFPropertiesOnlyDocument(fs))
         {
 
         }
         public HPSFPropertiesExtractor(NPOIFSFileSystem fs)
-            : base(new PropertiesOnlyDocument(fs))
+            : base(new HPSFPropertiesOnlyDocument(fs))
         {
             
         }
@@ -193,29 +193,6 @@ namespace NPOI.HPSF.Extractor
             get
             {
                 throw new InvalidOperationException("You already have the Metadata Text Extractor, not recursing!");
-            }
-        }
-
-        /// <summary>
-        /// So we can get at the properties of any
-        /// random OLE2 document.
-        /// </summary>
-        private class PropertiesOnlyDocument : POIDocument
-        {
-            public PropertiesOnlyDocument(NPOIFSFileSystem fs)
-                : base(fs.Root)
-            {
-                
-            }
-            public PropertiesOnlyDocument(POIFSFileSystem fs)
-                : base(fs)
-            {
-
-            }
-
-            public override void Write(Stream out1)
-            {
-                throw new InvalidOperationException("Unable to write, only for properties!");
             }
         }
     }
