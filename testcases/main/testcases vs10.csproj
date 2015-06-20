@@ -179,6 +179,7 @@
     <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
     <Compile Include="SS\UserModel\Charts\TestDataSources.cs" />
+    <Compile Include="SS\UserModel\TestFractionFormat.cs" />
     <Compile Include="Util\TestBitField.cs" />
     <Compile Include="Util\TestByteField.cs" />
     <Compile Include="Util\TestHexDump.cs" />

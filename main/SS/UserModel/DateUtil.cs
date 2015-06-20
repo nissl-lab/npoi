@@ -43,6 +43,17 @@ namespace NPOI.SS.UserModel
         public const long DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
         private static readonly char[] TIME_SEPARATOR_PATTERN = new char[] { ':' };
 
+        /**
+         * The following patterns are used in {@link #isADateFormat(int, String)}
+         */
+        private static Regex date_ptrn1 = new Regex("^\\[\\$\\-.*?\\]");
+        private static Regex date_ptrn2 = new Regex("^\\[[a-zA-Z]+\\]");
+        private static Regex date_ptrn3a = new Regex("[yYmMdDhHsS]");
+        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-/,. :\"\\\\]+0*[ampAMP/]*$");
+        //  elapsed time patterns: [h],[m] and [s]
+        private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]");
+
+
         /// <summary>
         /// Given a Calendar, return the number of days since 1899/12/31.
         /// </summary>
@@ -420,18 +431,21 @@ namespace NPOI.SS.UserModel
 
 
             // short-circuit if it indicates elapsed time: [h], [m] or [s]
-            if (Regex.IsMatch(fs, "^\\[([hH]+|[mM]+|[sS]+)\\]"))
+            //if (Regex.IsMatch(fs, "^\\[([hH]+|[mM]+|[sS]+)\\]"))
+            if (date_ptrn4.IsMatch(fs))
             {
                 return true;
             }
 
             // If it starts with [$-...], then could be a date, but
             //  who knows what that starting bit Is all about
-            fs = Regex.Replace(fs, "^\\[\\$\\-.*?\\]", "");
+            //fs = Regex.Replace(fs, "^\\[\\$\\-.*?\\]", "");
+            fs = date_ptrn1.Replace(fs, "");
 
             // If it starts with something like [Black] or [Yellow],
             //  then it could be a date
-            fs = Regex.Replace(fs, "^\\[[a-zA-Z]+\\]", "");
+            //fs = Regex.Replace(fs, "^\\[[a-zA-Z]+\\]", "");
+            fs = date_ptrn2.Replace(fs, "");
             // You're allowed something like dd/mm/yy;[red]dd/mm/yy
             //  which would place dates before 1900/1904 in red
             // For now, only consider the first one
@@ -441,7 +455,8 @@ namespace NPOI.SS.UserModel
             }
             // Ensure it has some date letters in it
             // (Avoids false positives on the rest of pattern 3)
-            if (!Regex.Match(fs, "[yYmMdDhHsS]").Success)
+            if (! date_ptrn3a.Match(fs).Success)
+            //if (!Regex.Match(fs, "[yYmMdDhHsS]").Success)
             {
                 return false;
             }
@@ -453,12 +468,13 @@ namespace NPOI.SS.UserModel
             // Delete any string literals.
             fs = Regex.Replace(fs, @"""[^""\\]*(?:\\.[^""\\]*)*""", "");
 
-            if (Regex.IsMatch(fs, @"^[\[\]yYmMdDhHsS\-/,. :\""\\]+0*[ampAMP/]*$"))
-            {
-                return true;
-            }
+            //if (Regex.IsMatch(fs, @"^[\[\]yYmMdDhHsS\-/,. :\""\\]+0*[ampAMP/]*$"))
+            //{
+            //    return true;
+            //}
 
-            return false;
+            //return false;
+            return date_ptrn3b.IsMatch(fs);
         }
         /// <summary>
         /// Converts a string of format "YYYY/MM/DD" to its (Excel) numeric equivalent

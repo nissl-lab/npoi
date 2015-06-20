@@ -245,13 +245,27 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/##########"));
 
             // Not a valid fraction formats (too many #/# or ?/?) - hence the strange expected results
-            Assert.AreEqual("321 / ?/?", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
+            /*Assert.AreEqual("321 / ?/?", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
             Assert.AreEqual("321 / /", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
             Assert.AreEqual("321 ?/? ?/?", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
             Assert.AreEqual("321 ?/? / /", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
+            */
+
+            //Bug54686 patch sets default behavior of # #/## if there is a failure to parse
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
 
             // Where both p and n don't include a fraction, so cannot always be formatted
-            Assert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+            //Assert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+
+            //Bug54868 patch has a hit on the first string before the ";"
+            Assert.AreEqual("-123 1/3", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+
+            //Bug53150 formatting a whole number with fractions should just give the number
+            Assert.AreEqual("1", dfUS.FormatRawCellContents(1.0, -1, "# #/#"));
+            Assert.AreEqual("11", dfUS.FormatRawCellContents(11.0, -1, "# #/#"));
         }
 
         /**
