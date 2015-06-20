@@ -53,9 +53,11 @@ namespace TestCases.SS.UserModel
                 wb.GetSheetAt(0);
                 Assert.Fail("should have thrown exceptiuon due to invalid sheet index");
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
                 // expected during successful Test
+                // no negative index in the range message
+                Assert.IsFalse(ex.Message.Contains("-1"));
             }
 
             ISheet sheet0 = wb.CreateSheet();

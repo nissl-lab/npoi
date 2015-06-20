@@ -338,6 +338,7 @@ namespace NPOI.HSSF.Model
                 //case UnknownRecord.SHEETEXT_0862:
                 case SheetExtRecord.sid:
                 case UnknownRecord.SHEETPROTECTION_0867:
+                case UnknownRecord.PLV_MAC:
                 //case UnknownRecord.RANGEPROTECTION_0868:
                 case FeatRecord.sid: 
                 case EOFRecord.sid:
