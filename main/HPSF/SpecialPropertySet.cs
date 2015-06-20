@@ -34,6 +34,7 @@ namespace NPOI.HPSF
     using NPOI.HPSF.Wellknown;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using System.Text;
 
     /// <summary>
     /// Abstract superclass for the convenience classes {@link
@@ -351,7 +352,47 @@ namespace NPOI.HPSF
             return delegate1.GetPropertyIntValue(id);
         }
 
+        /**
+         * Fetches the property with the given ID, then does its
+         *  best to return it as a String
+         * @return The property as a String, or null if unavailable
+         */
+        protected String GetPropertyStringValue(int propertyId)
+        {
+            Object propertyValue = GetProperty(propertyId);
+            return GetPropertyStringValue(propertyValue);
+        }
+        protected static String GetPropertyStringValue(Object propertyValue) 
+        {
+            // Normal cases
+            if (propertyValue == null) return null;
+            if (propertyValue is String) return (String)propertyValue;
 
+            // Do our best with some edge cases
+            if (propertyValue is byte[])
+            {
+                byte[] b = (byte[])propertyValue;
+                if (b.Length == 0)
+                {
+                    return "";
+                }
+                if (b.Length == 1)
+                {
+                    return b[0].ToString();
+                }
+                if (b.Length == 2)
+                {
+                    return LittleEndian.GetUShort(b).ToString();
+                }
+                if (b.Length == 4)
+                {
+                    return LittleEndian.GetUInt(b).ToString();
+                }
+                // Maybe it's a string? who knows!
+                return Encoding.UTF8.GetString(b);
+            }
+            return propertyValue.ToString();
+        }
 
         /// <summary>
         /// Serves as a hash function for a particular type.

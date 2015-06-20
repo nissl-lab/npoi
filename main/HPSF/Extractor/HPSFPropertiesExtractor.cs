@@ -77,7 +77,7 @@ namespace NPOI.HPSF.Extractor
                     while (keys.MoveNext())
                     {
                         String key = keys.Current.ToString();
-                        String val = GetPropertyValueText(cps[key]);
+                        String val = HelperPropertySet.GetPropertyValueText(cps[key]);
                         text.Append(key + " = " + val + "\n");
                     }
                 }
@@ -126,48 +126,13 @@ namespace NPOI.HPSF.Extractor
                     type = typeObj.ToString();
                 }
 
-                String val = GetPropertyValueText(props[i].Value);
+                String val = HelperPropertySet.GetPropertyValueText(props[i].Value);
                 text.Append(type + " = " + val + "\n");
             }
 
             return text.ToString();
         }
-        /// <summary>
-        /// Gets the property value text.
-        /// </summary>
-        /// <param name="val">The val.</param>
-        /// <returns></returns>
-        private static String GetPropertyValueText(Object val)
-        {
-            if (val == null)
-            {
-                return "(not set)";
-            }
-            if (val is byte[])
-            {
-                byte[] b = (byte[])val;
-                if (b.Length == 0)
-                {
-                    return "";
-                }
-                if (b.Length == 1)
-                {
-                    return b[0].ToString(CultureInfo.InvariantCulture);
-                }
-                if (b.Length == 2)
-                {
-                    return LittleEndian.GetUShort(b).ToString(CultureInfo.InvariantCulture);
-                }
-                if (b.Length == 4)
-                {
-                    return LittleEndian.GetUInt(b).ToString(CultureInfo.InvariantCulture);
-                }
-                // Maybe it's a string? who knows!
-                return b.ToString();
-            }
-
-            return val.ToString();
-        }
+        
 
         /// <summary>
         /// Return the text of all the properties defined in
@@ -193,6 +158,22 @@ namespace NPOI.HPSF.Extractor
             get
             {
                 throw new InvalidOperationException("You already have the Metadata Text Extractor, not recursing!");
+            }
+        }
+
+        public abstract class HelperPropertySet : SpecialPropertySet
+        {
+            public HelperPropertySet()
+                : base(null)
+            {
+            }
+            public static String GetPropertyValueText(Object val)
+            {
+                if (val == null)
+                {
+                    return "(not set)";
+                }
+                return SpecialPropertySet.GetPropertyStringValue(val);
             }
         }
     }

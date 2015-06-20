@@ -81,7 +81,7 @@ namespace NPOI.HPSF
         {
             get
             {
-                return (String)GetProperty(PropertyIDMap.PID_CATEGORY);
+                return GetPropertyStringValue(PropertyIDMap.PID_CATEGORY);
             }
             set
             {
@@ -107,7 +107,7 @@ namespace NPOI.HPSF
         /// <value>The presentation format value</value>
         public String PresentationFormat
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_PRESFORMAT); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_PRESFORMAT); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -402,7 +402,7 @@ namespace NPOI.HPSF
         /// <value>The manager value</value>
         public String Manager
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_MANAGER); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_MANAGER); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -427,7 +427,7 @@ namespace NPOI.HPSF
         /// <value>The company value</value>
         public String Company
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_COMPANY); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_COMPANY); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
