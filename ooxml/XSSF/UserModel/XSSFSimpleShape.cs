@@ -20,6 +20,7 @@ using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.Util;
 using System.Xml;
+using System.Collections.Generic;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -29,7 +30,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFSimpleShape : XSSFShape
+    public class XSSFSimpleShape : XSSFShape/*, IEnumerable<XSSFTextParagraph>*/
     { // TODO - instantiable superclass
         /**
          * A default instance of CT_Shape used for creating new shapes.

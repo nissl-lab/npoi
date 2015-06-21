@@ -96,6 +96,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tField = value;
             }
         }
+
+        public bool IsSetRPr()
+        {
+            return this.rPrField != null;
+        }
     }
 
 }
