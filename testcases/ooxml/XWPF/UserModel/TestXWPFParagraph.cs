@@ -23,7 +23,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using NPOI.XWPF.Util;
+    using NPOI.Util;
 
     /**
      * Tests for XWPF Paragraphs

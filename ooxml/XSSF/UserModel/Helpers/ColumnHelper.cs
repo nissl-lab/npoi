@@ -97,112 +97,292 @@ namespace NPOI.XSSF.UserModel.Helpers
          */
         public CT_Col GetColumn1Based(long index1, bool splitColumns)
         {
-            CT_Cols colsArray = worksheet.GetColsArray(0);
-            for (int i = 0; i < colsArray.sizeOfColArray(); i++)
+            CT_Cols cols = worksheet.GetColsArray(0);
+            CT_Col[] colArray = cols.GetColArray().ToArray();
+            foreach (CT_Col col in colArray)
             {
-                CT_Col colArray = colsArray.GetColArray(i);
-                if (colArray.min <= index1 && colArray.max >= index1)
+                long colMin = col.min;
+                long colMax = col.max;
+                if (colMin <= index1 && colMax >= index1)
                 {
                     if (splitColumns)
                     {
-                        if (colArray.min < index1)
+                        if (colMin < index1)
                         {
-                            insertCol(colsArray, colArray.min, (index1 - 1), new CT_Col[] { colArray });
+                            insertCol(cols, colMin, (index1 - 1), new CT_Col[] { col });
                         }
-                        if (colArray.max > index1)
+                        if (colMax > index1)
                         {
-                            insertCol(colsArray, (index1 + 1), colArray.max, new CT_Col[] { colArray });
+                            insertCol(cols, (index1 + 1), colMax, new CT_Col[] { col });
                         }
-                        colArray.min = (uint)(index1);
-                        colArray.max = (uint)(index1);
+                        col.min = (uint)(index1);
+                        col.max = (uint)(index1);
                     }
-                    return colArray;
+                    return col;
                 }
             }
             return null;
         }
-
         public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col col)
         {
-            bool colOverlaps = false;
-            int sizeOfColArray = cols.sizeOfColArray();
-            for (int i = 0; i < sizeOfColArray; i++)
+            CT_Cols newCols = new CT_Cols();
+            foreach (CT_Col c in cols.GetColArray())
             {
-                CT_Col ithCol = cols.GetColArray(i);
-                long[] range1 = { ithCol.min, ithCol.max };
-                long[] range2 = { col.min, col.max };
-                long[] overlappingRange = NumericRanges.GetOverlappingRange(range1,
-                        range2);
-                int overlappingType = NumericRanges.GetOverlappingType(range1,
-                        range2);
-                // different behavior required for each of the 4 different
-                // overlapping types
-                if (overlappingType == NumericRanges.OVERLAPS_1_MINOR)
-                {
-                    ithCol.max = (uint)(overlappingRange[0] - 1);
-                    CT_Col rangeCol = insertCol(cols, overlappingRange[0],
-                            overlappingRange[1], new CT_Col[] { ithCol, col });
-                    i++;
-                    CT_Col newCol = insertCol(cols, (overlappingRange[1] + 1), col
-                            .max, new CT_Col[] { col });
-                    i++;
-                }
-                else if (overlappingType == NumericRanges.OVERLAPS_2_MINOR)
-                {
-                    ithCol.min = (uint)(overlappingRange[1] + 1);
-                    CT_Col rangeCol = insertCol(cols, overlappingRange[0],
-                            overlappingRange[1], new CT_Col[] { ithCol, col });
-                    i++;
-                    CT_Col newCol = insertCol(cols, col.min,
-                            (overlappingRange[0] - 1), new CT_Col[] { col });
-                    i++;
-                }
-                else if (overlappingType == NumericRanges.OVERLAPS_2_WRAPS)
-                {
-                    SetColumnAttributes(col, ithCol);
-                    if (col.min != ithCol.min)
-                    {
-                        CT_Col newColBefore = insertCol(cols, col.min, (ithCol
-                                .min - 1), new CT_Col[] { col });
-                        i++;
-                    }
-                    if (col.max != ithCol.max)
-                    {
-                        CT_Col newColAfter = insertCol(cols, (ithCol.max + 1),
-                                col.max, new CT_Col[] { col });
-                        i++;
-                    }
-                }
-                else if (overlappingType == NumericRanges.OVERLAPS_1_WRAPS)
-                {
-                    if (col.min != ithCol.min)
-                    {
-                        CT_Col newColBefore = insertCol(cols, ithCol.min, (col
-                                .min - 1), new CT_Col[] { ithCol });
-                        i++;
-                    }
-                    if (col.max != ithCol.max)
-                    {
-                        CT_Col newColAfter = insertCol(cols, (col.max + 1),
-                                ithCol.max, new CT_Col[] { ithCol });
-                        i++;
-                    }
-                    ithCol.min = (uint)(overlappingRange[0]);
-                    ithCol.max = (uint)(overlappingRange[1]);
-                    SetColumnAttributes(col, ithCol);
-                }
-                if (overlappingType != NumericRanges.NO_OVERLAPS)
-                {
-                    colOverlaps = true;
-                }
+                CloneCol(newCols, c);
             }
-            if (!colOverlaps)
+            CloneCol(newCols, col);
+            SortColumns(newCols);
+            CT_Col[] colArray = newCols.GetColArray().ToArray();
+            CT_Cols returnCols = new CT_Cols();
+            SweepCleanColumns(returnCols, colArray, col);
+            colArray = returnCols.GetColArray().ToArray();
+            cols.SetColArray(colArray);
+            return returnCols;
+        }
+        public class TreeSet<T> : SortedSet<T>
+        {
+            public TreeSet(IComparer<T> comparer)
+                : base(comparer)
+            { }
+            public T First()
             {
-                CT_Col newCol = CloneCol(cols, col);
+                IEnumerator<T> enumerator = this.GetEnumerator();
+                if (enumerator.MoveNext())
+                    return enumerator.Current;
+                return default(T);
+            }
+            public T Higher(T element)
+            {
+                IEnumerator<T> enumerator = this.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (this.Comparer.Compare(enumerator.Current, element) > 0)
+                        return enumerator.Current;
+                }
+                return default(T);
+            }
+        }
+        /**
+         * @see <a href="http://en.wikipedia.org/wiki/Sweep_line_algorithm">Sweep line algorithm</a>
+         */
+        private void SweepCleanColumns(CT_Cols cols, CT_Col[] flattenedColsArray, CT_Col overrideColumn)
+        {
+            List<CT_Col> flattenedCols = new List<CT_Col>(flattenedColsArray);
+            TreeSet<CT_Col> currentElements = new TreeSet<CT_Col>(CTColComparator.BY_MAX);
+            IEnumerator<CT_Col> flIter = flattenedCols.GetEnumerator();
+            CT_Col haveOverrideColumn = null;
+            long lastMaxIndex = 0;
+            long currentMax = 0;
+            IList<CT_Col> toRemove = new List<CT_Col>();
+            int pos = -1;
+            //while (flIter.hasNext())
+            while ((pos + 1) < flattenedCols.Count)
+            {
+                //CTCol col = flIter.next();
+                pos++;
+                CT_Col col = flattenedCols[pos]; 
+                
+                long currentIndex = col.min;
+                long colMax = col.max;
+                long nextIndex = (colMax > currentMax) ? colMax : currentMax;
+                //if (flIter.hasNext()) {
+                if((pos+1)<flattenedCols.Count)
+                {
+                    //nextIndex = flIter.next().getMin();
+                    nextIndex = flattenedCols[pos + 1].min;
+                    //flIter.previous();
+                }
+                IEnumerator<CT_Col> iter = currentElements.GetEnumerator();
+                toRemove.Clear();
+                while (iter.MoveNext())
+                {
+                    CT_Col elem = iter.Current;
+                    if (currentIndex <= elem.max) break; // all passed elements have been purged
+                    //iter.remove();
+                    toRemove.Add(elem);
+                }
+
+                foreach (CT_Col rc in toRemove)
+                {
+                    currentElements.Remove(rc);
+                }
+                
+                if (!(currentElements.Count == 0) && lastMaxIndex < currentIndex)
+                {
+                    // we need to process previous elements first
+                    CT_Col[] copyCols = new CT_Col[currentElements.Count];
+                    currentElements.CopyTo(copyCols);
+                    insertCol(cols, lastMaxIndex, currentIndex - 1, copyCols, true, haveOverrideColumn);
+                }
+                currentElements.Add(col);
+                if (colMax > currentMax) currentMax = colMax;
+                if (col.Equals(overrideColumn)) haveOverrideColumn = overrideColumn;
+                while (currentIndex <= nextIndex && !(currentElements.Count == 0))
+                {
+                    HashSet<CT_Col> currentIndexElements = new HashSet<CT_Col>();
+                    long currentElemIndex;
+
+                    {
+                        // narrow scope of currentElem
+                        CT_Col currentElem = currentElements.First();
+                        currentElemIndex = currentElem.max;
+                        currentIndexElements.Add(currentElem);
+
+                        while (true)
+                        {
+                            CT_Col higherElem = currentElements.Higher(currentElem);
+                            if (higherElem == null || higherElem.max != currentElemIndex)
+                                break;
+                            currentElem = higherElem;
+                            currentIndexElements.Add(currentElem);
+                            if (colMax > currentMax) currentMax = colMax;
+                            if (col.Equals(overrideColumn)) haveOverrideColumn = overrideColumn;
+                        }
+                    }
+
+                    //if (currentElemIndex < nextIndex || !flIter.hasNext()) {
+                    if (currentElemIndex < nextIndex || !((pos + 1) < flattenedCols.Count))
+                    {
+                        CT_Col[] copyCols = new CT_Col[currentElements.Count];
+                        currentElements.CopyTo(copyCols);
+                        insertCol(cols, currentIndex, currentElemIndex, copyCols, true, haveOverrideColumn);
+                        //if (flIter.hasNext()) {
+                        if ((pos + 1) < flattenedCols.Count)
+                        {
+                            if (nextIndex > currentElemIndex)
+                            {
+                                //currentElements.removeAll(currentIndexElements);
+                                foreach (CT_Col rc in currentIndexElements)
+                                    currentElements.Remove(rc);
+                                if (currentIndexElements.Contains(overrideColumn)) haveOverrideColumn = null;
+                            }
+                        }
+                        else
+                        {
+                            //currentElements.removeAll(currentIndexElements);
+                            foreach (CT_Col rc in currentIndexElements)
+                                currentElements.Remove(rc);
+                            if (currentIndexElements.Contains(overrideColumn)) haveOverrideColumn = null;
+                        }
+                        lastMaxIndex = currentIndex = currentElemIndex + 1;
+                    }
+                    else
+                    {
+                        lastMaxIndex = currentIndex;
+                        currentIndex = nextIndex + 1;
+                    }
+
+                }
             }
             SortColumns(cols);
-            return cols;
         }
+
+        //public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col col)
+        //{
+        //    bool colOverlaps = false;
+        //    // a Map to remember overlapping columns
+        //    Dictionary<long, bool> overlappingCols = new Dictionary<long, bool>();
+        //    int sizeOfColArray = cols.sizeOfColArray();
+        //    for (int i = 0; i < sizeOfColArray; i++)
+        //    {
+        //        CT_Col ithCol = cols.GetColArray(i);
+        //        long[] range1 = { ithCol.min, ithCol.max };
+        //        long[] range2 = { col.min, col.max };
+        //        long[] overlappingRange = NumericRanges.GetOverlappingRange(range1,
+        //                range2);
+        //        int overlappingType = NumericRanges.GetOverlappingType(range1,
+        //                range2);
+        //        // different behavior required for each of the 4 different
+        //        // overlapping types
+        //        if (overlappingType == NumericRanges.OVERLAPS_1_MINOR)
+        //        {
+        //            // move the max border of the ithCol 
+        //            // and insert a new column within the overlappingRange with merged column attributes
+        //            ithCol.max = (uint)(overlappingRange[0] - 1);
+        //            insertCol(cols, overlappingRange[0],
+        //                    overlappingRange[1], new CT_Col[] { ithCol, col });
+        //            i++;
+        //            //CT_Col newCol = insertCol(cols, (overlappingRange[1] + 1), col
+        //            //        .max, new CT_Col[] { col });
+        //            //i++;
+        //        }
+        //        else if (overlappingType == NumericRanges.OVERLAPS_2_MINOR)
+        //        {
+        //            // move the min border of the ithCol 
+        //            // and insert a new column within the overlappingRange with merged column attributes
+        //            ithCol.min = (uint)(overlappingRange[1] + 1);
+        //            insertCol(cols, overlappingRange[0],
+        //                    overlappingRange[1], new CT_Col[] { ithCol, col });
+        //            i++;
+        //            //CT_Col newCol = insertCol(cols, col.min,
+        //            //        (overlappingRange[0] - 1), new CT_Col[] { col });
+        //            //i++;
+        //        }
+        //        else if (overlappingType == NumericRanges.OVERLAPS_2_WRAPS)
+        //        {
+        //            // merge column attributes, no new column is needed
+        //            SetColumnAttributes(col, ithCol);
+                    
+        //        }
+        //        else if (overlappingType == NumericRanges.OVERLAPS_1_WRAPS)
+        //        {
+        //            // split the ithCol in three columns: before the overlappingRange, overlappingRange, and after the overlappingRange
+        //            // before overlappingRange
+        //            if (col.min != ithCol.min)
+        //            {
+        //                insertCol(cols, ithCol.min, (col
+        //                        .min - 1), new CT_Col[] { ithCol });
+        //                i++;
+        //            }
+        //            // after the overlappingRange
+        //            if (col.max != ithCol.max)
+        //            {
+        //                insertCol(cols, (col.max + 1),
+        //                        ithCol.max, new CT_Col[] { ithCol });
+        //                i++;
+        //            }
+        //            // within the overlappingRange
+        //            ithCol.min = (uint)(overlappingRange[0]);
+        //            ithCol.max = (uint)(overlappingRange[1]);
+        //            SetColumnAttributes(col, ithCol);
+        //        }
+        //        if (overlappingType != NumericRanges.NO_OVERLAPS)
+        //        {
+        //            colOverlaps = true;
+        //            // remember overlapped columns
+        //            for (long j = overlappingRange[0]; j <= overlappingRange[1]; j++)
+        //            {
+        //                overlappingCols.Add(j, true);
+        //            }
+        //        }
+        //    }
+        //    if (!colOverlaps)
+        //    {
+        //        CloneCol(cols, col);
+        //    }
+        //    else
+        //    {
+        //        // insert new columns for ranges without overlaps
+        //        long colMin = -1;
+        //        for (long j = col.min; j <= col.max; j++)
+        //        {
+        //            if (overlappingCols.ContainsKey(j) && !overlappingCols[j])
+        //            {
+        //                if (colMin < 0)
+        //                {
+        //                    colMin = j;
+        //                }
+        //                if ((j + 1) > col.max || overlappingCols[(j + 1)])
+        //                {
+        //                    insertCol(cols, colMin, j, new CT_Col[] { col });
+        //                    colMin = -1;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    SortColumns(cols);
+        //    return cols;
+        //}
 
         /*
          * Insert a new CT_Col at position 0 into cols, Setting min=min, max=max and
@@ -211,7 +391,12 @@ namespace NPOI.XSSF.UserModel.Helpers
         private CT_Col insertCol(CT_Cols cols, long min, long max,
             CT_Col[] colsWithAttributes)
         {
-            if (!columnExists(cols, min, max))
+            return insertCol(cols, min, max, colsWithAttributes, false, null);
+        }
+        private CT_Col insertCol(CT_Cols cols, long min, long max,
+        CT_Col[] colsWithAttributes, bool ignoreExistsCheck, CT_Col overrideColumn)
+        {
+            if (ignoreExistsCheck || !columnExists(cols, min, max))
             {
                 CT_Col newCol = cols.InsertNewCol(0);
                 newCol.min = (uint)(min);
@@ -220,11 +405,11 @@ namespace NPOI.XSSF.UserModel.Helpers
                 {
                     SetColumnAttributes(col, newCol);
                 }
+                if (overrideColumn != null) SetColumnAttributes(overrideColumn, newCol);
                 return newCol;
             }
             return null;
         }
-
         /**
          * Does the column at the given 0 based index exist
          *  in the supplied list of column defInitions?
@@ -263,15 +448,17 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (fromCol.IsSetStyle())
             {
                 toCol.style = (fromCol.style);
-                toCol.styleSpecified = true;
+                toCol.styleSpecified = fromCol.styleSpecified;
             }
             if (fromCol.IsSetWidth())
             {
                 toCol.width = (fromCol.width);
+                toCol.widthSpecified = fromCol.widthSpecified;
             }
             if (fromCol.IsSetCollapsed())
             {
                 toCol.collapsed = (fromCol.collapsed);
+                toCol.collapsedSpecified = fromCol.collapsedSpecified;
             }
             if (fromCol.IsSetPhonetic())
             {

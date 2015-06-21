@@ -25,7 +25,6 @@ namespace NPOI.XWPF.UserModel
     using NPOI.Util;
     using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using NPOI.XWPF.Util;
 
     [TestFixture]
     public class TestXWPFDocument
