@@ -79,7 +79,7 @@ namespace NPOI.HPSF
         /// <value>The title.</value>
         public String Title
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_TITLE); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_TITLE); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -103,7 +103,7 @@ namespace NPOI.HPSF
         /// <value>The subject.</value>
         public String Subject
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_SUBJECT); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_SUBJECT); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -127,7 +127,7 @@ namespace NPOI.HPSF
         /// <value>The author.</value>
         public String Author
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_AUTHOR); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_AUTHOR); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -151,7 +151,7 @@ namespace NPOI.HPSF
         /// <value>The keywords.</value>
         public String Keywords
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_KEYWORDS); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_KEYWORDS); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -176,7 +176,7 @@ namespace NPOI.HPSF
         /// <value>The comments.</value>
         public String Comments
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_COMMENTS); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_COMMENTS); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -199,7 +199,7 @@ namespace NPOI.HPSF
         /// <value>The template.</value>
         public String Template
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_TEMPLATE); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_TEMPLATE); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -222,7 +222,7 @@ namespace NPOI.HPSF
         /// <value>The last author.</value>
         public String LastAuthor
         {
-            get{return (String)GetProperty(PropertyIDMap.PID_LASTAUTHOR);}
+            get{return GetPropertyStringValue(PropertyIDMap.PID_LASTAUTHOR);}
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -246,7 +246,7 @@ namespace NPOI.HPSF
         /// <value>The rev number.</value>
         public String RevNumber
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_REVNUMBER); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_REVNUMBER); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
@@ -496,7 +496,7 @@ namespace NPOI.HPSF
         /// <value>The name of the application.</value>
         public String ApplicationName
         {
-            get { return (String)GetProperty(PropertyIDMap.PID_APPNAME); }
+            get { return GetPropertyStringValue(PropertyIDMap.PID_APPNAME); }
             set
             {
                 MutableSection s = (MutableSection)FirstSection;
