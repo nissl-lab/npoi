@@ -1255,6 +1255,94 @@ namespace NPOI.OpenXmlFormats.Dml
             this.solidFillField = new CT_SolidColorFillProperties();
             return solidFillField;
         }
+
+        public bool IsSetStrike()
+        {
+            return this.strikeFieldSpecified;
+        }
+
+        public bool IsSetBaseline()
+        {
+            return this.baselineFieldSpecified && this.baselineField != 0;
+        }
+
+        public bool IsSetB()
+        {
+            return this.bFieldSpecified;
+        }
+
+        public bool IsSetI()
+        {
+            return this.iFieldSpecified;
+        }
+
+        public bool IsSetU()
+        {
+            return this.uFieldSpecified;
+        }
+
+        public bool IsSetCap()
+        {
+            return this.capFieldSpecified;
+        }
+
+        public bool IsSetSz()
+        {
+            return this.szFieldSpecified;
+        }
+
+        public void UnsetSz()
+        {
+            this.szFieldSpecified = false;
+            this.szField = 0;
+        }
+
+        public bool IsSetSpc()
+        {
+            return this.spcFieldSpecified;
+        }
+
+        public void UnsetSpc()
+        {
+            this.spcFieldSpecified = false;
+            this.spcField = 0;
+        }
+
+        public bool IsSetLatin()
+        {
+            return this.latinField != null;
+        }
+
+        public void UnsetLatin()
+        {
+            this.latinField = null;
+        }
+
+        public bool IsSetCs()
+        {
+            return this.csField != null;
+        }
+
+        public void UnsetCs()
+        {
+            this.csField = null;
+        }
+
+        public bool IsSetSym()
+        {
+            return this.symField != null;
+        }
+
+        public void UnsetSym()
+        {
+            this.symField = null;
+        }
+
+        public CT_TextFont AddNewSym()
+        {
+            this.symField = new CT_TextFont();
+            return this.symField;
+        }
     }
 
 

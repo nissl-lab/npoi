@@ -322,6 +322,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rPrField = value;
             }
         }
+
+        public CT_TextCharacterProperties AddNewRPr()
+        {
+            this.rPr = new CT_TextCharacterProperties();
+            return rPr;
+        }
     }
 
     [Serializable]
@@ -387,18 +393,37 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.r = new List<CT_RegularTextRun>();
             ctObj.br = new List<CT_TextLineBreak>();
             ctObj.fld = new List<CT_TextField>();
+            ctObj.items = new List<object>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "pPr")
+                {
                     ctObj.pPr = CT_TextParagraphProperties.Parse(childNode, namespaceManager);
+                    ctObj.items.Add(ctObj.pPr);
+                }
                 else if (childNode.LocalName == "endParaRPr")
+                {
                     ctObj.endParaRPr = CT_TextCharacterProperties.Parse(childNode, namespaceManager);
+                    ctObj.items.Add(ctObj.endParaRPr);
+                }
                 else if (childNode.LocalName == "r")
-                    ctObj.r.Add(CT_RegularTextRun.Parse(childNode, namespaceManager));
+                {
+                    CT_RegularTextRun r = CT_RegularTextRun.Parse(childNode, namespaceManager);
+                    ctObj.r.Add(r);
+                    ctObj.items.Add(r);
+                }
                 else if (childNode.LocalName == "br")
-                    ctObj.br.Add(CT_TextLineBreak.Parse(childNode, namespaceManager));
+                {
+                    CT_TextLineBreak br = CT_TextLineBreak.Parse(childNode, namespaceManager);
+                    ctObj.br.Add(br);
+                    ctObj.items.Add(br);
+                }
                 else if (childNode.LocalName == "fld")
-                    ctObj.fld.Add(CT_TextField.Parse(childNode, namespaceManager));
+                {
+                    CT_TextField fld = CT_TextField.Parse(childNode, namespaceManager);
+                    ctObj.fld.Add(fld);
+                    ctObj.items.Add(fld);
+                }
             }
             return ctObj;
         }
@@ -411,25 +436,40 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
-            if (this.r != null)
+            //if (this.r != null)
+            //{
+            //    foreach (CT_RegularTextRun x in this.r)
+            //    {
+            //        x.Write(sw, "r");
+            //    }
+            //}
+            //if (this.br != null)
+            //{
+            //    foreach (CT_TextLineBreak x in this.br)
+            //    {
+            //        x.Write(sw, "br");
+            //    }
+            //}
+            //if (this.fld != null)
+            //{
+            //    foreach (CT_TextField x in this.fld)
+            //    {
+            //        x.Write(sw, "fld");
+            //    }
+            //}
+            foreach (object o in items)
             {
-                foreach (CT_RegularTextRun x in this.r)
+                if (o is CT_RegularTextRun)
                 {
-                    x.Write(sw, "r");
+                    (o as CT_RegularTextRun).Write(sw, "r");
                 }
-            }
-            if (this.br != null)
-            {
-                foreach (CT_TextLineBreak x in this.br)
+                else if (o is CT_TextLineBreak)
                 {
-                    x.Write(sw, "br");
+                    (o as CT_TextLineBreak).Write(sw, "br");
                 }
-            }
-            if (this.fld != null)
-            {
-                foreach (CT_TextField x in this.fld)
+                else if (o is CT_TextField)
                 {
-                    x.Write(sw, "fld");
+                    (o as CT_TextField).Write(sw, "fld");
                 }
             }
             if (this.endParaRPr != null)
@@ -445,6 +485,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private List<CT_TextField> fldField;
 
+        private List<object> itemsField;
+        [XmlIgnore]
+        public List<object> items
+        {
+            get { return itemsField; }
+            set { itemsField = value; }
+        }
         private CT_TextCharacterProperties endParaRPrField;
 
         public CT_RegularTextRun AddNewR()
@@ -536,6 +583,19 @@ namespace NPOI.OpenXmlFormats.Dml
         public int SizeOfRArray()
         {
             return rField.Count;
+        }
+
+        public bool IsSetPPr()
+        {
+            return this.pPrField != null;
+        }
+
+        public CT_TextLineBreak AddNewBr()
+        {
+            CT_TextLineBreak br = new CT_TextLineBreak();
+            this.brField.Add(br);
+            this.itemsField.Add(br);
+            return br;
         }
     }
 

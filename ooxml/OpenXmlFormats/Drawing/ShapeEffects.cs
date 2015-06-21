@@ -2135,6 +2135,56 @@ namespace NPOI.OpenXmlFormats.Dml
             this.srgbClrField = new CT_SRgbColor();
             return srgbClrField;
         }
+
+        public bool IsSetHslClr()
+        {
+            return this.hslClrField != null;
+        }
+
+        public bool IsSetPrstClr()
+        {
+            return this.prstClrField != null;
+        }
+
+        public bool IsSetSchemeClr()
+        {
+            return this.schemeClrField != null;
+        }
+
+        public bool IsSetScrgbClr()
+        {
+            return this.scrgbClrField != null;
+        }
+
+        public bool IsSetSysClr()
+        {
+            return this.sysClrField != null;
+        }
+
+        public void UnsetHslClr()
+        {
+            this.hslClrField = null;
+        }
+
+        public void UnsetPrstClr()
+        {
+            this.prstClrField = null;
+        }
+
+        public void UnsetSchemeClr()
+        {
+            this.schemeClrField = null;
+        }
+
+        public void UnsetScrgbClr()
+        {
+            this.scrgbClrField = null;
+        }
+
+        public void UnsetSysClr()
+        {
+            this.sysClrField = null;
+        }
     }
 
     [Serializable]

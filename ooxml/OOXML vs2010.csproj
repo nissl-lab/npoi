@@ -155,6 +155,14 @@
     <Compile Include="XSSF\UserModel\Helpers\XSSFRowShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
+    <Compile Include="XSSF\UserModel\ListAutoNumber.cs" />
+    <Compile Include="XSSF\UserModel\TextAlign.cs" />
+    <Compile Include="XSSF\UserModel\TextAutofit.cs" />
+    <Compile Include="XSSF\UserModel\TextCap.cs" />
+    <Compile Include="XSSF\UserModel\TextDirection.cs" />
+    <Compile Include="XSSF\UserModel\TextFontAlign.cs" />
+    <Compile Include="XSSF\UserModel\TextHorizontalOverflow.cs" />
+    <Compile Include="XSSF\UserModel\TextVerticalOverflow.cs" />
     <Compile Include="XSSF\UserModel\XSSFAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFAutoFilter.cs" />
     <Compile Include="XSSF\UserModel\XSSFBorderFormatting.cs" />
@@ -264,7 +272,7 @@
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
-    <Compile Include="XWPF\Util\EnumConverter.cs" />
+    <Compile Include="Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\main vs10.csproj">
@@ -301,6 +309,9 @@
     <None Include="..\main\npoi.snk">
       <Link>npoi.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="XWPF\Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

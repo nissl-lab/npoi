@@ -5,7 +5,7 @@ using NPOI.XWPF.UserModel;
 using NPOI.OpenXmlFormats.Wordprocessing;
 using System.Reflection;
 
-namespace NPOI.XWPF.Util
+namespace NPOI.Util
 {
     public static class EnumConverter
     {       

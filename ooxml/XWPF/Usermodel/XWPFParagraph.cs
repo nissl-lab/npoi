@@ -20,7 +20,6 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Text;
-    using NPOI.XWPF.Util;
     using NPOI.Util;
     using System.Collections;
     /**
