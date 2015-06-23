@@ -99,5 +99,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
 
+
+        public void SetColArray(CT_Col[] colArray)
+        {
+            this.colField = new List<CT_Col>(colArray);
+        }
     }
 }

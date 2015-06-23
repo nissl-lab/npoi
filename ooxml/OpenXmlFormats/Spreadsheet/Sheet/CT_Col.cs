@@ -112,7 +112,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetWidth()
         {
-            return this.widthField>0;
+            return this.widthField > 0;
         }
         public bool IsSetCollapsed()
         {
@@ -293,5 +293,45 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
 
+
+        public CT_Col Copy()
+        {
+            CT_Col col = new CT_Col();
+            col.bestFitField = this.bestFitField;
+            col.collapsedField = this.collapsedField;
+            col.collapsedSpecifiedField = this.collapsedSpecifiedField;
+            col.customWidthField = this.customWidthField;
+            col.hiddenField = this.hiddenField;
+            col.maxField = this.maxField;
+            col.minField = this.minField;
+            col.outlineLevelField = this.outlineLevelField;
+            col.phoneticField = this.phoneticField;
+            col.styleField = this.styleField;
+            col.styleSpecifiedField = this.styleSpecifiedField;
+            col.widthField = this.widthField;
+            col.widthSpecifiedField = this.widthSpecifiedField;
+            
+            return col;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (!(obj is CT_Col))
+                return false;
+            CT_Col col = obj as CT_Col;
+            return col.min == this.min && col.max == this.max;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("min:{0}, max:{1}, width:{2}", this.min, this.max, this.width);
+        }
     }
 }

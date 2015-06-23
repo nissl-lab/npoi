@@ -88,6 +88,53 @@ namespace NPOI.XSSF
             }
             return result;
         }
+
+        /**
+     * Writes the Workbook either into a file or into a byte array, depending on presence of 
+     * the system property {@value #TEST_OUTPUT_DIR}, and reads it in a new instance of the Workbook back.
+     * @param wb workbook to write
+     * @param testName file name to be used if writing into a file. The old file with the same name will be overridden.
+     * @return new instance read from the stream written by the wb parameter.
+     */
+        public static XSSFWorkbook WriteOutAndReadBack(XSSFWorkbook wb, String testName)
+        {
+            XSSFWorkbook result = null;
+
+
+            try
+            {
+                string filename = Path.Combine(Environment.CurrentDirectory, testName + ".xlsx");
+
+                if (File.Exists(filename))
+                {
+                    File.Delete(filename);
+                }
+                FileStream out1 = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
+                try
+                {
+                    wb.Write(out1);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+                FileStream in1 = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                try
+                {
+                    result = new XSSFWorkbook(in1);
+                }
+                finally
+                {
+                    in1.Close();
+                }
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            return result;
+        }
     }
 
 }

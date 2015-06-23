@@ -1459,9 +1459,26 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
             CT_Col ctCol = new CT_Col();
+
+            // copy attributes, as they might be removed by merging with the new column
+            // TODO: check if this fix is really necessary or if the sweeping algorithm
+            // in addCleanColIntoCols needs to be adapted ...
+            CT_Col fixCol_before = this.columnHelper.GetColumn1Based(toColumn, false);
+            if (fixCol_before != null)
+            {
+                fixCol_before = (CT_Col)fixCol_before.Copy();
+            }
+
             ctCol.min = (uint)fromColumn;
             ctCol.max = (uint)toColumn;
             this.columnHelper.AddCleanColIntoCols(ctCols, ctCol);
+
+            CT_Col fixCol_after = this.columnHelper.GetColumn1Based(toColumn, false);
+            if (fixCol_before != null && fixCol_after != null)
+            {
+                this.columnHelper.SetColumnAttributes(fixCol_before, fixCol_after);
+            }
+
             for (int index = fromColumn; index <= toColumn; index++)
             {
                 CT_Col col = columnHelper.GetColumn1Based(index, false);
@@ -1473,7 +1490,18 @@ namespace NPOI.XSSF.UserModel
             worksheet.SetColsArray(0, ctCols);
             SetSheetFormatPrOutlineLevelCol();
         }
-
+        /**
+         * Do not leave the width attribute undefined (see #52186).
+         */
+        private void SetColWidthAttribute(CT_Cols ctCols) {
+            foreach (CT_Col col in ctCols.GetColArray())
+            {
+        	    if (!col.IsSetWidth()) {
+        		    col.width = (DefaultColumnWidth);
+        		    col.customWidth = (false);
+        	    }
+            }
+        }
         /**
          * Tie a range of cell toGether so that they can be collapsed or expanded
          *
@@ -1508,11 +1536,12 @@ namespace NPOI.XSSF.UserModel
 
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
+        [Obsolete]
         private short GetMaxOutlineLevelCols()
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
             short outlineLevel = 0;
-            foreach (CT_Col col in ctCols.col)
+            foreach (CT_Col col in ctCols.GetColArray())
             {
                 outlineLevel = col.outlineLevel > outlineLevel ? col.outlineLevel : outlineLevel;
             }
@@ -3041,7 +3070,12 @@ namespace NPOI.XSSF.UserModel
                 {
                     worksheet.SetColsArray(null);
                 }
+                else
+                {
+                    SetColWidthAttribute(col);
+                }
             }
+            
 
             // Now re-generate our CT_Hyperlinks, if needed
             if (hyperlinks.Count > 0)

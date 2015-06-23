@@ -133,6 +133,7 @@
     <Compile Include="XSSF\UserModel\TestXSSFCellStyle.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFChart.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFChartSheet.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFColGrouping.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFColor.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFComment.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFConditionalFormatting.cs" />
