@@ -3066,14 +3066,14 @@ namespace NPOI.XSSF.UserModel
             if (worksheet.sizeOfColsArray() == 1)
             {
                 CT_Cols col = worksheet.GetColsArray(0);
-                if (col.sizeOfColArray() == 0)
+                if (col.sizeOfColArray() != 0)
                 {
-                    worksheet.SetColsArray(null);
+                    SetColWidthAttribute(col); 
                 }
-                else
+                /*else
                 {
-                    SetColWidthAttribute(col);
-                }
+                    remove, see Bug 52233: worksheet.SetColsArray(null);
+                }*/
             }
             
 

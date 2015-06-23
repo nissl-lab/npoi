@@ -112,6 +112,8 @@ namespace NPOI.XSSF.UserModel
             sheet1 = workbook.GetSheetAt(0);
             Assert.AreEqual(1.2, sheet1.GetRow(0).GetCell(0).NumericCellValue, 0.0001);
             Assert.AreEqual("hello world", sheet1.GetRow(1).GetCell(0).RichStringCellValue.String);
+
+            pkg.Close();
         }
         [Test]
         public void TestExisting()
@@ -129,7 +131,7 @@ namespace NPOI.XSSF.UserModel
             // Links to the three sheets, shared, styles and themes
             Assert.IsTrue(wbPart.HasRelationships);
             Assert.AreEqual(6, wbPart.Relationships.Size);
-
+            pkg.Close();
         }
         [Test]
         public void TestGetCellStyleAt()
@@ -475,6 +477,30 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
             Assert.AreEqual(IndexedColors.Red.Index,
                     sh.GetCTWorksheet().sheetPr.tabColor.indexed);
+        }
+        [Test]
+        public void TestColumnWidthPOI52233()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue("hello world");
+            Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+
+            MemoryStream stream = new MemoryStream();
+            try
+            {
+                workbook.Write(stream);
+            }
+            finally
+            {
+                stream.Close();
+            }
+
+            Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <- did throw IndexOutOfBoundsException before fixing the bug
         }
     }
 }
