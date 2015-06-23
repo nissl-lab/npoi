@@ -179,9 +179,9 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(2.0, ((NumberEval)ve).NumberValue, 0D);
         }
         /**
-	 * Ensures that we can handle NameXPtgs in the formulas
-	 *  we Parse.
-	 */
+     * Ensures that we can handle NameXPtgs in the formulas
+     *  we Parse.
+     */
         [Test]
         public void TestXRefs()
         {
