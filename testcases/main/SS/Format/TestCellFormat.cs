@@ -899,5 +899,18 @@ namespace TestCases.SS.Format
             Assert.AreEqual("FALSE", cf2.Apply(false).Text);
             Assert.AreEqual("TRUE", cf3.Apply(true).Text);
         }
+        [Test]
+        public void TestSimpleFractionFormat()
+        {
+            CellFormat cf1 = CellFormat.GetInstance("# ?/?");
+            // Create a workbook, row and cell to test with
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue(123456.6);
+            //System.out.println(cf1.apply(cell).text);
+            Assert.AreEqual("123456 3/5", cf1.Apply(cell).Text);
+        }
     }
 }
