@@ -359,6 +359,15 @@ namespace NPOI.XWPF.UserModel
             NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData god =  r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic.graphicData;
             //PicDocument pd = new PicDocumentImpl(null);
         }
+        [Test]
+        public void TestTika792()
+        {
+            //This test forces the loading of CTMoveBookmark and
+            //CTMoveBookmarkImpl into ooxml-lite.
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Tika-792.docx");
+            XWPFParagraph paragraph = doc.Paragraphs[(0)];
+            Assert.AreEqual("s", paragraph.Text);
+        }
     }
 
 }

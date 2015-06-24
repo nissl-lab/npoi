@@ -168,15 +168,20 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new ArgumentException("ve must not be null");
             }
+            if (ve is BoolEval)
+            {
+                if (!isViaReference || _isReferenceBoolCounted)
+                {
+                    BoolEval boolEval = (BoolEval)ve;
+                    temp.Add(boolEval.NumberValue);
+                }
+                return;
+            }
             if (ve is NumberEval)
             {
                 NumberEval ne = (NumberEval)ve;
                 temp.Add(ne.NumberValue);
                 return;
-            }
-            if (ve is ErrorEval)
-            {
-                throw new EvaluationException((ErrorEval)ve);
             }
             if (ve is StringEval)
             {
@@ -194,14 +199,9 @@ namespace NPOI.SS.Formula.Functions
                 temp.Add(d);
                 return;
             }
-            if (ve is BoolEval)
+            if (ve is ErrorEval)
             {
-                if (!isViaReference || _isReferenceBoolCounted)
-                {
-                    BoolEval boolEval = (BoolEval)ve;
-                    temp.Add(boolEval.NumberValue);
-                }
-                return;
+                throw new EvaluationException((ErrorEval)ve);
             }
             if (ve == BlankEval.instance)
             {
