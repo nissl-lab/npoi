@@ -215,15 +215,34 @@ namespace NPOI.SS.Formula
             {
                 case NameType.Column:
                     firstRow = 0;
-                    lastRow = ssVersion.LastRowIndex;
-                    firstCol = ParseColRef(refStrPart1);
-                    lastCol = ParseColRef(refStrPart2);
+                    if (part2refType.Equals(NameType.Column))
+                    {
+                        lastRow = ssVersion.LastRowIndex;
+                        firstCol = ParseRowRef(refStrPart1);
+                        lastCol = ParseRowRef(refStrPart2);
+                    }
+                    else
+                    {
+                        lastRow = ssVersion.LastRowIndex;
+                        firstCol = ParseColRef(refStrPart1);
+                        lastCol = ParseColRef(refStrPart2);
+                    }
                     break;
                 case NameType.Row:
+                    // support of cell range in the form of integer:integer
                     firstCol = 0;
-                    lastCol = ssVersion.LastColumnIndex;
-                    firstRow = ParseRowRef(refStrPart1);
-                    lastRow = ParseRowRef(refStrPart2);
+                    if (part2refType.Equals(NameType.Row))
+                    {
+                        firstRow = ParseColRef(refStrPart1);
+                        lastRow = ParseColRef(refStrPart2);
+                        lastCol = ssVersion.LastColumnIndex;
+                    }
+                    else
+                    {
+                        lastCol = ssVersion.LastColumnIndex;
+                        firstRow = ParseRowRef(refStrPart1);
+                        lastRow = ParseRowRef(refStrPart2);
+                    }
                     break;
                 case NameType.Cell:
                     CellReference cr;

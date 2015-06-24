@@ -61,6 +61,7 @@ namespace NPOI.SS.Formula.Functions
             bool foundCurrency = false;
             bool foundUnaryPlus = false;
             bool foundUnaryMinus = false;
+            bool foundPercentage = false;
 
             int len = strText.Length;
             int i;
@@ -130,8 +131,13 @@ namespace NPOI.SS.Formula.Functions
                 switch (ch)
                 {
                     case ' ':
-                        String remainingText = strText.Substring(i);
-                        if (remainingText.Trim().Length > 0)
+                        String remainingTextTrimmed = strText.Substring(i).Trim();
+                        // support for value[space]%
+                        if (remainingTextTrimmed.Equals("%")) {
+                            foundPercentage= true;
+                            break;
+                        }
+                        if (remainingTextTrimmed.Length > 0)
                         {
                             // intervening spaces not allowed once the digits start
                             return Double.NaN;
@@ -175,6 +181,9 @@ namespace NPOI.SS.Formula.Functions
                         sb.Append(strText.Substring(i));
                         i = len;
                         break;
+                    case '%':
+                        foundPercentage = true;
+                        break;
                     default:
                         // all other characters are illegal
                         return Double.NaN;
@@ -197,7 +206,8 @@ namespace NPOI.SS.Formula.Functions
                 // still a problem parsing the number - probably out of range
                 return Double.NaN;
             }
-            return foundUnaryMinus ? -d : d;
+            double result = foundUnaryMinus ? -d : d;
+            return foundPercentage ? result / 100 : result;
         }
     }
 }

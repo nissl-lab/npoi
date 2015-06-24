@@ -19,9 +19,9 @@ namespace NPOI.SS.Formula.Functions
      *
      * @author cedric dot walter @ gmail dot com
      */
-    public class Quotient : Fixed2ArgFunction
+    public class Quotient : Fixed2ArgFunction, FreeRefFunction
     {
-
+        public static FreeRefFunction instance = new Quotient();
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval venumerator, ValueEval vedenominator)
         {
 
@@ -50,7 +50,16 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.DIV_ZERO;
             }
 
-            return new StringEval(((int)(enumerator / denominator)).ToString());
+            return new NumberEval(((int)(enumerator / denominator)));
+        }
+
+        public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+        {
+            if (args.Length != 2)
+            {
+                return ErrorEval.VALUE_INVALID;
+            }
+            return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
         }
     }
 
