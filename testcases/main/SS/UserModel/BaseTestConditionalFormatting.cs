@@ -749,6 +749,17 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(BorderStyle.Hair, r1fp.BorderRight);
 
         }
+        [Test]
+        public void TestBug55380()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            CellRangeAddress[] ranges = new CellRangeAddress[] {
+            CellRangeAddress.ValueOf("C9:D30"), CellRangeAddress.ValueOf("C7:C31")
+        };
+            IConditionalFormattingRule rule = sheet.SheetConditionalFormatting.CreateConditionalFormattingRule("$A$1>0");
+            sheet.SheetConditionalFormatting.AddConditionalFormatting(ranges, rule);
+        }
     }
 
 }

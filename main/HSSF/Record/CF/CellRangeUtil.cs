@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record.CF
     using System;
     using System.Collections;
     using NPOI.SS.Util;
+    using System.Collections.Generic;
 
     /**
      * 
@@ -97,47 +98,53 @@ namespace NPOI.HSSF.Record.CF
             {
                 return cellRanges;
             }
-            ArrayList temp = MergeCellRanges(NPOI.Util.Arrays.AsList(cellRanges));
-            return ToArray(temp);
+            //ArrayList temp = MergeCellRanges(NPOI.Util.Arrays.AsList(cellRanges));
+            List<CellRangeAddress> lst = new List<CellRangeAddress>(cellRanges);
+            List<CellRangeAddress> temp = MergeCellRanges(lst);
+            return temp.ToArray();
         }
-        private static ArrayList MergeCellRanges(ArrayList cellRangeList)
-	{
+        private static List<CellRangeAddress> MergeCellRanges(List<CellRangeAddress> cellRangeList)
+        {
+            // loop until either only one item is left or we did not merge anything any more
+            while (cellRangeList.Count > 1)
+            {
+                bool somethingGotMerged = false;
+                // look at all cell-ranges
+                for (int i = 0; i < cellRangeList.Count; i++)
+                {
+                    CellRangeAddress range1 = cellRangeList[i];
+                    // compare each cell range to all other cell-ranges
+                    for (int j = i + 1; j < cellRangeList.Count; j++)
+                    {
+                        CellRangeAddress range2 = cellRangeList[j];
 
-		while(cellRangeList.Count > 1)
-		{
-			bool somethingGotMerged = false;
-			
-			for( int i=0; i<cellRangeList.Count; i++)
-			{
-				CellRangeAddress range1 = (CellRangeAddress)cellRangeList[i];
-				for( int j=i+1; j<cellRangeList.Count; j++)
-				{
-					CellRangeAddress range2 = (CellRangeAddress)cellRangeList[j];
-					
-					CellRangeAddress[] mergeResult = MergeRanges(range1, range2);
-					if(mergeResult == null) {
-						continue;
-					}
-					somethingGotMerged = true;
-					// overwrite range1 with first result 
-					cellRangeList[i]= mergeResult[0];
-					// remove range2
-					cellRangeList.RemoveAt(j--);
-					// Add any extra results beyond the first
-					for(int k=1; k<mergeResult.Length; k++) {
-						j++;
-						cellRangeList.Insert(j, mergeResult[k]);
-					}
-				}
-			}
-			if(!somethingGotMerged) {
-				break;
-			}
-		}
-		
+                        CellRangeAddress[] mergeResult = MergeRanges(range1, range2);
+                        if (mergeResult == null)
+                        {
+                            continue;
+                        }
+                        somethingGotMerged = true;
+                        // overwrite range1 with first result 
+                        cellRangeList[i] = mergeResult[0];
+                        // remove range2
+                        cellRangeList.RemoveAt(j--);
+                        // Add any extra results beyond the first
+                        for (int k = 1; k < mergeResult.Length; k++)
+                        {
+                            j++;
+                            cellRangeList.Insert(j, mergeResult[k]);
+                        }
+                    }
+                }
+                if (!somethingGotMerged)
+                {
+                    break;
+                }
+            }
 
-		return cellRangeList;
-	}
+
+            return cellRangeList;
+        }
 
         /**
          * @return the new range(s) to replace the supplied ones.  <c>null</c> if no merge is possible
@@ -148,6 +155,7 @@ namespace NPOI.HSSF.Record.CF
             int x = Intersect(range1, range2);
             switch (x)
             {
+                // nothing in common: at most they could be adjacent to each other and thus form a single bigger area  
                 case CellRangeUtil.NO_INTERSECTION:
                     if (HasExactSharedBorder(range1, range2))
                     {
@@ -156,130 +164,133 @@ namespace NPOI.HSSF.Record.CF
                     // else - No intersection and no shared border: do nothing 
                     return null;
                 case CellRangeUtil.OVERLAP:
-                    return ResolveRangeOverlap(range1, range2);
+                    // commented out the cells overlap implementation, it caused endless loops, see Bug 55380
+                    // disabled for now, the algorithm will not detect some border cases this way currently!
+                    //return ResolveRangeOverlap(range1, range2);
+                    return null;
                 case CellRangeUtil.INSIDE:
                     // Remove range2, since it is completely inside of range1
-                    return new CellRangeAddress[] { range1, };
+                    return new CellRangeAddress[] { range1 };
                 case CellRangeUtil.ENCLOSES:
                     // range2 encloses range1, so replace it with the enclosing one
-                    return new CellRangeAddress[] { range2, };
+                    return new CellRangeAddress[] { range2 };
             }
             throw new InvalidOperationException("unexpected intersection result (" + x + ")");
         }
 
-        // TODO - write junit test for this
-        static CellRangeAddress[] ResolveRangeOverlap(CellRangeAddress rangeA, CellRangeAddress rangeB)
-        {
+        //// TODO - write junit test for this
+        //static CellRangeAddress[] ResolveRangeOverlap(CellRangeAddress rangeA, CellRangeAddress rangeB)
+        //{
 
-            if (rangeA.IsFullColumnRange)
-            {
-                if (rangeA.IsFullRowRange)
-                {
-                    // Excel seems to leave these unresolved
-                    return null;
-                }
-                return SliceUp(rangeA, rangeB);
-            }
-            if (rangeA.IsFullRowRange)
-            {
-                if (rangeB.IsFullColumnRange)
-                {
-                    // Excel seems to leave these unresolved
-                    return null;
-                }
-                return SliceUp(rangeA, rangeB);
-            }
-            if (rangeB.IsFullColumnRange)
-            {
-                return SliceUp(rangeB, rangeA);
-            }
-            if (rangeB.IsFullRowRange)
-            {
-                return SliceUp(rangeB, rangeA);
-            }
-            return SliceUp(rangeA, rangeB);
-        }
+        //    if (rangeA.IsFullColumnRange)
+        //    {
+        //        if (rangeA.IsFullRowRange)
+        //        {
+        //            // Excel seems to leave these unresolved
+        //            return null;
+        //        }
+        //        return SliceUp(rangeA, rangeB);
+        //    }
+        //    if (rangeA.IsFullRowRange)
+        //    {
+        //        if (rangeB.IsFullColumnRange)
+        //        {
+        //            // Excel seems to leave these unresolved
+        //            return null;
+        //        }
+        //        return SliceUp(rangeA, rangeB);
+        //    }
+        //    if (rangeB.IsFullColumnRange)
+        //    {
+        //        return SliceUp(rangeB, rangeA);
+        //    }
+        //    if (rangeB.IsFullRowRange)
+        //    {
+        //        return SliceUp(rangeB, rangeA);
+        //    }
+        //    return SliceUp(rangeA, rangeB);
+        //}
 
-        /**
-         * @param crB never a full row or full column range
-         * @return an array including <b>this</b> <c>CellRange</c> and all parts of <c>range</c> 
-         * outside of this range  
-         */
-        private static CellRangeAddress[] SliceUp(CellRangeAddress crA, CellRangeAddress crB)
-        {
+        ///**
+        // * @param crB never a full row or full column range
+        // * @return an array including <b>this</b> <c>CellRange</c> and all parts of <c>range</c> 
+        // * outside of this range  
+        // */
+        //private static CellRangeAddress[] SliceUp(CellRangeAddress crA, CellRangeAddress crB)
+        //{
 
-            ArrayList temp = new ArrayList();
+        //    ArrayList temp = new ArrayList();
 
-            // Chop up range horizontally and vertically
-            temp.Add(crB);
-            if (!crA.IsFullColumnRange)
-            {
-                temp = CutHorizontally(crA.FirstRow, temp);
-                temp = CutHorizontally(crA.LastRow + 1, temp);
-            }
-            if (!crA.IsFullRowRange)
-            {
-                temp = CutVertically(crA.FirstColumn, temp);
-                temp = CutVertically(crA.LastColumn + 1, temp);
-            }
-            CellRangeAddress[] crParts = ToArray(temp);
+        //    // Chop up range horizontally and vertically
+        //    temp.Add(crB);
+        //    if (!crA.IsFullColumnRange)
+        //    {
+        //        temp = CutHorizontally(crA.FirstRow, temp);
+        //        temp = CutHorizontally(crA.LastRow + 1, temp);
+        //    }
+        //    if (!crA.IsFullRowRange)
+        //    {
+        //        temp = CutVertically(crA.FirstColumn, temp);
+        //        temp = CutVertically(crA.LastColumn + 1, temp);
+        //    }
+        //    CellRangeAddress[] crParts = ToArray(temp);
 
-            // form result array
-            temp.Clear();
-            temp.Add(crA);
+        //    // form result array
+        //    temp.Clear();
+        //    temp.Add(crA);
 
-            for (int i = 0; i < crParts.Length; i++)
-            {
-                CellRangeAddress crPart = crParts[i];
-                // only include parts that are not enclosed by this
-                if (Intersect(crA, crPart) != ENCLOSES)
-                {
-                    temp.Add(crPart);
-                }
-            }
-            return ToArray(temp);
-        }
+        //    for (int i = 0; i < crParts.Length; i++)
+        //    {
+        //        CellRangeAddress crPart = crParts[i];
+        //        // only include parts that are not enclosed by this
+        //        if (Intersect(crA, crPart) != ENCLOSES)
+        //        {
+        //            temp.Add(crPart);
+        //        }
+        //    }
+        //    return ToArray(temp);
+        //}
 
-        private static ArrayList CutHorizontally(int cutRow, ArrayList input)
-        {
+        //private static ArrayList CutHorizontally(int cutRow, ArrayList input)
+        //{
 
-            ArrayList result = new ArrayList();
-            CellRangeAddress[] crs = ToArray(input);
-            for (int i = 0; i < crs.Length; i++)
-            {
-                CellRangeAddress cr = crs[i];
-                if (cr.FirstRow < cutRow && cutRow < cr.LastRow)
-                {
-                    result.Add(new CellRangeAddress(cr.FirstRow, cutRow, cr.FirstColumn, cr.LastColumn));
-                    result.Add(new CellRangeAddress(cutRow + 1, cr.LastRow, cr.FirstColumn, cr.LastColumn));
-                }
-                else
-                {
-                    result.Add(cr);
-                }
-            }
-            return result;
-        }
-        private static ArrayList CutVertically(int cutColumn, ArrayList input)
-        {
+        //    ArrayList result = new ArrayList();
+        //    CellRangeAddress[] crs = ToArray(input);
+        //    for (int i = 0; i < crs.Length; i++)
+        //    {
+        //        CellRangeAddress cr = crs[i];
+        //        if (cr.FirstRow < cutRow && cutRow < cr.LastRow)
+        //        {
+        //            result.Add(new CellRangeAddress(cr.FirstRow, cutRow, cr.FirstColumn, cr.LastColumn));
+        //            result.Add(new CellRangeAddress(cutRow + 1, cr.LastRow, cr.FirstColumn, cr.LastColumn));
+        //        }
+        //        else
+        //        {
+        //            result.Add(cr);
+        //        }
+        //    }
+        //    return result;
+        //}
+        //private static ArrayList CutVertically(int cutColumn, ArrayList input)
+        //{
 
-            ArrayList result = new ArrayList();
-            CellRangeAddress[] crs = ToArray(input);
-            for (int i = 0; i < crs.Length; i++)
-            {
-                CellRangeAddress cr = crs[i];
-                if (cr.FirstColumn < cutColumn && cutColumn < cr.LastColumn)
-                {
-                    result.Add(new CellRangeAddress(cr.FirstRow, cr.LastRow, cr.FirstColumn, cutColumn));
-                    result.Add(new CellRangeAddress(cr.FirstRow, cr.LastRow, cutColumn + 1, cr.LastColumn));
-                }
-                else
-                {
-                    result.Add(cr);
-                }
-            }
-            return result;
-        }
+        //    ArrayList result = new ArrayList();
+        //    CellRangeAddress[] crs = ToArray(input);
+        //    for (int i = 0; i < crs.Length; i++)
+        //    {
+        //        CellRangeAddress cr = crs[i];
+        //        if (cr.FirstColumn < cutColumn && cutColumn < cr.LastColumn)
+        //        {
+        //            result.Add(new CellRangeAddress(cr.FirstRow, cr.LastRow, cr.FirstColumn, cutColumn));
+        //            result.Add(new CellRangeAddress(cr.FirstRow, cr.LastRow, cutColumn + 1, cr.LastColumn));
+        //        }
+        //        else
+        //        {
+        //            result.Add(cr);
+        //        }
+        //    }
+        //    return result;
+        //}
 
 
         private static CellRangeAddress[] ToArray(ArrayList temp)
