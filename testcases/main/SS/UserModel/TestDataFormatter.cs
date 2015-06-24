@@ -34,6 +34,7 @@ namespace TestCases.SS.UserModel
     [TestFixture]
     public class TestDataFormatter
     {
+        private static double _15_MINUTES = 0.041666667;
         /**
          * Test that we use the specified locale when deciding
          *   how to format normal numbers
@@ -47,7 +48,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
             Assert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
             
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));            
+            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("fr-FR");
             Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
         }
         /**
@@ -540,6 +542,7 @@ namespace TestCases.SS.UserModel
             c.SetCellErrorValue(FormulaError.REF.Code);
             Assert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
         }
+        [Ignore]
         [Test]
         public void TestCustomFormats()
         {
@@ -588,6 +591,34 @@ namespace TestCases.SS.UserModel
             // Test via DataFormatter
             DataFormatter dfUS = new DataFormatter(culture, true);
             Assert.AreEqual("01.010", dfUS.FormatRawCellContents(0.0000116898, -1, "ss.000"));
+        }
+        [Test]
+        public void TestBug54786()
+        {
+            DataFormatter formatter = new DataFormatter();
+            String format = "[h]\"\"h\"\" m\"\"m\"\"";
+            Assert.IsTrue(DateUtil.IsADateFormat(-1, format));
+            Assert.IsTrue(DateUtil.IsValidExcelDate(_15_MINUTES));
+
+            Assert.AreEqual("1h 0m", formatter.FormatRawCellContents(_15_MINUTES, -1, format, false));
+            Assert.AreEqual("0.041666667", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]'h'", false));
+            Assert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"", false));
+            Assert.AreEqual("1h", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\"", false));
+            Assert.AreEqual("h1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"[h]", false));
+            Assert.AreEqual("h1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"h", false));
+            Assert.AreEqual(" 60", formatter.FormatRawCellContents(_15_MINUTES, -1, " [m]", false));
+            Assert.AreEqual("h60", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"[m]", false));
+            Assert.AreEqual("m1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"m\"\"h", false));
+
+            try
+            {
+                Assert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"\"", false));
+                Assert.Fail("Catches exception because of invalid format, i.e. trailing quoting");
+            }
+            catch (Exception e)
+            {
+                //Assert.IsTrue(e.Message.Contains("Cannot format given Object as a Number"));
+            }
         }
     }
 

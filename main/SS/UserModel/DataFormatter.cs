@@ -346,30 +346,6 @@ namespace NPOI.SS.UserModel
             }
 
             // Excel supports fractions in format strings, which Java doesn't
-            //if (formatStr.IndexOf("#/#") >= 0 || formatStr.IndexOf("?/?") >= 0)
-            //{
-            //    // Strip custom text in quotes and escaped characters for now as it can cause performance problems in fractions.
-            //    String strippedFormatStr = formatStr.Replace("\\\\ ", " ").Replace("\\\\.", "").Replace("\"[^\"]*\"", " ");
-
-            //    strippedFormatStr = RegexDoubleBackslashAny.Replace(strippedFormatStr, " ");
-            //    strippedFormatStr = RegexAnyInDoubleQuote.Replace(strippedFormatStr, " ");
-            //    strippedFormatStr = RegexContinueWs.Replace(strippedFormatStr, " ");
-            //    bool ok = true;
-            //    foreach (String part in strippedFormatStr.Split(";".ToCharArray()))
-            //    {
-            //        int indexOfFraction = IndexOfFraction(part);
-            //        if (indexOfFraction == -1 || indexOfFraction != LastIndexOfFraction(part))
-            //        {
-            //            ok = false;
-            //            break;
-            //        }
-            //    }
-            //    if (ok)
-            //    {
-            //        return new FractionFormat(strippedFormatStr);
-            //    }
-            //}
-
             if (formatStr.IndexOf("#/") >= 0 || formatStr.IndexOf("?/") >= 0)
             {
                 String[] chunks = formatStr.Split(";".ToCharArray());
@@ -429,6 +405,9 @@ namespace NPOI.SS.UserModel
             formatStr = formatStr.Replace("\\ ", " ");
             formatStr = formatStr.Replace("\\/", "/");
             formatStr = formatStr.Replace(";@", "");
+            formatStr = formatStr.Replace("\"/\"", "/"); // "/" is escaped for no reason in: mm"/"dd"/"yyyy
+            formatStr = formatStr.Replace("\"\"", "'");	// replace Excel quoting with Java style quoting
+
             bool hasAmPm = Regex.IsMatch(formatStr, amPmPattern);
             if (hasAmPm)
             {
@@ -457,11 +436,59 @@ namespace NPOI.SS.UserModel
             StringBuilder sb = new StringBuilder();
             char[] chars = formatStr.ToCharArray();
             bool mIsMonth = true;
+            bool isElapsed = false;
             ArrayList ms = new ArrayList();
             for (int j = 0; j < chars.Length; j++)
             {
                 char c = chars[j];
-                if (c == 'h' || c == 'H')
+                if (c == '\'')
+                {
+                    sb.Append(c);
+                    j++;
+
+                    // skip until the next quote
+                    while (j < chars.Length)
+                    {
+                        c = chars[j];
+                        sb.Append(c);
+                        if (c == '\'')
+                        {
+                            break;
+                        }
+                        j++;
+                    }
+                }
+                else if (c == '[' && !isElapsed)
+                {
+                    isElapsed = true;
+                    mIsMonth = false;
+                    sb.Append(c);
+                }
+                else if (c == ']' && isElapsed)
+                {
+                    isElapsed = false;
+                    sb.Append(c);
+                }
+                else if (isElapsed)
+                {
+                    if (c == 'h' || c == 'H')
+                    {
+                        sb.Append('H');
+                    }
+                    else if (c == 'm' || c == 'M')
+                    {
+                        sb.Append('m');
+                    }
+                    else if (c == 's' || c == 'S')
+                    {
+                        sb.Append('s');
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                    }
+                }
+                else if (c == 'h' || c == 'H')
                 {
                     mIsMonth = false;
                     if (hasAmPm)
