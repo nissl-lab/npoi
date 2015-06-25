@@ -3062,18 +3062,21 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Write(Stream stream)
         {
-
+            bool setToNull = false;
             if (worksheet.sizeOfColsArray() == 1)
             {
                 CT_Cols col = worksheet.GetColsArray(0);
-                if (col.sizeOfColArray() != 0)
+                if (col.sizeOfColArray() == 0)
                 {
-                    SetColWidthAttribute(col); 
+                    setToNull = true;
+                    // this is necessary so that we do not write an empty <cols/> item into the sheet-xml in the xlsx-file
+                    // Excel complains about a corrupted file if this shows up there!
+                    worksheet.SetColsArray(null);
                 }
-                /*else
+                else
                 {
-                    remove, see Bug 52233: worksheet.SetColsArray(null);
-                }*/
+                    SetColWidthAttribute(col);
+                }
             }
             
 
@@ -3110,6 +3113,12 @@ namespace NPOI.XSSF.UserModel
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
             new WorksheetDocument(worksheet).Save(stream);
+
+            // Bug 52233: Ensure that we have a col-array even if write() removed it
+            if (setToNull)
+            {
+                worksheet.AddNewCols();
+            }
         }
 
         /**

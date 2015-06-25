@@ -486,8 +486,14 @@ namespace NPOI.XSSF.UserModel
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
             cell.SetCellValue("hello world");
-            Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+
+            sheet = workbook.CreateSheet();
+            sheet.SetColumnWidth(4, 5000);
+            sheet.SetColumnWidth(5, 5000);
+
+            sheet.GroupColumn((short)4, (short)5);
+
+            accessWorkbook(workbook);
 
             MemoryStream stream = new MemoryStream();
             try
@@ -498,9 +504,17 @@ namespace NPOI.XSSF.UserModel
             {
                 stream.Close();
             }
+            accessWorkbook(workbook);
+            
+        }
+
+        private void accessWorkbook(XSSFWorkbook workbook)
+        {
+            workbook.GetSheetAt(1).SetColumnGroupCollapsed(4, true);
+            workbook.GetSheetAt(1).SetColumnGroupCollapsed(4, false);
 
             Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <- did throw IndexOutOfBoundsException before fixing the bug
+            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
         }
     }
 }
