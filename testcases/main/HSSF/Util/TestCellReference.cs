@@ -30,6 +30,28 @@ namespace TestCases.HSSF.Util
     public class TestCellReference
     {
         [Test]
+        public void TestColNumConversion()
+        {
+            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("A"));
+            Assert.AreEqual(1, CellReference.ConvertColStringToIndex("B"));
+            Assert.AreEqual(25, CellReference.ConvertColStringToIndex("Z"));
+            Assert.AreEqual(26, CellReference.ConvertColStringToIndex("AA"));
+            Assert.AreEqual(27, CellReference.ConvertColStringToIndex("AB"));
+            Assert.AreEqual(51, CellReference.ConvertColStringToIndex("AZ"));
+            Assert.AreEqual(701, CellReference.ConvertColStringToIndex("ZZ"));
+            Assert.AreEqual(702, CellReference.ConvertColStringToIndex("AAA"));
+            Assert.AreEqual(18277, CellReference.ConvertColStringToIndex("ZZZ"));
+
+            Assert.AreEqual("A", CellReference.ConvertNumToColString(0));
+            Assert.AreEqual("B", CellReference.ConvertNumToColString(1));
+            Assert.AreEqual("Z", CellReference.ConvertNumToColString(25));
+            Assert.AreEqual("AA", CellReference.ConvertNumToColString(26));
+            Assert.AreEqual("ZZ", CellReference.ConvertNumToColString(701));
+            Assert.AreEqual("AAA", CellReference.ConvertNumToColString(702));
+            Assert.AreEqual("ZZZ", CellReference.ConvertNumToColString(18277));
+        }
+
+        [Test]
         public void TestAbsRef1()
         {
             CellReference cf = new CellReference("$B$5");
