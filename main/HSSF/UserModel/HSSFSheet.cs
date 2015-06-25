@@ -1210,7 +1210,20 @@ namespace NPOI.HSSF.UserModel
                 _sheet.LeftCol = value;
             }
         }
+        /**
+         * Sets desktop window pane display area, when the
+         * file is first opened in a viewer.
+         *
+         * @param toprow  the top row to show in desktop window pane
+         * @param leftcol the left column to show in desktop window pane
+         */
+        public void ShowInPane(int toprow, int leftcol)
+        {
+            int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
+            if (toprow > maxrow) throw new ArgumentException("Maximum row number is " + maxrow);
 
+            ShowInPane((short)toprow, (short)leftcol);
+        }
         /// <summary>
         /// Sets desktop window pane display area, when the
         /// file is first opened in a viewer.
