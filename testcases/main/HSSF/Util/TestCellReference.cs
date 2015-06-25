@@ -49,6 +49,19 @@ namespace TestCases.HSSF.Util
             Assert.AreEqual("ZZ", CellReference.ConvertNumToColString(701));
             Assert.AreEqual("AAA", CellReference.ConvertNumToColString(702));
             Assert.AreEqual("ZZZ", CellReference.ConvertNumToColString(18277));
+
+            // Absolute references are allowed for the string ones
+            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("$A"));
+            Assert.AreEqual(25, CellReference.ConvertColStringToIndex("$Z"));
+            Assert.AreEqual(26, CellReference.ConvertColStringToIndex("$AA"));
+
+            // $ sign isn't allowed elsewhere though
+            try
+            {
+                CellReference.ConvertColStringToIndex("A$B$");
+                Assert.Fail("Column reference is invalid and shouldn't be accepted");
+            }
+            catch (ArgumentException e) { }
         }
 
         [Test]

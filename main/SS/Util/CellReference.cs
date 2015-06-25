@@ -216,26 +216,22 @@ namespace NPOI.SS.Util
          */
         public static int ConvertColStringToIndex(String ref1)
         {
-
-            int pos = 0;
             int retval = 0;
-            for (int k = ref1.Length - 1; k >= 0; k--)
+            char[] refs = ref1.ToUpper().ToCharArray();
+            for (int k = 0; k < refs.Length; k++)
             {
-                char thechar = ref1[k];
+                char thechar = refs[k];
                 if (thechar == ABSOLUTE_REFERENCE_MARKER)
                 {
                     if (k != 0)
                     {
-                        throw new ArgumentException("Bad col ref format '"
-                                + ref1 + "'");
+                        throw new ArgumentException("Bad col ref format '" + ref1 + "'");
                     }
-                    break;
+                    continue;
                 }
-                // Character.getNumericValue() returns the values
-                //  10-35 for the letter A-Z
-                int shift = (int)Math.Pow(26, pos);
-                retval += (NPOI.Util.Character.GetNumericValue(thechar) - 9) * shift;
-                pos++;
+
+                // Character is uppercase letter, find relative value to A
+                retval = (retval * 26) + (thechar - 'A' + 1);
             }
             return retval - 1;
         }
