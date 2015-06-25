@@ -545,5 +545,58 @@ namespace NPOI.XSSF.UserModel
             }
 
         }
+        [Test]
+        public void TestBug47090a()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.RemoveSheetAt(0);
+            assertSheetOrder(workbook, "Sheet2");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet2", "Sheet1");
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet2", "Sheet1");
+        }
+
+        [Test]
+        public void TestBug47090b()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.RemoveSheetAt(1);
+            assertSheetOrder(workbook, "Sheet1");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet1", "Sheet0");		// Sheet0 because it uses "Sheet" + sheets.size() as starting point!
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet1", "Sheet0");
+        }
+
+        [Test]
+        public void TestBug47090c()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.RemoveSheetAt(0);
+            assertSheetOrder(workbook, "Sheet2");
+            workbook.CloneSheet(0);
+            assertSheetOrder(workbook, "Sheet2", "Sheet2 (2)");
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet2", "Sheet2 (2)");
+        }
+
+        [Test]
+        public void TestBug47090d()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet1", "Sheet2", "Sheet0");
+            workbook.RemoveSheetAt(0);
+            assertSheetOrder(workbook, "Sheet2", "Sheet0");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet2", "Sheet0", "Sheet1");
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet2", "Sheet0", "Sheet1");
+        }
     }
 }
