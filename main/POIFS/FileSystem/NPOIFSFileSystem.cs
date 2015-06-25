@@ -674,7 +674,7 @@ namespace NPOI.POIFS.FileSystem
          *  and buffers. After this, you will be unable to read or 
          *  write from the FileSystem.
          */
-        public void close()
+        public void Close()
         {
             _data.Close();
         }

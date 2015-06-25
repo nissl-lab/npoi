@@ -720,6 +720,12 @@ namespace NPOI.HSSF.Model
             BoundSheetRecord sheet = boundsheets[sheetNumber];
             boundsheets.RemoveAt(sheetNumber);
             boundsheets.Insert(pos, sheet);
+
+            // also adjust order of Records, calculate the position of the Boundsheets via getBspos()...
+            int pos0 = records.Bspos - (boundsheets.Count - 1);
+            Record removed = records[(pos0 + sheetNumber)];
+            records.Remove(pos0 + sheetNumber);
+            records.Add(pos0 + pos, removed);
         }
 
         /**
@@ -2904,10 +2910,8 @@ namespace NPOI.HSSF.Model
          */
         public void WriteProtectWorkbook(String password, String username)
         {
-            //int protIdx = -1;
             FileSharingRecord frec = FileSharing;
             WriteAccessRecord waccess = WriteAccess;
-            WriteProtectRecord wprotect = WriteProtect;
             frec.ReadOnly=((short)1);
             frec.Password=(FileSharingRecord.HashPassword(password));
             frec.Username=(username);

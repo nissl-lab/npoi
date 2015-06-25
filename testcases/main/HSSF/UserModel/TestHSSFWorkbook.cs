@@ -35,6 +35,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Util;
     using System.Collections.Generic;
+    using System.Text;
     /**
      *
      */
@@ -722,6 +723,8 @@ namespace TestCases.HSSF.UserModel
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             Assert.AreEqual(3, wb.NumberOfSheets);
             Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+
+            fs.Close();
         }
 
         [Test]
@@ -1042,6 +1045,93 @@ namespace TestCases.HSSF.UserModel
 
             wb.UnwriteProtectWorkbook();
             Assert.IsFalse(wb.IsWriteProtected);
+        }
+        [Test]
+        public void TestBug50298()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("50298.xls");
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+
+            ISheet sheet = wb.CloneSheet(0);
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received", "Invoice (2)");
+
+            wb.SetSheetName(wb.GetSheetIndex(sheet), "copy");
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received", "copy");
+
+            wb.SetSheetOrder("copy", 0);
+
+            assertSheetOrder(wb, "copy", "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+
+            wb.RemoveSheetAt(0);
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+
+
+            // check that the overall workbook serializes with its correct size
+            int expected = wb.Workbook.Size;
+            int written = wb.Workbook.Serialize(0, new byte[expected * 2]);
+
+            Assert.AreEqual(expected, written, "Did not have the expected size when writing the workbook: written: " + written + ", but expected: " + expected);
+
+            HSSFWorkbook read = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            assertSheetOrder(read, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+        }
+        [Test]
+        public void TestBug50298a()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("50298.xls");
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+
+            ISheet sheet = wb.CloneSheet(0);
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received", "Invoice (2)");
+
+            wb.SetSheetName(wb.GetSheetIndex(sheet), "copy");
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received", "copy");
+
+            wb.SetSheetOrder("copy", 0);
+
+            assertSheetOrder(wb, "copy", "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+
+            wb.RemoveSheetAt(0);
+
+            assertSheetOrder(wb, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
+
+            wb.RemoveSheetAt(1);
+
+            assertSheetOrder(wb, "Invoice", "Digest", "Deferred", "Received");
+
+            wb.SetSheetOrder("Digest", 3);
+
+            assertSheetOrder(wb, "Invoice", "Deferred", "Received", "Digest");
+
+            // check that the overall workbook serializes with its correct size
+            int expected = wb.Workbook.Size;
+            int written = wb.Workbook.Serialize(0, new byte[expected * 2]);
+
+            Assert.AreEqual(expected, written, "Did not have the expected size when writing the workbook: written: " + written + ", but expected: " + expected);
+
+            HSSFWorkbook read = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            assertSheetOrder(wb, "Invoice", "Deferred", "Received", "Digest");
+        }
+
+        private void assertSheetOrder(HSSFWorkbook wb, params String[] sheets)
+        {
+            StringBuilder sheetNames = new StringBuilder();
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                sheetNames.Append(wb.GetSheetAt(i).SheetName).Append(",");
+            }
+            Assert.AreEqual(sheets.Length, wb.NumberOfSheets, "Had: " + sheetNames.ToString());
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                Assert.AreEqual(sheets[i], wb.GetSheetAt(i).SheetName, "Had: " + sheetNames.ToString());
+            }
         }
     }
 }
