@@ -333,7 +333,7 @@ namespace NPOI.SS.Util
             //  treat it as the 0th one
             int excelColNum = col + 1;
 
-            String colRef = "";
+            StringBuilder colRef = new StringBuilder(2);
             int colRemain = excelColNum;
 
             while (colRemain > 0)
@@ -344,10 +344,10 @@ namespace NPOI.SS.Util
 
                 // The letter A is at 65
                 char colChar = (char)(thisPart + 64);
-                colRef = colChar + colRef;
+                colRef.Insert(0, colChar);
             }
 
-            return colRef;
+            return colRef.ToString();
         }
 
         /**
