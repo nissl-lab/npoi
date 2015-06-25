@@ -1119,19 +1119,5 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook read = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             assertSheetOrder(wb, "Invoice", "Deferred", "Received", "Digest");
         }
-
-        private void assertSheetOrder(HSSFWorkbook wb, params String[] sheets)
-        {
-            StringBuilder sheetNames = new StringBuilder();
-            for (int i = 0; i < wb.NumberOfSheets; i++)
-            {
-                sheetNames.Append(wb.GetSheetAt(i).SheetName).Append(",");
-            }
-            Assert.AreEqual(sheets.Length, wb.NumberOfSheets, "Had: " + sheetNames.ToString());
-            for (int i = 0; i < wb.NumberOfSheets; i++)
-            {
-                Assert.AreEqual(sheets[i], wb.GetSheetAt(i).SheetName, "Had: " + sheetNames.ToString());
-            }
-        }
     }
 }

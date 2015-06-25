@@ -230,7 +230,7 @@ namespace NPOI.XSSF.UserModel
 
 
             // Save, load back in again, and check
-            workbook = (XSSFWorkbook) XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
 
             ss = workbook.GetStylesSource();
             Assert.IsNotNull(ss);
@@ -275,7 +275,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("NPOI", opcProps.GetCreatorProperty());
             opcProps.SetCreatorProperty("poi-dev@poi.apache.org");
 
-            workbook = (XSSFWorkbook) XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             Assert.AreEqual("NPOI", workbook.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
             opcProps = workbook.GetProperties().CoreProperties.GetUnderlyingProperties();
             Assert.AreEqual("Testing Bugzilla #47460", opcProps.GetTitleProperty());
@@ -505,7 +505,7 @@ namespace NPOI.XSSF.UserModel
                 stream.Close();
             }
             accessWorkbook(workbook);
-            
+
         }
 
         private void accessWorkbook(XSSFWorkbook workbook)
@@ -515,6 +515,35 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
             Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+        }
+
+        [Test]
+        public void TestBug48495()
+        {
+            try
+            {
+                IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48495.xlsx");
+
+                assertSheetOrder(wb, "Sheet1");
+
+                ISheet sheet = wb.GetSheetAt(0);
+                sheet.ShiftRows(2, sheet.LastRowNum, 1, true, false);
+                IRow newRow = sheet.GetRow(2);
+                if (newRow == null) newRow = sheet.CreateRow(2);
+                newRow.CreateCell(0).SetCellValue(" Another Header");
+                wb.CloneSheet(0);
+
+                assertSheetOrder(wb, "Sheet1", "Sheet1 (2)");
+
+
+                IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+                Assert.IsNotNull(read);
+                assertSheetOrder(read, "Sheet1", "Sheet1 (2)");
+            }
+            catch (Exception e)
+            {
+            }
+
         }
     }
 }
