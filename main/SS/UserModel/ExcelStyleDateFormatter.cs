@@ -43,6 +43,7 @@ namespace NPOI.SS.UserModel
         public const char SS_BRACKET_SYMBOL = '\ue015';
         public const char L_BRACKET_SYMBOL = '\ue016';
         public const char LL_BRACKET_SYMBOL = '\ue017';
+        public const char QUOTE_SYMBOL = '\ue009'; //add for C# DateTime format
 
         private DecimalFormat format1digit = new DecimalFormat("0");
         private DecimalFormat format2digits = new DecimalFormat("00");
@@ -102,6 +103,7 @@ namespace NPOI.SS.UserModel
             t = t.Replace("s.000", "s.fff");
             t = t.Replace("s.00", "s." + LL_BRACKET_SYMBOL);
             t = t.Replace("s.0", "s." + L_BRACKET_SYMBOL);
+            t = t.Replace("\"", QUOTE_SYMBOL.ToString());
             //only one char 'M'
             //see http://msdn.microsoft.com/en-us/library/8kb3ddd4.aspx#UsingSingleSpecifiers
             t = Regex.Replace(t, "(?<![M%])M(?!M)", "%M");
@@ -133,7 +135,10 @@ namespace NPOI.SS.UserModel
             }
             else
                 s = pattern;
-            
+            if (s.IndexOf(QUOTE_SYMBOL) != -1)
+            {
+                s = s.Replace(QUOTE_SYMBOL, '"');
+            }
             // Now handle our special cases
             if (s.IndexOf(MMMMM_START_SYMBOL) != -1)
             {
