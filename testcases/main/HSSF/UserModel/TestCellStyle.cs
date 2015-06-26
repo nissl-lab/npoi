@@ -369,5 +369,49 @@ namespace TestCases.HSSF.UserModel
             c4.CellStyle = (cs2);
             Assert.AreEqual("style1", ((HSSFCellStyle)c4.CellStyle).ParentStyle.UserStyleName);
         }
+
+        [Test]
+        public void TestGetSetBorderHair()
+        {
+            HSSFWorkbook wb = OpenSample("55341_CellStyleBorder.xls");
+            ISheet s = wb.GetSheetAt(0);
+            ICellStyle cs;
+
+            cs = s.GetRow(0).GetCell(0).CellStyle;
+            Assert.AreEqual(BorderStyle.Hair, cs.BorderRight);
+
+            cs = s.GetRow(1).GetCell(1).CellStyle;
+            Assert.AreEqual(BorderStyle.Dotted, cs.BorderRight);
+
+            cs = s.GetRow(2).GetCell(2).CellStyle;
+            Assert.AreEqual(BorderStyle.DashDotDot, cs.BorderRight);
+
+            cs = s.GetRow(3).GetCell(3).CellStyle;
+            Assert.AreEqual(BorderStyle.Dashed, cs.BorderRight);
+
+            cs = s.GetRow(4).GetCell(4).CellStyle;
+            Assert.AreEqual(BorderStyle.Thin, cs.BorderRight);
+
+            cs = s.GetRow(5).GetCell(5).CellStyle;
+            Assert.AreEqual(BorderStyle.MediumDashDotDot, cs.BorderRight);
+
+            cs = s.GetRow(6).GetCell(6).CellStyle;
+            Assert.AreEqual(BorderStyle.SlantedDashDot, cs.BorderRight);
+
+            cs = s.GetRow(7).GetCell(7).CellStyle;
+            Assert.AreEqual(BorderStyle.MediumDashDot, cs.BorderRight);
+
+            cs = s.GetRow(8).GetCell(8).CellStyle;
+            Assert.AreEqual(BorderStyle.MediumDashed, cs.BorderRight);
+
+            cs = s.GetRow(9).GetCell(9).CellStyle;
+            Assert.AreEqual(BorderStyle.Medium, cs.BorderRight);
+
+            cs = s.GetRow(10).GetCell(10).CellStyle;
+            Assert.AreEqual(BorderStyle.Thick, cs.BorderRight);
+
+            cs = s.GetRow(11).GetCell(11).CellStyle;
+            Assert.AreEqual(BorderStyle.Double, cs.BorderRight);
+        }
     }
 }
