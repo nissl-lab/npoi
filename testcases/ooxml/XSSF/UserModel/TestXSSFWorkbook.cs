@@ -230,7 +230,7 @@ namespace NPOI.XSSF.UserModel
 
 
             // Save, load back in again, and check
-            workbook = (XSSFWorkbook) XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
 
             ss = workbook.GetStylesSource();
             Assert.IsNotNull(ss);
@@ -275,7 +275,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("NPOI", opcProps.GetCreatorProperty());
             opcProps.SetCreatorProperty("poi-dev@poi.apache.org");
 
-            workbook = (XSSFWorkbook) XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             Assert.AreEqual("NPOI", workbook.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
             opcProps = workbook.GetProperties().CoreProperties.GetUnderlyingProperties();
             Assert.AreEqual("Testing Bugzilla #47460", opcProps.GetTitleProperty());
@@ -486,8 +486,14 @@ namespace NPOI.XSSF.UserModel
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
             cell.SetCellValue("hello world");
-            Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+
+            sheet = workbook.CreateSheet();
+            sheet.SetColumnWidth(4, 5000);
+            sheet.SetColumnWidth(5, 5000);
+
+            sheet.GroupColumn((short)4, (short)5);
+
+            accessWorkbook(workbook);
 
             MemoryStream stream = new MemoryStream();
             try
@@ -498,9 +504,99 @@ namespace NPOI.XSSF.UserModel
             {
                 stream.Close();
             }
+            accessWorkbook(workbook);
+
+        }
+
+        private void accessWorkbook(XSSFWorkbook workbook)
+        {
+            workbook.GetSheetAt(1).SetColumnGroupCollapsed(4, true);
+            workbook.GetSheetAt(1).SetColumnGroupCollapsed(4, false);
 
             Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <- did throw IndexOutOfBoundsException before fixing the bug
+            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+        }
+
+        [Test]
+        public void TestBug48495()
+        {
+            try
+            {
+                IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48495.xlsx");
+
+                assertSheetOrder(wb, "Sheet1");
+
+                ISheet sheet = wb.GetSheetAt(0);
+                sheet.ShiftRows(2, sheet.LastRowNum, 1, true, false);
+                IRow newRow = sheet.GetRow(2);
+                if (newRow == null) newRow = sheet.CreateRow(2);
+                newRow.CreateCell(0).SetCellValue(" Another Header");
+                wb.CloneSheet(0);
+
+                assertSheetOrder(wb, "Sheet1", "Sheet1 (2)");
+
+
+                IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+                Assert.IsNotNull(read);
+                assertSheetOrder(read, "Sheet1", "Sheet1 (2)");
+            }
+            catch (Exception e)
+            {
+            }
+
+        }
+        [Test]
+        public void TestBug47090a()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.RemoveSheetAt(0);
+            assertSheetOrder(workbook, "Sheet2");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet2", "Sheet1");
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet2", "Sheet1");
+        }
+
+        [Test]
+        public void TestBug47090b()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.RemoveSheetAt(1);
+            assertSheetOrder(workbook, "Sheet1");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet1", "Sheet0");		// Sheet0 because it uses "Sheet" + sheets.size() as starting point!
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet1", "Sheet0");
+        }
+
+        [Test]
+        public void TestBug47090c()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.RemoveSheetAt(0);
+            assertSheetOrder(workbook, "Sheet2");
+            workbook.CloneSheet(0);
+            assertSheetOrder(workbook, "Sheet2", "Sheet2 (2)");
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet2", "Sheet2 (2)");
+        }
+
+        [Test]
+        public void TestBug47090d()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
+            assertSheetOrder(workbook, "Sheet1", "Sheet2");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet1", "Sheet2", "Sheet0");
+            workbook.RemoveSheetAt(0);
+            assertSheetOrder(workbook, "Sheet2", "Sheet0");
+            workbook.CreateSheet();
+            assertSheetOrder(workbook, "Sheet2", "Sheet0", "Sheet1");
+            IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            assertSheetOrder(read, "Sheet2", "Sheet0", "Sheet1");
         }
     }
 }

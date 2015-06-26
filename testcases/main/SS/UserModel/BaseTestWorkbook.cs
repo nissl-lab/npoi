@@ -22,6 +22,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using TestCases.SS;
     using NPOI.SS.UserModel;
+    using System.Text;
 
     /**
      * @author Yegor Kozlov
@@ -663,6 +664,20 @@ namespace TestCases.SS.UserModel
                 ICell cellB = sheet.GetRow(1).GetCell(1);
 
                 Assert.AreEqual(cellB.StringCellValue, Evaluator.Evaluate(cellA).StringValue);
+            }
+        }
+
+        protected void assertSheetOrder(IWorkbook wb, params String[] sheets)
+        {
+            StringBuilder sheetNames = new StringBuilder();
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                sheetNames.Append(wb.GetSheetAt(i).SheetName).Append(",");
+            }
+            Assert.AreEqual(sheets.Length, wb.NumberOfSheets, "Had: " + sheetNames.ToString());
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                Assert.AreEqual(sheets[i], wb.GetSheetAt(i).SheetName, "Had: " + sheetNames.ToString());
             }
         }
     }

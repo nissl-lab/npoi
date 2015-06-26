@@ -404,6 +404,12 @@ namespace NPOI.SS.UserModel
         short LeftCol { get; set; }
 
         /// <summary>
+        /// Sets desktop window pane display area, when the file is first opened in a viewer.
+        /// </summary>
+        /// <param name="toprow">the top row to show in desktop window pane</param>
+        /// <param name="leftcol">the left column to show in desktop window pane</param>
+        void ShowInPane(int toprow, int leftcol);
+        /// <summary>
         /// Sets desktop window pane display area, when the
         /// file is first opened in a viewer.
         /// </summary>
