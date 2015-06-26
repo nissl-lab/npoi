@@ -433,7 +433,7 @@ namespace NPOI.SS.Formula.Eval
             retval[351] = new NotImplementedFunction("DATEDIF"); // DATEDIF
             retval[352] = new NotImplementedFunction("DATESTRING"); // DATESTRING
             retval[353] = new NotImplementedFunction("NUMBERSTRING"); // NUMBERSTRING
-            retval[354] = new NotImplementedFunction("ROMAN"); // ROMAN
+            retval[354] = new Roman(); // ROMAN
             retval[355] = new NotImplementedFunction("OPENDIALOG"); // OPENDIALOG
             retval[356] = new NotImplementedFunction("SAVEDIALOG"); // SAVEDIALOG
             retval[357] = new NotImplementedFunction("VIEWGet"); // VIEWGet

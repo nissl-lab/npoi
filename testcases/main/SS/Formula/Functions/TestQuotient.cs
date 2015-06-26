@@ -39,8 +39,8 @@ namespace TestCases.SS.Formula.Functions
         private static void ConfirmValue(String msg, String numerator, String denominator, String expected)
         {
             ValueEval result = invokeValue(numerator, denominator);
-            Assert.AreEqual(typeof(StringEval), result.GetType());
-            Assert.AreEqual(expected, ((StringEval)result).StringValue, msg);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval)result).StringValue, msg);
         }
 
         private static void ConfirmValueError(String msg, String numerator, String denominator, ErrorEval numError)
@@ -66,7 +66,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmValueError("numerator is nonnumeric", "ABCD", "", ErrorEval.VALUE_INVALID);
             ConfirmValueError("denominator is nonnumeric", "", "ABCD", ErrorEval.VALUE_INVALID);
 
-            ConfirmValueError("denominator is nonnumeric", "3.14159", "0", ErrorEval.DIV_ZERO);
+            ConfirmValueError("dividing by zero", "3.14159", "0", ErrorEval.DIV_ZERO);
         }
     }
 }

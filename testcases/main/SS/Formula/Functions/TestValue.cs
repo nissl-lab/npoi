@@ -76,6 +76,8 @@ namespace TestCases.SS.Formula.Functions
             ConfirmValue("1,000e2", 100000);
             ConfirmValue("$10e2", 1000);
             ConfirmValue("$1,000e2", 100000);
+            ConfirmValue("30%", 0.3);
+            ConfirmValue("30 %", 0.3);
         }
         [Test]
         public void TestErrors()

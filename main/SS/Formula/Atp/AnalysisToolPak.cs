@@ -41,7 +41,7 @@ namespace NPOI.SS.Formula.Atp
         {
             throw new NotImplementedException(_functionName);
         }
-    };
+    }
 
     public class AnalysisToolPak : UDFFinder
     {
@@ -121,7 +121,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "HEX2OCT", null);
             r(m, "IFERROR", IfError.Instance);
             r(m, "IMABS", null);
-            r(m, "IMAGINARY", null);
+            r(m, "IMAGINARY", Imaginary.instance);
             r(m, "IMARGUMENT", null);
             r(m, "IMCONJUGATE", null);
             r(m, "IMCOS", null);
@@ -132,7 +132,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "IMLOG2", null);
             r(m, "IMPOWER", null);
             r(m, "IMPRODUCT", null);
-            r(m, "IMREAL", null);
+            r(m, "IMREAL", ImReal.instance);
             r(m, "IMSIN", null);
             r(m, "IMSQRT", null);
             r(m, "IMSUB", null);
@@ -157,7 +157,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "PRICE", null);
             r(m, "PRICEDISC", null);
             r(m, "PRICEMAT", null);
-            r(m, "QUOTIENT", null);
+            r(m, "QUOTIENT", Quotient.instance);
             r(m, "RANDBETWEEN", RandBetween.Instance);
             r(m, "RECEIVED", null);
             r(m, "RTD", null);
