@@ -54,7 +54,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Dec2Hex : Var1or2ArgFunction, FreeRefFunction
     {
-
+        public static FreeRefFunction instance = new Dec2Hex();
         private static long MinValue = -549755813888;
         private static long MaxValue = 549755813887;
         private static int DEFAULT_PLACES_VALUE = 10;
@@ -91,7 +91,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 placesNumber = DEFAULT_PLACES_VALUE;
             }
-            else
+            else if (places != null)
             {
                 ValueEval placesValueEval;
                 try
@@ -129,21 +129,28 @@ namespace NPOI.SS.Formula.Functions
             {
                 hex = String.Format("{0:X}", (int)number1);
             }
-
+            if (number1 < 0)
+            {
+                hex = "FF" + hex.Substring(2);
+            }
             return new StringEval(hex.ToUpper());
         }
 
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {
-            return this.Evaluate(srcRowIndex, srcColumnIndex, arg0, new StringEval(String.Format("{0}",DEFAULT_PLACES_VALUE)));
+            return this.Evaluate(srcRowIndex, srcColumnIndex, arg0, null);
         }
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
         {
-            if (args.Length != 2)
+            if (args.Length == 1)
             {
-                return ErrorEval.VALUE_INVALID;
+                return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0]);
+            }
+            if (args.Length == 2)
+            {
+                return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
             }
             return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
         }
