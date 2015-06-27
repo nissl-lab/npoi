@@ -198,6 +198,7 @@
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
     <Compile Include="SS\Formula\Functions\Complex.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />

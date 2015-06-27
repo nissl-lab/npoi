@@ -78,7 +78,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "BESSELJ", null);
             r(m, "BESSELK", null);
             r(m, "BESSELY", null);
-            r(m, "BIN2DEC", null);
+            r(m, "BIN2DEC", Bin2Dec.instance);
             r(m, "BIN2HEX", null);
             r(m, "BIN2OCT", null);
             r(m, "COMPLEX", Complex.Instance);
