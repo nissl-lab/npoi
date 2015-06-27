@@ -167,6 +167,7 @@
     <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestFactDoubleFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImaginaryFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImRealFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIndirectFunctionFromSpreadsheet.cs" />
