@@ -240,7 +240,10 @@ namespace NPOI.SS.Util
         {
             this.pattern = pattern;
         }
-
+        public override string Format(Object obj)
+        {
+            return Format(obj, CultureInfo.CurrentCulture);
+        }
         public override string Format(object obj, CultureInfo culture)
         {
             String result = ((DateTime)obj).ToString(pattern, culture); //DateTimeFormatInfo.InvariantInfo

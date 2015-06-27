@@ -65,18 +65,32 @@ namespace NPOI.SS.Formula.Atp
             DateTime startDate = DateUtil.GetJavaDate(start);
             //Calendar endDate = Calendar.getInstance();
             //endDate.setTime(startDate);
-            DateTime endDate = startDate.AddDays(workdays);
-            int skippedDays = 0;
-            do
+            int direction = workdays < 0 ? -1 : 1;
+            DateTime endDate = startDate;
+            double excelEndDate = DateUtil.GetExcelDate(endDate);
+            while (workdays != 0)
             {
-                double end = DateUtil.GetExcelDate(endDate);
-                int saturdaysPast = this.PastDaysOfWeek(start, end, DayOfWeek.Saturday);
-                int sundaysPast = this.PastDaysOfWeek(start, end, DayOfWeek.Sunday);
-                int nonWeekendHolidays = this.CalculateNonWeekendHolidays(start, end, holidays);
-                skippedDays = saturdaysPast + sundaysPast + nonWeekendHolidays;
-                endDate = endDate.AddDays(skippedDays);
-                start = end + IsNonWorkday(end, holidays);
-            } while (skippedDays != 0);
+                endDate = endDate.AddDays(direction);
+                excelEndDate += direction;
+                if (endDate.DayOfWeek!= DayOfWeek.Saturday
+                        && endDate.DayOfWeek != DayOfWeek.Sunday
+                        && !IsHoliday(excelEndDate, holidays))
+                {
+                    workdays -= direction;
+                }
+            }
+            //DateTime endDate = startDate.AddDays(workdays);
+            //int skippedDays = 0;
+            //do
+            //{
+            //    double end = DateUtil.GetExcelDate(endDate);
+            //    int saturdaysPast = this.PastDaysOfWeek(start, end, DayOfWeek.Saturday);
+            //    int sundaysPast = this.PastDaysOfWeek(start, end, DayOfWeek.Sunday);
+            //    int nonWeekendHolidays = this.CalculateNonWeekendHolidays(start, end, holidays);
+            //    skippedDays = saturdaysPast + sundaysPast + nonWeekendHolidays;
+            //    endDate = endDate.AddDays(skippedDays);
+            //    start = end + IsNonWorkday(end, holidays);
+            //} while (skippedDays != 0);
             return endDate;
         }
 
