@@ -219,6 +219,7 @@
     <Compile Include="SS\Formula\Functions\Slope.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
+    <Compile Include="SS\Formula\Functions\WeekNum.cs" />
     <Compile Include="SS\Formula\Udf\IndexedUDFFinder.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
