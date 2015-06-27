@@ -39,9 +39,9 @@ namespace NPOI.SS.Formula.Functions
      *
      * @author cedric dot walter @ gmail dot com
      */
-    public class Delta : Fixed2ArgFunction
+    public class Delta : Fixed2ArgFunction, FreeRefFunction
     {
-
+        public static FreeRefFunction instance = new Delta();
         private static NumberEval ONE = new NumberEval(1);
         private static NumberEval ZERO = new NumberEval(0);
 
@@ -85,6 +85,14 @@ namespace NPOI.SS.Formula.Functions
             int result = NumberComparer.Compare(number1, number2);
             return result == 0 ? ONE : ZERO;
         }
+        public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+        {
+            if (args.Length == 2)
+            {
+                return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
+            }
 
+            return ErrorEval.VALUE_INVALID;
+        }
     }
 }

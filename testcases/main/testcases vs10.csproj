@@ -164,6 +164,7 @@
     <Compile Include="SS\Formula\Functions\TestComplexFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestDec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\TestDelta.cs" />
+    <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImaginaryFunctionsFromSpreadsheet.cs" />
