@@ -123,7 +123,7 @@ namespace NPOI.SS.Formula.Functions
             String hex = "";
             if (placesNumber != 0)
             {
-                hex = String.Format("{0:X" + placesNumber + "}", (int)number1 & 0x0FFFFF);
+                hex = String.Format("{0:X" + placesNumber + "}", (int)number1);
             }
             else
             {
