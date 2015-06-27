@@ -117,7 +117,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "GCD", null);
             r(m, "GESTEP", null);
             r(m, "HEX2BIN", null);
-            r(m, "HEX2DEC", null);
+            r(m, "HEX2DEC", Hex2Dec.instance);
             r(m, "HEX2OCT", null);
             r(m, "IFERROR", IfError.Instance);
             r(m, "IMABS", null);

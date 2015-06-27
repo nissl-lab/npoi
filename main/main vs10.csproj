@@ -207,6 +207,7 @@
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\FactDouble.cs" />
     <Compile Include="SS\Formula\Functions\Finance.cs" />
+    <Compile Include="SS\Formula\Functions\Hex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
     <Compile Include="SS\Formula\Functions\Imaginary.cs" />
     <Compile Include="SS\Formula\Functions\ImReal.cs" />
