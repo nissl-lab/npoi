@@ -99,7 +99,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "CUBEVALUE", null);
             r(m, "CUMIPMT", null);
             r(m, "CUMPRINC", null);
-            r(m, "DEC2BIN", null);
+            r(m, "DEC2BIN", Dec2Bin.instance);
             r(m, "DEC2HEX", null);
             r(m, "DEC2OCT", null);
             r(m, "DELTA", Delta.instance);
