@@ -164,8 +164,10 @@
     <Compile Include="SS\Formula\Functions\TestComplexFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestDec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\TestDelta.cs" />
+    <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestFactDoubleFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImaginaryFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImRealFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIndirectFunctionFromSpreadsheet.cs" />
@@ -180,6 +182,8 @@
     <Compile Include="SS\Formula\Functions\TestRomanFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestSlope.cs" />
     <Compile Include="SS\Formula\Functions\TestSumifs.cs" />
+    <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet2013.cs" />
     <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
     <Compile Include="SS\UserModel\Charts\TestDataSources.cs" />

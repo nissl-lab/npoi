@@ -77,6 +77,54 @@ namespace TestCases.SS.Formula.Atp
             Assert.AreEqual(new DateTime(2009, APRIL, 30), DateUtil.GetJavaDate(((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
                 new StringEval(STARTING_DATE), new NumberEval(151) }, EC)).NumberValue));
         }
+
+        [Test]
+        public void TestReturnWorkdaysSpanningAWeekendSubtractingDays()
+        {
+            String startDate = "2013/09/30";
+            int days = -1;
+            String expectedWorkDay = "2013/09/27";
+            StringEval stringEval = new StringEval(startDate);
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
+                stringEval, new NumberEval(days) }, EC)).NumberValue;
+            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+        }
+
+        [Test]
+        public void TestReturnWorkdaysSpanningAWeekendAddingDays()
+        {
+            String startDate = "2013/09/27";
+            int days = 1;
+            String expectedWorkDay = "2013/09/30";
+            StringEval stringEval = new StringEval(startDate);
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
+                stringEval, new NumberEval(days) }, EC)).NumberValue;
+            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+        }
+
+        [Test]
+        public void TestReturnWorkdaysWhenStartIsWeekendAddingDays()
+        {
+            String startDate = "2013/10/06";
+            int days = 1;
+            String expectedWorkDay = "2013/10/07";
+            StringEval stringEval = new StringEval(startDate);
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
+                stringEval, new NumberEval(days) }, EC)).NumberValue;
+            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+        }
+
+        [Test]
+        public void TestReturnWorkdaysWhenStartIsWeekendSubtractingDays()
+        {
+            String startDate = "2013/10/06";
+            int days = -1;
+            String expectedWorkDay = "2013/10/04";
+            StringEval stringEval = new StringEval(startDate);
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
+                stringEval, new NumberEval(days) }, EC)).NumberValue;
+            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+        }
         [Test]
         public void TestReturnWorkdaysWithDaysTruncated()
         {

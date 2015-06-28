@@ -198,12 +198,16 @@
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
     <Compile Include="SS\Formula\Functions\Complex.cs" />
+    <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\Delta.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
+    <Compile Include="SS\Formula\Functions\FactDouble.cs" />
     <Compile Include="SS\Formula\Functions\Finance.cs" />
+    <Compile Include="SS\Formula\Functions\Hex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
     <Compile Include="SS\Formula\Functions\Imaginary.cs" />
     <Compile Include="SS\Formula\Functions\ImReal.cs" />
@@ -219,6 +223,7 @@
     <Compile Include="SS\Formula\Functions\Slope.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
+    <Compile Include="SS\Formula\Functions\WeekNum.cs" />
     <Compile Include="SS\Formula\Udf\IndexedUDFFinder.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />

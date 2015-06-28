@@ -78,7 +78,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "BESSELJ", null);
             r(m, "BESSELK", null);
             r(m, "BESSELY", null);
-            r(m, "BIN2DEC", null);
+            r(m, "BIN2DEC", Bin2Dec.instance);
             r(m, "BIN2HEX", null);
             r(m, "BIN2OCT", null);
             r(m, "COMPLEX", Complex.Instance);
@@ -99,10 +99,10 @@ namespace NPOI.SS.Formula.Atp
             r(m, "CUBEVALUE", null);
             r(m, "CUMIPMT", null);
             r(m, "CUMPRINC", null);
-            r(m, "DEC2BIN", null);
-            r(m, "DEC2HEX", null);
+            r(m, "DEC2BIN", Dec2Bin.instance);
+            r(m, "DEC2HEX", Dec2Hex.instance);
             r(m, "DEC2OCT", null);
-            r(m, "DELTA", null);
+            r(m, "DELTA", Delta.instance);
             r(m, "DISC", null);
             r(m, "DOLLARDE", null);
             r(m, "DOLLARFR", null);
@@ -112,12 +112,12 @@ namespace NPOI.SS.Formula.Atp
             r(m, "EOMONTH", null);
             r(m, "ERF", null);
             r(m, "ERFC", null);
-            r(m, "FACTDOUBLE", null);
+            r(m, "FACTDOUBLE", FactDouble.instance);
             r(m, "FVSCHEDULE", null);
             r(m, "GCD", null);
             r(m, "GESTEP", null);
             r(m, "HEX2BIN", null);
-            r(m, "HEX2DEC", null);
+            r(m, "HEX2DEC", Hex2Dec.instance);
             r(m, "HEX2OCT", null);
             r(m, "IFERROR", IfError.Instance);
             r(m, "IMABS", null);
@@ -167,7 +167,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "TBILLEQ", null);
             r(m, "TBILLPRICE", null);
             r(m, "TBILLYIELD", null);
-            r(m, "WEEKNUM", null);
+            r(m, "WEEKNUM", WeekNum.instance);
             r(m, "WORKDAY", WorkdayFunction.instance);
             r(m, "XIRR", null);
             r(m, "XNPV", null);
