@@ -48,8 +48,8 @@ namespace TestCases.POIFS.FileSystem
 
             Ole10Native ole = Ole10Native.CreateFromEmbeddedOleObject(fs);
 
-            Assert.AreEqual("File1.svg", ole.GetLabel());
-            Assert.AreEqual("D:\\Documents and Settings\\rsc\\My Documents\\file1.svg", ole.GetCommand());
+            Assert.AreEqual("File1.svg", ole.Label);
+            Assert.AreEqual("D:\\Documents and Settings\\rsc\\My Documents\\file1.svg", ole.Command);
         }
 
        

@@ -269,10 +269,6 @@ namespace TestCases.HSSF.UserModel
             Array.Copy(pictureDataWmf, 22, wmfNoHeader, 0, pictureDataWmf.Length - 22);
             pictureDataOut = (wb.GetAllPictures()[2] as HSSFPictureData).Data;
             Assert.IsTrue(Arrays.Equals(wmfNoHeader, pictureDataOut));
-
-            FileStream fos = new FileStream("vect.xls", FileMode.Create);
-            wb.Write(fos);
-            fos.Close();
         }
 
     }

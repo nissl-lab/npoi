@@ -33,8 +33,10 @@ namespace NPOI.POIFS.FileSystem
             DirectoryEntry newTarget = null;
             if (entry.IsDirectoryEntry)
             {
+                DirectoryEntry dirEntry = (DirectoryEntry)entry;
                 newTarget = target.CreateDirectory(entry.Name);
-                IEnumerator<Entry> entries = ((DirectoryEntry)entry).Entries;
+                newTarget.StorageClsid=(dirEntry.StorageClsid);
+                IEnumerator<Entry> entries = dirEntry.Entries;
 
                 while (entries.MoveNext())
                 {

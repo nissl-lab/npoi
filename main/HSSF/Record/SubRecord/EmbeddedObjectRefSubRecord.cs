@@ -209,7 +209,7 @@ namespace NPOI.HSSF.Record
                 return EMPTY_BYTE_ARRAY;
             }
             byte[] result = new byte[size];
-		    in1.ReadFully(result);
+            in1.ReadFully(result);
             return result;
         }
 
@@ -276,12 +276,12 @@ namespace NPOI.HSSF.Record
             int dataSize = GetDataSize(idOffset);
 
 
-		    out1.WriteShort(sid);
-		    out1.WriteShort(dataSize);
+            out1.WriteShort(sid);
+            out1.WriteShort(dataSize);
 
-		    out1.WriteShort(idOffset);
-		    out1.WriteShort(formulaSize);
-		    out1.WriteInt(field_1_unknown_int);
+            out1.WriteShort(idOffset);
+            out1.WriteShort(formulaSize);
+            out1.WriteInt(field_1_unknown_int);
 
             int pos = 12;
 
@@ -370,6 +370,7 @@ namespace NPOI.HSSF.Record
             {
                 return field_4_ole_classname;
             }
+            set { field_4_ole_classname = value; }
         }
 
         public byte[] ObjectData
@@ -377,6 +378,10 @@ namespace NPOI.HSSF.Record
             get
             {
                 return field_6_unknown;
+            }
+            set
+            {
+                field_6_unknown = value;
             }
         }
 
@@ -418,6 +423,14 @@ namespace NPOI.HSSF.Record
         {
             return this; // TODO proper clone
         }
+        public void SetUnknownFormulaData(byte[] formularData)
+        {
+            field_2_unknownFormulaData = formularData;
+        }
 
+        public void SetStorageId(int storageId)
+        {
+            field_5_stream_id = storageId;
+        }
     }
 }

@@ -139,7 +139,7 @@ namespace NPOI.SS.UserModel
          * @see #MOVE_DONT_RESIZE
          * @see #DONT_MOVE_AND_RESIZE
          */
-        int AnchorType { get; set; }
+        AnchorType AnchorType { get; set; }
 
     }
 }

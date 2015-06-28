@@ -183,6 +183,8 @@
     <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\DConRefRecord.cs" />
+    <Compile Include="HSSF\Record\FtCfSubRecord.cs" />
+    <Compile Include="HSSF\Record\FtPioGrbitSubRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
@@ -651,6 +653,7 @@
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
+    <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
@@ -1146,7 +1149,6 @@
     <Compile Include="Util\BitFieldFactory.cs" />
     <Compile Include="Util\ByteField.cs" />
     <Compile Include="Util\Character.cs" />
-    <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\CodePageUtil.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />

@@ -252,9 +252,9 @@ namespace NPOI.HSSF.UserModel
         /// 0 = Move and size with Cells, 2 = Move but don't size with cells, 3 = Don't move or size with cells.
         /// </summary>
         /// <value>The type of the anchor.</value>
-        public int AnchorType
+        public AnchorType AnchorType
         {
-            get { return _escherClientAnchor.Flag; }
+            get { return (AnchorType)_escherClientAnchor.Flag; }
             set { this._escherClientAnchor.Flag = (short)value; }
         }
 

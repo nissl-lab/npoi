@@ -142,7 +142,7 @@ namespace TestCases.HSSF.Model
 
             HSSFPatriarch drawing = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFClientAnchor anchor = new HSSFClientAnchor(10, 10, 50, 50, (short)2, 2, (short)4, 4);
-            anchor.AnchorType=(2);
+            anchor.AnchorType = (AnchorType)(2);
             Assert.AreEqual(anchor.AnchorType, 2);
 
             HSSFSimpleShape rectangle = drawing.CreateSimpleShape(anchor);

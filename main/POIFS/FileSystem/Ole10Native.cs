@@ -20,6 +20,7 @@ namespace NPOI.POIFS.FileSystem
     using System;
     using System.IO;
     using NPOI.Util;
+    using System.Text;
 
     /**
      * Represents an Ole10Native record which is wrapped around certain binary
@@ -29,20 +30,19 @@ namespace NPOI.POIFS.FileSystem
      */
     public class Ole10Native
     {
-        // (the fields as they appear in the raw record:)
-        private int totalSize;                // 4 bytes, total size of record not including this field
-        private short flags1;                // 2 bytes, unknown, mostly [02 00]
-        private String label;                // ASCIIZ, stored in this field without the terminating zero
-        private String fileName;        // ASCIIZ, stored in this field without the terminating zero
-        private short flags2;                // 2 bytes, unknown, mostly [00 00]
-        // private byte unknown1Length;	// 1 byte, specifying the length of the following byte array (unknown1)
-        private byte[] unknown1;        // see below
-        private byte[] unknown2;        // 3 bytes, unknown, mostly [00 00 00]
-        private String command;                // ASCIIZ, stored in this field without the terminating zero
-        private int dataSize;                // 4 bytes (if space), size of following buffer
-        private byte[] dataBuffer;        // varying size, the actual native data
-        private short flags3;                // some flags? or zero terminators?, sometimes not there
         public static String OLE10_NATIVE = "\x0001Ole10Native";
+        protected static String ISO1 = "ISO-8859-1";
+
+        // (the fields as they appear in the raw record:)
+        private int totalSize;             // 4 bytes, total size of record not including this field
+        private short flags1 = 2;          // 2 bytes, unknown, mostly [02 00]
+        private String label;              // ASCIIZ, stored in this field without the terminating zero
+        private String fileName;           // ASCIIZ, stored in this field without the terminating zero
+        private short flags2 = 0;          // 2 bytes, unknown, mostly [00 00]
+        private short unknown1 = 3;        // see below
+        private String command;            // ASCIIZ, stored in this field without the terminating zero
+        private byte[] dataBuffer;         // varying size, the actual native data
+        private short flags3 = 0;          // some final flags? or zero terminators?, sometimes not there
 
 
         /// <summary>
@@ -85,7 +85,16 @@ namespace NPOI.POIFS.FileSystem
 
             return new Ole10Native(data, 0, plain);
         }
-
+        /**
+       * Creates an instance and fills the fields based on ... the fields
+       */
+        public Ole10Native(String label, String filename, String command, byte[] data)
+        {
+            Label=(label);
+            FileName=(filename);
+            Command=(command);
+            DataBuffer=(data);
+        }
 
         /**
          * Creates an instance and Fills the fields based on the data in the given buffer.
@@ -94,9 +103,10 @@ namespace NPOI.POIFS.FileSystem
          * @param offset The start offset of the record in the buffer
          * @throws Ole10NativeException on invalid or unexcepted data format
          */
-        public Ole10Native(byte[] data, int offset):this(data, offset, false)
+        public Ole10Native(byte[] data, int offset)
+            : this(data, offset, false)
         {
-            
+
         }
         /**
          * Creates an instance and Fills the fields based on the data in the given buffer.
@@ -122,7 +132,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 dataBuffer = new byte[totalSize - 4];
                 Array.Copy(data, 4, dataBuffer, 0, dataBuffer.Length);
-                dataSize = totalSize - 4;
+                //dataSize = totalSize - 4;
 
                 byte[] oleLabel = new byte[8];
                 Array.Copy(dataBuffer, 0, oleLabel, 0, Math.Min(dataBuffer.Length, 8));
@@ -142,44 +152,31 @@ namespace NPOI.POIFS.FileSystem
                 ofs += len;
                 flags2 = LittleEndian.GetShort(data, ofs);
                 ofs += LittleEndianConsts.SHORT_SIZE;
-                len = LittleEndian.GetUByte(data, ofs);
-                unknown1 = new byte[len];
-                ofs += len;
-                len = 3;
-                unknown2 = new byte[len];
-                ofs += len;
-                len = GetStringLength(data, ofs);
+
+                unknown1 = LittleEndian.GetShort(data, ofs);
+                ofs += LittleEndianConsts.SHORT_SIZE;
+
+                len = LittleEndian.GetInt(data, ofs);
+                ofs += LittleEndianConsts.INT_SIZE;
+
                 command = StringUtil.GetFromCompressedUnicode(data, ofs, len - 1);
                 ofs += len;
-
-                if (totalSize + LittleEndianConsts.INT_SIZE - ofs > LittleEndianConsts.INT_SIZE)
-                {
-                    dataSize = LittleEndian.GetInt(data, ofs);
-                    ofs += LittleEndianConsts.INT_SIZE;
-
-                    if (dataSize > totalSize || dataSize < 0)
-                    {
-                        throw new Ole10NativeException("Invalid Ole10Native");
-                    }
-
-                    dataBuffer = new byte[dataSize];
-                    Array.Copy(data, ofs, dataBuffer, 0, dataSize);
-                    ofs += dataSize;
-
-                    if (unknown1.Length > 0)
-                    {
-                        flags3 = LittleEndian.GetShort(data, ofs);
-                        ofs += LittleEndianConsts.SHORT_SIZE;
-                    }
-                    else
-                    {
-                        flags3 = 0;
-                    }
-                }
-                else
+                if (totalSize < ofs)
                 {
                     throw new Ole10NativeException("Invalid Ole10Native");
                 }
+
+                int dataSize = LittleEndian.GetInt(data, ofs);
+                ofs += LittleEndianConsts.INT_SIZE;
+
+                if (dataSize < 0 || totalSize - (ofs - LittleEndianConsts.INT_SIZE) < dataSize)
+                {
+                    throw new Ole10NativeException("Invalid Ole10Native");
+                }
+
+                dataBuffer = new byte[dataSize];
+                Array.Copy(data, ofs, dataBuffer, 0, dataSize);
+                ofs += dataSize;
             }
         }
 
@@ -216,9 +213,13 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the flags1
          */
-        public short GetFlags1()
+        public short Flags1
         {
-            return flags1;
+            get
+            {
+                return flags1;
+            }
+            set { flags1 = value; }
         }
 
         /**
@@ -227,9 +228,16 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the label
          */
-        public String GetLabel()
+        public String Label
         {
-            return label;
+            get
+            {
+                return label;
+            }
+            set
+            {
+                label = value;
+            }
         }
 
         /**
@@ -238,9 +246,16 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the fileName
          */
-        public String GetFileName()
+        public String FileName
         {
-            return fileName;
+            get
+            {
+                return fileName;
+            }
+            set
+            {
+                fileName = value;
+            }
         }
 
         /**
@@ -248,9 +263,16 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the flags2
          */
-        public short GetFlags2()
+        public short Flags2
         {
-            return flags2;
+            get
+            {
+                return flags2;
+            }
+            set
+            {
+                flags2 = value;
+            }
         }
 
         /**
@@ -258,19 +280,16 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the unknown1
          */
-        public byte[] GetUnknown1()
+        public short Unknown1
         {
-            return unknown1;
-        }
-
-        /**
-         * Returns the unknown2 field - currently being a byte[3] - mostly {0, 0, 0}.
-         *
-         * @return the unknown2
-         */
-        public byte[] GetUnknown2()
-        {
-            return unknown2;
+            get
+            {
+                return unknown1;
+            }
+            set
+            {
+                unknown1 = value;
+            }
         }
 
         /**
@@ -279,9 +298,13 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the command
          */
-        public String GetCommand()
+        public String Command
         {
-            return command;
+            get
+            {
+                return command;
+            }
+            set { command = value; }
         }
 
         /**
@@ -291,9 +314,10 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the dataSize
          */
-        public int GetDataSize()
+        public int DataSize
         {
-            return dataSize;
+            get{return dataBuffer.Length;}
+            
         }
 
         /**
@@ -304,9 +328,10 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the dataBuffer
          */
-        public byte[] GetDataBuffer()
+        public byte[] DataBuffer
         {
-            return dataBuffer;
+            get{return dataBuffer;}
+            set { dataBuffer = value; }
         }
 
         /**
@@ -314,10 +339,69 @@ namespace NPOI.POIFS.FileSystem
          *
          * @return the flags3
          */
-        public short GetFlags3()
+        public short Flags3
         {
-            return flags3;
+            get
+            {
+                return flags3;
+            }
+            set
+            {
+                flags3 = value;
+            }
         }
+
+        /**
+   * Have the contents printer out into an OutputStream, used when writing a
+   * file back out to disk (Normally, atom classes will keep their bytes
+   * around, but non atom classes will just request the bytes from their
+   * children, then chuck on their header and return)
+   */
+        public void WriteOut(Stream out1)
+        {
+            byte[] intbuf = new byte[LittleEndianConsts.INT_SIZE];
+            byte[] shortbuf = new byte[LittleEndianConsts.SHORT_SIZE];
+            byte[] zerobuf = { 0, 0, 0, 0 };
+            MemoryStream bos = new MemoryStream();
+            bos.Write(intbuf, 0, intbuf.Length); // total size, will be determined later ..
+
+            LittleEndian.PutShort(shortbuf, 0, Flags1);
+            bos.Write(shortbuf, 0, shortbuf.Length);
+            byte[] buffer = Encoding.GetEncoding(ISO1).GetBytes(Label);
+            bos.Write(buffer, 0, buffer.Length);
+            bos.Write(zerobuf, 0, zerobuf.Length);
+            buffer = Encoding.GetEncoding(ISO1).GetBytes(FileName);
+            bos.Write(buffer, 0, buffer.Length);
+            bos.Write(zerobuf, 0, zerobuf.Length);
+
+            LittleEndian.PutShort(shortbuf, 0, Flags2);
+            bos.Write(shortbuf, 0, shortbuf.Length);
+
+            LittleEndian.PutShort(shortbuf, 0, Unknown1);
+            bos.Write(shortbuf, 0, shortbuf.Length);
+
+            LittleEndian.PutInt(intbuf, 0, Command.Length+1);
+            bos.Write(intbuf, 0, intbuf.Length);
+            buffer = Encoding.GetEncoding(ISO1).GetBytes(Command);
+            bos.Write(buffer, 0, buffer.Length);
+            bos.Write(zerobuf, 0, zerobuf.Length);
+
+            LittleEndian.PutInt(intbuf, 0, DataBuffer.Length);
+            bos.Write(intbuf, 0, intbuf.Length);
+
+            bos.Write(DataBuffer, 0, DataBuffer.Length);
+
+            LittleEndian.PutShort(shortbuf, 0, Flags3);
+            bos.Write(shortbuf, 0, shortbuf.Length);
+
+            // update total size - length of length-field (4 bytes)
+            byte[] data = bos.ToArray();
+            totalSize = data.Length - LittleEndianConsts.INT_SIZE;
+            LittleEndian.PutInt(data, 0, totalSize);
+
+            out1.Write(data, 0, data.Length);
+        }
+
     }
 
 }

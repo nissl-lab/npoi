@@ -1265,15 +1265,15 @@ namespace NPOI.HSSF.UserModel
                 if (preserveNodes)
                 {
                     // Don't Write out the old Workbook, we'll be doing our new one
-                    excepts.Add("Workbook");
                     // If the file had an "incorrect" name for the workbook stream,
                     // don't write the old one as we'll use the correct name shortly
-                    foreach (String wrongName in WORKBOOK_DIR_ENTRY_NAMES) {
-                       excepts.Add(wrongName);
-                    }
+                    excepts.AddRange(WORKBOOK_DIR_ENTRY_NAMES);
 
                     // Copy over all the other nodes to our new poifs
-                    POIUtils.CopyNodes(directory, fs.Root, excepts);
+                    EntryUtils.CopyNodes(
+                            new FilteringDirectoryNode(this.directory, excepts)
+                            , new FilteringDirectoryNode(fs.Root, excepts)
+                    );
                     // YK: preserve StorageClsid, it is important for embedded workbooks,
                     // see Bugzilla 47920
                     fs.Root.StorageClsid = (this.directory.StorageClsid);
@@ -1856,6 +1856,71 @@ namespace NPOI.HSSF.UserModel
                     SearchForPictures(escherRecord.ChildRecords, pictures);
                 }
             }
+        }
+        protected static Dictionary<String, ClassID> GetOleMap()
+        {
+            Dictionary<String, ClassID> olemap = new Dictionary<String, ClassID>();
+            olemap.Add("PowerPoint Document", ClassID.PPT_SHOW);
+            foreach (String str in WORKBOOK_DIR_ENTRY_NAMES)
+            {
+                olemap.Add(str, ClassID.XLS_WORKBOOK);
+            }
+            // ... to be continued
+            return olemap;
+        }
+
+        public int AddOlePackage(POIFSFileSystem poiData, String label, String fileName, String command)
+        {
+            DirectoryNode root = poiData.Root;
+            Dictionary<String, ClassID> olemap = GetOleMap();
+            foreach (KeyValuePair<String, ClassID> entry in olemap)
+            {
+                if (root.HasEntry(entry.Key))
+                {
+                    root.StorageClsid = (/*setter*/entry.Value);
+                    break;
+                }
+            }
+
+            MemoryStream bos = new MemoryStream();
+            poiData.WriteFileSystem(bos);
+            return AddOlePackage(bos.ToArray(), label, fileName, command);
+        }
+
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
+        {
+            // check if we were Created by POIFS otherwise create a new dummy POIFS for storing the package data
+            if (directory == null)
+            {
+                directory = new POIFSFileSystem().Root;
+                preserveNodes = true;
+            }
+
+            // Get free MBD-Node
+            int storageId = 0;
+            DirectoryEntry oleDir = null;
+            do
+            {
+                String storageStr = "MBD" + HexDump.ToHex(++storageId);
+                if (!directory.HasEntry(storageStr))
+                {
+                    oleDir = directory.CreateDirectory(storageStr);
+                    oleDir.StorageClsid = (/*setter*/ClassID.OLE10_PACKAGE);
+                }
+            } while (oleDir == null);
+
+            // the following data was taken from an example libre office document
+            // beside this "\u0001Ole" record there were several other records, e.g. CompObj,
+            // OlePresXXX, but it seems, that they aren't neccessary
+            byte[] oleBytes = { 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            oleDir.CreateDocument("\u0001Ole", new MemoryStream(oleBytes));
+
+            Ole10Native oleNative = new Ole10Native(label, fileName, command, oleData);
+            MemoryStream bos = new MemoryStream();
+            oleNative.WriteOut(bos);
+            oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
+
+            return storageId;
         }
 
         /// <summary>

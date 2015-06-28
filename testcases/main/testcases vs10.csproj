@@ -292,7 +292,6 @@
     <Compile Include="POIFS\FileSystem\TestOffice2007XMLException.cs" />
     <Compile Include="POIFS\FileSystem\TestPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestPropertySorter.cs" />
-    <Compile Include="Util\TestClassID.cs" />
     <Compile Include="HPSF\Basic\TestEmptyProperties.cs" />
     <Compile Include="HPSF\Basic\TestMetaDataIPI.cs" />
     <Compile Include="HPSF\Basic\TestReadAllFiles.cs" />
