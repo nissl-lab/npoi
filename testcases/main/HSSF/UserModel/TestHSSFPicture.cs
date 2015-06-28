@@ -27,6 +27,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.HSSF.Model;
     using NPOI.DDF;
+    using System.IO;
 
     /**
      * Test <c>HSSFPicture</c>.
@@ -220,5 +221,59 @@ namespace TestCases.HSSF.UserModel
             p1 = (HSSFPicture)dr.Children[0];
             Assert.AreEqual(p1.FileName, "aaa");
         }
+
+        [Test]
+        public void Test49658()
+        {
+            // test if inserted EscherMetafileBlip will be read again
+            IWorkbook wb = new HSSFWorkbook();
+
+            byte[] pictureDataEmf = POIDataSamples.GetDocumentInstance().ReadFile("vector_image.emf");
+            int indexEmf = wb.AddPicture(pictureDataEmf, PictureType.EMF);
+            byte[] pictureDataPng = POIDataSamples.GetSpreadSheetInstance().ReadFile("logoKarmokar4.png");
+            int indexPng = wb.AddPicture(pictureDataPng, PictureType.PNG);
+            byte[] pictureDataWmf = POIDataSamples.GetSlideShowInstance().ReadFile("santa.wmf");
+            int indexWmf = wb.AddPicture(pictureDataWmf, PictureType.WMF);
+
+            ISheet sheet = wb.CreateSheet();
+            HSSFPatriarch patriarch = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
+            ICreationHelper ch = wb.GetCreationHelper();
+
+            IClientAnchor anchor = ch.CreateClientAnchor();
+            anchor.Col1 = (/*setter*/2);
+            anchor.Col2 = (/*setter*/5);
+            anchor.Row1 = (/*setter*/1);
+            anchor.Row2 = (/*setter*/6);
+            patriarch.CreatePicture(anchor, indexEmf);
+
+            anchor = ch.CreateClientAnchor();
+            anchor.Col1 = (/*setter*/2);
+            anchor.Col2 = (/*setter*/5);
+            anchor.Row1 = (/*setter*/10);
+            anchor.Row2 = (/*setter*/16);
+            patriarch.CreatePicture(anchor, indexPng);
+
+            anchor = ch.CreateClientAnchor();
+            anchor.Col1 = (/*setter*/6);
+            anchor.Col2 = (/*setter*/9);
+            anchor.Row1 = (/*setter*/1);
+            anchor.Row2 = (/*setter*/6);
+            patriarch.CreatePicture(anchor, indexWmf);
+
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb as HSSFWorkbook);
+            byte[] pictureDataOut = (wb.GetAllPictures()[0] as HSSFPictureData).Data;
+            Assert.IsTrue(Arrays.Equals(pictureDataEmf, pictureDataOut));
+
+            byte[] wmfNoHeader = new byte[pictureDataWmf.Length - 22];
+            Array.Copy(pictureDataWmf, 22, wmfNoHeader, 0, pictureDataWmf.Length - 22);
+            pictureDataOut = (wb.GetAllPictures()[2] as HSSFPictureData).Data;
+            Assert.IsTrue(Arrays.Equals(wmfNoHeader, pictureDataOut));
+
+            FileStream fos = new FileStream("vect.xls", FileMode.Create);
+            wb.Write(fos);
+            fos.Close();
+        }
+
     }
 }
