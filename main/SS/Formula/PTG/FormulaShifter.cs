@@ -362,7 +362,7 @@ namespace NPOI.SS.Formula
                 aptg.FirstRow = (destLastRowIndex + 1);
                 return aptg;
             }
-            if (destFirstRowIndex < aLastRow && aLastRow <= destLastRowIndex)
+            if (destFirstRowIndex <= aLastRow && aLastRow < destLastRowIndex)
             {
                 // dest rows overlap bottom of area
                 // - truncate the bottom

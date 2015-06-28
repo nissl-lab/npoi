@@ -2649,37 +2649,37 @@ namespace NPOI.XSSF.UserModel
          * @param reSetOriginalRowHeight whether to set the original row's height to the default
          */
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
+        
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
         {
+            // first remove all rows which will be overwritten
             List<int> rowsToRemove = new List<int>();
-            foreach (KeyValuePair<int,XSSFRow> rowDict in _rows)
+            foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
                 XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
-
+                // check if we should remove this row as it will be overwritten by the data later
                 if (RemoveRow(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.SheetData row array
-                    int idx = rowDict.Key+1;
-                    //if (n > 0) 
-                    //{ 
-                    //    idx -= rowsToRemove.Count; 
-                    //} 
-                    //else 
-                    //{ 
-                    //    idx += rowsToRemove.Count; 
-                    //} 
+                    int idx = rowDict.Key + 1;
                     // compensate removed rows
                     worksheet.sheetData.RemoveRow(idx);
                     // remove row from _rows
                     rowsToRemove.Add(rowDict.Key);
                 }
+            }
 
-                if (!copyRowHeight)
-                {
-                    row.Height = (short)-1;
-                }
-
+            foreach (int rowKey in rowsToRemove)
+            {
+                _rows.Remove(rowKey);
+            }
+            // then do the actual moving and also adjust comments/rowHeight 
+            foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
+            {
+                XSSFRow row = (XSSFRow)rowDict.Value;
+                int rownum = row.RowNum;
+            
                 if (sheetComments != null && rownum >= startRow && rownum <= endRow)
                 {
                     //TODO shift Note's anchor in the associated /xl/drawing/vmlDrawings#.vml
@@ -2690,31 +2690,34 @@ namespace NPOI.XSSF.UserModel
                         if (ref1.Row == rownum)
                         {
                             CellReference ref2 = new CellReference(rownum + n, ref1.Col);
-                            string originRef = comment.@ref;
                             comment.@ref = ref2.FormatAsString();
-                            break;
                         }
                     }
                 }
-            }
-            
-            foreach(int rowKey in rowsToRemove)
-            {
 
-                _rows.Remove(rowKey);
-            }
-            if(sheetComments!=null)
-                sheetComments.RecreateReference();
-            foreach (XSSFRow row in _rows.Values)
-            {
-                int rownum = row.RowNum;
+                if (rownum < startRow || rownum > endRow) continue;
 
-                if (rownum >= startRow && rownum <= endRow)
+                if (!copyRowHeight)
                 {
-                    row.Shift(n);
+                    row.Height = ((short)-1);
                 }
 
+                row.Shift(n);
             }
+
+            //if(sheetComments!=null)
+            //    sheetComments.RecreateReference();
+            //foreach (XSSFRow row in _rows.Values)
+            //{
+            //    int rownum = row.RowNum;
+
+            //    if (rownum >= startRow && rownum <= endRow)
+            //    {
+            //        row.Shift(n);
+            //    }
+
+            //}
+
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
 
             int sheetIndex = Workbook.GetSheetIndex(this);

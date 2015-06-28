@@ -283,6 +283,150 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(ctBorder.IsSetTop());
         }
         [Test]
+        public void TestGetSetBorderThin()
+        {
+            cellStyle.BorderTop = (BorderStyle.Thin);
+            Assert.AreEqual(BorderStyle.Thin, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.thin, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderMedium()
+        {
+            cellStyle.BorderTop = (BorderStyle.Medium);
+            Assert.AreEqual(BorderStyle.Medium, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.medium, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderThick()
+        {
+            cellStyle.BorderTop = (BorderStyle.Thick);
+            Assert.AreEqual(BorderStyle.Thick, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.thick, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderHair()
+        {
+            cellStyle.BorderTop = (BorderStyle.Hair);
+            Assert.AreEqual(BorderStyle.Hair, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.hair, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderDotted()
+        {
+            cellStyle.BorderTop = (BorderStyle.Dotted);
+            Assert.AreEqual(BorderStyle.Dotted, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.dotted, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderDashed()
+        {
+            cellStyle.BorderTop = (BorderStyle.Dashed);
+            Assert.AreEqual(BorderStyle.Dashed, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.dashed, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderDashDot()
+        {
+            cellStyle.BorderTop = (BorderStyle.DashDot);
+            Assert.AreEqual(BorderStyle.DashDot, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.dashDot, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderDashDotDot()
+        {
+            cellStyle.BorderTop=(BorderStyle.DashDotDot);
+            Assert.AreEqual(BorderStyle.DashDotDot, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.dashDotDot, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderMediumDashDot()
+        {
+            cellStyle.BorderTop = (BorderStyle.MediumDashDot);
+            Assert.AreEqual(BorderStyle.MediumDashDot, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.mediumDashDot, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderMediumDashDotDot()
+        {
+            cellStyle.BorderTop = (BorderStyle.MediumDashDotDot);
+            Assert.AreEqual(BorderStyle.MediumDashDotDot, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.mediumDashDotDot, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderMediumDashed()
+        {
+            cellStyle.BorderTop=(BorderStyle.MediumDashed);
+            Assert.AreEqual(BorderStyle.MediumDashed, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.mediumDashed, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderSlantDashDot()
+        {
+            cellStyle.BorderTop = (BorderStyle.SlantedDashDot);
+            Assert.AreEqual(BorderStyle.SlantedDashDot, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.slantDashDot, ctBorder.top.style);
+        }
+        [Test]
+        public void TestGetSetBorderDouble()
+        {
+            cellStyle.BorderTop=(BorderStyle.Double);
+            Assert.AreEqual(BorderStyle.Double, cellStyle.BorderTop);
+            int borderId = (int)cellStyle.GetCoreXf().borderId;
+            Assert.IsTrue(borderId > 0);
+            //check changes in the underlying xml bean
+            CT_Border ctBorder = stylesTable.GetBorderAt(borderId).GetCTBorder();
+            Assert.AreEqual(ST_BorderStyle.@double, ctBorder.top.style);
+        }
+
+        [Test]
         public void TestGetSetBottomBorderColor()
         {
             //defaults
