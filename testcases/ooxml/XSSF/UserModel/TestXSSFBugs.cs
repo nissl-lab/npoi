@@ -34,6 +34,8 @@ namespace NPOI.XSSF.UserModel
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula.Eval;
+    using TestCases;
+    using NPOI.POIFS.FileSystem;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -1437,6 +1439,45 @@ using NPOI.SS.Formula.Eval;
                 WorkbookEvaluator.RegisterFunction("GETPIVOTDATA", func);
             }
             workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+        }
+
+        /**
+         * Password Protected .xlsx files should give a helpful
+         *  error message when called via WorkbookFactory.
+         * (You need to supply a password explicitly for them)
+         */
+        [Test]
+        public void Test55692()
+        {
+            Stream inpA = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
+            Stream inpB = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
+            Stream inpC = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
+
+            // Directly on a Stream
+            try
+            {
+                WorkbookFactory.Create(inpA);
+                Assert.Fail("Should've raised a EncryptedDocumentException error");
+            }
+            catch (EncryptedDocumentException e) { }
+
+            // Via a POIFSFileSystem
+            POIFSFileSystem fsP = new POIFSFileSystem(inpB);
+            try
+            {
+                WorkbookFactory.Create(fsP);
+                Assert.Fail("Should've raised a EncryptedDocumentException error");
+            }
+            catch (EncryptedDocumentException e) { }
+
+            // Via a NPOIFSFileSystem
+            NPOIFSFileSystem fsNP = new NPOIFSFileSystem(inpC);
+            try
+            {
+                WorkbookFactory.Create(fsNP);
+                Assert.Fail("Should've raised a EncryptedDocumentException error");
+            }
+            catch (EncryptedDocumentException e) { }
         }
     }
 
