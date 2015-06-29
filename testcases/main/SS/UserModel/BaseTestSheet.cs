@@ -850,6 +850,23 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(expectedCols, s.RepeatingColumns.FormatAsString());
             }
         }
+        [Test]
+        public void TestBaseZoom()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            // here we can only verify that setting some zoom values works, range-checking is different between the implementations
+            sheet.SetZoom(3, 4);
+        }
+
+        [Test]
+        public void TestBaseShowInPane()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            sheet.ShowInPane(2, 3);
+        }
     }
 
 }

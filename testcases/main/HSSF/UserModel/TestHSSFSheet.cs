@@ -407,16 +407,22 @@ namespace TestCases.HSSF.UserModel
             int expectedHashB = -14556;
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet hssfSheet = (HSSFSheet)workbook.CreateSheet();
+            Assert.IsFalse(hssfSheet.ObjectProtect);
             hssfSheet.ProtectSheet(passwordA);
-
+            Assert.IsTrue(hssfSheet.ObjectProtect);
             Assert.AreEqual(expectedHashA, hssfSheet.Password);
+            Assert.AreEqual(expectedHashA, hssfSheet.Sheet.ProtectionBlock.PasswordHash);
+            
 
             // Clone the sheet, and make sure the password hash is preserved
             HSSFSheet sheet2 = (HSSFSheet)workbook.CloneSheet(0);
-            Assert.AreEqual(expectedHashA, sheet2.Password);
+            Assert.IsTrue(hssfSheet.ObjectProtect);
+            Assert.AreEqual(expectedHashA, sheet2.Sheet.ProtectionBlock.PasswordHash);
 
             // change the password on the first sheet
             hssfSheet.ProtectSheet(passwordB);
+            Assert.IsTrue(hssfSheet.ObjectProtect);
+            Assert.AreEqual(expectedHashB, hssfSheet.Sheet.ProtectionBlock.PasswordHash);
             Assert.AreEqual(expectedHashB, hssfSheet.Password);
             // but the cloned sheet's password should remain unchanged
             Assert.AreEqual(expectedHashA, sheet2.Password);
@@ -530,6 +536,44 @@ namespace TestCases.HSSF.UserModel
             int sclLoc = sheet.Sheet.FindFirstRecordLocBySid(SCLRecord.sid);
             int window2Loc = sheet.Sheet.FindFirstRecordLocBySid(WindowTwoRecord.sid);
             Assert.IsTrue(sclLoc == window2Loc + 1);
+
+            // verify limits
+            try
+            {
+                sheet.SetZoom(0, 2);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Numerator must be greater than 0 and less than 65536", e.Message);
+            }
+            try
+            {
+                sheet.SetZoom(65536, 2);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Numerator must be greater than 0 and less than 65536", e.Message);
+            }
+            try
+            {
+                sheet.SetZoom(2, 0);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Denominator must be greater than 0 and less than 65536", e.Message);
+            }
+            try
+            {
+                sheet.SetZoom(2, 65536);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Denominator must be greater than 0 and less than 65536", e.Message);
+            }
         }
 
 
@@ -676,6 +720,7 @@ namespace TestCases.HSSF.UserModel
 
             //Create a region over the 2nd row and auto size the first column
             sheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 1));
+            Assert.IsNotNull(sheet.GetMergedRegion(0));
             sheet.AutoSizeColumn(0);
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb);
 
@@ -1152,6 +1197,35 @@ namespace TestCases.HSSF.UserModel
                 Assert.AreEqual(w, sheet.GetColumnWidth((short)i));
             }
             Assert.AreEqual(40000, sheet.GetColumnWidth((short)10));
+        }
+
+        [Test]
+        public void TestShowInPane()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            sheet.ShowInPane(2, 3);
+
+            try
+            {
+                sheet.ShowInPane(int.MaxValue, 3);
+                Assert.Fail("Should catch exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Maximum row number is 65535", e.Message);
+            }
+        }
+        [Test]
+        public void TestDrawingRecords()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+
+            /* TODO: NPE?
+            sheet.dumpDrawingRecords(false);
+            sheet.dumpDrawingRecords(true);*/
+            Assert.IsNull(sheet.DrawingEscherAggregate);
         }
     }
 }
