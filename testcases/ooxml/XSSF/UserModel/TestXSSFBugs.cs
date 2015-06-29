@@ -171,7 +171,7 @@ using NPOI.SS.Formula.Eval;
         [Test]
         public void Test49020()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
+            /*XSSFWorkbook wb =*/ XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
         }
 
         /**
@@ -332,9 +332,9 @@ using NPOI.SS.Formula.Eval;
                 Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
 
                 // Get two more, unChanged
-                IFont b = wb.CreateFont();
+                /*IFont b = */wb.CreateFont();
                 Assert.AreEqual(startingFonts + 2, wb.NumberOfFonts);
-                IFont c = wb.CreateFont();
+                /*IFont c = */wb.CreateFont();
                 Assert.AreEqual(startingFonts + 3, wb.NumberOfFonts);
             }
         }
@@ -576,9 +576,9 @@ using NPOI.SS.Formula.Eval;
 
         /**
          * Repeatedly writing the same file which has styles
-         * TODO Currently failing
          */
-        public void DISABLEDtest49940()
+        [Test]
+        public void Test49940()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("styles.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);

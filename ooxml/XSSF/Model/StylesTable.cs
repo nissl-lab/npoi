@@ -439,7 +439,9 @@ namespace NPOI.XSSF.Model
                 styleSheet.numFmts = ctFormats;
 
             // Fonts
-            CT_Fonts ctFonts = new CT_Fonts();
+            CT_Fonts ctFonts = styleSheet.fonts;
+            if (ctFonts == null)
+                ctFonts = new CT_Fonts();
             ctFonts.count = (uint)fonts.Count;
             if (ctFonts.count > 0)
                 ctFonts.countSpecified = true;
@@ -451,29 +453,43 @@ namespace NPOI.XSSF.Model
             styleSheet.fonts = (ctFonts);
 
             // Fills
+            CT_Fills ctFills = styleSheet.fills;
+            if (ctFills == null)
+            {
+                ctFills = new CT_Fills();
+            }
+            ctFills.count = (uint)fills.Count;
             List<CT_Fill> ctf = new List<CT_Fill>(fills.Count);
+            
             foreach (XSSFCellFill f in fills)
                 ctf.Add( f.GetCTFill());
-            CT_Fills ctFills = new CT_Fills();
             ctFills.SetFillArray(ctf);
-            ctFills.count = (uint)fills.Count;
             if (ctFills.count > 0)
                 ctFills.countSpecified = true;
             styleSheet.fills = ctFills;
 
             // Borders
+            CT_Borders ctBorders = styleSheet.borders;
+            if (ctBorders == null)
+            {
+                ctBorders = new CT_Borders();
+            }
+            ctBorders.count = (uint)borders.Count;
             List<CT_Border> ctb = new List<CT_Border>(borders.Count);
             foreach (XSSFCellBorder b in borders) 
                 ctb.Add(b.GetCTBorder());
-            CT_Borders ctBorders = new CT_Borders();
+            
             ctBorders.SetBorderArray(ctb);
-            ctBorders.count = (uint)ctb.Count;
             styleSheet.borders = ctBorders;
 
             // Xfs
             if (xfs.Count > 0)
             {
-                CT_CellXfs ctXfs = new CT_CellXfs();
+                CT_CellXfs ctXfs = styleSheet.cellXfs;
+                if (ctXfs == null)
+                {
+                    ctXfs = new CT_CellXfs();
+                }
                 ctXfs.count = (uint)xfs.Count;
                 if (ctXfs.count > 0)
                     ctXfs.countSpecified = true;
@@ -485,7 +501,11 @@ namespace NPOI.XSSF.Model
             // Style xfs
             if (styleXfs.Count > 0)
             {
-                CT_CellStyleXfs ctSXfs = new CT_CellStyleXfs();
+                CT_CellStyleXfs ctSXfs = styleSheet.cellStyleXfs;
+                if (ctSXfs == null)
+                {
+                    ctSXfs = new CT_CellStyleXfs();
+                }
                 ctSXfs.count = (uint)(styleXfs.Count);
                 if (ctSXfs.count > 0)
                     ctSXfs.countSpecified = true;
@@ -497,7 +517,11 @@ namespace NPOI.XSSF.Model
             // Style dxfs
             if (dxfs.Count > 0)
             {
-                CT_Dxfs ctDxfs = new CT_Dxfs();
+                CT_Dxfs ctDxfs = styleSheet.dxfs;
+                if (ctDxfs == null)
+                {
+                    ctDxfs = new CT_Dxfs();
+                }
                 ctDxfs.count = (uint)dxfs.Count;
                 if (ctDxfs.count > 0)
                     ctDxfs.countSpecified = true;
