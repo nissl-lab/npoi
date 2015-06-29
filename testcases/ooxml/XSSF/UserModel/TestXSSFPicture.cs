@@ -63,7 +63,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             Assert.AreEqual(AnchorType.MoveAndResize, (AnchorType)anchor.AnchorType);
-            anchor.AnchorType = (int)AnchorType.DontMoveAndResize;
+            anchor.AnchorType = AnchorType.DontMoveAndResize;
             Assert.AreEqual(AnchorType.DontMoveAndResize, (AnchorType)anchor.AnchorType);
 
             XSSFPicture shape = (XSSFPicture)drawing.CreatePicture(anchor, jpegIdx);

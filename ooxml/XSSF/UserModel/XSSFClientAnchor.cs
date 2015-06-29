@@ -214,15 +214,15 @@ namespace NPOI.XSSF.UserModel
                 cell2.colOff = value;
             }
         }
-        public int AnchorType
+        public AnchorType AnchorType
         {
             get
             {
-                return this.anchorType;
+                return (AnchorType)this.anchorType;
             }
             set
             {
-                this.anchorType = value;
+                this.anchorType = (int)value;
             }
         }
 
