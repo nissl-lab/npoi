@@ -52,6 +52,10 @@ namespace NPOI.HSSF.Record
                     return new LbsDataSubRecord(in1, secondUShort, (int)cmoOt);
                 case FtCblsSubRecord.sid:
                     return new FtCblsSubRecord(in1, secondUShort);
+                case FtPioGrbitSubRecord.sid:
+                    return new FtPioGrbitSubRecord(in1, secondUShort);
+                case FtCfSubRecord.sid:
+                    return new FtCfSubRecord(in1, secondUShort);
             }
             return new UnknownSubRecord(in1, sid, secondUShort);
         }

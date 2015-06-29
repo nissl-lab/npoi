@@ -4,6 +4,7 @@
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
+    using NPOI.SS.UserModel;
 
     [Obsolete]
     public class ComboboxShape:AbstractShape
@@ -75,7 +76,7 @@
             opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00020000));
 
             HSSFClientAnchor userAnchor = (HSSFClientAnchor)shape.Anchor;
-            userAnchor.AnchorType = 1;
+            userAnchor.AnchorType = (AnchorType)1;
             EscherRecord anchor = CreateAnchor(userAnchor);
             clientData.RecordId=(EscherClientDataRecord.RECORD_ID);
             clientData.Options=((short)0x0000);

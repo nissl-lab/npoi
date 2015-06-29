@@ -106,7 +106,7 @@ namespace NPOI.HSSF.UserModel
         public void Resize(double scale)
         {
             HSSFClientAnchor anchor = (HSSFClientAnchor)Anchor;
-            anchor.AnchorType = 2;
+            anchor.AnchorType = (AnchorType)2;
 
             IClientAnchor pref = GetPreferredSize(scale);
 

@@ -1265,15 +1265,15 @@ namespace NPOI.HSSF.UserModel
                 if (preserveNodes)
                 {
                     // Don't Write out the old Workbook, we'll be doing our new one
-                    excepts.Add("Workbook");
                     // If the file had an "incorrect" name for the workbook stream,
                     // don't write the old one as we'll use the correct name shortly
-                    foreach (String wrongName in WORKBOOK_DIR_ENTRY_NAMES) {
-                       excepts.Add(wrongName);
-                    }
+                    excepts.AddRange(WORKBOOK_DIR_ENTRY_NAMES);
 
                     // Copy over all the other nodes to our new poifs
-                    POIUtils.CopyNodes(directory, fs.Root, excepts);
+                    EntryUtils.CopyNodes(
+                            new FilteringDirectoryNode(this.directory, excepts)
+                            , new FilteringDirectoryNode(fs.Root, excepts)
+                    );
                     // YK: preserve StorageClsid, it is important for embedded workbooks,
                     // see Bugzilla 47920
                     fs.Root.StorageClsid = (this.directory.StorageClsid);
@@ -1711,11 +1711,52 @@ namespace NPOI.HSSF.UserModel
             InitDrawings();
 
             byte[] uid;
-            using (SHA1 hasher = SHA1.Create())
+            using (MD5 hasher = MD5.Create())
             {
                 uid = hasher.ComputeHash(pictureData);
             }
-            EscherBitmapBlip blipRecord = new EscherBitmapBlip();
+            EscherBlipRecord blipRecord;
+            int blipSize;
+            short escherTag;
+            switch (format) {
+                case PictureType.WMF:
+                    // remove first 22 bytes if file starts with magic bytes D7-CD-C6-9A
+                    // see also http://de.wikipedia.org/wiki/Windows_Metafile#Hinweise_zur_WMF-Spezifikation
+                    if (LittleEndian.GetInt(pictureData) == unchecked((int)0x9AC6CDD7)) {
+                        byte[] picDataNoHeader = new byte[pictureData.Length-22];
+                        Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
+                        pictureData = picDataNoHeader;
+                    }
+                    EscherMetafileBlip blipRecordMeta = new EscherMetafileBlip();
+                    blipRecord = blipRecordMeta;
+                    blipRecordMeta.UID=(/*setter*/uid);
+                    blipRecordMeta.SetPictureData(pictureData);
+                    // taken from libre office export, it won't open, if this is left to 0
+                    blipRecordMeta.Filter=(/*setter*/unchecked((byte)-2));
+                    blipSize = blipRecordMeta.CompressedSize + 58;
+                    escherTag = 0;
+                    break;
+                case PictureType.EMF:
+                    blipRecordMeta = new EscherMetafileBlip();
+                    blipRecord = blipRecordMeta;
+                    blipRecordMeta.UID=(/*setter*/uid);
+                    blipRecordMeta.SetPictureData(pictureData);
+                    // taken from libre office export, it won't open, if this is left to 0
+                    blipRecordMeta.Filter=(/*setter*/unchecked((byte)-2));
+                    blipSize = blipRecordMeta.CompressedSize + 58;
+                    escherTag = 0;
+                    break;
+                default:
+                    EscherBitmapBlip blipRecordBitmap = new EscherBitmapBlip();
+                    blipRecord = blipRecordBitmap;
+                    blipRecordBitmap.UID=(/*setter*/ uid );
+                    blipRecordBitmap.Marker=(/*setter*/ (byte) 0xFF );
+                    blipRecordBitmap.PictureData=(pictureData);
+                    blipSize = pictureData.Length + 25;
+                    escherTag = (short) 0xFF;
+    	            break;
+            }
+
             blipRecord.RecordId = (short)(EscherBitmapBlip.RECORD_ID_START + format);
             
             switch (format)
@@ -1739,10 +1780,6 @@ namespace NPOI.HSSF.UserModel
                     blipRecord.Options = HSSFPictureData.MSOBI_DIB;
                     break;
             }
-
-            blipRecord.UID = uid;
-            blipRecord.Marker = (byte)0xFF;
-            blipRecord.PictureData = pictureData;
 
             EscherBSERecord r = new EscherBSERecord();
             r.RecordId = EscherBSERecord.RECORD_ID;
@@ -1819,6 +1856,71 @@ namespace NPOI.HSSF.UserModel
                     SearchForPictures(escherRecord.ChildRecords, pictures);
                 }
             }
+        }
+        protected static Dictionary<String, ClassID> GetOleMap()
+        {
+            Dictionary<String, ClassID> olemap = new Dictionary<String, ClassID>();
+            olemap.Add("PowerPoint Document", ClassID.PPT_SHOW);
+            foreach (String str in WORKBOOK_DIR_ENTRY_NAMES)
+            {
+                olemap.Add(str, ClassID.XLS_WORKBOOK);
+            }
+            // ... to be continued
+            return olemap;
+        }
+
+        public int AddOlePackage(POIFSFileSystem poiData, String label, String fileName, String command)
+        {
+            DirectoryNode root = poiData.Root;
+            Dictionary<String, ClassID> olemap = GetOleMap();
+            foreach (KeyValuePair<String, ClassID> entry in olemap)
+            {
+                if (root.HasEntry(entry.Key))
+                {
+                    root.StorageClsid = (/*setter*/entry.Value);
+                    break;
+                }
+            }
+
+            MemoryStream bos = new MemoryStream();
+            poiData.WriteFileSystem(bos);
+            return AddOlePackage(bos.ToArray(), label, fileName, command);
+        }
+
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
+        {
+            // check if we were Created by POIFS otherwise create a new dummy POIFS for storing the package data
+            if (directory == null)
+            {
+                directory = new POIFSFileSystem().Root;
+                preserveNodes = true;
+            }
+
+            // Get free MBD-Node
+            int storageId = 0;
+            DirectoryEntry oleDir = null;
+            do
+            {
+                String storageStr = "MBD" + HexDump.ToHex(++storageId);
+                if (!directory.HasEntry(storageStr))
+                {
+                    oleDir = directory.CreateDirectory(storageStr);
+                    oleDir.StorageClsid = (/*setter*/ClassID.OLE10_PACKAGE);
+                }
+            } while (oleDir == null);
+
+            // the following data was taken from an example libre office document
+            // beside this "\u0001Ole" record there were several other records, e.g. CompObj,
+            // OlePresXXX, but it seems, that they aren't neccessary
+            byte[] oleBytes = { 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            oleDir.CreateDocument("\u0001Ole", new MemoryStream(oleBytes));
+
+            Ole10Native oleNative = new Ole10Native(label, fileName, command, oleData);
+            MemoryStream bos = new MemoryStream();
+            oleNative.WriteOut(bos);
+            oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
+
+            return storageId;
         }
 
         /// <summary>

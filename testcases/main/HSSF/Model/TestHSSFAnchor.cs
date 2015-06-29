@@ -22,6 +22,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.DDF;
 using NUnit.Framework;
 using TestCases.HSSF.UserModel;
+using NPOI.SS.UserModel;
 
 namespace TestCases.HSSF.Model
 {
@@ -149,7 +150,7 @@ namespace TestCases.HSSF.Model
 
             HSSFPatriarch drawing = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFClientAnchor anchor = new HSSFClientAnchor(10, 10, 200, 200, (short)2, 2, (short)15, 15);
-            anchor.AnchorType = (2);
+            anchor.AnchorType = (AnchorType)(2);
 
             HSSFSimpleShape rectangle = drawing.CreateSimpleShape(anchor);
             rectangle.ShapeType = (HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
@@ -377,7 +378,7 @@ namespace TestCases.HSSF.Model
             clientAnchor2.Row2=(7);
             Assert.AreEqual(clientAnchor1, clientAnchor2);
 
-            clientAnchor2.AnchorType=(3);
+            clientAnchor2.AnchorType = (AnchorType)(3);
             Assert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.AnchorType=(0);
             Assert.AreEqual(clientAnchor1, clientAnchor2);

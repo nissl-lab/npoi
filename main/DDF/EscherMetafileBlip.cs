@@ -23,6 +23,7 @@ namespace NPOI.DDF
     using NPOI.Util;
     using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
     using ICSharpCode.SharpZipLib.Zip.Compression;
+    using NPOI.HSSF.UserModel;
 
     /// <summary>
     /// @author Daniel Noll
@@ -376,18 +377,53 @@ namespace NPOI.DDF
             get{
                 short sig = 0;
                 switch(RecordId){
-                    case RECORD_ID_EMF: 
-                        sig = SIGNATURE_EMF; 
+                    case RECORD_ID_EMF:
+                        sig = HSSFPictureData.MSOBI_EMF; 
                         break;
-                    case RECORD_ID_WMF: 
-                        sig = SIGNATURE_WMF; 
+                    case RECORD_ID_WMF:
+                        sig = HSSFPictureData.MSOBI_WMF; 
                         break;
-                    case RECORD_ID_PICT: 
-                        sig = SIGNATURE_PICT; 
+                    case RECORD_ID_PICT:
+                        sig = HSSFPictureData.MSOBI_PICT; 
                         break;
                     default: log.Log(POILogger.WARN, "Unknown metafile: " + RecordId); break;
                 }
                 return sig;
+            }
+        }
+
+        public void SetPictureData(byte[] pictureData)
+        {
+            base.PictureData = (pictureData);
+            UncompressedSize = (pictureData.Length);
+
+            // info of chicago project:
+            // "... LZ compression algorithm in the format used by GNU Zip deflate/inflate with a 32k window ..."
+            // not sure what to do, when lookup tables exceed 32k ...
+
+            try
+            {
+                MemoryStream bos = new MemoryStream();
+                DeflaterOutputStream dos = new DeflaterOutputStream(bos);
+                dos.Write(pictureData, 0, pictureData.Length);
+                dos.Close();
+                raw_pictureData = bos.ToArray();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException("Can't compress metafile picture data", e);
+            }
+
+            CompressedSize=(raw_pictureData.Length);
+            IsCompressed = (true);
+        }
+
+        public byte Filter
+        {
+            get { return field_7_fFilter; }
+            set
+            {
+                field_7_fFilter = value;
             }
         }
     }

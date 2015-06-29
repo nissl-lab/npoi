@@ -17,6 +17,7 @@
 using System;
 using NPOI.DDF;
 using NPOI.HSSF.Record;
+using NPOI.SS.UserModel;
 
 namespace NPOI.HSSF.UserModel
 {
@@ -62,7 +63,7 @@ namespace NPOI.HSSF.UserModel
             opt.AddEscherProperty(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00020000));
 
             HSSFClientAnchor userAnchor = (HSSFClientAnchor)Anchor;
-            userAnchor.AnchorType = (1);
+            userAnchor.AnchorType = (AnchorType)(1);
             EscherRecord anchor = userAnchor.GetEscherAnchor();
             clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
             clientData.Options = ((short)0x0000);
