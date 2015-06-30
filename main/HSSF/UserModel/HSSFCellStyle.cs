@@ -22,6 +22,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
+    using System.Collections.Generic;
 
     /// <summary>
     /// High level representation of the style of a cell in a sheet of a workbook.
@@ -32,7 +33,7 @@ namespace NPOI.HSSF.UserModel
     {
         private ExtendedFormatRecord format = null;
         private short index = 0;
-        private NPOI.HSSF.Model.InternalWorkbook workbook = null;
+        private NPOI.HSSF.Model.InternalWorkbook _workbook = null;
 
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="workbook">The workbook.</param>
         public HSSFCellStyle(short index, ExtendedFormatRecord rec, NPOI.HSSF.Model.InternalWorkbook workbook)
         {
-            this.workbook = workbook;
+            this._workbook = workbook;
             this.index = index;
             format = rec;
         }
@@ -86,8 +87,8 @@ namespace NPOI.HSSF.UserModel
                 }
                 return new HSSFCellStyle(
                         parentIndex,
-                        workbook.GetExFormatAt(parentIndex),
-                        workbook
+                        _workbook.GetExFormatAt(parentIndex),
+                        _workbook
                 );
             }
         }
@@ -100,7 +101,9 @@ namespace NPOI.HSSF.UserModel
             get { return format.FormatIndex; }
             set { format.FormatIndex = (value); }
         }
-
+        private static short lastDateFormat = short.MinValue;
+        private static List<FormatRecord> lastFormats = null;
+        private static String getDataFormatStringCache = null;
         /// <summary>
         /// Get the contents of the format string, by looking up
         /// the DataFormat against the bound workbook
@@ -108,15 +111,42 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public String GetDataFormatString()
         {
-            HSSFDataFormat format = new HSSFDataFormat(workbook);
+            //HSSFDataFormat format = new HSSFDataFormat(workbook);
+            //return format.GetFormat(DataFormat);
 
-            return format.GetFormat(DataFormat);
+            if (getDataFormatStringCache != null)
+            {
+                if (lastDateFormat == DataFormat && _workbook.Formats.Equals(lastFormats))
+                {
+                    return getDataFormatStringCache;
+                }
+            }
+
+            lastFormats = _workbook.Formats;
+            lastDateFormat = DataFormat;
+
+            getDataFormatStringCache = GetDataFormatString(_workbook);
+
+            return getDataFormatStringCache;
+        }
+
+        /// <summary>
+        /// Get the contents of the format string, by looking up the DataFormat against the supplied workbook
+        /// </summary>
+        /// <param name="workbook">The workbook</param>
+        /// <returns>the format string or "General" if not found</returns>
+        public String GetDataFormatString(IWorkbook workbook)
+        {
+            HSSFDataFormat format = new HSSFDataFormat(((HSSFWorkbook)workbook).Workbook);
+
+            int idx = DataFormat;
+            return idx == -1 ? "General" : format.GetFormat(DataFormat);
         }
         /// <summary>
         /// Get the contents of the format string, by looking up
         /// the DataFormat against the supplied workbook
         /// </summary>
-        /// <param name="workbook">The workbook.</param>
+        /// <param name="workbook">The internal workbook.</param>
         /// <returns></returns>
         public String GetDataFormatString(NPOI.HSSF.Model.InternalWorkbook workbook)
         {
@@ -280,7 +310,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="wb">The workbook.</param>
         public void VerifyBelongsToWorkbook(HSSFWorkbook wb)
         {
-            if (wb.Workbook != workbook)
+            if (wb.Workbook != _workbook)
             {
                 throw new ArgumentException("This Style does not belong to the supplied Workbook. Are you trying to assign a style from one workbook to the cell of a differnt workbook?");
             }
@@ -474,17 +504,17 @@ namespace NPOI.HSSF.UserModel
                     FillBackgroundColor=(HSSFColor.Automatic.Index);
         }
         /**
- * Clones all the style information from another
- *  HSSFCellStyle, onto this one. This
- *  HSSFCellStyle will then have all the same
- *  properties as the source, but the two may
- *  be edited independently.
- * Any stylings on this HSSFCellStyle will be lost!
- *
- * The source HSSFCellStyle could be from another
- *  HSSFWorkbook if you like. This allows you to
- *  copy styles from one HSSFWorkbook to another.
- */
+         * Clones all the style information from another
+         *  HSSFCellStyle, onto this one. This
+         *  HSSFCellStyle will then have all the same
+         *  properties as the source, but the two may
+         *  be edited independently.
+         * Any stylings on this HSSFCellStyle will be lost!
+         *
+         * The source HSSFCellStyle could be from another
+         *  HSSFWorkbook if you like. This allows you to
+         *  copy styles from one HSSFWorkbook to another.
+         */
         public void CloneStyleFrom(ICellStyle source)
         {
             if (source is HSSFCellStyle)
@@ -516,26 +546,29 @@ namespace NPOI.HSSF.UserModel
             format.CloneStyleFrom(source.format);
 
             // Handle matching things if we cross workbooks
-            if (workbook != source.workbook)
+            if (_workbook != source._workbook)
             {
+                lastDateFormat = short.MinValue;
+                lastFormats = null;
+                getDataFormatStringCache = null;
                 // Then we need to clone the format string,
                 //  and update the format record for this
-                short fmt = (short)workbook.CreateFormat(
+                short fmt = (short)_workbook.CreateFormat(
                         source.GetDataFormatString()
                 );
                 this.DataFormat=(fmt);
 
                 // Finally we need to clone the font,
                 //  and update the format record for this
-                FontRecord fr = workbook.CreateNewFont();
+                FontRecord fr = _workbook.CreateNewFont();
                 fr.CloneStyleFrom(
-                        source.workbook.GetFontRecordAt(
+                        source._workbook.GetFontRecordAt(
                                 source.FontIndex
                         )
                 );
 
                 HSSFFont font = new HSSFFont(
-                        (short)workbook.GetFontIndex(fr), fr
+                        (short)_workbook.GetFontIndex(fr), fr
                 );
                 this.SetFont(font);
             }
@@ -580,7 +613,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                HSSFPalette pallette = new HSSFPalette(workbook.CustomPalette);
+                HSSFPalette pallette = new HSSFPalette(_workbook.CustomPalette);
                 return pallette.GetColor(FillBackgroundColor);
             }
         }
@@ -602,7 +635,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                HSSFPalette pallette = new HSSFPalette(workbook.CustomPalette);
+                HSSFPalette pallette = new HSSFPalette(_workbook.CustomPalette);
                 return pallette.GetColor(FillForegroundColor);
             }
         }
@@ -615,7 +648,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                StyleRecord sr = workbook.GetStyleRecord(index);
+                StyleRecord sr = _workbook.GetStyleRecord(index);
                 if (sr == null)
                 {
                     return null;
@@ -628,10 +661,10 @@ namespace NPOI.HSSF.UserModel
             }
             set 
             {
-                StyleRecord sr = workbook.GetStyleRecord(index);
+                StyleRecord sr = _workbook.GetStyleRecord(index);
                 if (sr == null)
                 {
-                    sr = workbook.CreateStyleRecord(index);
+                    sr = _workbook.CreateStyleRecord(index);
                 }
                 // All Style records start as "builtin", but generally
                 //  only 20 and below really need to be

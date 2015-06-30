@@ -185,6 +185,7 @@ namespace NPOI.XWPF.Extractor
 
         private void extractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
         {
+            if (hfPolicy == null) return;
             if (hfPolicy.GetFirstPageFooter() != null)
             {
                 text.Append(hfPolicy.GetFirstPageFooter().Text);
@@ -201,6 +202,7 @@ namespace NPOI.XWPF.Extractor
 
         private void extractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
         {
+            if (hfPolicy == null) return;
             if (hfPolicy.GetFirstPageHeader() != null)
             {
                 text.Append(hfPolicy.GetFirstPageHeader().Text);

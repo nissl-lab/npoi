@@ -34,6 +34,8 @@ namespace NPOI.XSSF.UserModel
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula.Eval;
+    using TestCases;
+    using NPOI.POIFS.FileSystem;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -169,7 +171,7 @@ using NPOI.SS.Formula.Eval;
         [Test]
         public void Test49020()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
+            /*XSSFWorkbook wb =*/ XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
         }
 
         /**
@@ -330,9 +332,9 @@ using NPOI.SS.Formula.Eval;
                 Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
 
                 // Get two more, unChanged
-                IFont b = wb.CreateFont();
+                /*IFont b = */wb.CreateFont();
                 Assert.AreEqual(startingFonts + 2, wb.NumberOfFonts);
-                IFont c = wb.CreateFont();
+                /*IFont c = */wb.CreateFont();
                 Assert.AreEqual(startingFonts + 3, wb.NumberOfFonts);
             }
         }
@@ -574,9 +576,9 @@ using NPOI.SS.Formula.Eval;
 
         /**
          * Repeatedly writing the same file which has styles
-         * TODO Currently failing
          */
-        public void DISABLEDtest49940()
+        [Test]
+        public void Test49940()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("styles.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);
@@ -1437,6 +1439,45 @@ using NPOI.SS.Formula.Eval;
                 WorkbookEvaluator.RegisterFunction("GETPIVOTDATA", func);
             }
             workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+        }
+
+        /**
+         * Password Protected .xlsx files should give a helpful
+         *  error message when called via WorkbookFactory.
+         * (You need to supply a password explicitly for them)
+         */
+        [Test]
+        public void Test55692()
+        {
+            Stream inpA = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
+            Stream inpB = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
+            Stream inpC = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
+
+            // Directly on a Stream
+            try
+            {
+                WorkbookFactory.Create(inpA);
+                Assert.Fail("Should've raised a EncryptedDocumentException error");
+            }
+            catch (EncryptedDocumentException e) { }
+
+            // Via a POIFSFileSystem
+            POIFSFileSystem fsP = new POIFSFileSystem(inpB);
+            try
+            {
+                WorkbookFactory.Create(fsP);
+                Assert.Fail("Should've raised a EncryptedDocumentException error");
+            }
+            catch (EncryptedDocumentException e) { }
+
+            // Via a NPOIFSFileSystem
+            NPOIFSFileSystem fsNP = new NPOIFSFileSystem(inpC);
+            try
+            {
+                WorkbookFactory.Create(fsNP);
+                Assert.Fail("Should've raised a EncryptedDocumentException error");
+            }
+            catch (EncryptedDocumentException e) { }
         }
     }
 

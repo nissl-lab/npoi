@@ -360,6 +360,20 @@ namespace NPOI.XWPF.Extractor
                 Assert.AreEqual(true, hit, "controlled content loading-" + targ);
             }
             Assert.AreEqual(targs.Length, hits, "controlled content loading hit count");
+
+            ex.Close();
+        }
+
+        /** No Header or Footer in document */
+        [Test]
+        public void TestBug55733()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("55733.docx");
+            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+
+            // Check it gives text without error
+            string text = extractor.Text;
+            extractor.Close();
         }
     }
 }

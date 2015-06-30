@@ -934,6 +934,21 @@ namespace NPOI.XSSF.UserModel
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle; // no exception at this point
             Assert.IsNull(style.GetStyleXf());
         }
+        /**
+         * Avoid ArrayIndexOutOfBoundsException  when getting cell style
+         * in a workbook that has an empty xf table.
+         */
+        [Test]
+        public void TestBug55650()
+        {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("52348.xlsx");
+            StylesTable st = workbook.GetStylesSource();
+            Assert.AreEqual(0, st.StyleXfsSize);
 
+            // no exception at this point
+            XSSFCellStyle style = workbook.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle as XSSFCellStyle;
+            Assert.IsNull(style.GetStyleXf());
+
+        }
     }
 }

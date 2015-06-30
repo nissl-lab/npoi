@@ -231,7 +231,17 @@ namespace NPOI.HSSF.UserModel
                     // continue - to try other options
                 }
             }
-
+            // check for an encrypted .xlsx file - they get OLE2 wrapped
+            try
+            {
+                directory.GetEntry("EncryptedPackage");
+                throw new EncryptedDocumentException("The supplied spreadsheet seems to be an Encrypted .xlsx file. " +
+                        "It must be decrypted before use by XSSF, it cannot be used by HSSF");
+            }
+            catch (FileNotFoundException e)
+            {
+                // fall through
+            }
             // Check for previous version of file format
             try
             {

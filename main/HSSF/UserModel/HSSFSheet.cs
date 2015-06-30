@@ -1103,9 +1103,9 @@ namespace NPOI.HSSF.UserModel
         public void SetZoom(int numerator, int denominator)
         {
             if (numerator < 1 || numerator > 65535)
-                throw new ArgumentException("Numerator must be greater than 1 and less than 65536");
+                throw new ArgumentException("Numerator must be greater than 0 and less than 65536");
             if (denominator < 1 || denominator > 65535)
-                throw new ArgumentException("Denominator must be greater than 1 and less than 65536");
+                throw new ArgumentException("Denominator must be greater than 0 and less than 65536");
 
             SCLRecord sclRecord = new SCLRecord();
             sclRecord.Numerator = ((short)numerator);

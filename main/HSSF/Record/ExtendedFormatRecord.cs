@@ -1044,6 +1044,13 @@ namespace NPOI.HSSF.Record
             return false;
         }
 
-
+        public int[] StateSummary
+        {
+            get
+            {
+                return new int[] { field_1_font_index, field_2_format_index, field_3_cell_options, field_4_alignment_options,
+                field_5_indention_options, field_6_border_options, field_7_palette_options, field_8_adtl_palette_options, field_9_fill_palette_options };
+            }
+        }
     }
 }
