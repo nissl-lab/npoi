@@ -115,7 +115,7 @@ namespace NPOI.POIFS.FileSystem
         {
 
         }
-        private NPOIFSFileSystem(FileStream channel, bool closeChannelOnError)
+        public NPOIFSFileSystem(FileStream channel, bool closeChannelOnError)
             : this(false)
         {
 
