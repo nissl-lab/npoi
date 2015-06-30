@@ -141,6 +141,16 @@ namespace NPOI.XSSF.UserModel.Extensions
             }
         }
 
+        public bool ShrinkToFit
+        {
+            get { return cellAlignement.shrinkToFit; }
+            set
+            {
+                cellAlignement.shrinkToFit = value;
+                cellAlignement.shrinkToFitSpecified = value;
+            }
+        }
+
         /**
          * Access to low-level data
          */

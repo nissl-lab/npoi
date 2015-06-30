@@ -169,6 +169,7 @@
     <Compile Include="XWPF\TestAllExtendedProperties.cs" />
     <Compile Include="XWPF\TestDocumentProtection.cs" />
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
+    <Compile Include="XWPF\TestXWPFBugs.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeader.cs" />
