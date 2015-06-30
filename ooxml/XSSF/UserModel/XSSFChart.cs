@@ -287,9 +287,18 @@ namespace NPOI.XSSF.UserModel
 
         private void ParseAxis()
         {
+            ParseCategoryAxis();
             ParseValueAxis();
         }
-
+        private void ParseCategoryAxis()
+        {
+            if (chart.plotArea.catAx == null)
+                return;
+            foreach (CT_CatAx catAx in chart.plotArea.catAx)
+            {
+                axis.Add(new XSSFCategoryAxis(this, catAx));
+            }
+        }
         private void ParseValueAxis()
         {
             if (chart.plotArea.valAx == null)
