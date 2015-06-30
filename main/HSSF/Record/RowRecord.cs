@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
         public const int ENCODED_SIZE = 20;
 
         private const int OPTION_BITS_ALWAYS_SET = 0x0100;
-        private const int DEFAULT_HEIGHT_BIT = 0x8000;
+        //private const int DEFAULT_HEIGHT_BIT = 0x8000;
 
         /** The maximum row number that excel can handle (zero based) ie 65536 rows Is
          *  max number of rows.
@@ -286,16 +286,32 @@ namespace NPOI.HSSF.Record
             get { return xfIndex.GetShortValue((short)field_8_option_flags); }
             set { field_8_option_flags = xfIndex.SetValue(field_8_option_flags, value); }
         }
+        /**
+         * bit that specifies whether any cell in the row has a thick top border, or any
+         * cell in the row directly above the current row has a thick bottom border.
+         * @param f has thick top border
+         */
         public bool TopBorder
         {
             get { return topBorder.IsSet(field_8_option_flags); }
             set { field_8_option_flags = topBorder.SetBoolean(field_8_option_flags, value); }
         }
+        /**
+         * A bit that specifies whether any cell in the row has a medium or thick
+         * bottom border, or any cell in the row directly below the current row has
+         * a medium or thick top border.
+         * @param f has thick bottom border
+         */
         public bool BottomBorder
         {
             get { return bottomBorder.IsSet(field_8_option_flags); }
             set { field_8_option_flags = bottomBorder.SetBoolean(field_8_option_flags, value); }
         }
+        /**
+         * A bit that specifies whether the phonetic guide feature is enabled for
+         * any cell in this row.
+         * @param f use phoenetic guide
+         */
         public bool PhoeneticGuide
         {
             get { return phoeneticGuide.IsSet(field_8_option_flags); }
@@ -306,40 +322,23 @@ namespace NPOI.HSSF.Record
             StringBuilder buffer = new StringBuilder();
 
             buffer.Append("[ROW]\n");
-            buffer.Append("    .rownumber      = ")
-                .Append(StringUtil.ToHexString(RowNumber)).Append("\n");
-            buffer.Append("    .firstcol       = ")
-                .Append(StringUtil.ToHexString(FirstCol)).Append("\n");
-            buffer.Append("    .lastcol        = ")
-                .Append(StringUtil.ToHexString(LastCol)).Append("\n");
-            buffer.Append("    .height         = ")
-                .Append(StringUtil.ToHexString(Height)).Append("\n");
-            buffer.Append("    .optimize       = ")
-                .Append(StringUtil.ToHexString(Optimize)).Append("\n");
-            buffer.Append("    .reserved       = ")
-                .Append(StringUtil.ToHexString(field_6_reserved)).Append("\n");
-            buffer.Append("    .optionflags    = ")
-                .Append(StringUtil.ToHexString(OptionFlags)).Append("\n");
-            buffer.Append("        .outlinelvl = ")
-                .Append(StringUtil.ToHexString(OutlineLevel)).Append("\n");
-            buffer.Append("        .colapsed   = ").Append(Colapsed)
-                .Append("\n");
-            buffer.Append("        .zeroheight = ").Append(ZeroHeight)
-                .Append("\n");
-            buffer.Append("        .badfontheig= ").Append(BadFontHeight)
-                .Append("\n");
-            buffer.Append("        .formatted  = ").Append(Formatted)
-                .Append("\n");
-            buffer.Append("        .optionsflags2  = ").Append(StringUtil.ToHexString(OptionFlags2))
-    .Append("\n");
-            buffer.Append("        .xFindex    = ")
-                .Append(StringUtil.ToHexString(XFIndex)).Append("\n");
-            buffer.Append("        .topBorder  = ").Append(TopBorder)
-    .Append("\n");
-            buffer.Append("        .bottomBorder  = ").Append(BottomBorder)
-    .Append("\n");
-            buffer.Append("        .phoeneticGuide= ").Append(PhoeneticGuide)
-    .Append("\n");
+            buffer.Append("    .rownumber      = ").Append(StringUtil.ToHexString(RowNumber)).Append("\n");
+            buffer.Append("    .firstcol       = ").Append(StringUtil.ToHexString(FirstCol)).Append("\n");
+            buffer.Append("    .lastcol        = ").Append(StringUtil.ToHexString(LastCol)).Append("\n");
+            buffer.Append("    .height         = ").Append(StringUtil.ToHexString(Height)).Append("\n");
+            buffer.Append("    .optimize       = ").Append(StringUtil.ToHexString(Optimize)).Append("\n");
+            buffer.Append("    .reserved       = ").Append(StringUtil.ToHexString(field_6_reserved)).Append("\n");
+            buffer.Append("    .optionflags    = ").Append(StringUtil.ToHexString(OptionFlags)).Append("\n");
+            buffer.Append("        .outlinelvl = ").Append(StringUtil.ToHexString(OutlineLevel)).Append("\n");
+            buffer.Append("        .colapsed   = ").Append(Colapsed).Append("\n");
+            buffer.Append("        .zeroheight = ").Append(ZeroHeight).Append("\n");
+            buffer.Append("        .badfontheig= ").Append(BadFontHeight).Append("\n");
+            buffer.Append("        .formatted  = ").Append(Formatted).Append("\n");
+            buffer.Append("    .optionsflags2  = ").Append(StringUtil.ToHexString(OptionFlags2)).Append("\n");
+            buffer.Append("        .xFindex       = ").Append(StringUtil.ToHexString(XFIndex)).Append("\n");
+            buffer.Append("        .topBorder     = ").Append(TopBorder).Append("\n");
+            buffer.Append("        .bottomBorder  = ").Append(BottomBorder).Append("\n");
+            buffer.Append("        .phoeneticGuide= ").Append(PhoeneticGuide).Append("\n");
             buffer.Append("[/ROW]\n");
             return buffer.ToString();
         }
@@ -354,7 +353,7 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(Optimize);
             out1.WriteShort(field_6_reserved);
             out1.WriteShort(OptionFlags);
-            out1.WriteShort(XFIndex);
+            out1.WriteShort(OptionFlags2);
         }
         protected override int DataSize
         {
