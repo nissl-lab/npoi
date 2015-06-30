@@ -115,7 +115,7 @@ namespace NPOI.SS.Formula.Functions
          * Maximum number of operands accepted by this function.
          * Subclasses may override to Change default value.
          */
-        protected int MaxNumOperands
+        protected virtual int MaxNumOperands
         {
             get
             {

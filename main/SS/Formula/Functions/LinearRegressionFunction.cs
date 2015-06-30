@@ -161,7 +161,6 @@ namespace NPOI.SS.Formula.Functions
             ErrorEval firstXerr = null;
             ErrorEval firstYerr = null;
             bool accumlatedSome = false;
-            double result = 0.0;
             // first pass: read in data, compute xbar and ybar
             double sumx = 0.0, sumy = 0.0;
 

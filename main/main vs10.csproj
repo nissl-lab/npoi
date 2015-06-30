@@ -217,6 +217,7 @@
     <Compile Include="SS\Formula\Functions\Intercept.cs" />
     <Compile Include="SS\Formula\Functions\IPMT.cs" />
     <Compile Include="SS\Formula\Functions\LinearRegressionFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Mirr.cs" />
     <Compile Include="SS\Formula\Functions\Oct2Dec.cs" />
     <Compile Include="SS\Formula\Functions\PPMT.cs" />
     <Compile Include="SS\Formula\Functions\Quotient.cs" />
@@ -652,6 +653,7 @@
     <Compile Include="SS\Format\SimpleFraction.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
+    <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
