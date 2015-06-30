@@ -407,7 +407,7 @@ namespace NPOI.SS.Formula.Eval
             retval[325] = AggregateFunction.LARGE; // LARGE
             retval[326] = AggregateFunction.SMALL; // SMALL
             retval[327] = new NotImplementedFunction("QUARTILE"); // QUARTILE
-            retval[328] = new NotImplementedFunction("PERCENTILE"); // PERCENTILE
+            retval[328] = AggregateFunction.PERCENTILE; // PERCENTILE
             retval[329] = new NotImplementedFunction("PERCENTRANK"); // PERCENTRANK
             retval[330] = new Mode(); // MODE
             retval[331] = new NotImplementedFunction("TRIMMEAN"); // TRIMMEAN

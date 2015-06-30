@@ -177,6 +177,7 @@
     <Compile Include="SS\Formula\Functions\TestMatchFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestMirr.cs" />
     <Compile Include="SS\Formula\Functions\TestOct2Dec.cs" />
+    <Compile Include="SS\Formula\Functions\TestPercentile.cs" />
     <Compile Include="SS\Formula\Functions\TestPPMT.cs" />
     <Compile Include="SS\Formula\Functions\TestQuotient.cs" />
     <Compile Include="SS\Formula\Functions\TestQuotientFunctionsFromSpreadsheet.cs" />
