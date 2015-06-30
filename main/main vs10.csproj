@@ -200,6 +200,7 @@
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\BaseNumberUtils.cs" />
     <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
     <Compile Include="SS\Formula\Functions\Complex.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="SS\Formula\Functions\Intercept.cs" />
     <Compile Include="SS\Formula\Functions\IPMT.cs" />
     <Compile Include="SS\Formula\Functions\LinearRegressionFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Oct2Dec.cs" />
     <Compile Include="SS\Formula\Functions\PPMT.cs" />
     <Compile Include="SS\Formula\Functions\Quotient.cs" />
     <Compile Include="SS\Formula\Functions\Rank.cs" />
