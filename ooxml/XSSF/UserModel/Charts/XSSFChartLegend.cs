@@ -42,6 +42,19 @@ namespace NPOI.XSSF.UserModel.Charts
             this.legend = (ctChart.IsSetLegend()) ?
                 ctChart.legend :
                 ctChart.AddNewLegend();
+
+            SetDefaults();
+        }
+        /**
+         * Set sensible default styling.
+         */
+        private void SetDefaults()
+        {
+            if (!legend.IsSetOverlay())
+            {
+                legend.AddNewOverlay();
+            }
+            legend.overlay.val = 0;
         }
 
         /**
@@ -80,6 +93,12 @@ namespace NPOI.XSSF.UserModel.Charts
                 legend.legendPos.val = FromLegendPosition(value);
                 legend.legendPosSpecified = true;
             }
+        }
+
+        public bool IsOverlay
+        {
+            get { return legend.overlay.val != 0; }
+            set { legend.overlay.val = value ? 1 : 0; }
         }
 
         public IManualLayout GetManualLayout()
