@@ -47,7 +47,12 @@ namespace NPOI.Util
         public static ClassID PPT_SHOW = new ClassID("{64818D10-4F9B-11CF-86EA-00AA00B929E8}");
         public static ClassID XLS_WORKBOOK = new ClassID("{00020841-0000-0000-C000-000000000046}");
         public static ClassID TXT_ONLY = new ClassID("{5e941d80-bf96-11cd-b579-08002b30bfeb}"); // ???
-    
+        public static ClassID EXCEL97      = new ClassID("{00020820-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL95      = new ClassID("{00020810-0000-0000-C000-000000000046}");
+        public static ClassID WORD97       = new ClassID("{00020906-0000-0000-C000-000000000046}");
+        public static ClassID WORD95       = new ClassID("{00020900-0000-0000-C000-000000000046}");
+        public static ClassID POWERPOINT97 = new ClassID("{64818D10-4F9B-11CF-86EA-00AA00B929E8}");
+        public static ClassID POWERPOINT95 = new ClassID("{EA7BAE70-FB3B-11CD-A903-00AA00510EA3}");
         /**
          * The bytes making out the class ID in correct order,
          * i.e. big-endian.
