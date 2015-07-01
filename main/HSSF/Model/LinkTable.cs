@@ -334,12 +334,17 @@ namespace NPOI.HSSF.Model
             // TODO - do we need "Workbook.records.Remove(...);" similar to that in Workbook.RemoveName(int namenum) {}?
         }
         /**
- * @param extRefIndex as from a {@link Ref3DPtg} or {@link Area3DPtg}
- * @return -1 if the reference is to an external book
- */
+         * @param extRefIndex as from a {@link Ref3DPtg} or {@link Area3DPtg}
+         * @return -1 if the reference is to an external book
+         */
         public int GetIndexToInternalSheet(int extRefIndex)
         {
             return _externSheetRecord.GetFirstSheetIndexFromRefIndex(extRefIndex);
+        }
+
+        public void UpdateIndexToInternalSheet(int extRefIndex, int offset)
+        {
+            _externSheetRecord.AdjustIndex(extRefIndex, offset);
         }
         public int NumNames
         {

@@ -173,6 +173,136 @@ namespace NPOI.SS.Formula.Functions
             }
         }
     }
+
+
+    public class LargeSmall : Fixed2ArgFunction
+    {
+        private bool _isLarge;
+        protected LargeSmall(bool isLarge)
+        {
+            _isLarge = isLarge;
+        }
+
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0,
+                ValueEval arg1)
+        {
+            double dn;
+            try
+            {
+                ValueEval ve1 = OperandResolver.GetSingleValue(arg1, srcRowIndex, srcColumnIndex);
+                dn = OperandResolver.CoerceValueToDouble(ve1);
+            }
+            catch (EvaluationException e1)
+            {
+                // all errors in the second arg translate to #VALUE!
+                return ErrorEval.VALUE_INVALID;
+            }
+            // weird Excel behaviour on second arg
+            if (dn < 1.0)
+            {
+                // values between 0.0 and 1.0 result in #NUM!
+                return ErrorEval.NUM_ERROR;
+            }
+            // all other values are rounded up to the next integer
+            int k = (int)Math.Ceiling(dn);
+
+            double result;
+            try
+            {
+                double[] ds = NPOI.SS.Formula.Functions.AggregateFunction.ValueCollector.CollectValues(arg0);
+                if (k > ds.Length)
+                {
+                    return ErrorEval.NUM_ERROR;
+                }
+                result = _isLarge ? StatsLib.kthLargest(ds, k) : StatsLib.kthSmallest(ds, k);
+                NumericFunction.CheckValue(result);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
+
+            return new NumberEval(result);
+        }
+    }
+
+    /**
+     *  Returns the k-th percentile of values in a range. You can use this function to establish a threshold of
+     *  acceptance. For example, you can decide to examine candidates who score above the 90th percentile.
+     *
+     *  PERCENTILE(array,k)
+     *  Array     is the array or range of data that defines relative standing.
+     *  K     is the percentile value in the range 0..1, inclusive.
+     *
+     * <strong>Remarks</strong>
+     * <ul>
+     *     <li>if array is empty or Contains more than 8,191 data points, PERCENTILE returns the #NUM! error value.</li>
+     *     <li>If k is nonnumeric, PERCENTILE returns the #VALUE! error value.</li>
+     *     <li>If k is < 0 or if k > 1, PERCENTILE returns the #NUM! error value.</li>
+     *     <li>If k is not a multiple of 1/(n - 1), PERCENTILE interpolates to determine the value at the k-th percentile.</li>
+     * </ul>
+     */
+    public class Percentile : Fixed2ArgFunction
+    {
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0,
+                ValueEval arg1)
+        {
+            double dn;
+            try
+            {
+                ValueEval ve1 = OperandResolver.GetSingleValue(arg1, srcRowIndex, srcColumnIndex);
+                dn = OperandResolver.CoerceValueToDouble(ve1);
+            }
+            catch (EvaluationException e1)
+            {
+                // all errors in the second arg translate to #VALUE!
+                return ErrorEval.VALUE_INVALID;
+            }
+            if (dn < 0 || dn > 1)
+            { // has to be percentage
+                return ErrorEval.NUM_ERROR;
+            }
+
+            double result;
+            try
+            {
+                double[] ds = NPOI.SS.Formula.Functions.AggregateFunction.ValueCollector.CollectValues(arg0);
+                int N = ds.Length;
+
+                if (N == 0 || N > 8191)
+                {
+                    return ErrorEval.NUM_ERROR;
+                }
+
+                double n = (N - 1) * dn + 1;
+                if (n == 1d)
+                {
+                    result = StatsLib.kthSmallest(ds, 1);
+                }
+                else if (n == N)
+                {
+                    result = StatsLib.kthLargest(ds, 1);
+                }
+                else
+                {
+                    int k = (int)n;
+                    double d = n - k;
+                    result = StatsLib.kthSmallest(ds, k) + d
+                            * (StatsLib.kthSmallest(ds, k + 1) - StatsLib.kthSmallest(ds, k));
+                }
+
+                NumericFunction.CheckValue(result);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
+
+            return new NumberEval(result);
+        }
+    }
+
+
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *
@@ -220,5 +350,6 @@ namespace NPOI.SS.Formula.Functions
         public static readonly Function SUMSQ = new SUMSQ();
         public static readonly Function VAR = new VAR();
         public static readonly Function VARP = new VARP();
+        public static readonly Function PERCENTILE = new Percentile();
     }
 }

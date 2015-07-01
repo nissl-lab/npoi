@@ -35,7 +35,11 @@ namespace NPOI.HSSF.Record
         private int _firstSheetIndex; // may be -1 (0xFFFF)
         private int _lastSheetIndex;  // may be -1 (0xFFFF)
 
-
+        public void AdjustIndex(int offset)
+        {
+            _firstSheetIndex += offset;
+            _lastSheetIndex += offset;
+        }
         /** a Constructor for making new sub record
          */
         public RefSubRecord(int extBookIndex, int firstSheetIndex, int lastSheetIndex)
@@ -172,7 +176,7 @@ namespace NPOI.HSSF.Record
                 return _list.Count;
             }
         }
-	
+    
         /**  
  * @return number of REF structures
  */
@@ -195,6 +199,11 @@ namespace NPOI.HSSF.Record
         private RefSubRecord GetRef(int i)
         {
             return (RefSubRecord)_list[i];
+        }
+
+        public void AdjustIndex(int extRefIndex, int offset)
+        {
+            GetRef(extRefIndex).AdjustIndex(offset);
         }
         public int GetExtbookIndexFromRefIndex(int refIndex)
         {
@@ -233,7 +242,7 @@ namespace NPOI.HSSF.Record
         {
             return GetRef(extRefIndex).FirstSheetIndex;
         }
-	
+    
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();

@@ -168,12 +168,16 @@
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestFactDoubleFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestHex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\TestImaginaryFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImRealFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIndirectFunctionFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIntercept.cs" />
     <Compile Include="SS\Formula\Functions\TestIPMT.cs" />
     <Compile Include="SS\Formula\Functions\TestMatchFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestMirr.cs" />
+    <Compile Include="SS\Formula\Functions\TestOct2Dec.cs" />
+    <Compile Include="SS\Formula\Functions\TestPercentile.cs" />
     <Compile Include="SS\Formula\Functions\TestPPMT.cs" />
     <Compile Include="SS\Formula\Functions\TestQuotient.cs" />
     <Compile Include="SS\Formula\Functions\TestQuotientFunctionsFromSpreadsheet.cs" />

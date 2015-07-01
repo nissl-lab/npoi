@@ -1,4 +1,4 @@
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -14,7 +14,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
 namespace NPOI.SS.Formula.Functions
 {
     using System;
@@ -23,34 +22,36 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
 
     /**
-     * Implementation for Excel HEX2DEC() function.<p/>
+     * <p>Implementation for Excel Oct2Dec() function.<p/>
+     * <p>
+     * Converts an octal number to decimal.
+     * </p>
+     * <p>
+     * <b>Syntax</b>:<br/> <b>Oct2Dec  </b>(<b>number</b> )
+     * </p>
      * <p/>
-     * <b>Syntax</b>:<br/> <b>HEX2DEC  </b>(<b>number</b>)<br/>
+     * Number     is the octal number you want to Convert. Number may not contain more than 10 octal characters (30 bits).
+     * The most significant bit of number is the sign bit. The remaining 29 bits are magnitude bits.
+     * Negative numbers are represented using two's-complement notation..
      * <p/>
-     * Converts a hexadecimal number to decimal.
-     * <p/>
-     * Number     is the hexadecimal number you want to Convert. Number cannot contain more than 10 characters (40 bits).
-     * The most significant bit of number is the sign bit.
-     * The remaining 39 bits are magnitude bits. Negative numbers are represented using two's-complement notation.
-     * Remark
-     * If number is not a valid hexadecimal number, HEX2DEC returns the #NUM! error value.
+     * If number is not a valid octal number, OCT2DEC returns the #NUM! error value.
      *
      * @author cedric dot walter @ gmail dot com
      */
-    public class Hex2Dec : Fixed1ArgFunction, FreeRefFunction
+    public class Oct2Dec : Fixed1ArgFunction, FreeRefFunction
     {
 
-        public static FreeRefFunction instance = new Hex2Dec();
+        public static FreeRefFunction instance = new Oct2Dec();
 
-        static int HEXADECIMAL_BASE = 16;
         static int MAX_NUMBER_OF_PLACES = 10;
+        static int OCTAL_BASE = 8;
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval numberVE)
         {
-            String hex = OperandResolver.CoerceValueToString(numberVE);
+            String octal = OperandResolver.CoerceValueToString(numberVE);
             try
             {
-                return new NumberEval(BaseNumberUtils.ConvertToDecimal(hex, HEXADECIMAL_BASE, MAX_NUMBER_OF_PLACES));
+                return new NumberEval(BaseNumberUtils.ConvertToDecimal(octal, OCTAL_BASE, MAX_NUMBER_OF_PLACES));
             }
             catch (ArgumentException)
             {

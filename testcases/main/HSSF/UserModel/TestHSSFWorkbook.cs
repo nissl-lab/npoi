@@ -1119,5 +1119,58 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook read = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             assertSheetOrder(wb, "Invoice", "Deferred", "Received", "Digest");
         }
+
+        [Test]
+        public void TestBug54500()
+        {
+            String nameName = "AName";
+            String sheetName = "ASheet";
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("54500.xls");
+
+            assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3");
+
+            wb.CreateSheet(sheetName);
+
+            assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3", "ASheet");
+
+            IName n = wb.CreateName();
+            n.NameName = (/*setter*/nameName);
+            n.SheetIndex = (/*setter*/3);
+            n.RefersToFormula = (/*setter*/sheetName + "!A1");
+
+            assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3", "ASheet");
+            Assert.AreEqual("ASheet!A1", wb.GetName(nameName).RefersToFormula);
+
+            MemoryStream stream = new MemoryStream();
+            wb.Write(stream);
+
+            assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3", "ASheet");
+            Assert.AreEqual("ASheet!A1", wb.GetName(nameName).RefersToFormula);
+
+            wb.RemoveSheetAt(1);
+
+            assertSheetOrder(wb, "Sheet1", "Sheet3", "ASheet");
+            Assert.AreEqual("ASheet!A1", wb.GetName(nameName).RefersToFormula);
+
+            MemoryStream stream2 = new MemoryStream();
+            wb.Write(stream2);
+
+            assertSheetOrder(wb, "Sheet1", "Sheet3", "ASheet");
+            Assert.AreEqual("ASheet!A1", wb.GetName(nameName).RefersToFormula);
+
+            expectName(
+                    new HSSFWorkbook(new MemoryStream(stream.ToArray())),
+                    nameName, "ASheet!A1");
+            expectName(
+                    new HSSFWorkbook(
+                            new MemoryStream(stream2.ToArray())),
+                    nameName, "ASheet!A1");
+        }
+
+        private void expectName(HSSFWorkbook wb, String name, String expect)
+        {
+            Assert.AreEqual(expect, wb.GetName(name).RefersToFormula);
+        }
+
     }
 }
