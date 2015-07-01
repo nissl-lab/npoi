@@ -38,152 +38,210 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             this.chart = chart;
         }
-        public abstract long GetId();
+        public abstract long Id { get;}
         public abstract void CrossAxis(IChartAxis axis);
 
-        public AxisPosition GetPosition()
+        public AxisPosition Position
         {
-            return toAxisPosition(GetCTAxPos());
-        }
-
-        public void SetPosition(AxisPosition position)
-        {
-            GetCTAxPos().val = fromAxisPosition(position);
-        }
-
-        public void SetNumberFormat(String format)
-        {
-            GetCTNumFmt().formatCode=format;
-            GetCTNumFmt().sourceLinked = true;
-        }
-
-        public String GetNumberFormat()
-        {
-            return GetCTNumFmt().formatCode;
-        }
-
-        public bool IsSetLogBase()
-        {
-            return GetCTScaling().IsSetLogBase();
-        }
-
-        public void SetLogBase(double logBase)
-        {
-            if (logBase < Min_LOG_BASE ||
-                Max_LOG_BASE < logBase)
+            get
             {
-                throw new ArgumentException("Axis log base must be between 2 and 1000 (inclusive), got: " + logBase);
+                return toAxisPosition(GetCTAxPos());
             }
-            CT_Scaling scaling = GetCTScaling();
-            if (scaling.IsSetLogBase())
+            set
             {
-                scaling.logBase.val = logBase;
-            }
-            else
-            {
-                scaling.AddNewLogBase().val = (logBase);
+                GetCTAxPos().val = fromAxisPosition(value);
             }
         }
 
-        public double GetLogBase()
+        public String NumberFormat
         {
-            CT_LogBase logBase = GetCTScaling().logBase;
-            if (logBase != null)
+            get
             {
-                return logBase.val;
+                return GetCTNumFmt().formatCode;
             }
-            return 0.0;
-        }
-
-        public bool IsSetMinimum()
-        {
-            return GetCTScaling().IsSetMin();
-        }
-
-        public void SetMinimum(double min)
-        {
-            CT_Scaling scaling = GetCTScaling();
-            if (scaling.IsSetMin())
+            set
             {
-                scaling.min.val = min;
-            }
-            else
-            {
-                scaling.AddNewMin().val = min;
+                GetCTNumFmt().formatCode = value;
+                GetCTNumFmt().sourceLinked = true;
             }
         }
 
-        public double GetMinimum()
+        public bool IsSetLogBase
         {
-            CT_Scaling scaling = GetCTScaling();
-            if (scaling.IsSetMin())
+            get
             {
-                return scaling.min.val;
+                return GetCTScaling().IsSetLogBase();
             }
-            else
+        }
+
+        public double LogBase
+        {
+            get
             {
+                CT_LogBase logBase = GetCTScaling().logBase;
+                if (logBase != null)
+                {
+                    return logBase.val;
+                }
                 return 0.0;
             }
-        }
-
-        public bool IsSetMaximum()
-        {
-            return GetCTScaling().IsSetMax();
-        }
-
-        public void SetMaximum(double max)
-        {
-            CT_Scaling scaling = GetCTScaling();
-            if (scaling.IsSetMax())
+            set
             {
-                scaling.max.val=max;
-            }
-            else
-            {
-                scaling.AddNewMax().val = max;
-            }
-        }
-
-        public double GetMaximum()
-        {
-            CT_Scaling scaling = GetCTScaling();
-            if (scaling.IsSetMax())
-            {
-                return scaling.max.val;
-            }
-            else
-            {
-                return 0.0;
+                if (value < Min_LOG_BASE ||
+                Max_LOG_BASE < value)
+                {
+                    throw new ArgumentException("Axis log base must be between 2 and 1000 (inclusive), got: " + value);
+                }
+                CT_Scaling scaling = GetCTScaling();
+                if (scaling.IsSetLogBase())
+                {
+                    scaling.logBase.val = value;
+                }
+                else
+                {
+                    scaling.AddNewLogBase().val = (value);
+                }
             }
         }
 
-        public AxisOrientation GetOrientation()
+        public bool IsSetMinimum
         {
-            return toAxisOrientation(GetCTScaling().orientation);
-        }
-
-        public void SetOrientation(AxisOrientation orientation)
-        {
-            CT_Scaling scaling = GetCTScaling();
-            ST_Orientation stOrientation = fromAxisOrientation(orientation);
-            if (scaling.IsSetOrientation())
+            get
             {
-                scaling.orientation.val = stOrientation;
-            }
-            else
-            {
-                GetCTScaling().AddNewOrientation().val= stOrientation;
+                return GetCTScaling().IsSetMin();
             }
         }
 
-        public AxisCrosses GetCrosses()
+        public double Minimum
         {
-            return toAxisCrosses(GetCTCrosses());
+            get
+            {
+                CT_Scaling scaling = GetCTScaling();
+                if (scaling.IsSetMin())
+                {
+                    return scaling.min.val;
+                }
+                else
+                {
+                    return 0.0;
+                }
+            }
+            set
+            {
+                CT_Scaling scaling = GetCTScaling();
+                if (scaling.IsSetMin())
+                {
+                    scaling.min.val = value;
+                }
+                else
+                {
+                    scaling.AddNewMin().val = value;
+                }
+            }
         }
 
-        public void SetCrosses(AxisCrosses crosses)
+        public bool IsSetMaximum
         {
-            GetCTCrosses().val = fromAxisCrosses(crosses);
+            get
+            {
+                return GetCTScaling().IsSetMax();
+            }
+        }
+
+        public double Maximum
+        {
+            get
+            {
+                CT_Scaling scaling = GetCTScaling();
+                if (scaling.IsSetMax())
+                {
+                    return scaling.max.val;
+                }
+                else
+                {
+                    return 0.0;
+                }
+            }
+            set
+            {
+                CT_Scaling scaling = GetCTScaling();
+                if (scaling.IsSetMax())
+                {
+                    scaling.max.val = value;
+                }
+                else
+                {
+                    scaling.AddNewMax().val = value;
+                }
+            }
+        }
+
+        public AxisOrientation Orientation
+        {
+            get
+            {
+                return toAxisOrientation(GetCTScaling().orientation);
+            }
+            set
+            {
+                CT_Scaling scaling = GetCTScaling();
+                ST_Orientation stOrientation = fromAxisOrientation(value);
+                if (scaling.IsSetOrientation())
+                {
+                    scaling.orientation.val = stOrientation;
+                }
+                else
+                {
+                    GetCTScaling().AddNewOrientation().val = stOrientation;
+                }
+            }
+        }
+
+        public AxisCrosses Crosses
+        {
+            get
+            {
+                return toAxisCrosses(GetCTCrosses());
+            }
+            set
+            {
+                GetCTCrosses().val = fromAxisCrosses(value);
+            }
+        }
+        public bool IsVisible
+        {
+            get
+            {
+                return GetDelete().val == 1;
+            }
+            set
+            {
+                GetDelete().val = value ? 1 : 0;
+            }
+        }
+
+        public AxisTickMark MajorTickMark
+        {
+            get
+            {
+                return toAxisTickMark(GetMajorCTTickMark());
+            }
+            set
+            {
+                GetMajorCTTickMark().val = fromAxisTickMark(value);
+            }
+        }
+
+        public AxisTickMark MinorTickMark
+        {
+            get
+            {
+                return toAxisTickMark(GetMinorCTTickMark());
+            }
+            set
+            {
+                GetMinorCTTickMark().val = fromAxisTickMark(value);
+            }
         }
 
         protected abstract CT_AxPos GetCTAxPos();
@@ -287,37 +345,6 @@ namespace NPOI.XSSF.UserModel.Charts
                 case ST_TickMark.cross: return AxisTickMark.Cross;
                 default: return AxisTickMark.Cross;
             }
-        }
-        public bool IsVisible
-        {
-            get
-            {
-                return GetDelete().val==1;
-            }
-            set 
-            {
-                GetDelete().val = value?1:0;
-            }
-        }
-
-        public AxisTickMark GetMajorTickMark()
-        {
-            return toAxisTickMark(GetMajorCTTickMark());
-        }
-
-        public void SetMajorTickMark(AxisTickMark tickMark)
-        {
-            GetMajorCTTickMark().val = fromAxisTickMark(tickMark);
-        }
-
-        public AxisTickMark GetMinorTickMark()
-        {
-            return toAxisTickMark(GetMinorCTTickMark());
-        }
-
-        public void SetMinorTickMark(AxisTickMark tickMark)
-        {
-            GetMinorCTTickMark().val =fromAxisTickMark(tickMark);
         }
     }
 

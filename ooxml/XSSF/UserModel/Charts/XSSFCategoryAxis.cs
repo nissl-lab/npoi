@@ -26,9 +26,12 @@ namespace NPOI.XSSF.UserModel.Charts
             this.ctCatAx = ctCatAx;
         }
 
-        public override long GetId()
+        public override long Id
         {
-            return ctCatAx.axId.val;
+            get
+            {
+                return ctCatAx.axId.val;
+            }
         }
 
         protected override CT_AxPos GetCTAxPos()
@@ -72,7 +75,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
         public override void CrossAxis(IChartAxis axis)
         {
-            ctCatAx.crossAx.val = (uint)axis.GetId();
+            ctCatAx.crossAx.val = (uint)axis.Id;
         }
 
         private void createAxis(long id, AxisPosition pos)
@@ -89,12 +92,12 @@ namespace NPOI.XSSF.UserModel.Charts
             ctCatAx.AddNewMinorTickMark();
 
             
-            this.SetPosition(pos);
-            this.SetOrientation(AxisOrientation.MinToMax);
-            this.SetCrosses(AxisCrosses.AutoZero);
+            this.Position=(pos);
+            this.Orientation=(AxisOrientation.MinToMax);
+            this.Crosses=(AxisCrosses.AutoZero);
             this.IsVisible = true;
-            this.SetMajorTickMark(AxisTickMark.Cross);
-            this.SetMinorTickMark(AxisTickMark.None);
+            this.MajorTickMark=(AxisTickMark.Cross);
+            this.MinorTickMark=(AxisTickMark.None);
         }
     }
 }

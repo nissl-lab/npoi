@@ -146,7 +146,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
             foreach (IChartAxis ax in axis)
             {
-                scatterChart.AddNewAxId().val = (uint)ax.GetId();
+                scatterChart.AddNewAxId().val = (uint)ax.Id;
             }
         }
 

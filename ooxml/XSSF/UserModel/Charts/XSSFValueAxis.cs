@@ -45,9 +45,12 @@ namespace NPOI.XSSF.UserModel.Charts
             this.ctValAx = ctValAx;
         }
 
-        public override long GetId()
+        public override long Id
         {
-            return ctValAx.axId.val;
+            get
+            {
+                return ctValAx.axId.val;
+            }
         }
 
         public void SetCrossBetween(AxisCrossBetween crossBetween)
@@ -101,7 +104,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
         public override void CrossAxis(IChartAxis axis)
         {
-            ctValAx.crossAx.val= (uint)axis.GetId();
+            ctValAx.crossAx.val= (uint)axis.Id;
         }
 
         private void CreateAxis(long id, AxisPosition pos)
@@ -114,11 +117,17 @@ namespace NPOI.XSSF.UserModel.Charts
             ctValAx.AddNewCrosses();
             ctValAx.AddNewCrossAx();
             ctValAx.AddNewTickLblPos().val = ST_TickLblPos.nextTo;
+            ctValAx.AddNewDelete();
+            ctValAx.AddNewMajorTickMark();
+            ctValAx.AddNewMinorTickMark();
 
-            SetPosition(pos);
-            SetOrientation(AxisOrientation.MinToMax);
+            Position=(pos);
+            Orientation=(AxisOrientation.MinToMax);
             SetCrossBetween(AxisCrossBetween.MidpointCategory);
-            SetCrosses(AxisCrosses.AutoZero);
+            Crosses=(AxisCrosses.AutoZero);
+            IsVisible=(true);
+            MajorTickMark = (AxisTickMark.Cross);
+            MinorTickMark=(AxisTickMark.None);
         }
 
         private static ST_CrossBetween fromCrossBetween(AxisCrossBetween crossBetween)

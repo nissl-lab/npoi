@@ -99,7 +99,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
             foreach (IChartAxis ax in axis)
             {
-                lineChart.AddNewAxId().val = (uint)ax.GetId();
+                lineChart.AddNewAxId().val = (uint)ax.Id;
             }
         }
     }
