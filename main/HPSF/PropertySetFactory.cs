@@ -29,6 +29,7 @@ namespace NPOI.HPSF
 {
     using System.IO;
     using NPOI.HPSF.Wellknown;
+    using System;
 
     /// <summary>
     /// Factory class To Create instances of {@link SummaryInformation},
@@ -62,11 +63,11 @@ namespace NPOI.HPSF
                 else
                     return ps;
             }
-            catch (UnexpectedPropertySetTypeException)
+            catch (UnexpectedPropertySetTypeException ex)
             {
                 /* This exception will never be throws because we alReady checked
                  * explicitly for this case above. */
-                throw;
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 
