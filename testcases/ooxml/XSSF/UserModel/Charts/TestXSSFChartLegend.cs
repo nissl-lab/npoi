@@ -37,6 +37,41 @@ namespace NPOI.XSSF.UserModel.Charts
             legend.Position = LegendPosition.TopRight;
             Assert.AreEqual(LegendPosition.TopRight, legend.Position);
         }
+        [Test]
+        public void Test_setOverlay_defaultChartLegend_expectOverlayInitialValueSetToFalse()
+        {
+            // Arrange
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            IChart chart = Drawing.CreateChart(anchor);
+            IChartLegend legend = chart.GetOrCreateLegend();
+
+            // Act
+
+            // Assert
+            Assert.IsFalse(legend.IsOverlay);
+        }
+
+        [Test]
+        public void Test_setOverlay_chartLegendSetToTrue_expectOverlayInitialValueSetToTrue()
+        {
+            // Arrange
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            IChart chart = Drawing.CreateChart(anchor);
+            IChartLegend legend = chart.GetOrCreateLegend();
+
+            // Act
+            legend.IsOverlay = (/*setter*/true);
+
+            // Assert
+            Assert.IsTrue(legend.IsOverlay);
+        }
+
     }
 }
 

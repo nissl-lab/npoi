@@ -950,5 +950,38 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNull(style.GetStyleXf());
 
         }
+
+        [Test]
+        public void TestShrinkToFit()
+        {
+            // Existing file
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ShrinkToFit.xlsx");
+            ISheet s = wb.GetSheetAt(0);
+            IRow r = s.GetRow(0);
+            ICellStyle cs = r.GetCell(0).CellStyle;
+
+            Assert.AreEqual(true, cs.ShrinkToFit);
+
+            // New file
+            XSSFWorkbook wbOrig = new XSSFWorkbook();
+            s = wbOrig.CreateSheet();
+            r = s.CreateRow(0);
+
+            cs = wbOrig.CreateCellStyle();
+            cs.ShrinkToFit = (/*setter*/false);
+            r.CreateCell(0).CellStyle = (/*setter*/cs);
+
+            cs = wbOrig.CreateCellStyle();
+            cs.ShrinkToFit = (/*setter*/true);
+            r.CreateCell(1).CellStyle = (/*setter*/cs);
+
+            // Write out1, Read, and check
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wbOrig) as XSSFWorkbook;
+            s = wb.GetSheetAt(0);
+            r = s.GetRow(0);
+            Assert.AreEqual(false, r.GetCell(0).CellStyle.ShrinkToFit);
+            Assert.AreEqual(true, r.GetCell(1).CellStyle.ShrinkToFit);
+        }
+
     }
 }

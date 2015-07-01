@@ -115,6 +115,7 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFManualLayout.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="XWPF\TestAllExtendedProperties.cs" />
     <Compile Include="XWPF\TestDocumentProtection.cs" />
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
+    <Compile Include="XWPF\TestXWPFBugs.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeader.cs" />

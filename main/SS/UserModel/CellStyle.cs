@@ -21,7 +21,9 @@ namespace NPOI.SS.UserModel
 
     public interface ICellStyle
     {
-
+        /// <summary>
+        /// the Cell should be auto-sized to shrink to fit if the text is too long
+        /// </summary>
         bool ShrinkToFit { get; set; }
         /**
          * get the index within the Workbook (sequence within the collection of ExtnededFormat objects)
@@ -271,7 +273,6 @@ namespace NPOI.SS.UserModel
          *  XSSFCellStyle)
          */
         void CloneStyleFrom(ICellStyle source);
-
 
         IFont GetFont(IWorkbook parentWorkbook);
 

@@ -2957,7 +2957,7 @@ namespace TestCases.HSSF.UserModel
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
         [Test]
-        public void Bug49237()
+        public void TestBug49237()
         {
             HSSFWorkbook wb = OpenSample("49237.xls");
             ISheet sheet = wb.GetSheetAt(0);

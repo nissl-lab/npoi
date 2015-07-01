@@ -413,5 +413,37 @@ namespace TestCases.HSSF.UserModel
             cs = s.GetRow(11).GetCell(11).CellStyle;
             Assert.AreEqual(BorderStyle.Double, cs.BorderRight);
         }
+
+        [Test]
+        public void TestShrinkToFit()
+        {
+            // Existing file
+            IWorkbook wb = OpenSample("ShrinkToFit.xls");
+            ISheet s = wb.GetSheetAt(0);
+            IRow r = s.GetRow(0);
+            ICellStyle cs = r.GetCell(0).CellStyle;
+
+            Assert.AreEqual(true, cs.ShrinkToFit);
+
+            // New file
+            IWorkbook wbOrig = new HSSFWorkbook();
+            s = wbOrig.CreateSheet();
+            r = s.CreateRow(0);
+
+            cs = wbOrig.CreateCellStyle();
+            cs.ShrinkToFit = (/*setter*/false);
+            r.CreateCell(0).CellStyle = (/*setter*/cs);
+
+            cs = wbOrig.CreateCellStyle();
+            cs.ShrinkToFit = (/*setter*/true);
+            r.CreateCell(1).CellStyle = (/*setter*/cs);
+
+            // Write out1, Read, and check
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wbOrig as HSSFWorkbook);
+            s = wb.GetSheetAt(0);
+            r = s.GetRow(0);
+            Assert.AreEqual(false, r.GetCell(0).CellStyle.ShrinkToFit);
+            Assert.AreEqual(true, r.GetCell(1).CellStyle.ShrinkToFit);
+        }
     }
 }

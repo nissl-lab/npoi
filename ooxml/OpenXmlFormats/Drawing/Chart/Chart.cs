@@ -1758,6 +1758,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public bool IsSetOverlay()
+        {
+            return this.overlayField != null && this.overlayField.val > 0;
+        }
+
+        public void AddNewOverlay()
+        {
+            this.overlayField = new CT_Boolean();
+            //return this.overlayField;
+        }
     }
 
 

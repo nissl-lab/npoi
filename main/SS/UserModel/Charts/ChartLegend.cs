@@ -32,6 +32,17 @@ namespace NPOI.SS.UserModel.Charts
             get;
             set;
         }
+
+        /// <summary>
+        /// If true the legend is positioned over the chart area otherwise
+        /// the legend is displayed next to it.
+        /// Default is no overlay.
+        /// </summary>
+        bool IsOverlay
+        {
+            get;
+            set;
+        }
     }
 
 
