@@ -36,10 +36,10 @@ namespace NPOI.XSSF.UserModel.Charts
             XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             XSSFClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30) as XSSFClientAnchor;
             XSSFChart chart = Drawing.CreateChart(anchor) as XSSFChart;
-            XSSFCategoryAxis axis = chart.GetChartAxisFactory().CreateCategoryAxis(AxisPosition.Bottom) as XSSFCategoryAxis;
+            XSSFCategoryAxis axis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom) as XSSFCategoryAxis;
 
-            axis.SetCrosses(AxisCrosses.AutoZero);
-            Assert.AreEqual(axis.GetCrosses(), AxisCrosses.AutoZero);
+            axis.Crosses=(AxisCrosses.AutoZero);
+            Assert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);
 
             Assert.AreEqual(chart.GetAxis().Count, 1);
         }

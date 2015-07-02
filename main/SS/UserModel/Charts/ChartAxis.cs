@@ -30,99 +30,82 @@ namespace NPOI.SS.UserModel.Charts
         /**
          * @return axis id
          */
-        long GetId();
+        long Id { get; }
 
         /**
-         * @return axis position
+         * get or set axis position
          */
-        AxisPosition GetPosition();
+        AxisPosition Position { get; set; }
 
         /**
-         * @param position new axis position
+         * get or set axis number format
          */
-        void SetPosition(AxisPosition position);
-
-        /**
-         * @return axis number format
-         */
-        String GetNumberFormat();
-
-        /**
-         * @param format axis number format
-         */
-        void SetNumberFormat(String format);
+        String NumberFormat { get; set; }
 
         /**
          * @return true if log base is defined, false otherwise
          */
-        bool IsSetLogBase();
+        bool IsSetLogBase { get; }
 
         /**
          * @param logBase a number between 2 and 1000 (inclusive)
+         * @return axis log base or 0.0 if not Set
          * @throws ArgumentException if log base not within allowed range
          */
-        void SetLogBase(double logBase);
-
-        /**
-         * @return axis log base or 0.0 if not Set
-         */
-        double GetLogBase();
+        double LogBase { get; set; }
 
         /**
          * @return true if minimum value is defined, false otherwise
          */
-        bool IsSetMinimum();
+        bool IsSetMinimum { get; }
 
         /**
-         * @return axis minimum or 0.0 if not Set
+         * get or set axis minimum 
+         * 0.0 if not Set
          */
-        double GetMinimum();
-
-        /**
-         * @param min axis minimum
-         */
-        void SetMinimum(double min);
+        double Minimum { get; set; }
 
         /**
          * @return true if maximum value is defined, false otherwise
          */
-        bool IsSetMaximum();
+        bool IsSetMaximum { get; }
 
         /**
-         * @return axis maximum or 0.0 if not Set
+         * get or set axis maximum 
+         * 0.0 if not Set
          */
-        double GetMaximum();
+        double Maximum { get; set; }
 
         /**
-         * @param max axis maximum
+         * get or set axis orientation
          */
-        void SetMaximum(double max);
+        AxisOrientation Orientation { get; set; }
 
         /**
-         * @return axis orientation
+         * get or set axis cross type
          */
-        AxisOrientation GetOrientation();
-
-        /**
-         * @param orientation axis orientation
-         */
-        void SetOrientation(AxisOrientation orientation);
-
-        /**
-         * @param crosses axis cross type
-         */
-        void SetCrosses(AxisCrosses crosses);
-
-        /**
-         * @return axis cross type
-         */
-        AxisCrosses GetCrosses();
+        AxisCrosses Crosses { get; set; }
 
         /**
          * Declare this axis cross another axis.
          * @param axis that this axis should cross
          */
         void CrossAxis(IChartAxis axis);
+
+        /**
+         * @return visibility of the axis.
+         */
+        bool IsVisible { get; set; }
+
+        /**
+         * @return major tick mark.
+         */
+        AxisTickMark MajorTickMark { get; set; }
+
+        /**
+         * @return minor tick mark.
+         */
+        AxisTickMark MinorTickMark { get; set; }
     }
 
 

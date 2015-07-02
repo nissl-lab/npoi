@@ -6126,6 +6126,24 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public CT_Boolean AddNewDelete()
+        {
+            this.deleteField = new CT_Boolean();
+            return this.deleteField;
+        }
+
+        public CT_TickMark AddNewMajorTickMark()
+        {
+            this.majorTickMarkField = new CT_TickMark();
+            return this.majorTickMarkField;
+        }
+
+        public CT_TickMark AddNewMinorTickMark()
+        {
+            this.minorTickMarkField = new CT_TickMark();
+            return this.minorTickMarkField;
+        }
     }
 
 
