@@ -26,6 +26,18 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Dml;
     using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml.WordProcessing;
+
+    /**
+     * @see <a href="http://msdn.microsoft.com/en-us/library/ff533743(v=office.12).aspx">[MS-OI29500] Run Fonts</a> 
+     */
+    public enum FontCharRange
+    {
+        None,
+        Ascii /* char 0-127 */,
+        CS /* complex symbol */,
+        EastAsia /* east asia */,
+        HAnsi /* high ansi */
+    };
     /**
      * XWPFrun.object defines a region of text with a common Set of properties
      *
@@ -615,18 +627,90 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_RPr pr = run.rPr;
-                return (pr != null && pr.IsSetRFonts()) ? pr.rFonts.ascii
-                        : null;
+                return GetFontFamily(FontCharRange.None);
             }
             set 
             {
-                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-                CT_Fonts fonts = pr.IsSetRFonts() ? pr.rFonts : pr.AddNewRFonts();
-                fonts.ascii = value;
+                SetFontFamily(value, FontCharRange.None);
             }
         }
 
+        /**
+         * Gets the font family for the specified font char range.
+         * If fcr is null, the font char range "ascii" is used
+         *
+         * @param fcr the font char range, defaults to "ansi"
+         * @return  a string representing the font famil
+         */
+        public String GetFontFamily(FontCharRange fcr)
+        {
+            CT_RPr pr = run.rPr;
+            if (pr == null || !pr.IsSetRFonts()) return null;
+
+            CT_Fonts fonts = pr.rFonts;
+            switch (fcr == FontCharRange.None ? FontCharRange.Ascii : fcr)
+            {
+                default:
+                case FontCharRange.Ascii:
+                    return fonts.ascii;
+                case FontCharRange.CS:
+                    return fonts.cs;
+                case FontCharRange.EastAsia:
+                    return fonts.eastAsia;
+                case FontCharRange.HAnsi:
+                    return fonts.hAnsi;
+            }
+        }
+
+        /**
+         * Specifies the fonts which shall be used to display the text contents of
+         * this run. The default handling for fcr == null is to overwrite the
+         * ascii font char range with the given font family and also set all not
+         * specified font ranges
+         *
+         * @param fontFamily
+         * @param fcr FontCharRange or null for default handling
+         */
+        public void SetFontFamily(String fontFamily, FontCharRange fcr)
+        {
+            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+            CT_Fonts fonts = pr.IsSetRFonts() ? pr.rFonts : pr.AddNewRFonts();
+
+            if (fcr == FontCharRange.None)
+            {
+                fonts.ascii = (fontFamily);
+                if (!fonts.IsSetHAnsi())
+                {
+                    fonts.hAnsi=(fontFamily);
+                }
+                if (!fonts.IsSetCs())
+                {
+                    fonts.cs=(fontFamily);
+                }
+                if (!fonts.IsSetEastAsia())
+                {
+                    fonts.eastAsia=(fontFamily);
+                }
+            }
+            else
+            {
+                switch (fcr)
+                {
+                    case FontCharRange.Ascii:
+                        fonts.ascii=(fontFamily);
+                        break;
+                    case FontCharRange.CS:
+                        fonts.cs = (fontFamily);
+                        break;
+                    case FontCharRange.EastAsia:
+                        fonts.eastAsia=(fontFamily);
+                        break;
+                    case FontCharRange.HAnsi:
+                        fonts.hAnsi=(fontFamily);
+                        break;
+                }
+            }
+        }
 
         /**
          * Specifies the font size which shall be applied to all non complex script

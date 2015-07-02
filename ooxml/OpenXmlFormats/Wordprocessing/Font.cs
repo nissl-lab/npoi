@@ -700,6 +700,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.csthemeFieldSpecified = value;
             }
         }
+
+        public bool IsSetHAnsi()
+        {
+            return !string.IsNullOrEmpty(this.hAnsiField);
+        }
+
+        public bool IsSetCs()
+        {
+            return !string.IsNullOrEmpty(this.csField);
+        }
+
+        public bool IsSetEastAsia()
+        {
+            return !string.IsNullOrEmpty(this.eastAsiaField);
+        }
     }
 
 
