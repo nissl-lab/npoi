@@ -83,7 +83,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return data == null ? 0 : data.Length;
             }
         }
-        public void Clear()
+        public override void Clear()
         {
             data = null;
         }

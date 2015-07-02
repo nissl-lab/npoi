@@ -164,7 +164,7 @@ namespace NPOI.XWPF.UserModel
         {
             return ctSettings.IsSetUpdateFields() && ctSettings.updateFields.val == true;
         }
-        protected override void Commit()
+        protected internal override void Commit()
         {
             if (ctSettings == null)
             {

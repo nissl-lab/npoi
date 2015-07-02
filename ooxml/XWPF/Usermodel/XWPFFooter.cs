@@ -79,7 +79,7 @@ namespace NPOI.XWPF.UserModel
          * save and Commit footer
          */
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             xmlOptions.SaveSyntheticDocumentElement=(new QName(CTNumbering.type.Name.NamespaceURI, "ftr"));

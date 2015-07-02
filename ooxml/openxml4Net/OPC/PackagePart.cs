@@ -571,12 +571,13 @@ namespace NPOI.OpenXml4Net.OPC
                 // Create a memory part
                 PackagePart part = container.CreatePart(this.partName,
                         this.contentType.ToString(), false);
-                part.relationships = this.relationships;
                 if (part == null)
                 {
                     throw new InvalidOperationException(
                             "Can't create a temporary part !");
                 }
+
+                part.relationships = this.relationships;
                 outStream = part.GetOutputStreamImpl();
             }
             else
@@ -746,6 +747,11 @@ namespace NPOI.OpenXml4Net.OPC
          * respective buffer.
          */
         public abstract void Flush();
+
+        /**
+         * Allows sub-classes to clean up before new data is added.
+         */
+        public virtual void Clear() { }
     }
 
 }

@@ -83,7 +83,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
             /*XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             xmlOptions.SaveSyntheticDocumentElement=(new QName(CTFootnotes.type.Name.NamespaceURI, "footnotes"));

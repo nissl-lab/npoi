@@ -1341,7 +1341,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
             SaveNamedRanges();
             SaveCalculationChain();

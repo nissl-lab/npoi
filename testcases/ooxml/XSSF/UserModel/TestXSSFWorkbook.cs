@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 using TestCases.SS.UserModel;
+using System.Text;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -597,6 +598,93 @@ namespace NPOI.XSSF.UserModel
             assertSheetOrder(workbook, "Sheet2", "Sheet0", "Sheet1");
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             assertSheetOrder(read, "Sheet2", "Sheet0", "Sheet1");
+        }
+
+        [Test]
+        public void TestBug51158()
+        {
+            // create a workbook
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.CreateSheet("Test Sheet") as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(2) as XSSFRow;
+            XSSFCell cell = row.CreateCell(3) as XSSFCell;
+            cell.SetCellValue("test1");
+
+            //XSSFCreationHelper helper = workbook.GetCreationHelper();
+            //cell.Hyperlink=(/*setter*/helper.CreateHyperlink(0));
+
+            XSSFComment comment = (sheet.CreateDrawingPatriarch() as XSSFDrawing).CreateCellComment(new XSSFClientAnchor()) as XSSFComment;
+            Assert.IsNotNull(comment);
+            comment.SetString("some comment");
+
+            //        ICellStyle cs = workbook.CreateCellStyle();
+            //        cs.ShrinkToFit=(/*setter*/false);
+            //        row.CreateCell(0).CellStyle=(/*setter*/cs);
+
+            // write the first excel file
+            XSSFWorkbook readBack = XSSFTestDataSamples.WriteOutAndReadBack(workbook) as XSSFWorkbook;
+            Assert.IsNotNull(readBack);
+            Assert.AreEqual("test1", readBack.GetSheetAt(0).GetRow(2).GetCell(3).StringCellValue);
+            Assert.IsNull(readBack.GetSheetAt(0).GetRow(2).GetCell(4));
+
+            // add a new cell to the sheet
+            cell = row.CreateCell(4) as XSSFCell;
+            cell.SetCellValue("test2");
+
+            // write the second excel file
+            readBack = XSSFTestDataSamples.WriteOutAndReadBack(workbook) as XSSFWorkbook;
+            Assert.IsNotNull(readBack);
+            Assert.AreEqual("test1", readBack.GetSheetAt(0).GetRow(2).GetCell(3).StringCellValue);
+            Assert.AreEqual("test2", readBack.GetSheetAt(0).GetRow(2).GetCell(4).StringCellValue);
+        }
+
+        [Test]
+        public void TestBug51158a()
+        {
+            // create a workbook
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            workbook.CreateSheet("Test Sheet");
+
+            XSSFSheet sheetBack = workbook.GetSheetAt(0) as XSSFSheet;
+
+            // Committing twice did add the XML twice without Clearing the part in between
+            sheetBack.Commit();
+
+            // ensure that a memory based package part does not have lingering data from previous Commit() calls
+            if (sheetBack.GetPackagePart() is MemoryPackagePart)
+            {
+                ((MemoryPackagePart)sheetBack.GetPackagePart()).Clear();
+            }
+
+            sheetBack.Commit();
+
+            String str = Encoding.UTF8.GetString(IOUtils.ToByteArray(sheetBack.GetPackagePart().GetInputStream()));
+            //System.out.Println(str);
+
+            Assert.AreEqual(1, countMatches(str, "<worksheet"));
+        }
+
+        private static int INDEX_NOT_FOUND = -1;
+
+        private static int countMatches(string str, string sub)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(sub))
+            {
+                return 0;
+            }
+            int count = 0;
+            int idx = 0;
+            while ((idx = IndexOf(str, sub, idx)) != INDEX_NOT_FOUND)
+            {
+                count++;
+                idx += sub.Length;
+            }
+            return count;
+        }
+
+        private static int IndexOf(string cs, string searchChar, int start)
+        {
+            return cs.ToString().IndexOf(searchChar.ToString(), start);
         }
     }
 }

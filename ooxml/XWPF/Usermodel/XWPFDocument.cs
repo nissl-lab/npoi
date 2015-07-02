@@ -778,7 +778,7 @@ namespace NPOI.XWPF.UserModel
          * Commit and saves the document
          */
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
 
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);

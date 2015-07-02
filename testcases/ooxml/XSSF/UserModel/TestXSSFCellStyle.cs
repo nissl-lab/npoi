@@ -643,6 +643,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(IndexedColors.Automatic.Index, style1.FillBackgroundColor);
             Assert.IsNull(style1.FillBackgroundColorColor);
 
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb1));
+
             //compatibility with HSSF
             HSSFWorkbook wb2 = new HSSFWorkbook();
             HSSFCellStyle style2 = (HSSFCellStyle)wb2.CreateCellStyle();
@@ -697,6 +699,8 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(IndexedColors.BrightGreen.Index, style.FillForegroundColor);
                 Assert.AreEqual(4, styles.GetFills().Count);
             }
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestGetFillPattern()
@@ -847,6 +851,8 @@ namespace NPOI.XSSF.UserModel
             clone.DataFormat = 17;
             Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
             Assert.AreEqual(18, orig.DataFormat);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         /**
          * Cloning one XSSFCellStyle onto Another, different XSSFWorkbooks
@@ -917,6 +923,9 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("TestingFont", reload.GetFont().FontName);
             Assert.AreEqual(fmtClone.GetFormat("Test##"), reload.DataFormat);
             Assert.IsFalse(fmtClone.GetFormat("Test##") == fmt.GetFormat("Test##"));
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wbOrig));
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wbClone));
         }
 
         /**
@@ -933,6 +942,8 @@ namespace NPOI.XSSF.UserModel
 
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle; // no exception at this point
             Assert.IsNull(style.GetStyleXf());
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
         /**
          * Avoid ArrayIndexOutOfBoundsException  when getting cell style
@@ -949,6 +960,7 @@ namespace NPOI.XSSF.UserModel
             XSSFCellStyle style = workbook.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle as XSSFCellStyle;
             Assert.IsNull(style.GetStyleXf());
 
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
 
         [Test]
@@ -981,6 +993,9 @@ namespace NPOI.XSSF.UserModel
             r = s.GetRow(0);
             Assert.AreEqual(false, r.GetCell(0).CellStyle.ShrinkToFit);
             Assert.AreEqual(true, r.GetCell(1).CellStyle.ShrinkToFit);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wbOrig));
         }
 
     }

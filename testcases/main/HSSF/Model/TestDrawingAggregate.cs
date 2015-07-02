@@ -171,6 +171,8 @@ namespace TestCases.HSSF.Model
          * Test that we correctly read and write Drawing aggregates
          *  in all .xls files in POI Test samples
          */
+        [Ignore("refactor it")]
+        [Test]
         public void TestAllTestSamples()
         {
             //File[] xls = new File(System.GetProperty("POI.testdata.path"), "spreadsheet").listFiles(
@@ -180,6 +182,8 @@ namespace TestCases.HSSF.Model
             //            }
             //        }
             //);
+            //Assert.IsNotNull(xls,
+            //    "Need to find files in test-data path, had path: " + new File(System.getProperty("POI.testdata.path"), "spreadsheet"));
             //foreach(File file in xls) {
             //    HSSFWorkbook wb;
             //    try {

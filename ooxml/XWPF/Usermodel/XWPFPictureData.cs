@@ -270,6 +270,15 @@ namespace NPOI.XWPF.UserModel
         {
             return Checksum.GetHashCode();
         }
+
+        /**
+         * *PictureData objects store the actual content in the part directly without keeping a 
+         * copy like all others therefore we need to handle them differently.
+         */
+        protected internal override void PrepareForCommit()
+        {
+            // do not clear the part here
+        }
     }
 
 }

@@ -80,6 +80,7 @@ namespace NPOI.OOXML
             context[part.GetPackageRelationship().TargetUri.ToString()] = part;
             foreach (POIXMLDocumentPart p in part.GetRelations())
             {
+                Assert.IsNotNull(p.ToString());
                 String uri = p.GetPackageRelationship().TargetUri.ToString();
                 if (!context.ContainsKey(uri))
                 {
@@ -170,6 +171,23 @@ namespace NPOI.OOXML
                 //TODO finish me
             }
 
+        }
+
+        [Test]
+        public void TestCommitNullPart()
+        {
+            POIXMLDocumentPart part = new POIXMLDocumentPart();
+            part.PrepareForCommit();
+            part.Commit();
+            part.OnSave(new List<PackagePart>());
+
+            Assert.IsNull(part.GetRelationById(null));
+            Assert.IsNull(part.GetRelationId(null));
+            Assert.IsFalse(part.RemoveRelation(null, true));
+            part.RemoveRelation(null);
+            Assert.IsNull(part.ToString());
+            part.OnDocumentCreate();
+            //part.GetTargetPart(null);
         }
     }
 }
