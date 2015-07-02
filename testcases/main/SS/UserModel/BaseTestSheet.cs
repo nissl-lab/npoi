@@ -23,6 +23,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using System.Collections;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Common superclass for Testing {@link NPOI.xssf.UserModel.XSSFCell}  and
@@ -867,6 +868,47 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             sheet.ShowInPane(2, 3);
         }
+
+        [Test]
+        public void TestBug55723()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            CellRangeAddress range = CellRangeAddress.ValueOf("A:B");
+            IAutoFilter filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+            // there seems to be currently no generic way to check the Setting...
+
+            range = CellRangeAddress.ValueOf("B:C");
+            filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+            // there seems to be currently no generic way to check the Setting...
+        }
+
+        [Test]
+        public void TestBug55723_Rows()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            CellRangeAddress range = CellRangeAddress.ValueOf("A4:B55000");
+            IAutoFilter filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+        }
+
+
+        [Test]
+        public void TestBug55723d_RowsOver65k()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            CellRangeAddress range = CellRangeAddress.ValueOf("A4:B75000");
+            IAutoFilter filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+        }
+
     }
 
 }
