@@ -268,7 +268,6 @@
     <Compile Include="DDF\EscherArrayProperty.cs" />
     <Compile Include="DDF\EscherBitmapBlip.cs" />
     <Compile Include="DDF\EscherBlipRecord.cs" />
-    <Compile Include="DDF\EscherBlipWMFRecord.cs" />
     <Compile Include="DDF\EscherBoolProperty.cs" />
     <Compile Include="DDF\EscherBSERecord.cs" />
     <Compile Include="DDF\EscherChildAnchorRecord.cs" />

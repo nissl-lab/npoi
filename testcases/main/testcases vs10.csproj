@@ -268,7 +268,6 @@
     <Compile Include="DDF\TestEscherBlipRecord.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DDF\TestEscherBlipWMFRecord.cs" />
     <Compile Include="DDF\TestEscherBoolProperty.cs" />
     <Compile Include="DDF\TestEscherBSERecord.cs" />
     <Compile Include="DDF\TestEscherChildAnchorRecord.cs" />
