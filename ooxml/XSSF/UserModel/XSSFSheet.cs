@@ -2460,8 +2460,9 @@ namespace NPOI.XSSF.UserModel
             XSSFRow row = (XSSFRow)GetRow(rowNumber);
             // If it is already expanded do nothing.
             if (!row.GetCTRow().IsSetHidden())
+            {
                 return;
-
+            }
             // Find the start of the group.
             int startIdx = FindStartOfRowOutlineGroup(rowNumber);
 
@@ -2495,7 +2496,16 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             // Write collapse field
-            ((XSSFRow)GetRow(endIdx)).GetCTRow().UnsetCollapsed();
+            row = GetRow(endIdx) as XSSFRow;
+            if (row != null)
+            {
+                CT_Row ctRow = row.GetCTRow();
+                // This avoids an IndexOutOfBounds if multiple nested groups are collapsed/expanded
+                if (ctRow.collapsed)
+                {
+                    ctRow.UnsetCollapsed();
+                }
+            }
         }
 
         /**

@@ -74,7 +74,6 @@ namespace TestCases.POIFS.FileSystem
                 Console.WriteLine("Adding document: " + descriptor + " (" + size
                                    + " bytes)");
                 dataMap[descriptor] = data;
-                int pathLength = path.Length;
                 DirectoryEntry entry = root;
 
                 for (int k = 0; k < path.Length; k++)
