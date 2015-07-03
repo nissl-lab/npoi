@@ -376,21 +376,21 @@ namespace NPOI.OpenXml4Net.OPC
                     }
 
                     // Target converted in URI
-                    Uri target;
-                    String value = string.Empty;
+                    Uri target = PackagingUriHelper.ToUri("http://invalid.uri"); // dummy url
+                    String value = iterator.Current.GetAttribute(
+                                PackageRelationship.TARGET_ATTRIBUTE_NAME, xpathnav.NamespaceURI); ;
                     try
                     {
-                        value = iterator.Current.GetAttribute(
-                                PackageRelationship.TARGET_ATTRIBUTE_NAME, xpathnav.NamespaceURI);
-
-
+                        // when parsing of the given uri fails, we can either
+                        // ignore this relationship, which leads to IllegalStateException
+                        // later on, or use a dummy value and thus enable processing of the
+                        // package
                         target = PackagingUriHelper.ToUri(value);
                     }
                     catch (UriFormatException e)
                     {
                         logger.Log(POILogger.ERROR, "Cannot convert " + value
-                                + " in a valid relationship URI-> ignored", e);
-                        continue;
+                                + " in a valid relationship URI-> dummy-URI used", e);
                     }
                     AddRelationship(target, targetMode, type, id);
                 }
