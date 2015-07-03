@@ -173,6 +173,7 @@
     <Compile Include="XWPF\TestDocumentProtection.cs" />
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
     <Compile Include="XWPF\TestXWPFBugs.cs" />
+    <Compile Include="XWPF\UserModel\TestChangeTracking.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFBugs.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />

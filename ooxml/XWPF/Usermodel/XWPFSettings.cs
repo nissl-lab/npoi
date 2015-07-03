@@ -164,6 +164,35 @@ namespace NPOI.XWPF.UserModel
         {
             return ctSettings.IsSetUpdateFields() && ctSettings.updateFields.val == true;
         }
+
+        /**
+         * get or set revision tracking
+         */
+        public bool IsTrackRevisions
+        {
+            get
+            {
+                return ctSettings.IsSetTrackRevisions();
+            }
+            set
+            {
+                if (value)
+                {
+                    if (!ctSettings.IsSetTrackRevisions())
+                    {
+                        ctSettings.AddNewTrackRevisions();
+                    }
+                }
+                else
+                {
+                    if (ctSettings.IsSetTrackRevisions())
+                    {
+                        ctSettings.UnsetTrackRevisions();
+                    }
+                }
+            }
+        }
+
         protected internal override void Commit()
         {
             if (ctSettings == null)

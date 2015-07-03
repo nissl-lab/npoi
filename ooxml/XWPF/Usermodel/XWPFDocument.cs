@@ -1190,6 +1190,23 @@ namespace NPOI.XWPF.UserModel
         {
             Settings.SetUpdateFields();
         }
+
+        /**
+          * Check if revision tracking is turned on.
+          * 
+          * @return <code>true</code> if revision tracking is turned on
+          */
+        public bool IsTrackRevisions
+        {
+            get
+            {
+                return Settings.IsTrackRevisions;
+            }
+            set
+            {
+                Settings.IsTrackRevisions = value;
+            }
+        }
         /**
          * inserts an existing XWPFTable to the arrays bodyElements and tables
          * @param pos
