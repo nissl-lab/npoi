@@ -104,39 +104,6 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
-
-            // Get all our child nodes in order, and process them
-            //  into XWPFRuns where we can
-            /*XmlCursor c = paragraph.NewCursor();
-            c.SelectPath("child::*");
-            while (c.ToNextSelection()) {
-               XmlObject o = c.Object;
-               if(o is CT_R) {
-                  Runs.Add(new XWPFRun((CT_R)o, this));
-               }
-               if(o is CT_Hyperlink) {
-                  CT_Hyperlink link = (CT_Hyperlink)o;
-                  foreach(CTR r in link.RList) {
-                     Runs.Add(new XWPFHyperlinkRun(link, r, this));
-                  }
-               }
-               if(o is CT_SdtRun) {
-                  CT_SdtContentRun run = ((CT_SdtRun)o).SdtContent;
-                  foreach(CTR r in Run.RList) {
-                     Runs.Add(new XWPFRun(r, this));
-                  }
-               }
-               if(o is CT_RunTrackChange) {
-                  foreach(CTR r in ((CT_RunTrackChange)o).RList) {
-                     Runs.Add(new XWPFRun(r, this));
-                  }
-               }
-               if(o is CT_SimpleField) {
-                  foreach(CTR r in ((CT_SimpleField)o).RList) {
-                     Runs.Add(new XWPFRun(r, this));
-                  }
-               }
-            }*/
         }
         /**
          * Identifies (in order) the parts of the paragraph /
@@ -1199,7 +1166,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFRun CreateRun()
         {
             XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
-            Runs.Add(xwpfRun);
+            runs.Add(xwpfRun);
             iRuns.Add(xwpfRun);
             return xwpfRun;
         }
@@ -1219,9 +1186,9 @@ namespace NPOI.XWPF.UserModel
                 // To update the iRuns, find where we're going
                 // in the normal Runs, and go in there
                 int iPos = iRuns.Count;
-                if (pos < Runs.Count)
+                if (pos < runs.Count)
                 {
-                    XWPFRun oldAtPos = Runs[(pos)];
+                    XWPFRun oldAtPos = runs[(pos)];
                     int oldAt = iRuns.IndexOf(oldAtPos);
                     if (oldAt != -1)
                     {
@@ -1231,7 +1198,7 @@ namespace NPOI.XWPF.UserModel
                 iRuns.Insert(iPos, newRun);
 
                 // Runs itself is easy to update
-                Runs.Insert(pos, newRun);
+                runs.Insert(pos, newRun);
 
                 return newRun;
             }
@@ -1361,11 +1328,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun GetRun(CT_R r)
         {
-            for (int i = 0; i < Runs.Count; i++)
+            for (int i = 0; i < runs.Count; i++)
             {
-                if (Runs[i].GetCTR() == r)
+                if (runs[i].GetCTR() == r)
                 {
-                    return Runs[i];
+                    return runs[i];
                 }
             }
             return null;

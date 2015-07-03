@@ -530,6 +530,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             lock (this)
             {
                 int pos = GetObjectIndex(type, p);
+                if (pos == -1)
+                    pos = 0;
                 this.itemsElementNameField.Insert(pos, type);
                 this.itemsField.Insert(pos, t);
             }

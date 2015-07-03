@@ -354,39 +354,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetText(String value)
         {
-            StringBuilder sb = new StringBuilder();
-            run.Items.Clear();
-            run.ItemsElementName.Clear();
-            char[] chars= value.ToCharArray();
-            for (int i = 0; i < chars.Length;i++ )
-            {
-                if (chars[i] == '\n')
-                {
-                    run.Items.Add(new CT_Text() { Value = sb.ToString() });
-                    run.ItemsElementName.Add(RunItemsChoiceType.instrText);
-                    sb=sb.Remove(0,sb.Length);
-                    run.Items.Add(new CT_Br());
-                    run.ItemsElementName.Add(RunItemsChoiceType.br);
-                }
-                else if (chars[i] == '\t')
-                {
-                    run.Items.Add(new CT_Text() { Value = sb.ToString() });
-                    run.ItemsElementName.Add(RunItemsChoiceType.instrText);
-                    sb=sb.Remove(0, sb.Length);
-                    run.Items.Add(new CT_PTab());
-                    run.ItemsElementName.Add(RunItemsChoiceType.ptab);
-                }
-                else
-                {
-                    sb.Append(chars[i]);
-                }
-
-            }
-            if (sb.Length > 0)
-            {
-                run.Items.Add(new CT_Text() { Value = sb.ToString() });
-                run.ItemsElementName.Add(RunItemsChoiceType.instrText);
-            }
+            this.SetText(value, run.SizeOfTArray());
         }
         
 
