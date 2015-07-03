@@ -42,7 +42,7 @@ namespace TestCases.HPSF.Basic
     public class TestReadAllFiles
     {
         private static String[] excludes = new String[] {
-        "TestZeroLengthCodePage.mpp",
+        //"TestZeroLengthCodePage.mpp",
     };
 
         /**
