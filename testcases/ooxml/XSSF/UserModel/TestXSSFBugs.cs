@@ -1488,9 +1488,26 @@ using NPOI.SS.Formula.Eval;
 
             //with .net new Uri("mailto:#@_#") is valid, but java think it invalid,
             //excel also think it invalid too
-            //TODO: add more validation to valid mail address PackagingUriHelper.ParseUri(string, UriKind)
+            //TODO: add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
             Assert.AreEqual("http://invalid.uri", c.Hyperlink.Address);
         }
+
+        /**
+     * Was giving NullPointerException
+     * at NPOI.XSSF.UserModel.XSSFWorkbook.onDocumentRead
+     * due to a lack of Styles Table
+     */
+        [Test]
+        public void Bug56278()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56278.xlsx");
+            Assert.AreEqual(0, wb.GetSheetIndex("Market Rates"));
+
+            // Save and re-check
+            IWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(0, nwb.GetSheetIndex("Market Rates"));
+        }
+
     }
 
 }
