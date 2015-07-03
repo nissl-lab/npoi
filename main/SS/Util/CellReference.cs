@@ -479,9 +479,9 @@ namespace NPOI.SS.Util
             get
             {
                 return new String[] {
-				    _sheetName,
-				    (_rowIndex+1).ToString(CultureInfo.InvariantCulture),
-				   ConvertNumToColString(_colIndex)
+                    _sheetName,
+                    (_rowIndex+1).ToString(CultureInfo.InvariantCulture),
+                   ConvertNumToColString(_colIndex)
                 };
             }
         }
@@ -601,6 +601,8 @@ namespace NPOI.SS.Util
         }
         public override bool Equals(Object o)
         {
+            if (object.ReferenceEquals(this, o))
+                return true;
             if (!(o is CellReference))
             {
                 return false;
@@ -608,14 +610,18 @@ namespace NPOI.SS.Util
             CellReference cr = (CellReference)o;
             return _rowIndex == cr._rowIndex
                 && _colIndex == cr._colIndex
-                && _isRowAbs == cr._isColAbs
+                && _isRowAbs == cr._isRowAbs
                 && _isColAbs == cr._isColAbs;
         }
 
         public override int GetHashCode ()
         {
-            return _isRowAbs.GetHashCode () ^ _isColAbs.GetHashCode () ^
-                _rowIndex ^ _colIndex;
+            int result = 17;
+            result = 31 * result + _rowIndex;
+            result = 31 * result + _colIndex;
+            result = 31 * result + (_isRowAbs ? 1 : 0);
+            result = 31 * result + (_isColAbs ? 1 : 0);
+            return result;
         }
     }
 }
