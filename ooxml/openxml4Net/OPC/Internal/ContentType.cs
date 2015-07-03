@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using NPOI.OpenXml4Net.Exceptions;
+using System.Collections;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -47,7 +48,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
          * Parameters
          */
-        private SortedList<String, String> parameters;
+        Hashtable p;
+        private Dictionary<String, String> parameters;
 
         /**
          * Media type compiled pattern for parameters.
@@ -58,7 +60,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          * Media type compiled pattern, with parameters.
          */
         private static Regex patternTypeSubTypeParams;
-
+        /**
+         * Pattern to match on just the parameters part, to work
+         * around the Java Regexp group capture behaviour
+         */
+        private static Regex patternParams;
         static ContentType()
         {
             /*
@@ -71,7 +77,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal
              *
              * CHAR = <any US-ASCII character (octets 0 - 127)>
              */
-            String token = "[^\\(\\)<>@,;:\\\\/\"\\[\\]\\?={}\\s]";
+            //String token = "[\\x21-\\x7E&&[^\\(\\)<>@,;:\\\\/\"\\[\\]\\?={}\\x20\\x09]]";
+            string token = @"[\x21\x23-\x27\x2A\x2B\x2D\x2E0-9A-Z\x5E\x5F\x60a-z\x7E]";
 
             /*
              * parameter = attribute "=" value
@@ -107,11 +114,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
              * quoted-pair = "\" CHAR
              */
 
-            // Keep for future use with parameter:
-            // patternMediaType = Pattern.compile("^(" + token + "+)/(" + token
-            // + "+)(;" + parameter + ")*$");
             patternTypeSubType = new Regex("^(" + token + "+)/(" + token + "+)$");
-            patternTypeSubTypeParams = new Regex("^(" + token + "+)/(" + token + "+)(;" + parameter + ")+$");
+            patternTypeSubTypeParams = new Regex("^(" + token + "+)/(" + token + "+)(;" + parameter + ")*$");
+            patternParams = new Regex(";" + parameter);
         }
 
         /**
@@ -141,25 +146,40 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 this.type = mMediaType.Groups[1].Value;
                 this.subType = mMediaType.Groups[2].Value;
                 // Parameters
-                this.parameters = new SortedList<String, String>();
-                //System.out.println(mMediaType.groupCount() + " = " + contentType);
-                //for (int j=1; j<mMediaType.groupCount(); j++) { System.out.println("  " + j + " - " + mMediaType.group(j)); }
-                for (int i = 4; i <= mMediaType.Groups.Count
-                        && (mMediaType.Groups[i] != null); i += 2)
+                this.parameters = new Dictionary<String, String>();
+                // Java RegExps are unhelpful, and won't do multiple group captures
+                // See http://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html#cg
+                if (mMediaType.Groups.Count >= 5)
                 {
-                    this.parameters[mMediaType.Groups[i].Value] = mMediaType
-                            .Groups[i + 1].Value;
+                    Match mParams = patternParams.Match(contentType.Substring(mMediaType.Groups[2].Index + mMediaType.Groups[2].Length));
+                    while (mParams.Success)
+                    {
+                        this.parameters.Add(mParams.Groups[1].Value, mParams.Groups[2].Value);
+                        mParams = mParams.NextMatch();
+                    }
                 }
             }
         }
-
-
         public override String ToString()
+        {
+            return ToString(true);
+        }
+        public String ToString(bool withParameters)
         {
             StringBuilder retVal = new StringBuilder();
             retVal.Append(this.Type);
             retVal.Append("/");
             retVal.Append(this.SubType);
+            if (withParameters)
+            {
+                foreach (String key in parameters.Keys)
+                {
+                    retVal.Append(";");
+                    retVal.Append(key);
+                    retVal.Append("=");
+                    retVal.Append(parameters[key]);
+                }
+            }
             return retVal.ToString();
         }
         public String ToStringWithParameters()
