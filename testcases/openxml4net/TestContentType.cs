@@ -22,6 +22,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
+using NPOI.XWPF.UserModel;
 namespace TestCase.OPC
 {
 
@@ -163,14 +164,40 @@ namespace TestCase.OPC
         }
 
         /**
-     * OOXML content types don't need entities, but we shouldn't
-     * barf if we Get one from a third party system that Added them
-     */
+         * OOXML content types don't need entities, but we shouldn't
+         * barf if we Get one from a third party system that Added them
+         */
         [Test]
         public void TestFileWithContentTypeEntities()
         {
-            // TODO
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ContentTypeHasEntities.ooxml");
+            OPCPackage p = OPCPackage.Open(is1);
+
+            // Check we found the contents of it
+            bool foundCoreProps = false, foundDocument = false, foundTheme1 = false;
+            foreach (PackagePart part in p.GetParts())
+            {
+                if (part.PartName.ToString().Equals("/docProps/core.xml"))
+                {
+                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, part.ContentType);
+                    foundCoreProps = true;
+                }
+                if (part.PartName.ToString().Equals("/word/document.xml"))
+                {
+                    Assert.AreEqual(XWPFRelation.DOCUMENT.ContentType, part.ContentType);
+                    foundDocument = true;
+                }
+                if (part.PartName.ToString().Equals("/word/theme/theme1.xml"))
+                {
+                    Assert.AreEqual(XWPFRelation.THEME.ContentType, part.ContentType);
+                    foundTheme1 = true;
+                }
+            }
+            Assert.IsTrue(foundCoreProps, "Core not found in " + p.GetParts());
+            Assert.IsTrue(foundDocument, "Document not found in " + p.GetParts());
+            Assert.IsTrue(foundTheme1, "Theme1 not found in " + p.GetParts());
         }
+
 
         /**
          * Check that we can open a file where there are valid
