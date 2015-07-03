@@ -2696,11 +2696,13 @@ namespace NPOI.XSSF.UserModel
                     CT_CommentList lst = sheetComments.GetCTComments().commentList;
                     foreach (CT_Comment comment in lst.comment)
                     {
-                        CellReference ref1 = new CellReference(comment.@ref);
+                        String oldRef = comment.@ref;
+                        CellReference ref1 = new CellReference(oldRef);
                         if (ref1.Row == rownum)
                         {
                             CellReference ref2 = new CellReference(rownum + n, ref1.Col);
                             comment.@ref = ref2.FormatAsString();
+                            sheetComments.ReferenceUpdated(oldRef, comment);
                         }
                     }
                 }

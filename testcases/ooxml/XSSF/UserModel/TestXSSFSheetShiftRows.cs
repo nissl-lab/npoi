@@ -20,7 +20,9 @@ using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using System;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -138,6 +140,54 @@ namespace NPOI.XSSF.UserModel
             verifyCellContent(readSheet, 7, "6.0");
             verifyCellContent(readSheet, 8, "8.0");
         }
+
+        [Test]
+        public void TestBug56017()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56017.xlsx");
+
+            ISheet sheet = wb.GetSheetAt(0);
+
+            IComment comment = sheet.GetCellComment(0, 0);
+            Assert.IsNotNull(comment);
+            Assert.AreEqual("Amdocs", comment.Author);
+            Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+
+            sheet.ShiftRows(0, 1, 1);
+
+            // comment in row 0 is gone
+            comment = sheet.GetCellComment(0, 0);
+            Assert.IsNull(comment);
+
+            // comment is now in row 1
+            comment = sheet.GetCellComment(1, 0);
+            Assert.IsNotNull(comment);
+            Assert.AreEqual("Amdocs", comment.Author);
+            Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+
+            //        FileOutputStream outputStream = new FileOutputStream("/tmp/56017.xlsx");
+            //        try {
+            //            wb.Write(outputStream);
+            //        } finally {
+            //            outputStream.Close();
+            //        }
+
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            ISheet sheetBack = wbBack.GetSheetAt(0);
+
+            // comment in row 0 is gone
+            comment = sheetBack.GetCellComment(0, 0);
+            Assert.IsNull(comment);
+
+            // comment is now in row 1
+            comment = sheetBack.GetCellComment(1, 0);
+            Assert.IsNotNull(comment);
+            Assert.AreEqual("Amdocs", comment.Author);
+            Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+        }
+
     }
 }
 
