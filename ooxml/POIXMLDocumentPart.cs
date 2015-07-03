@@ -230,6 +230,8 @@ using System.Xml;
          */
         public POIXMLDocumentPart GetRelationById(String id)
         {
+            if (string.IsNullOrEmpty(id))
+                return null;
             return relations[id];
         }
 
@@ -333,7 +335,7 @@ using System.Xml;
 
         public override String ToString()
         {
-            return packagePart == null ? null : packagePart.ToString();
+            return packagePart == null ? string.Empty : packagePart.ToString();
         }
 
         /**

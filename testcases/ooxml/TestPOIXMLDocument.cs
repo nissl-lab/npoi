@@ -185,7 +185,7 @@ namespace NPOI.OOXML
             Assert.IsNull(part.GetRelationId(null));
             Assert.IsFalse(part.RemoveRelation(null, true));
             part.RemoveRelation(null);
-            Assert.IsNull(part.ToString());
+            Assert.AreEqual(string.Empty, part.ToString());
             part.OnDocumentCreate();
             //part.GetTargetPart(null);
         }
