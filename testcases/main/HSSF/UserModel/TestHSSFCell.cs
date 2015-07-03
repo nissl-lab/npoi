@@ -293,6 +293,56 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, s.ActiveCellRow, "After serialize, active cell should be on row 3");
         }
 
+        [Test]
+        public void TestActiveCellBug56114()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sh = wb.CreateSheet();
+
+            sh.CreateRow(0);
+            sh.CreateRow(1);
+            sh.CreateRow(2);
+            sh.CreateRow(3);
+
+            ICell cell = sh.GetRow(1).CreateCell(3);
+            sh.GetRow(3).CreateCell(3);
+
+            Assert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+
+            cell.SetAsActiveCell();
+
+            Assert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+
+            //	    FileOutputStream fos = new FileOutputStream("/tmp/56114.xls");
+            //
+            //	    wb.Write(fos);
+            //
+            //	    fos.Close();
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+
+            Assert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+
+            wb.GetSheetAt(0).GetRow(3).GetCell(3).SetAsActiveCell();
+
+            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+
+            //	    fos = new FileOutputStream("/tmp/56114a.xls");
+            //
+            //	    wb.Write(fos);
+            //
+            //	    fos.Close();
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+
+            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+        }
+
 
         /**
          * Test reading hyperlinks
@@ -419,12 +469,103 @@ namespace TestCases.HSSF.UserModel
             catch (ArgumentException) { }
         }
         /**
-  * HSSF prior to version 3.7 had a bug: it could write a NaN but could not read such a file back.
-  */
+          * HSSF prior to version 3.7 had a bug: it could write a NaN but could not read such a file back.
+          */
         [Test]
         public void TestReadNaN()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49761.xls");
+            Assert.IsNotNull(wb);
+        }
+
+        [Test]
+        public void TestHSSFCell1()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            row.CreateCell(0);
+            HSSFCell cell = new HSSFCell(wb, sheet, 0, (short)0);
+            Assert.IsNotNull(cell);
+        }
+
+        [Test]
+        public void TestDeprecatedMethods()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+
+            // cover some deprecated methods and other smaller stuff...
+            Assert.AreEqual(wb.Workbook, cell.BoundWorkbook);
+            //cell.getCellNum();
+            //cell.setCellNum((short)0);
+
+            try
+            {
+                CellType t = cell.CachedFormulaResultType;
+                Assert.Fail("Should catch exception");
+            }
+            catch (InvalidOperationException e)
+            {
+            }
+
+            try
+            {
+                Assert.IsNotNull(new HSSFCell(wb, sheet, 0, (short)0, CellType.Error + 1));
+                Assert.Fail("Should catch exception");
+            }
+            catch (Exception e)
+            {
+            }
+
+            cell.RemoveCellComment();
+            cell.RemoveCellComment();
+        }
+
+        [Test]
+        public void TestCellType()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+
+            cell.SetCellType(CellType.Blank);
+            Assert.AreEqual("9999-12-31 23:59:59.999", cell.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            Assert.IsFalse(cell.BooleanCellValue);
+            Assert.AreEqual("", cell.ToString());
+
+            cell.SetCellType(CellType.String);
+            Assert.AreEqual("", cell.ToString());
+            cell.SetCellType(CellType.String);
+            cell.SetCellValue(1.2);
+            cell.SetCellType(CellType.Numeric);
+            Assert.AreEqual("1.2", cell.ToString());
+            cell.SetCellType(CellType.Boolean);
+            Assert.AreEqual("TRUE", cell.ToString());
+            cell.SetCellType(CellType.Boolean);
+            cell.SetCellType(CellType.Error);
+            Assert.AreEqual("#VALUE!", cell.ToString());
+            cell.SetCellType(CellType.Error);
+            cell.SetCellType(CellType.Boolean);
+            Assert.AreEqual("FALSE", cell.ToString());
+            cell.SetCellValue(1.2);
+            cell.SetCellType(CellType.Numeric);
+            Assert.AreEqual("1.2", cell.ToString());
+            cell.SetCellType(CellType.Boolean);
+            cell.SetCellType(CellType.String);
+            cell.SetCellType(CellType.Error);
+            cell.SetCellType(CellType.String);
+            cell.SetCellValue(1.2);
+            cell.SetCellType(CellType.Numeric);
+            cell.SetCellType(CellType.String);
+            Assert.AreEqual("1.2", cell.ToString());
+
+            cell.SetCellValue((String)null);
+            cell.SetCellValue((IRichTextString)null);
+            
         }
 
     }
