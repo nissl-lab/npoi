@@ -2396,7 +2396,12 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test47251()
         {
+            // Firstly, try with one that triggers on InterfaceHdrRecord
             OpenSample("47251.xls");
+
+            // Now with one that triggers on NoteRecord
+            // TODO Fix the bug and enable this bit of the test
+            //openSample("47251_1.xls");
         }
         /**
      * Round trip a file with an unusual UnicodeString/ExtRst record parts
