@@ -801,6 +801,20 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Specifies that a tab shall be placed at the current location in 
+         *  the run content.
+         */
+            public void AddTab()
+            {
+                run.AddNewTab();
+            }
+
+            public void RemoveTab()
+            {
+                //TODO
+            }    
+
+        /**
          * Specifies that a carriage return shall be placed at the
          * current location in the run.content.
          * A carriage return is used to end the current line of text in
