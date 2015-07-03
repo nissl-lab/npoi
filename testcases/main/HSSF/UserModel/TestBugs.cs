@@ -1977,7 +1977,7 @@ namespace TestCases.HSSF.UserModel
 
             ISheet s = wb.GetSheetAt(0);
             ICell cell1 = s.GetRow(0).GetCell(0);
-            Assert.AreEqual("test ", cell1.StringCellValue.ToString());
+            Assert.AreEqual("test ", cell1.StringCellValue);
 
             ICell cell2 = s.GetRow(0).GetCell(1);
             Assert.AreEqual(1.0, cell2.NumericCellValue);
