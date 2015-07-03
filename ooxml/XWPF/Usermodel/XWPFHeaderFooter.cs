@@ -294,7 +294,8 @@ namespace NPOI.XWPF.UserModel
                 {
                     try
                     {
-                        out1.Close();
+                        if (out1 != null)
+                            out1.Close();
                     }
                     catch (IOException)
                     {

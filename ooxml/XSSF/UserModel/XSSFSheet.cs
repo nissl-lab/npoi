@@ -1494,7 +1494,7 @@ namespace NPOI.XSSF.UserModel
          * Do not leave the width attribute undefined (see #52186).
          */
         private void SetColWidthAttribute(CT_Cols ctCols) {
-            foreach (CT_Col col in ctCols.GetColArray())
+            foreach (CT_Col col in ctCols.GetColList())
             {
         	    if (!col.IsSetWidth()) {
         		    col.width = (DefaultColumnWidth);
@@ -1541,7 +1541,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
             short outlineLevel = 0;
-            foreach (CT_Col col in ctCols.GetColArray())
+            foreach (CT_Col col in ctCols.GetColList())
             {
                 outlineLevel = col.outlineLevel > outlineLevel ? col.outlineLevel : outlineLevel;
             }

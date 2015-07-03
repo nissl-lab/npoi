@@ -536,8 +536,11 @@ namespace NPOI.XWPF.UserModel
             set
             {
                 CT_PBdr ct = GetCTPBrd(true);
-
-                CT_Border pr = (ct != null && ct.IsSetTop()) ? ct.top : ct.AddNewTop();
+                if (ct == null)
+                {
+                    throw new RuntimeException("invalid paragraph state");
+                }
+                CT_Border pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
                 if (value == Borders.NONE)
                     ct.UnsetTop();
                 else

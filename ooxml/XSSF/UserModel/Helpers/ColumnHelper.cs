@@ -39,37 +39,44 @@ namespace NPOI.XSSF.UserModel.Helpers
             this.worksheet = worksheet;
             CleanColumns();
         }
-
-       public void CleanColumns()
+        public void CleanColumns()
         {
             this.newCols = new CT_Cols();
-            List<CT_Cols> colsArray = worksheet.GetColsArray();
-            if (null != colsArray)
+
+            CT_Cols aggregateCols = new CT_Cols();
+            List<CT_Cols> colsList = worksheet.GetColsList();
+            if (colsList == null)
             {
-                int i = 0;
-                for (i = 0; i < colsArray.Count; i++)
+                return;
+            }
+
+            foreach (CT_Cols cols in colsList)
+            {
+                foreach (CT_Col col in cols.GetColList())
                 {
-                    CT_Cols cols = colsArray[i];
-                    List<CT_Col> colArray = cols.GetColArray();
-                    for (int y = 0; y < colArray.Count; y++)
-                    {
-                        CT_Col col = colArray[y];
-                        newCols = AddCleanColIntoCols(newCols, col);
-                    }
+                    CloneCol(aggregateCols, col);
                 }
-                for (int y = i - 1; y >= 0; y--)
-                {
-                    worksheet.RemoveCols(y);
-                }
+            }
+
+            SortColumns(aggregateCols);
+
+            CT_Col[] colArray = aggregateCols.GetColList().ToArray();
+            SweepCleanColumns(newCols, colArray, null);
+
+            int i = colsList.Count;
+            for (int y = i - 1; y >= 0; y--)
+            {
+                worksheet.RemoveCols(y);
             }
             worksheet.AddNewCols();
             worksheet.SetColsArray(0, newCols);
         }
+        
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public static void SortColumns(CT_Cols newCols)
         {
-            List<CT_Col> colArray = newCols.GetColArray();
+            List<CT_Col> colArray = newCols.GetColList();
             colArray.Sort(new CTColComparator());
             newCols.SetColArray(colArray);
         }
@@ -98,7 +105,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         public CT_Col GetColumn1Based(long index1, bool splitColumns)
         {
             CT_Cols cols = worksheet.GetColsArray(0);
-            CT_Col[] colArray = cols.GetColArray().ToArray();
+            CT_Col[] colArray = cols.GetColList().ToArray();
             foreach (CT_Col col in colArray)
             {
                 long colMin = col.min;
@@ -126,16 +133,16 @@ namespace NPOI.XSSF.UserModel.Helpers
         public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col col)
         {
             CT_Cols newCols = new CT_Cols();
-            foreach (CT_Col c in cols.GetColArray())
+            foreach (CT_Col c in cols.GetColList())
             {
                 CloneCol(newCols, c);
             }
             CloneCol(newCols, col);
             SortColumns(newCols);
-            CT_Col[] colArray = newCols.GetColArray().ToArray();
+            CT_Col[] colArray = newCols.GetColList().ToArray();
             CT_Cols returnCols = new CT_Cols();
             SweepCleanColumns(returnCols, colArray, col);
-            colArray = returnCols.GetColArray().ToArray();
+            colArray = returnCols.GetColList().ToArray();
             cols.SetColArray(colArray);
             return returnCols;
         }
