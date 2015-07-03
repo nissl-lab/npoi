@@ -682,14 +682,21 @@ namespace TestCases.HPSF.Basic
             for (int i = 0; i < files.Length; i++)
             {
                 string filename = Path.GetFileName(files[i]);
-                if (filename.StartsWith("Test"))
+                if (filename.StartsWith("Test") && TestReadAllFiles.checkExclude(filename))
                 {
                     //if (files[i].EndsWith("1")
                     //    || files[i].EndsWith("TestHPSFWritingFunctionality.doc")
                     //    || files[i].EndsWith("excel_with_embeded.xls"))
                     //    continue;
 
-                    TestRecreate(new FileInfo(files[i]));
+                    try
+                    {
+                        TestRecreate(new FileInfo(files[i]));
+                    }
+                    catch (Exception e)
+                    {
+                        throw new IOException("While handling file " + files[i], e);
+                    }
                 }
             }
         }
