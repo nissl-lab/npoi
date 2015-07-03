@@ -37,13 +37,13 @@ namespace NPOI.HPSF
             offset += LittleEndian.INT_SIZE;
 
             _value = LittleEndian.GetByteArray(data, offset, size);
-            if (_value[size - 1] != 0)
+            if (size != 0 && _value[size - 1] != 0)
             {
                 // TODO Some files, such as TestVisioWithCodepage.vsd, are currently
                 //  triggering this for values that don't look like codepages
                 // See Bug #52258 for details
-                //logger.log(POILogger.WARN, "CodePageString started at offset #" + offset
-                //            + " is not NULL-terminated" );
+                Console.WriteLine("CodePageString started at offset #" + offset
+                            + " is not NULL-terminated" );
                 //            throw new IllegalPropertySetDataException(
                 //                    "CodePageString started at offset #" + offset
                 //                            + " is not NULL-terminated" );

@@ -136,6 +136,31 @@ namespace TestCases.HPSF.Basic
             Assert.AreEqual("", si.Author);
             Assert.AreEqual("Cour de Justice", dsi.Company);
         }
+
+        /**
+        * CodePage Strings can be zero length
+        */
+        [Test]
+        public void Test56138()
+        {
+            DocumentInputStream dis;
+            POIFSFileSystem fs =
+                    new POIFSFileSystem(_samples.OpenResourceAsStream("TestZeroLengthCodePage.mpp"));
+
+            dis = fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME);
+            SummaryInformation si = (SummaryInformation)PropertySetFactory.Create(dis);
+
+            dis = fs.CreateDocumentInputStream(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
+            DocumentSummaryInformation dsi = (DocumentSummaryInformation)PropertySetFactory.Create(dis);
+
+            // Test
+            Assert.AreEqual("MSProject", si.ApplicationName);
+            Assert.AreEqual("project1", si.Title);
+            Assert.AreEqual("Jon Iles", si.Author);
+
+            Assert.AreEqual("", dsi.Company);
+            Assert.AreEqual(2, dsi.SectionCount);
+        }
     }
 
 }
