@@ -122,7 +122,7 @@ namespace NPOI.OpenXml4Net.OPC
          *             Throws if the specified part is a relationship part.
          */
         public PackageRelationshipCollection(PackagePart part) :
-            this(part.container, part)
+            this(part._container, part)
         {
 
         }

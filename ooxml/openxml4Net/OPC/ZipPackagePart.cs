@@ -83,7 +83,7 @@ public class ZipPackagePart : PackagePart {
     {
         // We use the getInputStream() method from java.util.zip.ZipFile
         // class which return an InputStream to this part zip entry.
-        return ((ZipPackage) container).ZipArchive
+        return ((ZipPackage) _container).ZipArchive
                 .GetInputStream(zipEntry);
     }
 

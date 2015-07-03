@@ -19,6 +19,9 @@ using System;
 using NUnit.Framework;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.Exceptions;
+using System.IO;
+using NPOI.OpenXml4Net.OPC;
+using TestCases.OpenXml4Net;
 namespace TestCase.OPC
 {
 
@@ -100,6 +103,9 @@ namespace TestCase.OPC
         {
             // TODO Review [01.2], then add tests for valid ones
             // TODO See bug #55026
+            // String[] contentTypesToTest = new String[] { "mail/toto;titi=tata",
+            //         "text/xml;a=b;c=d" // TODO Maybe more?
+            // };
         }
         /**
          * Check rule [O1.2]: Format designers might restrict the usage of
@@ -108,8 +114,10 @@ namespace TestCase.OPC
         [Test]
         public void TestContentTypeParameterFailure()
         {
-            String[] contentTypesToTest = new String[] { "mail/toto;titi=tata",
-                "text/xml;a=b;c=d", "mail/toto;\"titi=tata\"" };
+            String[] contentTypesToTest = new String[] { 
+                "mail/toto;\"titi=tata\"", // quotes not allowed like that
+                "text/\u0080" // characters above ASCII are not allowed
+        };
             for (int i = 0; i < contentTypesToTest.Length; ++i)
             {
                 try
@@ -150,13 +158,83 @@ namespace TestCase.OPC
         }
 
         /**
+     * OOXML content types don't need entities, but we shouldn't
+     * barf if we Get one from a third party system that Added them
+     */
+        [Test]
+        public void TestFileWithContentTypeEntities()
+        {
+            // TODO
+        }
+
+        /**
          * Check that we can open a file where there are valid
          *  parameters on a content type
          */
         [Test]
         public void TestFileWithContentTypeParams()
         {
-            // TODO Implement with ContentTypeHasParameters.ooxml
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ContentTypeHasParameters.ooxml");
+
+            OPCPackage p = OPCPackage.Open(is1);
+
+            String typeResqml = "application/x-resqml+xml";
+
+            // Check the types on everything
+            foreach (PackagePart part in p.GetParts())
+            {
+                // _rels type doesn't have any params
+                if (part.IsRelationshipPart)
+                {
+                    Assert.AreEqual(ContentTypes.RELATIONSHIPS_PART, part.ContentType);
+                    Assert.AreEqual(ContentTypes.RELATIONSHIPS_PART, part.ContentTypeDetails.ToString());
+                    Assert.AreEqual(false, part.ContentTypeDetails.HasParameters());
+                    Assert.AreEqual(0, part.ContentTypeDetails.GetParameterKeys().Length);
+                }
+                // Core type doesn't have any params
+                else if (part.PartName.ToString().Equals("/docProps/core.xml"))
+                {
+                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, part.ContentType);
+                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, part.ContentTypeDetails.ToString());
+                    Assert.AreEqual(false, part.ContentTypeDetails.HasParameters());
+                    Assert.AreEqual(0, part.ContentTypeDetails.GetParameterKeys().Length);
+                }
+                // Global Crs types do have params
+                else if (part.PartName.ToString().Equals("/global1dCrs.xml"))
+                {
+                    //System.out.Println(part.ContentTypeDetails.ToStringWithParameters());
+                    Assert.AreEqual(typeResqml, part.ContentType);
+                    Assert.AreEqual(typeResqml, part.ContentTypeDetails.ToString());
+                    Assert.AreEqual(true, part.ContentTypeDetails.HasParameters());
+                    Assert.AreEqual(2, part.ContentTypeDetails.GetParameterKeys().Length);
+                    Assert.AreEqual("2.0", part.ContentTypeDetails.GetParameter("version"));
+                    Assert.AreEqual("obj_global1dCrs", part.ContentTypeDetails.GetParameter("type"));
+                }
+                else if (part.PartName.ToString().Equals("/global2dCrs.xml"))
+                {
+                    Assert.AreEqual(typeResqml, part.ContentType);
+                    Assert.AreEqual(typeResqml, part.ContentTypeDetails.ToString());
+                    Assert.AreEqual(true, part.ContentTypeDetails.HasParameters());
+                    Assert.AreEqual(2, part.ContentTypeDetails.GetParameterKeys().Length);
+                    Assert.AreEqual("2.0", part.ContentTypeDetails.GetParameter("version"));
+                    Assert.AreEqual("obj_global2dCrs", part.ContentTypeDetails.GetParameter("type"));
+                }
+                // Other thingy
+                else if (part.PartName.ToString().Equals("/myTestingGuid.xml"))
+                {
+                    Assert.AreEqual(typeResqml, part.ContentType);
+                    Assert.AreEqual(typeResqml, part.ContentTypeDetails.ToString());
+                    Assert.AreEqual(true, part.ContentTypeDetails.HasParameters());
+                    Assert.AreEqual(2, part.ContentTypeDetails.GetParameterKeys().Length);
+                    Assert.AreEqual("2.0", part.ContentTypeDetails.GetParameter("version"));
+                    Assert.AreEqual("obj_tectonicBoundaryFeature", part.ContentTypeDetails.GetParameter("type"));
+                }
+                // That should be it!
+                else
+                {
+                    Assert.Fail("Unexpected part " + part);
+                }
+            }
         }
     }
 }
