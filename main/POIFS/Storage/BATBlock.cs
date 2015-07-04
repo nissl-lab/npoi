@@ -304,10 +304,10 @@ namespace NPOI.POIFS.Storage
          *  For 512 byte block sizes, this means we may over-estimate by up to 65kb.
          *  For 4096 byte block sizes, this means we may over-estimate by up to 4mb
          */
-        public static int CalculateMaximumSize(POIFSBigBlockSize bigBlockSize,
+        public static long CalculateMaximumSize(POIFSBigBlockSize bigBlockSize,
               int numBATs)
         {
-            int size = 1; // Header isn't FAT addressed
+            long size = 1; // Header isn't FAT addressed
 
             // The header has up to 109 BATs, and extra ones are referenced
             //  from XBATs
@@ -317,7 +317,7 @@ namespace NPOI.POIFS.Storage
             // So far we've been in sector counts, turn into bytes
             return size * bigBlockSize.GetBigBlockSize();
         }
-        public static int CalculateMaximumSize(HeaderBlock header)
+        public static long CalculateMaximumSize(HeaderBlock header)
         {
             return CalculateMaximumSize(header.BigBlockSize, header.BATCount);
         }

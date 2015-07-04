@@ -212,18 +212,13 @@ namespace NPOI.POIFS.FileSystem
                 // We need to buffer the whole file into memory when
                 //  working with an InputStream.
                 // The max possible size is when each BAT block entry is used
-                int maxSize = BATBlock.CalculateMaximumSize(_header);
-                //ByteBuffer data = ByteBuffer.allocate(maxSize);
-                // byte[] data = new byte[maxSize];
-                //// Copy in the header
-                //for(int i = 0; i < headerBuffer.Length; i++)
-                //{
-                //    data[i] = headerBuffer[i];
-                //}
-                // byte[] temp = new byte[channel.Length];
-                // Now read the rest of the stream
+                long maxSize = BATBlock.CalculateMaximumSize(_header);
+                if (maxSize > int.MaxValue)
+                {
+                    throw new ArgumentException("Unable read a >2gb file via an InputStream");
+                }
 
-                ByteBuffer data = ByteBuffer.CreateBuffer(maxSize);
+                ByteBuffer data = ByteBuffer.CreateBuffer((int)maxSize);
                 headerBuffer.Position = 0;
                 data.Write(headerBuffer.Buffer);
                 data.Position = headerBuffer.Length;
