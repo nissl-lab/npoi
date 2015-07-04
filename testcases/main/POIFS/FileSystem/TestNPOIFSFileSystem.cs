@@ -898,20 +898,98 @@ namespace TestCases.POIFS.FileSystem
         public void AddBeforeWrite()
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            NDocumentInputStream inp;
 
             // Initially has BAT + Properties but nothing else
             Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
 
+            DirectoryEntry parentDir = fs.CreateDirectory("Parent Directory");
+            DirectoryEntry testDir = parentDir.CreateDirectory("Test Directory");
+
+
             // Add to the mini stream
-            // TODO
+            byte[] mini = new byte[] { 0, 1, 2, 3, 4 };
+            testDir.CreateDocument("Mini", new MemoryStream(mini));
 
             // Add to the main stream
-            // TODO
+            byte[] main4096 = new byte[4096];
+            main4096[0] = unchecked((byte)-10);
+            main4096[4095] = unchecked((byte)-11);
+            testDir.CreateDocument("Normal4096", new MemoryStream(main4096));
+
+
+            // Check the mini stream was Added, then the main stream
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            Assert.AreEqual(3, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+            Assert.AreEqual(5, fs.GetNextBlock(4));
+            Assert.AreEqual(6, fs.GetNextBlock(5));
+            Assert.AreEqual(7, fs.GetNextBlock(6));
+            Assert.AreEqual(8, fs.GetNextBlock(7));
+            Assert.AreEqual(9, fs.GetNextBlock(8));
+            Assert.AreEqual(10, fs.GetNextBlock(9));
+            Assert.AreEqual(11, fs.GetNextBlock(10));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
+
 
             // Write, Read, check
-            // TODO
+            fs = WriteOutAndReadBack(fs);
+
+            // Check it was unChanged
+            // TODO Fix this
+#if !HIDE_UNREACHABLE_CODE
+            if (1 == 0)
+            {
+                Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+                Assert.AreEqual(3, fs.GetNextBlock(2));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+                Assert.AreEqual(5, fs.GetNextBlock(4));
+                Assert.AreEqual(6, fs.GetNextBlock(5));
+                Assert.AreEqual(7, fs.GetNextBlock(6));
+                Assert.AreEqual(8, fs.GetNextBlock(7));
+                Assert.AreEqual(9, fs.GetNextBlock(8));
+                Assert.AreEqual(10, fs.GetNextBlock(9));
+                Assert.AreEqual(11, fs.GetNextBlock(10));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
+                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
+            }
+#endif
+            // Check the data
+            DirectoryEntry fsRoot = fs.Root;
+            Assert.AreEqual(1, fsRoot.EntryCount);
+
+            parentDir = (DirectoryEntry)fsRoot.GetEntry("Parent Directory");
+            Assert.AreEqual(1, parentDir.EntryCount);
+
+            testDir = (DirectoryEntry)parentDir.GetEntry("Test Directory");
+            Assert.AreEqual(2, testDir.EntryCount);
+
+            // TODO Fix mini stream Reading
+#if !HIDE_UNREACHABLE_CODE
+            if (1 == 0)
+            {
+                DocumentEntry miniDoc = (DocumentEntry)testDir.GetEntry("Mini");
+                inp = new NDocumentInputStream(miniDoc);
+                byte[] miniRead = new byte[miniDoc.Size];
+                Assert.AreEqual(miniDoc.Size, inp.Read(miniRead));
+                //assertThat(mini, EqualTo(miniRead));
+                Assert.IsTrue(Arrays.Equals(mini, miniRead));
+                inp.Close();
+            }
+#endif
+            DocumentEntry normDoc = (DocumentEntry)testDir.GetEntry("Normal4096");
+            inp = new NDocumentInputStream(normDoc);
+            byte[] normRead = new byte[normDoc.Size];
+            Assert.AreEqual(normDoc.Size, inp.Read(normRead));
+            Assert.IsTrue(Arrays.Equals(main4096, normRead));
+            //assertThat(main4096, EqualTo(normRead));
+            inp.Close();
+
         }
 
         /**
