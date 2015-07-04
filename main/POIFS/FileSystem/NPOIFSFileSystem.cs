@@ -101,12 +101,15 @@ namespace NPOI.POIFS.FileSystem
             // Mark us as having a single empty BAT at offset 0
             _header.BATCount = 1;
             _header.BATArray = new int[] { 0 };
-            _bat_blocks.Add(BATBlock.CreateEmptyBATBlock(bigBlockSize, false));
-            SetNextBlock(0, POIFSConstants.FAT_SECTOR_BLOCK);
 
-            // Now associate the properties with the empty block
-            _property_table.StartBlock = 1;
+            BATBlock bb = BATBlock.CreateEmptyBATBlock(bigBlockSize, false);
+            bb.OurBlockIndex = 0;
+            _bat_blocks.Add(bb);
+
+            SetNextBlock(0, POIFSConstants.FAT_SECTOR_BLOCK);
             SetNextBlock(1, POIFSConstants.END_OF_CHAIN);
+
+            _property_table.StartBlock = (POIFSConstants.END_OF_CHAIN);
         }
 
 
@@ -416,14 +419,11 @@ namespace NPOI.POIFS.FileSystem
          */
         public override int GetFreeBlock()
         {
+            int numSectors = bigBlockSize.GetBATEntriesPerBlock();
             // First up, do we have any spare ones?
             int offset = 0;
-            for (int i = 0; i < _bat_blocks.Count; i++)
+            foreach(BATBlock temp in _bat_blocks)
             {
-                int numSectors = bigBlockSize.GetBATEntriesPerBlock();
-
-                // Check this one
-                BATBlock temp = _bat_blocks[i];
                 if (temp.HasFreeSectors)
                 {
                     // Claim one of them and return it
@@ -649,6 +649,11 @@ namespace NPOI.POIFS.FileSystem
          */
         private void syncWithDataSource()
         {
+            // Properties
+            NPOIFSStream propStream = new NPOIFSStream(this, _header.PropertyStart);
+            _property_table.PreWrite();
+            _property_table.Write(propStream);
+            // _header.setPropertyStart has been updated on write ...
             // HeaderBlock
             HeaderBlockWriter hbw = new HeaderBlockWriter(_header);
             hbw.WriteBlock(GetBlockAt(-1));
@@ -663,10 +668,6 @@ namespace NPOI.POIFS.FileSystem
 
             // SBATs
             _mini_store.SyncWithDataSource();
-
-            // Properties
-            _property_table.Write(new NPOIFSStream(this, _header.PropertyStart)
-        );
         }
 
         /**

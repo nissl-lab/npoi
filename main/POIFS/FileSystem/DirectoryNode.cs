@@ -472,8 +472,14 @@ namespace NPOI.POIFS.FileSystem
 
         public DocumentEntry CreateDocument(string name, int size, POIFSWriterListener writer)
         {
-           // return CreateDocument(name, size, write);
-            return CreateDocument(new POIFSDocument(name, size, _path, writer));
+            if (_nFilesSystem != null)
+            {
+                return CreateDocument(new NPOIFSDocument(name, size, _nFilesSystem, writer));
+            }
+            else
+            {
+                return CreateDocument(new POIFSDocument(name, size, _path, writer));
+            }
         }
 
 
@@ -485,7 +491,7 @@ namespace NPOI.POIFS.FileSystem
         public Array ViewableArray
         {
             get
-			{
+            {
                 return new Object[0];
             }
         }

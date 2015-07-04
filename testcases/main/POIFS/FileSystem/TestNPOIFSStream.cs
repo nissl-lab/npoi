@@ -539,7 +539,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(3, count);
 
             // Free it
-            stream.free();
+            stream.Free();
             Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));

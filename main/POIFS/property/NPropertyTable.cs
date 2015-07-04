@@ -98,28 +98,48 @@ namespace NPOI.POIFS.Properties
                 return (int)Math.Ceiling(1.0*size/_bigBigBlockSize.GetBigBlockSize());
             }
         }
+        /**
+     * Prepare to be written
+     */
+        public void PreWrite()
+        {
+            List<Property> pList = new List<Property>();
+            // give each property its index
+            int i = 0;
+            foreach (Property p in _properties)
+            {
+                // only handle non-null properties 
+                if (p == null) continue;
+                p.Index = (i++);
+                pList.Add(p);
+            }
+
+            // prepare each property for writing
+            foreach (Property p in pList) p.PreWrite();
+        }
 
         public void Write(NPOIFSStream stream)
         {
+            Stream os = stream.GetOutputStream();
             try
             {
                 //Leon ByteArrayOutputStream  -->MemoryStream
                 MemoryStream ms = new MemoryStream();
-                foreach(Property property in _properties)
+                foreach (Property property in _properties)
                 {
-                    if(property != null)
-                        property.WriteData(ms);
+                    if (property != null)
+                        property.WriteData(os);
                 }
 
-                stream.UpdateContents(ms.ToArray());
+                os.Close();
 
-                 // Update the start position if needed
-              if(StartBlock != stream.GetStartBlock()) 
-              {
-                      StartBlock = stream.GetStartBlock();
-              }
+                // Update the start position if needed
+                if (StartBlock != stream.GetStartBlock())
+                {
+                    StartBlock = stream.GetStartBlock();
+                }
             }
-            catch(System.IO.IOException ex)
+            catch (System.IO.IOException ex)
             {
                 throw ex;
             }

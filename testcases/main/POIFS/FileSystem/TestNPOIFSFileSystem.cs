@@ -27,6 +27,7 @@ using NPOI.POIFS.Common;
 using NPOI.HPSF;
 using NPOI.POIFS.NIO;
 using NPOI.Util;
+using NPOI.POIFS.EventFileSystem;
 
 namespace TestCases.POIFS.FileSystem
 {
@@ -83,7 +84,7 @@ namespace TestCases.POIFS.FileSystem
                     Assert.Fail("Should only be one BAT, but a 2nd was found");
                 }
                 //catch (IndexOutOfRangeException)
-                catch(ArgumentOutOfRangeException)
+                catch (ArgumentOutOfRangeException)
                 {
 
                 }
@@ -133,7 +134,7 @@ namespace TestCases.POIFS.FileSystem
                     Assert.Fail("Should only be two SBATs, but a 3rd was found");
                 }
                 //catch (IndexOutOfRangeException)
-                catch(ArgumentOutOfRangeException)
+                catch (ArgumentOutOfRangeException)
                 {
                 }
 
@@ -142,7 +143,7 @@ namespace TestCases.POIFS.FileSystem
 
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
 
-               
+
             }
             fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
             fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
@@ -154,13 +155,13 @@ namespace TestCases.POIFS.FileSystem
                 try
                 {
                     fs.GetBATBlockAndIndex(1040);
-                    Assert.Fail("Should only be one BAT, but a 2nd was found"); 
+                    Assert.Fail("Should only be one BAT, but a 2nd was found");
                 }
                 //catch (IndexOutOfRangeException)
-                catch(ArgumentOutOfRangeException)
+                catch (ArgumentOutOfRangeException)
                 {
                 }
-                
+
                 Assert.AreEqual(1, fs.GetNextBlock(0));
                 Assert.AreEqual(2, fs.GetNextBlock(1));
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
@@ -176,7 +177,7 @@ namespace TestCases.POIFS.FileSystem
 
                 NPOI.POIFS.Properties.Property prop;
                 IEnumerator<NPOI.POIFS.Properties.Property> pi = root.Children;
-                
+
                 pi.MoveNext();
                 prop = pi.Current;
                 Assert.AreEqual("Thumbnail", prop.Name);
@@ -209,12 +210,12 @@ namespace TestCases.POIFS.FileSystem
                     Assert.Fail("Should only be one SBAT, but a 2nd was found");
                 }
                 //catch(IndexOutOfRangeException)
-                catch(ArgumentOutOfRangeException)
+                catch (ArgumentOutOfRangeException)
                 {
                 }
 
-                for(int i = 0; i < 50; i++)
-                    Assert.AreEqual(i+1, miniStore.GetNextBlock(i));
+                for (int i = 0; i < 50; i++)
+                    Assert.AreEqual(i + 1, miniStore.GetNextBlock(i));
 
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
             }
@@ -236,8 +237,8 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(89, fs.GetNextBlock(21));
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(89));
 
-                for(int i = 22; i < 88; i++)
-                Assert.AreEqual(i+1, fs.GetNextBlock(i));
+                for (int i = 22; i < 88; i++)
+                    Assert.AreEqual(i + 1, fs.GetNextBlock(i));
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(88));
 
                 for (int i = 90; i < 96; i++)
@@ -383,7 +384,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.Fail("Should only be one BAT");
             }
             //catch (IndexOutOfRangeException)
-            catch(ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
             }
 
@@ -414,8 +415,8 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128).Block.HasFreeSectors);
                 Assert.Fail("Should only be 109 BATs");
             }
-           // catch (IndexOutOfRangeException)
-            catch(ArgumentOutOfRangeException)
+            // catch (IndexOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
             }
 
@@ -428,7 +429,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.Fail("Should only be 110 BATs");
             }
             //catch (IndexOutOfRangeException)
-            catch(ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
             }
 
@@ -511,49 +512,49 @@ namespace TestCases.POIFS.FileSystem
         *  entries, and the details on the files in them
         */
         [Test]
-        public void TestListEntries() 
+        public void TestListEntries()
         {
 
-              NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
-              NPOIFSFileSystem fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
-              NPOIFSFileSystem fsC = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
-              NPOIFSFileSystem fsD = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
-              foreach(NPOIFSFileSystem fs in new NPOIFSFileSystem[] {fsA,fsB,fsC,fsD}) 
-              {
-                  DirectoryEntry root = fs.Root;
-                 Assert.AreEqual(5, root.EntryCount);
-                 
-                 // Check by the names
-                 Entry thumbnail = root.GetEntry("Thumbnail");
-                 Entry dsi = root.GetEntry("\u0005DocumentSummaryInformation");
-                 Entry si = root.GetEntry("\u0005SummaryInformation");
-                 Entry image = root.GetEntry("Image");
-                 Entry tags = root.GetEntry("Tags");
+            NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
+            NPOIFSFileSystem fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
+            NPOIFSFileSystem fsC = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
+            NPOIFSFileSystem fsD = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
+            foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB, fsC, fsD })
+            {
+                DirectoryEntry root = fs.Root;
+                Assert.AreEqual(5, root.EntryCount);
 
-                 Assert.AreEqual(false, thumbnail.IsDirectoryEntry);
-                 Assert.AreEqual(false, dsi.IsDirectoryEntry);
-                 Assert.AreEqual(false, si.IsDirectoryEntry);
-                 Assert.AreEqual(true, image.IsDirectoryEntry);
-                 Assert.AreEqual(false, tags.IsDirectoryEntry);
-                 
-                 // Check via the iterator
-                 IEnumerator<Entry> it = root.Entries;
-                 it.MoveNext();
-                 Assert.AreEqual(thumbnail.Name, it.Current.Name);
-                 it.MoveNext();
-                 Assert.AreEqual(dsi.Name, it.Current.Name);
-                 it.MoveNext();
-                 Assert.AreEqual(si.Name, it.Current.Name);
-                 it.MoveNext();
-                 Assert.AreEqual(image.Name, it.Current.Name);
-                 it.MoveNext();
-                 Assert.AreEqual(tags.Name, it.Current.Name);
-                 
-                 // Look inside another
-                 DirectoryEntry imageD = (DirectoryEntry)image;
-                 Assert.AreEqual(7, imageD.EntryCount);
-              }
-         }
+                // Check by the names
+                Entry thumbnail = root.GetEntry("Thumbnail");
+                Entry dsi = root.GetEntry("\u0005DocumentSummaryInformation");
+                Entry si = root.GetEntry("\u0005SummaryInformation");
+                Entry image = root.GetEntry("Image");
+                Entry tags = root.GetEntry("Tags");
+
+                Assert.AreEqual(false, thumbnail.IsDirectoryEntry);
+                Assert.AreEqual(false, dsi.IsDirectoryEntry);
+                Assert.AreEqual(false, si.IsDirectoryEntry);
+                Assert.AreEqual(true, image.IsDirectoryEntry);
+                Assert.AreEqual(false, tags.IsDirectoryEntry);
+
+                // Check via the iterator
+                IEnumerator<Entry> it = root.Entries;
+                it.MoveNext();
+                Assert.AreEqual(thumbnail.Name, it.Current.Name);
+                it.MoveNext();
+                Assert.AreEqual(dsi.Name, it.Current.Name);
+                it.MoveNext();
+                Assert.AreEqual(si.Name, it.Current.Name);
+                it.MoveNext();
+                Assert.AreEqual(image.Name, it.Current.Name);
+                it.MoveNext();
+                Assert.AreEqual(tags.Name, it.Current.Name);
+
+                // Look inside another
+                DirectoryEntry imageD = (DirectoryEntry)image;
+                Assert.AreEqual(7, imageD.EntryCount);
+            }
+        }
 
         [Test]
         public void TestGetDocumentEntry()
@@ -564,7 +565,7 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSFileSystem fsC = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
             NPOIFSFileSystem fsD = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
 
-            
+
             foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB, fsC, fsD })
             {
                 DirectoryEntry root = fs.Root;
@@ -577,9 +578,9 @@ namespace TestCases.POIFS.FileSystem
                 NDocumentInputStream inp = new NDocumentInputStream(doc);
                 byte[] contents = new byte[doc.Size];
                 Assert.AreEqual(doc.Size, inp.Read(contents));
-                
+
                 // Now try to build the property set
-              //  ByteBuffer temp = inp.GetCurrentBuffer();
+                //  ByteBuffer temp = inp.GetCurrentBuffer();
                 inp = new NDocumentInputStream(doc);
 
                 PropertySet ps = PropertySetFactory.Create(inp);
@@ -625,16 +626,83 @@ namespace TestCases.POIFS.FileSystem
             fs = new NPOIFSFileSystem(new MemoryStream(temp));
             //fs = new NPOIFSFileSystem(new MemoryStream(baos.ToArray()));
 
-            // Check it's still like that
+            // Property table entries have been added to the blocks 
             Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
             // Now add a normal stream and a mini stream
             // TODO
 
             // TODO The rest of the test
+        }
+        [Test]
+        public void WritePOIFSWriterListener()
+        {
+            FileStream testFile = POIDataSamples.GetSpreadSheetInstance().GetFile("Simple.xls");
+            NPOIFSFileSystem src = new NPOIFSFileSystem(testFile);
+            byte[] wbDataExp = IOUtils.ToByteArray(src.CreateDocumentInputStream("Workbook"));
+
+            NPOIFSFileSystem nfs = new NPOIFSFileSystem();
+            copy(src.Root, nfs.Root);
+            src.Close();
+
+            MemoryStream bos = new MemoryStream();
+            nfs.WriteFilesystem(bos);
+            nfs.Close();
+
+            POIFSFileSystem pfs = new POIFSFileSystem(new MemoryStream(bos.ToArray()));
+            byte[] wbDataAct = IOUtils.ToByteArray(pfs.CreateDocumentInputStream("Workbook"));
+
+            //assertThat(wbDataExp, EqualTo(wbDataAct));
+        }
+
+        private static void copy(DirectoryNode src, DirectoryNode dest)
+        {
+            IEnumerator<Entry> srcIter = src.Entries;
+            while (srcIter.MoveNext())
+            {
+                Entry entry = srcIter.Current;
+                if (entry.IsDirectoryEntry)
+                {
+                    DirectoryNode srcDir = (DirectoryNode)entry;
+                    DirectoryNode destDir = (DirectoryNode)dest.CreateDirectory(srcDir.Name);
+                    destDir.StorageClsid = (/*setter*/src.StorageClsid);
+                    copy(srcDir, destDir);
+                }
+                else
+                {
+                    DocumentNode srcDoc = (DocumentNode)entry;
+                    // dest.CreateDocument(srcDoc.Name, src.CreateDocumentInputStream(srcDoc));
+                    dest.CreateDocument(srcDoc.Name, srcDoc.Size, new POIFSWriterListener1(src, srcDoc));
+                }
+            }
+
+        }
+
+        public class POIFSWriterListener1 : POIFSWriterListener
+        {
+            DirectoryNode src;
+            DocumentNode srcDoc;
+            public POIFSWriterListener1(DirectoryNode src, DocumentNode srcDoc)
+            {
+                this.src = src;
+                this.srcDoc = srcDoc;
+            }
+            public void ProcessPOIFSWriterEvent(POIFSWriterEvent event1)
+            {
+                try
+                {
+                    DocumentInputStream dis = src.CreateDocumentInputStream(srcDoc);
+                    IOUtils.Copy(dis, event1.Stream);
+                }
+                catch (IOException e)
+                {
+                    throw;
+                }
+            }
         }
 
     }
