@@ -85,6 +85,12 @@ namespace NPOI.POIFS.FileSystem
          */
         public override ByteBuffer CreateBlockIfNeeded(int offset)
         {
+            // Ensure we have our first block at this point
+            if (_mini_stream.GetStartBlock() == POIFSConstants.END_OF_CHAIN)
+            {
+                GetFreeBlock();
+            }
+
             // Try to Get it without extending the stream
             try
             {
@@ -196,6 +202,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 _header.SBATStart = batForSBAT;
                 _header.SBATBlockCount = 1;
+                _mini_stream = new NPOIFSStream(_filesystem, batForSBAT);
             }
             else
             {
