@@ -72,6 +72,22 @@ namespace NPOI.POIFS.FileSystem
             get { return GetEntries(); }
         }
 
+        public HashSet<String> EntryNames
+        {
+            get
+            {
+                HashSet<String> names = new HashSet<String>();
+                foreach (String name in directory.EntryNames)
+                {
+                    if (!excludes.Contains(name))
+                    {
+                        names.Add(name);
+                    }
+                }
+                return names;
+            }
+        }
+
         public bool IsEmpty
         {
             get { return EntryCount == 0; }

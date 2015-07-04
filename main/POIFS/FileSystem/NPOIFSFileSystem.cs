@@ -112,18 +112,45 @@ namespace NPOI.POIFS.FileSystem
             _property_table.StartBlock = (POIFSConstants.END_OF_CHAIN);
         }
 
-
+        public NPOIFSFileSystem(FileInfo file, bool readOnly)
+            : this(null, file, readOnly, true)
+        {
+            ;
+        }
+        /**
+         * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses 
+         *  less memory than creating from an <tt>InputStream</tt>.</p>
+         *  
+         * <p>Note that with this constructor, you will need to call {@link #close()}
+         *  when you're done to have the underlying Channel closed, as the channel is
+         *  kept open during normal operation to read the data out.</p> 
+         *  
+         * @param channel the FileChannel from which to read and write the data
+         *
+         * @exception IOException on errors reading, or on invalid data
+         */
         public NPOIFSFileSystem(FileStream channel)
-            : this(channel, true)
+            : this(channel, null, false, false)
         {
 
         }
-        public NPOIFSFileSystem(FileStream channel, bool closeChannelOnError)
+        public NPOIFSFileSystem(FileStream channel, FileInfo srcFile, bool readOnly, bool closeChannelOnError)
             : this(false)
         {
 
             try
             {
+                // Initialize the datasource
+                if (srcFile != null)
+                {
+                    FileBackedDataSource d = new FileBackedDataSource(srcFile, readOnly);
+                    channel = new FileStream(srcFile.FullName, FileMode.Open, FileAccess.ReadWrite);
+                    _data = d;
+                }
+                else
+                {
+                    _data = new FileBackedDataSource(channel, readOnly);
+                }
                 // Get the header
                 byte[] headerBuffer = new byte[POIFSConstants.SMALLER_BIG_BLOCK_SIZE];
                 IOUtils.ReadFully(channel, headerBuffer);
@@ -132,7 +159,7 @@ namespace NPOI.POIFS.FileSystem
                 _header = new HeaderBlock(headerBuffer);
 
                 // Now process the various entries
-                _data = new FileBackedDataSource(channel);
+                _data = new FileBackedDataSource(channel, readOnly);
                 ReadCoreContents();
                 channel.Close();
 
@@ -354,7 +381,15 @@ namespace NPOI.POIFS.FileSystem
         {
             // The header block doesn't count, so add one
             long startAt = (offset + 1) * bigBlockSize.GetBigBlockSize();
-            return _data.Read(bigBlockSize.GetBigBlockSize(), startAt);
+            try
+            {
+                return _data.Read(bigBlockSize.GetBigBlockSize(), startAt);
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                throw new IndexOutOfRangeException("Block " + offset + " not found - " + e);
+            }
+            
         }
 
         /**
@@ -643,11 +678,30 @@ namespace NPOI.POIFS.FileSystem
 
         public void WriteFilesystem(Stream stream)
         {
+            if (_data is FileBackedDataSource)
+            {
+                // Good, correct type
+            }
+            else
+            {
+                throw new ArgumentException(
+                      "POIFS opened from an inputstream, so writeFilesystem() may " +
+                      "not be called. Use writeFilesystem(OutputStream) instead"
+                );
+            }
+            if (!((FileBackedDataSource)_data).IsWriteable)
+            {
+                throw new ArgumentException(
+                     "POIFS opened in read only mode, so writeFilesystem() may " +
+                     "not be called. Open the FileSystem in read-write mode first"
+                );
+            }
+
             // Have the datasource updated
             syncWithDataSource();
 
             // Now copy the contents to the stream
-            _data.CopyTo(stream);
+            //_data.CopyTo(stream);
         }
 
         /**
@@ -731,6 +785,11 @@ namespace NPOI.POIFS.FileSystem
 
         public void Remove(EntryNode entry)
         {
+            // If it's a document, free the blocks
+            if (entry is DocumentEntry) {
+                NPOIFSDocument doc = new NPOIFSDocument((DocumentProperty)entry.Property, this);
+                doc.Free();
+            }
             _property_table.RemoveProperty(entry.Property);
         }
 

@@ -191,7 +191,13 @@ namespace TestCases.HPSF.Basic
             POIFSReaderListener pfl = new POIFSReaderListener1();
             reader2.RegisterListener(pfl);
             /* Read the POI filesystem. */
-            reader2.Read(poifs);
+            try
+            {
+                reader2.Read(poifs);
+            }
+            finally
+            {
+            }
             POIFile[] result = new POIFile[files.Count];
             for (int i = 0; i < result.Length; i++)
                 result[i] = (POIFile)files[i];

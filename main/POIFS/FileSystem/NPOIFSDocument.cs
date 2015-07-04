@@ -42,6 +42,14 @@ namespace NPOI.POIFS.FileSystem
         private int _block_size;
 
         /**
+    * Constructor for an existing Document 
+    */
+        public NPOIFSDocument(DocumentNode document)
+            : this((DocumentProperty)document.Property,
+                 ((DirectoryNode)document.Parent).NFileSystem)
+        {
+        }
+        /**
          * Constructor for an existing Document 
          */
         public NPOIFSDocument(DocumentProperty property, NPOIFSFileSystem filesystem)
@@ -70,7 +78,16 @@ namespace NPOI.POIFS.FileSystem
         public NPOIFSDocument(String name, NPOIFSFileSystem filesystem, Stream stream)
         {
             this._filesystem = filesystem;
+            // sotre it
+            int length = Store(stream);
 
+            // Build the property for it
+            this._property = new DocumentProperty(name, length);
+            _property.StartBlock = _stream.GetStartBlock();
+        }
+
+        private int Store(Stream stream)
+        {
             int bigBlockSize = POIFSConstants.BIG_BLOCK_MINIMUM_DOCUMENT_SIZE;
             BufferedStream bis = new BufferedStream(stream, bigBlockSize + 1);
             //bis.mark(bigBlockSize);
@@ -92,32 +109,33 @@ namespace NPOI.POIFS.FileSystem
             //}
 
             // Do we need to store as a mini stream or a full one?
-            if(bis.Seek(bigBlockSize, SeekOrigin.Current) < bigBlockSize)
+            if (bis.Seek(bigBlockSize, SeekOrigin.Current) < bigBlockSize)
             {
-                _stream = new NPOIFSStream(filesystem.GetMiniStore());
+                _stream = new NPOIFSStream(_filesystem.GetMiniStore());
                 _block_size = _filesystem.GetMiniStore().GetBlockStoreBlockSize();
             }
             else
             {
-                _stream = new NPOIFSStream(filesystem);
+                _stream = new NPOIFSStream(_filesystem);
                 _block_size = _filesystem.GetBlockStoreBlockSize();
             }
 
             // start from the beginning 
             bis.Seek(0, SeekOrigin.Begin);
-      
+
             // Store it
             Stream os = _stream.GetOutputStream();
             byte[] buf = new byte[1024];
             int length = 0;
-      
-            for (int readBytes; (readBytes = bis.Read(buf, 0, buf.Length)) != -1; length += readBytes) {
+
+            for (int readBytes; (readBytes = bis.Read(buf, 0, buf.Length)) != 0; length += readBytes)
+            {
                 os.Write(buf, 0, readBytes);
             }
 
-            // And build the property for it
-            this._property = new DocumentProperty(name, length);
-            _property.StartBlock = _stream.GetStartBlock();
+            os.Close();
+
+            return length;
         }
 
         public NPOIFSDocument(String name, int size, NPOIFSFileSystem filesystem, POIFSWriterListener Writer)
@@ -146,6 +164,21 @@ namespace NPOI.POIFS.FileSystem
             // And build the property for it
             this._property = new DocumentProperty(name, size);
             _property.StartBlock = (/*setter*/_stream.GetStartBlock());
+        }
+        /**
+        * Frees the underlying stream and property
+        */
+        internal void Free() {
+            _stream.Free();
+            _property.StartBlock = (POIFSConstants.END_OF_CHAIN);
+        }
+
+        internal NPOIFSFileSystem FileSystem
+        {
+            get
+            {
+                return _filesystem;
+            }
         }
 
         public int GetDocumentBlockSize()
@@ -177,7 +210,13 @@ namespace NPOI.POIFS.FileSystem
                 return _property.Size;
             }
         }
-
+        public void ReplaceContents(Stream stream)
+        {
+            Free();
+            int size = Store(stream);
+            _property.StartBlock = (_stream.GetStartBlock());
+            _property.UpdateSize(size);
+        }
         /**
          * @return the instance's DocumentProperty
          */

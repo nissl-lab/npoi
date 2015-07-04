@@ -55,6 +55,15 @@ namespace NPOI.POIFS.FileSystem
         IEnumerator<Entry> Entries { get; }
 
         /// <summary>
+        /// get the names of all the Entries contained directly in this
+        /// instance (in other words, names of children only; no grandchildren etc).
+        /// </summary>
+        /// <value>the names of all the entries that may be retrieved with
+        /// getEntry(String), which may be empty (if this DirectoryEntry is empty
+        /// </value>
+        HashSet<String> EntryNames { get; }
+
+        /// <summary>
         ///is this DirectoryEntry empty?
         /// </summary>
         /// <value><c>true</c> if this instance contains no Entry instances; otherwise, <c>false</c>.</value>

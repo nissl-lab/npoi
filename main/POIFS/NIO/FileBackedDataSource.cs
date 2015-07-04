@@ -22,23 +22,37 @@ namespace NPOI.POIFS.NIO
 {
     /// <summary>
     /// A POIFS DataSource backed by a File
+    /// TODO - Return the ByteBuffers in such a way that in RW mode,
+    /// changes to the buffer end up on the disk (will fix the HPSF TestWrite
+    /// currently failing unit test when done)
     /// </summary>
     public class FileBackedDataSource : DataSource
     {
-        private Stream fileStream;
+        private FileStream fileStream;
+        private bool writable;
+        private string fileName;
         public FileBackedDataSource(FileInfo file)
-            {
-            if (file.Exists)
-                throw new FileNotFoundException(file.FullName);
-            }
-
-        public FileBackedDataSource(FileStream stream)
+            : this(file, false)
         {
-            stream.Position = 0;
-            byte[] temp = new byte[stream.Length];
-            stream.Read(temp, 0, (int)stream.Length);
-            MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
-            fileStream = ms;
+            
+        }
+        public FileBackedDataSource(FileInfo file, bool readOnly)
+        {
+            if (!file.Exists)
+                throw new FileNotFoundException(file.FullName);
+            fileName = file.FullName;
+            this.fileStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
+            this.writable = !readOnly;
+        }
+        public FileBackedDataSource(FileStream stream, bool readOnly)
+        {
+            fileName = stream.Name;//??
+            //stream.Position = 0;
+            //byte[] temp = new byte[stream.Length];
+            //stream.Read(temp, 0, (int)stream.Length);
+            //MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
+            fileStream = stream;
+            this.writable = !readOnly;
         }
 
         #region IDisposable Members
@@ -68,6 +82,19 @@ namespace NPOI.POIFS.NIO
 
         #endregion
 
+        public bool IsWriteable
+        {
+            get
+            {
+                return this.writable;
+            }
+        }
+
+        public FileStream Stream
+        {
+            get { return this.fileStream; }
+        }
+
         /// <summary>
         /// Reads a sequence of bytes from this FileStream starting at the given file position.
         /// </summary>
@@ -79,11 +106,23 @@ namespace NPOI.POIFS.NIO
             if (position >= Size)
                 throw new ArgumentException("Position " + position + " past the end of the file");
 
-            // Read
-            fileStream.Position = position;
-            ByteBuffer dst = ByteBuffer.CreateBuffer(length);
+            // Do we read or map (for read/write?
+            ByteBuffer dst;
+            int worked = -1;
+            if (writable)
+            {
+                //dst = channel.map(FileChannel.MapMode.READ_WRITE, position, length);
+                dst = ByteBuffer.CreateBuffer(length);
+                worked = 0;
+            }
+            else
+            {
+                // Read
+                fileStream.Position = position;
+                dst = ByteBuffer.CreateBuffer(length);
 
-            int worked = IOUtils.ReadFully(fileStream, dst.Buffer);
+                worked = IOUtils.ReadFully(fileStream, dst.Buffer);
+            }
             // Check
             if(worked == -1)
                 throw new ArgumentException("Position " + position + " past the end of the file");

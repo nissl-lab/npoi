@@ -132,7 +132,7 @@ namespace NPOI.POIFS.FileSystem
         {
             if (outStream == null)
             {
-                outStream = new StreamBlockByteBuffer(blockStore, startBlock);
+                outStream = new StreamBlockByteBuffer(this);
             }
             return outStream;
         }
@@ -166,7 +166,106 @@ namespace NPOI.POIFS.FileSystem
          * Class that handles a streaming read of one stream
          */
 
+        public class StreamBlockByteBuffer : MemoryStream
+        {
+            byte[] oneByte = new byte[1];
+            ByteBuffer buffer;
+            // Make sure we don't encounter a loop whilst overwriting
+            // the existing blocks
+            ChainLoopDetector loopDetector;
+            int prevBlock, nextBlock;
+            NPOIFSStream pStream;
 
+            protected internal StreamBlockByteBuffer(NPOIFSStream pStream)
+            {
+                this.pStream = pStream;
+                loopDetector = pStream.blockStore.GetChainLoopDetector();
+                prevBlock = POIFSConstants.END_OF_CHAIN;
+                nextBlock = pStream.startBlock;
+            }
+
+            protected void CreateBlockIfNeeded()
+            {
+                if (buffer != null && buffer.HasRemaining()) return;
+
+                int thisBlock = nextBlock;
+
+                // Allocate a block if needed, otherwise figure
+                //  out what the next block will be
+                if (thisBlock == POIFSConstants.END_OF_CHAIN)
+                {
+                    thisBlock = pStream.blockStore.GetFreeBlock();
+                    loopDetector.Claim(thisBlock);
+
+                    // We're on the end of the chain
+                    nextBlock = POIFSConstants.END_OF_CHAIN;
+
+                    // Mark the previous block as carrying on to us if needed
+                    if (prevBlock != POIFSConstants.END_OF_CHAIN)
+                    {
+                        pStream.blockStore.SetNextBlock(prevBlock, thisBlock);
+                    }
+                    pStream.blockStore.SetNextBlock(thisBlock, POIFSConstants.END_OF_CHAIN);
+
+                    // If we've just written the first block on a 
+                    //  new stream, save the start block offset
+                    if (pStream.startBlock == POIFSConstants.END_OF_CHAIN)
+                    {
+                        pStream.startBlock = thisBlock;
+                    }
+                }
+                else
+                {
+                    loopDetector.Claim(thisBlock);
+                    nextBlock = pStream.blockStore.GetNextBlock(thisBlock);
+                }
+
+                buffer = pStream.blockStore.CreateBlockIfNeeded(thisBlock);
+
+                // Update pointers
+                prevBlock = thisBlock;
+            }
+
+            public void Write(int b)
+            {
+                oneByte[0] = (byte)(b & 0xFF);
+                base.Write(oneByte, 0, oneByte.Length);
+            }
+
+            public override void Write(byte[] b, int off, int len)
+            {
+                if ((off < 0) || (off > b.Length) || (len < 0) ||
+                        ((off + len) > b.Length) || ((off + len) < 0))
+                {
+                    throw new IndexOutOfRangeException();
+                }
+                else if (len == 0)
+                {
+                    return;
+                }
+
+                do
+                {
+                    CreateBlockIfNeeded();
+                    int writeBytes = Math.Min(buffer.Remaining(), len);
+                    buffer.Write(b, off, writeBytes);
+                    off += writeBytes;
+                    len -= writeBytes;
+                } while (len > 0);
+            }
+
+            public override void Close()
+            {
+                // If we're overwriting, free any remaining blocks
+                NPOIFSStream toFree = new NPOIFSStream(pStream.blockStore, nextBlock);
+                toFree.Free(loopDetector);
+
+                // Mark the end of the stream
+                pStream.blockStore.SetNextBlock(prevBlock, POIFSConstants.END_OF_CHAIN);
+
+                base.Close();
+            }
+        }
 
 
     }
@@ -277,106 +376,5 @@ namespace NPOI.POIFS.FileSystem
         }
     }
 
-    public class StreamBlockByteBuffer : MemoryStream
-    {
-        byte[] oneByte = new byte[1];
-        ByteBuffer buffer;
-        // Make sure we don't encounter a loop whilst overwriting
-        // the existing blocks
-        ChainLoopDetector loopDetector;
-        int prevBlock, nextBlock;
-        private BlockStore blockStore;
-        private int startBlock;
-
-        protected internal StreamBlockByteBuffer(BlockStore blockStore, int startBlock)
-        {
-            this.blockStore = blockStore;
-            this.startBlock = startBlock;
-            loopDetector = blockStore.GetChainLoopDetector();
-            prevBlock = POIFSConstants.END_OF_CHAIN;
-            nextBlock = startBlock;
-        }
-
-        protected void CreateBlockIfNeeded()
-        {
-            if (buffer != null && buffer.HasRemaining()) return;
-
-            int thisBlock = nextBlock;
-
-            // Allocate a block if needed, otherwise figure
-            //  out what the next block will be
-            if (thisBlock == POIFSConstants.END_OF_CHAIN)
-            {
-                thisBlock = blockStore.GetFreeBlock();
-                loopDetector.Claim(thisBlock);
-
-                // We're on the end of the chain
-                nextBlock = POIFSConstants.END_OF_CHAIN;
-
-                // Mark the previous block as carrying on to us if needed
-                if (prevBlock != POIFSConstants.END_OF_CHAIN)
-                {
-                    blockStore.SetNextBlock(prevBlock, thisBlock);
-                }
-                blockStore.SetNextBlock(thisBlock, POIFSConstants.END_OF_CHAIN);
-
-                // If we've just written the first block on a 
-                //  new stream, save the start block offset
-                if (startBlock == POIFSConstants.END_OF_CHAIN)
-                {
-                    startBlock = thisBlock;
-                }
-            }
-            else
-            {
-                loopDetector.Claim(thisBlock);
-                nextBlock = blockStore.GetNextBlock(thisBlock);
-            }
-
-            buffer = blockStore.CreateBlockIfNeeded(thisBlock);
-
-            // Update pointers
-            prevBlock = thisBlock;
-        }
-
-        public void Write(int b)
-        {
-            oneByte[0] = (byte)(b & 0xFF);
-            base.Write(oneByte, 0, oneByte.Length);
-        }
-
-        public override void Write(byte[] b, int off, int len)
-        {
-            if ((off < 0) || (off > b.Length) || (len < 0) ||
-                    ((off + len) > b.Length) || ((off + len) < 0))
-            {
-                throw new IndexOutOfRangeException();
-            }
-            else if (len == 0)
-            {
-                return;
-            }
-
-            do
-            {
-                CreateBlockIfNeeded();
-                int writeBytes = Math.Min(buffer.Remaining(), len);
-                buffer.Write(b, off, writeBytes);
-                off += writeBytes;
-                len -= writeBytes;
-            } while (len > 0);
-        }
-
-        public override void Close()
-        {
-            // If we're overwriting, free any remaining blocks
-            NPOIFSStream toFree = new NPOIFSStream(blockStore, nextBlock);
-            toFree.Free(loopDetector);
-
-            // Mark the end of the stream
-            blockStore.SetNextBlock(prevBlock, POIFSConstants.END_OF_CHAIN);
-
-            base.Close();
-        }
-    }
+    
 }

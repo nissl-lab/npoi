@@ -45,7 +45,7 @@ namespace TestCases.POIFS.NIO
         {
             FileStream f =  data.GetFile("Notes.ole2");
 
-            FileBackedDataSource ds = new FileBackedDataSource(f);
+            FileBackedDataSource ds = new FileBackedDataSource(f, true);
 
             Assert.AreEqual(8192, ds.Size);
 

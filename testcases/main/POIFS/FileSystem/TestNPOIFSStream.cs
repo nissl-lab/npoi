@@ -974,6 +974,197 @@ namespace TestCases.POIFS.FileSystem
 
             Assert.AreEqual(false, it.MoveNext());
         }
-        
+        /**
+        * Writes a stream, then Replaces it
+        */
+        [Test]
+        public void TestWriteThenReplace()
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
+
+            // Starts empty
+            BATBlock bat = fs.GetBATBlockAndIndex(0).Block;
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(2));
+
+            // Write something that uses a main stream
+            byte[] main4106 = new byte[4106];
+            main4106[0] = unchecked((byte)-10);
+            main4106[4105] = unchecked((byte)-11);
+            DocumentEntry normal = fs.Root.CreateDocument(
+                    "Normal", new MemoryStream(main4106));
+
+            // Should have used 9 blocks
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(3, bat.GetValueAt(2));
+            Assert.AreEqual(4, bat.GetValueAt(3));
+            Assert.AreEqual(5, bat.GetValueAt(4));
+            Assert.AreEqual(6, bat.GetValueAt(5));
+            Assert.AreEqual(7, bat.GetValueAt(6));
+            Assert.AreEqual(8, bat.GetValueAt(7));
+            Assert.AreEqual(9, bat.GetValueAt(8));
+            Assert.AreEqual(10, bat.GetValueAt(9));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(4106, normal.Size);
+            Assert.AreEqual(4106, ((DocumentNode)normal).Property.Size);
+
+
+            // Replace with one still big enough for a main stream, but one block smaller
+            byte[] main4096 = new byte[4096];
+            main4096[0] = unchecked((byte)-10);
+            main4096[4095] = unchecked((byte)-11);
+
+            NDocumentOutputStream nout = new NDocumentOutputStream(normal);
+            nout.Write(main4096);
+            nout.Close();
+
+            // Will have dropped to 8
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(3, bat.GetValueAt(2));
+            Assert.AreEqual(4, bat.GetValueAt(3));
+            Assert.AreEqual(5, bat.GetValueAt(4));
+            Assert.AreEqual(6, bat.GetValueAt(5));
+            Assert.AreEqual(7, bat.GetValueAt(6));
+            Assert.AreEqual(8, bat.GetValueAt(7));
+            Assert.AreEqual(9, bat.GetValueAt(8));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(9));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(4096, normal.Size);
+            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+
+
+            // Write and check
+            fs = TestNPOIFSFileSystem.WriteOutAndReadBack(fs);
+            bat = fs.GetBATBlockAndIndex(0).Block;
+
+            // Will have properties, but otherwise the same
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(3, bat.GetValueAt(2));
+            Assert.AreEqual(4, bat.GetValueAt(3));
+            Assert.AreEqual(5, bat.GetValueAt(4));
+            Assert.AreEqual(6, bat.GetValueAt(5));
+            Assert.AreEqual(7, bat.GetValueAt(6));
+            Assert.AreEqual(8, bat.GetValueAt(7));
+            Assert.AreEqual(9, bat.GetValueAt(8));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(9)); // End of Normal
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Props
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(4096, normal.Size);
+            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+
+
+            // Make longer, take 1 block After the properties too
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            nout = new NDocumentOutputStream(normal);
+            nout.Write(main4106);
+            nout.Close();
+
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(3, bat.GetValueAt(2));
+            Assert.AreEqual(4, bat.GetValueAt(3));
+            Assert.AreEqual(5, bat.GetValueAt(4));
+            Assert.AreEqual(6, bat.GetValueAt(5));
+            Assert.AreEqual(7, bat.GetValueAt(6));
+            Assert.AreEqual(8, bat.GetValueAt(7));
+            Assert.AreEqual(9, bat.GetValueAt(8));
+            Assert.AreEqual(11, bat.GetValueAt(9));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Props
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(11)); // Normal
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(4106, normal.Size);
+            Assert.AreEqual(4106, ((DocumentNode)normal).Property.Size);
+
+
+            // Make it small, will trigger the SBAT stream and free lots up
+            byte[] mini = new byte[] { 42, 0, 1, 2, 3, 4, 42 };
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            nout = new NDocumentOutputStream(normal);
+            nout.Write(mini);
+            nout.Close();
+
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(4));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(5));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(6));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(7));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(8));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(9));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Props
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(7, normal.Size);
+            Assert.AreEqual(7, ((DocumentNode)normal).Property.Size);
+
+
+            // Finally back to big again
+            nout = new NDocumentOutputStream(normal);
+            nout.Write(main4096);
+            nout.Close();
+
+            // Will keep the mini stream, now empty
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
+            Assert.AreEqual(5, bat.GetValueAt(4));
+            Assert.AreEqual(6, bat.GetValueAt(5));
+            Assert.AreEqual(7, bat.GetValueAt(6));
+            Assert.AreEqual(8, bat.GetValueAt(7));
+            Assert.AreEqual(9, bat.GetValueAt(8));
+            Assert.AreEqual(11, bat.GetValueAt(9));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Props
+            Assert.AreEqual(12, bat.GetValueAt(11));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(12));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(13));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(4096, normal.Size);
+            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+
+
+            // Save, re-load, re-check
+            fs = TestNPOIFSFileSystem.WriteOutAndReadBack(fs);
+            bat = fs.GetBATBlockAndIndex(0).Block;
+
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
+            Assert.AreEqual(5, bat.GetValueAt(4));
+            Assert.AreEqual(6, bat.GetValueAt(5));
+            Assert.AreEqual(7, bat.GetValueAt(6));
+            Assert.AreEqual(8, bat.GetValueAt(7));
+            Assert.AreEqual(9, bat.GetValueAt(8));
+            Assert.AreEqual(11, bat.GetValueAt(9));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Props
+            Assert.AreEqual(12, bat.GetValueAt(11));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(12));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(13));
+
+            normal = (DocumentEntry)fs.Root.GetEntry("Normal");
+            Assert.AreEqual(4096, normal.Size);
+            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+        }
+
     }
 }

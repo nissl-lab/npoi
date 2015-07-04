@@ -96,5 +96,13 @@ namespace NPOI.POIFS.Properties
         {
             // do nothing
         }
+
+        /**
+         * Update the size of the property's data
+         */
+        public void UpdateSize(int size)
+        {
+            Size = (size);
+        }
     }
 }

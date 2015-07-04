@@ -210,7 +210,14 @@ namespace NPOI.POIFS.FileSystem
                 }
                 else
                 {
-                    _nFilesSystem.Remove(entry);
+                    try
+                    {
+                        _nFilesSystem.Remove(entry);
+                    }
+                    catch (IOException e)
+                    {
+                        // TODO Work out how to report this, given we can't change the method signature...
+                    }
                 }
             }
             return rval;
@@ -254,6 +261,24 @@ namespace NPOI.POIFS.FileSystem
         {
             return _entries[index];
         }
+
+        /**
+         * get the names of all the Entries contained directly in this
+         * instance (in other words, names of children only; no grandchildren
+         * etc).
+         *
+         * @return the names of all the entries that may be retrieved with
+         *         getEntry(String), which may be empty (if this 
+         *         DirectoryEntry is empty)
+         */
+        public HashSet<String> EntryNames
+        {
+            get
+            {
+                return new HashSet<string>(_byname.Keys);
+            }
+        }
+
         /// <summary>
         /// is this DirectoryEntry empty?
         /// </summary>
