@@ -86,7 +86,13 @@ namespace TestCases.POIFS.FileSystem
             HeaderBlock header = new HeaderBlock(new MemoryStream(baos.ToArray()));
             return header;
         }
-
+        protected static NPOIFSFileSystem WriteOutAndReadBack(NPOIFSFileSystem original)
+        {
+            MemoryStream baos = new MemoryStream();
+            original.WriteFilesystem(baos);
+            original.Close();
+            return new NPOIFSFileSystem(new ByteArrayInputStream(baos.ToArray()));
+        }
         [Test]
         public void TestBasicOpen()
         {
@@ -542,12 +548,10 @@ namespace TestCases.POIFS.FileSystem
 
 
             // Now, write it out, and read it back in again fully
-            MemoryStream stream = new MemoryStream();
-            fs.WriteFilesystem(stream);
+            fs = WriteOutAndReadBack(fs);
 
             
             // Check that it is seen correctly
-            fs = new NPOIFSFileSystem(new MemoryStream(stream.ToArray()));
             assertBATCount(fs, 237, 2);
 
             Assert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
@@ -702,11 +706,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
             // Write and read it
-            MemoryStream baos = new MemoryStream();
-            fs.WriteFilesystem(baos);
-            byte[] temp = baos.ToArray();
-            fs = new NPOIFSFileSystem(new MemoryStream(temp));
-            //fs = new NPOIFSFileSystem(new MemoryStream(baos.ToArray()));
+            fs = WriteOutAndReadBack(fs);
 
             // Property table entries have been added to the blocks 
             Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
@@ -837,7 +837,61 @@ namespace TestCases.POIFS.FileSystem
 
 
             // Write and read back
+            fs = WriteOutAndReadBack(fs);
+
+            // Check it's all unChanged
+            // TODO Fix it so that it is....
+#if !HIDE_UNREACHABLE_CODE
+            if (1 == 0)
+            {
+                Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+                if (fs.GetBigBlockSize() == POIFSConstants.SMALLER_BIG_BLOCK_SIZE)
+                {
+                    Assert.AreEqual(4, fs.GetNextBlock(3));
+                    Assert.AreEqual(5, fs.GetNextBlock(4));
+                    Assert.AreEqual(6, fs.GetNextBlock(5));
+                    Assert.AreEqual(7, fs.GetNextBlock(6));
+                    Assert.AreEqual(8, fs.GetNextBlock(7));
+                    Assert.AreEqual(9, fs.GetNextBlock(8));
+                    Assert.AreEqual(10, fs.GetNextBlock(9));
+                    Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(10));
+
+                    Assert.AreEqual(12, fs.GetNextBlock(11));
+                    Assert.AreEqual(13, fs.GetNextBlock(12));
+                    Assert.AreEqual(14, fs.GetNextBlock(13));
+                    Assert.AreEqual(15, fs.GetNextBlock(14));
+                    Assert.AreEqual(16, fs.GetNextBlock(15));
+                    Assert.AreEqual(17, fs.GetNextBlock(16));
+                    Assert.AreEqual(18, fs.GetNextBlock(17));
+                    Assert.AreEqual(19, fs.GetNextBlock(18));
+                    Assert.AreEqual(20, fs.GetNextBlock(19));
+                    Assert.AreEqual(21, fs.GetNextBlock(20));
+                    Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21));
+                    Assert.AreEqual(23, fs.GetNextBlock(22));
+                    Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23));
+                    Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
+                }
+                else
+                {
+                    Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+                    Assert.AreEqual(5, fs.GetNextBlock(4));
+                    Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(5));
+                    Assert.AreEqual(7, fs.GetNextBlock(6));
+                    Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(7));
+                    Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(8));
+                }
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            }
+#endif
+            // Check some data
+
+
             // TODO
+
+            // All done
+            fs.Close();
         }
 
         [Test]
