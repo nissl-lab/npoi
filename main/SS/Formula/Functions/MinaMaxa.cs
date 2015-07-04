@@ -21,14 +21,14 @@ namespace NPOI.SS.Formula.Functions
     {
         protected internal override double Evaluate(double[] values)
         {
-            return values.Length > 0 ? MathX.max(values) : 0;
+            return values.Length > 0 ? MathX.Max(values) : 0;
         }
     }
     public class Mina : MinaMaxa
     {
          protected internal override double Evaluate(double[] values)
         {
-            return values.Length > 0 ? MathX.min(values) : 0;
+            return values.Length > 0 ? MathX.Min(values) : 0;
         }
     }
     /**

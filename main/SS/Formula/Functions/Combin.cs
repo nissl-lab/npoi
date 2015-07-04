@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.Functions
 			if (d0 > int.MaxValue || d1 > int.MaxValue) {
 				throw new EvaluationException(ErrorEval.NUM_ERROR);
 			}
-			return  MathX.nChooseK((int) d0, (int) d1);
+			return  MathX.NChooseK((int) d0, (int) d1);
 		}
 
     }

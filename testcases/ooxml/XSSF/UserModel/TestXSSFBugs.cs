@@ -1493,10 +1493,10 @@ using NPOI.SS.Formula.Eval;
         }
 
         /**
-     * Was giving NullPointerException
-     * at NPOI.XSSF.UserModel.XSSFWorkbook.onDocumentRead
-     * due to a lack of Styles Table
-     */
+         * Was giving NullPointerException
+         * at NPOI.XSSF.UserModel.XSSFWorkbook.onDocumentRead
+         * due to a lack of Styles Table
+         */
         [Test]
         public void Bug56278()
         {
@@ -1508,6 +1508,15 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(0, nwb.GetSheetIndex("Market Rates"));
         }
 
+        [Test]
+        public void Bug56315()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56315.xlsx");
+            ICell c = wb.GetSheetAt(0).GetRow(1).GetCell(0);
+            CellValue cv = wb.GetCreationHelper().CreateFormulaEvaluator().Evaluate(c);
+            double rounded = cv.NumberValue;
+            Assert.AreEqual(0.1, rounded, 0.0);
+        }
     }
 
 }

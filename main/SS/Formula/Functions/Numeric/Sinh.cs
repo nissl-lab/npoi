@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.Functions
 
         public override double Evaluate(double d)
         {
-            return MathX.sinh(d);
+            return MathX.Sinh(d);
         }
 
     }

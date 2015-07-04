@@ -24,7 +24,7 @@ namespace NPOI.SS.Formula.Functions
     {
         public override double Evaluate(double d0, double d1)
         {
-            return MathX.roundDown(d0, (int)d1);
+            return MathX.RoundDown(d0, (int)d1);
         }
     }
 }

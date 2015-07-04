@@ -24,7 +24,7 @@ namespace NPOI.SS.Formula.Functions
     {
         public override double Evaluate(double d)
         {
-            return MathX.sign(d);
+            return MathX.Sign(d);
         }
     }
 }
