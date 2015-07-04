@@ -2970,5 +2970,89 @@ namespace TestCases.HSSF.UserModel
             ICellStyle rstyle = row.RowStyle;
             Assert.AreEqual(rstyle.BorderBottom, BorderStyle.Double);
         }
+        [Test]
+        public void Bug35897()
+        {
+            // password is abc
+            OpenSample("xor-encryption-abc.xls");
+        }
+
+        [Test]
+        public void stackoverflow23114397()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            IDataFormat format = wb.GetCreationHelper().CreateDataFormat();
+
+            // How close the sizing should be, given that not all
+            //  systems will have quite the same fonts on them
+            int fontAccuracy = 25;
+
+            // x%
+            ICellStyle iPercent = wb.CreateCellStyle();
+            iPercent.DataFormat = (/*setter*/format.GetFormat("0%"));
+            // x.x%
+            ICellStyle d1Percent = wb.CreateCellStyle();
+            d1Percent.DataFormat = (/*setter*/format.GetFormat("0.0%"));
+            // x.xx%
+            ICellStyle d2Percent = wb.CreateCellStyle();
+            d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
+
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+
+            for (int i = 0; i < 3; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(0);
+            }
+            for (int i = 3; i < 6; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(1);
+            }
+            for (int i = 6; i < 9; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(0.12345);
+            }
+            for (int i = 9; i < 12; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(1.2345);
+            }
+            for (int i = 0; i < 12; i += 3)
+            {
+                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
+                r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
+                r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                s.AutoSizeColumn(i);
+                //System.out.Println(i + " => " + s.GetColumnWidth(i));
+            }
+
+            // Check the 0(.00)% ones
+            assertAlmostEquals(980, s.GetColumnWidth(0), fontAccuracy);
+            assertAlmostEquals(1400, s.GetColumnWidth(1), fontAccuracy);
+            assertAlmostEquals(1700, s.GetColumnWidth(2), fontAccuracy);
+
+            // Check the 100(.00)% ones
+            assertAlmostEquals(1500, s.GetColumnWidth(3), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(4), fontAccuracy);
+            assertAlmostEquals(2225, s.GetColumnWidth(5), fontAccuracy);
+
+            // Check the 12(.34)% ones
+            assertAlmostEquals(1225, s.GetColumnWidth(6), fontAccuracy);
+            assertAlmostEquals(1650, s.GetColumnWidth(7), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(8), fontAccuracy);
+
+            // Check the 123(.45)% ones
+            assertAlmostEquals(1500, s.GetColumnWidth(9), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
+            assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
+        }
+        public static void assertAlmostEquals(double expected, double actual, double fuzz)
+        {
+            double diff = Math.Abs(expected - actual);
+            if (diff > fuzz)
+                Assert.Fail(actual + " not within " + fuzz + " of " + expected);
+        }
     }
 }
