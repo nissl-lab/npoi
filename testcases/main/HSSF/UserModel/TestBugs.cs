@@ -2985,7 +2985,7 @@ namespace TestCases.HSSF.UserModel
 
             // How close the sizing should be, given that not all
             //  systems will have quite the same fonts on them
-            int fontAccuracy = 25;
+            float fontAccuracy = 0.15f;
 
             // x%
             ICellStyle iPercent = wb.CreateCellStyle();
@@ -3048,9 +3048,10 @@ namespace TestCases.HSSF.UserModel
             assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
             assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
         }
-        public static void assertAlmostEquals(double expected, double actual, double fuzz)
+        public static void assertAlmostEquals(double expected, double actual, float factor)
         {
             double diff = Math.Abs(expected - actual);
+            double fuzz = expected * factor;
             if (diff > fuzz)
                 Assert.Fail(actual + " not within " + fuzz + " of " + expected);
         }
