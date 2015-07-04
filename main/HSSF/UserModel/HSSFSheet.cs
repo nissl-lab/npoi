@@ -2317,7 +2317,7 @@ namespace NPOI.HSSF.UserModel
                 if (shape is HSSFComment)
                 {
                     HSSFComment comment = (HSSFComment)shape;
-                    if (comment.Column == column && comment.Row == row)
+                    if (comment.HasPosition && comment.Column == column && comment.Row == row)
                     {
                         return comment;
                     }

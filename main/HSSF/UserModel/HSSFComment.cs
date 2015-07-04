@@ -210,6 +210,20 @@ namespace NPOI.HSSF.UserModel
         {
             get { return _note; }
         }
+
+        /**
+         * Do we know which cell this comment belongs to?
+         */
+        public bool HasPosition
+        {
+            get
+            {
+                if (_note == null) return false;
+                if (this.Column < 0 || this.Row < 0) return false;
+                return true;
+            }
+        }
+
         public override int ShapeType
         {
             get

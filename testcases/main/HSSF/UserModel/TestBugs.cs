@@ -3055,5 +3055,24 @@ namespace TestCases.HSSF.UserModel
             if (diff > fuzz)
                 Assert.Fail(actual + " not within " + fuzz + " of " + expected);
         }
+        [Test]
+        public void Bug56450()
+        {
+            HSSFWorkbook wb = OpenSample("56450.xls");
+            HSSFSheet sheet = wb.GetSheetAt(0) as HSSFSheet;
+            int comments = 0;
+            foreach (IRow r in sheet)
+            {
+                foreach (ICell c in r)
+                {
+                    if (c.CellComment != null)
+                    {
+                        Assert.IsNotNull(c.CellComment.String.String);
+                        comments++;
+                    }
+                }
+            }
+            Assert.AreEqual(0, comments);
+        }
     }
 }
