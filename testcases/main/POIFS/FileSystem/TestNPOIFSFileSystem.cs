@@ -44,6 +44,20 @@ namespace TestCases.POIFS.FileSystem
             // TODO: Add constructor logic here
             //
         }
+
+        /**
+    * Returns test files with 512 byte and 4k block sizes, loaded
+    *  both from InputStreams and Files
+    */
+        protected NPOIFSFileSystem[] get512and4kFileAndInput()
+        {
+            NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
+            NPOIFSFileSystem fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
+            NPOIFSFileSystem fsC = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
+            NPOIFSFileSystem fsD = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
+            return new NPOIFSFileSystem[] { fsA, fsB, fsC, fsD };
+        }
+
         protected static void assertBATCount(NPOIFSFileSystem fs, int expectedBAT, int expectedXBAT)
         {
             int foundBAT = 0;
@@ -531,17 +545,20 @@ namespace TestCases.POIFS.FileSystem
             MemoryStream stream = new MemoryStream();
             fs.WriteFilesystem(stream);
 
-            // TODO Correct this to work
-#if !HIDE_UNREACHABLE_CODE
-            if (1 == 2) // TODO Fix this - actual is 128
-            {                
-                // Check that it is seen correctly
+            
+            // Check that it is seen correctly
+            fs = new NPOIFSFileSystem(new MemoryStream(stream.ToArray()));
+            assertBATCount(fs, 237, 2);
 
-                fs = new NPOIFSFileSystem(new MemoryStream(stream.ToArray()));
-                assertBATCount(fs, 237, 2);
-                // TODO Do some more checks
+            Assert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
+            Assert.AreEqual(true, fs.GetBATBlockAndIndex(237 * 128 - 1).Block.HasFreeSectors);
+            try
+            {
+                Assert.AreEqual(false, fs.GetBATBlockAndIndex(237 * 128).Block.HasFreeSectors);
+                Assert.Fail("Should only be 237 BATs");
             }
-#endif
+            catch (ArgumentOutOfRangeException) { }
+
             fs.Close();
         }
 
@@ -552,12 +569,7 @@ namespace TestCases.POIFS.FileSystem
         [Test]
         public void TestListEntries()
         {
-
-            NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
-            NPOIFSFileSystem fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
-            NPOIFSFileSystem fsC = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
-            NPOIFSFileSystem fsD = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
-            foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB, fsC, fsD })
+            foreach (NPOIFSFileSystem fs in get512and4kFileAndInput())
             {
                 DirectoryEntry root = fs.Root;
                 Assert.AreEqual(5, root.EntryCount);
@@ -597,14 +609,7 @@ namespace TestCases.POIFS.FileSystem
         [Test]
         public void TestGetDocumentEntry()
         {
-
-            NPOIFSFileSystem fsB = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
-            NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
-            NPOIFSFileSystem fsC = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
-            NPOIFSFileSystem fsD = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
-
-
-            foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB, fsC, fsD })
+            foreach (NPOIFSFileSystem fs in get512and4kFileAndInput())
             {
                 DirectoryEntry root = fs.Root;
                 Entry si = root.GetEntry("\x0005SummaryInformation");
@@ -616,6 +621,7 @@ namespace TestCases.POIFS.FileSystem
                 NDocumentInputStream inp = new NDocumentInputStream(doc);
                 byte[] contents = new byte[doc.Size];
                 Assert.AreEqual(doc.Size, inp.Read(contents));
+                inp.Close();
 
                 // Now try to build the property set
                 //  ByteBuffer temp = inp.GetCurrentBuffer();
@@ -641,6 +647,41 @@ namespace TestCases.POIFS.FileSystem
         [Test]
         public void TestReadWriteRead()
         {
+            foreach (NPOIFSFileSystem fs in get512and4kFileAndInput())
+            {
+                // Check we can find the entries we expect
+                // TODO Add check
+
+                // Write out, re-load
+                // TODO Add check
+
+                // Check they're still there
+                // TODO Add check
+
+                // Check the first few and last few bytes of a few
+                // TODO Add check
+
+                // Add a test mini stream
+                // TODO Add check
+
+                // Write out, re-load
+                // TODO Add check
+
+                // Check old and new are there
+                // TODO Add check
+
+                // Add a full stream, delete a full stream
+                // TODO Add check
+
+                // Write out, re-load
+                // TODO Add check
+
+                // Check it's all there
+                // TODO Add check
+
+                // All done
+                fs.Close();
+            }
         }
 
         /**
@@ -705,7 +746,6 @@ namespace TestCases.POIFS.FileSystem
             Arrays.Equals(wbDataExp, wbDataAct);
         }
 
+        // TODO Directory/Document create/write/read/delete/change tests
     }
-
-
 }

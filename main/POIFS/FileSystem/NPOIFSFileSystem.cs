@@ -672,7 +672,12 @@ namespace NPOI.POIFS.FileSystem
                 //byte[] block = GetBlockAt(bat.OurBlockIndex);
                 BlockAllocationTableWriter.WriteBlock(bat, block);
             }
-
+            // XBats
+            foreach (BATBlock bat in _xbat_blocks)
+            {
+                ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
+                BlockAllocationTableWriter.WriteBlock(bat, block);
+            }
             // SBATs
             _mini_store.SyncWithDataSource();
         }
