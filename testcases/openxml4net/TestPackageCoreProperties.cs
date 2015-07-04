@@ -170,6 +170,8 @@ namespace TestCases.OPC
             props.SetModifiedProperty(strDate);
             Assert.AreEqual(strDate, props.GetModifiedPropertyString());
             Assert.AreEqual(date, props.GetModifiedProperty());
+
+            pkg.Close();
         }
         [Test]
         public void TestGetPropertiesLO()
@@ -187,7 +189,34 @@ namespace TestCases.OPC
             PackageProperties props2 = pkg2.GetPackageProperties();
             props2.SetTitleProperty("Bug 51444 fixed");
         }
+        [Test]
+        public void TestEntitiesInCoreProps_56164()
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("CorePropertiesHasEntities.ooxml");
+            OPCPackage p = OPCPackage.Open(is1);
+            is1.Close();
 
+            // Should have 3 root relationships
+            bool foundDocRel = false, foundCorePropRel = false, foundExtPropRel = false;
+            foreach (PackageRelationship pr in p.Relationships)
+            {
+                if (pr.RelationshipType.Equals(PackageRelationshipTypes.CORE_DOCUMENT))
+                    foundDocRel = true;
+                if (pr.RelationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES))
+                    foundCorePropRel = true;
+                if (pr.RelationshipType.Equals(PackageRelationshipTypes.EXTENDED_PROPERTIES))
+                    foundExtPropRel = true;
+            }
+            Assert.IsTrue(foundDocRel, "Core/Doc Relationship not found in " + p.Relationships);
+            Assert.IsTrue(foundCorePropRel, "Core Props Relationship not found in " + p.Relationships);
+            Assert.IsTrue(foundExtPropRel, "Ext Props Relationship not found in " + p.Relationships);
+
+            // Get the Core Properties
+            PackagePropertiesPart props = (PackagePropertiesPart)p.GetPackageProperties();
+
+            // Check
+            Assert.AreEqual("Stefan Kopf", props.GetCreatorProperty());
+        }
     }
 }
 
