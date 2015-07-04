@@ -36,6 +36,11 @@ namespace NPOI.OpenXml4Net.OPC
             : base(defaultPackageAccess)
         {
             this.zipArchive = null;
+            try
+            {
+                this.contentTypeManager = new ZipContentTypeManager(null, this);
+            }
+            catch (InvalidFormatException e) { }
         }
 
         /**
