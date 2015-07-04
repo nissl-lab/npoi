@@ -460,7 +460,9 @@ namespace NPOI.POIFS.FileSystem
                 {
                     // Oh joy, we need a new XBAT too...
                     xbat = CreateBAT(offset + 1, false);
+                    // Allocate our new BAT as the first block in the XBAT
                     xbat.SetValueAt(0, offset);
+                    // And allocate the XBAT in the BAT
                     bat.SetValueAt(1, POIFSConstants.DIFAT_SECTOR_BLOCK);
 
                     // Will go one place higher as XBAT Added in
@@ -480,12 +482,16 @@ namespace NPOI.POIFS.FileSystem
                     _xbat_blocks.Add(xbat);
                     _header.XBATCount = _xbat_blocks.Count;
                 }
-                // Allocate us in the XBAT
-                for (int i = 0; i < bigBlockSize.GetXBATEntriesPerBlock(); i++)
+                else
                 {
-                    if (xbat.GetValueAt(i) == POIFSConstants.UNUSED_BLOCK)
+                    // Allocate us in the XBAT
+                    for (int i = 0; i < bigBlockSize.GetXBATEntriesPerBlock(); i++)
                     {
-                        xbat.SetValueAt(i, offset);
+                        if (xbat.GetValueAt(i) == POIFSConstants.UNUSED_BLOCK)
+                        {
+                            xbat.SetValueAt(i, offset);
+                            break;
+                        }
                     }
                 }
             }
@@ -503,7 +509,13 @@ namespace NPOI.POIFS.FileSystem
             return offset + 1;
         }
 
-
+        protected internal long Size
+        {
+            get
+            {
+                return _data.Size;
+            }
+        }
         public override ChainLoopDetector GetChainLoopDetector()
         {
             return new ChainLoopDetector(_data.Size, this);

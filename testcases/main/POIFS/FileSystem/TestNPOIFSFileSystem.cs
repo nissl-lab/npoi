@@ -44,6 +44,34 @@ namespace TestCases.POIFS.FileSystem
             // TODO: Add constructor logic here
             //
         }
+        protected static void assertBATCount(NPOIFSFileSystem fs, int expectedBAT, int expectedXBAT)
+        {
+            int foundBAT = 0;
+            int foundXBAT = 0;
+            int sz = (int)(fs.Size / fs.GetBigBlockSize());
+            for (int i = 0; i < sz; i++)
+            {
+                if (fs.GetNextBlock(i) == POIFSConstants.FAT_SECTOR_BLOCK)
+                {
+                    foundBAT++;
+                }
+                if (fs.GetNextBlock(i) == POIFSConstants.DIFAT_SECTOR_BLOCK)
+                {
+                    foundXBAT++;
+                }
+            }
+            Assert.AreEqual(expectedBAT, foundBAT, "Wrong number of BATs");
+            Assert.AreEqual(expectedXBAT, foundXBAT, "Wrong number of XBATs with " + expectedBAT + " BATs");
+        }
+
+        protected static HeaderBlock WriteOutAndReadHeader(NPOIFSFileSystem fs)
+        {
+            MemoryStream baos = new MemoryStream();
+            fs.WriteFilesystem(baos);
+
+            HeaderBlock header = new HeaderBlock(new MemoryStream(baos.ToArray()));
+            return header;
+        }
 
         [Test]
         public void TestBasicOpen()
@@ -358,6 +386,7 @@ namespace TestCases.POIFS.FileSystem
             fs.SetNextBlock(100, POIFSConstants.END_OF_CHAIN);
             Assert.AreEqual(101, fs.GetFreeBlock());
 
+            fs.Close();
         }
 
         [Test]
@@ -387,6 +416,7 @@ namespace TestCases.POIFS.FileSystem
             catch (ArgumentOutOfRangeException)
             {
             }
+            assertBATCount(fs, 1, 0);
 
             // Now ask for a free one, will need to extend the file
 
@@ -396,6 +426,9 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(true, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
             Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(128));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(129));
+
+            // We now have 2 BATs, but no XBATs
+            assertBATCount(fs, 2, 0);
 
             // Fill up to hold 109 BAT blocks
             for (int i = 0; i < 109; i++)
@@ -420,6 +453,15 @@ namespace TestCases.POIFS.FileSystem
             {
             }
 
+            // We now have 109 BATs, but no XBATs
+            assertBATCount(fs, 109, 0);
+
+
+            // Ask for it to be written out, and check the header
+            HeaderBlock header = WriteOutAndReadHeader(fs);
+            Assert.AreEqual(109, header.BATCount);
+            Assert.AreEqual(0, header.XBATCount);
+
             free = fs.GetFreeBlock();
             Assert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128 - 1).Block.HasFreeSectors);
             Assert.AreEqual(true, fs.GetBATBlockAndIndex(110 * 128 - 1).Block.HasFreeSectors);
@@ -433,6 +475,12 @@ namespace TestCases.POIFS.FileSystem
             {
             }
 
+            assertBATCount(fs, 110, 1);
+
+            header = WriteOutAndReadHeader(fs);
+            Assert.AreEqual(110, header.BATCount);
+            Assert.AreEqual(1, header.XBATCount);
+
             for (int i = 109; i < 109 + 127; i++)
             {
                 fs.GetFreeBlock();
@@ -442,6 +490,8 @@ namespace TestCases.POIFS.FileSystem
                     free = fs.GetFreeBlock();
                     fs.SetNextBlock(free, POIFSConstants.END_OF_CHAIN);
                 }
+
+                assertBATCount(fs, i + 1, 1);
             }
 
             // Should now have 109+127 = 236 BATs
@@ -454,6 +504,7 @@ namespace TestCases.POIFS.FileSystem
             catch (ArgumentOutOfRangeException)
             {
             }
+            assertBATCount(fs, 236, 1);
 
             // Ask for another, will get our 2nd XBAT
             free = fs.GetFreeBlock();
@@ -469,42 +520,29 @@ namespace TestCases.POIFS.FileSystem
             {
             }
 
-            // Check the counts
-            int numBATs = 0;
-            int numXBATs = 0;
-            for (int i = 0; i < 237 * 128; i++)
-            {
-                if (fs.GetNextBlock(i) == POIFSConstants.FAT_SECTOR_BLOCK)
-                {
-                    numBATs++;
-                }
-                if (fs.GetNextBlock(i) == POIFSConstants.DIFAT_SECTOR_BLOCK)
-                {
-                    numXBATs++;
-                }
-            }
-            Assert.AreEqual(237, numBATs);
-#if !HIDE_UNREACHABLE_CODE
-            if (1 == 2)
-            {
-                // TODO Fix this - actual is 128
-                Assert.AreEqual(2, numXBATs);
-            }
-#endif
+            // Check the counts now
+            assertBATCount(fs, 237, 2);
+
+            // Check the header
+            header = WriteOutAndReadHeader(fs);
+
+
+            // Now, write it out, and read it back in again fully
             MemoryStream stream = new MemoryStream();
             fs.WriteFilesystem(stream);
 
-            HeaderBlock header = new HeaderBlock(new MemoryStream(stream.ToArray()));
-            Assert.AreEqual(237, header.BATCount);
+            // TODO Correct this to work
 #if !HIDE_UNREACHABLE_CODE
             if (1 == 2) // TODO Fix this - actual is 128
             {                
-                Assert.AreEqual(2, header.XBATCount);
+                // Check that it is seen correctly
 
                 fs = new NPOIFSFileSystem(new MemoryStream(stream.ToArray()));
+                assertBATCount(fs, 237, 2);
+                // TODO Do some more checks
             }
 #endif
-
+            fs.Close();
         }
 
         /**
@@ -590,6 +628,9 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(null, inf.ApplicationName);
                 Assert.AreEqual(null, inf.Author);
                 Assert.AreEqual(null, inf.Subject);
+
+                // Finish
+                inp.Close();
             }
         }
 
@@ -638,15 +679,20 @@ namespace TestCases.POIFS.FileSystem
 
             // TODO The rest of the test
         }
+
+        /**
+        * Test that we can read a file with NPOIFS, create a new NPOIFS instance,
+        *  write it out, read it with POIFS, and see the original data
+        */
         [Test]
-        public void WritePOIFSWriterListener()
+        public void NPOIFSReadCopyWritePOIFSRead()
         {
             FileStream testFile = POIDataSamples.GetSpreadSheetInstance().GetFile("Simple.xls");
             NPOIFSFileSystem src = new NPOIFSFileSystem(testFile);
             byte[] wbDataExp = IOUtils.ToByteArray(src.CreateDocumentInputStream("Workbook"));
 
             NPOIFSFileSystem nfs = new NPOIFSFileSystem();
-            copy(src.Root, nfs.Root);
+            EntryUtils.CopyNodes(src.Root, nfs.Root);
             src.Close();
 
             MemoryStream bos = new MemoryStream();
@@ -656,53 +702,7 @@ namespace TestCases.POIFS.FileSystem
             POIFSFileSystem pfs = new POIFSFileSystem(new MemoryStream(bos.ToArray()));
             byte[] wbDataAct = IOUtils.ToByteArray(pfs.CreateDocumentInputStream("Workbook"));
 
-            //assertThat(wbDataExp, EqualTo(wbDataAct));
-        }
-
-        private static void copy(DirectoryNode src, DirectoryNode dest)
-        {
-            IEnumerator<Entry> srcIter = src.Entries;
-            while (srcIter.MoveNext())
-            {
-                Entry entry = srcIter.Current;
-                if (entry.IsDirectoryEntry)
-                {
-                    DirectoryNode srcDir = (DirectoryNode)entry;
-                    DirectoryNode destDir = (DirectoryNode)dest.CreateDirectory(srcDir.Name);
-                    destDir.StorageClsid = (/*setter*/src.StorageClsid);
-                    copy(srcDir, destDir);
-                }
-                else
-                {
-                    DocumentNode srcDoc = (DocumentNode)entry;
-                    // dest.CreateDocument(srcDoc.Name, src.CreateDocumentInputStream(srcDoc));
-                    dest.CreateDocument(srcDoc.Name, srcDoc.Size, new POIFSWriterListener1(src, srcDoc));
-                }
-            }
-
-        }
-
-        public class POIFSWriterListener1 : POIFSWriterListener
-        {
-            DirectoryNode src;
-            DocumentNode srcDoc;
-            public POIFSWriterListener1(DirectoryNode src, DocumentNode srcDoc)
-            {
-                this.src = src;
-                this.srcDoc = srcDoc;
-            }
-            public void ProcessPOIFSWriterEvent(POIFSWriterEvent event1)
-            {
-                try
-                {
-                    DocumentInputStream dis = src.CreateDocumentInputStream(srcDoc);
-                    IOUtils.Copy(dis, event1.Stream);
-                }
-                catch (IOException e)
-                {
-                    throw;
-                }
-            }
+            Arrays.Equals(wbDataExp, wbDataAct);
         }
 
     }
