@@ -143,7 +143,22 @@ namespace NPOI.HSSF.Record
             }
             public override int GetHashCode()
             {
-                return base.GetHashCode();
+                int hash = reserved;
+                hash = 31 * hash + formattingFontIndex;
+                hash = 31 * hash + formattingOptions;
+                hash = 31 * hash + numberOfRuns;
+                hash = 31 * hash + phoneticText.GetHashCode();
+
+                if (phRuns != null)
+                {
+                    foreach (PhRun ph in phRuns)
+                    {
+                        hash = 31 * hash + ph.phoneticTextFirstCharacterOffset;
+                        hash = 31 * hash + ph.realTextFirstCharacterOffset;
+                        hash = 31 * hash + ph.realTextLength;
+                    }
+                }
+                return hash;
             }
             internal ExtRst()
             {
@@ -267,6 +282,11 @@ namespace NPOI.HSSF.Record
                 ExtRst other = (ExtRst)obj;
                 return (CompareTo(other) == 0);
             }
+            public override string ToString()
+            {
+                return base.ToString();
+            }
+                 
             public int CompareTo(ExtRst o)
             {
                 int result;
@@ -292,15 +312,14 @@ namespace NPOI.HSSF.Record
                     if (result != 0) return result;
                     result = phRuns[i].realTextFirstCharacterOffset - o.phRuns[i].realTextFirstCharacterOffset;
                     if (result != 0) return result;
-                    result = phRuns[i].realTextFirstCharacterOffset - o.phRuns[i].realTextLength;
+                    result = phRuns[i].realTextLength - o.phRuns[i].realTextLength;
                     if (result != 0) return result;
                 }
 
-                result = extraData.Length - o.extraData.Length;
-                if (result != 0) return result;
+                result = Arrays.HashCode(extraData) - Arrays.HashCode(o.extraData);
 
                 // If we Get here, it's the same
-                return 0;
+                return result;
             }
 
             internal ExtRst Clone()

@@ -36,6 +36,11 @@ namespace NPOI.OpenXml4Net.OPC
             : base(defaultPackageAccess)
         {
             this.zipArchive = null;
+            try
+            {
+                this.contentTypeManager = new ZipContentTypeManager(null, this);
+            }
+            catch (InvalidFormatException e) { }
         }
 
         /**
@@ -477,9 +482,9 @@ namespace NPOI.OpenXml4Net.OPC
                     logger.Log(POILogger.DEBUG,"Save part '"
                             + ZipHelper.GetZipItemNameFromOPCName(part
                                     .PartName.Name) + "'");
-                    if (partMarshallers.ContainsKey(part.contentType))
+                    if (partMarshallers.ContainsKey(part._contentType))
                     {
-                        PartMarshaller marshaller = partMarshallers[part.contentType];
+                        PartMarshaller marshaller = partMarshallers[part._contentType];
 
                         if (!marshaller.Marshall(part, zos))
                         {

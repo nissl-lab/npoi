@@ -33,6 +33,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, s1.GetRelations().Count);
             Assert.AreEqual(1, s2.GetRelations().Count);
             Assert.AreEqual(1, s3.GetRelations().Count);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestGetCharts()
@@ -56,6 +58,8 @@ namespace NPOI.XSSF.UserModel
 
             chart = (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
             Assert.AreEqual("Sheet 3 Chart with Title", chart.Title.String);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestAddChartsToNewWorkbook()
@@ -73,7 +77,10 @@ namespace NPOI.XSSF.UserModel
 
             XSSFClientAnchor a2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
             XSSFChart c2 = (XSSFChart)d1.CreateChart(a2);
+
+            Assert.IsNotNull(c2);
             Assert.AreEqual(2, d1.GetCharts().Count);
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
     }
 

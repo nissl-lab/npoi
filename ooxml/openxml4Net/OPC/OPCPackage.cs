@@ -363,7 +363,12 @@ namespace NPOI.OpenXml4Net.OPC
                 Revert();
                 return;
             }
-
+            if (this.contentTypeManager == null)
+            {
+                logger.Log(POILogger.WARN,
+                        "Unable to call close() on a package that hasn't been fully opened yet");
+                return;
+            }
             // Save the content
             //ReentrantReadWriteLock l = new ReentrantReadWriteLock();
             try
@@ -723,9 +728,9 @@ namespace NPOI.OpenXml4Net.OPC
 
 
 
-                    if (partUnmarshallers.ContainsKey(part.contentType))
+                    if (partUnmarshallers.ContainsKey(part._contentType))
                     {
-                        PartUnmarshaller partUnmarshaller = partUnmarshallers[part.contentType];
+                        PartUnmarshaller partUnmarshaller = partUnmarshallers[part._contentType];
                         UnmarshallContext context = new UnmarshallContext(this,
                                 part.PartName);
                         try

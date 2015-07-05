@@ -127,6 +127,8 @@ namespace NPOI.XSSF.Model
                 CT_Rst st2 = items2[i];
                 Assert.AreEqual(st1.ToString(), st2.ToString());
             }
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
 
         /**
@@ -163,6 +165,8 @@ namespace NPOI.XSSF.Model
                 String val = s.GetRow(i++).GetCell(0).StringCellValue;
                 Assert.AreEqual(str, val);
             }
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(w));
         }
 
         private List<String> ReadStrings(String filename)

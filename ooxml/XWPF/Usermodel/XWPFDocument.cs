@@ -778,7 +778,7 @@ namespace NPOI.XWPF.UserModel
          * Commit and saves the document
          */
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
 
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -1190,6 +1190,23 @@ namespace NPOI.XWPF.UserModel
         {
             Settings.SetUpdateFields();
         }
+
+        /**
+          * Check if revision tracking is turned on.
+          * 
+          * @return <code>true</code> if revision tracking is turned on
+          */
+        public bool IsTrackRevisions
+        {
+            get
+            {
+                return Settings.IsTrackRevisions;
+            }
+            set
+            {
+                Settings.IsTrackRevisions = value;
+            }
+        }
         /**
          * inserts an existing XWPFTable to the arrays bodyElements and tables
          * @param pos
@@ -1309,7 +1326,8 @@ namespace NPOI.XWPF.UserModel
                 {
                     try
                     {
-                        out1.Close();
+                        if (out1 != null)
+                            out1.Close();
                     }
                     catch (IOException)
                     {

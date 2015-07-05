@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new EvaluationException(ErrorEval.DIV_ZERO);
             }
-            return MathX.average(values);
+            return MathX.Average(values);
         }
     }
     public class DEVSQ : AggregateFunction
@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.Functions
     {
         protected internal override double Evaluate(double[] values)
         {
-            return MathX.sum(values);
+            return MathX.Sum(values);
         }
     }
     public class LARGE : AggregateFunction
@@ -71,14 +71,14 @@ namespace NPOI.SS.Formula.Functions
     {
         protected internal override double Evaluate(double[] values)
         {
-            return values.Length > 0 ? MathX.max(values) : 0;
+            return values.Length > 0 ? MathX.Max(values) : 0;
         }
     }
     public class MIN : AggregateFunction
     {
         protected internal override double Evaluate(double[] values)
         {
-            return values.Length > 0 ? MathX.min(values) : 0;
+            return values.Length > 0 ? MathX.Min(values) : 0;
         }
     }
     public class MEDIAN : AggregateFunction
@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula.Functions
     {
         protected internal override double Evaluate(double[] values)
         {
-            return MathX.product(values);
+            return MathX.Product(values);
         }
     }
     public class SMALL : AggregateFunction
@@ -124,7 +124,7 @@ namespace NPOI.SS.Formula.Functions
     {
         protected internal override double Evaluate(double[] values)
         {
-            return MathX.sumsq(values);
+            return MathX.Sumsq(values);
         }
     }
     public class VAR : AggregateFunction

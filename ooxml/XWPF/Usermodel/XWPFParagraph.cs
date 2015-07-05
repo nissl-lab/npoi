@@ -36,7 +36,7 @@ namespace NPOI.XWPF.UserModel
         /** For access to the document's hyperlink, comments, tables etc */
         protected XWPFDocument document;
         protected List<XWPFRun> runs;
-        protected List<IRunElement> iruns;
+        protected List<IRunElement> iRuns;
 
         private StringBuilder footnoteText = new StringBuilder();
 
@@ -53,7 +53,7 @@ namespace NPOI.XWPF.UserModel
             }
             // Build up the character runs
             runs = new List<XWPFRun>();
-            iruns = new List<IRunElement>();
+            iRuns = new List<IRunElement>();
 
             BuildRunsInOrderFromXml(paragraph.Items);
             // Look for bits associated with the runs
@@ -104,39 +104,6 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
-
-            // Get all our child nodes in order, and process them
-            //  into XWPFRuns where we can
-            /*XmlCursor c = paragraph.NewCursor();
-            c.SelectPath("child::*");
-            while (c.ToNextSelection()) {
-               XmlObject o = c.Object;
-               if(o is CT_R) {
-                  Runs.Add(new XWPFRun((CT_R)o, this));
-               }
-               if(o is CT_Hyperlink) {
-                  CT_Hyperlink link = (CT_Hyperlink)o;
-                  foreach(CTR r in link.RList) {
-                     Runs.Add(new XWPFHyperlinkRun(link, r, this));
-                  }
-               }
-               if(o is CT_SdtRun) {
-                  CT_SdtContentRun run = ((CT_SdtRun)o).SdtContent;
-                  foreach(CTR r in Run.RList) {
-                     Runs.Add(new XWPFRun(r, this));
-                  }
-               }
-               if(o is CT_RunTrackChange) {
-                  foreach(CTR r in ((CT_RunTrackChange)o).RList) {
-                     Runs.Add(new XWPFRun(r, this));
-                  }
-               }
-               if(o is CT_SimpleField) {
-                  foreach(CTR r in ((CT_SimpleField)o).RList) {
-                     Runs.Add(new XWPFRun(r, this));
-                  }
-               }
-            }*/
         }
         /**
          * Identifies (in order) the parts of the paragraph /
@@ -151,7 +118,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     XWPFRun r = new XWPFRun((CT_R)o, this);
                     runs.Add(r);
-                    iruns.Add(r);
+                    iRuns.Add(r);
                 }
                 if (o is CT_Hyperlink1)
                 {
@@ -161,19 +128,19 @@ namespace NPOI.XWPF.UserModel
                         //runs.Add(new XWPFHyperlinkRun(link, r, this));
                         XWPFHyperlinkRun hr = new XWPFHyperlinkRun(link, r, this);
                         runs.Add(hr);
-                        iruns.Add(hr);
+                        iRuns.Add(hr);
 
                     }
                 }
                 if (o is CT_SdtBlock)
                 {
                     XWPFSDT cc = new XWPFSDT((CT_SdtBlock)o, part);
-                    iruns.Add(cc);
+                    iRuns.Add(cc);
                 }
                 if (o is CT_SdtRun)
                 {
                     XWPFSDT cc = new XWPFSDT((CT_SdtRun)o, part);
-                    iruns.Add(cc);
+                    iRuns.Add(cc);
                 }
                 if (o is CT_RunTrackChange)
                 {
@@ -181,7 +148,7 @@ namespace NPOI.XWPF.UserModel
                     {
                         XWPFRun cr = new XWPFRun(r, this);
                         runs.Add(cr);
-                        iruns.Add(cr);
+                        iRuns.Add(cr);
                     }
                 }
                 if (o is CT_SimpleField)
@@ -190,7 +157,7 @@ namespace NPOI.XWPF.UserModel
                     {
                         XWPFRun cr = new XWPFRun(r, this);
                         runs.Add(cr);
-                        iruns.Add(cr);
+                        iRuns.Add(cr);
                     }
                 }
                 if (o is CT_SmartTagRun)
@@ -224,7 +191,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return iruns;
+                return iRuns;
             }
         }
 
@@ -253,7 +220,7 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 StringBuilder out1 = new StringBuilder();
-                foreach (IRunElement run in iruns)
+                foreach (IRunElement run in iRuns)
                 {
                     if (run is XWPFSDT)
                     {
@@ -441,17 +408,6 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /// <summary>
-        /// Appends a new run to this paragraph
-        /// </summary>
-        /// <returns>a new text run</returns>
-        public XWPFRun CreateRun()
-        {
-            XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
-            runs.Add(xwpfRun);
-            return xwpfRun;
-        }
-
         /**
          * Returns the paragraph alignment which shall be applied to text in this
          * paragraph.
@@ -536,8 +492,11 @@ namespace NPOI.XWPF.UserModel
             set
             {
                 CT_PBdr ct = GetCTPBrd(true);
-
-                CT_Border pr = (ct != null && ct.IsSetTop()) ? ct.top : ct.AddNewTop();
+                if (ct == null)
+                {
+                    throw new RuntimeException("invalid paragraph state");
+                }
+                CT_Border pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
                 if (value == Borders.NONE)
                     ct.UnsetTop();
                 else
@@ -1199,23 +1158,52 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
-        /// <summary>
-        /// insert a new Run in RunArray
-        /// </summary>
-        /// <param name="pos"></param>
-        /// <returns>the inserted run</returns>
+        /**
+         * Appends a new run to this paragraph
+         *
+         * @return a new text run
+         */
+        public XWPFRun CreateRun()
+        {
+            XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
+            runs.Add(xwpfRun);
+            iRuns.Add(xwpfRun);
+            return xwpfRun;
+        }
+
+        /**
+         * insert a new Run in RunArray
+         * @param pos
+         * @return  the inserted run
+         */
         public XWPFRun InsertNewRun(int pos)
         {
             if (pos >= 0 && pos <= paragraph.SizeOfRArray())
             {
                 CT_R ctRun = paragraph.InsertNewR(pos);
                 XWPFRun newRun = new XWPFRun(ctRun, this);
+
+                // To update the iRuns, find where we're going
+                // in the normal Runs, and go in there
+                int iPos = iRuns.Count;
+                if (pos < runs.Count)
+                {
+                    XWPFRun oldAtPos = runs[(pos)];
+                    int oldAt = iRuns.IndexOf(oldAtPos);
+                    if (oldAt != -1)
+                    {
+                        iPos = oldAt;
+                    }
+                }
+                iRuns.Insert(iPos, newRun);
+
+                // Runs itself is easy to update
                 runs.Insert(pos, newRun);
+
                 return newRun;
             }
             return null;
         }
-
 
 
         /**
@@ -1340,11 +1328,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun GetRun(CT_R r)
         {
-            for (int i = 0; i < Runs.Count; i++)
+            for (int i = 0; i < runs.Count; i++)
             {
-                if (Runs[i].GetCTR() == r)
+                if (runs[i].GetCTR() == r)
                 {
-                    return Runs[i];
+                    return runs[i];
                 }
             }
             return null;

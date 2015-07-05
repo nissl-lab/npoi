@@ -20,32 +20,32 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * This part's container.
          */
-        internal OPCPackage container;
+        internal OPCPackage _container;
 
         /**
          * The part name. (required by the specification [M1.1])
          */
-        protected PackagePartName partName;
+        protected PackagePartName _partName;
 
         /**
          * The type of content of this part. (required by the specification [M1.2])
          */
-        internal ContentType contentType;
+        internal ContentType _contentType;
 
         /**
          * Flag to know if this part is a relationship.
          */
-        private bool isRelationshipPart;
+        private bool _isRelationshipPart;
 
         /**
          * Flag to know if this part has been logically deleted.
          */
-        private bool isDeleted;
+        private bool _isDeleted;
 
         /**
          * This part's relationships.
          */
-        private PackageRelationshipCollection relationships;
+        private PackageRelationshipCollection _relationships;
 
         /**
          * Constructor.
@@ -83,12 +83,12 @@ namespace NPOI.OpenXml4Net.OPC
         protected PackagePart(OPCPackage pack, PackagePartName partName,
                 ContentType contentType, bool loadRelationships)
         {
-            this.partName = partName;
-            this.contentType = contentType;
-            this.container = (ZipPackage)pack; // TODO - enforcing ZipPackage here - perhaps should change constructor signature
+            this._partName = partName;
+            this._contentType = contentType;
+            this._container = (ZipPackage)pack; // TODO - enforcing ZipPackage here - perhaps should change constructor signature
 
             // Check if this part is a relationship part
-            isRelationshipPart = this.partName.IsRelationshipPartURI();
+            _isRelationshipPart = this._partName.IsRelationshipPartURI();
 
             // Load relationships if any
             if (loadRelationships)
@@ -163,9 +163,9 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("relationshipType");
             }
 
-            if (relationships == null)
+            if (_relationships == null)
             {
-                relationships = new PackageRelationshipCollection();
+                _relationships = new PackageRelationshipCollection();
             }
 
             Uri targetURI;
@@ -178,7 +178,7 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("Invalid target - " + e);
             }
 
-            return relationships.AddRelationship(targetURI, TargetMode.External,
+            return _relationships.AddRelationship(targetURI, TargetMode.External,
                     relationshipType, id);
         }
 
@@ -230,7 +230,7 @@ namespace NPOI.OpenXml4Net.OPC
         public PackageRelationship AddRelationship(PackagePartName targetPartName,
                 TargetMode targetMode, String relationshipType, String id)
         {
-            container.ThrowExceptionIfReadOnly();
+            _container.ThrowExceptionIfReadOnly();
 
             if (targetPartName == null)
             {
@@ -251,12 +251,12 @@ namespace NPOI.OpenXml4Net.OPC
                         "Rule M1.25: The Relationships part shall not have relationships to any other part.");
             }
 
-            if (relationships == null)
+            if (_relationships == null)
             {
-                relationships = new PackageRelationshipCollection();
+                _relationships = new PackageRelationshipCollection();
             }
 
-            return relationships.AddRelationship(targetPartName.URI,
+            return _relationships.AddRelationship(targetPartName.URI,
                     targetMode, relationshipType, id);
         }
 
@@ -307,7 +307,7 @@ namespace NPOI.OpenXml4Net.OPC
         public PackageRelationship AddRelationship(Uri targetURI,
                 TargetMode targetMode, String relationshipType, String id)
         {
-            container.ThrowExceptionIfReadOnly();
+            _container.ThrowExceptionIfReadOnly();
 
             if (targetURI == null)
             {
@@ -331,12 +331,12 @@ namespace NPOI.OpenXml4Net.OPC
                         "Rule M1.25: The Relationships part shall not have relationships to any other part.");
             }
 
-            if (relationships == null)
+            if (_relationships == null)
             {
-                relationships = new PackageRelationshipCollection();
+                _relationships = new PackageRelationshipCollection();
             }
 
-            return relationships.AddRelationship(targetURI,
+            return _relationships.AddRelationship(targetURI,
                     targetMode, relationshipType, id);
         }
 
@@ -345,9 +345,9 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void ClearRelationships()
         {
-            if (relationships != null)
+            if (_relationships != null)
             {
-                relationships.Clear();
+                _relationships.Clear();
             }
         }
 
@@ -360,9 +360,9 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void RemoveRelationship(String id)
         {
-            this.container.ThrowExceptionIfReadOnly();
-            if (this.relationships != null)
-                this.relationships.RemoveRelationship(id);
+            this._container.ThrowExceptionIfReadOnly();
+            if (this._relationships != null)
+                this._relationships.RemoveRelationship(id);
         }
 
         /**
@@ -390,7 +390,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public PackageRelationship GetRelationship(String id)
         {
-            return this.relationships.GetRelationshipByID(id);
+            return this._relationships.GetRelationshipByID(id);
         }
 
         /**
@@ -409,7 +409,7 @@ namespace NPOI.OpenXml4Net.OPC
         public PackageRelationshipCollection GetRelationshipsByType(
                 String relationshipType)
         {
-            container.ThrowExceptionIfWriteOnly();
+            _container.ThrowExceptionIfWriteOnly();
 
             return GetRelationshipsCore(relationshipType);
         }
@@ -430,13 +430,13 @@ namespace NPOI.OpenXml4Net.OPC
          */
         private PackageRelationshipCollection GetRelationshipsCore(String filter)
         {
-            this.container.ThrowExceptionIfWriteOnly();
-            if (relationships == null)
+            this._container.ThrowExceptionIfWriteOnly();
+            if (_relationships == null)
             {
                 this.ThrowExceptionIfRelationship();
-                relationships = new PackageRelationshipCollection(this);
+                _relationships = new PackageRelationshipCollection(this);
             }
-            return new PackageRelationshipCollection(relationships, filter);
+            return new PackageRelationshipCollection(_relationships, filter);
         }
 
         /**
@@ -450,7 +450,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             get
             {
-                return (!this.IsRelationshipPart && (relationships != null && relationships.Size > 0));
+                return (!this.IsRelationshipPart && (_relationships != null && _relationships.Size > 0));
             }
         }
 
@@ -491,7 +491,7 @@ namespace NPOI.OpenXml4Net.OPC
             // Ensure this is one of ours
             if (!IsRelationshipExists(rel))
             {
-                throw new ArgumentException("Relationship " + rel + " doesn't start with this part " + partName);
+                throw new ArgumentException("Relationship " + rel + " doesn't start with this part " + _partName);
             }
 
             // Get the target URI, excluding any relative fragments
@@ -511,7 +511,7 @@ namespace NPOI.OpenXml4Net.OPC
 
             // Turn that into a name, and fetch
             PackagePartName relName = PackagingUriHelper.CreatePartName(target);
-            PackagePart part = container.GetPart(relName);
+            PackagePart part = _container.GetPart(relName);
             if (part == null)
             {
                 throw new ArgumentException("No part found for relationship " + rel);
@@ -544,7 +544,7 @@ namespace NPOI.OpenXml4Net.OPC
             if (inStream == null)
             {
                 throw new IOException("Can't obtain the input stream from "
-                        + partName.Name);
+                        + _partName.Name);
             }
             else
                 return inStream;
@@ -566,17 +566,18 @@ namespace NPOI.OpenXml4Net.OPC
             if (this is ZipPackagePart)
             {
                 // Delete logically this part
-                container.RemovePart(this.partName);
+                _container.RemovePart(this._partName);
 
                 // Create a memory part
-                PackagePart part = container.CreatePart(this.partName,
-                        this.contentType.ToString(), false);
-                part.relationships = this.relationships;
+                PackagePart part = _container.CreatePart(this._partName,
+                        this._contentType.ToString(), false);
                 if (part == null)
                 {
                     throw new InvalidOperationException(
                             "Can't create a temporary part !");
                 }
+
+                part._relationships = this._relationships;
                 outStream = part.GetOutputStreamImpl();
             }
             else
@@ -608,10 +609,10 @@ namespace NPOI.OpenXml4Net.OPC
          */
         private void LoadRelationships()
         {
-            if (this.relationships == null && !this.IsRelationshipPart)
+            if (this._relationships == null && !this.IsRelationshipPart)
             {
                 this.ThrowExceptionIfRelationship();
-                relationships = new PackageRelationshipCollection(this);
+                _relationships = new PackageRelationshipCollection(this);
             }
         }
 
@@ -626,7 +627,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             get
             {
-                return partName;
+                return _partName;
             }
         }
 
@@ -637,23 +638,32 @@ namespace NPOI.OpenXml4Net.OPC
         {
             get
             {
-                return contentType.ToString();
+                return _contentType.ToString();
             }
             set
             {
-                if (container == null)
-                    this.contentType = new ContentType(value);
+                if (_container == null)
+                    this._contentType = new ContentType(value);
                 else
                     throw new InvalidOperationException(
                             "You can't change the content type of a part.");
             }
         }
-
+        /**
+         * @return The Content Type, including parameters, of the part
+         */
+        public ContentType ContentTypeDetails
+        {
+            get
+            {
+                return _contentType;
+            }
+        }
         public OPCPackage Package
         {
             get
             {
-                return container;
+                return _container;
             }
         }
 
@@ -664,7 +674,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             get
             {
-                return this.isRelationshipPart;
+                return this._isRelationshipPart;
             }
         }
 
@@ -675,9 +685,9 @@ namespace NPOI.OpenXml4Net.OPC
         {
             get
             {
-                return isDeleted;
+                return _isDeleted;
             }
-            set { this.isDeleted = value; }
+            set { this._isDeleted = value; }
         }
         /**
          * @return The length of the part in bytes, or -1 if not known
@@ -691,8 +701,8 @@ namespace NPOI.OpenXml4Net.OPC
         }
         public override String ToString()
         {
-            return "Name: " + this.partName + " - Content Type: "
-                    + this.contentType.ToString();
+            return "Name: " + this._partName + " - Content Type: "
+                    + this._contentType.ToString();
         }
 
         /*-------------- Abstract methods ------------- */
@@ -746,6 +756,11 @@ namespace NPOI.OpenXml4Net.OPC
          * respective buffer.
          */
         public abstract void Flush();
+
+        /**
+         * Allows sub-classes to clean up before new data is added.
+         */
+        public virtual void Clear() { }
     }
 
 }

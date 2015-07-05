@@ -1227,5 +1227,24 @@ namespace TestCases.HSSF.UserModel
             sheet.dumpDrawingRecords(true);*/
             Assert.IsNull(sheet.DrawingEscherAggregate);
         }
+
+        [Test]
+        public void TestBug55723b()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            // stored with a special name
+            Assert.IsNull(wb.Workbook.GetSpecificBuiltinRecord(NameRecord.BUILTIN_FILTER_DB, 1));
+
+            CellRangeAddress range = CellRangeAddress.ValueOf("A:B");
+            IAutoFilter filter = sheet.SetAutoFilter(range);
+            Assert.IsNotNull(filter);
+
+            // stored with a special name
+            NameRecord record = wb.Workbook.GetSpecificBuiltinRecord(NameRecord.BUILTIN_FILTER_DB, 1);
+            Assert.IsNotNull(record);
+        }
+
     }
 }

@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.Functions
     {
         public override double Evaluate(double d)
         {
-            return MathX.acosh(d);
+            return MathX.Acosh(d);
         }
 
     }

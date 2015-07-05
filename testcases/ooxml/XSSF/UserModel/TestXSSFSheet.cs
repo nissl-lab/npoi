@@ -313,7 +313,7 @@ namespace NPOI.XSSF.UserModel
             sheet.GroupColumn(10, 11);
             CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
             Assert.AreEqual(2, cols.sizeOfColArray());
-            List<CT_Col> colArray = cols.GetColArray();
+            List<CT_Col> colArray = cols.GetColList();
             Assert.IsNotNull(colArray);
             Assert.AreEqual((uint)(2 + 1), colArray[0].min); // 1 based
             Assert.AreEqual((uint)(7 + 1), colArray[0].max); // 1 based
@@ -323,7 +323,7 @@ namespace NPOI.XSSF.UserModel
             sheet.GroupColumn(1, 2);
             cols = sheet.GetCTWorksheet().GetColsArray(0);
             Assert.AreEqual(4, cols.sizeOfColArray());
-            colArray = cols.GetColArray();
+            colArray = cols.GetColList();
             Assert.AreEqual(2, colArray[1].outlineLevel);
 
             //three level
@@ -331,17 +331,17 @@ namespace NPOI.XSSF.UserModel
             sheet.GroupColumn(2, 3);
             cols = sheet.GetCTWorksheet().GetColsArray(0);
             Assert.AreEqual(7, cols.sizeOfColArray());
-            colArray = cols.GetColArray();
+            colArray = cols.GetColList();
             Assert.AreEqual(3, colArray[1].outlineLevel);
             Assert.AreEqual(3, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelCol);
 
             sheet.UngroupColumn(8, 10);
-            colArray = cols.GetColArray();
+            colArray = cols.GetColList();
             //Assert.AreEqual(3, colArray[1].outlineLevel);
 
             sheet.UngroupColumn(4, 6);
             sheet.UngroupColumn(2, 2);
-            colArray = cols.GetColArray();
+            colArray = cols.GetColList();
             Assert.AreEqual(4, colArray.Count);
             Assert.AreEqual(2, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelCol);
         }
@@ -734,7 +734,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet xs = sheet;
             CT_Worksheet cts = xs.GetCTWorksheet();
 
-            List<CT_Cols> cols_s = cts.GetColsArray();
+            List<CT_Cols> cols_s = cts.GetColsList();
             Assert.AreEqual(1, cols_s.Count);
             CT_Cols cols = cols_s[0];
             Assert.AreEqual(1, cols.sizeOfColArray());
@@ -749,7 +749,7 @@ namespace NPOI.XSSF.UserModel
             // Now Set another
             sheet.SetColumnWidth(3, 33 * 256);
 
-            cols_s = cts.GetColsArray();
+            cols_s = cts.GetColsList();
             Assert.AreEqual(1, cols_s.Count);
             cols = cols_s[0];
             Assert.AreEqual(2, cols.sizeOfColArray());

@@ -72,59 +72,67 @@ namespace TestCases.HPSF.Basic
 
             for (int i = 0; i < files.Length; i++)
             {
+                if (!TestReadAllFiles.checkExclude(files[i]))
+                    continue;
                 using (FileStream doc = new FileStream(files[i], FileMode.Open, FileAccess.Read))
                 {
                     Console.WriteLine("Reading file " + doc);
-
-                    /* Read a Test document <em>doc</em> into a POI filesystem. */
-                    POIFSFileSystem poifs = new POIFSFileSystem(doc);
-                    DirectoryEntry dir = poifs.Root;
-                    DocumentEntry dsiEntry = null;
                     try
                     {
-                        dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-                    }
-                    catch (FileNotFoundException)
-                    {
+                        /* Read a Test document <em>doc</em> into a POI filesystem. */
+                        POIFSFileSystem poifs = new POIFSFileSystem(doc);
+                        DirectoryEntry dir = poifs.Root;
+                        DocumentEntry dsiEntry = null;
+                        try
+                        {
+                            dsiEntry = (DocumentEntry)dir.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            /*
+                             * A missing document summary information stream is not an error
+                             * and therefore silently ignored here.
+                             */
+                        }
+                        //catch (System.IO.IOException ex)
+                        //{
+                        //     // The process cannot access the file 'testcases\test-data\hpsf\TestUnicode.xls' because it is being used by another process.
+                        //    Console.Error.WriteLine("Exception ignored (because some other test cases may read this file, too): " + ex.Message);
+                        //}
+
                         /*
-                         * A missing document summary information stream is not an error
-                         * and therefore silently ignored here.
+                         * If there is a document summry information stream, Read it from
+                         * the POI filesystem.
                          */
+                        if (dsiEntry != null)
+                        {
+                            DocumentInputStream dis = new DocumentInputStream(dsiEntry);
+                            PropertySet ps = new PropertySet(dis);
+                            DocumentSummaryInformation dsi = new DocumentSummaryInformation(ps);
+
+                            /* Execute the Get... methods. */
+                            Console.WriteLine(dsi.ByteCount);
+                            Console.WriteLine(dsi.ByteOrder);
+                            Console.WriteLine(dsi.Category);
+                            Console.WriteLine(dsi.Company);
+                            Console.WriteLine(dsi.CustomProperties);
+                            // FIXME Console.WriteLine(dsi.Docparts);
+                            // FIXME Console.WriteLine(dsi.HeadingPair);
+                            Console.WriteLine(dsi.HiddenCount);
+                            Console.WriteLine(dsi.LineCount);
+                            Console.WriteLine(dsi.LinksDirty);
+                            Console.WriteLine(dsi.Manager);
+                            Console.WriteLine(dsi.MMClipCount);
+                            Console.WriteLine(dsi.NoteCount);
+                            Console.WriteLine(dsi.ParCount);
+                            Console.WriteLine(dsi.PresentationFormat);
+                            Console.WriteLine(dsi.Scale);
+                            Console.WriteLine(dsi.SlideCount);
+                        }
                     }
-                    //catch (System.IO.IOException ex)
-                    //{
-                    //     // The process cannot access the file 'testcases\test-data\hpsf\TestUnicode.xls' because it is being used by another process.
-                    //    Console.Error.WriteLine("Exception ignored (because some other test cases may read this file, too): " + ex.Message);
-                    //}
-
-                    /*
-                     * If there is a document summry information stream, Read it from
-                     * the POI filesystem.
-                     */
-                    if (dsiEntry != null)
+                    catch (Exception e)
                     {
-                        DocumentInputStream dis = new DocumentInputStream(dsiEntry);
-                        PropertySet ps = new PropertySet(dis);
-                        DocumentSummaryInformation dsi = new DocumentSummaryInformation(ps);
-
-                        /* Execute the Get... methods. */
-                        Console.WriteLine(dsi.ByteCount);
-                        Console.WriteLine(dsi.ByteOrder);
-                        Console.WriteLine(dsi.Category);
-                        Console.WriteLine(dsi.Company);
-                        Console.WriteLine(dsi.CustomProperties);
-                        // FIXME Console.WriteLine(dsi.Docparts);
-                        // FIXME Console.WriteLine(dsi.HeadingPair);
-                        Console.WriteLine(dsi.HiddenCount);
-                        Console.WriteLine(dsi.LineCount);
-                        Console.WriteLine(dsi.LinksDirty);
-                        Console.WriteLine(dsi.Manager);
-                        Console.WriteLine(dsi.MMClipCount);
-                        Console.WriteLine(dsi.NoteCount);
-                        Console.WriteLine(dsi.ParCount);
-                        Console.WriteLine(dsi.PresentationFormat);
-                        Console.WriteLine(dsi.Scale);
-                        Console.WriteLine(dsi.SlideCount);
+                        throw new IOException("While handling file " + files[i], e);
                     }
                 }
             }
@@ -627,9 +635,18 @@ namespace TestCases.HPSF.Basic
 
             for (int i = 0; i < files.Length; i++)
             {
+                if (TestReadAllFiles.checkExclude(files[i]))
+                    continue;
                 using (FileStream file = new FileStream(files[i], FileMode.Open, FileAccess.Read))
                 {
-                    RunTest(file);
+                    try
+                    {
+                        RunTest(file);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new IOException("While handling file " + files[i], e);
+                    }
                 }
             }
         }

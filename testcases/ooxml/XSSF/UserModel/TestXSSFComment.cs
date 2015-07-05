@@ -156,6 +156,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
             Assert.AreEqual(IndexedColors.BlueGrey.Index, (short)rPr.GetColorArray(0).indexed);
             Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestAuthor()

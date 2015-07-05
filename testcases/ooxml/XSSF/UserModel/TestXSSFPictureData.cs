@@ -90,14 +90,17 @@ namespace NPOI.XSSF.UserModel
 
             //TODO finish usermodel API for XSSFPicture
             XSSFPicture p1 = (XSSFPicture)Drawing.CreatePicture(new XSSFClientAnchor(), jpegIdx);
+            Assert.IsNotNull(p1);
             XSSFPicture p2 = (XSSFPicture)Drawing.CreatePicture(new XSSFClientAnchor(), wmfIdx);
+            Assert.IsNotNull(p1);
             XSSFPicture p3 = (XSSFPicture)Drawing.CreatePicture(new XSSFClientAnchor(), pngIdx);
+            Assert.IsNotNull(p1);
 
             //check that the Added pictures are accessible After write
             wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);
             IList pictures2 = wb.GetAllPictures();
             Assert.AreEqual(3, pictures2.Count);
-
+            
             Assert.AreEqual("jpeg", ((XSSFPictureData)pictures2[jpegIdx]).SuggestFileExtension());
             Assert.IsTrue(Arrays.Equals(jpegData, ((XSSFPictureData)pictures2[jpegIdx]).Data));
 
@@ -106,6 +109,39 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual("png", ((XSSFPictureData)pictures2[pngIdx]).SuggestFileExtension());
             Assert.IsTrue(Arrays.Equals(pngData, ((XSSFPictureData)pictures2[pngIdx]).Data));
+
+        }
+
+        /**
+         * Bug 53568:  XSSFPicture.PictureData can return null.
+         */
+        [Test]
+        public void Test53568()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53568.xlsx");
+            List<XSSFPictureData> pictures = wb.GetAllPictures() as List<XSSFPictureData>;
+            Assert.IsNotNull(pictures);
+            Assert.AreEqual(4, pictures.Count);
+
+            XSSFSheet sheet1 = wb.GetSheetAt(0) as XSSFSheet;
+            List<XSSFShape> shapes1 = (sheet1.CreateDrawingPatriarch() as XSSFDrawing).GetShapes();
+            Assert.IsNotNull(shapes1);
+            Assert.AreEqual(5, shapes1.Count);
+
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                XSSFSheet sheet = wb.GetSheetAt(i) as XSSFSheet;
+                XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+                foreach (XSSFShape shape in Drawing.GetShapes())
+                {
+                    if (shape is XSSFPicture)
+                    {
+                        XSSFPicture pic = (XSSFPicture)shape;
+                        XSSFPictureData picData = pic.PictureData as XSSFPictureData;
+                        Assert.IsNotNull(picData);
+                    }
+                }
+            }
 
         }
     }

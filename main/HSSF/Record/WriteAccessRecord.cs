@@ -143,7 +143,7 @@ namespace NPOI.HSSF.Record
 
             buffer.Append("[WriteACCESS]\n");
             buffer.Append("    .name            = ")
-                .Append(field_1_username.ToString()).Append("\n");
+                .Append(field_1_username).Append("\n");
             buffer.Append("[/WriteACCESS]\n");
             return buffer.ToString();
         }

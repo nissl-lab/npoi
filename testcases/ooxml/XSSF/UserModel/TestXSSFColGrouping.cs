@@ -56,7 +56,7 @@ namespace NPOI.XSSF.UserModel
 
             CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
             //logger.log(POILogger.DEBUG, "test52186/cols:" + cols);
-            foreach (CT_Col col in cols.GetColArray())
+            foreach (CT_Col col in cols.GetColList())
             {
                 Assert.IsTrue(col.IsSetWidth(), "Col width attribute is unset: " + col.ToString());
             }
@@ -90,7 +90,7 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(5000, sheet.GetColumnWidth(i), "Unexpected width of column " + i);
             }
             cols = sheet.GetCTWorksheet().GetColsArray(0);
-            foreach (CT_Col col in cols.GetColArray())
+            foreach (CT_Col col in cols.GetColList())
             {
                 Assert.IsTrue(col.IsSetWidth(), "Col width attribute is unset: " + col.ToString());
             }

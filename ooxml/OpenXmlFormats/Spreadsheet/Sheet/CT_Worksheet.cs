@@ -456,7 +456,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (null == colsField) { colsField = new List<CT_Cols>(); }
             return this.colsField[index];
         }
-        public List<CT_Cols> GetColsArray()
+        public List<CT_Cols> GetColsList()
         {
             return this.colsField;
         }

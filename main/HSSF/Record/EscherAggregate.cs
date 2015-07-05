@@ -1307,6 +1307,8 @@ namespace NPOI.HSSF.Record
         internal NoteRecord GetNoteRecordByObj(ObjRecord obj)
         {
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)obj.SubRecords[0];
+            if (!tailRec.ContainsKey(cod.ObjectId))
+                return null;
             return tailRec[(cod.ObjectId)];
         }
     }

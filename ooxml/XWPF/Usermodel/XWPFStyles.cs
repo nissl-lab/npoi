@@ -82,7 +82,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
             if (ctStyles == null)
             {

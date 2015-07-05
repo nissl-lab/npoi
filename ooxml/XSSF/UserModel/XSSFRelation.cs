@@ -45,25 +45,25 @@ namespace NPOI.XSSF.UserModel
         );
         public static XSSFRelation MACROS_WORKBOOK = new XSSFRelation(
                 "application/vnd.ms-excel.sheet.macroEnabled.main+xml",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                PackageRelationshipTypes.CORE_DOCUMENT,
                 "/xl/workbook.xml",
                 null
         );
         public static XSSFRelation TEMPLATE_WORKBOOK = new XSSFRelation(
                   "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml",
-                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                  PackageRelationshipTypes.CORE_DOCUMENT,
                   "/xl/workbook.xml",
                   null
         );
         public static XSSFRelation MACRO_TEMPLATE_WORKBOOK = new XSSFRelation(
                   "application/vnd.ms-excel.template.macroEnabled.main+xml",
-                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                  PackageRelationshipTypes.CORE_DOCUMENT,
                   "/xl/workbook.xml",
                   null
         );
         public static XSSFRelation MACRO_ADDIN_WORKBOOK = new XSSFRelation(
                   "application/vnd.ms-excel.Addin.macroEnabled.main+xml",
-                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                  PackageRelationshipTypes.CORE_DOCUMENT,
                   "/xl/workbook.xml",
                   null
         );
@@ -87,7 +87,7 @@ namespace NPOI.XSSF.UserModel
         );
         public static XSSFRelation STYLES = new XSSFRelation(
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
+                PackageRelationshipTypes.STYLE_PART,
                 "/xl/styles.xml",
                  typeof(StylesTable)
         );
@@ -133,74 +133,74 @@ namespace NPOI.XSSF.UserModel
 
         public static XSSFRelation IMAGES = new XSSFRelation(
                 null,
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 null,
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_EMF = new XSSFRelation(
                 "image/x-emf",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.emf",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_WMF = new XSSFRelation(
                 "image/x-wmf",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.wmf",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_PICT = new XSSFRelation(
                 "image/pict",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.pict",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_JPEG = new XSSFRelation(
                 "image/jpeg",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.jpeg",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_PNG = new XSSFRelation(
                 "image/png",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.png",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_DIB = new XSSFRelation(
                 "image/dib",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.dib",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_GIF = new XSSFRelation(
             "image/gif",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            PackageRelationshipTypes.IMAGE_PART,
             "/xl/media/image#.gif",
             typeof(XSSFPictureData)
         );
 
         public static XSSFRelation IMAGE_TIFF = new XSSFRelation(
                 "image/tiff",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.tiff",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_EPS = new XSSFRelation(
                 "image/x-eps",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.eps",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_BMP = new XSSFRelation(
                 "image/x-ms-bmp",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.bmp",
                 typeof(XSSFPictureData)
         );
         public static XSSFRelation IMAGE_WPG = new XSSFRelation(
                 "image/x-wpg",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                PackageRelationshipTypes.IMAGE_PART,
                 "/xl/media/image#.wpg",
                 typeof(XSSFPictureData)
         );
@@ -212,7 +212,7 @@ namespace NPOI.XSSF.UserModel
           );
         public static XSSFRelation SHEET_HYPERLINKS = new XSSFRelation(
                 null,
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                PackageRelationshipTypes.HYPERLINK_PART,
                 null,
                 null
         );

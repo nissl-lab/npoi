@@ -1494,7 +1494,7 @@ namespace NPOI.XSSF.UserModel
          * Do not leave the width attribute undefined (see #52186).
          */
         private void SetColWidthAttribute(CT_Cols ctCols) {
-            foreach (CT_Col col in ctCols.GetColArray())
+            foreach (CT_Col col in ctCols.GetColList())
             {
         	    if (!col.IsSetWidth()) {
         		    col.width = (DefaultColumnWidth);
@@ -1541,7 +1541,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
             short outlineLevel = 0;
-            foreach (CT_Col col in ctCols.GetColArray())
+            foreach (CT_Col col in ctCols.GetColList())
             {
                 outlineLevel = col.outlineLevel > outlineLevel ? col.outlineLevel : outlineLevel;
             }
@@ -2696,11 +2696,13 @@ namespace NPOI.XSSF.UserModel
                     CT_CommentList lst = sheetComments.GetCTComments().commentList;
                     foreach (CT_Comment comment in lst.comment)
                     {
-                        CellReference ref1 = new CellReference(comment.@ref);
+                        String oldRef = comment.@ref;
+                        CellReference ref1 = new CellReference(oldRef);
                         if (ref1.Row == rownum)
                         {
                             CellReference ref2 = new CellReference(rownum + n, ref1.Col);
                             comment.@ref = ref2.FormatAsString();
+                            sheetComments.ReferenceUpdated(oldRef, comment);
                         }
                     }
                 }
@@ -3065,7 +3067,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();

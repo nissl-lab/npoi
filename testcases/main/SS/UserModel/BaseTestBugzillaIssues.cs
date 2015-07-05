@@ -46,6 +46,13 @@ namespace TestCases.SS.UserModel
             _testDataProvider = TestDataProvider;
         }
 
+        public static void assertAlmostEquals(double expected, double actual, float factor)
+        {
+            double diff = Math.Abs(expected - actual);
+            double fuzz = expected * factor;
+            if (diff > fuzz)
+                Assert.Fail(actual + " not within " + fuzz + " of " + expected);
+        }
         /**
          * Test writing a hyperlink
          * Open resulting sheet in Excel and check that A1 Contains a hyperlink

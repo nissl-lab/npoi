@@ -52,6 +52,8 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(1, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
             Assert.AreEqual(0, st.NumberFormatSize);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestLoadExisting()
@@ -62,6 +64,8 @@ namespace NPOI.XSSF.Model
             StylesTable st = workbook.GetStylesSource();
 
             doTestExisting(st);
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
         [Test]
         public void TestLoadSaveLoad()
@@ -129,6 +133,8 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual("yyyy-mm-dd", st.GetNumberFormatAt(nf1));
             Assert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
             Assert.AreEqual(nf2, st.PutNumberFormat("yyyy-mm-DD"));
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestPopulateExisting()
@@ -154,6 +160,8 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual("YYYY-mm-dd", st.GetNumberFormatAt(nf1));
             Assert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
             Assert.AreEqual(nf2, st.PutNumberFormat("YYYY-mm-DD"));
+
+            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
     }
 }

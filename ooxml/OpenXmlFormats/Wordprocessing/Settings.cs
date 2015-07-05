@@ -2092,6 +2092,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return this.updateFieldsField != null;
         }
+
+        public bool IsSetTrackRevisions()
+        {
+            return this.trackRevisionsField != null && this.trackRevisionsField.val;
+        }
+
+        public CT_OnOff AddNewTrackRevisions()
+        {
+            this.trackRevisionsField = new CT_OnOff();
+            this.trackRevisionsField.val = true;
+            return this.trackRevisionsField;
+        }
+
+        public void UnsetTrackRevisions()
+        {
+            this.trackRevisionsField = null;
+        }
     }
 
 

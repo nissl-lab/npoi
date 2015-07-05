@@ -158,6 +158,7 @@
     <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\CountifsTests.cs" />
     <Compile Include="SS\Formula\Functions\TestCode.cs" />
     <Compile Include="SS\Formula\Functions\TestCodeFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestComplex.cs" />
@@ -268,7 +269,6 @@
     <Compile Include="DDF\TestEscherBlipRecord.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DDF\TestEscherBlipWMFRecord.cs" />
     <Compile Include="DDF\TestEscherBoolProperty.cs" />
     <Compile Include="DDF\TestEscherBSERecord.cs" />
     <Compile Include="DDF\TestEscherChildAnchorRecord.cs" />

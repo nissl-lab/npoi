@@ -204,6 +204,7 @@
     <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
     <Compile Include="SS\Formula\Functions\Complex.cs" />
+    <Compile Include="SS\Formula\Functions\Countifs.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\Delta.cs" />
@@ -268,7 +269,6 @@
     <Compile Include="DDF\EscherArrayProperty.cs" />
     <Compile Include="DDF\EscherBitmapBlip.cs" />
     <Compile Include="DDF\EscherBlipRecord.cs" />
-    <Compile Include="DDF\EscherBlipWMFRecord.cs" />
     <Compile Include="DDF\EscherBoolProperty.cs" />
     <Compile Include="DDF\EscherBSERecord.cs" />
     <Compile Include="DDF\EscherChildAnchorRecord.cs" />

@@ -196,8 +196,33 @@ namespace NPOI.XWPF.UserModel
             run.SetText("T2");
             run.AddCarriageReturn();
             Assert.AreEqual(3, run.GetCTR().GetCrList().Count);
+            Assert.AreEqual("T1\n\nT2\n", run.ToString());
 
         }
+
+        [Test]
+        public void TestAddTabsAndLineBreaks()
+        {
+            ctRun.AddNewT().Value=("TEST STRING");
+            ctRun.AddNewCr();
+            ctRun.AddNewT().Value = (/*setter*/"TEST2 STRING");
+            ctRun.AddNewTab();
+            ctRun.AddNewT().Value = (/*setter*/"TEST3 STRING");
+            Assert.AreEqual(1, ctRun.SizeOfCrArray());
+            Assert.AreEqual(1, ctRun.SizeOfTabArray());
+
+            XWPFRun run = new XWPFRun(new CT_R(), p);
+            run.SetText("T1");
+            run.AddCarriageReturn();
+            run.SetText("T2");
+            run.AddTab();
+            run.SetText("T3");
+            Assert.AreEqual(1, run.GetCTR().GetCrList().Count);
+            Assert.AreEqual(1, run.GetCTR().GetTabList().Count);
+
+            Assert.AreEqual("T1\nT2\tT3", run.ToString());
+        }
+
 
         [Test]
         public void TestAddPageBreak()

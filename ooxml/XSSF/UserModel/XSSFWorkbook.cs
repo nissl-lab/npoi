@@ -269,7 +269,12 @@ namespace NPOI.XSSF.UserModel
                         shIdMap.Add(p.GetPackageRelationship().Id,(XSSFSheet)p);
                     }
                 }
-                if (null != stylesSource) { stylesSource.SetTheme(theme); }
+                if (stylesSource == null)
+                {
+                    // Create Styles if it is missing
+                    stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
+                }
+                stylesSource.SetTheme(theme);
 
                 if (sharedStringSource == null)
                 {
@@ -1341,7 +1346,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected override void Commit()
+        protected internal override void Commit()
         {
             SaveNamedRanges();
             SaveCalculationChain();

@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.Functions
 
         public override double Evaluate(double d)
         {
-            return MathX.atanh(d);
+            return MathX.Atanh(d);
         }
     }
 }

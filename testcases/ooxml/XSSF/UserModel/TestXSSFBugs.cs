@@ -1479,6 +1479,44 @@ using NPOI.SS.Formula.Eval;
             }
             catch (EncryptedDocumentException e) { }
         }
+        [Test]
+        public void Bug53282()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53282b.xlsx");
+            ICell c = wb.GetSheetAt(0).GetRow(1).GetCell(0);
+            Assert.AreEqual("#@_#", c.StringCellValue);
+
+            //with .net new Uri("mailto:#@_#") is valid, but java think it invalid,
+            //excel also think it invalid too
+            //TODO: add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
+            Assert.AreEqual("http://invalid.uri", c.Hyperlink.Address);
+        }
+
+        /**
+         * Was giving NullPointerException
+         * at NPOI.XSSF.UserModel.XSSFWorkbook.onDocumentRead
+         * due to a lack of Styles Table
+         */
+        [Test]
+        public void Bug56278()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56278.xlsx");
+            Assert.AreEqual(0, wb.GetSheetIndex("Market Rates"));
+
+            // Save and re-check
+            IWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(0, nwb.GetSheetIndex("Market Rates"));
+        }
+
+        [Test]
+        public void Bug56315()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56315.xlsx");
+            ICell c = wb.GetSheetAt(0).GetRow(1).GetCell(0);
+            CellValue cv = wb.GetCreationHelper().CreateFormulaEvaluator().Evaluate(c);
+            double rounded = cv.NumberValue;
+            Assert.AreEqual(0.1, rounded, 0.0);
+        }
     }
 
 }

@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.Functions
 			if (d1 == NumericFunction.ZERO) {
 				throw new EvaluationException(ErrorEval.DIV_ZERO);
 			}
-			return MathX.mod(d0, d1);
+			return MathX.Mod(d0, d1);
 		}
 
     }

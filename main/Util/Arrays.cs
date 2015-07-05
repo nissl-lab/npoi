@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using System.Collections.Generic;
 
 
 namespace NPOI.Util
@@ -292,6 +293,768 @@ namespace NPOI.Util
                              Math.Min(original.Length - from, newLength));
             return copy;
         }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>long</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link Long}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(long[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (long element in a) {
+                int elementHash = (int)(element ^ (Operator.UnsignedRightShift(element , 32)));
+                result = 31 * result + elementHash;
+            }
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two non-null <tt>int</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link int}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(int[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (int element in a)
+                result = 31 * result + element;
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>short</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link short}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(short[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (short element in a)
+                result = 31 * result + element;
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>char</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link Character}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(char[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (char element in a)
+                result = 31 * result + element;
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>byte</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link Byte}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(byte[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (byte element in a)
+                result = 31 * result + element;
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>bool</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link Boolean}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(bool[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (bool element in a)
+                result = 31 * result + (element ? 1231 : 1237);
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>float</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link Float}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int HashCode(float[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (float element in a)
+            {
+                result = 31 * result + BitConverter.ToInt32(BitConverter.GetBytes(element), 0);
+            }
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.
+         * For any two <tt>double</tt> arrays <tt>a</tt> and <tt>b</tt>
+         * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is the same value that would be
+         * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
+         * method on a {@link List} Containing a sequence of {@link Double}
+         * instances representing the elements of <tt>a</tt> in the same order.
+         * If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+         *
+         * @param a the array whose hash value to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @since 1.5
+         */
+        public static int hashCode(double[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+            foreach (double element in a) {
+                long bits = BitConverter.DoubleToInt64Bits(element);
+                result = 31 * result + (int)(bits ^ (Operator.UnsignedRightShift(bits, 32)));
+            }
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the contents of the specified array.  If
+         * the array Contains other arrays as elements, the hash code is based on
+         * their identities rather than their contents.  It is therefore
+         * acceptable to invoke this method on an array that Contains itself as an
+         * element,  either directly or indirectly through one or more levels of
+         * arrays.
+         *
+         * <p>For any two arrays <tt>a</tt> and <tt>b</tt> such that
+         * <tt>Arrays.Equals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
+         *
+         * <p>The value returned by this method is equal to the value that would
+         * be returned by <tt>Arrays.AsList(a).HashCode()</tt>, unless <tt>a</tt>
+         * is <tt>null</tt>, in which case <tt>0</tt> is returned.
+         *
+         * @param a the array whose content-based hash code to compute
+         * @return a content-based hash code for <tt>a</tt>
+         * @see #deepHashCode(Object[])
+         * @since 1.5
+         */
+        public static int HashCode(Object[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+
+            foreach (Object element in a)
+                result = 31 * result + (element == null ? 0 : element.GetHashCode());
+
+            return result;
+        }
+
+        /**
+         * Returns a hash code based on the "deep contents" of the specified
+         * array.  If the array Contains other arrays as elements, the
+         * hash code is based on their contents and so on, ad infInitum.
+         * It is therefore unacceptable to invoke this method on an array that
+         * Contains itself as an element, either directly or indirectly through
+         * one or more levels of arrays.  The behavior of such an invocation is
+         * undefined.
+         *
+         * <p>For any two arrays <tt>a</tt> and <tt>b</tt> such that
+         * <tt>Arrays.DeepEquals(a, b)</tt>, it is also the case that
+         * <tt>Arrays.DeepHashCode(a) == Arrays.DeepHashCode(b)</tt>.
+         *
+         * <p>The computation of the value returned by this method is similar to
+         * that of the value returned by {@link List#hashCode()} on a list
+         * Containing the same elements as <tt>a</tt> in the same order, with one
+         * difference: If an element <tt>e</tt> of <tt>a</tt> is itself an array,
+         * its hash code is computed not by calling <tt>e.HashCode()</tt>, but as
+         * by calling the appropriate overloading of <tt>Arrays.HashCode(e)</tt>
+         * if <tt>e</tt> is an array of a primitive type, or as by calling
+         * <tt>Arrays.DeepHashCode(e)</tt> recursively if <tt>e</tt> is an array
+         * of a reference type.  If <tt>a</tt> is <tt>null</tt>, this method
+         * returns 0.
+         *
+         * @param a the array whose deep-content-based hash code to compute
+         * @return a deep-content-based hash code for <tt>a</tt>
+         * @see #hashCode(Object[])
+         * @since 1.5
+         */
+        public static int DeepHashCode(Object[] a) {
+            if (a == null)
+                return 0;
+
+            int result = 1;
+
+            foreach (Object element in a) {
+                int elementHash = 0;
+                if (element is Object[])
+                    elementHash = DeepHashCode((Object[]) element);
+                else if (element is byte[])
+                    elementHash = HashCode((byte[]) element);
+                else if (element is short[])
+                    elementHash = HashCode((short[]) element);
+                else if (element is int[])
+                    elementHash = HashCode((int[]) element);
+                else if (element is long[])
+                    elementHash = HashCode((long[]) element);
+                else if (element is char[])
+                    elementHash = HashCode((char[]) element);
+                else if (element is float[])
+                    elementHash = HashCode((float[]) element);
+                else if (element is double[])
+                    elementHash = hashCode((double[]) element);
+                else if (element is bool[])
+                    elementHash = HashCode((bool[]) element);
+                else if (element != null)
+                    elementHash = element.GetHashCode();
+
+                result = 31 * result + elementHash;
+            }
+
+            return result;
+        }
+
+        /**
+         * Returns <tt>true</tt> if the two specified arrays are <i>deeply
+         * Equal</i> to one another.  Unlike the {@link #Equals(Object[],Object[])}
+         * method, this method is appropriate for use with nested arrays of
+         * arbitrary depth.
+         *
+         * <p>Two array references are considered deeply equal if both
+         * are <tt>null</tt>, or if they refer to arrays that contain the same
+         * number of elements and all corresponding pairs of elements in the two
+         * arrays are deeply Equal.
+         *
+         * <p>Two possibly <tt>null</tt> elements <tt>e1</tt> and <tt>e2</tt> are
+         * deeply equal if any of the following conditions hold:
+         * <ul>
+         *    <li> <tt>e1</tt> and <tt>e2</tt> are both arrays of object reference
+         *         types, and <tt>Arrays.DeepEquals(e1, e2) would return true</tt>
+         *    <li> <tt>e1</tt> and <tt>e2</tt> are arrays of the same primitive
+         *         type, and the appropriate overloading of
+         *         <tt>Arrays.Equals(e1, e2)</tt> would return true.
+         *    <li> <tt>e1 == e2</tt>
+         *    <li> <tt>e1.Equals(e2)</tt> would return true.
+         * </ul>
+         * Note that this defInition permits <tt>null</tt> elements at any depth.
+         *
+         * <p>If either of the specified arrays contain themselves as elements
+         * either directly or indirectly through one or more levels of arrays,
+         * the behavior of this method is undefined.
+         *
+         * @param a1 one array to be tested for Equality
+         * @param a2 the other array to be tested for Equality
+         * @return <tt>true</tt> if the two arrays are equal
+         * @see #Equals(Object[],Object[])
+         * @see Objects#deepEquals(Object, Object)
+         * @since 1.5
+         */
+        public static bool DeepEquals(Object[] a1, Object[] a2) {
+            if (a1 == a2)
+                return true;
+            if (a1 == null || a2==null)
+                return false;
+            int length = a1.Length;
+            if (a2.Length != length)
+                return false;
+
+            for (int i = 0; i < length; i++) {
+                Object e1 = a1[i];
+                Object e2 = a2[i];
+
+                if (e1 == e2)
+                    continue;
+                if (e1 == null)
+                    return false;
+
+                // Figure out whether the two elements are equal
+                bool eq = DeepEquals0(e1, e2);
+
+                if (!eq)
+                    return false;
+            }
+            return true;
+        }
+
+        static bool DeepEquals0(Object e1, Object e2) {
+            bool eq;
+            if (e1 is Object[] && e2 is Object[])
+                eq = DeepEquals ((Object[]) e1, (Object[]) e2);
+            else if (e1 is byte[] && e2 is byte[])
+                eq = Equals((byte[]) e1, (byte[]) e2);
+            else if (e1 is short[] && e2 is short[])
+                eq = Equals((short[]) e1, (short[]) e2);
+            else if (e1 is int[] && e2 is int[])
+                eq = Equals((int[]) e1, (int[]) e2);
+            else if (e1 is long[] && e2 is long[])
+                eq = Equals((long[]) e1, (long[]) e2);
+            else if (e1 is char[] && e2 is char[])
+                eq = Equals((char[]) e1, (char[]) e2);
+            else if (e1 is float[] && e2 is float[])
+                eq = Equals((float[]) e1, (float[]) e2);
+            else if (e1 is double[] && e2 is double[])
+                eq = Equals((double[]) e1, (double[]) e2);
+            else if (e1 is bool[] && e2 is bool[])
+                eq = Equals((bool[]) e1, (bool[]) e2);
+            else
+                eq = e1.Equals(e2);
+            return eq;
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(long)</tt>.  Returns <tt>"null"</tt> if <tt>a</tt>
+         * is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(long[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(int)</tt>.  Returns <tt>"null"</tt> if <tt>a</tt> is
+         * <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(int[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(short)</tt>.  Returns <tt>"null"</tt> if <tt>a</tt>
+         * is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(short[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(char)</tt>.  Returns <tt>"null"</tt> if <tt>a</tt>
+         * is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(char[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements
+         * are Separated by the characters <tt>", "</tt> (a comma followed
+         * by a space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(byte)</tt>.  Returns <tt>"null"</tt> if
+         * <tt>a</tt> is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(byte[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(bool)</tt>.  Returns <tt>"null"</tt> if
+         * <tt>a</tt> is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(bool[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(float)</tt>.  Returns <tt>"null"</tt> if <tt>a</tt>
+         * is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(float[] a) {
+            if (a == null)
+                return "null";
+
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+        /**
+         * Returns a string representation of the contents of the specified array.
+         * The string representation consists of a list of the array's elements,
+         * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are
+         * Separated by the characters <tt>", "</tt> (a comma followed by a
+         * space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(double)</tt>.  Returns <tt>"null"</tt> if <tt>a</tt>
+         * is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @since 1.5
+         */
+        public static String ToString(double[] a) {
+            if (a == null)
+                return "null";
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+                return "[]";
+
+            StringBuilder b = new StringBuilder();
+            b.Append('[');
+            for (int i = 0; ; i++) {
+                b.Append(a[i]);
+                if (i == iMax)
+                    return b.Append(']').ToString();
+                b.Append(", ");
+            }
+        }
+
+
+        /**
+         * Returns a string representation of the "deep contents" of the specified
+         * array.  If the array Contains other arrays as elements, the string
+         * representation Contains their contents and so on.  This method is
+         * designed for Converting multidimensional arrays to strings.
+         *
+         * <p>The string representation consists of a list of the array's
+         * elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent
+         * elements are Separated by the characters <tt>", "</tt> (a comma
+         * followed by a space).  Elements are Converted to strings as by
+         * <tt>String.ValueOf(Object)</tt>, unless they are themselves
+         * arrays.
+         *
+         * <p>If an element <tt>e</tt> is an array of a primitive type, it is
+         * Converted to a string as by invoking the appropriate overloading of
+         * <tt>Arrays.ToString(e)</tt>.  If an element <tt>e</tt> is an array of a
+         * reference type, it is Converted to a string as by invoking
+         * this method recursively.
+         *
+         * <p>To avoid infInite recursion, if the specified array Contains itself
+         * as an element, or Contains an indirect reference to itself through one
+         * or more levels of arrays, the self-reference is Converted to the string
+         * <tt>"[...]"</tt>.  For example, an array Containing only a reference
+         * to itself would be rendered as <tt>"[[...]]"</tt>.
+         *
+         * <p>This method returns <tt>"null"</tt> if the specified array
+         * is <tt>null</tt>.
+         *
+         * @param a the array whose string representation to return
+         * @return a string representation of <tt>a</tt>
+         * @see #ToString(Object[])
+         * @since 1.5
+         */
+        public static String DeepToString(Object[] a) {
+            if (a == null)
+                return "null";
+
+            int bufLen = 20 * a.Length;
+            if (a.Length != 0 && bufLen <= 0)
+                bufLen = Int32.MaxValue;
+            StringBuilder buf = new StringBuilder(bufLen);
+            DeepToString(a, buf, new HashSet<Object[]>());
+            return buf.ToString();
+        }
+
+        private static void DeepToString(Object[] a, StringBuilder buf,
+                                         HashSet<Object[]> dejaVu)
+        {
+            if (a == null)
+            {
+                buf.Append("null");
+                return;
+            }
+            int iMax = a.Length - 1;
+            if (iMax == -1)
+            {
+                buf.Append("[]");
+                return;
+            }
+
+            dejaVu.Add(a);
+            buf.Append('[');
+            for (int i = 0; ; i++)
+            {
+
+                Object element = a[i];
+                if (element == null)
+                {
+                    buf.Append("null");
+                }
+                else
+                {
+                    Type eClass = element.GetType();
+                    //Class<?> eClass = element.Class;
+
+                    if (eClass.IsArray)
+                    {
+                        if (eClass == typeof(byte[]))
+                            buf.Append(ToString((byte[])element));
+                        else if (eClass == typeof(short[]))
+                            buf.Append(ToString((short[])element));
+                        else if (eClass == typeof(int[]))
+                            buf.Append(ToString((int[])element));
+                        else if (eClass == typeof(long[]))
+                            buf.Append(ToString((long[])element));
+                        else if (eClass == typeof(char[]))
+                            buf.Append(ToString((char[])element));
+                        else if (eClass == typeof(float[]))
+                            buf.Append(ToString((float[])element));
+                        else if (eClass == typeof(double[]))
+                            buf.Append(ToString((double[])element));
+                        else if (eClass == typeof(bool[]))
+                            buf.Append(ToString((bool[])element));
+                        else
+                        { // element is an array of object references
+                            if (dejaVu.Contains((element as object[])))
+                                buf.Append("[...]");
+                            else
+                                DeepToString((Object[])element, buf, dejaVu);
+                        }
+                    }
+                    else
+                    {  // element is non-null and not an array
+                        buf.Append(element.ToString());
+                    }
+                }
+                if (i == iMax)
+                    break;
+                buf.Append(", ");
+            }
+            buf.Append(']');
+            dejaVu.Remove(a);
+        }
+
         /**
          * Returns a string representation of the contents of the specified array.
          * If the array contains other arrays as elements, they are converted to

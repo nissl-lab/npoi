@@ -57,6 +57,14 @@ namespace NPOI.XWPF.UserModel
         public void TestPictureInHeader()
         {
             XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("headerPic.docx");
+            verifyOneHeaderPicture(sampleDoc);
+
+            XWPFDocument readBack = XWPFTestDataSamples.WriteOutAndReadBack(sampleDoc);
+            verifyOneHeaderPicture(readBack);
+        }
+
+        private void verifyOneHeaderPicture(XWPFDocument sampleDoc)
+        {
             XWPFHeaderFooterPolicy policy = sampleDoc.GetHeaderFooterPolicy();
 
             XWPFHeader header = policy.GetDefaultHeader();
@@ -69,8 +77,11 @@ namespace NPOI.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("EmptyDocumentWithHeaderFooter.docx");
             byte[] jpegData = XWPFTestDataSamples.GetImage("nature1.jpg");
+            Assert.IsNotNull(jpegData);
             byte[] gifData = XWPFTestDataSamples.GetImage("nature1.gif");
+            Assert.IsNotNull(gifData);
             byte[] pngData = XWPFTestDataSamples.GetImage("nature1.png");
+            Assert.IsNotNull(pngData);
 
             IList<XWPFPictureData> pictures = doc.AllPictures;
             Assert.AreEqual(0, pictures.Count);
@@ -112,17 +123,16 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("/word/media/image1.jpeg", jpegRel.TargetUri.OriginalString);
 
             XWPFPictureData pictureDataByID = doc.GetPictureDataByID(jpegRel.Id);
-            byte[] newJPEGData = pictureDataByID.Data;
-            Assert.AreEqual(newJPEGData.Length, jpegData.Length);
-            for (int i = 0; i < newJPEGData.Length; i++)
-            {
-                Assert.AreEqual(newJPEGData[i], jpegData[i]);
-            }
+            Assert.IsTrue(Arrays.Equals(jpegData, pictureDataByID.Data));
 
             // Save an re-load, check it appears
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             Assert.AreEqual(1, doc.AllPictures.Count);
             Assert.AreEqual(1, doc.AllPackagePictures.Count);
+
+            // verify the picture that we read back in
+            pictureDataByID = doc.GetPictureDataByID(jpegRel.Id);
+            Assert.IsTrue(Arrays.Equals(jpegData, pictureDataByID.Data));
         }
 
         [Test]

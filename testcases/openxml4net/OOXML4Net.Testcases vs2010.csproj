@@ -132,6 +132,10 @@
       <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
       <Name>main vs10</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ooxml\OOXML vs2010.csproj">
+      <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
+      <Name>OOXML vs2010</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ooxml\openxml4Net\OpenXml4Net vs2010.csproj">
       <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
       <Name>OpenXml4Net vs2010</Name>

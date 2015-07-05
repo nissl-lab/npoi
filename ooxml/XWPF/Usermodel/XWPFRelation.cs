@@ -103,6 +103,13 @@ namespace NPOI.XWPF.UserModel
             "/word/footer#.xml",
                 typeof(XWPFFooter)
         );
+
+        public static XWPFRelation THEME = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.theme+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+            "/word/theme/theme#.xml",
+            null
+        );
         public static XWPFRelation HYPERLINK = new XWPFRelation(
                 null,
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",

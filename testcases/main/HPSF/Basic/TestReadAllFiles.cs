@@ -26,6 +26,7 @@ namespace TestCases.HPSF.Basic
     using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.Util;
+    using System.Collections.Generic;
 
 
     /**
@@ -40,6 +41,9 @@ namespace TestCases.HPSF.Basic
     [TestFixture]
     public class TestReadAllFiles
     {
+        private static String[] excludes = new String[] {
+        //"TestZeroLengthCodePage.mpp",
+    };
 
         /**
          * Test case constructor.
@@ -63,12 +67,11 @@ namespace TestCases.HPSF.Basic
             //string dataDir = @"..\..\..\TestCases\HPSF\data\";
             POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
             string[] files = _samples.GetFiles();
-
             try
             {
                 for (int i = 0; i < files.Length; i++)
                 {
-                    if (files[i].EndsWith("1"))
+                    if (files[i].EndsWith("1") || !checkExclude(files[i]))
                         continue;
 
                     Console.WriteLine("Reading file \"" + files[i] + "\"");
@@ -82,7 +85,14 @@ namespace TestCases.HPSF.Basic
                         {
                             Stream in1 =
                                 new ByteArrayInputStream(psf1[j].GetBytes());
+                            try
+                            {
                             PropertySet a = PropertySetFactory.Create(in1);
+                            }
+                            catch(Exception e)
+                            {
+                                throw new IOException("While handling file: " + files[i] + " at " + j, e);
+                            }
                         }
                         f.Close();
                     }
@@ -93,6 +103,25 @@ namespace TestCases.HPSF.Basic
                 String s = t.ToString();
                 Assert.Fail(s);
             }
+        }
+
+        /**
+         * Returns true if the file should be checked, false if it should be excluded.
+         *
+         * @param f
+         * @return
+         */
+        public static bool checkExclude(string f)
+        {
+            foreach (String exclude in excludes)
+            {
+                if (f.EndsWith(exclude))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
     }

@@ -2260,9 +2260,14 @@ namespace NPOI.HSSF.UserModel
             {
                 name = workbook.CreateBuiltInName(NameRecord.BUILTIN_FILTER_DB, sheetIndex + 1);
             }
-
+            int firstRow = range.FirstRow;
+            // if row was not given when constructing the range...
+            if (firstRow == -1)
+            {
+                firstRow = 0;
+            }
             // The built-in name must consist of a single Area3d Ptg.
-            Area3DPtg ptg = new Area3DPtg(range.FirstRow, range.LastRow,
+            Area3DPtg ptg = new Area3DPtg(firstRow, range.LastRow,
                     range.FirstColumn, range.LastColumn,
                     false, false, false, false, sheetIndex);
             name.NameDefinition = (new Ptg[] { ptg });
@@ -2279,7 +2284,7 @@ namespace NPOI.HSSF.UserModel
             for (int col = range.FirstColumn; col <= range.LastColumn; col++)
             {
                 p.CreateComboBox(new HSSFClientAnchor(0, 0, 0, 0,
-                        (short)col, range.FirstRow, (short)(col + 1), range.FirstRow + 1));
+                        (short)col, firstRow, (short)(col + 1), firstRow + 1));
             }
 
             return new HSSFAutoFilter(this);
@@ -2312,7 +2317,7 @@ namespace NPOI.HSSF.UserModel
                 if (shape is HSSFComment)
                 {
                     HSSFComment comment = (HSSFComment)shape;
-                    if (comment.Column == column && comment.Row == row)
+                    if (comment.HasPosition && comment.Column == column && comment.Row == row)
                     {
                         return comment;
                     }
