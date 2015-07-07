@@ -420,9 +420,9 @@ namespace NPOI.SS.Formula.Atp
         /// <returns></returns>
         private static SimpleDate CreateDate(int dayCount)
         {
-            return new SimpleDate(NPOI.SS.UserModel.DateUtil.GetJavaDate(dayCount));
-            //DateTime dt = new DateTime(1900, 1, 1);
-            //return new SimpleDate(dt.AddDays(dayCount));
+            DateTime dt = DateTime.Now;
+            NPOI.SS.UserModel.DateUtil.SetCalendar(ref dt, dayCount, 0, false, false);
+            return new SimpleDate(dt);
         }
 
         /// <summary>

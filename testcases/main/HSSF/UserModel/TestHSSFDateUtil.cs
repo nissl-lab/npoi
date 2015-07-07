@@ -524,5 +524,20 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(false, isDateFormat);
         }
+
+        [Test]
+        public void Bug56269()
+        {
+            double excelFraction = 41642.45833321759d;
+            DateTime calNoRound = HSSFDateUtil.GetJavaCalendar(excelFraction, false);
+            Assert.AreEqual(10, calNoRound.Hour);
+            Assert.AreEqual(59, calNoRound.Minute);
+            Assert.AreEqual(59, calNoRound.Second);
+            DateTime calRound = HSSFDateUtil.GetJavaCalendar(excelFraction, false, true);
+            Assert.AreEqual(11, calRound.Hour);
+            Assert.AreEqual(0, calRound.Minute);
+            Assert.AreEqual(0, calRound.Second);
+        }
+
     }
 }
