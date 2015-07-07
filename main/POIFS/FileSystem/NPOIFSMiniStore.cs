@@ -61,7 +61,7 @@ namespace NPOI.POIFS.FileSystem
             int bigBlockOffset = byteOffset % _filesystem.GetBigBlockSize();
 
             // Now locate the data block for it
-            StreamBlockByteBufferIterator it = _mini_stream.GetBlockIterator() as StreamBlockByteBufferIterator;
+            NPOIFSStream.StreamBlockByteBufferIterator it = _mini_stream.GetBlockIterator() as NPOIFSStream.StreamBlockByteBufferIterator;
 
             for (int i = 0; i < bigBlockNumber; i++)
             {

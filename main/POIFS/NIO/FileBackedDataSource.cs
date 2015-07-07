@@ -18,6 +18,7 @@
 using System.IO;
 using System;
 using NPOI.Util;
+//using System.IO.MemoryMappedFiles;
 namespace NPOI.POIFS.NIO
 {
     /// <summary>
@@ -28,9 +29,11 @@ namespace NPOI.POIFS.NIO
     /// </summary>
     public class FileBackedDataSource : DataSource
     {
-        private FileStream fileStream;
+        private MemoryStream fileStream;
+        //private MemoryMappedFile mmFile;
+        //private MemoryMappedViewStream mmViewStream;
+        private FileInfo fileinfo;
         private bool writable;
-        private string fileName;
         public FileBackedDataSource(FileInfo file)
             : this(file, false)
         {
@@ -40,19 +43,24 @@ namespace NPOI.POIFS.NIO
         {
             if (!file.Exists)
                 throw new FileNotFoundException(file.FullName);
-            fileName = file.FullName;
-            this.fileStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
+            this.fileinfo = file;
+            FileStream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
+            byte[] temp = new byte[stream.Length];
+            stream.Read(temp, 0, (int)stream.Length);
+            MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
+            fileStream = ms;
             this.writable = !readOnly;
+            stream.Position = 0;
         }
         public FileBackedDataSource(FileStream stream, bool readOnly)
         {
-            fileName = stream.Name;//??
-            //stream.Position = 0;
-            //byte[] temp = new byte[stream.Length];
-            //stream.Read(temp, 0, (int)stream.Length);
-            //MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
-            fileStream = stream;
+            stream.Position = 0;
+            byte[] temp = new byte[stream.Length];
+            stream.Read(temp, 0, (int)stream.Length);
+            MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
+            fileStream = ms;
             this.writable = !readOnly;
+            stream.Position = 0;
         }
 
         #region IDisposable Members
@@ -90,7 +98,7 @@ namespace NPOI.POIFS.NIO
             }
         }
 
-        public FileStream Stream
+        public Stream Stream
         {
             get { return this.fileStream; }
         }
@@ -146,20 +154,33 @@ namespace NPOI.POIFS.NIO
 
         public override void CopyTo(Stream stream)
         {
-            byte[] tempBuffer = new byte[stream.Length];
-            stream.Write(tempBuffer, 0, tempBuffer.Length);
-
-            fileStream.Write(tempBuffer, 0, tempBuffer.Length);
-        }
+            //byte[] tempBuffer = new byte[stream.Length];
+            //fileStream.Read(tempBuffer, 0, tempBuffer.Length);
+            byte[] tempBuffer = fileStream.ToArray();
+            stream.Write(tempBuffer, 0, tempBuffer.Length);        }
 
         public override long Size
         {
-            get { return fileStream.Length; }
+            get 
+            {
+                if (fileStream != null)
+                {
+                    return fileStream.Length;
+                }
+                else
+                {
+                    return fileinfo.Length;
+                }
+            }
         }
 
         public override void Close()
         {
-            fileStream.Close();
+            if (fileStream != null)
+            {
+                fileStream.Close();
+            }
+            
         }
     }
 

@@ -91,7 +91,7 @@ namespace TestCases.POIFS.FileSystem
         public static HeaderBlock WriteOutAndReadHeader(NPOIFSFileSystem fs)
         {
             MemoryStream baos = new MemoryStream();
-            fs.WriteFilesystem(baos);
+            fs.WriteFileSystem(baos);
 
             HeaderBlock header = new HeaderBlock(new MemoryStream(baos.ToArray()));
             return header;
@@ -99,7 +99,7 @@ namespace TestCases.POIFS.FileSystem
         public static NPOIFSFileSystem WriteOutAndReadBack(NPOIFSFileSystem original)
         {
             MemoryStream baos = new MemoryStream();
-            original.WriteFilesystem(baos);
+            original.WriteFileSystem(baos);
             original.Close();
             return new NPOIFSFileSystem(new ByteArrayInputStream(baos.ToArray()));
         }
@@ -673,8 +673,10 @@ namespace TestCases.POIFS.FileSystem
             SummaryInformation sinf = null;
             DocumentSummaryInformation dinf = null;
             DirectoryEntry root = null, testDir = null;
-            foreach (NPOIFSFileSystem fs in get512and4kFileAndInput())
+            NPOIFSFileSystem[] testFS = get512and4kFileAndInput();
+            for (int i=0;i<testFS.Length;i++)
             {
+                NPOIFSFileSystem fs = testFS[i];
                 // Check we can find the entries we expect
                 root = fs.Root;
                 Assert.AreEqual(5, root.EntryCount);
@@ -687,10 +689,10 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Write out1, re-load
-                NPOIFSFileSystem fs1 = WriteOutAndReadBack(fs);
+                fs = WriteOutAndReadBack(fs);
 
                 // Check they're still there
-                root = fs1.Root;
+                root = fs.Root;
                 Assert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
@@ -718,9 +720,9 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Write out1, re-load
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
+                root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
-                root = fs1.Root;
                 Assert.AreEqual(6, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
@@ -743,9 +745,9 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Write out and read once more, just to be sure
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
 
-                root = fs1.Root;
+                root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
                 Assert.AreEqual(6, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
@@ -773,7 +775,7 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Write out1, re-load
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
 
                 // Check it's all there
                 root = fs.Root;
@@ -805,10 +807,10 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Save
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
 
                 // Check
-                root = fs1.Root;
+                root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
                 Assert.AreEqual(5, root.EntryCount);
@@ -831,9 +833,9 @@ namespace TestCases.POIFS.FileSystem
                 testDir.CreateDocument("Mini2", new MemoryStream(mini2));
 
                 // Save, load, check
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
 
-                root = fs1.Root;
+                root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
                 Assert.AreEqual(5, root.EntryCount);
@@ -863,9 +865,9 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Save, load, check
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
 
-                root = fs1.Root;
+                root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
                 Assert.AreEqual(5, root.EntryCount);
@@ -898,9 +900,9 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Re-check
-                fs1 = WriteOutAndReadBack(fs1);
+                fs = WriteOutAndReadBack(fs);
 
-                root = fs1.Root;
+                root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
                 Assert.AreEqual(5, root.EntryCount);
@@ -924,7 +926,6 @@ namespace TestCases.POIFS.FileSystem
 
 
                 fs.Close();
-                fs1.Close();
             }
         }
 
@@ -1324,7 +1325,7 @@ namespace TestCases.POIFS.FileSystem
             src.Close();
 
             MemoryStream bos = new MemoryStream();
-            nfs.WriteFilesystem(bos);
+            nfs.WriteFileSystem(bos);
             nfs.Close();
 
             POIFSFileSystem pfs = new POIFSFileSystem(new MemoryStream(bos.ToArray()));

@@ -46,47 +46,38 @@ namespace NPOI.POIFS.Properties
 
         private static List<Property> BuildProperties(IEnumerator<ByteBuffer> dataSource, POIFSBigBlockSize bigBlockSize)
         {
-            try
-            {
-                List<Property> properties = new List<Property>();
+            List<Property> properties = new List<Property>();
 
-                while(dataSource.MoveNext())
+            while(dataSource.MoveNext())
+            {
+                ByteBuffer bb = dataSource.Current;
+
+                // Turn it into an array
+                byte[] data;
+                if (bb.HasBuffer && bb.Offset == 0 &&
+                    bb.Buffer.Length == bigBlockSize.GetBigBlockSize())
                 {
-                    ByteBuffer bb = dataSource.Current;
-
-                    // Turn it into an array
-                    byte[] data;
-                    if (bb.HasBuffer && bb.Offset == 0 &&
-                        bb.Buffer.Length == bigBlockSize.GetBigBlockSize())
-                    {
-                        data = bb.Buffer;
-                    }
-                    else
-                    {
-                        data = new byte[bigBlockSize.GetBigBlockSize()];
-                        int toRead = data.Length;
-                        if (bb.Remaining() < bigBlockSize.GetBigBlockSize())
-                        {
-                            // Looks to be a truncated block
-                            // This isn't allowed, but some third party created files
-                            //  sometimes do this, and we can normally read anyway
-
-                            toRead = bb.Remaining();
-                        }
-                        bb.Read(data, 0, toRead);
-                    }
-
-                    PropertyFactory.ConvertToProperties(data, properties);
+                    data = bb.Buffer;
                 }
-                return properties;
+                else
+                {
+                    data = new byte[bigBlockSize.GetBigBlockSize()];
+                    int toRead = data.Length;
+                    if (bb.Remaining() < bigBlockSize.GetBigBlockSize())
+                    {
+                        // Looks to be a truncated block
+                        // This isn't allowed, but some third party created files
+                        //  sometimes do this, and we can normally read anyway
 
-            }
-            catch(System.IO.IOException ex)
-            {
-                throw ex;
-            }
+                        toRead = bb.Remaining();
+                    }
+                    bb.Read(data, 0, toRead);
+                }
 
-         
+                PropertyFactory.ConvertToProperties(data, properties);
+            }
+            return properties;
+
         }
 
         public override int CountBlocks

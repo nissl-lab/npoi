@@ -130,7 +130,7 @@ namespace NPOI.POIFS.FileSystem
          * @exception IOException on errors reading, or on invalid data
          */
         public NPOIFSFileSystem(FileStream channel)
-            : this(channel, null, false, false)
+            : this(channel, null, true, true)
         {
 
         }
@@ -143,9 +143,9 @@ namespace NPOI.POIFS.FileSystem
                 // Initialize the datasource
                 if (srcFile != null)
                 {
-                    FileBackedDataSource d = new FileBackedDataSource(srcFile, readOnly);
+                    //FileBackedDataSource d = new FileBackedDataSource(srcFile, readOnly);
                     channel = new FileStream(srcFile.FullName, FileMode.Open, FileAccess.ReadWrite);
-                    _data = d;
+                    _data = new FileBackedDataSource(channel, readOnly);
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace NPOI.POIFS.FileSystem
                 _header = new HeaderBlock(headerBuffer);
 
                 // Now process the various entries
-                _data = new FileBackedDataSource(channel, readOnly);
+                //_data = new FileBackedDataSource(channel, readOnly);
                 ReadCoreContents();
                 channel.Close();
 
@@ -651,7 +651,7 @@ namespace NPOI.POIFS.FileSystem
          * 
          * @exception IOException thrown on errors writing to the stream
          */
-        public void WriteFilesystem()
+        public void WriteFileSystem()
         {
             if (_data is FileBackedDataSource)
             {
@@ -676,32 +676,14 @@ namespace NPOI.POIFS.FileSystem
          * @exception IOException thrown on errors writing to the stream
          */
 
-        public void WriteFilesystem(Stream stream)
+        public void WriteFileSystem(Stream stream)
         {
-            if (_data is FileBackedDataSource)
-            {
-                // Good, correct type
-            }
-            else
-            {
-                throw new ArgumentException(
-                      "POIFS opened from an inputstream, so writeFilesystem() may " +
-                      "not be called. Use writeFilesystem(OutputStream) instead"
-                );
-            }
-            if (!((FileBackedDataSource)_data).IsWriteable)
-            {
-                throw new ArgumentException(
-                     "POIFS opened in read only mode, so writeFilesystem() may " +
-                     "not be called. Open the FileSystem in read-write mode first"
-                );
-            }
 
             // Have the datasource updated
             syncWithDataSource();
 
             // Now copy the contents to the stream
-            //_data.CopyTo(stream);
+            _data.CopyTo(stream);
         }
 
         /**

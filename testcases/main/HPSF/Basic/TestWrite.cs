@@ -958,7 +958,7 @@ namespace TestCases.HPSF.Basic
 
 
             // Close the whole filesystem, and open it once more
-            fs.WriteFilesystem();
+            fs.WriteFileSystem();
             fs.Close();
 
             fs = new NPOIFSFileSystem(new FileStream(copy.FullName, FileMode.Open));

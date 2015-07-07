@@ -112,7 +112,7 @@ namespace NPOI.POIFS.FileSystem
                       "Can't read from a new stream before it has been written to"
                 );
             }
-            return new StreamBlockByteBufferIterator(this.blockStore, startBlock);
+            return new StreamBlockByteBufferIterator(this, startBlock);
         }
 
         /**
@@ -267,114 +267,111 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
+        public class StreamBlockByteBufferIterator : IEnumerator<ByteBuffer>
+        {
+            private ChainLoopDetector loopDetector;
+            private int nextBlock;
+            //private BlockStore blockStore;
+            private ByteBuffer current;
+            private NPOIFSStream pStream;
 
+            public StreamBlockByteBufferIterator(NPOIFSStream pStream, int firstBlock)
+            {
+                this.pStream = pStream;
+                this.nextBlock = firstBlock;
+                try
+                {
+                    this.loopDetector = pStream.blockStore.GetChainLoopDetector();
+                }
+                catch (IOException e)
+                {
+                    //throw new System.RuntimeException(e);
+                    throw new Exception(e.Message);
+                }
+            }
+
+            public bool HasNext()
+            {
+                if (nextBlock == POIFSConstants.END_OF_CHAIN)
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            public ByteBuffer Next()
+            {
+                if (nextBlock == POIFSConstants.END_OF_CHAIN)
+                {
+                    throw new IndexOutOfRangeException("Can't read past the end of the stream");
+                }
+
+                try
+                {
+                    loopDetector.Claim(nextBlock);
+                    //byte[] data = blockStore.GetBlockAt(nextBlock);
+                    ByteBuffer data = pStream.blockStore.GetBlockAt(nextBlock);
+                    nextBlock = pStream.blockStore.GetNextBlock(nextBlock);
+                    return data;
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e.Message);
+                }
+            }
+
+            public void Remove()
+            {
+                //throw new UnsupportedOperationException();
+                throw new NotImplementedException("Unsupported Operations!");
+            }
+
+            public ByteBuffer Current
+            {
+                get { return current; }
+            }
+
+            Object System.Collections.IEnumerator.Current
+            {
+                get { return current; }
+            }
+
+            void System.Collections.IEnumerator.Reset()
+            {
+                throw new NotImplementedException();
+            }
+
+            bool System.Collections.IEnumerator.MoveNext()
+            {
+                if (nextBlock == POIFSConstants.END_OF_CHAIN)
+                {
+                    return false;
+                }
+
+                try
+                {
+
+                    loopDetector.Claim(nextBlock);
+                    // byte[] data = blockStore.GetBlockAt(nextBlock);
+                    current = pStream.blockStore.GetBlockAt(nextBlock);
+                    nextBlock = pStream.blockStore.GetNextBlock(nextBlock);
+
+                    return true;
+                }
+                catch (IOException)
+                {
+                    return false;
+                }
+            }
+
+            public void Dispose()
+            {
+            }
+        }
     }
 
     //public class StreamBlockByteBufferIterator : IEnumerator<byte[]>
-    public class StreamBlockByteBufferIterator : IEnumerator<ByteBuffer>
-    {
-        private ChainLoopDetector loopDetector;
-        private int nextBlock;
-        private BlockStore blockStore;
-        private ByteBuffer current;
-
-        public StreamBlockByteBufferIterator(BlockStore blockStore, int firstBlock)
-        {
-            this.blockStore = blockStore;
-            this.nextBlock = firstBlock;
-            try
-            {
-                this.loopDetector = blockStore.GetChainLoopDetector();
-            }
-            catch (IOException e)
-            {
-                //throw new System.RuntimeException(e);
-                throw new Exception(e.Message);
-            }
-        }
-
-        public bool HasNext()
-        {
-            if (nextBlock == POIFSConstants.END_OF_CHAIN)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public ByteBuffer Next()
-        {
-            if (nextBlock == POIFSConstants.END_OF_CHAIN)
-            {
-                throw new IndexOutOfRangeException("Can't read past the end of the stream");
-            }
-
-            try
-            {
-                loopDetector.Claim(nextBlock);
-                //byte[] data = blockStore.GetBlockAt(nextBlock);
-                ByteBuffer data = blockStore.GetBlockAt(nextBlock);
-                nextBlock = blockStore.GetNextBlock(nextBlock);
-                return data;
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e.Message);
-            }
-        }
-
-        public void Remove()
-        {
-            //throw new UnsupportedOperationException();
-            throw new NotImplementedException("Unsupported Operations!");
-        }
-
-        public ByteBuffer Current
-        {
-            get { return current; }
-        }
-
-        Object System.Collections.IEnumerator.Current
-        {
-            get { return current; }
-        }
-
-        void System.Collections.IEnumerator.Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        bool System.Collections.IEnumerator.MoveNext()
-        {
-            if (nextBlock == POIFSConstants.END_OF_CHAIN)
-            {
-                //throw new IndexOutOfBoundsException("Can't read past the end of the stream");
-                //throw new Exception("Can't read past the end of the stream");
-                return false;
-            }
-
-            try
-            {
-
-                loopDetector.Claim(nextBlock);
-                // byte[] data = blockStore.GetBlockAt(nextBlock);
-                current = blockStore.GetBlockAt(nextBlock);
-                nextBlock = blockStore.GetNextBlock(nextBlock);
-
-                return true;
-            }
-            catch (IOException)
-            {
-                return false;
-                // throw new RuntimeException(e);
-                //throw new Exception(e.Message);
-            }
-        }
-
-        public void Dispose()
-        {
-        }
-    }
+    
 
     
 }

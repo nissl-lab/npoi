@@ -86,10 +86,10 @@ namespace NPOI.POIFS.FileSystem
             _property.StartBlock = _stream.GetStartBlock();
         }
 
-        private int Store(Stream stream)
+        private int Store(Stream inStream)
         {
             int bigBlockSize = POIFSConstants.BIG_BLOCK_MINIMUM_DOCUMENT_SIZE;
-            BufferedStream bis = new BufferedStream(stream, bigBlockSize + 1);
+            //BufferedStream bis = new BufferedStream(stream, bigBlockSize + 1);
             //bis.mark(bigBlockSize);
 
             //// Buffer the contents into memory. This is a bit icky...
@@ -109,7 +109,7 @@ namespace NPOI.POIFS.FileSystem
             //}
 
             // Do we need to store as a mini stream or a full one?
-            if (bis.Seek(bigBlockSize, SeekOrigin.Current) < bigBlockSize)
+            if (inStream.Length < bigBlockSize)
             {
                 _stream = new NPOIFSStream(_filesystem.GetMiniStore());
                 _block_size = _filesystem.GetMiniStore().GetBlockStoreBlockSize();
@@ -121,20 +121,27 @@ namespace NPOI.POIFS.FileSystem
             }
 
             // start from the beginning 
-            bis.Seek(0, SeekOrigin.Begin);
+            //bis.Seek(0, SeekOrigin.Begin);
 
             // Store it
-            Stream os = _stream.GetOutputStream();
+            Stream outStream = _stream.GetOutputStream();
             byte[] buf = new byte[1024];
             int length = 0;
 
-            for (int readBytes; (readBytes = bis.Read(buf, 0, buf.Length)) != 0; length += readBytes)
+            //for (int readBytes; (readBytes = bis.Read(buf, 0, buf.Length)) != 0; length += readBytes)
+            //{
+            //    outStream.Write(buf, 0, readBytes);
+            //}
+
+            for (int readBytes = 0; ; )
             {
-                os.Write(buf, 0, readBytes);
+                readBytes = inStream.Read(buf, 0, buf.Length);
+                if (readBytes <= 0)
+                    break;
+                length += readBytes;
+                outStream.Write(buf, 0, readBytes);
             }
-
-            os.Close();
-
+            outStream.Close();
             return length;
         }
 
