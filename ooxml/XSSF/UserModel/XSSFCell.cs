@@ -840,7 +840,7 @@ namespace NPOI.XSSF.UserModel
                         FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         return sdf.Format(DateCellValue, CultureInfo.CurrentCulture);
                     }
-                    return NumericCellValue + "";
+                    return NumericCellValue.ToString();
                 case CellType.String:
                     return RichStringCellValue.ToString();
                 default:
