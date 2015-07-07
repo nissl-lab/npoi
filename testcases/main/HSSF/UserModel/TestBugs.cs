@@ -3074,6 +3074,19 @@ namespace TestCases.HSSF.UserModel
             }
             Assert.AreEqual(0, comments);
         }
+
+        [Test]
+        public void Bug56482()
+        {
+            HSSFWorkbook wb = OpenSample("56482.xls");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+
+            HSSFSheet sheet = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFSheetConditionalFormatting cf = sheet.SheetConditionalFormatting as HSSFSheetConditionalFormatting;
+
+            Assert.AreEqual(5, cf.NumConditionalFormattings);
+        }
+
         [Test]
         public void Bug56325()
         {
