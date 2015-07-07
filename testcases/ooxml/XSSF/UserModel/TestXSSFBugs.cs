@@ -616,6 +616,7 @@ using NPOI.SS.Formula.Eval;
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("shared_formulas.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
 
+            IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             // CalcChain has lots of entries
             CalculationChain cc = wb.GetCalculationChain();
             Assert.AreEqual("A2", cc.GetCTCalcChain().GetCArray(0).r);
@@ -627,18 +628,29 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A8", cc.GetCTCalcChain().GetCArray(6).r);
             Assert.AreEqual(40, cc.GetCTCalcChain().SizeOfCArray());
 
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
             // Try various ways of changing the formulas
             // If it stays a formula, chain entry should remain
             // Otherwise should go
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
             sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+            validateCells(sheet);
             sheet.GetRow(5).RemoveCell(
                   sheet.GetRow(5).GetCell(0)  // go
             );
+            validateCells(sheet);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
 
             // Save and check
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
@@ -649,6 +661,26 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A4", cc.GetCTCalcChain().GetCArray(1).r);
             Assert.AreEqual("A9", cc.GetCTCalcChain().GetCArray(2).r);
 
+        }
+        [Test]
+        public void Bug49966Row()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples
+                    .OpenSampleWorkbook("shared_formulas.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            validateCells(sheet);
+            sheet.GetRow(5).RemoveCell(sheet.GetRow(5).GetCell(0)); // go
+            validateCells(sheet);
+        }
+
+        private void validateCells(XSSFSheet sheet)
+        {
+            foreach (IRow row in sheet)
+            {
+                // trigger handling
+                ((XSSFRow)row).OnDocumentWrite();
+            }
         }
         [Test]
         public void Test49156()
