@@ -180,6 +180,18 @@ namespace TestCases
                 throw;
             }
         }
+
+        public FileInfo GetFileInfo(String sampleFileName)
+        {
+            string path = _resolvedDataDir + sampleFileName;
+            if (!File.Exists(path))
+            {
+                throw new Exception("Sample file '" + sampleFileName
+                        + "' not found in data dir '" + _resolvedDataDir + "'");
+            }
+            return new FileInfo(path);
+        }
+
         /**
          *
          * @param sampleFileName    the name of the test file

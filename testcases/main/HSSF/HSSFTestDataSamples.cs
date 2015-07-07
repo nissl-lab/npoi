@@ -32,7 +32,10 @@ namespace TestCases.HSSF
 
         private static POIDataSamples _inst = POIDataSamples.GetSpreadSheetInstance();
 
-
+        public static FileInfo GetSampleFile(string sampleFileName)
+        {
+            return _inst.GetFileInfo(sampleFileName);
+        }
         public static Stream OpenSampleFileStream(String sampleFileName)
         {
             return _inst.OpenResourceAsStream(sampleFileName);

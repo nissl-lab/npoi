@@ -341,11 +341,17 @@ namespace NPOI.HSSF.Model
         {
             return _externSheetRecord.GetFirstSheetIndexFromRefIndex(extRefIndex);
         }
-
+        [Obsolete]
         public void UpdateIndexToInternalSheet(int extRefIndex, int offset)
         {
             _externSheetRecord.AdjustIndex(extRefIndex, offset);
         }
+
+        public void RemoveSheet(int sheetIdx)
+        {
+            _externSheetRecord.RemoveSheet(sheetIdx);
+        }
+
         public int NumNames
         {
             get
@@ -572,9 +578,9 @@ namespace NPOI.HSSF.Model
         private int FindFirstRecordLocBySid(short sid)
         {
             int index = 0;
-            for (IEnumerator iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); )
+            for (IEnumerator<Record> iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); )
             {
-                Record record = (Record)iterator.Current;
+                Record record = iterator.Current;
 
                 if (record.Sid == sid)
                 {

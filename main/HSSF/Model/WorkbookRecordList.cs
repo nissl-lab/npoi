@@ -89,7 +89,7 @@ namespace NPOI.HSSF.Model
             if ((Palettepos!= -1) && (Palettepos>= pos)) Palettepos=(palettepos + 1);
             if (ExternsheetPos >= pos) ExternsheetPos=ExternsheetPos + 1;
         }
-        public IEnumerator GetEnumerator()
+        public IEnumerator<Record> GetEnumerator()
         {
             return records.GetEnumerator();
         }

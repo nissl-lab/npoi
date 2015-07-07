@@ -3074,5 +3074,37 @@ namespace TestCases.HSSF.UserModel
             }
             Assert.AreEqual(0, comments);
         }
+        [Test]
+        public void Bug56325()
+        {
+            HSSFWorkbook wb;
+
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("56325.xls");
+            Stream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                POIFSFileSystem fs = new POIFSFileSystem(stream);
+                wb = new HSSFWorkbook(fs);
+            }
+            finally
+            {
+                stream.Close();
+            }
+
+            Assert.AreEqual(3, wb.NumberOfSheets);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(2, wb.NumberOfSheets);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(2, wb.NumberOfSheets);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(0, wb.NumberOfSheets);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(0, wb.NumberOfSheets);
+        }
+
     }
 }
