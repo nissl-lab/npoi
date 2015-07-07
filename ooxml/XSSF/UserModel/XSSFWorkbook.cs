@@ -298,15 +298,7 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 // Process the named ranges
-                namedRanges = new List<XSSFName>();
-                if (workbook.IsSetDefinedNames())
-                {
-                    foreach (CT_DefinedName ctName in workbook.definedNames.definedName)
-                    {
-                        namedRanges.Add(new XSSFName(ctName, this));
-                    }
-                }
-
+                ReprocessNamedRanges();
             }
             catch (XmlException e)
             {
@@ -1321,7 +1313,13 @@ namespace NPOI.XSSF.UserModel
                     nr.Add(name.GetCTName());
                 }
                 names.SetDefinedNameArray(nr);
+                if (workbook.IsSetDefinedNames())
+                {
+                    workbook.unsetDefinedNames();
+                }
                 workbook.SetDefinedNames(names);
+                // Re-process the named ranges
+                ReprocessNamedRanges();
             }
             else
             {
@@ -1331,7 +1329,17 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-
+        private void ReprocessNamedRanges()
+        {
+            namedRanges = new List<XSSFName>();
+            if (workbook.IsSetDefinedNames())
+            {
+                foreach (CT_DefinedName ctName in workbook.definedNames.definedName)
+                {
+                    namedRanges.Add(new XSSFName(ctName, this));
+                }
+            }
+        }
         private void SaveCalculationChain()
         {
             if (calcChain != null)
