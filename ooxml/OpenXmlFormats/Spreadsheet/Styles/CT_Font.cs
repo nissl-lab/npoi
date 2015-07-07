@@ -281,7 +281,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get { return this.bField; }
             set { this.bField = value; }
         }
-        public int sizeOfBArray()
+        public int SizeOfBArray()
         {
             if (this.bField == null)
                 return 0;

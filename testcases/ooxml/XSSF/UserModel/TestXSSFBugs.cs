@@ -37,6 +37,8 @@ using NPOI.SS.Formula.Eval;
     using TestCases;
     using NPOI.POIFS.FileSystem;
     using NUnit.Framework.Constraints;
+    using NPOI.Util;
+    using TestCases.HSSF;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -1571,6 +1573,122 @@ using NPOI.SS.Formula.Eval;
             byte[] secondSave = bos2.ToArray();
 
             Assert.That(firstSave, new EqualConstraint(secondSave));
+        }
+
+        [Test]
+        public void TestBug53798XLSX()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xlsx");
+            FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
+            bug53798Work(wb, xlsOutput);
+        }
+
+        [Ignore("Shifting rows is not yet implemented in XSSFSheet")]
+        [Test]
+        public void TestBug53798XLSXStream()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xlsx");
+            //FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
+            //bug53798Work(new SXSSFWorkbook(wb), xlsOutput);
+        }
+
+        [Test]
+        public void TestBug53798XLS()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xls");
+            FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xls");
+            bug53798Work(wb, xlsOutput);
+        }
+
+        private void bug53798Work(IWorkbook wb, FileInfo xlsOutput)
+        {
+            ISheet testSheet = wb.GetSheetAt(0);
+
+            testSheet.ShiftRows(2, 2, 1);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            // 1) corrupted xlsx (unreadable data in the first row of a Shifted group) already comes about
+            // when Shifted by less than -1 negative amount (try -2)
+            testSheet.ShiftRows(3, 3, -1);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            testSheet.ShiftRows(2, 2, 1);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            IRow newRow = null;
+            ICell newCell = null;
+            // 2) attempt to create a new row IN PLACE of a Removed row by a negative shift causes corrupted
+            // xlsx file with  unreadable data in the negative Shifted row.
+            // NOTE it's ok to create any other row.
+            newRow = testSheet.CreateRow(3);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            newCell = newRow.CreateCell(0);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            newCell.SetCellValue("new Cell in row " + newRow.RowNum);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            // 3) once a negative shift has been made any attempt to shift another group of rows
+            // (note: outside of previously negative Shifted rows) by a POSITIVE amount causes POI exception:
+            // org.apache.xmlbeans.impl.values.XmlValueDisconnectedException.
+            // NOTE: another negative shift on another group of rows is successful, provided no new rows in
+            // place of previously Shifted rows were attempted to be Created as explained above.
+            testSheet.ShiftRows(6, 7, 1);   // -- CHANGE the shift to positive once the behaviour of
+            // the above has been tested
+
+            saveAndReloadReport(wb, xlsOutput);
+        }
+
+        private void saveAndReloadReport(IWorkbook wb, FileInfo outFile)
+        {
+            // run some method on the font to verify if it is "disconnected" already
+            //for(short i = 0;i < 256;i++)
+            {
+                IFont font = wb.GetFontAt((short)0);
+                if (font is XSSFFont)
+                {
+                    XSSFFont xfont = (XSSFFont)wb.GetFontAt((short)0);
+                    CT_Font ctFont = (CT_Font)xfont.GetCTFont();
+                    Assert.AreEqual(0, ctFont.SizeOfBArray());
+                }
+            }
+
+            FileStream fileOutStream = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
+            wb.Write(fileOutStream);
+            fileOutStream.Close();
+            //System.out.Println("File \""+outFile.Name+"\" has been saved successfully");
+
+            FileStream is1 = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                IWorkbook newWB;
+                if (wb is XSSFWorkbook)
+                {
+                    newWB = new XSSFWorkbook(is1);
+                }
+                else if (wb is HSSFWorkbook)
+                {
+                    newWB = new HSSFWorkbook(is1);
+                    //} else if(wb is SXSSFWorkbook) {
+                    //    newWB = new SXSSFWorkbook(new XSSFWorkbook(is1));
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unknown workbook: " + wb);
+                }
+                Assert.IsNotNull(newWB.GetSheet("test"));
+            }
+            finally
+            {
+                is1.Close();
+            }
         }
 
     }
