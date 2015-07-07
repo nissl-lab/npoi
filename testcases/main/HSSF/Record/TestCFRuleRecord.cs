@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NUnit.Framework;
-
+    using NUnit.Framework.Constraints;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.Formula;
@@ -94,62 +94,62 @@ namespace TestCases.HSSF.Record
         }
 
         private void TestCFRuleRecord1(CFRuleRecord record)
-	    {
-		    FontFormatting fontFormatting = new FontFormatting();
-		    TestFontFormattingAccessors(fontFormatting);
-		    Assert.IsFalse(record.ContainsFontFormattingBlock);
-		    record.FontFormatting = (fontFormatting);
-		    Assert.IsTrue(record.ContainsFontFormattingBlock);
+        {
+            FontFormatting fontFormatting = new FontFormatting();
+            TestFontFormattingAccessors(fontFormatting);
+            Assert.IsFalse(record.ContainsFontFormattingBlock);
+            record.FontFormatting = (fontFormatting);
+            Assert.IsTrue(record.ContainsFontFormattingBlock);
 
-		    BorderFormatting borderFormatting = new BorderFormatting();
-		    TestBorderFormattingAccessors(borderFormatting);
-		    Assert.IsFalse(record.ContainsBorderFormattingBlock);
-		    record.BorderFormatting = (borderFormatting);
-		    Assert.IsTrue(record.ContainsBorderFormattingBlock);
+            BorderFormatting borderFormatting = new BorderFormatting();
+            TestBorderFormattingAccessors(borderFormatting);
+            Assert.IsFalse(record.ContainsBorderFormattingBlock);
+            record.BorderFormatting = (borderFormatting);
+            Assert.IsTrue(record.ContainsBorderFormattingBlock);
 
-		    Assert.IsFalse(record.IsLeftBorderModified);
-		    record.IsLeftBorderModified = (true);
-		    Assert.IsTrue(record.IsLeftBorderModified);
+            Assert.IsFalse(record.IsLeftBorderModified);
+            record.IsLeftBorderModified = (true);
+            Assert.IsTrue(record.IsLeftBorderModified);
 
-		    Assert.IsFalse(record.IsRightBorderModified);
-		    record.IsRightBorderModified = (true);
-		    Assert.IsTrue(record.IsRightBorderModified);
+            Assert.IsFalse(record.IsRightBorderModified);
+            record.IsRightBorderModified = (true);
+            Assert.IsTrue(record.IsRightBorderModified);
 
-		    Assert.IsFalse(record.IsTopBorderModified);
-		    record.IsTopBorderModified = (true);
-		    Assert.IsTrue(record.IsTopBorderModified);
+            Assert.IsFalse(record.IsTopBorderModified);
+            record.IsTopBorderModified = (true);
+            Assert.IsTrue(record.IsTopBorderModified);
 
-		    Assert.IsFalse(record.IsBottomBorderModified);
-		    record.IsBottomBorderModified = (true);
-		    Assert.IsTrue(record.IsBottomBorderModified);
+            Assert.IsFalse(record.IsBottomBorderModified);
+            record.IsBottomBorderModified = (true);
+            Assert.IsTrue(record.IsBottomBorderModified);
 
-		    Assert.IsFalse(record.IsTopLeftBottomRightBorderModified);
-		    record.IsTopLeftBottomRightBorderModified = (true);
-		    Assert.IsTrue(record.IsTopLeftBottomRightBorderModified);
+            Assert.IsFalse(record.IsTopLeftBottomRightBorderModified);
+            record.IsTopLeftBottomRightBorderModified = (true);
+            Assert.IsTrue(record.IsTopLeftBottomRightBorderModified);
 
-		    Assert.IsFalse(record.IsBottomLeftTopRightBorderModified);
-		    record.IsBottomLeftTopRightBorderModified = (true);
-		    Assert.IsTrue(record.IsBottomLeftTopRightBorderModified);
+            Assert.IsFalse(record.IsBottomLeftTopRightBorderModified);
+            record.IsBottomLeftTopRightBorderModified = (true);
+            Assert.IsTrue(record.IsBottomLeftTopRightBorderModified);
 
 
-		    PatternFormatting patternFormatting = new PatternFormatting();
-		    TestPatternFormattingAccessors(patternFormatting);
-		    Assert.IsFalse(record.ContainsPatternFormattingBlock);
-		    record.PatternFormatting = (patternFormatting);
-		    Assert.IsTrue(record.ContainsPatternFormattingBlock);
+            PatternFormatting patternFormatting = new PatternFormatting();
+            TestPatternFormattingAccessors(patternFormatting);
+            Assert.IsFalse(record.ContainsPatternFormattingBlock);
+            record.PatternFormatting = (patternFormatting);
+            Assert.IsTrue(record.ContainsPatternFormattingBlock);
 
-		    Assert.IsFalse(record.IsPatternBackgroundColorModified);
-		    record.IsPatternBackgroundColorModified = (true);
-		    Assert.IsTrue(record.IsPatternBackgroundColorModified);
+            Assert.IsFalse(record.IsPatternBackgroundColorModified);
+            record.IsPatternBackgroundColorModified = (true);
+            Assert.IsTrue(record.IsPatternBackgroundColorModified);
 
-		    Assert.IsFalse(record.IsPatternColorModified);
-		    record.IsPatternColorModified = (true);
-		    Assert.IsTrue(record.IsPatternColorModified);
+            Assert.IsFalse(record.IsPatternColorModified);
+            record.IsPatternColorModified = (true);
+            Assert.IsTrue(record.IsPatternColorModified);
 
-		    Assert.IsFalse(record.IsPatternStyleModified);
-		    record.IsPatternStyleModified = (true);
-		    Assert.IsTrue(record.IsPatternStyleModified);
-	    }
+            Assert.IsFalse(record.IsPatternStyleModified);
+            record.IsPatternStyleModified = (true);
+            Assert.IsTrue(record.IsPatternStyleModified);
+        }
 
         private void TestPatternFormattingAccessors(PatternFormatting patternFormatting)
         {
@@ -307,25 +307,25 @@ namespace TestCases.HSSF.Record
         }
         [Test]
         public void TestWrite() {
-		    HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
             CFRuleRecord rr = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "5", "10");
 
-		    PatternFormatting patternFormatting = new PatternFormatting();
-		    patternFormatting.FillPattern = FillPattern.Bricks;
-		    rr.PatternFormatting=(patternFormatting);
+            PatternFormatting patternFormatting = new PatternFormatting();
+            patternFormatting.FillPattern = FillPattern.Bricks;
+            rr.PatternFormatting=(patternFormatting);
 
-		    byte[] data = rr.Serialize();
-		    Assert.AreEqual(26, data.Length);
-		    Assert.AreEqual(3, LittleEndian.GetShort(data, 6));
-		    Assert.AreEqual(3, LittleEndian.GetShort(data, 8));
+            byte[] data = rr.Serialize();
+            Assert.AreEqual(26, data.Length);
+            Assert.AreEqual(3, LittleEndian.GetShort(data, 6));
+            Assert.AreEqual(3, LittleEndian.GetShort(data, 8));
 
-		    int flags = LittleEndian.GetInt(data, 10);
-		    Assert.AreEqual(0x00380000, flags & 0x00380000,"unused flags should be 111");
-		    Assert.AreEqual(0, flags & 0x03C00000,"undocumented flags should be 0000"); // Otherwise Excel s unhappy
-		    // check all remaining flag bits (some are not well understood yet)
-		    Assert.AreEqual(0x203FFFFF, flags);
-	    }
+            int flags = LittleEndian.GetInt(data, 10);
+            Assert.AreEqual(0x00380000, flags & 0x00380000,"unused flags should be 111");
+            Assert.AreEqual(0, flags & 0x03C00000,"undocumented flags should be 0000"); // Otherwise Excel s unhappy
+            // check all remaining flag bits (some are not well understood yet)
+            Assert.AreEqual(0x203FFFFF, flags);
+        }
 
         private static byte[] DATA_REFN = {
         // formula extracted from bugzilla 45234 att 22141
@@ -344,25 +344,38 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestReserializeRefNTokens() 
         {
-    		
-		    RecordInputStream is1 = TestcaseRecordInputStream.Create (CFRuleRecord.sid, DATA_REFN);
-		    CFRuleRecord rr = new CFRuleRecord(is1);
-		    Ptg[] ptgs = rr.ParsedExpression1;
-		    Assert.AreEqual(3, ptgs.Length);
-		    if (ptgs[0] is RefPtg) {
-			    throw new AssertionException("Identified bug 45234");
-		    }
-		    Assert.AreEqual(typeof(RefNPtg), ptgs[0].GetType());
-		    RefNPtg refNPtg = (RefNPtg) ptgs[0];
-		    Assert.IsTrue(refNPtg.IsColRelative);
-		    Assert.IsTrue(refNPtg.IsRowRelative);
-    		    
-		    byte[] data = rr.Serialize();
+            
+            RecordInputStream is1 = TestcaseRecordInputStream.Create (CFRuleRecord.sid, DATA_REFN);
+            CFRuleRecord rr = new CFRuleRecord(is1);
+            Ptg[] ptgs = rr.ParsedExpression1;
+            Assert.AreEqual(3, ptgs.Length);
+            if (ptgs[0] is RefPtg) {
+                throw new AssertionException("Identified bug 45234");
+            }
+            Assert.AreEqual(typeof(RefNPtg), ptgs[0].GetType());
+            RefNPtg refNPtg = (RefNPtg) ptgs[0];
+            Assert.IsTrue(refNPtg.IsColRelative);
+            Assert.IsTrue(refNPtg.IsRowRelative);
+                
+            byte[] data = rr.Serialize();
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(CFRuleRecord.sid, DATA_REFN, data);
-	    }
+        }
 
-        
+        [Test]
+        public void TestBug53691()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
+
+            CFRuleRecord record = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "2", "5") as CFRuleRecord;
+
+            CFRuleRecord clone = (CFRuleRecord)record.Clone();
+
+            byte[] SerializedRecord = record.Serialize();
+            byte[] SerializedClone = clone.Serialize();
+            Assert.That(SerializedRecord, new EqualConstraint(SerializedClone));
+        }
 
     }
 }
