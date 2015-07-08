@@ -29,7 +29,7 @@ namespace NPOI.XWPF.UserModel
      * WARNING - APIs expected to change rapidly
      * 
      */
-    public class XWPFSDTContent
+    public class XWPFSDTContent : ISDTContent
     {
 
         // private IBody part;
@@ -92,12 +92,12 @@ namespace NPOI.XWPF.UserModel
                     Object o = bodyElements[i];
                     if (o is XWPFParagraph)
                     {
-                        text.Append(((XWPFParagraph)o).Text);
+                        AppendParagraph((XWPFParagraph)o, text);
                         addNewLine = true;
                     }
                     else if (o is XWPFTable)
                     {
-                        text.Append(((XWPFTable)o).Text);
+                        AppendTable((XWPFTable)o, text);
                         addNewLine = true;
                     }
                     else if (o is XWPFSDT)
@@ -118,6 +118,41 @@ namespace NPOI.XWPF.UserModel
                 return text.ToString();
             }
         }
+
+        private void AppendTable(XWPFTable table, StringBuilder text)
+        {
+            //this works recursively to pull embedded tables from within cells
+            foreach (XWPFTableRow row in table.Rows)
+            {
+                List<ICell> cells = row.GetTableICells();
+                for (int i = 0; i < cells.Count; i++)
+                {
+                    ICell cell = cells[i];
+                    if (cell is XWPFTableCell)
+                    {
+                        text.Append(((XWPFTableCell)cell).GetTextRecursively());
+                    }
+                    else if (cell is XWPFSDTCell)
+                    {
+                        text.Append(((XWPFSDTCell)cell).Content.Text);
+                    }
+                    if (i < cells.Count - 1)
+                    {
+                        text.Append("\t");
+                    }
+                }
+                text.Append('\n');
+            }
+        }
+
+        private void AppendParagraph(XWPFParagraph paragraph, StringBuilder text)
+        {
+            foreach (IRunElement run in paragraph.Runs)
+            {
+                text.Append(run.ToString());
+            }
+        }
+
 
         public override String ToString()
         {

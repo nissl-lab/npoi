@@ -34,8 +34,8 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54849.docx");
             String tag = null;
             String title = null;
-            List<XWPFSDT> sdts = extractAllSDTs(doc);
-            foreach (XWPFSDT sdt in sdts)
+            List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
+            foreach (AbstractXWPFSDT sdt in sdts)
             {
                 if (sdt.Content.ToString().Equals("Rich_text"))
                 {
@@ -44,7 +44,7 @@ namespace NPOI.XWPF.UserModel
                     break;
                 }
             }
-            Assert.AreEqual(12, sdts.Count, "controls size");
+            Assert.AreEqual(13, sdts.Count, "controls size");
 
             Assert.AreEqual("MyTag", tag, "tag");
             Assert.AreEqual("MyTitle", title, "title");
@@ -56,12 +56,13 @@ namespace NPOI.XWPF.UserModel
             String[] contents = new String[]{
                 "header_rich_text",
                 "Rich_text",
-                "Rich_text_pre_table\nRich_text_cell1\t\t\t\n\nRich_text_post_table",
+                "Rich_text_pre_table\nRich_text_cell1\t\t\t\n\t\t\t\n\t\t\t\n\nRich_text_post_table",
                 "Plain_text_no_newlines",
                 "Plain_text_with_newlines1\nplain_text_with_newlines2",
                 "Watermelon",
                 "Dirt",
                 "4/16/2013",
+                "Rich_text_in_cell",
                 "rich_text_in_paragraph_in_cell",
                 "Footer_rich_text",
                 "Footnote_sdt",
@@ -69,35 +70,44 @@ namespace NPOI.XWPF.UserModel
 
         };
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54849.docx");
-            List<XWPFSDT> sdts = extractAllSDTs(doc);
+            List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
 
             Assert.AreEqual(contents.Length, sdts.Count, "number of sdts");
 
-            for (int i = 0; i < sdts.Count; i++)
+            for (int i = 0; i <contents.Length; i++)
             {//contents.Length; i++){
-                XWPFSDT sdt = sdts[i];
+                AbstractXWPFSDT sdt = sdts[i];
 
                 Assert.AreEqual(contents[i], sdt.Content.ToString(), i + ": " + contents[i]);
             }
         }
+        /**
+         * POI-54771 and TIKA-1317
+         */
         [Test]
-        public void TestFailureToGetSDTAsCell()
+        public void TestSDTAsCell()
         {
-            /**
-             * The current code fails to extract an sdt if it comprises/is the parent
-             * of a cell in a table.
-             */
-            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54849.docx");
-            List<XWPFSDT> sdts = extractAllSDTs(doc);
-            bool found = false;
-            foreach (XWPFSDT sdt in sdts)
-            {
-                if (sdt.Content.Text.ToLower().IndexOf("rich_text_in_cell") > -1)
-                {
-                    found = true;
-                }
-            }
-            Assert.AreEqual(false, found, "SDT as cell known failure");
+            //Bug54771a.docx and Bug54771b.docx test slightly 
+            //different recursion patterns. Keep both!
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54771a.docx");
+            List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
+            String text = sdts[(0)].Content.Text;
+            Assert.AreEqual(2, sdts.Count);
+            Assert.IsTrue(text.IndexOf("Test") > -1);
+
+            text = sdts[(1)].Content.Text;
+            Assert.IsTrue(text.IndexOf("Test Subtitle") > -1);
+            Assert.IsTrue(text.IndexOf("Test User") > -1);
+            Assert.IsTrue(text.IndexOf("Test") < text.IndexOf("Test Subtitle"));
+
+            doc = XWPFTestDataSamples.OpenSampleDocument("Bug54771b.docx");
+            sdts = ExtractAllSDTs(doc);
+            Assert.AreEqual(3, sdts.Count);
+            Assert.IsTrue(sdts[0].Content.Text.IndexOf("Test") > -1);
+
+            Assert.IsTrue(sdts[(1)].Content.Text.IndexOf("Test Subtitle") > -1);
+            Assert.IsTrue(sdts[(2)].Content.Text.IndexOf("Test User") > -1);
+
         }
         /**
          * POI-55142 and Tika 1130
@@ -106,7 +116,7 @@ namespace NPOI.XWPF.UserModel
         public void TestNewLinesBetweenRuns()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug55142.docx");
-            List<XWPFSDT> sdts = extractAllSDTs(doc);
+            List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
             List<String> targs = new List<String>();
             //these test newlines and tabs in paragraphs/body elements
             targs.Add("Rich-text1 abcdefghi");
@@ -122,14 +132,16 @@ namespace NPOI.XWPF.UserModel
 
             for (int i = 0; i < sdts.Count; i++)
             {
-                XWPFSDT sdt = sdts[i];
+                AbstractXWPFSDT sdt = sdts[i];
                 Assert.AreEqual(targs[i], sdt.Content.Text, targs[i]);
             }
         }
-        private List<XWPFSDT> extractAllSDTs(XWPFDocument doc)
+
+
+        private List<AbstractXWPFSDT> ExtractAllSDTs(XWPFDocument doc)
         {
 
-            List<XWPFSDT> sdts = new List<XWPFSDT>();
+            List<AbstractXWPFSDT> sdts = new List<AbstractXWPFSDT>();
 
             IList<XWPFHeader> headers = doc.HeaderList;
             foreach (XWPFHeader header in headers)
@@ -155,9 +167,9 @@ namespace NPOI.XWPF.UserModel
             return sdts;
         }
 
-        private List<XWPFSDT> ExtractSDTsFromBodyElements(IList<IBodyElement> elements)
+        private List<AbstractXWPFSDT> ExtractSDTsFromBodyElements(IList<IBodyElement> elements)
         {
-            List<XWPFSDT> sdts = new List<XWPFSDT>();
+            List<AbstractXWPFSDT> sdts = new List<AbstractXWPFSDT>();
             foreach (IBodyElement e in elements)
             {
                 if (e is XWPFSDT)
@@ -181,20 +193,28 @@ namespace NPOI.XWPF.UserModel
                 else if (e is XWPFTable)
                 {
                     XWPFTable table = (XWPFTable)e;
-                    sdts.AddRange(extractSDTsFromTable(table));
+                    sdts.AddRange(ExtractSDTsFromTable(table));
                 }
             }
             return sdts;
         }
 
-        private List<XWPFSDT> extractSDTsFromTable(XWPFTable table)
+        private List<AbstractXWPFSDT> ExtractSDTsFromTable(XWPFTable table)
         {
-            List<XWPFSDT> sdts = new List<XWPFSDT>();
+
+            List<AbstractXWPFSDT> sdts = new List<AbstractXWPFSDT>();
             foreach (XWPFTableRow r in table.Rows)
             {
-                foreach (XWPFTableCell c in r.GetTableCells())
+                foreach (ICell c in r.GetTableICells())
                 {
-                    sdts.AddRange(ExtractSDTsFromBodyElements(c.BodyElements));
+                    if (c is XWPFSDTCell)
+                    {
+                        sdts.Add((XWPFSDTCell)c);
+                    }
+                    else if (c is XWPFTableCell)
+                    {
+                        sdts.AddRange(ExtractSDTsFromBodyElements(((XWPFTableCell)c).BodyElements));
+                    }
                 }
             }
             return sdts;

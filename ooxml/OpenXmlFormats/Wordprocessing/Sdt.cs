@@ -17,7 +17,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SdtContentCell
     {
-
+        public override string ToString()
+        {
+            string text = string.Empty;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (StreamWriter sw = new StreamWriter(ms))
+                {
+                    this.Write(sw, "sdtContent");
+                    sw.Flush();
+                    ms.Position = 0;
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        text = sr.ReadToEnd();
+                    }
+                }
+            }
+            return text;
+        }
         private ArrayList itemsField;
 
         private List<ItemsChoiceType23> itemsElementNameField;
@@ -1993,6 +2010,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return AddNewObject<CT_SdtDocPart>(SdtPrElementType.docPartObj);
         }
+
+        public CT_String[] GetAliasArray()
+        {
+            return GetObjectList<CT_String>(SdtPrElementType.alias).ToArray();
+        }
+
         #region Generic methods for object operation
 
         public List<T> GetObjectList<T>(SdtPrElementType type) where T : class
