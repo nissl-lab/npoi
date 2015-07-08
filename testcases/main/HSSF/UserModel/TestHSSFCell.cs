@@ -567,6 +567,43 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue((IRichTextString)null);
             
         }
+        [Test]
+        public void TestSetRemoveStyle()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+
+            HSSFCellStyle defaultStyle = wb.GetCellStyleAt((short)15) as HSSFCellStyle;
+
+            // Starts out with the default style
+            Assert.AreEqual(defaultStyle, cell.CellStyle);
+
+            // Create some styles, no change
+            HSSFCellStyle style1 = wb.CreateCellStyle() as HSSFCellStyle;
+            HSSFCellStyle style2 = wb.CreateCellStyle() as HSSFCellStyle;
+            style1.DataFormat = (/*setter*/(short)2);
+            style2.DataFormat = (/*setter*/(short)3);
+
+            Assert.AreEqual(defaultStyle, cell.CellStyle);
+
+            // Apply one, Changes
+            cell.CellStyle = (/*setter*/style1);
+            Assert.AreEqual(style1, cell.CellStyle);
+
+            // Apply the other, Changes
+            cell.CellStyle = (/*setter*/style2);
+            Assert.AreEqual(style2, cell.CellStyle);
+
+            // Remove, goes back to default
+            cell.CellStyle = (/*setter*/null);
+            Assert.AreEqual(defaultStyle, cell.CellStyle);
+
+            // Add back, returns
+            cell.CellStyle = (/*setter*/style2);
+            Assert.AreEqual(style2, cell.CellStyle);
+        }
 
     }
 
