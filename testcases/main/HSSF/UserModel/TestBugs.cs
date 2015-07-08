@@ -2984,7 +2984,7 @@ namespace TestCases.HSSF.UserModel
 
             // How close the sizing should be, given that not all
             //  systems will have quite the same fonts on them
-            float fontAccuracy = 0.15f;
+            float fontAccuracy = 0.22f;
 
             // x%
             ICellStyle iPercent = wb.CreateCellStyle();
