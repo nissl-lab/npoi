@@ -40,7 +40,7 @@ namespace NPOI.SS.Formula
             FreeRefFunction targetFunc = ec.FindUserDefinedFunction(functionName);
             if (targetFunc == null)
             {
-                throw new NotImplementedException(functionName);
+                throw new NotImplementedFunctionException(functionName);
             }
             int nOutGoingArgs = nIncomingArgs - 1;
             ValueEval[] outGoingArgs = new ValueEval[nOutGoingArgs];

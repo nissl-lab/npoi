@@ -199,6 +199,7 @@
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\IfError.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
     <Compile Include="SS\Formula\Functions\BaseNumberUtils.cs" />

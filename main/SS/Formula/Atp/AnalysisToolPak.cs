@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula.Atp
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
         {
-            throw new NotImplementedException(_functionName);
+            throw new NotImplementedFunctionException(_functionName);
         }
     }
 

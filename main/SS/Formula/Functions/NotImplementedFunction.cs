@@ -48,7 +48,7 @@ namespace NPOI.SS.Formula.Functions
 
         public ValueEval Evaluate(ValueEval[] operands, int srcRow, int srcCol)
         {
-            throw new NotImplementedException(_functionName);
+            throw new NotImplementedFunctionException(_functionName);
         }
         public String FunctionName
         {
