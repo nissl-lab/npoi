@@ -91,6 +91,12 @@ namespace NPOI.HSSF.Record
  		    if (in1.Available() == 1) {
 			    field_7_padding = (byte)in1.ReadByte();
 		    }
+            else if (in1.Available() == 2 && length == 0)
+            {
+                // If there's no author, may be double padded
+                field_7_padding = (byte)in1.ReadByte();
+                in1.ReadByte();
+            }
         }
 
         /**
