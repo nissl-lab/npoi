@@ -115,6 +115,9 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(512, fs.GetBigBlockSize());
             }
 
+            fsA.Close();
+            fsB.Close();
+
             fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
             fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
 
@@ -122,6 +125,8 @@ namespace TestCases.POIFS.FileSystem
             {
                 Assert.AreEqual(4096, fs.GetBigBlockSize());
             }
+            fsA.Close();
+            fsB.Close();
         }
 
         [Test]
@@ -201,7 +206,7 @@ namespace TestCases.POIFS.FileSystem
 
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
 
-
+                fs.Close();
             }
             fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
             fsB = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
@@ -276,8 +281,8 @@ namespace TestCases.POIFS.FileSystem
                     Assert.AreEqual(i + 1, miniStore.GetNextBlock(i));
 
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
+                fs.Close();
             }
-
         }
 
         [Test]
@@ -313,6 +318,8 @@ namespace TestCases.POIFS.FileSystem
                 //Leon i = 100
                 for (int i = 100; i < fs.GetBigBlockSizeDetails().GetBATEntriesPerBlock(); i++)
                     Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(i));
+
+                fs.Close();
             }
 
             fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
@@ -328,6 +335,7 @@ namespace TestCases.POIFS.FileSystem
                     Assert.AreEqual(i + 1, fs.GetNextBlock(i));
 
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
+                fs.Close();
             }
 
         }
@@ -363,6 +371,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual((byte)0x00, b.Read());
                 Assert.AreEqual((byte)0x00, b.Read());
                 Assert.AreEqual((byte)0x00, b.Read());
+                fs.Close();
             }
 
             fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize4096.zvi"));
@@ -394,6 +403,8 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual((byte)0x00, b.Read());
                 Assert.AreEqual((byte)0x00, b.Read());
                 Assert.AreEqual((byte)0x00, b.Read());
+
+                fs.Close();
             }
         }
 
@@ -617,6 +628,8 @@ namespace TestCases.POIFS.FileSystem
                 // Look inside another
                 DirectoryEntry imageD = (DirectoryEntry)image;
                 Assert.AreEqual(7, imageD.EntryCount);
+
+                fs.Close();
             }
         }
 
@@ -660,6 +673,8 @@ namespace TestCases.POIFS.FileSystem
                 ps = PropertySetFactory.Create(inp);
                 DocumentSummaryInformation dinf = (DocumentSummaryInformation)ps;
                 Assert.AreEqual(131333, dinf.OSVersion);
+
+                fs.Close();
             }
         }
 

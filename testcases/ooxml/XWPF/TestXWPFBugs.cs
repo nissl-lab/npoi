@@ -66,6 +66,7 @@ namespace NPOI.XWPF
                 Assert.AreEqual("This is password protected Word document.", text.Trim());
                 ex.Close();
  */
+                filesystem.Close();
             }
             finally
             {
