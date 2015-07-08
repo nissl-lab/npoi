@@ -1680,6 +1680,32 @@ using NPOI.SS.Formula.Eval;
             saveAndReloadReport(wb, xlsOutput);
         }
 
+        /**
+         * XSSFCell.typeMismatch on certain blank cells when formatting
+         *  with DataFormatter
+         */
+        [Test]
+        public void Bug56702()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56702.xlsx");
+
+            ISheet sheet = wb.GetSheetAt(0);
+
+            // Get wrong cell by row 8 & column 7
+            ICell cell = sheet.GetRow(8).GetCell(7);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
+
+            // Check the value - will be zero as it is <c><v/></c>
+            Assert.AreEqual(0.0, cell.NumericCellValue, 0.001);
+
+            // Try to format
+            DataFormatter formatter = new DataFormatter();
+            formatter.FormatCellValue(cell);
+
+            // Check the formatting
+            Assert.AreEqual("0", formatter.FormatCellValue(cell));
+        }
+
         private void saveAndReloadReport(IWorkbook wb, FileInfo outFile)
         {
             // run some method on the font to verify if it is "disconnected" already

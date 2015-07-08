@@ -210,6 +210,8 @@ namespace NPOI.XSSF.UserModel
                     case CellType.Numeric:
                         if (_cell.IsSetV())
                         {
+                            if (string.IsNullOrEmpty(_cell.v))
+                                return 0.0;
                             try
                             {
                                 return Double.Parse(_cell.v, CultureInfo.InvariantCulture);
