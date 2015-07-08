@@ -1217,7 +1217,8 @@ using NPOI.SS.Formula.Eval;
          * Repeatedly writing a file.
          * Something with the SharedStringsTable currently breaks...
          */
-        public void DISABLEDtest46662()
+        [Test]
+        public void Test46662()
         {
             // New file
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -1616,7 +1617,23 @@ using NPOI.SS.Formula.Eval;
             FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xls");
             bug53798Work(wb, xlsOutput);
         }
+        /**
+         * SUMIF was throwing a NPE on some formulas
+         */
+        [Test]
+        [Ignore("This bug is still to be fixed")]
+        public void TestBug56420SumIfNPE()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56420.xlsx");
 
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow r = sheet.GetRow(2);
+            ICell c = r.GetCell(2);
+            Assert.AreEqual("SUMIF($A$1:$A$4,A3,$B$1:$B$4)", c.CellFormula);
+            evaluator.EvaluateInCell(c);
+        }
         private void bug53798Work(IWorkbook wb, FileInfo xlsOutput)
         {
             ISheet testSheet = wb.GetSheetAt(0);
