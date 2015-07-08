@@ -324,13 +324,17 @@ namespace NPOI.XSSF.UserModel
             int firstHeaderColumn = ref1.Col;
             XSSFRow row = sheet.GetRow(headerRow) as XSSFRow;
 
-            if (row != null) foreach (CT_TableColumn col in GetCTTable().tableColumns.tableColumn)
+            if (row != null && row.GetCTRow() != null)
             {
-                int colIdx = (int)col.id - 1 + firstHeaderColumn;
-                XSSFCell cell = row.GetCell(colIdx) as XSSFCell;
-                if (cell != null)
+                int cellnum = firstHeaderColumn;
+                foreach (CT_TableColumn col in GetCTTable().tableColumns.tableColumn)
                 {
-                    col.name = (cell.StringCellValue);
+                    XSSFCell cell = row.GetCell(cellnum) as XSSFCell;
+                    if (cell != null)
+                    {
+                        col.name = (cell.StringCellValue);
+                    }
+                    cellnum++;
                 }
             }
         }
