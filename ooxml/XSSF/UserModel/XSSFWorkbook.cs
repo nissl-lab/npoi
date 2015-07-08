@@ -204,6 +204,24 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Constructs a XSSFWorkbook object from a given file.
+         * 
+         * <p>Once you have finished working with the Workbook, you should close 
+         * the package by calling  {@link #close()}, to avoid leaving file 
+         * handles open.
+         * 
+         * <p>Opening a XSSFWorkbook from a file has a lower memory footprint 
+         *  than opening from an InputStream
+         *  
+         * @param file   the file to open
+         */
+        public XSSFWorkbook(FileInfo file)
+            : this(OPCPackage.Open(file))
+        {
+            ;
+        }
+
+        /**
          * Constructs a XSSFWorkbook object given a file name.
          *
          * <p>
@@ -238,9 +256,7 @@ namespace NPOI.XSSF.UserModel
          * </p>
          * 
          * @param      path   the file name.
-         * @deprecated
          */
-        [Obsolete]
         public XSSFWorkbook(String path)
             : this(OpenPackage(path))
         {
