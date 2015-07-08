@@ -3118,5 +3118,43 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, wb.NumberOfSheets);
         }
 
+        /**
+     * Formulas which reference named ranges, either in other
+     *  sheets, or workbook scoped but in other workbooks.
+     * Currently failing with 
+     * java.lang.Exception: Unexpected eval class (NPOI.SS.Formula.Eval.NameXEval)
+     */
+        [Ignore]
+        [Test]
+        public void bug56737()
+        {
+            IWorkbook wb = OpenSample("56737.xls");
+
+            // Check the named range defInitions
+            IName nSheetScope = wb.GetName("NR_To_A1");
+            IName nWBScope = wb.GetName("NR_Global_B2");
+
+            Assert.IsNotNull(nSheetScope);
+            Assert.IsNotNull(nWBScope);
+
+            Assert.AreEqual("Defines!$A$1", nSheetScope.RefersToFormula);
+            Assert.AreEqual("Defines!$B$2", nWBScope.RefersToFormula);
+
+            // Check the different kinds of formulas
+            ISheet s = wb.GetSheetAt(0);
+            ICell cRefSName = s.GetRow(1).GetCell(3);
+            ICell cRefWName = s.GetRow(2).GetCell(3);
+
+            Assert.AreEqual("Defines!NR_To_A1", cRefSName.CellFormula);
+            Assert.AreEqual("'56737.xls'!NR_Global_B2", cRefWName.CellFormula);
+
+            // Try to Evaluate them
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("Test A1", eval.Evaluate(cRefSName).StringValue);
+            Assert.AreEqual(142, (int)eval.Evaluate(cRefWName).NumberValue);
+
+            // Try to Evaluate everything
+            eval.EvaluateAll();
+        }
     }
 }
