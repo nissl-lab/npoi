@@ -49,7 +49,7 @@ namespace NPOI.SS.UserModel
         private static Regex date_ptrn1 = new Regex("^\\[\\$\\-.*?\\]");
         private static Regex date_ptrn2 = new Regex("^\\[[a-zA-Z]+\\]");
         private static Regex date_ptrn3a = new Regex("[yYmMdDhHsS]");
-        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-/,. :\"\\\\]+0*[ampAMP/]*$");
+        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-T/,. :\"\\\\]+0*[ampAMP/]*$");
         //  elapsed time patterns: [h],[m] and [s]
         //private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]");
         private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]$");
@@ -518,7 +518,7 @@ namespace NPOI.SS.UserModel
                 }
 
                 // If we get here, check it's only made up, in any case, of:
-                //  y m d h s - \ / , . : [ ]
+                //  y m d h s - \ / , . : [ ] T
                 // optionally followed by AM/PM
 
                 // Delete any string literals.

@@ -1574,6 +1574,23 @@ using NPOI.SS.Formula.Eval;
 
             Assert.That(firstSave, new EqualConstraint(secondSave));
         }
+        /**
+         * ISO-8601 style cell formats with a T in them, eg
+         * cell format of "yyyy-MM-ddTHH:mm:ss"
+         */
+        [Test]
+        public void Bug54034()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("54034.xlsx");
+            ISheet sheet = wb.GetSheet("Sheet1");
+            IRow row = sheet.GetRow(1);
+            ICell cell = row.GetCell(2);
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
+
+            DataFormatter fmt = new DataFormatter();
+            Assert.AreEqual("yyyy\\-mm\\-dd\\Thh:mm", cell.CellStyle.GetDataFormatString());
+            Assert.AreEqual("2012-08-08T22:59", fmt.FormatCellValue(cell));
+        }
 
         [Test]
         public void TestBug53798XLSX()
