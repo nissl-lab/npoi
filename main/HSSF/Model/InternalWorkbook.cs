@@ -427,7 +427,7 @@ namespace NPOI.HSSF.Model
         }
         public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
         {
-            String nameName = linkTable.ResolveNameXText(externSheetIndex, externNameIndex);
+            String nameName = linkTable.ResolveNameXText(externSheetIndex, externNameIndex, this);
             if (nameName == null)
             {
                 return null;
@@ -2946,7 +2946,7 @@ namespace NPOI.HSSF.Model
          */
         public String ResolveNameXText(int reFindex, int definedNameIndex)
         {
-            return linkTable.ResolveNameXText(reFindex, definedNameIndex);
+            return linkTable.ResolveNameXText(reFindex, definedNameIndex, this);
         }
 
         public NameRecord CloneFilter(int filterDbNameIndex, int newSheetIndex)

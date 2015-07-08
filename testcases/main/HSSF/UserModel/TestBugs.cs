@@ -3119,14 +3119,13 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-     * Formulas which reference named ranges, either in other
-     *  sheets, or workbook scoped but in other workbooks.
-     * Currently failing with 
-     * java.lang.Exception: Unexpected eval class (NPOI.SS.Formula.Eval.NameXEval)
-     */
-        [Ignore]
+         * Formulas which reference named ranges, either in other
+         *  sheets, or workbook scoped but in other workbooks.
+         * Currently failing with 
+         * java.lang.Exception: Unexpected eval class (NPOI.SS.Formula.Eval.NameXEval)
+         */
         [Test]
-        public void bug56737()
+        public void Bug56737()
         {
             IWorkbook wb = OpenSample("56737.xls");
 

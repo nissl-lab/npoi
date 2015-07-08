@@ -232,13 +232,18 @@ namespace NPOI.HSSF.Record
                 _list.RemoveAt(toRemove);
             }
         }
+
+        /**
+         * Returns the index of the SupBookRecord for this index
+         */
         public int GetExtbookIndexFromRefIndex(int refIndex)
         {
-            return GetRef(refIndex).ExtBookIndex;
+            RefSubRecord refRec = GetRef(refIndex);
+            return refRec.ExtBookIndex;
         }
         /**
- * @return -1 if not found
- */
+         * @return -1 if not found
+         */
         public int FindRefIndexFromExtBookIndex(int extBookIndex)
         {
             int nItems = _list.Count;
@@ -265,6 +270,11 @@ namespace NPOI.HSSF.Record
             }
             return result;
         }
+        /**
+         * Returns the first sheet that the reference applies to, or
+         *  -1 if the referenced sheet can't be found, or -2 if the
+         *  reference is workbook scoped.
+         */
         public int GetFirstSheetIndexFromRefIndex(int extRefIndex)
         {
             return GetRef(extRefIndex).FirstSheetIndex;
