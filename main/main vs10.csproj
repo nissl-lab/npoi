@@ -233,6 +233,7 @@
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\Formula\Functions\WeekNum.cs" />
     <Compile Include="SS\Formula\NameIdentifier.cs" />
+    <Compile Include="SS\Formula\PTG\Area3DPxg.cs" />
     <Compile Include="SS\Formula\PTG\Ref3DPxg.cs" />
     <Compile Include="SS\Formula\SheetIdentifier.cs" />
     <Compile Include="SS\Formula\Udf\IndexedUDFFinder.cs" />

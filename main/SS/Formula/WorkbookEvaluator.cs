@@ -748,11 +748,12 @@ namespace NPOI.SS.Formula
             {
                 return ec.GetRef3DEval((Ref3DPxg)ptg);
             }
-            if (ptg is Area3DPtg)
-            {
-                Area3DPtg aptg = (Area3DPtg)ptg;
-                return ec.GetArea3DEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn, aptg.ExternSheetIndex);
-            }
+            if (ptg is Area3DPtg) {
+               return ec.GetArea3DEval((Area3DPtg)ptg);
+           }
+           if (ptg is Area3DPxg) {
+               return ec.GetArea3DEval((Area3DPxg)ptg);
+           }
 
             if (ptg is RefPtg)
             {

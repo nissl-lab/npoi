@@ -316,11 +316,17 @@ namespace NPOI.SS.Formula
             SheetRefEvaluator sre = GetRefEvaluatorForCurrentSheet();
             return new LazyAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex, sre);
         }
-        public ValueEval GetArea3DEval(int firstRowIndex, int firstColumnIndex,
-                int lastRowIndex, int lastColumnIndex, int extSheetIndex)
+        public ValueEval GetArea3DEval(Area3DPtg aptg)
         {
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(extSheetIndex);
-            return new LazyAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex, sre);
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(aptg.ExternSheetIndex);
+            return new LazyAreaEval(aptg.FirstRow, aptg.FirstColumn,
+                    aptg.LastRow, aptg.LastColumn, sre);
+        }
+        public ValueEval GetArea3DEval(Area3DPxg aptg)
+        {
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(aptg.SheetName, aptg.ExternalWorkbookNumber);
+            return new LazyAreaEval(aptg.FirstRow, aptg.FirstColumn,
+                    aptg.LastRow, aptg.LastColumn, sre);
         }
         public ValueEval GetNameXEval(NameXPtg nameXPtg)
         {

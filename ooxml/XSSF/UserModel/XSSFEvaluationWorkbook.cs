@@ -166,8 +166,17 @@ namespace NPOI.XSSF.UserModel
         }
         public Ptg Get3DReferencePtg(AreaReference area, SheetIdentifier sheet)
         {
-            // TODO Implement properly
-            return new Area3DPtg(area, GetExternalSheetIndex(sheet._sheetIdentifier.Name));
+            String sheetName = sheet._sheetIdentifier.Name;
+
+            if (sheet._bookName != null)
+            {
+                int bookIndex = ResolveBookIndex(sheet._bookName);
+                return new Area3DPxg(bookIndex, sheetName, area);
+            }
+            else
+            {
+                return new Area3DPxg(sheetName, area);
+            }
         }
         public String ResolveNameXText(NameXPtg n)
         {
@@ -198,13 +207,14 @@ namespace NPOI.XSSF.UserModel
         {
             throw new InvalidOperationException("HSSF-style external references are not supported for XSSF");
         }
-        public ExternalSheet GetExternalSheetIndex(String sheetName, int externalWorkbookNumber)
+
+        public ExternalSheet GetExternalSheet(String sheetName, int externalWorkbookNumber)
         {
             if (externalWorkbookNumber > 0)
             {
                 // External reference - reference is 1 based, link table is 0 based
                 int linkNumber = externalWorkbookNumber - 1;
-                ExternalLinksTable linkTable = _uBook.ExternalLinksTable[linkNumber];
+                ExternalLinksTable linkTable = _uBook.ExternalLinksTable[(linkNumber)];
                 return new ExternalSheet(linkTable.LinkedFileName, sheetName);
             }
             else
