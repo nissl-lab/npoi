@@ -107,17 +107,17 @@ namespace NPOI.XSSF.UserModel
             ptgs = Parse(fpb, "[0]!NR_Global_B2");
             Assert.AreEqual(1, ptgs.Length);
             Assert.AreEqual(typeof(NameXPxg), ptgs[0].GetType());
+            Assert.AreEqual(0, ((NameXPxg)ptgs[0]).ExternalWorkbookNumber);
             Assert.AreEqual(null, ((NameXPxg)ptgs[0]).SheetName);
             Assert.AreEqual("NR_Global_B2", ((NameXPxg)ptgs[0]).NameName);
             Assert.AreEqual("[0]!NR_Global_B2", ((NameXPxg)ptgs[0]).ToFormulaString());
         }
 
         [Test]
-        [Ignore("Work in progress, see bug #56737")]
         public void FormulaReferencesOtherSheets()
         {
             // Use a test file with the named ranges in place
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref-56737.xlsx");
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56737.xlsx");
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
             Ptg[] ptgs;
 
@@ -125,39 +125,28 @@ namespace NPOI.XSSF.UserModel
             ptgs = Parse(fpb, "Uses!A1");
             Assert.AreEqual(1, ptgs.Length);
             Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
+            Assert.AreEqual(-1, ((Ref3DPxg)ptgs[0]).ExternalWorkbookNumber);
             Assert.AreEqual("A1", ((Ref3DPxg)ptgs[0]).Format2DRefAsString());
             Assert.AreEqual("Uses!A1", ((Ref3DPxg)ptgs[0]).ToFormulaString());
 
             // Reference to a sheet scoped named range from another sheet
             ptgs = Parse(fpb, "Defines!NR_To_A1");
             Assert.AreEqual(1, ptgs.Length);
-            // TODO assert
+            Assert.AreEqual(typeof(NameXPxg), ptgs[0].GetType());
+            Assert.AreEqual(-1, ((NameXPxg)ptgs[0]).ExternalWorkbookNumber);
+            Assert.AreEqual("Defines", ((NameXPxg)ptgs[0]).SheetName);
+            Assert.AreEqual("NR_To_A1", ((NameXPxg)ptgs[0]).NameName);
+            Assert.AreEqual("Defines!NR_To_A1", ((NameXPxg)ptgs[0]).ToFormulaString());
 
             // Reference to a workbook scoped named range
             ptgs = Parse(fpb, "NR_Global_B2");
             Assert.AreEqual(1, ptgs.Length);
-            // TODO assert
+            Assert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
+            Assert.AreEqual("NR_Global_B2", ((NamePtg)ptgs[0]).ToFormulaString(fpb));
+
         }
 
         [Test]
-        [Ignore("Work in progress, see bug #56737")]
-        public void FFormaulReferncesSameWorkbook()
-        {
-            // Use a test file with "other workbook" style references
-            //  to itself
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56737.xlsx");
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            Ptg[] ptgs;
-
-            // Reference to a named range in our own workbook, as if it
-            // were defined in a different workbook
-            ptgs = Parse(fpb, "[0]!NR_Global_B2");
-            Assert.AreEqual(1, ptgs.Length);
-            // TODO assert
-        }
-
-        [Test]
-        [Ignore("Work in progress, see bug #56737")]
         public void FormulaReferencesOtherWorkbook()
         {
             // Use a test file with the external linked table in place
@@ -168,17 +157,30 @@ namespace NPOI.XSSF.UserModel
             // Reference to a single cell in a different workbook
             ptgs = Parse(fpb, "[1]Uses!$A$1");
             Assert.AreEqual(1, ptgs.Length);
-            // TODO assert
+            Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
+            Assert.AreEqual(1, ((Ref3DPxg)ptgs[0]).ExternalWorkbookNumber);
+            Assert.AreEqual("Uses", ((Ref3DPxg)ptgs[0]).SheetName);
+            Assert.AreEqual("$A$1", ((Ref3DPxg)ptgs[0]).Format2DRefAsString());
+            Assert.AreEqual("[1]Uses!$A$1", ((Ref3DPxg)ptgs[0]).ToFormulaString());
 
             // Reference to a sheet-scoped named range in a different workbook
             ptgs = Parse(fpb, "[1]Defines!NR_To_A1");
             Assert.AreEqual(1, ptgs.Length);
-            // TODO assert
+            Assert.AreEqual(typeof(NameXPxg), ptgs[0].GetType());
+            Assert.AreEqual(1, ((NameXPxg)ptgs[0]).ExternalWorkbookNumber);
+            Assert.AreEqual("Defines", ((NameXPxg)ptgs[0]).SheetName);
+            Assert.AreEqual("NR_To_A1", ((NameXPxg)ptgs[0]).NameName);
+            Assert.AreEqual("[1]Defines!NR_To_A1", ((NameXPxg)ptgs[0]).ToFormulaString());
 
             // Reference to a global named range in a different workbook
             ptgs = Parse(fpb, "[1]!NR_Global_B2");
             Assert.AreEqual(1, ptgs.Length);
-            // TODO assert
+            Assert.AreEqual(typeof(NameXPxg), ptgs[0].GetType());
+            Assert.AreEqual(1, ((NameXPxg)ptgs[0]).ExternalWorkbookNumber);
+            Assert.AreEqual(null, ((NameXPxg)ptgs[0]).SheetName);
+            Assert.AreEqual("NR_Global_B2", ((NameXPxg)ptgs[0]).NameName);
+            Assert.AreEqual("[1]!NR_Global_B2", ((NameXPxg)ptgs[0]).ToFormulaString());
+
         }
 
     }
