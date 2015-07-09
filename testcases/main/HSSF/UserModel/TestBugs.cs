@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.HSSF.Record.Aggregates;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -2883,6 +2884,57 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = OpenSample("51670.xls");
             WriteOutAndReadBack(wb);
+        }
+        /**
+         * Note - part of this test is still failing, see
+         * {@link TestUnfixedBugs#test49612()}
+         */
+        [Test]
+        public void bug49612_part()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49612.xls");
+            HSSFSheet sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFRow row = sh.GetRow(0) as HSSFRow;
+            HSSFCell c1 = row.GetCell(2) as HSSFCell;
+            HSSFCell d1 = row.GetCell(3) as HSSFCell;
+            HSSFCell e1 = row.GetCell(2) as HSSFCell;
+
+            Assert.AreEqual("SUM(BOB+JIM)", c1.CellFormula);
+
+            // Problem 1: See TestUnfixedBugs#test49612()
+            // Problem 2: TestUnfixedBugs#test49612()
+
+            // Problem 3: These used to fail, now pass
+            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
+            Assert.AreEqual(30.0, eval.Evaluate(c1).NumberValue, 0.001, "Evaluating c1");
+            Assert.AreEqual(30.0, eval.Evaluate(d1).NumberValue, 0.001, "Evaluating d1");
+            Assert.AreEqual(30.0, eval.Evaluate(e1).NumberValue, 0.001, "Evaluating e1");
+        }
+
+        [Test]
+        public void bug51675()
+        {
+            List<short> list = new List<short>();
+            HSSFWorkbook workbook = OpenSample("51675.xls");
+            HSSFSheet sh = workbook.GetSheetAt(0) as HSSFSheet;
+            InternalSheet ish = HSSFTestHelper.GetSheetForTest(sh);
+            PageSettingsBlock psb = (PageSettingsBlock)ish.Records[(13)];
+            psb.VisitContainedRecords(new RecordVisitor1(list));
+            Assert.IsTrue(list[(list.Count - 1)] == UnknownRecord.BITMAP_00E9);
+            Assert.IsTrue(list[(list.Count - 2)] == UnknownRecord.HEADER_FOOTER_089C);
+        }
+        public class RecordVisitor1 : RecordVisitor
+        {
+            private List<short> list;
+            public RecordVisitor1(List<short> list)
+            {
+                this.list = list;
+            }
+
+            public void VisitRecord(NPOI.HSSF.Record.Record r)
+            {
+                list.Add(r.Sid);
+            }
         }
 
         [Test]
