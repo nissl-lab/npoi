@@ -68,9 +68,9 @@ using NPOI.Util;
             return _iBook.GetExternalName(externSheetIndex, externNameIndex);
         }
 
-        public NameXPtg GetNameXPtg(String name)
+        public NameXPtg GetNameXPtg(String name, int sheetRefIndex)
         {
-            return _iBook.GetNameXPtg(name, _uBook.GetUDFFinder());
+            return _iBook.GetNameXPtg(name, sheetRefIndex, _uBook.GetUDFFinder());
         }
 
         public IEvaluationName GetName(String name,int sheetIndex)

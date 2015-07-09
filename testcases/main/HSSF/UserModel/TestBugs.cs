@@ -3211,6 +3211,11 @@ namespace TestCases.HSSF.UserModel
 
             // Try to Evaluate everything
             eval.EvaluateAll();
+
+            // Try to set the same kinds of formula elsewhere
+            ICell newF = s.GetRow(0).CreateCell(10, CellType.Formula);
+            // TODO Fix this
+            //newF.SetCellFormula("Defines!NR_To_A1");
         }
     }
 }

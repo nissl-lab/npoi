@@ -110,8 +110,6 @@ namespace NPOI.SS.Formula
         }
         private class SheetIdentifier
         {
-
-
             private String _bookName;
             private Identifier _sheetIdentifier;
             public SheetIdentifier(String bookName, Identifier sheetIdentifier)
@@ -133,11 +131,8 @@ namespace NPOI.SS.Formula
                     return _sheetIdentifier;
                 }
             }
-            public override String ToString()
+            private void AsFormulaString(StringBuilder sb)
             {
-                StringBuilder sb = new StringBuilder(64);
-                sb.Append(this.GetType().Name);
-                sb.Append(" [");
                 if (_bookName != null)
                 {
                     sb.Append(" [").Append(_sheetIdentifier.Name).Append("]");
@@ -150,6 +145,21 @@ namespace NPOI.SS.Formula
                 {
                     sb.Append(_sheetIdentifier.Name);
                 }
+            }
+
+            public String AsFormulaString()
+            {
+                StringBuilder sb = new StringBuilder(32);
+                AsFormulaString(sb);
+                return sb.ToString();
+            }
+
+            public override String ToString()
+            {
+                StringBuilder sb = new StringBuilder(64);
+                sb.Append(this.GetType().Name);
+                sb.Append(" [");
+                AsFormulaString(sb);
                 sb.Append("]");
                 return sb.ToString();
             }
@@ -160,14 +170,14 @@ namespace NPOI.SS.Formula
 
         private String formulaString;
         private int formulaLength;
-        private int pointer;
+        private int _pointer;
         private static SpreadsheetVersion _ssVersion;
 
         private ParseNode _rootNode;
 
         private const char TAB = '\t';// HSSF + XSSF
-	    private const char CR = '\r';  // Normally just XSSF
-	    private const char LF = '\n';  // Normally just XSSF
+        private const char CR = '\r';  // Normally just XSSF
+        private const char LF = '\n';  // Normally just XSSF
 
         /**
          * Lookahead Character.
@@ -194,7 +204,7 @@ namespace NPOI.SS.Formula
         public FormulaParser(String formula, IFormulaParsingWorkbook book, int sheetIndex)
         {
             formulaString = formula;
-            pointer = 0;
+            _pointer = 0;
             this._book = book;
 
             _ssVersion = book == null ? SpreadsheetVersion.EXCEL97 : book.GetSpreadsheetVersion();
@@ -237,13 +247,13 @@ namespace NPOI.SS.Formula
         private void GetChar()
         {
             // Check To see if we've walked off the end of the string.
-            if (pointer > formulaLength)
+            if (_pointer > formulaLength)
             {
                 throw new Exception("too far");
             }
-            if (pointer < formulaLength)
+            if (_pointer < formulaLength)
             {
-                look = formulaString[pointer];
+                look = formulaString[_pointer];
             }
             else
             {
@@ -251,7 +261,7 @@ namespace NPOI.SS.Formula
                 // SkipWhitespace from spinning
                 look = (char)0;
             }
-            pointer++;
+            _pointer++;
             //Console.WriteLine("Got char: "+ look);
         }
 
@@ -260,14 +270,14 @@ namespace NPOI.SS.Formula
         {
             String msg;
 
-            if (look == '=' && formulaString.Substring(0, pointer - 1).Trim().Length < 1)
+            if (look == '=' && formulaString.Substring(0, _pointer - 1).Trim().Length < 1)
             {
                 msg = "The specified formula '" + formulaString
                     + "' starts with an equals sign which is not allowed.";
             }
             else
             {
-                msg = "Parse error near char " + (pointer - 1) + " '" + look + "'"
+                msg = "Parse error near char " + (_pointer - 1) + " '" + look + "'"
                     + " in specified formula '" + formulaString + "'. Expected "
                     + s;
             }
@@ -358,7 +368,7 @@ namespace NPOI.SS.Formula
             bool hasRange = false;
             while (look == ':')
             {
-                int pos = pointer;
+                int pos = _pointer;
                 GetChar();
                 ParseNode nextPart = ParseRangeable();
                 // Note - no range simplification here. An expr like "A1:B2:C3:D4:E5" should be
@@ -393,11 +403,11 @@ namespace NPOI.SS.Formula
             return new ParseNode(memPtg, root);
         }
         /**
- * From OOO doc: "Whenever one operand of the reference subexpression is a function,
- *  a defined name, a 3D reference, or an external reference (and no error occurs),
- *  a tMemFunc token is used"
- *
- */
+         * From OOO doc: "Whenever one operand of the reference subexpression is a function,
+         *  a defined name, a 3D reference, or an external reference (and no error occurs),
+         *  a tMemFunc token is used"
+         *
+         */
         private static bool NeedsMemFunc(ParseNode root)
         {
             Ptg token = root.GetToken();
@@ -439,12 +449,29 @@ namespace NPOI.SS.Formula
         }
 
 
+        private String ParseAsName()
+        {
+            StringBuilder sb = new StringBuilder();
 
+            // defined names may begin with a letter or underscore
+            if (!char.IsLetter(look) && look != '_')
+            {
+                throw expected("number, string, or defined name");
+            }
+            while (IsValidDefinedNameChar(look))
+            {
+                sb.Append(look);
+                GetChar();
+            }
+            SkipWhite();
+
+            return sb.ToString();
+        }
 
         /**
- *
- * @return <c>true</c> if the specified character may be used in a defined name
- */
+         *
+         * @return <c>true</c> if the specified character may be used in a defined name
+         */
         private static bool IsValidDefinedNameChar(char ch)
         {
             if (Char.IsLetterOrDigit(ch))
@@ -462,8 +489,8 @@ namespace NPOI.SS.Formula
             return false;
         }
         /**
- * @param currentParsePosition used to format a potential error message
- */
+         * @param currentParsePosition used to format a potential error message
+         */
         private void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
         {
             if (!IsValidRangeOperand(pn))
@@ -524,28 +551,30 @@ namespace NPOI.SS.Formula
 
 
         /**
- * Parses area refs (things which could be the operand of ':') and simple factors
- * Examples
- * <pre>
- *   A$1
- *   $A$1 :  $B1
- *   A1 .......	C2
- *   Sheet1 !$A1
- *   a..b!A1
- *   'my sheet'!A1
- *   .my.sheet!A1
- *   my.named..range.
- *   foo.bar(123.456, "abc")
- *   123.456
- *   "abc"
- *   true
- * </pre>
- *
- */
+         * Parses area refs (things which could be the operand of ':') and simple factors
+         * Examples
+         * <pre>
+         *   A$1
+         *   $A$1 :  $B1
+         *   A1 .......	C2
+         *   Sheet1 !$A1
+         *   a..b!A1
+         *   'my sheet'!A1
+         *   .my.sheet!A1
+         *   my.named..range.
+         *   'my sheet'!my.named.range
+         *   .my.sheet!my.named.range
+         *   foo.bar(123.456, "abc")
+         *   123.456
+         *   "abc"
+         *   true
+         * </pre>
+         *
+         */
         private ParseNode ParseRangeable()
         {
             SkipWhite();
-            int savePointer = pointer;
+            int savePointer = _pointer;
             SheetIdentifier sheetIden = ParseSheetName();
             if (sheetIden == null)
             {
@@ -554,7 +583,7 @@ namespace NPOI.SS.Formula
             else
             {
                 SkipWhite();
-                savePointer = pointer;
+                savePointer = _pointer;
             }
 
             SimpleRangePart part1 = ParseSimpleRangePart();
@@ -569,8 +598,21 @@ namespace NPOI.SS.Formula
                     }
                     else
                     {
-                        throw new FormulaParseException("Cell reference expected after sheet name at index "
-                                + pointer + ".");
+                        // Is it a named range?
+                        String name = ParseAsName();
+                        if (name.Length == 0)
+                        {
+                            throw new FormulaParseException("Cell reference or Named Range "
+                                    + "expected after sheet name at index " + _pointer + ".");
+                        }
+                        int extIx = GetSheetExtIx(sheetIden);
+                        NameXPtg nameXPtg = _book.GetNameXPtg(name, extIx);
+                        if (nameXPtg == null)
+                        {
+                            throw new FormulaParseException("Specified name '" + name +
+                                    "' for sheet " + sheetIden.AsFormulaString() + " not found");
+                        }
+                        return new ParseNode(nameXPtg);
                     }
                 }
                 return ParseNonRange(savePointer);
@@ -588,7 +630,7 @@ namespace NPOI.SS.Formula
 
             if (look == ':')
             {
-                int colonPos = pointer;
+                int colonPos = _pointer;
                 GetChar();
                 SkipWhite();
                 SimpleRangePart part2 = ParseSimpleRangePart();
@@ -635,13 +677,13 @@ namespace NPOI.SS.Formula
 
                 SkipWhite();
                 SimpleRangePart part2 = ParseSimpleRangePart();
-                String part1And2 = formulaString.Substring(savePointer - 1, pointer - savePointer);
+                String part1And2 = formulaString.Substring(savePointer - 1, _pointer - savePointer);
                 if (part2 == null)
                 {
                     if (sheetIden != null)
                     {
                         throw new FormulaParseException("Complete area reference expected after sheet name at index "
-                                + pointer + ".");
+                                + _pointer + ".");
                     }
                     return ParseNonRange(savePointer);
                 }
@@ -682,24 +724,24 @@ namespace NPOI.SS.Formula
             if (sheetIden != null)
             {
                 throw new FormulaParseException("Second part of cell reference expected after sheet name at index "
-                        + pointer + ".");
+                        + _pointer + ".");
             }
 
             return ParseNonRange(savePointer);
         }
 
         /**
-  * Parses simple factors that are not primitive ranges or range components
-  * i.e. '!', ':'(and equiv '...') do not appear
-  * Examples
-  * <pre>
-  *   my.named...range.
-  *   foo.bar(123.456, "abc")
-  *   123.456
-  *   "abc"
-  *   true
-  * </pre>
-  */
+          * Parses simple factors that are not primitive ranges or range components
+          * i.e. '!', ':'(and equiv '...') do not appear
+          * Examples
+          * <pre>
+          *   my.named...range.
+          *   foo.bar(123.456, "abc")
+          *   123.456
+          *   "abc"
+          *   true
+          * </pre>
+          */
         private ParseNode ParseNonRange(int savePointer)
         {
             ResetPointer(savePointer);
@@ -714,19 +756,7 @@ namespace NPOI.SS.Formula
             }
             // from now on we can only be dealing with non-quoted identifiers
             // which will either be named ranges or functions
-            StringBuilder sb = new StringBuilder();
-
-            if (!Char.IsLetter(look) && look != '_')
-            {
-                throw expected("number, string, or defined name");
-            }
-            while (IsValidDefinedNameChar(look))
-            {
-                sb.Append(look);
-                GetChar();
-            }
-            SkipWhite();
-            String name = sb.ToString();
+            String name = ParseAsName();
             if (look == '(')
             {
                 return Function(name);
@@ -755,20 +785,12 @@ namespace NPOI.SS.Formula
                     + name + "' is not a range as expected.");
         }
 
-        /**
- *
- * @param sheetIden may be <code>null</code>
- * @param part1
- * @param part2 may be <code>null</code>
- */
-        private ParseNode CreateAreaRefParseNode(SheetIdentifier sheetIden, SimpleRangePart part1,
-                SimpleRangePart part2)
+        private int GetSheetExtIx(SheetIdentifier sheetIden)
         {
-
             int extIx;
             if (sheetIden == null)
             {
-                extIx = Int32.MinValue;
+                extIx = int.MaxValue;
             }
             else
             {
@@ -782,6 +804,20 @@ namespace NPOI.SS.Formula
                     extIx = _book.GetExternalSheetIndex(sheetIden.BookName, sName);
                 }
             }
+            return extIx;
+        }
+
+        /**
+         *
+         * @param sheetIden may be <code>null</code>
+         * @param part1
+         * @param part2 may be <code>null</code>
+         */
+        private ParseNode CreateAreaRefParseNode(SheetIdentifier sheetIden, SimpleRangePart part1,
+                SimpleRangePart part2)
+        {
+            int extIx = GetSheetExtIx(sheetIden);
+
             Ptg ptg;
             if (part2 == null)
             {
@@ -839,7 +875,7 @@ namespace NPOI.SS.Formula
   */
         private SimpleRangePart ParseSimpleRangePart()
         {
-            int ptr = pointer - 1; // TODO avoid StringIndexOutOfBounds
+            int ptr = _pointer - 1; // TODO avoid StringIndexOutOfBounds
             bool hasDigits = false;
             bool hasLetters = false;
             while (ptr < formulaLength)
@@ -863,11 +899,11 @@ namespace NPOI.SS.Formula
                 }
                 ptr++;
             }
-            if (ptr <= pointer - 1)
+            if (ptr <= _pointer - 1)
             {
                 return null;
             }
-            String rep = formulaString.Substring(pointer - 1, ptr - pointer + 1);
+            String rep = formulaString.Substring(_pointer - 1, ptr - _pointer + 1);
 
             Regex pattern = new Regex(CELL_REF_PATTERN);
 
@@ -1055,9 +1091,9 @@ namespace NPOI.SS.Formula
             }
         }
         /**
- * Note - caller should reset {@link #_pointer} upon <code>null</code> result
- * @return The sheet name as an identifier <code>null</code> if '!' is not found in the right place
- */
+         * Note - caller should reset {@link #_pointer} upon <code>null</code> result
+         * @return The sheet name as an identifier <code>null</code> if '!' is not found in the right place
+         */
         private SheetIdentifier ParseSheetName()
         {
 
@@ -1128,8 +1164,8 @@ namespace NPOI.SS.Formula
             return null;
         }
         /**
-  * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
-  */
+          * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
+          */
         private bool IsUnquotedSheetNameChar(char ch)
         {
             if (Char.IsLetterOrDigit(ch))
@@ -1146,10 +1182,10 @@ namespace NPOI.SS.Formula
         }
         private void ResetPointer(int ptr)
         {
-            pointer = ptr;
-            if (pointer <= formulaLength)
+            _pointer = ptr;
+            if (_pointer <= formulaLength)
             {
-                look = formulaString[pointer - 1];
+                look = formulaString[_pointer - 1];
             }
             else
             {
@@ -1178,8 +1214,8 @@ namespace NPOI.SS.Formula
                 bool isFunc = FunctionMetadataRegistry.GetFunctionByName(str.ToUpper()) != null;
                 if (isFunc)
                 {
-                    int savePointer = pointer;
-                    ResetPointer(pointer + str.Length);
+                    int savePointer = _pointer;
+                    ResetPointer(_pointer + str.Length);
                     SkipWhite();
                     // open bracket indicates that the argument is a function,
                     // the returning value should be false, i.e. "not a valid cell reference"
@@ -1216,7 +1252,7 @@ namespace NPOI.SS.Formula
                 if (hName == null)
                 {
 
-                    nameToken = _book.GetNameXPtg(name);
+                    nameToken = _book.GetNameXPtg(name, -1);
                     if (nameToken == null)
                     {
                         throw new FormulaParseException("Name '" + name
@@ -1248,7 +1284,7 @@ namespace NPOI.SS.Formula
          * Generates the variable Function ptg for the formula.
          * 
          * For IF Formulas, Additional PTGs are Added To the Tokens
-	 * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
+     * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
          * @return Ptg a null is returned if we're in an IF formula, it needs extreme manipulation and is handled in this Function
          */
         private ParseNode GetFunction(String name, Ptg namePtg, ParseNode[] args)
@@ -1275,12 +1311,12 @@ namespace NPOI.SS.Formula
             }
             bool IsVarArgs = !fm.HasFixedArgsLength;
             int funcIx = fm.Index;
-		if (funcIx == FunctionMetadataRegistry.FUNCTION_INDEX_SUM && args.Length == 1) {
-			// Excel encodes the sum of a single argument as tAttrSum
-			// POI does the same for consistency, but this is not critical
-			return new ParseNode(AttrPtg.GetSumSingle(), args);
-			// The code below would encode tFuncVar(SUM) which seems to do no harm
-		}
+        if (funcIx == FunctionMetadataRegistry.FUNCTION_INDEX_SUM && args.Length == 1) {
+            // Excel encodes the sum of a single argument as tAttrSum
+            // POI does the same for consistency, but this is not critical
+            return new ParseNode(AttrPtg.GetSumSingle(), args);
+            // The code below would encode tFuncVar(SUM) which seems to do no harm
+        }
             ValidateNumArgs(args.Length, fm);
 
             AbstractFunctionPtg retval;
@@ -1951,13 +1987,13 @@ namespace NPOI.SS.Formula
          */
         private void Parse()
         {
-            pointer = 0;
+            _pointer = 0;
             GetChar();
             _rootNode = UnionExpression();
 
-            if (pointer <= formulaLength)
+            if (_pointer <= formulaLength)
             {
-                String msg = "Unused input [" + formulaString.Substring(pointer - 1)
+                String msg = "Unused input [" + formulaString.Substring(_pointer - 1)
                     + "] after attempting To Parse the formula [" + formulaString + "]";
                 throw new FormulaParseException(msg);
             }

@@ -110,7 +110,7 @@ namespace NPOI.XSSF.UserModel
             throw new NotImplementedException();
         }
 
-        public NameXPtg GetNameXPtg(String name)
+        public NameXPtg GetNameXPtg(String name, int sheetRefIndex)
         {
             IndexedUDFFinder udfFinder = (IndexedUDFFinder)GetUDFFinder();
             FreeRefFunction func = udfFinder.FindFunction(name);

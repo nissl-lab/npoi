@@ -44,7 +44,7 @@ namespace NPOI.SS.Formula
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        NameXPtg GetNameXPtg(String name);
+        NameXPtg GetNameXPtg(String name, int sheetRefIndex);
 
         /// <summary>
         /// Gets the externSheet index for a sheet from this workbook

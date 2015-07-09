@@ -2273,15 +2273,16 @@ namespace NPOI.HSSF.Model
             }
         }
         /**
-     *
-     * @param name the  name of an external function, typically a name of a UDF
-     * @param udf  locator of user-defiend functions to resolve names of VBA and Add-In functions
-     * @return the external name or null
-     */
-        public NameXPtg GetNameXPtg(String name, UDFFinder udf)
+         *
+         * @param name the  name of an external function, typically a name of a UDF
+         * @param sheetRefIndex the sheet ref index, or -1 if not known
+         * @param udf  locator of user-defiend functions to resolve names of VBA and Add-In functions
+         * @return the external name or null
+         */
+        public NameXPtg GetNameXPtg(String name, int sheetRefIndex, UDFFinder udf)
         {
             LinkTable lnk = OrCreateLinkTable;
-            NameXPtg xptg = lnk.GetNameXPtg(name);
+            NameXPtg xptg = lnk.GetNameXPtg(name, sheetRefIndex);
 
             if (xptg == null && udf.FindFunction(name) != null)
             {
@@ -2291,10 +2292,10 @@ namespace NPOI.HSSF.Model
             }
             return xptg;
         }
-        //public NameXPtg GetNameXPtg(String name)
-        //{
-        //    return OrCreateLinkTable.GetNameXPtg(name);
-        //}
+        public NameXPtg GetNameXPtg(String name, UDFFinder udf)
+        {
+            return GetNameXPtg(name, -1, udf);
+        }
         /** Gets the name record
          * @param index name index
          * @return name record

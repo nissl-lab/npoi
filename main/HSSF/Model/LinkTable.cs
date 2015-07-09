@@ -366,7 +366,13 @@ namespace NPOI.HSSF.Model
         {
             return _externSheetRecord.FindRefIndexFromExtBookIndex(extBookIndex);
         }
-        public NameXPtg GetNameXPtg(String name)
+        /**
+         * Finds the external name definition for the given name,
+         *  optionally restricted by externsheet index, and returns
+         *  (if found) as a NameXPtg.
+         * @param sheetRefIndex The Extern Sheet Index to look for, or -1 if any
+         */
+        public NameXPtg GetNameXPtg(String name, int sheetRefIndex)
         {
             // first find any external book block that contains the name:
             for (int i = 0; i < _externalBookBlocks.Length; i++)
@@ -376,11 +382,15 @@ namespace NPOI.HSSF.Model
                 {
                     continue;
                 }
-                // found it.
-                int sheetRefIndex = FindRefIndexFromExtBookIndex(i);
-                if (sheetRefIndex >= 0)
+                // Found one
+                int thisSheetRefIndex = FindRefIndexFromExtBookIndex(i);
+                if (thisSheetRefIndex >= 0)
                 {
-                    return new NameXPtg(sheetRefIndex, definedNameIndex);
+                    // Check for the sheet index match, if requested
+                    if (sheetRefIndex == -1 || thisSheetRefIndex == sheetRefIndex)
+                    {
+                        return new NameXPtg(thisSheetRefIndex, definedNameIndex);
+                    }
                 }
             }
             return null;
