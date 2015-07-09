@@ -24,6 +24,8 @@ using NPOI.SS.Formula.PTG;
 using NPOI.SS.Formula.Udf;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
+using NPOI.Util;
+using NPOI.SS.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -80,6 +82,23 @@ namespace NPOI.XSSF.UserModel
             return ConvertToExternalSheetIndex(sheetIndex);
         }
 
+        private int ResolveBookIndex(String bookName)
+        {
+            // Is it already in numeric form?
+            if (bookName.StartsWith("[") && bookName.EndsWith("]"))
+            {
+                bookName = bookName.Substring(1, bookName.Length - 2);
+                try
+                {
+                    return int.Parse(bookName);
+                }
+                catch (FormatException e) { }
+            }
+
+            // Look up an External Link Table for this name
+            throw new RuntimeException("Not implemented yet"); // TODO
+        }
+
         public IEvaluationName GetName(String name, int sheetIndex)
         {
             for (int i = 0; i < _uBook.NumberOfNames; i++)
@@ -110,7 +129,7 @@ namespace NPOI.XSSF.UserModel
             throw new NotImplementedException();
         }
 
-        public NameXPtg GetNameXPtg(String name, int sheetRefIndex)
+        public NameXPtg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             IndexedUDFFinder udfFinder = (IndexedUDFFinder)GetUDFFinder();
             FreeRefFunction func = udfFinder.FindFunction(name);
@@ -131,7 +150,25 @@ namespace NPOI.XSSF.UserModel
                 return null;
             }
         }
+        public Ptg Get3DReferencePtg(CellReference cell, SheetIdentifier sheet)
+        {
+            String sheetName = sheet._sheetIdentifier.Name;
 
+            if (sheet._bookName != null)
+            {
+                int bookIndex = ResolveBookIndex(sheet._bookName);
+                return new Ref3DPxg(bookIndex, sheetName, cell);
+            }
+            else
+            {
+                return new Ref3DPxg(sheetName, cell);
+            }
+        }
+        public Ptg Get3DReferencePtg(AreaReference area, SheetIdentifier sheet)
+        {
+            // TODO Implement properly
+            return new Area3DPtg(area, GetExternalSheetIndex(sheet._sheetIdentifier.Name));
+        }
         public String ResolveNameXText(NameXPtg n)
         {
             int idx = n.NameIndex;

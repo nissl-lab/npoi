@@ -56,118 +56,9 @@ namespace NPOI.SS.Formula
      * <term> ::= <factor>  [ <mulop> <factor> ]*
      * <factor> ::= <number> | (<expression>) | <cellRef> | <function>
      * <function> ::= <functionName> ([expression [, expression]*])
-     *
-     *  @author Avik Sengupta (avik at apache dot org)
-     *  @author Andrew C. oliver (acoliver at apache dot org)
-     *  @author Eric Ladner (eladner at goldinc dot com)
-     *  @author Cameron Riley (criley at ekmail.com)
-     *  @author Peter M. Murray (pete at quantrix dot com)
-     *  @author Pavel Krupets (pkrupets at palmtreebusiness dot com)
-     *  @author Josh Micich
      */
     public class FormulaParser
     {
-        private class Identifier
-        {
-            private String _name;
-            private bool _isQuoted;
-
-            public Identifier(String name, bool IsQuoted)
-            {
-                _name = name;
-                _isQuoted = IsQuoted;
-            }
-            public String Name
-            {
-                get
-                {
-                    return _name;
-                }
-            }
-            public bool IsQuoted
-            {
-                get
-                {
-                    return _isQuoted;
-                }
-            }
-            public override String ToString()
-            {
-                StringBuilder sb = new StringBuilder(64);
-                sb.Append(GetType().Name);
-                sb.Append(" [");
-                if (_isQuoted)
-                {
-                    sb.Append("'").Append(_name).Append("'");
-                }
-                else
-                {
-                    sb.Append(_name);
-                }
-                sb.Append("]");
-                return sb.ToString();
-            }
-        }
-        private class SheetIdentifier
-        {
-            private String _bookName;
-            private Identifier _sheetIdentifier;
-            public SheetIdentifier(String bookName, Identifier sheetIdentifier)
-            {
-                _bookName = bookName;
-                _sheetIdentifier = sheetIdentifier;
-            }
-            public String BookName
-            {
-                get
-                {
-                    return _bookName;
-                }
-            }
-            public Identifier SheetID
-            {
-                get
-                {
-                    return _sheetIdentifier;
-                }
-            }
-            private void AsFormulaString(StringBuilder sb)
-            {
-                if (_bookName != null)
-                {
-                    sb.Append(" [").Append(_sheetIdentifier.Name).Append("]");
-                }
-                if (_sheetIdentifier.IsQuoted)
-                {
-                    sb.Append("'").Append(_sheetIdentifier.Name).Append("'");
-                }
-                else
-                {
-                    sb.Append(_sheetIdentifier.Name);
-                }
-            }
-
-            public String AsFormulaString()
-            {
-                StringBuilder sb = new StringBuilder(32);
-                AsFormulaString(sb);
-                return sb.ToString();
-            }
-
-            public override String ToString()
-            {
-                StringBuilder sb = new StringBuilder(64);
-                sb.Append(this.GetType().Name);
-                sb.Append(" [");
-                AsFormulaString(sb);
-                sb.Append("]");
-                return sb.ToString();
-            }
-        }
-
-
-
-
         private String formulaString;
         private int formulaLength;
         private int _pointer;
@@ -605,8 +496,7 @@ namespace NPOI.SS.Formula
                             throw new FormulaParseException("Cell reference or Named Range "
                                     + "expected after sheet name at index " + _pointer + ".");
                         }
-                        int extIx = GetSheetExtIx(sheetIden);
-                        NameXPtg nameXPtg = _book.GetNameXPtg(name, extIx);
+                        NameXPtg nameXPtg = _book.GetNameXPtg(name, sheetIden);
                         if (nameXPtg == null)
                         {
                             throw new FormulaParseException("Specified name '" + name +
@@ -655,7 +545,7 @@ namespace NPOI.SS.Formula
                         }
                         else
                         {
-                            prefix = "'" + sheetIden.SheetID.Name + '!';
+                            prefix = "'" + sheetIden.SheetId.Name + '!';
                         }
                         throw new FormulaParseException(prefix + part1.Rep + "' is not a proper reference.");
                     }
@@ -794,7 +684,7 @@ namespace NPOI.SS.Formula
             }
             else
             {
-                String sName = sheetIden.SheetID.Name;
+                String sName = sheetIden.SheetId.Name;
                 if (sheetIden.BookName == null)
                 {
                     extIx = _book.GetExternalSheetIndex(sName);
@@ -816,8 +706,6 @@ namespace NPOI.SS.Formula
         private ParseNode CreateAreaRefParseNode(SheetIdentifier sheetIden, SimpleRangePart part1,
                 SimpleRangePart part2)
         {
-            int extIx = GetSheetExtIx(sheetIden);
-
             Ptg ptg;
             if (part2 == null)
             {
@@ -828,7 +716,7 @@ namespace NPOI.SS.Formula
                 }
                 else
                 {
-                    ptg = new Ref3DPtg(cr, extIx);
+                    ptg = _book.Get3DReferencePtg(cr, sheetIden);
                 }
             }
             else
@@ -841,7 +729,7 @@ namespace NPOI.SS.Formula
                 }
                 else
                 {
-                    ptg = new Area3DPtg(areaRef, extIx);
+                    ptg = _book.Get3DReferencePtg(areaRef, sheetIden);
                 }
             }
             return new ParseNode(ptg);
@@ -1132,7 +1020,7 @@ namespace NPOI.SS.Formula
                     }
                 }
 
-                Identifier iden = new Identifier(sb.ToString(), true);
+                NameIdentifier iden = new NameIdentifier(sb.ToString(), true);
                 // quoted identifier - can't concatenate anything more
                 SkipWhite();
                 if (look == '!')
@@ -1157,7 +1045,7 @@ namespace NPOI.SS.Formula
                 if (look == '!')
                 {
                     GetChar();
-                    return new SheetIdentifier(bookName, new Identifier(sb.ToString(), false));
+                    return new SheetIdentifier(bookName, new NameIdentifier(sb.ToString(), false));
                 }
                 return null;
             }
@@ -1252,7 +1140,7 @@ namespace NPOI.SS.Formula
                 if (hName == null)
                 {
 
-                    nameToken = _book.GetNameXPtg(name, -1);
+                    nameToken = _book.GetNameXPtg(name, null);
                     if (nameToken == null)
                     {
                         throw new FormulaParseException("Name '" + name

@@ -96,7 +96,7 @@ namespace NPOI.XSSF.UserModel
 
         [Test]
         [Ignore("Work in progress, see bug #56737")]
-        public void formulaReferencesOtherSheets()
+        public void FormulaReferencesOtherSheets()
         {
             // Use a test file with the named ranges in place
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref-56737.xlsx");
@@ -106,9 +106,9 @@ namespace NPOI.XSSF.UserModel
             // Reference to a single cell in a different sheet
             ptgs = Parse(fpb, "Uses!A1");
             Assert.AreEqual(1, ptgs.Length);
-            Assert.AreEqual(typeof(Ref3DPtg), ptgs[0].GetType());
-            Assert.AreEqual("A1", ((Ref3DPtg)ptgs[0]).Format2DRefAsString());
-            Assert.AreEqual("Uses!A1", ((Ref3DPtg)ptgs[0]).ToFormulaString(fpb));
+            Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
+            Assert.AreEqual("A1", ((Ref3DPxg)ptgs[0]).Format2DRefAsString());
+            Assert.AreEqual("Uses!A1", ((Ref3DPxg)ptgs[0]).ToFormulaString());
 
             // Reference to a sheet scoped named range from another sheet
             ptgs = Parse(fpb, "Defines!NR_To_A1");
@@ -123,7 +123,7 @@ namespace NPOI.XSSF.UserModel
 
         [Test]
         [Ignore("Work in progress, see bug #56737")]
-        public void fFormaulReferncesSameWorkbook()
+        public void FFormaulReferncesSameWorkbook()
         {
             // Use a test file with "other workbook" style references
             //  to itself
@@ -140,7 +140,7 @@ namespace NPOI.XSSF.UserModel
 
         [Test]
         [Ignore("Work in progress, see bug #56737")]
-        public void formulaReferencesOtherWorkbook()
+        public void FormulaReferencesOtherWorkbook()
         {
             // Use a test file with the external linked table in place
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref-56737.xlsx");

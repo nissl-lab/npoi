@@ -749,6 +749,11 @@ namespace NPOI.SS.Formula
                 Area3DPtg aptg = (Area3DPtg)ptg;
                 return ec.GetArea3DEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn, aptg.ExternSheetIndex);
             }
+
+            if (ptg is Ref3DPxg) {
+                Ref3DPtg rptg = (Ref3DPtg) ptg;
+                // TODO Return the right eval, should be easy as we already know the sheet details
+            }
             if (ptg is RefPtg)
             {
                 RefPtg rptg = (RefPtg)ptg;

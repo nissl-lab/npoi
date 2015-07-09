@@ -27,6 +27,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
 using NPOI.Util;
+    using NPOI.SS.Util;
    
     /**
      * Internal POI use only
@@ -67,11 +68,22 @@ using NPOI.Util;
         {
             return _iBook.GetExternalName(externSheetIndex, externNameIndex);
         }
-
-        public NameXPtg GetNameXPtg(String name, int sheetRefIndex)
+        public Ptg Get3DReferencePtg(CellReference cr, SheetIdentifier sheet)
         {
+            int extIx = GetSheetExtIx(sheet);
+            return new Ref3DPtg(cr, extIx);
+        }
+        public Ptg Get3DReferencePtg(AreaReference areaRef, SheetIdentifier sheet)
+        {
+            int extIx = GetSheetExtIx(sheet);
+            return new Area3DPtg(areaRef, extIx);
+        }
+        public NameXPtg GetNameXPtg(String name, SheetIdentifier sheet)
+        {
+            int sheetRefIndex = GetSheetExtIx(sheet);
             return _iBook.GetNameXPtg(name, sheetRefIndex, _uBook.GetUDFFinder());
         }
+
 
         public IEvaluationName GetName(String name,int sheetIndex)
         {
@@ -210,7 +222,27 @@ using NPOI.Util;
                 return new NamePtg(_index);
             }
         }
-
+        private int GetSheetExtIx(SheetIdentifier sheetIden)
+        {
+            int extIx;
+            if (sheetIden == null)
+            {
+                extIx = -1;
+            }
+            else
+            {
+                String sName = sheetIden.SheetId.Name;
+                if (sheetIden.BookName == null)
+                {
+                    extIx = GetExternalSheetIndex(sName);
+                }
+                else
+                {
+                    extIx = GetExternalSheetIndex(sheetIden.BookName, sName);
+                }
+            }
+            return extIx;
+        }
         public SpreadsheetVersion GetSpreadsheetVersion()
         {
             return SpreadsheetVersion.EXCEL97;
