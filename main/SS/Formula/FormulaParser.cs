@@ -459,6 +459,9 @@ namespace NPOI.SS.Formula
          *   123.456
          *   "abc"
          *   true
+         *   [Foo.xls]!$A$1
+         *   [Foo.xls]'my sheet'!$A$1
+         *   [Foo.xls]!my.named.range
          * </pre>
          *
          */
@@ -1051,6 +1054,13 @@ namespace NPOI.SS.Formula
                     return new SheetIdentifier(bookName, new NameIdentifier(sb.ToString(), false));
                 }
                 return null;
+            }
+
+            if (look == '!' && bookName != null)
+            {
+                // Raw book reference, wihtout a sheet
+                GetChar();
+                return new SheetIdentifier(bookName, null);
             }
             return null;
         }

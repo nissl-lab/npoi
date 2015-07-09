@@ -56,7 +56,10 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append("workbook=").Append(ExternalWorkbookNumber);
                 sb.Append("] ");
             }
-            sb.Append("sheet=").Append(SheetName);
+            if (SheetName != null)
+            {
+                sb.Append("sheet=").Append(SheetName);
+            }
             sb.Append(" ! ");
             sb.Append("name=");
             sb.Append(nameName);

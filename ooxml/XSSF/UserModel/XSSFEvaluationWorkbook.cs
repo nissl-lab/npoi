@@ -84,19 +84,21 @@ namespace NPOI.XSSF.UserModel
 
         private int ResolveBookIndex(String bookName)
         {
-            // Is it already in numeric form?
+            // Strip the [] wrapper, if still present
             if (bookName.StartsWith("[") && bookName.EndsWith("]"))
             {
                 bookName = bookName.Substring(1, bookName.Length - 2);
-                try
-                {
-                    return int.Parse(bookName);
-                }
-                catch (FormatException e) { }
             }
+            // Is it already in numeric form?
+            try
+            {
+                return int.Parse(bookName);
+            }
+            catch (FormatException e) { }
+            
 
             // Look up an External Link Table for this name
-            throw new RuntimeException("Not implemented yet"); // TODO
+            throw new RuntimeException("Not implemented yet for book " + bookName); // TODO
         }
 
         public IEvaluationName GetName(String name, int sheetIndex)
@@ -139,6 +141,14 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Otherwise, try it as a named range
+            if (sheet._sheetIdentifier == null)
+            {
+                // Workbook + Named Range only
+                int bookIndex = ResolveBookIndex(sheet._bookName);
+                return new NameXPxg(bookIndex, null, name);
+            }
+
+            // Use the sheetname and process
             String sheetName = sheet._sheetIdentifier.Name;
 
             if (sheet._bookName != null)

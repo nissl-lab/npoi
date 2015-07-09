@@ -93,6 +93,24 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[0] is IntPtg);
             Assert.IsTrue(ptgs[1] is FuncPtg);
         }
+        [Test]
+        public void FormaulReferncesSameWorkbook()
+        {
+            // Use a test file with "other workbook" style references
+            //  to itself
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56737.xlsx");
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+
+            // Reference to a named range in our own workbook, as if it
+            // were defined in a different workbook
+            ptgs = Parse(fpb, "[0]!NR_Global_B2");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(typeof(NameXPxg), ptgs[0].GetType());
+            Assert.AreEqual(null, ((NameXPxg)ptgs[0]).SheetName);
+            Assert.AreEqual("NR_Global_B2", ((NameXPxg)ptgs[0]).NameName);
+            Assert.AreEqual("[0]!NR_Global_B2", ((NameXPxg)ptgs[0]).ToFormulaString());
+        }
 
         [Test]
         [Ignore("Work in progress, see bug #56737")]
