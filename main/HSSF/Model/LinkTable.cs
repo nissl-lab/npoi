@@ -114,7 +114,7 @@ namespace NPOI.HSSF.Model
         private class ExternalBookBlock
         {
             private SupBookRecord _externalBookRecord;
-            private ExternalNameRecord[] _externalNameRecords;
+            internal ExternalNameRecord[] _externalNameRecords;
             private CRNBlock[] _crnBlocks;
             /**
          * Create a new block for registering add-in functions
@@ -605,7 +605,8 @@ namespace NPOI.HSSF.Model
             }
 
             // Does it exist via the external book block?
-            if (_externalBookBlocks.Length > extBookIndex)
+            ExternalBookBlock externalBook = _externalBookBlocks[extBookIndex];
+            if (externalBook._externalNameRecords.Length > definedNameIndex)
             {
                 return _externalBookBlocks[extBookIndex].GetNameText(definedNameIndex);
             }
