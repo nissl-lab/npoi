@@ -2733,12 +2733,14 @@ namespace NPOI.XSSF.UserModel
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
 
             int sheetIndex = Workbook.GetSheetIndex(this);
-            FormulaShifter Shifter = FormulaShifter.CreateForRowShift(sheetIndex, startRow, endRow, n);
+            String sheetName = Workbook.GetSheetName(sheetIndex);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(
+                                       sheetIndex, sheetName, startRow, endRow, n);
 
-            rowShifter.UpdateNamedRanges(Shifter);
-            rowShifter.UpdateFormulas(Shifter);
+            rowShifter.UpdateNamedRanges(shifter);
+            rowShifter.UpdateFormulas(shifter);
             rowShifter.ShiftMerged(startRow, endRow, n);
-            rowShifter.UpdateConditionalFormatting(Shifter);
+            rowShifter.UpdateConditionalFormatting(shifter);
 
             //rebuild the _rows map 
             SortedList<int, XSSFRow> map = new SortedList<int, XSSFRow>();

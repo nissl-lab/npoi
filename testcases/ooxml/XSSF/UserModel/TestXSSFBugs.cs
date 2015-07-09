@@ -234,10 +234,11 @@ using NPOI.SS.Formula.Eval;
          * TODO: delete this Test case when MROUND and VAR are implemented
          */
         [Test]
-        public void Test48539()
+        public void Bug48539()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48539.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);
+            Assert.AreEqual(0, wb.NumberOfNames);
 
             // Try each cell individually
             XSSFFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
@@ -250,7 +251,16 @@ using NPOI.SS.Formula.Eval;
                     {
                         if (c.CellType == CellType.Formula)
                         {
-                            CellValue cv = eval.Evaluate(c);
+                            String formula = c.CellFormula;
+                            CellValue cv;
+                            try
+                            {
+                                cv = eval.Evaluate(c);
+                            }
+                            catch (Exception e)
+                            {
+                                throw new RuntimeException("Can't evaluate formula: " + formula, e);
+                            }
                             if (cv.CellType == CellType.Numeric)
                             {
                                 // assert that the calculated value agrees with

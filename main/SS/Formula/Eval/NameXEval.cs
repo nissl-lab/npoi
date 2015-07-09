@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.Eval
     using NPOI.SS.Formula.PTG;
 
     /**
-     * @author Josh Micich
+     * Evaluation of a Name defined in a Sheet or Workbook scope
      */
     public class NameXEval : ValueEval
     {

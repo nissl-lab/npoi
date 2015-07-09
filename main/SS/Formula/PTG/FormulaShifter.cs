@@ -37,46 +37,64 @@ namespace NPOI.SS.Formula
          * Extern sheet index of sheet where moving is occurring
          */
         private int _externSheetIndex;
+        /**
+         * Sheet name of the sheet where moving is occurring, 
+         *  used for updating XSSF style 3D references on row shifts.
+         */
+        private String _sheetName;
         private int _firstMovedIndex;
         private int _lastMovedIndex;
         private int _amountToMove;
         private int _srcSheetIndex;
         private int _dstSheetIndex;
          private ShiftMode _mode;
-        private FormulaShifter(int externSheetIndex, int firstMovedIndex, int lastMovedIndex, int amountToMove)
-        {
-            if (amountToMove == 0)
-            {
-                throw new ArgumentException("amountToMove must not be zero");
-            }
-            if (firstMovedIndex > lastMovedIndex)
-            {
-                throw new ArgumentException("firstMovedIndex, lastMovedIndex out of order");
-            }
-            _externSheetIndex = externSheetIndex;
-            _firstMovedIndex = firstMovedIndex;
-            _lastMovedIndex = lastMovedIndex;
-            _amountToMove = amountToMove;
-            _mode = ShiftMode.Row;
 
-            _srcSheetIndex = _dstSheetIndex = -1;
-        }
+         /**
+          * Create an instance for Shifting row.
+          *
+          * For example, this will be called on {@link NPOI.HSSF.UserModel.HSSFSheet#ShiftRows(int, int, int)} }
+          */
+         private FormulaShifter(int externSheetIndex, String sheetName, int firstMovedIndex, int lastMovedIndex, int amountToMove)
+         {
+             if (amountToMove == 0)
+             {
+                 throw new ArgumentException("amountToMove must not be zero");
+             }
+             if (firstMovedIndex > lastMovedIndex)
+             {
+                 throw new ArgumentException("firstMovedIndex, lastMovedIndex out of order");
+             }
+             _externSheetIndex = externSheetIndex;
+             _sheetName = sheetName;
+             _firstMovedIndex = firstMovedIndex;
+             _lastMovedIndex = lastMovedIndex;
+             _amountToMove = amountToMove;
+             _mode = ShiftMode.Row;
+
+             _srcSheetIndex = _dstSheetIndex = -1;
+         }
+
         /**
-    * Create an instance for shifting sheets.
-    *
-    * For example, this will be called on {@link org.apache.poi.hssf.usermodel.HSSFWorkbook#setSheetOrder(String, int)}  
-    */
+        * Create an instance for shifting sheets.
+        *
+        * For example, this will be called on {@link org.apache.poi.hssf.usermodel.HSSFWorkbook#setSheetOrder(String, int)}  
+        */
         private FormulaShifter(int srcSheetIndex, int dstSheetIndex)
         {
             _externSheetIndex = _firstMovedIndex = _lastMovedIndex = _amountToMove = -1;
+            _sheetName = null;
 
             _srcSheetIndex = srcSheetIndex;
             _dstSheetIndex = dstSheetIndex;
             _mode = ShiftMode.Sheet;
         }
+        public static FormulaShifter CreateForRowShift(int externSheetIndex, String sheetName, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove)
+        {
+            return new FormulaShifter(externSheetIndex, sheetName, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove);
+        }
         public static FormulaShifter CreateForRowShift(int externSheetIndex, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove)
         {
-            return new FormulaShifter(externSheetIndex, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove);
+            return new FormulaShifter(externSheetIndex, null, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove);
         }
         public static FormulaShifter CreateForSheetShift(int srcSheetIndex, int dstSheetIndex)
         {

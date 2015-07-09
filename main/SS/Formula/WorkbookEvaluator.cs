@@ -625,11 +625,11 @@ namespace NPOI.SS.Formula
             return result;
         }
         /**
- * Calculates the number of tokens that the evaluator should skip upon reaching a tAttrSkip.
- *
- * @return the number of tokens (starting from <c>startIndex+1</c>) that need to be skipped
- * to achieve the specified <c>distInBytes</c> skip distance.
- */
+         * Calculates the number of tokens that the evaluator should skip upon reaching a tAttrSkip.
+         *
+         * @return the number of tokens (starting from <c>startIndex+1</c>) that need to be skipped
+         * to achieve the specified <c>distInBytes</c> skip distance.
+         */
         private static int CountTokensToBeSkipped(Ptg[] ptgs, int startIndex, int distInBytes)
         {
             int remBytes = distInBytes;
@@ -709,7 +709,28 @@ namespace NPOI.SS.Formula
                     return eval;
                 }
             }
+            if (ptg is NameXPxg)
+            {
+                // TODO This is a temporary hack....
+                NameXPxg pxg = (NameXPxg)ptg;
+                int sIdx = -1;
+                if (pxg.SheetName != null)
+                {
+                    sIdx = _workbook.GetSheetIndex(pxg.SheetName);
+                }
+                IEvaluationName evalName = _workbook.GetName(pxg.NameName, sIdx);
+                if (evalName == null)
+                {
+                    // We don't know about that name, sorry
+                    // TODO What about UDFs?
+                    Console.WriteLine("Unknown Name referenced: " + pxg.NameName);
+                    return ErrorEval.NAME_INVALID;
+                }
 
+                int nIdx = evalName.CreatePtg().Index;
+                NameXPtg nptg = new NameXPtg(sIdx, nIdx);
+                return GetEvalForPtg(nptg, ec);
+            }
             if (ptg is IntPtg)
             {
                 return new NumberEval(((IntPtg)ptg).Value);
