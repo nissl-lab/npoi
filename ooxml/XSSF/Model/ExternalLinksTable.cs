@@ -88,6 +88,46 @@ namespace NPOI.XSSF.Model
             }
         }
 
+        /**
+         * get or set the last recorded name of the file that this
+         *  is linked to
+         */
+        public String LinkedFileName
+        {
+            get
+            {
+                String rId = link.externalBook.id;
+                PackageRelationship rel = GetPackagePart().GetRelationship(rId);
+                if (rel != null && rel.TargetMode == TargetMode.External)
+                {
+                    return rel.TargetUri.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                String rId = link.externalBook.id;
+
+                if (string.IsNullOrEmpty(rId))
+                {
+                    // We're a new External Link Table, so nothing to remove
+                }
+                else
+                {
+                    // Relationships can't be changed, so remove the old one
+                    GetPackagePart().RemoveRelationship(rId);
+                }
+
+                // Have a new one added
+                PackageRelationship newRel = GetPackagePart().AddExternalRelationship(
+                                        value, PackageRelationshipTypes.EXTERNAL_LINK_PATH);
+                link.externalBook.id = (newRel.Id);
+            }
+        }
+
 
         public List<String> SheetNames
         {

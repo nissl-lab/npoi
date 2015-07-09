@@ -198,6 +198,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.bookViewsField != null;
         }
+
+        public bool IsSetExternalReferences()
+        {
+            return this.externalReferencesField != null;
+        }
+
         public bool IsSetDefinedNames()
         {
             return this.definedNamesField != null;

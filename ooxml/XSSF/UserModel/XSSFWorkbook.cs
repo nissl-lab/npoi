@@ -118,9 +118,9 @@ namespace NPOI.XSSF.UserModel
         private CalculationChain calcChain;
 
         /**
-         * External Links, for referencing names or cells in other workbooks
+         * External Links, for referencing names or cells in other workbooks.
          */
-        private ExternalLinksTable externalLinks;
+        private List<ExternalLinksTable> externalLinks;
 
         /**
          * A collection of custom XML mappings
@@ -278,17 +278,21 @@ namespace NPOI.XSSF.UserModel
                 this.workbook = doc.Workbook;
 
                 Dictionary<String, XSSFSheet> shIdMap = new Dictionary<String, XSSFSheet>();
+                Dictionary<String, ExternalLinksTable> elIdMap = new Dictionary<String, ExternalLinksTable>();
                 foreach (POIXMLDocumentPart p in GetRelations())
                 {
                     if (p is SharedStringsTable) sharedStringSource = (SharedStringsTable)p;
                     else if (p is StylesTable) stylesSource = (StylesTable)p;
                     else if (p is ThemesTable) theme = (ThemesTable)p;
                     else if (p is CalculationChain) calcChain = (CalculationChain)p;
-                    else if (p is ExternalLinksTable) externalLinks = (ExternalLinksTable)p;
                     else if (p is MapInfo) mapInfo = (MapInfo)p;
                     else if (p is XSSFSheet)
                     {
                         shIdMap.Add(p.GetPackageRelationship().Id,(XSSFSheet)p);
+                    }
+                    else if (p is ExternalLinksTable)
+                    {
+                        elIdMap.Add(p.GetPackageRelationship().Id, (ExternalLinksTable)p);
                     }
                 }
                 if (stylesSource == null)
@@ -304,7 +308,8 @@ namespace NPOI.XSSF.UserModel
                     sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
                 }
 
-                // Load individual sheets. The order of sheets is defined by the order of CT_Sheet elements in the workbook
+                // Load individual sheets. The order of sheets is defined by the order
+                //  of CTSheet elements in the workbook
                 sheets = new List<XSSFSheet>(shIdMap.Count);
                 foreach (CT_Sheet ctSheet in this.workbook.sheets.sheet)
                 {
@@ -318,7 +323,24 @@ namespace NPOI.XSSF.UserModel
                     sh.OnDocumentRead();
                     sheets.Add(sh);
                 }
-
+                // Load the external links tables. Their order is defined by the order 
+                //  of CTExternalReference elements in the workbook
+                externalLinks = new List<ExternalLinksTable>(elIdMap.Count);
+                if (this.workbook.IsSetExternalReferences())
+                {
+                    foreach (CT_ExternalReference er in this.workbook.externalReferences.externalReference)
+                    {
+                        ExternalLinksTable el = null;
+                        if(elIdMap.ContainsKey(er.id))
+                            el = elIdMap[(er.id)];
+                        if (el == null)
+                        {
+                            logger.Log(POILogger.WARN, "ExternalLinksTable with r:id " + er.id + " was defined, but didn't exist in package, skipping");
+                            continue;
+                        }
+                        externalLinks.Add(el);
+                    }
+                }
                 // Process the named ranges
                 ReprocessNamedRanges();
             }
@@ -1618,16 +1640,19 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Returns the {@link ExternalLinksTable} object for this workbook.
+         * Returns the list of {@link ExternalLinksTable} object for this workbook
          * 
          * <p>The external links table specifies details of named ranges etc
          *  that are referenced from other workbooks, along with the last seen
          *  values of what they point to.</p>
          *
-         * @return the <code>ExternalLinksTable</code> object or <code>null</code> if not defined
-         */
+         * <p>Note that Excel uses index 0 for the current workbook, so the first
+         *  External Links in a formula would be '[1]Foo' which corresponds to
+         *  entry 0 in this list.</p>
 
-        public ExternalLinksTable ExternalLinksTable
+         * @return the <code>ExternalLinksTable</code> list, which may be empty
+         */
+        public List<ExternalLinksTable> ExternalLinksTable
         {
             get
             {
