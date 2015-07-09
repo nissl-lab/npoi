@@ -112,6 +112,7 @@
     <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
     <Compile Include="XSSF\Model\TestCalculationChain.cs" />
     <Compile Include="XSSF\Model\TestCommentsTable.cs" />
+    <Compile Include="XSSF\Model\TestExternalLinksTable.cs" />
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />

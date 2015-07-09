@@ -118,6 +118,11 @@ namespace NPOI.XSSF.UserModel
         private CalculationChain calcChain;
 
         /**
+         * External Links, for referencing names or cells in other workbooks
+         */
+        private ExternalLinksTable externalLinks;
+
+        /**
          * A collection of custom XML mappings
          */
         private MapInfo mapInfo;
@@ -279,6 +284,7 @@ namespace NPOI.XSSF.UserModel
                     else if (p is StylesTable) stylesSource = (StylesTable)p;
                     else if (p is ThemesTable) theme = (ThemesTable)p;
                     else if (p is CalculationChain) calcChain = (CalculationChain)p;
+                    else if (p is ExternalLinksTable) externalLinks = (ExternalLinksTable)p;
                     else if (p is MapInfo) mapInfo = (MapInfo)p;
                     else if (p is XSSFSheet)
                     {
@@ -1609,6 +1615,24 @@ namespace NPOI.XSSF.UserModel
         public CalculationChain GetCalculationChain()
         {
             return calcChain;
+        }
+
+        /**
+         * Returns the {@link ExternalLinksTable} object for this workbook.
+         * 
+         * <p>The external links table specifies details of named ranges etc
+         *  that are referenced from other workbooks, along with the last seen
+         *  values of what they point to.</p>
+         *
+         * @return the <code>ExternalLinksTable</code> object or <code>null</code> if not defined
+         */
+
+        public ExternalLinksTable ExternalLinksTable
+        {
+            get
+            {
+                return externalLinks;
+            }
         }
 
         /**
