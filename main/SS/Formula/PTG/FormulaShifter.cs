@@ -92,10 +92,7 @@ namespace NPOI.SS.Formula
         {
             return new FormulaShifter(externSheetIndex, sheetName, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove);
         }
-        public static FormulaShifter CreateForRowShift(int externSheetIndex, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove)
-        {
-            return new FormulaShifter(externSheetIndex, null, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove);
-        }
+
         public static FormulaShifter CreateForSheetShift(int srcSheetIndex, int dstSheetIndex)
         {
             return new FormulaShifter(srcSheetIndex, dstSheetIndex);
@@ -171,6 +168,17 @@ namespace NPOI.SS.Formula
                 }
                 return RowMoveRefPtg(rptg);
             }
+
+            if (ptg is Ref3DPxg)
+            {
+                Ref3DPxg rpxg = (Ref3DPxg)ptg;
+                if (rpxg.ExternalWorkbookNumber > 0 ||
+                       !_sheetName.Equals(rpxg.SheetName))
+                {
+                    // only move 3D refs that refer to the sheet with cells being moved
+                }
+                return RowMoveRefPtg(rpxg);
+            }
             if (ptg is Area2DPtgBase)
             {
                 if (currentExternSheetIx != _externSheetIndex)
@@ -190,6 +198,18 @@ namespace NPOI.SS.Formula
                     return null;
                 }
                 return RowMoveAreaPtg(aptg);
+            }
+
+            if (ptg is Area3DPxg)
+            {
+                Area3DPxg apxg = (Area3DPxg)ptg;
+                if (apxg.ExternalWorkbookNumber > 0 ||
+                        !_sheetName.Equals(apxg.SheetName))
+                {
+                    // only move 3D refs that refer to the sheet with cells being moved
+                    return null;
+                }
+                return RowMoveAreaPtg(apxg);
             }
             return null;
         }
@@ -411,7 +431,16 @@ namespace NPOI.SS.Formula
                 Area3DPtg area3DPtg = (Area3DPtg)ptg;
                 return new DeletedArea3DPtg(area3DPtg.ExternSheetIndex);
             }
-
+            if (ptg is Ref3DPxg)
+            {
+                Ref3DPxg pxg = (Ref3DPxg)ptg;
+                return new Deleted3DPxg(pxg.ExternalWorkbookNumber, pxg.SheetName);
+            }
+            if (ptg is Area3DPxg)
+            {
+                Area3DPxg pxg = (Area3DPxg)ptg;
+                return new Deleted3DPxg(pxg.ExternalWorkbookNumber, pxg.SheetName);
+            }
             throw new ArgumentException("Unexpected ref ptg class (" + ptg.GetType().Name + ")");
         }
     }

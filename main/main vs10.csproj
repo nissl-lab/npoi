@@ -234,6 +234,7 @@
     <Compile Include="SS\Formula\Functions\WeekNum.cs" />
     <Compile Include="SS\Formula\NameIdentifier.cs" />
     <Compile Include="SS\Formula\PTG\Area3DPxg.cs" />
+    <Compile Include="SS\Formula\PTG\Deleted3DPxg.cs" />
     <Compile Include="SS\Formula\PTG\NameXPxg.cs" />
     <Compile Include="SS\Formula\PTG\Ref3DPxg.cs" />
     <Compile Include="SS\Formula\SheetIdentifier.cs" />
@@ -793,8 +794,8 @@
     <Compile Include="SS\Formula\Eval\FunctionEval.cs" />
     <Compile Include="SS\Formula\Eval\IntersectionEval.cs" />
     <Compile Include="SS\Formula\Eval\MissingArgEval.cs" />
-    <Compile Include="SS\Formula\Eval\NameEval.cs" />
-    <Compile Include="SS\Formula\Eval\NameXEval.cs" />
+    <Compile Include="SS\Formula\Eval\FunctionNameEval.cs" />
+    <Compile Include="SS\Formula\Eval\ExternalNameEval.cs" />
     <Compile Include="SS\Formula\Eval\NumberEval.cs" />
     <Compile Include="SS\Formula\Eval\NumericOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\NumericValueEval.cs" />

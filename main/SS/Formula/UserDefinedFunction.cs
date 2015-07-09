@@ -24,9 +24,9 @@ namespace NPOI.SS.Formula
 
             ValueEval nameArg = args[0];
             String functionName = string.Empty ;
-            if (nameArg is NameEval)
+            if (nameArg is FunctionNameEval)
             {
-                functionName = ((NameEval)nameArg).FunctionName;
+                functionName = ((FunctionNameEval)nameArg).FunctionName;
             }
             else
             {

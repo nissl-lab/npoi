@@ -104,7 +104,7 @@ namespace TestCases.SS.Formula
                 int expectedAreaFirstRow, int expectedAreaLastRow)
         {
 
-            FormulaShifter fs = FormulaShifter.CreateForRowShift(0, firstRowMoved, lastRowMoved, numberRowsMoved);
+            FormulaShifter fs = FormulaShifter.CreateForRowShift(0,"", firstRowMoved, lastRowMoved, numberRowsMoved);
             bool expectedChanged = aptg.FirstRow != expectedAreaFirstRow || aptg.LastRow != expectedAreaLastRow;
 
             AreaPtg copyPtg = (AreaPtg)aptg.Copy(); // clone so we can re-use aptg in calling method

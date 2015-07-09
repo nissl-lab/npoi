@@ -22,17 +22,17 @@ namespace NPOI.SS.Formula.Eval
     /**
      * @author Josh Micich
      */
-    public class NameEval : ValueEval
+    public class FunctionNameEval : ValueEval
     {
 
-	    private String _functionName;
+        private String _functionName;
 
-	    /**
-	     * Creates a NameEval representing a function name
-	     */
-	    public NameEval(String functionName) {
-		    _functionName = functionName;
-	    }
+        /**
+         * Creates a NameEval representing a function name
+         */
+        public FunctionNameEval(String functionName) {
+            _functionName = functionName;
+        }
 
         public String FunctionName
         {

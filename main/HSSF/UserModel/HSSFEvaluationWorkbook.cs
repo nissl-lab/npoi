@@ -68,6 +68,11 @@ using NPOI.Util;
         {
             return _iBook.GetExternalName(externSheetIndex, externNameIndex);
         }
+
+        public ExternalName GetExternalName(String nameName, String sheetName, int externalWorkbookNumber)
+        {
+            throw new InvalidOperationException("XSSF-style external names are not supported for HSSF");
+        }
         public Ptg Get3DReferencePtg(CellReference cr, SheetIdentifier sheet)
         {
             int extIx = GetSheetExtIx(sheet);

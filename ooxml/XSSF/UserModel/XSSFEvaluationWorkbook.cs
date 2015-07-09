@@ -128,9 +128,25 @@ namespace NPOI.XSSF.UserModel
 
         public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("HSSF-style external references are not supported for XSSF");
         }
+        public ExternalName GetExternalName(String nameName, String sheetName, int externalWorkbookNumber)
+        {
+            if (externalWorkbookNumber > 0)
+            {
+                // External reference - reference is 1 based, link table is 0 based
+                int linkNumber = externalWorkbookNumber - 1;
+                ExternalLinksTable linkTable = _uBook.ExternalLinksTable[linkNumber];
+                return new ExternalName(nameName, -1, -1); // TODO Finish this
+            }
+            else
+            {
+                // Internal reference
+                int nameIdx = _uBook.GetNameIndex(nameName);
+                return new ExternalName(nameName, nameIdx, -1);  // TODO Is this right?
+            }
 
+        }
         public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             IndexedUDFFinder udfFinder = (IndexedUDFFinder)GetUDFFinder();
@@ -141,6 +157,14 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Otherwise, try it as a named range
+            if (sheet == null)
+            {
+                if (_uBook.GetNameIndex(name) > -1)
+                {
+                    return new NameXPxg(null, name);
+                }
+                return null;
+            }
             if (sheet._sheetIdentifier == null)
             {
                 // Workbook + Named Range only

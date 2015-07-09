@@ -1,7 +1,7 @@
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -18,27 +18,27 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
+
+    using NPOI.SS.Formula;
     using System.Text;
-    using NPOI.SS.Formula.PTG;
 
     /**
      * Evaluation of a Name defined in a Sheet or Workbook scope
      */
-    public class NameXEval : ValueEval
+    public class ExternalNameEval : ValueEval
     {
+        private IEvaluationName _name;
 
-        private NameXPtg _ptg;
-
-        public NameXEval(NameXPtg ptg)
+        public ExternalNameEval(IEvaluationName name)
         {
-            _ptg = ptg;
+            _name = name;
         }
 
-        public NameXPtg Ptg
+        public IEvaluationName Name
         {
             get
             {
-                return _ptg;
+                return _name;
             }
         }
 
@@ -46,9 +46,10 @@ namespace NPOI.SS.Formula.Eval
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append(GetType().Name).Append(" [");
-            sb.Append(_ptg.SheetRefIndex).Append(", ").Append(_ptg.NameIndex);
+            sb.Append(_name.NameText);
             sb.Append("]");
             return sb.ToString();
         }
     }
+
 }

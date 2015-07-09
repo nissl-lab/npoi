@@ -334,15 +334,15 @@ namespace NPOI.SS.Formula
             if (externSheet == null || externSheet.GetWorkbookName() == null)
             {
                 // External reference to our own workbook's name
-                return new NameXEval(nameXPtg);
+                return GetLocalNameXEval(nameXPtg);
             }
-
+            // Look it up for the external workbook
             String workbookName = externSheet.GetWorkbookName();
             ExternalName externName = _workbook.GetExternalName(
                   nameXPtg.SheetRefIndex,
                   nameXPtg.NameIndex
             );
-            return GetNameXEval(externName, workbookName);
+            return GetExternalNameXEval(externName, workbookName);
         }
         public ValueEval GetNameXEval(NameXPxg nameXPxg)
         {
@@ -350,15 +350,74 @@ namespace NPOI.SS.Formula
             if (externSheet == null || externSheet.GetWorkbookName() == null)
             {
                 // External reference to our own workbook's name
-                // TODO How to do this?
-                return new NameXEval(null);
+                return GetLocalNameXEval(nameXPxg);
             }
 
-            // TODO
-            return null;
-            //        return getNameXEval(nameXPxg.getNameName(), externSheet.getWorkbookName());
+            // Look it up for the external workbook
+            String workbookName = externSheet.GetWorkbookName();
+            ExternalName externName = _workbook.GetExternalName(
+                  nameXPxg.NameName,
+                  nameXPxg.SheetName,
+                  nameXPxg.ExternalWorkbookNumber
+            );
+            return GetExternalNameXEval(externName, workbookName);
         }
-        private ValueEval GetNameXEval(ExternalName externName, String workbookName)
+        private ValueEval GetLocalNameXEval(NameXPxg nameXPxg)
+        {
+            // Look up the sheet, if present
+            int sIdx = -1;
+            if (nameXPxg.SheetName != null)
+            {
+                sIdx = _workbook.GetSheetIndex(nameXPxg.SheetName);
+            }
+
+            // Is it a name or a function?
+            String name = nameXPxg.NameName;
+            IEvaluationName evalName = _workbook.GetName(name, sIdx);
+            if (evalName != null)
+            {
+                // Process it as a name
+                return new ExternalNameEval(evalName);
+            }
+            else
+            {
+                // Must be an external function
+                return new FunctionNameEval(name);
+            }
+        }
+        private ValueEval GetLocalNameXEval(NameXPtg nameXPtg)
+        {
+            String name = _workbook.ResolveNameXText(nameXPtg);
+
+            // Try to parse it as a name
+            int sheetNameAt = name.IndexOf('!');
+            IEvaluationName evalName = null;
+            if (sheetNameAt > -1)
+            {
+                // Sheet based name
+                String sheetName = name.Substring(0, sheetNameAt - 1);
+                String nameName = name.Substring(sheetNameAt + 1);
+                evalName = _workbook.GetName(nameName, _workbook.GetSheetIndex(sheetName));
+            }
+            else
+            {
+                // Workbook based name
+                evalName = _workbook.GetName(name, -1);
+            }
+
+            if (evalName != null)
+            {
+                // Process it as a name
+                return new ExternalNameEval(evalName);
+            }
+            else
+            {
+                // Must be an external function
+                return new FunctionNameEval(name);
+            }
+        }
+
+        private ValueEval GetExternalNameXEval(ExternalName externName, String workbookName)
         {
             try
             {

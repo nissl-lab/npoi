@@ -75,7 +75,15 @@ namespace NPOI.SS.Formula
          *  for an external-style reference to one of this workbook's own sheets 
          */
         int ConvertFromExternSheetIndex(int externSheetIndex);
+        /**
+         * HSSF Only - fetch the external-style name details
+         */
         ExternalName GetExternalName(int externSheetIndex, int externNameIndex);
+        /**
+         * XSSF Only - fetch the external-style name details
+         */
+        ExternalName GetExternalName(String nameName, String sheetName, int externalWorkbookNumber);
+    
         IEvaluationName GetName(NamePtg namePtg);
         IEvaluationName GetName(String name, int sheetIndex);
         String ResolveNameXText(NameXPtg ptg);

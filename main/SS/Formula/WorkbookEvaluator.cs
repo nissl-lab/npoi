@@ -692,44 +692,15 @@ namespace NPOI.SS.Formula
                 IEvaluationName nameRecord = _workbook.GetName(namePtg);
                 return GetEvalForNameRecord(nameRecord, ec);
             }
-            if (ptg is NameXPtg) // TODO Generalise for NameXPxg
+            if (ptg is NameXPtg) 
             {
                 // Externally defined named ranges or macro functions
-                NameXPtg nameXPtg = (NameXPtg)ptg;
-                ValueEval eval = ec.GetNameXEval(nameXPtg);
-
-                if (eval is NameXEval)
-                {
-                    // Could not be directly evaluated, so process as a name
-                    return GetEvalForNameX(nameXPtg, ec);
-                }
-                else
-                {
-                    // Use the evaluated version
-                    return eval;
-                }
+                return ProcessNameEval(ec.GetNameXEval((NameXPtg)ptg), ec);
             }
             if (ptg is NameXPxg)
             {
-                // TODO This is a temporary hack....
-                NameXPxg pxg = (NameXPxg)ptg;
-                int sIdx = -1;
-                if (pxg.SheetName != null)
-                {
-                    sIdx = _workbook.GetSheetIndex(pxg.SheetName);
-                }
-                IEvaluationName evalName = _workbook.GetName(pxg.NameName, sIdx);
-                if (evalName == null)
-                {
-                    // We don't know about that name, sorry
-                    // TODO What about UDFs?
-                    Console.WriteLine("Unknown Name referenced: " + pxg.NameName);
-                    return ErrorEval.NAME_INVALID;
-                }
-
-                int nIdx = evalName.CreatePtg().Index;
-                NameXPtg nptg = new NameXPtg(sIdx, nIdx);
-                return GetEvalForPtg(nptg, ec);
+                // Externally defined named ranges or macro functions
+                return ProcessNameEval(ec.GetNameXEval((NameXPxg)ptg), ec);
             }
             if (ptg is IntPtg)
             {
@@ -802,11 +773,21 @@ namespace NPOI.SS.Formula
             }
             throw new RuntimeException("Unexpected ptg class (" + ptg.GetType().Name + ")");
         }
+
+        private ValueEval ProcessNameEval(ValueEval eval, OperationEvaluationContext ec)
+        {
+            if (eval is ExternalNameEval)
+            {
+                IEvaluationName name = ((ExternalNameEval)eval).Name;
+                return GetEvalForNameRecord(name, ec);
+            }
+            return eval;
+        }
         private ValueEval GetEvalForNameRecord(IEvaluationName nameRecord, OperationEvaluationContext ec)
         {
             if (nameRecord.IsFunctionName)
             {
-                return new NameEval(nameRecord.NameText);
+                return new FunctionNameEval(nameRecord.NameText);
             }
             if (nameRecord.HasFormula)
             {
@@ -815,37 +796,7 @@ namespace NPOI.SS.Formula
 
             throw new Exception("Don't now how to Evalate name '" + nameRecord.NameText + "'");
         }
-        private ValueEval GetEvalForNameX(NameXPtg nameXPtg, OperationEvaluationContext ec)
-        {
-            String name = _workbook.ResolveNameXText(nameXPtg);
-
-            // Try to parse it as a name
-            int sheetNameAt = name.IndexOf('!');
-            IEvaluationName nameRecord = null;
-            if (sheetNameAt > -1)
-            {
-                // Sheet based name
-                String sheetName = name.Substring(0, sheetNameAt);
-                String nameName = name.Substring(sheetNameAt + 1);
-                nameRecord = _workbook.GetName(nameName, _workbook.GetSheetIndex(sheetName));
-            }
-            else
-            {
-                // Workbook based name
-                nameRecord = _workbook.GetName(name, -1);
-            }
-
-            if (nameRecord != null)
-            {
-                // Process it as a name
-                return GetEvalForNameRecord(nameRecord, ec);
-            }
-            else
-            {
-                // Must be an external function
-                return new NameEval(name);
-            }
-        }
+        
         internal ValueEval EvaluateNameFormula(Ptg[] ptgs, OperationEvaluationContext ec)
         {
             if (ptgs.Length == 1)
