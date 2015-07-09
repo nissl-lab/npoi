@@ -93,6 +93,76 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[0] is IntPtg);
             Assert.IsTrue(ptgs[1] is FuncPtg);
         }
+
+        [Test]
+        [Ignore("Work in progress, see bug #56737")]
+        public void formulaReferencesOtherSheets()
+        {
+            // Use a test file with the named ranges in place
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref-56737.xlsx");
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+
+            // Reference to a single cell in a different sheet
+            ptgs = Parse(fpb, "Uses!A1");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(typeof(Ref3DPtg), ptgs[0].GetType());
+            Assert.AreEqual("A1", ((Ref3DPtg)ptgs[0]).Format2DRefAsString());
+            Assert.AreEqual("Uses!A1", ((Ref3DPtg)ptgs[0]).ToFormulaString(fpb));
+
+            // Reference to a sheet scoped named range from another sheet
+            ptgs = Parse(fpb, "Defines!NR_To_A1");
+            Assert.AreEqual(1, ptgs.Length);
+            // TODO assert
+
+            // Reference to a workbook scoped named range
+            ptgs = Parse(fpb, "NR_Global_B2");
+            Assert.AreEqual(1, ptgs.Length);
+            // TODO assert
+        }
+
+        [Test]
+        [Ignore("Work in progress, see bug #56737")]
+        public void fFormaulReferncesSameWorkbook()
+        {
+            // Use a test file with "other workbook" style references
+            //  to itself
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56737.xlsx");
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+
+            // Reference to a named range in our own workbook, as if it
+            // were defined in a different workbook
+            ptgs = Parse(fpb, "[0]!NR_Global_B2");
+            Assert.AreEqual(1, ptgs.Length);
+            // TODO assert
+        }
+
+        [Test]
+        [Ignore("Work in progress, see bug #56737")]
+        public void formulaReferencesOtherWorkbook()
+        {
+            // Use a test file with the external linked table in place
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref-56737.xlsx");
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+
+            // Reference to a single cell in a different workbook
+            ptgs = Parse(fpb, "[1]Uses!$A$1");
+            Assert.AreEqual(1, ptgs.Length);
+            // TODO assert
+
+            // Reference to a sheet-scoped named range in a different workbook
+            ptgs = Parse(fpb, "[1]Defines!NR_To_A1");
+            Assert.AreEqual(1, ptgs.Length);
+            // TODO assert
+
+            // Reference to a global named range in a different workbook
+            ptgs = Parse(fpb, "[1]!NR_Global_B2");
+            Assert.AreEqual(1, ptgs.Length);
+            // TODO assert
+        }
+
     }
 }
 
