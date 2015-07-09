@@ -124,7 +124,30 @@ using NPOI.Util;
 
         public ExternalSheet GetExternalSheet(int externSheetIndex)
         {
-            return _iBook.GetExternalSheet(externSheetIndex);
+            ExternalSheet sheet = _iBook.GetExternalSheet(externSheetIndex);
+            if (sheet == null)
+            {
+                // Try to treat it as a local sheet
+                int localSheetIndex = ConvertFromExternSheetIndex(externSheetIndex);
+                if (localSheetIndex == -1)
+                {
+                    // The sheet referenced can't be found, sorry
+                    return null;
+                }
+                if (localSheetIndex == -2)
+                {
+                    // Not actually sheet based at all - is workbook scoped
+                    return null;
+                }
+                // Look up the local sheet
+                String sheetName = GetSheetName(localSheetIndex);
+                sheet = new ExternalSheet(null, sheetName);
+            }
+            return sheet;
+        }
+        public ExternalSheet GetExternalSheet(String sheetName, int externalWorkbookNumber)
+        {
+            throw new InvalidOperationException("XSSF-style external references are not supported for HSSF");
         }
 
         public String ResolveNameXText(NameXPtg n)

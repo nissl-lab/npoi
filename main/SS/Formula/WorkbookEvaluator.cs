@@ -741,8 +741,12 @@ namespace NPOI.SS.Formula
             }
             if (ptg is Ref3DPtg)
             {
-                Ref3DPtg rptg = (Ref3DPtg)ptg;
-                return ec.GetRef3DEval(rptg.Row, rptg.Column, rptg.ExternSheetIndex);
+                return ec.GetRef3DEval((Ref3DPtg)ptg);
+            }
+
+            if (ptg is Ref3DPxg)
+            {
+                return ec.GetRef3DEval((Ref3DPxg)ptg);
             }
             if (ptg is Area3DPtg)
             {
@@ -750,10 +754,6 @@ namespace NPOI.SS.Formula
                 return ec.GetArea3DEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn, aptg.ExternSheetIndex);
             }
 
-            if (ptg is Ref3DPxg) {
-                Ref3DPtg rptg = (Ref3DPtg) ptg;
-                // TODO Return the right eval, should be easy as we already know the sheet details
-            }
             if (ptg is RefPtg)
             {
                 RefPtg rptg = (RefPtg)ptg;

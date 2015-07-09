@@ -61,9 +61,19 @@ namespace NPOI.SS.Formula
         IEvaluationSheet GetSheet(int sheetIndex);
 
         /**
-         * @return <c>null</c> if externSheetIndex refers To a sheet inside the current workbook
+         * HSSF Only - fetch the external-style sheet details
+         * <p>Return will have no workbook set if it's actually in our own workbook</p>
          */
         ExternalSheet GetExternalSheet(int externSheetIndex);
+        /**
+         * XSSF Only - fetch the external-style sheet details
+         * <p>Return will have no workbook set if it's actually in our own workbook</p>
+         */
+        ExternalSheet GetExternalSheet(String sheetName, int externalWorkbookNumber);
+        /**
+         * HSSF Only - convert an external sheet index to an internal sheet index,
+         *  for an external-style reference to one of this workbook's own sheets 
+         */
         int ConvertFromExternSheetIndex(int externSheetIndex);
         ExternalName GetExternalName(int externSheetIndex, int externNameIndex);
         IEvaluationName GetName(NamePtg namePtg);

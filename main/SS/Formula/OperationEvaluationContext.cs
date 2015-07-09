@@ -63,15 +63,26 @@ namespace NPOI.SS.Formula
         {
             return CreateExternSheetRefEvaluator(ptg.ExternSheetIndex);
         }
+
+        SheetRefEvaluator CreateExternSheetRefEvaluator(String sheetName, int externalWorkbookNumber)
+        {
+            ExternalSheet externalSheet = _workbook.GetExternalSheet(sheetName, externalWorkbookNumber);
+            return CreateExternSheetRefEvaluator(externalSheet);
+        }
+
         SheetRefEvaluator CreateExternSheetRefEvaluator(int externSheetIndex)
         {
             ExternalSheet externalSheet = _workbook.GetExternalSheet(externSheetIndex);
+            return CreateExternSheetRefEvaluator(externalSheet);
+        }
+        SheetRefEvaluator CreateExternSheetRefEvaluator(ExternalSheet externalSheet)
+        {
             WorkbookEvaluator targetEvaluator;
             int otherSheetIndex;
-            if (externalSheet == null)
+            if (externalSheet == null || externalSheet.GetWorkbookName() == null)
             {
                 // sheet is in same workbook
-                otherSheetIndex = _workbook.ConvertFromExternSheetIndex(externSheetIndex);
+                otherSheetIndex = _workbook.GetSheetIndex(externalSheet.GetSheetName());
                 targetEvaluator = _bookEvaluator;
             }
             else
@@ -289,10 +300,15 @@ namespace NPOI.SS.Formula
             SheetRefEvaluator sre = GetRefEvaluatorForCurrentSheet();
             return new LazyRefEval(rowIndex, columnIndex, sre);
         }
-        public ValueEval GetRef3DEval(int rowIndex, int columnIndex, int extSheetIndex)
+        public ValueEval GetRef3DEval(Ref3DPtg rptg)
         {
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(extSheetIndex);
-            return new LazyRefEval(rowIndex, columnIndex, sre);
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(rptg.ExternSheetIndex);
+            return new LazyRefEval(rptg.Row, rptg.Column, sre);
+        }
+        public ValueEval GetRef3DEval(Ref3DPxg rptg)
+        {
+            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(rptg.SheetName, rptg.ExternalWorkbookNumber);
+            return new LazyRefEval(rptg.Row, rptg.Column, sre);
         }
         public ValueEval GetAreaEval(int firstRowIndex, int firstColumnIndex,
                 int lastRowIndex, int lastColumnIndex)

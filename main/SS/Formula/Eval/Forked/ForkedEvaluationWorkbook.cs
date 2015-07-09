@@ -105,7 +105,10 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             return _masterBook.GetExternalSheet(externSheetIndex);
         }
-
+        public ExternalSheet GetExternalSheet(String sheetName, int externalWorkbookNumber)
+        {
+            return _masterBook.GetExternalSheet(sheetName, externalWorkbookNumber);
+        }
         public Ptg[] GetFormulaTokens(IEvaluationCell cell)
         {
             if (cell is ForkedEvaluationCell)

@@ -15,8 +15,16 @@ namespace NPOI.SS.Formula.PTG
             {
                 String wbName = externalSheet.GetWorkbookName();
                 String sheetName = externalSheet.GetSheetName();
-                sb = new StringBuilder(wbName.Length + sheetName.Length + cellRefText.Length + 4);
-                SheetNameFormatter.AppendFormat(sb, wbName, sheetName);
+                if (wbName != null)
+                {
+                    sb = new StringBuilder(wbName.Length + sheetName.Length + cellRefText.Length + 4);
+                    SheetNameFormatter.AppendFormat(sb, wbName, sheetName);
+                }
+                else
+                {
+                    sb = new StringBuilder(sheetName.Length + cellRefText.Length + 4);
+                    SheetNameFormatter.AppendFormat(sb, sheetName);
+                }
             }
             else
             {

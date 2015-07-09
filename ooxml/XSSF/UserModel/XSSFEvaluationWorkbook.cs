@@ -196,12 +196,27 @@ namespace NPOI.XSSF.UserModel
 
         public ExternalSheet GetExternalSheet(int externSheetIndex)
         {
-            // TODO Auto-generated method stub
-            return null;
+            throw new InvalidOperationException("HSSF-style external references are not supported for XSSF");
         }
+        public ExternalSheet GetExternalSheetIndex(String sheetName, int externalWorkbookNumber)
+        {
+            if (externalWorkbookNumber > 0)
+            {
+                // External reference - reference is 1 based, link table is 0 based
+                int linkNumber = externalWorkbookNumber - 1;
+                ExternalLinksTable linkTable = _uBook.ExternalLinksTable[linkNumber];
+                return new ExternalSheet(linkTable.LinkedFileName, sheetName);
+            }
+            else
+            {
+                // Internal reference
+                return new ExternalSheet(null, sheetName);
+            }
+        }
+
         public int GetExternalSheetIndex(String workbookName, String sheetName)
         {
-            throw new Exception("not implemented yet");
+            throw new RuntimeException("not implemented yet");
         }
         public int GetSheetIndex(String sheetName)
         {
