@@ -692,7 +692,7 @@ namespace NPOI.SS.Formula
                 IEvaluationName nameRecord = _workbook.GetName(namePtg);
                 return GetEvalForNameRecord(nameRecord, ec);
             }
-            if (ptg is NameXPtg)
+            if (ptg is NameXPtg) // TODO Generalise for NameXPxg
             {
                 // Externally defined named ranges or macro functions
                 NameXPtg nameXPtg = (NameXPtg)ptg;

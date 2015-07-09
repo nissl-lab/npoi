@@ -78,7 +78,7 @@ using NPOI.Util;
             int extIx = GetSheetExtIx(sheet);
             return new Area3DPtg(areaRef, extIx);
         }
-        public NameXPtg GetNameXPtg(String name, SheetIdentifier sheet)
+        public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             int sheetRefIndex = GetSheetExtIx(sheet);
             return _iBook.GetNameXPtg(name, sheetRefIndex, _uBook.GetUDFFinder());

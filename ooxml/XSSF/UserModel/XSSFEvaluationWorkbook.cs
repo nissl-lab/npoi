@@ -129,25 +129,26 @@ namespace NPOI.XSSF.UserModel
             throw new NotImplementedException();
         }
 
-        public NameXPtg GetNameXPtg(String name, SheetIdentifier sheet)
+        public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             IndexedUDFFinder udfFinder = (IndexedUDFFinder)GetUDFFinder();
             FreeRefFunction func = udfFinder.FindFunction(name);
             if (func != null)
             {
-                return new NameXPtg(0, udfFinder.GetFunctionIndex(name));
+                return new NameXPxg(null, name);
             }
 
             // Otherwise, try it as a named range
-            IName xname = _uBook.GetName(name);
-            if (xname != null)
+            String sheetName = sheet._sheetIdentifier.Name;
+
+            if (sheet._bookName != null)
             {
-                int nameAt = _uBook.GetNameIndex(name);
-                return new NameXPtg(xname.SheetIndex, nameAt);
+                int bookIndex = ResolveBookIndex(sheet._bookName);
+                return new NameXPxg(bookIndex, sheetName, name);
             }
             else
             {
-                return null;
+                return new NameXPxg(sheetName, name);
             }
         }
         public Ptg Get3DReferencePtg(CellReference cell, SheetIdentifier sheet)

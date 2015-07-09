@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        NameXPtg GetNameXPtg(String name, SheetIdentifier sheet);
+        Ptg GetNameXPtg(String name, SheetIdentifier sheet);
 
         /// <summary>
         /// Produce the appropriate Ptg for a 3d cell reference

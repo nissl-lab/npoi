@@ -331,13 +331,35 @@ namespace NPOI.SS.Formula
         public ValueEval GetNameXEval(NameXPtg nameXPtg)
         {
             ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPtg.SheetRefIndex);
-            if (externSheet == null)
+            if (externSheet == null || externSheet.GetWorkbookName() == null)
+            {
+                // External reference to our own workbook's name
                 return new NameXEval(nameXPtg);
+            }
+
             String workbookName = externSheet.GetWorkbookName();
             ExternalName externName = _workbook.GetExternalName(
                   nameXPtg.SheetRefIndex,
                   nameXPtg.NameIndex
             );
+            return GetNameXEval(externName, workbookName);
+        }
+        public ValueEval GetNameXEval(NameXPxg nameXPxg)
+        {
+            ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPxg.SheetName, nameXPxg.ExternalWorkbookNumber);
+            if (externSheet == null || externSheet.GetWorkbookName() == null)
+            {
+                // External reference to our own workbook's name
+                // TODO How to do this?
+                return new NameXEval(null);
+            }
+
+            // TODO
+            return null;
+            //        return getNameXEval(nameXPxg.getNameName(), externSheet.getWorkbookName());
+        }
+        private ValueEval GetNameXEval(ExternalName externName, String workbookName)
+        {
             try
             {
                 WorkbookEvaluator refWorkbookEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);

@@ -496,7 +496,7 @@ namespace NPOI.SS.Formula
                             throw new FormulaParseException("Cell reference or Named Range "
                                     + "expected after sheet name at index " + _pointer + ".");
                         }
-                        NameXPtg nameXPtg = _book.GetNameXPtg(name, sheetIden);
+                        Ptg nameXPtg = _book.GetNameXPtg(name, sheetIden);
                         if (nameXPtg == null)
                         {
                             throw new FormulaParseException("Specified name '" + name +
@@ -709,7 +709,7 @@ namespace NPOI.SS.Formula
             Ptg ptg;
             if (part2 == null)
             {
-                CellReference cr = part1.getCellReference();
+                CellReference cr = part1.CellReference;
                 if (sheetIden == null)
                 {
                     ptg = new RefPtg(cr);
@@ -749,7 +749,7 @@ namespace NPOI.SS.Formula
             {
                 return AreaReference.GetWholeColumn(part1.Rep, part2.Rep);
             }
-            return new AreaReference(part1.getCellReference(), part2.getCellReference());
+            return new AreaReference(part1.CellReference, part2.CellReference);
         }
         private string CELL_REF_PATTERN = "(\\$?[A-Za-z]+)?(\\$?[0-9]+)?";
 
@@ -926,13 +926,16 @@ namespace NPOI.SS.Formula
             }
 
 
-            public CellReference getCellReference()
+            public CellReference CellReference
             {
-                if (_type != PartType.Cell)
+                get
                 {
-                    throw new InvalidOperationException("Not applicable to this type");
+                    if (_type != PartType.Cell)
+                    {
+                        throw new InvalidOperationException("Not applicable to this type");
+                    }
+                    return new CellReference(_rep);
                 }
-                return new CellReference(_rep);
             }
 
             public bool IsColumn
