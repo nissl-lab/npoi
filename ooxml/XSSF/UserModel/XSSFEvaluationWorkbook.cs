@@ -114,15 +114,42 @@ namespace NPOI.XSSF.UserModel
         {
             IndexedUDFFinder udfFinder = (IndexedUDFFinder)GetUDFFinder();
             FreeRefFunction func = udfFinder.FindFunction(name);
-            if (func == null) return null;
-            else return new NameXPtg(0, udfFinder.GetFunctionIndex(name));
+            if (func != null)
+            {
+                return new NameXPtg(0, udfFinder.GetFunctionIndex(name));
+            }
+
+            // Otherwise, try it as a named range
+            IName xname = _uBook.GetName(name);
+            if (xname != null)
+            {
+                int nameAt = _uBook.GetNameIndex(name);
+                return new NameXPtg(xname.SheetIndex, nameAt);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public String ResolveNameXText(NameXPtg n)
         {
             int idx = n.NameIndex;
+            String name = null;
+
+            // First, try to find it as a User Defined Function
             IndexedUDFFinder udfFinder = (IndexedUDFFinder)GetUDFFinder();
-            return udfFinder.GetFunctionName(idx);
+            name = udfFinder.GetFunctionName(idx);
+            if (name != null) return name;
+
+            // Otherwise, try it as a named range
+            IName xname = _uBook.GetNameAt(idx);
+            if (xname != null)
+            {
+                name = xname.NameName;
+            }
+
+            return name;
         }
 
         public IEvaluationSheet GetSheet(int sheetIndex)
