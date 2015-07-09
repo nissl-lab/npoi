@@ -129,6 +129,16 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("A1", ((Ref3DPxg)ptgs[0]).Format2DRefAsString());
             Assert.AreEqual("Uses!A1", ((Ref3DPxg)ptgs[0]).ToFormulaString());
 
+            // Reference to a single cell in a different sheet, which needs quoting
+            ptgs = Parse(fpb, "'Testing 47100'!A1");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
+            Assert.AreEqual(-1, ((Ref3DPxg)ptgs[0]).ExternalWorkbookNumber);
+            Assert.AreEqual("Testing 47100", ((Ref3DPxg)ptgs[0]).SheetName);
+            Assert.AreEqual("A1", ((Ref3DPxg)ptgs[0]).Format2DRefAsString());
+            Assert.AreEqual("'Testing 47100'!A1", ((Ref3DPxg)ptgs[0]).ToFormulaString());
+        
+
             // Reference to a sheet scoped named range from another sheet
             ptgs = Parse(fpb, "Defines!NR_To_A1");
             Assert.AreEqual(1, ptgs.Length);

@@ -31,7 +31,7 @@ namespace NPOI.SS.Formula.PTG
      * <p>This is XSSF only, as it stores the sheet / book references
      *  in String form. The HSSF equivalent using indexes is {@link Ref3DPtg}</p>
      */
-    public class Ref3DPxg : RefPtgBase
+    public class Ref3DPxg : RefPtgBase, Pxg
     {
         private int externalWorkbookNumber = -1;
         private String sheetName;
@@ -90,6 +90,10 @@ namespace NPOI.SS.Formula.PTG
             {
                 return sheetName;
             }
+            set
+            {
+                sheetName = value;
+            }
         }
 
         public String Format2DRefAsString()
@@ -106,7 +110,10 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append(externalWorkbookNumber);
                 sb.Append(']');
             }
-            sb.Append(sheetName);
+            if (sheetName != null)
+            {
+                SheetNameFormatter.AppendFormat(sb, sheetName);
+            }
             sb.Append('!');
             sb.Append(FormatReferenceAsString());
             return sb.ToString();

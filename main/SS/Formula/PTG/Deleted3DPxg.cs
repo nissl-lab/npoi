@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.PTG
     /**
      * An XSSF only representation of a reference to a deleted area
      */
-    public class Deleted3DPxg : OperandPtg
+    public class Deleted3DPxg : OperandPtg, Pxg
     {
         private int externalWorkbookNumber = -1;
         private String sheetName;
@@ -54,7 +54,10 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append("workbook=").Append(ExternalWorkbookNumber);
                 sb.Append("] ");
             }
-            sb.Append("sheet=").Append(SheetName);
+            if (sheetName != null)
+            {
+                SheetNameFormatter.AppendFormat(sb, sheetName);
+            }
             sb.Append(" ! ");
             sb.Append(ErrorConstants.GetText(ErrorConstants.ERROR_REF));
             sb.Append("]");
@@ -73,6 +76,10 @@ namespace NPOI.SS.Formula.PTG
             get
             {
                 return sheetName;
+            }
+            set
+            {
+                sheetName = value;
             }
         }
 
