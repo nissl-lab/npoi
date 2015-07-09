@@ -503,7 +503,7 @@ namespace NPOI.Util
          * @return a content-based hash code for <tt>a</tt>
          * @since 1.5
          */
-        public static int hashCode(double[] a) {
+        public static int HashCode(double[] a) {
             if (a == null)
                 return 0;
 
@@ -600,7 +600,7 @@ namespace NPOI.Util
                 else if (element is float[])
                     elementHash = HashCode((float[]) element);
                 else if (element is double[])
-                    elementHash = hashCode((double[]) element);
+                    elementHash = HashCode((double[]) element);
                 else if (element is bool[])
                     elementHash = HashCode((bool[]) element);
                 else if (element != null)

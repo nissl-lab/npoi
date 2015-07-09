@@ -91,9 +91,9 @@ namespace NPOI.HPSF
             ClearSections();
             if (sections == null)
                 sections = new List<Section>();
-            for (IEnumerator i = ps.Sections.GetEnumerator(); i.MoveNext(); )
+            foreach (Section section in ps.Sections)
             {
-                MutableSection s = new MutableSection((Section)(i.Current));
+                MutableSection s = new MutableSection(section);
                 AddSection(s);
             }
         }
@@ -228,6 +228,9 @@ namespace NPOI.HPSF
                 MutableSection s = (MutableSection)i.Current;
                 offset += s.Write(out1);
             }
+
+            /* Indicate that we're done */
+            out1.Close();
         }
 
         /// <summary>
@@ -261,8 +264,15 @@ namespace NPOI.HPSF
         {
             using (MemoryStream psStream = new MemoryStream())
             {
-                Write(psStream);
-                psStream.Flush();
+                try
+                {
+                    Write(psStream);
+                    psStream.Flush();
+                }
+                finally
+                {
+                    psStream.Close();
+                }
                 byte[] streamData = psStream.ToArray();
                 return new MemoryStream(streamData);
             }

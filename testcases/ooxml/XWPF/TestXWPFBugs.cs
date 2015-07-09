@@ -44,7 +44,7 @@ namespace NPOI.XWPF
             {
                 Biff8EncryptionKey.CurrentUserPassword = (/*setter*/"solrcell");
                 FileStream file = POIDataSamples.GetDocumentInstance().GetFile("bug53475-password-is-solrcell.docx");
-                NPOIFSFileSystem filesystem = new NPOIFSFileSystem(file, true);
+                NPOIFSFileSystem filesystem = new NPOIFSFileSystem(file,null, true, true);
 /*
                 // Check the encryption details
                 EncryptionInfo info = new EncryptionInfo(filesystem);

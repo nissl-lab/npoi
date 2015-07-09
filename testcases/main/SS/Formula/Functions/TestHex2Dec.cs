@@ -15,12 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
 
     using NPOI.SS.Formula.Eval;
     using NUnit.Framework;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Tests for {@link Hex2Dec}

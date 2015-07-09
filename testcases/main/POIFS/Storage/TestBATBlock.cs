@@ -320,6 +320,16 @@ namespace TestCases.POIFS.Storage
                   4096 + 112 * 4096 * 1024,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 112)
             );
+
+            // Check for >2gb, which we only support via a File
+            Assert.AreEqual(
+                    512 + 8030L * 512 * 128,
+                    BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 8030)
+            );
+            Assert.AreEqual(
+                    4096 + 8030L * 4096 * 1024,
+                    BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 8030)
+            );
         }
         [Test]
         public void TestGetBATBlockAndIndex()

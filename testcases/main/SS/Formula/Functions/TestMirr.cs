@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Text;
@@ -25,6 +25,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.Util;
     using NUnit.Framework;
     using TestCases.HSSF;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Tests for {@link NPOI.SS.Formula.Functions.Mirr}

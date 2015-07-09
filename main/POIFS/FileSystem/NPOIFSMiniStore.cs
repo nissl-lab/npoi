@@ -61,7 +61,7 @@ namespace NPOI.POIFS.FileSystem
             int bigBlockOffset = byteOffset % _filesystem.GetBigBlockSize();
 
             // Now locate the data block for it
-            StreamBlockByteBufferIterator it = _mini_stream.GetBlockIterator() as StreamBlockByteBufferIterator;
+            NPOIFSStream.StreamBlockByteBufferIterator it = _mini_stream.GetBlockIterator() as NPOIFSStream.StreamBlockByteBufferIterator;
 
             for (int i = 0; i < bigBlockNumber; i++)
             {
@@ -85,21 +85,36 @@ namespace NPOI.POIFS.FileSystem
          */
         public override ByteBuffer CreateBlockIfNeeded(int offset)
         {
-            // Try to Get it without extending the stream
-            try
+            bool firstInStore = false;
+            // If we are the first block to be allocated, initialise the stream
+            if (_mini_stream.GetStartBlock() == POIFSConstants.END_OF_CHAIN)
             {
-                return GetBlockAt(offset);
+                firstInStore = true;
             }
-            catch (IndexOutOfRangeException)
+
+            // Try to Get it without extending the stream
+            if (! firstInStore) {
+                try
+                {
+                    return GetBlockAt(offset);
+                }catch (IndexOutOfRangeException){}
+            }
+            
+            // Need to extend the stream
+            // TODO Replace this with proper append support
+            // For now, do the extending by hand...
+
+            // Ask for another block
+            int newBigBlock = _filesystem.GetFreeBlock();
+            _filesystem.CreateBlockIfNeeded(newBigBlock);
+            // If we are the first block to be allocated, initialise the stream
+            if (firstInStore)
             {
-                // Need to extend the stream
-                // TODO Replace this with proper append support
-                // For now, do the extending by hand...
-
-                // Ask for another block
-                int newBigBlock = _filesystem.GetFreeBlock();
-                _filesystem.CreateBlockIfNeeded(newBigBlock);
-
+                _filesystem.PropertyTable.Root.StartBlock = (newBigBlock);
+                _mini_stream = new NPOIFSStream(_filesystem, newBigBlock);
+            }
+            else
+            {
                 // Tack it onto the end of our chain
                 ChainLoopDetector loopDetector = _filesystem.GetChainLoopDetector();
                 int block = _mini_stream.GetStartBlock();
@@ -114,11 +129,12 @@ namespace NPOI.POIFS.FileSystem
                     block = next;
                 }
                 _filesystem.SetNextBlock(block, newBigBlock);
-                _filesystem.SetNextBlock(newBigBlock, POIFSConstants.END_OF_CHAIN);
-
-                // Now try again to Get it
-                return CreateBlockIfNeeded(offset);
             }
+            _filesystem.SetNextBlock(newBigBlock, POIFSConstants.END_OF_CHAIN);
+
+            // Now try again, to get the real small block
+            return CreateBlockIfNeeded(offset);
+            
         }
 
         /**
@@ -194,6 +210,7 @@ namespace NPOI.POIFS.FileSystem
             // Are we the first SBAT?
             if (_header.SBATCount == 0)
             {
+                // Tell the header that we've got our first SBAT there
                 _header.SBATStart = batForSBAT;
                 _header.SBATBlockCount = 1;
             }

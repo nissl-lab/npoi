@@ -59,7 +59,7 @@ namespace TestCases.POIFS.FileSystem
 
             foreach (FileStream f in files)
             {
-                NPOIFSFileSystem fs = new NPOIFSFileSystem(f, true);
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(f,null, true, true);
                 List<Entry> entries = new List<Entry>();
                 FindOle10(entries, fs.Root, "/", "");
 

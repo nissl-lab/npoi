@@ -47,6 +47,7 @@ namespace NPOI.POIFS.Properties
         /// <param name="name">POIFSDocument name</param>
         /// <param name="size">POIFSDocument size</param>
         public DocumentProperty(String name, int size)
+            : base()
         {
             _document = null;
             
@@ -95,6 +96,14 @@ namespace NPOI.POIFS.Properties
         public override void PreWrite()
         {
             // do nothing
+        }
+
+        /**
+         * Update the size of the property's data
+         */
+        public void UpdateSize(int size)
+        {
+            Size = (size);
         }
     }
 }

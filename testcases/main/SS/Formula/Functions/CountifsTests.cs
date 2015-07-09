@@ -16,7 +16,7 @@
 ==================================================================== */
 
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
 
