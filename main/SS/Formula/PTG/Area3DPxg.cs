@@ -104,7 +104,7 @@ namespace NPOI.SS.Formula.PTG
             return FormatReferenceAsString();
         }
 
-        public String toFormulaString()
+        public override String ToFormulaString()
         {
             StringBuilder sb = new StringBuilder();
             if (externalWorkbookNumber >= 0)

@@ -31,7 +31,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestParse()
+        public void BasicParse()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
@@ -76,6 +76,41 @@ namespace NPOI.XSSF.UserModel
             {
                 Assert.AreEqual("Specified named range 'XFD1048577' does not exist in the current workbook.", e.Message);
             }
+
+            // Formula referencing one cell
+            ptgs = Parse(fpb, "ISEVEN(A1)");
+            Assert.AreEqual(3, ptgs.Length);
+            Assert.AreEqual(typeof(NameXPxg), ptgs[0].GetType());
+            Assert.AreEqual(typeof(RefPtg), ptgs[1].GetType());
+            Assert.AreEqual(typeof(FuncVarPtg), ptgs[2].GetType());
+            Assert.AreEqual("ISEVEN", ptgs[0].ToFormulaString());
+            Assert.AreEqual("A1", ptgs[1].ToFormulaString());
+            Assert.AreEqual("#external#", ptgs[2].ToFormulaString());
+
+            // Formula referencing an area
+            ptgs = Parse(fpb, "SUM(A1:B3)");
+            Assert.AreEqual(2, ptgs.Length);
+            Assert.AreEqual(typeof(AreaPtg), ptgs[0].GetType());
+            Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
+            Assert.AreEqual("A1:B3", ptgs[0].ToFormulaString());
+            Assert.AreEqual("SUM", ptgs[1].ToFormulaString());
+
+            // Formula referencing one cell in a different sheet
+            ptgs = Parse(fpb, "SUM(Sheet1!A1)");
+            Assert.AreEqual(2, ptgs.Length);
+            Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
+            Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
+            Assert.AreEqual("Sheet1!A1", ptgs[0].ToFormulaString());
+            Assert.AreEqual("SUM", ptgs[1].ToFormulaString());
+
+            // Formula referencing an area in a different sheet
+            ptgs = Parse(fpb, "SUM(Sheet1!A1:B3)");
+            Assert.AreEqual(2, ptgs.Length);
+            Assert.AreEqual(typeof(Area3DPxg), ptgs[0].GetType());
+            Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
+            Assert.AreEqual("Sheet1!A1:B3", ptgs[0].ToFormulaString());
+            Assert.AreEqual("SUM", ptgs[1].ToFormulaString());
+
         }
         [Test]
         public void TestBuiltInFormulas()

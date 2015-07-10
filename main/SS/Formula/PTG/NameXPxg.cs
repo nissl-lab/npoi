@@ -96,17 +96,23 @@ namespace NPOI.SS.Formula.PTG
         public override String ToFormulaString()
         {
             StringBuilder sb = new StringBuilder();
+            bool needsExclamation = false;
             if (externalWorkbookNumber >= 0)
             {
                 sb.Append('[');
                 sb.Append(externalWorkbookNumber);
                 sb.Append(']');
+                needsExclamation = true;
             }
             if (sheetName != null)
             {
                 SheetNameFormatter.AppendFormat(sb, sheetName);
+                needsExclamation = true;
             }
-            sb.Append('!');
+            if (needsExclamation)
+            {
+                sb.Append('!');
+            }
             sb.Append(nameName);
             return sb.ToString();
         }
