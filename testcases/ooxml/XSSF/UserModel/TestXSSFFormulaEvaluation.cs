@@ -168,9 +168,9 @@ namespace NPOI.XSSF.UserModel
             }
 
             Assert.AreEqual("\"Hello!\"", evaluator.Evaluate(cXSLX_cell).FormatAsString());
-            // TODO Fix XSSF reference Evaluations to work
-            //        Assert.AreEqual("\"Test A1\"", Evaluator.Evaluate(cXSLX_sNR).FormatAsString());
-            //        Assert.AreEqual("142.0",   Evaluator.Evaluate(cXSLX_gNR).FormatAsString());
+            Assert.AreEqual("\"Test A1\"", evaluator.Evaluate(cXSLX_sNR).FormatAsString());
+            //Assert.AreEqual("142.0", evaluator.Evaluate(cXSLX_gNR).FormatAsString());
+            Assert.AreEqual("142", evaluator.Evaluate(cXSLX_gNR).FormatAsString());
 
             Assert.AreEqual("\"Hello!\"", evaluator.Evaluate(cXSL_cell).FormatAsString());
             Assert.AreEqual("\"Test A1\"", evaluator.Evaluate(cXSL_sNR).FormatAsString());

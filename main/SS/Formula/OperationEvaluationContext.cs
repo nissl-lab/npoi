@@ -417,6 +417,7 @@ namespace NPOI.SS.Formula
             }
         }
 
+        // Fetch the workbook this refers to, and the name as defined with that
         private ValueEval GetExternalNameXEval(ExternalName externName, String workbookName)
         {
             try
@@ -429,23 +430,32 @@ namespace NPOI.SS.Formula
                     {
                         throw new Exception("Complex name formulas not supported yet");
                     }
+                    // Need to Evaluate the reference in the context of the other book
+                    OperationEvaluationContext refWorkbookContext = new OperationEvaluationContext(
+                            refWorkbookEvaluator, refWorkbookEvaluator.Workbook, -1, -1, -1, _tracker);
+
                     Ptg ptg = evaluationName.NameDefinition[0];
                     if (ptg is Ref3DPtg)
                     {
                         Ref3DPtg ref3D = (Ref3DPtg)ptg;
-                        int sheetIndex = refWorkbookEvaluator.GetSheetIndexByExternIndex(ref3D.ExternSheetIndex);
-                        String sheetName = refWorkbookEvaluator.GetSheetName(sheetIndex);
-                        SheetRefEvaluator sre = CreateExternSheetRefEvaluator(workbookName, sheetName);
-                        return new LazyRefEval(ref3D.Row, ref3D.Column, sre);
+                        return refWorkbookContext.GetRef3DEval(ref3D);
+                    }
+                    else if (ptg is Ref3DPxg)
+                    {
+                        Ref3DPxg ref3D = (Ref3DPxg)ptg;
+                        return refWorkbookContext.GetRef3DEval(ref3D);
                     }
                     else if (ptg is Area3DPtg)
                     {
                         Area3DPtg area3D = (Area3DPtg)ptg;
-                        int sheetIndex = refWorkbookEvaluator.GetSheetIndexByExternIndex(area3D.ExternSheetIndex);
-                        String sheetName = refWorkbookEvaluator.GetSheetName(sheetIndex);
-                        SheetRefEvaluator sre = CreateExternSheetRefEvaluator(workbookName, sheetName);
-                        return new LazyAreaEval(area3D.FirstRow, area3D.FirstColumn, area3D.LastRow, area3D.LastColumn, sre);
+                        return refWorkbookContext.GetArea3DEval(area3D);
                     }
+                    else if (ptg is Area3DPxg)
+                    {
+                        Area3DPxg area3D = (Area3DPxg)ptg;
+                        return refWorkbookContext.GetArea3DEval(area3D);
+                    }
+
                 }
                 return ErrorEval.REF_INVALID;
             }
