@@ -97,6 +97,62 @@ namespace NPOI.XSSF.UserModel
             }
 
         }
+
+        /**
+     * Related to bugs #56737 and #56752 - XSSF workbooks which have
+     *  formulas that refer to cells and named ranges in multiple other
+     *  workbooks, both HSSF and XSSF ones
+     */
+        [Test]
+        public void TestReferencesToOtherWorkbooks()
+        {
+            XSSFWorkbook wb = (XSSFWorkbook)_testDataProvider.OpenSampleWorkbook("ref2-56737.xlsx");
+            XSSFFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+            XSSFSheet s = wb.GetSheetAt(0) as XSSFSheet;
+
+            // References to a .xlsx file
+            IRow rXSLX = s.GetRow(2);
+            ICell cXSLX_cell = rXSLX.GetCell(4);
+            ICell cXSLX_sNR = rXSLX.GetCell(6);
+            ICell cXSLX_gNR = rXSLX.GetCell(8);
+            Assert.AreEqual("[1]Uses!$A$1", cXSLX_cell.CellFormula);
+            Assert.AreEqual("[1]Defines!NR_To_A1", cXSLX_sNR.CellFormula);
+            Assert.AreEqual("[1]!NR_Global_B2", cXSLX_gNR.CellFormula);
+
+            Assert.AreEqual("Hello!", cXSLX_cell.StringCellValue);
+            Assert.AreEqual("Test A1", cXSLX_sNR.StringCellValue);
+            Assert.AreEqual(142.0, cXSLX_gNR.NumericCellValue);
+
+            // References to a .xls file
+            IRow rXSL = s.GetRow(4);
+            ICell cXSL_cell = rXSL.GetCell(4);
+            ICell cXSL_sNR = rXSL.GetCell(6);
+            ICell cXSL_gNR = rXSL.GetCell(8);
+            Assert.AreEqual("[2]Uses!$C$1", cXSL_cell.CellFormula);
+            Assert.AreEqual("[2]Defines!NR_To_A1", cXSL_sNR.CellFormula);
+            Assert.AreEqual("[2]!NR_Global_B2", cXSL_gNR.CellFormula);
+
+            Assert.AreEqual("Hello!", cXSL_cell.StringCellValue);
+            Assert.AreEqual("Test A1", cXSL_sNR.StringCellValue);
+            Assert.AreEqual(142.0, cXSL_gNR.NumericCellValue);
+
+            // Try Evaluating
+            // TODO
+        }
+
+        /**
+         * If a formula references cells or named ranges in another workbook,
+         *  but that isn't available at Evaluation time, the cached values
+         *  should be used instead
+         * TODO Add the support then add a unit test
+         * See bug #56752
+         */
+        [Test]
+        public void TestCachedReferencesToOtherWorkbooks()
+        {
+            // TODO
+        }
+
     }
 
 }

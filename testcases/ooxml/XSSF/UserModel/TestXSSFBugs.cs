@@ -1723,7 +1723,6 @@ using NPOI.SS.Formula.Eval;
          * NPOI.SS.Formula.FormulaParseException: Cell reference expected After sheet name at index 9
          * NPOI.SS.Formula.FormulaParseException: Parse error near char 0 '[' in specified formula '[0]!NR_Global_B2'. Expected number, string, or defined name 
          */
-        [Ignore]
         [Test]
         public void Bug56737()
         {

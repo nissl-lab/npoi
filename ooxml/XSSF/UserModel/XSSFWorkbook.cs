@@ -1302,16 +1302,22 @@ namespace NPOI.XSSF.UserModel
         public void SetSheetName(int sheetIndex, String sheetname)
         {
             ValidateSheetIndex(sheetIndex);
+            String oldSheetName = GetSheetName(sheetIndex);
 
             // YK: Mimic Excel and silently tRuncate sheet names longer than 31 characters
             if (sheetname != null && sheetname.Length > 31) sheetname = sheetname.Substring(0, 31);
             WorkbookUtil.ValidateSheetName(sheetname);
 
+            // Do nothing if no change
+            if (sheetname.Equals(oldSheetName)) return;
+
+            // Check it isn't already taken
             if (ContainsSheet(sheetname, sheetIndex))
                 throw new ArgumentException("The workbook already contains a sheet of this name");
 
+            // Update references to the name
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);
-            utils.UpdateSheetName(sheetIndex, sheetname);
+            utils.UpdateSheetName(sheetIndex, oldSheetName, sheetname);
 
             workbook.sheets.GetSheetArray(sheetIndex).name = (sheetname);
         }

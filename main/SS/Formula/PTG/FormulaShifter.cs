@@ -176,6 +176,7 @@ namespace NPOI.SS.Formula
                        !_sheetName.Equals(rpxg.SheetName))
                 {
                     // only move 3D refs that refer to the sheet with cells being moved
+                    return null;
                 }
                 return RowMoveRefPtg(rpxg);
             }
