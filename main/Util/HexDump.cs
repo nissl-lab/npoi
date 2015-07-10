@@ -167,7 +167,7 @@ namespace NPOI.Util
             {
                 if (data.Length == 0)
                 {
-                    byte[] info = System.Text.Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "No Data{0}", Environment.NewLine));
+                    byte[] info = Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "No Data{0}", EOL));
                     if (stream != null)
                     {
                         //Console.Write(info);
@@ -233,6 +233,45 @@ namespace NPOI.Util
                 }
             }
         }
+
+
+        /**
+         * Dumps <code>bytesToDump</code> bytes to an output stream.
+         *
+         * @param in          The stream to read from
+         * @param out         The output stream
+         * @param start       The index to use as the starting position for the left hand side label
+         * @param bytesToDump The number of bytes to output.  Use -1 to read until the end of file.
+         */
+        public static void Dump(Stream in1, Stream out1, int start, int bytesToDump ) 
+        {
+            MemoryStream buf = new MemoryStream();
+            if (bytesToDump == -1)
+            {
+                int c = in1.ReadByte();
+                while (c != -1)
+                {
+                    buf.WriteByte((byte)c);
+                    c = in1.ReadByte();
+                }
+            }
+            else
+            {
+                int bytesRemaining = bytesToDump;
+                while (bytesRemaining-- > 0)
+                {
+                    int c = in1.ReadByte();
+                    if (c == -1) {
+                        break;
+                    }
+                    buf.WriteByte((byte)c);
+                }
+            }
+
+            byte[] data = buf.ToArray();
+            Dump(data, 0, out1, start, data.Length);
+        }
+
         /// <summary>
         /// Shorts to hex.
         /// </summary>
@@ -322,8 +361,11 @@ namespace NPOI.Util
             buffer.Append('[');
             for (int i = 0; i < value.Length; i++)
             {
+                if (i > 0)
+                {
+                    buffer.Append(", ");
+                }
                 buffer.Append(ToHex(value[i]));
-                buffer.Append(", ");
             }
             buffer.Append(']');
             return buffer.ToString();
@@ -335,8 +377,12 @@ namespace NPOI.Util
             buffer.Append('[');
             for (int i = 0; i < value.Length; i++)
             {
+                if (i > 0)
+                {
+                    buffer.Append(", ");
+                }
                 buffer.Append(ToHex(value[i]));
-                buffer.Append(", ");
+                
             }
             buffer.Append(']');
             return buffer.ToString();
@@ -354,13 +400,15 @@ namespace NPOI.Util
 
         public static String ToHex(byte[] value, int bytesPerLine)
         {
-            int digits = (int)Math.Round(Math.Log(value.Length) / Math.Log(10) + 0.5);
+            int digits = value.Length == 0 ? 0 : (int)Math.Round(Math.Log(value.Length) / Math.Log(10) + 0.50000001);
             StringBuilder formatString = new StringBuilder();
             for (int i = 0; i < digits; i++)
                 formatString.Append('0');
             formatString.Append(": ");
             StringBuilder retVal = new StringBuilder();
             retVal.Append(((double)0).ToString(formatString.ToString(), CultureInfo.InvariantCulture));
+            if (value.Length == 0)
+                retVal.Append("0");
             int j = -1;
             for (int x = 0; x < value.Length; x++)
             {
@@ -370,8 +418,11 @@ namespace NPOI.Util
                     retVal.Append(((double)x).ToString(formatString.ToString(), CultureInfo.InvariantCulture));
                     j = 0;
                 }
+                else if (x > 0)
+                {
+                    retVal.Append(", ");
+                }
                 retVal.Append(ToHex(value[x]));
-                retVal.Append(", ");
             }
             return retVal.ToString();
         }
