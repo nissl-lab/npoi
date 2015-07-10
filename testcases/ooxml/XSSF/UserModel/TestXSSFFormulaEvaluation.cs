@@ -20,6 +20,8 @@ using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using System;
+using System.Collections.Generic;
+using TestCases.HSSF;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -107,7 +109,7 @@ namespace NPOI.XSSF.UserModel
         public void TestReferencesToOtherWorkbooks()
         {
             XSSFWorkbook wb = (XSSFWorkbook)_testDataProvider.OpenSampleWorkbook("ref2-56737.xlsx");
-            XSSFFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+            XSSFFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
             XSSFSheet s = wb.GetSheetAt(0) as XSSFSheet;
 
             // References to a .xlsx file
@@ -136,8 +138,37 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Test A1", cXSL_sNR.StringCellValue);
             Assert.AreEqual(142.0, cXSL_gNR.NumericCellValue);
 
-            // Try Evaluating
-            // TODO
+            // Try to Evaluate without references, won't work
+            // (At least, not unit we fix bug #56752 that is1)
+            try
+            {
+                evaluator.Evaluate(cXSL_cell);
+                Assert.Fail("Without a fix for #56752, shouldn't be able to Evaluate a " +
+                     "reference to a non-provided linked workbook");
+            }
+            catch (Exception e) { }
+
+            // Setup the environment
+            Dictionary<String, IFormulaEvaluator> evaluators = new Dictionary<String, IFormulaEvaluator>();
+            evaluators.Add("ref2-56737.xlsx", evaluator);
+            evaluators.Add("56737.xlsx",
+                    _testDataProvider.OpenSampleWorkbook("56737.xlsx").GetCreationHelper().CreateFormulaEvaluator());
+            evaluators.Add("56737.xls",
+                    HSSFTestDataSamples.OpenSampleWorkbook("56737.xls").GetCreationHelper().CreateFormulaEvaluator());
+            evaluator.SetupReferencedWorkbooks(evaluators);
+
+            // Try Evaluating all of them, ensure we don't blow up
+            foreach (IRow r in s)
+            {
+                foreach (ICell c in r)
+                {
+                    // TODO Fix and enable
+                    //               Evaluator.Evaluate(c);
+                }
+            }
+
+            // Evaluate and check results
+
         }
 
         /**

@@ -24,12 +24,13 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
+    using System.Collections.Generic;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * 
      */
-    public class HSSFFormulaEvaluator : IFormulaEvaluator
+    public class HSSFFormulaEvaluator : IFormulaEvaluator, IWorkbookEvaluatorProvider
     {
         private WorkbookEvaluator _bookEvaluator;
         // params to lookup the right constructor using reflection
@@ -170,6 +171,15 @@ namespace NPOI.HSSF.UserModel
             CollaboratingWorkbooksEnvironment.Setup(workbookNames, wbEvals);
         }
 
+        public void SetupReferencedWorkbooks(Dictionary<String, IFormulaEvaluator> evaluators)
+        {
+            CollaboratingWorkbooksEnvironment.SetupFormulaEvaluator(evaluators);
+        }
+
+        public WorkbookEvaluator GetWorkbookEvaluator()
+        {
+            return _bookEvaluator;
+        }
         /**
          * If cell Contains a formula, the formula is Evaluated and returned,
          * else the CellValue simply copies the appropriate cell value from

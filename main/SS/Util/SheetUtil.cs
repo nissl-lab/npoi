@@ -22,6 +22,7 @@ namespace NPOI.SS.Util
     using NPOI.SS.UserModel;
     using System.Drawing;
     using System.Windows.Forms;
+    using System.Collections.Generic;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -61,6 +62,7 @@ namespace NPOI.SS.Util
             public void NotifyUpdateCell(ICell cell) { }
             public CellValue Evaluate(ICell cell) { return null; }
             public ICell EvaluateInCell(ICell cell) { return null; }
+            public void SetupReferencedWorkbooks(Dictionary<String, IFormulaEvaluator> workbooks) { }
             public void EvaluateAll() { }
 
             public CellType EvaluateFormulaCell(ICell cell)

@@ -137,13 +137,24 @@ namespace NPOI.XSSF.UserModel
                 // External reference - reference is 1 based, link table is 0 based
                 int linkNumber = externalWorkbookNumber - 1;
                 ExternalLinksTable linkTable = _uBook.ExternalLinksTable[linkNumber];
-                return new ExternalName(nameName, -1, -1); // TODO Finish this
+                foreach (IName name in linkTable.DefinedNames)
+                {
+                    if (name.NameName.Equals(nameName))
+                    {
+                        // TODO Return a more specialised form of this, see bug #56752
+                        // Should include the cached values, for in case that book isn't available
+                        // Should support XSSF stuff lookups
+                        return new ExternalName(nameName, -1, name.SheetIndex);
+                    }
+                }
+                throw new ArgumentException("Name '" + nameName + "' not found in " +
+                                                   "reference to " + linkTable.LinkedFileName);
             }
             else
             {
                 // Internal reference
                 int nameIdx = _uBook.GetNameIndex(nameName);
-                return new ExternalName(nameName, nameIdx, -1);  // TODO Is this right?
+                return new ExternalName(nameName, nameIdx, 0);  // TODO Is this right?
             }
 
         }
