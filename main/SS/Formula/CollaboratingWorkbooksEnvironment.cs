@@ -74,6 +74,7 @@ namespace NPOI.SS.Formula
                 throw new  ArgumentException("Must provide at least one collaborating worbook");
             }
             List<WorkbookEvaluator> temp = new List<WorkbookEvaluator>(evaluatorsByName.Count);
+            temp.AddRange(evaluatorsByName.Values);
             WorkbookEvaluator[] evaluators = temp.ToArray();
             new CollaboratingWorkbooksEnvironment(evaluatorsByName, evaluators);
         }

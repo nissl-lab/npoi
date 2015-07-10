@@ -113,16 +113,8 @@ namespace NPOI.SS.Formula
         /* package */
         internal IEvaluationName GetName(String name, int sheetIndex)
         {
-            NamePtg namePtg = _workbook.GetName(name, sheetIndex).CreatePtg();
-
-            if (namePtg == null)
-            {
-                return null;
-            }
-            else
-            {
-                return _workbook.GetName(namePtg);
-            }
+            IEvaluationName evalName = _workbook.GetName(name, sheetIndex);
+            return evalName;
         }
         private static bool IsDebugLogEnabled()
         {

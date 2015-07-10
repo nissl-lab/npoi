@@ -107,7 +107,9 @@ namespace NPOI.XSSF.UserModel
             {
                 IName nm = _uBook.GetNameAt(i);
                 String nameText = nm.NameName;
-                if (name.Equals(nameText, StringComparison.InvariantCultureIgnoreCase) && nm.SheetIndex == sheetIndex)
+                int nameSheetindex = nm.SheetIndex;
+                if (name.Equals(nameText, StringComparison.CurrentCultureIgnoreCase) &&
+                       (nameSheetindex == -1 || nameSheetindex == sheetIndex))
                 {
                     return new Name(_uBook.GetNameAt(i), i, this);
                 }
@@ -141,10 +143,13 @@ namespace NPOI.XSSF.UserModel
                 {
                     if (name.NameName.Equals(nameName))
                     {
+                        // HSSF returns one sheet higher than normal, and various bits
+                        //  of the code assume that. So, make us match that behaviour!
+                        int nameSheetIndex = name.SheetIndex + 1;
                         // TODO Return a more specialised form of this, see bug #56752
                         // Should include the cached values, for in case that book isn't available
                         // Should support XSSF stuff lookups
-                        return new ExternalName(nameName, -1, name.SheetIndex);
+                        return new ExternalName(nameName, -1, nameSheetIndex);
                     }
                 }
                 throw new ArgumentException("Name '" + nameName + "' not found in " +
