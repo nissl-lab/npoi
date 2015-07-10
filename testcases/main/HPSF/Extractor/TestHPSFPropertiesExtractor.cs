@@ -30,6 +30,7 @@ namespace TestCases.HPSF.Extractor
     using NPOI.HSSF.Extractor;
     using NPOI.HPSF.Extractor;
     using TestCases.HSSF;
+    using NPOI.HPSF;
 
     [TestFixture]
     public class TestHPSFPropertiesExtractor
@@ -139,6 +140,19 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(txt.IndexOf("PID_REVNUMBER") != -1);
             Assert.IsTrue(txt.IndexOf("PID_THUMBNAIL") != -1);
         }
+
+        [Test]
+        public void TestThumbnail()
+        {
+            POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestThumbnail.xls"));
+            HSSFWorkbook wb = new HSSFWorkbook(fs);
+            Thumbnail thumbnail = new Thumbnail(wb.SummaryInformation.Thumbnail);
+            Assert.AreEqual(-1, thumbnail.ClipboardFormatTag);
+            Assert.AreEqual(3, thumbnail.GetClipboardFormat());
+            Assert.IsNotNull(thumbnail.GetThumbnailAsWMF());
+            //wb.Close();
+        }
+
     }
 
 
