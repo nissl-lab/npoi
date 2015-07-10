@@ -25,6 +25,7 @@ namespace TestCases.HSSF.UserModel
     using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
 
     /**
      * Class TestHSSFDateUtil
@@ -414,6 +415,19 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(DateUtil.IsADateFormat(style.DataFormat, style.GetDataFormatString()));
             Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
         }
+
+        [Test]
+        public void ExcelDateBorderCases()
+        {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+            Assert.AreEqual(1.0, DateUtil.GetExcelDate(df.Parse("1900-01-01")), 0.00001);
+            Assert.AreEqual(31.0, DateUtil.GetExcelDate(df.Parse("1900-01-31")), 0.00001);
+            Assert.AreEqual(32.0, DateUtil.GetExcelDate(df.Parse("1900-02-01")), 0.00001);
+            Assert.AreEqual(/* BAD_DATE! */ -1.0, DateUtil.GetExcelDate(df.Parse("1899-12-31")), 0.00001);
+        }
+
+
         [Test]
         public void TestDateBug_2Excel()
         {

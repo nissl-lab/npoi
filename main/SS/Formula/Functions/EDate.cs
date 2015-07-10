@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula.Functions
 
         public static FreeRefFunction Instance = new EDate();
 
-        private EDate()
+        internal EDate()
         {
             // enforce singleton
         }
@@ -56,8 +56,8 @@ namespace NPOI.SS.Formula.Functions
             try
             {
                 double startDateAsNumber = GetValue(args[0]);
-                NumberEval offsetInYearsValue = (NumberEval)args[1];
-                int offsetInMonthAsNumber = (int)offsetInYearsValue.NumberValue;
+                int offsetInMonthAsNumber = (int)GetValue(args[1]);
+
                 // resolve the arguments
                 DateTime startDate = DateUtil.GetJavaDate(startDateAsNumber);
 
@@ -78,12 +78,23 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ((NumberEval)arg).NumberValue;
             }
+            if (arg is BlankEval)
+            {
+                return 0;
+            }
             if (arg is RefEval)
             {
                 ValueEval innerValueEval = ((RefEval)arg).InnerValueEval;
-                return ((NumberEval)innerValueEval).NumberValue;
+                if (innerValueEval is NumberEval)
+                {
+                    return ((NumberEval)innerValueEval).NumberValue;
+                }
+                if (innerValueEval is BlankEval)
+                {
+                    return 0;
+                }
             }
-            throw new EvaluationException(ErrorEval.REF_INVALID);
+            throw new EvaluationException(ErrorEval.VALUE_INVALID);
         }
     }
 }

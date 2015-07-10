@@ -588,6 +588,8 @@ using NPOI.SS.Formula.Eval;
             r = s.GetRow(0) as XSSFRow;
             c = r.GetCell(0) as XSSFCell;
             Assert.AreEqual("hello world", c.RichStringCellValue.ToString());
+
+            wb.Close();
         }
 
         /**
@@ -628,7 +630,7 @@ using NPOI.SS.Formula.Eval;
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("shared_formulas.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
 
-            IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            XSSFWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             // CalcChain has lots of entries
             CalculationChain cc = wb.GetCalculationChain();
             Assert.AreEqual("A2", cc.GetCTCalcChain().GetCArray(0).r);
@@ -639,8 +641,9 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A7", cc.GetCTCalcChain().GetCArray(5).r);
             Assert.AreEqual("A8", cc.GetCTCalcChain().GetCArray(6).r);
             Assert.AreEqual(40, cc.GetCTCalcChain().SizeOfCArray());
+            wbRead.Close();
 
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
 
             // Try various ways of changing the formulas
             // If it stays a formula, chain entry should remain
@@ -648,21 +651,26 @@ using NPOI.SS.Formula.Eval;
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
             sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wbRead.Close();
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wbRead.Close();
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
 
             validateCells(sheet);
             sheet.GetRow(5).RemoveCell(
                   sheet.GetRow(5).GetCell(0)  // go
             );
             validateCells(sheet);
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wbRead.Close();
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
 
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wbRead.Close();
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wbRead.Close();
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
 
             // Save and check
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
@@ -672,7 +680,7 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A2", cc.GetCTCalcChain().GetCArray(0).r);
             Assert.AreEqual("A4", cc.GetCTCalcChain().GetCArray(1).r);
             Assert.AreEqual("A9", cc.GetCTCalcChain().GetCArray(2).r);
-
+            wbRead.Close();
         }
         [Test]
         public void Bug49966Row()
@@ -979,10 +987,12 @@ using NPOI.SS.Formula.Eval;
             row = sheet.GetRow(2) as XSSFRow;
             cell = row.GetCell(2) as XSSFCell;
             Assert.AreEqual(text, cell.StringCellValue);
+            wb.Close();
 
             //       FileOutputStream out = new FileOutputStream("/tmp/test48877.xlsx");
             //       wb.Write(out);
             //       out.Close();
+            
         }
 
         /**
@@ -1144,6 +1154,9 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
             Assert.AreEqual(true, ps2.ValidSettings);
             Assert.AreEqual(false, ps2.Landscape);
+
+            wb1.Close();
+            wb2.Close();
         }
 
         /**
@@ -1221,6 +1234,8 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(pinkStyle, s.GetColumnStyle(0));
             Assert.AreEqual(defaultStyle, s.GetColumnStyle(2));
             Assert.AreEqual(blueStyle, s.GetColumnStyle(3));
+
+            wb.Close();
         }
 
         /**
@@ -1584,6 +1599,8 @@ using NPOI.SS.Formula.Eval;
             byte[] secondSave = bos2.ToArray();
 
             Assert.That(firstSave, new EqualConstraint(secondSave));
+
+            wb.Close();
         }
         /**
          * ISO-8601 style cell formats with a T in them, eg
@@ -1777,27 +1794,82 @@ using NPOI.SS.Formula.Eval;
             FileStream is1 = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
             try
             {
-                IWorkbook newWB;
-                if (wb is XSSFWorkbook)
+                IWorkbook newWB = null;
+                try
                 {
-                    newWB = new XSSFWorkbook(is1);
+                    if (wb is XSSFWorkbook)
+                    {
+                        newWB = new XSSFWorkbook(is1);
+                    }
+                    else if (wb is HSSFWorkbook)
+                    {
+                        newWB = new HSSFWorkbook(is1);
+                        //} else if(wb is SXSSFWorkbook) {
+                        //    newWB = new SXSSFWorkbook(new XSSFWorkbook(is1));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Unknown workbook: " + wb);
+                    }
+                    Assert.IsNotNull(newWB.GetSheet("test"));
                 }
-                else if (wb is HSSFWorkbook)
+                finally
                 {
-                    newWB = new HSSFWorkbook(is1);
-                    //} else if(wb is SXSSFWorkbook) {
-                    //    newWB = new SXSSFWorkbook(new XSSFWorkbook(is1));
+                    if (newWB != null)
+                    {
+                        //newWB.Close();
+                    }
                 }
-                else
-                {
-                    throw new InvalidOperationException("Unknown workbook: " + wb);
-                }
-                Assert.IsNotNull(newWB.GetSheet("test"));
             }
             finally
             {
                 is1.Close();
             }
+        }
+
+        [Test]
+        public void TestBug56688_1()
+        {
+            XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_1.xlsx");
+            CheckValue(excel, "-1.0");  /* Not 0.0 because POI sees date "0" minus one month as invalid date, which is -1! */
+        }
+
+        [Test]
+        public void TestBug56688_2()
+        {
+            XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_2.xlsx");
+            CheckValue(excel, "#VALUE!");
+        }
+
+        [Test]
+        public void TestBug56688_3()
+        {
+            XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_3.xlsx");
+            CheckValue(excel, "#VALUE!");
+        }
+
+        [Test]
+        public void TestBug56688_4()
+        {
+            XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_4.xlsx");
+
+            //        Calendar calendar = Calendar.Instance;
+            //        calendar.Add(Calendar.MONTH, 2);
+            //        double excelDate = DateUtil.GetExcelDate(calendar.Time);
+            //        NumberEval eval = new NumberEval(Math.Floor(excelDate));
+            //        CheckValue(excel, Eval.StringValue + ".0");
+            CheckValue(excel, "41904.0");
+        }
+
+        private void CheckValue(XSSFWorkbook excel, String expect)
+        {
+            XSSFFormulaEvaluator Evaluator = new XSSFFormulaEvaluator(excel);
+            Evaluator.EvaluateAll();
+
+            XSSFCell cell = excel.GetSheetAt(0).GetRow(1).GetCell(1) as XSSFCell;
+            CellValue value = Evaluator.Evaluate(cell);
+
+            Assert.AreEqual(expect, value.FormatAsString());
         }
 
     }

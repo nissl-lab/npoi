@@ -178,7 +178,25 @@ namespace NPOI
             OnDocumentRead();
             context.Clear();
         }
-
+        /**
+         * Closes the underlying {@link OPCPackage} from which this
+         *  document was read, if there is one
+         */
+        public void Close()
+        {
+            if (pkg != null)
+            {
+                if (pkg.GetPackageAccess() == PackageAccess.READ)
+                {
+                    pkg.Revert();
+                }
+                else
+                {
+                    pkg.Close();
+                }
+                pkg = null;
+            }
+        }
         /**
          * Write out this document to an Outputstream.
          *
@@ -188,10 +206,10 @@ namespace NPOI
          */
         public void Write(Stream stream)
         {
-            //if (!this.GetProperties().CustomProperties.Contains("Generator"))
-            //    this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
-            //if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
-            //    this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+            if (!this.GetProperties().CustomProperties.Contains("Generator"))
+                this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
+            if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
+                this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
             //force all children to commit their Changes into the underlying OOXML Package
             List<PackagePart> context = new List<PackagePart>();
             OnSave(context);
