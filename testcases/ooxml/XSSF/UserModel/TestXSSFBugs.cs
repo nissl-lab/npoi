@@ -39,6 +39,7 @@ using NPOI.SS.Formula.Eval;
     using NUnit.Framework.Constraints;
     using NPOI.Util;
     using TestCases.HSSF;
+    using System.Globalization;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -1831,7 +1832,8 @@ using NPOI.SS.Formula.Eval;
         public void TestBug56688_1()
         {
             XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_1.xlsx");
-            CheckValue(excel, "-1.0");  /* Not 0.0 because POI sees date "0" minus one month as invalid date, which is -1! */
+            //CheckValue(excel, "-1.0");  /* Not 0.0 because POI sees date "0" minus one month as invalid date, which is -1! */
+            CheckValue(excel, "-1");
         }
 
         [Test]
@@ -1853,12 +1855,12 @@ using NPOI.SS.Formula.Eval;
         {
             XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_4.xlsx");
 
-            //        Calendar calendar = Calendar.Instance;
-            //        calendar.Add(Calendar.MONTH, 2);
-            //        double excelDate = DateUtil.GetExcelDate(calendar.Time);
-            //        NumberEval eval = new NumberEval(Math.Floor(excelDate));
-            //        CheckValue(excel, Eval.StringValue + ".0");
-            CheckValue(excel, "41904.0");
+            Calendar calendar = new GregorianCalendar(GregorianCalendarTypes.USEnglish);
+            DateTime time = calendar.AddMonths(DateTime.Now, 2);
+            double excelDate = DateUtil.GetExcelDate(time);
+            NumberEval eval = new NumberEval(Math.Floor(excelDate));
+            //CheckValue(excel, eval.StringValue + ".0");
+            CheckValue(excel, eval.StringValue);
         }
 
         private void CheckValue(XSSFWorkbook excel, String expect)
