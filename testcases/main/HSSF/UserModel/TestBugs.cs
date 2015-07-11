@@ -3258,6 +3258,16 @@ namespace TestCases.HSSF.UserModel
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.AreEqual("4", eval.Evaluate(intF).FormatAsString());
         }
+        [Test]
+        public void Bug42016()
+        {
+            IWorkbook wb = OpenSample("42016.xls");
+            ISheet s = wb.GetSheetAt(0);
+            for (int row = 0; row < 7; row++)
+            {
+                Assert.AreEqual("A$1+B$1", s.GetRow(row).GetCell(2).CellFormula);
+            }
+        }
 
     }
 }
