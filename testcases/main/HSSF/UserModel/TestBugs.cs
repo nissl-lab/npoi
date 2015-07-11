@@ -3237,5 +3237,27 @@ namespace TestCases.HSSF.UserModel
             // Optimise
             HSSFOptimiser.OptimiseCellStyles(workbook);
         }
+
+        /**
+         * Intersection formula ranges, eg =(C2:D3 D3:E4)
+         */
+        [Test]
+        public void Bug52111()
+        {
+            IWorkbook wb = OpenSample("Intersection-52111.xls");
+            ISheet s = wb.GetSheetAt(0);
+
+            // Check we can read it correctly
+            ICell intF = s.GetRow(2).GetCell(0);
+            Assert.AreEqual(CellType.Formula, intF.CellType);
+            Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+
+            Assert.AreEqual("(C2:D3 D3:E4)", intF.CellFormula);
+
+            // Check we can Evaluate it correctly
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("4", eval.Evaluate(intF).FormatAsString());
+        }
+
     }
 }
