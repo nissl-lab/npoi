@@ -260,7 +260,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public byte[] GetRgb()
         {
-            return rgbField;
+            byte[] retVal = new byte[rgbField.Length];
+            Array.Copy(rgbField, retVal, rgbField.Length);
+            return retVal;
         }
         #endregion rgb
 
