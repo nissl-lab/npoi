@@ -77,6 +77,39 @@ namespace TestCases.SS.Formula.PTG
             Assert.AreEqual(fc, aptg.FirstColumn);
             Assert.AreEqual(lc, aptg.LastColumn);
         }
+
+        [Test]
+        public void TestAbsoluteRelativeRefs()
+        {
+            AreaPtg sca1 = new AreaPtg(4, 5, 6, 7, true, false, true, false);
+            AreaPtg sca2 = new AreaPtg(4, 5, 6, 7, false, true, false, true);
+            AreaPtg sca3 = new AreaPtg(5, 5, 7, 7, true, false, true, false);
+            AreaPtg sca4 = new AreaPtg(5, 5, 7, 7, false, true, false, true);
+
+            Assert.AreEqual("G5:$H$6", sca1.ToFormulaString(), "first rel., last abs.");
+            Assert.AreEqual("$G$5:H6", sca2.ToFormulaString(), "first abs., last rel.");
+            Assert.AreEqual("H6:$H$6", sca3.ToFormulaString(), "first rel., last abs.");
+            Assert.AreEqual("$H$6:H6", sca4.ToFormulaString(), "first abs., last rel.");
+
+            AreaPtg cla1 = CloneArea(sca1);
+            AreaPtg cla2 = CloneArea(sca2);
+            AreaPtg cla3 = CloneArea(sca3);
+            AreaPtg cla4 = CloneArea(sca4);
+
+            Assert.AreEqual("G5:$H$6", cla1.ToFormulaString(), "first rel., last abs.");
+            Assert.AreEqual("$G$5:H6", cla2.ToFormulaString(), "first abs., last rel.");
+            Assert.AreEqual("H6:$H$6", cla3.ToFormulaString(), "first rel., last abs.");
+            Assert.AreEqual("$H$6:H6", cla4.ToFormulaString(), "first abs., last rel.");
+        }
+        private AreaPtg CloneArea(AreaPtg a)
+        {
+            return new AreaPtg(
+                    a.FirstRow, a.LastRow, a.FirstColumn, a.LastColumn,
+                    a.IsFirstRowRelative, a.IsLastRowRelative, a.IsFirstColRelative, a.IsLastColRelative
+            );
+        }
+
+
         [Test]
         public void TestFormulaParser()
         {
