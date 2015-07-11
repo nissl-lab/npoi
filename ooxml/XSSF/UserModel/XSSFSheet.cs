@@ -1735,8 +1735,9 @@ namespace NPOI.XSSF.UserModel
         {
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
 
-            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[ctMergeCells.sizeOfMergeCellArray() - 1];
-            for (int i = 0; i < ctMergeCells.sizeOfMergeCellArray(); i++)
+            int size = ctMergeCells.sizeOfMergeCellArray();
+            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[size - 1];
+            for (int i = 0; i < size; i++)
             {
                 if (i < index)
                 {
