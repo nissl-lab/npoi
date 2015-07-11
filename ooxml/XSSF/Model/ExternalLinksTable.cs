@@ -92,7 +92,7 @@ namespace NPOI.XSSF.Model
          * get or set the last recorded name of the file that this
          *  is linked to
          */
-        public String LinkedFileName
+        public virtual String LinkedFileName
         {
             get
             {

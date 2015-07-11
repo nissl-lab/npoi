@@ -26,6 +26,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
 using NPOI.Util;
 using NPOI.SS.Util;
+using System.Collections.Generic;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -89,17 +90,71 @@ namespace NPOI.XSSF.UserModel
             {
                 bookName = bookName.Substring(1, bookName.Length - 2);
             }
+
             // Is it already in numeric form?
             try
             {
-                return int.Parse(bookName);
+                return Int32.Parse(bookName);
             }
             catch (FormatException e) { }
-            
 
             // Look up an External Link Table for this name
-            throw new RuntimeException("Not implemented yet for book " + bookName); // TODO
+            List<ExternalLinksTable> tables = _uBook.ExternalLinksTable;
+            int index = FindExternalLinkIndex(bookName, tables);
+            if (index != -1) return index;
+
+            // Is it an absolute file reference?
+            if (bookName.StartsWith("'file:///") && bookName.EndsWith("'"))
+            {
+                String relBookName = bookName.Substring(bookName.LastIndexOf('/') + 1);
+                relBookName = relBookName.Substring(0, relBookName.Length - 1); // Trailing '
+
+                // Try with this name
+                index = FindExternalLinkIndex(relBookName, tables);
+                if (index != -1) return index;
+
+                // If we Get here, it's got no associated proper links yet
+                // So, add the missing reference and return
+                // Note - this is really rather nasty...
+                ExternalLinksTable fakeLinkTable = new FakeExternalLinksTable(relBookName);
+                tables.Add(fakeLinkTable);
+                return tables.Count; // 1 based results, 0 = current workbook
+            }
+
+            // Not properly referenced
+            throw new Exception("Book not linked for filename " + bookName);
         }
+        private int FindExternalLinkIndex(String bookName, List<ExternalLinksTable> tables)
+        {
+            for (int i = 0; i < tables.Count; i++)
+            {
+                if (tables[(i)].LinkedFileName.Equals(bookName))
+                {
+                    return i + 1; // 1 based results, 0 = current workbook
+                }
+            }
+            return -1;
+        }
+        private class FakeExternalLinksTable : ExternalLinksTable
+        {
+            private String fileName;
+            public FakeExternalLinksTable(String fileName)
+            {
+                this.fileName = fileName;
+            }
+            public override String LinkedFileName
+            {
+                get
+                {
+                    return fileName;
+                }
+                set
+                {
+                    this.fileName = value;
+                }
+            }
+        }
+
 
         public IEvaluationName GetName(String name, int sheetIndex)
         {
