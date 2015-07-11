@@ -1923,10 +1923,51 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A4", cRef.CellFormula);
         }
 
+        [Test]
+        public void Bug54764()
+        {
+            OPCPackage pkg = XSSFTestDataSamples.OpenSamplePackage("54764.xlsx");
+
+            // Check the core properties - will be found but empty, due
+            //  to the expansion being too much to be considered valid
+            POIXMLProperties props = new POIXMLProperties(pkg);
+            Assert.AreEqual(null, props.CoreProperties.Title);
+            Assert.AreEqual(null, props.CoreProperties.Subject);
+            Assert.AreEqual(null, props.CoreProperties.Description);
+
+            // Now check the spreadsheet itself
+
+            try
+            {
+                new XSSFWorkbook(pkg);
+                Assert.Fail("Should fail as too much expansion occurs");
+            }
+            catch (POIXMLException)
+            {
+                //Expected
+            }
+
+            // Try with one with the entities in the Content Types
+            try
+            {
+                XSSFTestDataSamples.OpenSamplePackage("54764-2.xlsx");
+                Assert.Fail("Should fail as too much expansion occurs");
+            }
+            catch (Exception)
+            {
+                // Expected
+            }
+
+            // Check we can still parse valid files after all that
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
+            Assert.AreEqual(3, wb.NumberOfSheets);
+        }
+
+
         /**
-     * .xlsb files are not supported, but we should generate a helpful
-     *  error message if given one
-     */
+         * .xlsb files are not supported, but we should generate a helpful
+         *  error message if given one
+         */
         [Test]
         public void Bug56800_xlsb()
         {
