@@ -1863,6 +1863,38 @@ using NPOI.SS.Formula.Eval;
             CheckValue(excel, eval.StringValue);
         }
 
+        [Test]
+        public void TestBug56527()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFCreationHelper creationHelper = wb.GetCreationHelper() as XSSFCreationHelper;
+            XSSFHyperlink hyperlink;
+
+            // Try with a cell reference
+            hyperlink = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+            sheet.AddHyperlink(hyperlink);
+            hyperlink.Address = (/*setter*/"http://myurl");
+            hyperlink.SetCellReference(/*setter*/"B4");
+            Assert.AreEqual(3, hyperlink.FirstRow);
+            Assert.AreEqual(1, hyperlink.FirstColumn);
+            Assert.AreEqual(3, hyperlink.LastRow);
+            Assert.AreEqual(1, hyperlink.LastColumn);
+
+            // Try with explicit rows / columns
+            hyperlink = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+            sheet.AddHyperlink(hyperlink);
+            hyperlink.Address = (/*setter*/"http://myurl");
+            hyperlink.FirstRow = (/*setter*/5);
+            hyperlink.FirstColumn = (/*setter*/3);
+
+            Assert.AreEqual(5, hyperlink.FirstRow);
+            Assert.AreEqual(3, hyperlink.FirstColumn);
+            Assert.AreEqual(5, hyperlink.LastRow);
+            Assert.AreEqual(3, hyperlink.LastColumn);
+        }
+
+
         private void CheckValue(XSSFWorkbook excel, String expect)
         {
             XSSFFormulaEvaluator Evaluator = new XSSFFormulaEvaluator(excel);
