@@ -317,6 +317,18 @@ namespace NPOI.XSSF.UserModel
         {
             return _bookEvaluator;
         }
+
+        public bool IgnoreMissingWorkbooks
+        {
+            get
+            {
+                return _bookEvaluator.IgnoreMissingWorkbooks;
+            }
+            set
+            {
+                _bookEvaluator.IgnoreMissingWorkbooks = value;
+            }
+        }
         public bool DebugEvaluationOutputForNextEval
         {
             get 

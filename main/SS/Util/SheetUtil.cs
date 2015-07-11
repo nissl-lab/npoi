@@ -62,6 +62,7 @@ namespace NPOI.SS.Util
             public void NotifyUpdateCell(ICell cell) { }
             public CellValue Evaluate(ICell cell) { return null; }
             public ICell EvaluateInCell(ICell cell) { return null; }
+            public bool IgnoreMissingWorkbooks { get; set; }
             public void SetupReferencedWorkbooks(Dictionary<String, IFormulaEvaluator> workbooks) { }
             public void EvaluateAll() { }
 

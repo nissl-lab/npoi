@@ -124,6 +124,24 @@ namespace NPOI.SS.UserModel
         void SetupReferencedWorkbooks(Dictionary<string, IFormulaEvaluator> workbooks);
 
         /**
+         * Whether to ignore missing references to external workbooks and
+         * use cached formula results in the main workbook instead.
+         * <p>
+         * In some cases external workbooks referenced by formulas in the main workbook are not available.
+         * With this method you can control how POI handles such missing references:
+         * <ul>
+         *     <li>by default ignoreMissingWorkbooks=false and POI throws 
+         *     {@link org.apache.poi.ss.formula.CollaboratingWorkbooksEnvironment.WorkbookNotFoundException}
+         *     if an external reference cannot be resolved</li>
+         *     <li>if ignoreMissingWorkbooks=true then POI uses cached formula result
+         *     that already exists in the main workbook</li>
+         * </ul>
+         *
+         * @param ignore whether to ignore missing references to external workbooks
+         */
+        bool IgnoreMissingWorkbooks { get; set; }
+
+        /**
          * Perform detailed output of formula evaluation for next evaluation only?
          * Is for developer use only (also developers using POI for their XLS files).
          * Log-Level WARN is for basic info, INFO for detailed information. These quite
