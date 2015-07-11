@@ -200,13 +200,22 @@ namespace NPOI.XSSF.UserModel.Helpers
             IWorkbook wb = sheet.Workbook;
             int sheetIndex = wb.GetSheetIndex(sheet);
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex);
-            String ShiftedFmla = null;
-            if (Shifter.AdjustFormula(ptgs, sheetIndex))
+            try
             {
-                ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
+                Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex);
+                String ShiftedFmla = null;
+                if (Shifter.AdjustFormula(ptgs, sheetIndex))
+                {
+                    ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
+                }
+                return ShiftedFmla;
             }
-            return ShiftedFmla;
+            catch (FormulaParseException fpe)
+            {
+                // Log, but don't change, rather than breaking
+                Console.WriteLine("Error shifting formula on row {0}, {1}", row.RowNum, fpe);
+                return formula;
+            }
         }
 
         public void UpdateConditionalFormatting(FormulaShifter Shifter) {

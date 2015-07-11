@@ -1863,6 +1863,10 @@ using NPOI.SS.Formula.Eval;
             CheckValue(excel, eval.StringValue);
         }
 
+        /**
+         * New hyperlink with no initial cell reference, still need
+         *  to be able to change it
+         */
         [Test]
         public void TestBug56527()
         {
@@ -1894,6 +1898,30 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(3, hyperlink.LastColumn);
         }
 
+        /**
+         * Shifting rows with a formula that references a 
+         * function in another file
+         */
+        [Test]
+        public void Bug56502()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56502.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+
+            ICell cFunc = sheet.GetRow(3).GetCell(0);
+            Assert.AreEqual("[1]!LUCANET(\"Ist\")", cFunc.CellFormula);
+            ICell cRef = sheet.GetRow(3).CreateCell(1);
+            cRef.CellFormula = (/*setter*/"A3");
+
+            // Shift it down one row
+            sheet.ShiftRows(1, sheet.LastRowNum, 1);
+
+            // Check the new formulas: Function won't Change, Reference will
+            cFunc = sheet.GetRow(4).GetCell(0);
+            Assert.AreEqual("[1]!LUCANET(\"Ist\")", cFunc.CellFormula);
+            cRef = sheet.GetRow(4).GetCell(1);
+            Assert.AreEqual("A4", cRef.CellFormula);
+        }
 
         private void CheckValue(XSSFWorkbook excel, String expect)
         {
