@@ -427,7 +427,7 @@ namespace NPOI.HSSF.Model
         }
         public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
         {
-            String nameName = linkTable.ResolveNameXText(externSheetIndex, externNameIndex);
+            String nameName = linkTable.ResolveNameXText(externSheetIndex, externNameIndex, this);
             if (nameName == null)
             {
                 return null;
@@ -867,13 +867,13 @@ namespace NPOI.HSSF.Model
             //}
         }
 
-        public void RemoveSheet(int sheetnum)
+        public void RemoveSheet(int sheetIndex)
         {
-            if (boundsheets.Count > sheetnum)
+            if (boundsheets.Count > sheetIndex)
             {
-                records.Remove(records.Bspos - (boundsheets.Count - 1) + sheetnum);
+                records.Remove(records.Bspos - (boundsheets.Count - 1) + sheetIndex);
                 //            records.bspos--;
-                boundsheets.RemoveAt(sheetnum);
+                boundsheets.RemoveAt(sheetIndex);
                 FixTabIdRecord();
             }
 
@@ -884,7 +884,7 @@ namespace NPOI.HSSF.Model
             // However, the sheet index must be adjusted, or
             //  excel will break. (Sheet index is either 0 for
             //  global, or 1 based index to sheet)
-            int sheetNum1Based = sheetnum + 1;
+            int sheetNum1Based = sheetIndex + 1;
             for (int i = 0; i < NumNames; i++)
             {
                 NameRecord nr = GetNameRecord(i);
@@ -892,17 +892,25 @@ namespace NPOI.HSSF.Model
                 if (nr.SheetNumber == sheetNum1Based)
                 {
                     // Excel re-writes these to point to no sheet
-                    nr.SheetNumber=(0);
+                    nr.SheetNumber = (0);
                 }
                 else if (nr.SheetNumber > sheetNum1Based)
                 {
                     // Bump down by one, so still points
                     //  at the same sheet
-                    nr.SheetNumber=(nr.SheetNumber - 1);
+                    nr.SheetNumber = (nr.SheetNumber - 1);
                     // also update the link-table as otherwise references might point at invalid sheets
-                    linkTable.UpdateIndexToInternalSheet(i, -1);
                 }
             }
+
+            // also tell the LinkTable about the removed sheet
+            // +1 because we already removed it from the count of sheets!
+            for (int i = sheetIndex + 1; i < NumSheets + 1; i++)
+            {
+                // also update the link-table as otherwise references might point at invalid sheets
+                linkTable.RemoveSheet(i);
+            }
+
         }
 
         /// <summary>
@@ -2938,7 +2946,7 @@ namespace NPOI.HSSF.Model
          */
         public String ResolveNameXText(int reFindex, int definedNameIndex)
         {
-            return linkTable.ResolveNameXText(reFindex, definedNameIndex);
+            return linkTable.ResolveNameXText(reFindex, definedNameIndex, this);
         }
 
         public NameRecord CloneFilter(int filterDbNameIndex, int newSheetIndex)

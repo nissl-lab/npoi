@@ -1,7 +1,7 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -16,14 +16,24 @@
 ==================================================================== */
 namespace NPOI.XWPF.UserModel
 {
+    using System;
 
 
     /**
-     * Interface for anything that can be within an STD:
-     *  {@link XWPFRun}, {@link XWPFTable}, {@link XWPFParagraph},
-     *  {@link XWPFSDT} etc
+     * Experimental interface to offer rudimentary Read-only Processing of
+     * of the contentblock of an SDT/ContentControl.
+     * <p/>
+     * <p/>
+     * <p/>
+     * WARNING - APIs expected to change rapidly
      */
-    public interface ISDTContents
+    public interface ISDTContent
     {
+
+        string Text { get; }
+
+        string ToString();
+
     }
+
 }

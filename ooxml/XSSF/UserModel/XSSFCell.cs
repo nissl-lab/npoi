@@ -210,6 +210,8 @@ namespace NPOI.XSSF.UserModel
                     case CellType.Numeric:
                         if (_cell.IsSetV())
                         {
+                            if (string.IsNullOrEmpty(_cell.v))
+                                return 0.0;
                             try
                             {
                                 return Double.Parse(_cell.v, CultureInfo.InvariantCulture);
@@ -840,7 +842,7 @@ namespace NPOI.XSSF.UserModel
                         FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         return sdf.Format(DateCellValue, CultureInfo.CurrentCulture);
                     }
-                    return NumericCellValue + "";
+                    return NumericCellValue.ToString();
                 case CellType.String:
                     return RichStringCellValue.ToString();
                 default:

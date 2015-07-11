@@ -204,6 +204,24 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Constructs a XSSFWorkbook object from a given file.
+         * 
+         * <p>Once you have finished working with the Workbook, you should close 
+         * the package by calling  {@link #close()}, to avoid leaving file 
+         * handles open.
+         * 
+         * <p>Opening a XSSFWorkbook from a file has a lower memory footprint 
+         *  than opening from an InputStream
+         *  
+         * @param file   the file to open
+         */
+        public XSSFWorkbook(FileInfo file)
+            : this(OPCPackage.Open(file))
+        {
+            ;
+        }
+
+        /**
          * Constructs a XSSFWorkbook object given a file name.
          *
          * <p>
@@ -238,9 +256,7 @@ namespace NPOI.XSSF.UserModel
          * </p>
          * 
          * @param      path   the file name.
-         * @deprecated
          */
-        [Obsolete]
         public XSSFWorkbook(String path)
             : this(OpenPackage(path))
         {
@@ -298,15 +314,7 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 // Process the named ranges
-                namedRanges = new List<XSSFName>();
-                if (workbook.IsSetDefinedNames())
-                {
-                    foreach (CT_DefinedName ctName in workbook.definedNames.definedName)
-                    {
-                        namedRanges.Add(new XSSFName(ctName, this));
-                    }
-                }
-
+                ReprocessNamedRanges();
             }
             catch (XmlException e)
             {
@@ -1321,7 +1329,13 @@ namespace NPOI.XSSF.UserModel
                     nr.Add(name.GetCTName());
                 }
                 names.SetDefinedNameArray(nr);
+                if (workbook.IsSetDefinedNames())
+                {
+                    workbook.unsetDefinedNames();
+                }
                 workbook.SetDefinedNames(names);
+                // Re-process the named ranges
+                ReprocessNamedRanges();
             }
             else
             {
@@ -1331,7 +1345,17 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-
+        private void ReprocessNamedRanges()
+        {
+            namedRanges = new List<XSSFName>();
+            if (workbook.IsSetDefinedNames())
+            {
+                foreach (CT_DefinedName ctName in workbook.definedNames.definedName)
+                {
+                    namedRanges.Add(new XSSFName(ctName, this));
+                }
+            }
+        }
         private void SaveCalculationChain()
         {
             if (calcChain != null)

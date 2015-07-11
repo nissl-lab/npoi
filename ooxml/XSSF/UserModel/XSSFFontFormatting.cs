@@ -173,7 +173,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _font.sizeOfBArray() == 1 && _font.GetBArray(0).val;
+                return _font.SizeOfBArray() == 1 && _font.GetBArray(0).val;
             }
         }
 

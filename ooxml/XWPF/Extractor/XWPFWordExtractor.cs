@@ -169,11 +169,18 @@ namespace NPOI.XWPF.Extractor
             //this works recursively to pull embedded tables from tables
             foreach (XWPFTableRow row in table.Rows)
             {
-                List<XWPFTableCell> cells = row.GetTableCells();
+                List<ICell> cells = row.GetTableICells();
                 for (int i = 0; i < cells.Count; i++)
                 {
-                    XWPFTableCell cell = cells[i];
-                    text.Append(cell.GetTextRecursively());
+                    ICell cell = cells[(i)];
+                    if (cell is XWPFTableCell)
+                    {
+                        text.Append(((XWPFTableCell)cell).GetTextRecursively());
+                    }
+                    else if (cell is XWPFSDTCell)
+                    {
+                        text.Append(((XWPFSDTCell)cell).Content.Text);
+                    }
                     if (i < cells.Count - 1)
                     {
                         text.Append("\t");

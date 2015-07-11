@@ -304,7 +304,7 @@ namespace NPOI.XSSF.UserModel
          */
         private void SetRunAttributes(CT_Font ctFont, CT_RPrElt pr)
         {
-            if (ctFont.sizeOfBArray() > 0) pr.AddNewB().val = (ctFont.GetBArray(0).val);
+            if (ctFont.SizeOfBArray() > 0) pr.AddNewB().val = (ctFont.GetBArray(0).val);
             if (ctFont.sizeOfUArray() > 0) pr.AddNewU().val =(ctFont.GetUArray(0).val);
             if (ctFont.sizeOfIArray() > 0) pr.AddNewI().val =(ctFont.GetIArray(0).val);
             if (ctFont.sizeOfColorArray() > 0)

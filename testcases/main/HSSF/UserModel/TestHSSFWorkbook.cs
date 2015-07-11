@@ -710,21 +710,31 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestWriteWorkbookFromNPOIFS()
         {
-            //throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls");
-            NPOIFSFileSystem fs = new NPOIFSFileSystem(is1);
+            try
+            {
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(is1);
+                try
+                {
+                    // Start as NPOIFS
+                    HSSFWorkbook wb = new HSSFWorkbook(fs.Root, true);
+                    Assert.AreEqual(3, wb.NumberOfSheets);
+                    Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
 
-            // Start as NPOIFS
-            HSSFWorkbook wb = new HSSFWorkbook(fs.Root, true);
-            Assert.AreEqual(3, wb.NumberOfSheets);
-            Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-
-            // Will switch to POIFS
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(3, wb.NumberOfSheets);
-            Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-
-            fs.Close();
+                    // Will switch to POIFS
+                    wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+                    Assert.AreEqual(3, wb.NumberOfSheets);
+                    Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+                }
+                finally
+                {
+                    fs.Close();
+                }
+            }
+            finally
+            {
+                is1.Close();
+            }
         }
 
         [Test]

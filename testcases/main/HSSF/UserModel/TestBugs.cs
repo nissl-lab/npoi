@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.HSSF.Record.Aggregates;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -2400,8 +2401,7 @@ namespace TestCases.HSSF.UserModel
             OpenSample("47251.xls");
 
             // Now with one that triggers on NoteRecord
-            // TODO Fix the bug and enable this bit of the test
-            //openSample("47251_1.xls");
+            OpenSample("47251_1.xls");
         }
         /**
      * Round trip a file with an unusual UnicodeString/ExtRst record parts
@@ -2885,6 +2885,57 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("51670.xls");
             WriteOutAndReadBack(wb);
         }
+        /**
+         * Note - part of this test is still failing, see
+         * {@link TestUnfixedBugs#test49612()}
+         */
+        [Test]
+        public void bug49612_part()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49612.xls");
+            HSSFSheet sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFRow row = sh.GetRow(0) as HSSFRow;
+            HSSFCell c1 = row.GetCell(2) as HSSFCell;
+            HSSFCell d1 = row.GetCell(3) as HSSFCell;
+            HSSFCell e1 = row.GetCell(2) as HSSFCell;
+
+            Assert.AreEqual("SUM(BOB+JIM)", c1.CellFormula);
+
+            // Problem 1: See TestUnfixedBugs#test49612()
+            // Problem 2: TestUnfixedBugs#test49612()
+
+            // Problem 3: These used to fail, now pass
+            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
+            Assert.AreEqual(30.0, eval.Evaluate(c1).NumberValue, 0.001, "Evaluating c1");
+            Assert.AreEqual(30.0, eval.Evaluate(d1).NumberValue, 0.001, "Evaluating d1");
+            Assert.AreEqual(30.0, eval.Evaluate(e1).NumberValue, 0.001, "Evaluating e1");
+        }
+
+        [Test]
+        public void bug51675()
+        {
+            List<short> list = new List<short>();
+            HSSFWorkbook workbook = OpenSample("51675.xls");
+            HSSFSheet sh = workbook.GetSheetAt(0) as HSSFSheet;
+            InternalSheet ish = HSSFTestHelper.GetSheetForTest(sh);
+            PageSettingsBlock psb = (PageSettingsBlock)ish.Records[(13)];
+            psb.VisitContainedRecords(new RecordVisitor1(list));
+            Assert.IsTrue(list[(list.Count - 1)] == UnknownRecord.BITMAP_00E9);
+            Assert.IsTrue(list[(list.Count - 2)] == UnknownRecord.HEADER_FOOTER_089C);
+        }
+        public class RecordVisitor1 : RecordVisitor
+        {
+            private List<short> list;
+            public RecordVisitor1(List<short> list)
+            {
+                this.list = list;
+            }
+
+            public void VisitRecord(NPOI.HSSF.Record.Record r)
+            {
+                list.Add(r.Sid);
+            }
+        }
 
         [Test]
         public void Test52272()
@@ -2985,7 +3036,7 @@ namespace TestCases.HSSF.UserModel
 
             // How close the sizing should be, given that not all
             //  systems will have quite the same fonts on them
-            float fontAccuracy = 0.15f;
+            float fontAccuracy = 0.22f;
 
             // x%
             ICellStyle iPercent = wb.CreateCellStyle();
@@ -3073,6 +3124,93 @@ namespace TestCases.HSSF.UserModel
                 }
             }
             Assert.AreEqual(0, comments);
+        }
+
+        [Test]
+        public void Bug56482()
+        {
+            HSSFWorkbook wb = OpenSample("56482.xls");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+
+            HSSFSheet sheet = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFSheetConditionalFormatting cf = sheet.SheetConditionalFormatting as HSSFSheetConditionalFormatting;
+
+            Assert.AreEqual(5, cf.NumConditionalFormattings);
+        }
+
+        [Test]
+        public void Bug56325()
+        {
+            HSSFWorkbook wb;
+
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("56325.xls");
+            Stream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                POIFSFileSystem fs = new POIFSFileSystem(stream);
+                wb = new HSSFWorkbook(fs);
+            }
+            finally
+            {
+                stream.Close();
+            }
+
+            Assert.AreEqual(3, wb.NumberOfSheets);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(2, wb.NumberOfSheets);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(2, wb.NumberOfSheets);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(0, wb.NumberOfSheets);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(0, wb.NumberOfSheets);
+        }
+
+        /**
+         * Formulas which reference named ranges, either in other
+         *  sheets, or workbook scoped but in other workbooks.
+         * Currently failing with 
+         * java.lang.Exception: Unexpected eval class (NPOI.SS.Formula.Eval.NameXEval)
+         */
+        [Test]
+        public void Bug56737()
+        {
+            IWorkbook wb = OpenSample("56737.xls");
+
+            // Check the named range defInitions
+            IName nSheetScope = wb.GetName("NR_To_A1");
+            IName nWBScope = wb.GetName("NR_Global_B2");
+
+            Assert.IsNotNull(nSheetScope);
+            Assert.IsNotNull(nWBScope);
+
+            Assert.AreEqual("Defines!$A$1", nSheetScope.RefersToFormula);
+            Assert.AreEqual("Defines!$B$2", nWBScope.RefersToFormula);
+
+            // Check the different kinds of formulas
+            ISheet s = wb.GetSheetAt(0);
+            ICell cRefSName = s.GetRow(1).GetCell(3);
+            ICell cRefWName = s.GetRow(2).GetCell(3);
+
+            Assert.AreEqual("Defines!NR_To_A1", cRefSName.CellFormula);
+            // TODO How does Excel know to prefix this with the filename?
+            // This is what Excel itself shows
+            //assertEquals("'56737.xls'!NR_Global_B2", cRefWName.getCellFormula());
+            // TODO This isn't right, but it's what we currently generate....
+            Assert.AreEqual("NR_Global_B2", cRefWName.CellFormula);
+        
+
+            // Try to Evaluate them
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("Test A1", eval.Evaluate(cRefSName).StringValue);
+            Assert.AreEqual(142, (int)eval.Evaluate(cRefWName).NumberValue);
+
+            // Try to Evaluate everything
+            eval.EvaluateAll();
         }
     }
 }

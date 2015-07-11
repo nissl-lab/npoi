@@ -28,7 +28,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Allow accessing the Initial value.
         /// </summary>
-        US_Letter = 0,
+        PRINTER_DEFAULT_PAPERSIZE = 0,
         US_Letter_Small = 1,
         US_Tabloid = 2,
         US_Ledger = 3,

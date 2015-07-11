@@ -251,7 +251,7 @@ namespace TestCases.HSSF.Model
 
             //check that
             Assert.AreEqual(0, tbl.ResolveNameXIx(namex1.SheetRefIndex, namex1.NameIndex));
-            Assert.AreEqual("ISODD", tbl.ResolveNameXText(namex1.SheetRefIndex, namex1.NameIndex));
+            Assert.AreEqual("ISODD", tbl.ResolveNameXText(namex1.SheetRefIndex, namex1.NameIndex, null));
 
             Assert.IsNull(tbl.GetNameXPtg("ISEVEN"));
             NameXPtg namex2 = tbl.AddNameXPtg("ISEVEN");  // Adds two new rercords
@@ -277,7 +277,7 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(wrl[(7)] is EOFRecord);
 
             Assert.AreEqual(0, tbl.ResolveNameXIx(namex2.SheetRefIndex, namex2.NameIndex));
-            Assert.AreEqual("ISEVEN", tbl.ResolveNameXText(namex2.SheetRefIndex, namex2.NameIndex));
+            Assert.AreEqual("ISEVEN", tbl.ResolveNameXText(namex2.SheetRefIndex, namex2.NameIndex, null));
 
         }
     }

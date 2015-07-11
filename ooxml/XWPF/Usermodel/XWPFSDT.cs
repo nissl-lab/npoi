@@ -29,78 +29,23 @@ namespace NPOI.XWPF.UserModel
      * WARNING - APIs expected to change rapidly
      * 
      */
-    public class XWPFSDT : IBodyElement, IRunBody, ISDTContents, IRunElement
+    public class XWPFSDT : AbstractXWPFSDT, IBodyElement, IRunBody, ISDTContents, IRunElement
     {
-        private String title;
-        private String tag;
-        private XWPFSDTContent content;
-        private IBody part;
+        private ISDTContent content;
 
         public XWPFSDT(CT_SdtRun sdtRun, IBody part)
+            : base(sdtRun.sdtPr, part)
         {
-            this.part = part;
             this.content = new XWPFSDTContent(sdtRun.sdtContent, part, this);
-            CT_SdtPr pr = sdtRun.sdtPr;
-            List<CT_String> aliases = pr.GetObjectList<CT_String>(SdtPrElementType.alias);
-            if (aliases != null && aliases.Count > 0)
-            {
-                title = aliases[0].val;
-            }
-            else
-            {
-                title = "";
-            }
-            CT_String[] array = pr.GetObjectList<CT_String>(SdtPrElementType.tag).ToArray();
-            if (array != null && array.Length > 0)
-            {
-                tag = array[0].val;
-            }
-            else
-            {
-                tag = "";
-            }
 
         }
         public XWPFSDT(CT_SdtBlock block, IBody part)
+            : base(block.sdtPr, part)
         {
-            this.part = part;
             this.content = new XWPFSDTContent(block.sdtContent, part, this);
-            CT_SdtPr pr = block.sdtPr;
-            List<CT_String> aliases = pr.GetObjectList<CT_String>(SdtPrElementType.alias);
-            if (aliases != null && aliases.Count > 0)
-            {
-                title = aliases[0].val;
-            }
-            else
-            {
-                title = "";
-            }
-            CT_String[] array = pr.GetObjectList<CT_String>(SdtPrElementType.tag).ToArray();
-            if (array != null && array.Length > 0)
-            {
-                tag = array[0].val;
-            }
-            else
-            {
-                tag = "";
-            }
+        }
 
-        }
-        public String Title
-        {
-            get
-            {
-                return title;
-            }
-        }
-        public String Tag
-        {
-            get
-            {
-                return tag;
-            }
-        }
-        public XWPFSDTContent Content
+        public override ISDTContent Content
         {
             get
             {
@@ -108,45 +53,29 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        public IBody Body
+        public XWPFDocument Document
         {
-            get
-            {
-                // TODO Auto-generated method stub
-                return null;
-            }
+            get { return GetDocument(); }
         }
 
         public POIXMLDocumentPart Part
         {
-            get
-            {
-                return part.Part;
-            }
+            get { return GetPart(); }
+        }
+
+        public IBody Body
+        {
+            get { return GetBody(); }
         }
 
         public BodyType PartType
         {
-            get
-            {
-                return BodyType.CONTENTCONTROL;
-            }
+            get { return GetPartType(); }
         }
 
         public BodyElementType ElementType
         {
-            get
-            {
-                return BodyElementType.CONTENTCONTROL;
-            }
-        }
-
-        public XWPFDocument Document
-        {
-            get
-            {
-                return part.GetXWPFDocument();
-            }
+            get { return GetElementType(); }
         }
     }
 

@@ -226,6 +226,7 @@
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
     <Compile Include="XWPF\Model\XWPFHyperlinkDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
+    <Compile Include="XWPF\Usermodel\AbstractXWPFSDT.cs" />
     <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
     <Compile Include="XWPF\Usermodel\BodyType.cs" />
     <Compile Include="XWPF\Usermodel\Borders.cs" />
@@ -234,8 +235,10 @@
     <Compile Include="XWPF\Usermodel\Document.cs" />
     <Compile Include="XWPF\Usermodel\IBody.cs" />
     <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
+    <Compile Include="XWPF\Usermodel\ICell.cs" />
     <Compile Include="XWPF\Usermodel\IRunBody.cs" />
     <Compile Include="XWPF\Usermodel\IRunElement.cs" />
+    <Compile Include="XWPF\Usermodel\ISDTContent.cs" />
     <Compile Include="XWPF\Usermodel\ISDTContents.cs" />
     <Compile Include="XWPF\Usermodel\LineSpacingRule.cs" />
     <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs" />
@@ -265,7 +268,9 @@
     <Compile Include="XWPF\Usermodel\XWPFRelation.cs" />
     <Compile Include="XWPF\Usermodel\XWPFRun.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSDT.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDTCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSDTContent.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDTContentCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />

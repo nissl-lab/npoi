@@ -25,7 +25,7 @@ namespace NPOI.XWPF.UserModel
      * Represents a Cell within a {@link XWPFTable}. The
      *  Cell is the thing that holds the actual content (paragraphs etc)
      */
-    public class XWPFTableCell : IBody
+    public class XWPFTableCell : IBody, ICell
     {
         private CT_Tc ctTc;
         protected List<XWPFParagraph> paragraphs = null;

@@ -104,28 +104,33 @@ namespace NPOI.XSSF.UserModel.Helpers
          */
         public CT_Col GetColumn1Based(long index1, bool splitColumns)
         {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            CT_Col[] colArray = cols.GetColList().ToArray();
-            foreach (CT_Col col in colArray)
+            CT_Cols colsArray = worksheet.GetColsArray(0);
+
+            // Fetching the array is quicker than working on the new style
+            //  list, assuming we need to read many of them (which we often do),
+            //  and assuming we're not making many changes (which we're not)
+            CT_Col[] cols = colsArray.GetColList().ToArray();
+            for (int i = 0; i < cols.Length; i++)
             {
-                long colMin = col.min;
-                long colMax = col.max;
+                CT_Col colArray = cols[i];
+                long colMin = colArray.min;
+                long colMax = colArray.max;
                 if (colMin <= index1 && colMax >= index1)
                 {
                     if (splitColumns)
                     {
                         if (colMin < index1)
                         {
-                            insertCol(cols, colMin, (index1 - 1), new CT_Col[] { col });
+                            insertCol(colsArray, colMin, (index1 - 1), new CT_Col[] { colArray });
                         }
                         if (colMax > index1)
                         {
-                            insertCol(cols, (index1 + 1), colMax, new CT_Col[] { col });
+                            insertCol(colsArray, (index1 + 1), colMax, new CT_Col[] { colArray });
                         }
-                        col.min = (uint)(index1);
-                        col.max = (uint)(index1);
+                        colArray.min = (uint)(index1);
+                        colArray.max = (uint)(index1);
                     }
-                    return col;
+                    return colArray;
                 }
             }
             return null;

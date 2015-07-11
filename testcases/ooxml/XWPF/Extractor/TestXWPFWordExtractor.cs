@@ -26,6 +26,7 @@ namespace NPOI.XWPF.Extractor
     using NPOI.XWPF.Extractor;
     using NUnit.Framework;
     using System.Diagnostics;
+    using System.Text.RegularExpressions;
 
     /**
      * Tests for HXFWordExtractor
@@ -334,12 +335,14 @@ namespace NPOI.XWPF.Extractor
             String[] targs = new String[]{
                 "header_rich_text",
                 "rich_text",
-                "rich_text_pre_table\nrich_text_cell1\t\t\t\n\nrich_text_post_table",
+                "rich_text_pre_table\nrich_text_cell1\t\t\t\n\t\t\t\n\t\t\t\n\nrich_text_post_table",
                 "plain_text_no_newlines",
                 "plain_text_with_newlines1\nplain_text_with_newlines2\n",
                 "watermelon\n",
                 "dirt\n",
                 "4/16/2013\n",
+                "rich_text_in_cell",
+                "abc",
                 "rich_text_in_paragraph_in_cell",
                 "footer_rich_text",
                 "footnote_sdt",
@@ -351,17 +354,54 @@ namespace NPOI.XWPF.Extractor
 
             foreach (String targ in targs)
             {
-                bool hit = false;
+                bool hitted = false;
                 if (s.IndexOf(targ) > -1)
                 {
-                    hit = true;
+                    hitted = true;
                     hits++;
                 }
-                Assert.AreEqual(true, hit, "controlled content loading-" + targ);
+                Assert.AreEqual(true, hitted, "controlled content loading-" + targ);
             }
             Assert.AreEqual(targs.Length, hits, "controlled content loading hit count");
 
             ex.Close();
+
+            doc = XWPFTestDataSamples.OpenSampleDocument("Bug54771a.docx");
+            targs = new String[]{
+                "bb",
+                "test subtitle\n",
+                "test user\n",
+        };
+            ex = new XWPFWordExtractor(doc);
+            s = ex.Text.ToLower();
+
+            //At one point in development there were three copies of the text.
+            //This ensures that there is only one copy.
+            MatchCollection mc;
+            int hit;
+            foreach (String targ in targs)
+            {
+                mc = Regex.Matches(s, targ);
+                hit = 0;
+                foreach (Match m in mc)
+                {
+                    if (m.Success)
+                        hit++;
+                }
+                Assert.AreEqual(1, hit, "controlled content loading-" + targ);
+            }
+            //"test\n" appears twice: once as the "title" and once in the text.
+            //This also happens when you save this document as text from MSWord.
+            mc = Regex.Matches(s, "test\n");
+            hit = 0;
+            foreach (Match m in mc)
+            {
+                if (m.Success)
+                    hit++;
+            }
+            Assert.AreEqual(2, hit, "test<N>");
+            ex.Close();
+
         }
 
         /** No Header or Footer in document */

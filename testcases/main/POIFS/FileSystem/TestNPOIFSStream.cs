@@ -64,6 +64,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b[5]);
             Assert.AreEqual((byte)0x00, b[6]);
             Assert.AreEqual((byte)0x00, b[7]);
+
+            fs.Close();
         }
 
         [Test]
@@ -104,6 +106,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b98[5]);
             Assert.AreEqual((byte)0x00, b98[6]);
             Assert.AreEqual((byte)0x00, b98[7]);
+
+            fs.Close();
         }
 
         [Test]
@@ -162,6 +166,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x01, b22[5]);
             Assert.AreEqual((byte)0x02, b22[6]);
             Assert.AreEqual((byte)0x00, b22[7]);
+
+            fs.Close();
         }
 
         [Test]
@@ -216,6 +222,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b2[5]);
             Assert.AreEqual((byte)0x46, b2[6]);
             Assert.AreEqual((byte)0x00, b2[7]);
+
+            fs.Close();
         }
 
         [Test]
@@ -251,14 +259,15 @@ namespace TestCases.POIFS.FileSystem
             try
             {
                 i.MoveNext();
-                Assert.AreEqual(true, i.MoveNext());
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
             catch (Exception)
             {
                 // Good, it was detected
             }
-            // Assert.AreEqual(true, i.MoveNext());
+            //Assert.AreEqual(true, i.MoveNext());
+
+            fs.Close();
         }
 
         [Test]
@@ -286,7 +295,7 @@ namespace TestCases.POIFS.FileSystem
            // i.MoveNext();
             ByteBuffer b180 = i.Current;
             Assert.AreEqual(false, i.MoveNext());
-           // Assert.AreEqual(false, i.MoveNext());
+            Assert.AreEqual(false, i.MoveNext());
            // Assert.AreEqual(false, i.MoveNext());
 
             // Check the contents of the 1st block
@@ -318,6 +327,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x00, b180[5]);
             Assert.AreEqual((byte)0x00, b180[6]);
             Assert.AreEqual((byte)0x80, b180[7]);
+
+            fs.Close();
         }
 
         [Test]
@@ -352,6 +363,8 @@ namespace TestCases.POIFS.FileSystem
                 byte exp = (byte)(i % 256);
                 Assert.AreEqual(exp, data[i]);
             }
+
+            fs.Close();
         }
 
         [Test]
@@ -397,6 +410,8 @@ namespace TestCases.POIFS.FileSystem
                 byte exp = (byte)(i % 256);
                 Assert.AreEqual(exp, data[i]);
             }
+
+            fs.Close();
         }
 
         [Test]
@@ -446,6 +461,8 @@ namespace TestCases.POIFS.FileSystem
                 count++;
             }
             Assert.AreEqual(3, count);
+
+            fs.Close();
         }
 
         [Test]
@@ -546,6 +563,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
+
+            fs.Close();
         }
 
         [Test]
@@ -585,6 +604,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(130, fs.GetNextBlock(129));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(130));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(131));
+
+            fs.Close();
         }
 
         [Test]
@@ -641,6 +662,8 @@ namespace TestCases.POIFS.FileSystem
                 count++;
             }
             Assert.AreEqual(5, count);
+
+            fs.Close();
         }
 
         [Test]
@@ -859,6 +882,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual((byte)0x42, b183[1]);
             Assert.AreEqual((byte)0x81, b184[0]);
             Assert.AreEqual((byte)0x82, b184[1]);
+
+            fs.Close();
         }
 
         [Test]
@@ -895,6 +920,8 @@ namespace TestCases.POIFS.FileSystem
                 Assert.Fail("Loop should have been detected but wasn't!");
             }
             catch (Exception) { }
+
+            fs.Close();
         }
 
         [Test]
@@ -973,6 +1000,8 @@ namespace TestCases.POIFS.FileSystem
             }
 
             Assert.AreEqual(false, it.MoveNext());
+
+            fs.Close();
         }
         /**
         * Writes a stream, then Replaces it
@@ -1164,6 +1193,8 @@ namespace TestCases.POIFS.FileSystem
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
             Assert.AreEqual(4096, normal.Size);
             Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+
+            fs.Close();
         }
 
     }

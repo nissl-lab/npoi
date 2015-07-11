@@ -21,6 +21,7 @@ using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
 using NPOI.XSSF.Model;
+using NPOI.SS.Util;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -316,6 +317,101 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        [Test]
+        public void Test56170()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56170.xlsx");
+            XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
+
+            IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            ICell cell;
+
+            // add some contents to table so that the table will need expansion
+            IRow row = sheet.GetRow(0);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            cell = row.CreateCell(0);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            cell.SetCellValue("demo1");
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            cell = row.CreateCell(1);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            cell.SetCellValue("demo2");
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            cell = row.CreateCell(2);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            cell.SetCellValue("demo3");
+
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+            row = sheet.GetRow(1);
+            cell = row.CreateCell(0);
+            cell.SetCellValue("demo1");
+            cell = row.CreateCell(1);
+            cell.SetCellValue("demo2");
+            cell = row.CreateCell(2);
+            cell.SetCellValue("demo3");
+
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+            // expand table
+            XSSFTable table = sheet.GetTables()[0];
+            CellReference startRef = table.GetStartCellReference();
+            CellReference endRef = table.GetEndCellReference();
+            table.GetCTTable().@ref = (new CellRangeAddress(startRef.Row, 1, startRef.Col, endRef.Col).FormatAsString());
+
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbRead);
+
+            /*FileOutputStream stream = new FileOutputStream("c:\\temp\\output.xlsx");
+            workbook.Write(stream);
+            stream.Close();*/
+        }
+
+        [Test]
+        public void Test56170Reproduce()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+
+            // by creating Cells out of order we trigger the handling in onDocumentWrite()
+            ICell cell1 = row.CreateCell(1);
+            ICell cell2 = row.CreateCell(0);
+
+            validateRow(row);
+
+            validateRow(row);
+
+            // once again with removing one cell
+            row.RemoveCell(cell1);
+
+            validateRow(row);
+
+            // once again with removing one cell
+            row.RemoveCell(cell1);
+
+            // now check again
+            validateRow(row);
+
+            // once again with removing one cell
+            row.RemoveCell(cell2);
+
+            // now check again
+            validateRow(row);
+        }
+
+        private void validateRow(IRow row)
+        {
+            // trigger bug with CArray handling
+            ((XSSFRow)row).OnDocumentWrite();
+
+            foreach (ICell cell in row)
+            {
+                cell.ToString();
+            }
+        }    
+
     }
 
 }

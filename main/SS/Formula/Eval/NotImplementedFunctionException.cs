@@ -14,16 +14,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.UserModel
+
+using System;
+namespace NPOI.SS.Formula.Eval
 {
-
-
     /**
-     * Interface for anything that can be within an STD:
-     *  {@link XWPFRun}, {@link XWPFTable}, {@link XWPFParagraph},
-     *  {@link XWPFSDT} etc
+     * An exception thrown by implementors of {@link FormulaEvaluator} when 
+     *  attempting to evaluate a formula which requires a function that POI 
+     *  does not (yet) support.
      */
-    public interface ISDTContents
+    public class NotImplementedFunctionException : NotImplementedException
     {
+        private static long serialVersionUID = 1208119411557559057L;
+
+        private String functionName;
+
+        public NotImplementedFunctionException(string functionName)
+            : base(functionName)
+        {
+            this.functionName = functionName;
+        }
+        public NotImplementedFunctionException(string functionName, NotImplementedException cause)
+            : base(functionName,cause)
+        {
+            this.functionName = functionName;
+        }
+
+        public String FunctionName
+        {
+            get
+            {
+                return functionName;
+            }
+        }
     }
 }

@@ -122,7 +122,7 @@ namespace TestCases.POIFS.FileSystem
                 {
                     Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
                 }
-
+                fs.Close();
             }
         }
 
@@ -190,6 +190,8 @@ namespace TestCases.POIFS.FileSystem
                     Assert.AreEqual((byte)0, b[6]);
                     Assert.AreEqual((byte)0, b[7]);
                 }
+
+                fs.Close();
             }
         }
 
@@ -218,6 +220,8 @@ namespace TestCases.POIFS.FileSystem
             // Allocate it, then ask again
             ministore.SetNextBlock(181, POIFSConstants.END_OF_CHAIN);
             Assert.AreEqual(182, ministore.GetFreeBlock());
+
+            fs.Close();
         }
 
         [Test]
@@ -262,6 +266,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(255)); // 2nd SBAT
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(256)); // 3rd SBAT
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(257)); // 3rd SBAT
+
+            fs.Close();
         }
 
         [Test]
@@ -353,6 +359,8 @@ namespace TestCases.POIFS.FileSystem
             {
                 Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
             }
+
+            fs.Close();
         }
 
     }

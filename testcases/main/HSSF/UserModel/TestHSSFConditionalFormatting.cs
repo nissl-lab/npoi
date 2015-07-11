@@ -53,19 +53,19 @@ namespace TestCases.HSSF.UserModel
             bordFmt.BorderRight = BorderStyle.Dotted;
 
             HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor= (HSSFColor.Yellow.Index);
+            patternFmt.FillBackgroundColor = (HSSFColor.Yellow.Index);
 
 
             HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Between, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
-		    {
-			    rule1, rule2
-		    };
+            {
+                rule1, rule2
+            };
 
             short col = 1;
             CellRangeAddress[] regions = {
-			    new CellRangeAddress(0, 65535, col, col)
-		    };
+                new CellRangeAddress(0, 65535, col, col)
+            };
 
             sheetCF.AddConditionalFormatting(regions, cfRules);
             sheetCF.AddConditionalFormatting(regions, cfRules);
@@ -133,14 +133,14 @@ namespace TestCases.HSSF.UserModel
 
             HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Between, "1", "2");
             HSSFConditionalFormattingRule[] cfRules =
-		    {
-			    rule1, rule2
-		    };
+            {
+                rule1, rule2
+            };
 
             short col = 1;
             CellRangeAddress[] regions = {
-			    new CellRangeAddress(0, 65535, col, col)
-		    };
+                new CellRangeAddress(0, 65535, col, col)
+            };
 
             sheetCF.AddConditionalFormatting(regions, cfRules);
 
@@ -177,8 +177,8 @@ namespace TestCases.HSSF.UserModel
             HSSFConditionalFormattingRule[] cfRules = { rule1, };
 
             CellRangeAddress[] regions = {
-			    new CellRangeAddress(2, 4, 0, 0), // A3:A5
-		    };
+                new CellRangeAddress(2, 4, 0, 0), // A3:A5
+            };
             sheetCF.AddConditionalFormatting(regions, cfRules);
 
             // This row-shift should destroy the CF region
@@ -199,5 +199,77 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("SUM(A10:A21)", cf.GetRule(0).Formula1);
             Assert.AreEqual("1+SUM(#REF!)", cf.GetRule(0).Formula2);
         }
+
+        [Test]
+        public void Test53691()
+        {
+            ISheetConditionalFormatting cf;
+            IWorkbook wb;
+            wb = HSSFITestDataProvider.Instance.OpenSampleWorkbook("53691.xls");
+            /*
+            FileInputStream s = new FileInputStream("C:\\temp\\53691bbadfixed.xls");
+            try {
+                wb = new HSSFWorkbook(s);
+            } finally {
+                s.Close();
+            }
+
+            wb.RemoveSheetAt(1);*/
+
+            // Initially it is good
+            WriteTemp53691(wb, "agood");
+
+            // clone sheet corrupts it
+            ISheet sheet = wb.CloneSheet(0);
+            WriteTemp53691(wb, "bbad");
+
+            // removing the sheet Makes it good again
+            wb.RemoveSheetAt(wb.GetSheetIndex(sheet));
+            WriteTemp53691(wb, "cgood");
+
+            // cloning again and removing the conditional formatting Makes it good again
+            sheet = wb.CloneSheet(0);
+            RemoveConditionalFormatting(sheet);
+            WriteTemp53691(wb, "dgood");
+
+            // cloning the conditional formatting manually Makes it bad again
+            cf = sheet.SheetConditionalFormatting;
+            ISheetConditionalFormatting scf = wb.GetSheetAt(0).SheetConditionalFormatting;
+            for (int j = 0; j < scf.NumConditionalFormattings; j++)
+            {
+                cf.AddConditionalFormatting(scf.GetConditionalFormattingAt(j));
+            }
+            WriteTemp53691(wb, "ebad");
+
+            // remove all conditional formatting for comparing BIFF output
+            RemoveConditionalFormatting(sheet);
+            RemoveConditionalFormatting(wb.GetSheetAt(0));
+            WriteTemp53691(wb, "fgood");
+        }
+
+        private void RemoveConditionalFormatting(ISheet sheet)
+        {
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            for (int j = 0; j < cf.NumConditionalFormattings; j++)
+            {
+                cf.RemoveConditionalFormatting(j);
+            }
+        }
+
+        private void WriteTemp53691(IWorkbook wb, String suffix)
+        {
+            // assert that we can Write/read it in memory
+            IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            /* Just necessary for local testing... */
+            /*OutputStream out1 = new FileOutputStream("C:\\temp\\53691" + suffix + ".xls");
+            try {
+                wb.Write(out1);
+            } finally {
+                out1.Close();
+            }*/
+        }
+
     }
 }

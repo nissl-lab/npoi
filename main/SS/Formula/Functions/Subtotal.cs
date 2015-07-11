@@ -15,8 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.Formula.Eval;
 using System;
+using NPOI.SS.Formula.Eval;
 namespace NPOI.SS.Formula.Functions
 {
     /**
@@ -66,10 +66,10 @@ namespace NPOI.SS.Formula.Functions
                 case 5: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN);
                 case 6: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT);
                 case 7: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV);
-                case 8: throw new NotImplementedException("STDEVP");
+                case 8: throw new NotImplementedFunctionException("STDEVP");
                 case 9: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM);
-                case 10: throw new NotImplementedException("VAR");
-                case 11: throw new NotImplementedException("VARP");
+                case 10: throw new NotImplementedFunctionException("VAR");
+                case 11: throw new NotImplementedFunctionException("VARP");
             }
             if (functionCode > 100 && functionCode < 112)
             {

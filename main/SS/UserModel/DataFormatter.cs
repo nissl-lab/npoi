@@ -407,6 +407,7 @@ namespace NPOI.SS.UserModel
             formatStr = formatStr.Replace(";@", "");
             formatStr = formatStr.Replace("\"/\"", "/"); // "/" is escaped for no reason in: mm"/"dd"/"yyyy
             formatStr = formatStr.Replace("\"\"", "'");	// replace Excel quoting with Java style quoting
+            formatStr = formatStr.Replace("\\\\T", "'T'"); // Quote the T is iso8601 style dates
 
             bool hasAmPm = Regex.IsMatch(formatStr, amPmPattern);
             if (hasAmPm)

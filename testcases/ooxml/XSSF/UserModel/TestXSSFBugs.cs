@@ -36,6 +36,9 @@ using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula.Eval;
     using TestCases;
     using NPOI.POIFS.FileSystem;
+    using NUnit.Framework.Constraints;
+    using NPOI.Util;
+    using TestCases.HSSF;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -171,7 +174,8 @@ using NPOI.SS.Formula.Eval;
         [Test]
         public void Test49020()
         {
-            /*XSSFWorkbook wb =*/ XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
+            /*XSSFWorkbook wb =*/
+            XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
         }
 
         /**
@@ -328,13 +332,15 @@ using NPOI.SS.Formula.Eval;
                 // Get a font, and slightly change it
                 IFont a = wb.CreateFont();
                 Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
-                a.FontHeightInPoints=((short)23);
+                a.FontHeightInPoints = ((short)23);
                 Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
 
                 // Get two more, unChanged
-                /*IFont b = */wb.CreateFont();
+                /*IFont b = */
+                wb.CreateFont();
                 Assert.AreEqual(startingFonts + 2, wb.NumberOfFonts);
-                /*IFont c = */wb.CreateFont();
+                /*IFont c = */
+                wb.CreateFont();
                 Assert.AreEqual(startingFonts + 3, wb.NumberOfFonts);
             }
         }
@@ -547,7 +553,7 @@ using NPOI.SS.Formula.Eval;
 
             // Apply a font
             XSSFFont f = wb.CreateFont() as XSSFFont;
-            f.IsBold=(true);
+            f.IsBold = (true);
             c.RichStringCellValue.ApplyFont(0, 5, f);
             Assert.AreEqual("hello world", c.RichStringCellValue.ToString());
             // Does need preserving on the 2nd part
@@ -612,6 +618,7 @@ using NPOI.SS.Formula.Eval;
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("shared_formulas.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
 
+            IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             // CalcChain has lots of entries
             CalculationChain cc = wb.GetCalculationChain();
             Assert.AreEqual("A2", cc.GetCTCalcChain().GetCArray(0).r);
@@ -623,18 +630,29 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A8", cc.GetCTCalcChain().GetCArray(6).r);
             Assert.AreEqual(40, cc.GetCTCalcChain().SizeOfCArray());
 
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
             // Try various ways of changing the formulas
             // If it stays a formula, chain entry should remain
             // Otherwise should go
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
             sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+            validateCells(sheet);
             sheet.GetRow(5).RemoveCell(
                   sheet.GetRow(5).GetCell(0)  // go
             );
+            validateCells(sheet);
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
+            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
 
             // Save and check
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
@@ -645,6 +663,26 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A4", cc.GetCTCalcChain().GetCArray(1).r);
             Assert.AreEqual("A9", cc.GetCTCalcChain().GetCArray(2).r);
 
+        }
+        [Test]
+        public void Bug49966Row()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples
+                    .OpenSampleWorkbook("shared_formulas.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            validateCells(sheet);
+            sheet.GetRow(5).RemoveCell(sheet.GetRow(5).GetCell(0)); // go
+            validateCells(sheet);
+        }
+
+        private void validateCells(XSSFSheet sheet)
+        {
+            foreach (IRow row in sheet)
+            {
+                // trigger handling
+                ((XSSFRow)row).OnDocumentWrite();
+            }
         }
         [Test]
         public void Test49156()
@@ -727,7 +765,7 @@ using NPOI.SS.Formula.Eval;
 
 
             // Move the comment
-            cellWithoutComment.CellComment=(comment);
+            cellWithoutComment.CellComment = (comment);
 
 
             // Write out and re-check
@@ -880,7 +918,7 @@ using NPOI.SS.Formula.Eval;
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
 
             IFont font1 = wb.CreateFont();
-            font1.Color=((short)20);
+            font1.Color = ((short)20);
             IFont font2 = wb.CreateFont();
             font2.Color = (short)(FontColor.Red);
             IFont font3 = wb.GetFontAt((short)0);
@@ -901,8 +939,8 @@ using NPOI.SS.Formula.Eval;
 
             // To enable newlines you need Set a cell styles with wrap=true
             ICellStyle cs = wb.CreateCellStyle();
-            cs.WrapText=(true);
-            cell.CellStyle=(cs);
+            cs.WrapText = (true);
+            cell.CellStyle = (cs);
 
             // Check the text has the
             Assert.AreEqual(text, cell.StringCellValue);
@@ -1085,7 +1123,7 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
 
-            ps2.Landscape=(false);
+            ps2.Landscape = (false);
             Assert.AreEqual(true, ps2.ValidSettings);
             Assert.AreEqual(false, ps2.Landscape);
 
@@ -1111,13 +1149,13 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(0, defaultStyle.Index);
 
             ICellStyle blueStyle = wb.CreateCellStyle();
-            blueStyle.FillForegroundColor=(IndexedColors.Aqua.Index);
-            blueStyle.FillPattern=(FillPattern.SolidForeground);
+            blueStyle.FillForegroundColor = (IndexedColors.Aqua.Index);
+            blueStyle.FillPattern = (FillPattern.SolidForeground);
             Assert.AreEqual(1, blueStyle.Index);
 
             ICellStyle pinkStyle = wb.CreateCellStyle();
-            pinkStyle.FillForegroundColor=(IndexedColors.Pink.Index);
-            pinkStyle.FillPattern=(FillPattern.SolidForeground);
+            pinkStyle.FillForegroundColor = (IndexedColors.Pink.Index);
+            pinkStyle.FillPattern = (FillPattern.SolidForeground);
             Assert.AreEqual(2, pinkStyle.Index);
 
             // Starts empty
@@ -1179,7 +1217,8 @@ using NPOI.SS.Formula.Eval;
          * Repeatedly writing a file.
          * Something with the SharedStringsTable currently breaks...
          */
-        public void DISABLEDtest46662()
+        [Test]
+        public void Test46662()
         {
             // New file
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -1517,6 +1556,241 @@ using NPOI.SS.Formula.Eval;
             double rounded = cv.NumberValue;
             Assert.AreEqual(0.1, rounded, 0.0);
         }
+        [Test]
+        public void Bug56468()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+            XSSFCell cell = row.CreateCell(0) as XSSFCell;
+            cell.SetCellValue("Hi");
+            sheet.RepeatingRows = (new CellRangeAddress(0, 0, 0, 0));
+
+            MemoryStream bos = new MemoryStream(8096);
+            wb.Write(bos);
+            byte[] firstSave = bos.ToArray();
+            MemoryStream bos2 = new MemoryStream(8096);
+            wb.Write(bos2);
+            byte[] secondSave = bos2.ToArray();
+
+            Assert.That(firstSave, new EqualConstraint(secondSave));
+        }
+        /**
+         * ISO-8601 style cell formats with a T in them, eg
+         * cell format of "yyyy-MM-ddTHH:mm:ss"
+         */
+        [Test]
+        public void Bug54034()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("54034.xlsx");
+            ISheet sheet = wb.GetSheet("Sheet1");
+            IRow row = sheet.GetRow(1);
+            ICell cell = row.GetCell(2);
+            Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
+
+            DataFormatter fmt = new DataFormatter();
+            Assert.AreEqual("yyyy\\-mm\\-dd\\Thh:mm", cell.CellStyle.GetDataFormatString());
+            Assert.AreEqual("2012-08-08T22:59", fmt.FormatCellValue(cell));
+        }
+
+        [Test]
+        public void TestBug53798XLSX()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xlsx");
+            FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
+            bug53798Work(wb, xlsOutput);
+        }
+
+        [Ignore("Shifting rows is not yet implemented in XSSFSheet")]
+        [Test]
+        public void TestBug53798XLSXStream()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xlsx");
+            //FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
+            //bug53798Work(new SXSSFWorkbook(wb), xlsOutput);
+        }
+
+        [Test]
+        public void TestBug53798XLS()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xls");
+            FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xls");
+            bug53798Work(wb, xlsOutput);
+        }
+        /**
+         * SUMIF was throwing a NPE on some formulas
+         */
+        [Test]
+        [Ignore("This bug is still to be fixed")]
+        public void TestBug56420SumIfNPE()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56420.xlsx");
+
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow r = sheet.GetRow(2);
+            ICell c = r.GetCell(2);
+            Assert.AreEqual("SUMIF($A$1:$A$4,A3,$B$1:$B$4)", c.CellFormula);
+            evaluator.EvaluateInCell(c);
+        }
+        private void bug53798Work(IWorkbook wb, FileInfo xlsOutput)
+        {
+            ISheet testSheet = wb.GetSheetAt(0);
+
+            testSheet.ShiftRows(2, 2, 1);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            // 1) corrupted xlsx (unreadable data in the first row of a Shifted group) already comes about
+            // when Shifted by less than -1 negative amount (try -2)
+            testSheet.ShiftRows(3, 3, -1);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            testSheet.ShiftRows(2, 2, 1);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            IRow newRow = null;
+            ICell newCell = null;
+            // 2) attempt to create a new row IN PLACE of a Removed row by a negative shift causes corrupted
+            // xlsx file with  unreadable data in the negative Shifted row.
+            // NOTE it's ok to create any other row.
+            newRow = testSheet.CreateRow(3);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            newCell = newRow.CreateCell(0);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            newCell.SetCellValue("new Cell in row " + newRow.RowNum);
+
+            saveAndReloadReport(wb, xlsOutput);
+
+            // 3) once a negative shift has been made any attempt to shift another group of rows
+            // (note: outside of previously negative Shifted rows) by a POSITIVE amount causes POI exception:
+            // org.apache.xmlbeans.impl.values.XmlValueDisconnectedException.
+            // NOTE: another negative shift on another group of rows is successful, provided no new rows in
+            // place of previously Shifted rows were attempted to be Created as explained above.
+            testSheet.ShiftRows(6, 7, 1);   // -- CHANGE the shift to positive once the behaviour of
+            // the above has been tested
+
+            saveAndReloadReport(wb, xlsOutput);
+        }
+
+        /**
+         * XSSFCell.typeMismatch on certain blank cells when formatting
+         *  with DataFormatter
+         */
+        [Test]
+        public void Bug56702()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56702.xlsx");
+
+            ISheet sheet = wb.GetSheetAt(0);
+
+            // Get wrong cell by row 8 & column 7
+            ICell cell = sheet.GetRow(8).GetCell(7);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
+
+            // Check the value - will be zero as it is <c><v/></c>
+            Assert.AreEqual(0.0, cell.NumericCellValue, 0.001);
+
+            // Try to format
+            DataFormatter formatter = new DataFormatter();
+            formatter.FormatCellValue(cell);
+
+            // Check the formatting
+            Assert.AreEqual("0", formatter.FormatCellValue(cell));
+        }
+
+        /**
+         * Formulas which reference named ranges, either in other
+         *  sheets, or workbook scoped but in other workbooks.
+         * Currently failing with errors like
+         * NPOI.SS.Formula.FormulaParseException: Cell reference expected After sheet name at index 9
+         * NPOI.SS.Formula.FormulaParseException: Parse error near char 0 '[' in specified formula '[0]!NR_Global_B2'. Expected number, string, or defined name 
+         */
+        [Ignore]
+        [Test]
+        public void Bug56737()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56737.xlsx");
+
+            // Check the named range defInitions
+            IName nSheetScope = wb.GetName("NR_To_A1");
+            IName nWBScope = wb.GetName("NR_Global_B2");
+
+            Assert.IsNotNull(nSheetScope);
+            Assert.IsNotNull(nWBScope);
+
+            Assert.AreEqual("Defines!$A$1", nSheetScope.RefersToFormula);
+            Assert.AreEqual("Defines!$B$2", nWBScope.RefersToFormula);
+
+            // Check the different kinds of formulas
+            ISheet s = wb.GetSheetAt(0);
+            ICell cRefSName = s.GetRow(1).GetCell(3);
+            ICell cRefWName = s.GetRow(2).GetCell(3);
+
+            Assert.AreEqual("Defines!NR_To_A1", cRefSName.CellFormula);
+            Assert.AreEqual("[0]!NR_Global_B2", cRefWName.CellFormula);
+
+            // Try to Evaluate them
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("Test A1", eval.Evaluate(cRefSName).StringValue);
+            Assert.AreEqual(142, (int)eval.Evaluate(cRefWName).NumberValue);
+
+            // Try to Evaluate everything
+            eval.EvaluateAll();
+        }
+
+        private void saveAndReloadReport(IWorkbook wb, FileInfo outFile)
+        {
+            // run some method on the font to verify if it is "disconnected" already
+            //for(short i = 0;i < 256;i++)
+            {
+                IFont font = wb.GetFontAt((short)0);
+                if (font is XSSFFont)
+                {
+                    XSSFFont xfont = (XSSFFont)wb.GetFontAt((short)0);
+                    CT_Font ctFont = (CT_Font)xfont.GetCTFont();
+                    Assert.AreEqual(0, ctFont.SizeOfBArray());
+                }
+            }
+
+            FileStream fileOutStream = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
+            wb.Write(fileOutStream);
+            fileOutStream.Close();
+            //System.out.Println("File \""+outFile.Name+"\" has been saved successfully");
+
+            FileStream is1 = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                IWorkbook newWB;
+                if (wb is XSSFWorkbook)
+                {
+                    newWB = new XSSFWorkbook(is1);
+                }
+                else if (wb is HSSFWorkbook)
+                {
+                    newWB = new HSSFWorkbook(is1);
+                    //} else if(wb is SXSSFWorkbook) {
+                    //    newWB = new SXSSFWorkbook(new XSSFWorkbook(is1));
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unknown workbook: " + wb);
+                }
+                Assert.IsNotNull(newWB.GetSheet("test"));
+            }
+            finally
+            {
+                is1.Close();
+            }
+        }
+
     }
 
 }

@@ -617,7 +617,11 @@ namespace NPOI.OpenXml4Net.OPC
             List<PackagePart> retArr = new List<PackagePart>();
             foreach (PackageRelationship rel in GetRelationshipsByType(relationshipType))
             {
-                retArr.Add(GetPart(rel));
+                PackagePart part = GetPart(rel);
+                if (part != null)
+                {
+                    retArr.Add(part);
+                }
             }
             return retArr;
         }

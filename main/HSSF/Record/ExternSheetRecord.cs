@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using System.Collections;
     using NPOI.Util;
+    using System.Collections.Generic;
 
 
     public class RefSubRecord
@@ -113,14 +114,14 @@ namespace NPOI.HSSF.Record
     public class ExternSheetRecord : StandardRecord
     {
         public const short sid = 0x17;
-        private IList _list;
+        private IList<RefSubRecord> _list;
 
 
 
 
         public ExternSheetRecord()
         {
-            _list = new ArrayList();
+            _list = new List<RefSubRecord>();
         }
 
         /**
@@ -130,7 +131,7 @@ namespace NPOI.HSSF.Record
 
         public ExternSheetRecord(RecordInputStream in1)
         {
-            _list = new ArrayList();
+            _list = new List<RefSubRecord>();
 
             int nItems = in1.ReadShort();
 
@@ -200,18 +201,49 @@ namespace NPOI.HSSF.Record
         {
             return (RefSubRecord)_list[i];
         }
-
+        [Obsolete]
         public void AdjustIndex(int extRefIndex, int offset)
         {
             GetRef(extRefIndex).AdjustIndex(offset);
         }
+
+        public void RemoveSheet(int sheetIdx)
+        {
+            int nItems = _list.Count;
+            int toRemove = -1;
+            for (int i = 0; i < nItems; i++)
+            {
+                RefSubRecord refSubRecord = _list[(i)];
+                if (refSubRecord.FirstSheetIndex == sheetIdx &&
+                        refSubRecord.LastSheetIndex == sheetIdx)
+                {
+                    toRemove = i;
+                }
+                else if (refSubRecord.FirstSheetIndex > sheetIdx &&
+                      refSubRecord.LastSheetIndex > sheetIdx)
+                {
+                    _list[i] =(new RefSubRecord(refSubRecord.ExtBookIndex, refSubRecord.FirstSheetIndex - 1, refSubRecord.LastSheetIndex - 1));
+                }
+            }
+
+            // finally remove entries for sheet indexes that we remove
+            if (toRemove != -1)
+            {
+                _list.RemoveAt(toRemove);
+            }
+        }
+
+        /**
+         * Returns the index of the SupBookRecord for this index
+         */
         public int GetExtbookIndexFromRefIndex(int refIndex)
         {
-            return GetRef(refIndex).ExtBookIndex;
+            RefSubRecord refRec = GetRef(refIndex);
+            return refRec.ExtBookIndex;
         }
         /**
- * @return -1 if not found
- */
+         * @return -1 if not found
+         */
         public int FindRefIndexFromExtBookIndex(int extBookIndex)
         {
             int nItems = _list.Count;
@@ -238,6 +270,11 @@ namespace NPOI.HSSF.Record
             }
             return result;
         }
+        /**
+         * Returns the first sheet that the reference applies to, or
+         *  -1 if the referenced sheet can't be found, or -2 if the
+         *  reference is workbook scoped.
+         */
         public int GetFirstSheetIndexFromRefIndex(int extRefIndex)
         {
             return GetRef(extRefIndex).FirstSheetIndex;

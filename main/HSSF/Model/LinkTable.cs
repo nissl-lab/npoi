@@ -23,6 +23,9 @@ namespace NPOI.HSSF.Model
 
     using NPOI.HSSF.Record;
     using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
+    using System.Text;
+    using NPOI.SS.Formula;
 
     /**
      * Link Table (OOO pdf reference: 4.10.3 ) <p/>
@@ -111,7 +114,7 @@ namespace NPOI.HSSF.Model
         private class ExternalBookBlock
         {
             private SupBookRecord _externalBookRecord;
-            private ExternalNameRecord[] _externalNameRecords;
+            internal ExternalNameRecord[] _externalNameRecords;
             private CRNBlock[] _crnBlocks;
             /**
          * Create a new block for registering add-in functions
@@ -307,10 +310,10 @@ namespace NPOI.HSSF.Model
         public NameRecord GetSpecificBuiltinRecord(byte builtInCode, int sheetNumber)
         {
 
-            IEnumerator iterator = _definedNames.GetEnumerator();
+            IEnumerator<NameRecord> iterator = _definedNames.GetEnumerator();
             while (iterator.MoveNext())
             {
-                NameRecord record = (NameRecord)iterator.Current;
+                NameRecord record = iterator.Current;
 
                 //print areas are one based
                 if (record.BuiltInName == builtInCode && record.SheetNumber == sheetNumber)
@@ -341,11 +344,17 @@ namespace NPOI.HSSF.Model
         {
             return _externSheetRecord.GetFirstSheetIndexFromRefIndex(extRefIndex);
         }
-
+        [Obsolete]
         public void UpdateIndexToInternalSheet(int extRefIndex, int offset)
         {
             _externSheetRecord.AdjustIndex(extRefIndex, offset);
         }
+
+        public void RemoveSheet(int sheetIdx)
+        {
+            _externSheetRecord.RemoveSheet(sheetIdx);
+        }
+
         public int NumNames
         {
             get
@@ -572,9 +581,9 @@ namespace NPOI.HSSF.Model
         private int FindFirstRecordLocBySid(short sid)
         {
             int index = 0;
-            for (IEnumerator iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); )
+            for (IEnumerator<Record> iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); )
             {
-                Record record = (Record)iterator.Current;
+                Record record = iterator.Current;
 
                 if (record.Sid == sid)
                 {
@@ -585,10 +594,45 @@ namespace NPOI.HSSF.Model
             return -1;
         }
 
-        public String ResolveNameXText(int refIndex, int definedNameIndex)
+        public String ResolveNameXText(int refIndex, int definedNameIndex, InternalWorkbook workbook)
         {
             int extBookIndex = _externSheetRecord.GetExtbookIndexFromRefIndex(refIndex);
-            return _externalBookBlocks[extBookIndex].GetNameText(definedNameIndex);
+            int firstTabIndex = _externSheetRecord.GetFirstSheetIndexFromRefIndex(refIndex);
+            if (firstTabIndex == -1)
+            {
+                // The referenced sheet could not be found
+                throw new RuntimeException("Referenced sheet could not be found");
+            }
+
+            // Does it exist via the external book block?
+            ExternalBookBlock externalBook = _externalBookBlocks[extBookIndex];
+            if (externalBook._externalNameRecords.Length > definedNameIndex)
+            {
+                return _externalBookBlocks[extBookIndex].GetNameText(definedNameIndex);
+            }
+            else if (firstTabIndex == -2)
+            {
+                // Workbook scoped name, not actually external after all
+                NameRecord nr = GetNameRecord(definedNameIndex);
+                int sheetNumber = nr.SheetNumber;
+
+                StringBuilder text = new StringBuilder();
+                if (sheetNumber > 0)
+                {
+                    String sheetName = workbook.GetSheetName(sheetNumber - 1);
+                    SheetNameFormatter.AppendFormat(text, sheetName);
+                    text.Append("!");
+                }
+                text.Append(nr.NameText);
+                return text.ToString();
+            }
+            else
+            {
+                throw new IndexOutOfRangeException(
+                        "Ext Book Index relative but beyond the supported length, was " +
+                        extBookIndex + " but maximum is " + _externalBookBlocks.Length
+                );
+            }
         }
         public int ResolveNameXIx(int refIndex, int definedNameIndex)
         {

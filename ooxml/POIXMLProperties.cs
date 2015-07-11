@@ -477,6 +477,9 @@ namespace NPOI
             if (extPart != null)
             {
                 Stream out1 = extPart.GetOutputStream();
+
+                if (extPart.Size > 0)
+                    extPart.Clear();
                 ext.props.Save(out1);
                 out1.Close();
             }

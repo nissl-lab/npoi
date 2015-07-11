@@ -28,10 +28,6 @@ namespace NPOI.SS.Formula
             {
                 functionName = ((NameEval)nameArg).FunctionName;
             }
-            else if (nameArg is NameXEval)
-            {
-                functionName = ec.GetWorkbook().ResolveNameXText(((NameXEval)nameArg).Ptg);
-            }
             else
             {
                 throw new Exception("First argument should be a NameEval, but got ("
@@ -40,7 +36,7 @@ namespace NPOI.SS.Formula
             FreeRefFunction targetFunc = ec.FindUserDefinedFunction(functionName);
             if (targetFunc == null)
             {
-                throw new NotImplementedException(functionName);
+                throw new NotImplementedFunctionException(functionName);
             }
             int nOutGoingArgs = nIncomingArgs - 1;
             ValueEval[] outGoingArgs = new ValueEval[nOutGoingArgs];
