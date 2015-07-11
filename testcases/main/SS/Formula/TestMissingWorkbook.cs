@@ -92,6 +92,12 @@ namespace TestCases.SS.Formula
             Assert.AreEqual(CellType.Formula, lB1Cell.CellType);
             Assert.AreEqual(CellType.Formula, lC1Cell.CellType);
 
+            // Check cached values
+            Assert.AreEqual(10.0d, lA1Cell.NumericCellValue, 0.00001d);
+            Assert.AreEqual("POI rocks!", lB1Cell.StringCellValue);
+            Assert.AreEqual(true, lC1Cell.BooleanCellValue);
+
+            // Evaluate
             IFormulaEvaluator evaluator = mainWorkbook.GetCreationHelper().CreateFormulaEvaluator();
             evaluator.IgnoreMissingWorkbooks = (true);
 

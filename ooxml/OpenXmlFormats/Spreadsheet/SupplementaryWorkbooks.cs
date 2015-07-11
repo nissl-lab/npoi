@@ -119,6 +119,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.oleLinkField.Write(sw, "oleLink");
             sw.Write("</externalLink>");
         }
+
+        public void AddNewExternalBook()
+        {
+            this.externalBookField = new CT_ExternalBook();
+        }
     }
     
 

@@ -38,6 +38,7 @@ namespace NPOI.XSSF.Model
             : base()
         {
             link = new CT_ExternalLink();
+            link.AddNewExternalBook();
         }
 
         internal ExternalLinksTable(PackagePart part, PackageRelationship rel)
