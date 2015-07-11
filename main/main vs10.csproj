@@ -668,6 +668,7 @@
     <Compile Include="SS\Format\SimpleFraction.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
+    <Compile Include="UnsupportedFileFormatException.cs" />
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />

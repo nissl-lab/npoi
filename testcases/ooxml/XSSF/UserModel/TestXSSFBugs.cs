@@ -1923,6 +1923,51 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual("A4", cRef.CellFormula);
         }
 
+        /**
+     * .xlsb files are not supported, but we should generate a helpful
+     *  error message if given one
+     */
+        [Test]
+        public void Bug56800_xlsb()
+        {
+            // Can be opened at the OPC level
+            OPCPackage pkg = XSSFTestDataSamples.OpenSamplePackage("Simple.xlsb");
+
+            // XSSF Workbook gives helpful error
+            try
+            {
+                new XSSFWorkbook(pkg);
+                Assert.Fail(".xlsb files not supported");
+            }
+            catch (XLSBUnsupportedException e)
+            {
+                // Good, detected and warned
+            }
+
+            // Workbook Factory gives helpful error on package
+            try
+            {
+                WorkbookFactory.Create(pkg);
+                Assert.Fail(".xlsb files not supported");
+            }
+            catch (XLSBUnsupportedException e)
+            {
+                // Good, detected and warned
+            }
+
+            // Workbook Factory gives helpful error on file
+            FileInfo xlsbFile = HSSFTestDataSamples.GetSampleFile("Simple.xlsb");
+            try
+            {
+                WorkbookFactory.Create(xlsbFile.FullName);
+                Assert.Fail(".xlsb files not supported");
+            }
+            catch (XLSBUnsupportedException e)
+            {
+                // Good, detected and warned
+            }
+        }
+
         private void CheckValue(XSSFWorkbook excel, String expect)
         {
             XSSFFormulaEvaluator Evaluator = new XSSFFormulaEvaluator(excel);

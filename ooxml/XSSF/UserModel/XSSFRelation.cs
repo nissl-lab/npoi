@@ -67,6 +67,13 @@ namespace NPOI.XSSF.UserModel
                   "/xl/workbook.xml",
                   null
         );
+
+        public static XSSFRelation XLSB_BINARY_WORKBOOK = new XSSFRelation(
+            "application/vnd.ms-excel.sheet.binary.macroEnabled.main",
+            PackageRelationshipTypes.CORE_DOCUMENT,
+            "/xl/workbook.bin",
+            null
+        );
         public static XSSFRelation WORKSHEET = new XSSFRelation(
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",

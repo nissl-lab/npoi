@@ -180,7 +180,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(OPCPackage pkg)
             : base(pkg)
         {
-
+            BeforeDocumentRead();
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
@@ -202,7 +202,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(Stream is1)
             : base(PackageHelper.Open(is1))
         {
-
+            BeforeDocumentRead();
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
@@ -266,6 +266,20 @@ namespace NPOI.XSSF.UserModel
             : this(OpenPackage(path))
         {
 
+        }
+
+        protected void BeforeDocumentRead()
+        {
+            // Ensure it isn't a XLSB file, which we don't support
+            if (CorePart.ContentType.Equals(XSSFRelation.XLSB_BINARY_WORKBOOK.ContentType))
+            {
+                throw new XLSBUnsupportedException();
+            }
+
+            // Create arrays for parts attached to the workbook itself
+            Console.WriteLine("XSSFPivotTable is not implemented");
+            //pivotTables = new List<XSSFPivotTable>();
+            //pivotCaches = new List<CTPivotCache>();
         }
 
         WorkbookDocument doc = null;
