@@ -997,7 +997,7 @@ namespace NPOI.XWPF.UserModel
             foreach (XWPFParagraph par in paragraphs)
             {
                 String parStyle = par.Style;
-                if (parStyle != null && parStyle.Substring(0, 7).Equals("Heading"))
+                if (parStyle != null && parStyle.StartsWith("Heading"))
                 {
                     try
                     {
