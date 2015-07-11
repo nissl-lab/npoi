@@ -542,6 +542,36 @@ namespace TestCases.SS.UserModel
             c.SetCellErrorValue(FormulaError.REF.Code);
             Assert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
         }
+
+        /**
+         * While we don't currently support using a locale code at
+         *  the start of a format string to format it differently, we
+         *  should at least handle it as it if wasn't there
+         */
+        [Test]
+        public void TestDatesWithLocales()
+        {
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
+
+            String dateFormatEnglish = "[$-409]mmmm dd yyyy  h:mm AM/PM";
+            String dateFormatChinese = "[$-804]mmmm dd yyyy  h:mm AM/PM";
+
+            // Check we format the English one correctly
+            double date = 26995.477777777778;
+            Assert.AreEqual(
+                    "November 27 1973  11:28 AM",
+                    dfUS.FormatRawCellContents(date, -1, dateFormatEnglish)
+            );
+
+            // Check that, in the absence of locale support, we handle
+            //  the Chinese one the same as the English one
+            Assert.AreEqual(
+                    "November 27 1973  11:28 AM",
+                    dfUS.FormatRawCellContents(date, -1, dateFormatChinese)
+            );
+        }
+
+
         [Ignore]
         [Test]
         public void TestCustomFormats()
