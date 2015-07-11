@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
     using NPOI.SS.Util;
+    using NPOI.Util;
 
     /// <summary>
     /// Low level model implementation of a Sheet (one workbook Contains many sheets)
@@ -215,10 +216,31 @@ namespace NPOI.HSSF.Model
                 throw new Exception("BOF record expected");
             }
             BOFRecord bof = (BOFRecord)rs.GetNext();
-            if (bof.Type != BOFRecordType.Worksheet)
+            if (bof.Type == BOFRecordType.Worksheet)
             {
-                // TODO - fix junit tests throw new RuntimeException("Bad BOF record type");
+                // Good, well supported
             }
+            else if (bof.Type == BOFRecordType.Chart ||
+                     bof.Type == BOFRecordType.Excel4Macro)
+            {
+                // These aren't really typical sheets... Let it go though,
+                //  we can handle them roughly well enough as a "normal" one
+            }
+            else
+            {
+                // Not a supported type
+                // Skip onto the EOF, then complain
+                while (rs.HasNext())
+                {
+                    Record rec = rs.GetNext();
+                    if (rec is EOFRecord)
+                    {
+                        break;
+                    }
+                }
+                throw new UnsupportedBOFType(bof.Type);
+            }
+        
             records.Add(bof);
             while (rs.HasNext())
             {
@@ -2231,9 +2253,9 @@ namespace NPOI.HSSF.Model
             return _dataValidityTable;
         }
         /**
- * Get the {@link NoteRecord}s (related to cell comments) for this sheet
- * @return never <code>null</code>, typically empty array
- */
+         * Get the {@link NoteRecord}s (related to cell comments) for this sheet
+         * @return never <code>null</code>, typically empty array
+         */
         public NoteRecord[] GetNoteRecords()
         {
             List<NoteRecord> temp = new List<NoteRecord>();
@@ -2254,5 +2276,23 @@ namespace NPOI.HSSF.Model
             return result;
         }
 
+    }
+
+    public class UnsupportedBOFType : RecordFormatException {
+        private BOFRecordType type;
+        public UnsupportedBOFType(BOFRecordType type) 
+            : base("BOF not of a supported type, found " + type)
+        {
+            ;
+            this.type = type;
+        }
+
+        public BOFRecordType Type
+        {
+            get
+            {
+                return type;
+            }
+        }
     }
 }

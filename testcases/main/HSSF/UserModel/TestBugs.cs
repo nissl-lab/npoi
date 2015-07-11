@@ -3269,5 +3269,17 @@ namespace TestCases.HSSF.UserModel
             }
         }
 
+        /**
+         * Unexpected record type (NPOI.HSSF.Record.ColumnInfoRecord)
+         */
+        [Test]
+        public void Bug53984()
+        {
+            IWorkbook wb = OpenSample("53984.xls");
+            ISheet s = wb.GetSheetAt(0);
+            Assert.AreEqual("International Communication Services SA", s.GetRow(2).GetCell(0).StringCellValue);
+            Assert.AreEqual("Saudi Arabia-Riyadh", s.GetRow(210).GetCell(0).StringCellValue);
+        }
+
     }
 }

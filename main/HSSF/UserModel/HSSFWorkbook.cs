@@ -319,8 +319,16 @@ namespace NPOI.HSSF.UserModel
             RecordStream rs = new RecordStream(records, recOffset);
             while (rs.HasNext())
             {
-                InternalSheet sheet = InternalSheet.CreateSheet(rs);
-                _sheets.Add(new HSSFSheet(this, sheet));
+                try
+                {
+                    InternalSheet sheet = InternalSheet.CreateSheet(rs);
+                    _sheets.Add(new HSSFSheet(this, sheet));
+                }
+                catch (UnsupportedBOFType eb)
+                {
+                    // Hopefully there's a supported one after this!
+                    Console.WriteLine("Unsupported BOF found of type " + eb.Type);
+                }
             }
 
             for (int i = 0; i < workbook.NumNames; ++i)

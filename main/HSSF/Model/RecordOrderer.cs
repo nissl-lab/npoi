@@ -424,6 +424,7 @@ namespace NPOI.HSSF.Model
                 case DrawingSelectionRecord.sid:
                 case ObjRecord.sid:
                 case TextObjectRecord.sid:
+                case ColumnInfoRecord.sid: // See Bugzilla 53984
                 case GutsRecord.sid:   // see Bugzilla 50426
                 case WindowOneRecord.sid:
                 // should really be part of workbook stream, but some apps seem to put this before WINDOW2
