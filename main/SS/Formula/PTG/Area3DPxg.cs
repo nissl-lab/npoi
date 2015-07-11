@@ -22,37 +22,45 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.SS.Util;
     using NPOI.Util;
 
-/**
- * <p>Title:        XSSF Area 3D Reference (Sheet + Area)<P>
- * <p>Description:  Defined an area in an external or different sheet. <P>
- * <p>REFERENCE:  </p>
- * 
- * <p>This is XSSF only, as it stores the sheet / book references
- *  in String form. The HSSF equivalent using indexes is {@link Area3DPtg}</p>
- */
+    /**
+     * <p>Title:        XSSF Area 3D Reference (Sheet + Area)<P>
+     * <p>Description:  Defined an area in an external or different sheet. <P>
+     * <p>REFERENCE:  </p>
+     * 
+     * <p>This is XSSF only, as it stores the sheet / book references
+     *  in String form. The HSSF equivalent using indexes is {@link Area3DPtg}</p>
+     */
     public class Area3DPxg : AreaPtgBase, Pxg
     {
         private int externalWorkbookNumber = -1;
-        private String sheetName;
+        private String firstSheetName;
+        private String lastSheetName;
 
-        public Area3DPxg(int externalWorkbookNumber, String sheetName, String arearef)
+        public Area3DPxg(int externalWorkbookNumber, SheetIdentifier sheetName, String arearef)
             : this(externalWorkbookNumber, sheetName, new AreaReference(arearef))
         {
             ;
         }
-        public Area3DPxg(int externalWorkbookNumber, String sheetName, AreaReference arearef)
+        public Area3DPxg(int externalWorkbookNumber, SheetIdentifier sheetName, AreaReference arearef)
             : base(arearef)
         {
-
             this.externalWorkbookNumber = externalWorkbookNumber;
-            this.sheetName = sheetName;
+            this.firstSheetName = sheetName.SheetId.Name;
+            if (sheetName is SheetRangeIdentifier)
+            {
+                this.lastSheetName = ((SheetRangeIdentifier)sheetName).LastSheetIdentifier.Name;
+            }
+            else
+            {
+                this.lastSheetName = null;
+            }
         }
 
-        public Area3DPxg(String sheetName, String arearef)
+        public Area3DPxg(SheetIdentifier sheetName, String arearef)
             : this(sheetName, new AreaReference(arearef))
         {
         }
-        public Area3DPxg(String sheetName, AreaReference arearef)
+        public Area3DPxg(SheetIdentifier sheetName, AreaReference arearef)
             : this(-1, sheetName, arearef)
         {
 
@@ -70,9 +78,11 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append("workbook=").Append(ExternalWorkbookNumber);
                 sb.Append("] ");
             }
-            if (sheetName != null)
+            sb.Append("sheet=").Append(SheetName);
+            if (lastSheetName != null)
             {
-                SheetNameFormatter.AppendFormat(sb, sheetName);
+                sb.Append(" : ");
+                sb.Append("sheet=").Append(lastSheetName);
             }
             sb.Append(" ! ");
             sb.Append(FormatReferenceAsString());
@@ -91,12 +101,18 @@ namespace NPOI.SS.Formula.PTG
         {
             get
             {
-                return sheetName;
+                return firstSheetName;
             }
             set
             {
-                sheetName = value;
+                firstSheetName = value;
             }
+        }
+
+        public string LastSheetName
+        {
+            get { return lastSheetName; }
+            set { lastSheetName = value; }
         }
 
         public String Format2DRefAsString()
@@ -113,7 +129,12 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append(externalWorkbookNumber);
                 sb.Append(']');
             }
-            sb.Append(sheetName);
+            SheetNameFormatter.AppendFormat(sb, firstSheetName);
+            if (lastSheetName != null)
+            {
+                sb.Append(':');
+                SheetNameFormatter.AppendFormat(sb, lastSheetName);
+            }
             sb.Append('!');
             sb.Append(FormatReferenceAsString());
             return sb.ToString();

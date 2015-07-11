@@ -203,30 +203,26 @@ namespace NPOI.XSSF.UserModel
         }
         public Ptg Get3DReferencePtg(CellReference cell, SheetIdentifier sheet)
         {
-            String sheetName = sheet._sheetIdentifier.Name;
-
             if (sheet._bookName != null)
             {
                 int bookIndex = ResolveBookIndex(sheet._bookName);
-                return new Ref3DPxg(bookIndex, sheetName, cell);
+                return new Ref3DPxg(bookIndex, sheet, cell);
             }
             else
             {
-                return new Ref3DPxg(sheetName, cell);
+                return new Ref3DPxg(sheet, cell);
             }
         }
         public Ptg Get3DReferencePtg(AreaReference area, SheetIdentifier sheet)
         {
-            String sheetName = sheet._sheetIdentifier.Name;
-
             if (sheet._bookName != null)
             {
                 int bookIndex = ResolveBookIndex(sheet._bookName);
-                return new Area3DPxg(bookIndex, sheetName, area);
+                return new Area3DPxg(bookIndex, sheet, area);
             }
             else
             {
-                return new Area3DPxg(sheetName, area);
+                return new Area3DPxg(sheet, area);
             }
         }
         public String ResolveNameXText(NameXPtg n)
@@ -259,21 +255,32 @@ namespace NPOI.XSSF.UserModel
             throw new InvalidOperationException("HSSF-style external references are not supported for XSSF");
         }
 
-        public ExternalSheet GetExternalSheet(String sheetName, int externalWorkbookNumber)
+        public ExternalSheet GetExternalSheet(String firstSheetName, String lastSheetName, int externalWorkbookNumber)
         {
+            String workbookName;
             if (externalWorkbookNumber > 0)
             {
                 // External reference - reference is 1 based, link table is 0 based
                 int linkNumber = externalWorkbookNumber - 1;
                 ExternalLinksTable linkTable = _uBook.ExternalLinksTable[(linkNumber)];
-                return new ExternalSheet(linkTable.LinkedFileName, sheetName);
+                workbookName = linkTable.LinkedFileName;
             }
             else
             {
                 // Internal reference
-                return new ExternalSheet(null, sheetName);
+                workbookName = null;
+            }
+
+            if (lastSheetName == null || firstSheetName.Equals(lastSheetName))
+            {
+                return new ExternalSheet(workbookName, firstSheetName);
+            }
+            else
+            {
+                return new ExternalSheetRange(workbookName, firstSheetName, lastSheetName);
             }
         }
+
 
         public int GetExternalSheetIndex(String workbookName, String sheetName)
         {
@@ -284,10 +291,16 @@ namespace NPOI.XSSF.UserModel
             return _uBook.GetSheetIndex(sheetName);
         }
 
-        public String GetSheetNameByExternSheet(int externSheetIndex)
+        public String GetSheetFirstNameByExternSheet(int externSheetIndex)
         {
             int sheetIndex = ConvertFromExternalSheetIndex(externSheetIndex);
             return _uBook.GetSheetName(sheetIndex);
+        }
+
+        public String GetSheetLastNameByExternSheet(int externSheetIndex)
+        {
+            // XSSF does multi-sheet references differently, so this is the same as the first
+            return GetSheetFirstNameByExternSheet(externSheetIndex);
         }
 
         public String GetNameText(NamePtg namePtg)

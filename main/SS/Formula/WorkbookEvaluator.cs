@@ -445,7 +445,7 @@ namespace NPOI.SS.Formula
                 dbgIndentStr = "                                                                                                    ";
                 dbgIndentStr = dbgIndentStr.Substring(0, Math.Min(dbgIndentStr.Length, dbgEvaluationOutputIndent * 2));
                 EVAL_LOG.Log(POILogger.WARN, dbgIndentStr
-                                   + "- evaluateFormula('" + ec.GetRefEvaluatorForCurrentSheet().SheetName
+                                   + "- evaluateFormula('" + ec.GetRefEvaluatorForCurrentSheet().SheetNameRange
                                    + "'/" + new CellReference(ec.RowIndex, ec.ColumnIndex).FormatAsString()
                                    + "): " + Arrays.ToString(ptgs).Replace("\\Qorg.apache.poi.ss.formula.ptg.\\E", ""));
                 dbgEvaluationOutputIndent++;

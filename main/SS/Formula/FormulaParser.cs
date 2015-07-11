@@ -452,6 +452,8 @@ namespace NPOI.SS.Formula
          *   a..b!A1
          *   'my sheet'!A1
          *   .my.sheet!A1
+         *   'my sheet':'my alt sheet'!A1
+         *   .my.sheet1:.my.sheet2!$B$2
          *   my.named..range.
          *   'my sheet'!my.named.range
          *   .my.sheet!my.named.range
@@ -1034,6 +1036,11 @@ namespace NPOI.SS.Formula
                     GetChar();
                     return new SheetIdentifier(bookName, iden);
                 }
+                // See if it's a multi-sheet range, eg Sheet1:Sheet3!A1
+                if (look == ':')
+                {
+                    return ParseSheetRange(bookName, iden);
+                }
                 return null;
             }
 
@@ -1047,20 +1054,41 @@ namespace NPOI.SS.Formula
                     sb.Append(look);
                     GetChar();
                 }
+                NameIdentifier iden = new NameIdentifier(sb.ToString(), false);
                 SkipWhite();
                 if (look == '!')
                 {
                     GetChar();
-                    return new SheetIdentifier(bookName, new NameIdentifier(sb.ToString(), false));
+                    return new SheetIdentifier(bookName, iden);
+                }
+                // See if it's a multi-sheet range, eg Sheet1:Sheet3!A1
+                if (look == ':')
+                {
+                    return ParseSheetRange(bookName, iden);
                 }
                 return null;
             }
 
             if (look == '!' && bookName != null)
             {
-                // Raw book reference, wihtout a sheet
+                // Raw book reference, without a sheet
                 GetChar();
                 return new SheetIdentifier(bookName, null);
+            }
+            return null;
+        }
+
+        /**
+         * If we have something that looks like [book]Sheet1: or 
+         *  Sheet1, see if it's actually a range eg Sheet1:Sheet2!
+         */
+        private SheetIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
+        {
+            GetChar();
+            SheetIdentifier sheet2 = ParseSheetName();
+            if (sheet2 != null)
+            {
+                return new SheetRangeIdentifier(bookname, sheet1Name, sheet2._sheetIdentifier);
             }
             return null;
         }

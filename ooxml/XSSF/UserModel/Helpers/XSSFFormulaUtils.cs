@@ -24,43 +24,54 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.Formula.PTG;
 namespace NPOI.XSSF.UserModel.Helpers
 {
-    class XSSFFormulaRenderingWorkbook : IFormulaRenderingWorkbook
-    {
-        XSSFEvaluationWorkbook _fpwb;
-        int _sheetIndex = 0;
-        string _name;
-        public XSSFFormulaRenderingWorkbook(XSSFEvaluationWorkbook fpwb, int sheetIndex,string name)
-        {
-            _fpwb = fpwb;
-            _sheetIndex = sheetIndex;
-            _name = name;
-        }
-        #region IFormulaRenderingWorkbook Members
+    //class XSSFFormulaRenderingWorkbook : IFormulaRenderingWorkbook
+    //{
+    //    XSSFEvaluationWorkbook _fpwb;
+    //    int _sheetIndex = 0;
+    //    string _name;
+    //    public XSSFFormulaRenderingWorkbook(XSSFEvaluationWorkbook fpwb, int sheetIndex,string name)
+    //    {
+    //        _fpwb = fpwb;
+    //        _sheetIndex = sheetIndex;
+    //        _name = name;
+    //    }
+    //    #region IFormulaRenderingWorkbook Members
 
-        public ExternalSheet GetExternalSheet(int externSheetIndex)
-        {
-            return _fpwb.GetExternalSheet(externSheetIndex);
-        }
+    //    public ExternalSheet GetExternalSheet(int externSheetIndex)
+    //    {
+    //        return _fpwb.GetExternalSheet(externSheetIndex);
+    //    }
 
-        public String GetSheetNameByExternSheet(int externSheetIndex)
-        {
-            if (externSheetIndex == _sheetIndex) 
-                return _name;
-            else return _fpwb.GetSheetNameByExternSheet(externSheetIndex);
-        }
+    //    public String GetSheetNameByExternSheet(int externSheetIndex)
+    //    {
+    //        if (externSheetIndex == _sheetIndex) 
+    //            return _name;
+    //        else return _fpwb.GetSheetNameByExternSheet(externSheetIndex);
+    //    }
 
-        public String ResolveNameXText(NameXPtg nameXPtg)
-        {
-            return _fpwb.ResolveNameXText(nameXPtg);
-        }
+    //    public String ResolveNameXText(NameXPtg nameXPtg)
+    //    {
+    //        return _fpwb.ResolveNameXText(nameXPtg);
+    //    }
 
-        public String GetNameText(NamePtg namePtg)
-        {
-            return _fpwb.GetNameText(namePtg);
-        }
+    //    public String GetNameText(NamePtg namePtg)
+    //    {
+    //        return _fpwb.GetNameText(namePtg);
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+
+
+    //    public string GetSheetFirstNameByExternSheet(int externSheetIndex)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public string GetSheetLastNameByExternSheet(int externSheetIndex)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
     /**
      * Utility to update formulas and named ranges when a sheet name was Changed
      *

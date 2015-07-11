@@ -64,7 +64,7 @@ namespace NPOI.HSSF.UserModel
                 String result;
                 int indexToExternSheet = _definedNameRec.ExternSheetNumber;
 
-                result = book.Workbook.FindSheetNameFromExternSheet(indexToExternSheet);
+                result = book.Workbook.FindSheetFirstNameFromExternSheet(indexToExternSheet);
 
                 return result;
             }

@@ -86,16 +86,18 @@ namespace NPOI.SS.Formula.Functions
         private class RefValueArray : ValueArray
         {
             private RefEval _ref;
+            private int _width;
             public RefValueArray(RefEval ref1)
-                : base(1)
+                : base(ref1.NumberOfSheets)
             {
-
                 _ref = ref1;
+                _width = ref1.NumberOfSheets;
             }
 
             protected override ValueEval GetItemInternal(int index)
             {
-                return _ref.InnerValueEval;
+                int sIx = (index % _width) + _ref.FirstSheetIndex;
+                return _ref.GetInnerValueEval(sIx);
             }
         }
 

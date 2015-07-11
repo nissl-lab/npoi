@@ -133,11 +133,29 @@ namespace NPOI.SS.Formula.Functions
             }
         }
         /**
- * Collects values from a single argument
- */
+     * Collects values from a single argument
+     */
         private void CollectValues(ValueEval operand, DoubleList temp)
         {
-
+            if (operand is ThreeDEval)
+            {
+                ThreeDEval ae = (ThreeDEval)operand;
+                for (int sIx = ae.FirstSheetIndex; sIx <= ae.LastSheetIndex; sIx++)
+                {
+                    int width = ae.Width;
+                    int height = ae.Height;
+                    for (int rrIx = 0; rrIx < height; rrIx++)
+                    {
+                        for (int rcIx = 0; rcIx < width; rcIx++)
+                        {
+                            ValueEval ve = ae.GetValue(sIx, rrIx, rcIx);
+                            if (!IsSubtotalCounted && ae.IsSubTotal(rrIx, rcIx)) continue;
+                            CollectValue(ve, true, temp);
+                        }
+                    }
+                }
+                return;
+            }
             if (operand is TwoDEval)
             {
                 TwoDEval ae = (TwoDEval)operand;
@@ -157,7 +175,10 @@ namespace NPOI.SS.Formula.Functions
             if (operand is RefEval)
             {
                 RefEval re = (RefEval)operand;
-                CollectValue(re.InnerValueEval, true, temp);
+                for (int sIx = re.FirstSheetIndex; sIx <= re.LastSheetIndex; sIx++)
+                {
+                    CollectValue(re.GetInnerValueEval(sIx), true, temp);
+                }
                 return;
             }
             CollectValue((ValueEval)operand, false, temp);

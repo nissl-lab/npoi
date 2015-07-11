@@ -84,7 +84,14 @@ namespace NPOI.SS.Formula.Functions
             }
             if (arg is RefEval)
             {
-                ValueEval innerValueEval = ((RefEval)arg).InnerValueEval;
+                RefEval refEval = (RefEval)arg;
+                if (refEval.NumberOfSheets > 1)
+                {
+                    // Multi-Sheet references are not supported
+                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                }
+
+                ValueEval innerValueEval = refEval.GetInnerValueEval(refEval.FirstSheetIndex);
                 if (innerValueEval is NumberEval)
                 {
                     return ((NumberEval)innerValueEval).NumberValue;

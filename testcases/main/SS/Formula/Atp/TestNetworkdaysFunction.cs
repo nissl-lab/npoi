@@ -117,11 +117,14 @@ namespace TestCases.SS.Formula.Atp
 
             }
 
-            public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
+            public override ValueEval GetRelativeValue(int sheetIndex, int relativeRowIndex, int relativeColumnIndex)
             {
                 return this.holidays[(relativeColumnIndex)];
             }
-
+            public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
+            {
+                return GetRelativeValue(-1, relativeRowIndex, relativeColumnIndex);
+            }
             public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
             {
                 return null;

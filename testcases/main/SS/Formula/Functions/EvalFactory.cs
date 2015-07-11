@@ -96,6 +96,10 @@ namespace TestCases.SS.Formula.Functions
             }
             public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
             {
+                return GetRelativeValue(-1, relativeRowIndex, relativeColumnIndex);
+            }
+            public override ValueEval GetRelativeValue(int sheetIndex, int relativeRowIndex, int relativeColumnIndex)
+            {
                 if (relativeRowIndex < 0 || relativeRowIndex >= Height)
                 {
                     throw new ArgumentException("row index out of range");
@@ -179,23 +183,18 @@ namespace TestCases.SS.Formula.Functions
         {
             private ValueEval _value;
             public MockRefEval(RefPtg ptg, ValueEval value)
-                : base(ptg.Row, ptg.Column)
+                : base(-1, -1, ptg.Row, ptg.Column)
             {
-                ;
                 _value = value;
             }
             public MockRefEval(Ref3DPtg ptg, ValueEval value)
-                : base(ptg.Row, ptg.Column)
+                : base(-1, -1, ptg.Row, ptg.Column)
             {
-
                 _value = value;
             }
-            public override ValueEval InnerValueEval
+            public override ValueEval GetInnerValueEval(int sheetIndex)
             {
-                get
-                {
-                    return _value;
-                }
+                return _value;
             }
             public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
             {

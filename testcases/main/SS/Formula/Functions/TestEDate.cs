@@ -24,7 +24,32 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new InvalidOperationException();
             }
+            public ValueEval GetInnerValueEval(int sheetIndex)
+            {
+                return value;
+            }
 
+            public int NumberOfSheets
+            {
+                get
+                {
+                    return 1;
+                }
+            }
+            public int FirstSheetIndex
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+            public int LastSheetIndex
+            {
+                get
+                {
+                    return 0;
+                }
+            }   
             public int Row
             {
                 get

@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.Eval
      * value object should be of type NumberEval; if cell type is CELL_TYPE_STRING,
      * contained value object should be of type StringEval
      */
-    public interface RefEval : ValueEval
+    public interface RefEval : ValueEval, ISheetRange
     {
 
         /**
@@ -38,8 +38,7 @@ namespace NPOI.SS.Formula.Eval
          * A1 will return as the InnerValueEval the
          * object of concrete type StringEval
          */
-        ValueEval InnerValueEval { get; }
-
+        ValueEval GetInnerValueEval(int sheetIndex);
         /**
          * returns the zero based column index.
          */
@@ -49,9 +48,26 @@ namespace NPOI.SS.Formula.Eval
          * returns the zero based row index.
          */
         int Row { get; }
+
         /**
-     * Creates an {@link AreaEval} offset by a relative amount from this RefEval
-     */
+         * returns the first sheet index this applies to
+         */
+        int FirstSheetIndex { get; }
+
+        /**
+         * returns the last sheet index this applies to, which
+         *  will be the same as the first for a 2D and many 3D references
+         */
+        int LastSheetIndex { get; }
+
+        /**
+         * returns the number of sheets this applies to
+         */
+        int NumberOfSheets { get; }
+
+        /**
+         * Creates an {@link AreaEval} offset by a relative amount from this RefEval
+         */
         AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx);
 
     }

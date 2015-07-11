@@ -33,15 +33,47 @@ namespace NPOI.SS.Formula
             _workbookName = workbookName;
             _sheetName = sheetName;
         }
-        public String GetWorkbookName()
+        public String WorkbookName
         {
-            return _workbookName;
+            get
+            {
+                return _workbookName;
+            }
         }
-        public String GetSheetName()
+        public String SheetName
         {
-            return _sheetName;
+            get
+            {
+                return _sheetName;
+            }
         }
     }
+
+    public class ExternalSheetRange : ExternalSheet
+    {
+        private String _lastSheetName;
+        public ExternalSheetRange(String workbookName, String firstSheetName, String lastSheetName)
+            : base(workbookName, firstSheetName)
+        {
+            this._lastSheetName = lastSheetName;
+        }
+
+        public String FirstSheetName
+        {
+            get
+            {
+                return SheetName;
+            }
+        }
+        public String LastSheetName
+        {
+            get
+            {
+                return _lastSheetName;
+            }
+        }
+    }
+
     /**
      * Abstracts a workbook for the purpose of formula evaluation.<br/>
      * 
@@ -69,7 +101,7 @@ namespace NPOI.SS.Formula
          * XSSF Only - fetch the external-style sheet details
          * <p>Return will have no workbook set if it's actually in our own workbook</p>
          */
-        ExternalSheet GetExternalSheet(String sheetName, int externalWorkbookNumber);
+        ExternalSheet GetExternalSheet(String firstSheetName, string lastSheetName, int externalWorkbookNumber);
         /**
          * HSSF Only - convert an external sheet index to an internal sheet index,
          *  for an external-style reference to one of this workbook's own sheets 

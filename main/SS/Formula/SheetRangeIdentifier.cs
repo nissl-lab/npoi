@@ -20,59 +20,41 @@ namespace NPOI.SS.Formula
     using System;
     using System.Text;
 
-    public class SheetIdentifier
+    public class SheetRangeIdentifier : SheetIdentifier
     {
-        public String _bookName;
-        public NameIdentifier _sheetIdentifier;
+        public NameIdentifier _lastSheetIdentifier;
 
-        public SheetIdentifier(String bookName, NameIdentifier sheetIdentifier)
+        public SheetRangeIdentifier(String bookName, NameIdentifier firstSheetIdentifier, NameIdentifier lastSheetIdentifier)
+            : base(bookName, firstSheetIdentifier)
         {
-            _bookName = bookName;
-            _sheetIdentifier = sheetIdentifier;
+            _lastSheetIdentifier = lastSheetIdentifier;
         }
-        public String BookName
+        public NameIdentifier FirstSheetIdentifier
         {
             get
             {
-                return _bookName;
+                return base.SheetId;
             }
         }
-        public NameIdentifier SheetId
+        public NameIdentifier LastSheetIdentifier
         {
             get
             {
-                return _sheetIdentifier;
+                return _lastSheetIdentifier;
             }
         }
-        protected virtual void AsFormulaString(StringBuilder sb)
+        protected override void AsFormulaString(StringBuilder sb)
         {
-            if (_bookName != null)
+            base.AsFormulaString(sb);
+            sb.Append(':');
+            if (_lastSheetIdentifier.IsQuoted)
             {
-                sb.Append(" [").Append(_sheetIdentifier.Name).Append("]");
-            }
-            if (_sheetIdentifier.IsQuoted)
-            {
-                sb.Append("'").Append(_sheetIdentifier.Name).Append("'");
+                sb.Append("'").Append(_lastSheetIdentifier.Name).Append("'");
             }
             else
             {
-                sb.Append(_sheetIdentifier.Name);
+                sb.Append(_lastSheetIdentifier.Name);
             }
-        }
-        public String AsFormulaString()
-        {
-            StringBuilder sb = new StringBuilder(32);
-            AsFormulaString(sb);
-            return sb.ToString();
-        }
-        public override String ToString()
-        {
-            StringBuilder sb = new StringBuilder(64);
-            sb.Append(this.GetType().Name);
-            sb.Append(" [");
-            AsFormulaString(sb);
-            sb.Append("]");
-            return sb.ToString();
         }
     }
 }

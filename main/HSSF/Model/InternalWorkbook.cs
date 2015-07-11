@@ -416,15 +416,7 @@ namespace NPOI.HSSF.Model
         {
             return OrCreateLinkTable.GetSpecificBuiltinRecord(name, sheetIndex);
         }
-        public ExternalSheet GetExternalSheet(int externSheetIndex)
-        {
-            String[] extNames = linkTable.GetExternalBookAndSheetName(externSheetIndex);
-            if (extNames == null)
-            {
-                return null;
-            }
-            return new ExternalSheet(extNames[0], extNames[1]);
-        }
+
         public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
         {
             String nameName = linkTable.ResolveNameXText(externSheetIndex, externNameIndex, this);
@@ -2214,49 +2206,105 @@ namespace NPOI.HSSF.Model
             }
         }
 
-        /** Finds the sheet name by his extern sheet index
-         * @param num extern sheet index
-         * @return sheet name
+        /** 
+         * Finds the first sheet name by his extern sheet index
+         * @param externSheetIndex extern sheet index
+         * @return first sheet name.
          */
-        public String FindSheetNameFromExternSheet(int externSheetIndex)
+        public String FindSheetFirstNameFromExternSheet(int externSheetIndex)
         {
-            int indexToSheet = linkTable.GetIndexToInternalSheet(externSheetIndex);
-            if (indexToSheet < 0)
+            int indexToSheet = linkTable.GetFirstInternalSheetIndexForExtIndex(externSheetIndex);
+            return FindSheetNameFromIndex(indexToSheet);
+        }
+        public String FindSheetLastNameFromExternSheet(int externSheetIndex)
+        {
+            int indexToSheet = linkTable.GetLastInternalSheetIndexForExtIndex(externSheetIndex);
+            return FindSheetNameFromIndex(indexToSheet);
+        }
+        private String FindSheetNameFromIndex(int internalSheetIndex)
+        {
+            if (internalSheetIndex < 0)
             {
                 // TODO - what does '-1' mean here?
-                //error check, bail out gracefully!
+                //error Check, bail out gracefully!
                 return "";
             }
-            if (indexToSheet >= boundsheets.Count)
+            if (internalSheetIndex >= boundsheets.Count)
             {
                 // Not sure if this can ever happen (See bug 45798)
                 return ""; // Seems to be what excel would do in this case
             }
-            return GetSheetName(indexToSheet);
+            return GetSheetName(internalSheetIndex);
+        }
+
+        public ExternalSheet GetExternalSheet(int externSheetIndex)
+        {
+            String[] extNames = linkTable.GetExternalBookAndSheetName(externSheetIndex);
+            if (extNames == null)
+            {
+                return null;
+            }
+            if (extNames.Length == 2)
+            {
+                return new ExternalSheet(extNames[0], extNames[1]);
+            }
+            else
+            {
+                return new ExternalSheetRange(extNames[0], extNames[1], extNames[2]);
+            }
+        }
+
+
+        /**
+         * Finds the (first) sheet index for a particular external sheet number.
+         * @param externSheetNumber     The external sheet number to convert
+         * @return  The index to the sheet found.
+         */
+        public int GetFirstSheetIndexFromExternSheetIndex(int externSheetNumber)
+        {
+            return linkTable.GetFirstInternalSheetIndexForExtIndex(externSheetNumber);
         }
 
         /**
-         * Finds the sheet index for a particular external sheet number.
-         * @param externSheetNumber     The external sheet number to Convert
+         * Finds the last sheet index for a particular external sheet number,
+         *  which may be the same as the first (except for multi-sheet references)
+         * @param externSheetNumber     The external sheet number to convert
          * @return  The index to the sheet found.
          */
-        public int GetSheetIndexFromExternSheetIndex(int externSheetNumber)
+        public int GetLastSheetIndexFromExternSheetIndex(int externSheetNumber)
         {
-            return linkTable.GetSheetIndexFromExternSheetIndex(externSheetNumber);
+            return linkTable.GetLastInternalSheetIndexForExtIndex(externSheetNumber);
         }
 
-        /** returns the extern sheet number for specific sheet number ,
-         *  if this sheet doesn't exist in extern sheet , Add it
-         * @param sheetNumber sheet number
+        /** 
+         * Returns the extern sheet number for specific sheet number.
+         * If this sheet doesn't exist in extern sheet, add it
+         * @param sheetNumber local sheet number
          * @return index to extern sheet
          */
         public int CheckExternSheet(int sheetNumber)
         {
             return OrCreateLinkTable.CheckExternSheet(sheetNumber);
         }
+        /** 
+         * Returns the extern sheet number for specific range of sheets.
+         * If this sheet range doesn't exist in extern sheet, add it
+         * @param firstSheetNumber first local sheet number
+         * @param lastSheetNumber last local sheet number
+         * @return index to extern sheet
+         */
+        public short checkExternSheet(int firstSheetNumber, int lastSheetNumber)
+        {
+            return (short)OrCreateLinkTable.CheckExternSheet(firstSheetNumber, lastSheetNumber);
+        }
+
         public int GetExternalSheetIndex(String workbookName, String sheetName)
         {
-            return OrCreateLinkTable.GetExternalSheetIndex(workbookName, sheetName);
+            return OrCreateLinkTable.GetExternalSheetIndex(workbookName, sheetName, sheetName);
+        }
+        public int GetExternalSheetIndex(String workbookName, String firstSheetName, String lastSheetName)
+        {
+            return OrCreateLinkTable.GetExternalSheetIndex(workbookName, firstSheetName, lastSheetName);
         }
         /** Gets the total number of names
          * @return number of names

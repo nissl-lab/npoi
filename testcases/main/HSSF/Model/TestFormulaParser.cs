@@ -461,6 +461,55 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("A1:A2", formula);
         }
 
+        [Test]
+        public void TestMultiSheetReference()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            wb.CreateSheet("Cash_Flow");
+            wb.CreateSheet("Test Sheet");
+
+            HSSFSheet sheet = wb.CreateSheet("Test") as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+            String formula = null;
+
+            // References to a single cell:
+
+            // One sheet
+            cell.CellFormula = (/*setter*/"Cash_Flow!A1");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow!A1", formula);
+
+            // Then the other
+            cell.CellFormula = (/*setter*/"\'Test Sheet\'!A1");
+            formula = cell.CellFormula;
+            Assert.AreEqual("\'Test Sheet\'!A1", formula);
+
+            // Now both
+            cell.CellFormula = (/*setter*/"Cash_Flow:\'Test Sheet\'!A1");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1", formula);
+
+            // References to a range (area) of cells:
+
+            // One sheet
+            cell.CellFormula=("Cash_Flow!A1:B2");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow!A1:B2", formula);
+
+            // Then the other
+            cell.CellFormula=("\'Test Sheet\'!A1:B2");
+            formula = cell.CellFormula;
+            Assert.AreEqual("\'Test Sheet\'!A1:B2", formula);
+
+            // Now both
+            cell.CellFormula=("Cash_Flow:\'Test Sheet\'!A1:B2");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1:B2", formula);
+        }
+
+
         /**
          * Test for bug observable at svn revision 618865 (5-Feb-2008)<br/>
          * a formula consisting of a single no-arg function got rendered without the function braces

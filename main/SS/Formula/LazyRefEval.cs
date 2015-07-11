@@ -26,15 +26,17 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
 
     /**
-    *
-    * @author Josh Micich 
-    */
+     * Provides Lazy Evaluation to a 3D Reference
+     * 
+     * TODO Provide access to multiple sheets where present
+     */
     public class LazyRefEval : RefEvalBase
     {
 
-        private SheetRefEvaluator _evaluator;
-        public LazyRefEval(int rowIndex, int columnIndex, SheetRefEvaluator sre)
-            :base(rowIndex, columnIndex)
+        private SheetRangeEvaluator _evaluator;
+
+        public LazyRefEval(int rowIndex, int columnIndex, SheetRangeEvaluator sre)
+            :base(sre, rowIndex, columnIndex)
         {
            
             if (sre == null)
@@ -43,19 +45,10 @@ namespace NPOI.SS.Formula
             }
             _evaluator = sre;
         }
-        public LazyRefEval(Ref3DPtg ptg, SheetRefEvaluator sre)
-            : base(ptg.Row, ptg.Column)
-        {
 
-            _evaluator = sre;
-        }
-
-        public override ValueEval InnerValueEval
+        public override ValueEval GetInnerValueEval(int sheetIndex)
         {
-            get
-            {
-                return _evaluator.GetEvalForCell(Row, Column);
-            }
+            return _evaluator.GetEvalForCell(sheetIndex, Row, Column);
         }
 
         public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
@@ -72,7 +65,7 @@ namespace NPOI.SS.Formula
             CellReference cr = new CellReference(Row, Column);
             StringBuilder sb = new StringBuilder();
             sb.Append(GetType().Name).Append("[");
-            sb.Append(_evaluator.SheetName);
+            sb.Append(_evaluator.SheetNameRange);
             sb.Append('!');
             sb.Append(cr.FormatAsString());
             sb.Append("]");

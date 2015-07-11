@@ -59,53 +59,81 @@ namespace NPOI.SS.Formula
             }
         }
 
-        SheetRefEvaluator CreateExternSheetRefEvaluator(IExternSheetReferenceToken ptg)
+        SheetRangeEvaluator CreateExternSheetRefEvaluator(IExternSheetReferenceToken ptg)
         {
             return CreateExternSheetRefEvaluator(ptg.ExternSheetIndex);
         }
 
-        SheetRefEvaluator CreateExternSheetRefEvaluator(String sheetName, int externalWorkbookNumber)
+        SheetRangeEvaluator CreateExternSheetRefEvaluator(String firstSheetName, String lastSheetName, int externalWorkbookNumber)
         {
-            ExternalSheet externalSheet = _workbook.GetExternalSheet(sheetName, externalWorkbookNumber);
+            ExternalSheet externalSheet = _workbook.GetExternalSheet(firstSheetName, lastSheetName, externalWorkbookNumber);
             return CreateExternSheetRefEvaluator(externalSheet);
         }
 
-        SheetRefEvaluator CreateExternSheetRefEvaluator(int externSheetIndex)
+        SheetRangeEvaluator CreateExternSheetRefEvaluator(int externSheetIndex)
         {
             ExternalSheet externalSheet = _workbook.GetExternalSheet(externSheetIndex);
             return CreateExternSheetRefEvaluator(externalSheet);
         }
-        SheetRefEvaluator CreateExternSheetRefEvaluator(ExternalSheet externalSheet)
+        SheetRangeEvaluator CreateExternSheetRefEvaluator(ExternalSheet externalSheet)
         {
             WorkbookEvaluator targetEvaluator;
-            int otherSheetIndex;
-            if (externalSheet == null || externalSheet.GetWorkbookName() == null)
+            int otherFirstSheetIndex;
+            int otherLastSheetIndex = -1;
+            if (externalSheet == null || externalSheet.WorkbookName == null)
             {
                 // sheet is in same workbook
-                otherSheetIndex = _workbook.GetSheetIndex(externalSheet.GetSheetName());
                 targetEvaluator = _bookEvaluator;
+                otherFirstSheetIndex = _workbook.GetSheetIndex(externalSheet.SheetName);
+
+                if (externalSheet is ExternalSheetRange)
+                {
+                    String lastSheetName = ((ExternalSheetRange)externalSheet).LastSheetName;
+                    otherLastSheetIndex = _workbook.GetSheetIndex(lastSheetName);
+                }
             }
             else
             {
                 // look up sheet by name from external workbook
-                String workbookName = externalSheet.GetWorkbookName();
+                String workbookName = externalSheet.WorkbookName;
                 try
                 {
                     targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
                 }
                 catch (WorkbookNotFoundException e)
                 {
-                    throw new RuntimeException(e.Message, e);
+                    throw new Exception(e.Message, e);
                 }
-                otherSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.GetSheetName());
-                if (otherSheetIndex < 0)
+
+                otherFirstSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.SheetName);
+                if (externalSheet is ExternalSheetRange)
                 {
-                    throw new Exception("Invalid sheet name '" + externalSheet.GetSheetName()
+                    String lastSheetName = ((ExternalSheetRange)externalSheet).LastSheetName;
+                    otherLastSheetIndex = targetEvaluator.GetSheetIndex(lastSheetName);
+                }
+
+                if (otherFirstSheetIndex < 0)
+                {
+                    throw new Exception("Invalid sheet name '" + externalSheet.SheetName
                             + "' in bool '" + workbookName + "'.");
                 }
             }
-            return new SheetRefEvaluator(targetEvaluator, _tracker, otherSheetIndex);
+
+            if (otherLastSheetIndex == -1)
+            {
+                // Reference to just one sheet
+                otherLastSheetIndex = otherFirstSheetIndex;
+            }
+
+            SheetRefEvaluator[] Evals = new SheetRefEvaluator[otherLastSheetIndex - otherFirstSheetIndex + 1];
+            for (int i = 0; i < Evals.Length; i++)
+            {
+                int otherSheetIndex = i + otherFirstSheetIndex;
+                Evals[i] = new SheetRefEvaluator(targetEvaluator, _tracker, otherSheetIndex);
+            }
+            return new SheetRangeEvaluator(otherFirstSheetIndex, otherLastSheetIndex, Evals);
         }
+
 
         /**
          * @return <code>null</code> if either workbook or sheet is not found
@@ -140,9 +168,10 @@ namespace NPOI.SS.Formula
             return new SheetRefEvaluator(targetEvaluator, _tracker, otherSheetIndex);
         }
 
-        public SheetRefEvaluator GetRefEvaluatorForCurrentSheet()
+        public SheetRangeEvaluator GetRefEvaluatorForCurrentSheet()
         {
-            return new SheetRefEvaluator(_bookEvaluator, _tracker, _sheetIndex);
+            SheetRefEvaluator sre = new SheetRefEvaluator(_bookEvaluator, _tracker, _sheetIndex);
+            return new SheetRangeEvaluator(_sheetIndex, sre);
         }
 
 
@@ -171,11 +200,13 @@ namespace NPOI.SS.Formula
             {
                 throw new Exception("R1C1 style not supported yet");
             }
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(workbookName, sheetName);
-            if (sre == null)
+            SheetRefEvaluator se = CreateExternSheetRefEvaluator(workbookName, sheetName);
+            if (se == null)
             {
                 return ErrorEval.REF_INVALID;
             }
+            SheetRangeEvaluator sre = new SheetRangeEvaluator(_sheetIndex, se);
+
             // ugly typecast - TODO - make spReadsheet version more easily accessible
             SpreadsheetVersion ssVersion = ((IFormulaParsingWorkbook)_workbook).GetSpreadsheetVersion();
 
@@ -297,47 +328,47 @@ namespace NPOI.SS.Formula
 
         public ValueEval GetRefEval(int rowIndex, int columnIndex)
         {
-            SheetRefEvaluator sre = GetRefEvaluatorForCurrentSheet();
+            SheetRangeEvaluator sre = GetRefEvaluatorForCurrentSheet();
             return new LazyRefEval(rowIndex, columnIndex, sre);
         }
         public ValueEval GetRef3DEval(Ref3DPtg rptg)
         {
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(rptg.ExternSheetIndex);
+            SheetRangeEvaluator sre = CreateExternSheetRefEvaluator(rptg.ExternSheetIndex);
             return new LazyRefEval(rptg.Row, rptg.Column, sre);
         }
         public ValueEval GetRef3DEval(Ref3DPxg rptg)
         {
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(rptg.SheetName, rptg.ExternalWorkbookNumber);
+            SheetRangeEvaluator sre = CreateExternSheetRefEvaluator(rptg.SheetName, rptg.LastSheetName, rptg.ExternalWorkbookNumber);
             return new LazyRefEval(rptg.Row, rptg.Column, sre);
         }
         public ValueEval GetAreaEval(int firstRowIndex, int firstColumnIndex,
                 int lastRowIndex, int lastColumnIndex)
         {
-            SheetRefEvaluator sre = GetRefEvaluatorForCurrentSheet();
+            SheetRangeEvaluator sre = GetRefEvaluatorForCurrentSheet();
             return new LazyAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex, sre);
         }
         public ValueEval GetArea3DEval(Area3DPtg aptg)
         {
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(aptg.ExternSheetIndex);
+            SheetRangeEvaluator sre = CreateExternSheetRefEvaluator(aptg.ExternSheetIndex);
             return new LazyAreaEval(aptg.FirstRow, aptg.FirstColumn,
                     aptg.LastRow, aptg.LastColumn, sre);
         }
         public ValueEval GetArea3DEval(Area3DPxg aptg)
         {
-            SheetRefEvaluator sre = CreateExternSheetRefEvaluator(aptg.SheetName, aptg.ExternalWorkbookNumber);
+            SheetRangeEvaluator sre = CreateExternSheetRefEvaluator(aptg.SheetName, aptg.LastSheetName, aptg.ExternalWorkbookNumber);
             return new LazyAreaEval(aptg.FirstRow, aptg.FirstColumn,
                     aptg.LastRow, aptg.LastColumn, sre);
         }
         public ValueEval GetNameXEval(NameXPtg nameXPtg)
         {
             ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPtg.SheetRefIndex);
-            if (externSheet == null || externSheet.GetWorkbookName() == null)
+            if (externSheet == null || externSheet.WorkbookName == null)
             {
                 // External reference to our own workbook's name
                 return GetLocalNameXEval(nameXPtg);
             }
             // Look it up for the external workbook
-            String workbookName = externSheet.GetWorkbookName();
+            String workbookName = externSheet.WorkbookName;
             ExternalName externName = _workbook.GetExternalName(
                   nameXPtg.SheetRefIndex,
                   nameXPtg.NameIndex
@@ -346,15 +377,15 @@ namespace NPOI.SS.Formula
         }
         public ValueEval GetNameXEval(NameXPxg nameXPxg)
         {
-            ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPxg.SheetName, nameXPxg.ExternalWorkbookNumber);
-            if (externSheet == null || externSheet.GetWorkbookName() == null)
+            ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPxg.SheetName, null, nameXPxg.ExternalWorkbookNumber);
+            if (externSheet == null || externSheet.WorkbookName == null)
             {
                 // External reference to our own workbook's name
                 return GetLocalNameXEval(nameXPxg);
             }
 
             // Look it up for the external workbook
-            String workbookName = externSheet.GetWorkbookName();
+            String workbookName = externSheet.WorkbookName;
             ExternalName externName = _workbook.GetExternalName(
                   nameXPxg.NameName,
                   nameXPxg.SheetName,

@@ -34,26 +34,35 @@ namespace NPOI.SS.Formula.PTG
     public class Ref3DPxg : RefPtgBase, Pxg
     {
         private int externalWorkbookNumber = -1;
-        private String sheetName;
+        private String firstSheetName;
+        private String lastSheetName;
 
-        public Ref3DPxg(int externalWorkbookNumber, String sheetName, String cellref)
+        public Ref3DPxg(int externalWorkbookNumber, SheetIdentifier sheetName, String cellref)
             : this(externalWorkbookNumber, sheetName, new CellReference(cellref))
         {
 
         }
-        public Ref3DPxg(int externalWorkbookNumber, String sheetName, CellReference c)
+        public Ref3DPxg(int externalWorkbookNumber, SheetIdentifier sheetName, CellReference c)
             : base(c)
         {
             this.externalWorkbookNumber = externalWorkbookNumber;
-            this.sheetName = sheetName;
+            this.firstSheetName = sheetName.SheetId.Name;
+            if (sheetName is SheetRangeIdentifier)
+            {
+                this.lastSheetName = ((SheetRangeIdentifier)sheetName).LastSheetIdentifier.Name;
+            }
+            else
+            {
+                this.lastSheetName = null;
+            }
         }
 
-        public Ref3DPxg(String sheetName, String cellref)
+        public Ref3DPxg(SheetIdentifier sheetName, String cellref)
             : this(sheetName, new CellReference(cellref))
         {
 
         }
-        public Ref3DPxg(String sheetName, CellReference c)
+        public Ref3DPxg(SheetIdentifier sheetName, CellReference c)
             : this(-1, sheetName, c)
         {
 
@@ -70,7 +79,12 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append("workbook=").Append(ExternalWorkbookNumber);
                 sb.Append("] ");
             }
-            sb.Append("sheet=").Append(SheetName);
+            sb.Append("sheet=").Append(firstSheetName);
+            if (lastSheetName != null)
+            {
+                sb.Append(" : ");
+                sb.Append("sheet=").Append(lastSheetName);
+            }
             sb.Append(" ! ");
             sb.Append(FormatReferenceAsString());
             sb.Append("]");
@@ -88,14 +102,18 @@ namespace NPOI.SS.Formula.PTG
         {
             get
             {
-                return sheetName;
+                return firstSheetName;
             }
             set
             {
-                sheetName = value;
+                firstSheetName = value;
             }
         }
-
+        public string LastSheetName
+        {
+            get { return lastSheetName; }
+            set { lastSheetName = value; }
+        }
         public String Format2DRefAsString()
         {
             return FormatReferenceAsString();
@@ -110,9 +128,14 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append(externalWorkbookNumber);
                 sb.Append(']');
             }
-            if (sheetName != null)
+            if (firstSheetName != null)
             {
-                SheetNameFormatter.AppendFormat(sb, sheetName);
+                SheetNameFormatter.AppendFormat(sb, firstSheetName);
+            }
+            if (lastSheetName != null)
+            {
+                sb.Append(':');
+                SheetNameFormatter.AppendFormat(sb, lastSheetName);
             }
             sb.Append('!');
             sb.Append(FormatReferenceAsString());

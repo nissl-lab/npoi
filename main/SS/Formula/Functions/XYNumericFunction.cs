@@ -77,14 +77,18 @@ namespace NPOI.SS.Formula.Functions
         private class RefValueArray : ValueArray
         {
             private RefEval _ref;
+            private int _width;
+
             public RefValueArray(RefEval ref1)
-                : base(1)
+                : base(ref1.NumberOfSheets)
             {
                 _ref = ref1;
+                _width = ref1.NumberOfSheets;
             }
             protected override ValueEval GetItemInternal(int index)
             {
-                return _ref.InnerValueEval;
+                int sIx = (index % _width) + _ref.FirstSheetIndex;
+                return _ref.GetInnerValueEval(sIx);
             }
         }
         private class AreaValueArray : ValueArray
@@ -227,43 +231,45 @@ namespace NPOI.SS.Formula.Functions
 
         private static bool IsNumberEval(Eval eval)
         {
-            bool retval = false;
+            //bool retval = false;
 
-            if (eval is NumberEval)
-            {
-                retval = true;
-            }
-            else if (eval is RefEval)
-            {
-                RefEval re = (RefEval)eval;
-                ValueEval ve = re.InnerValueEval;
-                retval = (ve is NumberEval);
-            }
+            //if (eval is NumberEval)
+            //{
+            //    retval = true;
+            //}
+            //else if (eval is RefEval)
+            //{
+            //    RefEval re = (RefEval)eval;
+            //    ValueEval ve = re.InnerValueEval;
+            //    retval = (ve is NumberEval);
+            //}
 
-            return retval;
+            //return retval;
+            throw new InvalidOperationException("not found in poi");
         }
 
         private static double GetDoubleValue(Eval eval)
         {
-            double retval = 0;
-            if (eval is NumberEval)
-            {
-                NumberEval ne = (NumberEval)eval;
-                retval = ne.NumberValue;
-            }
-            else if (eval is RefEval)
-            {
-                RefEval re = (RefEval)eval;
-                ValueEval ve = re.InnerValueEval;
-                retval = (ve is NumberEval)
-                    ? ((NumberEval)ve).NumberValue
-                    : double.NaN;
-            }
-            else if (eval is ErrorEval)
-            {
-                retval = double.NaN;
-            }
-            return retval;
+            //double retval = 0;
+            //if (eval is NumberEval)
+            //{
+            //    NumberEval ne = (NumberEval)eval;
+            //    retval = ne.NumberValue;
+            //}
+            //else if (eval is RefEval)
+            //{
+            //    RefEval re = (RefEval)eval;
+            //    ValueEval ve = re.InnerValueEval;
+            //    retval = (ve is NumberEval)
+            //        ? ((NumberEval)ve).NumberValue
+            //        : double.NaN;
+            //}
+            //else if (eval is ErrorEval)
+            //{
+            //    retval = double.NaN;
+            //}
+            //return retval;
+            throw new InvalidOperationException("not found in poi");
         }
         private static ValueVector CreateValueVector(ValueEval arg)
         {

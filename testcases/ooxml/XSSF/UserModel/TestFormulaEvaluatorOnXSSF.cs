@@ -27,16 +27,16 @@ using NPOI.SS.Util;
 namespace NPOI.XSSF.UserModel{
 
 
-/**
- * Performs much the same role as {@link TestFormulasFromSpreadsheet},
- *  except for a XSSF spreadsheet, not a HSSF one.
- * This allows us to check that all our Formula Evaluation code
- *  is able to work for XSSF, as well as for HSSF.
- * 
- * Periodically, you should open FormulaEvalTestData.xls in
- *  Excel 2007, and re-save it as FormulaEvalTestData_Copy.xlsx
- *  
- */
+    /**
+     * Performs much the same role as {@link TestFormulasFromSpreadsheet},
+     *  except for a XSSF spreadsheet, not a HSSF one.
+     * This allows us to check that all our Formula Evaluation code
+     *  is able to work for XSSF, as well as for HSSF.
+     * 
+     * Periodically, you should open FormulaEvalTestData.xls in
+     *  Excel 2007, and re-save it as FormulaEvalTestData_Copy.xlsx
+     *  
+     */
     [TestFixture]
     public class TestFormulaEvaluatorOnXSSF
     {
@@ -128,16 +128,16 @@ namespace NPOI.XSSF.UserModel{
                     break;
                 case CellType.Error:
                     Assert.AreEqual(CellType.Error, actual.CellType, msg);
-					//if (false)
-					//{ // TODO: fix ~45 functions which are currently returning incorrect error values
-					//	Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
-					//}
+                    //if (false)
+                    //{ // TODO: fix ~45 functions which are currently returning incorrect error values
+                    //	Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
+                    //}
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.Numeric:
                     Assert.AreEqual(CellType.Numeric, actual.CellType, msg);
-                    AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue, TestMathX.POS_ZERO, TestMathX.DIFF_TOLERANCE_FACTOR);
+                    AbstractNumericTestCase.AssertEquals(msg, expected.NumericCellValue, actual.NumberValue, TestMathX.POS_ZERO, TestMathX.DIFF_TOLERANCE_FACTOR);
 
                     //				double delta = Math.abs(expected.NumericCellValue-actual.NumberValue);
                     //				double pctExpected = Math.abs(0.00001*expected.NumericCellValue);
@@ -199,10 +199,10 @@ namespace NPOI.XSSF.UserModel{
                 + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
                 throw new AssertionException(msg);
             }
-			//if (false)
-			//{ // normally no output for successful Tests
-			//	Console.WriteLine(this.GetType().Name + ": " + successMsg);
-			//}
+            //if (false)
+            //{ // normally no output for successful Tests
+            //	Console.WriteLine(this.GetType().Name + ": " + successMsg);
+            //}
         }
 
         /**

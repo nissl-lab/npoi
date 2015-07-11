@@ -137,7 +137,7 @@ namespace TestCases.SS.Formula.Eval
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.Numeric:
                     Assert.AreEqual(CellType.Numeric, actual.CellType, msg);
-                    AbstractNumericTestCase.AssertEqual(msg, expected.NumericCellValue, actual.NumberValue,
+                    AbstractNumericTestCase.AssertEquals(msg, expected.NumericCellValue, actual.NumberValue,
                         AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
                     break;
                 case CellType.String:
