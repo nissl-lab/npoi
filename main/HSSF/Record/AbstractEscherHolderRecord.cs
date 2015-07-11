@@ -82,8 +82,11 @@ namespace NPOI.HSSF.Record
 
         protected void ConvertRawBytesToEscherRecords()
         {
-            byte[] rawData = RawData;
-            ConvertToEscherRecords(0, rawData.Length, rawData);
+            if (!DESERIALISE)
+            {
+                byte[] rawData = RawData;
+                ConvertToEscherRecords(0, rawData.Length, rawData);
+            }
         }
         private void ConvertToEscherRecords(int offset, int size, byte[] data)
         {
@@ -284,7 +287,7 @@ namespace NPOI.HSSF.Record
 
         public EscherRecord GetEscherRecord(int index)
         {
-            return (EscherRecord)escherRecords[index];
+            return escherRecords[index];
         }
 
         /**

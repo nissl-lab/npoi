@@ -636,20 +636,28 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestShapeContainerImplementsIterable(){
             HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
-            HSSFPatriarch patriarch = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
+            try
+            {
+                HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+                HSSFPatriarch patriarch = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
 
-            patriarch.CreateSimpleShape(new HSSFClientAnchor());
-            patriarch.CreateSimpleShape(new HSSFClientAnchor());
+                patriarch.CreateSimpleShape(new HSSFClientAnchor());
+                patriarch.CreateSimpleShape(new HSSFClientAnchor());
 
-            int i=2;
+                int i = 2;
 
-            foreach (HSSFShape shape in patriarch){
-                i--;
+                foreach (HSSFShape shape in patriarch)
+                {
+                    i--;
+                }
+                Assert.AreEqual(i, 0);
             }
-            Assert.AreEqual(i, 0);
+            finally
+            {
+                //wb.Close();
+            }
         }
-
+        [Test]
         public void TestClearShapesForPatriarch()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -680,5 +688,128 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(agg.TailRecords.Count, 0);
             Assert.AreEqual(patriarch.Children.Count, 0);
         }
+
+        [Test]
+        public void TestBug45312()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            try
+            {
+                HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+                HSSFPatriarch patriarch = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
+
+                {
+                    HSSFClientAnchor a1 = new HSSFClientAnchor();
+                    a1.SetAnchor((short)1, 1, 0, 0, (short)1, 1, 512, 100);
+                    HSSFSimpleShape shape1 = patriarch.CreateSimpleShape(a1);
+                    shape1.ShapeType = (/*setter*/HSSFSimpleShape.OBJECT_TYPE_LINE);
+                }
+                {
+                    HSSFClientAnchor a1 = new HSSFClientAnchor();
+                    a1.SetAnchor((short)1, 1, 512, 0, (short)1, 1, 1024, 100);
+                    HSSFSimpleShape shape1 = patriarch.CreateSimpleShape(a1);
+                    shape1.FlipVertical=(true);
+                    shape1.ShapeType = (/*setter*/HSSFSimpleShape.OBJECT_TYPE_LINE);
+                }
+
+                {
+                    HSSFClientAnchor a1 = new HSSFClientAnchor();
+                    a1.SetAnchor((short)2, 2, 0, 0, (short)2, 2, 512, 100);
+                    HSSFSimpleShape shape1 = patriarch.CreateSimpleShape(a1);
+                    shape1.ShapeType = (/*setter*/HSSFSimpleShape.OBJECT_TYPE_LINE);
+                }
+                {
+                    HSSFClientAnchor a1 = new HSSFClientAnchor();
+                    a1.SetAnchor((short)2, 2, 0, 100, (short)2, 2, 512, 200);
+                    HSSFSimpleShape shape1 = patriarch.CreateSimpleShape(a1);
+                    shape1.FlipHorizontal = (/*setter*/true);
+                    shape1.ShapeType = (/*setter*/HSSFSimpleShape.OBJECT_TYPE_LINE);
+                }
+
+                /*OutputStream stream = new FileOutputStream("/tmp/45312.xls");
+                try {
+                    wb.Write(stream);
+                } finally {
+                    stream.Close();
+                }*/
+
+                CheckWorkbookBack(wb);
+            }
+            finally
+            {
+                //wb.Close();
+            }
+        }
+
+        private void CheckWorkbookBack(HSSFWorkbook wb)
+        {
+            HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            HSSFSheet sheetBack = wbBack.GetSheetAt(0) as HSSFSheet;
+            Assert.IsNotNull(sheetBack);
+
+            HSSFPatriarch patriarchBack = sheetBack.DrawingPatriarch as HSSFPatriarch;
+            Assert.IsNotNull(patriarchBack);
+
+            IList<HSSFShape> children = patriarchBack.Children;
+            Assert.AreEqual(4, children.Count);
+            HSSFShape hssfShape = children[(0)];
+            Assert.IsTrue(hssfShape is HSSFSimpleShape);
+            HSSFAnchor anchor = hssfShape.Anchor;
+            Assert.IsTrue(anchor is HSSFClientAnchor);
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(512, anchor.Dx2);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(100, anchor.Dy2);
+            HSSFClientAnchor cAnchor = (HSSFClientAnchor)anchor;
+            Assert.AreEqual(1, cAnchor.Col1);
+            Assert.AreEqual(1, cAnchor.Col2);
+            Assert.AreEqual(1, cAnchor.Row1);
+            Assert.AreEqual(1, cAnchor.Row2);
+
+            hssfShape = children[(1)];
+            Assert.IsTrue(hssfShape is HSSFSimpleShape);
+            anchor = hssfShape.Anchor;
+            Assert.IsTrue(anchor is HSSFClientAnchor);
+            Assert.AreEqual(512, anchor.Dx1);
+            Assert.AreEqual(1024, anchor.Dx2);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(100, anchor.Dy2);
+            cAnchor = (HSSFClientAnchor)anchor;
+            Assert.AreEqual(1, cAnchor.Col1);
+            Assert.AreEqual(1, cAnchor.Col2);
+            Assert.AreEqual(1, cAnchor.Row1);
+            Assert.AreEqual(1, cAnchor.Row2);
+
+            hssfShape = children[(2)];
+            Assert.IsTrue(hssfShape is HSSFSimpleShape);
+            anchor = hssfShape.Anchor;
+            Assert.IsTrue(anchor is HSSFClientAnchor);
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(512, anchor.Dx2);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(100, anchor.Dy2);
+            cAnchor = (HSSFClientAnchor)anchor;
+            Assert.AreEqual(2, cAnchor.Col1);
+            Assert.AreEqual(2, cAnchor.Col2);
+            Assert.AreEqual(2, cAnchor.Row1);
+            Assert.AreEqual(2, cAnchor.Row2);
+
+            hssfShape = children[(3)];
+            Assert.IsTrue(hssfShape is HSSFSimpleShape);
+            anchor = hssfShape.Anchor;
+            Assert.IsTrue(anchor is HSSFClientAnchor);
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(512, anchor.Dx2);
+            Assert.AreEqual(100, anchor.Dy1);
+            Assert.AreEqual(200, anchor.Dy2);
+            cAnchor = (HSSFClientAnchor)anchor;
+            Assert.AreEqual(2, cAnchor.Col1);
+            Assert.AreEqual(2, cAnchor.Col2);
+            Assert.AreEqual(2, cAnchor.Row1);
+            Assert.AreEqual(2, cAnchor.Row2);
+        }
+
     }
 }

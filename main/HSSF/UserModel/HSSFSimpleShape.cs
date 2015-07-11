@@ -261,5 +261,9 @@ namespace NPOI.HSSF.UserModel
             }
             return _textObjectRecord;
         }
+
+        public bool FlipVertical { get; set; }
+
+        public bool FlipHorizontal { get; set; }
     }
 }

@@ -47,6 +47,10 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Creates a new client anchor and Sets the top-left and bottom-right
         /// coordinates of the anchor.
+        /// 
+        /// Note: Microsoft Excel seems to sometimes disallow 
+        /// higher y1 than y2 or higher x1 than x2 in the anchor, you might need to 
+        /// reverse them and draw shapes vertically or horizontally flipped! 
         /// </summary>
         /// <param name="dx1">the x coordinate within the first cell.</param>
         /// <param name="dy1">the y coordinate within the first cell.</param>
@@ -189,6 +193,10 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Sets the top-left and bottom-right
         /// coordinates of the anchor
+        /// 
+        /// Note: Microsoft Excel seems to sometimes disallow 
+        /// higher y1 than y2 or higher x1 than x2 in the anchor, you might need to 
+        /// reverse them and draw shapes vertically or horizontally flipped! 
         /// </summary>
         /// <param name="col1">the column (0 based) of the first cell.</param>
         /// <param name="row1"> the row (0 based) of the first cell.</param>
