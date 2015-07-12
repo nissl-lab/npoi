@@ -10,11 +10,19 @@ namespace NPOI.SS.Util
     public class CellRangeAddress : CellRangeAddressBase
     {
         public const int ENCODED_SIZE = 8;
-
+        /**
+         * Creates new cell range. Indexes are zero-based.
+         * 
+         * @param firstRow Index of first row
+         * @param lastRow Index of last row (inclusive), must be equal to or larger than {@code firstRow}
+         * @param firstCol Index of first column
+         * @param lastCol Index of last column (inclusive), must be equal to or larger than {@code firstCol}
+         */
         public CellRangeAddress(int firstRow, int lastRow, int firstCol, int lastCol)
             : base(firstRow, lastRow, firstCol, lastCol)
         {
-
+            if (lastRow < firstRow || lastCol < firstCol)
+                throw new ArgumentException("lastRow < firstRow || lastCol < firstCol");
         }
 
         public CellRangeAddress(RecordInputStream in1)
@@ -28,10 +36,11 @@ namespace NPOI.SS.Util
             if (in1.Remaining < ENCODED_SIZE)
             {
                 // Ran out of data
-                throw new Exception("Ran out of data readin1g CellRangeAddress");
+                throw new RuntimeException("Ran out of data readin1g CellRangeAddress");
             }
             return in1.ReadUShort();
         }
+
         public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(FirstRow);
@@ -44,8 +53,8 @@ namespace NPOI.SS.Util
             return FormatAsString(null, false);
         }
         /**
-     * @return the text format of this range using specified sheet name.
-     */
+         * @return the text format of this range using specified sheet name.
+         */
         public String FormatAsString(String sheetName, bool useAbsoluteAddress)
         {
             StringBuilder sb = new StringBuilder();
