@@ -570,6 +570,156 @@ namespace TestCases.SS.UserModel
             assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
         }
 
+        /**
+         * =ISNUMBER(SEARCH("AM",A1)) Evaluation 
+         */
+        [Test]
+        public void Stackoverflow26437323()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+            IRow r2 = s.CreateRow(1);
+
+            // A1 is a number
+            r1.CreateCell(0).SetCellValue(1.1);
+            // B1 is a string, with the wanted text in it
+            r1.CreateCell(1).SetCellValue("This is text with AM in it");
+            // C1 is a string, with different text
+            r1.CreateCell(2).SetCellValue("This some other text");
+            // D1 is a blank cell
+            r1.CreateCell(3, CellType.Blank);
+            // E1 is null
+
+            // A2 will hold our test formulas
+            ICell cf = r2.CreateCell(0, CellType.Formula);
+
+
+            // First up, check that TRUE and ISLOGICAL both behave
+            cf.CellFormula = (/*setter*/"TRUE()");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISLOGICAL(TRUE())");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISLOGICAL(4)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+
+            // Now, check ISNUMBER / ISTEXT / ISNONTEXT
+            cf.CellFormula = (/*setter*/"ISNUMBER(A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(E1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+
+            cf.CellFormula = (/*setter*/"ISTEXT(A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(E1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(E1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue); // Blank and Null the same
+
+
+            // Next up, SEARCH on its own
+            cf.SetCellFormula("SEARCH(\"am\", A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+
+            cf.SetCellFormula("SEARCH(\"am\", B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(19, (int)cf.NumericCellValue);
+
+            cf.SetCellFormula("SEARCH(\"am\", C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+
+            cf.SetCellFormula("SEARCH(\"am\", D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+
+
+            // Finally, bring it all together
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", A1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", B1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", C1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", D1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", E1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+        }
+        private ICell EvaluateCell(IWorkbook wb, ICell c)
+        {
+            ISheet s = c.Sheet;
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateFormulaCell(c);
+            return s.GetRow(c.RowIndex).GetCell(c.ColumnIndex);
+        }
+
+
     }
 
 }
