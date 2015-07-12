@@ -340,6 +340,24 @@ namespace NPOI
             }
             return false;
         }
+
+        /**
+         * Retrieve the custom property with this name, or null if none exists.
+         *
+         * You will need to test the various isSetX methods to work out
+         *  what the type of the property is, before fetching the 
+         *  appropriate value for it.
+         *
+         * @param name the name of the property to fetch
+         */
+        public CT_Property GetProperty(String name) {
+            foreach(CT_Property p in props.GetProperties().GetPropertyList()){
+                if(p.name.Equals(name)) {
+                    return p;
+                }
+            }
+            return null;
+        }
     }
     /**
      * Wrapper around the two different kinds of OOXML properties
