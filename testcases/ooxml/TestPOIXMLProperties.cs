@@ -78,6 +78,10 @@ namespace NPOI
             ExtendedProperties newProperties =
                     newProps.ExtendedProperties;
 
+            Assert.AreEqual(application, newProperties.Application);
+            Assert.AreEqual(appVersion, newProperties.AppVersion);
+        
+
             CT_ExtendedProperties
                     newCtProps = newProperties.GetUnderlyingProperties();
 

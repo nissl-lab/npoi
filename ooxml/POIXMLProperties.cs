@@ -217,6 +217,161 @@ namespace NPOI
         {
             return props.GetProperties();
         }
+
+        public String Template
+        {
+            get
+            {
+                return props.GetProperties().Template;
+            }
+        }
+        public String Manager
+        {
+            get { return props.GetProperties().Manager; }
+        }
+        public String Company
+        {
+            get { return props.GetProperties().Company; }
+        }
+        public String PresentationFormat
+        {
+            get { return props.GetProperties().PresentationFormat; }
+        }
+        public String Application
+        {
+            get { return props.GetProperties().Application; }
+        }
+        public String AppVersion
+        {
+            get { return props.GetProperties().AppVersion; }
+        }
+
+        public int Pages
+        {
+            get
+            {
+                if (props.GetProperties().IsSetPages())
+                {
+                    return props.GetProperties().Pages;
+                }
+                return -1;
+            }
+        }
+        public int Words
+        {
+            get
+            {
+                if (props.GetProperties().IsSetWords())
+                {
+                    return props.GetProperties().Words;
+                }
+                return -1;
+            }
+        }
+        public int Characters
+        {
+            get
+            {
+                if (props.GetProperties().IsSetCharacters())
+                {
+                    return props.GetProperties().Characters;
+                }
+                return -1;
+            }
+        }
+        public int CharactersWithSpaces
+        {
+            get
+            {
+                if (props.GetProperties().IsSetCharactersWithSpaces())
+                {
+                    return props.GetProperties().CharactersWithSpaces;
+                }
+                return -1;
+            }
+        }
+        public int Lines
+        {
+            get
+            {
+                if (props.GetProperties().IsSetLines())
+                {
+                    return props.GetProperties().Lines;
+                }
+                return -1;
+            }
+        }
+        public int Paragraphs
+        {
+            get
+            {
+                if (props.GetProperties().IsSetParagraphs())
+                {
+                    return props.GetProperties().Paragraphs;
+                }
+                return -1;
+            }
+        }
+        public int Slides
+        {
+            get
+            {
+                if (props.GetProperties().IsSetSlides())
+                {
+                    return props.GetProperties().Slides;
+                }
+                return -1;
+            }
+        }
+        public int Notes
+        {
+            get
+            {
+                if (props.GetProperties().IsSetNotes())
+                {
+                    return props.GetProperties().Notes;
+                }
+                return -1;
+            }
+        }
+        public int TotalTime
+        {
+            get
+            {
+                if (props.GetProperties().IsSetTotalTime())
+                {
+                    return props.GetProperties().TotalTime;
+                }
+                return -1;
+            }
+        }
+        public int HiddenSlides
+        {
+            get
+            {
+                if (props.GetProperties().IsSetHiddenSlides())
+                {
+                    return props.GetProperties().HiddenSlides;
+                }
+                return -1;
+            }
+        }
+        public int MMClips
+        {
+            get
+            {
+                if (props.GetProperties().IsSetMMClips())
+                {
+                    return props.GetProperties().MMClips;
+                }
+                return -1;
+            }
+        }
+
+        public String HyperlinkBase
+        {
+            get { return props.GetProperties().HyperlinkBase; }
+        }
     }
 
     /**
