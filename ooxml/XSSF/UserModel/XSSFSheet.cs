@@ -1759,6 +1759,40 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Removes a number of merged regions of cells (hence letting them free)
+         * 
+         * This method can be used to bulk-remove merged regions in a way
+         * much faster than calling RemoveMergedRegion() for every single 
+         * merged region.
+         *
+         * @param indices A Set of the regions to unmerge
+         */
+        public void RemoveMergedRegions(HashSet<int> indices)
+        {
+            CT_MergeCells ctMergeCells = worksheet.mergeCells;
+
+            int size = ctMergeCells.sizeOfMergeCellArray();
+            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[size - indices.Count];
+            for (int i = 0, d = 0; i < size; i++)
+            {
+                if (!indices.Contains(i))
+                {
+                    mergeCellsArray[d] = ctMergeCells.GetMergeCellArray(i);
+                    d++;
+                }
+            }
+            if (mergeCellsArray.Length > 0)
+            {
+                ctMergeCells.SetMergeCellArray(mergeCellsArray);
+            }
+            else
+            {
+                worksheet.UnsetMergeCells();
+            }
+        }
+
+
+        /**
          * Remove a row from this sheet.  All cells Contained in the row are Removed as well
          *
          * @param row  the row to Remove.

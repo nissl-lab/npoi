@@ -47,8 +47,10 @@ namespace NPOI.XSSF.UserModel.Helpers
         public List<CellRangeAddress> ShiftMerged(int startRow, int endRow, int n)
         {
             List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
+            HashSet<int> removedIndices = new HashSet<int>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
-            for (int i = 0; i < sheet.NumMergedRegions; i++)
+            int size = sheet.NumMergedRegions;
+            for (int i = 0; i < size; i++) 
             {
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
 
@@ -69,10 +71,13 @@ namespace NPOI.XSSF.UserModel.Helpers
                     //have to Remove/add it back
                     ShiftedRegions.Add(merged);
                     sheet.RemoveMergedRegion(i);
-                    i = i - 1; // we have to back up now since we Removed one
+                    removedIndices.Add(i);
                 }
             }
-
+            if (removedIndices.Count>0)
+            {
+                sheet.RemoveMergedRegions(removedIndices);
+            }
             //read so it doesn't get Shifted again
             foreach (CellRangeAddress region in ShiftedRegions)
             {
