@@ -127,22 +127,6 @@ namespace TestCases.HSSF.UserModel
             WriteTestOutputFileForViewing(wb, "Test23094");
         }
 
-        /** Test hyperlinks
-         * Open resulting file in excel, and Check that there is a link to Google
-         */
-        [Test]
-        public void Test15353()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("My sheet");
-
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.CellFormula = ("HYPERLINK(\"http://google.com\",\"Google\")");
-
-            WriteOutAndReadBack(wb);
-        }
-
         /** Test reading of a formula with a name and a cell ref in one
          **/
         [Test]
@@ -2727,44 +2711,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("50939.xls");
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        /**
-         * HLookup and VLookup with optional arguments 
-         */
-        [Test]
-        public void Test51024()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet();
-            IRow r1 = s.CreateRow(0);
-            IRow r2 = s.CreateRow(1);
-
-            r1.CreateCell(0).SetCellValue("v A1");
-            r2.CreateCell(0).SetCellValue("v A2");
-            r1.CreateCell(1).SetCellValue("v B1");
-
-            ICell c = r1.CreateCell(4);
-
-            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
-
-            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1, )");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-
-            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1, )");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-        }
+        
         /**
          * File with exactly 256 data blocks (+header block)
          *  shouldn't break on POIFS loading 
@@ -3028,84 +2975,6 @@ namespace TestCases.HSSF.UserModel
             OpenSample("xor-encryption-abc.xls");
         }
 
-        [Test]
-        public void stackoverflow23114397()
-        {
-            IWorkbook wb = new HSSFWorkbook();
-            IDataFormat format = wb.GetCreationHelper().CreateDataFormat();
-
-            // How close the sizing should be, given that not all
-            //  systems will have quite the same fonts on them
-            float fontAccuracy = 0.22f;
-
-            // x%
-            ICellStyle iPercent = wb.CreateCellStyle();
-            iPercent.DataFormat = (/*setter*/format.GetFormat("0%"));
-            // x.x%
-            ICellStyle d1Percent = wb.CreateCellStyle();
-            d1Percent.DataFormat = (/*setter*/format.GetFormat("0.0%"));
-            // x.xx%
-            ICellStyle d2Percent = wb.CreateCellStyle();
-            d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
-
-            ISheet s = wb.CreateSheet();
-            IRow r1 = s.CreateRow(0);
-
-            for (int i = 0; i < 3; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(0);
-            }
-            for (int i = 3; i < 6; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(1);
-            }
-            for (int i = 6; i < 9; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(0.12345);
-            }
-            for (int i = 9; i < 12; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(1.2345);
-            }
-            for (int i = 0; i < 12; i += 3)
-            {
-                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
-                r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
-                r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
-            }
-            for (int i = 0; i < 12; i++)
-            {
-                s.AutoSizeColumn(i);
-                //System.out.Println(i + " => " + s.GetColumnWidth(i));
-            }
-
-            // Check the 0(.00)% ones
-            assertAlmostEquals(980, s.GetColumnWidth(0), fontAccuracy);
-            assertAlmostEquals(1400, s.GetColumnWidth(1), fontAccuracy);
-            assertAlmostEquals(1700, s.GetColumnWidth(2), fontAccuracy);
-
-            // Check the 100(.00)% ones
-            assertAlmostEquals(1500, s.GetColumnWidth(3), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(4), fontAccuracy);
-            assertAlmostEquals(2225, s.GetColumnWidth(5), fontAccuracy);
-
-            // Check the 12(.34)% ones
-            assertAlmostEquals(1225, s.GetColumnWidth(6), fontAccuracy);
-            assertAlmostEquals(1650, s.GetColumnWidth(7), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(8), fontAccuracy);
-
-            // Check the 123(.45)% ones
-            assertAlmostEquals(1500, s.GetColumnWidth(9), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
-            assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
-        }
-        public static void assertAlmostEquals(double expected, double actual, float factor)
-        {
-            double diff = Math.Abs(expected - actual);
-            double fuzz = expected * factor;
-            if (diff > fuzz)
-                Assert.Fail(actual + " not within " + fuzz + " of " + expected);
-        }
         [Test]
         public void Bug56450()
         {

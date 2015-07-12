@@ -434,6 +434,142 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, paneInfo.HorizontalSplitTopRow);
         }
 
+        /** 
+         * Test hyperlinks
+         * open resulting file in excel, and check that there is a link to Google
+         */
+        [Test]
+        public void Bug15353()
+        {
+            String hyperlinkF = "HYPERLINK(\"http://google.com\",\"Google\")";
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("My sheet");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.CellFormula = (/*setter*/hyperlinkF);
+
+            Assert.AreEqual(hyperlinkF, cell.CellFormula);
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            sheet = wb.GetSheet("My Sheet");
+            row = sheet.GetRow(0);
+            cell = row.GetCell(0);
+
+            Assert.AreEqual(hyperlinkF, cell.CellFormula);
+        }
+
+        /**
+         * HLookup and VLookup with optional arguments 
+         */
+        [Test]
+        public void Bug51024()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+            IRow r2 = s.CreateRow(1);
+
+            r1.CreateCell(0).SetCellValue("v A1");
+            r2.CreateCell(0).SetCellValue("v A2");
+            r1.CreateCell(1).SetCellValue("v B1");
+
+            ICell c = r1.CreateCell(4);
+
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            c.SetCellFormula("VLOOKUP(\"v A1\", A1:B2, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("VLOOKUP(\"v A1\", A1:B2, 1, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("VLOOKUP(\"v A1\", A1:B2, 1, )");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+
+            c.SetCellFormula("HLOOKUP(\"v A1\", A1:B2, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("HLOOKUP(\"v A1\", A1:B2, 1, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("HLOOKUP(\"v A1\", A1:B2, 1, )");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+        }
+
+        [Test]
+        public void Stackoverflow23114397()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IDataFormat format = wb.GetCreationHelper().CreateDataFormat();
+
+            // How close the sizing should be, given that not all
+            //  systems will have quite the same fonts on them
+            float fontAccuracy = 0.22f;
+
+            // x%
+            ICellStyle iPercent = wb.CreateCellStyle();
+            iPercent.DataFormat = (/*setter*/format.GetFormat("0%"));
+            // x.x%
+            ICellStyle d1Percent = wb.CreateCellStyle();
+            d1Percent.DataFormat = (/*setter*/format.GetFormat("0.0%"));
+            // x.xx%
+            ICellStyle d2Percent = wb.CreateCellStyle();
+            d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
+
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+
+            for (int i = 0; i < 3; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(0);
+            }
+            for (int i = 3; i < 6; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(1);
+            }
+            for (int i = 6; i < 9; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(0.12345);
+            }
+            for (int i = 9; i < 12; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(1.2345);
+            }
+            for (int i = 0; i < 12; i += 3)
+            {
+                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
+                r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
+                r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                s.AutoSizeColumn(i);
+            }
+
+            // Check the 0(.00)% ones
+            assertAlmostEquals(980, s.GetColumnWidth(0), fontAccuracy);
+            assertAlmostEquals(1400, s.GetColumnWidth(1), fontAccuracy);
+            assertAlmostEquals(1700, s.GetColumnWidth(2), fontAccuracy);
+
+            // Check the 100(.00)% ones
+            assertAlmostEquals(1500, s.GetColumnWidth(3), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(4), fontAccuracy);
+            assertAlmostEquals(2225, s.GetColumnWidth(5), fontAccuracy);
+
+            // Check the 12(.34)% ones
+            assertAlmostEquals(1225, s.GetColumnWidth(6), fontAccuracy);
+            assertAlmostEquals(1650, s.GetColumnWidth(7), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(8), fontAccuracy);
+
+            // Check the 123(.45)% ones
+            assertAlmostEquals(1500, s.GetColumnWidth(9), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
+            assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
+        }
+
     }
 
 }
