@@ -3150,5 +3150,56 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Saudi Arabia-Riyadh", s.GetRow(210).GetCell(0).StringCellValue);
         }
 
+        /**
+     * Read, Write, read for formulas point to cells in other files.
+     * See {@link #bug46670()} for the main test, this just
+     *  covers Reading an existing file and Checking it.
+     * TODO Fix this so that it works - formulas are ending up as
+     *  #REF when being Changed
+     */
+        //    [Test]
+        public void bug46670_existing()
+        {
+            HSSFWorkbook wb;
+            ISheet s;
+            ICell c;
+
+            // Expected values
+            String refLocal = "'[refs/airport.xls]Sheet1'!$A$2";
+            String refHttp = "'[9http://www.principlesofeconometrics.com/excel/airline.xls]Sheet1'!$A$2";
+
+            // Check we can read them correctly
+            wb = OpenSample("46670_local.xls");
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refLocal, s.GetRow(0).GetCell(0).CellFormula);
+
+            wb = OpenSample("46670_http.xls");
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refHttp, s.GetRow(0).GetCell(0).CellFormula);
+
+            // Now try to Set them to the same values, and ensure that
+            //  they end up as they did before, even with a save and re-load
+            wb = OpenSample("46670_local.xls");
+            s = wb.GetSheetAt(0);
+            c = s.GetRow(0).GetCell(0);
+            c.CellFormula = (/*setter*/refLocal);
+            Assert.AreEqual(refLocal, c.CellFormula);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refLocal, s.GetRow(0).GetCell(0).CellFormula);
+
+
+            wb = OpenSample("46670_http.xls");
+            s = wb.GetSheetAt(0);
+            c = s.GetRow(0).GetCell(0);
+            c.CellFormula = (/*setter*/refHttp);
+            Assert.AreEqual(refHttp, c.CellFormula);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refHttp, s.GetRow(0).GetCell(0).CellFormula);
+        }
+
     }
 }

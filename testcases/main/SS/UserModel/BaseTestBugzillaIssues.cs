@@ -26,6 +26,8 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using System.Text;
     using NPOI.SS.UserModel;
+    using System.Collections.Generic;
+    using NPOI.HSSF.UserModel;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
@@ -719,6 +721,89 @@ namespace TestCases.SS.UserModel
             return s.GetRow(c.RowIndex).GetCell(c.ColumnIndex);
         }
 
+        /**
+     * Should be able to write then read formulas with references
+     *  to cells in other files, eg '[refs/airport.xls]Sheet1'!$A$2
+     *  or 'http://192.168.1.2/[blank.xls]Sheet1'!$A$1 .
+     * Additionally, if a reference to that file is provided, it should
+     *  be possible to Evaluate them too
+     * TODO Fix this to Evaluate for XSSF
+     * TODO Fix this to work at all for HSSF
+     */
+        //    [Test]
+        public void bug46670()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+
+
+            // References to try
+            String ext = "xls";
+            if (!(wb is HSSFWorkbook)) ext += "x";
+            String refLocal = "'[test." + ext + "]Sheet1'!$A$2";
+            String refHttp = "'[http://example.com/test." + ext + "]Sheet1'!$A$2";
+            String otherCellText = "In Another Workbook";
+
+
+            // Create the references
+            ICell c1 = r1.CreateCell(0, CellType.Formula);
+            c1.CellFormula = (/*setter*/refLocal);
+
+            ICell c2 = r1.CreateCell(1, CellType.Formula);
+            c2.CellFormula = (/*setter*/refHttp);
+
+
+            // Check they were Set correctly
+            Assert.AreEqual(refLocal, c1.CellFormula);
+            Assert.AreEqual(refHttp, c2.CellFormula);
+
+
+            // Reload, and ensure they were serialised and read correctly
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            r1 = s.GetRow(0);
+
+            c1 = r1.GetCell(0);
+            c2 = r1.GetCell(1);
+            Assert.AreEqual(refLocal, c1.CellFormula);
+            Assert.AreEqual(refHttp, c2.CellFormula);
+
+
+            // Try to Evalutate, without giving a way to Get at the other file
+            try
+            {
+                EvaluateCell(wb, c1);
+                Assert.Fail("Shouldn't be able to Evaluate without the other file");
+            }
+            catch (Exception e) { }
+            try
+            {
+                EvaluateCell(wb, c2);
+                Assert.Fail("Shouldn't be able to Evaluate without the other file");
+            }
+            catch (Exception e) { }
+
+
+            // Set up references to the other file
+            IWorkbook wb2 = _testDataProvider.CreateWorkbook();
+            wb2.CreateSheet().CreateRow(1).CreateCell(0).SetCellValue(otherCellText);
+
+            Dictionary<String, IFormulaEvaluator> evaluators = new Dictionary<String, IFormulaEvaluator>();
+            evaluators.Add(refLocal, wb2.GetCreationHelper().CreateFormulaEvaluator());
+            evaluators.Add(refHttp, wb2.GetCreationHelper().CreateFormulaEvaluator());
+
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Evaluator.SetupReferencedWorkbooks(/*setter*/evaluators);
+
+
+            // Try to Evaluate, with the other file
+            Evaluator.EvaluateFormulaCell(c1);
+            Evaluator.EvaluateFormulaCell(c2);
+
+            Assert.AreEqual(otherCellText, c1.StringCellValue);
+            Assert.AreEqual(otherCellText, c2.StringCellValue);
+        }
 
     }
 
