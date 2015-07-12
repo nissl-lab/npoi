@@ -160,13 +160,18 @@ namespace NPOI.HSSF.Record
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(GetType().Name).Append(" [SUPBOOK ");
+            sb.Append("[SUPBOOK ");
 
             if (IsExternalReferences)
             {
-                sb.Append("External References");
-                sb.Append(" nSheets=").Append(field_1_number_of_sheets);
-                sb.Append(" url=").Append(field_2_encoded_url);
+                sb.Append("External References]\n");
+                sb.Append(" .url     = ").Append(field_2_encoded_url).Append("\n");
+                sb.Append(" .nSheets = ").Append(field_1_number_of_sheets).Append("\n");
+                foreach (String sheetname in field_3_sheet_names)
+                {
+                    sb.Append("    .name = ").Append(sheetname).Append("\n");
+                }
+                sb.Append("[/SUPBOOK");
             }
             else if (_isAddInFunctions)
             {
