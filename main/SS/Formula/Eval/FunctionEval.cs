@@ -207,7 +207,7 @@ namespace NPOI.SS.Formula.Eval
             retval[111] = TextFunction.CHAR; // CHAR
             retval[112] = TextFunction.LOWER; // LOWER
             retval[113] = TextFunction.UPPER; // UPPER
-            retval[114] = new NotImplementedFunction("PROPER"); // PROPER
+            retval[114] = TextFunction.PROPER; // PROPER
             retval[115] = TextFunction.LEFT; // LEFT
             retval[116] = TextFunction.RIGHT; // RIGHT
             retval[117] = TextFunction.EXACT; // EXACT

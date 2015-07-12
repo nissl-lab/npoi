@@ -230,6 +230,7 @@
     <Compile Include="SS\Formula\Functions\Roman.cs" />
     <Compile Include="SS\Formula\Functions\Slope.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
+    <Compile Include="SS\Formula\Functions\Text\Proper.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\Formula\Functions\WeekNum.cs" />
     <Compile Include="SS\Formula\ISheetRange.cs" />
