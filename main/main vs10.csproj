@@ -210,6 +210,7 @@
     <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\Delta.cs" />
+    <Compile Include="SS\Formula\Functions\EOMonth.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\FactDouble.cs" />
     <Compile Include="SS\Formula\Functions\Finance.cs" />
