@@ -280,9 +280,12 @@ namespace NPOI.XSSF.UserModel
                 vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
             String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();
-            XSSFComment shape = new XSSFComment(comments, comments.NewComment(ref1), vmlShape);
+            if (comments.FindCellComment(ref1) != null)
+            {
+                throw new ArgumentException("Multiple cell comments in one cell are not allowed, cell: " + ref1);
+            }
 
-            return shape;
+            return new XSSFComment(comments, comments.NewComment(ref1), vmlShape);
         }
 
         /**

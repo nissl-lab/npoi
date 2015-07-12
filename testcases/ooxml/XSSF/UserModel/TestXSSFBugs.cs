@@ -1351,6 +1351,12 @@ using NPOI.SS.Formula.Eval;
                   factory.CreateRichTextString("I like this cell. It's my favourite."));
             comment1.Author = ("Bob T. Fish");
 
+            anchor = factory.CreateClientAnchor();
+            anchor.Col1=(0);
+            anchor.Col2=(4);
+            anchor.Row1=(1);
+            anchor.Row2=(1);
+
             IComment comment2 = Drawing.CreateCellComment(anchor);
             comment2.String = (
                   factory.CreateRichTextString("This is much less fun..."));
