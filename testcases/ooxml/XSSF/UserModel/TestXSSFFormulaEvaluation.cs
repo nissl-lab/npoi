@@ -177,6 +177,30 @@ namespace NPOI.XSSF.UserModel
             //Assert.AreEqual("142.0", evaluator.Evaluate(cXSL_gNR).FormatAsString());
             Assert.AreEqual("142", evaluator.Evaluate(cXSL_gNR).FormatAsString());
 
+            // Now add a formula that refers to a yet another (different) workbook
+            /*            ICell cXSLX_nw_cell = rXSLX.CreateCell(42);
+                        cXSLX_nw_cell.CellFormula = ("[alt.xlsx]Sheet1!$A$1");
+
+                        // Check it - TODO Is this correct? Or should it become [2]Sheet1!$A$1 ?
+                        Assert.AreEqual("[alt.xlsx]Sheet1!$A$1", cXSLX_nw_cell.CellFormula);
+
+                        // Evaluate it, without a link to that workbook
+                        try
+                        {
+                            evaluator.Evaluate(cXSLX_nw_cell);
+                            Assert.Fail("No cached value and no link to workbook, shouldn't Evaluate");
+                        }
+                        catch (Exception e) { }
+
+                        // Add a link, check it does
+                        IWorkbook alt = new XSSFWorkbook();
+                        alt.CreateSheet().CreateRow(0).CreateCell(0).SetCellValue("In another workbook");
+                        evaluators.Add("alt.xlsx", alt.GetCreationHelper().CreateFormulaEvaluator());
+                        evaluator.SetupReferencedWorkbooks(evaluators);
+
+                        evaluator.Evaluate(cXSLX_nw_cell);
+                        Assert.AreEqual("In another workbook", cXSLX_nw_cell.StringCellValue);*/
+
         }
 
         /**

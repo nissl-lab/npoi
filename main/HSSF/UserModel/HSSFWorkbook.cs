@@ -181,7 +181,17 @@ namespace NPOI.HSSF.UserModel
             _sheets = new List<HSSFSheet>(INITIAL_CAPACITY);
             names = new List<HSSFName>(INITIAL_CAPACITY);
         }
-
+        /**
+         * Companion to HSSFWorkbook(POIFSFileSystem), this constructs the 
+         *  POI filesystem around your inputstream, including all nodes.
+         * <p>This calls {@link #HSSFWorkbook(InputStream, boolean)} with
+         *  preserve nodes set to true. 
+         *
+         * @see #HSSFWorkbook(InputStream, boolean)
+         * @see #HSSFWorkbook(POIFSFileSystem)
+         * @see org.apache.poi.poifs.filesystem.POIFSFileSystem
+         * @exception IOException if the stream cannot be read
+         */
         public HSSFWorkbook(POIFSFileSystem fs)
             : this(fs, true)
         {

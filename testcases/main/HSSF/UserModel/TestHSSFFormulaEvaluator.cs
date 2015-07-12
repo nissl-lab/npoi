@@ -239,6 +239,36 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(CellType.Formula, cell.CellType);
             Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
+
+    /*            
+      // Now add a formula that refers to yet another (different) workbook
+      cell = wb.GetSheetAt(0).GetRow(1).CreateCell(42);
+      cell.SetCellFormula("[alt.xls]Sheet1!$A$1");
+      
+      // Check it - TODO Is this correct? Or should it become [2]Sheet1!$A$1 ?
+      Assert.AreEqual("[alt.xls]Sheet1!$A$1", cell.CellFormula);
+      
+      // Evaluate it, without a link to that workbook
+      try {
+          eval.Evaluate(cell);
+          Assert.Fail("No cached value and no link to workbook, shouldn't evaluate");
+      } catch(Exception e) {}
+      
+      // Add a link, check it does
+      HSSFWorkbook alt = new HSSFWorkbook();
+      alt.CreateSheet().CreateRow(0).CreateCell(0).SetCellValue("In another workbook");
+      HSSFFormulaEvaluator.SetupEnvironment(
+              new String[] { "XRefCalc.xls", "XRefCalcData.xls", "alt.xls" },
+              new HSSFFormulaEvaluator[] {
+                    eval,
+                    new HSSFFormulaEvaluator(wbData),
+                    new HSSFFormulaEvaluator(alt)
+              }
+      );
+      
+      eval.Evaluate(cell);
+      Assert.AreEqual("In another workbook", cell.StringCellValue);
+*/
         }
         [Test]
         public void TestSharedFormulas()
