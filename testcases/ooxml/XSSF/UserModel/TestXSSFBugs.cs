@@ -1969,6 +1969,23 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(3, wb.NumberOfSheets);
         }
 
+        /**
+     * CTDefinedNamesImpl should be included in the smaller
+     *  poi-ooxml-schemas jar
+     */
+        [Test]
+        public void Bug57176()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57176.xlsx");
+            CT_DefinedNames definedNames = wb.GetCTWorkbook().definedNames;
+            List<CT_DefinedName> definedNameList = definedNames.definedName;
+            foreach (CT_DefinedName defName in definedNameList)
+            {
+                Assert.IsNotNull(defName.name);
+                Assert.IsNotNull(defName.Value);
+            }
+            Assert.AreEqual("TestDefinedName", definedNameList[(0)].name);
+        }
 
         /**
          * .xlsb files are not supported, but we should generate a helpful
