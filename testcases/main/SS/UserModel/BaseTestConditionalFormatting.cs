@@ -452,30 +452,44 @@ namespace TestCases.SS.UserModel
 
             IPatternFormatting patternFmt = rule1.CreatePatternFormatting();
             patternFmt.FillBackgroundColor = (/*setter*/HSSFColor.Yellow.Index);
-            IConditionalFormattingRule[] cfRules = { rule1, };
+
+            IConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(
+                ComparisonOperator.Between, "SUM(A10:A15)", "1+SUM(B16:B30)");
+            IBorderFormatting borderFmt = rule2.CreateBorderFormatting();
+            borderFmt.BorderDiagonal= BorderStyle.Medium;
+
 
             CellRangeAddress[] regions = {
             new CellRangeAddress(2, 4, 0, 0), // A3:A5
         };
-            sheetCF.AddConditionalFormatting(regions, cfRules);
+            sheetCF.AddConditionalFormatting(regions, rule1);
+            sheetCF.AddConditionalFormatting(regions, rule2);
 
             // This row-shift should destroy the CF region
             sheet.ShiftRows(10, 20, -9);
             Assert.AreEqual(0, sheetCF.NumConditionalFormattings);
 
             // re-add the CF
-            sheetCF.AddConditionalFormatting(regions, cfRules);
+            sheetCF.AddConditionalFormatting(regions, rule1);
+            sheetCF.AddConditionalFormatting(regions, rule2);
 
             // This row shift should only affect the formulas
             sheet.ShiftRows(14, 17, 8);
-            IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
-            Assert.AreEqual("SUM(A10:A23)", cf.GetRule(0).Formula1);
-            Assert.AreEqual("1+SUM(B24:B30)", cf.GetRule(0).Formula2);
+            IConditionalFormatting cf1 = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual("SUM(A10:A23)", cf1.GetRule(0).Formula1);
+            Assert.AreEqual("1+SUM(B24:B30)", cf1.GetRule(0).Formula2);
+            IConditionalFormatting cf2 = sheetCF.GetConditionalFormattingAt(1);
+            Assert.AreEqual("SUM(A10:A23)", cf2.GetRule(0).Formula1);
+            Assert.AreEqual("1+SUM(B24:B30)", cf2.GetRule(0).Formula2);
 
             sheet.ShiftRows(0, 8, 21);
-            cf = sheetCF.GetConditionalFormattingAt(0);
-            Assert.AreEqual("SUM(A10:A21)", cf.GetRule(0).Formula1);
-            Assert.AreEqual("1+SUM(#REF!)", cf.GetRule(0).Formula2);
+            cf1 = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual("SUM(A10:A21)", cf1.GetRule(0).Formula1);
+            Assert.AreEqual("1+SUM(#REF!)", cf1.GetRule(0).Formula2);
+            cf2 = sheetCF.GetConditionalFormattingAt(1);
+            Assert.AreEqual("SUM(A10:A21)", cf2.GetRule(0).Formula1);
+            Assert.AreEqual("1+SUM(#REF!)", cf2.GetRule(0).Formula2);
+
         }
         //
         

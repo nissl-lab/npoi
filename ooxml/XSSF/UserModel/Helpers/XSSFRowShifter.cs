@@ -223,67 +223,80 @@ namespace NPOI.XSSF.UserModel.Helpers
             }
         }
 
-        public void UpdateConditionalFormatting(FormulaShifter Shifter) {
-        IWorkbook wb = sheet.Workbook;
-        int sheetIndex = wb.GetSheetIndex(sheet);
+        public void UpdateConditionalFormatting(FormulaShifter Shifter)
+        {
+            IWorkbook wb = sheet.Workbook;
+            int sheetIndex = wb.GetSheetIndex(sheet);
 
 
-        XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-        List<CT_ConditionalFormatting> cfList = sheet.GetCTWorksheet().conditionalFormatting;
-        for(int j = 0; cfList!=null&&j< cfList.Count; j++){
-            CT_ConditionalFormatting cf = cfList[j];
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            CT_Worksheet ctWorksheet = sheet.GetCTWorksheet();
+            List<CT_ConditionalFormatting> conditionalFormattingArray = ctWorksheet.conditionalFormatting;
+            // iterate backwards due to possible calls to ctWorksheet.removeConditionalFormatting(j)
+            for (int j = conditionalFormattingArray.Count - 1; j >= 0; j--)
+            {
+                CT_ConditionalFormatting cf = conditionalFormattingArray[j];
 
-            List<CellRangeAddress> cellRanges = new List<CellRangeAddress>();
-            String[] regions = cf.sqref.ToString().Split(new char[] { ' ' });
-            for (int i = 0; i < regions.Length; i++) {
-                cellRanges.Add(CellRangeAddress.ValueOf(regions[i]));
-            }
-
-            bool Changed = false;
-            List<CellRangeAddress> temp = new List<CellRangeAddress>();
-            for (int i = 0; i < cellRanges.Count; i++) {
-                CellRangeAddress craOld = cellRanges[i];
-                CellRangeAddress craNew = ShiftRange(Shifter, craOld, sheetIndex);
-                if (craNew == null) {
-                    Changed = true;
-                    continue;
-                }
-                temp.Add(craNew);
-                if (craNew != craOld) {
-                    Changed = true;
-                }
-            }
-
-            if (Changed) {
-                int nRanges = temp.Count;
-                if (nRanges == 0) {
-                    cfList.RemoveAt(j);
-                    continue;
-                }
-                string refs = string.Empty;
-                foreach (CellRangeAddress a in temp)
+                List<CellRangeAddress> cellRanges = new List<CellRangeAddress>();
+                String[] regions = cf.sqref.ToString().Split(new char[] { ' ' });
+                for (int i = 0; i < regions.Length; i++)
                 {
-                    if (refs.Length == 0)
-                        refs = a.FormatAsString();
-                    else
-                        refs += " " + a.FormatAsString();
+                    cellRanges.Add(CellRangeAddress.ValueOf(regions[i]));
                 }
-                cf.sqref = refs;
-            }
 
-            foreach(CT_CfRule cfRule in cf.cfRule){
-                List<String> formulas = cfRule.formula;
-                for (int i = 0; i < formulas.Count; i++) {
-                    String formula = formulas[i];
-                    Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex);
-                    if (Shifter.AdjustFormula(ptgs, sheetIndex)) {
-                        String ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
-                        formulas[i] =  ShiftedFmla;
+                bool Changed = false;
+                List<CellRangeAddress> temp = new List<CellRangeAddress>();
+                for (int i = 0; i < cellRanges.Count; i++)
+                {
+                    CellRangeAddress craOld = cellRanges[i];
+                    CellRangeAddress craNew = ShiftRange(Shifter, craOld, sheetIndex);
+                    if (craNew == null)
+                    {
+                        Changed = true;
+                        continue;
+                    }
+                    temp.Add(craNew);
+                    if (craNew != craOld)
+                    {
+                        Changed = true;
+                    }
+                }
+
+                if (Changed)
+                {
+                    int nRanges = temp.Count;
+                    if (nRanges == 0)
+                    {
+                        conditionalFormattingArray.RemoveAt(j);
+                        continue;
+                    }
+                    string refs = string.Empty;
+                    foreach (CellRangeAddress a in temp)
+                    {
+                        if (refs.Length == 0)
+                            refs = a.FormatAsString();
+                        else
+                            refs += " " + a.FormatAsString();
+                    }
+                    cf.sqref = refs;
+                }
+
+                foreach (CT_CfRule cfRule in cf.cfRule)
+                {
+                    List<String> formulas = cfRule.formula;
+                    for (int i = 0; i < formulas.Count; i++)
+                    {
+                        String formula = formulas[i];
+                        Ptg[] ptgs = FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex);
+                        if (Shifter.AdjustFormula(ptgs, sheetIndex))
+                        {
+                            String ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
+                            formulas[i] = ShiftedFmla;
+                        }
                     }
                 }
             }
         }
-    }
 
         private static CellRangeAddress ShiftRange(FormulaShifter Shifter, CellRangeAddress cra, int currentExternSheetIx)
         {
