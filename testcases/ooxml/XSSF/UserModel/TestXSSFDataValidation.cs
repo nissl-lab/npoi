@@ -37,7 +37,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("DataValidations-49244.xlsx");
             ISheet sheet = workbook.GetSheetAt(0);
-            List<XSSFDataValidation> dataValidations = ((XSSFSheet)sheet).GetDataValidations();
+            List<IDataValidation> dataValidations = ((XSSFSheet)sheet).GetDataValidations();
 
             /**
              * 		For each validation type, there are two cells with the same validation. This Tests
@@ -60,13 +60,13 @@ namespace NPOI.XSSF.UserModel
             int[] validationTypes = new int[] { ValidationType.INTEGER, ValidationType.DECIMAL, ValidationType.TEXT_LENGTH };
 
             int[] SingleOperandOperatorTypes = new int[]{
-				OperatorType.LESS_THAN,OperatorType.LESS_OR_EQUAL,
-				OperatorType.GREATER_THAN,OperatorType.GREATER_OR_EQUAL,
-				OperatorType.EQUAL,OperatorType.NOT_EQUAL
-				};
+                OperatorType.LESS_THAN,OperatorType.LESS_OR_EQUAL,
+                OperatorType.GREATER_THAN,OperatorType.GREATER_OR_EQUAL,
+                OperatorType.EQUAL,OperatorType.NOT_EQUAL
+                };
             int[] doubleOperandOperatorTypes = new int[]{
-				OperatorType.BETWEEN,OperatorType.NOT_BETWEEN
-		};
+                OperatorType.BETWEEN,OperatorType.NOT_BETWEEN
+        };
 
             decimal value = (decimal)10, value2 = (decimal)20;
             double dvalue = (double)10.001, dvalue2 = (double)19.999;
@@ -254,7 +254,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            List<XSSFDataValidation> lst = sheet.GetDataValidations();    //<-- works
+            List<IDataValidation> lst = sheet.GetDataValidations();    //<-- works
             Assert.AreEqual(0, lst.Count);
 
             //create the cell that will have the validation applied

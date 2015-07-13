@@ -415,5 +415,21 @@ namespace NPOI.XWPF.Extractor
             string text = extractor.Text;
             extractor.Close();
         }
+
+        [Test]
+        public void TestCheckboxes()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("checkboxes.docx");
+            Console.WriteLine(doc);
+            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+
+            Assert.AreEqual("This is a small test for checkboxes \nunchecked: |_| \n" +
+                         "Or checked: |X|\n\n\n\n\n" +
+                         "Test a checkbox within a textbox: |_| -> |X|\n\n\n" +
+                         "In Table:\n|_|\t|X|\n\n\n" +
+                         "In Sequence:\n|X||_||X|\n", extractor.Text);
+            extractor.Close();
+        }
+
     }
 }
