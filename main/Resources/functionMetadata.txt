@@ -184,7 +184,7 @@
 235	DGET	3	3	V	R R R		
 244	INFO	1	1	V	V		
 # New Built-In Sheet Functions in BIFF4
-14	FIXED	2	3	V	V V V		x
+14	FIXED	1	3	V	V V V		x
 204	USDOLLAR	1	2	V	V V		x
 215	DBCS	1	1	V	V		x
 216	RANK	2	3	V	V R V		

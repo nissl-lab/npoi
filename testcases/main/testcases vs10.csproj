@@ -172,6 +172,8 @@
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEOMonth.cs" />
     <Compile Include="SS\Formula\Functions\TestFactDoubleFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestFixed.cs" />
+    <Compile Include="SS\Formula\Functions\TestFixedFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestHex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\TestImaginaryFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImRealFunctionsFromSpreadsheet.cs" />

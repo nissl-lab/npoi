@@ -108,7 +108,7 @@ namespace NPOI.SS.Formula.Eval
             retval[11] = new Npv(); // NPV
             retval[12] = AggregateFunction.STDEV; // STDEV
             retval[13] = NumericFunction.DOLLAR; // DOLLAR
-            retval[14] = new NotImplementedFunction("FIXED"); // FIXED
+            retval[14] = new Fixed(); // FIXED
             retval[15] = NumericFunction.SIN; // SIN
             retval[16] = NumericFunction.COS; // COS
             retval[17] = NumericFunction.TAN; // TAN
