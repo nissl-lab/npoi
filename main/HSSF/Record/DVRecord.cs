@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
 
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Formula;
     
 
 
@@ -143,11 +144,11 @@ namespace NPOI.HSSF.Record
             _regions = new CellRangeAddressList(in1);
         }
         /**
-     * When entered via the UI, Excel translates empty string into "\0"
-     * While it is possible to encode the title/text as empty string (Excel doesn't exactly crash),
-     * the resulting tool-tip text / message box looks wrong.  It is best to do the same as the 
-     * Excel UI and encode 'not present' as "\0". 
-     */
+         * When entered via the UI, Excel translates empty string into "\0"
+         * While it is possible to encode the title/text as empty string (Excel doesn't exactly crash),
+         * the resulting tool-tip text / message box looks wrong.  It is best to do the same as the 
+         * Excel UI and encode 'not present' as "\0". 
+         */
         private static UnicodeString ResolveTitleText(String str)
         {
             if (str == null || str.Length < 1)
@@ -155,6 +156,15 @@ namespace NPOI.HSSF.Record
                 return NULL_TEXT_STRING;
             }
             return new UnicodeString(str);
+        }
+
+        private static String ResolveTitleString(UnicodeString us)
+        {
+            if (us == null || us.Equals(NULL_TEXT_STRING))
+            {
+                return null;
+            }
+            return us.String;
         }
 
         private static UnicodeString ReadUnicodeString(RecordInputStream in1)
@@ -222,7 +232,17 @@ namespace NPOI.HSSF.Record
             set { this._option_flags = this.opt_empty_cell_allowed.SetBoolean(this._option_flags, value); }
         }
 
-
+        /**
+          * @return <code>true</code> if drop down arrow should be suppressed when list validation is
+          * used, <code>false</code> otherwise
+         */
+        public bool SuppressDropdownArrow
+        {
+            get
+            {
+                return (opt_suppress_dropdown_arrow.IsSet(_option_flags));
+            }
+        }
         /**
          * return true if a prompt window should appear when cell Is selected, false otherwise
          * @return if a prompt window should appear when cell Is selected, false otherwise
@@ -270,7 +290,53 @@ namespace NPOI.HSSF.Record
             }
         }
 
+        public String PromptTitle
+        {
+            get
+            {
+                return ResolveTitleString(_promptTitle);
+            }
+        }
 
+        public String ErrorTitle
+        {
+            get
+            {
+                return ResolveTitleString(_errorTitle);
+            }
+        }
+
+        public String PromptText
+        {
+            get
+            {
+                return ResolveTitleString(_promptText);
+            }
+        }
+
+        public String ErrorText
+        {
+            get
+            {
+                return ResolveTitleString(_errorText);
+            }
+        }
+
+        public Ptg[] Formula1
+        {
+            get
+            {
+                return Formula.GetTokens(_formula1);
+            }
+        }
+
+        public Ptg[] Formula2
+        {
+            get
+            {
+                return  Formula.GetTokens(_formula2);
+            }
+        }
 
         public CellRangeAddressList CellRangeAddress
         {

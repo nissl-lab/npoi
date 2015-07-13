@@ -712,6 +712,12 @@ namespace NPOI.SS.UserModel
         IDataValidationHelper GetDataValidationHelper();
 
         /// <summary>
+        /// Returns the list of DataValidation in the sheet.
+        /// </summary>
+        /// <returns>list of DataValidation in the sheet</returns>
+        List<IDataValidation> GetDataValidations();
+
+        /// <summary>
         /// Creates a data validation object
         /// </summary>
         /// <param name="dataValidation">The data validation object settings</param>

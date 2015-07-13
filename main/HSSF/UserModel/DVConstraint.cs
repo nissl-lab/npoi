@@ -25,6 +25,7 @@ namespace NPOI.HSSF.UserModel
     using System.Text;
     using NPOI.SS.Util;
     using System.Globalization;
+using NPOI.HSSF.Record;
 
     /**
      * 
@@ -505,6 +506,102 @@ namespace NPOI.HSSF.UserModel
             }
             IWorkbook wb = sheet.Workbook;
             return HSSFFormulaParser.Parse(formula, (HSSFWorkbook)wb, FormulaType.Cell, wb.GetSheetIndex(sheet));
+        }
+
+        internal static DVConstraint CreateDVConstraint(DVRecord dvRecord, IFormulaRenderingWorkbook book)
+        {
+            switch (dvRecord.DataType)
+            {
+                case ValidationType.ANY:
+                    return new DVConstraint(ValidationType.ANY, dvRecord.ConditionOperator, null, null, double.NaN, double.NaN, null);
+                case ValidationType.INTEGER:
+                case ValidationType.DECIMAL:
+                case ValidationType.DATE:
+                case ValidationType.TIME:
+                case ValidationType.TEXT_LENGTH:
+                    FormulaValuePair pair1 = toFormulaString(dvRecord.Formula1, book);
+                    FormulaValuePair pair2 = toFormulaString(dvRecord.Formula2, book);
+                    return new DVConstraint(dvRecord.DataType, dvRecord.ConditionOperator, pair1.formula(),
+                            pair2.formula(), pair1.Value, pair2.Value, null);
+                case ValidationType.LIST:
+                    if (dvRecord.ListExplicitFormula)
+                    {
+                        String values = toFormulaString(dvRecord.Formula1, book).AsString();
+                        if (values.StartsWith("\""))
+                        {
+                            values = values.Substring(1);
+                        }
+                        if (values.EndsWith("\""))
+                        {
+                            values = values.Substring(0, values.Length - 1);
+                        }
+                        String[] explicitListValues = values.Split("\0".ToCharArray());
+                        return CreateExplicitListConstraint(explicitListValues);
+                    }
+                    else
+                    {
+                        String listFormula = toFormulaString(dvRecord.Formula1, book).AsString();
+                        return CreateFormulaListConstraint(listFormula);
+                    }
+                case ValidationType.FORMULA:
+                    return CreateCustomFormulaConstraint(toFormulaString(dvRecord.Formula1, book).AsString());
+                default:
+                    throw new InvalidOperationException(string.Format("validationType={0}", dvRecord.DataType));
+            }
+        }
+
+        private class FormulaValuePair
+        {
+            internal String _formula;
+            internal String _value;
+
+            public String formula()
+            {
+                return _formula;
+            }
+
+            public Double Value
+            {
+                get
+                {
+                    if (_value == null)
+                    {
+                        return double.NaN;
+                    }
+                    return double.Parse(_value);
+                }
+            }
+
+            public String AsString()
+            {
+                if (_formula != null)
+                {
+                    return _formula;
+                }
+                if (_value != null)
+                {
+                    return _value;
+                }
+                return null;
+            }
+        }
+
+        private static FormulaValuePair toFormulaString(Ptg[] ptgs, IFormulaRenderingWorkbook book)
+        {
+            FormulaValuePair pair = new FormulaValuePair();
+            if (ptgs != null && ptgs.Length > 0)
+            {
+                String aString = FormulaRenderer.ToFormulaString(book, ptgs);
+                if (ptgs.Length == 1 && ptgs[0].GetType() == typeof(NumberPtg))
+                {
+                    pair._value = aString;
+                }
+                else
+                {
+                    pair._formula = aString;
+                }
+            }
+            return pair;
         }
     }
 

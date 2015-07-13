@@ -3660,9 +3660,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        public List<XSSFDataValidation> GetDataValidations()
+        public List<IDataValidation> GetDataValidations()
         {
-            List<XSSFDataValidation> xssfValidations = new List<XSSFDataValidation>();
+            List<IDataValidation> xssfValidations = new List<IDataValidation>();
             CT_DataValidations dataValidations = this.worksheet.dataValidations;
             if (dataValidations != null && dataValidations.count > 0)
             {

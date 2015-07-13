@@ -463,6 +463,47 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        private class RecordVisitor1 : RecordVisitor
+        {
+            private List<IDataValidation> hssfValidations;
+            private IWorkbook workbook;
+            public RecordVisitor1(List<IDataValidation> hssfValidations, IWorkbook workbook)
+            {
+                this.hssfValidations = hssfValidations;
+                this.workbook = workbook;
+                this.book = HSSFEvaluationWorkbook.Create(workbook);
+            }
+            private HSSFEvaluationWorkbook book;
+            public void VisitRecord(Record r)
+            {
+                if (!(r is DVRecord))
+                {
+                    return;
+                }
+                DVRecord dvRecord = (DVRecord)r;
+                CellRangeAddressList regions = dvRecord.CellRangeAddress.Copy();
+                DVConstraint constraint = DVConstraint.CreateDVConstraint(dvRecord, book);
+                HSSFDataValidation hssfDataValidation = new HSSFDataValidation(regions, constraint);
+                hssfDataValidation.ErrorStyle = (dvRecord.ErrorStyle);
+                hssfDataValidation.EmptyCellAllowed = (dvRecord.EmptyCellAllowed);
+                hssfDataValidation.SuppressDropDownArrow = (dvRecord.SuppressDropdownArrow);
+                hssfDataValidation.CreatePromptBox(dvRecord.PromptTitle, dvRecord.PromptText);
+                hssfDataValidation.ShowPromptBox = (dvRecord.ShowPromptOnCellSelected);
+                hssfDataValidation.CreateErrorBox(dvRecord.ErrorTitle, dvRecord.ErrorText);
+                hssfDataValidation.ShowErrorBox = (dvRecord.ShowErrorOnInvalidValue);
+                hssfValidations.Add(hssfDataValidation);
+            }
+        }
+
+        public List<IDataValidation> GetDataValidations()
+        {
+            DataValidityTable dvt = _sheet.GetOrCreateDataValidityTable();
+            List<IDataValidation> hssfValidations = new List<IDataValidation>();
+            RecordVisitor visitor = new RecordVisitor1(hssfValidations, Workbook);
+            dvt.VisitContainedRecords(visitor);
+            return hssfValidations;
+        }
+
         /// <summary>
         /// Creates a data validation object
         /// </summary>

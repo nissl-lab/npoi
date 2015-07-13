@@ -60,6 +60,6 @@ namespace NPOI.SS.UserModel
          *
          * @return defines position of this anchor in the sheet
          */
-        public IClientAnchor ClientAnchor { get; }
+        IClientAnchor ClientAnchor { get; }
     }
 }
