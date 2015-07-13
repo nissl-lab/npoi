@@ -6,26 +6,31 @@ using System.Text;
 
 namespace NPOI.XSSF.UserModel.Charts
 {
+    /// <summary>
+    /// Holds data for a XSSF Line Chart
+    /// </summary>
+    /// <typeparam name="Tx"></typeparam>
+    /// <typeparam name="Ty"></typeparam>
     public class XSSFLineChartData<Tx, Ty> : ILineChartData<Tx,Ty>
     {
         /**
- * List of all data series.
- */
-        private List<ILineChartSerie<Tx, Ty>> series;
+         * List of all data series.
+         */
+        private List<ILineChartSeries<Tx, Ty>> series;
 
         public XSSFLineChartData()
         {
-            series = new List<ILineChartSerie<Tx, Ty>>();
+            series = new List<ILineChartSeries<Tx, Ty>>();
         }
 
-        public class Serie:AbstractXSSFChartSerie, ILineChartSerie<Tx,Ty> 
+        public class Series:AbstractXSSFChartSeries, ILineChartSeries<Tx,Ty> 
         {
             private int id;
             private int order;
             private IChartDataSource<Tx> categories;
             private IChartDataSource<Ty> values;
 
-            internal Serie(int id, int order,
+            internal Series(int id, int order,
                             IChartDataSource<Tx> categories,
                             IChartDataSource<Ty> values) 
             {
@@ -63,19 +68,19 @@ namespace NPOI.XSSF.UserModel.Charts
                 }
             }
         }
-        public ILineChartSerie<Tx, Ty> AddSerie(IChartDataSource<Tx> categoryAxisData, IChartDataSource<Ty> values)
+        public ILineChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categoryAxisData, IChartDataSource<Ty> values)
         {
             if (!values.IsNumeric)
             {
                 throw new ArgumentException("Value data source must be numeric.");
             }
             int numOfSeries = series.Count;
-            Serie newSerie = new Serie(numOfSeries, numOfSeries, categoryAxisData, values);
-            series.Add(newSerie);
-            return newSerie;
+            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values);
+            series.Add(newSeries);
+            return newSeries;
         }
 
-        public List<ILineChartSerie<Tx, Ty>> GetSeries()
+        public List<ILineChartSeries<Tx, Ty>> GetSeries()
         {
             return series;
         }
@@ -92,7 +97,7 @@ namespace NPOI.XSSF.UserModel.Charts
             CT_LineChart lineChart = plotArea.AddNewLineChart();
             lineChart.AddNewVaryColors().val = 0;
 
-            foreach (Serie s in series)
+            foreach (Series s in series)
             {
                 s.AddToChart(lineChart);
             }

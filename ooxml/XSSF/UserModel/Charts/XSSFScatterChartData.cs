@@ -36,16 +36,16 @@ namespace NPOI.XSSF.UserModel.Charts
         /**
          * List of all data series.
          */
-        private List<IScatterChartSerie<Tx, Ty>> series;
+        private List<IScatterChartSeries<Tx, Ty>> series;
 
         public XSSFScatterChartData()
         {
-            series = new List<IScatterChartSerie<Tx, Ty>>();
+            series = new List<IScatterChartSeries<Tx, Ty>>();
         }
         /**
- * Package private ScatterChartSerie implementation.
- */
-        internal class Serie : AbstractXSSFChartSerie, IScatterChartSerie<Tx, Ty>
+         * Package private ScatterChartSerie implementation.
+         */
+        internal class Series : AbstractXSSFChartSeries, IScatterChartSeries<Tx, Ty>
         {
             private int id;
             private int order;
@@ -58,7 +58,7 @@ namespace NPOI.XSSF.UserModel.Charts
             private IChartDataSource<Tx> xs;
             private IChartDataSource<Ty> ys;
 
-            internal Serie(int id, int order,
+            internal Series(int id, int order,
                 IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
                 : base()
             {
@@ -115,14 +115,14 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public IScatterChartSerie<Tx,Ty> AddSerie(IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
+        public IScatterChartSeries<Tx,Ty> AddSeries(IChartDataSource<Tx> xs, IChartDataSource<Ty> ys)
         {
             if (!ys.IsNumeric)
             {
                 throw new ArgumentException("Y axis data source must be numeric.");
             }
             int numOfSeries = series.Count;
-            Serie newSerie = new Serie(numOfSeries, numOfSeries, xs, ys);
+            Series newSerie = new Series(numOfSeries, numOfSeries, xs, ys);
             series.Add(newSerie);
             return newSerie;
         }
@@ -139,7 +139,7 @@ namespace NPOI.XSSF.UserModel.Charts
             CT_ScatterChart scatterChart = plotArea.AddNewScatterChart();
             AddStyle(scatterChart);
 
-            foreach (Serie s in series)
+            foreach (Series s in series)
             {
                 s.AddToChart(scatterChart);
             }
@@ -150,7 +150,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public List<IScatterChartSerie<Tx, Ty>> GetSeries()
+        public List<IScatterChartSeries<Tx, Ty>> GetSeries()
         {
             return series;
         }

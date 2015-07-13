@@ -31,8 +31,8 @@ namespace NPOI.XSSF.UserModel.Charts
     {
 
         private static Object[][] plotData = new Object[][] {
-	        new object[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"},
-	        new object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+            new object[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"},
+            new object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
             };
         [Test]
         public void TestOneSeriePlot()
@@ -51,12 +51,12 @@ namespace NPOI.XSSF.UserModel.Charts
 
             IChartDataSource<String> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
             IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
-            IScatterChartSerie<string, double> serie = scatterChartData.AddSerie(xs, ys);
+            IScatterChartSeries<string, double> series = scatterChartData.AddSeries(xs, ys);
 
-            Assert.IsNotNull(serie);
+            Assert.IsNotNull(series);
 
             Assert.AreEqual(1, scatterChartData.GetSeries().Count);
-            Assert.IsTrue(scatterChartData.GetSeries().Contains(serie));
+            Assert.IsTrue(scatterChartData.GetSeries().Contains(series));
 
             chart.Plot(scatterChartData, bottomAxis, leftAxis);
         }

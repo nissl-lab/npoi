@@ -661,10 +661,10 @@
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
-    <Compile Include="SS\UserModel\Charts\ChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
-    <Compile Include="SS\UserModel\Charts\LineChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
     <Compile Include="SS\Format\SimpleFraction.cs" />
@@ -1087,7 +1087,7 @@
     <Compile Include="SS\UserModel\Charts\ManualLayout.cs" />
     <Compile Include="SS\UserModel\Charts\ManuallyPositionable.cs" />
     <Compile Include="SS\UserModel\Charts\ScatterChartData.cs" />
-    <Compile Include="SS\UserModel\Charts\ScatterChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ScatterChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ValueAxis.cs" />
     <Compile Include="SS\UserModel\ClientAnchor.cs" />
     <Compile Include="SS\UserModel\Color.cs" />
