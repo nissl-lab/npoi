@@ -1699,7 +1699,19 @@ namespace NPOI.XSSF.UserModel
             return mapInfo;
         }
 
-
+        /**
+         * Adds the External Link Table part and relations required to allow formulas 
+         *  referencing the specified external workbook to be added to this one. Allows
+         *  formulas such as "[MyOtherWorkbook.xlsx]Sheet3!$A$5" to be added to the 
+         *  file, for workbooks not already linked / referenced.
+         *
+         * @param name The name the workbook will be referenced as in formulas
+         * @param workbook The open workbook to fetch the link required information from
+         */
+        public int LinkExternalWorkbook(String name, IWorkbook workbook)
+        {
+            throw new RuntimeException("Not Implemented - see bug #57184");
+        }
         /**
          * Specifies a bool value that indicates whether structure of workbook is locked. <br/>
          * A value true indicates the structure of the workbook is locked. Worksheets in the workbook can't be Moved,

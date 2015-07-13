@@ -21,7 +21,10 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
+    using System.Reflection;
+    using System.Security.Cryptography;
     using System.Text;
     using NPOI.DDF;
     using NPOI.HSSF.Model;
@@ -32,9 +35,6 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using System.Globalization;
-    using System.Security.Cryptography;
-    using System.Reflection;
 
 
     /// <summary>
@@ -1949,6 +1949,20 @@ namespace NPOI.HSSF.UserModel
             oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
 
             return storageId;
+        }
+
+        /// <summary>
+        /// Adds the LinkTable records required to allow formulas referencing
+        /// the specified external workbook to be added to this one. Allows
+        /// formulas such as "[MyOtherWorkbook]Sheet3!$A$5" to be added to the 
+        /// file, for workbooks not already referenced.
+        /// </summary>
+        /// <param name="name">The name the workbook will be referenced as in formulas</param>
+        /// <param name="workbook">The open workbook to fetch the link required information from</param>
+        /// <returns></returns>
+        public int LinkExternalWorkbook(String name, IWorkbook workbook)
+        {
+            return this.workbook.LinkExternalWorkbook(name, workbook);
         }
 
         /// <summary>
