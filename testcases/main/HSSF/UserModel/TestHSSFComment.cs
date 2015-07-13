@@ -78,5 +78,39 @@ namespace TestCases.HSSF.UserModel
             comment = cell.CellComment;
             Assert.AreEqual("c6", comment.String.String);
         }
+
+        [Test]
+        public void TestGetClientAnchor()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFPatriarch Drawing = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
+            HSSFComment comment;
+            IClientAnchor anchor;
+
+            comment = Drawing.CreateCellComment(new HSSFClientAnchor(101, 102, 103, 104, (short)1, 2, (short)3, 4))
+                as HSSFComment;
+            anchor = comment.ClientAnchor;
+            Assert.AreEqual(101, anchor.Dx1);
+            Assert.AreEqual(102, anchor.Dy1);
+            Assert.AreEqual(103, anchor.Dx2);
+            Assert.AreEqual(104, anchor.Dy2);
+            Assert.AreEqual(1, anchor.Col1);
+            Assert.AreEqual(2, anchor.Row1);
+            Assert.AreEqual(3, anchor.Col2);
+            Assert.AreEqual(4, anchor.Row2);
+
+            comment = Drawing.CreateCellComment(new HSSFClientAnchor()) as HSSFComment;
+            anchor = comment.ClientAnchor;
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(0, anchor.Dx2);
+            Assert.AreEqual(0, anchor.Dy2);
+            Assert.AreEqual(0, anchor.Col1);
+            Assert.AreEqual(0, anchor.Row1);
+            Assert.AreEqual(0, anchor.Col2);
+            Assert.AreEqual(0, anchor.Row2);
+        }
+
     }
 }

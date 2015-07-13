@@ -200,6 +200,22 @@ namespace NPOI.XSSF.UserModel
             this.String = (new XSSFRichTextString(str));
         }
 
+        public IClientAnchor ClientAnchor
+        {
+            get
+            {
+                String position = _vmlShape.GetClientDataArray(0).GetAnchorArray(0);
+                int[] pos = new int[8];
+                int i = 0;
+                foreach (String s in position.Split(",".ToCharArray()))
+                {
+                    pos[i++] = int.Parse(s.Trim());
+                }
+                XSSFClientAnchor ca = new XSSFClientAnchor(0, 0, 0, 0, pos[0], pos[2], pos[4], pos[6]);
+                return ca;
+            }
+        }
+
         /**
          * @return the xml bean holding this comment's properties
          */

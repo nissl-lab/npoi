@@ -224,6 +224,21 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        public IClientAnchor ClientAnchor
+        {
+            get
+            {
+                HSSFAnchor ha = base.Anchor;
+                if (ha is IClientAnchor)
+                {
+                    return (IClientAnchor)ha;
+                }
+
+                throw new InvalidCastException("Anchor can not be changed in "
+                        + typeof(IClientAnchor).Name);
+            }
+        }
+
         public override int ShapeType
         {
             get

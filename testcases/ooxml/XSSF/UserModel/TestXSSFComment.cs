@@ -177,6 +177,39 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", comment.Author);
             Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
         }
+
+        [Test]
+        public void TestGetClientAnchor()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            XSSFComment comment;
+            IClientAnchor anchor;
+
+            comment = Drawing.CreateCellComment(new XSSFClientAnchor(101, 102, 103, 104, 1, 2, 3, 4)) as XSSFComment;
+            anchor = comment.ClientAnchor;
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(0, anchor.Dx2);
+            Assert.AreEqual(0, anchor.Dy2);
+            Assert.AreEqual(1, anchor.Col1);
+            Assert.AreEqual(2, anchor.Row1);
+            Assert.AreEqual(3, anchor.Col2);
+            Assert.AreEqual(4, anchor.Row2);
+
+            comment = Drawing.CreateCellComment(new XSSFClientAnchor()) as XSSFComment;
+            anchor = comment.ClientAnchor;
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(0, anchor.Dx2);
+            Assert.AreEqual(0, anchor.Dy2);
+            Assert.AreEqual(1, anchor.Col1);
+            Assert.AreEqual(0, anchor.Row1);
+            Assert.AreEqual(3, anchor.Col2);
+            Assert.AreEqual(3, anchor.Row2);
+        }
+
     }
 
 
