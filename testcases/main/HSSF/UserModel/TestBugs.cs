@@ -41,6 +41,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.Extractor;
+    using NPOI.HSSF.Record.Crypto;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -2972,7 +2973,24 @@ namespace TestCases.HSSF.UserModel
         public void Bug35897()
         {
             // password is abc
-            OpenSample("xor-encryption-abc.xls");
+            try
+            {
+                Biff8EncryptionKey.CurrentUserPassword = ("abc");
+                OpenSample("xor-encryption-abc.xls");
+            }
+            finally
+            {
+                Biff8EncryptionKey.CurrentUserPassword = (null);
+            }
+
+            // One using the only-recently-documented encryption header type 4,
+            //  and the RC4 CryptoAPI encryption header structure
+            try
+            {
+                OpenSample("35897-type4.xls");
+                Assert.Fail("POI doesn't currently support the RC4 CryptoAPI encryption header structure");
+            }
+            catch (EncryptedDocumentException e) { }
         }
 
         [Test]
