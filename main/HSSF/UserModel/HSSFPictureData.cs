@@ -135,5 +135,39 @@ namespace NPOI.HSSF.UserModel
                 }
             }
         }
+
+        /**
+     * @return the POI internal image type, -1 if not unknown image type
+     *
+     * @see Workbook#PICTURE_TYPE_DIB
+     * @see Workbook#PICTURE_TYPE_EMF
+     * @see Workbook#PICTURE_TYPE_JPEG
+     * @see Workbook#PICTURE_TYPE_PICT
+     * @see Workbook#PICTURE_TYPE_PNG
+     * @see Workbook#PICTURE_TYPE_WMF
+     */
+        public PictureType PictureType
+        {
+            get
+            {
+                switch (blip.RecordId)
+                {
+                    case EscherMetafileBlip.RECORD_ID_WMF:
+                        return PictureType.WMF;
+                    case EscherMetafileBlip.RECORD_ID_EMF:
+                        return PictureType.EMF;
+                    case EscherMetafileBlip.RECORD_ID_PICT:
+                        return PictureType.PICT;
+                    case EscherBitmapBlip.RECORD_ID_PNG:
+                        return PictureType.PNG;
+                    case EscherBitmapBlip.RECORD_ID_JPEG:
+                        return PictureType.JPEG;
+                    case EscherBitmapBlip.RECORD_ID_DIB:
+                        return PictureType.DIB;
+                    default:
+                        return PictureType.Unknown;
+                }
+            }
+        }
     }
 }

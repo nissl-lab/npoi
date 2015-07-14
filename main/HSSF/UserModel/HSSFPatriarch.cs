@@ -532,10 +532,6 @@ namespace NPOI.HSSF.UserModel
         {
             return _boundAggregate;
         }
-        internal EscherAggregate getBoundAggregate()
-        {
-            return _boundAggregate;
-        }
         /**
          * Creates a new client anchor and sets the top-left and bottom-right
          * coordinates of the anchor.

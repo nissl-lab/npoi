@@ -39,5 +39,17 @@ namespace NPOI.SS.UserModel
          * Returns the mime type for the image
          */
         String MimeType { get; }
+
+        /**
+         * @return the POI internal image type, 0 if unknown image type
+         *
+         * @see Workbook#PICTURE_TYPE_DIB
+         * @see Workbook#PICTURE_TYPE_EMF
+         * @see Workbook#PICTURE_TYPE_JPEG
+         * @see Workbook#PICTURE_TYPE_PICT
+         * @see Workbook#PICTURE_TYPE_PNG
+         * @see Workbook#PICTURE_TYPE_WMF
+         */
+        PictureType PictureType { get; }
     }
 }

@@ -26,6 +26,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
+    using NPOI.SS.Util;
 
 
     /// <summary>
@@ -35,19 +36,6 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFPicture : HSSFSimpleShape, IPicture
     {
-        /**
-         * width of 1px in columns with default width in Units of 1/256 of a Char width
-         */
-        private const float PX_DEFAULT = 32.00f;
-        /**
-         * width of 1px in columns with overridden width in Units of 1/256 of a Char width
-         */
-        private const float PX_MODIFIED = 36.56f;
-
-        /**
-         * Height of 1px of a row
-         */
-        private const int PX_ROW = 15;
 
         //int pictureIndex;
         //HSSFPatriarch patriarch;
@@ -79,6 +67,65 @@ namespace NPOI.HSSF.UserModel
             spContainer.RemoveChildRecord(spContainer.GetChildById(EscherTextboxRecord.RECORD_ID));
             return spContainer;
         }
+
+        /// <summary>
+        /// Reset the image to the dimension of the embedded image
+        /// </summary>
+        /// <remarks>
+        /// Please note, that this method works correctly only for workbooks
+        /// with default font size (Arial 10pt for .xls).
+        /// If the default font is changed the resized image can be streched vertically or horizontally.
+        /// </remarks>
+        public void Resize()
+        {
+            Resize(Double.MaxValue);
+        }
+
+        /// <summary>
+        /// Resize the image proportionally.
+        /// </summary>
+        /// <param name="scale">scale</param>
+        /// <seealso cref="Resize(double, double)"/>
+        public void Resize(double scale)
+        {
+            Resize(scale, scale);
+        }
+
+        /**
+     * Resize the image
+     * <p>
+     * Please note, that this method works correctly only for workbooks
+     * with default font size (Arial 10pt for .xls).
+     * If the default font is changed the resized image can be streched vertically or horizontally.
+     * </p>
+     * <p>
+     * <code>resize(1.0,1.0)</code> keeps the original size,<br/>
+     * <code>resize(0.5,0.5)</code> resize to 50% of the original,<br/>
+     * <code>resize(2.0,2.0)</code> resizes to 200% of the original.<br/>
+     * <code>resize({@link Double#MAX_VALUE},{@link Double#MAX_VALUE})</code> resizes to the dimension of the embedded image. 
+     * </p>
+     *
+     * @param scaleX the amount by which the image width is multiplied relative to the original width.
+     * @param scaleY the amount by which the image height is multiplied relative to the original height.
+     */
+        public void Resize(double scaleX, double scaleY)
+        {
+            HSSFClientAnchor anchor = (HSSFClientAnchor)ClientAnchor;
+            anchor.AnchorType = AnchorType.MoveDontResize;
+
+            HSSFClientAnchor pref = GetPreferredSize(scaleX, scaleY) as HSSFClientAnchor;
+
+            int row2 = anchor.Row1 + (pref.Row2 - pref.Row1);
+            int col2 = anchor.Col1 + (pref.Col2 - pref.Col1);
+
+            anchor.Col2=((short)col2);
+            // anchor.setDx1(0);
+            anchor.Dx2=(pref.Dx2);
+
+            anchor.Row2 = (row2);
+            // anchor.setDy1(0);
+            anchor.Dy2 = (pref.Dy2);
+        }
         /// <summary>
         /// Gets or sets the index of the picture.
         /// </summary>
@@ -99,145 +146,39 @@ namespace NPOI.HSSF.UserModel
                 SetPropertyValue(new EscherSimpleProperty(EscherProperties.BLIP__BLIPTODISPLAY, false, true, value));
             }
         }
-
-        /// <summary>
-        /// Reset the image to the original size.
-        /// </summary>
-        public void Resize(double scale)
+        /**
+         * Calculate the preferred size for this picture.
+         *
+         * @param scale the amount by which image dimensions are multiplied relative to the original size.
+         * @return HSSFClientAnchor with the preferred size for this image
+         * @since POI 3.0.2
+         */
+        public IClientAnchor GetPreferredSize(double scale)
         {
-            HSSFClientAnchor anchor = (HSSFClientAnchor)Anchor;
-            anchor.AnchorType = (AnchorType)2;
-
-            IClientAnchor pref = GetPreferredSize(scale);
-
-            int row2 = anchor.Row1 + (pref.Row2 - pref.Row1);
-            int col2 = anchor.Col1 + (pref.Col2 - pref.Col1);
-
-            anchor.Col2 = col2;
-            anchor.Dx1 = 0;
-            anchor.Dx2 = pref.Dx2;
-
-            anchor.Row2 = row2;
-            anchor.Dy1 = 0;
-            anchor.Dy2 = pref.Dy2;
-        }
-        /// <summary>
-        /// Reset the image to the original size.
-        /// </summary>
-        public void Resize()
-        {
-            Resize(1.0);
+            return GetPreferredSize(scale, scale);
         }
         /// <summary>
         /// Calculate the preferred size for this picture.
         /// </summary>
-        /// <param name="scale">the amount by which image dimensions are multiplied relative to the original size.</param>
+        /// <param name="scaleX">the amount by which image width is multiplied relative to the original width.</param>
+        /// <param name="scaleY">the amount by which image height is multiplied relative to the original height.</param>
         /// <returns>HSSFClientAnchor with the preferred size for this image</returns>
-        public HSSFClientAnchor GetPreferredSize(double scale)
+        public IClientAnchor GetPreferredSize(double scaleX, double scaleY)
         {
-            HSSFClientAnchor anchor = (HSSFClientAnchor)Anchor;
-
-            Size size = GetImageDimension();
-            double scaledWidth = size.Width * scale;
-            double scaledHeight = size.Height * scale;
-
-            float w = 0;
-
-            //space in the leftmost cell
-            w += GetColumnWidthInPixels(anchor.Col1) * (1 - (float)anchor.Dx1 / 1024);
-            short col2 = (short)(anchor.Col1 + 1);
-            int dx2 = 0;
-
-            while (w < scaledWidth)
-            {
-                w += GetColumnWidthInPixels(col2++);
-            }
-
-            if (w > scaledWidth)
-            {
-                //calculate dx2, offset in the rightmost cell
-                col2--;
-                double cw = GetColumnWidthInPixels(col2);
-                double delta = w - scaledWidth;
-                dx2 = (int)((cw - delta) / cw * 1024);
-            }
-            anchor.Col2 = col2;
-            anchor.Dx2 = dx2;
-
-            float h = 0;
-            h += (1 - (float)anchor.Dy1 / 256) * GetRowHeightInPixels(anchor.Row1);
-            int row2 = anchor.Row1 + 1;
-            int dy2 = 0;
-
-            while (h < scaledHeight)
-            {
-                h += GetRowHeightInPixels(row2++);
-            }
-            if (h > scaledHeight)
-            {
-                row2--;
-                double ch = GetRowHeightInPixels(row2);
-                double delta = h - scaledHeight;
-                dy2 = (int)((ch - delta) / ch * 256);
-            }
-            anchor.Row2 = row2;
-            anchor.Dy2 = dy2;
-
-            return anchor;
+            ImageUtils.SetPreferredSize(this, scaleX, scaleY);
+            return ClientAnchor;
+            
         }
 
         /// <summary>
         /// Calculate the preferred size for this picture.
         /// </summary>
         /// <returns>HSSFClientAnchor with the preferred size for this image</returns>
-        public NPOI.SS.UserModel.IClientAnchor GetPreferredSize()
+        public IClientAnchor GetPreferredSize()
         {
             return GetPreferredSize(1.0);
         }
 
-        /// <summary>
-        /// Gets the column width in pixels.
-        /// </summary>
-        /// <param name="column">The column.</param>
-        /// <returns></returns>
-        private float GetColumnWidthInPixels(int column)
-        {
-
-            int cw = _patriarch.Sheet.GetColumnWidth(column);
-            float px = GetPixelWidth(column);
-
-            return cw / px;
-        }
-
-        /// <summary>
-        /// Gets the row height in pixels.
-        /// </summary>
-        /// <param name="i">The row</param>
-        /// <returns></returns>
-        private float GetRowHeightInPixels(int i)
-        {
-
-            IRow row = _patriarch.Sheet.GetRow(i);
-            float height;
-            if (row != null) height = row.Height;
-            else height = _patriarch.Sheet.DefaultRowHeight;
-
-            return height / PX_ROW;
-        }
-
-        /// <summary>
-        /// Gets the width of the pixel.
-        /// </summary>
-        /// <param name="column">The column.</param>
-        /// <returns></returns>
-        private float GetPixelWidth(int column)
-        {
-
-            int def = _patriarch.Sheet.DefaultColumnWidth * 256;
-            int cw = _patriarch.Sheet.GetColumnWidth(column);
-
-            return cw == def ? PX_DEFAULT : PX_MODIFIED;
-        }
 
         /// <summary>
         /// The metadata of PNG and JPEG can contain the width of a pixel in millimeters.
@@ -253,25 +194,17 @@ namespace NPOI.HSSF.UserModel
         {
             //int hdpi = 96, vdpi = 96;
             //double mm2inch = 25.4;
-
-            //NodeList lst;
-            //Element node = (Element)r.GetImageMetadata(0).GetAsTree("javax_imageio_1.0");
-            //lst = node.GetElementsByTagName("HorizontalPixelSize");
-            //if (lst != null && lst.GetLength == 1) hdpi = (int)(mm2inch / Float.ParseFloat(((Element)lst.item(0)).GetAttribute("value")));
-
-            //lst = node.GetElementsByTagName("VerticalPixelSize");
-            //if (lst != null && lst.GetLength == 1) vdpi = (int)(mm2inch / Float.ParseFloat(((Element)lst.item(0)).GetAttribute("value")));
-
             return new Size((int)r.HorizontalResolution, (int)r.VerticalResolution);
         }
 
         /// <summary>
-        /// Return the dimension of this image
+        /// Return the dimension of the embedded image in pixel
         /// </summary>
         /// <returns>image dimension</returns>
         public Size GetImageDimension()
         {
-            EscherBSERecord bse = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(PictureIndex);
+            InternalWorkbook iwb = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
+            EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
@@ -293,7 +226,8 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 InternalWorkbook iwb = ((_patriarch.Sheet.Workbook) as HSSFWorkbook).Workbook;
-                EscherBlipRecord blipRecord = iwb.GetBSERecord(PictureIndex).BlipRecord;
+                EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
+                EscherBlipRecord blipRecord = bse.BlipRecord;
                 return new HSSFPictureData(blipRecord);
             }
         }
@@ -379,6 +313,31 @@ namespace NPOI.HSSF.UserModel
             spContainer.FillFields(inSp, 0, new DefaultEscherRecordFactory());
             ObjRecord obj = (ObjRecord)GetObjRecord().CloneViaReserialise();
             return new HSSFPicture(spContainer, obj);
+        }
+
+
+        /**
+         * @return the anchor that is used by this picture.
+         */
+        public IClientAnchor ClientAnchor
+        {
+            get
+            {
+                HSSFAnchor a = Anchor;
+                return (a is HSSFClientAnchor) ? (HSSFClientAnchor)a : null;
+            }
+        }
+
+
+        /**
+         * @return the sheet which contains the picture shape
+         */
+        public ISheet Sheet
+        {
+            get
+            {
+                return Patriarch.Sheet;
+            }
         }
     }
 }

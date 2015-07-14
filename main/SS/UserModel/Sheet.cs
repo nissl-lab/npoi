@@ -165,9 +165,21 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// get the width (in units of 1/256th of a character width )
         /// </summary>
-        /// <param name="columnIndex">the column to set (0-based)</param>
+        /// <param name="columnIndex">the column to get (0-based)</param>
         /// <returns>the width in units of 1/256th of a character width</returns>
         int GetColumnWidth(int columnIndex);
+
+        /// <summary>
+        /// get the width in pixel
+        /// </summary>
+        /// <param name="columnIndex"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Please note, that this method works correctly only for workbooks
+        /// with the default font size (Arial 10pt for .xls and Calibri 11pt for .xlsx).
+        /// If the default font is changed the column width can be streched
+        /// </remarks>
+        float GetColumnWidthInPixels(int columnIndex);
 
         /// <summary>
         /// Get the default column width for the sheet (if the columns do not define their own width)

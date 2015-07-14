@@ -98,17 +98,20 @@ namespace NPOI.XSSF.UserModel
          * @see NPOI.ss.usermodel.Workbook#PICTURE_TYPE_PNG
          * @see NPOI.ss.usermodel.Workbook#PICTURE_TYPE_DIB
          */
-        public int GetPictureType()
+        public PictureType PictureType
         {
-            String contentType = GetPackagePart().ContentType;
-            foreach (PictureType relation in RELATIONS.Keys)
+            get
             {
-                if (RELATIONS[(int)relation].ContentType.Equals(contentType))
+                String contentType = GetPackagePart().ContentType;
+                foreach (PictureType relation in RELATIONS.Keys)
                 {
-                    return (int)relation;
+                    if (RELATIONS[(int)relation].ContentType.Equals(contentType))
+                    {
+                        return relation;
+                    }
                 }
+                return PictureType.None;
             }
-            return 0;
         }
 
 

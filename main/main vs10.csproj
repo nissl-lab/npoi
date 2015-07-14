@@ -671,6 +671,9 @@
     <Compile Include="SS\Format\SimpleFraction.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
+    <Compile Include="SS\Util\ImageUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UnsupportedFileFormatException.cs" />
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
@@ -1211,6 +1214,7 @@
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />
     <Compile Include="SS\UserModel\FillPattern.cs" />
+    <Compile Include="Util\Units.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />

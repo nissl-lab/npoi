@@ -44,16 +44,24 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestResize()
+        public void Resize()
         {
-            BaseTestResize(new HSSFClientAnchor(0, 0, 848, 240, (short)0, 0, (short)1, 9));
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("resize_Compare.xls");
+            HSSFPatriarch dp = wb.GetSheetAt(0).CreateDrawingPatriarch() as HSSFPatriarch;
+            IList<HSSFShape> pics = dp.Children;
+            HSSFPicture inpPic = (HSSFPicture)pics[(0)];
+            HSSFPicture cmpPic = (HSSFPicture)pics[(1)];
+
+            BaseTestResize(inpPic, cmpPic, 2.0, 2.0);
+            //wb.Close();
         }
+
 
         /**
          * Bug # 45829 reported ArithmeticException (/ by zero) when resizing png with zero DPI.
          */
         [Test]
-        public void Test45829()
+        public void Bug45829()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sh1 = wb.CreateSheet();
@@ -65,7 +73,7 @@ namespace TestCases.HSSF.UserModel
             pic.Resize();
         }
         [Test]
-        public void TestAddPictures()
+        public void AddPictures()
         {
             IWorkbook wb = new HSSFWorkbook();
 
@@ -159,7 +167,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(Arrays.Equals(data4, ((HSSFPicture)((HSSFPatriarch)dr).Children[(3)]).PictureData.Data));
         }
         [Test]
-        public void TestBSEPictureRef()
+        public void BSEPictureRef()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -186,7 +194,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(bse.Ref, 3);
         }
         [Test]
-        public void TestReadExistingImage()
+        public void ReadExistingImage()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
             HSSFSheet sheet = wb.GetSheet("picture") as HSSFSheet;
@@ -197,7 +205,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(picture.FileName, "test");
         }
         [Test]
-        public void TestSetGetProperties()
+        public void SetGetProperties()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -223,7 +231,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void Test49658()
+        public void Bug49658()
         {
             // test if inserted EscherMetafileBlip will be read again
             IWorkbook wb = new HSSFWorkbook();

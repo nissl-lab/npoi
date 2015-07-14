@@ -15,25 +15,24 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
-using NPOI.Util;
-using System.IO;
-using NPOI.XSSF.Model;
-using System.Collections.Generic;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
-using NPOI.SS.Util;
-using NPOI.OpenXml4Net.Exceptions;
-using NPOI.OpenXml4Net.OPC;
-using NPOI.SS;
-using NPOI.XSSF.UserModel.Helpers;
-using NPOI.HSSF.Record;
-using NPOI.OpenXmlFormats;
-using NPOI.OpenXmlFormats.Dml;
 using System.Collections;
-using NPOI.SS.Formula;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
+using NPOI.HSSF.Record;
+using NPOI.OpenXml4Net.Exceptions;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS;
+using NPOI.SS.Formula;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.Util;
+using NPOI.XSSF.Model;
+using NPOI.XSSF.UserModel.Helpers;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -728,6 +727,19 @@ namespace NPOI.XSSF.UserModel
             return (int)(width * 256);
         }
 
+        /**
+         * Get the actual column width in pixels
+         * 
+         * <p>
+         * Please note, that this method works correctly only for workbooks
+         * with the default font size (Calibri 11pt for .xlsx).
+         * </p>
+         */
+        public float GetColumnWidthInPixels(int columnIndex)
+        {
+            float widthIn256 = GetColumnWidth(columnIndex);
+            return (float)(widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH);
+        }
         /**
          * Get the default column width for the sheet (if the columns do not define their own width) in
          * characters.

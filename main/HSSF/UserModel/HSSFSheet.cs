@@ -49,6 +49,14 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public class HSSFSheet : NPOI.SS.UserModel.ISheet
     {
+        /**
+         * width of 1px in columns with default width in units of 1/256 of a character width
+         */
+        private static float PX_DEFAULT = 32.00f;
+        /**
+         * width of 1px in columns with overridden width in units of 1/256 of a character width
+         */
+        private static float PX_MODIFIED = 36.56f;
 
         /**
          * Used for compile-time optimization.  This is the initial size for the collection of
@@ -561,6 +569,15 @@ namespace NPOI.HSSF.UserModel
         public int GetColumnWidth(int column)
         {
             return _sheet.GetColumnWidth(column);
+        }
+
+        public float GetColumnWidthInPixels(int column)
+        {
+            int cw = GetColumnWidth(column);
+            int def = DefaultColumnWidth * 256;
+            float px = (cw == def ? PX_DEFAULT : PX_MODIFIED);
+
+            return cw / px;
         }
 
         /// <summary>
