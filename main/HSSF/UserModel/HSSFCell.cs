@@ -30,6 +30,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.SS.Formula;
     using System.Globalization;
+    using System.Collections.Generic;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -59,7 +60,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFRichTextString stringValue;
         // fix warning CS0414 "never used": private short encoding = ENCODING_UNCHANGED;
         private HSSFWorkbook book;
-        private HSSFSheet sheet;
+        private HSSFSheet _sheet;
         private CellValueRecordInterface _record;
         private IComment comment;
 
@@ -102,7 +103,7 @@ namespace NPOI.HSSF.UserModel
             cellType = CellType.Unknown; // Force 'SetCellType' to Create a first Record
             stringValue = null;
             this.book = book;
-            this.sheet = sheet;
+            this._sheet = sheet;
 
             short xfindex = sheet.Sheet.GetXFIndexForColAt(col);
             SetCellType(type, false, row, col, xfindex);
@@ -121,7 +122,7 @@ namespace NPOI.HSSF.UserModel
             cellType = DetermineType(cval);
             stringValue = null;
             this.book = book;
-            this.sheet = sheet;
+            this._sheet = sheet;
             switch (cellType)
             {
                 case CellType.String:
@@ -204,7 +205,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return this.sheet;
+                return this._sheet;
             }
         }
         /// <summary>
@@ -215,7 +216,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 int rowIndex = this.RowIndex;
-                return sheet.GetRow(rowIndex);
+                return _sheet.GetRow(rowIndex);
             }
         }
 
@@ -261,7 +262,7 @@ namespace NPOI.HSSF.UserModel
 
                     if (cellType != this.cellType)
                     {
-                        frec = sheet.Sheet.RowsAggregate.CreateFormula(row, col);
+                        frec = _sheet.Sheet.RowsAggregate.CreateFormula(row, col);
                     }
                     else
                     {
@@ -388,7 +389,7 @@ namespace NPOI.HSSF.UserModel
             if (cellType != this.cellType &&
                 this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell
             {
-                sheet.Sheet.ReplaceValueRecord(_record);
+                _sheet.Sheet.ReplaceValueRecord(_record);
             }
             this.cellType = cellType;
         }
@@ -638,7 +639,7 @@ namespace NPOI.HSSF.UserModel
                 SetCellType(CellType.Blank, false, row, col, styleIndex);
                 return;
             }
-            int sheetIndex = book.GetSheetIndex(sheet);
+            int sheetIndex = book.GetSheetIndex(_sheet);
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, book, FormulaType.Cell, sheetIndex);
 
             SetCellType(CellType.Formula, false, row, col, styleIndex);
@@ -1054,7 +1055,7 @@ namespace NPOI.HSSF.UserModel
             int row = _record.Row;
             int col = _record.Column;
 
-            this.sheet.Sheet.SetActiveCell(row, col);
+            this._sheet.Sheet.SetActiveCell(row, col);
         }
 
         /// <summary>
@@ -1102,7 +1103,7 @@ namespace NPOI.HSSF.UserModel
             {
                 if (comment == null)
                 {
-                    comment = sheet.FindCellComment(_record.Row, _record.Column);
+                    comment = _sheet.FindCellComment(_record.Row, _record.Column);
                 }
                 return comment;
             }
@@ -1128,13 +1129,13 @@ namespace NPOI.HSSF.UserModel
         /// all comments after performing this action!</remarks>
         public void RemoveCellComment()
         {
-            HSSFComment comment2 = sheet.FindCellComment(_record.Row, _record.Column);
+            HSSFComment comment2 = _sheet.FindCellComment(_record.Row, _record.Column);
             comment = null;
             if (null == comment2)
             {
                 return;
             }
-            (sheet.DrawingPatriarch as HSSFPatriarch).RemoveShape(comment2);
+            (_sheet.DrawingPatriarch as HSSFPatriarch).RemoveShape(comment2);
         }
 
         /// <summary>
@@ -1231,14 +1232,15 @@ namespace NPOI.HSSF.UserModel
             }
         }
         /// <summary>
-        /// Returns hyperlink associated with this cell
+        /// Get or set hyperlink associated with this cell
+        /// If the supplied hyperlink is null on setting, the hyperlink for this cell will be removed.
         /// </summary>
         /// <value>The hyperlink associated with this cell or null if not found</value>
         public IHyperlink Hyperlink
         {
             get
             {
-                for (IEnumerator it = sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
+                for (IEnumerator it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
                 {
                     RecordBase rec = (RecordBase)it.Current;
                     if (rec is HyperlinkRecord)
@@ -1254,12 +1256,18 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
+                if (value == null)
+                {
+                    RemoveHyperlink();
+                    return;
+                }
+                HSSFHyperlink link = (HSSFHyperlink)value;
                 value.FirstRow = _record.Row;
                 value.LastRow = _record.Row;
                 value.FirstColumn = _record.Column;
                 value.LastColumn = _record.Column;
 
-                switch (value.Type)
+                switch (link.Type)
                 {
                     case HyperlinkType.Email:
                     case HyperlinkType.Url:
@@ -1273,10 +1281,36 @@ namespace NPOI.HSSF.UserModel
                         break;
                 }
 
-                int eofLoc = sheet.Sheet.FindFirstRecordLocBySid(EOFRecord.sid);
-                sheet.Sheet.Records.Insert(eofLoc, ((HSSFHyperlink)value).record);
+                int eofLoc = _sheet.Sheet.FindFirstRecordLocBySid(EOFRecord.sid);
+                _sheet.Sheet.Records.Insert(eofLoc, link.record);
             }
         }
+
+        /// <summary>
+        /// Removes the hyperlink for this cell, if there is one.
+        /// </summary>
+        public void RemoveHyperlink()
+        {
+            RecordBase toRemove = null;
+            for (IEnumerator<RecordBase> it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
+            {
+                RecordBase rec = it.Current;
+                if (rec is HyperlinkRecord)
+                {
+                    HyperlinkRecord link = (HyperlinkRecord)rec;
+                    if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
+                    {
+                        toRemove = rec;
+                        break;
+                        //it.Remove();
+                        //return;
+                    }
+                }
+            }
+            if (toRemove != null)
+                _sheet.Sheet.Records.Remove(toRemove);
+        }
+
         /// <summary>
         /// Only valid for formula cells
         /// </summary>
@@ -1365,7 +1399,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                foreach (CellRangeAddress range in sheet.Sheet.MergedRecords.MergedRegions)
+                foreach (CellRangeAddress range in _sheet.Sheet.MergedRecords.MergedRegions)
                 {
                     if (range.FirstColumn <= this.ColumnIndex
                         && range.LastColumn >= this.ColumnIndex

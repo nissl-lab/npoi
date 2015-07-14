@@ -2927,6 +2927,25 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Removes a hyperlink in the collection of hyperlinks on this sheet
+         *
+         * @param row row index
+         * @param column column index
+         */
+        public void RemoveHyperlink(int row, int column)
+        {
+            String ref1 = new CellReference(row, column).FormatAsString();
+            for (int index = 0; index < hyperlinks.Count; index++)
+            {
+                XSSFHyperlink hyperlink = hyperlinks[index];
+                if (hyperlink.GetCellRef().Equals(ref1))
+                {
+                    hyperlinks.RemoveAt(index);
+                    return;
+                }
+            }
+        }
+        /**
          * Return location of the active cell, e.g. <code>A1</code>.
          *
          * @return the location of the active cell.

@@ -392,6 +392,29 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, link2.FirstColumn);
         }
 
+        [Test]
+        public void TestRemoveHyperlink()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+
+            HSSFCell cell1 = row.CreateCell(1) as HSSFCell;
+            HSSFHyperlink link1 = new HSSFHyperlink(HyperlinkType.Url);
+            Assert.IsNotNull(link1);
+            cell1.RemoveHyperlink();
+            Assert.IsNull(cell1.Hyperlink);
+
+            HSSFCell cell2 = row.CreateCell(0) as HSSFCell;
+            HSSFHyperlink link2 = new HSSFHyperlink(HyperlinkType.Url);
+            Assert.IsNotNull(link2);
+            cell2.Hyperlink = (/*setter*/null);
+            Assert.IsNull(cell2.Hyperlink);
+
+            HSSFTestDataSamples.WriteOutAndReadBack(wb);
+        }
+
+
 
         [Test]
         public void TestHSSFCellToStringWithDataFormat()

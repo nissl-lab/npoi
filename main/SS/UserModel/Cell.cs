@@ -230,6 +230,11 @@ namespace NPOI.SS.UserModel
         IHyperlink Hyperlink { get; set; }
 
         /// <summary>
+        /// Removes the hyperlink for this cell, if there is one.
+        /// </summary>
+        void RemoveHyperlink();
+
+        /// <summary>
         ///  Only valid for array formula cells
         /// </summary>
         /// <returns>range of the array formula group that the cell belongs to.</returns>
