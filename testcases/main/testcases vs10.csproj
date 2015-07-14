@@ -102,6 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DDF\TestEscherDump.cs" />
     <Compile Include="HPSF\Basic\TestClassID.cs" />
     <Compile Include="HPSF\Basic\TestHPSFBugs.cs" />
     <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
