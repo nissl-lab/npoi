@@ -108,6 +108,7 @@
     <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
     <Compile Include="HPSF\TestVariantSupport.cs" />
     <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
+    <Compile Include="HSSF\Extractor\TestOldExcelExtractor.cs" />
     <Compile Include="HSSF\Model\HSSFTestModelHelper.cs" />
     <Compile Include="HSSF\Model\TestDrawingAggregate.cs" />
     <Compile Include="HSSF\Model\TestDrawingShapes.cs" />

@@ -101,7 +101,7 @@ namespace NPOI.HSSF.Record
         private ILittleEndianInput _dataInput;
         /** the record identifier of the BIFF record currently being read */
 
-        protected byte[] data = new byte[MAX_RECORD_DATA_SIZE];
+        //protected byte[] data = new byte[MAX_RECORD_DATA_SIZE];
 
         public RecordInputStream(Stream in1)
             : this(in1, null, 0)
@@ -248,7 +248,6 @@ namespace NPOI.HSSF.Record
          * 
          * <i>Note: The auto continue flag is Reset to true</i>
          */
-
         public void NextRecord()
         {
             if (_nextSid == INVALID_SID_VALUE)
@@ -605,10 +604,16 @@ namespace NPOI.HSSF.Record
 
         public override int Read(byte[] b, int off, int len)
         {
-
-            Array.Copy(data, _currentDataOffset, b, off, len);
-            _currentDataOffset += len;
-            return Math.Min(data.Length, b.Length);
+            int limit = Math.Min(len, Remaining);
+            if (limit == 0)
+            {
+                return 0;
+            }
+            ReadFully(b, off, limit);
+            return limit;
+            //Array.Copy(data, _currentDataOffset, b, off, len);
+            //_currentDataOffset += len;
+            //return Math.Min(data.Length, b.Length);
         }
 
 

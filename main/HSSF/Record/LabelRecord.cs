@@ -26,9 +26,7 @@ namespace NPOI.HSSF.Record
      * Label Record - Read only support for strings stored directly in the cell..  Don't
      * use this (except to Read), use LabelSST instead 
      * REFERENCE:  PG 325 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)
-     * @author Andrew C. Oliver (acoliver at apache dot org)
-     * @author Jason Height (jheight at chariot dot net dot au)
-     * @version 2.0-pre
+     * 
      * @see org.apache.poi.hssf.record.LabelSSTRecord
      */
     public class LabelRecord : Record, CellValueRecordInterface

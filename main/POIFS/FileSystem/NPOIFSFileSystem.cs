@@ -201,7 +201,8 @@ namespace NPOI.POIFS.FileSystem
             {
                 if (closeChannelOnError)
                 {
-                    channel.Close();
+                    if (channel != null)
+                        channel.Close();
                 }
                 throw e;
             }
@@ -212,6 +213,7 @@ namespace NPOI.POIFS.FileSystem
                 //  still sticking to the iterator contract
                 if (closeChannelOnError)
                 {
+                    if (channel != null)
                     channel.Close();
                 }
                 throw e;
@@ -320,6 +322,42 @@ namespace NPOI.POIFS.FileSystem
 
             }
         }
+
+        /**
+         * Checks that the supplied InputStream (which MUST
+         *  support mark and reset, or be a PushbackInputStream)
+         *  has a POIFS (OLE2) header at the start of it.
+         * If your InputStream does not support mark / reset,
+         *  then wrap it in a PushBackInputStream, then be
+         *  sure to always use that, and not the original!
+         * @param inp An InputStream which supports either mark/reset, or is a PushbackInputStream
+         */
+        public static bool HasPOIFSHeader(Stream inp)
+        {
+            // We want to peek at the first 8 bytes
+            //inp.Mark(8);
+
+            byte[] header = new byte[8];
+            IOUtils.ReadFully(inp, header);
+            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header);
+
+            // Wind back those 8 bytes
+            inp.Position = 0;
+
+            // Did it match the signature?
+            return (signature.Value == HeaderBlockConstants._signature);
+        }
+
+        /**
+         * Checks if the supplied first 8 bytes of a stream / file
+         *  has a POIFS (OLE2) header.
+         */
+        public static bool HasPOIFSHeader(byte[] header8Bytes)
+        {
+            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header8Bytes);
+            return (signature.Value == HeaderBlockConstants._signature);
+        }
+
 
         /**
          * Read and process the PropertiesTable and the

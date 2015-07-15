@@ -36,6 +36,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Util;
     using System.Collections.Generic;
     using System.Text;
+    using NPOI.HSSF;
     /**
      *
      */
@@ -58,7 +59,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestCaseInsensitiveNames()
+        public void CaseInsensitiveNames()
         {
             HSSFWorkbook b = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet originalSheet = b.CreateSheet("Sheet1");
@@ -80,7 +81,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
-        public void TestDuplicateNames()
+        public void DuplicateNames()
         {
             HSSFWorkbook b = new HSSFWorkbook();
             b.CreateSheet("Sheet1");
@@ -125,7 +126,7 @@ namespace TestCases.HSSF.UserModel
 
         }
         [Test]
-        public void TestWindowOneDefaults()
+        public void WindowOneDefaults()
         {
             HSSFWorkbook b = new HSSFWorkbook();
             try
@@ -151,7 +152,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, b.FirstVisibleTab);
         }
         [Test]
-        public void TestSheetClone()
+        public void SheetClone()
         {
             // First up, try a simple file
             HSSFWorkbook b = new HSSFWorkbook();
@@ -170,7 +171,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(2, b.NumberOfSheets);
         }
         [Test]
-        public void TestReadWriteWithCharts()
+        public void ReadWriteWithCharts()
         {
             HSSFWorkbook b;
             NPOI.SS.UserModel.ISheet s;
@@ -241,7 +242,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestSelectedSheet_bug44523()
+        public void SelectedSheet_bug44523()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sheet1 = wb.CreateSheet("Sheet1");
@@ -277,7 +278,7 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet4, false);
         }
 
-        //public void TestSelectMultiple()
+        //public void SelectMultiple()
         //{
         //    HSSFWorkbook wb = new HSSFWorkbook();
         //    NPOI.SS.UserModel.Sheet sheet1 = wb.CreateSheet("Sheet1");
@@ -337,7 +338,7 @@ namespace TestCases.HSSF.UserModel
         //}
 
         [Test]
-        public void TestActiveSheetAfterDelete_bug40414()
+        public void ActiveSheetAfterDelete_bug40414()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sheet0 = wb.CreateSheet("Sheet0");
@@ -426,7 +427,7 @@ namespace TestCases.HSSF.UserModel
          * a specific exception as soon as the situation is detected. See bugzilla 45066
          */
         [Test]
-        public void TestSheetSerializeSizeMisMatch_bug45066()
+        public void SheetSerializeSizeMisMatch_bug45066()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             InternalSheet sheet = ((HSSFSheet)wb.CreateSheet("Sheet1")).Sheet;
@@ -451,7 +452,7 @@ namespace TestCases.HSSF.UserModel
          *  that point to deleted sheets
          */
         [Test]
-        public void TestNamesToDeleteSheets()
+        public void NamesToDeleteSheets()
         {
             HSSFWorkbook b = OpenSample("30978-deleted.xls");
             Assert.AreEqual(3, b.NumberOfNames);
@@ -566,7 +567,7 @@ namespace TestCases.HSSF.UserModel
          * The sample file provided with bug 45582 seems to have one extra byte after the EOFRecord
          */
         [Test]
-        public void TestExtraDataAfterEOFRecord()
+        public void ExtraDataAfterEOFRecord()
         {
             try
             {
@@ -586,7 +587,7 @@ namespace TestCases.HSSF.UserModel
          * 1-based sheet tab index (not a 1-based extern sheet index)
          */
         [Test]
-        public void TestFindBuiltInNameRecord()
+        public void FindBuiltInNameRecord()
         {
             // TestRRaC has multiple (3) built-in name records
             // The second print titles name record has SheetNumber==4
@@ -620,7 +621,7 @@ namespace TestCases.HSSF.UserModel
      * Test that the storage clsid property is preserved
      */
         [Test]
-        public void Test47920()
+        public void Bug47920()
         {
             POIFSFileSystem fs1 = new POIFSFileSystem(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("47920.xls"));
             IWorkbook wb = new HSSFWorkbook(fs1);
@@ -636,11 +637,56 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
+     * If we try to open an old (pre-97) workbook, we Get a helpful
+     *  Exception give to explain what we've done wrong
+     */
+        [Test]
+        public void HelpfulExceptionOnOldFiles()
+        {
+            Stream excel4 = POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("testEXCEL_4.xls");
+            try
+            {
+                new HSSFWorkbook(excel4);
+                Assert.Fail("Shouldn't be able to load an Excel 4 file");
+            }
+            catch (OldExcelFormatException e)
+            {
+                POITestCase.AssertContains(e.Message, "BIFF4");
+            }
+            excel4.Close();
+
+            Stream excel5 = POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("testEXCEL_5.xls");
+            try
+            {
+                new HSSFWorkbook(excel5);
+                Assert.Fail("Shouldn't be able to load an Excel 5 file");
+            }
+            catch (OldExcelFormatException e)
+            {
+                POITestCase.AssertContains(e.Message, "BIFF8");
+            }
+            excel5.Close();
+
+            Stream excel95 = POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("testEXCEL_95.xls");
+            try
+            {
+                new HSSFWorkbook(excel95);
+                Assert.Fail("Shouldn't be able to load an Excel 95 file");
+            }
+            catch (OldExcelFormatException e)
+            {
+                POITestCase.AssertContains(e.Message, "BIFF5");
+            }
+            excel95.Close();
+        }
+
+
+        /**
          * Tests that we can work with both {@link POIFSFileSystem}
          *  and {@link NPOIFSFileSystem}
          */
         [Test]
-        public void TestDifferentPOIFS()
+        public void DifferentPOIFS()
         {
             //throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
             // Open the two filesystems
@@ -668,7 +714,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestWordDocEmbeddedInXls()
+        public void WordDocEmbeddedInXls()
         {
             //throw new NotImplementedException("class NPOIFSFileSystem is not implemented");
             // Open the two filesystems
@@ -708,7 +754,7 @@ namespace TestCases.HSSF.UserModel
          * @throws IOException
          */
         [Test]
-        public void TestWriteWorkbookFromNPOIFS()
+        public void WriteWorkbookFromNPOIFS()
         {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("WithEmbeddedObjects.xls");
             try
@@ -738,7 +784,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestCellStylesLimit()
+        public void CellStylesLimit()
         {
             IWorkbook wb = new HSSFWorkbook();
             int numBuiltInStyles = wb.NumCellStyles;
@@ -763,7 +809,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(MAX_STYLES, wb.NumCellStyles);
         }
         [Test]
-        public void TestSetSheetOrderHSSF()
+        public void SetSheetOrderHSSF()
         {
             IWorkbook wb = new HSSFWorkbook();
             ISheet s1 = wb.CreateSheet("first sheet");
@@ -833,7 +879,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestClonePictures()
+        public void ClonePictures()
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithImages.xls");
             InternalWorkbook iwb = ((HSSFWorkbook)wb).Workbook;
@@ -861,12 +907,12 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestChangeSheetNameWithSharedFormulas()
+        public void ChangeSheetNameWithSharedFormulas()
         {
             ChangeSheetNameWithSharedFormulas("shared_formulas.xls");
         }
         [Test]
-        public void TestEmptyDirectoryNode()
+        public void EmptyDirectoryNode()
         {
             try
             {
@@ -879,7 +925,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
-        public void TestSelectedSheetshort()
+        public void SelectedSheetshort()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet1 = (HSSFSheet)wb.CreateSheet("Sheet1");
@@ -922,7 +968,7 @@ namespace TestCases.HSSF.UserModel
             //Assert.AreEqual(2, wb.DisplayedTab);
         }
         [Test]
-        public void TestAddSheetTwice()
+        public void AddSheetTwice()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet1 = (HSSFSheet)wb.CreateSheet("Sheet1");
@@ -938,7 +984,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
-        public void TestGetSheetIndex()
+        public void GetSheetIndex()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet1 = (HSSFSheet)wb.CreateSheet("Sheet1");
@@ -962,7 +1008,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(-1, wb.GetSheetIndex(sheet4));
         }
         [Test]
-        public void TestExternSheetIndex()
+        public void ExternSheetIndex()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
@@ -981,7 +1027,7 @@ namespace TestCases.HSSF.UserModel
             //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(100));
         }
 
-        public void TestSSTString()
+        public void SSTString()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -990,7 +1036,7 @@ namespace TestCases.HSSF.UserModel
             ////Assert.IsNull(wb.GetSSTString(sst+1));
         }
         [Test]
-        public void TestNames()
+        public void Names()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -1036,7 +1082,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
-        public void TestTestMethods()
+        public void TestMethods()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.InsertChartRecord();
@@ -1044,7 +1090,7 @@ namespace TestCases.HSSF.UserModel
             //wb.dumpDrawingGroupRecords(false);
         }
         [Test]
-        public void TestWriteProtection()
+        public void WriteProtection()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -1057,7 +1103,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsFalse(wb.IsWriteProtected);
         }
         [Test]
-        public void TestBug50298()
+        public void Bug50298()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("50298.xls");
 
@@ -1090,7 +1136,7 @@ namespace TestCases.HSSF.UserModel
             assertSheetOrder(read, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
         }
         [Test]
-        public void TestBug50298a()
+        public void Bug50298a()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("50298.xls");
 
@@ -1131,7 +1177,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestBug54500()
+        public void Bug54500()
         {
             String nameName = "AName";
             String sheetName = "ASheet";

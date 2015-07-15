@@ -55,6 +55,7 @@ namespace NPOI.Util
 
         /** <p>Codepage for Windows 1252</p> */
         public const int CP_WINDOWS_1252 = 1252;
+        public const int CP_WINDOWS_1252_BIFF23 = 32769;
 
         /** <p>Codepage for Windows 1253</p> */
         public const int CP_WINDOWS_1253 = 1253;
@@ -79,6 +80,7 @@ namespace NPOI.Util
 
         /** <p>Codepage for Macintosh Roman (Java: MacRoman)</p> */
         public const int CP_MAC_ROMAN = 10000;
+        public const int CP_MAC_ROMAN_BIFF23 = 32768;
 
         /** <p>Codepage for Macintosh Japan (Java: unknown - use SJIS, cp942 or
          * cp943)</p> */
@@ -215,7 +217,7 @@ namespace NPOI.Util
          * @param string The byte of the string to convert
          * @param codepage The codepage number
          */
-        public static String getStringFromCodePage(byte[] string1, int codepage)
+        public static String GetStringFromCodePage(byte[] string1, int codepage)
     {
         return GetStringFromCodePage(string1, 0, string1.Length, codepage);
     }
@@ -271,6 +273,7 @@ namespace NPOI.Util
                 case CP_WINDOWS_1251:
                     return "windows-1251";
                 case CP_WINDOWS_1252:
+                case CP_WINDOWS_1252_BIFF23:
                     return "windows-1252";
                 case CP_WINDOWS_1253:
                     return "windows-1253";
@@ -287,6 +290,7 @@ namespace NPOI.Util
                 case CP_JOHAB:
                     return "johab";
                 case CP_MAC_ROMAN:
+                case CP_MAC_ROMAN_BIFF23:
                     return "MacRoman";
                 case CP_MAC_JAPAN:
                     return "SJIS";
