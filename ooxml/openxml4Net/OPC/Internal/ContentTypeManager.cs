@@ -75,10 +75,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 {
                     ParseContentTypesFile(in1);
                 }
-                catch (InvalidFormatException)
+                catch (InvalidFormatException ex)
                 {
-                    throw new InvalidFormatException(
-                            "Can't read content types part !");
+                    throw new InvalidFormatException("Can't read content types part !", ex);
                 }
             }
         }
