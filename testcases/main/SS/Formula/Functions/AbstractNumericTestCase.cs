@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Functions
          * @param baseval
          * @param Checkval
          */
-        public static void AssertEqual(String message, double baseval, double checkval, double almostZero, double diffToleranceFactor)
+        public static void AssertEquals(String message, double baseval, double checkval, double almostZero, double diffToleranceFactor)
         {
             double posZero = Math.Abs(almostZero);
             double negZero = -1 * posZero;
@@ -69,9 +69,9 @@ namespace TestCases.SS.Formula.Functions
             }
         }
 
-        public static void AssertEqual(String msg, double baseval, double checkval)
+        public static void AssertEquals(String msg, double baseval, double checkval)
         {
-            AssertEqual(msg, baseval, checkval, POS_ZERO, DIFF_TOLERANCE_FACTOR);
+            AssertEquals(msg, baseval, checkval, POS_ZERO, DIFF_TOLERANCE_FACTOR);
         }
 
     }

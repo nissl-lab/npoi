@@ -136,7 +136,14 @@ namespace NPOI.SS.Formula.Functions
             if (eval is RefEval)
             {
                 RefEval re = (RefEval)eval;
-                return new SingleValueVector(re.InnerValueEval);
+                if (re.NumberOfSheets == 1)
+                {
+                    return new SingleValueVector(re.GetInnerValueEval(re.FirstSheetIndex));
+                }
+                else
+                {
+                    return LookupUtils.CreateVector(re);
+                }
             }
             if (eval is TwoDEval)
             {

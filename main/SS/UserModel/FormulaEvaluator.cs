@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.Generic;
 namespace NPOI.SS.UserModel
 {
 
@@ -112,13 +113,22 @@ namespace NPOI.SS.UserModel
          * @param cell
          */
         ICell EvaluateInCell(ICell cell);
+        /**
+         * Sets up the Formula Evaluator to be able to reference and resolve
+         *  links to other workbooks, eg [Test.xls]Sheet1!A1.
+         * <p>For a workbook referenced as [Test.xls]Sheet1!A1, you should
+         *  supply a map containing the key Test.xls (no square brackets),
+         *  and an open FormulaEvaluator onto that Workbook.
+         * @param otherWorkbooks Map of workbook names (no square brackets) to an evaluator on that workbook
+         */
+        void SetupReferencedWorkbooks(Dictionary<string, IFormulaEvaluator> workbooks);
 
         /**
          * Perform detailed output of formula evaluation for next evaluation only?
          * Is for developer use only (also developers using POI for their XLS files).
          * Log-Level WARN is for basic info, INFO for detailed information. These quite
          * high levels are used because you have to explicitly enable this specific logging.
-	 
+     
          * @param value whether to perform detailed output
          */
         bool DebugEvaluationOutputForNextEval { get; set; }

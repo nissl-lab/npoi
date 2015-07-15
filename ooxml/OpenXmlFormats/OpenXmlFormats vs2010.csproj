@@ -129,6 +129,7 @@
     <Compile Include="Drawing\WordprocessingDrawing.cs" />
     <Compile Include="ExtendedPropertiesDocument.cs" />
     <Compile Include="Shared\Math.cs" />
+    <Compile Include="Spreadsheet\Document\ExternalLinkDocument.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Dxfs.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Table.cs" />
     <Compile Include="Spreadsheet\Styles\CT_TableStyles.cs" />

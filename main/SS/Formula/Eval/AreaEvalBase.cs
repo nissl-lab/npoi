@@ -27,15 +27,16 @@ namespace NPOI.SS.Formula.Eval
      */
     public abstract class AreaEvalBase : AreaEval
     {
-
+        private int _firstSheet;
         private int _firstColumn;
         private int _firstRow;
+        private int _lastSheet;
         private int _lastColumn;
         private int _lastRow;
         private int _nColumns;
         private int _nRows;
 
-        protected AreaEvalBase(int firstRow, int firstColumn, int lastRow, int lastColumn)
+        protected AreaEvalBase(ISheetRange sheets, int firstRow, int firstColumn, int lastRow, int lastColumn)
         {
             _firstColumn = firstColumn;
             _firstRow = firstRow;
@@ -44,17 +45,31 @@ namespace NPOI.SS.Formula.Eval
 
             _nColumns = _lastColumn - _firstColumn + 1;
             _nRows = _lastRow - _firstRow + 1;
+
+            if (sheets != null)
+            {
+                _firstSheet = sheets.FirstSheetIndex;
+                _lastSheet = sheets.LastSheetIndex;
+            }
+            else
+            {
+                _firstSheet = -1;
+                _lastSheet = -1;
+            }
         }
-
-        protected AreaEvalBase(AreaI ptg)
+        protected AreaEvalBase(int firstRow, int firstColumn, int lastRow, int lastColumn)
+            : this(null, firstRow, firstColumn, lastRow, lastColumn)
         {
-            _firstRow = ptg.FirstRow;
-            _firstColumn = ptg.FirstColumn;
-            _lastRow = ptg.LastRow;
-            _lastColumn = ptg.LastColumn;
-
-            _nColumns = _lastColumn - _firstColumn + 1;
-            _nRows = _lastRow - _firstRow + 1;
+        }
+        protected AreaEvalBase(AreaI ptg)
+            : this(ptg, null)
+        {
+            
+        }
+        protected AreaEvalBase(AreaI ptg, ISheetRange sheets)
+            : this(sheets, ptg.FirstRow, ptg.FirstColumn, ptg.LastRow, ptg.LastColumn)
+        {
+            
         }
 
         public int FirstColumn
@@ -77,10 +92,29 @@ namespace NPOI.SS.Formula.Eval
             get { return _lastRow; }
         }
 
+        public int FirstSheetIndex
+        {
+            get
+            {
+                return _firstSheet;
+            }
+        }
+        public int LastSheetIndex
+        {
+            get
+            {
+                return _lastSheet;
+            }
+        }
 
         public ValueEval GetValue(int row, int col)
         {
             return GetRelativeValue(row, col);
+        }
+
+        public ValueEval GetValue(int sheetIndex, int row, int col)
+        {
+            return GetRelativeValue(sheetIndex, row, col);
         }
 
         public bool Contains(int row, int col)
@@ -126,7 +160,7 @@ namespace NPOI.SS.Formula.Eval
             return GetRelativeValue(rowOffsetIx, colOffsetIx);
         }
         public abstract ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex);
-
+        public abstract ValueEval GetRelativeValue(int sheetIndex, int relativeRowIndex, int relativeColumnIndex);
 
         public int Width
         {

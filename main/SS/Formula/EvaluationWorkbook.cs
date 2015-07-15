@@ -33,15 +33,47 @@ namespace NPOI.SS.Formula
             _workbookName = workbookName;
             _sheetName = sheetName;
         }
-        public String GetWorkbookName()
+        public String WorkbookName
         {
-            return _workbookName;
+            get
+            {
+                return _workbookName;
+            }
         }
-        public String GetSheetName()
+        public String SheetName
         {
-            return _sheetName;
+            get
+            {
+                return _sheetName;
+            }
         }
     }
+
+    public class ExternalSheetRange : ExternalSheet
+    {
+        private String _lastSheetName;
+        public ExternalSheetRange(String workbookName, String firstSheetName, String lastSheetName)
+            : base(workbookName, firstSheetName)
+        {
+            this._lastSheetName = lastSheetName;
+        }
+
+        public String FirstSheetName
+        {
+            get
+            {
+                return SheetName;
+            }
+        }
+        public String LastSheetName
+        {
+            get
+            {
+                return _lastSheetName;
+            }
+        }
+    }
+
     /**
      * Abstracts a workbook for the purpose of formula evaluation.<br/>
      * 
@@ -61,11 +93,29 @@ namespace NPOI.SS.Formula
         IEvaluationSheet GetSheet(int sheetIndex);
 
         /**
-         * @return <c>null</c> if externSheetIndex refers To a sheet inside the current workbook
+         * HSSF Only - fetch the external-style sheet details
+         * <p>Return will have no workbook set if it's actually in our own workbook</p>
          */
         ExternalSheet GetExternalSheet(int externSheetIndex);
+        /**
+         * XSSF Only - fetch the external-style sheet details
+         * <p>Return will have no workbook set if it's actually in our own workbook</p>
+         */
+        ExternalSheet GetExternalSheet(String firstSheetName, string lastSheetName, int externalWorkbookNumber);
+        /**
+         * HSSF Only - convert an external sheet index to an internal sheet index,
+         *  for an external-style reference to one of this workbook's own sheets 
+         */
         int ConvertFromExternSheetIndex(int externSheetIndex);
+        /**
+         * HSSF Only - fetch the external-style name details
+         */
         ExternalName GetExternalName(int externSheetIndex, int externNameIndex);
+        /**
+         * XSSF Only - fetch the external-style name details
+         */
+        ExternalName GetExternalName(String nameName, String sheetName, int externalWorkbookNumber);
+    
         IEvaluationName GetName(NamePtg namePtg);
         IEvaluationName GetName(String name, int sheetIndex);
         String ResolveNameXText(NameXPtg ptg);

@@ -26,6 +26,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.Util;
 
     /**
      * Test for unary plus operator Evaluator.
@@ -51,9 +52,9 @@ namespace TestCases.SS.Formula.Eval
         {
 
             ValueEval[] args = {
-			CreateRefEval(refA),
-			CreateRefEval(refB),
-		};
+            CreateRefEval(refA),
+            CreateRefEval(refB),
+        };
             AreaReference ar = new AreaReference(expectedAreaRef);
             ValueEval result = EvalInstances.Range.Evaluate(args, 0, (short)0);
             Assert.IsTrue(result is AreaEval);
@@ -75,16 +76,13 @@ namespace TestCases.SS.Formula.Eval
         {
 
             public MockRefEval(int rowIndex, int columnIndex)
-                : base(rowIndex, columnIndex)
+                : base(-1, -1, rowIndex, columnIndex)
             {
                 ;
             }
-            public override ValueEval InnerValueEval
+            public override ValueEval GetInnerValueEval(int sheetIndex)
             {
-                get
-                {
-                    throw new SystemException("not expected to be called during this Test");
-                }
+                throw new SystemException("not expected to be called during this Test");
             }
             public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx,
                     int relLastColIx)
@@ -110,8 +108,14 @@ namespace TestCases.SS.Formula.Eval
             }
             public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
             {
-                throw new SystemException("not expected to be called during this Test");
+                throw new RuntimeException("not expected to be called during this Test");
             }
+
+            public override ValueEval GetRelativeValue(int sheetIndex, int relativeRowIndex, int relativeColumnIndex)
+            {
+                throw new RuntimeException("not expected to be called during this test");
+            }
+
             public override AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx,
                     int relLastColIx)
             {

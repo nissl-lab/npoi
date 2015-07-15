@@ -29,14 +29,25 @@ namespace TestCases.SS.Formula
     [TestFixture]
     public class TestMissingWorkbook
     {
-        private static String MAIN_WORKBOOK_FILENAME = "52575_main.xls";
-        private static String SOURCE_DUMMY_WORKBOOK_FILENAME = "source_dummy.xls";
-        private static String SOURCE_WORKBOOK_FILENAME = "52575_source.xls";
+        protected String MAIN_WORKBOOK_FILENAME = "52575_main.xls";
+        protected String SOURCE_DUMMY_WORKBOOK_FILENAME = "source_dummy.xls";
+        protected String SOURCE_WORKBOOK_FILENAME = "52575_source.xls";
 
-        private HSSFWorkbook mainWorkbook;
-        private HSSFWorkbook sourceWorkbook;
-
-        [TestFixtureSetUp]
+        protected IWorkbook mainWorkbook;
+        protected IWorkbook sourceWorkbook;
+        public TestMissingWorkbook()
+            : this("52575_main.xls", "source_dummy.xls", "52575_source.xls")
+        {
+            ;
+        }
+        protected TestMissingWorkbook(String MAIN_WORKBOOK_FILENAME,
+                String SOURCE_DUMMY_WORKBOOK_FILENAME, String SOURCE_WORKBOOK_FILENAME)
+        {
+            this.MAIN_WORKBOOK_FILENAME = MAIN_WORKBOOK_FILENAME;
+            this.SOURCE_DUMMY_WORKBOOK_FILENAME = SOURCE_DUMMY_WORKBOOK_FILENAME;
+            this.SOURCE_WORKBOOK_FILENAME = SOURCE_WORKBOOK_FILENAME;
+        }
+        [SetUp]
         protected void setUp()
         {
             mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);

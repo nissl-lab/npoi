@@ -530,17 +530,17 @@ namespace NPOI.SS.Formula.Functions
 
         
         /**
-	 * @return the number of evaluated cells in the range that match the specified criteria
-	 */
+     * @return the number of evaluated cells in the range that match the specified criteria
+     */
         private double CountMatchingCellsInArea(ValueEval rangeArg, IMatchPredicate criteriaPredicate)
         {
             if (rangeArg is RefEval)
             {
-                return CountUtils.CountMatchingCell((RefEval)rangeArg, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInRef((RefEval)rangeArg, criteriaPredicate);
             }
-            else if (rangeArg is TwoDEval)
+            else if (rangeArg is ThreeDEval)
             {
-                return CountUtils.CountMatchingCellsInArea((TwoDEval)rangeArg, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInArea((ThreeDEval)rangeArg, criteriaPredicate);
             }
             else
             {
@@ -550,9 +550,9 @@ namespace NPOI.SS.Formula.Functions
         
         
         /**
-	 *
-	 * @return the de-referenced criteria arg (possibly {@link ErrorEval})
-	 */
+     *
+     * @return the de-referenced criteria arg (possibly {@link ErrorEval})
+     */
         private static ValueEval EvaluateCriteriaArg(ValueEval arg, int srcRowIndex, int srcColumnIndex)
         {
             try
@@ -565,8 +565,8 @@ namespace NPOI.SS.Formula.Functions
             }
         }
         /**
-	 * When the second argument is a string, many things are possible
-	 */
+     * When the second argument is a string, many things are possible
+     */
         private static IMatchPredicate CreateGeneralMatchPredicate(StringEval stringEval)
         {
             String value = stringEval.StringValue;
@@ -594,9 +594,9 @@ namespace NPOI.SS.Formula.Functions
             return new StringMatcher(value, operator1);
         }
         /**
-	 * Creates a criteria predicate object for the supplied criteria arg
-	 * @return <code>null</code> if the arg evaluates to blank.
-	 */
+     * Creates a criteria predicate object for the supplied criteria arg
+     * @return <code>null</code> if the arg evaluates to blank.
+     */
         public static IMatchPredicate CreateCriteriaPredicate(ValueEval arg, int srcRowIndex, int srcColumnIndex)
         {
 

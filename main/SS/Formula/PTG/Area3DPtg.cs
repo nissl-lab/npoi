@@ -19,23 +19,18 @@ namespace NPOI.SS.Formula.PTG
 {
     using System;
     using System.Text;
-
-    using NPOI.Util;
-    using NPOI.SS.Util;
-    
     using NPOI.SS.Formula;
-
-    
-
+    using NPOI.SS.Util;
+    using NPOI.Util;
 
     /**
-     * Title:        Area 3D Ptg - 3D reference (Sheet + Area)
-     * Description:  Defined a area in Extern Sheet. 
-     * REFERENCE:  
-     * @author Libin Roman (Vista Portal LDT. Developer)
-     * @author avik
-     * @author Jason Height (jheight at chariot dot net dot au)
-     * @version 1.0-pre
+     * <p>Title:        Area 3D Ptg - 3D reference (Sheet + Area)</p>
+     * <p>Description:  Defined an area in Extern Sheet. </p>
+     * <p>REFERENCE:  </p>
+     * 
+     * <p>This is HSSF only, as it matches the HSSF file format way of
+     *  referring to the sheet by an extern index. The XSSF equivalent
+     *  is {@link Area3DPxg}
      */
     [Serializable]
     public class Area3DPtg : AreaPtgBase, WorkbookDependentFormula, IExternSheetReferenceToken

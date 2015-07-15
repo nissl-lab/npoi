@@ -1,7 +1,7 @@
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -15,40 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Eval
+namespace NPOI.SS.Formula
 {
     using System;
-    using System.Text;
-    using NPOI.SS.Formula.PTG;
 
-    /**
-     * @author Josh Micich
-     */
-    public class NameXEval : ValueEval
+    public interface ISheetRange
     {
-
-        private NameXPtg _ptg;
-
-        public NameXEval(NameXPtg ptg)
-        {
-            _ptg = ptg;
-        }
-
-        public NameXPtg Ptg
-        {
-            get
-            {
-                return _ptg;
-            }
-        }
-
-        public override String ToString()
-        {
-            StringBuilder sb = new StringBuilder(64);
-            sb.Append(GetType().Name).Append(" [");
-            sb.Append(_ptg.SheetRefIndex).Append(", ").Append(_ptg.NameIndex);
-            sb.Append("]");
-            return sb.ToString();
-        }
+        int FirstSheetIndex { get; }
+        int LastSheetIndex { get; }
     }
 }

@@ -82,9 +82,9 @@ namespace TestCases.HSSF.EventUserModel
             Assert.AreEqual(3, listener.GetStubWorkbook().NumSheets);
 
             InternalWorkbook ref1 = listener.GetStubWorkbook();
-            Assert.AreEqual("Sh3", ref1.FindSheetNameFromExternSheet(0));
-            Assert.AreEqual("Sheet1", ref1.FindSheetNameFromExternSheet(1));
-            Assert.AreEqual("S2", ref1.FindSheetNameFromExternSheet(2));
+            Assert.AreEqual("Sh3", ref1.FindSheetFirstNameFromExternSheet(0));
+            Assert.AreEqual("Sheet1", ref1.FindSheetFirstNameFromExternSheet(1));
+            Assert.AreEqual("S2", ref1.FindSheetFirstNameFromExternSheet(2));
         }
         [Test]
         public void TestFormulas()

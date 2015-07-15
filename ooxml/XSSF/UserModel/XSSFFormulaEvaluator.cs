@@ -22,6 +22,7 @@ using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Udf;
+using System.Collections.Generic;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -35,7 +36,7 @@ namespace NPOI.XSSF.UserModel
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      * @author Josh Micich
      */
-    public class XSSFFormulaEvaluator : IFormulaEvaluator
+    public class XSSFFormulaEvaluator : IFormulaEvaluator, IWorkbookEvaluatorProvider
     {
 
         private WorkbookEvaluator _bookEvaluator;
@@ -305,6 +306,16 @@ namespace NPOI.XSSF.UserModel
                 return CellValue.GetError(((ErrorEval)eval).ErrorCode);
             }
             throw new Exception("Unexpected eval class (" + eval.GetType().Name + ")");
+        }
+
+        public void SetupReferencedWorkbooks(Dictionary<String, IFormulaEvaluator> evaluators)
+        {
+            CollaboratingWorkbooksEnvironment.SetupFormulaEvaluator(evaluators);
+        }
+
+        public WorkbookEvaluator GetWorkbookEvaluator()
+        {
+            return _bookEvaluator;
         }
         public bool DebugEvaluationOutputForNextEval
         {

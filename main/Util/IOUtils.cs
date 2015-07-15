@@ -40,11 +40,11 @@ namespace NPOI.Util
         /// <remarks>Tony Qu changed the code</remarks>
         public static byte[] ToByteArray(Stream stream)
         {
-			byte[] outputBytes=new byte[stream.Length];
-			stream.Read(outputBytes,0, (int)stream.Length);
-			return outputBytes;
+            byte[] outputBytes=new byte[stream.Length];
+            stream.Read(outputBytes,0, (int)stream.Length);
+            return outputBytes;
         }
-		   public static byte[] ToByteArray(ByteBuffer buffer, int length)
+           public static byte[] ToByteArray(ByteBuffer buffer, int length)
         {
             if (buffer.HasBuffer && buffer.Offset == 0)
             {
@@ -115,12 +115,9 @@ namespace NPOI.Util
             byte[] buff = new byte[4096];
             inp.Position = 0;
             int count;
-            while ((count = inp.Read(buff, 0, buff.Length)) != -1)
+            while ((count = inp.Read(buff, 0, buff.Length)) >0)
             {
-                if (count > 0)
-                {
-                    out1.Write(buff, 0, count);
-                }
+                out1.Write(buff, 0, count);
             }
         }
 

@@ -259,6 +259,14 @@ namespace NPOI.XSSF.UserModel
                 "/xl/calcChain.xml",
                 typeof(CalculationChain)
         );
+
+        public static XSSFRelation EXTERNAL_LINKS = new XSSFRelation(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.externalLink+xml",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/externalLink",
+        "/xl/externalLinks/externalLink#.xmll",
+        typeof(ExternalLinksTable)
+        );
+
         public static XSSFRelation PRINTER_SETTINGS = new XSSFRelation(
               "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings",
               "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings",

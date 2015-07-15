@@ -461,6 +461,55 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("A1:A2", formula);
         }
 
+        [Test]
+        public void TestMultiSheetReference()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            wb.CreateSheet("Cash_Flow");
+            wb.CreateSheet("Test Sheet");
+
+            HSSFSheet sheet = wb.CreateSheet("Test") as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+            String formula = null;
+
+            // References to a single cell:
+
+            // One sheet
+            cell.CellFormula = (/*setter*/"Cash_Flow!A1");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow!A1", formula);
+
+            // Then the other
+            cell.CellFormula = (/*setter*/"\'Test Sheet\'!A1");
+            formula = cell.CellFormula;
+            Assert.AreEqual("\'Test Sheet\'!A1", formula);
+
+            // Now both
+            cell.CellFormula = (/*setter*/"Cash_Flow:\'Test Sheet\'!A1");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1", formula);
+
+            // References to a range (area) of cells:
+
+            // One sheet
+            cell.CellFormula=("Cash_Flow!A1:B2");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow!A1:B2", formula);
+
+            // Then the other
+            cell.CellFormula=("\'Test Sheet\'!A1:B2");
+            formula = cell.CellFormula;
+            Assert.AreEqual("\'Test Sheet\'!A1:B2", formula);
+
+            // Now both
+            cell.CellFormula=("Cash_Flow:\'Test Sheet\'!A1:B2");
+            formula = cell.CellFormula;
+            Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1:B2", formula);
+        }
+
+
         /**
          * Test for bug observable at svn revision 618865 (5-Feb-2008)<br/>
          * a formula consisting of a single no-arg function got rendered without the function braces
@@ -471,8 +520,8 @@ namespace TestCases.HSSF.Model
             HSSFWorkbook book = new HSSFWorkbook();
 
             Ptg[] ptgs = {
-				FuncPtg.Create(10),
-		};
+                FuncPtg.Create(10),
+        };
             Assert.AreEqual("NA()", HSSFFormulaParser.ToFormulaString(book, ptgs));
         }
         [Test]
@@ -543,24 +592,24 @@ namespace TestCases.HSSF.Model
 
             // TRUE=TRUE=2=2  evaluates to FALSE
             expClss = new Type[] { typeof(BoolPtg), typeof(BoolPtg), typeof(EqualPtg),
-				typeof(IntPtg), typeof(EqualPtg), typeof(IntPtg), typeof(EqualPtg),  };
+                typeof(IntPtg), typeof(EqualPtg), typeof(IntPtg), typeof(EqualPtg),  };
             ConfirmTokenClasses("TRUE=TRUE=2=2", expClss);
 
 
             //  2^3^2	evaluates to 64 not 512
             expClss = new Type[] { typeof(IntPtg), typeof(IntPtg), typeof(PowerPtg),
-				typeof(IntPtg), typeof(PowerPtg), };
+                typeof(IntPtg), typeof(PowerPtg), };
             ConfirmTokenClasses("2^3^2", expClss);
 
             // "abc" & 2 + 3 & "def"   evaluates to "abc5def"
             expClss = new Type[] { typeof(StringPtg), typeof(IntPtg), typeof(IntPtg),
-				typeof(AddPtg), typeof(ConcatPtg), typeof(StringPtg), typeof(ConcatPtg), };
+                typeof(AddPtg), typeof(ConcatPtg), typeof(StringPtg), typeof(ConcatPtg), };
             ConfirmTokenClasses("\"abc\"&2+3&\"def\"", expClss);
 
 
             //  (1 / 2) - (3 * 4)
             expClss = new Type[] { typeof(IntPtg), typeof(IntPtg), typeof(DividePtg),
-				typeof(IntPtg), typeof(IntPtg), typeof(MultiplyPtg), typeof(SubtractPtg), };
+                typeof(IntPtg), typeof(IntPtg), typeof(MultiplyPtg), typeof(SubtractPtg), };
             ConfirmTokenClasses("1/2-3*4", expClss);
 
             // 2 * (2^2)
@@ -677,19 +726,19 @@ namespace TestCases.HSSF.Model
             Type[] expClss;
 
             expClss = new Type[] { 
-				typeof(RefPtg), 
-				typeof(AttrPtg), // tAttrIf
-				typeof(MissingArgPtg), 
-				typeof(AttrPtg), // tAttrSkip
-				typeof(RefPtg),
-				typeof(AttrPtg), // tAttrSkip
-				typeof(FuncVarPtg), 
-		};
+                typeof(RefPtg), 
+                typeof(AttrPtg), // tAttrIf
+                typeof(MissingArgPtg), 
+                typeof(AttrPtg), // tAttrSkip
+                typeof(RefPtg),
+                typeof(AttrPtg), // tAttrSkip
+                typeof(FuncVarPtg), 
+        };
 
             ConfirmTokenClasses("if(A1, ,C1)", expClss);
 
             expClss = new Type[] { typeof(MissingArgPtg), typeof(AreaPtg), typeof(MissingArgPtg),
-				typeof(FuncVarPtg), };
+                typeof(FuncVarPtg), };
             ConfirmTokenClasses("counta( , A1:B2, )", expClss);
         }
         [Test]
@@ -873,10 +922,10 @@ namespace TestCases.HSSF.Model
             // Simulating badly encoded cell formula of "=/1"
             // Not sure if Excel could ever produce this
             Ptg[] ptgs = {
-				// Excel would probably have put tMissArg here
-				new IntPtg(1),
-				DividePtg.instance,
-		};
+                // Excel would probably have put tMissArg here
+                new IntPtg(1),
+                DividePtg.instance,
+        };
             try
             {
                 HSSFFormulaParser.ToFormulaString(null, ptgs);
@@ -1430,7 +1479,10 @@ namespace TestCases.HSSF.Model
 
             ConfirmParseError(wb, "A1:ROUND(B1,1)", "The RHS of the range operator ':' at position 3 is not a proper reference.");
 
-            ConfirmParseError(wb, "Sheet1!Sheet1", "Cell reference expected after sheet name at index 8.");
+            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, or defined name");
+            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, or defined name");
+            ConfirmParseError(wb, "Sheet1!Sheet1", "Specified name 'Sheet1' for sheet Sheet1 not found");
+
             ConfirmParseError(wb, "Sheet1!F:Sheet1!G", "'Sheet1!F' is not a proper reference.");
             ConfirmParseError(wb, "Sheet1!F..foobar", "Complete area reference expected after sheet name at index 11.");
             ConfirmParseError(wb, "Sheet1!A .. B", "Dotted range (full row or column) expression 'A .. B' must not contain whitespace.");

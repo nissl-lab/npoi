@@ -23,8 +23,12 @@ namespace NPOI.SS.Formula.PTG
 
 
     /**
-     *
-     * @author  aviks
+     * A Name, be that a Named Range or a Function / User Defined
+     *  Function, addressed in the HSSF External Sheet style.
+     *  
+     * <p>This is HSSF only, as it matches the HSSF file format way of
+     *  referring to the sheet by an extern index. The XSSF equivalent
+     *  is {@link NameXPxg}
      */
     public class NameXPtg : OperandPtg,WorkbookDependentFormula
     {
@@ -32,11 +36,11 @@ namespace NPOI.SS.Formula.PTG
         private const int SIZE = 7;
 
         /** index to REF entry in externsheet record */
-	    private int _sheetRefIndex;
-	    /** index to defined name or externname table(1 based) */
-	    private int _nameNumber;
-	    /** reserved must be 0 */
-	    private int _reserved;
+        private int _sheetRefIndex;
+        /** index to defined name or externname table(1 based) */
+        private int _nameNumber;
+        /** reserved must be 0 */
+        private int _reserved;
 
         private NameXPtg(int sheetRefIndex, int nameNumber, int reserved)
         {
@@ -63,10 +67,10 @@ namespace NPOI.SS.Formula.PTG
 
         public override void Write(ILittleEndianOutput out1)
         {
-		    out1.WriteByte(sid + PtgClass);
-		    out1.WriteShort(_sheetRefIndex);
-		    out1.WriteShort(_nameNumber);
-		    out1.WriteShort(_reserved);
+            out1.WriteByte(sid + PtgClass);
+            out1.WriteShort(_sheetRefIndex);
+            out1.WriteShort(_nameNumber);
+            out1.WriteShort(_reserved);
 
         }
 

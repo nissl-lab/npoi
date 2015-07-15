@@ -118,6 +118,7 @@
     <Compile Include="XSSF\Model\CommentsTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XSSF\Model\ExternalLinksTable.cs" />
     <Compile Include="XSSF\Model\MapInfo.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />

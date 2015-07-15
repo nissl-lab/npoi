@@ -137,7 +137,10 @@ namespace NPOI.SS.UserModel
             switch (_cellType)
             {
                 case CellType.Numeric:
-                    return _numberValue.ToString(CultureInfo.InvariantCulture);
+                    string result = _numberValue.ToString(CultureInfo.InvariantCulture);
+                    //if (result.IndexOf(".") < 0)
+                    //    result = result + ".0";
+                    return result;
                 case CellType.String:
                     return '"' + _textValue + '"';
                 case CellType.Boolean:

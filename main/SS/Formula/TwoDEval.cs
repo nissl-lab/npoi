@@ -20,9 +20,8 @@ namespace NPOI.SS.Formula
 {
 
     /**
-     * Common interface of {@link AreaEval} and {@link NPOI.ss.formula.Eval.AreaEvalBase}
-     *
-     * @author Josh Micich
+     * Common interface of {@link AreaEval} and {@link org.apache.poi.ss.formula.eval.AreaEvalBase},
+     * for 2D (row+column) evaluations
      */
     public interface TwoDEval : ValueEval
     {
@@ -35,7 +34,7 @@ namespace NPOI.SS.Formula
         ValueEval GetValue(int rowIndex, int columnIndex);
 
         int Width { get; }
-        int Height { get;}
+        int Height { get; }
 
         /**
          * @return <c>true</c> if the area has just a single row, this also includes

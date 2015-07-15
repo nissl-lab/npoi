@@ -176,7 +176,7 @@ namespace NPOI.HPSF
         {
             get
             {
-                long clipboardFormatTag = LittleEndian.GetUInt(this.ThumbnailData,
+                long clipboardFormatTag = LittleEndian.GetInt(this.ThumbnailData,
                                                                OFFSet_CFTAG);
                 return clipboardFormatTag;
             }
@@ -204,7 +204,7 @@ namespace NPOI.HPSF
                 throw new HPSFException("Clipboard Format Tag of Thumbnail must " +
                                         "be CFTAG_WINDOWS.");
 
-            return LittleEndian.GetUInt(this.ThumbnailData, OFFSet_CF);
+            return LittleEndian.GetInt(this.ThumbnailData, OFFSet_CF);
         }
 
 

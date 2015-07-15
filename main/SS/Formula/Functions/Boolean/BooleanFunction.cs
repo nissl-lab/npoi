@@ -14,10 +14,7 @@
 * See the License for the specific language governing permissions and
 * limitations Under the License.
 */
-/*
- * Created on May 15, 2005
- *
- */
+
 namespace NPOI.SS.Formula.Functions
 {
     using System;
@@ -26,15 +23,15 @@ namespace NPOI.SS.Formula.Functions
     using System.Globalization;
 
     /**
+     * Here are the general rules concerning Boolean functions:
+     * <ol>
+     * <li> Blanks are ignored (not either true or false) </li>
+     * <li> Strings are ignored if part of an area ref or cell ref, otherwise they must be 'true' or 'false'</li>
+     * <li> Numbers: 0 is false. Any other number is TRUE </li>
+     * <li> Areas: *all* cells in area are evaluated according to the above rules</li>
+     * </ol>
+     *
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
-     * Here are the general rules concerning bool functions:
-     * 
-     * - Blanks are not either true or false
-     * - Strings are not either true or false (even strings "true" or "TRUE" or "0" etc.)
-     * - Numbers: 0 Is false. Any other number Is TRUE.
-     * - References are Evaluated and above rules apply.
-     * - Areas: Individual cells in area are Evaluated and Checked to 
-     * see if they are blanks, strings etc.
      */
     public abstract class BooleanFunction : Function
     {
@@ -47,12 +44,13 @@ namespace NPOI.SS.Formula.Functions
 
             bool result = InitialResultValue;
             bool atleastOneNonBlank = false;
-            bool? tempVe;
+           
             /*
              * Note: no short-circuit bool loop exit because any ErrorEvals will override the result
              */
             for (int i = 0, iSize = args.Length; i < iSize; i++)
             {
+                bool? tempVe;
                 ValueEval arg = args[i];
                 if (arg is TwoDEval)
                 {
@@ -77,21 +75,31 @@ namespace NPOI.SS.Formula.Functions
 
                 if (arg is RefEval)
                 {
-                    ValueEval ve = ((RefEval)arg).InnerValueEval;
-                    tempVe = OperandResolver.CoerceValueToBoolean(ve, true);
+                    RefEval re = (RefEval)arg;
+                    for (int sIx = re.FirstSheetIndex; sIx <= re.LastSheetIndex; sIx++)
+                    {
+                        ValueEval ve = re.GetInnerValueEval(sIx);
+                        tempVe = OperandResolver.CoerceValueToBoolean(ve, true);
+                        if (tempVe != null)
+                        {
+                            result = PartialEvaluate(result, tempVe.Value);
+                            atleastOneNonBlank = true;
+                        }
+                    }
+                    continue;
                 }
-                else if (arg is ValueEval)
-                {
-                    ValueEval ve = (ValueEval)arg;
-                    tempVe = OperandResolver.CoerceValueToBoolean(ve, false);
-                }
-                else if (arg == MissingArgEval.instance)
+                //else if (arg is ValueEval)
+                //{
+                //    ValueEval ve = (ValueEval)arg;
+                //    tempVe = OperandResolver.CoerceValueToBoolean(ve, false);
+                //}
+                if (arg == MissingArgEval.instance)
                 {
                     tempVe = null; // you can leave out parameters, they are simply ignored
                 }
                 else
                 {
-                    throw new InvalidOperationException("Unexpected eval (" + arg.GetType().Name + ")");
+                    tempVe = OperandResolver.CoerceValueToBoolean(arg, false);
                 }
 
 

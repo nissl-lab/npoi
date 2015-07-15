@@ -570,22 +570,22 @@ namespace TestCases.HSSF.Model
         public void TestGutsRecord_bug45640() {
 
             InternalSheet sheet = InternalSheet.CreateSheet();
-		sheet.AddRow(new RowRecord(0));
-		sheet.AddRow(new RowRecord(1));
-		sheet.GroupRowRange( 0, 1, true );
-		sheet.ToString();
-		IList recs = sheet.Records;
-		int count=0;
-		for(int i=0; i< recs.Count; i++) {
-			if (recs[i] is GutsRecord) {
-				count++;
-			}
-		}
-		if (count == 2) {
-			throw new AssertionException("Identified bug 45640");
-		}
-		Assert.AreEqual(1, count);
-	}
+        sheet.AddRow(new RowRecord(0));
+        sheet.AddRow(new RowRecord(1));
+        sheet.GroupRowRange( 0, 1, true );
+        sheet.ToString();
+        IList recs = sheet.Records;
+        int count=0;
+        for(int i=0; i< recs.Count; i++) {
+            if (recs[i] is GutsRecord) {
+                count++;
+            }
+        }
+        if (count == 2) {
+            throw new AssertionException("Identified bug 45640");
+        }
+        Assert.AreEqual(1, count);
+    }
 
         public void TestMisplacedMergedCellsRecords_bug45699()
         {
@@ -688,7 +688,7 @@ namespace TestCases.HSSF.Model
             //Assert.AreEqual(23, sheetRecs.Count);
             Assert.AreEqual(24, sheetRecs.Count); //for SheetExtRecord
 
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0, 0, 0, 1);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0,"", 0, 0, 1);
             sheet.UpdateFormulasAfterCellShift(shifter, 0);
             if (sheetRecs.Count == 25 && sheetRecs[22] is ConditionalFormattingTable)
             {
@@ -725,14 +725,14 @@ namespace TestCases.HSSF.Model
         public void TestCloneMulBlank_bug46776()
         {
             Record[] recs = {
-				InternalSheet.CreateBOF(),
-				new DimensionsRecord(),
-				new RowRecord(1),
-				new MulBlankRecord(1, 3, new short[] { 0x0F, 0x0F, 0x0F, } ),
-				new RowRecord(2),
-				CreateWindow2Record(),
-				EOFRecord.instance,
-		};
+                InternalSheet.CreateBOF(),
+                new DimensionsRecord(),
+                new RowRecord(1),
+                new MulBlankRecord(1, 3, new short[] { 0x0F, 0x0F, 0x0F, } ),
+                new RowRecord(2),
+                CreateWindow2Record(),
+                EOFRecord.instance,
+        };
 
             InternalSheet sheet = CreateSheet(NPOI.Util.Arrays.AsList(recs));
 

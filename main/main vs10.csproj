@@ -232,7 +232,20 @@
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\Formula\Functions\WeekNum.cs" />
+    <Compile Include="SS\Formula\ISheetRange.cs" />
+    <Compile Include="SS\Formula\NameIdentifier.cs" />
+    <Compile Include="SS\Formula\PTG\Area3DPxg.cs" />
+    <Compile Include="SS\Formula\PTG\Deleted3DPxg.cs" />
+    <Compile Include="SS\Formula\PTG\NameXPxg.cs" />
+    <Compile Include="SS\Formula\PTG\Pxg.cs" />
+    <Compile Include="SS\Formula\PTG\Ref3DPxg.cs" />
+    <Compile Include="SS\Formula\SheetIdentifier.cs" />
+    <Compile Include="SS\Formula\SheetRangeEvaluator.cs" />
+    <Compile Include="SS\Formula\SheetRangeIdentifier.cs" />
+    <Compile Include="SS\Formula\ThreeDEval.cs" />
+    <Compile Include="SS\Formula\TwoDEval.cs" />
     <Compile Include="SS\Formula\Udf\IndexedUDFFinder.cs" />
+    <Compile Include="SS\Formula\WorkbookEvaluatorProvider.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
@@ -788,10 +801,9 @@
     <Compile Include="SS\Formula\Eval\FunctionEval.cs" />
     <Compile Include="SS\Formula\Eval\IntersectionEval.cs" />
     <Compile Include="SS\Formula\Eval\MissingArgEval.cs" />
-    <Compile Include="SS\Formula\Eval\NameEval.cs" />
-    <Compile Include="SS\Formula\Eval\NameXEval.cs" />
+    <Compile Include="SS\Formula\Eval\FunctionNameEval.cs" />
+    <Compile Include="SS\Formula\Eval\ExternalNameEval.cs" />
     <Compile Include="SS\Formula\Eval\NumberEval.cs" />
-    <Compile Include="SS\Formula\Eval\NumericOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\NumericValueEval.cs" />
     <Compile Include="SS\Formula\Eval\OperandResolver.cs" />
     <Compile Include="SS\Formula\Eval\OperationEval.cs" />
@@ -807,7 +819,6 @@
     <Compile Include="SS\Formula\Eval\RelationalOperationEval\NotEqualEval.cs" />
     <Compile Include="SS\Formula\Eval\RelationalOperationEval\RelationalOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\StringEval.cs" />
-    <Compile Include="SS\Formula\Eval\StringOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\StringValueEval.cs" />
     <Compile Include="SS\Formula\Eval\TwoOperandNumeric\AddEval.cs" />
     <Compile Include="SS\Formula\Eval\TwoOperandNumeric\DivideEval.cs" />
@@ -818,7 +829,6 @@
     <Compile Include="SS\Formula\Eval\UnaryMinusEval.cs" />
     <Compile Include="SS\Formula\Eval\UnaryPlusEval.cs" />
     <Compile Include="SS\Formula\Eval\ValueEval.cs" />
-    <Compile Include="SS\Formula\Eval\ValueEvalToNumericXlator.cs" />
     <Compile Include="SS\Formula\ExternSheetReferenceToken.cs" />
     <Compile Include="SS\Formula\Formula.cs" />
     <Compile Include="SS\Formula\FormulaCellCache.cs" />
@@ -1036,7 +1046,6 @@
     <Compile Include="SS\Formula\PTG\StringPtg.cs" />
     <Compile Include="SS\Formula\PTG\SubtractPtg.cs" />
     <Compile Include="SS\Formula\PTG\TblPtg.cs" />
-    <Compile Include="SS\Formula\PTG\TwoDEval.cs" />
     <Compile Include="SS\Formula\PTG\UnaryMinusPtg.cs" />
     <Compile Include="SS\Formula\PTG\UnaryPlusPtg.cs" />
     <Compile Include="SS\Formula\PTG\UnionPtg.cs" />

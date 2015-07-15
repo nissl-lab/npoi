@@ -24,43 +24,54 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.Formula.PTG;
 namespace NPOI.XSSF.UserModel.Helpers
 {
-    class XSSFFormulaRenderingWorkbook : IFormulaRenderingWorkbook
-    {
-        XSSFEvaluationWorkbook _fpwb;
-        int _sheetIndex = 0;
-        string _name;
-        public XSSFFormulaRenderingWorkbook(XSSFEvaluationWorkbook fpwb, int sheetIndex,string name)
-        {
-            _fpwb = fpwb;
-            _sheetIndex = sheetIndex;
-            _name = name;
-        }
-        #region IFormulaRenderingWorkbook Members
+    //class XSSFFormulaRenderingWorkbook : IFormulaRenderingWorkbook
+    //{
+    //    XSSFEvaluationWorkbook _fpwb;
+    //    int _sheetIndex = 0;
+    //    string _name;
+    //    public XSSFFormulaRenderingWorkbook(XSSFEvaluationWorkbook fpwb, int sheetIndex,string name)
+    //    {
+    //        _fpwb = fpwb;
+    //        _sheetIndex = sheetIndex;
+    //        _name = name;
+    //    }
+    //    #region IFormulaRenderingWorkbook Members
 
-        public ExternalSheet GetExternalSheet(int externSheetIndex)
-        {
-            return _fpwb.GetExternalSheet(externSheetIndex);
-        }
+    //    public ExternalSheet GetExternalSheet(int externSheetIndex)
+    //    {
+    //        return _fpwb.GetExternalSheet(externSheetIndex);
+    //    }
 
-        public String GetSheetNameByExternSheet(int externSheetIndex)
-        {
-            if (externSheetIndex == _sheetIndex) 
-                return _name;
-            else return _fpwb.GetSheetNameByExternSheet(externSheetIndex);
-        }
+    //    public String GetSheetNameByExternSheet(int externSheetIndex)
+    //    {
+    //        if (externSheetIndex == _sheetIndex) 
+    //            return _name;
+    //        else return _fpwb.GetSheetNameByExternSheet(externSheetIndex);
+    //    }
 
-        public String ResolveNameXText(NameXPtg nameXPtg)
-        {
-            return _fpwb.ResolveNameXText(nameXPtg);
-        }
+    //    public String ResolveNameXText(NameXPtg nameXPtg)
+    //    {
+    //        return _fpwb.ResolveNameXText(nameXPtg);
+    //    }
 
-        public String GetNameText(NamePtg namePtg)
-        {
-            return _fpwb.GetNameText(namePtg);
-        }
+    //    public String GetNameText(NamePtg namePtg)
+    //    {
+    //        return _fpwb.GetNameText(namePtg);
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+
+
+    //    public string GetSheetFirstNameByExternSheet(int externSheetIndex)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public string GetSheetLastNameByExternSheet(int externSheetIndex)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
     /**
      * Utility to update formulas and named ranges when a sheet name was Changed
      *
@@ -79,33 +90,27 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         /**
          * Update sheet name in all formulas and named ranges.
-         * Called from {@link XSSFWorkbook#SetSheetName(int, String)}
+         * Called from {@link XSSFWorkbook#setSheetName(int, String)}
          * <p/>
          * <p>
          * The idea is to parse every formula and render it back to string
-         * with the updated sheet name. The IFormulaParsingWorkbook passed to the formula Parser
-         * is constructed from the old workbook (sheet name is not yet updated) and
-         * the FormulaRenderingWorkbook passed to FormulaRenderer#toFormulaString is a custom implementation that
-         * returns the new sheet name.
+         * with the updated sheet name. This is done by parsing into Ptgs,
+         * looking for ones with sheet references in them, and changing those
          * </p>
          *
-         * @param sheetIndex the 0-based index of the sheet being Changed
-         * @param name       the new sheet name
+         * @param sheetIndex the 0-based index of the sheet being changed
+         * @param oldName    the old sheet name
+         * @param newName    the new sheet name
          */
-        public void UpdateSheetName(int sheetIndex, String name)
+        public void UpdateSheetName(int sheetIndex, string oldName, string newName)
         {
-
-            /**
-             * An instance of FormulaRenderingWorkbook that returns
-             */
-            IFormulaRenderingWorkbook frwb = new XSSFFormulaRenderingWorkbook(_fpwb, sheetIndex, name);
             // update named ranges
             for (int i = 0; i < _wb.NumberOfNames; i++)
             {
                 IName nm = _wb.GetNameAt(i);
                 if (nm.SheetIndex == -1 || nm.SheetIndex == sheetIndex)
                 {
-                    UpdateName(nm, frwb);
+                    UpdateName(nm, oldName, newName);
                 }
             }
 
@@ -118,7 +123,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     {
                         if (cell.CellType == CellType.Formula)
                         {
-                            UpdateFormula((XSSFCell)cell, frwb);
+                            UpdateFormula((XSSFCell)cell, oldName, newName);
                         }
                     }
                 }
@@ -131,7 +136,7 @@ namespace NPOI.XSSF.UserModel.Helpers
          * @param cell the cell to update
          * @param frwb the formula rendering workbbok that returns new sheet name
          */
-        private void UpdateFormula(XSSFCell cell, IFormulaRenderingWorkbook frwb)
+        private void UpdateFormula(XSSFCell cell, String oldName, String newName)
         {
             CT_CellFormula f = cell.GetCTCell().f;
             if (f != null)
@@ -141,7 +146,11 @@ namespace NPOI.XSSF.UserModel.Helpers
                 {
                     int sheetIndex = _wb.GetSheetIndex(cell.Sheet);
                     Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.Cell, sheetIndex);
-                    String updatedFormula = FormulaRenderer.ToFormulaString(frwb, ptgs);
+                    foreach (Ptg ptg in ptgs)
+                    {
+                        UpdatePtg(ptg, oldName, newName);
+                    }
+                    String updatedFormula = FormulaRenderer.ToFormulaString(_fpwb, ptgs);
                     if (!formula.Equals(updatedFormula)) f.Value = (updatedFormula);
                 }
             }
@@ -153,15 +162,34 @@ namespace NPOI.XSSF.UserModel.Helpers
          * @param name the name to update
          * @param frwb the formula rendering workbbok that returns new sheet name
          */
-        private void UpdateName(IName name, IFormulaRenderingWorkbook frwb)
+        private void UpdateName(IName name, String oldName, String newName)
         {
             String formula = name.RefersToFormula;
             if (formula != null)
             {
                 int sheetIndex = name.SheetIndex;
                 Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.NamedRange, sheetIndex);
-                String updatedFormula = FormulaRenderer.ToFormulaString(frwb, ptgs);
+                foreach (Ptg ptg in ptgs)
+                {
+                    UpdatePtg(ptg, oldName, newName);
+                }
+                String updatedFormula = FormulaRenderer.ToFormulaString(_fpwb, ptgs);
                 if (!formula.Equals(updatedFormula)) name.RefersToFormula = (updatedFormula);
+            }
+        }
+
+        private void UpdatePtg(Ptg ptg, String oldName, String newName)
+        {
+            if (ptg is Pxg)
+            {
+                Pxg pxg = (Pxg)ptg;
+                if (pxg.ExternalWorkbookNumber < 1)
+                {
+                    if (pxg.SheetName.Equals(oldName))
+                    {
+                        pxg.SheetName = (newName);
+                    }
+                }
             }
         }
     }

@@ -107,7 +107,11 @@ namespace NPOI.SS.Formula.Functions
             if (arg is RefEval)
             {
                 RefEval re = (RefEval)arg;
-                eval = re.InnerValueEval;
+                if (re.NumberOfSheets > 1)
+                {
+                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                }
+                eval = re.GetInnerValueEval(re.FirstSheetIndex);
             }
             else
             {

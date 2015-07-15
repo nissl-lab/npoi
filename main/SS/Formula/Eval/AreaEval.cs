@@ -23,10 +23,9 @@ namespace NPOI.SS.Formula.Eval
     using NPOI.SS.Formula;
 
     /**
-     * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
-     *  
+     * Evaluation of 2D (Row+Column) and 3D (Sheet+Row+Column) areas
      */
-    public interface AreaEval : TwoDEval
+    public interface AreaEval : TwoDEval, ThreeDEval
     {
 
         /**

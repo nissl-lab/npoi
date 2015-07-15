@@ -108,6 +108,37 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
+        private class SheetVector : ValueVector
+        {
+            private RefEval _re;
+            private int _size;
+
+            public SheetVector(RefEval re)
+            {
+                _size = re.NumberOfSheets;
+                _re = re;
+            }
+
+            public ValueEval GetItem(int index)
+            {
+                if (index >= _size)
+                {
+                    throw new IndexOutOfRangeException("Specified index (" + index
+                            + ") is outside the allowed range (0.." + (_size - 1) + ")");
+                }
+                int sheetIndex = _re.FirstSheetIndex + index;
+                return _re.GetInnerValueEval(sheetIndex);
+            }
+            public int Size
+            {
+                get
+                {
+                    return _size;
+                }
+            }
+        }
+
+
         public static ValueVector CreateRowVector(TwoDEval tableArray, int relativeRowIndex)
         {
             return new RowVector((AreaEval)tableArray, relativeRowIndex);
@@ -117,8 +148,8 @@ namespace NPOI.SS.Formula.Functions
             return new ColumnVector((AreaEval)tableArray, relativeColumnIndex);
         }
         /**
- * @return <c>null</c> if the supplied area is neither a single row nor a single colum
- */
+         * @return <c>null</c> if the supplied area is neither a single row nor a single colum
+         */
         public static ValueVector CreateVector(TwoDEval ae)
         {
             if (ae.IsColumn)
@@ -130,6 +161,11 @@ namespace NPOI.SS.Formula.Functions
                 return CreateRowVector(ae, 0);
             }
             return null;
+        }
+
+        public static ValueVector CreateVector(RefEval re)
+        {
+            return new SheetVector(re);
         }
         private class StringLookupComparer : LookupValueComparerBase
         {

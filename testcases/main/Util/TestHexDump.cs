@@ -33,6 +33,7 @@ using System.IO;
 
 using NUnit.Framework;
 using NPOI.Util;
+using System.Reflection;
 
 namespace TestCases.Util
 {
@@ -42,30 +43,6 @@ namespace TestCases.Util
     [TestFixture]
     public class TestHexDump
     {
-        public TestHexDump()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        private TestContext TestContextInstance;
-
-        /// <summary>
-        ///Gets or sets the Test context which provides
-        ///information about and functionality for the current Test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return TestContextInstance;
-            }
-            set
-            {
-                TestContextInstance = value;
-            }
-        }
 
         private char ToHex(int n)
         {
@@ -306,10 +283,229 @@ namespace TestCases.Util
         public void TestToHex()
         {
             Assert.AreEqual("000A", HexDump.ToHex((short)0xA));
+
+            Assert.AreEqual("[]", HexDump.ToHex(new short[] { }));
+            Assert.AreEqual("[000A]", HexDump.ToHex(new short[] { 0xA }));
+            Assert.AreEqual(HexDump.ToHex(new short[] { 0xA, 0xB }), "[000A, 000B]");
+
             Assert.AreEqual("0A", HexDump.ToHex((byte)0xA));
             Assert.AreEqual("0000000A", HexDump.ToHex(0xA));
-            //FFFF is out of short(Java) range
-            Assert.AreEqual("7FFF", HexDump.ToHex((short)0x7FFF));
+
+            Assert.AreEqual("[]", HexDump.ToHex(new byte[] { }));
+            Assert.AreEqual("[0A]", HexDump.ToHex(new byte[] { 0xA }));
+            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB }), "[0A, 0B]");
+
+            Assert.AreEqual(HexDump.ToHex(new byte[] { }, 10), ": 0");
+            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA }, 10), "0: 0A");
+            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB }, 10), "0: 0A, 0B");
+            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB, 0xC, 0xD }, 2), "0: 0A, 0B\n2: 0C, 0D");
+            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB, 0xC, 0xD, 0xE, 0xF }, 2), "0: 0A, 0B\n2: 0C, 0D\n4: 0E, 0F");
+
+            Assert.AreEqual("FFFF", HexDump.ToHex(unchecked((short)0xFFFF)));
+
+            Assert.AreEqual("00000000000004D2", HexDump.ToHex(1234L));
+
+            ConfirmStr("0xFE", HexDump.ByteToHex(-2));
+            ConfirmStr("0x25", HexDump.ByteToHex(37));
+            ConfirmStr("0xFFFE", HexDump.ShortToHex(-2));
+            ConfirmStr("0x0005", HexDump.ShortToHex(5));
+            ConfirmStr("0xFFFFFF9C", HexDump.IntToHex(-100));
+            ConfirmStr("0x00001001", HexDump.IntToHex(4097));
+            ConfirmStr("0xFFFFFFFFFFFF0006", HexDump.LongToHex(-65530));
+            ConfirmStr("0x0000000000003FCD", HexDump.LongToHex(16333));
         }
+        private static void ConfirmStr(String expected, char[] actualChars)
+        {
+            Assert.AreEqual(expected, new String(actualChars));
+        }
+        [Test]
+        public void TestDumpToString()
+        {
+            byte[] testArray = new byte[256];
+
+            for (int j = 0; j < 256; j++)
+            {
+                testArray[j] = (byte)j;
+            }
+            String dump = HexDump.Dump(testArray, 0, 0);
+            //System.out.Println("Hex: \n" + dump);
+            Assert.IsTrue(dump.Contains("0123456789:;<=>?"), "Had: \n" + dump);
+
+            dump = HexDump.Dump(testArray, 2, 1);
+            //System.out.Println("Hex: \n" + dump);
+            Assert.IsTrue(dump.Contains("123456789:;<=>?@"), "Had: \n" + dump);
+        }
+
+        [Test]
+        public void TestDumpToStringOutOfIndex()
+        {
+            byte[] testArray = new byte[0];
+
+            try
+            {
+                HexDump.Dump(testArray, 0, -1);
+                Assert.Fail("Should throw an exception with invalid input");
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                // expected
+            }
+
+            try
+            {
+                HexDump.Dump(testArray, 0, 1);
+                Assert.Fail("Should throw an exception with invalid input");
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                // expected
+            }
+        }
+
+        [Test]
+        public void TestDumpToPrintStream()
+        {
+            byte[] testArray = new byte[256];
+
+            for (int j = 0; j < 256; j++)
+            {
+                testArray[j] = (byte)j;
+            }
+
+            MemoryStream in1 = new MemoryStream(testArray);
+            try
+            {
+                MemoryStream byteOut = new MemoryStream();
+                BufferedStream out1 = new BufferedStream(byteOut);
+                try
+                {
+                    HexDump.Dump(in1, out1, 0, 256);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+
+                String str = Encoding.UTF8.GetString(byteOut.ToArray());
+                Assert.IsTrue(str.Contains("0123456789:;<=>?"),"Had: \n" + str);
+            }
+            finally
+            {
+                in1.Close();
+            }
+
+            in1 = new MemoryStream(testArray);
+            try
+            {
+                MemoryStream byteOut = new MemoryStream();
+                BufferedStream out1 = new BufferedStream(byteOut);
+                try
+                {
+                    // test with more than we have
+                    HexDump.Dump(in1, out1, 0, 1000);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+
+                String str = Encoding.UTF8.GetString(byteOut.ToArray());
+                Assert.IsTrue(str.Contains("0123456789:;<=>?"), "Had: \n" + str);
+            }
+            finally
+            {
+                in1.Close();
+            }
+
+            in1 = new MemoryStream(testArray);
+            try
+            {
+                MemoryStream byteOut = new MemoryStream();
+                BufferedStream out1 = new BufferedStream(byteOut);
+                try
+                {
+                    // test with -1
+                    HexDump.Dump(in1, out1, 0, -1);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+
+                String str = Encoding.UTF8.GetString(byteOut.ToArray());
+                Assert.IsTrue(str.Contains("0123456789:;<=>?"), "Had: \n" + str);
+            }
+            finally
+            {
+                in1.Close();
+            }
+
+            in1 = new MemoryStream(testArray);
+            try
+            {
+                MemoryStream byteOut = new MemoryStream();
+                BufferedStream out1 = new BufferedStream(byteOut);
+                try
+                {
+                    HexDump.Dump(in1, out1, 1, 235);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+
+                String str = Encoding.UTF8.GetString(byteOut.ToArray());
+                Assert.IsTrue(str.Contains("123456789:;<=>?@"), 
+                    "Line contents should be Moved by one now, but Had: \n" + str);
+            }
+            finally
+            {
+                in1.Close();
+            }
+        }
+
+        [Test]
+        public void TestConstruct()
+        {
+            // to cover private constructor
+            // Get the default constructor
+            ConstructorInfo c = typeof(HexDump).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null,
+                new Type[] { typeof(HexDump) }, null);
+
+            // make it callable from the outside
+            //c.=(/*setter*/true);
+
+            // call it
+            //Assert.IsNotNull(c.Invoke((Object[]) null));        
+        }
+
+        [Test]
+        public void TestMain()
+        {
+            FileInfo file = TempFile.CreateTempFile("HexDump", ".dat");
+            try
+            {
+                FileStream out1 = new FileStream(file.FullName, FileMode.Create, FileAccess.ReadWrite);
+                try
+                {
+
+                    IOUtils.Copy(new MemoryStream(Encoding.UTF8.GetBytes("teststring")), out1);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+                Assert.IsTrue(file.Exists);
+                Assert.IsTrue(file.Length > 0);
+
+                //HexDump.Main(new String[] { file.AbsolutePath });
+            }
+            finally
+            {
+                file.Delete();
+                //Assert.IsTrue(file.Exists);
+            }
+        }
+
     }
 }

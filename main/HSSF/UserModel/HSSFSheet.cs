@@ -1503,8 +1503,9 @@ namespace NPOI.HSSF.UserModel
             // Update any formulas on this _sheet that point to
             //  rows which have been moved
             int sheetIndex = _workbook.GetSheetIndex(this);
+            String sheetName = _workbook.GetSheetName(sheetIndex);
             int externSheetIndex = book.CheckExternSheet(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex, startRow, endRow, n);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex,sheetName, startRow, endRow, n);
             _sheet.UpdateFormulasAfterCellShift(shifter, externSheetIndex);
 
             int nSheets = _workbook.NumberOfSheets;

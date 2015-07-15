@@ -25,23 +25,23 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Util;
 
     /**
-     *
-     * @author Josh Micich 
+     * Provides Lazy Evaluation to 3D Ranges
      */
     public class LazyAreaEval : AreaEvalBase
     {
 
-        private SheetRefEvaluator _evaluator;
+        private SheetRangeEvaluator _evaluator;
 
-        public LazyAreaEval(AreaI ptg, SheetRefEvaluator evaluator):base(ptg)
+        public LazyAreaEval(AreaI ptg, SheetRangeEvaluator evaluator)
+            : base(ptg, evaluator)
         {
             
             _evaluator = evaluator;
         }
 
         public LazyAreaEval(int firstRowIndex, int firstColumnIndex, int lastRowIndex,
-                int lastColumnIndex, SheetRefEvaluator evaluator):
-            base(firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex)
+                int lastColumnIndex, SheetRangeEvaluator evaluator) :
+            base(evaluator, firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex)
         {
             
             _evaluator = evaluator;
@@ -49,11 +49,14 @@ namespace NPOI.SS.Formula
 
         public override ValueEval GetRelativeValue(int relativeRowIndex, int relativeColumnIndex)
         {
-
+            return GetRelativeValue(FirstSheetIndex, relativeRowIndex, relativeColumnIndex);
+        }
+        public override ValueEval GetRelativeValue(int sheetIndex, int relativeRowIndex, int relativeColumnIndex)
+        {
             int rowIx = (relativeRowIndex + FirstRow);
             int colIx = (relativeColumnIndex + FirstColumn);
 
-            return _evaluator.GetEvalForCell(rowIx, colIx);
+            return _evaluator.GetEvalForCell(sheetIndex, rowIx, colIx);
         }
 
         public override TwoDEval GetRow(int rowIndex)
@@ -90,7 +93,7 @@ namespace NPOI.SS.Formula
             CellReference crB = new CellReference(LastRow, LastColumn);
             StringBuilder sb = new StringBuilder();
             sb.Append(GetType().Name).Append("[");
-            sb.Append(_evaluator.SheetName);
+            sb.Append(_evaluator.SheetNameRange);
             sb.Append('!');
             sb.Append(crA.FormatAsString());
             sb.Append(':');
@@ -104,7 +107,8 @@ namespace NPOI.SS.Formula
         public override bool IsSubTotal(int rowIndex, int columnIndex)
         {
             // delegate the query to the sheet evaluator which has access to internal ptgs
-            return _evaluator.IsSubTotal(FirstRow + rowIndex, FirstColumn + columnIndex);
+            SheetRefEvaluator _sre = _evaluator.GetSheetEvaluator(_evaluator.FirstSheetIndex);
+            return _sre.IsSubTotal(FirstRow + rowIndex, FirstColumn + columnIndex);
         }
     }
 }

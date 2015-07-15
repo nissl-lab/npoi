@@ -27,6 +27,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
 using NPOI.Util;
+    using NPOI.SS.Util;
    
     /**
      * Internal POI use only
@@ -63,15 +64,32 @@ using NPOI.Util;
         {
             return _iBook.GetExternalSheetIndex(workbookName, sheetName);
         }
+
         public ExternalName GetExternalName(int externSheetIndex, int externNameIndex)
         {
             return _iBook.GetExternalName(externSheetIndex, externNameIndex);
         }
 
-        public NameXPtg GetNameXPtg(String name)
+        public ExternalName GetExternalName(String nameName, String sheetName, int externalWorkbookNumber)
         {
-            return _iBook.GetNameXPtg(name, _uBook.GetUDFFinder());
+            throw new InvalidOperationException("XSSF-style external names are not supported for HSSF");
         }
+        public Ptg Get3DReferencePtg(CellReference cr, SheetIdentifier sheet)
+        {
+            int extIx = GetSheetExtIx(sheet);
+            return new Ref3DPtg(cr, extIx);
+        }
+        public Ptg Get3DReferencePtg(AreaReference areaRef, SheetIdentifier sheet)
+        {
+            int extIx = GetSheetExtIx(sheet);
+            return new Area3DPtg(areaRef, extIx);
+        }
+        public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
+        {
+            int sheetRefIndex = GetSheetExtIx(sheet);
+            return _iBook.GetNameXPtg(name, sheetRefIndex, _uBook.GetUDFFinder());
+        }
+
 
         public IEvaluationName GetName(String name,int sheetIndex)
         {
@@ -107,12 +125,48 @@ using NPOI.Util;
         }
         public int ConvertFromExternSheetIndex(int externSheetIndex)
         {
-            return _iBook.GetSheetIndexFromExternSheetIndex(externSheetIndex);
+            // TODO Update this to expose first and last sheet indexes
+            return _iBook.GetFirstSheetIndexFromExternSheetIndex(externSheetIndex);
         }
 
         public ExternalSheet GetExternalSheet(int externSheetIndex)
         {
-            return _iBook.GetExternalSheet(externSheetIndex);
+            ExternalSheet sheet = _iBook.GetExternalSheet(externSheetIndex);
+            if (sheet == null)
+            {
+                // Try to treat it as a local sheet
+                int localSheetIndex = ConvertFromExternSheetIndex(externSheetIndex);
+                if (localSheetIndex == -1)
+                {
+                    // The sheet referenced can't be found, sorry
+                    return null;
+                }
+                if (localSheetIndex == -2)
+                {
+                    // Not actually sheet based at all - is workbook scoped
+                    return null;
+                }
+
+                // Look up the local sheet
+                String sheetName = GetSheetName(localSheetIndex);
+
+                // Is it a single local sheet, or a range?
+                int lastLocalSheetIndex = _iBook.GetLastSheetIndexFromExternSheetIndex(externSheetIndex);
+                if (lastLocalSheetIndex == localSheetIndex)
+                {
+                    sheet = new ExternalSheet(null, sheetName);
+                }
+                else
+                {
+                    String lastSheetName = GetSheetName(lastLocalSheetIndex);
+                    sheet = new ExternalSheetRange(null, sheetName, lastSheetName);
+                }
+            }
+            return sheet;
+        }
+        public ExternalSheet GetExternalSheet(String firstSheetName, string lastSheetName, int externalWorkbookNumber)
+        {
+            throw new InvalidOperationException("XSSF-style external references are not supported for HSSF");
         }
 
         public String ResolveNameXText(NameXPtg n)
@@ -120,9 +174,13 @@ using NPOI.Util;
             return _iBook.ResolveNameXText(n.SheetRefIndex, n.NameIndex);
         }
 
-        public String GetSheetNameByExternSheet(int externSheetIndex)
+        public String GetSheetFirstNameByExternSheet(int externSheetIndex)
         {
-            return _iBook.FindSheetNameFromExternSheet(externSheetIndex);
+            return _iBook.FindSheetFirstNameFromExternSheet(externSheetIndex);
+        }
+        public String GetSheetLastNameByExternSheet(int externSheetIndex)
+        {
+            return _iBook.FindSheetLastNameFromExternSheet(externSheetIndex);
         }
         public String GetNameText(NamePtg namePtg)
         {
@@ -210,7 +268,37 @@ using NPOI.Util;
                 return new NamePtg(_index);
             }
         }
+        private int GetSheetExtIx(SheetIdentifier sheetIden)
+        {
+            int extIx;
+            if (sheetIden == null)
+            {
+                extIx = -1;
+            }
+            else
+            {
+                String workbookName = sheetIden.BookName;
+                String firstSheetName = sheetIden.SheetId.Name;
+                String lastSheetName = firstSheetName;
 
+                if (sheetIden is SheetRangeIdentifier)
+                {
+                    lastSheetName = ((SheetRangeIdentifier)sheetIden).LastSheetIdentifier.Name;
+                }
+
+                if (workbookName == null)
+                {
+                    int firstSheetIndex = _uBook.GetSheetIndex(firstSheetName);
+                    int lastSheetIndex = _uBook.GetSheetIndex(lastSheetName);
+                    extIx = _iBook.checkExternSheet(firstSheetIndex, lastSheetIndex);
+                }
+                else
+                {
+                    extIx = _iBook.GetExternalSheetIndex(workbookName, firstSheetName, lastSheetName);
+                }
+            }
+            return extIx;
+        }
         public SpreadsheetVersion GetSpreadsheetVersion()
         {
             return SpreadsheetVersion.EXCEL97;

@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula
     using System;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.Util;
 
     /**
      * Abstracts a workbook for the purpose of formula parsing.<br/>
@@ -44,7 +45,23 @@ namespace NPOI.SS.Formula
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        NameXPtg GetNameXPtg(String name);
+        Ptg GetNameXPtg(String name, SheetIdentifier sheet);
+
+        /// <summary>
+        /// Produce the appropriate Ptg for a 3d cell reference
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
+        Ptg Get3DReferencePtg(CellReference cell, SheetIdentifier sheet);
+
+        /// <summary>
+        /// Produce the appropriate Ptg for a 3d area reference
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
+        Ptg Get3DReferencePtg(AreaReference area, SheetIdentifier sheet);
 
         /// <summary>
         /// Gets the externSheet index for a sheet from this workbook

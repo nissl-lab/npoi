@@ -151,9 +151,9 @@ namespace TestCases.HSSF.Model
         {
 
             Record[] recs = {
-				SupBookRecord.CreateAddInFunctions(),
-				new SSTRecord(),
-		};
+                SupBookRecord.CreateAddInFunctions(),
+                new SSTRecord(),
+        };
             List<Record> recList = new List<Record>(recs);
             WorkbookRecordList wrl = new WorkbookRecordList();
 
@@ -183,7 +183,7 @@ namespace TestCases.HSSF.Model
             new NameRecord(),
             new NameCommentRecord("name2", "comment2"),
 
-		    };
+            };
             List<Record> recList = new List<Record>(recs);
             WorkbookRecordList wrl = new WorkbookRecordList();
             Dictionary<String, NameCommentRecord> commentRecords = new Dictionary<String, NameCommentRecord>();
@@ -223,13 +223,18 @@ namespace TestCases.HSSF.Model
             ExternSheetRecord extSheet = (ExternSheetRecord)wrl[(3)];
             Assert.AreEqual(0, extSheet.NumOfRefs);
 
-            Assert.IsNull(tbl.GetNameXPtg("ISODD"));
+            Assert.IsNull(tbl.GetNameXPtg("ISODD", -1));
             Assert.AreEqual(5, wrl.Records.Count); //still have five records
 
             NameXPtg namex1 = tbl.AddNameXPtg("ISODD");  // Adds two new rercords
             Assert.AreEqual(0, namex1.SheetRefIndex);
             Assert.AreEqual(0, namex1.NameIndex);
-            Assert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD").ToString());
+            Assert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD", -1).ToString());
+
+            // Can only find on the right sheet ref, if restricting
+            Assert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD", 0).ToString());
+            Assert.IsNull(tbl.GetNameXPtg("ISODD", 1));
+            Assert.IsNull(tbl.GetNameXPtg("ISODD", 2));
             // assure they are in place:
             //    [BOFRecord]
             //    [CountryRecord]
@@ -253,11 +258,11 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(0, tbl.ResolveNameXIx(namex1.SheetRefIndex, namex1.NameIndex));
             Assert.AreEqual("ISODD", tbl.ResolveNameXText(namex1.SheetRefIndex, namex1.NameIndex, null));
 
-            Assert.IsNull(tbl.GetNameXPtg("ISEVEN"));
+            Assert.IsNull(tbl.GetNameXPtg("ISEVEN", -1));
             NameXPtg namex2 = tbl.AddNameXPtg("ISEVEN");  // Adds two new rercords
             Assert.AreEqual(0, namex2.SheetRefIndex);
             Assert.AreEqual(1, namex2.NameIndex);  // name index increased by one
-            Assert.AreEqual(namex2.ToString(), tbl.GetNameXPtg("ISEVEN").ToString());
+            Assert.AreEqual(namex2.ToString(), tbl.GetNameXPtg("ISEVEN", -1).ToString());
             Assert.AreEqual(8, wrl.Records.Count);
             // assure they are in place:
             //    [BOFRecord]

@@ -3211,6 +3211,31 @@ namespace TestCases.HSSF.UserModel
 
             // Try to Evaluate everything
             eval.EvaluateAll();
+
+        }
+
+        /**
+         * InvalidCastException in HSSFOptimiser - StyleRecord cannot be cast to 
+         * ExtendedFormatRecord when removing un-used styles
+         */
+        [Test]
+        public void Bug54443()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFCellStyle style = workbook.CreateCellStyle() as HSSFCellStyle;
+            HSSFCellStyle newStyle = workbook.CreateCellStyle() as HSSFCellStyle;
+
+            HSSFSheet mySheet = workbook.CreateSheet() as HSSFSheet;
+            HSSFRow row = mySheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+
+            // Use style
+            cell.CellStyle = (/*setter*/style);
+            // Switch to newStyle, style is now un-used
+            cell.CellStyle = (/*setter*/newStyle);
+
+            // Optimise
+            HSSFOptimiser.OptimiseCellStyles(workbook);
         }
     }
 }
