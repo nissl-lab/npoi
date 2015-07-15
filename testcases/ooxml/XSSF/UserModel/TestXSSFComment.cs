@@ -15,15 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.Util;
-using NUnit.Framework;
-using NPOI.XSSF.Model;
 using System;
-using TestCases.SS.UserModel;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.Model;
+using NUnit.Framework;
+using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel
          * Test properties of a newly constructed comment
          */
         [Test]
-        public void TestConstructor()
+        public void Constructor()
         {
             CommentsTable sheetComments = new CommentsTable();
             Assert.IsNotNull(sheetComments.GetCTComments().commentList);
@@ -64,7 +64,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(false, comment.Visible);
         }
         [Test]
-        public void TestGetSetCol()
+        public void GetSetCol()
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0));
         }
         [Test]
-        public void TestGetSetRow()
+        public void GetSetRow()
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
@@ -102,7 +102,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0));
         }
         [Test]
-        public void TestSetString()
+        public void SetString()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sh = (XSSFSheet)wb.CreateSheet();
@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
-        public void TestAuthor()
+        public void Author()
         {
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.NewComment("A1");
@@ -177,39 +177,6 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", comment.Author);
             Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
         }
-
-        [Test]
-        public void TestGetClientAnchor()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
-            XSSFComment comment;
-            IClientAnchor anchor;
-
-            comment = Drawing.CreateCellComment(new XSSFClientAnchor(101, 102, 103, 104, 1, 2, 3, 4)) as XSSFComment;
-            anchor = comment.ClientAnchor;
-            Assert.AreEqual(0, anchor.Dx1);
-            Assert.AreEqual(0, anchor.Dy1);
-            Assert.AreEqual(0, anchor.Dx2);
-            Assert.AreEqual(0, anchor.Dy2);
-            Assert.AreEqual(1, anchor.Col1);
-            Assert.AreEqual(2, anchor.Row1);
-            Assert.AreEqual(3, anchor.Col2);
-            Assert.AreEqual(4, anchor.Row2);
-
-            comment = Drawing.CreateCellComment(new XSSFClientAnchor()) as XSSFComment;
-            anchor = comment.ClientAnchor;
-            Assert.AreEqual(0, anchor.Dx1);
-            Assert.AreEqual(0, anchor.Dy1);
-            Assert.AreEqual(0, anchor.Dx2);
-            Assert.AreEqual(0, anchor.Dy2);
-            Assert.AreEqual(1, anchor.Col1);
-            Assert.AreEqual(0, anchor.Row1);
-            Assert.AreEqual(3, anchor.Col2);
-            Assert.AreEqual(3, anchor.Row2);
-        }
-
     }
 
 

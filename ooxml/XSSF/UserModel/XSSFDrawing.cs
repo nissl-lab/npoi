@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Xml;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.SS.Util;
+using NPOI.Util;
 
 
 namespace NPOI.XSSF.UserModel
@@ -274,9 +275,17 @@ namespace NPOI.XSSF.UserModel
             NPOI.OpenXmlFormats.Vml.CT_Shape vmlShape = vml.newCommentShape();
             if (ca.IsSet())
             {
+                // convert offsets from emus to pixels since we get a DrawingML-anchor
+                // but create a VML Drawing
+                int dx1Pixels = ca.Dx1 / Units.EMU_PER_PIXEL;
+                int dy1Pixels = ca.Dy1 / Units.EMU_PER_PIXEL;
+                int dx2Pixels = ca.Dx2 / Units.EMU_PER_PIXEL;
+                int dy2Pixels = ca.Dy2 / Units.EMU_PER_PIXEL;
                 String position =
-                        ca.Col1 + ", 0, " + ca.Row1 + ", 0, " +
-                        ca.Col2 + ", 0, " + ca.Row2 + ", 0";
+                        ca.Col1 + ", " + dx1Pixels + ", " +
+                        ca.Row1 + ", " + dy1Pixels + ", " +
+                        ca.Col2 + ", " + dx2Pixels + ", " +
+                        ca.Row2 + ", " + dy2Pixels;
                 vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
             String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();

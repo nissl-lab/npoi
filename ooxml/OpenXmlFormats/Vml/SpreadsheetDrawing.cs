@@ -344,7 +344,7 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 
         public string GetAnchorArray(int p)
         {
-            throw new NotImplementedException();
+            return this.anchor;
         }
     }
 

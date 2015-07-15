@@ -16,10 +16,10 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using NUnit.Framework;
 namespace NPOI.XSSF.Model
 {
 
@@ -32,7 +32,7 @@ namespace NPOI.XSSF.Model
         private static String TEST_A1_TEXT = "test A1 text";
         private static String TEST_AUTHOR = "test author";
         [Test]
-        public void TestFindAuthor()
+        public void FindAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
             Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
@@ -46,7 +46,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
         }
         [Test]
-        public void TestGetCellComment()
+        public void GetCellComment()
         {
             CommentsTable sheetComments = new CommentsTable();
 
@@ -72,7 +72,7 @@ namespace NPOI.XSSF.Model
         }
 
         [Test]
-        public void TestExisting()
+        public void Existing()
         {
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithVariousData.xlsx");
             ISheet sheet1 = workbook.GetSheetAt(0);
@@ -103,7 +103,7 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(2, cc7.Column);
         }
         [Test]
-        public void TestWriteRead()
+        public void WriteRead()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithVariousData.xlsx");
             XSSFSheet sheet1 = (XSSFSheet)workbook.GetSheetAt(0);
@@ -152,7 +152,7 @@ namespace NPOI.XSSF.Model
                     sheet1.GetRow(4).GetCell(2).CellComment.String.String);
         }
         [Test]
-        public void TestReadWriteMultipleAuthors()
+        public void ReadWriteMultipleAuthors()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithMoreVariousData.xlsx");
             XSSFSheet sheet1 = (XSSFSheet)workbook.GetSheetAt(0);
@@ -188,7 +188,7 @@ namespace NPOI.XSSF.Model
             // Todo - check text too, once bug fixed
         }
         [Test]
-        public void TestRemoveComment()
+        public void RemoveComment()
         {
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment a1 = sheetComments.NewComment("A1");
@@ -219,7 +219,7 @@ namespace NPOI.XSSF.Model
             Assert.IsNull(sheetComments.GetCTComment("A3"));
         }
         [Test]
-        public void TestBug54920()
+        public void Bug54920()
         {
             IWorkbook workbook = new XSSFWorkbook();
             ISheet sheet = workbook.CreateSheet("sheet01");

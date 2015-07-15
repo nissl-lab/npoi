@@ -21,6 +21,7 @@ using NPOI.OpenXmlFormats.Vml;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.Model;
+using NPOI.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -211,7 +212,8 @@ namespace NPOI.XSSF.UserModel
                 {
                     pos[i++] = int.Parse(s.Trim());
                 }
-                XSSFClientAnchor ca = new XSSFClientAnchor(0, 0, 0, 0, pos[0], pos[2], pos[4], pos[6]);
+                XSSFClientAnchor ca = new XSSFClientAnchor(pos[1] * Units.EMU_PER_PIXEL, pos[3] * Units.EMU_PER_PIXEL,
+                    pos[5] * Units.EMU_PER_PIXEL, pos[7] * Units.EMU_PER_PIXEL, pos[0], pos[2], pos[4], pos[6]);
                 return ca;
             }
         }

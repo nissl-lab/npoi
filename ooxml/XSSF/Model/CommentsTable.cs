@@ -146,9 +146,12 @@ namespace NPOI.XSSF.Model
             if (commentRefs == null)
             {
                 commentRefs = new Dictionary<String, CT_Comment>();
-                foreach (CT_Comment comment in comments.commentList.comment)
+                if (comments.commentList.comment != null)
                 {
-                    commentRefs.Add(comment.@ref, comment);
+                    foreach (CT_Comment comment in comments.commentList.comment)
+                    {
+                        commentRefs.Add(comment.@ref, comment);
+                    }
                 }
             }
 
