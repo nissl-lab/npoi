@@ -173,7 +173,7 @@ namespace NPOI.HSSF.UserModel
         }
         internal override void AfterInsert(HSSFPatriarch patriarch)
         {
-            EscherAggregate agg = patriarch.getBoundAggregate();
+            EscherAggregate agg = patriarch.GetBoundAggregate();
             agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
 
             if (null != GetTextObjectRecord())
@@ -183,10 +183,10 @@ namespace NPOI.HSSF.UserModel
         }
         internal override void AfterRemove(HSSFPatriarch patriarch)
         {
-            patriarch.getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
+            patriarch.GetBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
             if (null != GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID))
             {
-                patriarch.getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID));
+                patriarch.GetBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID));
             }
         }
         protected override EscherContainerRecord CreateSpContainer()
@@ -257,9 +257,13 @@ namespace NPOI.HSSF.UserModel
                 escherTextbox.RecordId = (EscherTextboxRecord.RECORD_ID);
                 escherTextbox.Options = ((short)0x0000);
                 GetEscherContainer().AddChildRecord(escherTextbox);
-                Patriarch.getBoundAggregate().AssociateShapeToObjRecord(escherTextbox, _textObjectRecord);
+                Patriarch.GetBoundAggregate().AssociateShapeToObjRecord(escherTextbox, _textObjectRecord);
             }
             return _textObjectRecord;
         }
+
+        public bool FlipVertical { get; set; }
+
+        public bool FlipHorizontal { get; set; }
     }
 }

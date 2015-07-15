@@ -188,6 +188,17 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
         }
 
+        [Test]
+        public void TestBug55280()
+        {
+            IWorkbook w = new XSSFWorkbook();
+            ISheet s = w.CreateSheet();
+            for (int row = 0; row < 5000; ++row)
+                s.AddMergedRegion(new CellRangeAddress(row, row, 0, 3));
+
+            s.ShiftRows(0, 4999, 1);        // takes a long time...
+        }
+
     }
 }
 

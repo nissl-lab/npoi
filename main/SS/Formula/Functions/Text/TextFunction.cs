@@ -61,9 +61,9 @@ namespace NPOI.SS.Formula.Functions
             return OperandResolver.CoerceValueToInt(ve);
         }
         public static double EvaluateDoubleArg(ValueEval arg, int srcCellRow, int srcCellCol) {
-		    ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
-		    return OperandResolver.CoerceValueToDouble(ve);
-	    }
+            ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
+            return OperandResolver.CoerceValueToDouble(ve);
+        }
 
         public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
@@ -148,6 +148,7 @@ namespace NPOI.SS.Formula.Functions
 
         public static readonly Function CLEAN = new Clean();
         public static readonly Function CHAR = new CHAR();
+        public static readonly Function PROPER = new Proper();
 
     }
 }

@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="SS\Converter\TestExcelToHtmlConverterSuite.cs" />
     <Compile Include="SS\Format\TestCellFormatPart.cs" />
+    <Compile Include="SS\Formula\Functions\TestProper.cs" />
     <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestEmbeded.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="XSSF\Util\TestNumericRanges.cs" />
     <Compile Include="XSSF\XSSFITestDataProvider.cs" />
     <Compile Include="XSSF\XSSFTestDataSamples.cs" />
+    <Compile Include="XWPF\Extractor\TestExternalEntities.cs" />
     <Compile Include="XWPF\Extractor\TestXWPFWordExtractor.cs" />
     <Compile Include="XWPF\Model\TestXWPFDecorators.cs" />
     <Compile Include="XWPF\Model\TestXWPFHeaderFooterPolicy.cs" />

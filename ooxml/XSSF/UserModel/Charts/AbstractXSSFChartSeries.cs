@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NPOI.XSSF.UserModel.Charts
 {
-    public class AbstractXSSFChartSerie : IChartSerie
+    public class AbstractXSSFChartSeries : IChartSeries
     {
         private String titleValue;
         private CellReference titleRef;

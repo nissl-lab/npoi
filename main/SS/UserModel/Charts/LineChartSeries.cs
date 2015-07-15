@@ -4,11 +4,11 @@ using System.Text;
 
 namespace NPOI.SS.UserModel.Charts
 {
-    public interface ILineChartSerie<Tx, Ty> : IChartSerie
+    public interface ILineChartSeries<Tx, Ty> : IChartSeries
     {
         /**
- * @return data source used for category axis data.
- */
+         * @return data source used for category axis data.
+         */
         IChartDataSource<Tx> GetCategoryAxisData();
 
         /**

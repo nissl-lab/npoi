@@ -949,7 +949,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns hyperlink associated with this cell
+        /// Get or set hyperlink associated with this cell
+        /// If the supplied hyperlink is null on setting, the hyperlink for this cell will be removed.
         /// </summary>
         public IHyperlink Hyperlink
         {
@@ -959,6 +960,11 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
+                if (value == null)
+                {
+                    RemoveHyperlink();
+                    return;
+                }
                 XSSFHyperlink link = (XSSFHyperlink)value;
 
                 // Assign to us
@@ -969,6 +975,13 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /**
+         * Removes the hyperlink for this cell, if there is one.
+         */
+        public void RemoveHyperlink()
+        {
+            ((XSSFSheet)Sheet).RemoveHyperlink(_row.RowNum, _cellNum);
+        }
         /**
          * Returns the xml bean containing information about the cell's location (reference), value,
          * data type, formatting, and formula

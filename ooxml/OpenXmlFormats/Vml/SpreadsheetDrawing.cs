@@ -341,6 +341,11 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
                 this.objectTypeField = value;
             }
         }
+
+        public string GetAnchorArray(int p)
+        {
+            return this.anchor;
+        }
     }
 
 

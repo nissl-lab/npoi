@@ -140,6 +140,10 @@
       <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
       <Name>OpenXml4Net vs2010</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ooxml\OpenXmlFormats\OpenXmlFormats vs2010.csproj">
+      <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
+      <Name>OpenXmlFormats vs2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

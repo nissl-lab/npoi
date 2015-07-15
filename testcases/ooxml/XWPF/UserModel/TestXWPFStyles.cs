@@ -75,9 +75,9 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
-	     * Bug #52449 - We should be able to write a file containing
-	     *  both regular and glossary styles without error
-	     */
+         * Bug #52449 - We should be able to write a file containing
+         *  both regular and glossary styles without error
+         */
         [Test]
         public void Test52449()
         {
@@ -113,7 +113,7 @@ namespace NPOI.XWPF.UserModel
             CT_Style ctStyle = new CT_Style();
             XWPFStyle style = new XWPFStyle(ctStyle);
 
-			style.StyleType = ST_StyleType.paragraph;
+            style.StyleType = ST_StyleType.paragraph;
             Assert.AreEqual(ST_StyleType.paragraph, style.StyleType);
         }
         [Test]
@@ -124,7 +124,7 @@ namespace NPOI.XWPF.UserModel
             ex.name=("ex1");
             XWPFLatentStyles ls = new XWPFLatentStyles(latentStyles);
             Assert.AreEqual(true, ls.IsLatentStyle("ex1"));
-
+            Assert.AreEqual(false, ls.IsLatentStyle("notex1"));
         }
 
     }

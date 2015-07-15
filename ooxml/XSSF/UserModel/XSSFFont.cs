@@ -426,7 +426,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(IsBold ? FontBoldWeight.Bold : FontBoldWeight.Normal);
+                return (IsBold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal);
             }
             set 
             {

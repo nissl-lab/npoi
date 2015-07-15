@@ -1000,7 +1000,28 @@ namespace NPOI.XWPF.UserModel
                         text.Append(((CT_Text)o).Value);
                     }
                 }
-
+                // Complex type evaluation (currently only for extraction of check boxes)
+                if (o is CT_FldChar)
+                {
+                    CT_FldChar ctfldChar = ((CT_FldChar)o);
+                    if (ctfldChar.fldCharType == ST_FldCharType.begin)
+                    {
+                        if (ctfldChar.ffData != null)
+                        {
+                            foreach (CT_FFCheckBox checkBox in ctfldChar.ffData.GetCheckBoxList())
+                            {
+                                if (checkBox.@default.val == true)
+                                {
+                                    text.Append("|X|");
+                                }
+                                else
+                                {
+                                    text.Append("|_|");
+                                }
+                            }
+                        }
+                    }
+                }
                 if (o is CT_PTab)
                 {
                     text.Append("\t");

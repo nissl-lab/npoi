@@ -25,6 +25,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using System.Xml;
+using NPOI.SS.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -45,7 +46,7 @@ namespace NPOI.XSSF.UserModel
          *
          * This value is the same for default font in Office 2007 (Calibry) and Office 2003 and earlier (Arial)
          */
-        private static float DEFAULT_COLUMN_WIDTH = 9.140625f;
+        //private static float DEFAULT_COLUMN_WIDTH = 9.140625f;
 
         /**
          * A default instance of CTShape used for creating new shapes.
@@ -149,36 +150,51 @@ namespace NPOI.XSSF.UserModel
          */
         public void Resize()
         {
-            Resize(1.0);
+            Resize(double.MaxValue);
         }
-
         /**
-         * Reset the image to the original size.
-         * <p>
-         * Please note, that this method works correctly only for workbooks
-         * with the default font size (Calibri 11pt for .xlsx).
-         * If the default font is Changed the resized image can be streched vertically or horizontally.
-         * </p>
+         * Resize the image proportionally.
          *
-         * @param scale the amount by which image dimensions are multiplied relative to the original size.
-         * <code>resize(1.0)</code> Sets the original size, <code>resize(0.5)</code> resize to 50% of the original,
-         * <code>resize(2.0)</code> resizes to 200% of the original.
+         * @see #resize(double, double)
          */
         public void Resize(double scale)
         {
+            Resize(scale, scale);
+        }
+        /**
+         * Resize the image relatively to its current size.
+         * <p>
+         * Please note, that this method works correctly only for workbooks
+         * with the default font size (Calibri 11pt for .xlsx).
+         * If the default font is changed the resized image can be streched vertically or horizontally.
+         * </p>
+         * <p>
+         * <code>resize(1.0,1.0)</code> keeps the original size,<br/>
+         * <code>resize(0.5,0.5)</code> resize to 50% of the original,<br/>
+         * <code>resize(2.0,2.0)</code> resizes to 200% of the original.<br/>
+         * <code>resize({@link Double#MAX_VALUE},{@link Double#MAX_VALUE})</code> resizes to the dimension of the embedded image. 
+         * </p>
+         *
+         * @param scaleX the amount by which the image width is multiplied relative to the original width,
+         *  when set to {@link java.lang.Double#MAX_VALUE} the width of the embedded image is used
+         * @param scaleY the amount by which the image height is multiplied relative to the original height,
+         *  when set to {@link java.lang.Double#MAX_VALUE} the height of the embedded image is used
+         */
+        public void Resize(double scaleX, double scaleY)
+        {
             IClientAnchor anchor = (XSSFClientAnchor)GetAnchor();
 
-            IClientAnchor pref = GetPreferredSize(scale);
+            IClientAnchor pref = GetPreferredSize(scaleX, scaleY);
 
             int row2 = anchor.Row1 + (pref.Row2 - pref.Row1);
             int col2 = anchor.Col1 + (pref.Col2 - pref.Col1);
 
             anchor.Col2=(col2);
-            anchor.Dx1=(0);
+            //anchor.Dx1=(0);
             anchor.Dx2=(pref.Dx2);
 
             anchor.Row2=(row2);
-            anchor.Dy1=(0);
+            //anchor.Dy1=(0);
             anchor.Dy2=(pref.Dy2);
         }
 
@@ -200,79 +216,25 @@ namespace NPOI.XSSF.UserModel
          */
         public IClientAnchor GetPreferredSize(double scale)
         {
-            XSSFClientAnchor anchor = (XSSFClientAnchor)GetAnchor();
+            return GetPreferredSize(scale, scale);
+        }
 
-            XSSFPictureData data = (XSSFPictureData)this.PictureData;
-            Size size = GetImageDimension(data.GetPackagePart(), data.GetPictureType());
-            double scaledWidth = size.Width * scale;
-            double scaledHeight = size.Height * scale;
 
-            float w = 0;
-            int col2 = anchor.Col1;
-            int dx2 = 0;
-
-            for (; ; )
-            {
-                w += GetColumnWidthInPixels(col2);
-                if (w > scaledWidth) break;
-                col2++;
-            }
-
-            if (w > scaledWidth)
-            {
-                double cw = GetColumnWidthInPixels(col2);
-                double delta = w - scaledWidth;
-                dx2 = (int)(EMU_PER_PIXEL * (cw - delta));
-            }
-            anchor.Col2 = (col2);
-            anchor.Dx2 = (dx2);
-
-            double h = 0;
-            int row2 = anchor.Row1;
-            int dy2 = 0;
-
-            for (; ; )
-            {
-                h += GetRowHeightInPixels(row2);
-                if (h > scaledHeight) break;
-                row2++;
-            }
-
-            if (h > scaledHeight)
-            {
-                double ch = GetRowHeightInPixels(row2);
-                double delta = h - scaledHeight;
-                dy2 = (int)(EMU_PER_PIXEL * (ch - delta));
-            }
-            anchor.Row2 = (row2);
-            anchor.Dy2 = (dy2);
-
+        /**
+         * Calculate the preferred size for this picture.
+         *
+         * @param scaleX the amount by which image width is multiplied relative to the original width.
+         * @param scaleY the amount by which image height is multiplied relative to the original height.
+         * @return XSSFClientAnchor with the preferred size for this image
+         */
+        public IClientAnchor GetPreferredSize(double scaleX, double scaleY)
+        {
+            Size dim = ImageUtils.SetPreferredSize(this, scaleX, scaleY);
             CT_PositiveSize2D size2d = ctPicture.spPr.xfrm.ext;
-            size2d.cx = ((long)(scaledWidth * EMU_PER_PIXEL));
-            size2d.cy = ((long)(scaledHeight * EMU_PER_PIXEL));
-
-            return anchor;
+            size2d.cx = (dim.Width);
+            size2d.cy = (dim.Height);
+            return ClientAnchor;
         }
-
-        private float GetColumnWidthInPixels(int columnIndex)
-        {
-            XSSFSheet sheet = (XSSFSheet)GetDrawing().GetParent();
-
-            CT_Col col = sheet.GetColumnHelper().GetColumn(columnIndex, false);
-            double numChars = col == null || !col.IsSetWidth() ? DEFAULT_COLUMN_WIDTH : col.width;
-
-            return (float)numChars * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH;
-        }
-
-        private float GetRowHeightInPixels(int rowIndex)
-        {
-            XSSFSheet sheet = (XSSFSheet)GetDrawing().GetParent();
-
-            IRow row = sheet.GetRow(rowIndex);
-            float height = row != null ? row.HeightInPoints : sheet.DefaultRowHeightInPoints;
-            return height * PIXEL_DPI / POINT_DPI;
-        }
-
         /**
          * Return the dimension of this image
          *
@@ -282,11 +244,14 @@ namespace NPOI.XSSF.UserModel
          *
          * @return image dimension in pixels
          */
-        protected static Size GetImageDimension(PackagePart part, int type)
+        protected static Size GetImageDimension(PackagePart part, PictureType type)
         {
             try
             {
-                return Image.FromStream(part.GetInputStream()).Size;
+                //return Image.FromStream(part.GetInputStream()).Size;
+                //java can only read png,jpeg,dib image
+                //C# read the image that format defined by PictureType , maybe.
+                return ImageUtils.GetImageDimension(part.GetInputStream());
             }
             catch (IOException e)
             {
@@ -295,7 +260,16 @@ namespace NPOI.XSSF.UserModel
                 return new Size();
             }
         }
-
+        /**
+         * Return the dimension of the embedded image in pixel
+         *
+         * @return image dimension in pixels
+         */
+        public Size GetImageDimension()
+        {
+            XSSFPictureData picData = PictureData as XSSFPictureData;
+            return GetImageDimension(picData.GetPackagePart(), picData.PictureType);
+        }
 
         protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
         {
@@ -365,6 +339,31 @@ namespace NPOI.XSSF.UserModel
             {
                 String blipId = ctPicture.blipFill.blip.embed;
                 return (XSSFPictureData)GetDrawing().GetRelationById(blipId);
+            }
+        }
+
+        /**
+         * @return the anchor that is used by this shape.
+         */
+
+        public IClientAnchor ClientAnchor
+        {
+            get
+            {
+                XSSFAnchor a = GetAnchor() as XSSFAnchor;
+                return (a is XSSFClientAnchor) ? (XSSFClientAnchor)a : null;
+            }
+        }
+
+        /**
+         * @return the sheet which contains the picture shape
+         */
+
+        public ISheet Sheet
+        {
+            get
+            {
+                return (XSSFSheet)this.GetDrawing().GetParent();
             }
         }
     }

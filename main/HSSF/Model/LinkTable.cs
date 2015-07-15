@@ -20,12 +20,12 @@ namespace NPOI.HSSF.Model
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
+    using System.Text;
     using NPOI.HSSF.Record;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
-    using System.Text;
-    using NPOI.SS.Formula;
+    using NPOI.SS.UserModel;
 
     /**
      * Link Table (OOO pdf reference: 4.10.3 ) <p/>
@@ -117,10 +117,10 @@ namespace NPOI.HSSF.Model
             internal ExternalNameRecord[] _externalNameRecords;
             private CRNBlock[] _crnBlocks;
             /**
-         * Create a new block for registering add-in functions
-         *
-         * @see org.apache.poi.hssf.model.LinkTable#addNameXPtg(String)
-         */
+             * Create a new block for registering add-in functions
+             *
+             * @see org.apache.poi.hssf.model.LinkTable#addNameXPtg(String)
+             */
             public ExternalBookBlock()
             {
                 _externalBookRecord = SupBookRecord.CreateAddInFunctions();
@@ -145,6 +145,28 @@ namespace NPOI.HSSF.Model
                 }
                 _crnBlocks = (CRNBlock[])temp.ToArray(typeof(CRNBlock));
             }
+
+            /**
+            * Create a new block for external references.
+            */
+            public ExternalBookBlock(String url, String[] sheetNames)
+            {
+                _externalBookRecord = SupBookRecord.CreateExternalReferences(url, sheetNames);
+                _crnBlocks = new CRNBlock[0];
+            }
+
+            /**
+             * Create a new block for internal references. It is called when constructing a new LinkTable.
+             *
+             * @see org.apache.poi.hssf.model.LinkTable#LinkTable(int, WorkbookRecordList)
+             */
+            public ExternalBookBlock(int numberOfSheets)
+            {
+                _externalBookRecord = SupBookRecord.CreateInternalReferences((short)numberOfSheets);
+                _externalNameRecords = new ExternalNameRecord[0];
+                _crnBlocks = new CRNBlock[0];
+            }
+
             public int NumberOfNames
             {
                 get
@@ -160,17 +182,7 @@ namespace NPOI.HSSF.Model
                 _externalNameRecords = tmp;
                 return _externalNameRecords.Length - 1;
             }
-            /**
-         * Create a new block for internal references. It is called when constructing a new LinkTable.
-         *
-         * @see org.apache.poi.hssf.model.LinkTable#LinkTable(int, WorkbookRecordList)
-         */
-            public ExternalBookBlock(int numberOfSheets)
-            {
-                _externalBookRecord = SupBookRecord.CreateInternalReferences((short)numberOfSheets);
-                _externalNameRecords = new ExternalNameRecord[0];
-                _crnBlocks = new CRNBlock[0];
-            }
+
 
             public SupBookRecord GetExternalBookRecord()
             {
@@ -182,9 +194,9 @@ namespace NPOI.HSSF.Model
                 return _externalNameRecords[definedNameIndex].Text;
             }
             /**
- * Performs case-insensitive search
- * @return -1 if not found
- */
+             * Performs case-insensitive search
+             * @return -1 if not found
+             */
             public int GetIndexOfName(String name)
             {
                 for (int i = 0; i < _externalNameRecords.Length; i++)
@@ -378,6 +390,17 @@ namespace NPOI.HSSF.Model
                 return _definedNames.Count;
             }
         }
+
+        private int ExtendExternalBookBlocks(ExternalBookBlock newBlock)
+        {
+            ExternalBookBlock[] tmp = new ExternalBookBlock[_externalBookBlocks.Length + 1];
+            Array.Copy(_externalBookBlocks, 0, tmp, 0, _externalBookBlocks.Length);
+            tmp[tmp.Length - 1] = newBlock;
+            _externalBookBlocks = tmp;
+
+            return (_externalBookBlocks.Length - 1);
+        }
+
         private int FindRefIndexFromExtBookIndex(int extBookIndex)
         {
             return _externSheetRecord.FindRefIndexFromExtBookIndex(extBookIndex);
@@ -456,12 +479,7 @@ namespace NPOI.HSSF.Model
             {
                 extBlock = new ExternalBookBlock();
 
-                ExternalBookBlock[] tmp = new ExternalBookBlock[_externalBookBlocks.Length + 1];
-                Array.Copy(_externalBookBlocks, 0, tmp, 0, _externalBookBlocks.Length);
-                tmp[tmp.Length - 1] = extBlock;
-                _externalBookBlocks = tmp;
-
-                extBlockIndex = _externalBookBlocks.Length - 1;
+                extBlockIndex = ExtendExternalBookBlocks(extBlock);
 
                 // add the created SupBookRecord before ExternSheetRecord
                 int idx = FindFirstRecordLocBySid(ExternSheetRecord.sid);
@@ -515,10 +533,8 @@ namespace NPOI.HSSF.Model
             }
             throw new InvalidOperationException("External workbook does not contain sheet '" + sheetName + "'");
         }
-        public int GetExternalSheetIndex(String workbookName, String firstSheetName, String lastSheetName)
+        private int GetExternalWorkbookIndex(String workbookName)
         {
-            SupBookRecord ebrTarget = null;
-            int externalBookIndex = -1;
             for (int i = 0; i < _externalBookBlocks.Length; i++)
             {
                 SupBookRecord ebr = _externalBookBlocks[i].GetExternalBookRecord();
@@ -528,23 +544,68 @@ namespace NPOI.HSSF.Model
                 }
                 if (workbookName.Equals(ebr.URL))
                 { // not sure if 'equals()' works when url has a directory
-                    ebrTarget = ebr;
-                    externalBookIndex = i;
-                    break;
+                    return i;
                 }
             }
-            if (ebrTarget == null)
+            return -1;
+        }
+
+        public int LinkExternalWorkbook(String name, IWorkbook externalWorkbook)
+        {
+            int extBookIndex = GetExternalWorkbookIndex(name);
+            if (extBookIndex != -1)
             {
-                throw new NullReferenceException("No external workbook with name '" + workbookName + "'");
+                // Already linked!
+                return extBookIndex;
             }
+
+            // Create a new SupBookRecord
+            String[] sheetNames = new String[externalWorkbook.NumberOfSheets];
+            for (int sn = 0; sn < sheetNames.Length; sn++)
+            {
+                sheetNames[sn] = externalWorkbook.GetSheetName(sn);
+            }
+            String url = "\000" + name;
+            ExternalBookBlock block = new ExternalBookBlock(url, sheetNames);
+
+            // Add it into the list + records
+            extBookIndex = ExtendExternalBookBlocks(block);
+
+            // add the created SupBookRecord before ExternSheetRecord
+            int idx = FindFirstRecordLocBySid(ExternSheetRecord.sid);
+            if (idx == -1)
+            {
+                idx = _workbookRecordList.Count;
+            }
+            _workbookRecordList.Add(idx, block.GetExternalBookRecord());
+
+            // Setup links for the sheets
+            for (int sn = 0; sn < sheetNames.Length; sn++)
+            {
+                _externSheetRecord.AddRef(extBookIndex, sn, sn);
+            }
+
+            // Report where it went
+            return extBookIndex;
+        }
+
+        public int GetExternalSheetIndex(String workbookName, String firstSheetName, String lastSheetName)
+        {
+            int externalBookIndex = GetExternalWorkbookIndex(workbookName);
+            if (externalBookIndex == -1)
+            {
+                throw new RuntimeException("No external workbook with name '" + workbookName + "'");
+            }
+            SupBookRecord ebrTarget = _externalBookBlocks[externalBookIndex].GetExternalBookRecord();
+
             int firstSheetIndex = GetSheetIndex(ebrTarget.SheetNames, firstSheetName);
             int lastSheetIndex = GetSheetIndex(ebrTarget.SheetNames, lastSheetName);
 
+            // Find or add the external sheet record definition for this
             int result = _externSheetRecord.GetRefIxForSheet(externalBookIndex, firstSheetIndex, lastSheetIndex);
             if (result < 0)
             {
-                throw new RuntimeException("ExternSheetRecord does not contain combination ("
-                        + externalBookIndex + ", " + firstSheetIndex + ", " + lastSheetIndex + ")");
+                result = _externSheetRecord.AddRef(externalBookIndex, firstSheetIndex, lastSheetIndex);
             }
             return result;
         }

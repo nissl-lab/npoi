@@ -29,13 +29,15 @@ namespace NPOI.XSSF.Model
     /**
      * Class that represents theme of XLSX document. The theme includes specific
      * colors and fonts.
-     * 
-     * @author Petr Udalau(Petr.Udalau at exigenservices.com) - theme colors
      */
     public class ThemesTable : POIXMLDocumentPart
     {
         private ThemeDocument theme;
-
+        /**
+         * Construct a ThemesTable.
+         * @param part A PackagePart.
+         * @param rel A PackageRelationship.
+         */
         internal ThemesTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
@@ -51,56 +53,61 @@ namespace NPOI.XSSF.Model
                 throw new IOException(e.Message);
             }
         }
-
+        /**
+         * Construct a ThemesTable from an existing ThemeDocument.
+         * @param theme A ThemeDocument.
+         */
         internal ThemesTable(ThemeDocument theme)
         {
             this.theme = theme;
         }
-
+        /**
+         * Convert a theme "index" into a color.
+         * @param idx A theme "index"
+         * @return The mapped XSSFColor, or null if not mapped.
+         */
         public XSSFColor GetThemeColor(int idx)
         {
+            // Theme color references are NOT positional indices into the color scheme,
+            // i.e. these keys are NOT the same as the order in which theme colors appear
+            // in theme1.xml. They are keys to a mapped color.
             CT_ColorScheme colorScheme = theme.GetTheme().themeElements.clrScheme;
             NPOI.OpenXmlFormats.Dml.CT_Color ctColor = null;
-            
-            int cnt = 0;
-            List<NPOI.OpenXmlFormats.Dml.CT_Color> colors = new List<NPOI.OpenXmlFormats.Dml.CT_Color>();
-            colors.Add(colorScheme.dk1);
-            colors.Add(colorScheme.lt1);
-            colors.Add(colorScheme.dk2);
-            colors.Add(colorScheme.lt2);
-            colors.Add(colorScheme.accent1);
-            colors.Add(colorScheme.accent2);
-            colors.Add(colorScheme.accent3);
-            colors.Add(colorScheme.accent4);
-            colors.Add(colorScheme.accent5);
-            colors.Add(colorScheme.accent6);
-            colors.Add(colorScheme.hlink);
-            colors.Add(colorScheme.folHlink);
 
-            //iterate ctcolors in colorschema
-            foreach (NPOI.OpenXmlFormats.Dml.CT_Color color in colors)
+            switch (idx)
             {
-                    if (cnt == idx)
-                    {
-                        ctColor = color;
-
-                        byte[] rgb = null;
-                        if (ctColor.srgbClr != null)
-                        {
-                            // Colour is a regular one 
-                            rgb = ctColor.srgbClr.val;
-                        }
-                        else if (ctColor.sysClr != null)
-                        {
-                            // Colour is a tint of white or black
-                            rgb = ctColor.sysClr.lastClr;
-                        }
-
-                        return new XSSFColor(rgb);
-                    }
-                    cnt++;
+                case 0: ctColor = colorScheme.lt1; break;
+                case 1: ctColor = colorScheme.dk1; break;
+                case 2: ctColor = colorScheme.lt2; break;
+                case 3: ctColor = colorScheme.dk2; break;
+                case 4: ctColor = colorScheme.accent1; break;
+                case 5: ctColor = colorScheme.accent2; break;
+                case 6: ctColor = colorScheme.accent3; break;
+                case 7: ctColor = colorScheme.accent4; break;
+                case 8: ctColor = colorScheme.accent5; break;
+                case 9: ctColor = colorScheme.accent6; break;
+                case 10: ctColor = colorScheme.hlink; break;
+                case 11: ctColor = colorScheme.folHlink; break;
+                default: return null;
             }
-            return null;
+
+            byte[] rgb = null;
+            if (ctColor.IsSetSrgbClr())
+            {
+                // Color is a regular one
+                rgb = ctColor.srgbClr.val;
+            }
+            else if (ctColor.IsSetSysClr())
+            {
+                // Color is a tint of white or black
+                rgb = ctColor.sysClr.lastClr;
+            }
+            else
+            {
+                return null;
+            }
+            return new XSSFColor(rgb);
+
         }
 
         /**

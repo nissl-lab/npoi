@@ -147,14 +147,6 @@ namespace NPOI.XSSF.UserModel
             {
                 throw new ArgumentException("Number of rules must not exceed 3");
             }
-            XSSFConditionalFormattingRule[] hfRules;
-            if (cfRules is XSSFConditionalFormattingRule[])
-                hfRules = (XSSFConditionalFormattingRule[])cfRules;
-            else
-            {
-                hfRules = new XSSFConditionalFormattingRule[cfRules.Length];
-                Array.Copy(cfRules, 0, hfRules, 0, hfRules.Length);
-            }
 
             CellRangeAddress[] mergeCellRanges = CellRangeUtil.MergeCellRanges(regions);
             CT_ConditionalFormatting cf = _sheet.GetCTWorksheet().AddNewConditionalFormatting();
@@ -167,7 +159,6 @@ namespace NPOI.XSSF.UserModel
                     refs += " " +a.FormatAsString() ;
             }
             cf.sqref = refs;
-
 
             int priority = 1;
             foreach (CT_ConditionalFormatting c in _sheet.GetCTWorksheet().conditionalFormatting)

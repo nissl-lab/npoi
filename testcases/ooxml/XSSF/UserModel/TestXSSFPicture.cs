@@ -39,13 +39,21 @@ namespace NPOI.XSSF.UserModel
 
         }
         [Test]
-        public void TestResize()
+        public void Resize()
         {
-            BaseTestResize(new XSSFClientAnchor(0, 0, 504825, 85725, (short)0, 0, (short)1, 8));
+            XSSFWorkbook wb = XSSFITestDataProvider.instance.OpenSampleWorkbook("resize_Compare.xlsx") as XSSFWorkbook;
+            XSSFDrawing dp = wb.GetSheetAt(0).CreateDrawingPatriarch() as XSSFDrawing;
+            List<XSSFShape> pics = dp.GetShapes();
+            XSSFPicture inpPic = (XSSFPicture)pics[(0)];
+            XSSFPicture cmpPic = (XSSFPicture)pics[(0)];
+
+            BaseTestResize(inpPic, cmpPic, 2.0, 2.0);
+            wb.Close();
         }
 
+
         [Test]
-        public void TestCreate()
+        public void Create()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
@@ -82,7 +90,7 @@ namespace NPOI.XSSF.UserModel
          * See Bugzilla 50458
          */
         [Test]
-        public void TestShapeId()
+        public void IncrementShapeId()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
@@ -105,7 +113,7 @@ namespace NPOI.XSSF.UserModel
      * same image refrerred by mulitple sheets
      */
         [Test]
-        public void TestMultiRelationShips()
+        public void multiRelationShips()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
 

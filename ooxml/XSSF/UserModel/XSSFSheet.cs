@@ -15,25 +15,24 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
-using NPOI.Util;
-using System.IO;
-using NPOI.XSSF.Model;
-using System.Collections.Generic;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
-using NPOI.SS.Util;
-using NPOI.OpenXml4Net.Exceptions;
-using NPOI.OpenXml4Net.OPC;
-using NPOI.SS;
-using NPOI.XSSF.UserModel.Helpers;
-using NPOI.HSSF.Record;
-using NPOI.OpenXmlFormats;
-using NPOI.OpenXmlFormats.Dml;
 using System.Collections;
-using NPOI.SS.Formula;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
+using NPOI.HSSF.Record;
+using NPOI.OpenXml4Net.Exceptions;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS;
+using NPOI.SS.Formula;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.Util;
+using NPOI.XSSF.Model;
+using NPOI.XSSF.UserModel.Helpers;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -728,6 +727,19 @@ namespace NPOI.XSSF.UserModel
             return (int)(width * 256);
         }
 
+        /**
+         * Get the actual column width in pixels
+         * 
+         * <p>
+         * Please note, that this method works correctly only for workbooks
+         * with the default font size (Calibri 11pt for .xlsx).
+         * </p>
+         */
+        public float GetColumnWidthInPixels(int columnIndex)
+        {
+            float widthIn256 = GetColumnWidth(columnIndex);
+            return (float)(widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH);
+        }
         /**
          * Get the default column width for the sheet (if the columns do not define their own width) in
          * characters.
@@ -1735,8 +1747,9 @@ namespace NPOI.XSSF.UserModel
         {
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
 
-            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[ctMergeCells.sizeOfMergeCellArray() - 1];
-            for (int i = 0; i < ctMergeCells.sizeOfMergeCellArray(); i++)
+            int size = ctMergeCells.sizeOfMergeCellArray();
+            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[size - 1];
+            for (int i = 0; i < size; i++)
             {
                 if (i < index)
                 {
@@ -1756,6 +1769,40 @@ namespace NPOI.XSSF.UserModel
                 worksheet.UnsetMergeCells();
             }
         }
+
+        /**
+         * Removes a number of merged regions of cells (hence letting them free)
+         * 
+         * This method can be used to bulk-remove merged regions in a way
+         * much faster than calling RemoveMergedRegion() for every single 
+         * merged region.
+         *
+         * @param indices A Set of the regions to unmerge
+         */
+        public void RemoveMergedRegions(HashSet<int> indices)
+        {
+            CT_MergeCells ctMergeCells = worksheet.mergeCells;
+
+            int size = ctMergeCells.sizeOfMergeCellArray();
+            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[size - indices.Count];
+            for (int i = 0, d = 0; i < size; i++)
+            {
+                if (!indices.Contains(i))
+                {
+                    mergeCellsArray[d] = ctMergeCells.GetMergeCellArray(i);
+                    d++;
+                }
+            }
+            if (mergeCellsArray.Length > 0)
+            {
+                ctMergeCells.SetMergeCellArray(mergeCellsArray);
+            }
+            else
+            {
+                worksheet.UnsetMergeCells();
+            }
+        }
+
 
         /**
          * Remove a row from this sheet.  All cells Contained in the row are Removed as well
@@ -2892,6 +2939,25 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Removes a hyperlink in the collection of hyperlinks on this sheet
+         *
+         * @param row row index
+         * @param column column index
+         */
+        public void RemoveHyperlink(int row, int column)
+        {
+            String ref1 = new CellReference(row, column).FormatAsString();
+            for (int index = 0; index < hyperlinks.Count; index++)
+            {
+                XSSFHyperlink hyperlink = hyperlinks[index];
+                if (hyperlink.GetCellRef().Equals(ref1))
+                {
+                    hyperlinks.RemoveAt(index);
+                    return;
+                }
+            }
+        }
+        /**
          * Return location of the active cell, e.g. <code>A1</code>.
          *
          * @return the location of the active cell.
@@ -3625,9 +3691,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        public List<XSSFDataValidation> GetDataValidations()
+        public List<IDataValidation> GetDataValidations()
         {
-            List<XSSFDataValidation> xssfValidations = new List<XSSFDataValidation>();
+            List<IDataValidation> xssfValidations = new List<IDataValidation>();
             CT_DataValidations dataValidations = this.worksheet.dataValidations;
             if (dataValidations != null && dataValidations.count > 0)
             {

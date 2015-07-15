@@ -89,7 +89,7 @@ namespace NPOI.SS.Formula.PTG
         protected AreaPtgBase(int firstRow, int lastRow, int firstColumn, int lastColumn,
                 bool firstRowRelative, bool lastRowRelative, bool firstColRelative, bool lastColRelative)
         {
-            if (lastRow > firstRow)
+            if (lastRow >= firstRow)
             {
                 FirstRow=(firstRow);
                 LastRow=(lastRow);
@@ -104,7 +104,7 @@ namespace NPOI.SS.Formula.PTG
                 IsLastRowRelative = (firstRowRelative);
             }
 
-            if (lastColumn > firstColumn)
+            if (lastColumn >= firstColumn)
             {
                 FirstColumn=(firstColumn);
                 LastColumn=(lastColumn);
@@ -128,10 +128,10 @@ namespace NPOI.SS.Formula.PTG
         }
         protected void WriteCoordinates(ILittleEndianOutput out1)
         {
-		    out1.WriteShort(field_1_first_row);
-		    out1.WriteShort(field_2_last_row);
-		    out1.WriteShort(field_3_first_column);
-		    out1.WriteShort(field_4_last_column);
+            out1.WriteShort(field_1_first_row);
+            out1.WriteShort(field_2_last_row);
+            out1.WriteShort(field_3_first_column);
+            out1.WriteShort(field_4_last_column);
         }
 
         protected void WriteCoordinates(byte[] array, int offset)

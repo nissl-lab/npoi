@@ -127,7 +127,7 @@ namespace NPOI.HSSF.UserModel
 
         internal override void AfterRemove(HSSFPatriarch patriarch)
         {
-            patriarch.getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
+            patriarch.GetBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
         }
 
         /**

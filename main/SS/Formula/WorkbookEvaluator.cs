@@ -31,6 +31,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
+    using NPOI.SS.Formula.Function;
 
     /**
      * Evaluates formula cells.<p/>
@@ -528,7 +529,10 @@ namespace NPOI.SS.Formula
                             int dist = attrPtg.Data;
                             i += CountTokensToBeSkipped(ptgs, i, dist);
                             Ptg nextPtg = ptgs[i + 1];
-                            if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg)
+                            if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg &&
+                                // in order to verify that there is no third param, we need to check 
+                                // if we really have the IF next or some other FuncVarPtg as third param, e.g. ROW()/COLUMN()!
+                                ((FuncVarPtg)nextPtg).GetFunctionIndex() == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
                             {
                                 // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
                                 i++;

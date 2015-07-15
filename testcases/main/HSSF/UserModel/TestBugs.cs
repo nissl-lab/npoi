@@ -41,6 +41,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.Extractor;
+    using NPOI.HSSF.Record.Crypto;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -125,22 +126,6 @@ namespace TestCases.HSSF.UserModel
             r.CreateCell(0).CellFormula = ("HYPERLINK( \"http://jakarta.apache.org\", \"Jakarta\" )");
 
             WriteTestOutputFileForViewing(wb, "Test23094");
-        }
-
-        /** Test hyperlinks
-         * Open resulting file in excel, and Check that there is a link to Google
-         */
-        [Test]
-        public void Test15353()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("My sheet");
-
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.CellFormula = ("HYPERLINK(\"http://google.com\",\"Google\")");
-
-            WriteOutAndReadBack(wb);
         }
 
         /** Test reading of a formula with a name and a cell ref in one
@@ -2727,44 +2712,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("50939.xls");
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        /**
-         * HLookup and VLookup with optional arguments 
-         */
-        [Test]
-        public void Test51024()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet();
-            IRow r1 = s.CreateRow(0);
-            IRow r2 = s.CreateRow(1);
-
-            r1.CreateCell(0).SetCellValue("v A1");
-            r2.CreateCell(0).SetCellValue("v A2");
-            r1.CreateCell(1).SetCellValue("v B1");
-
-            ICell c = r1.CreateCell(4);
-
-            HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
-
-            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("VLOOKUP(\"v A1\", A1:B2, 1, )");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-
-            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1, 1)");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-
-            c.CellFormula = ("HLOOKUP(\"v A1\", A1:B2, 1, )");
-            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
-        }
+        
         /**
          * File with exactly 256 data blocks (+header block)
          *  shouldn't break on POIFS loading 
@@ -3025,87 +2973,26 @@ namespace TestCases.HSSF.UserModel
         public void Bug35897()
         {
             // password is abc
-            OpenSample("xor-encryption-abc.xls");
+            try
+            {
+                Biff8EncryptionKey.CurrentUserPassword = ("abc");
+                OpenSample("xor-encryption-abc.xls");
+            }
+            finally
+            {
+                Biff8EncryptionKey.CurrentUserPassword = (null);
+            }
+
+            // One using the only-recently-documented encryption header type 4,
+            //  and the RC4 CryptoAPI encryption header structure
+            try
+            {
+                OpenSample("35897-type4.xls");
+                Assert.Fail("POI doesn't currently support the RC4 CryptoAPI encryption header structure");
+            }
+            catch (EncryptedDocumentException e) { }
         }
 
-        [Test]
-        public void stackoverflow23114397()
-        {
-            IWorkbook wb = new HSSFWorkbook();
-            IDataFormat format = wb.GetCreationHelper().CreateDataFormat();
-
-            // How close the sizing should be, given that not all
-            //  systems will have quite the same fonts on them
-            float fontAccuracy = 0.22f;
-
-            // x%
-            ICellStyle iPercent = wb.CreateCellStyle();
-            iPercent.DataFormat = (/*setter*/format.GetFormat("0%"));
-            // x.x%
-            ICellStyle d1Percent = wb.CreateCellStyle();
-            d1Percent.DataFormat = (/*setter*/format.GetFormat("0.0%"));
-            // x.xx%
-            ICellStyle d2Percent = wb.CreateCellStyle();
-            d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
-
-            ISheet s = wb.CreateSheet();
-            IRow r1 = s.CreateRow(0);
-
-            for (int i = 0; i < 3; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(0);
-            }
-            for (int i = 3; i < 6; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(1);
-            }
-            for (int i = 6; i < 9; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(0.12345);
-            }
-            for (int i = 9; i < 12; i++)
-            {
-                r1.CreateCell(i, CellType.Numeric).SetCellValue(1.2345);
-            }
-            for (int i = 0; i < 12; i += 3)
-            {
-                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
-                r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
-                r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
-            }
-            for (int i = 0; i < 12; i++)
-            {
-                s.AutoSizeColumn(i);
-                //System.out.Println(i + " => " + s.GetColumnWidth(i));
-            }
-
-            // Check the 0(.00)% ones
-            assertAlmostEquals(980, s.GetColumnWidth(0), fontAccuracy);
-            assertAlmostEquals(1400, s.GetColumnWidth(1), fontAccuracy);
-            assertAlmostEquals(1700, s.GetColumnWidth(2), fontAccuracy);
-
-            // Check the 100(.00)% ones
-            assertAlmostEquals(1500, s.GetColumnWidth(3), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(4), fontAccuracy);
-            assertAlmostEquals(2225, s.GetColumnWidth(5), fontAccuracy);
-
-            // Check the 12(.34)% ones
-            assertAlmostEquals(1225, s.GetColumnWidth(6), fontAccuracy);
-            assertAlmostEquals(1650, s.GetColumnWidth(7), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(8), fontAccuracy);
-
-            // Check the 123(.45)% ones
-            assertAlmostEquals(1500, s.GetColumnWidth(9), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
-            assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
-        }
-        public static void assertAlmostEquals(double expected, double actual, float factor)
-        {
-            double diff = Math.Abs(expected - actual);
-            double fuzz = expected * factor;
-            if (diff > fuzz)
-                Assert.Fail(actual + " not within " + fuzz + " of " + expected);
-        }
         [Test]
         public void Bug56450()
         {
@@ -3237,5 +3124,100 @@ namespace TestCases.HSSF.UserModel
             // Optimise
             HSSFOptimiser.OptimiseCellStyles(workbook);
         }
+
+        /**
+         * Intersection formula ranges, eg =(C2:D3 D3:E4)
+         */
+        [Test]
+        public void Bug52111()
+        {
+            IWorkbook wb = OpenSample("Intersection-52111.xls");
+            ISheet s = wb.GetSheetAt(0);
+
+            // Check we can read it correctly
+            ICell intF = s.GetRow(2).GetCell(0);
+            Assert.AreEqual(CellType.Formula, intF.CellType);
+            Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+
+            Assert.AreEqual("(C2:D3 D3:E4)", intF.CellFormula);
+
+            // Check we can Evaluate it correctly
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("4", eval.Evaluate(intF).FormatAsString());
+        }
+        [Test]
+        public void Bug42016()
+        {
+            IWorkbook wb = OpenSample("42016.xls");
+            ISheet s = wb.GetSheetAt(0);
+            for (int row = 0; row < 7; row++)
+            {
+                Assert.AreEqual("A$1+B$1", s.GetRow(row).GetCell(2).CellFormula);
+            }
+        }
+
+        /**
+         * Unexpected record type (NPOI.HSSF.Record.ColumnInfoRecord)
+         */
+        [Test]
+        public void Bug53984()
+        {
+            IWorkbook wb = OpenSample("53984.xls");
+            ISheet s = wb.GetSheetAt(0);
+            Assert.AreEqual("International Communication Services SA", s.GetRow(2).GetCell(0).StringCellValue);
+            Assert.AreEqual("Saudi Arabia-Riyadh", s.GetRow(210).GetCell(0).StringCellValue);
+        }
+
+        /**
+     * Read, Write, read for formulas point to cells in other files.
+     * See {@link #bug46670()} for the main test, this just
+     *  covers Reading an existing file and Checking it.
+     * TODO Fix this so that it works - formulas are ending up as
+     *  #REF when being Changed
+     */
+        //    [Test]
+        public void bug46670_existing()
+        {
+            HSSFWorkbook wb;
+            ISheet s;
+            ICell c;
+
+            // Expected values
+            String refLocal = "'[refs/airport.xls]Sheet1'!$A$2";
+            String refHttp = "'[9http://www.principlesofeconometrics.com/excel/airline.xls]Sheet1'!$A$2";
+
+            // Check we can read them correctly
+            wb = OpenSample("46670_local.xls");
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refLocal, s.GetRow(0).GetCell(0).CellFormula);
+
+            wb = OpenSample("46670_http.xls");
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refHttp, s.GetRow(0).GetCell(0).CellFormula);
+
+            // Now try to Set them to the same values, and ensure that
+            //  they end up as they did before, even with a save and re-load
+            wb = OpenSample("46670_local.xls");
+            s = wb.GetSheetAt(0);
+            c = s.GetRow(0).GetCell(0);
+            c.CellFormula = (/*setter*/refLocal);
+            Assert.AreEqual(refLocal, c.CellFormula);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refLocal, s.GetRow(0).GetCell(0).CellFormula);
+
+
+            wb = OpenSample("46670_http.xls");
+            s = wb.GetSheetAt(0);
+            c = s.GetRow(0).GetCell(0);
+            c.CellFormula = (/*setter*/refHttp);
+            Assert.AreEqual(refHttp, c.CellFormula);
+
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            Assert.AreEqual(refHttp, s.GetRow(0).GetCell(0).CellFormula);
+        }
+
     }
 }

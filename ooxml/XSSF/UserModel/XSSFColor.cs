@@ -96,32 +96,6 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        /**
-        * For RGB colours, but not ARGB (we think...)
-        * Excel Gets black and white the wrong way around, so switch them 
-         */
-        private byte[] CorrectRGB(byte[] rgb)
-        {
-            if (rgb.Length == 4)
-            {
-                // Excel doesn't appear to get these wrong
-                // Nothing to change
-                return rgb;
-            }
-            else
-            {
-                // Excel Gets black and white the wrong way around, so switch them 
-                if (rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0)
-                {
-                    rgb = new byte[] { 255, 255, 255 };
-                }
-                else if (rgb[0] == 255 && rgb[1] == 255 && rgb[2] == 255)
-                {
-                    rgb = new byte[] { 0, 0, 0 };
-                }
-                return rgb;
-            }
-        }
         public byte[] GetRgb()
         { 
             return this.RGB;
@@ -200,7 +174,7 @@ namespace NPOI.XSSF.UserModel
             rgb = ctColor.GetRgb();
 
             // Correct it as needed, and return
-            return CorrectRGB(rgb);
+            return (rgb);
         }
 
         /**
@@ -277,7 +251,7 @@ namespace NPOI.XSSF.UserModel
         public void SetRgb(byte[] rgb)
         {
             // Correct it and save
-            ctColor.SetRgb(CorrectRGB(rgb));
+            ctColor.SetRgb((rgb));
         }
 
         /**

@@ -80,7 +80,7 @@ namespace NPOI.HSSF.UserModel
         internal override void AfterInsert(HSSFPatriarch patriarch)
         {
             base.AfterInsert(patriarch);
-            patriarch.getBoundAggregate().AddTailRecord(NoteRecord);
+            patriarch.GetBoundAggregate().AddTailRecord(NoteRecord);
         }
 
         protected override EscherContainerRecord CreateSpContainer()
@@ -224,6 +224,21 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        public IClientAnchor ClientAnchor
+        {
+            get
+            {
+                HSSFAnchor ha = base.Anchor;
+                if (ha is IClientAnchor)
+                {
+                    return (IClientAnchor)ha;
+                }
+
+                throw new InvalidCastException("Anchor can not be changed in "
+                        + typeof(IClientAnchor).Name);
+            }
+        }
+
         public override int ShapeType
         {
             get
@@ -240,7 +255,7 @@ namespace NPOI.HSSF.UserModel
         internal override void AfterRemove(HSSFPatriarch patriarch)
         {
             base.AfterRemove(patriarch);
-            patriarch.getBoundAggregate().RemoveTailRecord(this.NoteRecord);
+            patriarch.GetBoundAggregate().RemoveTailRecord(this.NoteRecord);
         }
         internal override HSSFShape CloneShape()
         {

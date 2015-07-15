@@ -144,7 +144,24 @@ namespace NPOI.HSSF.UserModel
         public short Boldweight
         {
             get { return font.BoldWeight; }
-            set { font.BoldWeight=value; }
+            set { font.BoldWeight = value; }
+        }
+        /**
+         * get or set if the font bold style
+         */
+        public bool IsBold
+        {
+            get
+            {
+                return font.BoldWeight == (short)FontBoldWeight.Bold;
+            }
+            set
+            {
+                if (value)
+                    font.BoldWeight = (short)FontBoldWeight.Bold;
+                else
+                    font.BoldWeight = (short)FontBoldWeight.Normal;
+            }
         }
 
         /// <summary>

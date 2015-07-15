@@ -2198,12 +2198,22 @@ namespace NPOI.HSSF.Model
         {
             get
             {
-                if (linkTable == null)
-                {
-                    linkTable = new LinkTable((short)NumSheets, records);
-                }
-                return linkTable;
+                return GetOrCreateLinkTable();
             }
+        }
+
+        private LinkTable GetOrCreateLinkTable()
+        {
+            if (linkTable == null)
+            {
+                linkTable = new LinkTable((short)NumSheets, records);
+            }
+            return linkTable;
+        }
+
+        public int LinkExternalWorkbook(String name, IWorkbook externalWorkbook)
+        {
+            return GetOrCreateLinkTable().LinkExternalWorkbook(name, externalWorkbook);
         }
 
         /** 

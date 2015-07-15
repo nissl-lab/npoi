@@ -18,19 +18,16 @@
 namespace TestCases.HSSF.UserModel
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using NUnit.Framework;
-    using NPOI.HSSF.EventModel;
     using NPOI.HSSF.Record;
-    using NPOI.POIFS.FileSystem;
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using TestCases.Exceptions;
-    using TestCases.HSSF;
-    using TestCases.HSSF.UserModel;
-    using TestCases.SS.UserModel;
-    using NPOI.HSSF.UserModel;
     using NPOI.Util;
+    using NUnit.Framework;
+    using TestCases.HSSF;
+    using TestCases.SS.UserModel;
 
     /**
      * Class for Testing Excel's data validation mechanism
@@ -116,9 +113,9 @@ namespace TestCases.HSSF.UserModel
             // The allowable regions where the generated file can differ from the 
             // proof should be small (i.e. much less than 1K)
             int[] allowableDifferenceRegions = { 
-				0x0228, 16,  // a region of the file Containing the OS username
-				0x506C, 8,   // See RootProperty (super fields _seconds_2 and _days_2)
-		};
+                0x0228, 16,  // a region of the file Containing the OS username
+                0x506C, 8,   // See RootProperty (super fields _seconds_2 and _days_2)
+        };
             int[] diffs = StreamUtility.DiffStreams(isA, isB, allowableDifferenceRegions);
             if (diffs == null)
             {
@@ -243,6 +240,253 @@ namespace TestCases.HSSF.UserModel
             }
             return -1;
         }
+
+        [Test]
+        public void TestGetDataValidationsAny()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateNumericConstraint(ValidationType.ANY,
+                    OperatorType.IGNORED, null, null);
+            CellRangeAddressList AddressList = new CellRangeAddressList(1, 2, 3, 4);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            validation.EmptyCellAllowed = (/*setter*/true);
+            validation.CreateErrorBox("error-title", "error-text");
+            validation.CreatePromptBox("prompt-title", "prompt-text");
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations(); // <-- works
+            Assert.AreEqual(1, list.Count);
+
+            HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+            {
+                CellRangeAddressList regions = dv.Regions;
+                Assert.AreEqual(1, regions.CountRanges());
+
+                CellRangeAddress Address = regions.GetCellRangeAddress(0);
+                Assert.AreEqual(1, Address.FirstRow);
+                Assert.AreEqual(2, Address.LastRow);
+                Assert.AreEqual(3, Address.FirstColumn);
+                Assert.AreEqual(4, Address.LastColumn);
+            }
+            Assert.AreEqual(true, dv.EmptyCellAllowed);
+            Assert.AreEqual(false, dv.SuppressDropDownArrow);
+            Assert.AreEqual(true, dv.ShowErrorBox);
+            Assert.AreEqual("error-title", dv.ErrorBoxTitle);
+            Assert.AreEqual("error-text", dv.ErrorBoxText);
+            Assert.AreEqual(true, dv.ShowPromptBox);
+            Assert.AreEqual("prompt-title", dv.PromptBoxTitle);
+            Assert.AreEqual("prompt-text", dv.PromptBoxText);
+
+            IDataValidationConstraint c = dv.ValidationConstraint;
+            Assert.AreEqual(ValidationType.ANY, c.GetValidationType());
+            Assert.AreEqual(OperatorType.IGNORED, c.Operator);
+        }
+
+        [Test]
+        public void TestGetDataValidationsintFormula()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateintConstraint(OperatorType.BETWEEN, "=A2",
+                    "=A3");
+            CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations(); // <-- works
+            Assert.AreEqual(1, list.Count);
+
+            HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+            DVConstraint c = dv.Constraint;
+            Assert.AreEqual(ValidationType.INTEGER, c.GetValidationType());
+            Assert.AreEqual(OperatorType.BETWEEN, c.Operator);
+            Assert.AreEqual("A2", c.Formula1);
+            Assert.AreEqual("A3", c.Formula2);
+            Assert.AreEqual(double.NaN, c.Value1);
+            Assert.AreEqual(double.NaN, c.Value2);
+        }
+
+        [Test]
+        public void TestGetDataValidationsintValue(){
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+        List<IDataValidation> list = sheet.GetDataValidations();
+        Assert.AreEqual(0, list.Count);
+
+        IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+        IDataValidationConstraint constraint = dataValidationHelper.CreateintConstraint(OperatorType.BETWEEN, "100",
+                "200");
+        CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+        IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+        sheet.AddValidationData(validation);
+
+        list = sheet.GetDataValidations(); // <-- works
+        Assert.AreEqual(1, list.Count);
+
+        HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+        DVConstraint c = dv.Constraint;
+        Assert.AreEqual(ValidationType.INTEGER, c.GetValidationType());
+        Assert.AreEqual(OperatorType.BETWEEN, c.Operator);
+        Assert.AreEqual(null, c.Formula1);
+        Assert.AreEqual(null, c.Formula2);
+        Assert.AreEqual(100, c.Value1);
+        Assert.AreEqual(200, c.Value2);
+    }
+
+        [Test]
+        public void TestGetDataValidationsDecimal(){
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+        List<IDataValidation> list = sheet.GetDataValidations();
+        Assert.AreEqual(0, list.Count);
+
+        IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+        IDataValidationConstraint constraint = dataValidationHelper.CreateDecimalConstraint(OperatorType.BETWEEN, "=A2",
+                "200");
+        CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+        IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+        sheet.AddValidationData(validation);
+
+        list = sheet.GetDataValidations(); // <-- works
+        Assert.AreEqual(1, list.Count);
+
+        HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+        DVConstraint c = dv.Constraint;
+        Assert.AreEqual(ValidationType.DECIMAL, c.GetValidationType());
+        Assert.AreEqual(OperatorType.BETWEEN, c.Operator);
+        Assert.AreEqual("A2", c.Formula1);
+        Assert.AreEqual(null, c.Formula2);
+        Assert.AreEqual(double.NaN, c.Value1);
+        Assert.AreEqual(200, c.Value2);
+    }
+
+        [Test]
+        public void TestGetDataValidationsDate()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateDateConstraint(OperatorType.EQUAL,
+                    "2014/10/25", null, null);
+            CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations(); // <-- works
+            Assert.AreEqual(1, list.Count);
+
+            HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+            DVConstraint c = dv.Constraint;
+            Assert.AreEqual(ValidationType.DATE, c.GetValidationType());
+            Assert.AreEqual(OperatorType.EQUAL, c.Operator);
+            Assert.AreEqual(null, c.Formula1);
+            Assert.AreEqual(null, c.Formula2);
+            Assert.AreEqual(DateUtil.GetExcelDate(DateUtil.ParseYYYYMMDDDate("2014/10/25")), c.Value1);
+            Assert.AreEqual(double.NaN, c.Value2);
+        }
+
+        [Test]
+        public void TestGetDataValidationsListExplicit()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateExplicitListConstraint(new String[] { "aaa",
+                "bbb", "ccc" });
+            CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            validation.SuppressDropDownArrow = (/*setter*/true);
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations(); // <-- works
+            Assert.AreEqual(1, list.Count);
+
+            HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+            Assert.AreEqual(true, dv.SuppressDropDownArrow);
+
+            DVConstraint c = dv.Constraint;
+            Assert.AreEqual(ValidationType.LIST, c.GetValidationType());
+            Assert.AreEqual(null, c.Formula1);
+            Assert.AreEqual(null, c.Formula2);
+            Assert.AreEqual(double.NaN, c.Value1);
+            Assert.AreEqual(double.NaN, c.Value2);
+            String[] values = c.ExplicitListValues;
+            Assert.AreEqual(3, values.Length);
+            Assert.AreEqual("aaa", values[0]);
+            Assert.AreEqual("bbb", values[1]);
+            Assert.AreEqual("ccc", values[2]);
+        }
+
+        [Test]
+        public void TestGetDataValidationsListFormula()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateFormulaListConstraint("A2");
+            CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            validation.SuppressDropDownArrow = (/*setter*/true);
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations(); // <-- works
+            Assert.AreEqual(1, list.Count);
+
+            HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+            Assert.AreEqual(true, dv.SuppressDropDownArrow);
+
+            DVConstraint c = dv.Constraint;
+            Assert.AreEqual(ValidationType.LIST, c.GetValidationType());
+            Assert.AreEqual("A2", c.Formula1);
+            Assert.AreEqual(null, c.Formula2);
+            Assert.AreEqual(double.NaN, c.Value1);
+            Assert.AreEqual(double.NaN, c.Value2);
+        }
+
+        [Test]
+        public void TestGetDataValidationsFormula()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateCustomConstraint("A2:A3");
+            CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations(); // <-- works
+            Assert.AreEqual(1, list.Count);
+
+            HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
+            DVConstraint c = dv.Constraint;
+            Assert.AreEqual(ValidationType.FORMULA, c.GetValidationType());
+            Assert.AreEqual("A2:A3", c.Formula1);
+            Assert.AreEqual(null, c.Formula2);
+            Assert.AreEqual(double.NaN, c.Value1);
+            Assert.AreEqual(double.NaN, c.Value2);
+        }
+
     }
 
 }

@@ -239,6 +239,82 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(CellType.Formula, cell.CellType);
             Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
             Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
+
+            // Add a formula that refers to one of the existing external workbooks
+            cell = wb.GetSheetAt(0).GetRow(1).CreateCell(40);
+            cell.CellFormula = (/*setter*/"Cost*[XRefCalcData.xls]MarkupSheet!$B$1");
+
+            // Check is was stored correctly
+            Assert.AreEqual("Cost*[XRefCalcData.xls]MarkupSheet!$B$1", cell.CellFormula);
+
+            // Check it Evaluates correctly
+            eval.EvaluateFormulaCell(cell);
+            Assert.AreEqual(24.60 * 1.8, cell.NumericCellValue);
+
+
+            // Try to add a formula for a new external workbook, won't be allowed to start
+            try
+            {
+                cell = wb.GetSheetAt(0).GetRow(1).CreateCell(42);
+                cell.CellFormula = (/*setter*/"[alt.xls]Sheet0!$A$1");
+                Assert.Fail("New workbook not linked, shouldn't be able to Add");
+            }
+            catch (Exception e) { }
+
+            // Link our new workbook
+            HSSFWorkbook alt = new HSSFWorkbook();
+            alt.CreateSheet().CreateRow(0).CreateCell(0).SetCellValue("In another workbook");
+            wb.LinkExternalWorkbook("alt.xls", alt);
+
+            // Now add a formula that refers to our new workbook
+            cell.CellFormula = (/*setter*/"[alt.xls]Sheet0!$A$1");
+            Assert.AreEqual("[alt.xls]Sheet0!$A$1", cell.CellFormula);
+
+            // Evaluate it, without a link to that workbook
+            try
+            {
+                eval.Evaluate(cell);
+                Assert.Fail("No cached value and no link to workbook, shouldn't Evaluate");
+            }
+            catch (Exception e) { }
+
+            // Add a link, check it does
+            HSSFFormulaEvaluator.SetupEnvironment(
+                    new String[] { "XRefCalc.xls", "XRefCalcData.xls", "alt.xls" },
+                    new HSSFFormulaEvaluator[] {
+                    eval,
+                    new HSSFFormulaEvaluator(wbData),
+                    new HSSFFormulaEvaluator(alt)
+              }
+            );
+            eval.EvaluateFormulaCell(cell);
+            Assert.AreEqual("In another workbook", cell.StringCellValue);
+
+
+            // Save and re-load
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb as HSSFWorkbook);
+            eval = new HSSFFormulaEvaluator(wb);
+            HSSFFormulaEvaluator.SetupEnvironment(
+                    new String[] { "XRefCalc.xls", "XRefCalcData.xls", "alt.xls" },
+                    new HSSFFormulaEvaluator[] {
+                    eval,
+                    new HSSFFormulaEvaluator(wbData),
+                    new HSSFFormulaEvaluator(alt)
+              }
+            );
+
+            // Check the one referring to the previously existing workbook behaves
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(40);
+            Assert.AreEqual("Cost*[XRefCalcData.xls]MarkupSheet!$B$1", cell.CellFormula);
+            eval.EvaluateFormulaCell(cell);
+            Assert.AreEqual(24.60 * 1.8, cell.NumericCellValue);
+
+            // Now check the newly Added reference
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(42);
+            Assert.AreEqual("[alt.xls]Sheet0!$A$1", cell.CellFormula);
+            eval.EvaluateFormulaCell(cell);
+            Assert.AreEqual("In another workbook", cell.StringCellValue);
+
         }
         [Test]
         public void TestSharedFormulas()

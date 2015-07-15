@@ -119,7 +119,7 @@ namespace NPOI.HSSF.UserModel
 
         internal override void AfterInsert(HSSFPatriarch patriarch)
         {
-            EscherAggregate agg = patriarch.getBoundAggregate();
+            EscherAggregate agg = patriarch.GetBoundAggregate();
             agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
             if (GetTextObjectRecord() != null)
             {
@@ -139,8 +139,8 @@ namespace NPOI.HSSF.UserModel
 
         internal override void AfterRemove(HSSFPatriarch patriarch)
         {
-            patriarch.getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
-            patriarch.getBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID));
+            patriarch.GetBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
+            patriarch.GetBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherTextboxRecord.RECORD_ID));
         }
 
 

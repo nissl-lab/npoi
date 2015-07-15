@@ -16,12 +16,10 @@
 ==================================================================== */
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using System.IO;
-    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
-    using TestCases.HSSF;
     using NPOI.SS.UserModel;
+    using NUnit.Framework;
+    using TestCases.HSSF;
     using TestCases.SS.UserModel;
     /**
      * Tests TestHSSFCellComment.
@@ -37,17 +35,17 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestDefaultShapeType()
+        public void DefaultShapeType()
         {
             HSSFComment comment = new HSSFComment((HSSFShape)null, new HSSFClientAnchor());
             Assert.AreEqual(HSSFSimpleShape.OBJECT_TYPE_COMMENT, comment.ShapeType);
         }
         /**
- *  HSSFCell#findCellComment should NOT rely on the order of records
- * when matching cells and their cell comments. The correct algorithm is to map
- */
+         *  HSSFCell#findCellComment should NOT rely on the order of records
+         * when matching cells and their cell comments. The correct algorithm is to map
+         */
         [Test]
-        public void Test47924()
+        public void Bug47924()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("47924.xls");
             ISheet sheet = wb.GetSheetAt(0);
@@ -78,5 +76,6 @@ namespace TestCases.HSSF.UserModel
             comment = cell.CellComment;
             Assert.AreEqual("c6", comment.String.String);
         }
+
     }
 }

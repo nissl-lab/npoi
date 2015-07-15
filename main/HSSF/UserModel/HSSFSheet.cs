@@ -49,6 +49,14 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public class HSSFSheet : NPOI.SS.UserModel.ISheet
     {
+        /**
+         * width of 1px in columns with default width in units of 1/256 of a character width
+         */
+        private static float PX_DEFAULT = 32.00f;
+        /**
+         * width of 1px in columns with overridden width in units of 1/256 of a character width
+         */
+        private static float PX_MODIFIED = 36.56f;
 
         /**
          * Used for compile-time optimization.  This is the initial size for the collection of
@@ -463,6 +471,47 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        private class RecordVisitor1 : RecordVisitor
+        {
+            private List<IDataValidation> hssfValidations;
+            private IWorkbook workbook;
+            public RecordVisitor1(List<IDataValidation> hssfValidations, IWorkbook workbook)
+            {
+                this.hssfValidations = hssfValidations;
+                this.workbook = workbook;
+                this.book = HSSFEvaluationWorkbook.Create(workbook);
+            }
+            private HSSFEvaluationWorkbook book;
+            public void VisitRecord(Record r)
+            {
+                if (!(r is DVRecord))
+                {
+                    return;
+                }
+                DVRecord dvRecord = (DVRecord)r;
+                CellRangeAddressList regions = dvRecord.CellRangeAddress.Copy();
+                DVConstraint constraint = DVConstraint.CreateDVConstraint(dvRecord, book);
+                HSSFDataValidation hssfDataValidation = new HSSFDataValidation(regions, constraint);
+                hssfDataValidation.ErrorStyle = (dvRecord.ErrorStyle);
+                hssfDataValidation.EmptyCellAllowed = (dvRecord.EmptyCellAllowed);
+                hssfDataValidation.SuppressDropDownArrow = (dvRecord.SuppressDropdownArrow);
+                hssfDataValidation.CreatePromptBox(dvRecord.PromptTitle, dvRecord.PromptText);
+                hssfDataValidation.ShowPromptBox = (dvRecord.ShowPromptOnCellSelected);
+                hssfDataValidation.CreateErrorBox(dvRecord.ErrorTitle, dvRecord.ErrorText);
+                hssfDataValidation.ShowErrorBox = (dvRecord.ShowErrorOnInvalidValue);
+                hssfValidations.Add(hssfDataValidation);
+            }
+        }
+
+        public List<IDataValidation> GetDataValidations()
+        {
+            DataValidityTable dvt = _sheet.GetOrCreateDataValidityTable();
+            List<IDataValidation> hssfValidations = new List<IDataValidation>();
+            RecordVisitor visitor = new RecordVisitor1(hssfValidations, Workbook);
+            dvt.VisitContainedRecords(visitor);
+            return hssfValidations;
+        }
+
         /// <summary>
         /// Creates a data validation object
         /// </summary>
@@ -520,6 +569,15 @@ namespace NPOI.HSSF.UserModel
         public int GetColumnWidth(int column)
         {
             return _sheet.GetColumnWidth(column);
+        }
+
+        public float GetColumnWidthInPixels(int column)
+        {
+            int cw = GetColumnWidth(column);
+            int def = DefaultColumnWidth * 256;
+            float px = (cw == def ? PX_DEFAULT : PX_MODIFIED);
+
+            return cw / px;
         }
 
         /// <summary>

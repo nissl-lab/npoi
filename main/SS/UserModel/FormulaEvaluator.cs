@@ -74,7 +74,7 @@ namespace NPOI.SS.UserModel
         * This is a helpful wrapper around looping over all cells, and 
         *  calling evaluateFormulaCell on each one.
          */
-        void EvaluateAll(); 
+        void EvaluateAll();
 
         /**
          * If cell Contains formula, it Evaluates the formula,
@@ -92,7 +92,9 @@ namespace NPOI.SS.UserModel
          *  and the result. If you want the cell Replaced with
          *  the result of the formula, use {@link #EvaluateInCell(Cell)}
          * @param cell The cell to Evaluate
-         * @return The type of the formula result (the cell's type remains as Cell.CELL_TYPE_FORMULA however)
+         * @return The type of the formula result, i.e. -1 if the cell is not a formula, 
+         *      or one of Cell.CELL_TYPE_NUMERIC, Cell.CELL_TYPE_STRING, Cell.CELL_TYPE_BOOLEAN, Cell.CELL_TYPE_ERROR
+         *      Note: the cell's type remains as Cell.CELL_TYPE_FORMULA however.
          */
         CellType EvaluateFormulaCell(ICell cell);
 
@@ -122,6 +124,24 @@ namespace NPOI.SS.UserModel
          * @param otherWorkbooks Map of workbook names (no square brackets) to an evaluator on that workbook
          */
         void SetupReferencedWorkbooks(Dictionary<string, IFormulaEvaluator> workbooks);
+
+        /**
+         * Whether to ignore missing references to external workbooks and
+         * use cached formula results in the main workbook instead.
+         * <p>
+         * In some cases external workbooks referenced by formulas in the main workbook are not available.
+         * With this method you can control how POI handles such missing references:
+         * <ul>
+         *     <li>by default ignoreMissingWorkbooks=false and POI throws 
+         *     {@link org.apache.poi.ss.formula.CollaboratingWorkbooksEnvironment.WorkbookNotFoundException}
+         *     if an external reference cannot be resolved</li>
+         *     <li>if ignoreMissingWorkbooks=true then POI uses cached formula result
+         *     that already exists in the main workbook</li>
+         * </ul>
+         *
+         * @param ignore whether to ignore missing references to external workbooks
+         */
+        bool IgnoreMissingWorkbooks { get; set; }
 
         /**
          * Perform detailed output of formula evaluation for next evaluation only?

@@ -726,6 +726,59 @@ namespace NPOI.XSSF.UserModel
         //    Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         //}
 
+        [Test]
+        public void TestXSSFSimpleShapeCausesNPE56514()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56514.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            List<XSSFShape> shapes = Drawing.GetShapes();
+            Assert.AreEqual(4, shapes.Count);
+
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+
+            shapes = Drawing.GetShapes();
+            Assert.AreEqual(4, shapes.Count);
+
+            /*        OutputStream stream = new FileOutputStream(new File("C:\\temp\\56514.xlsx"));
+                    try {
+                        wb.Write(stream);
+                    } finally {
+                        stream.Close();
+                    }*/
+        }
+
+
+        [Test]
+        public void TestBug56835CellComment()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+                XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+
+                // first comment works
+                IClientAnchor anchor = new XSSFClientAnchor(1, 1, 2, 2, 3, 3, 4, 4);
+                XSSFComment comment = Drawing.CreateCellComment(anchor) as XSSFComment;
+                Assert.IsNotNull(comment);
+
+                try
+                {
+                    Drawing.CreateCellComment(anchor);
+                    Assert.Fail("Should fail if we try to add the same comment for the same cell");
+                }
+                catch (ArgumentException e)
+                {
+                    // expected
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
     }
 }
 

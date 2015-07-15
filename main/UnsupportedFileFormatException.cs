@@ -14,30 +14,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-using NPOI.SS.Util;
-namespace NPOI.SS.UserModel.Charts
+namespace NPOI
 {
-
+    using System;
 
     /**
-     * Represents scatter charts serie.
-     * @author Roman Kashitsyn
+     * Base class of all the exceptions that POI throws in the event
+     * that it's given a file that isn't supported
      */
-
-    public interface IScatterChartSerie<Tx, Ty> : IChartSerie
+    public abstract class UnsupportedFileFormatException : ArgumentException
     {
+        private static long serialVersionUID = -8281969197282030046L;
 
-        /**
-      * @return data source used for X axis values
-      */
-        IChartDataSource<Tx> GetXValues();
-
-        /**
-         * @return data source used for Y axis values
-         */
-        IChartDataSource<Ty> GetYValues();
-
+        public UnsupportedFileFormatException(String s)
+            : base(s)
+        {
+        }
     }
-
 }

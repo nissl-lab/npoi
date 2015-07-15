@@ -290,7 +290,10 @@ namespace NPOI.OpenXml4Net.Util
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             //Disable entity parsing (to aviod xmlbombs, External Entity Attacks etc).
-            settings.ProhibitDtd = true;
+            //settings.ProhibitDtd = true;
+            settings.DtdProcessing = DtdProcessing.Prohibit;
+            //settings.MaxCharactersFromEntities = 4096;
+            //settings.ValidationType = ValidationType.DTD;
 
             XmlReader reader = XmlReader.Create(stream, settings);
             xmlDoc.Load(reader);

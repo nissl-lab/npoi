@@ -26,6 +26,8 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using System.Text;
     using NPOI.SS.UserModel;
+    using System.Collections.Generic;
+    using NPOI.HSSF.UserModel;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
@@ -432,6 +434,375 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, paneInfo.HorizontalSplitPosition);
             Assert.AreEqual(4, paneInfo.VerticalSplitLeftColumn);
             Assert.AreEqual(0, paneInfo.HorizontalSplitTopRow);
+        }
+
+        /** 
+         * Test hyperlinks
+         * open resulting file in excel, and check that there is a link to Google
+         */
+        [Test]
+        public void Bug15353()
+        {
+            String hyperlinkF = "HYPERLINK(\"http://google.com\",\"Google\")";
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("My sheet");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.CellFormula = (/*setter*/hyperlinkF);
+
+            Assert.AreEqual(hyperlinkF, cell.CellFormula);
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            sheet = wb.GetSheet("My Sheet");
+            row = sheet.GetRow(0);
+            cell = row.GetCell(0);
+
+            Assert.AreEqual(hyperlinkF, cell.CellFormula);
+        }
+
+        /**
+         * HLookup and VLookup with optional arguments 
+         */
+        [Test]
+        public void Bug51024()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+            IRow r2 = s.CreateRow(1);
+
+            r1.CreateCell(0).SetCellValue("v A1");
+            r2.CreateCell(0).SetCellValue("v A2");
+            r1.CreateCell(1).SetCellValue("v B1");
+
+            ICell c = r1.CreateCell(4);
+
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            c.SetCellFormula("VLOOKUP(\"v A1\", A1:B2, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("VLOOKUP(\"v A1\", A1:B2, 1, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("VLOOKUP(\"v A1\", A1:B2, 1, )");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+
+            c.SetCellFormula("HLOOKUP(\"v A1\", A1:B2, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("HLOOKUP(\"v A1\", A1:B2, 1, 1)");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+
+            c.SetCellFormula("HLOOKUP(\"v A1\", A1:B2, 1, )");
+            Assert.AreEqual("v A1", eval.Evaluate(c).StringValue);
+        }
+
+        [Test]
+        public void Stackoverflow23114397()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IDataFormat format = wb.GetCreationHelper().CreateDataFormat();
+
+            // How close the sizing should be, given that not all
+            //  systems will have quite the same fonts on them
+            float fontAccuracy = 0.22f;
+
+            // x%
+            ICellStyle iPercent = wb.CreateCellStyle();
+            iPercent.DataFormat = (/*setter*/format.GetFormat("0%"));
+            // x.x%
+            ICellStyle d1Percent = wb.CreateCellStyle();
+            d1Percent.DataFormat = (/*setter*/format.GetFormat("0.0%"));
+            // x.xx%
+            ICellStyle d2Percent = wb.CreateCellStyle();
+            d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
+
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+
+            for (int i = 0; i < 3; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(0);
+            }
+            for (int i = 3; i < 6; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(1);
+            }
+            for (int i = 6; i < 9; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(0.12345);
+            }
+            for (int i = 9; i < 12; i++)
+            {
+                r1.CreateCell(i, CellType.Numeric).SetCellValue(1.2345);
+            }
+            for (int i = 0; i < 12; i += 3)
+            {
+                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
+                r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
+                r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                s.AutoSizeColumn(i);
+            }
+
+            // Check the 0(.00)% ones
+            assertAlmostEquals(980, s.GetColumnWidth(0), fontAccuracy);
+            assertAlmostEquals(1400, s.GetColumnWidth(1), fontAccuracy);
+            assertAlmostEquals(1700, s.GetColumnWidth(2), fontAccuracy);
+
+            // Check the 100(.00)% ones
+            assertAlmostEquals(1500, s.GetColumnWidth(3), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(4), fontAccuracy);
+            assertAlmostEquals(2225, s.GetColumnWidth(5), fontAccuracy);
+
+            // Check the 12(.34)% ones
+            assertAlmostEquals(1225, s.GetColumnWidth(6), fontAccuracy);
+            assertAlmostEquals(1650, s.GetColumnWidth(7), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(8), fontAccuracy);
+
+            // Check the 123(.45)% ones
+            assertAlmostEquals(1500, s.GetColumnWidth(9), fontAccuracy);
+            assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
+            assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
+        }
+
+        /**
+         * =ISNUMBER(SEARCH("AM",A1)) Evaluation 
+         */
+        [Test]
+        public void Stackoverflow26437323()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+            IRow r2 = s.CreateRow(1);
+
+            // A1 is a number
+            r1.CreateCell(0).SetCellValue(1.1);
+            // B1 is a string, with the wanted text in it
+            r1.CreateCell(1).SetCellValue("This is text with AM in it");
+            // C1 is a string, with different text
+            r1.CreateCell(2).SetCellValue("This some other text");
+            // D1 is a blank cell
+            r1.CreateCell(3, CellType.Blank);
+            // E1 is null
+
+            // A2 will hold our test formulas
+            ICell cf = r2.CreateCell(0, CellType.Formula);
+
+
+            // First up, check that TRUE and ISLOGICAL both behave
+            cf.CellFormula = (/*setter*/"TRUE()");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISLOGICAL(TRUE())");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISLOGICAL(4)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+
+            // Now, check ISNUMBER / ISTEXT / ISNONTEXT
+            cf.CellFormula = (/*setter*/"ISNUMBER(A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNUMBER(E1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+
+            cf.CellFormula = (/*setter*/"ISTEXT(A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISTEXT(E1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.CellFormula = (/*setter*/"ISNONTEXT(E1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue); // Blank and Null the same
+
+
+            // Next up, SEARCH on its own
+            cf.SetCellFormula("SEARCH(\"am\", A1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+
+            cf.SetCellFormula("SEARCH(\"am\", B1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(19, (int)cf.NumericCellValue);
+
+            cf.SetCellFormula("SEARCH(\"am\", C1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+
+            cf.SetCellFormula("SEARCH(\"am\", D1)");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+
+
+            // Finally, bring it all together
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", A1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", B1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(true, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", C1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", D1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+
+            cf.SetCellFormula("ISNUMBER(SEARCH(\"am\", E1))");
+            cf = EvaluateCell(wb, cf);
+            Assert.AreEqual(false, cf.BooleanCellValue);
+        }
+        private ICell EvaluateCell(IWorkbook wb, ICell c)
+        {
+            ISheet s = c.Sheet;
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateFormulaCell(c);
+            return s.GetRow(c.RowIndex).GetCell(c.ColumnIndex);
+        }
+
+        /**
+     * Should be able to write then read formulas with references
+     *  to cells in other files, eg '[refs/airport.xls]Sheet1'!$A$2
+     *  or 'http://192.168.1.2/[blank.xls]Sheet1'!$A$1 .
+     * Additionally, if a reference to that file is provided, it should
+     *  be possible to Evaluate them too
+     * TODO Fix this to Evaluate for XSSF
+     * TODO Fix this to work at all for HSSF
+     */
+        //    [Test]
+        public void bug46670()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r1 = s.CreateRow(0);
+
+
+            // References to try
+            String ext = "xls";
+            if (!(wb is HSSFWorkbook)) ext += "x";
+            String refLocal = "'[test." + ext + "]Sheet1'!$A$2";
+            String refHttp = "'[http://example.com/test." + ext + "]Sheet1'!$A$2";
+            String otherCellText = "In Another Workbook";
+
+
+            // Create the references
+            ICell c1 = r1.CreateCell(0, CellType.Formula);
+            c1.CellFormula = (/*setter*/refLocal);
+
+            ICell c2 = r1.CreateCell(1, CellType.Formula);
+            c2.CellFormula = (/*setter*/refHttp);
+
+
+            // Check they were Set correctly
+            Assert.AreEqual(refLocal, c1.CellFormula);
+            Assert.AreEqual(refHttp, c2.CellFormula);
+
+
+            // Reload, and ensure they were serialised and read correctly
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0);
+            r1 = s.GetRow(0);
+
+            c1 = r1.GetCell(0);
+            c2 = r1.GetCell(1);
+            Assert.AreEqual(refLocal, c1.CellFormula);
+            Assert.AreEqual(refHttp, c2.CellFormula);
+
+
+            // Try to Evalutate, without giving a way to Get at the other file
+            try
+            {
+                EvaluateCell(wb, c1);
+                Assert.Fail("Shouldn't be able to Evaluate without the other file");
+            }
+            catch (Exception e) { }
+            try
+            {
+                EvaluateCell(wb, c2);
+                Assert.Fail("Shouldn't be able to Evaluate without the other file");
+            }
+            catch (Exception e) { }
+
+
+            // Set up references to the other file
+            IWorkbook wb2 = _testDataProvider.CreateWorkbook();
+            wb2.CreateSheet().CreateRow(1).CreateCell(0).SetCellValue(otherCellText);
+
+            Dictionary<String, IFormulaEvaluator> evaluators = new Dictionary<String, IFormulaEvaluator>();
+            evaluators.Add(refLocal, wb2.GetCreationHelper().CreateFormulaEvaluator());
+            evaluators.Add(refHttp, wb2.GetCreationHelper().CreateFormulaEvaluator());
+
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Evaluator.SetupReferencedWorkbooks(/*setter*/evaluators);
+
+
+            // Try to Evaluate, with the other file
+            Evaluator.EvaluateFormulaCell(c1);
+            Evaluator.EvaluateFormulaCell(c2);
+
+            Assert.AreEqual(otherCellText, c1.StringCellValue);
+            Assert.AreEqual(otherCellText, c2.StringCellValue);
         }
 
     }

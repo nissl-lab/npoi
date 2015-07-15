@@ -2895,6 +2895,16 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.prstClrField = value;
             }
         }
+
+        public bool IsSetSrgbClr()
+        {
+            return this.srgbClrField != null;
+        }
+
+        public bool IsSetSysClr()
+        {
+            return this.sysClrField != null;
+        }
     }
 
     [Serializable]

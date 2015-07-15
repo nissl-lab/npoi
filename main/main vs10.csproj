@@ -210,9 +210,11 @@
     <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\Delta.cs" />
+    <Compile Include="SS\Formula\Functions\EOMonth.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\FactDouble.cs" />
     <Compile Include="SS\Formula\Functions\Finance.cs" />
+    <Compile Include="SS\Formula\Functions\Fixed.cs" />
     <Compile Include="SS\Formula\Functions\Hex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
     <Compile Include="SS\Formula\Functions\Imaginary.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="SS\Formula\Functions\Roman.cs" />
     <Compile Include="SS\Formula\Functions\Slope.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
+    <Compile Include="SS\Formula\Functions\Text\Proper.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
     <Compile Include="SS\Formula\Functions\WeekNum.cs" />
     <Compile Include="SS\Formula\ISheetRange.cs" />
@@ -659,15 +662,19 @@
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
-    <Compile Include="SS\UserModel\Charts\ChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
-    <Compile Include="SS\UserModel\Charts\LineChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
     <Compile Include="SS\Format\SimpleFraction.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
+    <Compile Include="SS\Util\ImageUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnsupportedFileFormatException.cs" />
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
@@ -1084,7 +1091,7 @@
     <Compile Include="SS\UserModel\Charts\ManualLayout.cs" />
     <Compile Include="SS\UserModel\Charts\ManuallyPositionable.cs" />
     <Compile Include="SS\UserModel\Charts\ScatterChartData.cs" />
-    <Compile Include="SS\UserModel\Charts\ScatterChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ScatterChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ValueAxis.cs" />
     <Compile Include="SS\UserModel\ClientAnchor.cs" />
     <Compile Include="SS\UserModel\Color.cs" />
@@ -1207,6 +1214,7 @@
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />
     <Compile Include="SS\UserModel\FillPattern.cs" />
+    <Compile Include="Util\Units.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />

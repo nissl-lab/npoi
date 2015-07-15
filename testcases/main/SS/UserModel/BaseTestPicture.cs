@@ -17,6 +17,9 @@
 
 using NPOI.SS.UserModel;
 using NUnit.Framework;
+using System.Drawing;
+using NPOI.Util;
+using NPOI.SS.Util;
 namespace TestCases.SS.UserModel
 {
 
@@ -31,29 +34,35 @@ namespace TestCases.SS.UserModel
             _testDataProvider = testDataProvider;
         }
 
-        public void BaseTestResize(IClientAnchor referenceAnchor)
+        public void BaseTestResize(IPicture input, IPicture Compare, double scaleX, double scaleY)
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sh1 = wb.CreateSheet();
-            IDrawing p1 = sh1.CreateDrawingPatriarch();
-            ICreationHelper factory = wb.GetCreationHelper();
+            input.Resize(scaleX, scaleY);
 
-            byte[] pictureData = _testDataProvider.GetTestDataFileContent("logoKarmokar4.png");
-            int idx1 = wb.AddPicture(pictureData,PictureType.PNG);
-            IPicture picture = p1.CreatePicture(factory.CreateClientAnchor(), idx1);
-            picture.Resize();
-            IClientAnchor anchor1 = picture.GetPreferredSize();
+            IClientAnchor inpCA = input.ClientAnchor;
+            IClientAnchor cmpCA = Compare.ClientAnchor;
 
-            //assert against what would BiffViewer print if we insert the image in xls and dump the file
-            Assert.AreEqual(referenceAnchor.Col1, anchor1.Col1);
-            Assert.AreEqual(referenceAnchor.Row1, anchor1.Row1);
-            Assert.AreEqual(referenceAnchor.Col2, anchor1.Col2);
-            Assert.AreEqual(referenceAnchor.Row2, anchor1.Row2);
-            Assert.AreEqual(referenceAnchor.Dx1, anchor1.Dx1);
-            Assert.AreEqual(referenceAnchor.Dy1, anchor1.Dy1);
-            Assert.AreEqual(referenceAnchor.Dx2, anchor1.Dx2);
-            Assert.AreEqual(referenceAnchor.Dy2, anchor1.Dy2);
+            Size inpDim = ImageUtils.GetDimensionFromAnchor(input);
+            Size cmpDim = ImageUtils.GetDimensionFromAnchor(Compare);
+
+            double emuPX = Units.EMU_PER_PIXEL;
+
+            Assert.AreEqual(inpDim.Height, cmpDim.Height, emuPX * 6, "the image height differs");
+            Assert.AreEqual(inpDim.Width, cmpDim.Width, emuPX * 6, "the image width differs");
+            Assert.AreEqual(inpCA.Col1, cmpCA.Col1, "the starting column differs");
+            Assert.AreEqual(inpCA.Dx1, cmpCA.Dx1, 1, "the column x-offset differs");
+            Assert.AreEqual(inpCA.Dy1, cmpCA.Dy1, 1, "the column y-offset differs");
+            Assert.AreEqual(inpCA.Col2, cmpCA.Col2, "the ending columns differs");
+            // can't compare row heights because of variable test heights
+
+            input.Resize();
+            inpDim = ImageUtils.GetDimensionFromAnchor(input);
+
+            Size imgDim = input.GetImageDimension();
+
+            Assert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
+            Assert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
         }
+
     }
 }
 

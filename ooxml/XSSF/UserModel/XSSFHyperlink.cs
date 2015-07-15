@@ -244,9 +244,20 @@ namespace NPOI.XSSF.UserModel
             _ctHyperlink.@ref = ref1;
         }
 
+        protected void SetCellReference(CellReference ref1)
+        {
+            SetCellReference(ref1.FormatAsString());
+        }
+
+
         private CellReference buildCellReference()
         {
-            return new CellReference(_ctHyperlink.@ref);
+            String ref1 = _ctHyperlink.@ref;
+            if (ref1 == null)
+            {
+                ref1 = "A1";
+            }
+            return new CellReference(ref1);
         }
 
 
@@ -263,17 +274,15 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                _ctHyperlink.@ref =
-                    new CellReference(
-                            FirstRow, value
-                    ).FormatAsString();
+                SetCellReference(new CellReference(FirstRow, value));
             }
         }
 
 
         /**
          * Return the column of the last cell that Contains the hyperlink
-         *
+         * For XSSF, a Hyperlink may only reference one cell
+         * 
          * @return the 0-based column of the last cell that Contains the hyperlink
          */
         public int LastColumn
@@ -301,16 +310,14 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                _ctHyperlink.@ref =
-                    new CellReference(
-                            value, FirstColumn
-                    ).FormatAsString();
+                SetCellReference(new CellReference(value, FirstColumn));
             }
         }
 
 
         /**
          * Return the row of the last cell that Contains the hyperlink
+         * For XSSF, a Hyperlink may only reference one cell
          *
          * @return the 0-based row of the last cell that Contains the hyperlink
          */

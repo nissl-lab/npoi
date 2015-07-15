@@ -180,7 +180,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(OPCPackage pkg)
             : base(pkg)
         {
-
+            BeforeDocumentRead();
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
@@ -202,7 +202,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(Stream is1)
             : base(PackageHelper.Open(is1))
         {
-
+            BeforeDocumentRead();
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
@@ -266,6 +266,20 @@ namespace NPOI.XSSF.UserModel
             : this(OpenPackage(path))
         {
 
+        }
+
+        protected void BeforeDocumentRead()
+        {
+            // Ensure it isn't a XLSB file, which we don't support
+            if (CorePart.ContentType.Equals(XSSFRelation.XLSB_BINARY_WORKBOOK.ContentType))
+            {
+                throw new XLSBUnsupportedException();
+            }
+
+            // Create arrays for parts attached to the workbook itself
+            Console.WriteLine("XSSFPivotTable is not implemented");
+            //pivotTables = new List<XSSFPivotTable>();
+            //pivotCaches = new List<CTPivotCache>();
         }
 
         WorkbookDocument doc = null;
@@ -1685,7 +1699,19 @@ namespace NPOI.XSSF.UserModel
             return mapInfo;
         }
 
-
+        /**
+         * Adds the External Link Table part and relations required to allow formulas 
+         *  referencing the specified external workbook to be added to this one. Allows
+         *  formulas such as "[MyOtherWorkbook.xlsx]Sheet3!$A$5" to be added to the 
+         *  file, for workbooks not already linked / referenced.
+         *
+         * @param name The name the workbook will be referenced as in formulas
+         * @param workbook The open workbook to fetch the link required information from
+         */
+        public int LinkExternalWorkbook(String name, IWorkbook workbook)
+        {
+            throw new RuntimeException("Not Implemented - see bug #57184");
+        }
         /**
          * Specifies a bool value that indicates whether structure of workbook is locked. <br/>
          * A value true indicates the structure of the workbook is locked. Worksheets in the workbook can't be Moved,

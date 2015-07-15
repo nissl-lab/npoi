@@ -102,6 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DDF\TestEscherDump.cs" />
     <Compile Include="HPSF\Basic\TestClassID.cs" />
     <Compile Include="HPSF\Basic\TestHPSFBugs.cs" />
     <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
     <Compile Include="SS\Formula\Eval\TestMultiSheetEval.cs" />
     <Compile Include="SS\Formula\Functions\CountifsTests.cs" />
+    <Compile Include="SS\Formula\Functions\RefValueImplementation.cs" />
     <Compile Include="SS\Formula\Functions\TestCode.cs" />
     <Compile Include="SS\Formula\Functions\TestCodeFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestComplex.cs" />
@@ -169,7 +171,10 @@
     <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestEOMonth.cs" />
     <Compile Include="SS\Formula\Functions\TestFactDoubleFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestFixed.cs" />
+    <Compile Include="SS\Formula\Functions\TestFixedFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestHex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\TestImaginaryFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestImRealFunctionsFromSpreadsheet.cs" />
@@ -194,6 +199,7 @@
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
     <Compile Include="SS\UserModel\Charts\TestDataSources.cs" />
     <Compile Include="SS\UserModel\TestFractionFormat.cs" />
+    <Compile Include="SS\Util\TestSheetUtil.cs" />
     <Compile Include="Util\TestBitField.cs" />
     <Compile Include="Util\TestByteField.cs" />
     <Compile Include="Util\TestHexDump.cs" />

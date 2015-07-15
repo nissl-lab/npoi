@@ -73,13 +73,19 @@ namespace NPOI.XSSF.UserModel.Extensions
             //color RGB will be extracted from theme
             XSSFColor foregroundColor = (XSSFColor)((XSSFCellStyle)cellWithThemeColor.CellStyle).FillForegroundColorColor;
             byte[] rgb = foregroundColor.GetRgb();
-            Assert.AreEqual(rgb[0], 238);
-            Assert.AreEqual(rgb[1], 236);
-            Assert.AreEqual(rgb[2], 225);
             byte[] rgbWithTint = foregroundColor.GetRgbWithTint();
-            Assert.AreEqual(rgbWithTint[0], 244);
-            Assert.AreEqual(rgbWithTint[1], 243);
-            Assert.AreEqual(rgbWithTint[2], 236);
+            // Dk2
+            Assert.AreEqual(rgb[0], 31);
+            Assert.AreEqual(rgb[1], 73);
+            Assert.AreEqual(rgb[2], 125);
+            // Dk2, lighter 40% (tint is about 0.39998)
+            // 31 * (1.0 - 0.39998) + (255 - 255 * (1.0 - 0.39998)) = 120.59552 => 120 (byte)
+            // 73 * (1.0 - 0.39998) + (255 - 255 * (1.0 - 0.39998)) = 145.79636 => -111 (byte)
+            // 125 * (1.0 - 0.39998) + (255 - 255 * (1.0 - 0.39998)) = 176.99740 => -80 (byte)
+            Assert.AreEqual(rgbWithTint[0], 120);
+            Assert.AreEqual((sbyte)rgbWithTint[1], -111);
+            Assert.AreEqual((sbyte)rgbWithTint[2], -80);
+
         }
     }
 

@@ -1351,6 +1351,12 @@ using NPOI.SS.Formula.Eval;
                   factory.CreateRichTextString("I like this cell. It's my favourite."));
             comment1.Author = ("Bob T. Fish");
 
+            anchor = factory.CreateClientAnchor();
+            anchor.Col1=(0);
+            anchor.Col2=(4);
+            anchor.Row1=(1);
+            anchor.Row2=(1);
+
             IComment comment2 = Drawing.CreateCellComment(anchor);
             comment2.String = (
                   factory.CreateRichTextString("This is much less fun..."));
@@ -1861,6 +1867,169 @@ using NPOI.SS.Formula.Eval;
             NumberEval eval = new NumberEval(Math.Floor(excelDate));
             //CheckValue(excel, eval.StringValue + ".0");
             CheckValue(excel, eval.StringValue);
+        }
+
+        /**
+         * New hyperlink with no initial cell reference, still need
+         *  to be able to change it
+         */
+        [Test]
+        public void TestBug56527()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFCreationHelper creationHelper = wb.GetCreationHelper() as XSSFCreationHelper;
+            XSSFHyperlink hyperlink;
+
+            // Try with a cell reference
+            hyperlink = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+            sheet.AddHyperlink(hyperlink);
+            hyperlink.Address = (/*setter*/"http://myurl");
+            hyperlink.SetCellReference(/*setter*/"B4");
+            Assert.AreEqual(3, hyperlink.FirstRow);
+            Assert.AreEqual(1, hyperlink.FirstColumn);
+            Assert.AreEqual(3, hyperlink.LastRow);
+            Assert.AreEqual(1, hyperlink.LastColumn);
+
+            // Try with explicit rows / columns
+            hyperlink = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+            sheet.AddHyperlink(hyperlink);
+            hyperlink.Address = (/*setter*/"http://myurl");
+            hyperlink.FirstRow = (/*setter*/5);
+            hyperlink.FirstColumn = (/*setter*/3);
+
+            Assert.AreEqual(5, hyperlink.FirstRow);
+            Assert.AreEqual(3, hyperlink.FirstColumn);
+            Assert.AreEqual(5, hyperlink.LastRow);
+            Assert.AreEqual(3, hyperlink.LastColumn);
+        }
+
+        /**
+         * Shifting rows with a formula that references a 
+         * function in another file
+         */
+        [Test]
+        public void Bug56502()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56502.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+
+            ICell cFunc = sheet.GetRow(3).GetCell(0);
+            Assert.AreEqual("[1]!LUCANET(\"Ist\")", cFunc.CellFormula);
+            ICell cRef = sheet.GetRow(3).CreateCell(1);
+            cRef.CellFormula = (/*setter*/"A3");
+
+            // Shift it down one row
+            sheet.ShiftRows(1, sheet.LastRowNum, 1);
+
+            // Check the new formulas: Function won't Change, Reference will
+            cFunc = sheet.GetRow(4).GetCell(0);
+            Assert.AreEqual("[1]!LUCANET(\"Ist\")", cFunc.CellFormula);
+            cRef = sheet.GetRow(4).GetCell(1);
+            Assert.AreEqual("A4", cRef.CellFormula);
+        }
+
+        [Test]
+        public void Bug54764()
+        {
+            OPCPackage pkg = XSSFTestDataSamples.OpenSamplePackage("54764.xlsx");
+
+            // Check the core properties - will be found but empty, due
+            //  to the expansion being too much to be considered valid
+            POIXMLProperties props = new POIXMLProperties(pkg);
+            Assert.AreEqual(null, props.CoreProperties.Title);
+            Assert.AreEqual(null, props.CoreProperties.Subject);
+            Assert.AreEqual(null, props.CoreProperties.Description);
+
+            // Now check the spreadsheet itself
+
+            try
+            {
+                new XSSFWorkbook(pkg);
+                Assert.Fail("Should fail as too much expansion occurs");
+            }
+            catch (POIXMLException)
+            {
+                //Expected
+            }
+
+            // Try with one with the entities in the Content Types
+            try
+            {
+                XSSFTestDataSamples.OpenSamplePackage("54764-2.xlsx");
+                Assert.Fail("Should fail as too much expansion occurs");
+            }
+            catch (Exception)
+            {
+                // Expected
+            }
+
+            // Check we can still parse valid files after all that
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
+            Assert.AreEqual(3, wb.NumberOfSheets);
+        }
+
+        /**
+     * CTDefinedNamesImpl should be included in the smaller
+     *  poi-ooxml-schemas jar
+     */
+        [Test]
+        public void Bug57176()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57176.xlsx");
+            CT_DefinedNames definedNames = wb.GetCTWorkbook().definedNames;
+            List<CT_DefinedName> definedNameList = definedNames.definedName;
+            foreach (CT_DefinedName defName in definedNameList)
+            {
+                Assert.IsNotNull(defName.name);
+                Assert.IsNotNull(defName.Value);
+            }
+            Assert.AreEqual("TestDefinedName", definedNameList[(0)].name);
+        }
+
+        /**
+         * .xlsb files are not supported, but we should generate a helpful
+         *  error message if given one
+         */
+        [Test]
+        public void Bug56800_xlsb()
+        {
+            // Can be opened at the OPC level
+            OPCPackage pkg = XSSFTestDataSamples.OpenSamplePackage("Simple.xlsb");
+
+            // XSSF Workbook gives helpful error
+            try
+            {
+                new XSSFWorkbook(pkg);
+                Assert.Fail(".xlsb files not supported");
+            }
+            catch (XLSBUnsupportedException e)
+            {
+                // Good, detected and warned
+            }
+
+            // Workbook Factory gives helpful error on package
+            try
+            {
+                WorkbookFactory.Create(pkg);
+                Assert.Fail(".xlsb files not supported");
+            }
+            catch (XLSBUnsupportedException e)
+            {
+                // Good, detected and warned
+            }
+
+            // Workbook Factory gives helpful error on file
+            FileInfo xlsbFile = HSSFTestDataSamples.GetSampleFile("Simple.xlsb");
+            try
+            {
+                WorkbookFactory.Create(xlsbFile.FullName);
+                Assert.Fail(".xlsb files not supported");
+            }
+            catch (XLSBUnsupportedException e)
+            {
+                // Good, detected and warned
+            }
         }
 
         private void CheckValue(XSSFWorkbook excel, String expect)

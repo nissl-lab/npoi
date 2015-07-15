@@ -112,11 +112,43 @@ namespace NPOI.POIFS.FileSystem
             _property_table.StartBlock = (POIFSConstants.END_OF_CHAIN);
         }
 
+        /**
+         * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
+         *  creating from an <tt>InputStream</tt>.</p>
+         *  
+         * <p>Note that with this constructor, you will need to call {@link #close()}
+         *  when you're done to have the underlying file closed, as the file is
+         *  kept open during normal operation to read the data out.</p> 
+         *  
+         * @param file the File from which to read or read/write the data
+         * @param readOnly whether the POIFileSystem will only be used in read-only mode
+         *
+         * @exception IOException on errors reading, or on invalid data
+         */
         public NPOIFSFileSystem(FileInfo file, bool readOnly)
             : this(null, file, readOnly, true)
         {
             ;
         }
+        /**
+         * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses 
+         *  less memory than creating from an <tt>InputStream</tt>. The stream will
+        *  be used in read-only mode.</p>
+         *  
+         * <p>Note that with this constructor, you will need to call {@link #close()}
+         *  when you're done to have the underlying Channel closed, as the channel is
+         *  kept open during normal operation to read the data out.</p> 
+         *  
+         * @param channel the FileChannel from which to read the data
+         *
+         * @exception IOException on errors reading, or on invalid data
+         */
+        public NPOIFSFileSystem(FileStream channel)
+            : this(channel, true)
+        {
+
+        }
+
         /**
          * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses 
          *  less memory than creating from an <tt>InputStream</tt>.</p>
@@ -125,14 +157,15 @@ namespace NPOI.POIFS.FileSystem
          *  when you're done to have the underlying Channel closed, as the channel is
          *  kept open during normal operation to read the data out.</p> 
          *  
-         * @param channel the FileChannel from which to read and write the data
+         * @param channel the FileChannel from which to read or read/write the data
+         * @param readOnly whether the POIFileSystem will only be used in read-only mode
          *
          * @exception IOException on errors reading, or on invalid data
          */
-        public NPOIFSFileSystem(FileStream channel)
-            : this(channel, null, true, true)
+        public NPOIFSFileSystem(FileStream channel, bool readOnly)
+            : this(channel, null, readOnly, false)
         {
-
+            ;
         }
         public NPOIFSFileSystem(FileStream channel, FileInfo srcFile, bool readOnly, bool closeChannelOnError)
             : this(false)

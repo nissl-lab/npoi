@@ -190,5 +190,7 @@ namespace NPOI.SS.UserModel
         short Index { get; }
 
         short Boldweight { get; set; }
+
+        bool IsBold { get; set; }
     }
 }

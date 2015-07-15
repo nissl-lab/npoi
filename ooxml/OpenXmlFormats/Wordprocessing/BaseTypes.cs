@@ -530,6 +530,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.valField = value;
             }
         }
+
+        public static CT_MacroName Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_MacroName ctObj = new CT_MacroName();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<w:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "w:val", this.val, true);
+            sw.Write("/>");
+        }
     }
 
     /// <summary>

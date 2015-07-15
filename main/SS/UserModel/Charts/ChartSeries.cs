@@ -11,7 +11,7 @@ namespace NPOI.SS.UserModel.Charts
         CellReference
     }
 
-    public interface IChartSerie
+    public interface IChartSeries
     {
         /**
  * Sets the title of the series as a string literal.

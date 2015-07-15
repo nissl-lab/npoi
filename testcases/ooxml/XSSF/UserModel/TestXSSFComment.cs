@@ -15,15 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.Util;
-using NUnit.Framework;
-using NPOI.XSSF.Model;
 using System;
-using TestCases.SS.UserModel;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.Model;
+using NUnit.Framework;
+using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel
          * Test properties of a newly constructed comment
          */
         [Test]
-        public void TestConstructor()
+        public void Constructor()
         {
             CommentsTable sheetComments = new CommentsTable();
             Assert.IsNotNull(sheetComments.GetCTComments().commentList);
@@ -64,7 +64,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(false, comment.Visible);
         }
         [Test]
-        public void TestGetSetCol()
+        public void GetSetCol()
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0));
         }
         [Test]
-        public void TestGetSetRow()
+        public void GetSetRow()
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
@@ -102,7 +102,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0));
         }
         [Test]
-        public void TestSetString()
+        public void SetString()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sh = (XSSFSheet)wb.CreateSheet();
@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
-        public void TestAuthor()
+        public void Author()
         {
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.NewComment("A1");

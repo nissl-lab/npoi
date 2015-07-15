@@ -109,7 +109,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "DURATION", null);
             r(m, "EDATE", EDate.Instance);
             r(m, "EFFECT", null);
-            r(m, "EOMONTH", null);
+            r(m, "EOMONTH", EOMonth.instance);
             r(m, "ERF", null);
             r(m, "ERFC", null);
             r(m, "FACTDOUBLE", FactDouble.instance);

@@ -662,7 +662,17 @@ namespace NPOI.HSSF.Record
          */
         private static short GetSid(List<RecordBase> records, int loc)
         {
-            return ((Record)records[(loc)]).Sid;
+            RecordBase record = records[(loc)];
+            if (record is Record)
+            {
+                return ((Record)record).Sid;
+            }
+            else
+            {
+                // Aggregates don't have a sid
+                // We could step into them, but for these needs we don't care
+                return -1;
+            }
         }
 
 
@@ -1278,6 +1288,7 @@ namespace NPOI.HSSF.Record
             EscherSpRecord sp = (EscherSpRecord)spContainer.GetChildById(EscherSpRecord.RECORD_ID);
             sp.ShapeId = (shapeId);
         }
+
         public void RemoveTailRecord(NoteRecord note)
         {
             tailRec.Remove(note.ShapeId);

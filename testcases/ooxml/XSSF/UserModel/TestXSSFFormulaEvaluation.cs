@@ -177,6 +177,48 @@ namespace NPOI.XSSF.UserModel
             //Assert.AreEqual("142.0", evaluator.Evaluate(cXSL_gNR).FormatAsString());
             Assert.AreEqual("142", evaluator.Evaluate(cXSL_gNR).FormatAsString());
 
+            // Add another formula referencing these workbooks
+            ICell cXSL_cell2 = rXSL.CreateCell(40);
+            cXSL_cell2.CellFormula=(/*setter*/"[56737.xls]Uses!$C$1");
+            // TODO Shouldn't it become [2] like the others?
+            Assert.AreEqual("[56737.xls]Uses!$C$1", cXSL_cell2.CellFormula);
+            Assert.AreEqual("\"Hello!\"",  evaluator.Evaluate(cXSL_cell2).FormatAsString());
+        
+        
+            // Now add a formula that refers to yet another (different) workbook
+            // Won't work without the workbook being linked
+            ICell cXSLX_nw_cell = rXSLX.CreateCell(42);
+            try {
+                cXSLX_nw_cell.CellFormula=(/*setter*/"[alt.xlsx]Sheet1!$A$1");
+                Assert.Fail("New workbook not linked, shouldn't be able to Add");
+            } catch (Exception e) {}
+        
+            // Link and re-try
+            IWorkbook alt = new XSSFWorkbook();
+            alt.CreateSheet().CreateRow(0).CreateCell(0).SetCellValue("In another workbook");
+        // TODO Implement the rest of this, see bug #57184
+/*
+        wb.LinkExternalWorkbook("alt.xlsx", alt);
+                
+        cXSLX_nw_cell.SetCellFormula"[alt.xlsx]Sheet1!$A$1");
+        // Check it - TODO Is this correct? Or should it become [3]Sheet1!$A$1 ?
+        Assert.AreEqual("[alt.xlsx]Sheet1!$A$1", cXSLX_nw_cell.CellFormula);
+        
+        // Evaluate it, without a link to that workbook
+        try {
+            Evaluator.Evaluate(cXSLX_nw_cell);
+            Assert.Fail("No cached value and no link to workbook, shouldn't Evaluate");
+        } catch(Exception e) {}
+        
+        // Add a link, check it does
+        Evaluators.Put("alt.xlsx", alt.GetCreationHelper().CreateFormulaEvaluator());
+        Evaluator.SetupReferencedWorkbooks(evaluators);
+        
+        Evaluator.Evaluate(cXSLX_nw_cell);
+        Assert.AreEqual("In another workbook", cXSLX_nw_cell.StringCellValue);
+*/
+
+
         }
 
         /**
@@ -312,48 +354,251 @@ namespace NPOI.XSSF.UserModel
         public void TestMultisheetFormulaEval()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet1 = wb.CreateSheet("Sheet1") as XSSFSheet;
-            XSSFSheet sheet2 = wb.CreateSheet("Sheet2") as XSSFSheet;
-            XSSFSheet sheet3 = wb.CreateSheet("Sheet3") as XSSFSheet;
+            try
+            {
+                XSSFSheet sheet1 = wb.CreateSheet("Sheet1") as XSSFSheet;
+                XSSFSheet sheet2 = wb.CreateSheet("Sheet2") as XSSFSheet;
+                XSSFSheet sheet3 = wb.CreateSheet("Sheet3") as XSSFSheet;
 
-            // sheet1 A1
-            XSSFCell cell = sheet1.CreateRow(0).CreateCell(0) as XSSFCell;
-            cell.SetCellType(CellType.Numeric);
-            cell.SetCellValue(1.0);
+                // sheet1 A1
+                XSSFCell cell = sheet1.CreateRow(0).CreateCell(0) as XSSFCell;
+                cell.SetCellType(CellType.Numeric);
+                cell.SetCellValue(1.0);
 
-            // sheet2 A1
-            cell = sheet2.CreateRow(0).CreateCell(0) as XSSFCell;
-            cell.SetCellType(CellType.Numeric);
-            cell.SetCellValue(1.0);
+                // sheet2 A1
+                cell = sheet2.CreateRow(0).CreateCell(0) as XSSFCell;
+                cell.SetCellType(CellType.Numeric);
+                cell.SetCellValue(1.0);
 
-            // sheet2 B1
-            cell = sheet2.GetRow(0).CreateCell(1) as XSSFCell;
-            cell.SetCellType(CellType.Numeric);
-            cell.SetCellValue(1.0);
+                // sheet2 B1
+                cell = sheet2.GetRow(0).CreateCell(1) as XSSFCell;
+                cell.SetCellType(CellType.Numeric);
+                cell.SetCellValue(1.0);
 
-            // sheet3 A1
-            cell = sheet3.CreateRow(0).CreateCell(0) as XSSFCell;
-            cell.SetCellType(CellType.Numeric);
-            cell.SetCellValue(1.0);
+                // sheet3 A1
+                cell = sheet3.CreateRow(0).CreateCell(0) as XSSFCell;
+                cell.SetCellType(CellType.Numeric);
+                cell.SetCellValue(1.0);
 
-            // sheet1 A2 formulae
-            cell = sheet1.CreateRow(1).CreateCell(0) as XSSFCell;
-            cell.SetCellType(CellType.Formula);
-            cell.CellFormula = (/*setter*/"SUM(Sheet1:Sheet3!A1)");
+                // sheet1 A2 formulae
+                cell = sheet1.CreateRow(1).CreateCell(0) as XSSFCell;
+                cell.SetCellType(CellType.Formula);
+                cell.CellFormula = (/*setter*/"SUM(Sheet1:Sheet3!A1)");
 
-            // sheet1 A3 formulae
-            cell = sheet1.CreateRow(2).CreateCell(0) as XSSFCell;
-            cell.SetCellType(CellType.Formula);
-            cell.CellFormula = (/*setter*/"SUM(Sheet1:Sheet3!A1:B1)");
+                // sheet1 A3 formulae
+                cell = sheet1.CreateRow(2).CreateCell(0) as XSSFCell;
+                cell.SetCellType(CellType.Formula);
+                cell.CellFormula = (/*setter*/"SUM(Sheet1:Sheet3!A1:B1)");
 
-            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+                wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
-            cell = sheet1.GetRow(1).GetCell(0) as XSSFCell;
-            Assert.AreEqual(3.0, cell.NumericCellValue);
+                cell = sheet1.GetRow(1).GetCell(0) as XSSFCell;
+                Assert.AreEqual(3.0, cell.NumericCellValue);
 
-            cell = sheet1.GetRow(2).GetCell(0) as XSSFCell;
-            Assert.AreEqual(4.0, cell.NumericCellValue);
+                cell = sheet1.GetRow(2).GetCell(0) as XSSFCell;
+                Assert.AreEqual(4.0, cell.NumericCellValue);
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
+
+        [Test]
+        public void TestBug55843()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+                cellA2.SetCellFormula("IF(B1=0,\"\",((ROW()-ROW(A$1))*12))");
+                CellValue Evaluate = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(Evaluate);
+                Assert.AreEqual("12", Evaluate.FormatAsString());
+
+                cellA2.CellFormula = (/*setter*/"IF(NOT(B1=0),((ROW()-ROW(A$1))*12),\"\")");
+                CellValue EvaluateN = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(EvaluateN);
+
+                Assert.AreEqual(Evaluate.ToString(), EvaluateN.ToString());
+                Assert.AreEqual("12", EvaluateN.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug55843a()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+                cellA2.SetCellFormula("IF(B1=0,\"\",((ROW(A$1))))");
+                CellValue Evaluate = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(Evaluate);
+                Assert.AreEqual("1", Evaluate.FormatAsString());
+
+                cellA2.CellFormula = (/*setter*/"IF(NOT(B1=0),((ROW(A$1))),\"\")");
+                CellValue EvaluateN = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(EvaluateN);
+
+                Assert.AreEqual(Evaluate.ToString(), EvaluateN.ToString());
+                Assert.AreEqual("1", EvaluateN.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug55843b()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+
+                cellA2.SetCellFormula("IF(B1=0,\"\",((ROW())))");
+                CellValue Evaluate = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(Evaluate);
+                Assert.AreEqual("2", Evaluate.FormatAsString());
+
+                cellA2.CellFormula = (/*setter*/"IF(NOT(B1=0),((ROW())),\"\")");
+                CellValue EvaluateN = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(EvaluateN);
+
+                Assert.AreEqual(Evaluate.ToString(), EvaluateN.ToString());
+                Assert.AreEqual("2", EvaluateN.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug55843c()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+
+                cellA2.CellFormula = (/*setter*/"IF(NOT(B1=0),((ROW())))");
+                CellValue EvaluateN = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(EvaluateN);
+                Assert.AreEqual("2", EvaluateN.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug55843d()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+
+                cellA2.CellFormula = (/*setter*/"IF(NOT(B1=0),((ROW())),\"\")");
+                CellValue EvaluateN = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(EvaluateN);
+                Assert.AreEqual("2", EvaluateN.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug55843e()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+
+                cellA2.SetCellFormula("IF(B1=0,\"\",((ROW())))");
+                CellValue Evaluate = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(Evaluate);
+                Assert.AreEqual("2", Evaluate.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+
+        [Test]
+        public void TestBug55843f()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet("test") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFRow row2 = sheet.CreateRow(1) as XSSFRow;
+                XSSFCell cellA2 = row2.CreateCell(0, CellType.Formula) as XSSFCell;
+                XSSFCell cellB1 = row.CreateCell(1, CellType.Numeric) as XSSFCell;
+                cellB1.SetCellValue(10);
+                XSSFFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+
+                cellA2.SetCellFormula("IF(B1=0,\"\",IF(B1=10,3,4))");
+                CellValue Evaluate = formulaEvaluator.Evaluate(cellA2);
+                System.Console.WriteLine(Evaluate);
+                Assert.AreEqual("3", Evaluate.FormatAsString());
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
 
     }
 

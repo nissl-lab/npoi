@@ -22,7 +22,9 @@ using TestCases.OpenXml4Net;
 using NUnit.Framework;
 using NPOI.SS.Util;
 using System;
+using NPOI.OpenXmlFormats;
 using NPOI.OpenXml4Net.OPC.Internal;
+using NPOI.XSSF.UserModel;
 namespace TestCases.OPC
 {
 
@@ -217,6 +219,26 @@ namespace TestCases.OPC
             // Check
             Assert.AreEqual("Stefan Kopf", props.GetCreatorProperty());
         }
+
+        [Test]
+        public void TestListOfCustomProperties()
+        {
+            FileInfo inp = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("ExcelWithAttachments.xlsm");
+            OPCPackage pkg = OPCPackage.Open(inp, PackageAccess.READ);
+            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+
+            Assert.IsNotNull(wb.GetProperties());
+            Assert.IsNotNull(wb.GetProperties().CustomProperties);
+
+            foreach (CT_Property prop in wb.GetProperties().CustomProperties.GetUnderlyingProperties().GetPropertyList())
+            {
+                Assert.IsNotNull(prop);
+            }
+
+            wb.Close();
+            pkg.Close();
+        }
+
     }
 }
 

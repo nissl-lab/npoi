@@ -39,11 +39,11 @@
 
             IChartDataSource<String> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
             IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
-            ILineChartSerie<string, double> serie = lineChartData.AddSerie(xs, ys);
+            ILineChartSeries<string, double> series = lineChartData.AddSeries(xs, ys);
 
-            Assert.IsNotNull(serie);
+            Assert.IsNotNull(series);
             Assert.AreEqual(1, lineChartData.GetSeries().Count);
-            Assert.IsTrue(lineChartData.GetSeries().Contains(serie));
+            Assert.IsTrue(lineChartData.GetSeries().Contains(series));
 
             chart.Plot(lineChartData, bottomAxis, leftAxis);
         }

@@ -97,15 +97,19 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(255, rgb3.GetARgb()[3]);
 
             // Tint doesn't have the alpha
+            // tint = -0.34999
+            // 255 * (1 + tint) = 165 truncated
+            // or (byte) -91 (which is 165 - 256)
             Assert.AreEqual(3, rgb3.GetRgbWithTint().Length);
-            Assert.AreEqual(0, rgb3.GetRgbWithTint()[0]);
-            Assert.AreEqual(0, rgb3.GetRgbWithTint()[1]);
-            Assert.AreEqual(0, rgb3.GetRgbWithTint()[2]);
+            Assert.AreEqual(-91, (sbyte)rgb3.GetRgbWithTint()[0]);
+            Assert.AreEqual(-91, (sbyte)rgb3.GetRgbWithTint()[1]);
+            Assert.AreEqual(-91, (sbyte)rgb3.GetRgbWithTint()[2]);
 
             // Set the colour to black, will Get translated internally
             // (Excel stores 3 colour white and black wrong!)
-            rgb3.SetRgb(new byte[] { 255, 255, 255 });
-            Assert.AreEqual("FFFFFFFF", rgb3.GetARGBHex());
+            // Set the color to black (no theme).
+            rgb3.SetRgb(new byte[] { 0, 0, 0 });
+            Assert.AreEqual("FF000000", rgb3.GetARGBHex());
             Assert.AreEqual(0, rgb3.GetCTColor().GetRgb()[0]);
             Assert.AreEqual(0, rgb3.GetCTColor().GetRgb()[1]);
             Assert.AreEqual(0, rgb3.GetCTColor().GetRgb()[2]);

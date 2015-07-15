@@ -55,5 +55,11 @@ namespace NPOI.SS.UserModel
          */
         IRichTextString String { get; set; }
 
+        /**
+         * Return defines position of this anchor in the sheet.
+         *
+         * @return defines position of this anchor in the sheet
+         */
+        IClientAnchor ClientAnchor { get; }
     }
 }

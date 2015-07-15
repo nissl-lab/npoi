@@ -779,6 +779,76 @@ namespace NPOI.OpenXmlFormats
         {
             return this.slidesFieldSpecified;
         }
+
+        public bool IsSetHyperlinkBase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTotalTime()
+        {
+            return this.totalTimeFieldSpecified;
+        }
+
+        public bool IsSetParagraphs()
+        {
+            return this.paragraphsFieldSpecified;
+        }
+
+        public bool IsSetLines()
+        {
+            return this.linesFieldSpecified;
+        }
+
+        public bool IsSetTemplate()
+        {
+            return this.templateField != null;
+        }
+
+        public bool IsSetManager()
+        {
+            return this.managerField != null;
+        }
+
+        public bool IsSetCompany()
+        {
+            return this.companyField != null;
+        }
+
+        public bool IsSetPresentationFormat()
+        {
+            return this.presentationFormatField != null;
+        }
+
+        public bool IsSetApplication()
+        {
+            return this.applicationField != null;
+        }
+
+        public bool IsSetAppVersion()
+        {
+            return this.appVersionField != null;
+        }
+
+        public bool IsSetWords()
+        {
+            return this.wordsFieldSpecified;
+        }
+
+        public bool IsSetPages()
+        {
+            return this.pagesFieldSpecified;
+        }
+
+        public bool IsSetCharacters()
+        {
+            return this.charactersFieldSpecified;
+        }
+
+        public bool IsSetCharactersWithSpaces()
+        {
+            return this.charactersWithSpacesFieldSpecified;
+        }
     }
 
     [Serializable]
