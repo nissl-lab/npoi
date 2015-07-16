@@ -95,7 +95,7 @@ namespace NPOI.XSSF.UserModel
                 int prevNum = row.LastCellNum;
                 if (prevNum != -1)
                 {
-                    _cellNum = row.GetCell(prevNum - 1).ColumnIndex + 1;
+                    _cellNum = (row as XSSFRow).GetCell(prevNum - 1, MissingCellPolicy.RETURN_NULL_AND_BLANK).ColumnIndex + 1;
                 }
             }
             _sharedStringSource = ((XSSFWorkbook)row.Sheet.Workbook).GetSharedStringSource();
