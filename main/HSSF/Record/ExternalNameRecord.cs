@@ -50,13 +50,13 @@ namespace NPOI.HSSF.Record
         private short field_2_ixals;
         private short field_3_not_used;
         private String field_4_name;
-        private NPOI.SS.Formula.Formula field_5_name_definition; // TODO - junits for name definition field
+        private Formula field_5_name_definition; 
 
         /**
- * 'rgoper' / 'Last received results of the DDE link'
- * (seems to be only applicable to DDE links)<br/>
- * Logically this is a 2-D array, which has been flattened into 1-D array here.
- */
+         * 'rgoper' / 'Last received results of the DDE link'
+         * (seems to be only applicable to DDE links)<br/>
+         * Logically this is a 2-D array, which has been flattened into 1-D array here.
+         */
         private Object[] _ddeValues;
         /**
          * (logical) number of columns in the {@link #_ddeValues} array
@@ -105,45 +105,6 @@ namespace NPOI.HSSF.Record
                     field_5_name_definition = Formula.Read(formulaLen, in1);
                 }
             }
-            //int nameLength = in1.ReadUByte();
-            //int multibyteFlag = in1.ReadUByte();
-            //if (multibyteFlag == 0)
-            //{
-            //    field_4_name = in1.ReadCompressedUnicode(nameLength);
-            //}
-            //else
-            //{
-            //    field_4_name = in1.ReadUnicodeLEString(nameLength);
-            //}
-            //if (!HasFormula)
-            //{
-            //    if (!IsStdDocumentNameIdentifier && !IsOLELink && IsAutomaticLink)
-            //    {
-            //        // both need to be incremented
-            //        int nColumns = in1.ReadUByte() + 1;
-            //        int nRows = in1.ReadShort() + 1;
-
-            //        int totalCount = nRows * nColumns;
-            //        _ddeValues = ConstantValueParser.Parse(in1, totalCount);
-            //        _nColumns = nColumns;
-            //        _nRows = nRows;
-            //    }
-
-            //    if (in1.Remaining > 0)
-            //    {
-            //        throw ReadFail("Some Unread data (is formula present?)");
-            //    }
-            //    field_5_name_definition = null;
-            //    return;
-            //}
-            //int nBytesRemaining = in1.Available();
-            //if (in1.Remaining <= 0)
-            //{
-            //    throw ReadFail("Ran out of record data trying to read formula.");
-            //}
-            //short formulaLen = in1.ReadShort();
-            //nBytesRemaining -= 2;
-            //field_5_name_definition = NPOI.SS.Formula.Formula.Read(formulaLen, in1, nBytesRemaining);
         }
 
         /**
@@ -218,21 +179,6 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                //int result = 3 * 2  // 3 short fields
-                //    + 2 + field_4_name.Length; // nameLen and name
-                //if (HasFormula)
-                //{
-                //    result += field_5_name_definition.EncodedSize;
-                //}
-                //else
-                //{
-                //    if (_ddeValues != null)
-                //    {
-                //        result += 3; // byte, short
-                //        result += ConstantValueParser.GetEncodedSize(_ddeValues);
-                //    }
-                //}
-                //return result;
                 int result = 2 + 4;  // short and int
                 result += StringUtil.GetEncodedSize(field_4_name) - 1; //size is byte, not short 
 
@@ -240,8 +186,11 @@ namespace NPOI.HSSF.Record
                 {
                     if (IsAutomaticLink)
                     {
-                        result += 3; // byte, short
-                        result += ConstantValueParser.GetEncodedSize(_ddeValues);
+                        if (_ddeValues != null)
+                        {
+                            result += 3; // byte, short
+                            result += ConstantValueParser.GetEncodedSize(_ddeValues);
+                        }
                     }
                     else
                     {
@@ -284,9 +233,12 @@ namespace NPOI.HSSF.Record
             {
                 if (IsAutomaticLink)
                 {
-                    out1.WriteByte(_nColumns - 1);
-                    out1.WriteShort(_nRows - 1);
-                    ConstantValueParser.Encode(out1, _ddeValues);
+                    if (_ddeValues != null)
+                    {
+                        out1.WriteByte(_nColumns - 1);
+                        out1.WriteShort(_nRows - 1);
+                        ConstantValueParser.Encode(out1, _ddeValues);
+                    }
                 }
                 else
                 {
