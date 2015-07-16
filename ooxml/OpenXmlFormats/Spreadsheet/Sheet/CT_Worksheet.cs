@@ -453,7 +453,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Cols GetColsArray(int index)
         {
-            if (null == colsField) { colsField = new List<CT_Cols>(); }
+            if (null == colsField)
+            {
+                colsField = new List<CT_Cols>();
+                colsField.Add(new CT_Cols());
+            }
             return this.colsField[index];
         }
         public List<CT_Cols> GetColsList()

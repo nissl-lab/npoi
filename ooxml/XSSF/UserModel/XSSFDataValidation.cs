@@ -77,14 +77,8 @@ namespace NPOI.XSSF.UserModel
 
 
         public XSSFDataValidation(CellRangeAddressList regions, CT_DataValidation ctDataValidation)
-            : base()
+            : this(GetConstraint(ctDataValidation), regions, ctDataValidation)
         {
-
-            this.validationConstraint = GetConstraint(ctDataValidation);
-            this.ctDdataValidation = ctDataValidation;
-            this.regions = regions;
-            this.ctDdataValidation.errorStyle = (ST_DataValidationErrorStyle.stop);
-            this.ctDdataValidation.allowBlank = (true);
         }
 
         public XSSFDataValidation(XSSFDataValidationConstraint constraint, CellRangeAddressList regions, CT_DataValidation ctDataValidation)
@@ -94,8 +88,6 @@ namespace NPOI.XSSF.UserModel
             this.validationConstraint = constraint;
             this.ctDdataValidation = ctDataValidation;
             this.regions = regions;
-            this.ctDdataValidation.errorStyle = (ST_DataValidationErrorStyle.stop);
-            this.ctDdataValidation.allowBlank = (true);
         }
 
         internal CT_DataValidation GetCTDataValidation()
@@ -259,7 +251,7 @@ namespace NPOI.XSSF.UserModel
             return builder.ToString();
         }
 
-        private XSSFDataValidationConstraint GetConstraint(CT_DataValidation ctDataValidation)
+        private static XSSFDataValidationConstraint GetConstraint(CT_DataValidation ctDataValidation)
         {
             XSSFDataValidationConstraint constraint = null;
             String formula1 = ctDataValidation.formula1;
