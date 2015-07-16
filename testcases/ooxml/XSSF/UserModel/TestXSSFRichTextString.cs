@@ -132,28 +132,30 @@ namespace NPOI.XSSF.UserModel
          * make sure we insert xml:space="preserve" attribute
          * if a string has leading or trailing white spaces
          */
-        //   [Test]
-        //public void TestPreserveSpaces()
-        //{
-        //    XSSFRichTextString rt = new XSSFRichTextString("Apache");
-        //    CT_Rst ct = rt.GetCTRst();
-        //    STXstring xs = ct.xgetT();
-        //    Assert.AreEqual("<xml-fragment>Apache</xml-fragment>", xs.xmlText());
-        //    rt.String = ("  Apache");
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", xs.xmlText());
-        //rt.Append(" POI");
-        //rt.Append(" ");
-        //Assert.AreEqual("  Apache POI ", rt.getString());
-        //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", rt.getCTRst().getRArray(0).xgetT().xmlText());
-        //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> POI</xml-fragment>", rt.getCTRst().getRArray(1).xgetT().xmlText());
-        //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> </xml-fragment>", rt.getCTRst().getRArray(2).xgetT().xmlText());
- 
-        //}
+        [Test]
+        public void TestPreserveSpaces()
+        {
+            //XSSFRichTextString rt = new XSSFRichTextString("Apache");
+            //CT_Rst ct = rt.GetCTRst();
+            //STXstring xs = ct.xgetT();
+            
+            //Assert.AreEqual("<xml-fragment>Apache</xml-fragment>", xs.xmlText());
+            //rt.String = ("  Apache");
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", xs.xmlText());
+            //rt.Append(" POI");
+            //rt.Append(" ");
+            //Assert.AreEqual("  Apache POI ", rt.String);
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", rt.getCTRst().getRArray(0).xgetT().xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> POI</xml-fragment>", rt.getCTRst().getRArray(1).xgetT().xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> </xml-fragment>", rt.getCTRst().getRArray(2).xgetT().xmlText());
+
+            Assert.Fail("implement STXString");
+        }
 
         /**
          * Test that unicode representation_ xHHHH_ is properly Processed
          */
-           [Test]
+        [Test]
         public void TestUtfDecode()
         {
             CT_Rst st = new CT_Rst();
@@ -163,121 +165,123 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("abc\r2ef\r", rt.String);
 
         }
-        //[Test]
-        //public void TestApplyFont_lowlevel()
-        //{
-        //    CT_Rst st = new CT_Rst();
-        //    String text = "Apache Software Foundation";
-        //    XSSFRichTextString str = new XSSFRichTextString(text);
-        //    Assert.AreEqual(26, text.Length);
+        [Test]
+        public void TestApplyFont_lowlevel()
+        {
+            //CT_Rst st = new CT_Rst();
+            //String text = "Apache Software Foundation";
+            //XSSFRichTextString str = new XSSFRichTextString(text);
+            //Assert.AreEqual(26, text.Length);
 
-        //    st.AddNewR().t = (text);
+            //st.AddNewR().t = (text);
 
-        //    Dictionary<int, CT_RPrElt> formats = str.GetFormatMap(st);
-        //    Assert.AreEqual(1, formats.Count);
-        //    Assert.AreEqual(26, (int)formats.firstKey());
-        //    Assert.IsNull(formats.Get(formats.firstKey()));
+            //Dictionary<int, CT_RPrElt> formats = str.GetFormatMap(st);
+            //Assert.AreEqual(1, formats.Count);
+            //Assert.AreEqual(26, (int)formats.firstKey());
+            //Assert.IsNull(formats.Get(formats.firstKey()));
 
-        //    CT_RPrElt fmt1 = new CT_RPrElt();
-        //    str.ApplyFont(formats, 0, 6, fmt1);
-        //    Assert.AreEqual(2, formats.Count);
-        //    Assert.AreEqual("[6, 26]", formats.Keys.ToString());
-        //    Object[] Runs1 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt1, Runs1[0]);
-        //    Assert.AreSame(null, Runs1[1]);
+            //CT_RPrElt fmt1 = new CT_RPrElt();
+            //str.ApplyFont(formats, 0, 6, fmt1);
+            //Assert.AreEqual(2, formats.Count);
+            //Assert.AreEqual("[6, 26]", formats.Keys.ToString());
+            //Object[] Runs1 = formats.Values.ToArray();
+            //Assert.AreSame(fmt1, Runs1[0]);
+            //Assert.AreSame(null, Runs1[1]);
 
-        //    CT_RPrElt fmt2 = new CT_RPrElt();
-        //    str.ApplyFont(formats, 7, 15, fmt2);
-        //    Assert.AreEqual(4, formats.Count);
-        //    Assert.AreEqual("[6, 7, 15, 26]", formats.Keys.ToString());
-        //    Object[] Runs2 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt1, Runs2[0]);
-        //    Assert.AreSame(null, Runs2[1]);
-        //    Assert.AreSame(fmt2, Runs2[2]);
-        //    Assert.AreSame(null, Runs2[3]);
+            //CT_RPrElt fmt2 = new CT_RPrElt();
+            //str.ApplyFont(formats, 7, 15, fmt2);
+            //Assert.AreEqual(4, formats.Count);
+            //Assert.AreEqual("[6, 7, 15, 26]", formats.Keys.ToString());
+            //Object[] Runs2 = formats.Values.ToArray();
+            //Assert.AreSame(fmt1, Runs2[0]);
+            //Assert.AreSame(null, Runs2[1]);
+            //Assert.AreSame(fmt2, Runs2[2]);
+            //Assert.AreSame(null, Runs2[3]);
 
-        //    CT_RPrElt fmt3 = new CT_RPrElt();
-        //    str.ApplyFont(formats, 6, 7, fmt3);
-        //    Assert.AreEqual(4, formats.Count);
-        //    Assert.AreEqual("[6, 7, 15, 26]", formats.Keys.ToString());
-        //    Object[] Runs3 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt1, Runs3[0]);
-        //    Assert.AreSame(fmt3, Runs3[1]);
-        //    Assert.AreSame(fmt2, Runs3[2]);
-        //    Assert.AreSame(null, Runs3[3]);
+            //CT_RPrElt fmt3 = new CT_RPrElt();
+            //str.ApplyFont(formats, 6, 7, fmt3);
+            //Assert.AreEqual(4, formats.Count);
+            //Assert.AreEqual("[6, 7, 15, 26]", formats.Keys.ToString());
+            //Object[] Runs3 = formats.Values.ToArray();
+            //Assert.AreSame(fmt1, Runs3[0]);
+            //Assert.AreSame(fmt3, Runs3[1]);
+            //Assert.AreSame(fmt2, Runs3[2]);
+            //Assert.AreSame(null, Runs3[3]);
 
-        //    CT_RPrElt fmt4 = new CT_RPrElt();
-        //    str.ApplyFont(formats, 0, 7, fmt4);
-        //    Assert.AreEqual(3, formats.Count);
-        //    Assert.AreEqual("[7, 15, 26]", formats.Keys.ToString());
-        //    Object[] Runs4 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt4, Runs4[0]);
-        //    Assert.AreSame(fmt2, Runs4[1]);
-        //    Assert.AreSame(null, Runs4[2]);
+            //CT_RPrElt fmt4 = new CT_RPrElt();
+            //str.ApplyFont(formats, 0, 7, fmt4);
+            //Assert.AreEqual(3, formats.Count);
+            //Assert.AreEqual("[7, 15, 26]", formats.Keys.ToString());
+            //Object[] Runs4 = formats.Values.ToArray();
+            //Assert.AreSame(fmt4, Runs4[0]);
+            //Assert.AreSame(fmt2, Runs4[1]);
+            //Assert.AreSame(null, Runs4[2]);
 
-        //    CT_RPrElt fmt5 = new CT_RPrElt();
-        //    str.ApplyFont(formats, 0, 26, fmt5);
-        //    Assert.AreEqual(1, formats.Count);
-        //    Assert.AreEqual("[26]", formats.Keys.ToString());
-        //    Object[] Runs5 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt5, Runs5[0]);
+            //CT_RPrElt fmt5 = new CT_RPrElt();
+            //str.ApplyFont(formats, 0, 26, fmt5);
+            //Assert.AreEqual(1, formats.Count);
+            //Assert.AreEqual("[26]", formats.Keys.ToString());
+            //Object[] Runs5 = formats.Values.ToArray();
+            //Assert.AreSame(fmt5, Runs5[0]);
 
-        //    CT_RPrElt fmt6 = new CT_RPrElt();
-        //    str.ApplyFont(formats, 15, 26, fmt6);
-        //    Assert.AreEqual(2, formats.Count);
-        //    Assert.AreEqual("[15, 26]", formats.Keys.ToString());
-        //    Object[] Runs6 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt5, Runs6[0]);
-        //    Assert.AreSame(fmt6, Runs6[1]);
+            //CT_RPrElt fmt6 = new CT_RPrElt();
+            //str.ApplyFont(formats, 15, 26, fmt6);
+            //Assert.AreEqual(2, formats.Count);
+            //Assert.AreEqual("[15, 26]", formats.Keys.ToString());
+            //Object[] Runs6 = formats.Values.ToArray();
+            //Assert.AreSame(fmt5, Runs6[0]);
+            //Assert.AreSame(fmt6, Runs6[1]);
 
-        //    str.ApplyFont(formats, 0, 26, null);
-        //    Assert.AreEqual(1, formats.Count);
-        //    Assert.AreEqual("[26]", formats.Keys.ToString());
-        //    Object[] Runs7 = formats.Values.ToArray();
-        //    Assert.AreSame(null, Runs7[0]);
+            //str.ApplyFont(formats, 0, 26, null);
+            //Assert.AreEqual(1, formats.Count);
+            //Assert.AreEqual("[26]", formats.Keys.ToString());
+            //Object[] Runs7 = formats.Values.ToArray();
+            //Assert.AreSame(null, Runs7[0]);
 
-        //    str.ApplyFont(formats, 15, 26, fmt6);
-        //    Assert.AreEqual(2, formats.Count);
-        //    Assert.AreEqual("[15, 26]", formats.Keys.ToString());
-        //    Object[] Runs8 = formats.Values.ToArray();
-        //    Assert.AreSame(null, Runs8[0]);
-        //    Assert.AreSame(fmt6, Runs8[1]);
+            //str.ApplyFont(formats, 15, 26, fmt6);
+            //Assert.AreEqual(2, formats.Count);
+            //Assert.AreEqual("[15, 26]", formats.Keys.ToString());
+            //Object[] Runs8 = formats.Values.ToArray();
+            //Assert.AreSame(null, Runs8[0]);
+            //Assert.AreSame(fmt6, Runs8[1]);
 
-        //    str.ApplyFont(formats, 15, 26, fmt5);
-        //    Assert.AreEqual(2, formats.Count);
-        //    Assert.AreEqual("[15, 26]", formats.Keys.ToString());
-        //    Object[] Runs9 = formats.Values.ToArray();
-        //    Assert.AreSame(null, Runs9[0]);
-        //    Assert.AreSame(fmt5, Runs9[1]);
+            //str.ApplyFont(formats, 15, 26, fmt5);
+            //Assert.AreEqual(2, formats.Count);
+            //Assert.AreEqual("[15, 26]", formats.Keys.ToString());
+            //Object[] Runs9 = formats.Values.ToArray();
+            //Assert.AreSame(null, Runs9[0]);
+            //Assert.AreSame(fmt5, Runs9[1]);
 
-        //    str.ApplyFont(formats, 2, 20, fmt6);
-        //    Assert.AreEqual(3, formats.Count);
-        //    Assert.AreEqual("[2, 20, 26]", formats.Keys.ToString());
-        //    Object[] Runs10 = formats.Values.ToArray();
-        //    Assert.AreSame(null, Runs10[0]);
-        //    Assert.AreSame(fmt6, Runs10[1]);
-        //    Assert.AreSame(fmt5, Runs10[2]);
+            //str.ApplyFont(formats, 2, 20, fmt6);
+            //Assert.AreEqual(3, formats.Count);
+            //Assert.AreEqual("[2, 20, 26]", formats.Keys.ToString());
+            //Object[] Runs10 = formats.Values.ToArray();
+            //Assert.AreSame(null, Runs10[0]);
+            //Assert.AreSame(fmt6, Runs10[1]);
+            //Assert.AreSame(fmt5, Runs10[2]);
 
-        //    str.ApplyFont(formats, 22, 24, fmt4);
-        //    Assert.AreEqual(5, formats.Count);
-        //    Assert.AreEqual("[2, 20, 22, 24, 26]", formats.Keys.ToString());
-        //    Object[] Runs11 = formats.Values.ToArray();
-        //    Assert.AreSame(null, Runs11[0]);
-        //    Assert.AreSame(fmt6, Runs11[1]);
-        //    Assert.AreSame(fmt5, Runs11[2]);
-        //    Assert.AreSame(fmt4, Runs11[3]);
-        //    Assert.AreSame(fmt5, Runs11[4]);
+            //str.ApplyFont(formats, 22, 24, fmt4);
+            //Assert.AreEqual(5, formats.Count);
+            //Assert.AreEqual("[2, 20, 22, 24, 26]", formats.Keys.ToString());
+            //Object[] Runs11 = formats.Values.ToArray();
+            //Assert.AreSame(null, Runs11[0]);
+            //Assert.AreSame(fmt6, Runs11[1]);
+            //Assert.AreSame(fmt5, Runs11[2]);
+            //Assert.AreSame(fmt4, Runs11[3]);
+            //Assert.AreSame(fmt5, Runs11[4]);
 
-        //    str.ApplyFont(formats, 0, 10, fmt1);
-        //    Assert.AreEqual(5, formats.Count);
-        //    Assert.AreEqual("[10, 20, 22, 24, 26]", formats.Keys.ToString());
-        //    Object[] Runs12 = formats.Values.ToArray();
-        //    Assert.AreSame(fmt1, Runs12[0]);
-        //    Assert.AreSame(fmt6, Runs12[1]);
-        //    Assert.AreSame(fmt5, Runs12[2]);
-        //    Assert.AreSame(fmt4, Runs12[3]);
-        //    Assert.AreSame(fmt5, Runs12[4]);
-        //}
+            //str.ApplyFont(formats, 0, 10, fmt1);
+            //Assert.AreEqual(5, formats.Count);
+            //Assert.AreEqual("[10, 20, 22, 24, 26]", formats.Keys.ToString());
+            //Object[] Runs12 = formats.Values.ToArray();
+            //Assert.AreSame(fmt1, Runs12[0]);
+            //Assert.AreSame(fmt6, Runs12[1]);
+            //Assert.AreSame(fmt5, Runs12[2]);
+            //Assert.AreSame(fmt4, Runs12[3]);
+            //Assert.AreSame(fmt5, Runs12[4]);
+
+            Assert.Fail("implement STXString");
+        }
         [Test]
         public void TestApplyFont_usermodel()
         {
@@ -306,66 +310,129 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        //[Test]
-        //public void TestLineBreaks_bug48877()
-        //{
+        [Test]
+        public void TestLineBreaks_bug48877()
+        {
 
-        //    XSSFFont font = new XSSFFont();
-        //    font.Boldweight = (short)FontBoldWeight.BOLD;
-        //    font.FontHeightInPoints = ((short)14);
-        //    XSSFRichTextString str;
-        //    STXstring t1, t2, t3;
+            //XSSFFont font = new XSSFFont();
+            //font.Boldweight = (short)FontBoldWeight.Bold;
+            //font.FontHeightInPoints = ((short)14);
+            //XSSFRichTextString str;
+            //STXstring t1, t2, t3;
 
-        //    str = new XSSFRichTextString("Incorrect\nLine-Breaking");
-        //    str.ApplyFont(0, 8, font);
-        //    t1 = str.GetCTRst().r[0].xgetT();
-        //    t2 = str.GetCTRst().r[1].xgetT();
-        //    Assert.AreEqual("<xml-fragment>Incorrec</xml-fragment>", t1.xmlText());
-        //    Assert.AreEqual("<xml-fragment>t\nLine-Breaking</xml-fragment>", t2.xmlText());
+            //str = new XSSFRichTextString("Incorrect\nLine-Breaking");
+            //str.ApplyFont(0, 8, font);
+            //t1 = str.GetCTRst().r[0].xgetT();
+            //t2 = str.GetCTRst().r[1].xgetT();
+            //Assert.AreEqual("<xml-fragment>Incorrec</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment>t\nLine-Breaking</xml-fragment>", t2.xmlText());
 
-        //    str = new XSSFRichTextString("Incorrect\nLine-Breaking");
-        //    str.ApplyFont(0, 9, font);
-        //    t1 = str.GetCTRst().r[0].xgetT();
-        //    t2 = str.GetCTRst().r[1].xgetT();
-        //    Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1.xmlText());
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\nLine-Breaking</xml-fragment>", t2.xmlText());
+            //str = new XSSFRichTextString("Incorrect\nLine-Breaking");
+            //str.ApplyFont(0, 9, font);
+            //t1 = str.GetCTRst().r[0].xgetT();
+            //t2 = str.GetCTRst().r[1].xgetT();
+            //Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\nLine-Breaking</xml-fragment>", t2.xmlText());
 
-        //    str = new XSSFRichTextString("Incorrect\n Line-Breaking");
-        //    str.ApplyFont(0, 9, font);
-        //    t1 = str.GetCTRst().r[0].xgetT();
-        //    t2 = str.GetCTRst().r[1].xgetT();
-        //    Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1.xmlText());
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n Line-Breaking</xml-fragment>", t2.xmlText());
+            //str = new XSSFRichTextString("Incorrect\n Line-Breaking");
+            //str.ApplyFont(0, 9, font);
+            //t1 = str.GetCTRst().r[0].xgetT();
+            //t2 = str.GetCTRst().r[1].xgetT();
+            //Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n Line-Breaking</xml-fragment>", t2.xmlText());
 
-        //    str = new XSSFRichTextString("Tab\tSeparated\n");
-        //    t1 = str.GetCTRst().xgetT();
-        //    // trailing \n causes must be preserved
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\tSeparated\n</xml-fragment>", t1.xmlText());
+            //str = new XSSFRichTextString("Tab\tSeparated\n");
+            //t1 = str.GetCTRst().xgetT();
+            //// trailing \n causes must be preserved
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\tSeparated\n</xml-fragment>", t1.xmlText());
 
-        //    str.ApplyFont(0, 3, font);
-        //    t1 = str.GetCTRst().r[0].xgetT();
-        //    t2 = str.GetCTRst().r[1].xgetT();
-        //    Assert.AreEqual("<xml-fragment>Tab</xml-fragment>", t1.xmlText());
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\tSeparated\n</xml-fragment>", t2.xmlText());
+            //str.ApplyFont(0, 3, font);
+            //t1 = str.GetCTRst().r[0].xgetT();
+            //t2 = str.GetCTRst().r[1].xgetT();
+            //Assert.AreEqual("<xml-fragment>Tab</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\tSeparated\n</xml-fragment>", t2.xmlText());
 
-        //    str = new XSSFRichTextString("Tab\tSeparated\n");
-        //    str.ApplyFont(0, 4, font);
-        //    t1 = str.GetCTRst().r[0].xgetT();
-        //    t2 = str.GetCTRst().r[1].xgetT();
-        //    // YK: don't know why, but XmlBeans Converts leading tab characters to spaces
-        //    //Assert.AreEqual("<xml-fragment>Tab\t</xml-fragment>", t1.xmlText());
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Separated\n</xml-fragment>", t2.xmlText());
+            //str = new XSSFRichTextString("Tab\tSeparated\n");
+            //str.ApplyFont(0, 4, font);
+            //t1 = str.GetCTRst().r[0].xgetT();
+            //t2 = str.GetCTRst().r[1].xgetT();
+            //// YK: don't know why, but XmlBeans Converts leading tab characters to spaces
+            ////Assert.AreEqual("<xml-fragment>Tab\t</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Separated\n</xml-fragment>", t2.xmlText());
 
-        //    str = new XSSFRichTextString("\n\n\nNew Line\n\n");
-        //    str.ApplyFont(0, 3, font);
-        //    str.ApplyFont(11, 13, font);
-        //    t1 = str.GetCTRst().r[0].xgetT();
-        //    t2 = str.GetCTRst().r[1].xgetT();
-        //    t3 = str.GetCTRst().r[2].xgetT();
-        //    // YK: don't know why, but XmlBeans Converts leading tab characters to spaces
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n\n</xml-fragment>", t1.xmlText());
-        //    Assert.AreEqual("<xml-fragment>New Line</xml-fragment>", t2.xmlText());
-        //    Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n</xml-fragment>", t3.xmlText());
-        //}
+            //str = new XSSFRichTextString("\n\n\nNew Line\n\n");
+            //str.ApplyFont(0, 3, font);
+            //str.ApplyFont(11, 13, font);
+            //t1 = str.GetCTRst().r[0].xgetT();
+            //t2 = str.GetCTRst().r[1].xgetT();
+            //t3 = str.GetCTRst().r[2].xgetT();
+            //// YK: don't know why, but XmlBeans Converts leading tab characters to spaces
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n\n</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment>New Line</xml-fragment>", t2.xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n</xml-fragment>", t3.xmlText());
+            Assert.Fail("implement STXString");
         }
+
+        [Test]
+        public void TestBug56511()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56511.xlsx");
+            foreach (XSSFSheet sheet in wb)
+            {
+                int lastRow = sheet.LastRowNum;
+                for (int rowIdx = sheet.FirstRowNum; rowIdx <= lastRow; rowIdx++)
+                {
+                    XSSFRow row = sheet.GetRow(rowIdx) as XSSFRow;
+                    if (row != null)
+                    {
+                        int lastCell = row.LastCellNum;
+
+                        for (int cellIdx = row.FirstCellNum; cellIdx <= lastCell; cellIdx++)
+                        {
+
+                            XSSFCell cell = row.GetCell(cellIdx) as XSSFCell;
+                            if (cell != null)
+                            {
+                                //System.out.Println("row " + rowIdx + " column " + cellIdx + ": " + cell.CellType + ": " + cell.ToString());
+
+                                XSSFRichTextString richText = cell.RichStringCellValue as XSSFRichTextString;
+                                int anzFormattingRuns = richText.NumFormattingRuns;
+                                for (int run = 0; run < anzFormattingRuns; run++)
+                                {
+                                    /*XSSFFont font =*/
+                                    richText.GetFontOfFormattingRun(run);
+                                    //System.out.Println("  run " + run
+                                    //        + " font " + (font == null ? "<null>" : font.FontName));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void TestBug56511_values()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56511.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+
+            // verify the values to ensure future Changes keep the returned information equal 
+            Assert.AreEqual(0, row.GetCell(0).RichStringCellValue.NumFormattingRuns);
+            Assert.AreEqual(0, row.GetCell(1).RichStringCellValue.NumFormattingRuns);
+
+            XSSFRichTextString rt = (XSSFRichTextString)row.GetCell(2).RichStringCellValue;
+            Assert.AreEqual(2, rt.NumFormattingRuns);
+            Assert.IsNotNull(rt.GetFontOfFormattingRun(0));
+            Assert.IsNotNull(rt.GetFontOfFormattingRun(1));
+
+            rt = (XSSFRichTextString)row.GetCell(3).RichStringCellValue;
+            Assert.AreEqual(3, rt.NumFormattingRuns);
+            Assert.IsNull(rt.GetFontOfFormattingRun(0));
+            Assert.IsNotNull(rt.GetFontOfFormattingRun(1));
+            Assert.IsNotNull(rt.GetFontOfFormattingRun(2));
+        }
+
+    }
 }

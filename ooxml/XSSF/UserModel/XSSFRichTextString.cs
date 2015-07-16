@@ -467,7 +467,7 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < st.sizeOfRArray(); i++)
             {
                 CT_RElt r = st.GetRArray(i);
-                if (i == index)
+                if (i == index && r.rPr != null)
                 {
                     XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
                     fnt.SetThemesTable(GetThemesTable());
