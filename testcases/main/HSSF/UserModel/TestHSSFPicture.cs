@@ -16,18 +16,16 @@
 */
 namespace TestCases.HSSF.UserModel
 {
-    using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
-
-    using NPOI.SS.UserModel;
-    using TestCases.SS.UserModel;
-    using NPOI.Util;
-    using System.Collections.Generic;
-    using System.Collections;
     using System;
-    using NPOI.HSSF.Model;
+    using System.Collections;
+    using System.Collections.Generic;
     using NPOI.DDF;
-    using System.IO;
+    using NPOI.HSSF.Model;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using TestCases.SS.UserModel;
 
     /**
      * Test <c>HSSFPicture</c>.
