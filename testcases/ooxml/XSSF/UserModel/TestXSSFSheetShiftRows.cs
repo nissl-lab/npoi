@@ -191,13 +191,185 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestBug55280()
         {
-            IWorkbook w = new XSSFWorkbook();
-            ISheet s = w.CreateSheet();
-            for (int row = 0; row < 5000; ++row)
-                s.AddMergedRegion(new CellRangeAddress(row, row, 0, 3));
+            XSSFWorkbook w = new XSSFWorkbook();
+            try
+            {
+                ISheet s = w.CreateSheet();
+                for (int row = 0; row < 5000; ++row)
+                    s.AddMergedRegion(new CellRangeAddress(row, row, 0, 3));
 
-            s.ShiftRows(0, 4999, 1);        // takes a long time...
+                s.ShiftRows(0, 4999, 1);        // takes a long time...
+            }
+            finally
+            {
+                w.Close();
+            }
         }
+
+        [Test]
+        public void Test57171()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            RemoveAllSheetsBut(5, wb); // 5 is the active / selected sheet
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(0, wbRead.ActiveSheetIndex);
+
+            wbRead.RemoveSheetAt(0);
+            Assert.AreEqual(0, wbRead.ActiveSheetIndex);
+
+            //wb.Write(new FileOutputStream("/tmp/57171.xls"));
+        }
+
+        [Test]
+        public void Test57163()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(4, wb.ActiveSheetIndex);
+
+            //wb.Write(new FileOutputStream("/tmp/57163.xls"));
+        }
+
+        [Test]
+        public void TestSetSheetOrderAndAdjustActiveSheet()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+
+            // Move the sheets around in all possible combinations to check that the active sheet
+            // is Set correctly in all cases
+            wb.SetSheetOrder(wb.GetSheetName(5), 4);
+            Assert.AreEqual(4, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(5), 5);
+            Assert.AreEqual(4, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(3), 5);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(4), 5);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(2), 2);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(2), 1);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(3), 5);
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(0), 5);
+            Assert.AreEqual(4, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(0), 5);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(0), 5);
+            Assert.AreEqual(2, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(0), 5);
+            Assert.AreEqual(1, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(0), 5);
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            wb.SetSheetOrder(wb.GetSheetName(0), 5);
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+        }
+
+        [Test]
+        public void TestRemoveSheetAndAdjustActiveSheet()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(4, wb.ActiveSheetIndex);
+
+            wb.SetActiveSheet(3);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(4);
+            Assert.AreEqual(3, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(3);
+            Assert.AreEqual(2, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(1, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(1);
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            try
+            {
+                wb.RemoveSheetAt(0);
+                Assert.Fail("Should catch exception as no more sheets are there");
+            }
+            catch (ArgumentException e)
+            {
+                // expected
+            }
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            wb.CreateSheet();
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            wb.RemoveSheetAt(0);
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+        }
+
+        // TODO: enable when bug 57165 is fixed
+        [Test]
+        public void Test57165()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            RemoveAllSheetsBut(3, wb);
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            wb.CreateSheet("New Sheet1");
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            wb.CloneSheet(0); // Throws exception here
+            wb.SetSheetName(1, "New Sheet");
+            Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            //wb.Write(new FileOutputStream("/tmp/57165.xls"));
+        }
+
+        //    public void Test57165b(){
+        //        IWorkbook wb = new XSSFWorkbook();
+        //        try {
+        //            wb.CreateSheet("New Sheet 1");
+        //            wb.CreateSheet("New Sheet 2");
+        //        } finally {
+        //            wb.Close();
+        //        }
+        //    }
+
+        private static void RemoveAllSheetsBut(int sheetIndex, IWorkbook wb)
+        {
+            int sheetNb = wb.NumberOfSheets;
+            // Move this sheet at the first position
+            wb.SetSheetOrder(wb.GetSheetName(sheetIndex), 0);
+            // Must make this sheet active (otherwise, for XLSX, Excel might protest that active sheet no longer exists)
+            // I think POI should automatically handle this case when deleting sheets...
+            //      wb.SetActiveSheet(0);
+            for (int sn = sheetNb - 1; sn > 0; sn--)
+            {
+                wb.RemoveSheetAt(sn);
+            }
+        }
+
 
     }
 }

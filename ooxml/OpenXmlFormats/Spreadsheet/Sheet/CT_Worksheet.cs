@@ -711,6 +711,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
+                if (this.conditionalFormattingField == null)
+                    this.conditionalFormattingField = new List<CT_ConditionalFormatting>();
                 return this.conditionalFormattingField;
             }
             set
