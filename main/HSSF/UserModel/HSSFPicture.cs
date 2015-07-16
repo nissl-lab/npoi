@@ -251,18 +251,7 @@ namespace NPOI.HSSF.UserModel
             {
                 EscherComplexProperty propFile = (EscherComplexProperty)GetOptRecord().Lookup(
                               EscherProperties.BLIP__BLIPFILENAME);
-                try
-                {
-                    if (null == propFile)
-                    {
-                        return "";
-                    }
-                    return Trim(Encoding.Unicode.GetString(propFile.ComplexData));
-                }
-                catch (Exception)
-                {
-                    return "";
-                }
+                return (null == propFile) ? "" : Trim(Encoding.Unicode.GetString(propFile.ComplexData));
             }
             set
             {
