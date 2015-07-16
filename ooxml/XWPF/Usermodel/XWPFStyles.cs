@@ -66,18 +66,13 @@ namespace NPOI.XWPF.UserModel
             {
                 XmlDocument doc = ConvertStreamToXml(GetPackagePart().GetInputStream());
                 stylesDoc = StylesDocument.Parse(doc,NamespaceManager);
-                ctStyles = stylesDoc.Styles;
+                SetStyles(stylesDoc.Styles);
                 latentStyles = new XWPFLatentStyles(ctStyles.latentStyles, this);
 
             }
             catch (XmlException e)
             {
                 throw new POIXMLException("Unable to read styles", e);
-            }
-            // Build up all the style objects
-            foreach (CT_Style style in ctStyles.GetStyleList())
-            {
-                listStyle.Add(new XWPFStyle(style, this));
             }
         }
 
@@ -110,6 +105,11 @@ namespace NPOI.XWPF.UserModel
         public void SetStyles(CT_Styles styles)
         {
             ctStyles = styles;
+            // Build up all the style objects
+            foreach (CT_Style style in ctStyles.GetStyleList())
+            {
+                listStyle.Add(new XWPFStyle(style, this));
+            }
         }
 
         /**
