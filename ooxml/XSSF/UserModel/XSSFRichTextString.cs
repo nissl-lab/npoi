@@ -390,14 +390,13 @@ namespace NPOI.XSSF.UserModel
          */
         public int GetLengthOfFormattingRun(int index)
         {
-            if (st.sizeOfRArray() == 0) return this.Length;
-
-            for (int i = 0; i < st.sizeOfRArray(); i++)
+            if (st.sizeOfRArray() == 0 || index >= st.sizeOfRArray())
             {
-                CT_RElt r = st.GetRArray(i);
-                if (i == index) return r.t.Length;
+                return -1;
             }
-            return -1;
+
+            CT_RElt r = st.GetRArray(index);
+            return r.t.Length;
         }
 
         public String String
@@ -462,17 +461,14 @@ namespace NPOI.XSSF.UserModel
          */
         public IFont GetFontOfFormattingRun(int index)
         {
-            if (st.sizeOfRArray() == 0) return null;
+            if (st.sizeOfRArray() == 0 || index >= st.sizeOfRArray()) return null;
 
-            for (int i = 0; i < st.sizeOfRArray(); i++)
+            CT_RElt r = st.GetRArray(index);
+            if (r.rPr != null)
             {
-                CT_RElt r = st.GetRArray(i);
-                if (i == index && r.rPr != null)
-                {
-                    XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
-                    fnt.SetThemesTable(GetThemesTable());
-                    return fnt;
-                }
+                XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
+                fnt.SetThemesTable(GetThemesTable());
+                return fnt;
             }
             return null;
         }

@@ -419,19 +419,37 @@ namespace NPOI.XSSF.UserModel
             IRow row = sheet.GetRow(0);
 
             // verify the values to ensure future Changes keep the returned information equal 
-            Assert.AreEqual(0, row.GetCell(0).RichStringCellValue.NumFormattingRuns);
-            Assert.AreEqual(0, row.GetCell(1).RichStringCellValue.NumFormattingRuns);
+            XSSFRichTextString rt = (XSSFRichTextString)row.GetCell(0).RichStringCellValue;
+            Assert.AreEqual(0, rt.NumFormattingRuns);
+            Assert.IsNull(rt.GetFontOfFormattingRun(0));
+            Assert.AreEqual(-1, rt.GetLengthOfFormattingRun(0));
 
-            XSSFRichTextString rt = (XSSFRichTextString)row.GetCell(2).RichStringCellValue;
+            rt = (XSSFRichTextString)row.GetCell(1).RichStringCellValue;
+            Assert.AreEqual(0, row.GetCell(1).RichStringCellValue.NumFormattingRuns);
+            Assert.IsNull(rt.GetFontOfFormattingRun(1));
+            Assert.AreEqual(-1, rt.GetLengthOfFormattingRun(1));
+
+            rt = (XSSFRichTextString)row.GetCell(2).RichStringCellValue;
             Assert.AreEqual(2, rt.NumFormattingRuns);
             Assert.IsNotNull(rt.GetFontOfFormattingRun(0));
+            Assert.AreEqual(4, rt.GetLengthOfFormattingRun(0));
+
             Assert.IsNotNull(rt.GetFontOfFormattingRun(1));
+            Assert.AreEqual(9, rt.GetLengthOfFormattingRun(1));
+
+            Assert.IsNull(rt.GetFontOfFormattingRun(2));
 
             rt = (XSSFRichTextString)row.GetCell(3).RichStringCellValue;
             Assert.AreEqual(3, rt.NumFormattingRuns);
             Assert.IsNull(rt.GetFontOfFormattingRun(0));
+            Assert.AreEqual(1, rt.GetLengthOfFormattingRun(0));
+
             Assert.IsNotNull(rt.GetFontOfFormattingRun(1));
+            Assert.AreEqual(3, rt.GetLengthOfFormattingRun(1));
+
             Assert.IsNotNull(rt.GetFontOfFormattingRun(2));
+            Assert.AreEqual(9, rt.GetLengthOfFormattingRun(2));
+
         }
 
     }
