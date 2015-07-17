@@ -26,6 +26,7 @@ namespace TestCases.HPSF.Basic
     using NPOI.HPSF;
     using NPOI.POIFS.EventFileSystem;
     using NPOI.Util;
+    using System.Collections.Generic;
 
 
 
@@ -132,7 +133,14 @@ namespace TestCases.HPSF.Basic
                     reader1.RegisterListener(pfl, poiFiles[i]);
 
             /* Read the POI filesystem. */
-            reader1.Read(poiFs);
+            try
+            {
+                reader1.Read(poiFs);
+            }
+            finally
+            {
+                poiFs.Close();
+            }
             POIFile[] result = new POIFile[files.Count];
             for (int i = 0; i < result.Length; i++)
                 result[i] = (POIFile)files[i];
@@ -185,7 +193,7 @@ namespace TestCases.HPSF.Basic
          */
         public static POIFile[] ReadPropertySets(FileStream poifs)
         {
-            files = new ArrayList(7);
+            List<POIFile> files = new List<POIFile>(7);
             POIFSReader reader2 = new POIFSReader();
             //reader2.StreamReaded += new POIFSReaderEventHandler(reader2_StreamReaded);
             POIFSReaderListener pfl = new POIFSReaderListener1();
@@ -200,7 +208,7 @@ namespace TestCases.HPSF.Basic
             }
             POIFile[] result = new POIFile[files.Count];
             for (int i = 0; i < result.Length; i++)
-                result[i] = (POIFile)files[i];
+                result[i] = files[i];
             return result;
         }
         private class POIFSReaderListener1:POIFSReaderListener
@@ -244,14 +252,14 @@ namespace TestCases.HPSF.Basic
         public static void PrintSystemProperties()
         {
             IDictionary p = Environment.GetEnvironmentVariables();
-            ArrayList names = new ArrayList();
-            for (IEnumerator i = p.Keys.GetEnumerator(); i.MoveNext(); )
-                names.Add(i.Current);
+            List<string> names = new List<string>();
+            for (IEnumerator i = p.GetEnumerator(); i.MoveNext(); )
+                names.Add(i.Current.ToString());
             names.Sort();
-            for (IEnumerator i = names.GetEnumerator(); i.MoveNext(); )
+            for (IEnumerator<string> i = names.GetEnumerator(); i.MoveNext(); )
             {
-                String name = (String)i.Current;
-                String value = (String)p[name];
+                String name = i.Current;
+                String value = (string)p[name];
                 Console.WriteLine(name + ": " + value);
             }
             Console.WriteLine("Current directory: " +

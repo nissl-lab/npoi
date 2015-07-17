@@ -214,47 +214,54 @@ namespace TestCases.SS.UserModel
         public void TestRemoveSheetAt()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            workbook.CreateSheet("sheet1");
-            workbook.CreateSheet("sheet2");
-            workbook.CreateSheet("sheet3");
-            Assert.AreEqual(3, workbook.NumberOfSheets);
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
-            workbook.RemoveSheetAt(1);
-            Assert.AreEqual(2, workbook.NumberOfSheets);
-            Assert.AreEqual("sheet3", workbook.GetSheetName(1));
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
-            workbook.RemoveSheetAt(0);
-            Assert.AreEqual(1, workbook.NumberOfSheets);
-            Assert.AreEqual("sheet3", workbook.GetSheetName(0));
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
-            workbook.RemoveSheetAt(0);
-            Assert.AreEqual(0, workbook.NumberOfSheets);
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
+            try
+            {
+                workbook.CreateSheet("sheet1");
+                workbook.CreateSheet("sheet2");
+                workbook.CreateSheet("sheet3");
+                Assert.AreEqual(3, workbook.NumberOfSheets);
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(1);
+                Assert.AreEqual(2, workbook.NumberOfSheets);
+                Assert.AreEqual("sheet3", workbook.GetSheetName(1));
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(0);
+                Assert.AreEqual(1, workbook.NumberOfSheets);
+                Assert.AreEqual("sheet3", workbook.GetSheetName(0));
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(0);
+                Assert.AreEqual(0, workbook.NumberOfSheets);
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
 
-            //re-create the sheets
-            workbook.CreateSheet("sheet1");
-            workbook.CreateSheet("sheet2");
-            workbook.CreateSheet("sheet3");
-            Assert.AreEqual(3, workbook.NumberOfSheets);
+                //re-create the sheets
+                workbook.CreateSheet("sheet1");
+                workbook.CreateSheet("sheet2");
+                workbook.CreateSheet("sheet3");
+                Assert.AreEqual(3, workbook.NumberOfSheets);
 
-            workbook.CreateSheet("sheet4");
-            Assert.AreEqual(4, workbook.NumberOfSheets);
+                workbook.CreateSheet("sheet4");
+                Assert.AreEqual(4, workbook.NumberOfSheets);
 
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
-            workbook.SetActiveSheet(2);
-            Assert.AreEqual(2, workbook.ActiveSheetIndex);
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                workbook.SetActiveSheet(2);
+                Assert.AreEqual(2, workbook.ActiveSheetIndex);
 
-            workbook.RemoveSheetAt(2);
-            Assert.AreEqual(2, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(2);
+                Assert.AreEqual(2, workbook.ActiveSheetIndex);
 
-            workbook.RemoveSheetAt(1);
-            Assert.AreEqual(1, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(1);
+                Assert.AreEqual(1, workbook.ActiveSheetIndex);
 
-            workbook.RemoveSheetAt(0);
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(0);
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
 
-            workbook.RemoveSheetAt(0);
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                workbook.RemoveSheetAt(0);
+                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+            }
+            finally
+            {
+                workbook.Close();
+            }
 
         }
 

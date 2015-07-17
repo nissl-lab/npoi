@@ -26,6 +26,7 @@ namespace NPOI.SS
     using NPOI.XSSF.UserModel;
     using TestCases.HSSF;
     using System.Configuration;
+    using System.IO;
 
     [TestFixture]
     public class TestWorkbookFactory
@@ -55,6 +56,7 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
+            wb.Close();
 
             // Package -> xssf
             wb = WorkbookFactory.Create(
@@ -81,6 +83,7 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
+            wb.Close();
 
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xlsx)
@@ -93,20 +96,31 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
+            wb.Close();
 
             wb = WorkbookFactory.Create(
                   testdataPath + xlsx
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            // TODO: close() re-writes the sample-file?! Resort to revert() for now to close file handle...
+            ((XSSFWorkbook)wb).Package.Revert();
+
+            // Invalid type -> exception
             try
             {
-                wb = WorkbookFactory.Create(
-                        HSSFTestDataSamples.OpenSampleFileStream(txt)
-                );
+                Stream stream = HSSFTestDataSamples.OpenSampleFileStream(txt);
+                try
+                {
+                    wb = WorkbookFactory.Create(stream);
+                }
+                finally
+                {
+                    stream.Close();
+                }
                 Assert.Fail();
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
                 // Good
             }

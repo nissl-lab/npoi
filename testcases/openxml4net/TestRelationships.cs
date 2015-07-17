@@ -192,7 +192,8 @@ namespace TestCases.OPC
             pkg.Save(baos);
             MemoryStream bais = new MemoryStream(baos.ToArray());
             pkg = OPCPackage.Open(bais);
-            
+            // use revert to not re-write the input file
+            pkg.Revert();
             // Check again
             sheet = pkg.GetPart(
                     PackagingUriHelper.CreatePartName(SHEET_WITH_COMMENTS));
@@ -281,8 +282,8 @@ namespace TestCases.OPC
         }
 
         [Test]
-        public void TestTargetWithSpecialChars(){
-
+        public void TestTargetWithSpecialChars()
+        {
             OPCPackage pkg;
 
             String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("50154.xlsx");
@@ -291,6 +292,10 @@ namespace TestCases.OPC
 
             MemoryStream baos = new MemoryStream();
             pkg.Save(baos);
+
+            // use revert to not re-write the input file
+            pkg.Revert();
+
             MemoryStream bais = new MemoryStream(baos.ToArray());
             pkg = OPCPackage.Open(bais);
 

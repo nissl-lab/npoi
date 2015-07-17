@@ -254,9 +254,16 @@ namespace TestCases.POIFS.FileSystem
             // Open the file up
             try
             {
-                POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("ReferencesInvalidSectors.mpp")
-                );
-                Assert.Fail("File is corrupt and shouldn't have been opened");
+                Stream stream = _samples.OpenResourceAsStream("ReferencesInvalidSectors.mpp");
+                try
+                {
+                    POIFSFileSystem fs = new POIFSFileSystem(stream);
+                    Assert.Fail("File is corrupt and shouldn't have been opened");
+                }
+                finally
+                {
+                    stream.Close();
+                }
             }
             catch (IOException e)
             {
@@ -326,37 +333,43 @@ namespace TestCases.POIFS.FileSystem
         {
             
             Stream inp = _samples.OpenResourceAsStream("BlockSize4096.zvi");
+            try
+            {
+                // First up, check that we can process the header properly
+                HeaderBlock header_block = new HeaderBlock(inp);
+                POIFSBigBlockSize bigBlockSize = header_block.BigBlockSize;
+                Assert.AreEqual(4096, bigBlockSize.GetBigBlockSize());
 
-            // First up, check that we can process the header properly
-            HeaderBlock header_block = new HeaderBlock(inp);
-            POIFSBigBlockSize bigBlockSize = header_block.BigBlockSize;
-            Assert.AreEqual(4096, bigBlockSize.GetBigBlockSize());
+                // Check the fat info looks sane
+                Assert.AreEqual(1, header_block.BATArray.Length);
+                Assert.AreEqual(1, header_block.BATCount);
+                Assert.AreEqual(0, header_block.XBATCount);
 
-            // Check the fat info looks sane
-            Assert.AreEqual(1, header_block.BATArray.Length);
-            Assert.AreEqual(1, header_block.BATCount);
-            Assert.AreEqual(0, header_block.XBATCount);
+                // Now check we can get the basic fat
+                RawDataBlockList data_blocks = new RawDataBlockList(inp, bigBlockSize);
+                Assert.AreEqual(15, data_blocks.BlockCount());
 
-            // Now check we can get the basic fat
-            RawDataBlockList data_blocks = new RawDataBlockList(inp, bigBlockSize);
+                // Now try and open properly
+                POIFSFileSystem fs = new POIFSFileSystem(
+                      _samples.OpenResourceAsStream("BlockSize4096.zvi")
+                );
+                Assert.IsTrue(fs.Root.EntryCount > 3);
 
-
-            // Now try and open properly
-            POIFSFileSystem fs = new POIFSFileSystem(
-                  _samples.OpenResourceAsStream("BlockSize4096.zvi")
-            );
-            Assert.IsTrue(fs.Root.EntryCount > 3);
-
-            // Check we can get at all the contents
-            CheckAllDirectoryContents(fs.Root);
+                // Check we can get at all the contents
+                CheckAllDirectoryContents(fs.Root);
 
 
-            // Finally, check we can do a similar 512byte one too
-            fs = new POIFSFileSystem(
-                 _samples.OpenResourceAsStream("BlockSize512.zvi")
-           );
-            Assert.IsTrue(fs.Root.EntryCount > 3);
-            CheckAllDirectoryContents(fs.Root);
+                // Finally, check we can do a similar 512byte one too
+                fs = new POIFSFileSystem(
+                     _samples.OpenResourceAsStream("BlockSize512.zvi")
+               );
+                Assert.IsTrue(fs.Root.EntryCount > 3);
+                CheckAllDirectoryContents(fs.Root);
+            }
+            finally
+            {
+                inp.Close();
+            }
         }
 
 
@@ -375,16 +388,23 @@ namespace TestCases.POIFS.FileSystem
                 {
                     DocumentNode doc = (DocumentNode)entry;
                     DocumentInputStream dis = new DocumentInputStream(doc);
-                    int numBytes = dis.Available();
-                    byte[] data = new byte[numBytes];
-                    dis.Read(data);
+                    try
+                    {
+                        int numBytes = dis.Available();
+                        byte[] data = new byte[numBytes];
+                        dis.Read(data);
+                    }
+                    finally
+                    {
+                        dis.Close();
+                    }
                 }
             }
-	   }
+       }
         /**
-	 * Test that we can open files that come via Lotus notes.
-	 * These have a top level directory without a name....
-	 */
+     * Test that we can open files that come via Lotus notes.
+     * These have a top level directory without a name....
+     */
         [Test]
         public void TestNotesOLE2Files()
         {

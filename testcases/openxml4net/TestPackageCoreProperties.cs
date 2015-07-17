@@ -58,38 +58,53 @@ namespace TestCases.OPC
 
             // Open namespace
             OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
+            try
+            {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
 
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
+                PackageProperties props = p.GetPackageProperties();
+                props.SetCategoryProperty("MyCategory");
+                props.SetContentStatusProperty("MyContentStatus");
+                props.SetContentTypeProperty("MyContentType");
+                props.SetCreatedProperty(new DateTime?(dateToInsert));
+                props.SetCreatorProperty("MyCreator");
+                props.SetDescriptionProperty("MyDescription");
+                props.SetIdentifierProperty("MyIdentifier");
+                props.SetKeywordsProperty("MyKeywords");
+                props.SetLanguageProperty("MyLanguage");
+                props.SetLastModifiedByProperty("Julien Chable");
+                props.SetLastPrintedProperty(new Nullable<DateTime>(dateToInsert));
+                props.SetModifiedProperty(new Nullable<DateTime>(dateToInsert));
+                props.SetRevisionProperty("2");
+                props.SetTitleProperty("MyTitle");
+                props.SetSubjectProperty("MySubject");
+                props.SetVersionProperty("2");
 
-            PackageProperties props = p.GetPackageProperties();
-            props.SetCategoryProperty("MyCategory");
-            props.SetContentStatusProperty("MyContentStatus");
-            props.SetContentTypeProperty("MyContentType");
-            props.SetCreatedProperty(new DateTime?(dateToInsert));
-            props.SetCreatorProperty("MyCreator");
-            props.SetDescriptionProperty("MyDescription");
-            props.SetIdentifierProperty("MyIdentifier");
-            props.SetKeywordsProperty("MyKeywords");
-            props.SetLanguageProperty("MyLanguage");
-            props.SetLastModifiedByProperty("Julien Chable");
-            props.SetLastPrintedProperty(new Nullable<DateTime>(dateToInsert));
-            props.SetModifiedProperty(new Nullable<DateTime>(dateToInsert));
-            props.SetRevisionProperty("2");
-            props.SetTitleProperty("MyTitle");
-            props.SetSubjectProperty("MySubject");
-            props.SetVersionProperty("2");
+                using (FileStream fs = outputFile.OpenWrite())
+                {
+                    // Save the namespace in the output directory
+                    p.Save(fs);
+                }
 
-            FileStream fs =outputFile.OpenWrite();
-            // Save the namespace in the output directory
-            p.Save(fs);
-            fs.Close();
-
-            // Open the newly Created file to check core properties saved values.
-            OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
-            CompareProperties(p2);
-            p2.Revert();
-            File.Delete(outputFile.Name);
+                // Open the newly Created file to check core properties saved values.
+                OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
+                try
+                {
+                    CompareProperties(p2);
+                    p2.Revert();
+                }
+                finally
+                {
+                    p2.Close();
+                }
+                outputFile.Delete();
+            }
+            finally
+            {
+                // use revert to not re-write the input file
+                p.Revert();
+            }
         }
 
         private void CompareProperties(OPCPackage p)

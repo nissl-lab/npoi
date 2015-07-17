@@ -1280,6 +1280,23 @@ namespace NPOI.HSSF.UserModel
             return style;
         }
 
+        /**
+         * Closes the underlying {@link NPOIFSFileSystem} from which
+         *  the Workbook was read, if any. Has no effect on Workbooks
+         *  opened from an InputStream, or newly created ones.
+         */
+        public void Close()
+        {
+            if (directory != null)
+            {
+                if (directory.NFileSystem != null)
+                {
+                    directory.NFileSystem.Close();
+                    directory = null;
+                }
+            }
+        }
+
         /// <summary>
         /// Write out this workbook to an Outputstream.  Constructs
         /// a new POI POIFSFileSystem, passes in the workbook binary representation  and

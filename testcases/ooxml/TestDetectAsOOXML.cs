@@ -47,18 +47,21 @@ namespace NPOI.OOXML
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xlsx")
             );
             Assert.IsTrue(POIXMLDocument.HasOOXMLHeader(in1));
+            in1.Close();
 
             // xls file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xls")
             );
             Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
+            in1.Close();
 
             // text file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.txt")
             );
             Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
+            in1.Close();
         }
     }
 }
