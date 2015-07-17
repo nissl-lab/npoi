@@ -686,5 +686,135 @@ namespace NPOI.XSSF.UserModel
         {
             return cs.ToString().IndexOf(searchChar.ToString(), start);
         }
+
+        [Test]
+        [Ignore]
+        public void TestAddPivotCache()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                CT_Workbook ctWb = wb.GetCTWorkbook();
+                //CTPivotCache pivotCache = wb.AddPivotCache("0");
+                ////Ensures that pivotCaches is Initiated
+                //Assert.IsTrue(ctWb.IsSetPivotCaches());
+                //Assert.AreSame(pivotCache, ctWb.PivotCaches.GetPivotCacheArray(0));
+                //Assert.AreEqual("0", pivotCache.Id);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        public void SetPivotData(XSSFWorkbook wb)
+        {
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+
+            IRow row1 = sheet.CreateRow(0);
+            // Create a cell and Put a value in it.
+            ICell cell = row1.CreateCell(0);
+            cell.SetCellValue("Names");
+            ICell cell2 = row1.CreateCell(1);
+            cell2.SetCellValue("#");
+            ICell cell7 = row1.CreateCell(2);
+            cell7.SetCellValue("Data");
+
+            IRow row2 = sheet.CreateRow(1);
+            ICell cell3 = row2.CreateCell(0);
+            cell3.SetCellValue("Jan");
+            ICell cell4 = row2.CreateCell(1);
+            cell4.SetCellValue(10);
+            ICell cell8 = row2.CreateCell(2);
+            cell8.SetCellValue("Apa");
+
+            IRow row3 = sheet.CreateRow(2);
+            ICell cell5 = row3.CreateCell(0);
+            cell5.SetCellValue("Ben");
+            ICell cell6 = row3.CreateCell(1);
+            cell6.SetCellValue(9);
+            ICell cell9 = row3.CreateCell(2);
+            cell9.SetCellValue("Bepa");
+
+            //AreaReference source = new AreaReference("A1:B2");
+            //sheet.CreatePivotTable(source, new CellReference("H5"));
+        }
+
+        [Test]
+        [Ignore]
+        public void TestLoadWorkbookWithPivotTable()
+        {
+            String fileName = "ooxml-pivottable.xlsx";
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            SetPivotData(wb);
+
+            //FileOutputStream fileOut = new FileOutputStream(fileName);
+            //wb.Write(fileOut);
+            //fileOut.Close();
+
+            //XSSFWorkbook wb2 = (XSSFWorkbook)WorkbookFactory.Create(new File(fileName));
+            //Assert.IsTrue(wb2.PivotTables.Count == 1);
+        }
+
+        [Test]
+        [Ignore]
+        public void TestAddPivotTableToWorkbookWithLoadedPivotTable()
+        {
+            String fileName = "ooxml-pivottable.xlsx";
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            SetPivotData(wb);
+
+            //FileOutputStream fileOut = new FileOutputStream(fileName);
+            //wb.Write(fileOut);
+            //fileOut.Close();
+
+            //XSSFWorkbook wb2 = (XSSFWorkbook)WorkbookFactory.Create(new File(fileName));
+            //SetPivotData(wb2);
+            //Assert.IsTrue(wb2.PivotTables.Count == 2);
+        }
+
+        [Test]
+        public void TestSetFirstVisibleTab_57373()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+
+            try
+            {
+                /*Sheet sheet1 =*/
+                wb.CreateSheet();
+                ISheet sheet2 = wb.CreateSheet();
+                int idx2 = wb.GetSheetIndex(sheet2);
+                ISheet sheet3 = wb.CreateSheet();
+                int idx3 = wb.GetSheetIndex(sheet3);
+
+                // add many sheets so "first visible" is relevant
+                for (int i = 0; i < 30; i++)
+                {
+                    wb.CreateSheet();
+                }
+
+                wb.FirstVisibleTab = (/*setter*/idx2);
+                wb.SetActiveSheet(idx3);
+
+                //wb.Write(new FileOutputStream(new File("C:\\temp\\test.xlsx")));
+
+                Assert.AreEqual(idx2, wb.FirstVisibleTab);
+                Assert.AreEqual(idx3, wb.ActiveSheetIndex);
+
+                IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+                sheet2 = wbBack.GetSheetAt(idx2);
+                sheet3 = wbBack.GetSheetAt(idx3);
+                Assert.AreEqual(idx2, wb.FirstVisibleTab);
+                Assert.AreEqual(idx3, wb.ActiveSheetIndex);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
     }
 }

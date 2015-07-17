@@ -1122,13 +1122,13 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BookViews bookViews = workbook.bookViews;
                 CT_BookView bookView = bookViews.GetWorkbookViewArray(0);
-                return (int)bookView.activeTab;
+                return (int)bookView.firstSheet;
             }
             set 
             {
                 CT_BookViews bookViews = workbook.bookViews;
                 CT_BookView bookView = bookViews.GetWorkbookViewArray(0);
-                bookView.activeTab = (uint)value;
+                bookView.firstSheet = (uint)value;
             }
         }
 
