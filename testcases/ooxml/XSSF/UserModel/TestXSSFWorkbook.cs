@@ -47,7 +47,7 @@ namespace NPOI.XSSF.UserModel
          * Tests that we can save, and then re-load a new document
          */
         [Test]
-        public void TestSaveLoadNew()
+        public void SaveLoadNew()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
 
@@ -117,7 +117,7 @@ namespace NPOI.XSSF.UserModel
             pkg.Close();
         }
         [Test]
-        public void TestExisting()
+        public void Existing()
         {
 
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
@@ -135,7 +135,7 @@ namespace NPOI.XSSF.UserModel
             pkg.Close();
         }
         [Test]
-        public void TestGetCellStyleAt()
+        public void GetCellStyleAt()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             short i = 0;
@@ -154,7 +154,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(cellStyleAt);
         }
         [Test]
-        public void TestGetFontAt()
+        public void GetFontAt()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             StylesTable styleSource = workbook.GetStylesSource();
@@ -171,7 +171,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(fontAt);
         }
         [Test]
-        public void TestNumCellStyles()
+        public void NumCellStyles()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             short i = workbook.NumCellStyles;
@@ -179,7 +179,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, i);
         }
         [Test]
-        public void TestLoadSave()
+        public void LoadSave()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
             Assert.AreEqual(3, workbook.NumberOfSheets);
@@ -203,7 +203,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(wb2.GetStylesSource());
         }
         [Test]
-        public void TestStyles()
+        public void Styles()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
 
@@ -242,52 +242,73 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, st.GetBorders().Count);
         }
         [Test]
-        public void TestIncrementSheetId()
+        public void IncrementSheetId()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
-            int sheetId = (int)((XSSFSheet)wb.CreateSheet()).sheet.sheetId;
-            Assert.AreEqual(1, sheetId);
-            sheetId = (int)((XSSFSheet)wb.CreateSheet()).sheet.sheetId;
-            Assert.AreEqual(2, sheetId);
+            try
+            {
+                int sheetId = (int)(wb.CreateSheet() as XSSFSheet).sheet.sheetId;
+                Assert.AreEqual(1, sheetId);
+                sheetId = (int)(wb.CreateSheet() as XSSFSheet).sheet.sheetId;
+                Assert.AreEqual(2, sheetId);
 
-            //test file with gaps in the sheetId sequence
-            wb = XSSFTestDataSamples.OpenSampleWorkbook("47089.xlsm");
-            int lastSheetId = (int)((XSSFSheet)wb.GetSheetAt(wb.NumberOfSheets - 1)).sheet.sheetId;
-            sheetId = (int)((XSSFSheet)wb.CreateSheet()).sheet.sheetId;
-            Assert.AreEqual(lastSheetId + 1, sheetId);
+                //test file with gaps in the sheetId sequence
+                XSSFWorkbook wbBack = XSSFTestDataSamples.OpenSampleWorkbook("47089.xlsm");
+                try
+                {
+                    int lastSheetId = (int)(wbBack.GetSheetAt(wbBack.NumberOfSheets - 1)  as XSSFSheet).sheet.sheetId;
+                    sheetId = (int)(wbBack.CreateSheet() as XSSFSheet).sheet.sheetId;
+                    Assert.AreEqual(lastSheetId + 1, sheetId);
+                }
+                finally
+                {
+                    wbBack.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
 
         /**
          *  Test Setting of core properties such as Title and Author
          */
         [Test]
-        public void TestWorkbookProperties()
+        public void WorkbookProperties()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
-            POIXMLProperties props = workbook.GetProperties();
-            Assert.IsNotNull(props);
-            //the Application property must be set for new workbooks, see Bugzilla #47559
-            Assert.AreEqual("NPOI", props.ExtendedProperties.GetUnderlyingProperties().Application);
+            try
+            {
+                POIXMLProperties props = workbook.GetProperties();
+                Assert.IsNotNull(props);
+                //the Application property must be set for new workbooks, see Bugzilla #47559
+                Assert.AreEqual("NPOI", props.ExtendedProperties.GetUnderlyingProperties().Application);
 
-            PackagePropertiesPart opcProps = props.CoreProperties.GetUnderlyingProperties();
-            Assert.IsNotNull(opcProps);
+                PackagePropertiesPart opcProps = props.CoreProperties.GetUnderlyingProperties();
+                Assert.IsNotNull(opcProps);
 
-            opcProps.SetTitleProperty("Testing Bugzilla #47460");
-            Assert.AreEqual("NPOI", opcProps.GetCreatorProperty());
-            opcProps.SetCreatorProperty("poi-dev@poi.apache.org");
+                opcProps.SetTitleProperty("Testing Bugzilla #47460");
+                Assert.AreEqual("NPOI", opcProps.GetCreatorProperty());
+                opcProps.SetCreatorProperty("poi-dev@poi.apache.org");
 
-            workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            Assert.AreEqual("NPOI", workbook.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
-            opcProps = workbook.GetProperties().CoreProperties.GetUnderlyingProperties();
-            Assert.AreEqual("Testing Bugzilla #47460", opcProps.GetTitleProperty());
-            Assert.AreEqual("poi-dev@poi.apache.org", opcProps.GetCreatorProperty());
+                XSSFWorkbook wbBack = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+                Assert.AreEqual("NPOI", wbBack.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
+                opcProps = wbBack.GetProperties().CoreProperties.GetUnderlyingProperties();
+                Assert.AreEqual("Testing Bugzilla #47460", opcProps.GetTitleProperty());
+                Assert.AreEqual("poi-dev@poi.apache.org", opcProps.GetCreatorProperty());
+            }
+            finally
+            {
+                workbook.Close();
+            }
         }
 
         /**
          * Verify that the attached Test data was not modified. If this Test method
          * fails, the Test data is not working properly.
          */
-        //public void TestBug47668()
+        //public void Bug47668()
         //{
         //    XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47668.xlsx");
         //    IList allPictures = workbook.GetAllPictures();
@@ -325,7 +346,7 @@ namespace NPOI.XSSF.UserModel
          * When deleting a sheet make sure that we adjust sheet indices of named ranges
          */
         [Test]
-        public void TestBug47737()
+        public void Bug47737()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47737.xlsx");
             Assert.AreEqual(2, wb.NumberOfNames);
@@ -353,7 +374,7 @@ namespace NPOI.XSSF.UserModel
          * Problems with XSSFWorkbook.RemoveSheetAt when workbook Contains chart
          */
         [Test]
-        public void TestBug47813()
+        public void Bug47813()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47813.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);
@@ -382,7 +403,7 @@ namespace NPOI.XSSF.UserModel
          *  coming out wrong
          */
         [Test]
-        public void TestBug49702()
+        public void Bug49702()
         {
             // First try with a new file
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -438,7 +459,7 @@ namespace NPOI.XSSF.UserModel
             catch (ArgumentOutOfRangeException) { }
         }
         [Test]
-        public void TestRecalcId()
+        public void RecalcId()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             Assert.IsFalse(wb.GetForceFormulaRecalculation());
@@ -464,12 +485,12 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(ST_CalcMode.auto, calcPr.calcMode);
         }
         [Test]
-        public void TestChangeSheetNameWithSharedFormulas()
+        public void ChangeSheetNameWithSharedFormulas()
         {
             ChangeSheetNameWithSharedFormulas("shared_formulas.xlsx");
         }
         [Test]
-        public void TestSetTabColor()
+        public void SetTabColor()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
@@ -480,7 +501,7 @@ namespace NPOI.XSSF.UserModel
                     sh.GetCTWorksheet().sheetPr.tabColor.indexed);
         }
         [Test]
-        public void TestColumnWidthPOI52233()
+        public void ColumnWidthPOI52233()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             ISheet sheet = workbook.CreateSheet();
@@ -519,7 +540,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestBug48495()
+        public void Bug48495()
         {
             try
             {
@@ -547,7 +568,7 @@ namespace NPOI.XSSF.UserModel
 
         }
         [Test]
-        public void TestBug47090a()
+        public void Bug47090a()
         {
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
             assertSheetOrder(workbook, "Sheet1", "Sheet2");
@@ -560,7 +581,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestBug47090b()
+        public void Bug47090b()
         {
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
             assertSheetOrder(workbook, "Sheet1", "Sheet2");
@@ -573,7 +594,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestBug47090c()
+        public void Bug47090c()
         {
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
             assertSheetOrder(workbook, "Sheet1", "Sheet2");
@@ -586,7 +607,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestBug47090d()
+        public void Bug47090d()
         {
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("47090.xlsx");
             assertSheetOrder(workbook, "Sheet1", "Sheet2");
@@ -601,7 +622,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestBug51158()
+        public void Bug51158()
         {
             // create a workbook
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -639,7 +660,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestBug51158a()
+        public void Bug51158a()
         {
             // create a workbook
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -689,7 +710,7 @@ namespace NPOI.XSSF.UserModel
 
         [Test]
         [Ignore]
-        public void TestAddPivotCache()
+        public void AddPivotCache()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             try
@@ -742,7 +763,7 @@ namespace NPOI.XSSF.UserModel
 
         [Test]
         [Ignore]
-        public void TestLoadWorkbookWithPivotTable()
+        public void LoadWorkbookWithPivotTable()
         {
             String fileName = "ooxml-pivottable.xlsx";
 
@@ -759,7 +780,7 @@ namespace NPOI.XSSF.UserModel
 
         [Test]
         [Ignore]
-        public void TestAddPivotTableToWorkbookWithLoadedPivotTable()
+        public void AddPivotTableToWorkbookWithLoadedPivotTable()
         {
             String fileName = "ooxml-pivottable.xlsx";
 
@@ -776,7 +797,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void TestSetFirstVisibleTab_57373()
+        public void SetFirstVisibleTab_57373()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
 
