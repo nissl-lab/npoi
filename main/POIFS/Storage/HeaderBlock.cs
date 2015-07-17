@@ -31,6 +31,7 @@ using System.IO;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
+using NPOI.HSSF;
 
 
 
@@ -60,11 +61,11 @@ namespace NPOI.POIFS.Storage
         // start of the small block allocation table (int index of small
         // block allocation table's first big block)
         private int _sbat_start;
-        	/**
-	 * Number of small block allocation table blocks (int)
-	 * (Number of MiniFAT Sectors in Microsoft parlance)
-	 */
-     	private int _sbat_count;
+            /**
+         * Number of small block allocation table blocks (int)
+         * (Number of MiniFAT Sectors in Microsoft parlance)
+         */
+        private int _sbat_count;
         // big block index for extension to the big block allocation table
         private int _xbat_start;
         private int _xbat_count;
@@ -127,14 +128,42 @@ namespace NPOI.POIFS.Storage
                 {
                     throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. You are calling the part of POI that deals with OLE2 Office Documents. You need to call a different part of POI to process this data (eg XSSF instead of HSSF)");
                 }
-                if ((signature & unchecked((long)0xFF8FFFFFFFFFFFFFL)) == 0x0010000200040009L)
+                if (_data[0] == 0x09 && _data[1] == 0x00 && // sid=0x0009
+                _data[2] == 0x04 && _data[3] == 0x00 && // size=0x0004
+                _data[4] == 0x00 && _data[5] == 0x00 && // unused
+               (_data[6] == 0x10 || _data[6] == 0x20 || _data[6] == 0x40) &&
+                _data[7] == 0x00)
                 {
-                    throw new ArgumentException("The supplied data appears to be in BIFF2 format.  "
-                        + "POI only supports BIFF8 format");
+                    // BIFF2 raw stream
+                    throw new OldExcelFormatException("The supplied data appears to be in BIFF2 format. " +
+                            "HSSF only supports the BIFF8 format, try OldExcelExtractor");
+                }
+                if (_data[0] == 0x09 && _data[1] == 0x02 && // sid=0x0209
+                    _data[2] == 0x06 && _data[3] == 0x00 && // size=0x0006
+                    _data[4] == 0x00 && _data[5] == 0x00 && // unused
+                   (_data[6] == 0x10 || _data[6] == 0x20 || _data[6] == 0x40) &&
+                    _data[7] == 0x00)
+                {
+                    // BIFF3 raw stream
+                    throw new OldExcelFormatException("The supplied data appears to be in BIFF3 format. " +
+                            "HSSF only supports the BIFF8 format, try OldExcelExtractor");
+                }
+                if (_data[0] == 0x09 && _data[1] == 0x04 && // sid=0x0409
+                    _data[2] == 0x06 && _data[3] == 0x00 && // size=0x0006
+                    _data[4] == 0x00 && _data[5] == 0x00)
+                { // unused
+                    if (((_data[6] == 0x10 || _data[6] == 0x20 || _data[6] == 0x40) &&
+                          _data[7] == 0x00) ||
+                        (_data[6] == 0x00 && _data[7] == 0x01))
+                    {
+                        // BIFF4 raw stream
+                        throw new OldExcelFormatException("The supplied data appears to be in BIFF4 format. " +
+                                "HSSF only supports the BIFF8 format, try OldExcelExtractor");
+                    }
                 }
 
                 // Give a generic error if the OLE2 signature isn't found
-                throw new IOException("Invalid header signature; read "
+                throw new NotOLE2FileException("Invalid header signature; read "
                                     + LongToHex(signature) + ", expected "
                                     + LongToHex(_signature) + " - Your file appears "
                                     + "not to be a valid OLE2 document");
@@ -224,8 +253,8 @@ namespace NPOI.POIFS.Storage
         private static IOException AlertShortRead(int read, int expectedReadSize)
         {
             if (read < 0)
-    		    //Cant have -1 bytes Read in the error message!
-    		    read = 0;
+                //Cant have -1 bytes Read in the error message!
+                read = 0;
             String type = " byte" + ((read == 1) ? (""): ("s"));
 
             return new IOException("Unable to Read entire header; "
@@ -349,7 +378,7 @@ namespace NPOI.POIFS.Storage
         /// @return 
         public POIFSBigBlockSize BigBlockSize
         {
-    	    get{return bigBlockSize;}
+            get{return bigBlockSize;}
         }
 
         //public void Write(Stream stream)

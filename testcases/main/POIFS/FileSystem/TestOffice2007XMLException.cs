@@ -33,6 +33,7 @@ namespace TestCases.POIFS.FileSystem
     using TestCases.HSSF;
     using NPOI.POIFS.FileSystem;
     using NUnit.Framework;
+    using NPOI.Util;
 
 
     /**
@@ -81,16 +82,24 @@ namespace TestCases.POIFS.FileSystem
         private void ConfirmIsPOIFS(String sampleFileName, bool expectedResult)
         {
             Stream in1 = OpenSampleStream(sampleFileName);
-            bool actualResult;
             try
             {
-                actualResult = POIFSFileSystem.HasPOIFSHeader(in1);
+                bool actualResult;
+                try
+                {
+                    actualResult = POIFSFileSystem.HasPOIFSHeader(in1);
+                }
+                catch (IOException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
+                Assert.AreEqual(expectedResult, actualResult);
             }
-            catch (IOException)
+            finally
             {
-                throw;
+                in1.Close();
             }
-            Assert.AreEqual(expectedResult, actualResult);
+
         }
     }
 }

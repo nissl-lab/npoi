@@ -16,6 +16,9 @@
 ==================================================================== */
 
 using NUnit.Framework;
+using NPOI.SS.UserModel;
+using System.Collections.Generic;
+using NPOI.SS.UserModel.Charts;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -82,6 +85,26 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, d1.GetCharts().Count);
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
+
+        [Test]
+        public void TestGetChartAxisBug57362()
+        {
+            //Load existing excel with some chart on it having primary and secondary axis.
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("57362.xlsx");
+            ISheet sh = workbook.GetSheetAt(0);
+            XSSFSheet xsh = (XSSFSheet)sh;
+            XSSFDrawing Drawing = xsh.CreateDrawingPatriarch() as XSSFDrawing;
+            XSSFChart chart = Drawing.GetCharts()[(0)];
+
+            List<IChartAxis> axisList = chart.GetAxis();
+
+            Assert.AreEqual(4, axisList.Count);
+            Assert.IsNotNull(axisList[(0)]);
+            Assert.IsNotNull(axisList[(1)]);
+            Assert.IsNotNull(axisList[(2)]);
+            Assert.IsNotNull(axisList[(3)]);
+        }
+
     }
 
 }

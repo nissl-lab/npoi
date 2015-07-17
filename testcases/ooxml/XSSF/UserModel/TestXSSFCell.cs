@@ -435,6 +435,58 @@ namespace NPOI.XSSF.UserModel
             XSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
 
+        [Test]
+        public void TestBug56644ReturnNull()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56644.xlsx");
+            try
+            {
+                wb.MissingCellPolicy = (MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                ISheet sheet = wb.GetSheet("samplelist");
+                IRow row = sheet.GetRow(20);
+                row.CreateCell(2);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug56644ReturnBlank()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56644.xlsx");
+            try
+            {
+                wb.MissingCellPolicy = (MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                ISheet sheet = wb.GetSheet("samplelist");
+                IRow row = sheet.GetRow(20);
+                row.CreateCell(2);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestBug56644CreateBlank()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56644.xlsx");
+            try
+            {
+                wb.MissingCellPolicy = (MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                ISheet sheet = wb.GetSheet("samplelist");
+                IRow row = sheet.GetRow(20);
+                row.CreateCell(2);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+
     }
 
 }

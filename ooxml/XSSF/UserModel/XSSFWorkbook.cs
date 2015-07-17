@@ -184,6 +184,14 @@ namespace NPOI.XSSF.UserModel
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
+
+            // some broken Workbooks miss this...
+            if (!workbook.IsSetBookViews())
+            {
+                CT_BookViews bvs = workbook.AddNewBookViews();
+                CT_BookView bv = bvs.AddNewWorkbookView();
+                bv.activeTab = (0);
+            }
         }
         /**
          * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
@@ -206,6 +214,14 @@ namespace NPOI.XSSF.UserModel
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
+
+            // some broken Workbooks miss this...
+            if (!workbook.IsSetBookViews())
+            {
+                CT_BookViews bvs = workbook.AddNewBookViews();
+                CT_BookView bv = bvs.AddNewWorkbookView();
+                bv.activeTab = (0);
+            }
         }
 
         /**
@@ -996,20 +1012,38 @@ namespace NPOI.XSSF.UserModel
         public void RemoveSheetAt(int index)
         {
             ValidateSheetIndex(index);
-            bool changeActiveTab = false;
-            if (ActiveSheetIndex>index)
-            {
-                changeActiveTab = true;
-            }
             OnSheetDelete(index);
 
             XSSFSheet sheet = (XSSFSheet)GetSheetAt(index);
             RemoveRelation(sheet);
             sheets.RemoveAt(index);
-            if (changeActiveTab)
+
+            // only Set new sheet if there are still some left
+            if (sheets.Count == 0)
             {
-                SetActiveSheet(0);
+                return;
             }
+
+            // the index of the closest remaining sheet to the one just deleted
+            int newSheetIndex = index;
+            if (newSheetIndex >= sheets.Count)
+            {
+                newSheetIndex = sheets.Count - 1;
+            }
+
+            // adjust active sheet
+            int active = ActiveSheetIndex;
+            if (active == index)
+            {
+                // Removed sheet was the active one, reset active sheet if there is still one left now
+                SetActiveSheet(newSheetIndex);
+            }
+            else if (active > index)
+            {
+                // Removed sheet was below the active one => active is one less now
+                SetActiveSheet(active - 1);
+            }
+
         }
 
         /**
@@ -1104,13 +1138,13 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BookViews bookViews = workbook.bookViews;
                 CT_BookView bookView = bookViews.GetWorkbookViewArray(0);
-                return (int)bookView.activeTab;
+                return (int)bookView.firstSheet;
             }
             set 
             {
                 CT_BookViews bookViews = workbook.bookViews;
                 CT_BookView bookView = bookViews.GetWorkbookViewArray(0);
-                bookView.activeTab = (uint)value;
+                bookView.firstSheet = (uint)value;
             }
         }
 
@@ -1356,10 +1390,35 @@ namespace NPOI.XSSF.UserModel
             newcts.Set(cts);
 
             //notify sheets
+            List<CT_Sheet> sheetArray = ct.sheet;
             for (int i = 0; i < sheets.Count; i++)
             {
-                sheets[i].sheet = ct.GetSheetArray(i);
+                sheets[i].sheet = sheetArray[i];
             }
+
+            // adjust active sheet if necessary
+            int active = ActiveSheetIndex;
+            if (active == idx)
+            {
+                // Moved sheet was the active one
+                SetActiveSheet(pos);
+            }
+            else if ((active < idx && active < pos) ||
+                  (active > idx && active > pos))
+            {
+                // not affected
+            }
+            else if (pos > idx)
+            {
+                // Moved sheet was below before and is above now => active is one less
+                SetActiveSheet(active - 1);
+            }
+            else
+            {
+                // remaining case: Moved sheet was higher than active before and is lower now => active is one more
+                SetActiveSheet(active + 1);
+            }
+
         }
 
         /**

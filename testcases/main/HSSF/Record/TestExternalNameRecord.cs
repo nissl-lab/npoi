@@ -30,21 +30,21 @@ namespace TestCases.HSSF.Record
     {
 
         private static byte[] dataFDS = {
-		    0, 0, 0, 0, 0, 0, 3, 0, 70, 68, 83, 0, 0,
-	    };
+            0, 0, 0, 0, 0, 0, 3, 0, 70, 68, 83, 0, 0,
+        };
 
         // data taken from bugzilla 44774 att 21790
         private static byte[] dataAutoDocName = {
-		    unchecked((byte)-22), 127, 0, 0, 0, 0, 29, 0, 39, 49, 57, 49, 50, 49, 57, 65, 87, 52, 32, 67, 111, 114,
-			112, 44, 91, 87, 79, 82, 75, 79, 85, 84, 95, 80, 88, 93, 39,
-    	};
+            unchecked((byte)-22), 127, 0, 0, 0, 0, 29, 0, 39, 49, 57, 49, 50, 49, 57, 65, 87, 52, 32, 67, 111, 114,
+            112, 44, 91, 87, 79, 82, 75, 79, 85, 84, 95, 80, 88, 93, 39,
+        };
 
         // data taken from bugzilla 44774 att 21790
         private static byte[] dataPlainName = {
-		    0, 0, 0, 0, 0, 0, 9, 0, 82, 97, 116, 101, 95, 68, 97, 116, 101, 9, 0, 58, 0, 0, 0, 0, 4, 0, 8, 0
-		    // TODO - the last 2 bytes of formula data (8,0) seem weird.  They encode to ConcatPtg, UnknownPtg
-		    // UnknownPtg is1 otherwise not created by any other test cases
-	    };
+            0, 0, 0, 0, 0, 0, 9, 0, 82, 97, 116, 101, 95, 68, 97, 116, 101, 9, 0, 58, 0, 0, 0, 0, 4, 0, 8, 0
+            // TODO - the last 2 bytes of formula data (8,0) seem weird.  They encode to ConcatPtg, UnknownPtg
+            // UnknownPtg is1 otherwise not created by any other test cases
+        };
 
         private static ExternalNameRecord CreateSimpleENR(byte[] data)
         {
@@ -78,6 +78,8 @@ namespace TestCases.HSSF.Record
                 throw new AssertionException("Identified bug 44695");
             }
             Assert.AreEqual(17, enr.RecordSize);
+
+            Assert.IsNotNull(enr.Serialize());
         }
         [Test]
         public void TestAutoStdDocName()
@@ -186,5 +188,22 @@ namespace TestCases.HSSF.Record
             }
             Assert.AreEqual("\u0159azen\u00ED_Billa", enr.Text);
         }
+
+        [Test]
+        public void TestNPEWithFileFrom49219()
+        {
+            // the file at test-data/spreadsheet/49219.xls has ExternalNameRecords without actual data, 
+            // we did handle this during Reading, but failed during serializing this out1, ensure it works now
+            byte[] data = new byte[] {
+        		2, 127, 0, 0, 0, 0, 
+        		9, 0, 82, 97, 116, 101, 95, 68, 97, 116, 101};
+
+            ExternalNameRecord enr = CreateSimpleENR(data);
+
+            byte[] ser = enr.Serialize();
+            Assert.AreEqual("[23, 00, 11, 00, 02, 7F, 00, 00, 00, 00, 09, 00, 52, 61, 74, 65, 5F, 44, 61, 74, 65]",
+                    HexDump.ToHex(ser));
+        }
+
     }
 }

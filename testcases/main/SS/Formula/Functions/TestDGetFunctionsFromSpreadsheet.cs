@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -14,33 +14,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-/* ================================================================
- * About NPOI
- * Author: Tony Qu 
- * Author's email: tonyqus (at) gmail.com 
- * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
- * HomePage: http://www.codeplex.com/npoi
- * Contributors:
- * 
- * ==============================================================*/
-
-using System;
-
-
-namespace NPOI.POIFS.FileSystem
+namespace TestCases.SS.Formula.Functions
 {
-    /// <summary>
-    /// This exception is thrown when we try to open a file that's actually
-    /// an Office 2007+ XML file, rather than an OLE2 file (which is what
-    /// POIFS works with)
-    /// </summary>
-    [Serializable]
-    public class OfficeXmlFileException:ArgumentException
+    using System;
+    using NUnit.Framework;
+
+    /**
+    * Tests DGET() as loaded from a test data spreadsheet.
+    */
+    [TestFixture]
+    public class TestDGetFunctionsFromSpreadsheet : BaseTestFunctionsFromSpreadsheet
     {
-        public OfficeXmlFileException(String s):base(s)
-        { 
-        
+
+        protected override String Filename
+        {
+            get
+            {
+                return "DGet.xls";
+            }
         }
     }
 }
+

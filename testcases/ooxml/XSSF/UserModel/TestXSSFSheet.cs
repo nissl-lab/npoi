@@ -1171,12 +1171,21 @@ namespace NPOI.XSSF.UserModel
             }
 
             // for XSSF also test with SXSSF
-            //if(isXSSF) {
-            //    IWorkbook swb = new SXSSFWorkbook((XSSFWorkbook) wb);
-            //    for (int si = 0; si < swb.GetNumberOfSheets(); si++) {
-            //        ISheet sh = swb.GetSheetAt(si);
-            //        Assert.IsNotNull(sh.SheetName);
-            //        Assert.AreEqual("Did not match for sheet " + si, topRows[si], sh.GetTopRow());
+            //if (isXSSF)
+            //{
+            //    Workbook swb = new SXSSFWorkbook((XSSFWorkbook)wb);
+            //    try
+            //    {
+            //        for (int si = 0; si < swb.getNumberOfSheets(); si++)
+            //        {
+            //            Sheet sh = swb.getSheetAt(si);
+            //            assertNotNull(sh.getSheetName());
+            //            assertEquals("Did not match for sheet " + si, topRows[si], sh.getTopRow());
+            //        }
+            //    }
+            //    finally
+            //    {
+            //        swb.close();
             //    }
             //}
         }
@@ -1209,6 +1218,7 @@ namespace NPOI.XSSF.UserModel
             //        Assert.IsNotNull(sh.SheetName);
             //        Assert.AreEqual("Did not match for sheet " + si, topRows[si], sh.GetLeftCol());
             //    }
+            //    swb.Close();
             //}
         }
         const int ROW_COUNT = 40000;

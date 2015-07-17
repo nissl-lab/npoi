@@ -116,6 +116,9 @@
     <Compile Include="HPSF\VariantBool.cs" />
     <Compile Include="HPSF\Vector.cs" />
     <Compile Include="HPSF\VersionedStream.cs" />
+    <Compile Include="HSSF\Extractor\OldExcelExtractor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HSSF\Record\Aggregates\Chart\AttachedLabelAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxesAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxisParentAggregate.cs" />
@@ -185,6 +188,11 @@
     <Compile Include="HSSF\Record\DConRefRecord.cs" />
     <Compile Include="HSSF\Record\FtCfSubRecord.cs" />
     <Compile Include="HSSF\Record\FtPioGrbitSubRecord.cs" />
+    <Compile Include="HSSF\Record\OldCellRecord.cs" />
+    <Compile Include="HSSF\Record\OldFormulaRecord.cs" />
+    <Compile Include="HSSF\Record\OldLabelRecord.cs" />
+    <Compile Include="HSSF\Record\OldSheetRecord.cs" />
+    <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
@@ -192,6 +200,7 @@
     <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />
+    <Compile Include="POIFS\FileSystem\NotOLE2FileException.cs" />
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -210,6 +219,9 @@
     <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\Delta.cs" />
+    <Compile Include="SS\Formula\Functions\DGet.cs" />
+    <Compile Include="SS\Formula\Functions\DMin.cs" />
+    <Compile Include="SS\Formula\Functions\DStarRunner.cs" />
     <Compile Include="SS\Formula\Functions\EOMonth.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\FactDouble.cs" />
@@ -217,6 +229,7 @@
     <Compile Include="SS\Formula\Functions\Fixed.cs" />
     <Compile Include="SS\Formula\Functions\Hex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
+    <Compile Include="SS\Formula\Functions\IDStarAlgorithm.cs" />
     <Compile Include="SS\Formula\Functions\Imaginary.cs" />
     <Compile Include="SS\Formula\Functions\ImReal.cs" />
     <Compile Include="SS\Formula\Functions\Intercept.cs" />

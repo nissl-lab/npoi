@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -15,32 +15,24 @@
    limitations under the License.
 ==================================================================== */
 
-/* ================================================================
- * About NPOI
- * Author: Tony Qu 
- * Author's email: tonyqus (at) gmail.com 
- * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
- * HomePage: http://www.codeplex.com/npoi
- * Contributors:
- * 
- * ==============================================================*/
-
-using System;
-
-
 namespace NPOI.POIFS.FileSystem
 {
-    /// <summary>
-    /// This exception is thrown when we try to open a file that's actually
-    /// an Office 2007+ XML file, rather than an OLE2 file (which is what
-    /// POIFS works with)
-    /// </summary>
-    [Serializable]
-    public class OfficeXmlFileException:ArgumentException
+    using System;
+    using System.IO;
+
+
+
+    /**
+     * This exception is thrown when we try to open a file that doesn't
+     *  seem to actually be an OLE2 file After all
+     */
+    public class NotOLE2FileException : IOException
     {
-        public OfficeXmlFileException(String s):base(s)
-        { 
-        
+        public NotOLE2FileException(String s)
+            : base(s)
+        {
+
         }
     }
+
 }

@@ -99,7 +99,7 @@ namespace NPOI
                 OPCPackage pkg = _document.Package;
                 if (pkg != null)
                 {
-                    pkg.Close();
+                    pkg.Revert();
                 }
             }
             base.Close();

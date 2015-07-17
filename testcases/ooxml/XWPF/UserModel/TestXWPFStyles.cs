@@ -61,17 +61,19 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument docOut = new XWPFDocument();
             XWPFStyles styles = docOut.CreateStyles();
 
-            String strStyleName = "headline1";
+            String strStyleId = "headline1";
             CT_Style ctStyle = new CT_Style();
 
-            ctStyle.styleId = (strStyleName);
+            ctStyle.styleId = (strStyleId);
             XWPFStyle s = new XWPFStyle(ctStyle);
             styles.AddStyle(s);
+
+            Assert.IsTrue(styles.StyleExist(strStyleId));
 
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
             styles = docIn.GetStyles();
-            Assert.IsTrue(styles.StyleExist(strStyleName));
+            Assert.IsTrue(styles.StyleExist(strStyleId));
         }
 
         /**
@@ -125,6 +127,27 @@ namespace NPOI.XWPF.UserModel
             XWPFLatentStyles ls = new XWPFLatentStyles(latentStyles);
             Assert.AreEqual(true, ls.IsLatentStyle("ex1"));
             Assert.AreEqual(false, ls.IsLatentStyle("notex1"));
+        }
+
+        [Test]
+        public void TestSetStyles_Bug57254()
+        {
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFStyles styles = docOut.CreateStyles();
+
+            CT_Styles ctStyles = new CT_Styles();
+            String strStyleId = "headline1";
+            CT_Style ctStyle = ctStyles.AddNewStyle();
+
+            ctStyle.styleId = (/*setter*/strStyleId);
+            styles.SetStyles(ctStyles);
+
+            Assert.IsTrue(styles.StyleExist(strStyleId));
+
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+
+            styles = docIn.GetStyles();
+            Assert.IsTrue(styles.StyleExist(strStyleId));
         }
 
     }

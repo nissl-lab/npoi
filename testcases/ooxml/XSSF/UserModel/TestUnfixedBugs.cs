@@ -42,8 +42,8 @@ namespace NPOI.XSSF.UserModel
         private void verifyBug54084Unicode(XSSFWorkbook wb)
         {
             // expected data is stored in UTF-8 in a text-file
-
-            String testData = Encoding.UTF8.GetString(HSSFTestDataSamples.GetTestDataFileContent("54084 - Greek - beyond BMP.txt")).Trim();
+            byte[] data = HSSFTestDataSamples.GetTestDataFileContent("54084 - Greek - beyond BMP.txt");
+            String testData = Encoding.UTF8.GetString(data).Trim();
 
             ISheet sheet = wb.GetSheetAt(0);
             IRow row = sheet.GetRow(0);
@@ -85,7 +85,78 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-        
+
+        [Test]
+        public void Test57236()
+        {
+            // Having very small numbers leads to different formatting, Excel uses the scientific notation, but POI leads to "0"
+
+            /*
+            DecimalFormat format = new DecimalFormat("#.##########", new DecimalFormatSymbols(Locale.Default));
+            double d = 3.0E-104;
+            Assert.AreEqual("3.0E-104", format.Format(d));
+             */
+
+            DataFormatter formatter = new DataFormatter(true);
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57236.xlsx");
+            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            {
+                ISheet sheet = wb.GetSheetAt(sheetNum);
+                for (int rowNum = sheet.FirstRowNum; rowNum < sheet.LastRowNum; rowNum++)
+                {
+                    IRow row = sheet.GetRow(rowNum);
+                    for (int cellNum = row.FirstCellNum; cellNum < row.LastCellNum; cellNum++)
+                    {
+                        ICell cell = row.GetCell(cellNum);
+                        String fmtCellValue = formatter.FormatCellValue(cell);
+
+                        //System.out.Println("Cell: " + fmtCellValue);
+                        Assert.IsNotNull(fmtCellValue);
+                        Assert.IsFalse(fmtCellValue.Equals("0"));
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void Test57165()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            try
+            {
+                RemoveAllSheetsBut(3, wb);
+                wb.CloneSheet(0); // Throws exception here
+                wb.SetSheetName(1, "New Sheet");
+                //saveWorkbook(wb, fileName);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+                try
+                {
+
+                }
+                finally
+                {
+                    wbBack.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        private static void RemoveAllSheetsBut(int sheetIndex, IWorkbook wb)
+        {
+            int sheetNb = wb.NumberOfSheets;
+            // Move this sheet at the first position
+            wb.SetSheetOrder(wb.GetSheetName(sheetIndex), 0);
+            for (int sn = sheetNb - 1; sn > 0; sn--)
+            {
+                wb.RemoveSheetAt(sn);
+            }
+        }
+
     }
 }
 

@@ -580,38 +580,46 @@ namespace TestCases.POIFS.FileSystem
             DocumentInputStream stream;
 
             NPOIFSFileSystem npoifs = new NPOIFSFileSystem(sample);
-            sample = _samples.GetFile("Sample.pub");
-            POIFSFileSystem opoifs = new POIFSFileSystem(sample);
 
-            // Ensure we have what we expect on the root
-            Assert.AreEqual(npoifs, npoifs.Root.NFileSystem);
-            Assert.AreEqual(null, npoifs.Root.FileSystem);
-            Assert.AreEqual(opoifs, opoifs.Root.FileSystem);
-            Assert.AreEqual(null, opoifs.Root.NFileSystem);
-
-            // Check inside
-            foreach (DirectoryNode root in new DirectoryNode[] { opoifs.Root, npoifs.Root })
+            try
             {
-                // Top Level
-                Entry top = root.GetEntry("Contents");
-                Assert.AreEqual(true, top.IsDocumentEntry);
-                stream = root.CreateDocumentInputStream(top);
-                stream.Read();
+                sample = _samples.GetFile("Sample.pub");
+                POIFSFileSystem opoifs = new POIFSFileSystem(sample);
 
-                // One Level Down
-                DirectoryNode escher = (DirectoryNode)root.GetEntry("Escher");
-                Entry one = escher.GetEntry("EscherStm");
-                Assert.AreEqual(true, one.IsDocumentEntry);
-                stream = escher.CreateDocumentInputStream(one);
-                stream.Read();
+                // Ensure we have what we expect on the root
+                Assert.AreEqual(npoifs, npoifs.Root.NFileSystem);
+                Assert.AreEqual(null, npoifs.Root.FileSystem);
+                Assert.AreEqual(opoifs, opoifs.Root.FileSystem);
+                Assert.AreEqual(null, opoifs.Root.NFileSystem);
 
-                // Two Levels Down
-                DirectoryNode quill = (DirectoryNode)root.GetEntry("Quill");
-                DirectoryNode quillSub = (DirectoryNode)quill.GetEntry("QuillSub");
-                Entry two = quillSub.GetEntry("CONTENTS");
-                Assert.AreEqual(true, two.IsDocumentEntry);
-                stream = quillSub.CreateDocumentInputStream(two);
-                stream.Read();
+                // Check inside
+                foreach (DirectoryNode root in new DirectoryNode[] { opoifs.Root, npoifs.Root })
+                {
+                    // Top Level
+                    Entry top = root.GetEntry("Contents");
+                    Assert.AreEqual(true, top.IsDocumentEntry);
+                    stream = root.CreateDocumentInputStream(top);
+                    stream.Read();
+
+                    // One Level Down
+                    DirectoryNode escher = (DirectoryNode)root.GetEntry("Escher");
+                    Entry one = escher.GetEntry("EscherStm");
+                    Assert.AreEqual(true, one.IsDocumentEntry);
+                    stream = escher.CreateDocumentInputStream(one);
+                    stream.Read();
+
+                    // Two Levels Down
+                    DirectoryNode quill = (DirectoryNode)root.GetEntry("Quill");
+                    DirectoryNode quillSub = (DirectoryNode)quill.GetEntry("QuillSub");
+                    Entry two = quillSub.GetEntry("CONTENTS");
+                    Assert.AreEqual(true, two.IsDocumentEntry);
+                    stream = quillSub.CreateDocumentInputStream(two);
+                    stream.Read();
+                }
+            }
+            finally
+            {
+                npoifs.Close();
             }
         }
     }

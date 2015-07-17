@@ -54,7 +54,7 @@ namespace NPOI.XSSF.UserModel
          */
         private CT_Chart chart;
 
-        List<IChartAxis> axis;
+        List<IChartAxis> axis = new List<IChartAxis>();
 
         /**
          * Create a new SpreadsheetML chart
@@ -62,8 +62,6 @@ namespace NPOI.XSSF.UserModel
         public XSSFChart()
             : base()
         {
-
-            axis = new List<IChartAxis>();
             CreateChart();
         }
 

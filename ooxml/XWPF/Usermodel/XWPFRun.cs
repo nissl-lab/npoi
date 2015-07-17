@@ -414,7 +414,8 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 CT_RPr pr = run.rPr;
-                return (pr != null && pr.IsSetU()) ? EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
+                return (pr != null && pr.IsSetU() && pr.u.val != null) ? 
+                    EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
             }
         }
         internal void InsertText(CT_Text text, int textIndex)

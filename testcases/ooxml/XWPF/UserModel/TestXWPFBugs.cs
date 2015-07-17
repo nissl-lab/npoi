@@ -19,6 +19,7 @@ namespace TestCases.XWPF.UserModel
     using System;
     using NUnit.Framework;
     using NPOI.XWPF.UserModel;
+    using NPOI.XWPF;
 
     [TestFixture]
     public class TestXWPFBugs
@@ -49,6 +50,37 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Times New Roman");
             run.SetFontFamily("Arial", FontCharRange.HAnsi);
             Assert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Arial");
+        }
+
+        [Test]
+        public void Bug57312_NullPointException()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("57312.docx");
+            Assert.IsNotNull(doc);
+
+            foreach (IBodyElement bodyElement in doc.BodyElements)
+            {
+                BodyElementType elementType = bodyElement.ElementType;
+
+                if (elementType == BodyElementType.PARAGRAPH)
+                {
+                    XWPFParagraph paragraph = (XWPFParagraph)bodyElement;
+
+                    foreach (IRunElement iRunElem in paragraph.IRuns)
+                    {
+
+                        if (iRunElem is XWPFRun)
+                        {
+                            XWPFRun RunElement = (XWPFRun)iRunElem;
+
+                            UnderlinePatterns underline = RunElement.Underline;
+                            Assert.IsNotNull(underline);
+
+                            //System.out.Println("Found: " + underline + ": " + RunElement.GetText(0));
+                        }
+                    }
+                }
+            }
         }
 
     }

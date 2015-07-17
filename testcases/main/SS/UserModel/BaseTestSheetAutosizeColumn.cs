@@ -48,31 +48,13 @@ namespace TestCases.SS.UserModel
             _testDataProvider = TestDataProvider;
         }
 
-        // TODO should we have this stuff in the FormulaEvaluator?
-        private void EvaluateWorkbook(IWorkbook workbook){
-        IFormulaEvaluator eval = workbook.GetCreationHelper().CreateFormulaEvaluator();
-        for(int i=0; i < workbook.NumberOfSheets; i++) {
-            ISheet sheet = workbook.GetSheetAt(i);
-            IEnumerator rows = sheet.GetRowEnumerator();
-            for (IRow r = null; rows.MoveNext(); )
-            {
-                r = (IRow)rows.Current;
-                foreach (ICell c in r)
-                {
-                    if (c.CellType == CellType.Formula)
-                    {
-                        eval.EvaluateFormulaCell(c);
-                    }
-                }
-            }
-        }
-    }
         [Test]
-        public void TestNumericCells()
+        public void NumericCells()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             IDataFormat df = workbook.GetCreationHelper().CreateDataFormat();
             ISheet sheet = workbook.CreateSheet();
 
@@ -110,9 +92,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(5)); // 10.0000 and '10.0000'
         }
         [Test]
-        public void TestBooleanCells()
+        public void BooleanCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
 
             IRow row = sheet.CreateRow(0);
@@ -138,10 +121,11 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3));  // columns 1, 2 and 3 should have the same width
         }
         [Test]
-        public void TestDateCells()
+        public void DateCells()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
             IDataFormat df = workbook.GetCreationHelper().CreateDataFormat();
 
@@ -204,9 +188,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(7)); // date formula formatted as 'mmm'
         }
         [Test]
-        public void TestStringCells()
+        public void StringCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
             IRow row = sheet.CreateRow(0);
 
@@ -235,9 +220,10 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(4)); //larger font results in a wider column width
         }
         [Test]
-        public void TestRotatedText()
+        public void RotatedText()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
             IRow row = sheet.CreateRow(0);
 
@@ -259,9 +245,10 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(w0 * 5 < w1); // rotated text occupies at least five times less horizontal space than normal text
         }
         [Test]
-        public void TestMergedCells()
+        public void MergedCells()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
 
             IRow row = sheet.CreateRow(0);
@@ -285,9 +272,10 @@ namespace TestCases.SS.UserModel
          *  passed the 32767 boundary. See bug #48079
          */
         [Test]
-        public void TestLargeRowNumbers()
+        public void LargeRowNumbers()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
 
             IRow r0 = sheet.CreateRow(0);
@@ -320,5 +308,43 @@ namespace TestCases.SS.UserModel
             r60708.CreateCell(0).SetCellValue("Near the end");
             sheet.AutoSizeColumn(0);
         }
+
+        // TODO should we have this stuff in the FormulaEvaluator?
+        private void EvaluateWorkbook(IWorkbook workbook)
+        {
+            IFormulaEvaluator eval = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            for (int i = 0; i < workbook.NumberOfSheets; i++)
+            {
+                ISheet sheet = workbook.GetSheetAt(i);
+                foreach (IRow r in sheet)
+                {
+                    foreach (ICell c in r)
+                    {
+                        if (c.CellType == CellType.Formula)
+                        {
+                            eval.EvaluateFormulaCell(c);
+                        }
+                    }
+                }
+            }
+        }
+
+        internal static void FixFonts(IWorkbook workbook)
+        {
+            //if (!JvmBugs.HasLineBreakMeasurerBug()) return;
+            for (int i = workbook.NumberOfFonts - 1; i >= 0; i--)
+            {
+                IFont f = workbook.GetFontAt((short)0);
+                if ("Calibri".Equals(f.FontName))
+                {
+                    f.FontName = (/*setter*/"Lucida Sans");
+                }
+                else if ("Cambria".Equals(f.FontName))
+                {
+                    f.FontName = (/*setter*/"Lucida Bright");
+                }
+            }
+        }
+
     }
 }

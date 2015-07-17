@@ -106,15 +106,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public IList<CT_Style> GetStyleList()
         {
+            if(this.styleField==null)
+                this.styleField = new List<CT_Style>();
             return style;
         }
 
-        public void AddNewStyle()
+        public CT_Style AddNewStyle()
         {
             CT_Style s = new CT_Style();
             if (styleField == null)
                 styleField = new List<CT_Style>();
             styleField.Add(s);
+            return s;
         }
 
         public void SetStyleArray(int pos, CT_Style cT_Style)
@@ -1163,7 +1166,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetName()
         {
-			return this.name != null;
+            return this.name != null;
         }
     }
     [Serializable]

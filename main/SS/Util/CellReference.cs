@@ -164,11 +164,11 @@ namespace NPOI.SS.Util
             // so these Checks are currently N.Q.R.
             if (pRow < -1)
             {
-                throw new ArgumentException("row index may not be negative");
+                throw new ArgumentException("row index may not be negative, but had " + pRow);
             }
             if (pCol < -1)
             {
-                throw new ArgumentException("column index may not be negative");
+                throw new ArgumentException("column index may not be negative, but had " + pCol);
             }
             _sheetName = pSheetName;
             _rowIndex = pRow;

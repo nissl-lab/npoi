@@ -110,31 +110,37 @@ namespace NPOI.OOXML
             out1.Close();
 
             OPCPackage pkg2 = OPCPackage.Open(tmp);
-
-            doc = new OPCParser(pkg1);
-            doc.Parse(new TestFactory());
-            context = new Dictionary<String, POIXMLDocumentPart>();
-            Traverse(doc, context);
-            context.Clear();
-
-            Assert.AreEqual(pkg1.Relationships.Size, pkg2.Relationships.Size);
-
-            List<PackagePart> l1 = pkg1.GetParts();
-            List<PackagePart> l2 = pkg2.GetParts();
-
-            Assert.AreEqual(l1.Count, l2.Count);
-            for (int i = 0; i < l1.Count; i++)
+            try
             {
-                PackagePart p1 = l1[i];
-                PackagePart p2 = l2[i];
+                doc = new OPCParser(pkg1);
+                doc.Parse(new TestFactory());
+                context = new Dictionary<String, POIXMLDocumentPart>();
+                Traverse(doc, context);
+                context.Clear();
 
-                Assert.AreEqual(p1.ContentType, p2.ContentType);
-                Assert.AreEqual(p1.HasRelationships, p2.HasRelationships);
-                if (p1.HasRelationships)
+                Assert.AreEqual(pkg1.Relationships.Size, pkg2.Relationships.Size);
+
+                List<PackagePart> l1 = pkg1.GetParts();
+                List<PackagePart> l2 = pkg2.GetParts();
+
+                Assert.AreEqual(l1.Count, l2.Count);
+                for (int i = 0; i < l1.Count; i++)
                 {
-                    Assert.AreEqual(p1.Relationships.Size, p2.Relationships.Size);
+                    PackagePart p1 = l1[i];
+                    PackagePart p2 = l2[i];
+
+                    Assert.AreEqual(p1.ContentType, p2.ContentType);
+                    Assert.AreEqual(p1.HasRelationships, p2.HasRelationships);
+                    if (p1.HasRelationships)
+                    {
+                        Assert.AreEqual(p1.Relationships.Size, p2.Relationships.Size);
+                    }
+                    Assert.AreEqual(p1.PartName, p2.PartName);
                 }
-                Assert.AreEqual(p1.PartName, p2.PartName);
+            }
+            finally
+            {
+                pkg2.Revert();
             }
         }
 
@@ -169,6 +175,7 @@ namespace NPOI.OOXML
             foreach (POIXMLDocumentPart rel in doc.GetRelations())
             {
                 //TODO finish me
+                Assert.IsNotNull(rel);
             }
 
         }

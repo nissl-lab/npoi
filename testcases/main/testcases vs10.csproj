@@ -108,6 +108,7 @@
     <Compile Include="HPSF\Extractor\TestHPSFPropertiesExtractor.cs" />
     <Compile Include="HPSF\TestVariantSupport.cs" />
     <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
+    <Compile Include="HSSF\Extractor\TestOldExcelExtractor.cs" />
     <Compile Include="HSSF\Model\HSSFTestModelHelper.cs" />
     <Compile Include="HSSF\Model\TestDrawingAggregate.cs" />
     <Compile Include="HSSF\Model\TestDrawingShapes.cs" />
@@ -169,6 +170,8 @@
     <Compile Include="SS\Formula\Functions\TestDec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\TestDelta.cs" />
     <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestDGetFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestDStarFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEOMonth.cs" />

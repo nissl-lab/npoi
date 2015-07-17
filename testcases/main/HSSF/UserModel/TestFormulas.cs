@@ -926,14 +926,27 @@ namespace TestCases.HSSF.UserModel
         public void TestComplexSheetRefs()
         {
             HSSFWorkbook sb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s1 = sb.CreateSheet("Sheet a.1");
-            NPOI.SS.UserModel.ISheet s2 = sb.CreateSheet("Sheet.A");
-            s2.CreateRow(1).CreateCell(2).CellFormula = ("'Sheet a.1'!A1");
-            s1.CreateRow(1).CreateCell(2).CellFormula = ("'Sheet.A'!A1");
-            string tmpfile = TempFile.GetTempFilePath("TestComplexSheetRefs", ".xls");
-            FileStream fs = new FileStream(tmpfile, FileMode.Create);
-            sb.Write(fs);
-            fs.Close();
+            try
+            {
+                NPOI.SS.UserModel.ISheet s1 = sb.CreateSheet("Sheet a.1");
+                NPOI.SS.UserModel.ISheet s2 = sb.CreateSheet("Sheet.A");
+                s2.CreateRow(1).CreateCell(2).CellFormula = ("'Sheet a.1'!A1");
+                s1.CreateRow(1).CreateCell(2).CellFormula = ("'Sheet.A'!A1");
+                string tmpfile = TempFile.GetTempFilePath("TestComplexSheetRefs", ".xls");
+                FileStream fs = new FileStream(tmpfile, FileMode.Create);
+                try
+                {
+                    sb.Write(fs);
+                }
+                finally
+                {
+                    fs.Close();
+                }
+            }
+            finally
+            {
+                sb.Close();
+            }
         }
 
         /** Unknown Ptg 3C*/
@@ -945,10 +958,15 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Compliance!#REF!", wb.GetNameAt(0).RefersToFormula, "Reference for named range ");
             string tmpfile = TempFile.GetTempFilePath("bug27272_1", ".xls");
             FileStream fs = new FileStream(tmpfile, FileMode.OpenOrCreate);
-            wb.Write(fs);
-            fs.Close();
+            try
+            {
+                wb.Write(fs);
+            }
+            finally
+            {
+                fs.Close();
+            }
             Console.WriteLine("Open " + Path.GetFullPath(tmpfile) + " in Excel");
-
         }
         /** Unknown Ptg 3D*/
         [Test]
@@ -958,7 +976,14 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("LOAD.POD_HISTORIES!#REF!", wb.GetNameAt(0).RefersToFormula, "Reference for named range ");
             string tmpfile = TempFile.GetTempFilePath("bug27272_2", ".xls");
             FileStream fs = new FileStream(tmpfile, FileMode.OpenOrCreate);
-            wb.Write(fs);
+            try
+            {
+                wb.Write(fs);
+            }
+            finally
+            {
+                fs.Close();
+            }
             Console.WriteLine("Open " + Path.GetFullPath(tmpfile) + " in Excel");
         }
 
@@ -967,8 +992,15 @@ namespace TestCases.HSSF.UserModel
         public void TestMissingArgPtg()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            ICell cell = wb.CreateSheet("Sheet1").CreateRow(4).CreateCell(0);
-            cell.CellFormula = ("IF(A1=\"A\",1,)");
+            try
+            {
+                ICell cell = wb.CreateSheet("Sheet1").CreateRow(4).CreateCell(0);
+                cell.CellFormula = ("IF(A1=\"A\",1,)");
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
         [Test]
         public void TestSharedFormula()
@@ -1037,18 +1069,26 @@ namespace TestCases.HSSF.UserModel
         public void TestFormulasWithUnderscore()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            IName nm1 = wb.CreateName();
-            nm1.NameName = ("_score1");
-            nm1.RefersToFormula = ("A1");
+            try
+            {
+                IName nm1 = wb.CreateName();
+                nm1.NameName = ("_score1");
+                nm1.RefersToFormula = ("A1");
 
-            IName nm2 = wb.CreateName();
-            nm2.NameName = ("_score2");
-            nm2.RefersToFormula = ("A2");
+                IName nm2 = wb.CreateName();
+                nm2.NameName = ("_score2");
+                nm2.RefersToFormula = ("A2");
 
-            ISheet sheet = wb.CreateSheet();
-            ICell cell = sheet.CreateRow(0).CreateCell(2);
-            cell.CellFormula = ("_score1*SUM(_score1+_score2)");
-            Assert.AreEqual("_score1*SUM(_score1+_score2)", cell.CellFormula);
+                ISheet sheet = wb.CreateSheet();
+                ICell cell = sheet.CreateRow(0).CreateCell(2);
+                cell.CellFormula = ("_score1*SUM(_score1+_score2)");
+                Assert.AreEqual("_score1*SUM(_score1+_score2)", cell.CellFormula);
+            }
+            finally
+            {
+                wb.Close();
+            }
+            
         }
     }
 

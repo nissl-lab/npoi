@@ -187,7 +187,8 @@ namespace NPOI.XSSF.UserModel
                     sqref = " " + cellRangeAddress.FormatAsString();
             }
             newDataValidation.sqref = sqref;
-
+            newDataValidation.allowBlank = (true);
+            newDataValidation.errorStyle = ST_DataValidationErrorStyle.stop;
             return new XSSFDataValidation(dataValidationConstraint, cellRangeAddressList, newDataValidation);
         }
     }

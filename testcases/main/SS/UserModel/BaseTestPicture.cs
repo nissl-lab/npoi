@@ -20,6 +20,8 @@ using NUnit.Framework;
 using System.Drawing;
 using NPOI.Util;
 using NPOI.SS.Util;
+using System.IO;
+using TestCases.HSSF;
 namespace TestCases.SS.UserModel
 {
 
@@ -61,6 +63,77 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
             Assert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
+        }
+
+        [Test]
+        public void TestResizeNoColumns()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+
+                IRow row = sheet.CreateRow(0);
+
+                handleResize(wb, sheet, row);
+            }
+            finally
+            {
+                //wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestResizeWithColumns()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+
+                IRow row = sheet.CreateRow(0);
+                row.CreateCell(0);
+
+                handleResize(wb, sheet, row);
+            }
+            finally
+            {
+                //wb.Close();
+            }
+        }
+
+
+        private void handleResize(IWorkbook wb, ISheet sheet, IRow row)
+        {
+            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            ICreationHelper CreateHelper = wb.GetCreationHelper();
+
+            byte[] bytes = HSSFITestDataProvider.Instance.GetTestDataFileContent("logoKarmokar4.png");
+
+            row.HeightInPoints = (/*setter*/GetImageSize(bytes).Y);
+
+            int pictureIdx = wb.AddPicture(bytes, PictureType.PNG);
+
+            //add a picture shape
+            IClientAnchor anchor = CreateHelper.CreateClientAnchor();
+            //set top-left corner of the picture,
+            //subsequent call of Picture#resize() will operate relative to it
+            anchor.Col1 = (/*setter*/0);
+            anchor.Row1 = (/*setter*/0);
+
+            IPicture pict = Drawing.CreatePicture(anchor, pictureIdx);
+
+            //auto-size picture relative to its top-left corner
+            pict.Resize();
+        }
+
+        private static Point GetImageSize(byte[] image)
+        {
+            Image img = Image.FromStream(new MemoryStream(image));
+
+            Assert.IsNotNull(img);
+
+            return new Point(img.Width, img.Height);
         }
 
     }

@@ -48,10 +48,17 @@ namespace NPOI.HSSF.Record
     {
 
         /**
-         * for BIFF8 files the BOF is 0x809.  For earlier versions it was 0x09 or 0x(biffversion)09
+         * for BIFF8 files the BOF is 0x809. For earlier versions see
+         *  {@link #biff2_sid} {@link #biff3_sid} {@link #biff4_sid} 
+         *  {@link #biff5_sid}
          */
-
         public const short sid = 0x809;
+        // SIDs from earlier BIFF versions
+        public const short biff2_sid = 0x009;
+        public const short biff3_sid = 0x209;
+        public const short biff4_sid = 0x409;
+        public const short biff5_sid = 0x809;
+
         private int field_1_version;
         private int field_2_type;
         private int field_3_build;

@@ -25,6 +25,7 @@ namespace TestCases.HSSF.Record
     using NPOI.Util;
     using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.UserModel;
 
     [TestFixture]
     public class TestArrayRecord
@@ -57,5 +58,25 @@ namespace TestCases.HSSF.Record
 
 
         }
+
+        [Test]
+        public void TestBug57231()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples
+                    .OpenSampleWorkbook("57231_MixedGasReport.xls");
+            HSSFSheet sheet = wb.GetSheet("master") as HSSFSheet;
+
+            HSSFSheet newSheet = wb.CloneSheet(wb.GetSheetIndex(sheet)) as HSSFSheet;
+            int idx = wb.GetSheetIndex(newSheet);
+            wb.SetSheetName(idx, "newName");
+
+            // Write the output to a file
+            HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            Assert.IsNotNull(wbBack.GetSheet("master"));
+            Assert.IsNotNull(wbBack.GetSheet("newName"));
+        }
+
     }
 }

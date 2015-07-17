@@ -458,6 +458,29 @@ namespace NPOI.HSSF.UserModel
             }
 
             workbook.UpdateNamesAfterCellShift(shifter);
+
+            // adjust active sheet if necessary
+            int active = ActiveSheetIndex;
+            if (active == oldSheetIndex)
+            {
+                // moved sheet was the active one
+                SetActiveSheet(pos);
+            }
+            else if ((active < oldSheetIndex && active < pos) ||
+                  (active > oldSheetIndex && active > pos))
+            {
+                // not affected
+            }
+            else if (pos > oldSheetIndex)
+            {
+                // moved sheet was below before and is above now => active is one less
+                SetActiveSheet(active - 1);
+            }
+            else
+            {
+                // remaining case: moved sheet was higher than active before and is lower now => active is one more
+                SetActiveSheet(active + 1);
+            }
         }
 
         /// <summary>
@@ -920,7 +943,6 @@ namespace NPOI.HSSF.UserModel
         public void RemoveSheetAt(int index)
         {
             ValidateSheetIndex(index);
-            bool wasActive = GetSheetAt(index).IsActive;
             bool wasSelected = GetSheetAt(index).IsSelected;
 
             _sheets.RemoveAt(index);
@@ -939,10 +961,6 @@ namespace NPOI.HSSF.UserModel
             {
                 newSheetIndex = nSheets - 1;
             }
-            if (wasActive)
-            {
-                SetActiveSheet(newSheetIndex);
-            }
 
             if (wasSelected)
             {
@@ -959,6 +977,19 @@ namespace NPOI.HSSF.UserModel
                 {
                     SetSelectedTab(newSheetIndex);
                 }
+            }
+
+            // adjust active sheet
+            int active = ActiveSheetIndex;
+            if (active == index)
+            {
+                // removed sheet was the active one, reset active sheet if there is still one left now
+                SetActiveSheet(newSheetIndex);
+            }
+            else if (active > index)
+            {
+                // removed sheet was below the active one => active is one less now
+                SetActiveSheet(active - 1);
             }
         }
 
@@ -1247,6 +1278,23 @@ namespace NPOI.HSSF.UserModel
             HSSFCellStyle style = new HSSFCellStyle(idx, xfr, this);
 
             return style;
+        }
+
+        /**
+         * Closes the underlying {@link NPOIFSFileSystem} from which
+         *  the Workbook was read, if any. Has no effect on Workbooks
+         *  opened from an InputStream, or newly created ones.
+         */
+        public void Close()
+        {
+            if (directory != null)
+            {
+                if (directory.NFileSystem != null)
+                {
+                    directory.NFileSystem.Close();
+                    directory = null;
+                }
+            }
         }
 
         /// <summary>

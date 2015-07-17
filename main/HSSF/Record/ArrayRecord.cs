@@ -49,8 +49,8 @@ namespace NPOI.HSSF.Record
             _options = in1.ReadUShort();
             _field3notUsed = in1.ReadInt();
             int formulaTokenLen = in1.ReadUShort();
-		    int totalFormulaLen = in1.Available();
-		    _formula = NPOI.SS.Formula.Formula.Read(formulaTokenLen, in1, totalFormulaLen);
+            int totalFormulaLen = in1.Available();
+            _formula = NPOI.SS.Formula.Formula.Read(formulaTokenLen, in1, totalFormulaLen);
         }
         public ArrayRecord(NPOI.SS.Formula.Formula formula, CellRangeAddress8Bit range):base(range)
         {
@@ -120,6 +120,17 @@ namespace NPOI.HSSF.Record
             }
             sb.Append("]");
             return sb.ToString();
+        }
+
+        public override Object Clone()
+        {
+            ArrayRecord rec = new ArrayRecord(_formula.Copy(), Range);
+
+            // they both seem unused, but clone them nevertheless to have an exact copy
+            rec._options = _options;
+            rec._field3notUsed = _field3notUsed;
+
+            return rec;
         }
     }
 }

@@ -96,9 +96,9 @@ namespace NPOI.HSSF.Record
         //    LittleEndian.PutUShort(data, offset + VARIABLE_DATA_LENGTH, 0xFFFF);
         //}
         public void Serialize(ILittleEndianOutput out1) {
-			out1.Write(_variableData);
-			out1.WriteShort(0xFFFF);
-		}
+            out1.Write(_variableData);
+            out1.WriteShort(0xFFFF);
+        }
 
         public String FormatDebugString
         {
@@ -148,13 +148,13 @@ namespace NPOI.HSSF.Record
         private static SpecialCachedValue Create(int code, int data)
         {
             byte[] vd = {
-					(byte) code,
-					0,
-					(byte) data,
-					0,
-					0,
-					0,
-			};
+                    (byte) code,
+                    0,
+                    (byte) data,
+                    0,
+                    0,
+                    0,
+            };
             return new SpecialCachedValue(vd);
         }
         public override String ToString()
@@ -205,9 +205,7 @@ namespace NPOI.HSSF.Record
     public class FormulaRecord : CellRecord
     {
 
-        public const short sid =
-            0x06;   // docs say 406...because of a bug Microsoft support site article #Q184647)
-
+        public const short sid = 0x06;   // docs say 406...because of a bug Microsoft support site article #Q184647)
         private const int FIXED_SIZE = 14;
 
 
@@ -221,8 +219,8 @@ namespace NPOI.HSSF.Record
         private NPOI.SS.Formula.Formula field_8_parsed_expr;
 
         /**
-* Since the NaN support seems sketchy (different constants) we'll store and spit it out directly
-*/
+        * Since the NaN support seems sketchy (different constants) we'll store and spit it out directly
+        */
         [NonSerialized]
         private SpecialCachedValue specialCachedValue;
 
@@ -252,12 +250,12 @@ namespace NPOI.HSSF.Record
 
         public FormulaRecord(RecordInputStream in1):base(in1)
         {
-		        long valueLongBits  = in1.ReadLong();
-		        field_5_options = in1.ReadShort();
-		        specialCachedValue = SpecialCachedValue.Create(valueLongBits);
-		        if (specialCachedValue == null) {
-			        field_4_value = BitConverter.Int64BitsToDouble(valueLongBits);
-		        }
+                long valueLongBits  = in1.ReadLong();
+                field_5_options = in1.ReadShort();
+                specialCachedValue = SpecialCachedValue.Create(valueLongBits);
+                if (specialCachedValue == null) {
+                    field_4_value = BitConverter.Int64BitsToDouble(valueLongBits);
+                }
 
                 field_6_zero = in1.ReadInt();
                 int field_7_expression_len = in1.ReadShort();
@@ -375,13 +373,13 @@ namespace NPOI.HSSF.Record
             }
         }
 
-	    protected override int ValueDataSize 
+        protected override int ValueDataSize 
         {
             get
             {
                 return FIXED_SIZE + field_8_parsed_expr.EncodedSize;
             }
-	    }
+        }
 
         public override short Sid
         {

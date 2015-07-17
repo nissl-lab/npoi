@@ -47,39 +47,48 @@ namespace TestCases.POIFS.NIO
 
             FileBackedDataSource ds = new FileBackedDataSource(f, true);
 
-            Assert.AreEqual(8192, ds.Size);
-
-            ByteBuffer bs;
-            bs = ds.Read(4, 0);
-            Assert.AreEqual(4, bs.Length);
-            //Assert.AreEqual(0, bs
-            Assert.AreEqual(unchecked((byte)0xd0 - (byte)256), bs[0]);
-            Assert.AreEqual(unchecked((byte)0xcf - (byte)256), bs[1]);
-            Assert.AreEqual(unchecked((byte)0x11 - 0), bs[2]);
-            Assert.AreEqual(unchecked((byte)0xe0 - (byte)256), bs[3]);
-
-            bs = ds.Read(8, 0x400);
-            Assert.AreEqual(8, bs.Length);
-            //Assert.AreEqual(0, bs.position());
-            Assert.AreEqual((byte)'R', bs[0]);
-            Assert.AreEqual(0, bs[1]);
-            Assert.AreEqual((byte)'o', bs[2]);
-            Assert.AreEqual(0, bs[3]);
-            Assert.AreEqual((byte)'o', bs[4]);
-            Assert.AreEqual(0, bs[5]);
-            Assert.AreEqual((byte)'t', bs[6]);
-            Assert.AreEqual(0, bs[7]);
-
-            bs = ds.Read(8, 8190);
-            //Assert.AreEqual(0, 
-
             try
             {
-                bs = ds.Read(4, 8192);
-                Assert.Fail("Shouldn't be able to read off the end of the file");
+                Assert.AreEqual(8192, ds.Size);
+
+                ByteBuffer bs;
+                bs = ds.Read(4, 0);
+                Assert.AreEqual(4, bs.Length);
+                //Assert.AreEqual(0, bs
+                Assert.AreEqual(unchecked((byte)0xd0 - (byte)256), bs[0]);
+                Assert.AreEqual(unchecked((byte)0xcf - (byte)256), bs[1]);
+                Assert.AreEqual(unchecked((byte)0x11 - 0), bs[2]);
+                Assert.AreEqual(unchecked((byte)0xe0 - (byte)256), bs[3]);
+
+                bs = ds.Read(8, 0x400);
+                Assert.AreEqual(8, bs.Length);
+                //Assert.AreEqual(0, bs.position());
+                Assert.AreEqual((byte)'R', bs[0]);
+                Assert.AreEqual(0, bs[1]);
+                Assert.AreEqual((byte)'o', bs[2]);
+                Assert.AreEqual(0, bs[3]);
+                Assert.AreEqual((byte)'o', bs[4]);
+                Assert.AreEqual(0, bs[5]);
+                Assert.AreEqual((byte)'t', bs[6]);
+                Assert.AreEqual(0, bs[7]);
+
+                // Can go to the end, but not past it
+                bs = ds.Read(8, 8190);
+                Assert.AreEqual(0, bs.Position);// TODO How best to warn of a short read?
+
+                // Can't go off the end
+                try
+                {
+                    bs = ds.Read(4, 8192);
+                    Assert.Fail("Shouldn't be able to read off the end of the file");
+                }
+                catch (System.ArgumentException)
+                {
+                }
             }
-            catch (System.ArgumentException)
+            finally
             {
+                ds.Close();
             }
 
         }

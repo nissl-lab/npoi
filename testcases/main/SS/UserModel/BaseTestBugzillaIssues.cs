@@ -363,6 +363,7 @@ namespace TestCases.SS.UserModel
         public void TestAutoSize_bug506819()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
+            BaseTestSheetAutosizeColumn.FixFonts(wb);
             ISheet sheet = wb.CreateSheet("Sheet1");
             IRow row = sheet.CreateRow(0);
             ICell cell0 = row.CreateCell(0);
