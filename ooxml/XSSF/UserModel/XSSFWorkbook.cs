@@ -184,6 +184,14 @@ namespace NPOI.XSSF.UserModel
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
+
+            // some broken Workbooks miss this...
+            if (!workbook.IsSetBookViews())
+            {
+                CT_BookViews bvs = workbook.AddNewBookViews();
+                CT_BookView bv = bvs.AddNewWorkbookView();
+                bv.activeTab = (0);
+            }
         }
         /**
          * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
@@ -206,6 +214,14 @@ namespace NPOI.XSSF.UserModel
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
             Load(XSSFFactory.GetInstance());
+
+            // some broken Workbooks miss this...
+            if (!workbook.IsSetBookViews())
+            {
+                CT_BookViews bvs = workbook.AddNewBookViews();
+                CT_BookView bv = bvs.AddNewWorkbookView();
+                bv.activeTab = (0);
+            }
         }
 
         /**
