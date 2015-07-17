@@ -137,7 +137,7 @@ namespace NPOI.SS.Formula.Eval
             retval[40] = new NotImplementedFunction("DCOUNT"); // DCOUNT
             retval[41] = new NotImplementedFunction("DSUM"); // DSUM
             retval[42] = new NotImplementedFunction("DAVERAGE"); // DAVERAGE
-            retval[43] = new NotImplementedFunction("DMIN"); // DMIN
+            retval[43] = new DStarRunner(new DMin()); // DMIN
             retval[44] = new NotImplementedFunction("DMAX"); // DMAX
             retval[45] = new NotImplementedFunction("DSTDEV"); // DSTDEV
             retval[46] = AggregateFunction.VAR; // VAR
@@ -316,7 +316,7 @@ namespace NPOI.SS.Formula.Eval
             retval[232] = NumericFunction.ASINH; // ASINH
             retval[233] = NumericFunction.ACOSH; // ACOSH
             retval[234] = NumericFunction.ATANH; // ATANH
-            retval[235] = new NotImplementedFunction("DGet"); // DGet
+            retval[235] = new DStarRunner(new DGet());// DGet
             retval[236] = new NotImplementedFunction("CreateOBJECT"); // CreateOBJECT
             retval[237] = new NotImplementedFunction("VOLATILE"); // VOLATILE
             retval[238] = new NotImplementedFunction("LASTERROR"); // LASTERROR

@@ -170,6 +170,8 @@
     <Compile Include="SS\Formula\Functions\TestDec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\TestDelta.cs" />
     <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestDGetFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestDStarFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEDate.cs" />
     <Compile Include="SS\Formula\Functions\BaseTestFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestEOMonth.cs" />

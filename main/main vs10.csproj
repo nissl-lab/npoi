@@ -219,6 +219,9 @@
     <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\Delta.cs" />
+    <Compile Include="SS\Formula\Functions\DGet.cs" />
+    <Compile Include="SS\Formula\Functions\DMin.cs" />
+    <Compile Include="SS\Formula\Functions\DStarRunner.cs" />
     <Compile Include="SS\Formula\Functions\EOMonth.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
     <Compile Include="SS\Formula\Functions\FactDouble.cs" />
@@ -226,6 +229,7 @@
     <Compile Include="SS\Formula\Functions\Fixed.cs" />
     <Compile Include="SS\Formula\Functions\Hex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
+    <Compile Include="SS\Formula\Functions\IDStarAlgorithm.cs" />
     <Compile Include="SS\Formula\Functions\Imaginary.cs" />
     <Compile Include="SS\Formula\Functions\ImReal.cs" />
     <Compile Include="SS\Formula\Functions\Intercept.cs" />
