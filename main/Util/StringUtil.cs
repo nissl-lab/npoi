@@ -42,12 +42,13 @@ namespace NPOI.Util
     /// @version    1.0
     /// </summary>
     public class StringUtil {
-	    private const String ENCODING = "ISO-8859-1";
-	    /**     
-	     *  Constructor for the StringUtil object     
-	     */
-	    private StringUtil() {
-	    }
+        private static Encoding ISO_8859_1 = Encoding.GetEncoding("ISO-8859-1");
+        private static Encoding UTF16LE = Encoding.Unicode;
+        /**     
+         *  Constructor for the StringUtil object     
+         */
+        private StringUtil() {
+        }
 
         /// <summary>
         /// Given a byte array of 16-bit unicode characters in Little Endian
@@ -60,19 +61,19 @@ namespace NPOI.Util
         /// byte array. it is assumed that string[ offset ] and string[ offset + 1 ] contain the first 16-bit unicode character</param>
         /// <param name="len">the Length of the string</param>
         /// <returns>the converted string</returns>                              
-	    public static String GetFromUnicodeLE(
-		    byte[] str,
-		    int offset,
-		    int len){
-		    if ((offset < 0) || (offset >= str.Length)) {
-			    throw new IndexOutOfRangeException("Illegal offset");
-		    }
-		    if ((len < 0) || (((str.Length - offset) / 2) < len)) {
-			    throw new ArgumentException("Illegal Length");
-		    }
+        public static String GetFromUnicodeLE(
+            byte[] str,
+            int offset,
+            int len){
+            if ((offset < 0) || (offset >= str.Length)) {
+                throw new IndexOutOfRangeException("Illegal offset");
+            }
+            if ((len < 0) || (((str.Length - offset) / 2) < len)) {
+                throw new ArgumentException("Illegal Length");
+            }
 
-			return Encoding.Unicode.GetString(str, offset, len * 2);
-	    }
+            return UTF16LE.GetString(str, offset, len * 2);
+        }
 
         /// <summary>
         /// Given a byte array of 16-bit unicode characters in little endian
@@ -82,10 +83,20 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="str">the byte array to be converted</param>
         /// <returns>the converted string</returns>  
-	    public static String GetFromUnicodeLE(byte[] str) {
-		    if(str.Length == 0) { return ""; }
-		    return GetFromUnicodeLE(str, 0, str.Length / 2);
-	    }
+        public static String GetFromUnicodeLE(byte[] str) {
+            if(str.Length == 0) { return ""; }
+            return GetFromUnicodeLE(str, 0, str.Length / 2);
+        }
+
+        /**
+         * Convert String to 16-bit unicode characters in little endian format
+         *
+         * @param string the string
+         * @return the byte array of 16-bit unicode characters
+         */
+        public static byte[] GetToUnicodeLE(String string1) {
+            return UTF16LE.GetBytes(string1);
+        }
 
         /// <summary>
         /// Given a byte array of 16-bit unicode characters in big endian
@@ -98,23 +109,23 @@ namespace NPOI.Util
         /// byte array. it is assumed that string[ offset ] and string[ offset + 1 ] contain the first 16-bit unicode character</param>
         /// <param name="len">the Length of the string</param>
         /// <returns> the converted string</returns>
-	    public static String GetFromUnicodeBE(
-		    byte[] str,
-		    int offset,
-		    int len)
+        public static String GetFromUnicodeBE(
+            byte[] str,
+            int offset,
+            int len)
         {
-		    if ((offset < 0) || (offset >= str.Length)) {
-			    throw new IndexOutOfRangeException("Illegal offset");
-		    }
-		    if ((len < 0) || (((str.Length - offset) / 2) < len)) {
-			    throw new ArgumentException("Illegal Length");
-		    }
-		    try {
-			    return Encoding.GetEncoding("UTF-16BE").GetString(str, offset, len * 2);
-		    } catch {
-			    throw new InvalidOperationException(); /*unreachable*/
-		    }
-	    }
+            if ((offset < 0) || (offset >= str.Length)) {
+                throw new IndexOutOfRangeException("Illegal offset");
+            }
+            if ((len < 0) || (((str.Length - offset) / 2) < len)) {
+                throw new ArgumentException("Illegal Length");
+            }
+            try {
+                return Encoding.GetEncoding("UTF-16BE").GetString(str, offset, len * 2);
+            } catch {
+                throw new InvalidOperationException(); /*unreachable*/
+            }
+        }
 
         /// <summary>
         /// Given a byte array of 16-bit unicode characters in big endian
@@ -124,10 +135,10 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="str">the byte array to be converted</param>
         /// <returns>the converted string</returns>      
-	    public static String GetFromUnicodeBE(byte[] str) {
-		    if(str.Length == 0) { return ""; }
-		    return GetFromUnicodeBE(str, 0, str.Length / 2);
-	    }
+        public static String GetFromUnicodeBE(byte[] str) {
+            if(str.Length == 0) { return ""; }
+            return GetFromUnicodeBE(str, 0, str.Length / 2);
+        }
 
         /// <summary>
         /// Read 8 bit data (in IsO-8859-1 codepage) into a (unicode) Java
@@ -138,17 +149,15 @@ namespace NPOI.Util
         /// <param name="offset">offset to read byte array</param>
         /// <param name="len">Length to read byte array</param>
         /// <returns>generated String instance by reading byte array</returns>
-	    public static String GetFromCompressedUnicode(
-		    byte[] str,
-		    int offset,
-		    int len) {
-		    try {
-			    int len_to_use = Math.Min(len, str.Length - offset);
-                return Encoding.GetEncoding(ENCODING).GetString(str, offset, len_to_use);
-		    } catch {
-			    throw new InvalidOperationException(); /* unreachable */
-		    }
-	    }
+        public static String GetFromCompressedUnicode(
+            byte[] str,
+            int offset,
+            int len)
+        {
+            int len_to_use = Math.Min(len, str.Length - offset);
+            return ISO_8859_1.GetString(str, offset, len_to_use);
+        }
+        
 
         /// <summary>
         /// Takes a unicode (java) string, and returns it as 8 bit data (in IsO-8859-1
@@ -158,28 +167,15 @@ namespace NPOI.Util
         /// <param name="input">the String containing the data to be written</param>
         /// <param name="output">the byte array to which the data Is to be written</param>
         /// <param name="offset">an offset into the byte arrat at which the data Is start when written</param>
-	    public static void PutCompressedUnicode(
-		    String input,
-		    byte[] output,
-		    int offset) {
-		    try {
-                byte[] bytes = Encoding.GetEncoding(ENCODING).GetBytes(input);
-			    Array.Copy(bytes, 0, output, offset, bytes.Length);
-		    } catch{
-                throw;
-            }
+        public static void PutCompressedUnicode(String input, byte[] output, int offset)
+        {
+            byte[] bytes = ISO_8859_1.GetBytes(input);
+            Array.Copy(bytes, 0, output, offset, bytes.Length);
         }
+        
         public static void PutCompressedUnicode(String input, ILittleEndianOutput out1)
         {
-            byte[] bytes;
-            try
-            {
-                bytes = Encoding.GetEncoding(ENCODING).GetBytes(input);
-            }
-            catch (EncoderFallbackException)
-            {
-                throw;
-            }
+            byte[] bytes = ISO_8859_1.GetBytes(input);
             out1.Write(bytes);
         }
 
@@ -194,20 +190,12 @@ namespace NPOI.Util
         /// <param name="offset">the offset to start writing into the byte array</param>
         public static void PutUnicodeLE(String input, byte[] output, int offset)
         {
-             byte[] bytes = Encoding.GetEncoding("UTF-16LE").GetBytes(input);
-             Array.Copy(bytes, 0, output, offset, bytes.Length);
+            byte[] bytes = UTF16LE.GetBytes(input);
+            Array.Copy(bytes, 0, output, offset, bytes.Length);
         }
         public static void PutUnicodeLE(String input, ILittleEndianOutput out1)
         {
-            byte[] bytes;
-            try
-            {
-                bytes = Encoding.GetEncoding("UTF-16LE").GetBytes(input);
-            }
-            catch (EncoderFallbackException)
-            {
-                throw;
-            }
+            byte[] bytes = UTF16LE.GetBytes(input);
             out1.Write(bytes);
         }
 
@@ -244,7 +232,7 @@ namespace NPOI.Util
         /// <returns>the encoding we want to use, currently hardcoded to IsO-8859-1</returns>
         public static String GetPreferredEncoding()
         {
-            return ENCODING;
+            return ISO_8859_1.WebName;
         }
 
         /// <summary>
@@ -267,21 +255,15 @@ namespace NPOI.Util
 
         public static String ReadCompressedUnicode(ILittleEndianInput in1, int nChars)
         {
-            char[] buf = new char[nChars];
-            for (int i = 0; i < buf.Length; i++)
-            {
-                buf[i] = (char)in1.ReadUByte();
-            }
-            return new String(buf);
+            byte[] buf = new byte[nChars];
+            in1.ReadFully(buf);
+            return ISO_8859_1.GetString(buf);
         }
         public static String ReadUnicodeLE(ILittleEndianInput in1, int nChars)
         {
-            char[] buf = new char[nChars];
-            for (int i = 0; i < buf.Length; i++)
-            {
-                buf[i] = (char)in1.ReadUShort();
-            }
-            return new String(buf);
+            byte[] bytes = new byte[nChars * 2];
+            in1.ReadFully(bytes);
+            return UTF16LE.GetString(bytes);
         }
 
         /**
@@ -395,13 +377,10 @@ namespace NPOI.Util
         /// 	<c>true</c> if string needs Unicode to be represented.; otherwise, <c>false</c>.
         /// </returns>
         ///<remarks>Tony Qu change the logic</remarks>
-	      public static bool IsUnicodeString(String value) {
-	        try{
-                return !value.Equals(Encoding.GetEncoding(ENCODING).GetString(Encoding.GetEncoding(ENCODING).GetBytes(value)));
-	        } catch {
-	          return true;
-	        }
-	      }
+        public static bool IsUnicodeString(String value)
+        {
+            return !value.Equals(ISO_8859_1.GetString(ISO_8859_1.GetBytes(value)));
+        }
           /// <summary> 
           /// Encodes non-US-ASCII characters in a string, good for encoding file names for download 
           /// http://www.acriticsreview.com/List.aspx?listid=42

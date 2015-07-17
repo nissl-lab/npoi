@@ -42,8 +42,8 @@ namespace NPOI.XSSF.UserModel
         private void verifyBug54084Unicode(XSSFWorkbook wb)
         {
             // expected data is stored in UTF-8 in a text-file
-
-            String testData = Encoding.UTF8.GetString(HSSFTestDataSamples.GetTestDataFileContent("54084 - Greek - beyond BMP.txt")).Trim();
+            byte[] data = HSSFTestDataSamples.GetTestDataFileContent("54084 - Greek - beyond BMP.txt");
+            String testData = Encoding.UTF8.GetString(data).Trim();
 
             ISheet sheet = wb.GetSheetAt(0);
             IRow row = sheet.GetRow(0);

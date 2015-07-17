@@ -251,20 +251,14 @@ namespace NPOI.HSSF.UserModel
             {
                 EscherComplexProperty propFile = (EscherComplexProperty)GetOptRecord().Lookup(
                               EscherProperties.BLIP__BLIPFILENAME);
-                return (null == propFile) ? "" : Trim(Encoding.Unicode.GetString(propFile.ComplexData));
+                return (null == propFile) ? "" : Trim(StringUtil.GetFromUnicodeLE(propFile.ComplexData));
             }
             set
             {
-                try
-                {
-                    EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.BLIP__BLIPFILENAME, true,
-                        Encoding.Unicode.GetBytes(value));
-                    SetPropertyValue(prop);
-                }
-                catch (Exception)
-                {
-                    logger.Log(POILogger.ERROR, "Unsupported encoding: UTF-16LE");
-                }
+                // TODO: add trailing \u0000? 
+                byte[] bytes = StringUtil.GetToUnicodeLE(value);
+                EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.BLIP__BLIPFILENAME, true, bytes);
+                SetPropertyValue(prop);
             }
         }
         private String Trim(string value)
