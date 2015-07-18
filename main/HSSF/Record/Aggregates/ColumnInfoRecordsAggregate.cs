@@ -753,5 +753,18 @@ namespace NPOI.HSSF.Record.Aggregates
                 return result;
             }
         }
+
+        public int GetOutlineLevel(int columnIndex)
+        {
+            ColumnInfoRecord ci = FindColumnInfo(columnIndex);
+            if (ci != null)
+            {
+                return ci.OutlineLevel;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

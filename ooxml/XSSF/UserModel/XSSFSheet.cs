@@ -4234,6 +4234,16 @@ namespace NPOI.XSSF.UserModel
         {
             return GetEnumerator();
         }
+
+        public int GetColumnOutlineLevel(int columnIndex)
+        {
+            CT_Col col = columnHelper.GetColumn(columnIndex, false);
+            if (col == null)
+            {
+                return 0;
+            }
+            return col.outlineLevel;
+        }
     }
 
 }

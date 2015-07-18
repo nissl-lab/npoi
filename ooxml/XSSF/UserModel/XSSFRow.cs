@@ -641,7 +641,13 @@ namespace NPOI.XSSF.UserModel
         {
             return GetEnumerator();
         }
-
+        public int OutlineLevel
+        {
+            get
+            {
+                return _row.outlineLevel;
+            }
+        }
         #endregion
     }
 

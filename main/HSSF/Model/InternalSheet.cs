@@ -2276,11 +2276,17 @@ namespace NPOI.HSSF.Model
             return result;
         }
 
+        public int GetColumnOutlineLevel(int columnIndex)
+        {
+            return _columnInfos.GetOutlineLevel(columnIndex);
+        }
+
     }
 
-    public class UnsupportedBOFType : RecordFormatException {
+    public class UnsupportedBOFType : RecordFormatException
+    {
         private BOFRecordType type;
-        public UnsupportedBOFType(BOFRecordType type) 
+        public UnsupportedBOFType(BOFRecordType type)
             : base("BOF not of a supported type, found " + type)
         {
             ;

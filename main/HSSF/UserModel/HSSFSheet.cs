@@ -2565,6 +2565,18 @@ namespace NPOI.HSSF.UserModel
             return _workbook.GetNameRecord(recIndex);
         }
 
+        /// <summary>
+        /// Returns the column outline level. Increased as you
+        /// put it into more groups (outlines), reduced as
+        /// you take it out of them.
+        /// </summary>
+        /// <param name="columnIndex"></param>
+        /// <returns></returns>
+        public int GetColumnOutlineLevel(int columnIndex)
+        {
+            return _sheet.GetColumnOutlineLevel(columnIndex);
+        }
+
         // Copy sheet based on logic posted by "brimars" on 2011-04-29 at http://npoi.codeplex.com/discussions/254536
         // That code was based on: http://www.coderanch.com/t/420958/open-source/Copying-sheet-excel-file-another
         // thanks to: Pierre Guilbert, 2011-04-14

@@ -209,6 +209,13 @@ namespace NPOI.SS.UserModel
         /// Get cells in the row
         /// </summary>
         List<ICell> Cells { get; }
+
+        /// <summary>
+        /// Returns the rows outline level. Increased as you
+        /// put it into more groups (outlines), reduced as
+        /// you take it out of them.
+        /// </summary>
+        int OutlineLevel { get; }
     }
 }
 
