@@ -22,6 +22,8 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
+using NPOI.SS.Formula;
+using NPOI.HSSF.UserModel;
 
     /**
      * Tests for {@link Hex2Dec}
@@ -66,6 +68,61 @@ namespace TestCases.SS.Formula.Functions
             ConfirmValueError("not a valid octal number", "GGGGGGG", ErrorEval.NUM_ERROR);
             ConfirmValueError("not a valid octal number", "3.14159", ErrorEval.NUM_ERROR);
         }
+
+        [Test]
+        public void TestEvalOperationEvaluationContext()
+        {
+            OperationEvaluationContext ctx = CreateContext();
+
+            ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
+            ValueEval result = new Hex2Dec().Evaluate(args, ctx);
+
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual("0", ((NumberEval)result).StringValue);
+        }
+
+        [Test]
+        public void TestEvalOperationEvaluationContextFails()
+        {
+            OperationEvaluationContext ctx = CreateContext();
+
+            ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 0) };
+            ValueEval result = new Hex2Dec().Evaluate(args, ctx);
+
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
+
+        private OperationEvaluationContext CreateContext()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet();
+            HSSFEvaluationWorkbook workbook = HSSFEvaluationWorkbook.Create(wb);
+            WorkbookEvaluator workbookEvaluator = new WorkbookEvaluator(workbook, new IStabilityClassifier1(), null);
+            OperationEvaluationContext ctx = new OperationEvaluationContext(workbookEvaluator,
+                    workbook, 0, 0, 0, null);
+            return ctx;
+        }
+        class IStabilityClassifier1 : IStabilityClassifier
+        {
+
+            public override bool IsCellFinal(int sheetIndex, int rowIndex, int columnIndex)
+            {
+                return true;
+            }
+        }
+        [Test]
+        public void TestRefs()
+        {
+            OperationEvaluationContext ctx = CreateContext();
+
+            ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
+            ValueEval result = new Hex2Dec().Evaluate(args, -1, -1);
+
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual("0", ((NumberEval)result).StringValue);
+        }
+
     }
 
 }

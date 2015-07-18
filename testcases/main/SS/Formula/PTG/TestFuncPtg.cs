@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.PTG
             byte[] fakeData = { 0x20, 0x00, };
 
             FuncPtg ptg = FuncPtg.Create(TestcaseRecordInputStream.CreateLittleEndian(fakeData));
-            Assert.AreEqual(0x20, ptg.GetFunctionIndex(), "Len formula index is not 32(20H)");
+            Assert.AreEqual(0x20, ptg.FunctionIndex, "Len formula index is not 32(20H)");
             Assert.AreEqual(1, ptg.NumberOfOperands, "Number of operands in the len formula");
             Assert.AreEqual("LEN", ptg.Name, "Function Name");
             Assert.AreEqual(3, ptg.Size, "Ptg Size");

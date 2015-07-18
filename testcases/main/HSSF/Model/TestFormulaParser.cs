@@ -170,6 +170,8 @@ namespace TestCases.HSSF.Model
 
             cell = row.CreateCell((short)1);
             cell.CellFormula = ("'Quotes Needed Here &#$@'!A1");
+
+            wb.Close();
         }
         [Test]
         public void TestUnaryMinus()
@@ -247,6 +249,8 @@ namespace TestCases.HSSF.Model
 
             cell = row.CreateCell((short)0);
             cell.CellFormula = ("Cash_Flow!A1");
+
+            wb.Close();
         }
         /** bug 49725, defined names with underscore */
         [Test]
@@ -258,33 +262,33 @@ namespace TestCases.HSSF.Model
             IName nm;
 
             nm = wb.CreateName();
-            nm.NameName=("DA6_LEO_WBS_Number");
-            nm.RefersToFormula=("33");
+            nm.NameName = ("DA6_LEO_WBS_Number");
+            nm.RefersToFormula = ("33");
 
             nm = wb.CreateName();
-            nm.NameName=("DA6_LEO_WBS_Name");
-            nm.RefersToFormula=("33");
+            nm.NameName = ("DA6_LEO_WBS_Name");
+            nm.RefersToFormula = ("33");
 
             nm = wb.CreateName();
-            nm.NameName=("A1_");
-            nm.RefersToFormula=("22");
+            nm.NameName = ("A1_");
+            nm.RefersToFormula = ("22");
 
             nm = wb.CreateName();
-            nm.NameName=("_A1");
-            nm.RefersToFormula=("11");
+            nm.NameName = ("_A1");
+            nm.RefersToFormula = ("11");
 
             nm = wb.CreateName();
-            nm.NameName=("A_1");
-            nm.RefersToFormula=("44");
+            nm.NameName = ("A_1");
+            nm.RefersToFormula = ("44");
 
             nm = wb.CreateName();
-            nm.NameName=("A_1_");
-            nm.RefersToFormula=("44");
+            nm.NameName = ("A_1_");
+            nm.RefersToFormula = ("44");
 
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
 
-            cell.CellFormula=("DA6_LEO_WBS_Number*2");
+            cell.CellFormula = ("DA6_LEO_WBS_Number*2");
             Assert.AreEqual("DA6_LEO_WBS_Number*2", cell.CellFormula);
 
             cell.CellFormula = ("(A1_*_A1+A_1)/A_1_");
@@ -292,6 +296,8 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = ("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))");
             Assert.AreEqual("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))", cell.CellFormula);
+
+            wb.Close();
         }
         // bug 38396 : Formula with exponential numbers not Parsed correctly.
         [Test]
@@ -393,6 +399,8 @@ namespace TestCases.HSSF.Model
             cell.CellFormula = ("-10E-1/3.1E2*4E3/3E4");
             formula = cell.CellFormula;
             Assert.AreEqual("-1/310*4000/30000", formula, "Exponential formula string");
+
+            wb.Close();
         }
         [Test]
         public void TestNumbers()
@@ -435,6 +443,8 @@ namespace TestCases.HSSF.Model
             cell.CellFormula = ("10E-1");
             formula = cell.CellFormula;
             Assert.AreEqual("1", formula);
+
+            wb.Close();
         }
         [Test]
         public void TestRanges()
@@ -459,6 +469,8 @@ namespace TestCases.HSSF.Model
             cell.CellFormula = ("A1...A2");
             formula = cell.CellFormula;
             Assert.AreEqual("A1:A2", formula);
+
+            wb.Close();
         }
 
         [Test]
@@ -494,19 +506,21 @@ namespace TestCases.HSSF.Model
             // References to a range (area) of cells:
 
             // One sheet
-            cell.CellFormula=("Cash_Flow!A1:B2");
+            cell.CellFormula = ("Cash_Flow!A1:B2");
             formula = cell.CellFormula;
             Assert.AreEqual("Cash_Flow!A1:B2", formula);
 
             // Then the other
-            cell.CellFormula=("\'Test Sheet\'!A1:B2");
+            cell.CellFormula = ("\'Test Sheet\'!A1:B2");
             formula = cell.CellFormula;
             Assert.AreEqual("\'Test Sheet\'!A1:B2", formula);
 
             // Now both
-            cell.CellFormula=("Cash_Flow:\'Test Sheet\'!A1:B2");
+            cell.CellFormula = ("Cash_Flow:\'Test Sheet\'!A1:B2");
             formula = cell.CellFormula;
             Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1:B2", formula);
+
+            wb.Close();
         }
 
 
@@ -523,6 +537,8 @@ namespace TestCases.HSSF.Model
                 FuncPtg.Create(10),
         };
             Assert.AreEqual("NA()", HSSFFormulaParser.ToFormulaString(book, ptgs));
+
+            book.Close();
         }
         [Test]
         public void TestPercent()
@@ -793,18 +809,25 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("test\"ing", sp.Value);
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
-            wb.SetSheetName(0, "Sheet1");
-
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell((short)0);
-            cell.CellFormula = ("right(\"test\"\"ing\", 3)");
-            String actualCellFormula = cell.CellFormula;
-            if ("RIGHT(\"test\"ing\",3)".Equals(actualCellFormula))
+            try
             {
-                throw new AssertionException("Identified bug 28754b");
+                NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
+                wb.SetSheetName(0, "Sheet1");
+
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell((short)0);
+                cell.CellFormula = ("right(\"test\"\"ing\", 3)");
+                String actualCellFormula = cell.CellFormula;
+                if ("RIGHT(\"test\"ing\",3)".Equals(actualCellFormula))
+                {
+                    throw new AssertionException("Identified bug 28754b");
+                }
+                Assert.AreEqual("RIGHT(\"test\"\"ing\",3)", actualCellFormula);
             }
-            Assert.AreEqual("RIGHT(\"test\"\"ing\",3)", actualCellFormula);
+            finally
+            {
+                wb.Close();
+            }
         }
         [Test]
         public void TestParseStringLiterals()
@@ -882,6 +905,8 @@ namespace TestCases.HSSF.Model
                 Assert.Fail("Identified bug 44539");
             }
             Assert.AreEqual("SUM(A32769:A32770)", cell.CellFormula);
+
+            wb.Close();
         }
         [Test]
         public void TestSpaceAtStartOfFormula()
@@ -1228,6 +1253,8 @@ namespace TestCases.HSSF.Model
             wb.SetSheetName(0, "A1...A2");
             cell.CellFormula = ("A1...A2!B1");
             Assert.AreEqual("A1...A2!B1", cell.CellFormula);
+
+            wb.Close();
         }
         [Test]
         public void TestBooleanNamedSheet()
@@ -1239,6 +1266,8 @@ namespace TestCases.HSSF.Model
             cell.CellFormula = ("'true'!B2");
 
             Assert.AreEqual("'true'!B2", cell.CellFormula);
+
+            wb.Close();
         }
         [Test]
         public void TestParseExternalWorkbookReference()
@@ -1313,6 +1342,8 @@ namespace TestCases.HSSF.Model
             ICell cell_D1 = row.CreateCell(2);
             cell_D1.CellFormula = ("NOT(POI\\2009=\"3.5-final\")");
             Assert.AreEqual("NOT(POI\\2009=\"3.5-final\")", cell_D1.CellFormula);
+
+            wb.Close();
         }
 
         /**
@@ -1595,5 +1626,39 @@ namespace TestCases.HSSF.Model
         {
             Assert.AreEqual(expMsg, e.Message);
         }
+
+        [Test]
+        public void Test57196_Formula()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            Ptg[] ptgs = HSSFFormulaParser.Parse("DEC2HEX(HEX2DEC(O8)-O2+D2)", wb, FormulaType.Cell, -1);
+            Assert.IsNotNull(ptgs, "Ptg array should not be null");
+
+            ConfirmTokenClasses(ptgs,
+                typeof(NameXPtg), // ??
+                typeof(NameXPtg), // ??
+                typeof(RefPtg), // O8
+                typeof(FuncVarPtg), // HEX2DEC
+                typeof(RefPtg), // O2
+                typeof(SubtractPtg),
+                typeof(RefPtg),   // D2
+                typeof(AddPtg),
+                typeof(FuncVarPtg) // DEC2HEX
+            );
+
+            RefPtg o8 = (RefPtg)ptgs[2];
+            FuncVarPtg hex2Dec = (FuncVarPtg)ptgs[3];
+            RefPtg o2 = (RefPtg)ptgs[4];
+            RefPtg d2 = (RefPtg)ptgs[6];
+            FuncVarPtg dec2Hex = (FuncVarPtg)ptgs[8];
+
+            Assert.AreEqual("O8", o8.ToFormulaString());
+            Assert.AreEqual(255, hex2Dec.FunctionIndex);
+            //Assert.AreEqual("", hex2Dec.ToString());
+            Assert.AreEqual("O2", o2.ToFormulaString());
+            Assert.AreEqual("D2", d2.ToFormulaString());
+            Assert.AreEqual(255, dec2Hex.FunctionIndex);
+        }
+
     }
 }

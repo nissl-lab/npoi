@@ -47,7 +47,17 @@ namespace NPOI.SS.Formula.Functions
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval numberVE)
         {
-            String hex = OperandResolver.CoerceValueToString(numberVE);
+            String hex;
+            if (numberVE is RefEval)
+            {
+                RefEval re = (RefEval)numberVE;
+                hex = OperandResolver.CoerceValueToString(re.GetInnerValueEval(re.FirstSheetIndex));
+            }
+            else
+            {
+                hex = OperandResolver.CoerceValueToString(numberVE);
+            }
+            
             try
             {
                 return new NumberEval(BaseNumberUtils.ConvertToDecimal(hex, HEXADECIMAL_BASE, MAX_NUMBER_OF_PLACES));

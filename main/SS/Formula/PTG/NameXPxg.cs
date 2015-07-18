@@ -28,6 +28,7 @@ namespace NPOI.SS.Formula.PTG
      * <p>This is XSSF only, as it stores the sheet / book references
      *  in String form. The HSSF equivalent using indexes is {@link NameXPtg}</p>
      */
+    [Serializable]
     public class NameXPxg : OperandPtg, Pxg
     {
         private int externalWorkbookNumber = -1;

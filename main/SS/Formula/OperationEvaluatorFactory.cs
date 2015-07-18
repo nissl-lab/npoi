@@ -102,7 +102,7 @@ namespace NPOI.SS.Formula
             if (ptg is AbstractFunctionPtg)
             {
                 AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
-                int functionIndex = fptg.GetFunctionIndex();
+                int functionIndex = fptg.FunctionIndex;
                 switch (functionIndex)
                 {
                     case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:

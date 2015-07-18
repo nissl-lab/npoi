@@ -2043,6 +2043,97 @@ using NPOI.SS.Formula.Eval;
             Assert.AreEqual(expect, value.FormatAsString());
         }
 
+        [Test]
+        public void TestBug57196()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57196.xlsx");
+            ISheet sheet = wb.GetSheet("Feuil1");
+            IRow mod = sheet.GetRow(1);
+            mod.GetCell(1).SetCellValue(3);
+            HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            //        FileOutputStream fileOutput = new FileOutputStream("/tmp/57196.xlsx");
+            //        wb.Write(fileOutput);
+            //        fileOutput.Close();
+            wb.Close();
+        }
+
+        [Test]
+        public void Test57196_Detail()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet("Sheet1") as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+            XSSFCell cell = row.CreateCell(0) as XSSFCell;
+            cell.CellFormula = (/*setter*/"DEC2HEX(HEX2DEC(O8)-O2+D2)");
+            XSSFFormulaEvaluator fe = new XSSFFormulaEvaluator(wb);
+            CellValue cv = fe.Evaluate(cell);
+
+            Assert.IsNotNull(cv);
+        }
+
+        [Test]
+        public void Test57196_Detail2()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet("Sheet1") as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+            XSSFCell cell = row.CreateCell(0) as XSSFCell;
+            cell.CellFormula = (/*setter*/"DEC2HEX(O2+D2)");
+            XSSFFormulaEvaluator fe = new XSSFFormulaEvaluator(wb);
+            CellValue cv = fe.Evaluate(cell);
+
+            Assert.IsNotNull(cv);
+        }
+
+        [Test]
+        public void Test57196_WorkbookEvaluator()
+        {
+            //Environment.SetEnvironmentVariable("NPOI.UTIL.POILogger", "NPOI.UTIL.SystemOutLogger");
+            //Environment.SetEnvironmentVariable("poi.log.level", "3");
+            try
+            {
+                XSSFWorkbook wb = new XSSFWorkbook();
+                XSSFSheet sheet = wb.CreateSheet("Sheet1") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFCell cell = row.CreateCell(0) as XSSFCell;
+
+                // simple formula worked
+                cell.CellFormula = (/*setter*/"DEC2HEX(O2+D2)");
+
+                WorkbookEvaluator workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // this already failed! Hex2Dec did not correctly handle RefEval
+                cell.CellFormula = (/*setter*/"HEX2DEC(O8)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // slightly more complex one failed
+                cell.CellFormula = (/*setter*/"HEX2DEC(O8)-O2+D2");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // more complicated failed
+                cell.CellFormula = (/*setter*/"DEC2HEX(HEX2DEC(O8)-O2+D2)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+            }
+            finally
+            {
+                //System.ClearProperty("NPOI.UTIL.POILogger");
+                //System.ClearProperty("poi.log.level");
+            }
+        }
+
     }
 
 }
