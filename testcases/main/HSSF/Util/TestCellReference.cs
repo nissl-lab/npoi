@@ -170,6 +170,44 @@ namespace TestCases.HSSF.Util
             NameType actualResult = CellReference.ClassifyCellReference(ref1, SpreadsheetVersion.EXCEL97);
             Assert.AreEqual(expectedResult, actualResult);
         }
+
+        [Test]
+        public void TestConvertColStringToIndex()
+        {
+            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("A"));
+            Assert.AreEqual(1, CellReference.ConvertColStringToIndex("B"));
+            Assert.AreEqual(14, CellReference.ConvertColStringToIndex("O"));
+            Assert.AreEqual(701, CellReference.ConvertColStringToIndex("ZZ"));
+            Assert.AreEqual(18252, CellReference.ConvertColStringToIndex("ZZA"));
+
+            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("$A"));
+            Assert.AreEqual(1, CellReference.ConvertColStringToIndex("$B"));
+
+            try
+            {
+                CellReference.ConvertColStringToIndex("A$");
+                Assert.Fail("Should throw exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.Contains("A$"));
+            }
+        }
+
+        [Test]
+        public void TestConvertNumColColString()
+        {
+            Assert.AreEqual("A", CellReference.ConvertNumToColString(0));
+            Assert.AreEqual("AV", CellReference.ConvertNumToColString(47));
+            Assert.AreEqual("AW", CellReference.ConvertNumToColString(48));
+            Assert.AreEqual("BF", CellReference.ConvertNumToColString(57));
+
+            Assert.AreEqual("", CellReference.ConvertNumToColString(-1));
+            Assert.AreEqual("", CellReference.ConvertNumToColString(Int32.MinValue));
+            Assert.AreEqual("", CellReference.ConvertNumToColString(Int32.MaxValue));
+            Assert.AreEqual("FXSHRXW", CellReference.ConvertNumToColString(Int32.MaxValue - 1));
+        }
+
     }
 
 }
