@@ -39,5 +39,14 @@ namespace TestCases.SS
         SpreadsheetVersion GetSpreadsheetVersion();
 
         string StandardFileNameExtension { get; }
+
+        /**
+         * Creates the corresponding {@link FormulaEvaluator} for the
+         * type of Workbook handled by this Provider. 
+         *
+         * @param wb The workbook to base the formula evaluator on.
+         * @return A new instance of a matching type of formula evaluator. 
+         */
+        IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb);
     }
 }

@@ -160,6 +160,8 @@
     <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Eval\BaseTestCircularReferences.cs" />
+    <Compile Include="SS\Formula\Eval\TestHSSFCircularReferences.cs" />
     <Compile Include="SS\Formula\Eval\TestMultiSheetEval.cs" />
     <Compile Include="SS\Formula\Functions\CountifsTests.cs" />
     <Compile Include="SS\Formula\Functions\RefValueImplementation.cs" />
@@ -521,7 +523,6 @@
     <Compile Include="SS\Formula\Eval\EvalInstances.cs" />
     <Compile Include="SS\Formula\Eval\Forked\TestForkedEvaluator.cs" />
     <Compile Include="SS\Formula\Eval\TestAreaEval.cs" />
-    <Compile Include="SS\Formula\Eval\TestCircularReferences.cs" />
     <Compile Include="SS\Formula\Eval\TestDivideEval.cs" />
     <Compile Include="SS\Formula\Eval\TestEqualEval.cs" />
     <Compile Include="SS\Formula\Eval\TestExternalFunction.cs" />

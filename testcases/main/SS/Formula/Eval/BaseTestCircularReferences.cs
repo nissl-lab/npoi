@@ -14,35 +14,55 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-namespace TestCases.SS.Formula.Eval
+namespace NPOI.SS.Formula.Eval
 {
     using System;
+
     using NUnit.Framework;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.Formula.Eval;
+    using NUnit.Framework;
+
+    using NPOI.SS;
     using NPOI.SS.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.UserModel;
+    using TestCases.SS;
+    using NPOI.Util;
+
     /**
-     * Tests HSSFFormulaEvaluator for its handling of cell formula circular references.
-     *
-     * @author Josh Micich
+     * Common superclass for testing cases of circular references
+     * both for HSSF and XSSF
      */
     [TestFixture]
-    public class TestCircularReferences
+    public abstract class BaseTestCircularReferences
     {
+
+        protected ITestDataProvider _testDataProvider;
+
         /**
-         * Translates StackOverflowError into AssertionFailedError
+         * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
          */
-        private static CellValue EvaluateWithCycles(HSSFWorkbook wb, ICell testCell)
+        protected BaseTestCircularReferences(ITestDataProvider testDataProvider)
         {
-            HSSFFormulaEvaluator Evaluator = new HSSFFormulaEvaluator(wb);
+            _testDataProvider = testDataProvider;
+        }
+
+
+        /**
+         * Translates StackOverflowError into AssertFailedException
+         */
+        private CellValue EvaluateWithCycles(IWorkbook wb, ICell testCell)
+        {
+            IFormulaEvaluator Evaluator = _testDataProvider.CreateFormulaEvaluator(wb);
             try
             {
                 return Evaluator.Evaluate(testCell);
             }
-            catch (StackOverflowException)
+            catch (StackOverflowException e)
             {
-                throw new AssertionException("circular reference caused stack overflow error");
+                throw new AssertFailedException("circular reference caused stack overflow error");
             }
         }
         /**
@@ -63,7 +83,7 @@ namespace TestCases.SS.Formula.Eval
         public void TestIndexFormula()
         {
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Sheet1");
 
             int colB = 1;
@@ -73,7 +93,7 @@ namespace TestCases.SS.Formula.Eval
             IRow row4 = sheet.CreateRow(3);
             ICell testCell = row4.CreateCell(0);
             // This formula should Evaluate to the contents of B2,
-            testCell.CellFormula = ("INDEX(A1:B4,2,2)");
+            testCell.SetCellFormula("INDEX(A1:B4,2,2)");
             // However the range A1:B4 also includes the current cell A4.  If the other parameters
             // were 4 and 1, this would represent a circular reference.  Prior to v3.2 POI would
             // 'fully' Evaluate ref arguments before invoking operators, which raised the possibility of
@@ -87,18 +107,18 @@ namespace TestCases.SS.Formula.Eval
         }
 
         /**
-         * Cell A1 has formula "=A1"
+         * ICell A1 has formula "=A1"
          */
         [Test]
         public void TestSimpleCircularReference()
         {
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Sheet1");
 
             IRow row = sheet.CreateRow(0);
             ICell testCell = row.CreateCell(0);
-            testCell.CellFormula = ("A1");
+            testCell.CellFormula = (/*setter*/"A1");
 
             CellValue cellValue = EvaluateWithCycles(wb, testCell);
 
@@ -112,24 +132,25 @@ namespace TestCases.SS.Formula.Eval
         public void TestMultiLevelCircularReference()
         {
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Sheet1");
 
             IRow row = sheet.CreateRow(0);
-            row.CreateCell(0).CellFormula = ("B1");
-            row.CreateCell(1).CellFormula = ("C1");
-            row.CreateCell(2).CellFormula = ("D1");
+            row.CreateCell(0).CellFormula = (/*setter*/"B1");
+            row.CreateCell(1).CellFormula = (/*setter*/"C1");
+            row.CreateCell(2).CellFormula = (/*setter*/"D1");
             ICell testCell = row.CreateCell(3);
-            testCell.CellFormula = ("A1");
+            testCell.CellFormula = (/*setter*/"A1");
 
             CellValue cellValue = EvaluateWithCycles(wb, testCell);
 
             ConfirmCycleErrorCode(cellValue);
         }
+
         [Test]
         public void TestIntermediateCircularReferenceResults_bug46898()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Sheet1");
 
             IRow row = sheet.CreateRow(0);
@@ -140,13 +161,13 @@ namespace TestCases.SS.Formula.Eval
             ICell cellD1 = row.CreateCell(3);
             ICell cellE1 = row.CreateCell(4);
 
-            cellA1.CellFormula = ("IF(FALSE, 1+B1, 42)");
-            cellB1.CellFormula = ("1+C1");
-            cellC1.CellFormula = ("1+D1");
-            cellD1.CellFormula = ("1+E1");
-            cellE1.CellFormula = ("1+A1");
+            cellA1.SetCellFormula("IF(FALSE, 1+B1, 42)");
+            cellB1.CellFormula = (/*setter*/"1+C1");
+            cellC1.CellFormula = (/*setter*/"1+D1");
+            cellD1.CellFormula = (/*setter*/"1+E1");
+            cellE1.CellFormula = (/*setter*/"1+A1");
 
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            IFormulaEvaluator fe = _testDataProvider.CreateFormulaEvaluator(wb);
             CellValue cv;
 
             // Happy day flow - Evaluate A1 first
@@ -162,7 +183,7 @@ namespace TestCases.SS.Formula.Eval
             cv = fe.Evaluate(cellB1);
             if ((int)cv.CellType == ErrorEval.CIRCULAR_REF_ERROR.ErrorCode)
             {
-                throw new AssertionException("Identified bug 46898");
+                throw new AssertFailedException("Identified bug 46898");
             }
             Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(46.0, cv.NumberValue, 0.0);
@@ -172,8 +193,6 @@ namespace TestCases.SS.Formula.Eval
             cv = fe.Evaluate(cellE1);
             Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(43.0, cv.NumberValue, 0.0);
-
-
         }
     }
 
