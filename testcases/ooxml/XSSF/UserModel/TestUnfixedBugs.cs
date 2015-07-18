@@ -9,6 +9,7 @@ using NPOI.Util;
 using System.IO;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.UserModel;
+using System.Globalization;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -84,6 +85,53 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+        }
+        [Test]
+        public void Test54071Simple()
+        {
+            double value1 = 41224.999988425923;
+            double value2 = 41224.999988368058;
+
+            int wholeDays1 = (int)Math.Floor(value1);
+            int millisecondsInDay1 = (int)((value1 - wholeDays1) * DateUtil.DAY_MILLISECONDS + 0.5);
+
+            int wholeDays2 = (int)Math.Floor(value2);
+            int millisecondsInDay2 = (int)((value2 - wholeDays2) * DateUtil.DAY_MILLISECONDS + 0.5);
+
+            Assert.AreEqual(wholeDays1, wholeDays2);
+            // here we see that the time-value is 5 milliseconds apart, one is 86399000 and the other is 86398995, 
+            // thus one is one second higher than the other
+            Assert.AreEqual(millisecondsInDay1, millisecondsInDay2, "The time-values are 5 milliseconds apart");
+
+            // when we do the calendar-stuff, there is a bool which determines if
+            // the milliseconds are rounded or not, having this at "false" causes the 
+            // second to be different here!
+            int startYear = 1900;
+            int dayAdjust = -1; // Excel thinks 2/29/1900 is a valid date, which it isn't
+            //calendar1.Set(startYear, 0, wholeDays1 + dayAdjust, 0, 0, 0);
+            //calendar1.Set(Calendar.MILLISECOND, millisecondsInDay1);
+            DateTime calendar1 = new DateTime(startYear, 0, wholeDays1 + dayAdjust, 0, 0, 0);
+            calendar1.AddMilliseconds(millisecondsInDay1);
+            // this is the rounding part:
+            //calendar1.Add(Calendar.MILLISECOND, 500);
+            //calendar1.Clear(Calendar.MILLISECOND);
+            calendar1.AddMilliseconds(500);
+            calendar1.AddMilliseconds(-calendar1.Millisecond);
+
+            DateTime calendar2 = new DateTime(startYear, 0, wholeDays2 + dayAdjust, 0, 0, 0);
+            calendar2.AddMilliseconds(millisecondsInDay2);
+            //calendar2.Set(startYear, 0, wholeDays2 + dayAdjust, 0, 0, 0);
+            //calendar2.Set(Calendar.MILLISECOND, millisecondsInDay2);
+            // this is the rounding part:
+            //calendar2.Add(Calendar.MILLISECOND, 500);
+            //calendar2.Clear(Calendar.MILLISECOND);
+            calendar2.AddMilliseconds(500);
+            calendar2.AddMilliseconds(-calendar2.Millisecond);
+
+            // now the calendars are equal
+            Assert.AreEqual(calendar1, calendar2);
+
+            Assert.AreEqual(DateUtil.GetJavaDate(value1, false), DateUtil.GetJavaDate(value2, false));
         }
 
         [Test]
