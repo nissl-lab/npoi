@@ -2097,6 +2097,13 @@ using NPOI.SS.Formula.Eval;
                 XSSFRow row = sheet.CreateRow(0) as XSSFRow;
                 XSSFCell cell = row.CreateCell(0) as XSSFCell;
 
+                cell.SetCellValue("0");
+                cell = row.CreateCell(1) as XSSFCell;
+                cell.SetCellValue(0);
+                cell = row.CreateCell(2) as XSSFCell;
+                cell.SetCellValue(0);
+
+
                 // simple formula worked
                 cell.CellFormula = (/*setter*/"DEC2HEX(O2+D2)");
 
@@ -2126,6 +2133,31 @@ using NPOI.SS.Formula.Eval;
 
                 workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
                 workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // what other similar functions
+                cell.CellFormula = (/*setter*/"DEC2BIN(O8)-O2+D2");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // what other similar functions
+                cell.CellFormula = (/*setter*/"DEC2BIN(A1)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // what other similar functions
+                cell.CellFormula = (/*setter*/"BIN2DEC(B1)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
             }
             finally
             {
