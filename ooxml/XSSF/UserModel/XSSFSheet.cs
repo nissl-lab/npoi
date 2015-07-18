@@ -379,28 +379,18 @@ namespace NPOI.XSSF.UserModel
         }
         XSSFDrawing drawing = null;
         /**
-         * Create a new SpreadsheetML drawing. If this sheet already Contains a drawing - return that.
+         * Return the sheet's existing Drawing, or null if there isn't yet one.
+         * 
+         * Use {@link #CreateDrawingPatriarch()} to Get or create
          *
-         * @return a SpreadsheetML drawing
+         * @return a SpreadsheetML Drawing
          */
-        public IDrawing CreateDrawingPatriarch()
+        public XSSFDrawing GetDrawingPatriarch()
         {
-            NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
-            if (ctDrawing == null)
+            CT_Drawing ctDrawing = GetCTDrawing();
+            if (ctDrawing != null)
             {
-                //drawingNumber = #drawings.Count + 1
-                int drawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
-                drawing = (XSSFDrawing)CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), drawingNumber);
-                String relId = drawing.GetPackageRelationship().Id;
-
-                //add CT_Drawing element which indicates that this sheet Contains drawing components built on the drawingML platform.
-                //The relationship Id references the part Containing the drawingML defInitions.
-                ctDrawing = worksheet.AddNewDrawing();
-                ctDrawing.id = (relId);
-            }
-            else
-            {
-                //search the referenced drawing in the list of the sheet's relations
+                // Search the referenced Drawing in the list of the sheet's relations
                 foreach (POIXMLDocumentPart p in GetRelations())
                 {
                     if (p is XSSFDrawing)
@@ -409,19 +399,44 @@ namespace NPOI.XSSF.UserModel
                         String drId = dr.GetPackageRelationship().Id;
                         if (drId.Equals(ctDrawing.id))
                         {
-                            drawing = dr;
-                            break;
+                            return dr;
                         }
                         break;
                     }
                 }
-                if (drawing == null)
-                {
-                    logger.Log(POILogger.ERROR, "Can't find drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
-                }
+                logger.Log(POILogger.ERROR, "Can't find Drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
             }
-            return drawing;
+            return null;
         }
+
+        /**
+         * Create a new SpreadsheetML Drawing. If this sheet already Contains a Drawing - return that.
+         *
+         * @return a SpreadsheetML Drawing
+         */
+
+        public IDrawing CreateDrawingPatriarch()
+        {
+            CT_Drawing ctDrawing = GetCTDrawing();
+            if (ctDrawing != null)
+            {
+                return GetDrawingPatriarch();
+            }
+
+            //drawingNumber = #drawings.Count + 1
+            int DrawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
+            XSSFDrawing Drawing = (XSSFDrawing)CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), DrawingNumber);
+            String relId = Drawing.GetPackageRelationship().Id;
+
+            //add CT_Drawing element which indicates that this sheet Contains Drawing components built on the DrawingML platform.
+            //The relationship Id references the part Containing the DrawingML defInitions.
+            ctDrawing = worksheet.AddNewDrawing();
+            ctDrawing.id = (/*setter*/relId);
+
+            // Return the newly Created Drawing
+            return Drawing;
+        }
+
 
         /**
          * Get VML drawing for this sheet (aka 'legacy' drawig)
