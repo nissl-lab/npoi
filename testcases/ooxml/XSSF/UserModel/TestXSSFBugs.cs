@@ -2184,10 +2184,9 @@ using NPOI.SS.Formula.Eval;
         }
 
         /**
-     * A .xlsx file with no Shared Strings table should open fine
-     *  in Read-only mode
-     */
-        [Ignore]
+         * A .xlsx file with no Shared Strings table should open fine
+         *  in Read-only mode
+         */
         [Test]
         public void Bug57482()
         {
@@ -2208,10 +2207,43 @@ using NPOI.SS.Formula.Eval;
                     Assert.AreEqual("1", fmt.FormatCellValue(s.GetRow(0).GetCell(0)));
                     Assert.AreEqual("11", fmt.FormatCellValue(s.GetRow(0).GetCell(1)));
                     Assert.AreEqual("5", fmt.FormatCellValue(s.GetRow(4).GetCell(0)));
+
+                    // Add a text cell
+                    s.GetRow(0).CreateCell(3).SetCellValue("Testing");
+                    Assert.AreEqual("Testing", fmt.FormatCellValue(s.GetRow(0).GetCell(3)));
+
+                    // Try to Write-out and read again, should only work
+                    //  in Read-write mode, not Read-only mode
+                    try
+                    {
+                        wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+                        if (access == PackageAccess.READ)
+                            Assert.Fail("Shouln't be able to write from Read-only mode");
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        if (access == PackageAccess.READ)
+                        {
+                            // Expected
+                        }
+                        else
+                        {
+                            // Shouldn't occur in Write-mode
+                            throw e;
+                        }
+                    }
+
+                    // Check again
+                    s = wb.GetSheetAt(0) as XSSFSheet;
+                    Assert.AreEqual("1", fmt.FormatCellValue(s.GetRow(0).GetCell(0)));
+                    Assert.AreEqual("11", fmt.FormatCellValue(s.GetRow(0).GetCell(1)));
+                    Assert.AreEqual("5", fmt.FormatCellValue(s.GetRow(4).GetCell(0)));
+                    Assert.AreEqual("Testing", fmt.FormatCellValue(s.GetRow(0).GetCell(3)));
+
                 }
                 finally
                 {
-                    pkg.Close();
+                    pkg.Revert();
                 }
             }
         }

@@ -325,17 +325,34 @@ namespace NPOI.XSSF.UserModel
                         elIdMap.Add(p.GetPackageRelationship().Id, (ExternalLinksTable)p);
                     }
                 }
+
+                bool packageReadOnly = (Package.GetPackageAccess() == PackageAccess.READ);
+
                 if (stylesSource == null)
                 {
                     // Create Styles if it is missing
-                    stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
+                    if (packageReadOnly)
+                    {
+                        stylesSource = new StylesTable();
+                    }
+                    else
+                    {
+                        stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
+                    }
                 }
                 stylesSource.SetTheme(theme);
 
                 if (sharedStringSource == null)
                 {
                     //Create SST if it is missing
-                    sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
+                    if (packageReadOnly)
+                    {
+                        sharedStringSource = new SharedStringsTable();
+                    }
+                    else
+                    {
+                        sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
+                    }
                 }
 
                 // Load individual sheets. The order of sheets is defined by the order
