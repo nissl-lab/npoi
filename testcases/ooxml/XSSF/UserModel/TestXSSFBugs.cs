@@ -993,7 +993,7 @@ using NPOI.SS.Formula.Eval;
             //       FileOutputStream out = new FileOutputStream("/tmp/test48877.xlsx");
             //       wb.Write(out);
             //       out.Close();
-            
+
         }
 
         /**
@@ -1352,10 +1352,10 @@ using NPOI.SS.Formula.Eval;
             comment1.Author = ("Bob T. Fish");
 
             anchor = factory.CreateClientAnchor();
-            anchor.Col1=(0);
-            anchor.Col2=(4);
-            anchor.Row1=(1);
-            anchor.Row2=(1);
+            anchor.Col1 = (0);
+            anchor.Col2 = (4);
+            anchor.Row1 = (1);
+            anchor.Row2 = (1);
 
             IComment comment2 = Drawing.CreateCellComment(anchor);
             comment2.String = (
@@ -2180,6 +2180,39 @@ using NPOI.SS.Formula.Eval;
             finally
             {
                 wb.Close();
+            }
+        }
+
+        /**
+     * A .xlsx file with no Shared Strings table should open fine
+     *  in Read-only mode
+     */
+        [Ignore]
+        [Test]
+        public void Bug57482()
+        {
+            foreach (PackageAccess access in new PackageAccess[] {
+                PackageAccess.READ_WRITE, PackageAccess.READ
+        })
+            {
+                FileInfo file = HSSFTestDataSamples.GetSampleFile("57482-OnlyNumeric.xlsx");
+                OPCPackage pkg = OPCPackage.Open(file, access);
+                try
+                {
+                    XSSFWorkbook wb = new XSSFWorkbook(pkg);
+                    Assert.IsNotNull(wb.GetSharedStringSource());
+                    Assert.AreEqual(0, wb.GetSharedStringSource().Count);
+
+                    DataFormatter fmt = new DataFormatter();
+                    XSSFSheet s = wb.GetSheetAt(0) as XSSFSheet;
+                    Assert.AreEqual("1", fmt.FormatCellValue(s.GetRow(0).GetCell(0)));
+                    Assert.AreEqual("11", fmt.FormatCellValue(s.GetRow(0).GetCell(1)));
+                    Assert.AreEqual("5", fmt.FormatCellValue(s.GetRow(4).GetCell(0)));
+                }
+                finally
+                {
+                    pkg.Close();
+                }
             }
         }
 
