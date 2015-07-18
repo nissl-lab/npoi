@@ -20,6 +20,7 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text;
+    using System.Collections.Generic;
     using NPOI.Util;
 
     /// <summary>
@@ -27,7 +28,7 @@ namespace NPOI.DDF
     /// with all sorts of special cases.  I'm hopeful I've got them all.
     /// @author Glen Stampoultzis (glens at superlinksoftware.com)
     /// </summary>
-    public class EscherArrayProperty : EscherComplexProperty
+    public class EscherArrayProperty : EscherComplexProperty, IEnumerable<byte[]> 
     {
         /**
          * The size of the header that goes at the
@@ -258,5 +259,55 @@ namespace NPOI.DDF
                 return sizeOfElements;
         }
 
+
+        public IEnumerator<byte[]> GetEnumerator()
+        {
+            return new EscherArrayEnumerator(this);
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        private class EscherArrayEnumerator : IEnumerator<byte[]>
+        {
+            EscherArrayProperty dataHolder;
+            public EscherArrayEnumerator(EscherArrayProperty eap)
+            {
+                dataHolder = eap;
+            }
+            private int idx = -1;
+            public byte[] Current
+            {
+                get
+                {
+                    if (idx < 0 || idx > dataHolder.NumberOfElementsInArray)
+                        throw new IndexOutOfRangeException();
+                    return dataHolder.GetElement(idx);
+                }
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            object System.Collections.IEnumerator.Current
+            {
+                get { return this.Current; }
+            }
+
+            public bool MoveNext()
+            {
+                idx++;
+                return (idx < dataHolder.NumberOfElementsInArray);
+            }
+
+            public void Reset()
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
