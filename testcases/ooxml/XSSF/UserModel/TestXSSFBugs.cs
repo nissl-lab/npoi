@@ -2165,6 +2165,23 @@ using NPOI.SS.Formula.Eval;
                 //System.ClearProperty("poi.log.level");
             }
         }
+        [Test]
+        public void Bug57430()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                wb.CreateSheet("Sheet1");
+
+                XSSFName name1 = wb.CreateName() as XSSFName;
+                name1.NameName = (/*setter*/"FMLA");
+                name1.RefersToFormula = (/*setter*/"Sheet1!$B$3");
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
 
     }
 
