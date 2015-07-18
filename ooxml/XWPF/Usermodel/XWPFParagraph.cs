@@ -199,7 +199,9 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return paragraph.Items.Count == 0;
+                //!paragraph.getDomNode().hasChildNodes();
+                //inner xml include objects holded by Items and pPr object
+                return paragraph.Items.Count == 0 && paragraph.pPr == null;
             }
         }
 
@@ -497,7 +499,7 @@ namespace NPOI.XWPF.UserModel
                     throw new RuntimeException("invalid paragraph state");
                 }
                 CT_Border pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetTop();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -528,7 +530,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetBottom();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -558,7 +560,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetLeft();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -591,7 +593,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetRight();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -669,7 +671,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetBetween() ? ct.between : ct.AddNewBetween();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetBetween();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -1061,7 +1063,7 @@ namespace NPOI.XWPF.UserModel
          * the content of parameter run
          * @param run
          */
-        protected void AddRun(CT_R Run)
+        protected internal void AddRun(CT_R Run)
         {
             int pos;
             pos = paragraph.GetRList().Count;

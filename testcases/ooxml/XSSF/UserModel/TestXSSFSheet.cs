@@ -318,6 +318,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual((uint)(2 + 1), colArray[0].min); // 1 based
             Assert.AreEqual((uint)(7 + 1), colArray[0].max); // 1 based
             Assert.AreEqual(1, colArray[0].outlineLevel);
+            Assert.AreEqual(0, sheet.GetColumnOutlineLevel(0));
 
             //two level
             sheet.GroupColumn(1, 2);
@@ -1116,6 +1117,8 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
 
+            Assert.IsFalse(sheet.ForceFormulaRecalculation);
+
             // Set
             sheet.ForceFormulaRecalculation = (true);
             Assert.AreEqual(true, sheet.ForceFormulaRecalculation);
@@ -1325,5 +1328,47 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFTestDataSamples.OpenSampleWorkbook("51585.xlsx");
         }
+
+
+        [Test]
+        public void TestReadFails()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+
+            try
+            {
+                sheet.OnDocumentRead();
+                Assert.Fail("Throws exception because we cannot read here");
+            }
+            catch (POIXMLException e)
+            {
+                // expected here
+            }
+        }
+
+        [Test]
+
+        public void TestCreateComment()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            Assert.IsNotNull(sheet.CreateComment());
+        }
+
+        [Test]
+
+        public void TestRightToLeft()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+
+            Assert.IsFalse(sheet.IsRightToLeft);
+            sheet.RightToLeft = (/*setter*/true);
+            Assert.IsTrue(sheet.IsRightToLeft);
+            sheet.RightToLeft = (/*setter*/false);
+            Assert.IsFalse(sheet.IsRightToLeft);
+        }
+
     }
 }

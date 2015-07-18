@@ -3163,7 +3163,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void UnsetBottom()
         {
-            this.bottomField = new CT_Border();
+            this.bottomField = null;// new CT_Border();
         }
 
         public bool IsSetRight()
@@ -3173,7 +3173,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void UnsetRight()
         {
-            this.rightField = new CT_Border();
+            this.rightField = null;// new CT_Border();
         }
 
         public CT_Border AddNewRight()
@@ -3197,7 +3197,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void UnsetBetween()
         {
-            this.betweenField = new CT_Border();
+            this.betweenField = null;// new CT_Border();
         }
 
         public bool IsSetLeft()
@@ -3214,7 +3214,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void UnsetLeft()
         {
-            this.leftField = new CT_Border();
+            this.leftField = null;// new CT_Border();
         }
     }
 
