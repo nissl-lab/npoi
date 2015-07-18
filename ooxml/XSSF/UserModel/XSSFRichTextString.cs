@@ -194,9 +194,9 @@ namespace NPOI.XSSF.UserModel
         public void ApplyFont(int startIndex, int endIndex, IFont font)
         {
             if (startIndex > endIndex)
-                throw new ArgumentException("Start index must be less than end index.");
+                throw new ArgumentException("Start index must be less than end index, but had " + startIndex + " and " + endIndex);
             if (startIndex < 0 || endIndex > Length)
-                throw new ArgumentException("Start and end index not in range.");
+                throw new ArgumentException("Start and end index not in range, but had " + startIndex + " and " + endIndex);
             if (startIndex == endIndex)
                 return;
 

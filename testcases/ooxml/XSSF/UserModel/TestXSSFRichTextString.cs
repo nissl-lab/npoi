@@ -20,6 +20,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Collections.Generic;
 using System;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.Model;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -47,6 +48,14 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(st.IsSetT());
 
             Assert.AreEqual("Apache POI is cool stuff", rt.String);
+        }
+        [Test]
+        public void TestEmpty()
+        {
+            XSSFRichTextString rt = new XSSFRichTextString();
+            Assert.AreEqual(0, rt.GetIndexOfFormattingRun(9999));
+            Assert.AreEqual(-1, rt.GetLengthOfFormattingRun(9999));
+            Assert.IsNull(rt.GetFontAtIndex(9999));
         }
 
         [Test]
@@ -79,7 +88,85 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(7, rt.GetIndexOfFormattingRun(3));
             Assert.AreEqual(2, rt.GetLengthOfFormattingRun(3));
             Assert.AreEqual("89", rt.GetCTRst().GetRArray(3).t);
+
+            Assert.AreEqual(-1, rt.GetIndexOfFormattingRun(9999));
+            Assert.AreEqual(-1, rt.GetLengthOfFormattingRun(9999));
+            Assert.IsNull(rt.GetFontAtIndex(9999));
+
         }
+
+        [Test]
+        public void TestApplyFontIndex()
+        {
+            XSSFRichTextString rt = new XSSFRichTextString("Apache POI");
+            rt.ApplyFont(0, 10, (short)1);
+
+            rt.ApplyFont((short)1);
+
+            Assert.IsNotNull(rt.GetFontAtIndex(0));
+        }
+
+        [Test]
+        public void TestApplyFontWithStyles()
+        {
+            XSSFRichTextString rt = new XSSFRichTextString("Apache POI");
+
+            StylesTable tbl = new StylesTable();
+            rt.SetStylesTableReference(tbl);
+
+            try
+            {
+                rt.ApplyFont(0, 10, (short)1);
+                Assert.Fail("Fails without styles in the table");
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                // expected
+            }
+
+            tbl.PutFont(new XSSFFont());
+            rt.ApplyFont(0, 10, (short)1);
+            rt.ApplyFont((short)1);
+        }
+
+        [Test]
+        public void TestApplyFontException()
+        {
+            XSSFRichTextString rt = new XSSFRichTextString("Apache POI");
+
+            rt.ApplyFont(0, 0, (short)1);
+
+            try
+            {
+                rt.ApplyFont(11, 10, (short)1);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.Contains("11"));
+            }
+
+            try
+            {
+                rt.ApplyFont(-1, 10, (short)1);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.Contains("-1"));
+            }
+
+            try
+            {
+                rt.ApplyFont(0, 555, (short)1);
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.Contains("555"));
+            }
+        }
+
         [Test]
         public void TestClearFormatting()
         {
@@ -450,6 +537,17 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(rt.GetFontOfFormattingRun(2));
             Assert.AreEqual(9, rt.GetLengthOfFormattingRun(2));
 
+        }
+
+        [Test]
+        public void TestToString()
+        {
+            XSSFRichTextString rt = new XSSFRichTextString("Apache POI");
+            Assert.IsNotNull(rt.ToString());
+
+            // TODO: normally ToString() should never return null, should we adjust this?
+            rt = new XSSFRichTextString();
+            Assert.IsNull(rt.ToString());
         }
 
     }

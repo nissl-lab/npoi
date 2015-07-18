@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
+    <Compile Include="DDF\EscherColorRef.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HPSF\Array.cs" />
