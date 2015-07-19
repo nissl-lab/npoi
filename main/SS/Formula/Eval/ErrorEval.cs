@@ -21,7 +21,8 @@ namespace NPOI.SS.Formula.Eval
     using System.Text;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    
+    using System.Collections.Generic;
+    using NPOI.Util;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -29,7 +30,7 @@ namespace NPOI.SS.Formula.Eval
      */
     public class ErrorEval : ValueEval
     {
-
+        private static Dictionary<FormulaError, ErrorEval> evals = new Dictionary<FormulaError, ErrorEval>();
         // convenient access to namespace
         private const HSSFErrorConstants EC = null;
 
@@ -50,12 +51,10 @@ namespace NPOI.SS.Formula.Eval
 
 
         // POI internal error codes
-        private const int CIRCULAR_REF_ERROR_CODE = unchecked((int)0xFFFFFFC4);
-        private const int FUNCTION_NOT_IMPLEMENTED_CODE = unchecked((int)0xFFFFFFE2);
+        public static ErrorEval FUNCTION_NOT_IMPLEMENTED = new ErrorEval(FormulaError.FUNCTION_NOT_IMPLEMENTED);
 
-        public static readonly ErrorEval FUNCTION_NOT_IMPLEMENTED = new ErrorEval(FUNCTION_NOT_IMPLEMENTED_CODE);
         // Note - Excel does not seem to represent this condition with an error code
-        public static readonly ErrorEval CIRCULAR_REF_ERROR = new ErrorEval(CIRCULAR_REF_ERROR_CODE);
+        public static ErrorEval CIRCULAR_REF_ERROR = new ErrorEval(FormulaError.CIRCULAR_REF);
 
 
         /**
@@ -64,20 +63,11 @@ namespace NPOI.SS.Formula.Eval
          */
         public static ErrorEval ValueOf(int errorCode)
         {
-            switch (errorCode)
-            {
-                case HSSFErrorConstants.ERROR_NULL: return NULL_INTERSECTION;
-                case HSSFErrorConstants.ERROR_DIV_0: return DIV_ZERO;
-                case HSSFErrorConstants.ERROR_VALUE: return VALUE_INVALID;
-                case HSSFErrorConstants.ERROR_REF: return REF_INVALID;
-                case HSSFErrorConstants.ERROR_NAME: return NAME_INVALID;
-                case HSSFErrorConstants.ERROR_NUM: return NUM_ERROR;
-                case HSSFErrorConstants.ERROR_NA: return NA;
-                // non-std errors (conditions modelled as errors by POI)
-                case CIRCULAR_REF_ERROR_CODE: return CIRCULAR_REF_ERROR;
-                case FUNCTION_NOT_IMPLEMENTED_CODE: return FUNCTION_NOT_IMPLEMENTED;
-            }
-            throw new Exception("Unexpected error code (" + errorCode + ")");
+            FormulaError error = FormulaError.ForInt(errorCode);
+            if (evals.ContainsKey(error))
+                return evals[error];
+
+            throw new RuntimeException("Unhandled error type  for code " + errorCode);
         }
 
         /**
@@ -89,40 +79,36 @@ namespace NPOI.SS.Formula.Eval
         {
             if (FormulaError.IsValidCode(errorCode))
             {
-                return FormulaError.ForInt((byte)errorCode).String;
+                return FormulaError.ForInt(errorCode).String;
             }
-            // It is desirable to make these (arbitrary) strings look clearly different from any other
-            // value expression that might appear in a formula.  In Addition these error strings should
-            // look Unlike the standard Excel errors.  Hence tilde ('~') was used.
-            switch (errorCode)
-            {
-                case CIRCULAR_REF_ERROR_CODE: return "~CIRCULAR~REF~";
-                case FUNCTION_NOT_IMPLEMENTED_CODE: return "~FUNCTION~NOT~IMPLEMENTED~";
-            }
+            // Give a special string, based on ~, to make clear this isn't a standard Excel error
             return "~non~std~err(" + errorCode + ")~";
         }
 
-        private int _errorCode;
-        /**
-         * @param errorCode an 8-bit value
-         */
-        private ErrorEval(int errorCode)
-        {
-            _errorCode = errorCode;
-        }
+        private FormulaError _error;
+ 
         private ErrorEval(FormulaError error)
         {
-            _errorCode = error.Code;
+            _error = error;
+            if (!evals.ContainsKey(error))
+                evals.Add(error, this);
         }
         public int ErrorCode
         {
-            get{return _errorCode;}
+            get{return _error.LongCode;}
+        }
+        public String ErrorString
+        {
+            get
+            {
+                return _error.String;
+            }
         }
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append(GetType().Name).Append(" [");
-            sb.Append(GetText(_errorCode));
+            sb.Append(_error.String);
             sb.Append("]");
             return sb.ToString();
         }

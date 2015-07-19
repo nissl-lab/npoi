@@ -2266,8 +2266,10 @@ using NPOI.SS.Formula.Eval;
             CellValue value = Evaluator.Evaluate(cell);
             Assert.AreEqual(CellType.Error, value.CellType);
             Assert.AreEqual(-60, value.ErrorValue);
-            // TODO Fix this
-            //        Assert.AreEqual("", FormulaError.ForInt(value.ErrorValue).ToString());
+
+            Assert.AreEqual("~CIRCULAR~REF~", FormulaError.ForInt(value.ErrorValue).String);
+            //Assert.AreEqual("CIRCULAR_REF", FormulaError.ForInt(value.ErrorValue).ToString());
+
         }
 
     }
