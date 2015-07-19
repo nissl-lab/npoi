@@ -78,6 +78,10 @@ namespace NPOI
          */
         public String GetCorePropertiesText()
         {
+            if (Document == null)
+            {  // event based extractor does not have a document
+                return "";
+            }
             StringBuilder text = new StringBuilder();
             PackagePropertiesPart props =
                 Document.GetProperties().CoreProperties.GetUnderlyingProperties();
@@ -111,6 +115,10 @@ namespace NPOI
          */
         public String GetExtendedPropertiesText()
         {
+            if (Document == null)
+            {  // event based extractor does not have a document
+                return "";
+            }
             StringBuilder text = new StringBuilder();
             CT_ExtendedProperties
                 props = Document.GetProperties().ExtendedProperties.GetUnderlyingProperties();
@@ -139,6 +147,10 @@ namespace NPOI
     */
         public String GetCustomPropertiesText()
         {
+            if (Document == null)
+            {  // event based extractor does not have a document
+                return "";
+            }
             StringBuilder text = new StringBuilder();
             CT_CustomProperties props = Document.GetProperties().CustomProperties.GetUnderlyingProperties();
 

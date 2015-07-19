@@ -179,7 +179,7 @@ namespace TestCases.HSSF.UserModel
             // string to error code
             cell.SetCellValue("abc");
             ConfirmStringRecord(sheet, true);
-            cell.SetCellErrorValue((byte)ErrorConstants.ERROR_REF);
+            cell.SetCellErrorValue(FormulaError.REF.Code);
             ConfirmStringRecord(sheet, false);
 
             // string to boolean
