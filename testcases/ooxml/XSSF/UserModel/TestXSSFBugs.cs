@@ -2248,6 +2248,28 @@ using NPOI.SS.Formula.Eval;
             }
         }
 
+        /**
+     * "Unknown error type: -60" fetching formula error value
+     */
+        [Test]
+        public void Bug57535()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57535.xlsx");
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Evaluator.ClearAllCachedResultValues();
+
+            ISheet sheet = wb.GetSheet("Sheet1");
+            ICell cell = sheet.GetRow(5).GetCell(4);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("E4+E5", cell.CellFormula);
+
+            CellValue value = Evaluator.Evaluate(cell);
+            Assert.AreEqual(CellType.Error, value.CellType);
+            Assert.AreEqual(-60, value.ErrorValue);
+            // TODO Fix this
+            //        Assert.AreEqual("", FormulaError.ForInt(value.ErrorValue).ToString());
+        }
+
     }
 
 }
