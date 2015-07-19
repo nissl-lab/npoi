@@ -20,6 +20,7 @@ namespace NPOI.SS.Formula.Eval
     using System;
     using System.Text;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
     
 
     /**
@@ -33,19 +34,19 @@ namespace NPOI.SS.Formula.Eval
         private const HSSFErrorConstants EC = null;
 
         /** <b>#NULL!</b>  - Intersection of two cell ranges is empty */
-        public static readonly ErrorEval NULL_INTERSECTION = new ErrorEval(HSSFErrorConstants.ERROR_NULL);
+        public static readonly ErrorEval NULL_INTERSECTION = new ErrorEval(FormulaError.NULL);
         /** <b>#DIV/0!</b> - Division by zero */
-        public static readonly ErrorEval DIV_ZERO = new ErrorEval(HSSFErrorConstants.ERROR_DIV_0);
+        public static readonly ErrorEval DIV_ZERO = new ErrorEval(FormulaError.DIV0);
         /** <b>#VALUE!</b> - Wrong type of operand */
-        public static readonly ErrorEval VALUE_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_VALUE);
+        public static readonly ErrorEval VALUE_INVALID = new ErrorEval(FormulaError.VALUE);
         /** <b>#REF!</b> - Illegal or deleted cell reference */
-        public static readonly ErrorEval REF_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_REF);
+        public static readonly ErrorEval REF_INVALID = new ErrorEval(FormulaError.REF);
         /** <b>#NAME?</b> - Wrong function or range name */
-        public static readonly ErrorEval NAME_INVALID = new ErrorEval(HSSFErrorConstants.ERROR_NAME);
+        public static readonly ErrorEval NAME_INVALID = new ErrorEval(FormulaError.NAME);
         /** <b>#NUM!</b> - Value range overflow */
-        public static readonly ErrorEval NUM_ERROR = new ErrorEval(HSSFErrorConstants.ERROR_NUM);
+        public static readonly ErrorEval NUM_ERROR = new ErrorEval(FormulaError.NUM);
         /** <b>#N/A</b> - Argument or function not available */
-        public static readonly ErrorEval NA = new ErrorEval(HSSFErrorConstants.ERROR_NA);
+        public static readonly ErrorEval NA = new ErrorEval(FormulaError.NA);
 
 
         // POI internal error codes
@@ -72,7 +73,7 @@ namespace NPOI.SS.Formula.Eval
                 case HSSFErrorConstants.ERROR_NAME: return NAME_INVALID;
                 case HSSFErrorConstants.ERROR_NUM: return NUM_ERROR;
                 case HSSFErrorConstants.ERROR_NA: return NA;
-                // non-std errors (conditions modeled as errors by POI)
+                // non-std errors (conditions modelled as errors by POI)
                 case CIRCULAR_REF_ERROR_CODE: return CIRCULAR_REF_ERROR;
                 case FUNCTION_NOT_IMPLEMENTED_CODE: return FUNCTION_NOT_IMPLEMENTED;
             }
@@ -86,9 +87,9 @@ namespace NPOI.SS.Formula.Eval
          */
         public static String GetText(int errorCode)
         {
-            if (HSSFErrorConstants.IsValidCode(errorCode))
+            if (FormulaError.IsValidCode(errorCode))
             {
-                return HSSFErrorConstants.GetText(errorCode);
+                return FormulaError.ForInt((byte)errorCode).String;
             }
             // It is desirable to make these (arbitrary) strings look clearly different from any other
             // value expression that might appear in a formula.  In Addition these error strings should
@@ -109,7 +110,10 @@ namespace NPOI.SS.Formula.Eval
         {
             _errorCode = errorCode;
         }
-
+        private ErrorEval(FormulaError error)
+        {
+            _errorCode = error.Code;
+        }
         public int ErrorCode
         {
             get{return _errorCode;}

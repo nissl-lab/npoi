@@ -17,14 +17,34 @@
 namespace NPOI.SS.UserModel
 {
     using System;
+    using System.Collections.Generic;
 
     /**
      * Enumerates error values in SpreadsheetML formula calculations.
      *
-     * @author Yegor Kozlov
+     * See also OOO's excelfileformat.pdf (2.5.6)
      */
     public class FormulaError
     {
+        static FormulaError()
+        {
+            _values = new FormulaError[] { 
+                FormulaError.NULL,
+                FormulaError.DIV0,
+                FormulaError.VALUE,
+                FormulaError.REF,
+                FormulaError.NAME,
+                FormulaError.NUM,
+                FormulaError.NA
+            };
+
+            foreach (FormulaError error in _values)
+            {
+                imap.Add(error.Code, error);
+                smap.Add(error.String, error);
+            }
+        }
+        private static FormulaError[] _values;
         /**
          * Intended to indicate when two areas are required to intersect, but do not.
          * <p>Example:
@@ -132,9 +152,16 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        //private static Dictionary<String, FormulaError> smap = null;
-        //private static Dictionary<Byte, FormulaError> imap = null;
-
+        private static Dictionary<String, FormulaError> smap = new Dictionary<string,FormulaError>();
+        private static Dictionary<Byte, FormulaError> imap = new Dictionary<byte,FormulaError>();
+        public static bool IsValidCode(int errorCode)
+        {
+            foreach (FormulaError error in _values)
+            {
+                if (error.Code == errorCode) return true;
+            }
+            return false;
+        }
         public static FormulaError ForInt(byte type)
         {
             //FormulaError err = imap[type];
