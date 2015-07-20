@@ -22,6 +22,7 @@ namespace NPOI.XWPF.UserModel
     using System.Text;
     using NPOI.Util;
     using System.Collections;
+    using NPOI.WP.UserModel;
     /**
      * <p>A Paragraph within a Document, Table, Header etc.</p> 
      * 
@@ -29,7 +30,7 @@ namespace NPOI.XWPF.UserModel
      *  actual text (possibly along with more styling) is held on
      *  the child {@link XWPFRun}s.</p>
      */
-    public class XWPFParagraph : IBodyElement, IRunBody, ISDTContents
+    public class XWPFParagraph : IBodyElement, IRunBody, ISDTContents, IParagraph
     {
         private CT_P paragraph;
         protected IBody part;
@@ -435,6 +436,21 @@ namespace NPOI.XWPF.UserModel
                 CT_PPr pr = GetCTPPr();
                 CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
                 jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>(value);
+            }
+        }
+
+        /**
+         * @return The raw alignment value, {@link #getAlignment()} is suggested
+         */
+        public int FontAlignment
+        {
+            get
+            {
+                return (int)Alignment;
+            }
+            set
+            {
+                Alignment = (ParagraphAlignment)value;
             }
         }
 
@@ -955,6 +971,41 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public int IndentFromLeft
+        {
+            get
+            {
+                return IndentationLeft;
+            }
+            set
+            {
+                IndentationLeft = value;
+            }
+        }
+
+        public int IndentFromRight
+        {
+            get
+            {
+                return IndentationRight;
+            }
+            set
+            {
+                IndentationRight = value;
+            }
+        }
+
+        public int FirstLineIndent
+        {
+            get
+            {
+                return IndentationFirstLine;
+            }
+            set
+            {
+                IndentationFirstLine = (value);
+            }
+        }
 
         /**
          * This element specifies whether a consumer shall break Latin text which
@@ -964,7 +1015,7 @@ namespace NPOI.XWPF.UserModel
          *
          * @return bool
          */
-        public bool IsWordWrap
+        public bool IsWordWrapped
         {
             get
             {
@@ -985,6 +1036,12 @@ namespace NPOI.XWPF.UserModel
                 else
                     wordWrap.UnSetVal();
             }
+        }
+        [Obsolete]
+        public bool IsWordWrap
+        {
+            get { return IsWordWrapped; }
+            set { IsWordWrapped = value; }
         }
 
         /**

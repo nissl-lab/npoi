@@ -71,7 +71,7 @@ namespace NPOI.XWPF.UserModel
             XWPFRun run = new XWPFRun(ctRun, p);
             Assert.AreEqual(true, run.IsBold);
 
-            run.SetBold(false);
+            run.IsBold = (false);
             Assert.AreEqual(false, run.IsBold);
             Assert.AreEqual(false, rpr.b.val);
         }

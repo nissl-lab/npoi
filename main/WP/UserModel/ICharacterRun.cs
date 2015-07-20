@@ -19,76 +19,73 @@ namespace NPOI.WP.UserModel
 {
     using System;
 
-/**
- * This class represents a run of text that share common properties.
- */
-public interface CharacterRun {// : Range {
-/*    
-    public bool IsMarkedDeleted();
-    public void markDeleted(bool mark);
+    /**
+     * This class represents a run of text that share common properties.
+     */
+    public interface ICharacterRun
+    {
+        bool IsBold { get; set; }
 
-    public bool IsBold();
-    public void SetBold(bool bold);
+        bool IsItalic { get; set; }
+        bool IsSmallCaps { get; set; }
 
-    public bool IsItalic();
-    public void SetItalic(bool italic);
+        bool IsCapitalized { get; set; }
 
-    public bool IsOutlined();
-    public void SetOutline(bool outlined);
+        bool IsStrikeThrough { get; set; }
+        bool IsDoubleStrikeThrough { get; set; }
 
-    public bool IsFldVanished();
-    public void SetFldVanish(bool fldVanish);
+        bool IsShadowed { get; set; }
 
-    public bool IsSmallCaps();
-    public void SetSmallCaps(bool smallCaps);
+        bool IsEmbossed { get; set; }
 
-    public bool IsCapitalized();
-    public void SetCapitalized(bool caps);
+        bool IsImprinted { get; set; }
 
-    public bool IsVanished();
-    public void SetVanished(bool vanish);
+        int FontSize { get; set; }
 
-    public bool IsMarkedInserted();
-    public void markInserted(bool mark);
+        int CharacterSpacing { get; set; }
 
-    public bool IsStrikeThrough();
-    public void SetStrikeThrough(bool strike);
-    public bool IsDoubleStrikeThrough();
-    public void SetDoubleStrikethrough(bool dstrike);
+        int Kerning { get; set; }
 
-    public bool IsShadowed();
-    public void SetShadow(bool shadow);
+        String FontName { get; }
 
-    public bool IsEmbossed();
-    public void SetEmbossed(bool emboss);
+        /**
+         * @return The text of the Run, including any tabs/spaces/etc
+         */
+        String Text { get; }
 
-    public bool IsImprinted();
-    public void SetImprinted(bool imprint);
+        // HWPF uses indexes, XWPF special
+        //    int GetUnderlineCode();
+        //    public void SetUnderlineCode(int kul);
 
-    public int GetFontSize();
-    public void SetFontSize(int halfPoints);
+        // HWPF uses indexes, XWPF special vertical alignments
+        //    public short GetSubSuperScriptIndex();
+        //    public void SetSubSuperScriptIndex(short iss);
 
-    public int GetCharacterSpacing();
-    public void SetCharacterSpacing(int twips);
+        // HWPF uses indexes, XWPF special vertical alignments
+        //    int GetVerticalOffset();
+        //    public void SetVerticalOffset(int hpsPos);
 
-    public int GetUnderlineCode();
-    public void SetUnderlineCode(int kul);
+        // HWPF has colour indexes, XWPF colour names
+        //    int GetColor();
+        //    public void SetColor(int color);
 
-    // HWPF uses indexes, XWPF enums
-//    public short GetSubSuperScriptIndex();
-//    public void SetSubSuperScriptIndex(short iss);
+        // TODO Review these, and add to XWPFRun if possible
+        /*
+            bool IsFldVanished();
+            public void SetFldVanish(bool fldVanish);
+    
+            bool IsOutlined();
+            public void SetOutline(bool outlined);
+    
+            bool IsVanished();
+            public void SetVanished(bool vanish);
 
-    // HWPF has colour indexes, XWPF colour names
-//    public int GetColor();
-//    public void SetColor(int color);
+            bool IsMarkedDeleted();
+            public void markDeleted(bool mark);
 
-    public int GetVerticalOffset();
-    public void SetVerticalOffset(int hpsPos);
+            bool IsMarkedInserted();
+            public void markInserted(bool mark);
+        */
+    }
 
-    public int GetKerning();
-    public void SetKerning(int kern);
-
-    public String GetFontName();
-*/
 }
-

@@ -1229,6 +1229,8 @@
     <Compile Include="HSSF\Record\TextOrientation.cs" />
     <Compile Include="SS\UserModel\FillPattern.cs" />
     <Compile Include="Util\Units.cs" />
+    <Compile Include="WP\UserModel\ICharacterRun.cs" />
+    <Compile Include="WP\UserModel\IParagraph.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />

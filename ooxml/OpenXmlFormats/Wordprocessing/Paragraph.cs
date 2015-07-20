@@ -4649,6 +4649,102 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return colorField != null && !string.IsNullOrEmpty(colorField.val);
         }
+
+        public bool IsSetDstrike()
+        {
+            return this.dstrikeField != null;
+        }
+
+        public CT_OnOff AddNewDstrike()
+        {
+            if (this.dstrikeField == null)
+                this.dstrikeField = new CT_OnOff();
+            return this.dstrikeField;
+        }
+
+        public bool IsSetEmboss()
+        {
+            return this.embossField != null;
+        }
+
+        public CT_OnOff AddNewEmboss()
+        {
+            if (this.embossField == null)
+                this.embossField = new CT_OnOff();
+            return this.embossField;
+        }
+
+        public bool IsSetImprint()
+        {
+            return this.imprintField != null;
+        }
+
+        public CT_OnOff AddNewImprint()
+        {
+            if (this.imprintField == null)
+                this.imprintField = new CT_OnOff();
+            return this.imprintField;
+        }
+
+        public bool IsSetShadow()
+        {
+            return this.shadowField != null;
+        }
+
+        public CT_OnOff AddNewShadow()
+        {
+            if (this.shadowField == null)
+                this.shadowField = new CT_OnOff();
+            return this.shadowField;
+        }
+
+        public bool IsSetCaps()
+        {
+            return this.capsField != null;
+        }
+
+        public CT_OnOff AddNewCaps()
+        {
+            if (this.capsField == null)
+                this.capsField = new CT_OnOff();
+            return this.capsField;
+        }
+
+        public bool IsSetSmallCaps()
+        {
+            return this.smallCapsField != null;
+        }
+
+        public CT_OnOff AddNewSmallCaps()
+        {
+            if (this.smallCapsField == null)
+                this.smallCapsField = new CT_OnOff();
+            return this.smallCapsField;
+        }
+
+        public bool IsSetKern()
+        {
+            return this.kernField != null;
+        }
+
+        public CT_HpsMeasure AddNewKern()
+        {
+            if (this.kernField == null)
+                this.kernField = new CT_HpsMeasure();
+            return this.kernField;
+        }
+
+        public bool IsSetSpacing()
+        {
+            return this.spacingField != null;
+        }
+
+        public CT_SignedTwipsMeasure AddNewSpacing()
+        {
+            if (this.spacingField == null)
+                this.spacingField = new CT_SignedTwipsMeasure();
+            return this.spacingField;
+        }
     }
 
 
