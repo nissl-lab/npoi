@@ -245,17 +245,9 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestNoCoreProperties_saveNew()
         {
             String sampleFileName = "OPCCompliance_NoCoreProperties.xlsx";
-            OPCPackage pkg = null;
-            try
-            {
-                pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+            OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
 
-            // Empty properties
+            // Verify it has empty properties
             Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
             Assert.IsNotNull(pkg.GetPackageProperties());
             Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
@@ -273,6 +265,22 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             Assert.IsNotNull(pkg.GetPackageProperties());
             Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
             //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
+            // Open a new copy of it
+            pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+
+            // Save and re-load, without having touched the properties yet
+            baos = new MemoryStream();
+            pkg.Save(baos);
+            bais = new MemoryStream(baos.ToArray());
+            pkg = OPCPackage.Open(bais);
+
+            // Check that this too Added empty properties without error
+            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            Assert.IsNotNull(pkg.GetPackageProperties());
+            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
         }
 
         /**
