@@ -2337,6 +2337,91 @@ using NPOI.SS.Formula.Eval;
                 wb.RemoveSheetAt(sn);
             }
         }
+
+        /**
+     * Sums 2 plus the cell at the left, indirectly to avoid reference
+     * problems when deleting columns, conditionally to stop recursion
+     */
+        private static String FORMULA1 =
+                "IF( INDIRECT( ADDRESS( ROW(), COLUMN()-1 ) ) = 0, 0,"
+                        + "INDIRECT( ADDRESS( ROW(), COLUMN()-1 ) ) ) + 2";
+
+        /**
+         * Sums 2 plus the upper cell, indirectly to avoid reference
+         * problems when deleting rows, conditionally to stop recursion
+         */
+        private static String FORMULA2 =
+                "IF( INDIRECT( ADDRESS( ROW()-1, COLUMN() ) ) = 0, 0,"
+                        + "INDIRECT( ADDRESS( ROW()-1, COLUMN() ) ) ) + 2";
+
+        /**
+         * Expected:
+
+         * [  0][  2][  4]
+         * @
+         */
+        [Test]
+        public void TestBug56820_Formula1()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                ISheet sh = wb.CreateSheet();
+
+                sh.CreateRow(0).CreateCell(0).SetCellValue(0.0d);
+                ICell formulaCell1 = sh.GetRow(0).CreateCell(1);
+                ICell formulaCell2 = sh.GetRow(0).CreateCell(2);
+                formulaCell1.CellFormula = (/*setter*/FORMULA1);
+                formulaCell2.CellFormula = (/*setter*/FORMULA1);
+
+                double A1 = Evaluator.Evaluate(formulaCell1).NumberValue;
+                double A2 = Evaluator.Evaluate(formulaCell2).NumberValue;
+
+                Assert.AreEqual(2, A1, 0);
+                Assert.AreEqual(4, A2, 0);  //<-- FAILS EXPECTATIONS
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        /**
+         * Expected:
+
+         * [  0] <- number
+         * [  2] <- formula
+         * [  4] <- formula
+         * @
+         */
+        [Test]
+        public void TestBug56820_Formula2()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                ISheet sh = wb.CreateSheet();
+
+                sh.CreateRow(0).CreateCell(0).SetCellValue(0.0d);
+                ICell formulaCell1 = sh.CreateRow(1).CreateCell(0);
+                ICell formulaCell2 = sh.CreateRow(2).CreateCell(0);
+                formulaCell1.CellFormula = (/*setter*/FORMULA2);
+                formulaCell2.CellFormula = (/*setter*/FORMULA2);
+
+                double A1 = Evaluator.Evaluate(formulaCell1).NumberValue;
+                double A2 = Evaluator.Evaluate(formulaCell2).NumberValue; //<-- FAILS EVALUATION
+
+                Assert.AreEqual(2, A1, 0);
+                Assert.AreEqual(4, A2, 0);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
     }
 
 }
