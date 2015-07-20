@@ -2299,6 +2299,34 @@ using NPOI.SS.Formula.Eval;
             }
         }
 
+        [Test]
+        public void Test57165_Create()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            try
+            {
+                RemoveAllSheetsBut(3, wb);
+                wb.CreateSheet("newsheet"); // Throws exception here
+                wb.SetSheetName(1, "New Sheet");
+                //saveWorkbook(wb, fileName);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+                try
+                {
+
+                }
+                finally
+                {
+                    wbBack.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+
         private static void RemoveAllSheetsBut(int sheetIndex, IWorkbook wb)
         {
             int sheetNb = wb.NumberOfSheets;
