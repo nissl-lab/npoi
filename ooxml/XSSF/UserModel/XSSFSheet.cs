@@ -4174,14 +4174,14 @@ namespace NPOI.XSSF.UserModel
 
         public ISheet CopySheet(String name, Boolean copyStyle)
         {
-            String newName = SheetUtil.GetUniqueSheetName(this.Workbook, name);
-            XSSFSheet newSheet = (XSSFSheet)this.Workbook.CreateSheet(newName);
+            String clonedName = SheetUtil.GetUniqueSheetName(this.Workbook, name);
+            XSSFSheet clonedSheet = (XSSFSheet)this.Workbook.CreateSheet(clonedName);
             try
             {
                 using (MemoryStream out1 = new MemoryStream())
                 {
                     this.Write(out1);
-                    newSheet.Read(new MemoryStream(out1.ToArray()));
+                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
                 }
             }
             catch (IOException e)
@@ -4189,13 +4189,13 @@ namespace NPOI.XSSF.UserModel
                 throw new POIXMLException("Failed to clone sheet", e);
             }
 
-            CT_Worksheet ct = newSheet.GetCTWorksheet();
+            CT_Worksheet ct = clonedSheet.GetCTWorksheet();
             if (ct.IsSetLegacyDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
                 ct.UnsetLegacyDrawing();
             }
-            newSheet.IsSelected = false;
+            clonedSheet.IsSelected = false;
 
             // copy sheet's relations
             List<POIXMLDocumentPart> rels = this.GetRelations();
@@ -4210,13 +4210,13 @@ namespace NPOI.XSSF.UserModel
                     continue;
                 }
                 PackageRelationship rel = r.GetPackageRelationship();
-                newSheet.GetPackagePart().AddRelationship(
+                clonedSheet.GetPackagePart().AddRelationship(
                     rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
-                newSheet.AddRelation(rel.Id, r);
+                clonedSheet.AddRelation(rel.Id, r);
             }
             
             // copy hyperlinks
-            newSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
+            clonedSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
             
             // clone the sheet drawing along with its relationships
             if (dg != null)
@@ -4227,22 +4227,25 @@ namespace NPOI.XSSF.UserModel
                     // so that subsequent call of clonedSheet.createDrawingPatriarch() will create a new one
                     ct.UnsetDrawing();
                 }
-                XSSFDrawing clonedDg = newSheet.CreateDrawingPatriarch() as XSSFDrawing;
+                XSSFDrawing clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
                 // copy drawing contents
                 clonedDg.GetCTDrawing().Set(dg.GetCTDrawing());
+
+                clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
 
                 // Clone drawing relations
                 List<POIXMLDocumentPart> srcRels = dg.GetRelations();
                 foreach (POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
-                    (newSheet.CreateDrawingPatriarch() as XSSFDrawing)
+                    clonedDg.AddRelation(relation.Id, rel);
+                    clonedDg
                             .GetPackagePart()
                             .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
                                     relation.RelationshipType, relation.Id);
                 }
             }
-            return newSheet;
+            return clonedSheet;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -2422,6 +2422,39 @@ using NPOI.SS.Formula.Eval;
             }
         }
 
+        [Test]
+        public void Test56467()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("picture.xlsx");
+            try
+            {
+                ISheet orig = wb.GetSheetAt(0);
+                Assert.IsNotNull(orig);
+
+                ISheet sheet = wb.CloneSheet(0);
+                IDrawing Drawing = sheet.CreateDrawingPatriarch();
+                foreach (XSSFShape shape in ((XSSFDrawing)Drawing).GetShapes())
+                {
+                    if (shape is XSSFPicture)
+                    {
+                        XSSFPictureData pictureData = ((XSSFPicture)shape).PictureData as XSSFPictureData;
+                        Assert.IsNotNull(pictureData);
+                    }
+                }
+
+                //            OutputStream out1 = new FileOutputStream("/tmp/56467.xls");
+                //            try {
+                //            	wb.Write(out1);
+                //            } finally {
+                //            	out1.Close();
+                //            }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
     }
 
 }
