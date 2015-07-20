@@ -662,6 +662,32 @@ namespace NPOI.XSSF.UserModel
             int sheetNumber = 1;
             foreach (XSSFSheet sh in sheets) sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
 
+            outerloop:
+            while (true)
+            {
+                foreach (XSSFSheet sh in sheets)
+                {
+                    sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
+                }
+
+                // Bug 57165: We also need to check that the resulting file name is not already taken
+                // this can happen when moving/cloning sheets
+                String sheetName = XSSFRelation.WORKSHEET.GetFileName(sheetNumber);
+                foreach (POIXMLDocumentPart relation in GetRelations())
+                {
+                    if (relation.GetPackagePart() != null &&
+                            sheetName.Equals(relation.GetPackagePart().PartName.Name))
+                    {
+                        // name is taken => try next one
+                        sheetNumber++;
+                        goto outerloop;
+                    }
+                }
+
+                // no duplicate found => use this one
+                break;
+            }
+
             XSSFSheet wrapper = (XSSFSheet)CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber);
             wrapper.sheet = sheet;
             sheet.id = (wrapper.GetPackageRelationship().Id);
