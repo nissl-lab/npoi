@@ -2454,6 +2454,18 @@ using NPOI.SS.Formula.Eval;
                 wb.Close();
             }
         }
+        /**
+     * OOXML-Strict files
+     */
+        [Test]
+        [Ignore]
+        public void Test57699()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.strict.xlsx");
+            Assert.AreEqual(3, wb.NumberOfSheets);
+
+            // TODO Check the rest
+        }
 
     }
 
