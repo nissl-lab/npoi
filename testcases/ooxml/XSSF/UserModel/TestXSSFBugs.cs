@@ -2456,16 +2456,23 @@ using NPOI.SS.Formula.Eval;
         }
         /**
      * OOXML-Strict files
+     * Not currently working - namespace mis-match from XMLBeans
      */
+        [Ignore("XMLBeans namespace mis-match on ooxml-strict files")]
         [Test]
-        [Ignore]
         public void Test57699()
         {
-            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.strict.xlsx");
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.strict.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);
+            // TODO Check sheet contents
+            // TODO Check formula Evaluation
 
-            // TODO Check the rest
+            XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            Assert.AreEqual(3, wbBack.NumberOfSheets);
+            // TODO Re-check sheet contents
+            // TODO Re-check formula Evaluation
         }
+
 
     }
 

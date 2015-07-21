@@ -73,7 +73,18 @@ using System.Xml;
         public POIXMLDocumentPart(OPCPackage pkg)
         {
             PackageRelationship coreRel = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT).GetRelationship(0);
-
+            if (coreRel == null)
+            {
+                coreRel = pkg.GetRelationshipsByType(PackageRelationshipTypes.STRICT_CORE_DOCUMENT).GetRelationship(0);
+                if (coreRel != null)
+                {
+                    throw new POIXMLException("Strict OOXML isn't currently supported, please see bug #57699");
+                }
+            }
+            if (coreRel == null)
+            {
+                throw new POIXMLException("OOXML file structure broken/invalid - no core document found!");
+            }
             this.packagePart = pkg.GetPart(coreRel);
             this.packageRel = coreRel;
         }
