@@ -44,6 +44,8 @@ namespace TestCases.HSSF.UserModel
             s.AddMergedRegion(new CellRangeAddress(0, 1, 0, 1));
             ISheet clonedSheet = b.CloneSheet(0);
             Assert.AreEqual(1, clonedSheet.NumMergedRegions, "One merged area");
+
+            b.Close();
         }
 
         /**
@@ -65,6 +67,8 @@ namespace TestCases.HSSF.UserModel
             s.RemoveRowBreak(3);
 
             Assert.IsTrue(clone.IsRowBroken(3), "Row 3 still should be broken");
+
+            b.Close();
         }
         [Test]
         public void TestCloneSheetWithoutDrawings()
@@ -130,8 +134,24 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch p2 = sh2.DrawingPatriarch as HSSFPatriarch;
             HSSFComment c2 = (HSSFComment)p2.Children[0];
 
+            Assert.AreEqual(c.String, c2.String);
+            Assert.AreEqual(c.Row, c2.Row);
+            Assert.AreEqual(c.Column, c2.Column);
+
+            // The ShapeId is not equal? 
+            // assertEquals(c.getNoteRecord().getShapeId(), c2.getNoteRecord().getShapeId());
+
             Assert.IsTrue(Arrays.Equals(c2.GetTextObjectRecord().Serialize(), c.GetTextObjectRecord().Serialize()));
+
+            // ShapeId is different
+            CommonObjectDataSubRecord subRecord = (CommonObjectDataSubRecord)c2.GetObjRecord().SubRecords[0];
+            subRecord.ObjectId = (1025);
+
             Assert.IsTrue(Arrays.Equals(c2.GetObjRecord().Serialize(), c.GetObjRecord().Serialize()));
+
+            // ShapeId is different
+            c2.NoteRecord.ShapeId = (1025);
+
             Assert.IsTrue(Arrays.Equals(c2.NoteRecord.Serialize(), c.NoteRecord.Serialize()));
 
 
@@ -140,6 +160,8 @@ namespace TestCases.HSSF.UserModel
             EscherSpRecord sp = (EscherSpRecord)c2.GetEscherContainer().GetChild(0);
             sp.ShapeId=(1025);
             Assert.IsTrue(Arrays.Equals(c2.GetEscherContainer().Serialize(), c.GetEscherContainer().Serialize()));
+
+            wb.Close();
         }
     }
 }

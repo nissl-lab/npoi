@@ -127,10 +127,12 @@ namespace NPOI.HSSF.UserModel
             get { return base.ShapeId; }
             set
             {
+                if (value > 65535)
+                    throw new ArgumentException("Cannot add more than 65535 shapes");
                 base.ShapeId = (value);
                 CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)GetObjRecord().SubRecords[0];
-                cod.ObjectId = ((short)(value % 1024));
-                _note.ShapeId = (value % 1024);
+                cod.ObjectId = value;
+                _note.ShapeId = value;
             }
         }
 
