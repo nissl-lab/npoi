@@ -379,28 +379,18 @@ namespace NPOI.XSSF.UserModel
         }
         XSSFDrawing drawing = null;
         /**
-         * Create a new SpreadsheetML drawing. If this sheet already Contains a drawing - return that.
+         * Return the sheet's existing Drawing, or null if there isn't yet one.
+         * 
+         * Use {@link #CreateDrawingPatriarch()} to Get or create
          *
-         * @return a SpreadsheetML drawing
+         * @return a SpreadsheetML Drawing
          */
-        public IDrawing CreateDrawingPatriarch()
+        public XSSFDrawing GetDrawingPatriarch()
         {
-            NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
-            if (ctDrawing == null)
+            CT_Drawing ctDrawing = GetCTDrawing();
+            if (ctDrawing != null)
             {
-                //drawingNumber = #drawings.Count + 1
-                int drawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
-                drawing = (XSSFDrawing)CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), drawingNumber);
-                String relId = drawing.GetPackageRelationship().Id;
-
-                //add CT_Drawing element which indicates that this sheet Contains drawing components built on the drawingML platform.
-                //The relationship Id references the part Containing the drawingML defInitions.
-                ctDrawing = worksheet.AddNewDrawing();
-                ctDrawing.id = (relId);
-            }
-            else
-            {
-                //search the referenced drawing in the list of the sheet's relations
+                // Search the referenced Drawing in the list of the sheet's relations
                 foreach (POIXMLDocumentPart p in GetRelations())
                 {
                     if (p is XSSFDrawing)
@@ -409,19 +399,44 @@ namespace NPOI.XSSF.UserModel
                         String drId = dr.GetPackageRelationship().Id;
                         if (drId.Equals(ctDrawing.id))
                         {
-                            drawing = dr;
-                            break;
+                            return dr;
                         }
                         break;
                     }
                 }
-                if (drawing == null)
-                {
-                    logger.Log(POILogger.ERROR, "Can't find drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
-                }
+                logger.Log(POILogger.ERROR, "Can't find Drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
             }
-            return drawing;
+            return null;
         }
+
+        /**
+         * Create a new SpreadsheetML Drawing. If this sheet already Contains a Drawing - return that.
+         *
+         * @return a SpreadsheetML Drawing
+         */
+
+        public IDrawing CreateDrawingPatriarch()
+        {
+            CT_Drawing ctDrawing = GetCTDrawing();
+            if (ctDrawing != null)
+            {
+                return GetDrawingPatriarch();
+            }
+
+            //drawingNumber = #drawings.Count + 1
+            int DrawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
+            XSSFDrawing Drawing = (XSSFDrawing)CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), DrawingNumber);
+            String relId = Drawing.GetPackageRelationship().Id;
+
+            //add CT_Drawing element which indicates that this sheet Contains Drawing components built on the DrawingML platform.
+            //The relationship Id references the part Containing the DrawingML defInitions.
+            ctDrawing = worksheet.AddNewDrawing();
+            ctDrawing.id = (/*setter*/relId);
+
+            // Return the newly Created Drawing
+            return Drawing;
+        }
+
 
         /**
          * Get VML drawing for this sheet (aka 'legacy' drawig)
@@ -4159,14 +4174,14 @@ namespace NPOI.XSSF.UserModel
 
         public ISheet CopySheet(String name, Boolean copyStyle)
         {
-            String newName = SheetUtil.GetUniqueSheetName(this.Workbook, name);
-            XSSFSheet newSheet = (XSSFSheet)this.Workbook.CreateSheet(newName);
+            String clonedName = SheetUtil.GetUniqueSheetName(this.Workbook, name);
+            XSSFSheet clonedSheet = (XSSFSheet)this.Workbook.CreateSheet(clonedName);
             try
             {
                 using (MemoryStream out1 = new MemoryStream())
                 {
                     this.Write(out1);
-                    newSheet.Read(new MemoryStream(out1.ToArray()));
+                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
                 }
             }
             catch (IOException e)
@@ -4174,13 +4189,13 @@ namespace NPOI.XSSF.UserModel
                 throw new POIXMLException("Failed to clone sheet", e);
             }
 
-            CT_Worksheet ct = newSheet.GetCTWorksheet();
+            CT_Worksheet ct = clonedSheet.GetCTWorksheet();
             if (ct.IsSetLegacyDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
                 ct.UnsetLegacyDrawing();
             }
-            newSheet.IsSelected = false;
+            clonedSheet.IsSelected = false;
 
             // copy sheet's relations
             List<POIXMLDocumentPart> rels = this.GetRelations();
@@ -4195,13 +4210,13 @@ namespace NPOI.XSSF.UserModel
                     continue;
                 }
                 PackageRelationship rel = r.GetPackageRelationship();
-                newSheet.GetPackagePart().AddRelationship(
+                clonedSheet.GetPackagePart().AddRelationship(
                     rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
-                newSheet.AddRelation(rel.Id, r);
+                clonedSheet.AddRelation(rel.Id, r);
             }
             
             // copy hyperlinks
-            newSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
+            clonedSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
             
             // clone the sheet drawing along with its relationships
             if (dg != null)
@@ -4212,27 +4227,40 @@ namespace NPOI.XSSF.UserModel
                     // so that subsequent call of clonedSheet.createDrawingPatriarch() will create a new one
                     ct.UnsetDrawing();
                 }
-                XSSFDrawing clonedDg = newSheet.CreateDrawingPatriarch() as XSSFDrawing;
+                XSSFDrawing clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
                 // copy drawing contents
                 clonedDg.GetCTDrawing().Set(dg.GetCTDrawing());
+
+                clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
 
                 // Clone drawing relations
                 List<POIXMLDocumentPart> srcRels = dg.GetRelations();
                 foreach (POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
-                    (newSheet.CreateDrawingPatriarch() as XSSFDrawing)
+                    clonedDg.AddRelation(relation.Id, rel);
+                    clonedDg
                             .GetPackagePart()
                             .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
                                     relation.RelationshipType, relation.Id);
                 }
             }
-            return newSheet;
+            return clonedSheet;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public int GetColumnOutlineLevel(int columnIndex)
+        {
+            CT_Col col = columnHelper.GetColumn(columnIndex, false);
+            if (col == null)
+            {
+                return 0;
+            }
+            return col.outlineLevel;
         }
     }
 

@@ -152,7 +152,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
             }
-            return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
+            return ErrorEval.VALUE_INVALID;
         }
     }
 }

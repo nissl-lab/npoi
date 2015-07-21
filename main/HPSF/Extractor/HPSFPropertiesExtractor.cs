@@ -62,6 +62,10 @@ namespace NPOI.HPSF.Extractor
         {
             get
             {
+                if (document == null)
+                {  // event based extractor does not have a document
+                    return "";
+                }
                 DocumentSummaryInformation dsi = document.DocumentSummaryInformation;
                 StringBuilder text = new StringBuilder();
 
@@ -93,6 +97,10 @@ namespace NPOI.HPSF.Extractor
         {
             get
             {
+                if (document == null)
+                {  // event based extractor does not have a document
+                    return "";
+                }
                 SummaryInformation si = document.SummaryInformation;
 
                 // Just normal properties

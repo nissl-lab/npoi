@@ -49,13 +49,13 @@ namespace TestCases.SS.Formula.Function
                 throw new Exception("function token missing");
             }
             AbstractFunctionPtg func = (AbstractFunctionPtg)ptgF;
-            if (func.GetFunctionIndex() == 255)
+            if (func.FunctionIndex == 255)
             {
                 throw new AssertionException("Failed to recognise built-in function in formula '"
                         + formula + "'");
             }
             Assert.AreEqual(expPtgArraySize, ptgs.Length);
-            Assert.AreEqual(funcIx, func.GetFunctionIndex());
+            Assert.AreEqual(funcIx, func.FunctionIndex);
             Type expCls = isVarArgFunc ? typeof(FuncVarPtg) : typeof(FuncPtg);
             Assert.AreEqual(expCls, ptgF.GetType());
 

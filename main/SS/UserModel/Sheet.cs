@@ -801,6 +801,15 @@ namespace NPOI.SS.UserModel
         /// <param name="copyStyle">whether to copy styles</param>
         /// <returns>cloned sheet</returns>
         ISheet CopySheet(String Name, Boolean copyStyle);
+
+        /// <summary>
+        /// Returns the column outline level. Increased as you
+        /// put it into more groups (outlines), reduced as
+        /// you take it out of them.
+        /// </summary>
+        /// <param name="columnIndex"></param>
+        /// <returns></returns>
+        int GetColumnOutlineLevel(int columnIndex);
     }
 
 }

@@ -17,14 +17,37 @@
 namespace NPOI.SS.UserModel
 {
     using System;
+    using System.Collections.Generic;
 
     /**
      * Enumerates error values in SpreadsheetML formula calculations.
      *
-     * @author Yegor Kozlov
+     * See also OOO's excelfileformat.pdf (2.5.6)
      */
     public class FormulaError
     {
+        static FormulaError()
+        {
+            _values = new FormulaError[] { 
+                FormulaError.NULL,
+                FormulaError.DIV0,
+                FormulaError.VALUE,
+                FormulaError.REF,
+                FormulaError.NAME,
+                FormulaError.NUM,
+                FormulaError.NA,
+                FormulaError.CIRCULAR_REF,
+                FormulaError.FUNCTION_NOT_IMPLEMENTED
+            };
+
+            foreach (FormulaError error in _values)
+            {
+                bmap.Add(error.Code, error);
+                imap.Add(error.LongCode, error);
+                smap.Add(error.String, error);
+            }
+        }
+        private static FormulaError[] _values;
         /**
          * Intended to indicate when two areas are required to intersect, but do not.
          * <p>Example:
@@ -95,12 +118,30 @@ namespace NPOI.SS.UserModel
          */
         public static readonly FormulaError NA = new FormulaError(0x2A, "#N/A");
 
+        // These are POI-specific error codes
+        // It is desirable to make these (arbitrary) strings look clearly different from any other
+        // value expression that might appear in a formula.  In addition these error strings should
+        // look unlike the standard Excel errors.  Hence tilde ('~') was used.
+    
+        /**
+         * POI specific code to indicate that there is a circular reference
+         *  in the formula
+         */
+        public static readonly FormulaError CIRCULAR_REF = new FormulaError(unchecked((int)0xFFFFFFC4), "~CIRCULAR~REF~");
+        /**
+         * POI specific code to indicate that the funcition required is
+         *  not implemented in POI
+         */
+        public static readonly FormulaError FUNCTION_NOT_IMPLEMENTED = new FormulaError(unchecked((int)0xFFFFFFE2), "~FUNCTION~NOT~IMPLEMENTED~");
+
         private byte type;
+        private int longType;
         private String repr;
 
         private FormulaError(int type, String repr)
         {
             this.type = (byte)type;
+            this.longType = type;
             this.repr = repr;
             //if(imap==null)
             //    imap = new Dictionary<Byte, FormulaError>();
@@ -120,7 +161,16 @@ namespace NPOI.SS.UserModel
                 return type;
             }
         }
-
+        /**
+         * @return long (internal) numeric code of the error
+         */
+        public int LongCode
+        {
+            get
+            {
+                return longType;
+            }
+        }
         /**
          * @return string representation of the error
          */
@@ -132,44 +182,43 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        //private static Dictionary<String, FormulaError> smap = null;
-        //private static Dictionary<Byte, FormulaError> imap = null;
-
+        private static Dictionary<String, FormulaError> smap = new Dictionary<string, FormulaError>();
+        private static Dictionary<Byte, FormulaError> bmap = new Dictionary<byte, FormulaError>();
+        private static Dictionary<int, FormulaError> imap = new Dictionary<int, FormulaError>();
+        public static bool IsValidCode(int errorCode)
+        {
+            foreach (FormulaError error in _values)
+            {
+                if (error.Code == errorCode) return true;
+                if (error.LongCode == errorCode) return true;
+            }
+            return false;
+        }
         public static FormulaError ForInt(byte type)
         {
-            //FormulaError err = imap[type];
-            //if (err == null) throw new ArgumentException("Unknown error type: " + type);
-            //return err;
-            switch (type)
-            {
-                case 0x00: return FormulaError.NULL;
-                case 0x07: return FormulaError.DIV0;
-                case 0x0F: return FormulaError.VALUE;
-                case 0x17: return FormulaError.REF;
-                case 0x1D: return FormulaError.NAME;
-                case 0x24: return FormulaError.NUM;
-                case 0x2A: return FormulaError.NA;
-            }
+            if (bmap.ContainsKey(type))
+                return bmap[type];
+            throw new ArgumentException("Unknown error type: " + type);
+        }
+        public static FormulaError ForInt(int type)
+        {
+            if (imap.ContainsKey(type))
+                return imap[type];
+
+            if (bmap.ContainsKey((byte)type))
+                return bmap[(byte)type];
+
             throw new ArgumentException("Unknown error type: " + type);
         }
 
         public static FormulaError ForString(String code)
         {
-            //FormulaError err = smap[code];
-            //if (err == null) throw new ArgumentException("Unknown error code: " + code);
-            //return err;
-            switch (code)
-            {
-                case "#NULL!": return FormulaError.NULL;
-                case "#DIV/0!": return FormulaError.DIV0;
-                case "#VALUE!": return FormulaError.VALUE;
-                case "#REF!": return FormulaError.REF;
-                case "#NAME?": return FormulaError.NAME;
-                case "#NUM!": return FormulaError.NUM;
-                case "#N/A": return FormulaError.NA;
-            }
+            if (smap.ContainsKey(code))
+                return smap[code];
+            
             throw new ArgumentException("Unknown error code: " + code);
         }
+
     }
 
 }

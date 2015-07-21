@@ -70,9 +70,12 @@ namespace NPOI.SS.Formula.PTG
             return sb.ToString();
         }
 
-        public short GetFunctionIndex()
+        public short FunctionIndex
         {
-            return _functionIndex;
+            get
+            {
+                return _functionIndex;
+            }
         }
         public override int NumberOfOperands
         {

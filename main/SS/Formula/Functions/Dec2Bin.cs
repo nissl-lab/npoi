@@ -118,7 +118,7 @@ namespace NPOI.SS.Formula.Functions
 
             if (binary.Length > DEFAULT_PLACES_VALUE)
             {
-                binary = binary.Substring(binary.Length - DEFAULT_PLACES_VALUE, binary.Length);
+                binary = binary.Substring(binary.Length - DEFAULT_PLACES_VALUE);
             }
             //If DEC2BIN requires more than places characters, it returns the #NUM! error value.
             if (binary.Length > placesNumber)

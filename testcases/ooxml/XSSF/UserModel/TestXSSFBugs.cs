@@ -993,7 +993,7 @@ using NPOI.SS.Formula.Eval;
             //       FileOutputStream out = new FileOutputStream("/tmp/test48877.xlsx");
             //       wb.Write(out);
             //       out.Close();
-            
+
         }
 
         /**
@@ -1352,10 +1352,10 @@ using NPOI.SS.Formula.Eval;
             comment1.Author = ("Bob T. Fish");
 
             anchor = factory.CreateClientAnchor();
-            anchor.Col1=(0);
-            anchor.Col2=(4);
-            anchor.Row1=(1);
-            anchor.Row2=(1);
+            anchor.Col1 = (0);
+            anchor.Col2 = (4);
+            anchor.Row1 = (1);
+            anchor.Row2 = (1);
 
             IComment comment2 = Drawing.CreateCellComment(anchor);
             comment2.String = (
@@ -2041,6 +2041,418 @@ using NPOI.SS.Formula.Eval;
             CellValue value = Evaluator.Evaluate(cell);
 
             Assert.AreEqual(expect, value.FormatAsString());
+        }
+
+        [Test]
+        public void TestBug57196()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57196.xlsx");
+            ISheet sheet = wb.GetSheet("Feuil1");
+            IRow mod = sheet.GetRow(1);
+            mod.GetCell(1).SetCellValue(3);
+            HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            //        FileOutputStream fileOutput = new FileOutputStream("/tmp/57196.xlsx");
+            //        wb.Write(fileOutput);
+            //        fileOutput.Close();
+            wb.Close();
+        }
+
+        [Test]
+        public void Test57196_Detail()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet("Sheet1") as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+            XSSFCell cell = row.CreateCell(0) as XSSFCell;
+            cell.CellFormula = (/*setter*/"DEC2HEX(HEX2DEC(O8)-O2+D2)");
+            XSSFFormulaEvaluator fe = new XSSFFormulaEvaluator(wb);
+            CellValue cv = fe.Evaluate(cell);
+
+            Assert.IsNotNull(cv);
+        }
+
+        [Test]
+        public void Test57196_Detail2()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet("Sheet1") as XSSFSheet;
+            XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+            XSSFCell cell = row.CreateCell(0) as XSSFCell;
+            cell.CellFormula = (/*setter*/"DEC2HEX(O2+D2)");
+            XSSFFormulaEvaluator fe = new XSSFFormulaEvaluator(wb);
+            CellValue cv = fe.Evaluate(cell);
+
+            Assert.IsNotNull(cv);
+        }
+
+        [Test]
+        public void Test57196_WorkbookEvaluator()
+        {
+            //Environment.SetEnvironmentVariable("NPOI.UTIL.POILogger", "NPOI.UTIL.SystemOutLogger");
+            //Environment.SetEnvironmentVariable("poi.log.level", "3");
+            try
+            {
+                XSSFWorkbook wb = new XSSFWorkbook();
+                XSSFSheet sheet = wb.CreateSheet("Sheet1") as XSSFSheet;
+                XSSFRow row = sheet.CreateRow(0) as XSSFRow;
+                XSSFCell cell = row.CreateCell(0) as XSSFCell;
+
+                cell.SetCellValue("0");
+                cell = row.CreateCell(1) as XSSFCell;
+                cell.SetCellValue(0);
+                cell = row.CreateCell(2) as XSSFCell;
+                cell.SetCellValue(0);
+
+
+                // simple formula worked
+                cell.CellFormula = (/*setter*/"DEC2HEX(O2+D2)");
+
+                WorkbookEvaluator workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // this already failed! Hex2Dec did not correctly handle RefEval
+                cell.CellFormula = (/*setter*/"HEX2DEC(O8)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // slightly more complex one failed
+                cell.CellFormula = (/*setter*/"HEX2DEC(O8)-O2+D2");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // more complicated failed
+                cell.CellFormula = (/*setter*/"DEC2HEX(HEX2DEC(O8)-O2+D2)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // what other similar functions
+                cell.CellFormula = (/*setter*/"DEC2BIN(O8)-O2+D2");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // what other similar functions
+                cell.CellFormula = (/*setter*/"DEC2BIN(A1)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+                // what other similar functions
+                cell.CellFormula = (/*setter*/"BIN2DEC(B1)");
+                workbookEvaluator.ClearAllCachedResultValues();
+
+                workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
+                workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
+                workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
+
+            }
+            finally
+            {
+                //System.ClearProperty("NPOI.UTIL.POILogger");
+                //System.ClearProperty("poi.log.level");
+            }
+        }
+        [Test]
+        public void Bug57430()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                wb.CreateSheet("Sheet1");
+
+                XSSFName name1 = wb.CreateName() as XSSFName;
+                name1.NameName = (/*setter*/"FMLA");
+                name1.RefersToFormula = (/*setter*/"Sheet1!$B$3");
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        /**
+         * A .xlsx file with no Shared Strings table should open fine
+         *  in Read-only mode
+         */
+        [Test]
+        public void Bug57482()
+        {
+            foreach (PackageAccess access in new PackageAccess[] {
+                PackageAccess.READ_WRITE, PackageAccess.READ
+        })
+            {
+                FileInfo file = HSSFTestDataSamples.GetSampleFile("57482-OnlyNumeric.xlsx");
+                OPCPackage pkg = OPCPackage.Open(file, access);
+                try
+                {
+                    XSSFWorkbook wb = new XSSFWorkbook(pkg);
+                    Assert.IsNotNull(wb.GetSharedStringSource());
+                    Assert.AreEqual(0, wb.GetSharedStringSource().Count);
+
+                    DataFormatter fmt = new DataFormatter();
+                    XSSFSheet s = wb.GetSheetAt(0) as XSSFSheet;
+                    Assert.AreEqual("1", fmt.FormatCellValue(s.GetRow(0).GetCell(0)));
+                    Assert.AreEqual("11", fmt.FormatCellValue(s.GetRow(0).GetCell(1)));
+                    Assert.AreEqual("5", fmt.FormatCellValue(s.GetRow(4).GetCell(0)));
+
+                    // Add a text cell
+                    s.GetRow(0).CreateCell(3).SetCellValue("Testing");
+                    Assert.AreEqual("Testing", fmt.FormatCellValue(s.GetRow(0).GetCell(3)));
+
+                    // Try to Write-out and read again, should only work
+                    //  in Read-write mode, not Read-only mode
+                    try
+                    {
+                        wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+                        if (access == PackageAccess.READ)
+                            Assert.Fail("Shouln't be able to write from Read-only mode");
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        if (access == PackageAccess.READ)
+                        {
+                            // Expected
+                        }
+                        else
+                        {
+                            // Shouldn't occur in Write-mode
+                            throw e;
+                        }
+                    }
+
+                    // Check again
+                    s = wb.GetSheetAt(0) as XSSFSheet;
+                    Assert.AreEqual("1", fmt.FormatCellValue(s.GetRow(0).GetCell(0)));
+                    Assert.AreEqual("11", fmt.FormatCellValue(s.GetRow(0).GetCell(1)));
+                    Assert.AreEqual("5", fmt.FormatCellValue(s.GetRow(4).GetCell(0)));
+                    Assert.AreEqual("Testing", fmt.FormatCellValue(s.GetRow(0).GetCell(3)));
+
+                }
+                finally
+                {
+                    pkg.Revert();
+                }
+            }
+        }
+
+        /**
+     * "Unknown error type: -60" fetching formula error value
+     */
+        [Test]
+        public void Bug57535()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57535.xlsx");
+            IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Evaluator.ClearAllCachedResultValues();
+
+            ISheet sheet = wb.GetSheet("Sheet1");
+            ICell cell = sheet.GetRow(5).GetCell(4);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("E4+E5", cell.CellFormula);
+
+            CellValue value = Evaluator.Evaluate(cell);
+            Assert.AreEqual(CellType.Error, value.CellType);
+            Assert.AreEqual(-60, value.ErrorValue);
+
+            Assert.AreEqual("~CIRCULAR~REF~", FormulaError.ForInt(value.ErrorValue).String);
+            //Assert.AreEqual("CIRCULAR_REF", FormulaError.ForInt(value.ErrorValue).ToString());
+
+        }
+
+        [Test]
+        public void Test57165()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            try
+            {
+                RemoveAllSheetsBut(3, wb);
+                wb.CloneSheet(0); // Throws exception here
+                wb.SetSheetName(1, "New Sheet");
+                //saveWorkbook(wb, fileName);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+                try
+                {
+
+                }
+                finally
+                {
+                    wbBack.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void Test57165_Create()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
+            try
+            {
+                RemoveAllSheetsBut(3, wb);
+                wb.CreateSheet("newsheet"); // Throws exception here
+                wb.SetSheetName(1, "New Sheet");
+                //saveWorkbook(wb, fileName);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+                try
+                {
+
+                }
+                finally
+                {
+                    wbBack.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+
+        private static void RemoveAllSheetsBut(int sheetIndex, IWorkbook wb)
+        {
+            int sheetNb = wb.NumberOfSheets;
+            // Move this sheet at the first position
+            wb.SetSheetOrder(wb.GetSheetName(sheetIndex), 0);
+            for (int sn = sheetNb - 1; sn > 0; sn--)
+            {
+                wb.RemoveSheetAt(sn);
+            }
+        }
+
+        /**
+     * Sums 2 plus the cell at the left, indirectly to avoid reference
+     * problems when deleting columns, conditionally to stop recursion
+     */
+        private static String FORMULA1 =
+                "IF( INDIRECT( ADDRESS( ROW(), COLUMN()-1 ) ) = 0, 0,"
+                        + "INDIRECT( ADDRESS( ROW(), COLUMN()-1 ) ) ) + 2";
+
+        /**
+         * Sums 2 plus the upper cell, indirectly to avoid reference
+         * problems when deleting rows, conditionally to stop recursion
+         */
+        private static String FORMULA2 =
+                "IF( INDIRECT( ADDRESS( ROW()-1, COLUMN() ) ) = 0, 0,"
+                        + "INDIRECT( ADDRESS( ROW()-1, COLUMN() ) ) ) + 2";
+
+        /**
+         * Expected:
+
+         * [  0][  2][  4]
+         * @
+         */
+        [Test]
+        public void TestBug56820_Formula1()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                ISheet sh = wb.CreateSheet();
+
+                sh.CreateRow(0).CreateCell(0).SetCellValue(0.0d);
+                ICell formulaCell1 = sh.GetRow(0).CreateCell(1);
+                ICell formulaCell2 = sh.GetRow(0).CreateCell(2);
+                formulaCell1.CellFormula = (/*setter*/FORMULA1);
+                formulaCell2.CellFormula = (/*setter*/FORMULA1);
+
+                double A1 = Evaluator.Evaluate(formulaCell1).NumberValue;
+                double A2 = Evaluator.Evaluate(formulaCell2).NumberValue;
+
+                Assert.AreEqual(2, A1, 0);
+                Assert.AreEqual(4, A2, 0);  //<-- FAILS EXPECTATIONS
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        /**
+         * Expected:
+
+         * [  0] <- number
+         * [  2] <- formula
+         * [  4] <- formula
+         * @
+         */
+        [Test]
+        public void TestBug56820_Formula2()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                ISheet sh = wb.CreateSheet();
+
+                sh.CreateRow(0).CreateCell(0).SetCellValue(0.0d);
+                ICell formulaCell1 = sh.CreateRow(1).CreateCell(0);
+                ICell formulaCell2 = sh.CreateRow(2).CreateCell(0);
+                formulaCell1.CellFormula = (/*setter*/FORMULA2);
+                formulaCell2.CellFormula = (/*setter*/FORMULA2);
+
+                double A1 = Evaluator.Evaluate(formulaCell1).NumberValue;
+                double A2 = Evaluator.Evaluate(formulaCell2).NumberValue; //<-- FAILS EVALUATION
+
+                Assert.AreEqual(2, A1, 0);
+                Assert.AreEqual(4, A2, 0);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void Test56467()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("picture.xlsx");
+            try
+            {
+                ISheet orig = wb.GetSheetAt(0);
+                Assert.IsNotNull(orig);
+
+                ISheet sheet = wb.CloneSheet(0);
+                IDrawing Drawing = sheet.CreateDrawingPatriarch();
+                foreach (XSSFShape shape in ((XSSFDrawing)Drawing).GetShapes())
+                {
+                    if (shape is XSSFPicture)
+                    {
+                        XSSFPictureData pictureData = ((XSSFPicture)shape).PictureData as XSSFPictureData;
+                        Assert.IsNotNull(pictureData);
+                    }
+                }
+
+                //            OutputStream out1 = new FileOutputStream("/tmp/56467.xls");
+                //            try {
+                //            	wb.Write(out1);
+                //            } finally {
+                //            	out1.Close();
+                //            }
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
 
     }

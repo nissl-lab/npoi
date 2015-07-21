@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -15,81 +15,79 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.Formula.Eval;
-using NPOI.SS.Formula.Functions;
-using System;
-using NUnit.Framework;
-using NPOI.SS.Formula;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-namespace TestCases.SS.Formula.Functions
+namespace NPOI.SS.Formula.Functions
 {
+    using System;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using NUnit.Framework;
 
     /**
-     * Tests for {@link Dec2Hex}
+     * Tests for {@link Dec2Bin}
      *
      * @author cedric dot walter @ gmail dot com
      */
     [TestFixture]
-    public class TestDec2Hex
+    public class TestDec2Bin
     {
 
-        private static ValueEval invokeValue(String number1, String number2)
+        private static ValueEval invokeValue(String number1)
         {
-            ValueEval[] args = new ValueEval[] { new StringEval(number1), new StringEval(number2), };
-            return new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval[] args = new ValueEval[] { new StringEval(number1) };
+            return new Dec2Bin().Evaluate(args, -1, -1);
         }
+
         private static ValueEval invokeBack(String number1)
         {
             ValueEval[] args = new ValueEval[] { new StringEval(number1) };
-            return new Hex2Dec().Evaluate(args, -1, -1);
-        }
-        private static ValueEval invokeValue(String number1)
-        {
-            ValueEval[] args = new ValueEval[] { new StringEval(number1), };
-            return new Dec2Hex().Evaluate(args, -1, -1);
-        }
-
-        private static void ConfirmValue(String msg, String number1, String number2, String expected)
-        {
-            ValueEval result = invokeValue(number1, number2);
-            Assert.AreEqual(typeof(StringEval), result.GetType());
-            Assert.AreEqual(expected, ((StringEval)result).StringValue, msg);
+            return new Bin2Dec().Evaluate(args, -1, -1);
         }
 
         private static void ConfirmValue(String msg, String number1, String expected)
         {
             ValueEval result = invokeValue(number1);
-            Assert.AreEqual(typeof(StringEval), result.GetType());
+            Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
             Assert.AreEqual(expected, ((StringEval)result).StringValue, msg);
         }
 
-        private static void ConfirmValueError(String msg, String number1, String number2, ErrorEval numError)
+        private static void ConfirmValueError(String msg, String number1, ErrorEval numError)
         {
-            ValueEval result = invokeValue(number1, number2);
+            ValueEval result = invokeValue(number1);
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(numError, result, msg);
         }
+
         [Test]
         public void TestBasic()
         {
-            ConfirmValue("Converts decimal 100 to hexadecimal with 0 characters (64)", "100", "0", "64");
-            ConfirmValue("Converts decimal 100 to hexadecimal with 4 characters (0064)", "100", "4", "0064");
-            ConfirmValue("Converts decimal 100 to hexadecimal with 5 characters (0064)", "100", "5", "00064");
-            ConfirmValue("Converts decimal 100 to hexadecimal with 10 (default) characters", "100", "10", "0000000064");
-            ConfirmValue("If argument places Contains a decimal value, dec2hex ignores the numbers to the right side of the decimal point.", "100", "10.0", "0000000064");
-
-            ConfirmValue("Converts decimal -54 to hexadecimal, 2 is ignored", "-54", "2", "FFFFFFFFCA");
-            ConfirmValue("places is optionnal", "-54", "FFFFFFFFCA");
+            ConfirmValue("Converts binary '00101' from binary (5)", "5", "101");
+            ConfirmValue("Converts binary '1111111111' from binary (-1)", "-1", "1111111111");
+            ConfirmValue("Converts binary '1111111110' from binary (-2)", "-2", "1111111110");
+            ConfirmValue("Converts binary '0111111111' from binary (511)", "511", "111111111");
+            ConfirmValue("Converts binary '1000000000' from binary (511)", "-512", "1000000000");
         }
+
         [Test]
         public void TestErrors()
         {
-            ConfirmValueError("Out of range min number", "-549755813889", "0", ErrorEval.NUM_ERROR);
-            ConfirmValueError("Out of range max number", "549755813888", "0", ErrorEval.NUM_ERROR);
+            ConfirmValueError("fails for >= 512 or < -512", "512", ErrorEval.NUM_ERROR);
+            ConfirmValueError("fails for >= 512 or < -512", "-513", ErrorEval.NUM_ERROR);
+            ConfirmValueError("not a valid decimal number", "GGGGGGG", ErrorEval.VALUE_INVALID);
+            ConfirmValueError("not a valid decimal number", "3.14159a", ErrorEval.VALUE_INVALID);
+        }
 
-            ConfirmValueError("negative places not allowed", "549755813888", "-10", ErrorEval.NUM_ERROR);
-            ConfirmValueError("non number places not allowed", "ABCDEF", "0", ErrorEval.VALUE_INVALID);
+        [Test]
+        public void TestEvalOperationEvaluationContext()
+        {
+            OperationEvaluationContext ctx = CreateContext();
+
+            ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
+            ValueEval result = new Dec2Bin().Evaluate(args, ctx);
+
+            Assert.AreEqual(typeof(StringEval), result.GetType());
+            Assert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -98,7 +96,7 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ErrorEval.VALUE_INVALID };
-            ValueEval result = new Dec2Hex().Evaluate(args, ctx);
+            ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
@@ -110,11 +108,13 @@ namespace TestCases.SS.Formula.Functions
             ISheet sheet = wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            cell.SetCellValue("123.43");
+            cell.SetCellValue("13.43");
             cell = row.CreateCell(1);
             cell.SetCellValue("8");
             cell = row.CreateCell(2);
             cell.SetCellValue("-8");
+            cell = row.CreateCell(3);
+            cell.SetCellValue("1");
 
             HSSFEvaluationWorkbook workbook = HSSFEvaluationWorkbook.Create(wb);
             WorkbookEvaluator workbookEvaluator = new WorkbookEvaluator(workbook, new IStabilityClassifier1(), null);
@@ -136,10 +136,10 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
-            ValueEval result = new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
-            Assert.AreEqual("7B", ((StringEval)result).StringValue);
+            Assert.AreEqual(result.GetType(), typeof(StringEval), "Had: " + result.ToString());
+            Assert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -148,10 +148,11 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1) };
-            ValueEval result = new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
             Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
-            Assert.AreEqual("0000007B", ((StringEval)result).StringValue);
+            // TODO: documentation and behavior do not match here!
+            Assert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -160,10 +161,23 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1) };
-            ValueEval result = new Dec2Hex().Evaluate(args, ctx);
+            ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
             Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
-            Assert.AreEqual("0000007B", ((StringEval)result).StringValue);
+            // TODO: documentation and behavior do not match here!
+            Assert.AreEqual("1101", ((StringEval)result).StringValue);
+        }
+
+        [Test]
+        public void TestWithToshortPlaces()
+        {
+            OperationEvaluationContext ctx = CreateContext();
+
+            ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 3) };
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
+
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
         }
 
         [Test]
@@ -172,7 +186,7 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1), ctx.GetRefEval(0, 1) };
-            ValueEval result = new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
@@ -184,7 +198,7 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1), ctx.GetRefEval(0, 1) };
-            ValueEval result = new Dec2Hex().Evaluate(args, ctx);
+            ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
@@ -196,7 +210,7 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ErrorEval.NULL_INTERSECTION };
-            ValueEval result = new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.NULL_INTERSECTION, result);
@@ -208,7 +222,19 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 2) };
-            ValueEval result = new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
+
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
+        }
+
+        [Test]
+        public void TestWithZeroPlaces()
+        {
+            OperationEvaluationContext ctx = CreateContext();
+
+            ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), new NumberEval(0.0) };
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.NUM_ERROR, result);
@@ -220,7 +246,7 @@ namespace TestCases.SS.Formula.Functions
             OperationEvaluationContext ctx = CreateContext();
 
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(1, 0) };
-            ValueEval result = new Dec2Hex().Evaluate(args, -1, -1);
+            ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
             Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
@@ -237,10 +263,8 @@ namespace TestCases.SS.Formula.Functions
                 ValueEval back = invokeBack(((StringEval)result).StringValue);
                 Assert.AreEqual(typeof(NumberEval), back.GetType(), "Had: " + back.ToString());
 
-                Assert.AreEqual(i.ToString(),
-                        ((NumberEval)back).StringValue);
+                Assert.AreEqual(i.ToString(), ((NumberEval)back).StringValue);
             }
         }
-
     }
 }

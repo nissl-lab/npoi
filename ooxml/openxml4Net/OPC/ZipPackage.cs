@@ -444,6 +444,9 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     logger.Log(POILogger.DEBUG, "Save core properties part");
 
+                    // Ensure that core properties are added if missing
+                    GetPackageProperties();
+
                     // Add core properties to part list ...
                     AddPackagePart(this.packageProperties);
 

@@ -22,6 +22,7 @@ namespace NPOI.XWPF.UserModel
     using System.Text;
     using NPOI.Util;
     using System.Collections;
+    using NPOI.WP.UserModel;
     /**
      * <p>A Paragraph within a Document, Table, Header etc.</p> 
      * 
@@ -29,7 +30,7 @@ namespace NPOI.XWPF.UserModel
      *  actual text (possibly along with more styling) is held on
      *  the child {@link XWPFRun}s.</p>
      */
-    public class XWPFParagraph : IBodyElement, IRunBody, ISDTContents
+    public class XWPFParagraph : IBodyElement, IRunBody, ISDTContents, IParagraph
     {
         private CT_P paragraph;
         protected IBody part;
@@ -199,7 +200,9 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return paragraph.Items.Count == 0;
+                //!paragraph.getDomNode().hasChildNodes();
+                //inner xml include objects holded by Items and pPr object
+                return paragraph.Items.Count == 0 && paragraph.pPr == null;
             }
         }
 
@@ -437,6 +440,21 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * @return The raw alignment value, {@link #getAlignment()} is suggested
+         */
+        public int FontAlignment
+        {
+            get
+            {
+                return (int)Alignment;
+            }
+            set
+            {
+                Alignment = (ParagraphAlignment)value;
+            }
+        }
+
+        /**
          * Returns the text vertical alignment which shall be applied to text in
          * this paragraph.
          * <p>
@@ -497,7 +515,7 @@ namespace NPOI.XWPF.UserModel
                     throw new RuntimeException("invalid paragraph state");
                 }
                 CT_Border pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetTop();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -528,7 +546,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetBottom();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -558,7 +576,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetLeft();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -591,7 +609,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetRight();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -669,7 +687,7 @@ namespace NPOI.XWPF.UserModel
             {
                 CT_PBdr ct = GetCTPBrd(true);
                 CT_Border pr = ct.IsSetBetween() ? ct.between : ct.AddNewBetween();
-                if (value == Borders.NONE)
+                if (value == Borders.None)
                     ct.UnsetBetween();
                 else
                     pr.val = EnumConverter.ValueOf<ST_Border, Borders>(value);
@@ -953,6 +971,41 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public int IndentFromLeft
+        {
+            get
+            {
+                return IndentationLeft;
+            }
+            set
+            {
+                IndentationLeft = value;
+            }
+        }
+
+        public int IndentFromRight
+        {
+            get
+            {
+                return IndentationRight;
+            }
+            set
+            {
+                IndentationRight = value;
+            }
+        }
+
+        public int FirstLineIndent
+        {
+            get
+            {
+                return IndentationFirstLine;
+            }
+            set
+            {
+                IndentationFirstLine = (value);
+            }
+        }
 
         /**
          * This element specifies whether a consumer shall break Latin text which
@@ -962,7 +1015,7 @@ namespace NPOI.XWPF.UserModel
          *
          * @return bool
          */
-        public bool IsWordWrap
+        public bool IsWordWrapped
         {
             get
             {
@@ -983,6 +1036,12 @@ namespace NPOI.XWPF.UserModel
                 else
                     wordWrap.UnSetVal();
             }
+        }
+        [Obsolete]
+        public bool IsWordWrap
+        {
+            get { return IsWordWrapped; }
+            set { IsWordWrapped = value; }
         }
 
         /**
@@ -1061,7 +1120,7 @@ namespace NPOI.XWPF.UserModel
          * the content of parameter run
          * @param run
          */
-        protected void AddRun(CT_R Run)
+        protected internal void AddRun(CT_R Run)
         {
             int pos;
             pos = paragraph.GetRList().Count;

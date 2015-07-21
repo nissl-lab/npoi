@@ -24,6 +24,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.HSSF.Util;
+    using NPOI.HSSF.UserModel;
 
     /**
      * Common superclass for testing implementatiosn of
@@ -641,5 +642,130 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(style2.IsLocked);
             Assert.IsFalse(style2.IsHidden);
         }
+        [Test]
+        public void TestBug55658SetNumericValue()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            IRow row = sh.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue(23);
+
+            cell.SetCellValue("some");
+
+            cell = row.CreateCell(1);
+            cell.SetCellValue(23);
+
+            cell.SetCellValue("24");
+
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+
+            Assert.AreEqual("some", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual("24", wb.GetSheetAt(0).GetRow(0).GetCell(1).StringCellValue);
+        }
+        [Test]
+        public void TestRemoveHyperlink()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet("test");
+            IRow row = sh.CreateRow(0);
+            ICreationHelper helper = wb.GetCreationHelper();
+
+            ICell cell1 = row.CreateCell(1);
+            IHyperlink link1 = helper.CreateHyperlink(HyperlinkType.Url);
+            cell1.Hyperlink = (/*setter*/link1);
+            Assert.IsNotNull(cell1.Hyperlink);
+            cell1.RemoveHyperlink();
+            Assert.IsNull(cell1.Hyperlink);
+
+            ICell cell2 = row.CreateCell(0);
+            IHyperlink link2 = helper.CreateHyperlink(HyperlinkType.Url);
+            cell2.Hyperlink = (/*setter*/link2);
+            Assert.IsNotNull(cell2.Hyperlink);
+            cell2.Hyperlink = (/*setter*/null);
+            Assert.IsNull(cell2.Hyperlink);
+
+            ICell cell3 = row.CreateCell(2);
+            IHyperlink link3 = helper.CreateHyperlink(HyperlinkType.Url);
+            link3.Address = (/*setter*/"http://poi.apache.org/");
+            cell3.Hyperlink = (/*setter*/link3);
+            Assert.IsNotNull(cell3.Hyperlink);
+
+            IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            cell1 = wbBack.GetSheet("test").GetRow(0).GetCell(1);
+            Assert.IsNull(cell1.Hyperlink);
+            cell2 = wbBack.GetSheet("test").GetRow(0).GetCell(0);
+            Assert.IsNull(cell2.Hyperlink);
+            cell3 = wbBack.GetSheet("test").GetRow(0).GetCell(2);
+            Assert.IsNotNull(cell3.Hyperlink);
+        }
+
+        /**
+         * Cell with the formula that returns error must return error code(There was
+         * an problem that cell could not return error value form formula cell).
+         * @
+         */
+        [Test]
+        public void TestGetErrorCellValueFromFormulaCell()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.CellFormula = (/*setter*/"SQRT(-1)");
+                wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateFormulaCell(cell);
+                Assert.AreEqual(36, cell.ErrorCellValue);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestSetRemoveStyle()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            // different default style indexes for HSSF and XSSF/SXSSF
+            ICellStyle defaultStyle = wb.GetCellStyleAt(wb is HSSFWorkbook ? (short)15 : (short)0);
+
+            // Starts out with the default style
+            Assert.AreEqual(defaultStyle, cell.CellStyle);
+
+            // Create some styles, no change
+            ICellStyle style1 = wb.CreateCellStyle();
+            ICellStyle style2 = wb.CreateCellStyle();
+            style1.DataFormat = (/*setter*/(short)2);
+            style2.DataFormat = (/*setter*/(short)3);
+
+            Assert.AreEqual(defaultStyle, cell.CellStyle);
+
+            // Apply one, Changes
+            cell.CellStyle = (/*setter*/style1);
+            Assert.AreEqual(style1, cell.CellStyle);
+
+            // Apply the other, Changes
+            cell.CellStyle = (/*setter*/style2);
+            Assert.AreEqual(style2, cell.CellStyle);
+
+            // Remove, goes back to default
+            cell.CellStyle = (/*setter*/null);
+            Assert.AreEqual(defaultStyle, cell.CellStyle);
+
+            // Add back, returns
+            cell.CellStyle = (/*setter*/style2);
+            Assert.AreEqual(style2, cell.CellStyle);
+
+            wb.Close();
+        }
+
     }
 }

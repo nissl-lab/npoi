@@ -23,6 +23,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
     using NPOI.OpenXml4Net.Exceptions;
     using NUnit.Framework;
     using System.IO;
+    using NPOI.Util;
 
 
 
@@ -235,5 +236,96 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_PresentWithUnauthorizedValueFAIL.docx");
             Assert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF' !", msg);
         }
+
+        /**
+     * Document with no core properties - testing at the OPC level,
+     *  saving into a new stream
+     */
+        [Test]
+        public void TestNoCoreProperties_saveNew()
+        {
+            String sampleFileName = "OPCCompliance_NoCoreProperties.xlsx";
+            OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+
+            // Verify it has empty properties
+            Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            Assert.IsNotNull(pkg.GetPackageProperties());
+            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
+            // Save and re-load
+            MemoryStream baos = new MemoryStream();
+            pkg.Save(baos);
+            MemoryStream bais = new MemoryStream(baos.ToArray());
+
+            pkg = OPCPackage.Open(bais);
+
+            // An Empty Properties part has been Added in the save/load
+            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            Assert.IsNotNull(pkg.GetPackageProperties());
+            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
+            // Open a new copy of it
+            pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+
+            // Save and re-load, without having touched the properties yet
+            baos = new MemoryStream();
+            pkg.Save(baos);
+            bais = new MemoryStream(baos.ToArray());
+            pkg = OPCPackage.Open(bais);
+
+            // Check that this too Added empty properties without error
+            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            Assert.IsNotNull(pkg.GetPackageProperties());
+            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
+        }
+
+        /**
+         * Document with no core properties - testing at the OPC level,
+         *  from a temp-file, saving in-place
+         */
+        [Test]
+        public void TestNoCoreProperties_saveInPlace()
+        {
+            String sampleFileName = "OPCCompliance_NoCoreProperties.xlsx";
+
+            // Copy this into a temp file, so we can play with it
+            FileInfo tmp = TempFile.CreateTempFile("poi-test", ".opc");
+            FileStream out1 = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
+            IOUtils.Copy(
+                    POIDataSamples.GetOpenXml4NetInstance().OpenResourceAsStream(sampleFileName),
+                    out1);
+            out1.Close();
+
+            // Open it from that temp file
+            OPCPackage pkg = OPCPackage.Open(tmp);
+
+            // Empty properties
+            Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            Assert.IsNotNull(pkg.GetPackageProperties());
+            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
+            // Save and close
+            pkg.Close();
+
+
+            // Re-open and check
+            pkg = OPCPackage.Open(tmp);
+
+            // An Empty Properties part has been Added in the save/load
+            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            Assert.IsNotNull(pkg.GetPackageProperties());
+            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+
+            // Finish and tidy
+            pkg.Revert();
+            tmp.Delete();
+        }
+
     }
 }

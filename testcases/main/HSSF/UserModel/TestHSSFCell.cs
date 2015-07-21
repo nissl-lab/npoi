@@ -161,7 +161,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestCachedTypeChange()
         {
-            HSSFSheet sheet = (HSSFSheet)new HSSFWorkbook().CreateSheet("Sheet1");
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet("Sheet1");
             HSSFCell cell = (HSSFCell)sheet.CreateRow(0).CreateCell(0);
             cell.CellFormula = ("A1");
             cell.SetCellValue("abc");
@@ -170,6 +171,7 @@ namespace TestCases.HSSF.UserModel
             NPOI.HSSF.Record.Record[] recs = RecordInspector.GetRecords(sheet, 0);
             if (recs.Length == 28 && recs[23] is StringRecord)
             {
+                wb.Close();
                 throw new AssertionException("Identified bug - leftover StringRecord");
             }
             ConfirmStringRecord(sheet, false);
@@ -177,7 +179,7 @@ namespace TestCases.HSSF.UserModel
             // string to error code
             cell.SetCellValue("abc");
             ConfirmStringRecord(sheet, true);
-            cell.SetCellErrorValue((byte)ErrorConstants.ERROR_REF);
+            cell.SetCellErrorValue(FormulaError.REF.Code);
             ConfirmStringRecord(sheet, false);
 
             // string to boolean
@@ -185,6 +187,7 @@ namespace TestCases.HSSF.UserModel
             ConfirmStringRecord(sheet, true);
             cell.SetCellValue(false);
             ConfirmStringRecord(sheet, false);
+            wb.Close();
         }
 
         private static void ConfirmStringRecord(HSSFSheet sheet, bool isPresent)
@@ -213,7 +216,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestMaxTextLength()
         {
-            HSSFSheet sheet = (HSSFSheet)new HSSFWorkbook().CreateSheet();
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
             HSSFCell cell = (HSSFCell)sheet.CreateRow(0).CreateCell(0);
 
             int maxlen = NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength;
@@ -239,6 +243,7 @@ namespace TestCases.HSSF.UserModel
             {
                 Assert.AreEqual("The maximum length of cell contents (text) is 32,767 characters", e.Message);
             }
+            wb.Close();
         }
 
         private static void SetCell(HSSFWorkbook workbook, int rowIdx, int colIdx, DateTime date)
@@ -321,15 +326,15 @@ namespace TestCases.HSSF.UserModel
             //
             //	    fos.Close();
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
 
-            Assert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+            Assert.AreEqual(1, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellCol);
 
-            wb.GetSheetAt(0).GetRow(3).GetCell(3).SetAsActiveCell();
+            wbBack.GetSheetAt(0).GetRow(3).GetCell(3).SetAsActiveCell();
 
-            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+            Assert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             //	    fos = new FileOutputStream("/tmp/56114a.xls");
             //
@@ -337,10 +342,13 @@ namespace TestCases.HSSF.UserModel
             //
             //	    fos.Close();
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wbBack2 = _testDataProvider.WriteOutAndReadBack(wb);
+            wbBack.Close();
 
-            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+            Assert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellRow);
+            Assert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellCol);
+
+            wbBack2.Close();
         }
 
 
@@ -390,28 +398,6 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("http://poi.apache.org/hssf/", link2.Address);
             Assert.AreEqual(8, link2.FirstRow);
             Assert.AreEqual(1, link2.FirstColumn);
-        }
-
-        [Test]
-        public void TestRemoveHyperlink()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
-            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
-
-            HSSFCell cell1 = row.CreateCell(1) as HSSFCell;
-            HSSFHyperlink link1 = new HSSFHyperlink(HyperlinkType.Url);
-            Assert.IsNotNull(link1);
-            cell1.RemoveHyperlink();
-            Assert.IsNull(cell1.Hyperlink);
-
-            HSSFCell cell2 = row.CreateCell(0) as HSSFCell;
-            HSSFHyperlink link2 = new HSSFHyperlink(HyperlinkType.Url);
-            Assert.IsNotNull(link2);
-            cell2.Hyperlink = (/*setter*/null);
-            Assert.IsNull(cell2.Hyperlink);
-
-            HSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
 
 
@@ -569,6 +555,7 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellType(CellType.Boolean);
             Assert.AreEqual("TRUE", cell.ToString());
             cell.SetCellType(CellType.Boolean);
+            cell.SetCellValue("" + FormulaError.VALUE.String);
             cell.SetCellType(CellType.Error);
             Assert.AreEqual("#VALUE!", cell.ToString());
             cell.SetCellType(CellType.Error);
@@ -588,46 +575,8 @@ namespace TestCases.HSSF.UserModel
 
             cell.SetCellValue((String)null);
             cell.SetCellValue((IRichTextString)null);
-            
+            wb.Close();
         }
-        [Test]
-        public void TestSetRemoveStyle()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
-            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
-            HSSFCell cell = row.CreateCell(0) as HSSFCell;
-
-            HSSFCellStyle defaultStyle = wb.GetCellStyleAt((short)15) as HSSFCellStyle;
-
-            // Starts out with the default style
-            Assert.AreEqual(defaultStyle, cell.CellStyle);
-
-            // Create some styles, no change
-            HSSFCellStyle style1 = wb.CreateCellStyle() as HSSFCellStyle;
-            HSSFCellStyle style2 = wb.CreateCellStyle() as HSSFCellStyle;
-            style1.DataFormat = (/*setter*/(short)2);
-            style2.DataFormat = (/*setter*/(short)3);
-
-            Assert.AreEqual(defaultStyle, cell.CellStyle);
-
-            // Apply one, Changes
-            cell.CellStyle = (/*setter*/style1);
-            Assert.AreEqual(style1, cell.CellStyle);
-
-            // Apply the other, Changes
-            cell.CellStyle = (/*setter*/style2);
-            Assert.AreEqual(style2, cell.CellStyle);
-
-            // Remove, goes back to default
-            cell.CellStyle = (/*setter*/null);
-            Assert.AreEqual(defaultStyle, cell.CellStyle);
-
-            // Add back, returns
-            cell.CellStyle = (/*setter*/style2);
-            Assert.AreEqual(style2, cell.CellStyle);
-        }
-
     }
 
 }

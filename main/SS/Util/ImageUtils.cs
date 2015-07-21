@@ -17,16 +17,11 @@
 namespace NPOI.SS.Util
 {
     using System;
+    using System.Drawing;
+    using System.IO;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
     using NPOI.Util;
-    using System.IO;
-    using System.Drawing;
 
     /**
      * @author Yegor Kozlov
@@ -68,26 +63,31 @@ namespace NPOI.SS.Util
         {
             Size size = new Size();
 
-            if (type == PictureType.JPEG || type == PictureType.PNG || type == PictureType.DIB)
+            switch (type)
             {
-                //we can calculate the preferred size only for JPEG, PNG and BMP
-                //other formats like WMF, EMF and PICT are not supported in Java
-                using (Image img = Image.FromStream(is1))
-                {
-                    int[] dpi = GetResolution(img);
+                case PictureType.JPEG:
+                case PictureType.PNG:
+                case PictureType.DIB:
+                    //we can calculate the preferred size only for JPEG, PNG and BMP
+                    //other formats like WMF, EMF and PICT are not supported in Java
+                    using (Image img = Image.FromStream(is1))
+                    {
+                        int[] dpi = GetResolution(img);
 
-                    //if DPI is zero then assume standard 96 DPI
-                    //since cannot divide by zero
-                    if (dpi[0] == 0) dpi[0] = PIXEL_DPI;
-                    if (dpi[1] == 0) dpi[1] = PIXEL_DPI;
+                        //if DPI is zero then assume standard 96 DPI
+                        //since cannot divide by zero
+                        if (dpi[0] == 0) dpi[0] = PIXEL_DPI;
+                        if (dpi[1] == 0) dpi[1] = PIXEL_DPI;
 
-                    size.Width = img.Width * PIXEL_DPI / dpi[0];
-                    size.Height = img.Height * PIXEL_DPI / dpi[1];
-                    return size;
-                }
+                        size.Width = img.Width * PIXEL_DPI / dpi[0];
+                        size.Height = img.Height * PIXEL_DPI / dpi[1];
+                        return size;
+                    }
+                    
+                default:
+                    logger.Log(POILogger.WARN, "Only JPEG, PNG and DIB pictures can be automatically sized");
+                    break;
             }
-            else
-                logger.Log(POILogger.WARN, "Only JPEG, PNG and DIB pictures can be automatically sized");
             return size;
         }
         

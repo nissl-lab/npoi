@@ -101,8 +101,10 @@
     </Compile>
     <Compile Include="SS\Converter\TestExcelToHtmlConverterSuite.cs" />
     <Compile Include="SS\Format\TestCellFormatPart.cs" />
+    <Compile Include="SS\Formula\Eval\TestXSSFCircularReferences.cs" />
     <Compile Include="SS\Formula\Functions\TestProper.cs" />
     <Compile Include="SS\TestWorkbookFactory.cs" />
+    <Compile Include="SS\UserModel\BaseTestXCell.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestEmbeded.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />

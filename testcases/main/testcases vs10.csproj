@@ -160,13 +160,17 @@
     <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\TestWorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Eval\BaseTestCircularReferences.cs" />
+    <Compile Include="SS\Formula\Eval\TestHSSFCircularReferences.cs" />
     <Compile Include="SS\Formula\Eval\TestMultiSheetEval.cs" />
     <Compile Include="SS\Formula\Functions\CountifsTests.cs" />
     <Compile Include="SS\Formula\Functions\RefValueImplementation.cs" />
+    <Compile Include="SS\Formula\Functions\TestBin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\TestCode.cs" />
     <Compile Include="SS\Formula\Functions\TestCodeFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestComplex.cs" />
     <Compile Include="SS\Formula\Functions\TestComplexFunctionsFromSpreadsheet.cs" />
+    <Compile Include="SS\Formula\Functions\TestDec2Bin.cs" />
     <Compile Include="SS\Formula\Functions\TestDec2Hex.cs" />
     <Compile Include="SS\Formula\Functions\TestDelta.cs" />
     <Compile Include="SS\Formula\Functions\TestDeltaFunctionsFromSpreadsheet.cs" />
@@ -521,7 +525,6 @@
     <Compile Include="SS\Formula\Eval\EvalInstances.cs" />
     <Compile Include="SS\Formula\Eval\Forked\TestForkedEvaluator.cs" />
     <Compile Include="SS\Formula\Eval\TestAreaEval.cs" />
-    <Compile Include="SS\Formula\Eval\TestCircularReferences.cs" />
     <Compile Include="SS\Formula\Eval\TestDivideEval.cs" />
     <Compile Include="SS\Formula\Eval\TestEqualEval.cs" />
     <Compile Include="SS\Formula\Eval\TestExternalFunction.cs" />

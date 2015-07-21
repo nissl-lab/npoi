@@ -29,7 +29,7 @@ namespace NPOI.XSSF.UserModel
      * @author Yegor Kozlov
      */
     [TestFixture]
-    public class TestXSSFCell : BaseTestCell
+    public class TestXSSFCell : BaseTestXCell
     {
 
         public TestXSSFCell()
@@ -185,21 +185,6 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(null, cell.CellStyle);
         }
 
-        /**
-         * Cell with the formula that returns error must return error code(There was
-         * an problem that cell could not return error value form formula cell).
-         */
-        [Test]
-        public void TestGetErrorCellValueFromFormulaCell()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.SetCellFormula("SQRT(-1)");
-            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateFormulaCell(cell);
-            Assert.AreEqual(36, cell.ErrorCellValue);
-        }
         [Test]
         public void TestIsMergedCell()
         {
@@ -410,29 +395,6 @@ namespace NPOI.XSSF.UserModel
             {
                 cell.ToString();
             }
-        }
-        [Test]
-        public void TestRemoveHyperlink()
-        {
-            IWorkbook wb = new XSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-
-            ICell cell1 = row.CreateCell(1);
-            XSSFHyperlink link1 = new XSSFHyperlink(HyperlinkType.Url);
-            cell1.Hyperlink = (/*setter*/link1);
-            Assert.IsNotNull(cell1.Hyperlink);
-            cell1.RemoveHyperlink();
-            Assert.IsNull(cell1.Hyperlink);
-
-            ICell cell2 = row.CreateCell(0);
-            XSSFHyperlink link2 = new XSSFHyperlink(HyperlinkType.Url);
-            cell2.Hyperlink = (/*setter*/link2);
-            Assert.IsNotNull(cell2.Hyperlink);
-            cell2.Hyperlink = (/*setter*/null);
-            Assert.IsNull(cell2.Hyperlink);
-
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
         }
 
         [Test]

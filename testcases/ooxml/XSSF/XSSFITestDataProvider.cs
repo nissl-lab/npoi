@@ -67,6 +67,11 @@ namespace NPOI.XSSF
                 return "xlsx";
             }
         }
+
+        public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
+        {
+            return new XSSFFormulaEvaluator((XSSFWorkbook)wb);
+        }
     }
 }
 

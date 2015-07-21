@@ -367,6 +367,25 @@ namespace NPOI.XWPF.UserModel
 
             doc.Package.Revert();
         }
+
+        [Test]
+        public void TestZeroLengthLibreOfficeDocumentWithWaterMarkHeader()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("zero-length.docx");
+            POIXMLProperties properties = doc.GetProperties();
+
+            Assert.IsNotNull(properties.CoreProperties);
+
+            XWPFHeader headerArray = doc.GetHeaderArray(0);
+            Assert.AreEqual(1, headerArray.AllPictures.Count);
+            Assert.AreEqual("image1.png", headerArray.AllPictures[0].FileName);
+            Assert.AreEqual("", headerArray.Text);
+
+            ExtendedProperties extendedProperties = properties.ExtendedProperties;
+            Assert.IsNotNull(extendedProperties);
+            Assert.AreEqual(0, extendedProperties.GetUnderlyingProperties().Characters);
+        }
+
         [Test]
         public void TestSettings()
         {

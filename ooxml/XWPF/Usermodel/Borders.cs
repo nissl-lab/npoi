@@ -41,566 +41,567 @@ namespace NPOI.XWPF.UserModel
     public enum Borders
     {
 
-        NIL = (1),
+        Nil = (1),
 
-        NONE = (2),
+        None = (2),
 
         /**
          * Specifies a line border consisting of a single line around the parent
          * object.
          */
-        SINGLE = (3),
+        Single = (3),
 
-        THICK = (4),
+        Thick = (4),
 
-        DOUBLE = (5),
+        Double = (5),
 
-        DOTTED = (6),
+        Dotted = (6),
 
-        DASHED = (7),
+        Dashed = (7),
 
-        DOT_DASH = (8),
+        DotDash = (8),
 
-        DOT_DOT_DASH = (9),
+        DotDotDash = (9),
 
-        TRIPLE = (10),
+        Triple = (10),
 
-        THIN_THICK_SMALL_GAP = (11),
+        ThinThickSmallGap = (11),
 
-        THICK_THIN_SMALL_GAP = (12),
+        ThickThinSmallGap = (12),
 
-        THIN_THICK_THIN_SMALL_GAP = (13),
+        ThinThickThinSmallGap = (13),
 
-        THIN_THICK_MEDIUM_GAP = (14),
+        ThinThickMediumGap = (14),
 
-        THICK_THIN_MEDIUM_GAP = (15),
+        ThickThinMediumGap = (15),
 
-        THIN_THICK_THIN_MEDIUM_GAP = (16),
+        ThinThickThinMediumGap = (16),
 
-        THIN_THICK_LARGE_GAP = (17),
+        ThinThickLargeGap = (17),
 
-        THICK_THIN_LARGE_GAP = (18),
+        ThickThinLargeGap = (18),
 
-        THIN_THICK_THIN_LARGE_GAP = (19),
+        ThinThickThinLargeGap = (19),
 
-        WAVE = (20),
+        Wave = (20),
 
-        DOUBLE_WAVE = (21),
+        DoubleWave = (21),
 
-        DASH_SMALL_GAP = (22),
+        DashSmallGap = (22),
 
-        DASH_DOT_STROKED = (23),
+        DashDotStroked = (23),
 
-        THREE_D_EMBOSS = (24),
+        ThreeDEmboss = (24),
 
-        THREE_D_ENGRAVE = (25),
+        ThreeDEngrave = (25),
 
-        OUTSET = (26),
+        Outset = (26),
 
-        INSET = (27),
+        Inset = (27),
 
         /**
-         * Specifies an art border consisting of a repeated image of an apple
+         * specifies an art border consisting of a repeated image of an apple
          */
-        APPLES = (28),
+        Apples = (28),
 
         /**
-         * Specifies an art border consisting of a repeated image of a shell pattern
+         * specifies an art border consisting of a repeated image of a shell pattern
          */
-        ARCHED_SCALLOPS = (29),
+        ArchedScallops = (29),
 
         /**
-         * Specifies an art border consisting of a repeated image of a baby pacifier
+         * specifies an art border consisting of a repeated image of a baby pacifier
          */
-        BABY_PACIFIER = (30),
+        BabyPacifier = (30),
 
         /**
-         * Specifies an art border consisting of a repeated image of a baby rattle
+         * specifies an art border consisting of a repeated image of a baby rattle
          */
-        BABY_RATTLE = (31),
+        BabyRattle = (31),
 
         /**
-         * Specifies an art border consisting of a repeated image of a Set of
+         * specifies an art border consisting of a repeated image of a set of
          * balloons
          */
-        BALLOONS_3_COLORS = (32),
+        Balloons3Colors = (32),
 
         /**
-         * Specifies an art border consisting of a repeated image of a hot air
+         * specifies an art border consisting of a repeated image of a hot air
          * balloon
          */
-        BALLOONS_HOT_AIR = (33),
+        BalloonsHotAir = (33),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background.
          */
-        BASIC_BLACK_DASHES = (34),
+        BasicBlackDashes = (34),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black dot on
+         * specifies an art border consisting of a repeating image of a black dot on
          * a white background.
          */
-        BASIC_BLACK_DOTS = (35),
+        BasicBlackDots = (35),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background
          */
-        BASIC_BLACK_SQUARES = (36),
+        BasicBlackSquares = (36),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background.
          */
-        BASIC_THIN_LINES = (37),
+        BasicThinLines = (37),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background.
          */
-        BASIC_WHITE_DASHES = (38),
+        BasicWhiteDashes = (38),
 
         /**
-         * Specifies an art border consisting of a repeating image of a white dot on
+         * specifies an art border consisting of a repeating image of a white dot on
          * a black background.
          */
-        BASIC_WHITE_DOTS = (39),
+        BasicWhiteDots = (39),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background.
          */
-        BASIC_WHITE_SQUARES = (40),
+        BasicWhiteSquares = (40),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background.
          */
-        BASIC_WIDE_INLINE = (41),
+        BasicWideInline = (41),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background
          */
-        BASIC_WIDE_MIDLINE = (42),
+        BasicWideMidline = (42),
 
         /**
-         * Specifies an art border consisting of a repeating image of a black and
+         * specifies an art border consisting of a repeating image of a black and
          * white background
          */
-        BASIC_WIDE_OUTLINE = (43),
+        BasicWideOutline = (43),
 
         /**
-         * Specifies an art border consisting of a repeated image of bats
+         * specifies an art border consisting of a repeated image of bats
          */
-        BATS = (44),
+        Bats = (44),
 
         /**
-         * Specifies an art border consisting of repeating images of birds
+         * specifies an art border consisting of repeating images of birds
          */
-        BIRDS = (45),
+        Birds = (45),
 
         /**
-         * Specifies an art border consisting of a repeated image of birds flying
+         * specifies an art border consisting of a repeated image of birds flying
          */
-        BIRDS_FLIGHT = (46),
+        BirdsFlight = (46),
 
         /**
-         * Specifies an art border consisting of a repeated image of a cabin
+         * specifies an art border consisting of a repeated image of a cabin
          */
-        CABINS = (47),
+        Cabins = (47),
 
         /**
-         * Specifies an art border consisting of a repeated image of a piece of cake
+         * specifies an art border consisting of a repeated image of a piece of cake
          */
-        CAKE_SLICE = (48),
+        CakeSlice = (48),
 
         /**
-         * Specifies an art border consisting of a repeated image of candy corn
+         * specifies an art border consisting of a repeated image of candy corn
          */
-        CANDY_CORN = (49),
+        CandyCorn = (49),
 
         /**
-         * Specifies an art border consisting of a repeated image of a knot work
+         * specifies an art border consisting of a repeated image of a knot work
          * pattern
          */
-        CELTIC_KNOTWORK = (50),
+        CelticKnotwork = (50),
 
         /**
-         * Specifies an art border consisting of a banner.
+         * specifies an art border consisting of a banner.
          * <p>
-         * If the border is on the left or right, no border is displayed.
+         * if the border is on the left or right, no border is displayed.
          * </p>
          */
-        CERTIFICATE_BANNER = (51),
+        CertificateBanner = (51),
 
         /**
-         * Specifies an art border consisting of a repeating image of a chain link
+         * specifies an art border consisting of a repeating image of a chain link
          * pattern.
          */
-        CHAIN_LINK = (52),
+        ChainLink = (52),
 
         /**
-         * Specifies an art border consisting of a repeated image of a champagne
+         * specifies an art border consisting of a repeated image of a champagne
          * bottle
          */
-        CHAMPAGNE_BOTTLE = (53),
+        ChampagneBottle = (53),
 
         /**
-         * Specifies an art border consisting of repeating images of a compass
+         * specifies an art border consisting of repeating images of a compass
          */
-        CHECKED_BAR_BLACK = (54),
+        CheckedBarBlack = (54),
 
         /**
-         * Specifies an art border consisting of a repeating image of a colored
+         * specifies an art border consisting of a repeating image of a colored
          * pattern.
          */
-        CHECKED_BAR_COLOR = (55),
+        CheckedBarColor = (55),
 
         /**
-         * Specifies an art border consisting of a repeated image of a Checkerboard
+         * specifies an art border consisting of a repeated image of a checkerboard
          */
-        CHECKERED = (56),
+        Checkered = (56),
 
         /**
-         * Specifies an art border consisting of a repeated image of a Christmas
+         * specifies an art border consisting of a repeated image of a christmas
          * tree
          */
-        CHRISTMAS_TREE = (57),
+        ChristmasTree = (57),
 
         /**
-         * Specifies an art border consisting of repeating images of lines and
+         * specifies an art border consisting of repeating images of lines and
          * circles
          */
-        CIRCLES_LINES = (58),
+        CirclesLines = (58),
 
         /**
-         * Specifies an art border consisting of a repeated image of a rectangular
+         * specifies an art border consisting of a repeated image of a rectangular
          * pattern
          */
-        CIRCLES_RECTANGLES = (59),
+        CirclesRectangles = (59),
 
         /**
-         * Specifies an art border consisting of a repeated image of a wave
+         * specifies an art border consisting of a repeated image of a wave
          */
-        CLASSICAL_WAVE = (60),
+        ClassicalWave = (60),
 
         /**
-         * Specifies an art border consisting of a repeated image of a clock
+         * specifies an art border consisting of a repeated image of a clock
          */
-        CLOCKS = (61),
+        Clocks = (61),
 
         /**
-         * Specifies an art border consisting of repeating images of a compass
+         * specifies an art border consisting of repeating images of a compass
          */
-        COMPASS = (62),
+        Compass = (62),
 
         /**
-         * Specifies an art border consisting of a repeated image of confetti
+         * specifies an art border consisting of a repeated image of confetti
          */
-        CONFETTI = (63),
+        Confetti = (63),
 
         /**
-         * Specifies an art border consisting of a repeated image of confetti
+         * specifies an art border consisting of a repeated image of confetti
          */
-        CONFETTI_GRAYS = (64),
+        ConfettiGrays = (64),
 
         /**
-         * Specifies an art border consisting of a repeated image of confetti
+         * specifies an art border consisting of a repeated image of confetti
          */
-        CONFETTI_OUTLINE = (65),
+        ConfettiOutline = (65),
 
         /**
-         * Specifies an art border consisting of a repeated image of confetti
+         * specifies an art border consisting of a repeated image of confetti
          * streamers
          */
-        CONFETTI_STREAMERS = (66),
+        ConfettiStreamers = (66),
 
         /**
-         * Specifies an art border consisting of a repeated image of confetti
+         * specifies an art border consisting of a repeated image of confetti
          */
-        CONFETTI_WHITE = (67),
+        ConfettiWhite = (67),
 
         /**
-         * Specifies an art border consisting of a repeated image
+         * specifies an art border consisting of a repeated image
          */
-        CORNER_TRIANGLES = (68),
+        CornerTriangles = (68),
 
         /**
-         * Specifies an art border consisting of a dashed line
+         * specifies an art border consisting of a dashed line
          */
-        COUPON_CUTOUT_DASHES = (69),
+        CouponCutoutDashes = (69),
 
         /**
-         * Specifies an art border consisting of a dotted line
+         * specifies an art border consisting of a dotted line
          */
-        COUPON_CUTOUT_DOTS = (70),
+        CouponCutoutDots = (70),
 
         /**
-         * Specifies an art border consisting of a repeated image of a maze-like
+         * specifies an art border consisting of a repeated image of a maze-like
          * pattern
          */
-        CRAZY_MAZE = (71),
+        CrazyMaze = (71),
 
         /**
-         * Specifies an art border consisting of a repeated image of a butterfly
+         * specifies an art border consisting of a repeated image of a butterfly
          */
-        CREATURES_BUTTERFLY = (72),
+        CreaturesButterfly = (72),
 
         /**
-         * Specifies an art border consisting of a repeated image of a fish
+         * specifies an art border consisting of a repeated image of a fish
          */
-        CREATURES_FISH = (73),
+        CreaturesFish = (73),
 
         /**
-         * Specifies an art border consisting of repeating images of insects.
+         * specifies an art border consisting of repeating images of insects.
          */
-        CREATURES_INSECTS = (74),
+        CreaturesInsects = (74),
 
         /**
-         * Specifies an art border consisting of a repeated image of a ladybug
+         * specifies an art border consisting of a repeated image of a ladybug
          */
-        CREATURES_LADY_BUG = (75),
+        CreaturesLadyBug = (75),
 
         /**
-         * Specifies an art border consisting of repeating images of a cross-stitch
+         * specifies an art border consisting of repeating images of a cross-stitch
          * pattern
          */
-        CROSS_STITCH = (76),
+        CrossStitch = (76),
 
         /**
-         * Specifies an art border consisting of a repeated image of Cupid
+         * specifies an art border consisting of a repeated image of cupid
          */
-        CUP = (77),
+        Cup = (77),
 
-        DECO_ARCH = (78),
+        DecoArch = (78),
 
-        DECO_ARCH_COLOR = (79),
+        DecoArchColor = (79),
 
-        DECO_BLOCKS = (80),
+        DecoBlocks = (80),
 
-        DIAMONDS_GRAY = (81),
+        DiamondsGray = (81),
 
-        DOUBLE_D = (82),
+        DoubleD = (82),
 
-        DOUBLE_DIAMONDS = (83),
+        DoubleDiamonds = (83),
 
-        EARTH_1 = (84),
+        Earth1 = (84),
 
-        EARTH_2 = (85),
+        Earth2 = (85),
 
-        ECLIPSING_SQUARES_1 = (86),
+        EclipsingSquares1 = (86),
 
-        ECLIPSING_SQUARES_2 = (87),
+        EclipsingSquares2 = (87),
 
-        EGGS_BLACK = (88),
+        EggsBlack = (88),
 
-        FANS = (89),
+        Fans = (89),
 
-        FILM = (90),
+        Film = (90),
 
-        FIRECRACKERS = (91),
+        Firecrackers = (91),
 
-        FLOWERS_BLOCK_PRINT = (92),
+        FlowersBlockPrint = (92),
 
-        FLOWERS_DAISIES = (93),
+        FlowersDaisies = (93),
 
-        FLOWERS_MODERN_1 = (94),
+        FlowersModern1 = (94),
 
-        FLOWERS_MODERN_2 = (95),
+        FlowersModern2 = (95),
 
-        FLOWERS_PANSY = (96),
+        FlowersPansy = (96),
 
-        FLOWERS_RED_ROSE = (97),
+        FlowersRedRose = (97),
 
-        FLOWERS_ROSES = (98),
+        FlowersRoses = (98),
 
-        FLOWERS_TEACUP = (99),
+        FlowersTeacup = (99),
 
-        FLOWERS_TINY = (100),
+        FlowersTiny = (100),
 
-        GEMS = (101),
+        Gems = (101),
 
-        GINGERBREAD_MAN = (102),
+        GingerbreadMan = (102),
 
-        GRADIENT = (103),
+        Gradient = (103),
 
-        HANDMADE_1 = (104),
+        Handmade1 = (104),
 
-        HANDMADE_2 = (105),
+        Handmade2 = (105),
 
-        HEART_BALLOON = (106),
+        HeartBalloon = (106),
 
-        HEART_GRAY = (107),
+        HeartGray = (107),
 
-        HEARTS = (108),
+        Hearts = (108),
 
-        HEEBIE_JEEBIES = (109),
+        HeebieJeebies = (109),
 
-        HOLLY = (110),
+        Holly = (110),
 
-        HOUSE_FUNKY = (111),
+        HouseFunky = (111),
 
-        HYPNOTIC = (112),
+        Hypnotic = (112),
 
-        ICE_CREAM_CONES = (113),
+        IceCreamCones = (113),
 
-        LIGHT_BULB = (114),
+        LightBulb = (114),
 
-        LIGHTNING_1 = (115),
+        Lightning1 = (115),
 
-        LIGHTNING_2 = (116),
+        Lightning2 = (116),
 
-        MAP_PINS = (117),
+        MapPins = (117),
 
-        MAPLE_LEAF = (118),
+        MapleLeaf = (118),
 
-        MAPLE_MUFFINS = (119),
+        MapleMuffins = (119),
 
-        MARQUEE = (120),
+        Marquee = (120),
 
-        MARQUEE_TOOTHED = (121),
+        MarqueeToothed = (121),
 
-        MOONS = (122),
+        Moons = (122),
 
-        MOSAIC = (123),
+        Mosaic = (123),
 
-        MUSIC_NOTES = (124),
+        MusicNotes = (124),
 
-        NORTHWEST = (125),
+        Northwest = (125),
 
-        OVALS = (126),
+        Ovals = (126),
 
-        PACKAGES = (127),
+        Packages = (127),
 
-        PALMS_BLACK = (128),
+        PalmsBlack = (128),
 
-        PALMS_COLOR = (129),
+        PalmsColor = (129),
 
-        PAPER_CLIPS = (130),
+        PaperClips = (130),
 
-        PAPYRUS = (131),
+        Papyrus = (131),
 
-        PARTY_FAVOR = (132),
+        PartyFavor = (132),
 
-        PARTY_GLASS = (133),
+        PartyGlass = (133),
 
-        PENCILS = (134),
+        Pencils = (134),
 
-        PEOPLE = (135),
+        People = (135),
 
-        PEOPLE_WAVING = (136),
+        PeopleWaving = (136),
 
-        PEOPLE_HATS = (137),
+        PeopleHats = (137),
 
-        POINSETTIAS = (138),
+        Poinsettias = (138),
 
-        POSTAGE_STAMP = (139),
+        PostageStamp = (139),
 
-        PUMPKIN_1 = (140),
+        Pumpkin1 = (140),
 
-        PUSH_PIN_NOTE_2 = (141),
+        PushPinNote2 = (141),
 
-        PUSH_PIN_NOTE_1 = (142),
+        PushPinNote1 = (142),
 
-        PYRAMIDS = (143),
+        Pyramids = (143),
 
-        PYRAMIDS_ABOVE = (144),
+        PyramidsAbove = (144),
 
-        QUADRANTS = (145),
+        Quadrants = (145),
 
-        RINGS = (146),
+        Rings = (146),
 
-        SAFARI = (147),
+        Safari = (147),
 
-        SAWTOOTH = (148),
+        Sawtooth = (148),
 
-        SAWTOOTH_GRAY = (149),
+        SawtoothGray = (149),
 
-        SCARED_CAT = (150),
+        ScaredCat = (150),
 
-        SEATTLE = (151),
+        Seattle = (151),
 
-        SHADOWED_SQUARES = (152),
+        ShadowedSquares = (152),
 
-        SHARKS_TEETH = (153),
+        SharksTeeth = (153),
 
-        SHOREBIRD_TRACKS = (154),
+        ShorebirdTracks = (154),
 
-        SKYROCKET = (155),
+        Skyrocket = (155),
 
-        SNOWFLAKE_FANCY = (156),
+        SnowflakeFancy = (156),
 
-        SNOWFLAKES = (157),
+        Snowflakes = (157),
 
-        SOMBRERO = (158),
+        Sombrero = (158),
 
-        SOUTHWEST = (159),
+        Southwest = (159),
 
-        STARS = (160),
+        Stars = (160),
 
-        STARS_TOP = (161),
+        StarsTop = (161),
 
-        STARS_3_D = (162),
+        Stars3D = (162),
 
-        STARS_BLACK = (163),
+        StarsBlack = (163),
 
-        STARS_SHADOWED = (164),
+        StarsShadowed = (164),
 
-        SUN = (165),
+        Sun = (165),
 
-        SWIRLIGIG = (166),
+        Swirligig = (166),
 
-        TORN_PAPER = (167),
+        TornPaper = (167),
 
-        TORN_PAPER_BLACK = (168),
+        TornPaperBlack = (168),
 
-        TREES = (169),
+        Trees = (169),
 
-        TRIANGLE_PARTY = (170),
+        TriangleParty = (170),
 
-        TRIANGLES = (171),
+        Triangles = (171),
 
-        TRIBAL_1 = (172),
+        Tribal1 = (172),
 
-        TRIBAL_2 = (173),
+        Tribal2 = (173),
 
-        TRIBAL_3 = (174),
+        Tribal3 = (174),
 
-        TRIBAL_4 = (175),
+        Tribal4 = (175),
 
-        TRIBAL_5 = (176),
+        Tribal5 = (176),
 
-        TRIBAL_6 = (177),
+        Tribal6 = (177),
 
-        TWISTED_LINES_1 = (178),
+        TwistedLines1 = (178),
 
-        TWISTED_LINES_2 = (179),
+        TwistedLines2 = (179),
 
-        VINE = (180),
+        Vine = (180),
 
-        WAVELINE = (181),
+        Waveline = (181),
 
-        WEAVING_ANGLES = (182),
+        WeavingAngles = (182),
 
-        WEAVING_BRAID = (183),
+        WeavingBraid = (183),
 
-        WEAVING_RIBBON = (184),
+        WeavingRibbon = (184),
 
-        WEAVING_STRIPS = (185),
+        WeavingStrips = (185),
 
-        WHITE_FLOWERS = (186),
+        WhiteFlowers = (186),
 
-        WOODWORK = (187),
+        Woodwork = (187),
 
-        X_ILLUSIONS = (188),
+        XIllusions = (188),
 
-        ZANY_TRIANGLES = (189),
+        ZanyTriangles = (189),
 
-        ZIG_ZAG = (190),
+        ZigZag = (190),
 
-        ZIG_ZAG_STITCH = (191)
+        ZigZagStitch = (191)
+
 
         //private int value;
 

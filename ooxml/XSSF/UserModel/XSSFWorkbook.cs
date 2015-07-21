@@ -325,17 +325,34 @@ namespace NPOI.XSSF.UserModel
                         elIdMap.Add(p.GetPackageRelationship().Id, (ExternalLinksTable)p);
                     }
                 }
+
+                bool packageReadOnly = (Package.GetPackageAccess() == PackageAccess.READ);
+
                 if (stylesSource == null)
                 {
                     // Create Styles if it is missing
-                    stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
+                    if (packageReadOnly)
+                    {
+                        stylesSource = new StylesTable();
+                    }
+                    else
+                    {
+                        stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
+                    }
                 }
                 stylesSource.SetTheme(theme);
 
                 if (sharedStringSource == null)
                 {
                     //Create SST if it is missing
-                    sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
+                    if (packageReadOnly)
+                    {
+                        sharedStringSource = new SharedStringsTable();
+                    }
+                    else
+                    {
+                        sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
+                    }
                 }
 
                 // Load individual sheets. The order of sheets is defined by the order
@@ -644,6 +661,32 @@ namespace NPOI.XSSF.UserModel
 
             int sheetNumber = 1;
             foreach (XSSFSheet sh in sheets) sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
+
+            outerloop:
+            while (true)
+            {
+                foreach (XSSFSheet sh in sheets)
+                {
+                    sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
+                }
+
+                // Bug 57165: We also need to check that the resulting file name is not already taken
+                // this can happen when moving/cloning sheets
+                String sheetName = XSSFRelation.WORKSHEET.GetFileName(sheetNumber);
+                foreach (POIXMLDocumentPart relation in GetRelations())
+                {
+                    if (relation.GetPackagePart() != null &&
+                            sheetName.Equals(relation.GetPackagePart().PartName.Name))
+                    {
+                        // name is taken => try next one
+                        sheetNumber++;
+                        goto outerloop;
+                    }
+                }
+
+                // no duplicate found => use this one
+                break;
+            }
 
             XSSFSheet wrapper = (XSSFSheet)CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber);
             wrapper.sheet = sheet;

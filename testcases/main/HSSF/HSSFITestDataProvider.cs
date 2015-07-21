@@ -29,7 +29,10 @@ namespace TestCases.HSSF
         {
             return new HSSFWorkbook();
         }
-
+        public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
+        {
+            return new HSSFFormulaEvaluator((HSSFWorkbook)wb);
+        }
         public byte[] GetTestDataFileContent(String fileName)
         {
             return POIDataSamples.GetSpreadSheetInstance().ReadFile(fileName);

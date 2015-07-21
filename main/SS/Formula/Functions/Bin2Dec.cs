@@ -49,7 +49,16 @@ namespace NPOI.SS.Formula.Functions
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval numberVE)
         {
-            String number = OperandResolver.CoerceValueToString(numberVE);
+            String number;
+            if (numberVE is RefEval)
+            {
+                RefEval re = (RefEval)numberVE;
+                number = OperandResolver.CoerceValueToString(re.GetInnerValueEval(re.FirstSheetIndex));
+            }
+            else
+            {
+                number = OperandResolver.CoerceValueToString(numberVE);
+            }
             if (number.Length > 10)
             {
                 return ErrorEval.NUM_ERROR;
@@ -71,27 +80,32 @@ namespace NPOI.SS.Formula.Functions
             }
 
             String value;
-            int sum;
-            if (isPositive)
+            try
             {
-                //bit9*2^8 + bit8*2^7 + bit7*2^6 + bit6*2^5 + bit5*2^4+ bit3*2^2+ bit2*2^1+ bit1*2^0
-                sum = getDecimalValue(unsigned);
-                value = sum.ToString();
+                if (isPositive)
+                {
+                    //bit9*2^8 + bit8*2^7 + bit7*2^6 + bit6*2^5 + bit5*2^4+ bit3*2^2+ bit2*2^1+ bit1*2^0
+                    int sum = getDecimalValue(unsigned);
+                    value = sum.ToString();
+                }
+                else
+                {
+                    //The leftmost bit is 1 -- this is negative number
+                    //Inverse bits [1-9]
+                    String inverted = toggleBits(unsigned);
+                    // Calculate decimal number
+                    int sum = getDecimalValue(inverted);
+
+                    //Add 1 to obtained number
+                    sum++;
+
+                    value = "-" + sum.ToString();
+                }
             }
-            else
+            catch (FormatException)
             {
-                //The leftmost bit is 1 -- this is negative number
-                //Inverse bits [1-9]
-                String inverted = toggleBits(unsigned);
-                // Calculate decimal number
-                sum = getDecimalValue(inverted);
-
-                //Add 1 to obtained number
-                sum++;
-
-                value = "-" + sum.ToString();
+                return ErrorEval.NUM_ERROR;
             }
-
             return new NumberEval(long.Parse(value));
         }
 

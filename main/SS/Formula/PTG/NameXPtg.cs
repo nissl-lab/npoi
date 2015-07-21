@@ -30,6 +30,7 @@ namespace NPOI.SS.Formula.PTG
      *  referring to the sheet by an extern index. The XSSF equivalent
      *  is {@link NameXPxg}
      */
+    [Serializable]
     public class NameXPtg : OperandPtg,WorkbookDependentFormula
     {
         public const short sid = 0x39;

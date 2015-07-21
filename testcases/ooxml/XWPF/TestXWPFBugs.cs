@@ -73,6 +73,44 @@ namespace NPOI.XWPF
                 Biff8EncryptionKey.CurrentUserPassword = (/*setter*/null);
             }
         }
+        [Test]
+        public void Bug57312_NullPointException()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("57312.docx");
+            Assert.IsNotNull(doc);
+
+            foreach (IBodyElement bodyElement in doc.BodyElements)
+            {
+                BodyElementType elementType = bodyElement.ElementType;
+
+                if (elementType == BodyElementType.PARAGRAPH)
+                {
+                    XWPFParagraph paragraph = (XWPFParagraph)bodyElement;
+
+                    foreach (IRunElement iRunElem in paragraph.IRuns)
+                    {
+
+                        if (iRunElem is XWPFRun)
+                        {
+                            XWPFRun RunElement = (XWPFRun)iRunElem;
+
+                            UnderlinePatterns underline = RunElement.Underline;
+                            Assert.IsNotNull(underline);
+
+                            //System.out.Println("Found: " + underline + ": " + RunElement.GetText(0));
+                        }
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void Test56392()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("56392.docx");
+            Assert.IsNotNull(doc);
+        }
+
     }
 }
 

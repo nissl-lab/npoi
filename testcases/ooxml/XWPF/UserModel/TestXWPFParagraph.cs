@@ -99,8 +99,8 @@ namespace NPOI.XWPF.UserModel
             borderTop.val = (ST_Border.@double);
             bdr.top = (borderTop);
 
-            Assert.AreEqual(Borders.DOUBLE, p.BorderTop);
-            p.BorderTop = (Borders.SINGLE);
+            Assert.AreEqual(Borders.Double, p.BorderTop);
+            p.BorderTop = (Borders.Single);
             Assert.AreEqual(ST_Border.single, borderTop.val);
         }
 
@@ -198,7 +198,7 @@ namespace NPOI.XWPF.UserModel
             txtAlign.val = (ST_TextAlignment.center);
             Assert.AreEqual(TextAlignment.CENTER, p.VerticalAlignment);
 
-            p.VerticalAlignment= (TextAlignment.BOTTOM);
+            p.VerticalAlignment = (TextAlignment.BOTTOM);
             Assert.AreEqual(ST_TextAlignment.bottom, ppr.textAlignment.val);
         }
 
@@ -259,7 +259,7 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            p.SetNumID ("10");
+            p.SetNumID("10");
             Assert.AreEqual("10", p.GetNumID());
         }
 
@@ -356,8 +356,9 @@ namespace NPOI.XWPF.UserModel
             r.GetCTR().GetDrawingArray(0);
             r.GetCTR().GetDrawingArray(0).GetInlineArray(0);
             NPOI.OpenXmlFormats.Dml.CT_GraphicalObject go = r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic;
-            NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData god =  r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic.graphicData;
+            NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData god = r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic.graphicData;
             //PicDocument pd = new PicDocumentImpl(null);
+            //assertTrue(pd.isNil());
         }
         [Test]
         public void TestTika792()
@@ -368,6 +369,168 @@ namespace NPOI.XWPF.UserModel
             XWPFParagraph paragraph = doc.Paragraphs[(0)];
             Assert.AreEqual("s", paragraph.Text);
         }
+
+        [Test]
+        public void TestSettersGetters()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            XWPFParagraph p = doc.CreateParagraph();
+
+            //Assert.IsTrue(p.IsEmpty);
+            Assert.IsFalse(p.RemoveRun(0));
+
+            p.BorderTop = (/*setter*/Borders.BabyPacifier);
+            p.BorderBetween = (/*setter*/Borders.BabyPacifier);
+            p.BorderBottom = (/*setter*/Borders.BabyPacifier);
+
+            Assert.IsNotNull(p.IRuns);
+            Assert.AreEqual(0, p.IRuns.Count);
+            Assert.IsFalse(p.IsEmpty);
+            Assert.IsNull(p.StyleID);
+            Assert.IsNull(p.Style);
+
+            Assert.IsNull(p.GetNumID());
+            p.SetNumID("12");
+            Assert.AreEqual("12", p.GetNumID());
+            p.SetNumID("13");
+            Assert.AreEqual("13", p.GetNumID());
+
+            Assert.IsNull(p.GetNumFmt());
+
+            //Assert.IsNull(p.GetNumIlvl());
+
+            Assert.AreEqual("", p.ParagraphText);
+            Assert.AreEqual("", p.PictureText);
+            Assert.AreEqual("", p.FootnoteText);
+
+            p.BorderBetween = (/*setter*/Borders.None);
+            Assert.AreEqual(Borders.None, p.BorderBetween);
+            p.BorderBetween = (/*setter*/Borders.BasicBlackDashes);
+            Assert.AreEqual(Borders.BasicBlackDashes, p.BorderBetween);
+
+            p.BorderBottom = (/*setter*/Borders.None);
+            Assert.AreEqual(Borders.None, p.BorderBottom);
+            p.BorderBottom = (/*setter*/Borders.BabyPacifier);
+            Assert.AreEqual(Borders.BabyPacifier, p.BorderBottom);
+
+            p.BorderLeft = (/*setter*/Borders.None);
+            Assert.AreEqual(Borders.None, p.BorderLeft);
+            p.BorderLeft = (/*setter*/Borders.BasicWhiteSquares);
+            Assert.AreEqual(Borders.BasicWhiteSquares, p.BorderLeft);
+
+            p.BorderRight = (/*setter*/Borders.None);
+            Assert.AreEqual(Borders.None, p.BorderRight);
+            p.BorderRight = (/*setter*/Borders.BasicWhiteDashes);
+            Assert.AreEqual(Borders.BasicWhiteDashes, p.BorderRight);
+
+            p.BorderBottom = (/*setter*/Borders.None);
+            Assert.AreEqual(Borders.None, p.BorderBottom);
+            p.BorderBottom = (/*setter*/Borders.BasicWhiteDots);
+            Assert.AreEqual(Borders.BasicWhiteDots, p.BorderBottom);
+
+            Assert.IsFalse(p.IsPageBreak);
+            p.IsPageBreak = (/*setter*/true);
+            Assert.IsTrue(p.IsPageBreak);
+            p.IsPageBreak = (/*setter*/false);
+            Assert.IsFalse(p.IsPageBreak);
+
+            Assert.AreEqual(-1, p.SpacingAfter);
+            p.SpacingAfter = (/*setter*/12);
+            Assert.AreEqual(12, p.SpacingAfter);
+
+            Assert.AreEqual(-1, p.SpacingAfterLines);
+            p.SpacingAfterLines = (/*setter*/14);
+            Assert.AreEqual(14, p.SpacingAfterLines);
+
+            Assert.AreEqual(-1, p.SpacingBefore);
+            p.SpacingBefore = (/*setter*/16);
+            Assert.AreEqual(16, p.SpacingBefore);
+
+            Assert.AreEqual(-1, p.SpacingBeforeLines);
+            p.SpacingBeforeLines = (/*setter*/18);
+            Assert.AreEqual(18, p.SpacingBeforeLines);
+
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            p.SpacingLineRule = (/*setter*/LineSpacingRule.EXACT);
+            Assert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
+
+            Assert.AreEqual(-1, p.IndentationLeft);
+            p.IndentationLeft = (/*setter*/21);
+            Assert.AreEqual(21, p.IndentationLeft);
+
+            Assert.AreEqual(-1, p.IndentationRight);
+            p.IndentationRight = (/*setter*/25);
+            Assert.AreEqual(25, p.IndentationRight);
+
+            Assert.AreEqual(-1, p.IndentationHanging);
+            p.IndentationHanging = (/*setter*/25);
+            Assert.AreEqual(25, p.IndentationHanging);
+
+            Assert.AreEqual(-1, p.IndentationFirstLine);
+            p.IndentationFirstLine = (/*setter*/25);
+            Assert.AreEqual(25, p.IndentationFirstLine);
+
+            Assert.IsFalse(p.IsWordWrap);
+            p.IsWordWrap = (/*setter*/true);
+            Assert.IsTrue(p.IsWordWrap);
+            p.IsWordWrap = (/*setter*/false);
+            Assert.IsFalse(p.IsWordWrap);
+
+            Assert.IsNull(p.Style);
+            p.Style = (/*setter*/"teststyle");
+            Assert.AreEqual("teststyle", p.Style);
+
+            p.AddRun(new CT_R());
+
+            //Assert.IsTrue(p.RemoveRun(0));
+
+            Assert.IsNotNull(p.Body);
+            Assert.AreEqual(BodyElementType.PARAGRAPH, p.ElementType);
+            Assert.AreEqual(BodyType.DOCUMENT, p.PartType);
+        }
+
+        [Test]
+        public void TestSearchTextNotFound()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            XWPFParagraph p = doc.CreateParagraph();
+
+            Assert.IsNull(p.SearchText("test", new PositionInParagraph()));
+            Assert.AreEqual("", p.Text);
+        }
+
+        [Test]
+        public void TestSearchTextFound()
+        {
+            XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
+
+            IList<XWPFParagraph> ps = xml.Paragraphs;
+            Assert.AreEqual(10, ps.Count);
+
+            XWPFParagraph p = ps[(0)];
+
+            TextSegement segment = p.SearchText("sample word document", new PositionInParagraph());
+            Assert.IsNotNull(segment);
+
+            Assert.AreEqual("sample word document", p.GetText(segment));
+
+            Assert.IsTrue(p.RemoveRun(0));
+        }
+        [Test]
+        public void TestRuns()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            XWPFParagraph p = doc.CreateParagraph();
+
+            CT_R run = new CT_R();
+            XWPFRun r = new XWPFRun(run, doc.CreateParagraph());
+            p.AddRun(r);
+            p.AddRun(r);
+
+            Assert.IsNotNull(p.GetRun(run));
+            Assert.IsNull(p.GetRun(null));
+        }
+
     }
 
 }

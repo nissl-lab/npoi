@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
+    <Compile Include="DDF\EscherColorRef.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HPSF\Array.cs" />
@@ -1228,6 +1229,8 @@
     <Compile Include="HSSF\Record\TextOrientation.cs" />
     <Compile Include="SS\UserModel\FillPattern.cs" />
     <Compile Include="Util\Units.cs" />
+    <Compile Include="WP\UserModel\ICharacterRun.cs" />
+    <Compile Include="WP\UserModel\IParagraph.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />

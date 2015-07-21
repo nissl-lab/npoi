@@ -154,8 +154,8 @@ namespace NPOI.XWPF.UserModel
             borders.AddNewTop().val = ST_Border.single;
 
             
-            CT_TblGrid tblgrid=table.AddNewTblGrid();
-            tblgrid.AddNewGridCol().w= (ulong)2000;
+            //CT_TblGrid tblgrid=table.AddNewTblGrid();
+            //tblgrid.AddNewGridCol().w= (ulong)2000;
            
         }
 
