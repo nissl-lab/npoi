@@ -3057,6 +3057,35 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, wb.NumberOfSheets);
         }
 
+        [Test]
+        public void Bug56325a()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
+
+            HSSFSheet sheet = wb.CloneSheet(2) as HSSFSheet;
+            wb.SetSheetName(3, "Clone 1");
+            sheet.RepeatingRows = (/*setter*/CellRangeAddress.ValueOf("2:3"));
+            wb.SetPrintArea(3, "$A$4:$C$10");
+
+            sheet = wb.CloneSheet(2) as HSSFSheet;
+            wb.SetSheetName(4, "Clone 2");
+            sheet.RepeatingRows = (/*setter*/CellRangeAddress.ValueOf("2:3"));
+            wb.SetPrintArea(4, "$A$4:$C$10");
+
+            wb.RemoveSheetAt(2);
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(4, wbBack.NumberOfSheets);
+
+            //        OutputStream fOut = new FileOutputStream("/tmp/56325a.xls");
+            //        try {
+            //        	wb.Write(fOut);
+            //        } finally {
+            //        	fOut.Close();
+            //        }
+        }
+
+
         /**
          * Formulas which reference named ranges, either in other
          *  sheets, or workbook scoped but in other workbooks.
