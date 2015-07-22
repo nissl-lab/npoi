@@ -1228,5 +1228,42 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(expect, wb.GetName(name).RefersToFormula);
         }
 
+        [Test]
+        public void Best49423()
+        {
+            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("49423.xls");
+
+            bool found = false;
+            int numSheets = workbook.NumberOfSheets;
+            for (int i = 0; i < numSheets; i++)
+            {
+                HSSFSheet sheet = workbook.GetSheetAt(i) as HSSFSheet;
+                IList<HSSFShape> shapes = (sheet.DrawingPatriarch as HSSFPatriarch).Children;
+                foreach (HSSFShape shape in shapes)
+                {
+                    HSSFAnchor anchor = shape.Anchor;
+
+                    if (anchor is HSSFClientAnchor)
+                    {
+                        // absolute coordinates
+                        HSSFClientAnchor clientAnchor = (HSSFClientAnchor)anchor;
+                        Assert.IsNotNull(clientAnchor);
+                        //System.out.Println(clientAnchor.Row1 + "," + clientAnchor.Row2);
+                        found = true;
+                    }
+                    else if (anchor is HSSFChildAnchor)
+                    {
+                        // shape is grouped and the anchor is expressed in the coordinate system of the group 
+                        HSSFChildAnchor childAnchor = (HSSFChildAnchor)anchor;
+                        Assert.IsNotNull(childAnchor);
+                        //System.out.Println(childAnchor.Dy1 + "," + childAnchor.Dy2);
+                        found = true;
+                    }
+                }
+            }
+
+            Assert.IsTrue(found, "Should find some images via Client or Child anchors, but did not find any at all");
+        }
+
     }
 }
