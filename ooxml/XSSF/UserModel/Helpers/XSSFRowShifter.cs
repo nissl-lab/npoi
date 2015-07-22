@@ -70,7 +70,6 @@ namespace NPOI.XSSF.UserModel.Helpers
                     merged.LastRow = (merged.LastRow + n);
                     //have to Remove/add it back
                     ShiftedRegions.Add(merged);
-                    sheet.RemoveMergedRegion(i);
                     removedIndices.Add(i);
                 }
             }

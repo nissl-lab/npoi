@@ -32,7 +32,7 @@ namespace TestCases.SS.UserModel
     [TestFixture]
     public class BaseTestSheet
     {
-
+        private static int ROW_COUNT = 40000;
         private ITestDataProvider _testDataProvider;
         public BaseTestSheet()
             : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
@@ -889,24 +889,135 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestBug55723_Rows()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
 
             CellRangeAddress range = CellRangeAddress.ValueOf("A4:B55000");
             IAutoFilter filter = sheet.SetAutoFilter(range);
             Assert.IsNotNull(filter);
+
+            wb.Close();
         }
 
 
         [Test]
         public void TestBug55723d_RowsOver65k()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
 
             CellRangeAddress range = CellRangeAddress.ValueOf("A4:B75000");
             IAutoFilter filter = sheet.SetAutoFilter(range);
             Assert.IsNotNull(filter);
+
+            wb.Close();
+        }
+
+        /**
+     * XSSFSheet autoSizeColumn() on empty RichTextString fails
+     * @
+     */
+        [Test]
+        public void bug48325()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("Test");
+            ICreationHelper factory = wb.GetCreationHelper();
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            IFont font = wb.CreateFont();
+            IRichTextString rts = factory.CreateRichTextString("");
+            rts.ApplyFont(font);
+            cell.SetCellValue(rts);
+
+            sheet.AutoSizeColumn(0);
+
+            Assert.IsNotNull(_testDataProvider.WriteOutAndReadBack(wb));
+
+            wb.Close();
+        }
+
+        [Test]
+        public void GetCellComment()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IDrawing dg = sheet.CreateDrawingPatriarch();
+            IComment comment = dg.CreateCellComment(workbook.GetCreationHelper().CreateClientAnchor());
+            ICell cell = sheet.CreateRow(9).CreateCell(2);
+            comment.Author = (/*setter*/"test C10 author");
+            cell.CellComment = (/*setter*/comment);
+
+            Assert.IsNotNull(sheet.GetCellComment(9, 2));
+            Assert.AreEqual("test C10 author", sheet.GetCellComment(9, 2).Author);
+
+            Assert.IsNotNull(_testDataProvider.WriteOutAndReadBack(workbook));
+
+            workbook.Close();
+        }
+
+
+        [Test]
+        public void newMergedRegionAt()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            CellRangeAddress region = CellRangeAddress.ValueOf("B2:D4");
+            sheet.AddMergedRegion(region);
+            Assert.AreEqual("B2:D4", sheet.GetMergedRegion(0).FormatAsString());
+            Assert.AreEqual(1, sheet.NumMergedRegions);
+
+            Assert.IsNotNull(_testDataProvider.WriteOutAndReadBack(workbook));
+
+            workbook.Close();
+        }
+
+        [Test]
+        public void ShowInPaneManyRowsBug55248()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("Sheet 1");
+
+            sheet.ShowInPane(0, 0);
+            int i;
+            for (i = ROW_COUNT / 2; i < ROW_COUNT; i++)
+            {
+                sheet.CreateRow(i);
+                sheet.ShowInPane(i, 0);
+                // this one fails: sheet.ShowInPane((short)i, 0);
+            }
+
+            i = 0;
+            sheet.ShowInPane(i, i);
+
+            IWorkbook wb = _testDataProvider.WriteOutAndReadBack(workbook);
+            CheckRowCount(wb);
+        }
+
+        private void CheckRowCount(IWorkbook wb)
+        {
+            Assert.IsNotNull(wb);
+            ISheet sh = wb.GetSheet("Sheet 1");
+            Assert.IsNotNull(sh);
+            Assert.AreEqual(ROW_COUNT - 1, sh.LastRowNum);
+        }
+
+
+        [Test]
+        public void TestRightToLeft()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            Assert.IsFalse(sheet.IsRightToLeft);
+            sheet.IsRightToLeft = (/*setter*/true);
+            Assert.IsTrue(sheet.IsRightToLeft);
+            sheet.IsRightToLeft = (/*setter*/false);
+            Assert.IsFalse(sheet.IsRightToLeft);
+
+            wb.Close();
         }
 
     }
