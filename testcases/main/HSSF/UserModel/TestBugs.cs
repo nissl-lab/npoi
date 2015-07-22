@@ -3248,5 +3248,17 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(refHttp, s.GetRow(0).GetCell(0).CellFormula);
         }
 
+        [Test]
+        public void Test57163()
+        {
+            IWorkbook wb = OpenSample("57163.xls");
+
+            while (wb.NumberOfSheets > 1)
+            {
+                wb.RemoveSheetAt(1);
+            }
+            wb.Close();
+        }
+
     }
 }

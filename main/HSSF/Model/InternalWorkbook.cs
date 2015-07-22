@@ -894,15 +894,15 @@ namespace NPOI.HSSF.Model
                     // also update the link-table as otherwise references might point at invalid sheets
                 }
             }
-
-            // also tell the LinkTable about the removed sheet
-            // +1 because we already removed it from the count of sheets!
-            for (int i = sheetIndex + 1; i < NumSheets + 1; i++)
+            if (linkTable != null)
             {
-                // also update the link-table as otherwise references might point at invalid sheets
-                linkTable.RemoveSheet(i);
+                // also tell the LinkTable about the removed sheet
+                // +1 because we already removed it from the count of sheets!
+                for (int i = sheetIndex + 1; i < NumSheets + 1; i++)
+                {
+                    linkTable.RemoveSheet(i);
+                }
             }
-
         }
 
         /// <summary>
