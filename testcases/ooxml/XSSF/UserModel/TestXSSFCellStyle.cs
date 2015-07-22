@@ -79,6 +79,9 @@ namespace NPOI.XSSF.UserModel
             stylesTable.PutCellStyleXf(cellStyleXf);
             stylesTable.PutCellXf(cellXf);
             cellStyle = new XSSFCellStyle(1, 1, stylesTable, null);
+
+            Assert.IsNotNull(stylesTable.GetFillAt(1).GetCTFill().patternFill);
+            Assert.AreEqual(ST_PatternType.darkGray, stylesTable.GetFillAt(1).GetCTFill().patternFill.patternType);
         }
         [Test]
         public void TestGetSetBorderBottom()
@@ -626,7 +629,7 @@ namespace NPOI.XSSF.UserModel
             byte[] rgb = ((XSSFColor)cellStyle.FillBackgroundColorColor).GetRgb();
             Assert.AreEqual(Color.Cyan.ToArgb(), Color.FromArgb(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF).ToArgb());
             //another border was added to the styles table
-            Assert.AreEqual(num, stylesTable.GetFills().Count);
+            Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
 
             //passing null unsets the color
             cellStyle.SetFillBackgroundColor(null);
@@ -661,6 +664,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(style2.BorderLeft, style1.BorderLeft);
             Assert.AreEqual(style2.BorderRight, style1.BorderRight);
             Assert.AreEqual(style2.BorderTop, style1.BorderTop);
+
+            wb2.Close();
         }
 
         [Ignore]
@@ -705,8 +710,10 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestGetFillPattern()
         {
+            //???
+            //assertEquals(STPatternType.INT_DARK_GRAY-1, cellStyle.getFillPattern());
 
-            Assert.AreEqual(FillPattern.NoFill, cellStyle.FillPattern);
+            Assert.AreEqual((int)ST_PatternType.darkGray, (int)cellStyle.FillPattern);
 
             int num = stylesTable.GetFills().Count;
             cellStyle.FillPattern = (FillPattern.SolidForeground);
