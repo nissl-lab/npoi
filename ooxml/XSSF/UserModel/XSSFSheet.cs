@@ -2788,7 +2788,7 @@ namespace NPOI.XSSF.UserModel
             // then do the actual moving and also adjust comments/rowHeight
             // we need to sort it in a way so the Shifting does not mess up the structures, 
             // i.e. when Shifting down, start from down and go up, when Shifting up, vice-versa
-            SortedDictionary<XSSFComment, int> commentsToShift = new SortedDictionary<XSSFComment, int>(new ShiftComparator(n));
+            SortedDictionary<XSSFComment, int> commentsToShift = new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
 
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
@@ -2864,19 +2864,22 @@ namespace NPOI.XSSF.UserModel
             }
             _rows = map;
         }
-        private class ShiftComparator : IComparer<XSSFComment>
+        private class ShiftCommentComparator : IComparer<XSSFComment>
         {
             private int shiftDir;
-            public ShiftComparator(int shiftDir)
+            public ShiftCommentComparator(int shiftDir)
             {
                 this.shiftDir = shiftDir;
             }
             public int Compare(XSSFComment o1, XSSFComment o2) {
-                int row1 = new CellReference(o1.GetCTComment().@ref).Row;
-                int row2 = new CellReference(o2.GetCTComment().@ref).Row;
-                
-                if(row1 == row2) {
-                    return 0;
+                int row1 = o1.Row;
+                int row2 = o2.Row;
+
+                if (row1 == row2)
+                {
+                    // ordering is not important when row is equal, but don't return zero to still 
+                    // get multiple comments per row into the map
+                    return o1.GetHashCode() - o2.GetHashCode();
                 }
 
                 // when Shifting down, sort higher row-values first
