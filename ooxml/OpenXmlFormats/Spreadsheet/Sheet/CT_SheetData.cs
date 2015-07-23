@@ -65,6 +65,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             rowField.Insert(index, newrow);
             return newrow;
         }
+        public void RemoveRows(IList<CT_Row> toRemove)
+        {
+            if (rowField == null) return;
+            foreach (CT_Row r in toRemove)
+            {
+                rowField.Remove(r);
+            }
+        }
         public void RemoveRow(int rowNum)
         {
             if (null != rowField)

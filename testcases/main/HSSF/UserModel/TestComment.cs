@@ -26,6 +26,7 @@ using NPOI.HSSF.Record;
 using NPOI.Util;
 using NPOI.SS.UserModel;
 using NPOI.DDF;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -81,11 +82,13 @@ namespace TestCases.HSSF.UserModel
 
             ObjRecord obj = comment.GetObjRecord();
             ObjRecord objShape = commentShape.ObjRecord;
-            /**shapeId = 1025 % 1024**/
-            ((CommonObjectDataSubRecord)objShape.SubRecords[0]).ObjectId = (1);
 
             expected = obj.Serialize();
             actual = objShape.Serialize();
+
+            Assert.AreEqual(expected.Length, actual.Length);
+            //assertArrayEquals(expected, actual);
+
 
             TextObjectRecord tor = comment.GetTextObjectRecord();
             TextObjectRecord torShape = commentShape.TextObjectRecord;
@@ -98,13 +101,14 @@ namespace TestCases.HSSF.UserModel
 
             NoteRecord note = comment.NoteRecord;
             NoteRecord noteShape = commentShape.NoteRecord;
-            noteShape.ShapeId = 1;
 
             expected = note.Serialize();
             actual = noteShape.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
+
+            wb.Close();
         }
         [Test]
         public void TestAddToExistingFile()
@@ -125,8 +129,8 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(patriarch.Children.Count, 2);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sh = wbBack.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
             comment = (HSSFComment)patriarch.Children[(1)];
@@ -139,8 +143,8 @@ namespace TestCases.HSSF.UserModel
             comment.String = new HSSFRichTextString("comment3");
 
             Assert.AreEqual(patriarch.Children.Count, 3);
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wbBack2 = HSSFTestDataSamples.WriteOutAndReadBack(wbBack);
+            sh = wbBack2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             comment = (HSSFComment)patriarch.Children[1];
             Assert.AreEqual(comment.GetBackgroundImageId(), 0);
@@ -148,6 +152,10 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(((HSSFComment)patriarch.Children[0]).String.String, "comment1");
             Assert.AreEqual(((HSSFComment)patriarch.Children[1]).String.String, "comment2");
             Assert.AreEqual(((HSSFComment)patriarch.Children[2]).String.String, "comment3");
+
+            wb.Close();
+            wbBack.Close();
+            wbBack2.Close();
         }
         [Test]
         public void TestSetGetProperties()
@@ -172,8 +180,8 @@ namespace TestCases.HSSF.UserModel
             comment.Visible = (false);
             Assert.AreEqual(comment.Visible, false);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sh = wbBack.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
             comment = (HSSFComment)patriarch.Children[0];
@@ -190,8 +198,8 @@ namespace TestCases.HSSF.UserModel
             comment.Row = (42);
             comment.Visible = (true);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wbBack2 = HSSFTestDataSamples.WriteOutAndReadBack(wbBack);
+            sh = wbBack2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             comment = (HSSFComment)patriarch.Children[0];
 
@@ -200,6 +208,10 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(comment.Column, 32);
             Assert.AreEqual(comment.Row, 42);
             Assert.AreEqual(comment.Visible, true);
+
+            wb.Close();
+            wbBack.Close();
+            wbBack2.Close();
         }
         [Test]
         public void TestExistingFileWithComment()
@@ -231,11 +243,14 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(sh.FindCellComment(5, 4));
             Assert.IsNull(sh.FindCellComment(5, 5));
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sh = wbBack.GetSheetAt(0) as HSSFSheet;
 
             Assert.IsNotNull(sh.FindCellComment(5, 4));
             Assert.IsNull(sh.FindCellComment(5, 5));
+
+            wb.Close();
+            wbBack.Close();
         }
         [Test]
         public void TestInitState()
@@ -251,8 +266,10 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(agg.TailRecords.Count, 1);
 
             HSSFSimpleShape shape = patriarch.CreateSimpleShape(new HSSFClientAnchor());
+            Assert.IsNotNull(shape);
 
             Assert.AreEqual(comment.GetOptRecord().EscherProperties.Count, 10);
+            wb.Close();
         }
         [Test]
         public void TestShapeId()
@@ -264,20 +281,17 @@ namespace TestCases.HSSF.UserModel
             HSSFComment comment = patriarch.CreateCellComment(new HSSFClientAnchor()) as HSSFComment;
 
             comment.ShapeId = 2024;
-            /**
-             * SpRecord.id == shapeId
-             * ObjRecord.id == shapeId % 1024
-             * NoteRecord.id == ObjectRecord.id == shapeId % 1024
-             */
 
             Assert.AreEqual(comment.ShapeId, 2024);
 
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)comment.GetObjRecord().SubRecords[0];
-            Assert.AreEqual(cod.ObjectId, 1000);
+            Assert.AreEqual(2024, cod.ObjectId);
             EscherSpRecord spRecord = (EscherSpRecord)comment.GetEscherContainer().GetChild(0);
-            Assert.AreEqual(spRecord.ShapeId, 2024);
-            Assert.AreEqual(comment.ShapeId, 2024);
-            Assert.AreEqual(comment.NoteRecord.ShapeId, 1000);
+            Assert.AreEqual(2024, spRecord.ShapeId);
+            Assert.AreEqual(2024, comment.ShapeId);
+            Assert.AreEqual(2024, comment.NoteRecord.ShapeId);
+
+            wb.Close();
         }
         [Test]
         public void TestAttemptToSave2CommentsWithSameCoordinates()

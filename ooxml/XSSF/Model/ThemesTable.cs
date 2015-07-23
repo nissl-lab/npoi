@@ -50,7 +50,7 @@ namespace NPOI.XSSF.Model
             }
             catch (XmlException e)
             {
-                throw new IOException(e.Message);
+                throw new IOException(e.Message, e);
             }
         }
         /**

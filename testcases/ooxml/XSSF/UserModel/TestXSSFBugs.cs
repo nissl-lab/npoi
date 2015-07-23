@@ -2454,6 +2454,82 @@ using NPOI.SS.Formula.Eval;
                 wb.Close();
             }
         }
+        /**
+     * OOXML-Strict files
+     * Not currently working - namespace mis-match from XMLBeans
+     */
+        [Ignore("XMLBeans namespace mis-match on ooxml-strict files")]
+        [Test]
+        public void Test57699()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.strict.xlsx");
+            Assert.AreEqual(3, wb.NumberOfSheets);
+            // TODO Check sheet contents
+            // TODO Check formula Evaluation
+
+            XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            Assert.AreEqual(3, wbBack.NumberOfSheets);
+            // TODO Re-check sheet contents
+            // TODO Re-check formula Evaluation
+        }
+
+        [Test]
+        public void TestBug56295_MergeXlslsWithStyles()
+        {
+            XSSFWorkbook xlsToAppendWorkbook = XSSFTestDataSamples.OpenSampleWorkbook("56295.xlsx");
+            XSSFSheet sheet = xlsToAppendWorkbook.GetSheetAt(0) as XSSFSheet;
+            XSSFRow srcRow = sheet.GetRow(0) as XSSFRow;
+            XSSFCell oldCell = srcRow.GetCell(0) as XSSFCell;
+            XSSFCellStyle cellStyle = oldCell.CellStyle as XSSFCellStyle;
+
+            CheckStyle(cellStyle);
+
+            //        StylesTable table = xlsToAppendWorkbook.StylesSource;
+            //        List<XSSFCellFill> Fills = table.Fills;
+            //        System.out.Println("Having " + Fills.Count + " Fills");
+            //        for(XSSFCellFill fill : Fills) {
+            //        	System.out.Println("Fill: " + Fill.FillBackgroundColor + "/" + Fill.FillForegroundColor);
+            //        }        
+
+            XSSFWorkbook targetWorkbook = new XSSFWorkbook();
+            XSSFSheet newSheet = targetWorkbook.CreateSheet(sheet.SheetName) as XSSFSheet;
+            XSSFRow destRow = newSheet.CreateRow(0) as XSSFRow;
+            XSSFCell newCell = destRow.CreateCell(0) as XSSFCell;
+
+            //newCell.CellStyle.CloneStyleFrom(cellStyle);
+            ICellStyle newCellStyle = targetWorkbook.CreateCellStyle();
+            newCellStyle.CloneStyleFrom(cellStyle);
+            newCell.CellStyle = (/*setter*/newCellStyle);
+            CheckStyle(newCell.CellStyle as XSSFCellStyle);
+            newCell.SetCellValue(oldCell.StringCellValue);
+
+            //        OutputStream os = new FileOutputStream("output.xlsm");
+            //        try {
+            //        	targetWorkbook.Write(os);
+            //        } finally {
+            //        	os.Close();
+            //        }
+
+            XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(targetWorkbook) as XSSFWorkbook;
+            XSSFCellStyle styleBack = wbBack.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle as XSSFCellStyle;
+            CheckStyle(styleBack);
+        }
+
+        private void CheckStyle(XSSFCellStyle cellStyle)
+        {
+            Assert.IsNotNull(cellStyle);
+            Assert.AreEqual(0, cellStyle.FillForegroundColor);
+            Assert.IsNotNull(cellStyle.FillForegroundXSSFColor);
+            XSSFColor fgColor = cellStyle.FillForegroundColorColor as XSSFColor;
+            Assert.IsNotNull(fgColor);
+            Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+
+            Assert.AreEqual(0, cellStyle.FillBackgroundColor);
+            Assert.IsNotNull(cellStyle.FillBackgroundXSSFColor);
+            XSSFColor bgColor = cellStyle.FillBackgroundColorColor as XSSFColor;
+            Assert.IsNotNull(bgColor);
+            Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+        }
 
     }
 

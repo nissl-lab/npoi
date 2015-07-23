@@ -320,7 +320,7 @@ namespace NPOI.HSSF.UserModel
         {
             if (o is HSSFRichTextString)
             {
-                return _string.Equals(((HSSFRichTextString)o).String);
+                return _string.Equals(((HSSFRichTextString)o)._string);
             }
             return false;
         }

@@ -1557,10 +1557,22 @@ namespace NPOI.OpenXml4Net.OPC
 
             this.ThrowExceptionIfReadOnly();
             FileStream fos = null;
-            fos = new FileStream(path, FileMode.OpenOrCreate);
-
-            this.Save(fos);
-            fos.Close();
+            try
+            {
+                fos = new FileStream(path, FileMode.OpenOrCreate);
+            }
+            catch (IOException e)
+            {
+                throw new IOException(e.Message, e);
+            }
+            try
+            {
+                this.Save(fos);
+            }
+            finally
+            {
+                fos.Close();
+            }
         }
 
         /**

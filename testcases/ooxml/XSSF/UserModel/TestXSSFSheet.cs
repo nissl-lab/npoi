@@ -163,40 +163,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(col.bestFit);
         }
 
-        /**
-         * XSSFSheet autoSizeColumn() on empty RichTextString fails
-         */
-        [Test]
-        public void Test48325()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("Test");
-            ICreationHelper factory = wb.GetCreationHelper();
-
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-
-            IFont font = wb.CreateFont();
-            IRichTextString rts = factory.CreateRichTextString("");
-            rts.ApplyFont(font);
-            cell.SetCellValue(rts);
-
-            sheet.AutoSizeColumn(0);
-        }
-        [Test]
-        public void TestGetCellComment()
-        {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-            ISheet sheet = workbook.CreateSheet();
-            IDrawing dg = sheet.CreateDrawingPatriarch();
-            IComment comment = dg.CreateCellComment(new XSSFClientAnchor());
-            ICell cell = sheet.CreateRow(9).CreateCell(2);
-            comment.Author = ("test C10 author");
-            cell.CellComment = (comment);
-
-            Assert.IsNotNull(sheet.GetCellComment(9, 2));
-            Assert.AreEqual("test C10 author", sheet.GetCellComment(9, 2).Author);
-        }
+        
         [Test]
         public void TestSetCellComment()
         {
@@ -243,16 +210,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(8.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.ySplit);
             Assert.AreEqual(ST_Pane.bottomRight, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.activePane);
         }
-        [Test]
-        public void TestNewMergedRegionAt()
-        {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
-            CellRangeAddress region = CellRangeAddress.ValueOf("B2:D4");
-            sheet.AddMergedRegion(region);
-            Assert.AreEqual("B2:D4", sheet.GetMergedRegion(0).FormatAsString());
-            Assert.AreEqual(1, sheet.NumMergedRegions);
-        }
+
         [Test]
         public void TestRemoveMergedRegion_lowlevel()
         {
@@ -1224,56 +1182,6 @@ namespace NPOI.XSSF.UserModel
             //    swb.Close();
             //}
         }
-        const int ROW_COUNT = 40000;
-        [Test]
-        public void showInPaneManyRowsBug55248()
-        {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
-
-            sheet.ShowInPane(0, 0);
-
-            for (int i = ROW_COUNT / 2; i < ROW_COUNT; i++)
-            {
-                sheet.CreateRow(i);
-                sheet.ShowInPane(i, 0);
-                // this one fails: sheet.showInPane((short)i, 0);
-            }
-
-            int j = 0;
-            sheet.ShowInPane(j, j);
-
-            IWorkbook wb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            checkRowCount(wb);
-        }
-
-        //[Test]
-        //public void showInPaneManyRowsBug55248SXSSF() {
-        //    SXSSFWorkbook IWorkbook = new SXSSFWorkbook(new XSSFWorkbook());
-        //    SXSSFSheet sheet = (SXSSFSheet) IWorkbook.CreateSheet("ISheet 1");
-
-        //    sheet.showInPane(0, 0);
-
-        //    for(int i = ROW_COUNT/2;i < ROW_COUNT;i++) {
-        //        sheet.CreateRow(i);
-        //        sheet.showInPane(i, 0);
-        //        // this one fails: sheet.showInPane((short)i, 0);
-        //    }
-
-        //    int i = 0;
-        //    sheet.showInPane(i, i);
-
-        //    IWorkbook wb = SXSSFITestDataProvider.instance.writeOutAndReadBack(IWorkbook);
-        //    checkRowCount(wb);
-        //}
-
-        private void checkRowCount(IWorkbook wb)
-        {
-            Assert.IsNotNull(wb);
-            ISheet sh = wb.GetSheet("Sheet 1");
-            Assert.IsNotNull(sh);
-            Assert.AreEqual(ROW_COUNT - 1, sh.LastRowNum);
-        }
 
         [Test]
         public void bug55745()
@@ -1348,26 +1256,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-
         public void TestCreateComment()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
             Assert.IsNotNull(sheet.CreateComment());
-        }
-
-        [Test]
-
-        public void TestRightToLeft()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-
-            Assert.IsFalse(sheet.IsRightToLeft);
-            sheet.RightToLeft = (/*setter*/true);
-            Assert.IsTrue(sheet.IsRightToLeft);
-            sheet.RightToLeft = (/*setter*/false);
-            Assert.IsFalse(sheet.IsRightToLeft);
         }
 
     }

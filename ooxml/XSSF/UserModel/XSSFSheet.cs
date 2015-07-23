@@ -1523,10 +1523,10 @@ namespace NPOI.XSSF.UserModel
         private void SetColWidthAttribute(CT_Cols ctCols) {
             foreach (CT_Col col in ctCols.GetColList())
             {
-        	    if (!col.IsSetWidth()) {
-        		    col.width = (DefaultColumnWidth);
-        		    col.customWidth = (false);
-        	    }
+                if (!col.IsSetWidth()) {
+                    col.width = (DefaultColumnWidth);
+                    col.customWidth = (false);
+                }
             }
         }
         /**
@@ -1799,7 +1799,7 @@ namespace NPOI.XSSF.UserModel
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
 
             int size = ctMergeCells.sizeOfMergeCellArray();
-            CT_MergeCell[] mergeCellsArray = new CT_MergeCell[size - indices.Count];
+            List<CT_MergeCell> mergeCellsArray = new List<CT_MergeCell>(ctMergeCells.sizeOfMergeCellArray());
             for (int i = 0, d = 0; i < size; i++)
             {
                 if (!indices.Contains(i))
@@ -1808,16 +1808,24 @@ namespace NPOI.XSSF.UserModel
                     d++;
                 }
             }
-            if (mergeCellsArray.Length > 0)
-            {
-                ctMergeCells.SetMergeCellArray(mergeCellsArray);
-            }
-            else
+            if (ListIsEmpty(mergeCellsArray))
             {
                 worksheet.UnsetMergeCells();
             }
+            else
+            {
+                ctMergeCells.SetMergeCellArray(mergeCellsArray.ToArray());
+            }
         }
-
+        private bool ListIsEmpty(List<CT_MergeCell> list)
+        {
+            foreach (CT_MergeCell mc in list)
+            {
+                if (mc != null)
+                    return false;
+            }
+            return true;
+        }
 
         /**
          * Remove a row from this sheet.  All cells Contained in the row are Removed as well
@@ -2721,50 +2729,99 @@ namespace NPOI.XSSF.UserModel
          * @param reSetOriginalRowHeight whether to set the original row's height to the default
          */
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        
-        public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool reSetOriginalRowHeight)
+        public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool resetOriginalRowHeight)
         {
-            // first remove all rows which will be overwritten
+            XSSFVMLDrawing vml = GetVMLDrawing(false);
             List<int> rowsToRemove = new List<int>();
+            List<CT_Comment> commentsToRemove = new List<CT_Comment>();
+            List<CT_Row> ctRowsToRemove = new List<CT_Row>();
+            // first remove all rows which will be overwritten
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
                 XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
+
                 // check if we should remove this row as it will be overwritten by the data later
-                if (RemoveRow(startRow, endRow, n, rownum))
+                if (ShouldRemoveRow(startRow, endRow, n, rownum))
                 {
-                    // remove row from worksheet.SheetData row array
-                    int idx = rowDict.Key + 1;
-                    // compensate removed rows
-                    worksheet.sheetData.RemoveRow(idx);
+                    // remove row from worksheet.GetSheetData row array
+                    //int idx = _rows.headMap(row.getRowNum()).size();
+                    int idx = _rows.IndexOfValue(row);
+                    //worksheet.sheetData.RemoveRow(idx);
+                    ctRowsToRemove.Add(worksheet.sheetData.GetRowArray(idx));
+
                     // remove row from _rows
                     rowsToRemove.Add(rowDict.Key);
+
+                    commentsToRemove.Clear();
+                    // also remove any comments associated with this row
+                    if (sheetComments != null)
+                    {
+                        CT_CommentList lst = sheetComments.GetCTComments().commentList;
+                        foreach (CT_Comment comment in lst.comment)
+                        {
+                            String strRef = comment.@ref;
+                            CellReference ref1 = new CellReference(strRef);
+
+                            // is this comment part of the current row?
+                            if (ref1.Row == rownum)
+                            {
+                                //sheetComments.RemoveComment(strRef);
+                                //vml.RemoveCommentShape(ref1.Row, ref1.Col);
+                                commentsToRemove.Add(comment);
+                            }
+                        }
+                    }
+                    foreach (CT_Comment comment in commentsToRemove)
+                    {
+                        sheetComments.RemoveComment(comment.@ref);
+                        CellReference ref1 = new CellReference(comment.@ref);
+                        vml.RemoveCommentShape(ref1.Row, ref1.Col);
+                    }
                 }
             }
-
             foreach (int rowKey in rowsToRemove)
             {
                 _rows.Remove(rowKey);
             }
-            // then do the actual moving and also adjust comments/rowHeight 
+            worksheet.sheetData.RemoveRows(ctRowsToRemove);
+            // then do the actual moving and also adjust comments/rowHeight
+            // we need to sort it in a way so the Shifting does not mess up the structures, 
+            // i.e. when Shifting down, start from down and go up, when Shifting up, vice-versa
+            SortedDictionary<XSSFComment, int> commentsToShift = new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
+
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
-                XSSFRow row = (XSSFRow)rowDict.Value;
+                XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
-            
-                if (sheetComments != null && rownum >= startRow && rownum <= endRow)
+
+                if (sheetComments != null)
                 {
-                    //TODO shift Note's anchor in the associated /xl/drawing/vmlDrawings#.vml
-                    CT_CommentList lst = sheetComments.GetCTComments().commentList;
-                    foreach (CT_Comment comment in lst.comment)
+                    // calculate the new rownum
+                    int newrownum = ShiftedRowNum(startRow, endRow, n, rownum);
+
+                    // is there a change necessary for the current row?
+                    if (newrownum != rownum)
                     {
-                        String oldRef = comment.@ref;
-                        CellReference ref1 = new CellReference(oldRef);
-                        if (ref1.Row == rownum)
+                        CT_CommentList lst = sheetComments.GetCTComments().commentList;
+                        foreach (CT_Comment comment in lst.comment)
                         {
-                            CellReference ref2 = new CellReference(rownum + n, ref1.Col);
-                            comment.@ref = ref2.FormatAsString();
-                            sheetComments.ReferenceUpdated(oldRef, comment);
+                            String oldRef = comment.@ref;
+                            CellReference ref1 = new CellReference(oldRef);
+
+                            // is this comment part of the current row?
+                            if (ref1.Row == rownum)
+                            {
+                                XSSFComment xssfComment = new XSSFComment(sheetComments, comment,
+                                        vml == null ? null : vml.FindCommentShape(rownum, ref1.Col));
+
+                                // we should not perform the Shifting right here as we would then find
+                                // already Shifted comments and would shift them again...
+                                if (commentsToShift.ContainsKey(xssfComment))
+                                    commentsToShift[xssfComment] = newrownum;
+                                else
+                                    commentsToShift.Add(xssfComment, newrownum);
+                            }
                         }
                     }
                 }
@@ -2773,38 +2830,33 @@ namespace NPOI.XSSF.UserModel
 
                 if (!copyRowHeight)
                 {
-                    row.Height = ((short)-1);
+                    row.Height = (/*setter*/(short)-1);
                 }
 
                 row.Shift(n);
             }
 
-            //if(sheetComments!=null)
-            //    sheetComments.RecreateReference();
-            //foreach (XSSFRow row in _rows.Values)
-            //{
-            //    int rownum = row.RowNum;
-
-            //    if (rownum >= startRow && rownum <= endRow)
-            //    {
-            //        row.Shift(n);
-            //    }
-
-            //}
+            // adjust all the affected comment-structures now
+            // the Map is sorted and thus provides them in the order that we need here, 
+            // i.e. from down to up if Shifting down, vice-versa otherwise
+            foreach (KeyValuePair<XSSFComment, int> entry in commentsToShift)
+            {
+                entry.Key.Row = (/*setter*/entry.Value);
+            }
 
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
 
             int sheetIndex = Workbook.GetSheetIndex(this);
             String sheetName = Workbook.GetSheetName(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(
+            FormulaShifter Shifter = FormulaShifter.CreateForRowShift(
                                        sheetIndex, sheetName, startRow, endRow, n);
 
-            rowShifter.UpdateNamedRanges(shifter);
-            rowShifter.UpdateFormulas(shifter);
+            rowShifter.UpdateNamedRanges(Shifter);
+            rowShifter.UpdateFormulas(Shifter);
             rowShifter.ShiftMerged(startRow, endRow, n);
-            rowShifter.UpdateConditionalFormatting(shifter);
+            rowShifter.UpdateConditionalFormatting(Shifter);
 
-            //rebuild the _rows map 
+            //rebuild the _rows map
             SortedList<int, XSSFRow> map = new SortedList<int, XSSFRow>();
             foreach (XSSFRow r in _rows.Values)
             {
@@ -2812,6 +2864,60 @@ namespace NPOI.XSSF.UserModel
             }
             _rows = map;
         }
+        private class ShiftCommentComparator : IComparer<XSSFComment>
+        {
+            private int shiftDir;
+            public ShiftCommentComparator(int shiftDir)
+            {
+                this.shiftDir = shiftDir;
+            }
+            public int Compare(XSSFComment o1, XSSFComment o2) {
+                int row1 = o1.Row;
+                int row2 = o2.Row;
+
+                if (row1 == row2)
+                {
+                    // ordering is not important when row is equal, but don't return zero to still 
+                    // get multiple comments per row into the map
+                    return o1.GetHashCode() - o2.GetHashCode();
+                }
+
+                // when Shifting down, sort higher row-values first
+                if (shiftDir > 0)
+                {
+                    return row1 < row2 ? 1 : -1;
+                } else {
+                    // sort lower-row values first when Shifting up
+                    return row1 > row2 ? 1 : -1;
+                }
+            }
+        }
+    private int ShiftedRowNum(int startRow, int endRow, int n, int rownum) {
+        // no change if before any affected row
+        if(rownum < startRow && (n > 0 || (startRow - rownum) > n)) {
+            return rownum;
+        }
+        
+        // no change if After any affected row
+        if(rownum > endRow && (n < 0 || (rownum - endRow) > n)) {
+            return rownum;
+        }
+        
+        // row before and things are Moved up
+        if(rownum < startRow) {
+            // row is Moved down by the Shifting
+            return rownum + (endRow - startRow);
+        }
+        
+        // row is After and things are Moved down
+        if(rownum > endRow) {
+            // row is Moved up by the Shifting
+            return rownum - (endRow - startRow);
+        }
+        
+        // row is part of the Shifted block
+        return rownum + n;
+    }
 
         /**
          * Location of the top left visible cell Location of the top left visible cell in the bottom right
@@ -3083,7 +3189,7 @@ namespace NPOI.XSSF.UserModel
             return sheetPr.IsSetPageSetUpPr() ? sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
         }
 
-        private bool RemoveRow(int startRow, int endRow, int n, int rownum)
+        private bool ShouldRemoveRow(int startRow, int endRow, int n, int rownum)
         {
             if (rownum >= (startRow + n) && rownum <= (endRow + n))
             {

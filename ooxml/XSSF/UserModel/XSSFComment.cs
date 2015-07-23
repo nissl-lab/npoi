@@ -115,9 +115,15 @@ namespace NPOI.XSSF.UserModel
                 _comment.@ref = (newRef);
                 _comments.ReferenceUpdated(oldRef, _comment);
 
-                if (_vmlShape != null) 
-                    _vmlShape.GetClientDataArray(0)
-                        .SetRowArray(0,value);
+                if (_vmlShape != null)
+                {
+                    _vmlShape.GetClientDataArray(0).SetRowArray(0, value);
+
+                    // There is a very odd xmlbeans bug when changing the row
+                    //  arrays which can lead to corrupt pointer
+                    // This call seems to fix them again... See bug #50795
+                    //_vmlShape.getClientDataList().toString();
+                }
             }
         }
 

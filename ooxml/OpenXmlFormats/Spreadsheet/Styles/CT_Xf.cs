@@ -110,7 +110,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if(this.applyFill)
                 XmlHelper.WriteAttribute(sw, "xfId", this.xfId, true);
             XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix,false);
-			XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
+            XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
 
             XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
             if (this.applyBorder)
@@ -358,6 +358,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return this.applyProtectionField; }
             set { this.applyProtectionField = value; }
+        }
+
+        public bool IsSetApplyFill()
+        {
+            return this.applyFillField;
         }
     }
 }

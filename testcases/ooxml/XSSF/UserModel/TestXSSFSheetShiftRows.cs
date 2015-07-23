@@ -37,6 +37,12 @@ namespace TestCases.XSSF.UserModel
         {
 
         }
+
+         [Test]
+        public override void TestShiftRowBreaks() { // disabled test from superclass
+            // TODO - support shifting of page breaks
+        }
+
         [Test]
         public void TestBug54524()
         {
@@ -186,24 +192,6 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(comment);
             Assert.AreEqual("Amdocs", comment.Author);
             Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
-        }
-
-        [Test]
-        public void TestBug55280()
-        {
-            XSSFWorkbook w = new XSSFWorkbook();
-            try
-            {
-                ISheet s = w.CreateSheet();
-                for (int row = 0; row < 5000; ++row)
-                    s.AddMergedRegion(new CellRangeAddress(row, row, 0, 3));
-
-                s.ShiftRows(0, 4999, 1);        // takes a long time...
-            }
-            finally
-            {
-                w.Close();
-            }
         }
 
         [Test]
@@ -370,6 +358,41 @@ namespace TestCases.XSSF.UserModel
             }
         }
 
+        [Test]
+        public void TestBug57828_OnlyOneCommentShiftedInRow()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57828.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            IComment comment1 = sheet.GetCellComment(2, 1);
+            Assert.IsNotNull(comment1);
+
+            IComment comment2 = sheet.GetCellComment(2, 2);
+            Assert.IsNotNull(comment2);
+
+            IComment comment3 = sheet.GetCellComment(1, 1);
+            Assert.IsNull(comment3, "NO comment in (1,1) and it should be null");
+
+            sheet.ShiftRows(2, 2, -1);
+
+            comment3 = sheet.GetCellComment(1, 1);
+            Assert.IsNotNull(comment3, "Comment in (2,1) Moved to (1,1) so its not null now.");
+
+            comment1 = sheet.GetCellComment(2, 1);
+            Assert.IsNull(comment1, "No comment currently in (2,1) and hence it is null");
+
+            comment2 = sheet.GetCellComment(1, 2);
+            Assert.IsNotNull(comment2, "Comment in (2,2) should have Moved as well because of shift rows. But its not");
+
+            //        OutputStream stream = new FileOutputStream("/tmp/57828.xlsx");
+            //        try {
+            //        	wb.Write(stream);
+            //        } finally {
+            //        	stream.Close();
+            //        }
+
+            wb.Close();
+        }
 
     }
 }
