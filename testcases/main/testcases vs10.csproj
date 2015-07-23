@@ -141,6 +141,7 @@
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\ReaderWriter.cs" />
     <Compile Include="POIFS\FileSystem\TestEntryUtils.cs" />
+    <Compile Include="POIFS\FileSystem\TestFileSystemBugs.cs" />
     <Compile Include="POIFS\FileSystem\TestFilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSMiniStore.cs" />

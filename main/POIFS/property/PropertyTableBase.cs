@@ -74,7 +74,11 @@ namespace NPOI.POIFS.Properties
                 while (children.Count != 0)
                 {
                     Property property = children.Pop();
-
+                    if (property == null)
+                    {
+                        // unknown / unsupported / corrupted property, skip
+                        continue;
+                    }
                     root.AddChild(property);
 
                     if (property.IsDirectory)
