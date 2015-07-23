@@ -25,6 +25,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
 using System.Collections.ObjectModel;
+using NPOI.SS;
 
 namespace NPOI.XSSF.Model
 {
@@ -38,6 +39,7 @@ namespace NPOI.XSSF.Model
     public class StylesTable : POIXMLDocumentPart
     {
         private Dictionary<int, String> numberFormats = new Dictionary<int, String>();
+        private bool[] usedNumberFormats = new bool[SpreadsheetVersion.EXCEL2007.MaxCellStyles];
         private List<XSSFFont> fonts = new List<XSSFFont>();
         private List<XSSFCellFill> fills = new List<XSSFCellFill>();
         private List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
@@ -50,6 +52,7 @@ namespace NPOI.XSSF.Model
          * The first style id available for use as a custom style
          */
         public static int FIRST_CUSTOM_STYLE_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX + 1;
+        private static int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
 
         private StyleSheetDocument doc;
         private ThemesTable theme;
@@ -117,7 +120,9 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_NumFmt nfmt in ctfmts.numFmt)
                     {
-                        numberFormats.Add((int)nfmt.numFmtId, nfmt.formatCode);
+                        int formatId = (int)nfmt.numFmtId;
+                        numberFormats.Add(formatId, nfmt.formatCode);
+                        usedNumberFormats[formatId] = true;
                     }
                 }
 
@@ -187,24 +192,29 @@ namespace NPOI.XSSF.Model
             if (numberFormats.ContainsValue(fmt))
             {
                 // Find the key, and return that
-                foreach (int key in numberFormats.Keys)
+                foreach (KeyValuePair<int, string> numFmt in numberFormats)
                 {
-                    if (numberFormats[key].Equals(fmt))
+                    if (numFmt.Value.Equals(fmt))
                     {
-                        return key;
+                        return numFmt.Key;
                     }
                 }
                 throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
             }
 
             // Find a spare key, and add that
-            int newKey = FIRST_CUSTOM_STYLE_ID;
-            while (numberFormats.ContainsKey(newKey))
+            for (int i = FIRST_CUSTOM_STYLE_ID; i < usedNumberFormats.Length; i++)
             {
-                newKey++;
+                if (!usedNumberFormats[i])
+                {
+                    usedNumberFormats[i] = true;
+                    numberFormats.Add(i, fmt);
+                    return i;
+                }
             }
-            numberFormats[newKey] = fmt;
-            return newKey;
+
+            throw new InvalidOperationException("The maximum number of Data Formats was exceeded. " +
+              "You can define up to " + usedNumberFormats.Length + " formats in a .xlsx Workbook");
         }
 
         public XSSFFont GetFontAt(int idx)
@@ -429,12 +439,17 @@ namespace NPOI.XSSF.Model
             ctFormats.count = (uint)numberFormats.Count;
             if (ctFormats.count > 0)
                 ctFormats.countSpecified = true;
-            foreach (KeyValuePair<int, String> fmt in numberFormats)
+
+            for (int fmtId = 0; fmtId < usedNumberFormats.Length; fmtId++)
             {
-                CT_NumFmt ctFmt = ctFormats.AddNewNumFmt();
-                ctFmt.numFmtId = (uint)fmt.Key;
-                ctFmt.formatCode = fmt.Value;
+                if (usedNumberFormats[fmtId])
+                {
+                    CT_NumFmt ctFmt = ctFormats.AddNewNumFmt();
+                    ctFmt.numFmtId = (uint)(fmtId);
+                    ctFmt.formatCode = (numberFormats[(fmtId)]);
+                }
             }
+
             if (ctFormats.count>0)
                 styleSheet.numFmts = ctFormats;
 
@@ -617,13 +632,18 @@ namespace NPOI.XSSF.Model
 
         public XSSFCellStyle CreateCellStyle()
         {
+            int xfSize = styleXfs.Count;
+            if (xfSize > MAXIMUM_STYLE_ID)
+                throw new InvalidOperationException("The maximum number of Cell Styles was exceeded. " +
+                          "You can define up to " + MAXIMUM_STYLE_ID + " style in a .xlsx Workbook");
+        
             CT_Xf ctXf = new CT_Xf();
             ctXf.numFmtId = 0;
             ctXf.fontId = 0;
             ctXf.fillId = 0;
             ctXf.borderId = 0;
             ctXf.xfId = 0;
-            int xfSize = styleXfs.Count;
+            
             int indexXf = PutCellXf(ctXf);
             return new XSSFCellStyle(indexXf - 1, xfSize - 1, this, theme);
         }
