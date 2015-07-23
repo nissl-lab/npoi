@@ -19,27 +19,26 @@ using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
     using System;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS;
-    using NPOI.XSSF;
-    using NUnit.Framework;
-    using NPOI.SS.Util;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using NPOI.OpenXml4Net.OPC;
     using System.Collections.Generic;
-    using NPOI.XSSF.UserModel.Extensions;
-    using System.IO;
-    using NPOI.XSSF.Model;
-using NPOI.SS.Formula;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.Formula.Eval;
-    using TestCases;
-    using NPOI.POIFS.FileSystem;
-    using NUnit.Framework.Constraints;
-    using NPOI.Util;
-    using TestCases.HSSF;
     using System.Globalization;
+    using System.IO;
+    using NPOI.HSSF.UserModel;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.OpenXmlFormats.Spreadsheet;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
+    using NPOI.XSSF;
+    using NPOI.XSSF.Model;
+    using NPOI.XSSF.UserModel.Extensions;
+    using NUnit.Framework;
+    using NUnit.Framework.Constraints;
+    using TestCases;
+    using TestCases.HSSF;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -2530,6 +2529,23 @@ using NPOI.SS.Formula.Eval;
             XSSFColor bgColor = cellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(bgColor);
             Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+        }
+
+        [Test]
+        public void Bug57642()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
+            XSSFCell c = s.CreateRow(0).CreateCell(0) as XSSFCell;
+            c.CellFormula = (/*setter*/"ISERROR(TestSheet!A1)");
+            c = s.CreateRow(1).CreateCell(1) as XSSFCell;
+            c.CellFormula = (/*setter*/"ISERROR(B2)");
+
+            wb.SetSheetName(0, "CSN");
+            c = s.GetRow(0).GetCell(0) as XSSFCell;
+            Assert.AreEqual("ISERROR(CSN!A1)", c.CellFormula);
+            c = s.GetRow(1).GetCell(1) as XSSFCell;
+            Assert.AreEqual("ISERROR(B2)", c.CellFormula);
         }
 
     }

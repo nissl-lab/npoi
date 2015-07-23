@@ -185,10 +185,21 @@ namespace NPOI.XSSF.UserModel.Helpers
                 Pxg pxg = (Pxg)ptg;
                 if (pxg.ExternalWorkbookNumber < 1)
                 {
-                    if (pxg.SheetName.Equals(oldName))
+                    if (pxg.SheetName != null &&
+                        pxg.SheetName.Equals(oldName))
                     {
                         pxg.SheetName = (newName);
                     }
+                    if (pxg is Pxg3D)
+                    {
+                        Pxg3D pxg3D = (Pxg3D)pxg;
+                        if (pxg3D.LastSheetName != null &&
+                                pxg3D.LastSheetName.Equals(oldName))
+                        {
+                            pxg3D.LastSheetName = (/*setter*/newName);
+                        }
+                    }
+
                 }
             }
         }
