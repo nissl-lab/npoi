@@ -255,6 +255,7 @@
     <Compile Include="SS\Formula\PTG\Deleted3DPxg.cs" />
     <Compile Include="SS\Formula\PTG\NameXPxg.cs" />
     <Compile Include="SS\Formula\PTG\Pxg.cs" />
+    <Compile Include="SS\Formula\PTG\Pxg3D.cs" />
     <Compile Include="SS\Formula\PTG\Ref3DPxg.cs" />
     <Compile Include="SS\Formula\SheetIdentifier.cs" />
     <Compile Include="SS\Formula\SheetRangeEvaluator.cs" />
