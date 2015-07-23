@@ -1311,8 +1311,12 @@ namespace NPOI.XWPF.UserModel
         {
             if (pos >= 0 && pos < paragraph.SizeOfRArray())
             {
-                GetCTP().RemoveR(pos);
+                // Remove the run from our high level lists
+                XWPFRun run = runs[(pos)];
                 runs.RemoveAt(pos);
+                iRuns.Remove(run);
+                // Remove the run from the low-level XML
+                GetCTP().RemoveR(pos);
                 return true;
             }
             return false;
