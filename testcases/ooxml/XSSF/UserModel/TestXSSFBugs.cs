@@ -1605,7 +1605,8 @@ using NPOI.SS.Formula.Eval;
             wb.Write(bos2);
             byte[] secondSave = bos2.ToArray();
 
-            Assert.That(firstSave, new EqualConstraint(secondSave));
+            Assert.That(firstSave, new EqualConstraint(secondSave), 
+                "Had: \n" + Arrays.ToString(firstSave) + " and \n" + Arrays.ToString(secondSave));
 
             wb.Close();
         }

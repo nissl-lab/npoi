@@ -44,7 +44,7 @@ namespace NPOI.XSSF
         {
             if (!(original is XSSFWorkbook))
             {
-                throw new ArgumentException("Expected an instance of XSSFWorkbook");
+                throw new ArgumentException("Expected an instance of XSSFWorkbook, but had " + original.GetType().Name);
             }
             return XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)original);
         }

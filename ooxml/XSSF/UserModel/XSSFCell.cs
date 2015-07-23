@@ -382,6 +382,11 @@ namespace NPOI.XSSF.UserModel
                 SetCellType(CellType.Blank);
                 return;
             }
+
+            if (str.Length > SpreadsheetVersion.EXCEL2007.MaxTextLength)
+            {
+                throw new ArgumentException("The maximum length of cell contents (text) is 32,767 characters");
+            }
             CellType cellType = CellType;
             switch (cellType)
             {
