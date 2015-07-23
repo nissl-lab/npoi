@@ -189,6 +189,7 @@
     <Compile Include="SS\Formula\Functions\TestIndirectFunctionFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIntercept.cs" />
     <Compile Include="SS\Formula\Functions\TestIPMT.cs" />
+    <Compile Include="SS\Formula\Functions\TestLogicalFunction.cs" />
     <Compile Include="SS\Formula\Functions\TestMatchFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestMirr.cs" />
     <Compile Include="SS\Formula\Functions\TestOct2Dec.cs" />

@@ -22,11 +22,22 @@ namespace NPOI.SS.Formula.Functions
      * contribute by Pavel Egorov 
      * https://github.com/xoposhiy/npoi/commit/27b34a2389030c7115a666ace65daafda40d61af
      */
+    /**
+     * Implementation of Excel <tt>ISERR()</tt> function.<p/>
+     *
+     * <b>Syntax</b>:<br/>
+     * <b>ISERR</b>(<b>value</b>)<p/>
+     *
+     * <b>value</b>  The value to be tested<p/>
+     *
+     * Returns the logical value <tt>TRUE</tt> if value refers to any error value except
+     * <tt>'#N/A'</tt>; otherwise, it returns <tt>FALSE</tt>.
+     */
     public class Iserr : LogicalFunction
     {
         protected override bool Evaluate(ValueEval arg)
         {
-            return arg != ErrorEval.NA && arg is ErrorEval;
+            return arg is ErrorEval && arg != ErrorEval.NA;
 
         }
     }
