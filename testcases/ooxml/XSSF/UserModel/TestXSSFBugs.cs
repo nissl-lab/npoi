@@ -2551,10 +2551,12 @@ namespace NPOI.XSSF.UserModel
         /**
          * .xlsx supports 64000 cell styles, the style indexes After
          *  32,767 must not be -32,768, then -32,767, -32,766
+         *  long time test, run over 1 minute.
          */
         [Test]
         public void Bug57880()
         {
+            Console.WriteLine("long time test, run over 1 minute.");
             int numStyles = 33000;
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
@@ -2573,7 +2575,18 @@ namespace NPOI.XSSF.UserModel
                 c.SetCellValue(i);
             }
 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            //wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            // using temp file instead of ByteArrayOutputStream because of OOM in gump run
+            FileInfo tmp = TempFile.CreateTempFile("poi-test", ".bug57880");
+            FileStream fos = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
+            wb.Write(fos);
+            fos.Close();
+
+            wb.Close();
+            fmt = null; s = null; wb = null;
+            // System.gc();
+
+            wb = new XSSFWorkbook(tmp.FullName);
             fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
             s = wb.GetSheetAt(0) as XSSFSheet;
             for (int i = 1; i < numStyles; i++)
@@ -2584,6 +2597,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(164 + i, style.DataFormat & 0xffff);
                 Assert.AreEqual("test" + i, style.GetDataFormatString());
             }
+
+            wb.Close();
+            tmp.Delete();
         }
 
     }
