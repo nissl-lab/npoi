@@ -2548,6 +2548,44 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("ISERROR(B2)", c.CellFormula);
         }
 
+        /**
+         * .xlsx supports 64000 cell styles, the style indexes After
+         *  32,767 must not be -32,768, then -32,767, -32,766
+         */
+        [Test]
+        public void Bug57880()
+        {
+            int numStyles = 33000;
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
+            XSSFDataFormat fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
+            for (int i = 1; i < numStyles; i++)
+            {
+                short df = fmt.GetFormat("test" + i);
+                // Format indexes will be wrapped beyond 32,676
+                Assert.AreEqual(164 + i, df & 0xffff);
+                // Create a style and use it
+                XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
+                Assert.AreEqual(i, style.UIndex);
+                style.DataFormat = (/*setter*/df);
+                XSSFCell c = s.CreateRow(i).CreateCell(0, CellType.Numeric) as XSSFCell;
+                c.CellStyle = (/*setter*/style);
+                c.SetCellValue(i);
+            }
+
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
+            s = wb.GetSheetAt(0) as XSSFSheet;
+            for (int i = 1; i < numStyles; i++)
+            {
+                XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;
+                Assert.IsNotNull(style);
+                Assert.AreEqual(i, style.UIndex);
+                Assert.AreEqual(164 + i, style.DataFormat & 0xffff);
+                Assert.AreEqual("test" + i, style.GetDataFormatString());
+            }
+        }
+
     }
 
 }

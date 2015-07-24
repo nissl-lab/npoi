@@ -405,11 +405,20 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                _cellXf.applyNumberFormat = (true);
-                _cellXf.numFmtId = (uint)value;
+                // XSSF supports >32,767 formats
+                SetDataFormat(value & 0xFFFF);
             }
         }
-
+        /**
+         * Set the index of a data format
+         *
+         * @param fmt the index of a data format
+         */
+            public void SetDataFormat(int fmt)
+            {
+                _cellXf.applyNumberFormat = (true);
+                _cellXf.numFmtId = (uint)(fmt);
+            }
         /**
          * Get the contents of the format string, by looking up
          * the StylesSource
@@ -682,7 +691,13 @@ namespace NPOI.XSSF.UserModel
                 return (short)this._cellXfId;
             }
         }
-
+        protected internal int UIndex
+        {
+            get
+            {
+                return this._cellXfId;
+            }
+        }
         /**
          * Get the color to use for the left border
          *
