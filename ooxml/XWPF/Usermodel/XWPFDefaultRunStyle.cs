@@ -14,51 +14,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
 namespace NPOI.XWPF.UserModel
 {
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
-    public class XWPFLatentStyles
+    /**
+     * Default Character Run style, from which other styles will override
+     * TODO Share logic with {@link XWPFRun} which also uses CTRPr
+     */
+    public class XWPFDefaultRunStyle
     {
-        private CT_LatentStyles latentStyles;
-        protected XWPFStyles styles; //LatentStyle shall know styles
+        private CT_RPr rpr;
 
-        protected XWPFLatentStyles()
+        public XWPFDefaultRunStyle(CT_RPr rpr)
         {
+            this.rpr = rpr;
         }
 
-        public XWPFLatentStyles(CT_LatentStyles latentStyles)
-            : this(latentStyles, null)
+        protected CT_RPr GetRPr()
         {
-            ;
+            return rpr;
         }
 
-        public XWPFLatentStyles(CT_LatentStyles latentStyles, XWPFStyles styles)
-        {
-            this.latentStyles = latentStyles;
-            this.styles = styles;
-        }
-
-        public int NumberOfStyles
+        public int FontSize
         {
             get
             {
-                return latentStyles.SizeOfLsdExceptionArray();
+                if (rpr.IsSetSz())
+                    return (int)rpr.sz.val / 2;
+                return -1;
             }
-        }
-
-        /**
-         * checks whether specific LatentStyleID is a latentStyle
-        */
-        public bool IsLatentStyle(String latentStyleID)
-        {
-            foreach (CT_LsdException lsd in latentStyles.lsdException)
-            {
-                if (lsd.name.Equals(latentStyleID))
-                    return true;
-            }
-            return false;
         }
     }
 

@@ -568,6 +568,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.lsdExceptionField.Add(lsd);
             return lsd;
         }
+
+        public int SizeOfLsdExceptionArray()
+        {
+            return lsdExceptionField == null ? 0 : lsdExceptionField.Count;
+        }
     }
 
     [Serializable]

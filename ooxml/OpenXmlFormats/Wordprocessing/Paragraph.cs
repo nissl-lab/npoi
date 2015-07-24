@@ -973,6 +973,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numPr = new CT_NumPr();
             return this.numPr;
         }
+
+        public bool IsSetSpacing()
+        {
+            return this.spacing != null;
+        }
     }
 
 

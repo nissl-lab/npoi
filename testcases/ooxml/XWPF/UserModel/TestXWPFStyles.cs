@@ -199,7 +199,11 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(styles.GetStyle("TableNormal"));
             Assert.IsNotNull(styles.GetStyle("NoList"));
 
-            // TODO Check latent and default
+            // We can't do much yet with latent styles
+            Assert.AreEqual(137, styles.getLatentStyles().getNumberOfStyles());
+
+            // Check the default styles
+            // TODO
         }
 
     }

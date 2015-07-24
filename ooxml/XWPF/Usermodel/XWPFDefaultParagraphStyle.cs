@@ -14,51 +14,35 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
 namespace NPOI.XWPF.UserModel
 {
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
-    public class XWPFLatentStyles
+    /**
+     * Default Paragraph style, from which other styles will override
+     * TODO Share logic with {@link XWPFParagraph} which also uses CTPPr
+     */
+    public class XWPFDefaultParagraphStyle
     {
-        private CT_LatentStyles latentStyles;
-        protected XWPFStyles styles; //LatentStyle shall know styles
+        private CT_PPr ppr;
 
-        protected XWPFLatentStyles()
+        public XWPFDefaultParagraphStyle(CT_PPr ppr)
         {
+            this.ppr = ppr;
         }
 
-        public XWPFLatentStyles(CT_LatentStyles latentStyles)
-            : this(latentStyles, null)
+        protected CT_PPr GetPPr()
         {
-            ;
+            return ppr;
         }
 
-        public XWPFLatentStyles(CT_LatentStyles latentStyles, XWPFStyles styles)
+        public int GetSpacingAfter()
         {
-            this.latentStyles = latentStyles;
-            this.styles = styles;
-        }
-
-        public int NumberOfStyles
-        {
-            get
-            {
-                return latentStyles.SizeOfLsdExceptionArray();
-            }
-        }
-
-        /**
-         * checks whether specific LatentStyleID is a latentStyle
-        */
-        public bool IsLatentStyle(String latentStyleID)
-        {
-            foreach (CT_LsdException lsd in latentStyles.lsdException)
-            {
-                if (lsd.name.Equals(latentStyleID))
-                    return true;
-            }
-            return false;
+            if (ppr.IsSetSpacing())
+                return (int)ppr.spacing.after;
+            return -1;
         }
     }
 

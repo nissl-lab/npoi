@@ -99,6 +99,10 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        protected void EnsureDocDefaults()
+        {
+            // TODO Refactor from elsewhere
+        }
 
         /**
          * Sets the ctStyles
@@ -313,14 +317,6 @@ namespace NPOI.XWPF.UserModel
 
 
         /**
-         * Get latentstyles
-         */
-        public XWPFLatentStyles GetLatentStyles()
-        {
-            return latentStyles;
-        }
-
-        /**
          * Get the style with the same name
          * if this style is not existing, return null
          */
@@ -336,6 +332,28 @@ namespace NPOI.XWPF.UserModel
             return null;
 
         }
-    }//end class
+
+        /**
+         * Get the default paragraph style which applies to the document
+         */
+        public XWPFDefaultParagraphStyle DefaultParagraphStyle
+        {
+            get
+            {
+                return null; // TODO
+            }
+        }
+
+        /**
+         * Get the definition of all the Latent Styles
+         */
+        public XWPFLatentStyles LatentStyles
+        {
+            get
+            {
+                return latentStyles;
+            }
+        }
+    }
 
 }
