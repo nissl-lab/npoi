@@ -14,7 +14,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public MemoryPackagePartOutputStream(MemoryPackagePart part)
         {
             this._part = part;
-            if (this._part.data == null)
+            //if (this._part.data == null)
             {
                 this._part.data = new MemoryStream();
             }

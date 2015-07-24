@@ -1596,13 +1596,25 @@ namespace NPOI.XSSF.UserModel
             XSSFCell cell = row.CreateCell(0) as XSSFCell;
             cell.SetCellValue("Hi");
             sheet.RepeatingRows = (new CellRangeAddress(0, 0, 0, 0));
-
+            
             MemoryStream bos = new MemoryStream(8096);
             wb.Write(bos);
             byte[] firstSave = bos.ToArray();
+            //using (FileStream fs = new FileStream("d:\\save1.xlsx", FileMode.Create, FileAccess.ReadWrite))
+            //{
+            //    fs.Write(firstSave, 0, firstSave.Length);
+            //    fs.Flush();
+            //}
+            
             MemoryStream bos2 = new MemoryStream(8096);
             wb.Write(bos2);
             byte[] secondSave = bos2.ToArray();
+            //using (FileStream fs2 = new FileStream("d:\\save2.xlsx", FileMode.Create, FileAccess.ReadWrite))
+            //{
+            //    fs2.Write(secondSave, 0, secondSave.Length);
+            //    fs2.Flush();
+            //}
+            
 
             Assert.That(firstSave, new EqualConstraint(secondSave), 
                 "Had: \n" + Arrays.ToString(firstSave) + " and \n" + Arrays.ToString(secondSave));
