@@ -33,10 +33,12 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFStyles : POIXMLDocumentPart
     {
-
-        private List<XWPFStyle> listStyle = new List<XWPFStyle>();
         private CT_Styles ctStyles;
-        XWPFLatentStyles latentStyles;
+        private List<XWPFStyle> listStyle = new List<XWPFStyle>();
+
+        private XWPFLatentStyles latentStyles;
+        private XWPFDefaultRunStyle defaultRunStyle;
+        private XWPFDefaultParagraphStyle defaultParaStyle;
 
         /**
          * Construct XWPFStyles from a package part
@@ -101,7 +103,25 @@ namespace NPOI.XWPF.UserModel
 
         protected void EnsureDocDefaults()
         {
-            // TODO Refactor from elsewhere
+            if (!ctStyles.IsSetDocDefaults())
+            {
+                ctStyles.AddNewDocDefaults();
+            }
+
+            CT_DocDefaults docDefaults = ctStyles.docDefaults;
+            if (!docDefaults.IsSetPPrDefault())
+                docDefaults.AddNewPPrDefault();
+            if (!docDefaults.IsSetRPrDefault())
+                docDefaults.AddNewRPrDefault();
+
+            CT_PPrDefault pprd = docDefaults.pPrDefault;
+            CT_RPrDefault rprd = docDefaults.rPrDefault;
+            if (!pprd.IsSetPPr()) pprd.AddNewPPr();
+            if (!rprd.IsSetRPr()) rprd.AddNewRPr();
+
+            defaultRunStyle = new XWPFDefaultRunStyle(rprd.rPr);
+            defaultParaStyle = new XWPFDefaultParagraphStyle(pprd.pPr);
+
         }
 
         /**
@@ -116,6 +136,22 @@ namespace NPOI.XWPF.UserModel
             {
                 listStyle.Add(new XWPFStyle(style, this));
             }
+
+            if (ctStyles.IsSetDocDefaults())
+            {
+                CT_DocDefaults docDefaults = ctStyles.docDefaults;
+                if (docDefaults.IsSetRPrDefault() && docDefaults.rPrDefault.IsSetRPr())
+                {
+                    defaultRunStyle = new XWPFDefaultRunStyle(
+                            docDefaults.rPrDefault.rPr);
+                }
+                if (docDefaults.IsSetPPrDefault() && docDefaults.pPrDefault.IsSetPPr())
+                {
+                    defaultParaStyle = new XWPFDefaultParagraphStyle(
+                            docDefaults.pPrDefault.pPr);
+                }
+            }
+
         }
 
         /**
@@ -211,41 +247,32 @@ namespace NPOI.XWPF.UserModel
             return usedStyleList;
         }
 
+        protected CT_Language GetCTLanguage()
+        {
+            EnsureDocDefaults();
+
+            CT_Language lang = null;
+            if (defaultRunStyle.GetRPr().IsSetLang())
+            {
+                lang = defaultRunStyle.GetRPr().lang;
+            }
+            else
+            {
+                lang = defaultRunStyle.GetRPr().AddNewLang();
+            }
+
+            return lang;
+        }
+
         /**
          * Sets the default spelling language on ctStyles DocDefaults parameter
          * @param strSpellingLanguage
          */
         public void SetSpellingLanguage(String strSpellingLanguage)
         {
-            CT_DocDefaults docDefaults = null;
-            CT_RPr RunProps = null;
-            CT_Language lang = null;
-
-            // Just making sure we use the members that have already been defined
-            if (ctStyles.IsSetDocDefaults())
-            {
-                docDefaults = ctStyles.docDefaults;
-                if (docDefaults.IsSetRPrDefault())
-                {
-                    CT_RPrDefault RPrDefault = docDefaults.rPrDefault;
-                    if (RPrDefault.IsSetRPr())
-                    {
-                        RunProps = RPrDefault.rPr;
-                        if (RunProps.IsSetLang())
-                            lang = RunProps.lang;
-                    }
-                }
-            }
-
-            if (docDefaults == null)
-                docDefaults = ctStyles.AddNewDocDefaults();
-            if (RunProps == null)
-                RunProps = docDefaults.AddNewRPrDefault().AddNewRPr();
-            if (lang == null)
-                lang = RunProps.AddNewLang();
-
-            lang.val = (strSpellingLanguage);
-            lang.bidi = (strSpellingLanguage);
+            CT_Language lang = GetCTLanguage();
+            lang.val = (/*setter*/strSpellingLanguage);
+            lang.bidi = (/*setter*/strSpellingLanguage);
         }
 
         /**
@@ -254,66 +281,23 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetEastAsia(String strEastAsia)
         {
-            CT_DocDefaults docDefaults = null;
-            CT_RPr RunProps = null;
-            CT_Language lang = null;
-
-            // Just making sure we use the members that have already been defined
-            if (ctStyles.IsSetDocDefaults())
-            {
-                docDefaults = ctStyles.docDefaults;
-                if (docDefaults.IsSetRPrDefault())
-                {
-                    CT_RPrDefault RPrDefault = docDefaults.rPrDefault;
-                    if (RPrDefault.IsSetRPr())
-                    {
-                        RunProps = RPrDefault.rPr;
-                        if (RunProps.IsSetLang())
-                            lang = RunProps.lang;
-                    }
-                }
-            }
-
-            if (docDefaults == null)
-                docDefaults = ctStyles.AddNewDocDefaults();
-            if (RunProps == null)
-                RunProps = docDefaults.AddNewRPrDefault().AddNewRPr();
-            if (lang == null)
-                lang = RunProps.AddNewLang();
-
-            lang.eastAsia = (strEastAsia);
+            CT_Language lang = GetCTLanguage();
+            lang.eastAsia = (/*setter*/strEastAsia);
         }
 
         /**
          * Sets the default font on ctStyles DocDefaults parameter
-         * @param fonts
+         * TODO Replace this with specific Setters for each type, possibly
+         *  on XWPFDefaultRunStyle
          */
         public void SetDefaultFonts(CT_Fonts fonts)
         {
-            CT_DocDefaults docDefaults = null;
-            CT_RPr RunProps = null;
+            EnsureDocDefaults();
 
-            // Just making sure we use the members that have already been defined
-            if (ctStyles.IsSetDocDefaults())
-            {
-                docDefaults = ctStyles.docDefaults;
-                if (docDefaults.IsSetRPrDefault())
-                {
-                    CT_RPrDefault RPrDefault = docDefaults.rPrDefault;
-                    if (RPrDefault.IsSetRPr())
-                    {
-                        RunProps = RPrDefault.rPr;
-                    }
-                }
-            }
-
-            if (docDefaults == null)
-                docDefaults = ctStyles.AddNewDocDefaults();
-            if (RunProps == null)
-                RunProps = docDefaults.AddNewRPrDefault().AddNewRPr();
-
-            RunProps.rFonts = (fonts);
+            CT_RPr RunProps = defaultRunStyle.GetRPr();
+            RunProps.rFonts = (/*setter*/fonts);
         }
+
 
 
         /**
@@ -334,13 +318,25 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Get the default style which applies text runs in the document
+         */
+        public XWPFDefaultRunStyle DefaultRunStyle
+        {
+            get
+            {
+                EnsureDocDefaults();
+                return defaultRunStyle;
+            }
+        }
+        /**
          * Get the default paragraph style which applies to the document
          */
         public XWPFDefaultParagraphStyle DefaultParagraphStyle
         {
             get
             {
-                return null; // TODO
+                EnsureDocDefaults();
+                return defaultParaStyle;
             }
         }
 

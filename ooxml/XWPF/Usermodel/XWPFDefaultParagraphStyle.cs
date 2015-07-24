@@ -33,16 +33,19 @@ namespace NPOI.XWPF.UserModel
             this.ppr = ppr;
         }
 
-        protected CT_PPr GetPPr()
+        protected internal CT_PPr GetPPr()
         {
             return ppr;
         }
 
-        public int GetSpacingAfter()
+        public int SpacingAfter
         {
-            if (ppr.IsSetSpacing())
-                return (int)ppr.spacing.after;
-            return -1;
+            get
+            {
+                if (ppr.IsSetSpacing())
+                    return (int)ppr.spacing.after;
+                return -1;
+            }
         }
     }
 

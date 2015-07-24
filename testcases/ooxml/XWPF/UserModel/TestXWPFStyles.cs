@@ -200,10 +200,15 @@ namespace NPOI.XWPF.UserModel
             Assert.IsNotNull(styles.GetStyle("NoList"));
 
             // We can't do much yet with latent styles
-            Assert.AreEqual(137, styles.getLatentStyles().getNumberOfStyles());
+            Assert.AreEqual(137, styles.LatentStyles.NumberOfStyles);
 
             // Check the default styles
-            // TODO
+            Assert.IsNotNull(styles.DefaultRunStyle);
+            Assert.IsNotNull(styles.DefaultParagraphStyle);
+
+            Assert.AreEqual(11, styles.DefaultRunStyle.FontSize);
+            Assert.AreEqual(200, styles.DefaultParagraphStyle.SpacingAfter);
+
         }
 
     }

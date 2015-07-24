@@ -33,7 +33,7 @@ namespace NPOI.XWPF.UserModel
             this.rpr = rpr;
         }
 
-        protected CT_RPr GetRPr()
+        protected internal CT_RPr GetRPr()
         {
             return rpr;
         }
