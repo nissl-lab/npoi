@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using NPOI.OpenXml4Net.Exceptions;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -14,7 +15,7 @@ namespace NPOI.OpenXml4Net.OPC
      *
      * @see <a href="http://www.ietf.org/rfc/rfc3986.txt">http://www.ietf.org/rfc/rfc3986.txt</a>
      */
-    public class PackagePartName : Comparer<PackagePartName>, IComparable
+    public class PackagePartName : IComparable<PackagePartName>
     {
 
         /**
@@ -30,7 +31,7 @@ namespace NPOI.OpenXml4Net.OPC
          * Reserved characters for sub delimitations.
          */
         private static String[] RFC3986_PCHAR_SUB_DELIMS = { "!", "$", "&", "'",
-			"(", ")", "*", "+", ",", ";", "=" };
+            "(", ")", "*", "+", ",", ";", "=" };
 
         /**
          * Unreserved character (+ ALPHA & DIGIT).
@@ -454,21 +455,10 @@ namespace NPOI.OpenXml4Net.OPC
          * part names and package implementers shall neither create nor recognize
          * packages with equivalent part names. [M1.12]
          */
-        public override int Compare(PackagePartName thisPartName,PackagePartName otherPartName)
+        public int CompareTo(PackagePartName other)
         {
-            if (otherPartName == null||thisPartName==null)
-                return -1;
-            return thisPartName.partNameURI.OriginalString.ToLower().CompareTo(
-                    otherPartName.partNameURI.OriginalString.ToLower());
-        }
-
-        public int CompareTo(object o)
-        {
-            if (o == null)
-                return -1;
-            PackagePartName otherPartName = (PackagePartName)o;
-            return this.partNameURI.OriginalString.ToLower().CompareTo(
-            otherPartName.partNameURI.OriginalString.ToLower());
+            // compare with natural sort order
+            return Compare(this, other);
         }
 
         /**
@@ -512,14 +502,20 @@ namespace NPOI.OpenXml4Net.OPC
          * packages with equivalent part names. [M1.12]
          */
 
-        public override bool Equals(Object otherPartName)
+        public override bool Equals(Object other)
         {
-            if (otherPartName == null
-                    || !(otherPartName is PackagePartName))
+            if (other is PackagePartName)
+            {
+                // String.equals() is compatible with our compareTo(), but cheaper
+                return this.partNameURI.OriginalString.ToLower().Equals
+                (
+                    ((PackagePartName)other).partNameURI.OriginalString.ToLower()
+                );
+            }
+            else
+            {
                 return false;
-            return this.partNameURI.OriginalString.ToLower().Equals(
-                    ((PackagePartName)otherPartName).partNameURI.OriginalString
-                            .ToLower());
+            }
         }
 
 
@@ -547,6 +543,104 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 return this.partNameURI;
             }
+        }
+
+        /**
+         * A natural sort order for package part names, consistent with the
+         * requirements of {@code java.util.Comparator}, but simply implemented
+         * as a static method.
+         * <p>
+         * For example, this sorts "file10.png" after "file2.png" (comparing the
+         * numerical portion), but sorts "File10.png" before "file2.png"
+         * (lexigraphical sort)
+         *
+         * <p>
+         * When comparing part names, the rule M1.12 is followed:
+         *
+         * Part name equivalence is determined by comparing part names as
+         * case-insensitive ASCII strings. Packages shall not contain equivalent
+         * part names and package implementers shall neither create nor recognize
+         * packages with equivalent part names. [M1.12]
+         */
+        public static int Compare(PackagePartName obj1, PackagePartName obj2)
+        {
+            // NOTE could also throw a NullPointerException() if desired
+            if (obj1 == null)
+            {
+                // (null) == (null), (null) < (non-null)
+                return (obj2 == null ? 0 : -1);
+            }
+            else if (obj2 == null)
+            {
+                // (non-null) > (null)
+                return 1;
+            }
+
+            return Compare
+            (
+                obj1.URI.OriginalString.ToLower(),
+                obj2.URI.OriginalString.ToLower()
+            );
+        }
+
+
+        /**
+         * A natural sort order for strings, consistent with the
+         * requirements of {@code java.util.Comparator}, but simply implemented
+         * as a static method.
+         * <p>
+         * For example, this sorts "file10.png" after "file2.png" (comparing the
+         * numerical portion), but sorts "File10.png" before "file2.png"
+         * (lexigraphical sort)
+         */
+        public static int Compare(String str1, String str2)
+        {
+            if (str1 == null)
+            {
+                // (null) == (null), (null) < (non-null)
+                return (str2 == null ? 0 : -1);
+            }
+            else if (str2 == null)
+            {
+                // (non-null) > (null)
+                return 1;
+            }
+
+            int len1 = str1.Length;
+            int len2 = str2.Length;
+            for (int idx1 = 0, idx2 = 0; idx1 < len1 && idx2 < len2; /*nil*/)
+            {
+                char c1 = str1[(idx1++)];
+                char c2 = str2[(idx2++)];
+
+                if (char.IsDigit(c1) && char.IsDigit(c2))
+                {
+                    int beg1 = idx1 - 1;  // undo previous increment
+                    while (idx1 < len1 && char.IsDigit(str1[(idx1)]))
+                    {
+                        ++idx1;
+                    }
+
+                    int beg2 = idx2 - 1;  // undo previous increment
+                    while (idx2 < len2 && char.IsDigit(str2[(idx2)]))
+                    {
+                        ++idx2;
+                    }
+
+                    // note: BigInteger for extra safety
+                    int cmp = new BigInteger(str1.Substring(beg1, idx1)).CompareTo
+                    (
+                        new BigInteger(str2.Substring(beg2, idx2))
+                    );
+                    if (cmp != 0) return cmp;
+                }
+                else if (c1 != c2)
+                {
+                    return (c1 - c2);
+                }
+            }
+
+            return (len1 - len2);
         }
     }
 }

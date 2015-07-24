@@ -597,6 +597,7 @@ namespace NPOI.OpenXml4Net.OPC
                 if (part.ContentType.Equals(contentType))
                     retArr.Add(part);
             }
+            retArr.Sort();
             return retArr;
         }
 
@@ -623,8 +624,17 @@ namespace NPOI.OpenXml4Net.OPC
                     retArr.Add(part);
                 }
             }
+            retArr.Sort();
             return retArr;
         }
+        /**
+         * Retrieve parts by name
+         *
+         * @param namePattern
+         *            The pattern for matching the names
+         * @return All parts associated to the specified content type, sorted
+         * in alphanumerically by the part-name
+         */
         public List<PackagePart> GetPartsByName(Regex namePattern)
         {
             if (namePattern == null)
@@ -639,7 +649,7 @@ namespace NPOI.OpenXml4Net.OPC
                 if (namePattern.IsMatch(name))
                     result.Add(part);
             }
-
+            result.Sort();
             return result;
         }
 

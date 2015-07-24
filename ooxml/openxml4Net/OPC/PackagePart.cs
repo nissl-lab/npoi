@@ -14,7 +14,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable
      * @version 0.9
      */
-    public abstract class PackagePart : RelationshipSource
+    public abstract class PackagePart : RelationshipSource, IComparable<PackagePart>
     {
 
         /**
@@ -705,6 +705,17 @@ namespace NPOI.OpenXml4Net.OPC
                     + this._contentType.ToString();
         }
 
+        /**
+         * Compare based on the package part name, using a natural sort order
+         */
+        public int CompareTo(PackagePart other)
+        {
+            // NOTE could also throw a NullPointerException() if desired
+            if (other == null)
+                return -1;
+
+            return PackagePartName.Compare(this._partName, other._partName);
+        }
         /*-------------- Abstract methods ------------- */
 
         /**
