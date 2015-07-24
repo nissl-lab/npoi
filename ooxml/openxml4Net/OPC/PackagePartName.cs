@@ -628,9 +628,9 @@ namespace NPOI.OpenXml4Net.OPC
                     }
 
                     // note: BigInteger for extra safety
-                    int cmp = new BigInteger(str1.Substring(beg1, idx1)).CompareTo
+                    int cmp = new BigInteger(str1.Substring(beg1, idx1 - beg1)).CompareTo
                     (
-                        new BigInteger(str2.Substring(beg2, idx2))
+                        new BigInteger(str2.Substring(beg2, idx2 - beg2))
                     );
                     if (cmp != 0) return cmp;
                 }

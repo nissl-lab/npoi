@@ -322,12 +322,113 @@ namespace NPOI.XWPF.UserModel
                             break;
                         }
                     }
-                    if (level != null)
+                    if (level != null && level.numFmt != null)
                         return level.numFmt.val.ToString();
                 }
             }
             return null;
         }
+
+        /**
+     * Returns the text that should be used around the paragraph level numbers.
+     *
+     * @return a string (e.g. "%1.") or null if the value is not found.
+     */
+        public String NumLevelText
+        {
+            get
+            {
+                string numID = GetNumID();
+                XWPFNumbering numbering = document.CreateNumbering();
+                if (numID != null && numbering != null)
+                {
+                    XWPFNum num = numbering.GetNum(numID);
+                    if (num != null)
+                    {
+                        string ilvl = GetNumIlvl();
+                        CT_Num ctNum = num.GetCTNum();
+                        if (ctNum == null)
+                            return null;
+
+                        CT_DecimalNumber ctDecimalNumber = ctNum.abstractNumId;
+                        if (ctDecimalNumber == null)
+                            return null;
+
+                        string abstractNumId = ctDecimalNumber.val;
+                        if (abstractNumId == null)
+                            return null;
+
+                        XWPFAbstractNum xwpfAbstractNum = numbering.GetAbstractNum(abstractNumId);
+
+                        if (xwpfAbstractNum == null)
+                            return null;
+
+                        CT_AbstractNum anum = xwpfAbstractNum.GetCTAbstractNum();
+
+                        if (anum == null)
+                            return null;
+
+                        CT_Lvl level = null;
+                        for (int i = 0; i < anum.SizeOfLvlArray(); i++)
+                        {
+                            CT_Lvl lvl = anum.GetLvlArray(i);
+                            if (lvl != null && lvl.ilvl != null && lvl.ilvl.Equals(ilvl))
+                            {
+                                level = lvl;
+                                break;
+                            }
+                        }
+                        if (level != null && level.lvlText != null
+                            && level.lvlText.val != null)
+                            return level.lvlText.val.ToString();
+                    }
+                }
+                return null;
+            }
+        }
+
+
+        /**
+         * Gets the numstartOverride for the paragraph numbering for this paragraph.
+         * @return returns the overridden start number or null if there is no override for this paragraph.
+         */
+        public string GetNumStartOverride()
+        {
+            string numID = GetNumID();
+            XWPFNumbering numbering = document.CreateNumbering();
+            if (numID != null && numbering != null)
+            {
+                XWPFNum num = numbering.GetNum(numID);
+
+                if (num != null)
+                {
+                    CT_Num ctNum = num.GetCTNum();
+                    if (ctNum == null)
+                    {
+                        return null;
+                    }
+                    string ilvl = GetNumIlvl();
+                    CT_NumLvl level = null;
+                    for (int i = 0; i < ctNum.SizeOfLvlOverrideArray(); i++)
+                    {
+                        CT_NumLvl ctNumLvl = ctNum.GetLvlOverrideArray(i);
+                        if (ctNumLvl != null && ctNumLvl.ilvl != null &&
+                            ctNumLvl.ilvl.Equals(ilvl))
+                        {
+                            level = ctNumLvl;
+                            break;
+                        }
+                    }
+                    if (level != null && level.startOverride != null)
+                    {
+                        return level.startOverride.val;
+                    }
+                }
+            }
+            return null;
+        }
+
+
         /**
          * SetNumID of Paragraph
          * @param numPos
