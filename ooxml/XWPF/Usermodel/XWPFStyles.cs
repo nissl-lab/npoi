@@ -26,8 +26,10 @@ namespace NPOI.XWPF.UserModel
     using System.Xml.Serialization;
 
     /**
-     * @author Philipp Epp
-     *
+     * Holds details of built-in, default and user styles, which
+     *  apply to tables / paragraphs / lists etc.
+     * Text within one of those with custom stylings has the style
+     *  information stored in the {@link XWPFRun}
      */
     public class XWPFStyles : POIXMLDocumentPart
     {
@@ -153,6 +155,13 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
+        public int NumberOfStyles
+        {
+            get
+            {
+                return listStyle.Count;
+            }
+        }
         /**
          * Get the styles which are related to the parameter style and their relatives
          * this method can be used to copy all styles from one document to another document 
