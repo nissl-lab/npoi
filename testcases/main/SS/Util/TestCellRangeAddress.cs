@@ -146,7 +146,7 @@ namespace TestCases.SS.Util
                 Assert.IsNotNull(new CellRangeAddress(1, 0, 0, 0));
                 Assert.Fail("Expect to catch an exception");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected here
             }
@@ -155,7 +155,7 @@ namespace TestCases.SS.Util
                 Assert.IsNotNull(new CellRangeAddress(0, 0, 1, 0));
                 Assert.Fail("Expect to catch an exception");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected here
             }

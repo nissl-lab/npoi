@@ -2798,7 +2798,7 @@ namespace TestCases.HSSF.UserModel
                 OpenSample("51832.xls");
                 Assert.Fail("Encrypted file");
             }
-            catch (EncryptedDocumentException e)
+            catch (EncryptedDocumentException)
             {
                 // Good
             }
@@ -2990,7 +2990,7 @@ namespace TestCases.HSSF.UserModel
                 OpenSample("35897-type4.xls");
                 Assert.Fail("POI doesn't currently support the RC4 CryptoAPI encryption header structure");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException) { }
         }
 
         [Test]

@@ -645,7 +645,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"\"", false));
                 Assert.Fail("Catches exception because of invalid format, i.e. trailing quoting");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Assert.IsTrue(e.Message.Contains("Cannot format given Object as a Number"));
             }

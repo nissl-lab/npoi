@@ -86,14 +86,14 @@ namespace TestCases.HSSF.UserModel
                 fs.Root.GetEntry("Workbook");
                 Assert.Fail();
             }
-            catch (FileNotFoundException e) { }
+            catch (FileNotFoundException) { }
             // And not a Summary one
             try
             {
                 fs.Root.GetEntry("\005SummaryInformation");
                 Assert.Fail();
             }
-            catch (FileNotFoundException e) { }
+            catch (FileNotFoundException) { }
 
             // Try to open the workbook
             HSSFWorkbook wb = new HSSFWorkbook(fs);
@@ -125,7 +125,7 @@ namespace TestCases.HSSF.UserModel
                     fs2.Root.GetEntry("BOOK");
                     Assert.Fail();
                 }
-                catch (FileNotFoundException e) { }
+                catch (FileNotFoundException) { }
                 try
                 {
                     fs2.Root.GetEntry("WORKBOOK");

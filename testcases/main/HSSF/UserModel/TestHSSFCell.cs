@@ -480,7 +480,7 @@ namespace TestCases.HSSF.UserModel
                 CellType t = cell.CachedFormulaResultType;
                 Assert.Fail("Should catch exception");
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
             }
 
@@ -489,7 +489,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNotNull(new HSSFCell(wb, sheet, 0, (short)0, CellType.Error + 1));
                 Assert.Fail("Should catch exception");
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 

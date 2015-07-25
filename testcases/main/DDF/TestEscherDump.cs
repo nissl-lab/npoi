@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.DDF
+namespace TestCases.DDF
 {
     using System;
     using NUnit.Framework;

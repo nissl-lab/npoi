@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.POIFS.FileSystem
+namespace TestCases.POIFS.FileSystem
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using NPOI.POIFS.FileSystem;
     using NUnit.Framework;
     using TestCases;
-    using System.IO;
 
     /**
      * Tests bugs across both POIFSFileSystem and NPOIFSFileSystem

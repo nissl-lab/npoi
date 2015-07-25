@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.extractor
+namespace TestCases.HSSF.Extractor
 {
     using System;
     using NPOI.HSSF;
@@ -23,6 +23,7 @@ namespace NPOI.HSSF.extractor
     using NUnit.Framework;
     using System.IO;
     using TestCases.HSSF;
+    using NPOI.HSSF.Extractor;
 
     /**
      * Unit tests for the Excel 5/95 and Excel 4 (and older) text 

@@ -37,6 +37,8 @@ namespace TestCases.HSSF.UserModel
     using System.Collections.Generic;
     using System.Text;
     using NPOI.HSSF;
+    using System.Threading;
+    using System.Globalization;
     /**
      *
      */
@@ -978,7 +980,7 @@ namespace TestCases.HSSF.UserModel
                 wb.CreateSheet("Sheet1");
                 Assert.Fail("Should fail if we add the same sheet twice");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 //Assert.IsTrue(e.Message.Contains("already Contains a sheet of this name"), e.Message);
             }
@@ -1017,6 +1019,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, wb.GetExternalSheetIndex(0));
             Assert.AreEqual(1, wb.GetExternalSheetIndex(1));
 
+            //The following methods are obsoleted
+
             //Assert.AreEqual("Sheet1", wb.FindSheetNameFromExternSheet(0));
             //Assert.AreEqual("Sheet2", wb.FindSheetNameFromExternSheet(1));
             ////Assert.AreEqual(null, wb.FindSheetNameFromExternSheet(2));
@@ -1026,13 +1030,13 @@ namespace TestCases.HSSF.UserModel
             //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(2));
             //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(100));
         }
-
+        [Test]
         public void SSTString()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
-            //int sst = wb.AddSSTString("somestring");
-            //Assert.AreEqual("somestring", wb.GetSSTString(sst));
+            int sst = wb.AddSSTString("somestring");
+            Assert.AreEqual("somestring", wb.GetSSTString(sst));
             ////Assert.IsNull(wb.GetSSTString(sst+1));
         }
         [Test]
@@ -1045,9 +1049,9 @@ namespace TestCases.HSSF.UserModel
                 wb.GetNameAt(0);
                 Assert.Fail("Fails without any defined names");
             }
-            catch (ArgumentException e)
+            catch (InvalidOperationException e)
             {
-                //Assert.IsTrue(e.Message.Contains("no defined names"), e.Message);
+                Assert.IsTrue(e.Message.Contains("no defined names"), e.Message);
             }
 
             HSSFName name = (HSSFName)wb.CreateName();
@@ -1066,9 +1070,9 @@ namespace TestCases.HSSF.UserModel
                 wb.GetNameAt(5);
                 Assert.Fail("Fails without any defined names");
             }
-            catch (ArgumentException e)
+            catch (ArgumentOutOfRangeException e)
             {
-                //Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
+                Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
             }
 
             try
@@ -1076,9 +1080,9 @@ namespace TestCases.HSSF.UserModel
                 wb.GetNameAt(-3);
                 Assert.Fail("Fails without any defined names");
             }
-            catch (ArgumentException e)
+            catch (ArgumentOutOfRangeException e)
             {
-                //Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
+                Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
             }
         }
         [Test]

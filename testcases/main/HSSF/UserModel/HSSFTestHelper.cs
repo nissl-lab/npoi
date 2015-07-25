@@ -43,7 +43,7 @@ namespace TestCases.HSSF.UserModel
                 return 1025; //Mock value
             }
 
-            public virtual int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
+            public override int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
             {
                 return 1025;
             }

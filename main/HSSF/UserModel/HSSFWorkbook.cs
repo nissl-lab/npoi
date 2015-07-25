@@ -1495,11 +1495,21 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Gets the Named range
         /// </summary>
-        /// <param name="index">position of the named range</param>
+        /// <param name="nameIndex">position of the named range</param>
         /// <returns>named range high level</returns>
-        public NPOI.SS.UserModel.IName GetNameAt(int index)
+        public NPOI.SS.UserModel.IName GetNameAt(int nameIndex)
         {
-            HSSFName result = names[index];
+            int nNames = names.Count;
+            if (nNames < 1)
+            {
+                throw new InvalidOperationException("There are no defined names in this workbook");
+            }
+            if (nameIndex < 0 || nameIndex > nNames)
+            {
+                throw new ArgumentOutOfRangeException("Specified name index " + nameIndex
+                        + " is outside the allowable range (0.." + (nNames - 1) + ").");
+            }
+            HSSFName result = names[nameIndex];
 
             return result;
         }

@@ -15,35 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.extractor
+namespace NPOI.HSSF.Extractor
 {
     using System;
-
-
-
-
-
-
-
-
-    using NPOI.HSSF;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Record;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.SS.UserModel;
     using System.IO;
     using System.Text;
+    using NPOI.HSSF;
+    using NPOI.HSSF.Record;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.SS.UserModel;
 
     /**
      * A text extractor for old Excel files, which are too old for

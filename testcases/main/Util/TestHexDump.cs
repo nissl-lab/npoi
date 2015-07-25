@@ -346,7 +346,7 @@ namespace TestCases.Util
                 HexDump.Dump(testArray, 0, -1);
                 Assert.Fail("Should throw an exception with invalid input");
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 // expected
             }
@@ -356,7 +356,7 @@ namespace TestCases.Util
                 HexDump.Dump(testArray, 0, 1);
                 Assert.Fail("Should throw an exception with invalid input");
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 // expected
             }

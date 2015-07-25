@@ -159,7 +159,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestRowHeight()
+        public new void TestRowHeight()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;

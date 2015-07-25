@@ -259,7 +259,7 @@ namespace TestCases.HSSF.UserModel
                 cell.CellFormula = (/*setter*/"[alt.xls]Sheet0!$A$1");
                 Assert.Fail("New workbook not linked, shouldn't be able to Add");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
             // Link our new workbook
             HSSFWorkbook alt = new HSSFWorkbook();
@@ -276,7 +276,7 @@ namespace TestCases.HSSF.UserModel
                 eval.Evaluate(cell);
                 Assert.Fail("No cached value and no link to workbook, shouldn't Evaluate");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
             // Add a link, check it does
             HSSFFormulaEvaluator.SetupEnvironment(
