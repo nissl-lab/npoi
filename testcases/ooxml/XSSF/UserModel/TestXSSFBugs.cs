@@ -1556,10 +1556,10 @@ namespace NPOI.XSSF.UserModel
             ICell c = wb.GetSheetAt(0).GetRow(1).GetCell(0);
             Assert.AreEqual("#@_#", c.StringCellValue);
 
-            //with .net new Uri("mailto:#@_#") is valid, but java think it invalid,
-            //excel also think it invalid too
-            //TODO: add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
-            Assert.AreEqual("http://invalid.uri", c.Hyperlink.Address);
+            //with .net new Uri("mailto:#@_#") is valid, but java think it invalid, http://invalid.uri,
+            //excel does nothing, it still show string "#@_#" 
+            //should we add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
+            Assert.AreEqual("mailto:#@_#", c.Hyperlink.Address);
         }
 
         /**

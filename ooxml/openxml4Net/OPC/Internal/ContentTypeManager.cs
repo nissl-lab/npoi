@@ -5,6 +5,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -375,7 +376,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             {
 
                 //in1.Position = 0;
-                XPathDocument xpathdoc = new XPathDocument(in1);
+                XPathDocument xpathdoc = DocumentHelper.ReadDocument(in1);
                 XPathNavigator xpathnav = xpathdoc.CreateNavigator();
                 XmlNamespaceManager nsMgr = new XmlNamespaceManager(xpathnav.NameTable);
                 nsMgr.AddNamespace("x", TYPES_NAMESPACE_URI);

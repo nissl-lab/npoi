@@ -335,7 +335,7 @@ namespace NPOI.OpenXml4Net.OPC
             try
             {
                 logger.Log(POILogger.DEBUG, "Parsing relationship: " + relPart.PartName);
-                XPathDocument xmlRelationshipsDoc = new XPathDocument(relPart.GetInputStream());
+                XPathDocument xmlRelationshipsDoc = DocumentHelper.ReadDocument(relPart.GetInputStream());
 
                 // Check OPC compliance M4.1 rule
                 bool fCorePropertiesRelationship = false;
