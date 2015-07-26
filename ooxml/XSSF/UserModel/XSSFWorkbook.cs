@@ -761,6 +761,16 @@ namespace NPOI.XSSF.UserModel
          */
         public ICellStyle GetCellStyleAt(short idx)
         {
+            return GetCellStyleAt(idx & 0xffff);
+        }
+        /**
+         * Get the cell style object at the given index
+         *
+         * @param idx  index within the set of styles
+         * @return XSSFCellStyle object at the index
+         */
+        public XSSFCellStyle GetCellStyleAt(int idx)
+        {
             return stylesSource.GetStyleAt(idx);
         }
 

@@ -221,6 +221,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.rPrDefaultField = new CT_RPrDefault();
             return this.rPrDefaultField;
         }
+
+        public bool IsSetPPrDefault()
+        {
+            return this.pPrDefaultField != null;
+        }
+
+        public CT_PPrDefault AddNewPPrDefault()
+        {
+            this.pPrDefaultField = new CT_PPrDefault();
+            return this.pPrDefaultField;
+        }
     }
 
 
@@ -334,6 +345,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.pPrField = value;
             }
+        }
+
+        public CT_PPr AddNewPPr()
+        {
+            this.pPrField = new CT_PPr();
+            return this.pPrField;
+        }
+
+        public bool IsSetPPr()
+        {
+            return this.pPrField != null;
         }
     }
 
@@ -567,6 +589,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.lsdExceptionField = new List<CT_LsdException>();
             this.lsdExceptionField.Add(lsd);
             return lsd;
+        }
+
+        public int SizeOfLsdExceptionArray()
+        {
+            return lsdExceptionField == null ? 0 : lsdExceptionField.Count;
         }
     }
 

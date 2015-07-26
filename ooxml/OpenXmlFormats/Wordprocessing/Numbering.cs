@@ -108,6 +108,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 abstractNumIdField = new CT_DecimalNumber();
             return abstractNumIdField;
         }
+
+        public int SizeOfLvlOverrideArray()
+        {
+            return lvlOverrideField == null ? 0 : lvlOverrideField.Count;
+        }
+
+        public CT_NumLvl GetLvlOverrideArray(int i)
+        {
+            return lvlOverrideField == null ? null : lvlOverrideField[i];
+        }
     }
 
 
@@ -1158,6 +1168,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
+
+        public int SizeOfLvlArray()
+        {
+            return this.lvlField == null ? 0 : this.lvlField.Count;
+        }
+
+        public CT_Lvl GetLvlArray(int i)
+        {
+            return this.lvlField == null ? null : this.lvlField[i];
+        }
     }
 
 
@@ -1629,13 +1649,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public static CT_LevelText Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-	        if(node==null)
-		        return null;
-	        CT_LevelText ctObj = new CT_LevelText();
-	        ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
-	        if (node.Attributes["w:null"]!=null)
-		        ctObj.@null = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:null"].Value);
-	        return ctObj;
+            if(node==null)
+                return null;
+            CT_LevelText ctObj = new CT_LevelText();
+            ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+            if (node.Attributes["w:null"]!=null)
+                ctObj.@null = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:null"].Value);
+            return ctObj;
         }
 
 

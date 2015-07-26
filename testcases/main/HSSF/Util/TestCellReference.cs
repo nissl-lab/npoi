@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Util
                 CellReference.ConvertColStringToIndex("A$B$");
                 Assert.Fail("Column reference is invalid and shouldn't be accepted");
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
         }
 
         [Test]

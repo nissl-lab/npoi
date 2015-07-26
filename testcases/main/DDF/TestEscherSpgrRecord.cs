@@ -43,7 +43,7 @@ namespace TestCases.DDF
                     "01, 00, 00, 00, " +     // x
                     "02, 00, 00, 00, " +     // y
                     "03, 00, 00, 00, " +     // width
-                    "04, 00, 00, 00, ]",     // height
+                    "04, 00, 00, 00]",     // height
                     HexDump.ToHex(data));
         }
         [Test]

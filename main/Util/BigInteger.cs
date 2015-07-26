@@ -203,6 +203,12 @@ namespace NPOI.Util
             }
         }
 
+        public BigInteger(string val)
+            : this(val, 10)
+        {
+
+        }
+
         public BigInteger(String val, int radix)
         {
             int cursor = 0, numDigits;

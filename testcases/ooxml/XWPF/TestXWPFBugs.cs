@@ -111,6 +111,23 @@ namespace NPOI.XWPF
             Assert.IsNotNull(doc);
         }
 
+        /**
+         * Removing a run needs to remove it from both Runs and IRuns
+         */
+        [Test]
+        public void Test57829()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
+            Assert.IsNotNull(doc);
+            Assert.AreEqual(3, doc.Paragraphs.Count);
+
+            foreach (XWPFParagraph paragraph in doc.Paragraphs)
+            {
+                paragraph.RemoveRun(0);
+                Assert.IsNotNull(paragraph.Text);
+            }
+        }
+
     }
 }
 

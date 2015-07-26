@@ -1005,5 +1005,52 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wbOrig));
         }
 
+        [Test]
+        public void TestSetColor()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+
+            //CreationHelper ch = wb.GetCreationHelper();
+            IDataFormat format = wb.CreateDataFormat();
+            ICell cell = row.CreateCell(1);
+            cell.SetCellValue("somEvalue");
+            ICellStyle cellStyle = wb.CreateCellStyle();
+
+
+            cellStyle.DataFormat = (/*setter*/format.GetFormat("###0"));
+
+            cellStyle.FillBackgroundColor = (/*setter*/IndexedColors.DarkBlue.Index);
+            cellStyle.FillForegroundColor = (/*setter*/IndexedColors.DarkBlue.Index);
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+
+            cellStyle.Alignment = HorizontalAlignment.Right;
+            cellStyle.VerticalAlignment = VerticalAlignment.Top;
+
+            cell.CellStyle = (/*setter*/cellStyle);
+
+            /*OutputStream stream = new FileOutputStream("C:\\temp\\CellColor.xlsx");
+            try {
+                wb.Write(stream);
+            } finally {
+                stream.Close();
+            }*/
+
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            ICell cellBack = wbBack.GetSheetAt(0).GetRow(0).GetCell(1);
+            Assert.IsNotNull(cellBack);
+            ICellStyle styleBack = cellBack.CellStyle;
+            Assert.AreEqual(IndexedColors.DarkBlue.Index, styleBack.FillBackgroundColor);
+            Assert.AreEqual(IndexedColors.DarkBlue.Index, styleBack.FillForegroundColor);
+            Assert.AreEqual(HorizontalAlignment.Right, styleBack.Alignment);
+            Assert.AreEqual(VerticalAlignment.Top, styleBack.VerticalAlignment);
+            Assert.AreEqual(FillPattern.SolidForeground, styleBack.FillPattern);
+
+            wbBack.Close();
+
+            wb.Close();
+        }
+
     }
 }

@@ -15,33 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.DDF
+namespace NPOI.SS.Formula.PTG
 {
     using System;
-    using NUnit.Framework;
-    using System.IO;
 
-
-    [TestFixture]
-    public class TestEscherDump
+    /**
+     * An XSSF only special kind of Ptg, which stores a range of 
+     *  sheet / book references in string form.
+     */
+    public interface Pxg3D : Pxg
     {
-
-        [Test]
-        public void TestSimple()
-        {
-            // simple test to at least cover some parts of the class
-            //EscherDump.Main(new String[] {});
-
-            //new EscherDump().Dump(0, new byte[] { }, System.Console.Out);
-            //new EscherDump().Dump(new byte[] { }, 0, 0, System.Console.Out);
-            //new EscherDump().DumpOld(0, new MemoryStream(new byte[] { }), System.Console.Out);
-        }
-
-
-        [Test]
-        public void TestWithData()
-        {
-            //new EscherDump().DumpOld(8, new MemoryStream(new byte[] { 00, 00, 00, 00, 00, 00, 00, 00 }), System.Console.Out);
-        }
+        String LastSheetName { get; set; }
     }
+
 }

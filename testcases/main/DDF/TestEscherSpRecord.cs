@@ -42,7 +42,7 @@ namespace TestCases.DDF
                     "0A, F0, " +
                     "08, 00, 00, 00, " +
                     "00, 04, 00, 00, " +
-                    "05, 00, 00, 00, ]",
+                    "05, 00, 00, 00]",
                     HexDump.ToHex(data));
         }
         [Test]

@@ -213,7 +213,7 @@ namespace NPOI.HSSF.Model
 
             if (rs.PeekNextSid() != BOFRecord.sid)
             {
-                throw new Exception("BOF record expected");
+                throw new RuntimeException("BOF record expected");
             }
             BOFRecord bof = (BOFRecord)rs.GetNext();
             if (bof.Type == BOFRecordType.Worksheet)

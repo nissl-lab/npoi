@@ -6,6 +6,7 @@ using System.IO;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.Util;
 namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
 {
     /**
@@ -101,12 +102,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
                             "Error while trying to get the part input stream.");
             }
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.PreserveWhitespace = true;
-            XmlTextReader reader = new XmlTextReader(in1);
+            XmlDocument xmlDoc = null;
             try
             {
-                xmlDoc.Load(reader);
+                xmlDoc = DocumentHelper.LoadDocument(in1);
 
                 nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
                 nsmgr.AddNamespace("cp", namespaceCP);
@@ -142,7 +141,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
                 else
                     throw ex;
             }
-            if (xmlDoc.DocumentElement != null)
+            if (xmlDoc!=null && xmlDoc.DocumentElement != null)
             {
                 coreProps.SetCategoryProperty(LoadCategory(xmlDoc));
                 coreProps.SetContentStatusProperty(LoadContentStatus(xmlDoc));

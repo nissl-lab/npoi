@@ -748,10 +748,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 value = value.Replace('\\', '/');
             }
-            //FIX::the following fix may be WRONG.
-            //to get rid of whitespace, Uri in .NET doesn't allow whitespace in Uri address
-            value = value.Trim();
-            //FIX END
+
             // URI fragemnts (those starting with '#') are not encoded
             // and may contain white spaces and raw unicode characters
             int fragmentIdx = value.IndexOf('#');

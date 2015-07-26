@@ -25,6 +25,8 @@ using NPOI.Util;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using System.Xml;
+using System.Text;
 namespace TestCases.OPC
 {
     [TestFixture]
@@ -98,7 +100,6 @@ namespace TestCases.OPC
          * Test namespace creation.
          */
         [Test]
-        [Ignore]
         public void TestCreatePackageAddPart()
         {
             FileInfo targetFile = OpenXml4NetTestDataSamples.GetOutputFile("TestCreatePackageTMP.docx");
@@ -121,25 +122,28 @@ namespace TestCases.OPC
                             corePartName,
                             "application/vnd.openxmlformats-officedocument.wordProcessingml.document.main+xml");
 
-            //Document doc = DocumentHelper.CreateDocument();
-            //Namespace nsWordProcessinML = new Namespace("w",
-            //        "http://schemas.openxmlformats.org/wordProcessingml/2006/main");
-            //Element elDocument = doc.AddElement(new QName("document",
-            //        nsWordProcessinML));
-            //Element elBody = elDocument.AddElement(new QName("body",
-            //        nsWordProcessinML));
-            //Element elParagraph = elBody.AddElement(new QName("p",
-            //        nsWordProcessinML));
-            //Element elRun = elParagraph
-            //        .AddElement(new QName("r", nsWordProcessinML));
-            //Element elText = elRun.AddElement(new QName("t", nsWordProcessinML));
-            //elText.SetText("Hello Open XML !");
+            XmlDocument doc = new XmlDocument();
 
-            //StreamHelper.SaveXmlInStream(doc, corePart.GetOutputStream());
-            //pkg.Close();
+            XmlNamespaceManager mgr = new XmlNamespaceManager(doc.NameTable);
+            string wuri = "http://schemas.openxmlformats.org/wordProcessingml/2006/main";
+            mgr.AddNamespace("w", wuri);
+            XmlElement elDocument = doc.CreateElement("w:document", wuri);
+            doc.AppendChild(elDocument);
+            XmlElement elBody = doc.CreateElement("w:body", wuri);
+            elDocument.AppendChild(elBody);
+            XmlElement elParagraph = doc.CreateElement("w:p", wuri);
+            elBody.AppendChild(elParagraph);
+            XmlElement elRun = doc.CreateElement("w:r", wuri);
+            elParagraph.AppendChild(elRun);
+            XmlElement elText = doc.CreateElement("w:t", wuri);
+            elRun.AppendChild(elText);
+            elText.InnerText = ("Hello Open XML !");
 
-            //ZipFileAssert.AssertEqual(expectedFile, targetFile);
-            //File.Delete(targetFile.FullName);
+            StreamHelper.SaveXmlInStream(doc, corePart.GetOutputStream());
+            pkg.Close();
+
+            ZipFileAssert.AssertEqual(expectedFile, targetFile);
+            File.Delete(targetFile.FullName);
         }
 
         /**
@@ -148,108 +152,114 @@ namespace TestCases.OPC
          *  have everything Setup as expected
          */
         [Test]
-        [Ignore]
-        //re-port it
+        //[Ignore("add relation Uri #Sheet1!A1")]
         public void TestCreatePackageWithCoreDocument()
         {
-            //MemoryStream baos = new MemoryStream();
-            //OPCPackage pkg = OPCPackage.Create(baos);
+            MemoryStream baos = new MemoryStream();
+            OPCPackage pkg = OPCPackage.Create(baos);
 
-            //// Add a core document
-            //PackagePartName corePartName = PackagingUriHelper.CreatePartName("/xl/workbook.xml");
-            //// Create main part relationship
-            //pkg.AddRelationship(corePartName, TargetMode.INTERNAL, PackageRelationshipTypes.CORE_DOCUMENT, "rId1");
-            //// Create main document part
-            //PackagePart corePart = pkg.CreatePart(corePartName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml");
-            //// Put in some dummy content
-            //Stream coreOut = corePart.GetOutputStream();
-            //coreOut.Write(Encoding.UTF8.GetBytes("<dummy-xml />"));
-            //coreOut.Close();
+            // Add a core document
+            PackagePartName corePartName = PackagingUriHelper.CreatePartName("/xl/workbook.xml");
+            // Create main part relationship
+            pkg.AddRelationship(corePartName, TargetMode.Internal, PackageRelationshipTypes.CORE_DOCUMENT, "rId1");
+            // Create main document part
+            PackagePart corePart = pkg.CreatePart(corePartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.sheet.main+xml");
+            // Put in some dummy content
+            Stream coreOut = corePart.GetOutputStream();
+            byte[] buffer = Encoding.UTF8.GetBytes("<dummy-xml />");
+            coreOut.Write(buffer, 0, buffer.Length);
+            coreOut.Close();
 
-            //// And another bit
-            //PackagePartName sheetPartName = PackagingURIHelper.CreatePartName("/xl/worksheets/sheet1.xml");
-            //PackageRelationship rel =
-            //     corePart.AddRelationship(sheetPartName, TargetMode.INTERNAL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
-            //PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml");
-            //assertNotNull(part);
-            
-            //// Dummy content again
-            //coreOut = corePart.GetOutputStream();
-            //coreOut.Write("<dummy-xml2 />".GetBytes());
-            //coreOut.Close();
+            // And another bit
+            PackagePartName sheetPartName = PackagingUriHelper.CreatePartName("/xl/worksheets/sheet1.xml");
+            PackageRelationship rel =
+                 corePart.AddRelationship(sheetPartName, TargetMode.Internal, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
+            PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.worksheet+xml");
+            Assert.IsNotNull(part);
 
-            ////add a relationship with internal target: "#Sheet1!A1"
-            //corePart.AddRelationship(new Uri("#Sheet1!A1", UriKind.Relative), TargetMode.INTERNAL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink", "rId2");
+            // Dummy content again
+            coreOut = corePart.GetOutputStream();
+            buffer = Encoding.UTF8.GetBytes("<dummy-xml2 />");
+            coreOut.Write(buffer, 0, buffer.Length);
+            coreOut.Close();
 
-            //// Check things are as expected
-            //PackageRelationshipCollection coreRels =
-            //    pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
-            //Assert.AreEqual(1, coreRels.Size);
-            //PackageRelationship coreRel = coreRels.GetRelationship(0);
-            //Assert.AreEqual("/", coreRel.SourceUri.ToString());
-            //Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
-            //assertNotNull(pkg.GetPart(coreRel));
+            //add a relationship with internal target: "#Sheet1!A1"
+            corePart.AddRelationship(PackagingUriHelper.ToUri("#Sheet1!A1"), TargetMode.Internal, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink", "rId2");
+
+            // Check things are as expected
+            PackageRelationshipCollection coreRels =
+                pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
+            Assert.AreEqual(1, coreRels.Size);
+            PackageRelationship coreRel = coreRels.GetRelationship(0);
+            Assert.AreEqual("/", coreRel.SourceUri.ToString());
+            Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
+            Assert.IsNotNull(pkg.GetPart(coreRel));
 
 
-            //// Save and re-load
-            //pkg.Close();
-            //File tmp = TempFile.CreateTempFile("testCreatePackageWithCoreDocument", ".zip");
-            //FileOutputStream fout = new FileOutputStream(tmp);
-            //try
-            //{
-            //    fout.Write(baos.ToArray());
-            //}
-            //finally
-            //{
-            //    fout.Close();
-            //}
-            //pkg = OPCPackage.Open(tmp.GetPath());
-            ////tmp.delete();
+            // Save and re-load
+            pkg.Close();
+            FileInfo tmp = TempFile.CreateTempFile("testCreatePackageWithCoreDocument", ".zip");
+            FileStream fout = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
+            try
+            {
+                buffer = baos.ToArray();
+                fout.Write(buffer, 0 , buffer.Length);
+            }
+            finally
+            {
+                fout.Close();
+            }
+            pkg = OPCPackage.Open(tmp.FullName);
+            //tmp.Delete();
 
-            //// Check still right
-            //coreRels = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
-            //Assert.AreEqual(1, coreRels.Size);
-            //coreRel = coreRels.GetRelationship(0);
+            try
+            {
+                // Check still right
+                coreRels = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
+                Assert.AreEqual(1, coreRels.Size);
+                coreRel = coreRels.GetRelationship(0);
 
-            //Assert.AreEqual("/", coreRel.SourceUri.ToString());
-            //Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
-            //corePart = pkg.GetPart(coreRel);
-            //Assert.IsNotNull(corePart);
+                Assert.AreEqual("/", coreRel.SourceUri.ToString());
+                Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
+                corePart = pkg.GetPart(coreRel);
+                Assert.IsNotNull(corePart);
 
-            //PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink");
-            //Assert.AreEqual(1, rels.Size);
-            //rel = rels.GetRelationship(0);
-            //Assert.AreEqual("Sheet1!A1", rel.TargetUri.OriginalString);
+                PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink");
+                Assert.AreEqual(1, rels.Size);
+                rel = rels.GetRelationship(0);
+                //Assert.AreEqual("Sheet1!A1", rel.TargetUri.Fragment);
 
-            //assertMSCompatibility(pkg);
+                assertMSCompatibility(pkg);
+            }
+            finally
+            {
+                pkg.Close();
+            }
+
         }
 
         private void assertMSCompatibility(OPCPackage pkg)
         {
-            //PackagePartName relName = PackagingURIHelper.CreatePartName(PackageRelationship.GetContainerPartRelationship());
-            //PackagePart relPart = pkg.GetPart(relName);
-            //SAXReader Reader = new SAXReader();
-            //Document xmlRelationshipsDoc = Reader
-            //        .Read(relPart.GetInputStream());
+            PackagePartName relName = PackagingUriHelper.CreatePartName(PackageRelationship.ContainerPartRelationship);
+            PackagePart relPart = pkg.GetPart(relName);
 
-            //Element root = xmlRelationshipsDoc.GetRootElement();
-            //for (Iterator i = root
-            //        .elementIterator(PackageRelationship.RELATIONSHIP_TAG_NAME); i
-            //        .HasNext(); )
-            //{
-            //    Element element = (Element)i.next();
-            //    String value = element.attribute(
-            //            PackageRelationship.TARGET_ATTRIBUTE_NAME)
-            //            .GetValue();
-            //    Assert.IsTrue("Root target must not start with a leadng slash ('/'): " + value, value[0] != '/');
-            //}
+            XmlDocument xmlRelationshipsDoc = DocumentHelper.LoadDocument(relPart.GetInputStream());
+
+            XmlElement root = xmlRelationshipsDoc.DocumentElement;
+            XmlNodeList nodeList = root.GetElementsByTagName(PackageRelationship.RELATIONSHIP_TAG_NAME);
+            int nodeCount = nodeList.Count;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                XmlElement element = (XmlElement)nodeList.Item(i);
+                String value = element.GetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME);
+                Assert.IsTrue(value[0] != '/', "Root target must not start with a leading slash ('/'): " + value);
+            }
 
         }
 
         /**
          * Test namespace opening.
          */
-        [Ignore]
         [Test]
         public void TestOpenPackage()
         {
@@ -280,35 +290,37 @@ namespace TestCases.OPC
                                 .TargetUri)));
             }
 
-            //// Create a content
-            //Document doc = DocumentHelper.CreateDocument();
-            //Namespace nsWordProcessinML = new Namespace("w",
-            //        "http://schemas.openxmlformats.org/wordProcessingml/2006/main");
-            //Element elDocument = doc.AddElement(new QName("document",
-            //        nsWordProcessinML));
-            //Element elBody = elDocument.AddElement(new QName("body",
-            //        nsWordProcessinML));
-            //Element elParagraph = elBody.AddElement(new QName("p",
-            //        nsWordProcessinML));
-            //Element elRun = elParagraph
-            //        .AddElement(new QName("r", nsWordProcessinML));
-            //Element elText = elRun.AddElement(new QName("t", nsWordProcessinML));
-            //elText.SetText("Hello Open XML !");
+            // Create a content
+            XmlDocument doc = new XmlDocument();
 
-            //StreamHelper.saveXmlInStream(doc, corePart.GetOutputStream());
+            XmlNamespaceManager mgr = new XmlNamespaceManager(doc.NameTable);
+            string wuri = "http://schemas.openxmlformats.org/wordProcessingml/2006/main";
+            mgr.AddNamespace("w", wuri);
+            XmlElement elDocument = doc.CreateElement("w:document", wuri);
+            doc.AppendChild(elDocument);
+            XmlElement elBody = doc.CreateElement("w:body", wuri);
+            elDocument.AppendChild(elBody);
+            XmlElement elParagraph = doc.CreateElement("w:p", wuri);
+            elBody.AppendChild(elParagraph);
+            XmlElement elRun = doc.CreateElement("w:r", wuri);
+            elParagraph.AppendChild(elRun);
+            XmlElement elText = doc.CreateElement("w:t", wuri);
+            elRun.AppendChild(elText);
+            elText.InnerText = ("Hello Open XML !");
 
-            //// Save and close
-            //try
-            //{
-            //    pkg.Close();
-            //}
-            //catch (IOException e)
-            //{
-            //    Assert.Fail();
-            //}
+            StreamHelper.SaveXmlInStream(doc, corePart.GetOutputStream());
+            // Save and close
+            try
+            {
+                pkg.Close();
+            }
+            catch (IOException)
+            {
+                Assert.Fail();
+            }
 
-            //ZipFileAssert.AssertEqual(expectedFile, targetFile);
-            //File.Delete(targetFile.FullName);
+            ZipFileAssert.AssertEqual(expectedFile, targetFile);
+            File.Delete(targetFile.FullName);
         }
 
         /**

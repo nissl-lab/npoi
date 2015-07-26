@@ -44,7 +44,7 @@ namespace TestCases.DDF
                     "01, 00, 00, 00, " +
                     "02, 00, 00, 00, " +
                     "03, 00, 00, 00, " +
-                    "04, 00, 00, 00, ]", HexDump.ToHex(data));
+                    "04, 00, 00, 00]", HexDump.ToHex(data));
         }
         [Test]
         public void TestFillFields()

@@ -72,7 +72,7 @@ namespace NPOI.SS.Formula.Functions
             //Matcher m = COMPLEX_NUMBER_PATTERN.matcher(iNumber);
             //bool result = m.matches();
             System.Text.RegularExpressions.Match m = COMPLEX_NUMBER_PATTERN.Match(iNumber);
-            bool result = m.Success;
+            bool result = m.Success && m.Groups[0].Length>0;
 
             String imaginary = "";
             if (result == true)

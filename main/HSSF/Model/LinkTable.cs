@@ -565,7 +565,8 @@ namespace NPOI.HSSF.Model
             {
                 sheetNames[sn] = externalWorkbook.GetSheetName(sn);
             }
-            String url = "\000" + name;
+            //\000 is octal digit in java, but c# think it is a '\0' and two zero.
+            String url = "\0" + name;
             ExternalBookBlock block = new ExternalBookBlock(url, sheetNames);
 
             // Add it into the list + records

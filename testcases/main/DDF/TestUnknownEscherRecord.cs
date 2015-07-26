@@ -97,7 +97,7 @@ namespace TestCases.DDF
             byte[] data = new byte[8];
             r.Serialize(0, data);
 
-            Assert.AreEqual("[34, 12, 12, F1, 00, 00, 00, 00, ]", HexDump.ToHex(data));
+            Assert.AreEqual("[34, 12, 12, F1, 00, 00, 00, 00]", HexDump.ToHex(data));
 
             EscherRecord childRecord = new UnknownEscherRecord();
             childRecord.Options=unchecked((short)0x9999);
@@ -107,7 +107,7 @@ namespace TestCases.DDF
             data = new byte[16];
             r.Serialize(0, data);
 
-            Assert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00, ]", HexDump.ToHex(data));
+            Assert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00]", HexDump.ToHex(data));
         }
         [Test]
         public void TestToString()

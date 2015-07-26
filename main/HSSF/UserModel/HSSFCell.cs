@@ -551,19 +551,17 @@ namespace NPOI.HSSF.UserModel
         /// If value is null then we will Change the cell to a Blank cell.</param>
         public void SetCellValue(IRichTextString value)
         {
-            HSSFRichTextString hvalue = (HSSFRichTextString)value;
-
             int row = _record.Row;
             int col = _record.Column;
             short styleIndex = _record.XFIndex;
-            if (hvalue == null)
+            if (value == null)
             {
                 NotifyFormulaChanging();
                 SetCellType(CellType.Blank, false, row, col, styleIndex);
                 return;
             }
 
-            if (hvalue.Length > NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength)
+            if (value.Length > NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength)
             {
                 throw new ArgumentException("The maximum length of cell contents (text) is 32,767 characters");
             }
@@ -584,6 +582,7 @@ namespace NPOI.HSSF.UserModel
             }
             int index = 0;
 
+            HSSFRichTextString hvalue = (HSSFRichTextString)value;
             UnicodeString str = hvalue.UnicodeString;
             index = book.Workbook.AddSSTString(str);
             ((LabelSSTRecord)_record).SSTIndex = index;

@@ -777,13 +777,13 @@ namespace TestCases.SS.UserModel
                 EvaluateCell(wb, c1);
                 Assert.Fail("Shouldn't be able to Evaluate without the other file");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
             try
             {
                 EvaluateCell(wb, c2);
                 Assert.Fail("Shouldn't be able to Evaluate without the other file");
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
 
             // Set up references to the other file

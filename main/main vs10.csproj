@@ -255,6 +255,7 @@
     <Compile Include="SS\Formula\PTG\Deleted3DPxg.cs" />
     <Compile Include="SS\Formula\PTG\NameXPxg.cs" />
     <Compile Include="SS\Formula\PTG\Pxg.cs" />
+    <Compile Include="SS\Formula\PTG\Pxg3D.cs" />
     <Compile Include="SS\Formula\PTG\Ref3DPxg.cs" />
     <Compile Include="SS\Formula\SheetIdentifier.cs" />
     <Compile Include="SS\Formula\SheetRangeEvaluator.cs" />
@@ -1192,6 +1193,7 @@
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
+    <Compile Include="Util\DocumentHelper.cs" />
     <Compile Include="Util\FixedField.cs" />
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />

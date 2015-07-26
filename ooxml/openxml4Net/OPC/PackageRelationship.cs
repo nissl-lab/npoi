@@ -117,7 +117,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /* Getters */
 
-        public Uri ContainerPartRelationship
+        public static Uri ContainerPartRelationship
         {
             get
             {

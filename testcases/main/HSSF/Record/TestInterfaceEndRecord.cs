@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record
             Record rec1 = records[(1)];
             Assert.AreEqual(typeof(InterfaceHdrRecord), rec1.GetType());
             InterfaceHdrRecord r = (InterfaceHdrRecord)rec1;
-            Assert.AreEqual("[E1, 00, 02, 00, B0, 04, ]", HexDump.ToHex(r.Serialize()));
+            Assert.AreEqual("[E1, 00, 02, 00, B0, 04]", HexDump.ToHex(r.Serialize()));
         }
     }
 

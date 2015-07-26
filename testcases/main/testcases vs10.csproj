@@ -141,6 +141,7 @@
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\ReaderWriter.cs" />
     <Compile Include="POIFS\FileSystem\TestEntryUtils.cs" />
+    <Compile Include="POIFS\FileSystem\TestFileSystemBugs.cs" />
     <Compile Include="POIFS\FileSystem\TestFilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSFileSystem.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSMiniStore.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="SS\Formula\Functions\TestIndirectFunctionFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestIntercept.cs" />
     <Compile Include="SS\Formula\Functions\TestIPMT.cs" />
+    <Compile Include="SS\Formula\Functions\TestLogicalFunction.cs" />
     <Compile Include="SS\Formula\Functions\TestMatchFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestMirr.cs" />
     <Compile Include="SS\Formula\Functions\TestOct2Dec.cs" />

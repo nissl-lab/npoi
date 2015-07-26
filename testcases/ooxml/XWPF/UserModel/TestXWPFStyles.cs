@@ -150,6 +150,67 @@ namespace NPOI.XWPF.UserModel
             Assert.IsTrue(styles.StyleExist(strStyleId));
         }
 
+        [Test]
+        public void TestEasyAccessToStyles()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+            XWPFStyles styles = doc.GetStyles();
+            Assert.IsNotNull(styles);
+
+            // Has 3 paragraphs on page one, a break, and 3 on page 2
+            Assert.AreEqual(7, doc.Paragraphs.Count);
+
+            // Check the first three have no run styles, just default paragraph style
+            for (int i = 0; i < 3; i++)
+            {
+                XWPFParagraph p = doc.Paragraphs[(i)];
+                Assert.AreEqual(null, p.Style);
+                Assert.AreEqual(null, p.StyleID);
+                Assert.AreEqual(1, p.Runs.Count);
+
+                XWPFRun r = p.Runs[(0)];
+                Assert.AreEqual(null, r.GetColor());
+                Assert.AreEqual(null, r.FontFamily);
+                Assert.AreEqual(null, r.FontName);
+                Assert.AreEqual(-1, r.FontSize);
+            }
+
+            // On page two, has explicit styles, but on Runs not on
+            //  the paragraph itself
+            for (int i = 4; i < 7; i++)
+            {
+                XWPFParagraph p = doc.Paragraphs[(i)];
+                Assert.AreEqual(null, p.Style);
+                Assert.AreEqual(null, p.StyleID);
+                Assert.AreEqual(1, p.Runs.Count);
+
+                XWPFRun r = p.Runs[(0)];
+                Assert.AreEqual("Arial Black", r.FontFamily);
+                Assert.AreEqual("Arial Black", r.FontName);
+                Assert.AreEqual(16, r.FontSize);
+                Assert.AreEqual("548DD4", r.GetColor());
+            }
+
+            // Check the document styles
+            // Should have a style defined for each type
+            Assert.AreEqual(4, styles.NumberOfStyles);
+            Assert.IsNotNull(styles.GetStyle("Normal"));
+            Assert.IsNotNull(styles.GetStyle("DefaultParagraphFont"));
+            Assert.IsNotNull(styles.GetStyle("TableNormal"));
+            Assert.IsNotNull(styles.GetStyle("NoList"));
+
+            // We can't do much yet with latent styles
+            Assert.AreEqual(137, styles.LatentStyles.NumberOfStyles);
+
+            // Check the default styles
+            Assert.IsNotNull(styles.DefaultRunStyle);
+            Assert.IsNotNull(styles.DefaultParagraphStyle);
+
+            Assert.AreEqual(11, styles.DefaultRunStyle.FontSize);
+            Assert.AreEqual(200, styles.DefaultParagraphStyle.SpacingAfter);
+
+        }
+
     }
 
 }

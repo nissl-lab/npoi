@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Model
         public void TestDefaultValues()
         {
             HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
-            Assert.AreEqual(clientAnchor.AnchorType, 0);
+            Assert.AreEqual((int)clientAnchor.AnchorType, 0);
             Assert.AreEqual(clientAnchor.Col1, 0);
             Assert.AreEqual(clientAnchor.Col2, 0);
             Assert.AreEqual(clientAnchor.Dx1, 0);
@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(clientAnchor.Row2, 0);
 
             clientAnchor = new HSSFClientAnchor(new EscherClientAnchorRecord());
-            Assert.AreEqual(clientAnchor.AnchorType, 0);
+            Assert.AreEqual((int)clientAnchor.AnchorType, 0);
             Assert.AreEqual(clientAnchor.Col1, 0);
             Assert.AreEqual(clientAnchor.Col2, 0);
             Assert.AreEqual(clientAnchor.Dx1, 0);

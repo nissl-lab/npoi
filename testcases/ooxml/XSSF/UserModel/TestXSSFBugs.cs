@@ -19,27 +19,26 @@ using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
     using System;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS;
-    using NPOI.XSSF;
-    using NUnit.Framework;
-    using NPOI.SS.Util;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using NPOI.OpenXml4Net.OPC;
     using System.Collections.Generic;
-    using NPOI.XSSF.UserModel.Extensions;
-    using System.IO;
-    using NPOI.XSSF.Model;
-using NPOI.SS.Formula;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.Formula.Eval;
-    using TestCases;
-    using NPOI.POIFS.FileSystem;
-    using NUnit.Framework.Constraints;
-    using NPOI.Util;
-    using TestCases.HSSF;
     using System.Globalization;
+    using System.IO;
+    using NPOI.HSSF.UserModel;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.OpenXmlFormats.Spreadsheet;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
+    using NPOI.XSSF;
+    using NPOI.XSSF.Model;
+    using NPOI.XSSF.UserModel.Extensions;
+    using NUnit.Framework;
+    using NUnit.Framework.Constraints;
+    using TestCases;
+    using TestCases.HSSF;
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -1557,10 +1556,10 @@ using NPOI.SS.Formula.Eval;
             ICell c = wb.GetSheetAt(0).GetRow(1).GetCell(0);
             Assert.AreEqual("#@_#", c.StringCellValue);
 
-            //with .net new Uri("mailto:#@_#") is valid, but java think it invalid,
-            //excel also think it invalid too
-            //TODO: add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
-            Assert.AreEqual("http://invalid.uri", c.Hyperlink.Address);
+            //with .net new Uri("mailto:#@_#") is valid, but java think it invalid, http://invalid.uri,
+            //excel does nothing, it still show string "#@_#" 
+            //should we add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
+            Assert.AreEqual("mailto:#@_#", c.Hyperlink.Address);
         }
 
         /**
@@ -1597,15 +1596,28 @@ using NPOI.SS.Formula.Eval;
             XSSFCell cell = row.CreateCell(0) as XSSFCell;
             cell.SetCellValue("Hi");
             sheet.RepeatingRows = (new CellRangeAddress(0, 0, 0, 0));
-
+            
             MemoryStream bos = new MemoryStream(8096);
             wb.Write(bos);
             byte[] firstSave = bos.ToArray();
+            //using (FileStream fs = new FileStream("d:\\save1.xlsx", FileMode.Create, FileAccess.ReadWrite))
+            //{
+            //    fs.Write(firstSave, 0, firstSave.Length);
+            //    fs.Flush();
+            //}
+            
             MemoryStream bos2 = new MemoryStream(8096);
             wb.Write(bos2);
             byte[] secondSave = bos2.ToArray();
+            //using (FileStream fs2 = new FileStream("d:\\save2.xlsx", FileMode.Create, FileAccess.ReadWrite))
+            //{
+            //    fs2.Write(secondSave, 0, secondSave.Length);
+            //    fs2.Flush();
+            //}
+            
 
-            Assert.That(firstSave, new EqualConstraint(secondSave));
+            Assert.That(firstSave, new EqualConstraint(secondSave), 
+                "Had: \n" + Arrays.ToString(firstSave) + " and \n" + Arrays.ToString(secondSave));
 
             wb.Close();
         }
@@ -2529,6 +2541,77 @@ using NPOI.SS.Formula.Eval;
             XSSFColor bgColor = cellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(bgColor);
             Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+        }
+
+        [Test]
+        public void Bug57642()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
+            XSSFCell c = s.CreateRow(0).CreateCell(0) as XSSFCell;
+            c.CellFormula = (/*setter*/"ISERROR(TestSheet!A1)");
+            c = s.CreateRow(1).CreateCell(1) as XSSFCell;
+            c.CellFormula = (/*setter*/"ISERROR(B2)");
+
+            wb.SetSheetName(0, "CSN");
+            c = s.GetRow(0).GetCell(0) as XSSFCell;
+            Assert.AreEqual("ISERROR(CSN!A1)", c.CellFormula);
+            c = s.GetRow(1).GetCell(1) as XSSFCell;
+            Assert.AreEqual("ISERROR(B2)", c.CellFormula);
+        }
+
+        /**
+         * .xlsx supports 64000 cell styles, the style indexes After
+         *  32,767 must not be -32,768, then -32,767, -32,766
+         *  long time test, run over 1 minute.
+         */
+        [Test]
+        public void Bug57880()
+        {
+            Console.WriteLine("long time test, run over 1 minute.");
+            int numStyles = 33000;
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
+            XSSFDataFormat fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
+            for (int i = 1; i < numStyles; i++)
+            {
+                short df = fmt.GetFormat("test" + i);
+                // Format indexes will be wrapped beyond 32,676
+                Assert.AreEqual(164 + i, df & 0xffff);
+                // Create a style and use it
+                XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
+                Assert.AreEqual(i, style.UIndex);
+                style.DataFormat = (/*setter*/df);
+                XSSFCell c = s.CreateRow(i).CreateCell(0, CellType.Numeric) as XSSFCell;
+                c.CellStyle = (/*setter*/style);
+                c.SetCellValue(i);
+            }
+
+            //wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            // using temp file instead of ByteArrayOutputStream because of OOM in gump run
+            FileInfo tmp = TempFile.CreateTempFile("poi-test", ".bug57880");
+            FileStream fos = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
+            wb.Write(fos);
+            fos.Close();
+
+            wb.Close();
+            fmt = null; s = null; wb = null;
+            // System.gc();
+
+            wb = new XSSFWorkbook(tmp.FullName);
+            fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
+            s = wb.GetSheetAt(0) as XSSFSheet;
+            for (int i = 1; i < numStyles; i++)
+            {
+                XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;
+                Assert.IsNotNull(style);
+                Assert.AreEqual(i, style.UIndex);
+                Assert.AreEqual(164 + i, style.DataFormat & 0xffff);
+                Assert.AreEqual("test" + i, style.GetDataFormatString());
+            }
+
+            wb.Close();
+            tmp.Delete();
         }
 
     }

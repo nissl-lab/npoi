@@ -25,6 +25,8 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
+    using System.Text;
+    using NPOI.SS;
 
     /**
      * Common superclass for testing implementatiosn of
@@ -764,6 +766,85 @@ namespace TestCases.SS.UserModel
             cell.CellStyle = (/*setter*/style2);
             Assert.AreEqual(style2, cell.CellStyle);
 
+            wb.Close();
+        }
+
+        [Test]
+        public void Test57008()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            IRow row0 = sheet.CreateRow(0);
+            ICell cell0 = row0.CreateCell(0);
+            cell0.SetCellValue("row 0, cell 0 _x0046_ without Changes");
+
+            ICell cell1 = row0.CreateCell(1);
+            cell1.SetCellValue("row 0, cell 1 _x005fx0046_ with Changes");
+
+            ICell cell2 = row0.CreateCell(2);
+            cell2.SetCellValue("hgh_x0041_**_x0100_*_x0101_*_x0190_*_x0200_*_x0300_*_x0427_*");
+
+            CheckUnicodeValues(wb);
+
+            //		String fname = "/tmp/Test_xNNNN_inCell" + (wb is HSSFWorkbook ? ".xls" : ".xlsx");
+            //		FileOutputStream out1 = new FileOutputStream(fname);
+            //		try {
+            //			wb.Write(out1);
+            //		} finally {
+            //			out1.Close();
+            //		}
+
+            IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
+            CheckUnicodeValues(wbBack);
+        }
+
+        private void CheckUnicodeValues(IWorkbook wb)
+        {
+            Assert.AreEqual((wb is HSSFWorkbook ? "row 0, cell 0 _x0046_ without Changes" : "row 0, cell 0 F without Changes"),
+                    wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());
+            Assert.AreEqual((wb is HSSFWorkbook ? "row 0, cell 1 _x005fx0046_ with Changes" : "row 0, cell 1 _x005fx0046_ with Changes"),
+                    wb.GetSheetAt(0).GetRow(0).GetCell(1).ToString());
+            Assert.AreEqual((wb is HSSFWorkbook ? "hgh_x0041_**_x0100_*_x0101_*_x0190_*_x0200_*_x0300_*_x0427_*" : "hghA**\u0100*\u0101*\u0190*\u0200*\u0300*\u0427*"),
+                    wb.GetSheetAt(0).GetRow(0).GetCell(2).ToString());
+        }
+
+        /**
+         *  The maximum length of cell contents (text) is 32,767 characters.
+         * @
+         */
+        [Test]
+        public void TestMaxTextLength()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+
+            int maxlen = wb is HSSFWorkbook ?
+                    SpreadsheetVersion.EXCEL97.MaxTextLength
+                    : SpreadsheetVersion.EXCEL2007.MaxTextLength;
+            Assert.AreEqual(32767, maxlen);
+
+            StringBuilder b = new StringBuilder();
+
+            // 32767 is okay
+            for (int i = 0; i < maxlen; i++)
+            {
+                b.Append("X");
+            }
+            cell.SetCellValue(b.ToString());
+
+            b.Append("X");
+            // 32768 produces an invalid XLS file
+            try
+            {
+                cell.SetCellValue(b.ToString());
+                Assert.Fail("Expected exception");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("The maximum length of cell contents (text) is 32,767 characters", e.Message);
+            }
             wb.Close();
         }
 

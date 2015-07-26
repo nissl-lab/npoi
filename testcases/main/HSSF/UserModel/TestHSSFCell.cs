@@ -210,42 +210,6 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(typeof(DBCellRecord), dbcr.GetType());
         }
 
-        /**
-         *  The maximum length of cell contents (text) is 32,767 characters.
-         */
-        [Test]
-        public void TestMaxTextLength()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
-            HSSFCell cell = (HSSFCell)sheet.CreateRow(0).CreateCell(0);
-
-            int maxlen = NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength;
-            Assert.AreEqual(32767, maxlen);
-
-            StringBuilder b = new StringBuilder();
-
-            // 32767 is okay
-            for (int i = 0; i < maxlen; i++)
-            {
-                b.Append("X");
-            }
-            cell.SetCellValue(b.ToString());
-
-            b.Append("X");
-            // 32768 produces an invalid XLS file
-            try
-            {
-                cell.SetCellValue(b.ToString());
-                Assert.Fail("Expected exception");
-            }
-            catch (ArgumentException e)
-            {
-                Assert.AreEqual("The maximum length of cell contents (text) is 32,767 characters", e.Message);
-            }
-            wb.Close();
-        }
-
         private static void SetCell(HSSFWorkbook workbook, int rowIdx, int colIdx, DateTime date)
         {
             NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
@@ -342,7 +306,7 @@ namespace TestCases.HSSF.UserModel
             //
             //	    fos.Close();
 
-            IWorkbook wbBack2 = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wbBack2 = _testDataProvider.WriteOutAndReadBack(wbBack);
             wbBack.Close();
 
             Assert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellRow);
@@ -516,7 +480,7 @@ namespace TestCases.HSSF.UserModel
                 CellType t = cell.CachedFormulaResultType;
                 Assert.Fail("Should catch exception");
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
             }
 
@@ -525,7 +489,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNotNull(new HSSFCell(wb, sheet, 0, (short)0, CellType.Error + 1));
                 Assert.Fail("Should catch exception");
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 

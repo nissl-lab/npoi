@@ -14,22 +14,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Formula.Eval
+namespace TestCases.SS.Formula.Eval
 {
     using System;
-
-    using NUnit.Framework;
-    using NUnit.Framework;
-
-    using NPOI.SS;
     using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using TestCases.SS;
     using NPOI.Util;
+    using NUnit.Framework;
+    using TestCases.SS;
+    using NPOI.SS.Formula.Eval;
 
     /**
      * Common superclass for testing cases of circular references
@@ -60,7 +52,7 @@ namespace NPOI.SS.Formula.Eval
             {
                 return Evaluator.Evaluate(testCell);
             }
-            catch (StackOverflowException e)
+            catch (StackOverflowException)
             {
                 throw new AssertFailedException("circular reference caused stack overflow error");
             }

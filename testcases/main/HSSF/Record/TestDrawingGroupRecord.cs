@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record
 
             byte[] data = new byte[28];
             int size = r.Serialize(0, data);
-            Assert.AreEqual("[EB, 00, 18, 00, 0F, 00, 00, F0, 10, 00, 00, 00, 11, 11, 0A, F0, 08, 00, 00, 00, FF, FF, FF, FF, FF, FF, FF, FF, ]", HexDump.ToHex(data));
+            Assert.AreEqual("[EB, 00, 18, 00, 0F, 00, 00, F0, 10, 00, 00, 00, 11, 11, 0A, F0, 08, 00, 00, 00, FF, FF, FF, FF, FF, FF, FF, FF]", HexDump.ToHex(data));
             Assert.AreEqual(28, size);
 
             Assert.AreEqual(24, dggContainer.RecordSize);
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.Record
             byte[] buffer = new byte[r.RecordSize];
             int size = r.Serialize(0, buffer);
             Assert.AreEqual(104, size);
-            Assert.AreEqual("[EB, 00, 64, 00, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, C8, ]", HexDump.ToHex(buffer));
+            Assert.AreEqual("[EB, 00, 64, 00, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, C8]", HexDump.ToHex(buffer));
 
             // check at max record size
             rawData = new byte[MAX_DATA_SIZE];
@@ -94,8 +94,8 @@ namespace TestCases.HSSF.Record
             buffer = new byte[r.RecordSize];
             size = r.Serialize(0, buffer);
             Assert.AreEqual(MAX_RECORD_SIZE + 5, size);
-            Assert.AreEqual("[EB, 00, 20, 20, ]", HexDump.ToHex(cut(buffer, 0, 4)));
-            Assert.AreEqual("[00, EB, 00, 01, 00, FF, ]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE - 1, MAX_RECORD_SIZE + 5)));
+            Assert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, 0, 4)));
+            Assert.AreEqual("[00, EB, 00, 01, 00, FF]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE - 1, MAX_RECORD_SIZE + 5)));
 
             // check continue record
             rawData = new byte[MAX_DATA_SIZE * 2 + 1];
@@ -105,9 +105,9 @@ namespace TestCases.HSSF.Record
             size = r.Serialize(0, buffer);
             Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, size);
             Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, r.RecordSize);
-            Assert.AreEqual("[EB, 00, 20, 20, ]", HexDump.ToHex(cut(buffer, 0, 4)));
-            Assert.AreEqual("[EB, 00, 20, 20, ]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE, MAX_RECORD_SIZE + 4)));
-            Assert.AreEqual("[3C, 00, 01, 00, FF, ]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE * 2, MAX_RECORD_SIZE * 2 + 5)));
+            Assert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, 0, 4)));
+            Assert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE, MAX_RECORD_SIZE + 4)));
+            Assert.AreEqual("[3C, 00, 01, 00, FF]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE * 2, MAX_RECORD_SIZE * 2 + 5)));
 
             // check continue record
             rawData = new byte[664532];

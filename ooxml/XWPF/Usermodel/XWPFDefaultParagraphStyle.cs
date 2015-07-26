@@ -15,33 +15,38 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.DDF
+namespace NPOI.XWPF.UserModel
 {
     using System;
-    using NUnit.Framework;
-    using System.IO;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
-
-    [TestFixture]
-    public class TestEscherDump
+    /**
+     * Default Paragraph style, from which other styles will override
+     * TODO Share logic with {@link XWPFParagraph} which also uses CTPPr
+     */
+    public class XWPFDefaultParagraphStyle
     {
+        private CT_PPr ppr;
 
-        [Test]
-        public void TestSimple()
+        public XWPFDefaultParagraphStyle(CT_PPr ppr)
         {
-            // simple test to at least cover some parts of the class
-            //EscherDump.Main(new String[] {});
-
-            //new EscherDump().Dump(0, new byte[] { }, System.Console.Out);
-            //new EscherDump().Dump(new byte[] { }, 0, 0, System.Console.Out);
-            //new EscherDump().DumpOld(0, new MemoryStream(new byte[] { }), System.Console.Out);
+            this.ppr = ppr;
         }
 
-
-        [Test]
-        public void TestWithData()
+        protected internal CT_PPr GetPPr()
         {
-            //new EscherDump().DumpOld(8, new MemoryStream(new byte[] { 00, 00, 00, 00, 00, 00, 00, 00 }), System.Console.Out);
+            return ppr;
+        }
+
+        public int SpacingAfter
+        {
+            get
+            {
+                if (ppr.IsSetSpacing())
+                    return (int)ppr.spacing.after;
+                return -1;
+            }
         }
     }
+
 }

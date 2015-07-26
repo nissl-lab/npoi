@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.PTG
      * <p>This is XSSF only, as it stores the sheet / book references
      *  in String form. The HSSF equivalent using indexes is {@link Area3DPtg}</p>
      */
-    public class Area3DPxg : AreaPtgBase, Pxg
+    public class Area3DPxg : AreaPtgBase, Pxg3D
     {
         private int externalWorkbookNumber = -1;
         private String firstSheetName;

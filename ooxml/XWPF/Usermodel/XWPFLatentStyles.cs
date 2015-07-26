@@ -40,8 +40,16 @@ namespace NPOI.XWPF.UserModel
             this.styles = styles;
         }
 
+        public int NumberOfStyles
+        {
+            get
+            {
+                return latentStyles.SizeOfLsdExceptionArray();
+            }
+        }
+
         /**
-         * Checks wheter specific LatentStyleID is a latentStyle
+         * checks whether specific LatentStyleID is a latentStyle
         */
         public bool IsLatentStyle(String latentStyleID)
         {

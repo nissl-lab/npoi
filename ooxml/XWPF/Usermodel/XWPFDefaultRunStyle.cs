@@ -15,33 +15,38 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.DDF
+namespace NPOI.XWPF.UserModel
 {
     using System;
-    using NUnit.Framework;
-    using System.IO;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
-
-    [TestFixture]
-    public class TestEscherDump
+    /**
+     * Default Character Run style, from which other styles will override
+     * TODO Share logic with {@link XWPFRun} which also uses CTRPr
+     */
+    public class XWPFDefaultRunStyle
     {
+        private CT_RPr rpr;
 
-        [Test]
-        public void TestSimple()
+        public XWPFDefaultRunStyle(CT_RPr rpr)
         {
-            // simple test to at least cover some parts of the class
-            //EscherDump.Main(new String[] {});
-
-            //new EscherDump().Dump(0, new byte[] { }, System.Console.Out);
-            //new EscherDump().Dump(new byte[] { }, 0, 0, System.Console.Out);
-            //new EscherDump().DumpOld(0, new MemoryStream(new byte[] { }), System.Console.Out);
+            this.rpr = rpr;
         }
 
-
-        [Test]
-        public void TestWithData()
+        protected internal CT_RPr GetRPr()
         {
-            //new EscherDump().DumpOld(8, new MemoryStream(new byte[] { 00, 00, 00, 00, 00, 00, 00, 00 }), System.Console.Out);
+            return rpr;
+        }
+
+        public int FontSize
+        {
+            get
+            {
+                if (rpr.IsSetSz())
+                    return (int)rpr.sz.val / 2;
+                return -1;
+            }
         }
     }
+
 }
