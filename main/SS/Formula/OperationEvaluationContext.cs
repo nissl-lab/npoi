@@ -102,7 +102,7 @@ namespace NPOI.SS.Formula
                 }
                 catch (WorkbookNotFoundException e)
                 {
-                    throw new Exception(e.Message, e);
+                    throw new RuntimeException(e.Message, e);
                 }
 
                 otherFirstSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.SheetName);
@@ -426,7 +426,7 @@ namespace NPOI.SS.Formula
             if (sheetNameAt > -1)
             {
                 // Sheet based name
-                String sheetName = name.Substring(0, sheetNameAt - 1);
+                String sheetName = name.Substring(0, sheetNameAt);
                 String nameName = name.Substring(sheetNameAt + 1);
                 evalName = _workbook.GetName(nameName, _workbook.GetSheetIndex(sheetName));
             }

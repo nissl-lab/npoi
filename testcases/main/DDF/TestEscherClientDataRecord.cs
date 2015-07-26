@@ -40,7 +40,7 @@ namespace TestCases.DDF
             Assert.AreEqual(8, bytesWritten);
             Assert.AreEqual("[02, 00, " +
                     "11, F0, " +
-                    "00, 00, 00, 00, ]",
+                    "00, 00, 00, 00]",
                     HexDump.ToHex(data));
         }
         [Test]

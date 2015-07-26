@@ -71,60 +71,60 @@ namespace TestCases.HSSF.UserModel
 
             //valid date formats -- all should have "Jul" in output
             String[] goodDatePatterns = {
-			"[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy",
-			"mmm/d/yy\\ h:mm PM;@",
-			"mmmm/d/yy\\ h:mm;@",
-			"mmmm/d;@",
-			"mmmm/d/yy;@",
-			"mmm/dd/yy;@",
-			"[$-409]d\\-mmm;@",
-			"[$-409]d\\-mmm\\-yy;@",
-			"[$-409]dd\\-mmm\\-yy;@",
-			"[$-409]mmm\\-yy;@",
-			"[$-409]mmmm\\-yy;@",
-			"[$-409]mmmm\\ d\\,\\ yyyy;@",
-			"[$-409]mmm/d/yy\\ h:mm:ss;@",
-			"[$-409]mmmm/d/yy\\ h:mm:ss am;@",
-			"[$-409]mmmmm;@",
-			"[$-409]mmmmm\\-yy;@",
-			"mmmm/d/yyyy;@",
-			"[$-409]d\\-mmm\\-yyyy;@"
-		};
+            "[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy",
+            "mmm/d/yy\\ h:mm PM;@",
+            "mmmm/d/yy\\ h:mm;@",
+            "mmmm/d;@",
+            "mmmm/d/yy;@",
+            "mmm/dd/yy;@",
+            "[$-409]d\\-mmm;@",
+            "[$-409]d\\-mmm\\-yy;@",
+            "[$-409]dd\\-mmm\\-yy;@",
+            "[$-409]mmm\\-yy;@",
+            "[$-409]mmmm\\-yy;@",
+            "[$-409]mmmm\\ d\\,\\ yyyy;@",
+            "[$-409]mmm/d/yy\\ h:mm:ss;@",
+            "[$-409]mmmm/d/yy\\ h:mm:ss am;@",
+            "[$-409]mmmmm;@",
+            "[$-409]mmmmm\\-yy;@",
+            "mmmm/d/yyyy;@",
+            "[$-409]d\\-mmm\\-yyyy;@"
+        };
 
             //valid time formats - all should have 11:23 in output
             String[] goodTimePatterns = {
-		   "HH:MM",
-		   "HH:MM:SS",
-		   "HH:MM;HH:MM;HH:MM", 
-		   // This is fun - blue if positive time,
-		   //  red if negative time or green for zero!
+           "HH:MM",
+           "HH:MM:SS",
+           "HH:MM;HH:MM;HH:MM", 
+           // This is fun - blue if positive time,
+           //  red if negative time or green for zero!
          "[BLUE]HH:MM;[RED]HH:MM;[GREEN]HH:MM", 
-		   "yyyy-mm-dd hh:mm",
+           "yyyy-mm-dd hh:mm",
          "yyyy-mm-dd hh:mm:ss",
-		};
+        };
 
             // valid number formats
             String[] goodNumPatterns = {
-				"#,##0.0000",
-				"#,##0;[Red]#,##0",
-				"(#,##0.00_);(#,##0.00)",
-				"($#,##0.00_);[Red]($#,##0.00)",
-				"$#,##0.00",
-				"[$-809]#,##0.00", // international format
-				"[$-2]#,##0.00", // international format
-				"0000.00000%",
-				"0.000E+00",
-				"0.00E+00",
-				"[BLACK]0.00;[COLOR 5]##.##"
-		};
+                "#,##0.0000",
+                "#,##0;[Red]#,##0",
+                "(#,##0.00_);(#,##0.00)",
+                "($#,##0.00_);[Red]($#,##0.00)",
+                "$#,##0.00",
+                "[$-809]#,##0.00", // international format
+                "[$-2]#,##0.00", // international format
+                "0000.00000%",
+                "0.000E+00",
+                "0.00E+00",
+                "[BLACK]0.00;[COLOR 5]##.##"
+        };
 
             // invalid date formats -- will throw exception in DecimalFormat ctor
             String[] badNumPatterns = {
-				"#,#$'#0.0000",
-				"'#','#ABC#0;##,##0",
-				"000 '123 4'5'6 000",
-				"#''0#0'1#10L16EE"
-		};
+                "#,#$'#0.0000",
+                "'#','#ABC#0;##,##0",
+                "000 '123 4'5'6 000",
+                "#''0#0'1#10L16EE"
+        };
 
             // create cells with good date patterns
             for (int i = 0; i < goodDatePatterns.Length; i++)
@@ -343,14 +343,6 @@ namespace TestCases.HSSF.UserModel
             string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             Assert.AreEqual(formatter.FormatCellValue(cell, Evaluator), "24" + decimalSeparator + "50%");
 
-        }
-        [Test]
-        public void TestGetFormmatedCellValueWithSpecialSymbol()
-        {
-            IRow row = wb.GetSheetAt(0).GetRow(8);
-            ICell cell = row.GetCell(0);
-            log(formatter.FormatCellValue(cell));
-            Assert.AreEqual("1,234,567,890.12 §â§å§Ò.", formatter.FormatCellValue(cell));
         }
 
         /**

@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Model
         {
             // Check we're Adding row and cell aggregates
             ArrayList records = new ArrayList();
-            records.Add(new BOFRecord());
+            records.Add(BOFRecord.CreateSheetBOF());
             records.Add(new DimensionsRecord());
             records.Add(CreateWindow2Record());
             records.Add(new EOFRecord());
@@ -476,7 +476,7 @@ namespace TestCases.HSSF.Model
         {
 
             ArrayList records = new ArrayList();
-            records.Add(new BOFRecord());
+            records.Add(BOFRecord.CreateSheetBOF());
             records.Add(new UncalcedRecord());
             records.Add(new DimensionsRecord());
             records.Add(CreateWindow2Record());

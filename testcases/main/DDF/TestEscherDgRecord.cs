@@ -43,7 +43,7 @@ namespace TestCases.DDF
                     "08, F0, " +
                     "08, 00, 00, 00, " +
                     "02, 00, 00, 00, " +     // num shapes in drawing
-                    "01, 04, 00, 00, ]",     // The last MSOSPID given to an SP in this DG
+                    "01, 04, 00, 00]",     // The last MSOSPID given to an SP in this DG
                     HexDump.ToHex(data));
         }
         [Test]

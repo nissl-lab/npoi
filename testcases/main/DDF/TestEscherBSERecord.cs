@@ -42,7 +42,7 @@ namespace TestCases.DDF
             Assert.AreEqual((short)0x0001, r.Options);
             Assert.AreEqual(EscherBSERecord.BT_JPEG, r.BlipTypeWin32);
             Assert.AreEqual(EscherBSERecord.BT_JPEG, r.BlipTypeMacOS);
-            Assert.AreEqual("[01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00, ]", HexDump.ToHex(r.UID));
+            Assert.AreEqual("[01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00]", HexDump.ToHex(r.UID));
             Assert.AreEqual((short)1, r.Tag);
             Assert.AreEqual(2, r.Ref);
             Assert.AreEqual(3, r.Offset);
@@ -62,7 +62,7 @@ namespace TestCases.DDF
             Assert.AreEqual(44, bytesWritten);
             Assert.AreEqual("[01, 00, 00, 00, 24, 00, 00, 00, 05, 05, 01, 02, 03, 04, " +
                     "05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00, 01, 00, 00, 00, " +
-                    "00, 00, 02, 00, 00, 00, 03, 00, 00, 00, 04, 05, 06, 07, ]",
+                    "00, 00, 02, 00, 00, 00, 03, 00, 00, 00, 04, 05, 06, 07]",
                     HexDump.ToHex(data));
 
         }
@@ -96,7 +96,7 @@ namespace TestCases.DDF
                     "  Instance: 0x0000" + '\n' +
                     "  BlipTypeWin32: 5" + nl +
                     "  BlipTypeMacOS: 5" + nl +
-                    "  SUID: [01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00, ]" + nl +
+                    "  SUID: [01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00]" + nl +
                     "  Tag: 1" + nl +
                     "  Size: 0" + nl +
                     "  Ref: 2" + nl +

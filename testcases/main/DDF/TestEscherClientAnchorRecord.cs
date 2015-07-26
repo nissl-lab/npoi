@@ -43,7 +43,7 @@ namespace TestCases.DDF
                     "4D, 00, 37, 00, 21, 00, 58, 00, " +
                     "0B, 00, 2C, 00, 16, 00, 63, 00, " +
                     "42, 00, " +
-                    "FF, DD, ]", HexDump.ToHex(data));
+                    "FF, DD]", HexDump.ToHex(data));
         }
         [Test]
         public void TestFillFields()

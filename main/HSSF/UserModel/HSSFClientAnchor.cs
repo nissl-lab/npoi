@@ -277,7 +277,7 @@ namespace NPOI.HSSF.UserModel
         private void CheckRange(int value, int minRange, int maxRange, String varName)
         {
             if (value < minRange || value > maxRange)
-                throw new ArgumentException(varName + " must be between " + minRange + " and " + maxRange + ", but was: " + value);
+                throw new ArgumentOutOfRangeException(varName + " must be between " + minRange + " and " + maxRange + ", but was: " + value);
         }
         internal override EscherRecord GetEscherAnchor()
         {

@@ -28,9 +28,13 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
+    [TestFixture]
     public class BaseTestPicture
     {
         protected ITestDataProvider _testDataProvider;
+        public BaseTestPicture()
+            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        { }
         protected BaseTestPicture(ITestDataProvider testDataProvider)
         {
             _testDataProvider = testDataProvider;

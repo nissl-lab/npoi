@@ -111,7 +111,7 @@ namespace TestCases.DDF
                     "BF, 00, 01, 00, 00, 00, " +
                     "01, 80, 02, 00, 00, 00, " +
                     "BF, 00, 01, 00, 00, 00, " +
-                    "01, 02, ]";
+                    "01, 02]";
             Assert.AreEqual(dataStr, HexDump.ToHex(data));
 
         }
@@ -135,7 +135,7 @@ namespace TestCases.DDF
                     "12, 00, 00, 00, " +
                     "BF, 00, 01, 00, 00, 00, " +
                     "81, 01, 09, 00, 00, 08, " +
-                    "C0, 01, 40, 00, 00, 08, ]";
+                    "C0, 01, 40, 00, 00, 08]";
             Assert.AreEqual(dataStr, HexDump.ToHex(data));
             Assert.AreEqual(26, bytesWritten);
         }
