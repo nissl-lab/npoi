@@ -569,5 +569,35 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.schemeField;
         }
         #endregion scheme
+
+        public int SizeOfUArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfBArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfSzArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfRFontArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfIArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfColorArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

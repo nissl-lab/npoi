@@ -165,6 +165,8 @@
     <Compile Include="XSSF\UserModel\TestXSSFSheetShiftRows.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetUpdateArrayFormulas.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFTable.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFTextParagraph.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFTextRun.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFWorkbook.cs" />
     <Compile Include="XSSF\Util\TestCTColComparator.cs" />

@@ -296,6 +296,16 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.pField = value;
             }
         }
+
+        public CT_TextParagraph GetPArray(int p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SizeOfPArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Serializable]

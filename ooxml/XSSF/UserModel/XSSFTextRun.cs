@@ -120,7 +120,7 @@ namespace NPOI.XSSF.UserModel
         {
             double scale = 1;
             double size = XSSFFont.DEFAULT_FONT_SIZE;	// default font size
-            CT_TextNormalAutofit afit = GetParentParagraph().GetParentShape().txBody.bodyPr.normAutofit;
+            CT_TextNormalAutofit afit = GetParentParagraph().ParentShape.txBody.bodyPr.normAutofit;
             if (afit != null) scale = (double)afit.fontScale / 100000;
 
             CT_TextCharacterProperties rPr = GetRPr();

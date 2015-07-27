@@ -120,7 +120,7 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.Prototype());
+            ctShape.Set(XSSFSimpleShape.GetPrototype());
             ctShape.nvSpPr.cNvPr.id=(uint)shapeId;
             XSSFTextBox shape = new XSSFTextBox(this, ctShape);
             shape.anchor = (XSSFClientAnchor)anchor;
@@ -213,7 +213,7 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.Prototype());
+            ctShape.Set(XSSFSimpleShape.GetPrototype());
             ctShape.nvSpPr.cNvPr.id=(uint)(shapeId);
             XSSFSimpleShape shape = new XSSFSimpleShape(this, ctShape);
             shape.anchor = anchor;

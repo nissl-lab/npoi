@@ -33,7 +33,7 @@ namespace NPOI.XSSF.UserModel
         private CT_Shape _shape;
         private List<XSSFTextRun> _Runs;
 
-        XSSFTextParagraph(CT_TextParagraph p, CT_Shape ctShape)
+        public XSSFTextParagraph(CT_TextParagraph p, CT_Shape ctShape)
         {
             _p = p;
             _shape = ctShape;
@@ -161,21 +161,21 @@ namespace NPOI.XSSF.UserModel
          */
         public TextAlign GetTextAlign()
         {
-            ParagraphPropertyFetcher<TextAlign> fetcher = new ParagraphPropertyFetcherTextAlign(GetLevel());
+            ParagraphPropertyFetcher<TextAlign> fetcher = new ParagraphPropertyTextAlignFetcher(GetLevel());
             fetchParagraphProperty(fetcher);
             //return fetcher.GetValue() == null ? TextAlign.LEFT : fetcher.GetValue();
             throw new NotImplementedException();
         }
-        private class ParagraphPropertyFetcherTextAlign : ParagraphPropertyFetcher<TextAlign>
+        private class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign>
         {
-            public ParagraphPropertyFetcherTextAlign(int level) : base(level) 
+            public ParagraphPropertyTextAlignFetcher(int level) : base(level) 
             {
             }
             public override bool Fetch(CT_TextParagraphProperties props)
             {
                 if (props.IsSetAlgn())
                 {
-                    TextAlign val = TextAlign.values()[props.GetAlgn().intValue() - 1];
+                    TextAlign val = (TextAlign)(props.algn - 1); //TextAlign.values()[props.GetAlgn().intValue() - 1];
                     SetValue(val);
                     return true;
                 }
@@ -197,6 +197,7 @@ namespace NPOI.XSSF.UserModel
             //} else {
             //    pr.SetAlgn(STTextAlignType.Enum.forInt(align.ordinal() + 1));
             //}
+            throw new NotImplementedException();
         }
 
         /**
@@ -293,6 +294,7 @@ namespace NPOI.XSSF.UserModel
             //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
             //CTTextCharBullet c = pr.IsSetBuChar() ? pr.GetBuChar() : pr.AddNewBuChar();
             //c.SetChar(str);
+            throw new NotImplementedException();
         }
 
         /**

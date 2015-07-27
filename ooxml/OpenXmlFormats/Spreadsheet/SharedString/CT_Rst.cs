@@ -246,5 +246,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             return ctObj;
         }
+
+        public int SizeOfRArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
