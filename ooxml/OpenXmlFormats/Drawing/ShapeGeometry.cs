@@ -1665,7 +1665,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         //private object[] itemsField;
 
-        private ItemsChoiceType[] itemsElementNameField;
+        //private ItemsChoiceType[] itemsElementNameField;
 
         private long wField;
 

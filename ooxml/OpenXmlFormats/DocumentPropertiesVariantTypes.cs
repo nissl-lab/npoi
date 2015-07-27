@@ -74,8 +74,8 @@ namespace NPOI.OpenXmlFormats
         //        this.itemElementNameField = value;
         //    }
         //}
-        private sbyte i1Field = 0;
-        private bool i1SpecifiedField = false;
+        //private sbyte i1Field = 0;
+        //private bool i1SpecifiedField = false;
         private short i2Field = 0;
         private bool i2SpecifiedField = false;
         private int i4Field = 0;
