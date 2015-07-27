@@ -50,7 +50,7 @@ namespace TestCases.HSSF.UserModel
             summary1.Title=(title);
             //Write the modified property back to POIFS
             fs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
-            fs.CreateDocument(summary1.ToStream(), SummaryInformation.DEFAULT_STREAM_NAME);
+            fs.CreateDocument(summary1.ToInputStream(), SummaryInformation.DEFAULT_STREAM_NAME);
 
             //save the workbook and read the property
             MemoryStream out1 = new MemoryStream();
@@ -75,7 +75,7 @@ namespace TestCases.HSSF.UserModel
             summary1.Title = (title);
 
             fs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
-            fs.CreateDocument(summary1.ToStream(), SummaryInformation.DEFAULT_STREAM_NAME);
+            fs.CreateDocument(summary1.ToInputStream(), SummaryInformation.DEFAULT_STREAM_NAME);
 
             HSSFWorkbook wb = new HSSFWorkbook(fs);
 

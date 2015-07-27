@@ -164,9 +164,9 @@ namespace NPOI.HPSF
             get{return delegate1.IsSummaryInformation;}
         }
 
-        public override Stream ToStream() 
+        public override Stream ToInputStream() 
         {
-            return delegate1.ToStream();
+            return delegate1.ToInputStream();
         }
 
         /// <summary>
@@ -238,10 +238,10 @@ namespace NPOI.HPSF
         /// the {@link MutablePropertySet} only.
         /// </summary>
         /// <returns>the contents of this PropertySet stream</returns>
-        public override Stream GetStream()
-        {
-            return delegate1.GetStream();
-        }
+        //public override Stream GetStream()
+        //{
+        //    return delegate1.GetStream();
+        //}
 
 
         /// <summary>
