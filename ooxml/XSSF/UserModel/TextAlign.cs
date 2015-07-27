@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel
      */
     public enum TextAlign
     {
+        None,
         /**
          * Align text to the left margin.
          */

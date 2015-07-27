@@ -18,6 +18,8 @@ namespace NPOI.XSSF.UserModel
 {
     using System;
     using NUnit.Framework;
+    using System.Drawing;
+    using System.Collections.Generic;
 
     [TestFixture]
     public class TestXSSFTextParagraph
@@ -28,30 +30,30 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             try
             {
-                XSSFSheet sheet = wb.CreateSheet();
-                XSSFDrawing Drawing = sheet.CreateDrawingPatriarch();
+                XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+                XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
-                XSSFTextBox shape = Drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
+                XSSFTextBox shape = Drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4)) as XSSFTextBox;
                 XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
-                XSSFFont font = wb.CreateFont();
-                Color color = new Color(0, 255, 255);
-                font.Color = (/*setter*/new XSSFColor(color));
+                XSSFFont font = wb.CreateFont() as XSSFFont;
+                Color color = Color.FromArgb(0, 255, 255);
+                font.SetColor(new XSSFColor(color));
                 font.FontName = (/*setter*/"Arial");
                 rt.ApplyFont(font);
 
-                shape.Text = (/*setter*/rt);
+                shape.SetText(rt);
 
                 List<XSSFTextParagraph> paras = shape.TextParagraphs;
                 Assert.AreEqual(1, paras.Count);
 
-                XSSFTextParagraph text = paras.Get(0);
+                XSSFTextParagraph text = paras[(0)];
                 Assert.AreEqual("Test String", text.Text);
 
                 Assert.IsFalse(text.IsBullet());
-                Assert.IsNotNull(text.XmlObject);
-                Assert.AreEqual(shape.CTShape, text.ParentShape);
-                Assert.IsNotNull(text.Iterator());
+                Assert.IsNotNull(text.GetXmlObject());
+                Assert.AreEqual(shape.GetCTShape(), text.ParentShape);
+                Assert.IsNotNull(text.GetEnumerator());
                 Assert.IsNotNull(text.AddLineBreak());
 
                 Assert.IsNotNull(text.TextRuns);
@@ -60,22 +62,22 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(3, text.TextRuns.Count);
 
                 Assert.AreEqual(TextAlign.LEFT, text.TextAlign);
-                text.TextAlign = (/*setter*/null);
+                text.TextAlign = TextAlign.None;
                 Assert.AreEqual(TextAlign.LEFT, text.TextAlign);
                 text.TextAlign = (/*setter*/TextAlign.CENTER);
                 Assert.AreEqual(TextAlign.CENTER, text.TextAlign);
                 text.TextAlign = (/*setter*/TextAlign.RIGHT);
                 Assert.AreEqual(TextAlign.RIGHT, text.TextAlign);
-                text.TextAlign = (/*setter*/null);
+                text.TextAlign = TextAlign.None;
                 Assert.AreEqual(TextAlign.LEFT, text.TextAlign);
 
                 text.TextFontAlign = (/*setter*/TextFontAlign.BASELINE);
                 Assert.AreEqual(TextFontAlign.BASELINE, text.TextFontAlign);
                 text.TextFontAlign = (/*setter*/TextFontAlign.BOTTOM);
                 Assert.AreEqual(TextFontAlign.BOTTOM, text.TextFontAlign);
-                text.TextFontAlign = (/*setter*/null);
+                text.TextFontAlign = TextFontAlign.None;
                 Assert.AreEqual(TextFontAlign.BASELINE, text.TextFontAlign);
-                text.TextFontAlign = (/*setter*/null);
+                text.TextFontAlign = TextFontAlign.None;
                 Assert.AreEqual(TextFontAlign.BASELINE, text.TextFontAlign);
 
                 Assert.IsNull(text.BulletFont);
@@ -159,37 +161,37 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(4, text.Level);
 
                 Assert.IsTrue(text.IsBullet());
-                Assert.IsFalse(text.IsBulletAutoNumber());
-                text.Bullet = (/*setter*/false);
-                text.Bullet = (/*setter*/false);
+                Assert.IsFalse(text.IsBulletAutoNumber);
+                text.SetBullet(false);
+                text.SetBullet(false);
                 Assert.IsFalse(text.IsBullet());
-                Assert.IsFalse(text.IsBulletAutoNumber());
-                text.Bullet = (/*setter*/true);
+                Assert.IsFalse(text.IsBulletAutoNumber);
+                text.SetBullet(true);
                 Assert.IsTrue(text.IsBullet());
-                Assert.IsFalse(text.IsBulletAutoNumber());
+                Assert.IsFalse(text.IsBulletAutoNumber);
                 Assert.AreEqual(0, text.BulletAutoNumberStart);
                 Assert.AreEqual(ListAutoNumber.ARABIC_PLAIN, text.BulletAutoNumberScheme);
 
-                text.Bullet = (/*setter*/false);
+                text.SetBullet(false);
                 Assert.IsFalse(text.IsBullet());
-                text.Bullet = (/*setter*/ListAutoNumber.CIRCLE_NUM_DB_PLAIN);
+                text.SetBullet(ListAutoNumber.CIRCLE_NUM_DB_PLAIN);
                 Assert.IsTrue(text.IsBullet());
-                Assert.IsTrue(text.IsBulletAutoNumber());
+                Assert.IsTrue(text.IsBulletAutoNumber);
                 Assert.AreEqual(0, text.BulletAutoNumberStart);
                 Assert.AreEqual(ListAutoNumber.CIRCLE_NUM_DB_PLAIN, text.BulletAutoNumberScheme);
-                text.Bullet = (/*setter*/false);
+                text.SetBullet(false);
                 Assert.IsFalse(text.IsBullet());
-                Assert.IsFalse(text.IsBulletAutoNumber());
+                Assert.IsFalse(text.IsBulletAutoNumber);
                 text.SetBullet(ListAutoNumber.CIRCLE_NUM_WD_BLACK_PLAIN, 10);
                 Assert.IsTrue(text.IsBullet());
-                Assert.IsTrue(text.IsBulletAutoNumber());
+                Assert.IsTrue(text.IsBulletAutoNumber);
                 Assert.AreEqual(10, text.BulletAutoNumberStart);
                 Assert.AreEqual(ListAutoNumber.CIRCLE_NUM_WD_BLACK_PLAIN, text.BulletAutoNumberScheme);
 
 
                 Assert.IsNotNull(text.ToString());
 
-                new XSSFTextParagraph(text.XmlObject, shape.CTShape);
+                new XSSFTextParagraph(text.GetXmlObject(), shape.GetCTShape());
             }
             finally
             {

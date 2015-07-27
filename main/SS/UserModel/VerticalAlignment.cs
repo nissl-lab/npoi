@@ -24,6 +24,7 @@ namespace NPOI.SS.UserModel
      */
     public enum VerticalAlignment:int
     {
+        None = -1,
         /**
          * The vertical alignment is aligned-to-top.
          */

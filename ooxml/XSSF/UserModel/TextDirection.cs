@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel
      */
     public enum TextDirection
     {
+        None,
         /**
          * Horizontal text. This should be default.
          */

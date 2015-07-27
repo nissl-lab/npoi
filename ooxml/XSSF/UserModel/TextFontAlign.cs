@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel
      */
     public enum TextFontAlign
     {
+        None,
         /**
          * Automatic alignment
          */

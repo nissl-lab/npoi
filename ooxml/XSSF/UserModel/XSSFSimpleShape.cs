@@ -134,58 +134,61 @@ namespace NPOI.XSSF.UserModel
          * 
          * @return  text Contained within this shape or empty string
          */
-        public String GetText()
+        public String Text
         {
-            int MAX_LEVELS = 9;
-            StringBuilder out1 = new StringBuilder();
-            List<int> levelCount = new List<int>(MAX_LEVELS);	// maximum 9 levels
-            XSSFTextParagraph p = null;
-
-            // Initialise the levelCount array - this maintains a record of the numbering to be used at each level
-            for (int k = 0; k < MAX_LEVELS; k++)
+            get
             {
-                levelCount.Add(0);
-            }
+                int MAX_LEVELS = 9;
+                StringBuilder out1 = new StringBuilder();
+                List<int> levelCount = new List<int>(MAX_LEVELS);	// maximum 9 levels
+                XSSFTextParagraph p = null;
 
-            for (int i = 0; i < _paragraphs.Count; i++)
-            {
-                if (out1.Length > 0) out1.Append('\n');
-                p = _paragraphs[(i)];
-
-                if (p.IsBullet() && p.GetText().Length > 0)
+                // Initialise the levelCount array - this maintains a record of the numbering to be used at each level
+                for (int k = 0; k < MAX_LEVELS; k++)
                 {
+                    levelCount.Add(0);
+                }
 
-                    int level = Math.Min(p.GetLevel(), MAX_LEVELS - 1);
+                for (int i = 0; i < _paragraphs.Count; i++)
+                {
+                    if (out1.Length > 0) out1.Append('\n');
+                    p = _paragraphs[(i)];
 
-                    if (p.IsBulletAutoNumber())
+                    if (p.IsBullet() && p.Text.Length > 0)
                     {
-                        i = ProcessAutoNumGroup(i, level, levelCount, out1);
+
+                        int level = Math.Min(p.Level, MAX_LEVELS - 1);
+
+                        if (p.IsBulletAutoNumber)
+                        {
+                            i = ProcessAutoNumGroup(i, level, levelCount, out1);
+                        }
+                        else
+                        {
+                            // indent appropriately for the level
+                            for (int j = 0; j < level; j++)
+                            {
+                                out1.Append('\t');
+                            }
+                            String character = p.BulletCharacter;
+                            out1.Append(character.Length > 0 ? character + " " : "- ");
+                            out1.Append(p.Text);
+                        }
                     }
                     else
                     {
-                        // indent appropriately for the level
-                        for (int j = 0; j < level; j++)
+                        out1.Append(p.Text);
+
+                        // this paragraph is not a bullet, so reset the count array
+                        for (int k = 0; k < MAX_LEVELS; k++)
                         {
-                            out1.Append('\t');
+                            levelCount[k] = 0;
                         }
-                        String character = p.GetBulletCharacter();
-                        out1.Append(character.Length > 0 ? character + " " : "- ");
-                        out1.Append(p.GetText());
                     }
                 }
-                else
-                {
-                    out1.Append(p.GetText());
 
-                    // this paragraph is not a bullet, so reset the count array
-                    for (int k = 0; k < MAX_LEVELS; k++)
-                    {
-                        levelCount[k] = 0;
-                    }
-                }
+                return out1.ToString();
             }
-
-            return out1.ToString();
         }
 
         /**
@@ -207,8 +210,8 @@ namespace NPOI.XSSF.UserModel
             // not being a bullet resets the count for that level to 1.
 
             // first auto-number paragraph so Initialise to 1 or the bullets startAt if present
-            startAt = p.GetBulletAutoNumberStart();
-            scheme = p.GetBulletAutoNumberScheme();
+            startAt = p.BulletAutoNumberStart;
+            scheme = p.BulletAutoNumberScheme;
             if (levelCount[(level)] == 0)
             {
                 levelCount[level] = startAt == 0 ? 1 : startAt;
@@ -218,29 +221,29 @@ namespace NPOI.XSSF.UserModel
             {
                 out1.Append('\t');
             }
-            if (p.GetText().Length > 0)
+            if (p.Text.Length > 0)
             {
                 out1.Append(GetBulletPrefix(scheme, levelCount[level]));
-                out1.Append(p.GetText());
+                out1.Append(p.Text);
             }
             while (true)
             {
                 nextp = (index + 1) == _paragraphs.Count ? null : _paragraphs[(index + 1)];
                 if (nextp == null) break; // out of paragraphs
-                if (!(nextp.IsBullet() && p.IsBulletAutoNumber())) break; // not an auto-number bullet                      
-                if (nextp.GetLevel() > level)
+                if (!(nextp.IsBullet() && p.IsBulletAutoNumber)) break; // not an auto-number bullet                      
+                if (nextp.Level > level)
                 {
                     // recurse into the new level group
                     if (out1.Length > 0) out1.Append('\n');
-                    index = ProcessAutoNumGroup(index + 1, nextp.GetLevel(), levelCount, out1);
+                    index = ProcessAutoNumGroup(index + 1, nextp.Level, levelCount, out1);
                     continue; // restart the loop given the new index
                 }
-                else if (nextp.GetLevel() < level)
+                else if (nextp.Level < level)
                 {
                     break; // Changed level   
                 }
-                nextScheme = nextp.GetBulletAutoNumberScheme();
-                nextStartAt = nextp.GetBulletAutoNumberStart();
+                nextScheme = nextp.BulletAutoNumberScheme;
+                nextStartAt = nextp.BulletAutoNumberStart;
 
                 if (nextScheme == scheme && nextStartAt == startAt)
                 {
@@ -253,12 +256,12 @@ namespace NPOI.XSSF.UserModel
                         out1.Append('\t');
                     }
                     // check for empty text - only output a bullet if there is text, but it is still part of the group
-                    if (nextp.GetText().Length > 0)
+                    if (nextp.Text.Length > 0)
                     {
                         // increment the count for this level
                         levelCount[level] = levelCount[(level) + 1];
                         out1.Append(GetBulletPrefix(nextScheme, levelCount[(level)]));
-                        out1.Append(nextp.GetText());
+                        out1.Append(nextp.Text);
                     }
                 }
                 else
@@ -399,7 +402,7 @@ namespace NPOI.XSSF.UserModel
         {
             ClearText();
 
-            AddNewTextParagraph().AddNewTextRun().SetText(text);
+            AddNewTextParagraph().AddNewTextRun().Text = (text);
         }
 
         /**
@@ -450,9 +453,12 @@ namespace NPOI.XSSF.UserModel
          * 
          * @return text paragraphs in this shape
          */
-        public List<XSSFTextParagraph> GetTextParagraphs()
+        public List<XSSFTextParagraph> TextParagraphs
         {
-            return _paragraphs;
+            get
+            {
+                return _paragraphs;
+            }
         }
 
         /**
@@ -477,7 +483,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFTextParagraph AddNewTextParagraph(String text)
         {
             XSSFTextParagraph paragraph = AddNewTextParagraph();
-            paragraph.AddNewTextRun().SetText(text);
+            paragraph.AddNewTextRun().Text=(text);
             return paragraph;
         }
 
@@ -526,63 +532,37 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Sets the type of horizontal overflow for the text.
-         *
-         * @param overflow - the type of horizontal overflow.
-         * A <code>null</code> values unsets this property.
-         */
-        public void SetTextHorizontalOverflow(TextHorizontalOverflow overflow)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                if (overflow == null)
-                {
-                    if (bodyPr.IsSetHorzOverflow()) bodyPr.UnsetHorzOverflow();
-                }
-                else
-                {
-                    bodyPr.horzOverflow = (/*setter*/(ST_TextHorzOverflowType)((int)overflow + 1));
-                }
-            }
-        }
-
-        /**
          * Returns the type of horizontal overflow for the text.
          *
          * @return the type of horizontal overflow
          */
-        public TextHorizontalOverflow GetTextHorizontalOverflow()
+        public TextHorizontalOverflow TextHorizontalOverflow
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetHorzOverflow())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return (TextHorizontalOverflow)((int)bodyPr.horzOverflow - 1);
+                    if (bodyPr.IsSetHorzOverflow())
+                    {
+                        return (TextHorizontalOverflow)((int)bodyPr.horzOverflow - 1);
+                    }
                 }
+                return TextHorizontalOverflow.OVERFLOW;
             }
-            return TextHorizontalOverflow.OVERFLOW;
-        }
-
-        /**
-         * Sets the type of vertical overflow for the text.
-         *
-         * @param overflow - the type of vertical overflow.
-         * A <code>null</code> values unsets this property.
-         */
-        public void SetTextVerticalOverflow(TextVerticalOverflow overflow)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            set
             {
-                if (overflow == null)
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    if (bodyPr.IsSetVertOverflow()) bodyPr.UnsetVertOverflow();
-                }
-                else
-                {
-                    bodyPr.vertOverflow = (/*setter*/(ST_TextVertOverflowType)((int)overflow + 1));
+                    if (value == null)
+                    {
+                        if (bodyPr.IsSetHorzOverflow()) bodyPr.UnsetHorzOverflow();
+                    }
+                    else
+                    {
+                        bodyPr.horzOverflow = (/*setter*/(ST_TextHorzOverflowType)((int)value + 1));
+                    }
                 }
             }
         }
@@ -592,37 +572,33 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the type of vertical overflow
          */
-        public TextVerticalOverflow GetTextVerticalOverflow()
+        public TextVerticalOverflow TextVerticalOverflow
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetVertOverflow())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return (TextVerticalOverflow)((int)bodyPr.vertOverflow - 1);
+                    if (bodyPr.IsSetVertOverflow())
+                    {
+                        return (TextVerticalOverflow)((int)bodyPr.vertOverflow - 1);
+                    }
                 }
+                return TextVerticalOverflow.OVERFLOW;
             }
-            return TextVerticalOverflow.OVERFLOW;
-        }
-
-        /**
-         * Sets the type of vertical alignment for the text within the shape.
-         *
-         * @param anchor - the type of alignment.
-         * A <code>null</code> values unsets this property.
-         */
-        public void SetVerticalAlignment(VerticalAlignment anchor)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            set
             {
-                if (anchor == null)
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    if (bodyPr.IsSetAnchor()) bodyPr.UnsetAnchor();
-                }
-                else
-                {
-                    bodyPr.anchor = (/*setter*/(ST_TextAnchoringType)((int)anchor + 1));
+                    if (value == null)
+                    {
+                        if (bodyPr.IsSetVertOverflow()) bodyPr.UnsetVertOverflow();
+                    }
+                    else
+                    {
+                        bodyPr.vertOverflow = (/*setter*/(ST_TextVertOverflowType)((int)value + 1));
+                    }
                 }
             }
         }
@@ -632,37 +608,33 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the type of vertical alignment
          */
-        public VerticalAlignment GetVerticalAlignment()
+        public VerticalAlignment VerticalAlignment
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetAnchor())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return (VerticalAlignment)((int)bodyPr.anchor - 1);
+                    if (bodyPr.IsSetAnchor())
+                    {
+                        return (VerticalAlignment)((int)bodyPr.anchor - 1);
+                    }
                 }
+                return VerticalAlignment.Top;
             }
-            return VerticalAlignment.Top;
-        }
-
-        /**
-         * Sets the vertical orientation of the text
-         * 
-         * @param orientation vertical orientation of the text
-         * A <code>null</code> values unsets this property.
-         */
-        public void SetTextDirection(TextDirection orientation)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            set
             {
-                if (orientation == null)
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    if (bodyPr.IsSetVert()) bodyPr.UnsetVert();
-                }
-                else
-                {
-                    bodyPr.vert = (/*setter*/(ST_TextVerticalType)((int)orientation + 1));
+                    if (value == null)
+                    {
+                        if (bodyPr.IsSetAnchor()) bodyPr.UnsetAnchor();
+                    }
+                    else
+                    {
+                        bodyPr.anchor = (/*setter*/(ST_TextAnchoringType)((int)value + 1));
+                    }
                 }
             }
         }
@@ -672,18 +644,36 @@ namespace NPOI.XSSF.UserModel
          * 
          * @return vertical orientation of the text
          */
-        public TextDirection GetTextDirection()
+        public TextDirection TextDirection
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                ST_TextVerticalType val = bodyPr.vert;
-                if (val != null)
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return (TextDirection)(val - 1);
+                    ST_TextVerticalType val = bodyPr.vert;
+                    if (val != null)
+                    {
+                        return (TextDirection)(val - 1);
+                    }
+                }
+                return TextDirection.HORIZONTAL;
+            }
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (value == TextDirection.None)
+                    {
+                        if (bodyPr.IsSetVert()) bodyPr.UnsetVert();
+                    }
+                    else
+                    {
+                        bodyPr.vert = (/*setter*/(ST_TextVerticalType)((int)value + 1));
+                    }
                 }
             }
-            return TextDirection.HORIZONTAL;
         }
 
 
@@ -693,18 +683,33 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the bottom inset in points
          */
-        public double GetBottomInset()
+        public double BottomInset
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetBIns())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return Units.ToPoints(bodyPr.bIns);
+                    if (bodyPr.IsSetBIns())
+                    {
+                        return Units.ToPoints(bodyPr.bIns);
+                    }
+                }
+                // If this attribute is omitted, then a value of 0.05 inches is implied
+                return 3.6;
+            }
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (value == -1)
+                    {
+                        if (bodyPr.IsSetBIns()) bodyPr.UnsetBIns();
+                    }
+                    else bodyPr.bIns = (/*setter*/Units.ToEMU(value));
                 }
             }
-            // If this attribute is omitted, then a value of 0.05 inches is implied
-            return 3.6;
         }
 
         /**
@@ -714,18 +719,33 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the left inset in points
          */
-        public double GetLeftInset()
+        public double LeftInset
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetLIns())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return Units.ToPoints(bodyPr.lIns);
+                    if (bodyPr.IsSetLIns())
+                    {
+                        return Units.ToPoints(bodyPr.lIns);
+                    }
+                }
+                // If this attribute is omitted, then a value of 0.05 inches is implied
+                return 3.6;
+            }
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (value == -1)
+                    {
+                        if (bodyPr.IsSetLIns()) bodyPr.UnsetLIns();
+                    }
+                    else bodyPr.lIns = (/*setter*/Units.ToEMU(value));
                 }
             }
-            // If this attribute is omitted, then a value of 0.05 inches is implied
-            return 3.6;
         }
 
         /**
@@ -735,18 +755,33 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the right inset in points
          */
-        public double GetRightInset()
+        public double RightInset
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetRIns())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return Units.ToPoints(bodyPr.rIns);
+                    if (bodyPr.IsSetRIns())
+                    {
+                        return Units.ToPoints(bodyPr.rIns);
+                    }
+                }
+                // If this attribute is omitted, then a value of 0.05 inches is implied
+                return 3.6;
+            }
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (value == -1)
+                    {
+                        if (bodyPr.IsSetRIns()) bodyPr.UnsetRIns();
+                    }
+                    else bodyPr.rIns = (/*setter*/Units.ToEMU(value));
                 }
             }
-            // If this attribute is omitted, then a value of 0.05 inches is implied
-            return 3.6;
         }
 
         /**
@@ -755,125 +790,63 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the top inset in points
          */
-        public double GetTopInset()
+        public double TopInset
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetTIns())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return Units.ToPoints(bodyPr.tIns);
+                    if (bodyPr.IsSetTIns())
+                    {
+                        return Units.ToPoints(bodyPr.tIns);
+                    }
+                }
+                // If this attribute is omitted, then a value of 0.05 inches is implied
+                return 3.6;
+            }
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (value == -1)
+                    {
+                        if (bodyPr.IsSetTIns()) bodyPr.UnsetTIns();
+                    }
+                    else bodyPr.tIns = (/*setter*/Units.ToEMU(value));
                 }
             }
-            // If this attribute is omitted, then a value of 0.05 inches is implied
-            return 3.6;
         }
-
-        /**
-         * Sets the bottom inset.
-         * @see #getBottomInset()
-         *
-         * @param margin    the bottom margin
-         */
-        public void SetBottomInset(double margin)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                if (margin == -1)
-                {
-                    if (bodyPr.IsSetBIns()) bodyPr.UnsetBIns();
-                }
-                else bodyPr.bIns = (/*setter*/Units.ToEMU(margin));
-            }
-        }
-
-        /**
-         * Sets the left inset.
-         * @see #getLeftInset()
-         *
-         * @param margin    the left margin
-         */
-        public void SetLeftInset(double margin)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                if (margin == -1)
-                {
-                    if (bodyPr.IsSetLIns()) bodyPr.UnsetLIns();
-                }
-                else bodyPr.lIns = (/*setter*/Units.ToEMU(margin));
-            }
-        }
-
-        /**
-         * Sets the right inset.
-         * @see #getRightInset()
-         *
-         * @param margin    the right margin
-         */
-        public void SetRightInset(double margin)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                if (margin == -1)
-                {
-                    if (bodyPr.IsSetRIns()) bodyPr.UnsetRIns();
-                }
-                else bodyPr.rIns = (/*setter*/Units.ToEMU(margin));
-            }
-        }
-
-        /**
-         * Sets the top inset.
-         * @see #getTopInset()
-         *
-         * @param margin    the top margin
-         */
-        public void SetTopInset(double margin)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                if (margin == -1)
-                {
-                    if (bodyPr.IsSetTIns()) bodyPr.UnsetTIns();
-                }
-                else bodyPr.tIns = (/*setter*/Units.ToEMU(margin));
-            }
-        }
-
 
         /**
          * @return whether to wrap words within the bounding rectangle
          */
-        public bool GetWordWrap()
+        public bool WordWrap
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetWrap())
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
                 {
-                    return bodyPr.wrap == ST_TextWrappingType.square;
+                    if (bodyPr.IsSetWrap())
+                    {
+                        return bodyPr.wrap == ST_TextWrappingType.square;
+                    }
+                }
+                return true;
+            }
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    bodyPr.wrap = (/*setter*/value ? ST_TextWrappingType.square : ST_TextWrappingType.none);
                 }
             }
-            return true;
         }
 
-        /**
-         *
-         * @param wrap  whether to wrap words within the bounding rectangle
-         */
-        public void SetWordWrap(bool wrap)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                bodyPr.wrap = (/*setter*/wrap ? ST_TextWrappingType.square : ST_TextWrappingType.none);
-            }
-        }
+
 
         /**
          *
@@ -881,39 +854,38 @@ namespace NPOI.XSSF.UserModel
          * Auto-fitting is when text within a shape is scaled in order to contain all the text inside
          *
          * @param value type of autofit
-         */
-        public void SetTextAutofit(TextAutofit value)
-        {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
-            {
-                if (bodyPr.IsSetSpAutoFit()) bodyPr.UnsetSpAutoFit();
-                if (bodyPr.IsSetNoAutofit()) bodyPr.UnsetNoAutofit();
-                if (bodyPr.IsSetNormAutofit()) bodyPr.UnsetNormAutofit();
-
-                switch (value)
-                {
-                    case TextAutofit.NONE: bodyPr.AddNewNoAutofit(); break;
-                    case TextAutofit.NORMAL: bodyPr.AddNewNormAutofit(); break;
-                    case TextAutofit.SHAPE: bodyPr.AddNewSpAutoFit(); break;
-                }
-            }
-        }
-
-        /**
-         *
          * @return type of autofit
          */
-        public TextAutofit GetTextAutofit()
+        public TextAutofit TextAutofit
         {
-            CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
-            if (bodyPr != null)
+            get
             {
-                if (bodyPr.IsSetNoAutofit()) return TextAutofit.NONE;
-                else if (bodyPr.IsSetNormAutofit()) return TextAutofit.NORMAL;
-                else if (bodyPr.IsSetSpAutoFit()) return TextAutofit.SHAPE;
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (bodyPr.IsSetNoAutofit()) return TextAutofit.NONE;
+                    else if (bodyPr.IsSetNormAutofit()) return TextAutofit.NORMAL;
+                    else if (bodyPr.IsSetSpAutoFit()) return TextAutofit.SHAPE;
+                }
+                return TextAutofit.NORMAL;
             }
-            return TextAutofit.NORMAL;
+            set
+            {
+                CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
+                if (bodyPr != null)
+                {
+                    if (bodyPr.IsSetSpAutoFit()) bodyPr.UnsetSpAutoFit();
+                    if (bodyPr.IsSetNoAutofit()) bodyPr.UnsetNoAutofit();
+                    if (bodyPr.IsSetNormAutofit()) bodyPr.UnsetNormAutofit();
+
+                    switch (value)
+                    {
+                        case TextAutofit.NONE: bodyPr.AddNewNoAutofit(); break;
+                        case TextAutofit.NORMAL: bodyPr.AddNewNormAutofit(); break;
+                        case TextAutofit.SHAPE: bodyPr.AddNewSpAutoFit(); break;
+                    }
+                }
+            }
         }
 
         /**
@@ -922,20 +894,16 @@ namespace NPOI.XSSF.UserModel
          * @return the shape type
          * @see NPOI.SS.UserModel.ShapeTypes
          */
-        public int GetShapeType()
+        public int ShapeType
         {
-            return (int)ctShape.spPr.prstGeom.prst;
-        }
-
-        /**
-         * Sets the shape types.
-         *
-         * @param type the shape type, one of the constants defined in {@link NPOI.SS.UserModel.ShapeTypes}.
-         * @see NPOI.SS.UserModel.ShapeTypes
-         */
-        public void SetShapeType(int type)
-        {
-            ctShape.spPr.prstGeom.prst = (/*setter*/(ST_ShapeType)(type));
+            get
+            {
+                return (int)ctShape.spPr.prstGeom.prst;
+            }
+            set
+            {
+                ctShape.spPr.prstGeom.prst = (/*setter*/(ST_ShapeType)(value));
+            }
         }
 
         protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
