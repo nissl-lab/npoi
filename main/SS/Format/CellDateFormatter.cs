@@ -35,6 +35,7 @@ namespace NPOI.SS.Format
         private bool ShowAmPm;
         private FormatBase dateFmt;
         private String sFmt;
+        private int millisecondPartLength = 0;
 
         private static readonly TimeSpan EXCEL_EPOCH_TIME;
         private static readonly DateTime EXCEL_EPOCH_DATE;
@@ -113,6 +114,7 @@ namespace NPOI.SS.Format
                         mStart = -1;
                         int sLen = part.Length;
                         _formatter.sFmt = "%0" + (sLen + 2) + "." + sLen + "f";
+                        _formatter.millisecondPartLength = sLen;
                         return part.Replace('0', 'f');
 
                     case 'a':
@@ -166,11 +168,11 @@ namespace NPOI.SS.Format
             partHandler.Finish(descBuf);
             dateFmt = new SimpleDateFormat(descBuf.ToString());
             
-            //NPOI do not need this
             // tweak the format pattern to pass tests on JDK 1.7,
             // See https://issues.apache.org/bugzilla/show_bug.cgi?id=53369
-            //String ptrn = descBuf.toString().replaceAll("((y)(?!y))(?<!yy)", "yy");
-            //dateFmt = new SimpleDateFormat(ptrn, LOCALE);
+
+            String ptrn = Regex.Replace(descBuf.ToString(), "((y)(?!y))(?<!yy)", "yy");
+            dateFmt = new SimpleDateFormat(ptrn);
         }
 
         /** {@inheritDoc} */
@@ -188,8 +190,22 @@ namespace NPOI.SS.Format
                 else
                     value = new DateTime((long)(EXCEL_EPOCH_TIME.Ticks + v));
             }
-            dateFmt.Format(value, toAppendTo, CultureInfo.CurrentCulture);
+            DateTime newValue = (DateTime)value;
+            //in excel, if  millisecond part value like .009, (that is above 5 millisecond)
+            //and millisecond part pattern is .00 (changed to .ff), the result need round up,
+            //millisecond part is 01 not 00. so try to adjuse the value.
+            if (millisecondPartLength > 0)
+            {
+                double second = (newValue.Millisecond / 1000.0 * Math.Pow(10, millisecondPartLength));
+                second = second - Math.Truncate(second);
+                if (second >= 0.5)
+                {
+                    newValue = newValue.AddMilliseconds((1 - second) / Math.Pow(10, millisecondPartLength) * 1000);
+                }
+            }
 
+            dateFmt.Format(newValue, toAppendTo, CultureInfo.CurrentCulture);
+            
             //throw new NotImplementedException();
             //AttributedCharacterIterator it = dateFmt.FormatToCharacterIterator(
             //        value);
