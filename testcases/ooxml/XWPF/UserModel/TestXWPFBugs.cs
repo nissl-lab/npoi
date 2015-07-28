@@ -14,11 +14,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace TestCases.XWPF.UserModel
+namespace NPOI.XWPF.UserModel
 {
     using System;
     using NUnit.Framework;
-    using NPOI.XWPF.UserModel;
     using NPOI.XWPF;
 
     [TestFixture]
