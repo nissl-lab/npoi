@@ -24,7 +24,6 @@ namespace NPOI.XSSF
      */
     public class XLSBUnsupportedException : UnsupportedFileFormatException
     {
-        private static long serialVersionUID = 7849681804154571175L;
         public static String MESSAGE = ".XLSB Binary Workbooks are not supported";
 
         public XLSBUnsupportedException()

@@ -22,6 +22,8 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using System.Xml.Serialization;
     using System.Xml;
+    using NPOI.Util;
+    using System.Xml.XPath;
 
     /**
      * Sketch of XWPF header class
@@ -109,7 +111,7 @@ namespace NPOI.XWPF.UserModel
             HdrDocument hdrDocument = null;
             try
             {
-                XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+                XmlDocument xmldoc = DocumentHelper.LoadDocument(GetPackagePart().GetInputStream());
                 hdrDocument = HdrDocument.Parse(xmldoc, NamespaceManager);
                 headerFooter = hdrDocument.Hdr;
                 foreach (object o in headerFooter.Items)

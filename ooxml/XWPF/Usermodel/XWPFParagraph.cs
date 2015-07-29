@@ -202,7 +202,11 @@ namespace NPOI.XWPF.UserModel
             {
                 //!paragraph.getDomNode().hasChildNodes();
                 //inner xml include objects holded by Items and pPr object
-                return paragraph.Items.Count == 0 && paragraph.pPr == null;
+                //should use children of pPr node, but we didn't keep reference to it.
+                //return paragraph.Items.Count == 0 && (paragraph.pPr == null ||
+                //    paragraph.pPr != null && paragraph.pPr.rPr == null && paragraph.pPr.sectPr == null && paragraph.pPr.pPrChange == null
+                //    );
+                return paragraph.Items.Count == 0 && (paragraph.pPr == null || paragraph.pPr.IsEmpty);
             }
         }
 

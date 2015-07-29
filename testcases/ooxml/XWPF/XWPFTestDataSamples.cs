@@ -40,6 +40,7 @@ namespace NPOI.XWPF
             MemoryStream baos = new MemoryStream(4096);
             doc.Write(baos);
             MemoryStream bais = new MemoryStream(baos.ToArray());
+            //WriteTo("D:\\testdoc.zip", baos.ToArray());
             return new XWPFDocument(bais);
         }
 
@@ -48,6 +49,15 @@ namespace NPOI.XWPF
             Stream is1 = POIDataSamples.GetDocumentInstance().OpenResourceAsStream(filename);
             byte[] result = IOUtils.ToByteArray(is1);
             return result;
+        }
+
+        public static void WriteTo(string fileName, byte[] data)
+        {
+            using (FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite))
+            {
+                fs.Write(data, 0, data.Length);
+                fs.Flush();
+            }
         }
     }
 

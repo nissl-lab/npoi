@@ -31,11 +31,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             CT_OnOff ctObj = new CT_OnOff();
             if (node.Attributes["w:val"] != null)
             {
-                ctObj.val = XmlHelper.ReadBool(node.Attributes["w:val"]);
+                ctObj.valField = XmlHelper.ReadBool(node.Attributes["w:val"]);
             }
             else
             {
-                ctObj.val = true;
+                ctObj.valField = true;
             }
             return ctObj;
         }
@@ -46,8 +46,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             //if true, don't render val attribute
-            if (!this.val)
-                XmlHelper.WriteAttribute(sw, "w:val", this.val, true);
+            if (!this.valField)
+                XmlHelper.WriteAttribute(sw, "w:val", this.valField, true);
             sw.Write("/>");
         }
 
@@ -91,7 +91,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetVal()
         {
-            return this.valFieldSpecified && this.valField;
+            return this.valFieldSpecified;
         }
     }
     /// <summary>

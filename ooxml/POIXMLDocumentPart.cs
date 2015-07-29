@@ -203,9 +203,10 @@ using System.Xml;
 
         public static XmlDocument ConvertStreamToXml(Stream xmlStream)
         {
-            XmlDocument xmlDoc = new XmlDocument();
-            NPOI.OpenXml4Net.Util.XmlHelper.LoadXmlSafe(xmlDoc, xmlStream);
-            return xmlDoc;
+            return DocumentHelper.LoadDocument(xmlStream);
+            //XmlDocument xmlDoc = new XmlDocument();
+            //NPOI.OpenXml4Net.Util.XmlHelper.LoadXmlSafe(xmlDoc, xmlStream);
+            //return xmlDoc;
         }
 
         /**
