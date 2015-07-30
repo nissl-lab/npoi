@@ -13,7 +13,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Hyperlink
     {
 
-        private string refField = string.Empty; // Required
+        private string refField = null;
 
         private string idField = null; // this and the other ones are optional
 

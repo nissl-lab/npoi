@@ -52,7 +52,6 @@ namespace NPOI.SS.UserModel
          */
         void ApplyFont(IFont font);
 
-        short GetFontAtIndex(int i);
         /**
          * Removes any formatting that may have been applied to the string.
          */

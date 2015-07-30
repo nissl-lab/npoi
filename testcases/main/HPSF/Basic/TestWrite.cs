@@ -252,7 +252,7 @@ namespace TestCases.HPSF.Basic
             si.SetProperty(p);
             si.SetProperty(PropertyIDMap.PID_TITLE, Variant.VT_LPSTR, TITLE);
 
-            poiFs.CreateDocument(ps.GetStream(),
+            poiFs.CreateDocument(ps.ToInputStream(),
                                  SummaryInformation.DEFAULT_STREAM_NAME);
             poiFs.WriteFileSystem(out1);
             //out1.Close();
@@ -332,7 +332,7 @@ namespace TestCases.HPSF.Basic
             s2.SetProperty(2, SECTION2);
             ps.AddSection(s2);
 
-            poiFs.CreateDocument(ps.GetStream(), STREAM_NAME);
+            poiFs.CreateDocument(ps.ToInputStream(), STREAM_NAME);
             poiFs.WriteFileSystem(out1);
             //out1.Close();
 
@@ -780,7 +780,7 @@ namespace TestCases.HPSF.Basic
                 s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
                 int codepage = CodePageUtil.CP_UNICODE;
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
-                poiFs.CreateDocument(ps1.GetStream(), "Test");
+                poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                 poiFs.WriteFileSystem(copy);
 
                 /* Read back: */
@@ -855,8 +855,8 @@ namespace TestCases.HPSF.Basic
             Assert.AreEqual(null, dinf.Manager);
 
             // Do an in-place replace via an InputStream
-            new NPOIFSDocument(sinfDoc).ReplaceContents(sinf.ToStream());
-            new NPOIFSDocument(dinfDoc).ReplaceContents(dinf.ToStream());
+            new NPOIFSDocument(sinfDoc).ReplaceContents(sinf.ToInputStream());
+            new NPOIFSDocument(dinfDoc).ReplaceContents(dinf.ToInputStream());
 
 
             // Check it didn't Get Changed
@@ -1011,7 +1011,7 @@ namespace TestCases.HPSF.Basic
                     s.Dictionary = m;
                     s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
                     s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
-                    poiFs.CreateDocument(ps1.GetStream(), "Test");
+                    poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                     poiFs.WriteFileSystem(copy);
                     Assert.Fail("This Testcase did not detect the invalid codepage value.");
                 }

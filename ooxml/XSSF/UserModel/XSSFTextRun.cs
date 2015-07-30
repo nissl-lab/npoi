@@ -36,19 +36,24 @@ namespace NPOI.XSSF.UserModel
             _p = p;
         }
 
-        XSSFTextParagraph GetParentParagraph()
+        public XSSFTextParagraph ParentParagraph
         {
-            return _p;
+            get
+            {
+                return _p;
+            }
         }
 
-        public String GetText()
+        public String Text
         {
-            return _r.t;
-        }
-
-        public void SetText(String text)
-        {
-            _r.t = (text);
+            get
+            {
+                return _r.t;
+            }
+            set
+            {
+                _r.t = (value);
+            }
         }
 
         public CT_RegularTextRun GetXmlObject()
@@ -56,80 +61,77 @@ namespace NPOI.XSSF.UserModel
             return _r;
         }
 
-        public void SetFontColor(Color color)
+        public Color FontColor
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            CT_SolidColorFillProperties fill = rPr.IsSetSolidFill() ? rPr.solidFill : rPr.AddNewSolidFill();
-            CT_SRgbColor clr = fill.IsSetSrgbClr() ? fill.srgbClr : fill.AddNewSrgbClr();
-            clr.val = (new byte[] { color.R, color.G, color.B });
-            
-            if (fill.IsSetHslClr()) fill.UnsetHslClr();
-            if (fill.IsSetPrstClr()) fill.UnsetPrstClr();
-            if (fill.IsSetSchemeClr()) fill.UnsetSchemeClr();
-            if (fill.IsSetScrgbClr()) fill.UnsetScrgbClr();
-            if (fill.IsSetSysClr()) fill.UnsetSysClr();
-
-        }
-
-        public Color GetFontColor()
-        {
-
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetSolidFill())
+            get
             {
-                CT_SolidColorFillProperties fill = rPr.solidFill;
-
-                if (fill.IsSetSrgbClr())
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetSolidFill())
                 {
-                    CT_SRgbColor clr = fill.srgbClr;
-                    byte[] rgb = clr.val;
-                    return Color.FromArgb(0xFF & rgb[0], 0xFF & rgb[1], 0xFF & rgb[2]);
-                }
-            }
+                    CT_SolidColorFillProperties fill = rPr.solidFill;
 
-            return  Color.FromArgb(0, 0, 0);
-        }
-
-        /**
-         *
-         * @param fontSize  font size in points.
-         * The value of <code>-1</code> unsets the Sz attribute from the underlying xml bean
-         */
-        public void SetFontSize(double fontSize)
-        {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (fontSize == -1.0)
-            {
-                if (rPr.IsSetSz()) rPr.UnsetSz();
-            }
-            else
-            {
-                if (fontSize < 1.0)
-                {
-                    throw new ArgumentException("Minimum font size is 1pt but was " + fontSize);
+                    if (fill.IsSetSrgbClr())
+                    {
+                        CT_SRgbColor clr = fill.srgbClr;
+                        byte[] rgb = clr.val;
+                        return Color.FromArgb(0xFF & rgb[0], 0xFF & rgb[1], 0xFF & rgb[2]);
+                    }
                 }
 
-                rPr.sz = ((int)(100 * fontSize));
+                return Color.FromArgb(0, 0, 0);
+            }
+            set
+            {
+                CT_TextCharacterProperties rPr = GetRPr();
+                CT_SolidColorFillProperties fill = rPr.IsSetSolidFill() ? rPr.solidFill : rPr.AddNewSolidFill();
+                CT_SRgbColor clr = fill.IsSetSrgbClr() ? fill.srgbClr : fill.AddNewSrgbClr();
+                clr.val = (new byte[] { value.R, value.G, value.B });
+
+                if (fill.IsSetHslClr()) fill.UnsetHslClr();
+                if (fill.IsSetPrstClr()) fill.UnsetPrstClr();
+                if (fill.IsSetSchemeClr()) fill.UnsetSchemeClr();
+                if (fill.IsSetScrgbClr()) fill.UnsetScrgbClr();
+                if (fill.IsSetSysClr()) fill.UnsetSysClr();
             }
         }
 
         /**
          * @return font size in points or -1 if font size is not Set.
          */
-        public double GetFontSize()
+        public double FontSize
         {
-            double scale = 1;
-            double size = XSSFFont.DEFAULT_FONT_SIZE;	// default font size
-            CT_TextNormalAutofit afit = GetParentParagraph().GetParentShape().txBody.bodyPr.normAutofit;
-            if (afit != null) scale = (double)afit.fontScale / 100000;
-
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetSz())
+            get
             {
-                size = rPr.sz * 0.01;
-            }
+                double scale = 1;
+                double size = XSSFFont.DEFAULT_FONT_SIZE;	// default font size
+                CT_TextNormalAutofit afit = ParentParagraph.ParentShape.txBody.bodyPr.normAutofit;
+                if (afit != null) scale = (double)afit.fontScale / 100000;
 
-            return size * scale;
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetSz())
+                {
+                    size = rPr.sz * 0.01;
+                }
+
+                return size * scale;
+            }
+            set
+            {
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (value == -1.0)
+                {
+                    if (rPr.IsSetSz()) rPr.UnsetSz();
+                }
+                else
+                {
+                    if (value < 1.0)
+                    {
+                        throw new ArgumentException("Minimum font size is 1pt but was " + value);
+                    }
+
+                    rPr.sz = ((int)(100 * value));
+                }
+            }
         }
 
         /**
@@ -137,35 +139,28 @@ namespace NPOI.XSSF.UserModel
          * @return the spacing between characters within a text Run,
          * If this attribute is omitted then a value of 0 or no adjustment is assumed.
          */
-        public double GetCharacterSpacing()
+        public double CharacterSpacing
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetSpc())
+            get
             {
-                return rPr.spc * 0.01;
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetSpc())
+                {
+                    return rPr.spc * 0.01;
+                }
+                return 0;
             }
-            return 0;
-        }
-
-        /**
-         * Set the spacing between characters within a text Run.
-         * <p>
-         * The spacing is specified in points. Positive values will cause the text to expand,
-         * negative values to condense.
-         * </p>
-         *
-         * @param spc  character spacing in points.
-         */
-        public void SetCharacterSpacing(double spc)
-        {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (spc == 0.0)
+            set
             {
-                if (rPr.IsSetSpc()) rPr.UnsetSpc();
-            }
-            else
-            {
-                rPr.spc = ((int)(100 * spc));
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (value == 0.0)
+                {
+                    if (rPr.IsSetSpc()) rPr.UnsetSpc();
+                }
+                else
+                {
+                    rPr.spc = ((int)(100 * value));
+                }
             }
         }
 
@@ -210,62 +205,73 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return  font family or null if not Set
          */
-        public String GetFontFamily()
+        public String FontFamily
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            CT_TextFont font = rPr.latin;
-            if (font != null)
+            get
             {
-                return font.typeface;
+                CT_TextCharacterProperties rPr = GetRPr();
+                CT_TextFont font = rPr.latin;
+                if (font != null)
+                {
+                    return font.typeface;
+                }
+                return XSSFFont.DEFAULT_FONT_NAME;
             }
-            return XSSFFont.DEFAULT_FONT_NAME;
         }
 
-        public byte GetPitchAndFamily()
+        public byte PitchAndFamily
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            CT_TextFont font = rPr.latin;
-            if (font != null)
+            get
             {
-                return (byte)font.pitchFamily;
+                CT_TextCharacterProperties rPr = GetRPr();
+                CT_TextFont font = rPr.latin;
+                if (font != null)
+                {
+                    return (byte)font.pitchFamily;
+                }
+                return 0;
             }
-            return 0;
-        }
-
-        /**
-         * Specifies whether a run of text will be formatted as strikethrough text.
-         *
-         * @param strike whether a run of text will be formatted as strikethrough text.
-         */
-        public void SetStrikethrough(bool strike)
-        {
-            GetRPr().strike = (strike ? ST_TextStrikeType.sngStrike : ST_TextStrikeType.noStrike);
         }
 
         /**
-         * @return whether a run of text will be formatted as strikethrough text. Default is false.
+         * get or set whether a run of text will be formatted as strikethrough text. Default is false.
          */
-        public bool IsStrikethrough()
+        public bool IsStrikethrough
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetStrike())
+            get
             {
-                return rPr.strike != ST_TextStrikeType.noStrike;
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetStrike())
+                {
+                    return rPr.strike != ST_TextStrikeType.noStrike;
+                }
+                return false;
             }
-            return false;
+            set
+            {
+                GetRPr().strike = (value ? ST_TextStrikeType.sngStrike : ST_TextStrikeType.noStrike);
+            }
         }
 
         /**
-         * @return whether a run of text will be formatted as a superscript text. Default is false.
+         * get or set whether a run of text will be formatted as a superscript text. Default is false.
+         * Default base line offset is 30%
          */
-        public bool IsSuperscript()
+        public bool IsSuperscript
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetBaseline())
+            get
             {
-                return rPr.baseline> 0;
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetBaseline())
+                {
+                    return rPr.baseline > 0;
+                }
+                return false;
             }
-            return false;
+            set
+            {
+                SetBaselineOffset(value ? 30.0 : 0.0);
+            }
         }
 
         /**
@@ -283,114 +289,100 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Set whether the text in this run is formatted as superscript.
-         * Default base line offset is 30%
-         *
-         * @see #setBaselineOffset(double)
-         */
-        public void SetSuperscript(bool flag){
-        SetBaselineOffset(flag ? 30.0 : 0.0);
-    }
-
-        /**
-         * Set whether the text in this run is formatted as subscript.
+         * get or set whether a run of text will be formatted as a superscript text. Default is false.
          * Default base line offset is -25%.
-         *
-         * @see #setBaselineOffset(double)
          */
-        public void SetSubscript(bool flag){
-        SetBaselineOffset(flag ? -25.0 : 0.0);
-    }
+        public bool IsSubscript
+        {
+            get
+            {
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetBaseline())
+                {
+                    return rPr.baseline < 0;
+                }
+                return false;
+            }
+            set
+            {
+                SetBaselineOffset(value ? -25.0 : 0.0);
+            }
+        }
 
         /**
          * @return whether a run of text will be formatted as a superscript text. Default is false.
          */
-        public bool IsSubscript()
+        public TextCap TextCap
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetBaseline())
+            get
             {
-                return rPr.baseline < 0;
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetCap())
+                {
+                    return EnumConverter.ValueOf<TextCap, ST_TextCapsType>(rPr.cap);
+                }
+                return TextCap.NONE;
             }
-            return false;
         }
 
         /**
-         * @return whether a run of text will be formatted as a superscript text. Default is false.
+         * get or set whether this run of text is formatted as bold text
          */
-        public TextCap GetTextCap()
+        public bool IsBold
         {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetCap())
+            get
             {
-                return EnumConverter.ValueOf<TextCap, ST_TextCapsType>(rPr.cap);
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetB())
+                {
+                    return rPr.b;
+                }
+                return false;
             }
-            return TextCap.NONE;
-        }
-
-        /**
-         * Specifies whether this run of text will be formatted as bold text
-         *
-         * @param bold whether this run of text will be formatted as bold text
-         */
-        public void SetBold(bool bold)
-        {
-            GetRPr().b = (bold);
-        }
-
-        /**
-         * @return whether this run of text is formatted as bold text
-         */
-        public bool IsBold()
-        {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetB())
+            set
             {
-                return rPr.b;
+                GetRPr().b = value;
             }
-            return false;
         }
 
         /**
-         * @param italic whether this run of text is formatted as italic text
+         * get or set whether this run of text is formatted as italic text
          */
-        public void SetItalic(bool italic)
+        public bool IsItalic
         {
-            GetRPr().i = (italic);
-        }
-
-        /**
-         * @return whether this run of text is formatted as italic text
-         */
-        public bool IsItalic()
-        {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetI())
+            get
             {
-                return rPr.i;
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetI())
+                {
+                    return rPr.i;
+                }
+                return false;
             }
-            return false;
-        }
-
-        /**
-         * @param underline whether this run of text is formatted as underlined text
-         */
-        public void SetUnderline(bool underline)
-        {
-            GetRPr().u = (underline ? ST_TextUnderlineType.sng : ST_TextUnderlineType.none);
-        }
-
-        /**
-         * @return whether this run of text is formatted as underlined text
-         */
-        public bool IsUnderline()
-        {
-            CT_TextCharacterProperties rPr = GetRPr();
-            if (rPr.IsSetU())
+            set
             {
-                return rPr.u != ST_TextUnderlineType.none;
+                GetRPr().i = value;
             }
-            return false;
+        }
+
+        /**
+         * get or set whether this run of text is formatted as underlined text
+         */
+        public bool IsUnderline
+        {
+            get
+            {
+                CT_TextCharacterProperties rPr = GetRPr();
+                if (rPr.IsSetU())
+                {
+                    return rPr.u != ST_TextUnderlineType.none;
+                }
+                return false;
+            }
+            set
+            {
+                GetRPr().u = (value ? ST_TextUnderlineType.sng : ST_TextUnderlineType.none);
+            }
         }
 
         internal CT_TextCharacterProperties GetRPr()
@@ -399,9 +391,9 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public String ToString()
+        public override String ToString()
         {
-            return "[" + this.GetType().ToString() + "]" + GetText();
+            return "[" + this.GetType().ToString() + "]" + Text;
         }
     }
 

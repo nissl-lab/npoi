@@ -37,8 +37,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}>", nodeName));
             if (this.t != null)
-                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>",XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
-
+            {
+                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>", 
+                    XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
+            }
             if (this.r != null)
             {
                 foreach (CT_RElt x in this.r)
@@ -245,6 +247,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     ctObj.t = childNode.InnerText.Replace("\r", "");
             }
             return ctObj;
+        }
+
+        public int SizeOfRArray()
+        {
+            throw new NotImplementedException();
         }
     }
 }

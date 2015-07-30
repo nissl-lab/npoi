@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="XSSF\Model\ExternalLinksTable.cs" />
     <Compile Include="XSSF\Model\MapInfo.cs" />
+    <Compile Include="XSSF\Model\ParagraphPropertyFetcher.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="XSSF\UserModel\XSSFFontFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\UserModel\XSSFGraphicFrame.cs" />
+    <Compile Include="XSSF\UserModel\XSSFLineBreak.cs" />
     <Compile Include="XSSF\UserModel\XSSFMap.cs" />
     <Compile Include="XSSF\UserModel\XSSFName.cs" />
     <Compile Include="XSSF\UserModel\XSSFHyperlink.cs" />
@@ -215,6 +217,8 @@
     <Compile Include="XSSF\UserModel\XSSFSimpleShape.cs" />
     <Compile Include="XSSF\UserModel\XSSFTable.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTextParagraph.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTextRun.cs" />
     <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
     <Compile Include="XSSF\Util\CTColComparator.cs" />

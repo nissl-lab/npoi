@@ -228,7 +228,14 @@ namespace NPOI.OpenXmlFormats
 
             return true;
         }
-
+        public override int GetHashCode()
+        {
+            return this.pidField.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return String.Format("[CT_Property][pid={0},name={1}]", pidField, nameField);
+        }
         public bool IsSetLpwstr()
         {
             throw new NotImplementedException();

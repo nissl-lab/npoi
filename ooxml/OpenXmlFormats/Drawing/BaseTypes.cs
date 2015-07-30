@@ -51,6 +51,12 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        public bool uriSpecified
+        {
+            get { return this.uriSpecifiedField; }
+            set { this.uriSpecifiedField = value; }
+        }
+
         public static CT_OfficeArtExtension Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)

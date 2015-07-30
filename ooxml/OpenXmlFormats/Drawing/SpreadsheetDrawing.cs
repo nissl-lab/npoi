@@ -706,7 +706,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     public class CT_ShapeProperties
     {
 
-        private NPOI.OpenXmlFormats.Dml.CT_Transform2D xfrmField = null;
+        private CT_Transform2D xfrmField = null;
 
         private CT_CustomGeometry2D custGeomField = null;
 
@@ -744,9 +744,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             this.prstGeomField = new CT_PresetGeometry2D();
             return this.prstGeomField;
         }
-        public NPOI.OpenXmlFormats.Dml.CT_Transform2D AddNewXfrm()
+        public CT_Transform2D AddNewXfrm()
         {
-            this.xfrmField = new NPOI.OpenXmlFormats.Dml.CT_Transform2D();
+            this.xfrmField = new CT_Transform2D();
             return this.xfrmField;
         }
         public CT_SolidColorFillProperties AddNewSolidFill()
@@ -781,7 +781,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
 
         [XmlElement(Order = 0)]
-        public NPOI.OpenXmlFormats.Dml.CT_Transform2D xfrm
+        public CT_Transform2D xfrm
         {
             get
             {
@@ -1003,7 +1003,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "xfrm")
-                    ctObj.xfrm = NPOI.OpenXmlFormats.Dml.CT_Transform2D.Parse(childNode, namespaceManager);
+                    ctObj.xfrm = CT_Transform2D.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "custGeom")
                     ctObj.custGeom = CT_CustomGeometry2D.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "prstGeom")

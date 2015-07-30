@@ -1318,6 +1318,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.hangingPunctFieldSpecified = value;
             }
         }
+
+        public bool IsSetAlgn()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

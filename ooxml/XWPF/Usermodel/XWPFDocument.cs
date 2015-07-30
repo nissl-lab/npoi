@@ -91,7 +91,7 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentRead()
         {
             try {
-                XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+                XmlDocument xmldoc = DocumentHelper.LoadDocument(GetPackagePart().GetInputStream());
                 DocumentDocument doc = DocumentDocument.Parse(xmldoc, NamespaceManager);
                 ctDocument = doc.Document;
 

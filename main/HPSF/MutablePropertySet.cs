@@ -242,13 +242,13 @@ namespace NPOI.HPSF
         /// the {@link MutablePropertySet} only.
         /// </summary>
         /// <returns>the contents of this property Set stream</returns>
-        public virtual Stream GetStream()
-        {
-            MemoryStream psStream = new MemoryStream();
-            Write(psStream);
-            psStream.Position = 0;  //tony Qu changed, otherwise this cause a bug
-            return psStream;
-        }
+        //public virtual Stream GetStream()
+        //{
+        //    MemoryStream psStream = new MemoryStream();
+        //    Write(psStream);
+        //    psStream.Position = 0;  //tony Qu changed, otherwise this cause a bug
+        //    return psStream;
+        //}
 
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace NPOI.HPSF
         /// the {@link MutablePropertySet} only.
         /// </summary>
         /// <returns>the contents of this property set stream</returns>
-        public virtual Stream ToStream()
+        public virtual Stream ToInputStream()
         {
             using (MemoryStream psStream = new MemoryStream())
             {
@@ -297,7 +297,7 @@ namespace NPOI.HPSF
                 /* Entry not found, no need To Remove it. */
             }
             /* Create the new entry. */
-            dir.CreateDocument(name, GetStream());
+            dir.CreateDocument(name, ToInputStream());
         }
 
     }

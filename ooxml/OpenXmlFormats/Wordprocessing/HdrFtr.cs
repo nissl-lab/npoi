@@ -194,7 +194,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" ");
             sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" ");
             sw.Write("xmlns:w10=\"urn:schemas-microsoft-com:office:word\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" ");
-            sw.Write("xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\"");
+            sw.Write("xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\" ");
+            sw.Write("xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" ");
             sw.Write(">");
             foreach (object o in this.Items)
             {
@@ -564,7 +565,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_HdrFtrRef : CT_Rel
     {
-        public static CT_HdrFtrRef Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_HdrFtrRef Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -577,7 +578,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
@@ -1500,7 +1501,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             //this.footnoteField = new List<CT_FtnEdnSepRef>();
         }
-        public static CT_FtnDocProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_FtnDocProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -1524,7 +1525,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
@@ -1774,7 +1775,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_EdnDocProps : CT_EdnProps
     {
-        public static CT_EdnDocProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public new static CT_EdnDocProps Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -1798,7 +1799,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");

@@ -1209,6 +1209,137 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.compatLnSpcFieldSpecified = value;
             }
         }
+
+        public void UnsetTIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetVertOverflow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetVert()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetVert()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetBIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetLIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetRIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetTIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetBIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetLIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetRIns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetSpAutoFit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetNoAutofit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetNormAutofit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetSpAutoFit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetNoAutofit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetNormAutofit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewNoAutofit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewNormAutofit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewSpAutoFit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetHorzOverflow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetHorzOverflow()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool IsSetVertOverflow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetAnchor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsetAnchor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetWrap()
+        {
+            throw new NotImplementedException();
+        }
     }
     
 

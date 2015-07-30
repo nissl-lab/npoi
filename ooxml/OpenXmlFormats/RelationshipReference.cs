@@ -9,7 +9,7 @@ namespace NPOI.OpenXmlFormats
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships", IsNullable = true)]
     public class ST_RelationshipId
     {
-        string _id;
+        //string _id;
         public ST_RelationshipId()
         { 
             

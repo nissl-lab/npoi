@@ -77,7 +77,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         private bool rotateFieldSpecified;
 
-        private string id1Field;
+        //private string id1Field;
 
         public static CT_Fill Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -1506,7 +1506,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string recolortargetField;
         
-        private string id1Field;
+        //private string id1Field;
         
         private string pictField;
         
@@ -2546,7 +2546,7 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private bool endarrowlengthFieldSpecified;
         
-        private string id1Field;
+        //private string id1Field;
         
         private ST_TrueFalse insetpenField;
         
@@ -3582,7 +3582,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse filledField;
         private ST_TrueFalse strokedField;
         private ST_TrueFalse preferrelativeField;
-        private string styleField;
+        //private string styleField;
         private float sptField;
         private string coordsizeField;
 
@@ -5940,9 +5940,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public class CT_Rect {
         
-        private List<object> itemsField;
+        //private List<object> itemsField;
         
-        private ItemsChoiceType4[] itemsElementNameField;
+        //private ItemsChoiceType4[] itemsElementNameField;
         
         
         //[XmlElement("ClientData", typeof(CT_ClientData), Namespace="urn:schemas-microsoft-com:office:excel")]
@@ -6058,9 +6058,9 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlRoot(Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public class CT_RoundRect {
         
-        private List<object> itemsField;
+        //private List<object> itemsField;
         
-        private ItemsChoiceType5[] itemsElementNameField;
+        //private ItemsChoiceType5[] itemsElementNameField;
         
         private string arcsizeField;
         

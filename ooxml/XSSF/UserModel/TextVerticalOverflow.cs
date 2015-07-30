@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel
      */
     public enum TextVerticalOverflow
     {
+        None,
         /**
          * Overflow the text and pay no attention to top and bottom barriers.
          */

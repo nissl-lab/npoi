@@ -41,7 +41,6 @@ namespace NPOI.Util
             settings.DtdProcessing = DtdProcessing.Ignore;
             //settings.ConformanceLevel = ConformanceLevel.Document;
             XmlReader xr = XmlReader.Create(stream, settings);
-            //xr.CanResolveEntity
             
             XPathDocument xpathdoc = new XPathDocument(xr);
             return xpathdoc;
@@ -51,22 +50,35 @@ namespace NPOI.Util
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.ValidationFlags = XmlSchemaValidationFlags.None;
-            settings.ValidationType = ValidationType.None;
+            settings.ValidationType = ValidationType.Schema;
             settings.XmlResolver = null;
             settings.DtdProcessing = DtdProcessing.Ignore;
-            //settings.ConformanceLevel = ConformanceLevel.Document;
-            XmlReader xr = XmlReader.Create(stream, settings);
-            //xr.CanResolveEntity
+            settings.ConformanceLevel = ConformanceLevel.Auto;
+            settings.IgnoreProcessingInstructions = true;
+            try
+            {
+                XmlReader xr = XmlReader.Create(stream, settings);
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.PreserveWhitespace = true;
-            xmlDoc.Load(xr);
-            return xmlDoc;
-        }
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.XmlResolver = null;
+                xmlDoc.PreserveWhitespace = true;
+                xmlDoc.Load(xr);
 
-        public static XmlDocument CreateDocument()
-        {
-            throw new NotImplementedException();
+                return xmlDoc;
+            }
+            catch (XmlException)
+            {
+                //try to load using xml string, see TestExternalEntities.TestFile
+                stream.Position = 0;
+                using(StreamReader sr = new StreamReader(stream))
+                {
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.XmlResolver = null;
+                    xmlDoc.PreserveWhitespace = true;
+                    xmlDoc.LoadXml(sr.ReadToEnd());
+                    return xmlDoc;
+                }
+            }
         }
     }
 }

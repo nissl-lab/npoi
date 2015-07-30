@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.extractor
+namespace NPOI.XWPF.Extractor
 {
     using System;
 

@@ -310,7 +310,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 Assert.AreEqual("Sheet1:Sheet3!A1", ToFormulaString(ptgs[0], fpb));
                 Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
-                Assert.AreEqual(ToFormulaString(ptgs[1], fpb), "SUM");
+                Assert.AreEqual("SUM", ToFormulaString(ptgs[1], fpb));
 
 
                 // MAX to one cell over 3 workbooks, absolute row reference
@@ -324,9 +324,9 @@ namespace NPOI.XSSF.UserModel
                 {
                     Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
                 }
-                Assert.AreEqual("Sheet1:Sheet3!A1", ToFormulaString(ptgs[0], fpb));
+                Assert.AreEqual("Sheet1:Sheet3!A$1", ToFormulaString(ptgs[0], fpb));
                 Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
-                Assert.AreEqual(ToFormulaString(ptgs[1], fpb), "MAX");
+                Assert.AreEqual( "MAX", ToFormulaString(ptgs[1], fpb));
 
 
                 // MIN to one cell over 3 workbooks, absolute reference
@@ -340,9 +340,9 @@ namespace NPOI.XSSF.UserModel
                 {
                     Assert.AreEqual(typeof(Ref3DPxg), ptgs[0].GetType());
                 }
-                Assert.AreEqual("Sheet1:Sheet3!A1", ToFormulaString(ptgs[0], fpb));
+                Assert.AreEqual("Sheet1:Sheet3!$A$1", ToFormulaString(ptgs[0], fpb));
                 Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
-                Assert.AreEqual(ToFormulaString(ptgs[1], fpb), "MIN");
+                Assert.AreEqual("MIN", ToFormulaString(ptgs[1], fpb));
 
                 // SUM to a range of cells over 3 workbooks
                 ptgs = Parse(fpb, "SUM(Sheet1:Sheet3!A1:B2)");
@@ -357,7 +357,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 Assert.AreEqual(ToFormulaString(ptgs[0], fpb), "Sheet1:Sheet3!A1:B2");
                 Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
-                Assert.AreEqual(ToFormulaString(ptgs[1], fpb), "SUM");
+                Assert.AreEqual("SUM", ToFormulaString(ptgs[1], fpb));
 
 
                 // MIN to a range of cells over 3 workbooks, absolute reference
@@ -373,7 +373,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 Assert.AreEqual(ToFormulaString(ptgs[0], fpb), "Sheet1:Sheet3!$A$1:$B$2");
                 Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
-                Assert.AreEqual(ToFormulaString(ptgs[1], fpb), "MIN");
+                Assert.AreEqual("MIN", ToFormulaString(ptgs[1], fpb));
 
 
                 // Check we can round-trip - try to Set a new one to a new single cell

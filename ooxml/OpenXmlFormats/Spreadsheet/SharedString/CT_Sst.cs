@@ -66,7 +66,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.countField = value;
+                this.countFieldSpecified = true;
             }
+        }
+        public bool countSpecified
+        {
+            get { return this.countFieldSpecified; }
+            set { this.countFieldSpecified = value; }
         }
         [XmlAttribute]
         public int uniqueCount
@@ -78,7 +84,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.uniqueCountField = value;
+                this.uniqueCountFieldSpecified = true;
             }
         }
+        public bool uniqueCountSpecified
+        {
+            get { return this.uniqueCountFieldSpecified; }
+            set { this.uniqueCountFieldSpecified = value; }
+        }
+
     }
 }

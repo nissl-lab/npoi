@@ -2025,7 +2025,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TrackChangeNumbering : CT_TrackChange
     {
-        public static CT_TrackChangeNumbering Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TrackChangeNumbering Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -2039,7 +2039,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "original", this.original);

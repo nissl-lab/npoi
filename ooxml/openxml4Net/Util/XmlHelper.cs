@@ -173,22 +173,30 @@ namespace NPOI.OpenXml4Net.Util
         public static string ExcelEncodeString(string t)
         {
             StringWriter sw = new StringWriter();
-            if (Regex.IsMatch(t, "(_x[0-9A-F]{4,4}_)"))
-            {
-                Match match = Regex.Match(t, "(_x[0-9A-F]{4,4}_)");
-                int indexAdd = 0;
-                while (match.Success)
-                {
-                    t = t.Insert(match.Index + indexAdd, "_x005F");
-                    indexAdd += 6;
-                    match = match.NextMatch();
-                }
-            }
+            //poi dose not add prefix _x005f before _x????_ char.
+            //if (Regex.IsMatch(t, "(_x[0-9A-F]{4,4}_)"))
+            //{
+            //    Match match = Regex.Match(t, "(_x[0-9A-F]{4,4}_)");
+            //    int indexAdd = 0;
+            //    while (match.Success)
+            //    {
+            //        t = t.Insert(match.Index + indexAdd, "_x005F");
+            //        indexAdd += 6;
+            //        match = match.NextMatch();
+            //    }
+            //}
             for (int i = 0; i < t.Length; i++)
             {
                 if (t[i] <= 0x1f && t[i] != '\t' && t[i] != '\n' && t[i] != '\r') //Not Tab, CR or LF
                 {
-                    sw.Write("_x00{0}_", (t[i] < 0xa ? "0" : "") + ((int)t[i]).ToString("X"));
+                    //[0x00-0x0a]-[\r\n\t]
+                    //poi replace those chars with ?
+                    sw.Write('?');
+                    //sw.Write("_x00{0}_", (t[i] < 0xa ? "0" : "") + ((int)t[i]).ToString("X"));
+                }
+                else if (t[i] == '\uFFFE')
+                {
+                    sw.Write('?');
                 }
                 else
                 {

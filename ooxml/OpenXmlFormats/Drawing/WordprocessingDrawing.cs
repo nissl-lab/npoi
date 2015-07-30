@@ -787,7 +787,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
 
         private CT_EffectExtent effectExtentField;
 
-        private object itemField;
+        //private object itemField;
 
         private CT_NonVisualDrawingProps docPrField;
 

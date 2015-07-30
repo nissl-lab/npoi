@@ -217,7 +217,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return null == this.rField ? 0 : (uint)this.rField;
+                return this.rField;
             }
             set
             {
@@ -244,7 +244,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == sField) ? 0 : (uint)this.sField;
+                return this.sField;
             }
             set
             {
@@ -258,7 +258,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == customFormatField) ? false : (bool)this.customFormatField;
+                return this.customFormatField;
             }
             set
             {
@@ -285,7 +285,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get
             {
-                return (null == hiddenField) ? false : (bool)this.hiddenField;
+                return this.hiddenField;
             }
             set
             {

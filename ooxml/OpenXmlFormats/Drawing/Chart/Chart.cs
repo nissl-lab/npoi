@@ -4851,7 +4851,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_UnsignedInt crossAxField;
 
-        private object itemField;
+        //private object itemField;
 
         private CT_Boolean autoField;
 
@@ -5527,7 +5527,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     public class CT_DispUnits
     {
 
-        private object itemField;
+        //private object itemField;
 
         private CT_DispUnitsLbl dispUnitsLblField;
 

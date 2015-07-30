@@ -665,12 +665,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         #endregion
 
-		public CT_TblGrid AddNewTblGrid()
-		{
-			this.tblGrid = new CT_TblGrid();
-			return this.tblGrid;
-		}
-	}
+        public CT_TblGrid AddNewTblGrid()
+        {
+            this.tblGrid = new CT_TblGrid();
+            return this.tblGrid;
+        }
+    }
 
 
     [Serializable]
@@ -738,7 +738,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             //this.tblGridField = new List<CT_TblGridCol>();
         }
-        public static CT_TblGridChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TblGridChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -755,7 +755,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
@@ -824,6 +824,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.wField = value;
             }
+        }
+        public bool wSpecified
+        {
+            get { return this.wFieldSpecified; }
+            set { this.wFieldSpecified = value; }
         }
     }
     [XmlInclude(typeof(CT_TblGrid))]
@@ -915,16 +920,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-		public CT_TblGridCol AddNewGridCol()
-		{
-			if (this.gridCol == null)
-				gridCol = new List<CT_TblGridCol>();
+        public CT_TblGridCol AddNewGridCol()
+        {
+            if (this.gridCol == null)
+                gridCol = new List<CT_TblGridCol>();
 
-			CT_TblGridCol col=new CT_TblGridCol();
-			gridCol.Add(col);
-			return col;
-		}
-	}
+            CT_TblGridCol col=new CT_TblGridCol();
+            gridCol.Add(col);
+            return col;
+        }
+    }
 
     [Serializable]
 
@@ -1081,7 +1086,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TblPrChange : CT_TrackChange
     {
-        public static CT_TblPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TblPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -1099,7 +1104,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
@@ -1954,7 +1959,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             
         }
-        public static CT_TblPrExChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TblPrExChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -1972,7 +1977,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
@@ -2220,7 +2225,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         private CT_TblPrExChange tblPrExChangeField;
-        public static CT_TblPrEx Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TblPrEx Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -2253,7 +2258,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
@@ -2739,7 +2744,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         private CT_TblPrChange tblPrChangeField;
-        public static CT_TblPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TblPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -2784,7 +2789,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
@@ -2841,12 +2846,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-		public CT_TblLayoutType AddNewTblLayout()
-		{
-			this.tblLayout = new CT_TblLayoutType();
-			return this.tblLayout;
-		}
-	}
+        public CT_TblLayoutType AddNewTblLayout()
+        {
+            this.tblLayout = new CT_TblLayoutType();
+            return this.tblLayout;
+        }
+    }
 
 
     [Serializable]
@@ -2862,7 +2867,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             
         }
-        public static CT_TrPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TrPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -2880,7 +2885,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
@@ -3833,7 +3838,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //this.delField = new CT_TrackChange();
             //this.insField = new CT_TrackChange();
         }
-        public static CT_TrPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TrPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -3912,7 +3917,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
@@ -4012,7 +4017,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_TcPrChange : CT_TrackChange
     {
-        public static CT_TcPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TcPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -4030,7 +4035,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
@@ -4221,7 +4226,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_AnnotationVMerge vMergeOrigField;
 
         private bool vMergeOrigFieldSpecified;
-        public static CT_CellMergeTrackChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_CellMergeTrackChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -4238,7 +4243,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:vMerge", this.vMerge.ToString());
@@ -4623,7 +4628,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         private CT_TcPrChange tcPrChangeField;
-        public static CT_TcPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static new CT_TcPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -4674,7 +4679,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.tcW;
         }
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");

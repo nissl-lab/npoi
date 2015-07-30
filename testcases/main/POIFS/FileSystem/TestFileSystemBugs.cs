@@ -113,6 +113,7 @@ namespace TestCases.POIFS.FileSystem
                 // Has two children
                 Assert.AreEqual(2, dir.EntryCount);
 
+                it = dir.Entries;
                 // Check them
                 it.MoveNext();
                 entry = it.Current;

@@ -49,7 +49,7 @@ namespace TestCases.SS.Formula
             this.SOURCE_WORKBOOK_FILENAME = SOURCE_WORKBOOK_FILENAME;
         }
         [SetUp]
-        protected void setUp()
+        protected virtual void SetUp()
         {
             mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);
             sourceWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(SOURCE_WORKBOOK_FILENAME);
@@ -82,7 +82,6 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestMissingWorkbookMissingOverride()
         {
-            mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);
             ISheet lSheet = mainWorkbook.GetSheetAt(0);
             ICell lA1Cell = lSheet.GetRow(0).GetCell(0);
             ICell lB1Cell = lSheet.GetRow(1).GetCell(0);

@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel
      */
     public enum TextHorizontalOverflow
     {
+        None,
         /**
          * When a big character does not fit into a line, allow a
          * horizontal overflow.

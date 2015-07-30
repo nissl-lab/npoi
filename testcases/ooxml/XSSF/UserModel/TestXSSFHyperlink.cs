@@ -273,7 +273,6 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("javascript:///", link.Address);
         }
         [Test]
-        [Ignore]
         public void Test53282()
         {
             //since limitation in .NET Uri class, it's impossible to accept uri like mailto:nobody@nowhere.uk%C2%A0

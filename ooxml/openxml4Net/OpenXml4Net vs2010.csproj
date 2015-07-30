@@ -136,6 +136,7 @@
     <Compile Include="OPC\ZipPackage.cs" />
     <Compile Include="OPC\ZipPackagePart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\DocumentHelper.cs" />
     <Compile Include="Util\XmlHelper.cs" />
     <Compile Include="Util\ZipEntrySource.cs" />
     <Compile Include="Util\ZipFileZipEntrySource.cs" />
