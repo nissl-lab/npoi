@@ -481,9 +481,9 @@ namespace NPOI.XSSF.UserModel
          *                      index or null if no font is being applied or the
          *                      index is out of range.
          */
-        public short GetFontAtIndex(int index)
+        public XSSFFont GetFontAtIndex(int index)
         {
-            if (st.sizeOfRArray() == 0) return -1;
+            if (st.sizeOfRArray() == 0) return null;
 
             int pos = 0;
             for (int i = 0; i < st.sizeOfRArray(); i++)
@@ -493,12 +493,12 @@ namespace NPOI.XSSF.UserModel
                 {
                     XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
                     fnt.SetThemesTable(GetThemesTable());
-                    return fnt.Index;
+                    return fnt;
                 }
 
                 pos += r.t.Length;
             }
-            return -1;
+            return null;
 
         }
 

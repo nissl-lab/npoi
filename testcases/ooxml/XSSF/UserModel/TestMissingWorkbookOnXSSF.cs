@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [SetUp]
-        protected void SetUp()
+        protected override void SetUp()
         {
             mainWorkbook = XSSFTestDataSamples.OpenSampleWorkbook(this.MAIN_WORKBOOK_FILENAME);
             sourceWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(this.SOURCE_WORKBOOK_FILENAME);
