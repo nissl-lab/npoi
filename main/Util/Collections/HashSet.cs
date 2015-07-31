@@ -27,15 +27,16 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace NPOI.Util.Collections
 {
     /// <summary>
     /// This class comes from Java
     /// </summary>
-	public class HashSet: ISet
+	public class HashSet<T>: ICollection<T>
 	{
-		private readonly Hashtable impl = new Hashtable();
+        private readonly Dictionary<T, object> impl = new Dictionary<T, object>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HashSet"/> class.
@@ -45,23 +46,13 @@ namespace NPOI.Util.Collections
 		}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HashSet"/> class.
-        /// </summary>
-        /// <param name="s">The s.</param>
-		public HashSet(ISet s)
-		{
-			foreach (object o in s)
-			{
-				Add(o);
-			}
-		}
-
-        /// <summary>
         /// Adds the specified o.
         /// </summary>
         /// <param name="o">The o.</param>
-		public void Add(object o)
+		public void Add(T o)
 		{
+            if (IsReadOnly)
+                throw new InvalidOperationException("this hashset is readonly");
 			impl[o] = null;
 		}
 
@@ -72,8 +63,10 @@ namespace NPOI.Util.Collections
         /// <returns>
         /// 	<c>true</c> if [contains] [the specified o]; otherwise, <c>false</c>.
         /// </returns>
-		public bool Contains(object o)
+		public bool Contains(T o)
 		{
+            if (o == null)
+                return false;
 			return impl.ContainsKey(o);
 		}
 
@@ -98,7 +91,7 @@ namespace NPOI.Util.Collections
         /// <exception cref="T:System.ArgumentException">
         /// The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
         /// </exception>
-		public void CopyTo(Array array, int index)
+		public void CopyTo(T[] array, int index)
 		{
 			impl.Keys.CopyTo(array, index);
 		}
@@ -114,48 +107,34 @@ namespace NPOI.Util.Collections
 		{
 			get { return impl.Count; }
 		}
-
+        
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
         /// </returns>
-		public IEnumerator GetEnumerator()
+		public IEnumerator<T> GetEnumerator()
 		{
 			return impl.Keys.GetEnumerator();
 		}
 
-        /// <summary>
-        /// Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
-        /// </summary>
-        /// <value></value>
-        /// <returns>true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.
-        /// </returns>
-		public bool IsSynchronized
-		{
-			get { return impl.IsSynchronized; }
-		}
+        public bool IsReadOnly
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Removes the specified o.
         /// </summary>
         /// <param name="o">The o.</param>
-		public void Remove(object o)
+		public bool Remove(T o)
 		{
+            if (IsReadOnly)
+                throw new InvalidOperationException("this hashset is readonly");
 			impl.Remove(o);
-		}
-
-        /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
-        /// </summary>
-        /// <value></value>
-        /// <returns>
-        /// An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
-        /// </returns>
-		public object SyncRoot
-		{
-			get { return impl.SyncRoot; }
+            return true;
 		}
 
 
@@ -168,5 +147,10 @@ namespace NPOI.Util.Collections
             impl.Clear();
         }
 
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return impl.GetEnumerator();
+        }
     }
 }

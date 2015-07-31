@@ -984,7 +984,7 @@ namespace NPOI.XSSF.UserModel
          * }
          * </code></pre>
          */
-        public IEnumerator<ISheet> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             return sheets.GetEnumerator();
         }
@@ -2108,11 +2108,6 @@ namespace NPOI.XSSF.UserModel
         {
 
             return this.sheets.Remove((XSSFSheet)item);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         #endregion

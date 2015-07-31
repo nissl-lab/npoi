@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.Util.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -72,11 +73,11 @@ namespace NPOI.POIFS.FileSystem
             get { return GetEntries(); }
         }
 
-        public HashSet<String> EntryNames
+        public List<String> EntryNames
         {
             get
             {
-                HashSet<String> names = new HashSet<String>();
+                List<String> names = new List<String>();
                 foreach (String name in directory.EntryNames)
                 {
                     if (!excludes.Contains(name))

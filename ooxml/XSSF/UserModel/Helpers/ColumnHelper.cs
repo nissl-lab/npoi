@@ -151,27 +151,53 @@ namespace NPOI.XSSF.UserModel.Helpers
             cols.SetColArray(colArray);
             return returnCols;
         }
-        public class TreeSet<T> : SortedSet<T>
+        public class TreeSet<T>
         {
+            private SortedList<T, object> innerObj;
             public TreeSet(IComparer<T> comparer)
-                : base(comparer)
-            { }
+            {
+                innerObj = new SortedList<T, object>(comparer);
+            }
             public T First()
             {
-                IEnumerator<T> enumerator = this.GetEnumerator();
+                IEnumerator<T> enumerator = this.innerObj.Keys.GetEnumerator();
                 if (enumerator.MoveNext())
                     return enumerator.Current;
                 return default(T);
             }
             public T Higher(T element)
             {
-                IEnumerator<T> enumerator = this.GetEnumerator();
+                IEnumerator<T> enumerator = this.innerObj.Keys.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (this.Comparer.Compare(enumerator.Current, element) > 0)
+                    if (this.innerObj.Comparer.Compare(enumerator.Current, element) > 0)
                         return enumerator.Current;
                 }
                 return default(T);
+            }
+            public void Add(T item)
+            {
+                this.innerObj.Add(item,null);
+            }
+            public bool Remove(T item)
+            {
+                return this.innerObj.Remove(item);
+            }
+            public int Count
+            {
+                get { return this.innerObj.Count; }
+            }
+            public void CopyTo(T[] target)
+            { 
+                for (int i = 0; i < this.innerObj.Count; i++)
+                {
+                    target[i] = (T)this.innerObj.Keys[i];
+                }
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return this.innerObj.Keys.GetEnumerator();
             }
         }
         /**
@@ -231,7 +257,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 if (col.Equals(overrideColumn)) haveOverrideColumn = overrideColumn;
                 while (currentIndex <= nextIndex && !(currentElements.Count == 0))
                 {
-                    HashSet<CT_Col> currentIndexElements = new HashSet<CT_Col>();
+                    NPOI.Util.Collections.HashSet<CT_Col> currentIndexElements = new NPOI.Util.Collections.HashSet<CT_Col>();
                     long currentElemIndex;
 
                     {
