@@ -80,6 +80,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.valField = value;
+                this.valFieldSpecified = true;
             }
         }
 
@@ -138,6 +139,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.valField = value;
+                this.valFieldSpecified = true;
             }
         }
 
@@ -197,7 +199,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private ST_TextAutonumberScheme typeField;
 
+        private bool typeFieldSpecified;
+
         private int startAtField;
+
+        private bool startAtFieldSpecified;
 
         public CT_TextAutonumberBullet()
         {
@@ -216,6 +222,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.typeField = value;
             }
         }
+        [XmlIgnore]
+        public bool typeSpecified
+        {
+            get { return this.typeFieldSpecified; }
+            set { this.typeFieldSpecified = value; }
+        }
 
         [XmlAttribute]
         [DefaultValue(1)]
@@ -229,6 +241,16 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.startAtField = value;
             }
+        }
+        [XmlIgnore]
+        public bool startAtSpecified
+        {
+            get { return this.startAtFieldSpecified; }
+            set { this.startAtFieldSpecified = value; }
+        }
+        public bool IsSetStartAt()
+        {
+            return this.startAtField >= 1;
         }
     }
 
@@ -372,11 +394,11 @@ namespace NPOI.OpenXmlFormats.Dml
     {
         public static CT_TextCharBullet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-	        if(node==null)
-		        return null;
-	        CT_TextCharBullet ctObj = new CT_TextCharBullet();
-	        ctObj.@char = XmlHelper.ReadString(node.Attributes["char"]);
-	        return ctObj;
+            if(node==null)
+                return null;
+            CT_TextCharBullet ctObj = new CT_TextCharBullet();
+            ctObj.@char = XmlHelper.ReadString(node.Attributes["char"]);
+            return ctObj;
         }
 
 

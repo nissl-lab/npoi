@@ -115,7 +115,7 @@ namespace NPOI.XSSF.UserModel
          *                  to the sheet.
          * @return      the newly Created textbox.
          */
-        public ITextbox CreateTextbox(IClientAnchor anchor)
+        public XSSFTextBox CreateTextbox(IClientAnchor anchor)
         {
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);

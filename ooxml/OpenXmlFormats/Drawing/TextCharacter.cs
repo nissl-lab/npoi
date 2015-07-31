@@ -842,6 +842,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.kumimojiField = value;
+                this.kumimojiFieldSpecified = value;
             }
         }
 
@@ -894,6 +895,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.szField = value;
+                this.szFieldSpecified = true;
             }
         }
 
@@ -920,6 +922,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.bField = value;
+                this.bFieldSpecified = value;
             }
         }
 
@@ -946,6 +949,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.iField = value;
+                this.iFieldSpecified = value;
             }
         }
 
@@ -972,6 +976,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.uField = value;
+                this.uFieldSpecified = value != ST_TextUnderlineType.none;
             }
         }
 
@@ -998,6 +1003,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.strikeField = value;
+                this.strikeFieldSpecified = value != ST_TextStrikeType.noStrike;
             }
         }
 
@@ -1024,6 +1030,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.kernField = value;
+                this.kernFieldSpecified = true;
             }
         }
 
@@ -1050,6 +1057,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.capField = value;
+                this.capFieldSpecified = value != ST_TextCapsType.none;
             }
         }
 
@@ -1076,6 +1084,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.spcField = value;
+                this.spcFieldSpecified = true;
             }
         }
 
@@ -1102,6 +1111,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.normalizeHField = value;
+                this.normalizeHFieldSpecified = true;
             }
         }
 
@@ -1128,6 +1138,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.baselineField = value;
+                this.baselineFieldSpecified = true;
             }
         }
 
@@ -1154,6 +1165,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.noProofField = value;
+                this.noProofFieldSpecified = value;
             }
         }
 

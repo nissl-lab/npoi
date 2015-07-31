@@ -14,9 +14,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
-    public enum ST_ShapeType
+    public enum ST_ShapeType : int
     {
-
+        none,
 
         line,
 
