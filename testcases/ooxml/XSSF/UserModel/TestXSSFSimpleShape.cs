@@ -56,20 +56,22 @@ namespace NPOI.XSSF.UserModel
                     Assert.IsNotNull(shape.Text);
                 }
 
-                shape.TextParagraphs[(0)].SetBullet(false);
+                shape.TextParagraphs[(0)].IsBullet = (false);
                 Assert.IsNotNull(shape.Text);
 
                 shape.SetText("testtext");
                 Assert.AreEqual("testtext", shape.Text);
 
                 shape.SetText(new XSSFRichTextString());
-                Assert.AreEqual("null", shape.Text);
+                //Assert.AreEqual("null", shape.Text);
+                Assert.AreEqual(String.Empty, shape.Text);
 
                 shape.AddNewTextParagraph();
                 shape.AddNewTextParagraph("test-other-text");
                 shape.AddNewTextParagraph(new XSSFRichTextString("rtstring"));
                 shape.AddNewTextParagraph(new XSSFRichTextString());
-                Assert.AreEqual("null\n\ntest-other-text\nrtstring\nnull", shape.Text);
+                //Assert.AreEqual("null\n\ntest-other-text\nrtstring\nnull", shape.Text);
+                Assert.AreEqual("test-other-text\nrtstring\n", shape.Text);
 
                 Assert.AreEqual(TextHorizontalOverflow.OVERFLOW, shape.TextHorizontalOverflow);
                 shape.TextHorizontalOverflow = (/*setter*/TextHorizontalOverflow.CLIP);
@@ -91,14 +93,14 @@ namespace NPOI.XSSF.UserModel
                 shape.TextVerticalOverflow = TextVerticalOverflow.None;
                 Assert.AreEqual(TextVerticalOverflow.OVERFLOW, shape.TextVerticalOverflow);
 
-                Assert.AreEqual((short)VerticalAlignment.Top, shape.VerticalAlignment);
-                shape.VerticalAlignment = (short)VerticalAlignment.Bottom;
+                Assert.AreEqual(VerticalAlignment.Top, shape.VerticalAlignment);
+                shape.VerticalAlignment = VerticalAlignment.Bottom;
                 Assert.AreEqual(VerticalAlignment.Bottom, shape.VerticalAlignment);
-                shape.VerticalAlignment = (short)VerticalAlignment.Top;
+                shape.VerticalAlignment = VerticalAlignment.Top;
                 Assert.AreEqual(VerticalAlignment.Top, shape.VerticalAlignment);
-                shape.VerticalAlignment = (short)VerticalAlignment.None;
+                shape.VerticalAlignment = VerticalAlignment.None;
                 Assert.AreEqual(VerticalAlignment.Top, shape.VerticalAlignment);
-                shape.VerticalAlignment = (short)VerticalAlignment.None;
+                shape.VerticalAlignment = VerticalAlignment.None;
                 Assert.AreEqual(VerticalAlignment.Top, shape.VerticalAlignment);
 
                 Assert.AreEqual(TextDirection.HORIZONTAL, shape.TextDirection);

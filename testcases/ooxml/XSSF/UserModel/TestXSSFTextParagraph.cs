@@ -25,7 +25,7 @@ namespace NPOI.XSSF.UserModel
     public class TestXSSFTextParagraph
     {
         [Test]
-        public void XSSFTextParagraphTest()
+        public void XSSFTextParagraph_()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             try
@@ -50,7 +50,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFTextParagraph text = paras[(0)];
                 Assert.AreEqual("Test String", text.Text);
 
-                Assert.IsFalse(text.IsBullet());
+                Assert.IsFalse(text.IsBullet);
                 Assert.IsNotNull(text.GetXmlObject());
                 Assert.AreEqual(shape.GetCTShape(), text.ParentShape);
                 Assert.IsNotNull(text.GetEnumerator());
@@ -88,7 +88,8 @@ namespace NPOI.XSSF.UserModel
                 text.BulletCharacter = (/*setter*/".");
                 Assert.AreEqual(".", text.BulletCharacter);
 
-                Assert.IsNull(text.BulletFontColor);
+                //Assert.IsNull(text.BulletFontColor);
+                Assert.AreEqual(Color.Empty, text.BulletFontColor);
                 text.BulletFontColor = (/*setter*/color);
                 Assert.AreEqual(color, text.BulletFontColor);
 
@@ -160,30 +161,35 @@ namespace NPOI.XSSF.UserModel
                 text.Level = (/*setter*/4);
                 Assert.AreEqual(4, text.Level);
 
-                Assert.IsTrue(text.IsBullet());
+                Assert.IsTrue(text.IsBullet);
                 Assert.IsFalse(text.IsBulletAutoNumber);
-                text.SetBullet(false);
-                text.SetBullet(false);
-                Assert.IsFalse(text.IsBullet());
+                text.IsBullet = (false);
+                text.IsBullet = (false);
+                Assert.IsFalse(text.IsBullet);
                 Assert.IsFalse(text.IsBulletAutoNumber);
-                text.SetBullet(true);
-                Assert.IsTrue(text.IsBullet());
+                text.IsBullet = (true);
+                Assert.IsTrue(text.IsBullet);
                 Assert.IsFalse(text.IsBulletAutoNumber);
                 Assert.AreEqual(0, text.BulletAutoNumberStart);
                 Assert.AreEqual(ListAutoNumber.ARABIC_PLAIN, text.BulletAutoNumberScheme);
 
-                text.SetBullet(false);
-                Assert.IsFalse(text.IsBullet());
+                text.IsBullet = (false);
+                Assert.IsFalse(text.IsBullet);
                 text.SetBullet(ListAutoNumber.CIRCLE_NUM_DB_PLAIN);
-                Assert.IsTrue(text.IsBullet());
+                Assert.IsTrue(text.IsBullet);
                 Assert.IsTrue(text.IsBulletAutoNumber);
-                Assert.AreEqual(0, text.BulletAutoNumberStart);
+                
+                //Assert.AreEqual(0, text.BulletAutoNumberStart);
+                //This value should be 1, see CT_TextAutonumberBullet.startAt, default value is 1;
+                Assert.AreEqual(1, text.BulletAutoNumberStart);
+
+
                 Assert.AreEqual(ListAutoNumber.CIRCLE_NUM_DB_PLAIN, text.BulletAutoNumberScheme);
-                text.SetBullet(false);
-                Assert.IsFalse(text.IsBullet());
+                text.IsBullet = (false);
+                Assert.IsFalse(text.IsBullet);
                 Assert.IsFalse(text.IsBulletAutoNumber);
                 text.SetBullet(ListAutoNumber.CIRCLE_NUM_WD_BLACK_PLAIN, 10);
-                Assert.IsTrue(text.IsBullet());
+                Assert.IsTrue(text.IsBullet);
                 Assert.IsTrue(text.IsBulletAutoNumber);
                 Assert.AreEqual(10, text.BulletAutoNumberStart);
                 Assert.AreEqual(ListAutoNumber.CIRCLE_NUM_WD_BLACK_PLAIN, text.BulletAutoNumberScheme);
