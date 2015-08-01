@@ -21,6 +21,7 @@ using System;
 using System.Text;
 using NPOI.XSSF.Model;
 using System.Drawing;
+using NPOI.Util;
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -166,23 +167,24 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                ParagraphPropertyFetcher<TextAlign> fetcher = new ParagraphPropertyTextAlignFetcher(Level);
+                ParagraphPropertyTextAlignFetcher fetcher = new ParagraphPropertyTextAlignFetcher(Level);
                 fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? TextAlign.LEFT : fetcher.GetValue();
-                throw new NotImplementedException();
+                return fetcher.GetValue() == null ? TextAlign.LEFT : fetcher.GetValue().Value;
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //if(align == null) {
-                //    if(pr.IsSetAlgn()) pr.unsetAlgn();
-                //} else {
-                //    pr.SetAlgn(STTextAlignType.Enum.forInt(align.ordinal() + 1));
-                //}
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                if (value == TextAlign.None)
+                {
+                    if (pr.IsSetAlgn()) pr.UnsetAlgn();
+                }
+                else
+                {
+                    pr.algn = (ST_TextAlignType)(value - 1);
+                }
             }
         }
-        private class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign>
+        private class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign?>
         {
             public ParagraphPropertyTextAlignFetcher(int level) : base(level) 
             {
@@ -191,7 +193,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (props.IsSetAlgn())
                 {
-                    TextAlign val = (TextAlign)(props.algn - 1); //TextAlign.values()[props.GetAlgn().intValue() - 1];
+                    TextAlign val = (TextAlign)(props.algn + 1); //TextAlign.values()[props.GetAlgn().intValue() - 1];
                     SetValue(val);
                     return true;
                 }
@@ -222,22 +224,37 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? TextFontAlign.BASELINE : fetcher.GetValue();        
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherTextFontAlign fetcher = new ParagraphPropertyFetcherTextFontAlign(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue() == null ? TextFontAlign.BASELINE : fetcher.GetValue().Value;        
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //if(align == null) {
-                //    if(pr.IsSetFontAlgn()) pr.unsetFontAlgn();
-                //} else {
-                //    pr.SetFontAlgn(STTextFontAlignType.Enum.forInt(align.ordinal() + 1));
-                //}
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                if (value == TextFontAlign.None)
+                {
+                    if (pr.IsSetFontAlgn()) pr.UnsetFontAlgn();
+                }
+                else
+                {
+                    pr.fontAlgn = (ST_TextFontAlignType)(value - 1);
+                }
             }
         }
-
+        class ParagraphPropertyFetcherTextFontAlign : ParagraphPropertyFetcher<TextFontAlign?>
+        {
+            public ParagraphPropertyFetcherTextFontAlign(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetFontAlgn())
+                {
+                    TextFontAlign val = (TextFontAlign)(props.fontAlgn + 1);
+                    SetValue(val);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * @return the font to be used on bullet characters within a given paragraph
          */
@@ -254,19 +271,30 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherBulletFont fetcher = new ParagraphPropertyFetcherBulletFont(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //CTTextFont font = pr.IsSetBuFont() ? pr.GetBuFont() : pr.AddNewBuFont();
-                //font.SetTypeface(typeface);
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                CT_TextFont font = pr.IsSetBuFont() ? pr.buFont : pr.AddNewBuFont();
+                font.typeface = (value);
             }
         }
-
+        class ParagraphPropertyFetcherBulletFont : ParagraphPropertyFetcher<String>
+        {
+            public ParagraphPropertyFetcherBulletFont(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuFont())
+                {
+                    SetValue(props.buFont.typeface);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * @return the character to be used in place of the standard bullet point
          */
@@ -283,19 +311,30 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherBulletCharacter fetcher = new ParagraphPropertyFetcherBulletCharacter(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //CTTextCharBullet c = pr.IsSetBuChar() ? pr.GetBuChar() : pr.AddNewBuChar();
-                //c.SetChar(str);
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                CT_TextCharBullet c = pr.IsSetBuChar() ? pr.buChar : pr.AddNewBuChar();
+                c.@char = (value);
             }
         }
-
+        class ParagraphPropertyFetcherBulletCharacter : ParagraphPropertyFetcher<String>
+        {
+            public ParagraphPropertyFetcherBulletCharacter(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuChar())
+                {
+                    SetValue(props.buChar.@char);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          *
          * @return the color of bullet characters within a given paragraph.
@@ -318,20 +357,36 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherBulletFontColor fetcher = new ParagraphPropertyFetcherBulletFontColor(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //CTColor c = pr.IsSetBuClr() ? pr.GetBuClr() : pr.AddNewBuClr();
-                //CTSRgbColor clr = c.IsSetSrgbClr() ? c.GetSrgbClr() : c.AddNewSrgbClr();
-                //clr.SetVal(new byte[]{(byte) color.GetRed(), (byte) color.GetGreen(), (byte) color.GetBlue()});
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                CT_Color c = pr.IsSetBuClr() ? pr.buClr : pr.AddNewBuClr();
+                CT_SRgbColor clr = c.IsSetSrgbClr() ? c.srgbClr : c.AddNewSrgbClr();
+                clr.val = (new byte[] { value.R, value.G, value.B });
             }
         }
-
+        class ParagraphPropertyFetcherBulletFontColor : ParagraphPropertyFetcher<Color>
+        {
+            public ParagraphPropertyFetcherBulletFontColor(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuClr())
+                {
+                    if (props.buClr.IsSetSrgbClr())
+                    {
+                        CT_SRgbColor clr = props.buClr.srgbClr;
+                        byte[] rgb = clr.val;
+                        SetValue(Color.FromArgb(0xFF & rgb[0], 0xFF & rgb[1], 0xFF & rgb[2]));
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         /**
          * Returns the bullet size that is to be used within a paragraph.
          * This may be specified in two different ways, percentage spacing and font point spacing:
@@ -359,31 +414,50 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? 100 : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherBulletFontSize fetcher = new ParagraphPropertyFetcherBulletFontSize(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue() == null ? 100 : fetcher.GetValue().Value;
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
 
-                //if(bulletSize >= 0) {
-                //    // percentage
-                //    CTTextBulletSizePercent pt = pr.IsSetBuSzPct() ? pr.GetBuSzPct() : pr.AddNewBuSzPct();
-                //    pt.SetVal((int)(bulletSize*1000));
-                //    // unset points if percentage is now Set
-                //    if(pr.IsSetBuSzPts()) pr.unsetBuSzPts();
-                //} else {
-                //    // points
-                //    CTTextBulletSizePoint pt = pr.IsSetBuSzPts() ? pr.GetBuSzPts() : pr.AddNewBuSzPts();
-                //    pt.SetVal((int)(-bulletSize*100));
-                //    // unset percentage if points is now Set
-                //    if(pr.IsSetBuSzPct()) pr.unsetBuSzPct();
-                //}
-                throw new NotImplementedException();
+                if (value >= 0)
+                {
+                    // percentage
+                    CT_TextBulletSizePercent pt = pr.IsSetBuSzPct() ? pr.buSzPct : pr.AddNewBuSzPct();
+                    pt.val = ((int)(value * 1000));
+                    // unset points if percentage is now Set
+                    if (pr.IsSetBuSzPts()) pr.UnsetBuSzPts();
+                }
+                else
+                {
+                    // points
+                    CT_TextBulletSizePoint pt = pr.IsSetBuSzPts() ? pr.buSzPts : pr.AddNewBuSzPts();
+                    pt.val = ((int)(-value * 100));
+                    // unset percentage if points is now Set
+                    if (pr.IsSetBuSzPct()) pr.UnsetBuSzPct();
+                }
             }
         }
-
+        class ParagraphPropertyFetcherBulletFontSize : ParagraphPropertyFetcher<double?>
+        {
+            public ParagraphPropertyFetcherBulletFontSize(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuSzPct())
+                {
+                    SetValue(props.buSzPct.val * 0.001);
+                    return true;
+                }
+                if (props.IsSetBuSzPts())
+                {
+                    SetValue(-props.buSzPts.val * 0.01);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          *
          * @return the indent applied to the first line of text in the paragraph.
@@ -401,24 +475,37 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-
-                //return fetcher.GetValue() == null ? 0 : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherIndent fetcher = new ParagraphPropertyFetcherIndent(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //if(value == -1) {
-                //    if(pr.IsSetIndent()) pr.unsetIndent();
-                //} else {
-                //    pr.SetIndent(Units.ToEMU(value));
-                //}
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                if (value == -1)
+                {
+                    if (pr.IsSetIndent()) pr.UnsetIndent();
+                }
+                else
+                {
+                    pr.indent = (Units.ToEMU(value));
+                }
             }
         }
 
-
+        class ParagraphPropertyFetcherIndent : ParagraphPropertyFetcher<double>
+        {
+            public ParagraphPropertyFetcherIndent(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetIndent())
+                {
+                    SetValue(Units.ToPoints(props.indent));
+                    return true;
+                }
+                return false;
+            }
+        }
 
         /**
          * Specifies the left margin of the paragraph. This is specified in Addition to the text body
@@ -441,23 +528,38 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //// if the marL attribute is omitted, then a value of 347663 is implied
-                //return fetcher.GetValue() == null ? 0 : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherLeftMargin fetcher = new ParagraphPropertyFetcherLeftMargin(Level);
+                fetchParagraphProperty(fetcher);
+                // if the marL attribute is omitted, then a value of 347663 is implied
+                return fetcher.GetValue();
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //if(value == -1) {
-                //    if(pr.IsSetMarL()) pr.unsetMarL();
-                //} else {
-                //    pr.SetMarL(Units.ToEMU(value));
-                //}
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                if (value == -1)
+                {
+                    if (pr.IsSetMarL()) pr.UnsetMarL();
+                }
+                else
+                {
+                    pr.marL = (Units.ToEMU(value));
+                }
             }
         }
-
+        class ParagraphPropertyFetcherLeftMargin : ParagraphPropertyFetcher<double>
+        {
+            public ParagraphPropertyFetcherLeftMargin(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetMarL())
+                {
+                    double val = Units.ToPoints(props.marL);
+                    SetValue(val);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * Specifies the right margin of the paragraph. This is specified in Addition to the text body
          * inset and applies only to this text paragraph. That is the text body inset and the marR
@@ -479,23 +581,38 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //// if the marL attribute is omitted, then a value of 347663 is implied
-                //return fetcher.GetValue() == null ? 0 : fetcher.GetValue();        
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherRightMargin fetcher = new ParagraphPropertyFetcherRightMargin(Level);
+                fetchParagraphProperty(fetcher);
+                // if the marL attribute is omitted, then a value of 347663 is implied
+                return fetcher.GetValue();        
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //if(value == -1) {
-                //    if(pr.IsSetMarR()) pr.unsetMarR();
-                //} else {
-                //    pr.SetMarR(Units.ToEMU(value));
-                //}
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                if (value == -1)
+                {
+                    if (pr.IsSetMarR()) pr.UnsetMarR();
+                }
+                else
+                {
+                    pr.marR = (Units.ToEMU(value));
+                }
             }
         }
-
+        class ParagraphPropertyFetcherRightMargin : ParagraphPropertyFetcher<double>
+        {
+            public ParagraphPropertyFetcherRightMargin(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetMarR())
+                {
+                    double val = Units.ToPoints(props.marR);
+                    SetValue(val);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          *
          * @return the default size for a tab character within this paragraph in points
@@ -514,12 +631,25 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? 0 : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherDefaultTabSize fetcher = new ParagraphPropertyFetcherDefaultTabSize(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
         }
-
+        class ParagraphPropertyFetcherDefaultTabSize : ParagraphPropertyFetcher<double>
+        {
+            public ParagraphPropertyFetcherDefaultTabSize(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetDefTabSz())
+                {
+                    double val = Units.ToPoints(props.defTabSz);
+                    SetValue(val);
+                    return true;
+                }
+                return false;
+            }
+        }
         public double GetTabStop(int idx)
         {
             //ParagraphPropertyFetcher<Double> fetcher = new ParagraphPropertyFetcher<Double>(getLevel()){
@@ -536,9 +666,30 @@ namespace NPOI.XSSF.UserModel
             //        return false;
             //    }
             //};
-            //fetchParagraphProperty(fetcher);
-            //return fetcher.GetValue() == null ? 0. : fetcher.GetValue();
-            throw new NotImplementedException();
+            ParagraphPropertyFetcherTabStop fetcher = new ParagraphPropertyFetcherTabStop(Level, idx);
+            fetchParagraphProperty(fetcher);
+            return fetcher.GetValue();
+        }
+
+        class ParagraphPropertyFetcherTabStop : ParagraphPropertyFetcher<double>
+        {
+            private int idx;
+            public ParagraphPropertyFetcherTabStop(int level, int idx) : base(level) { this.idx = idx; }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetTabLst())
+                {
+                    CT_TextTabStopList tabStops = props.tabLst;
+                    if (idx < tabStops.SizeOfTabArray())
+                    {
+                        CT_TextTabStop ts = tabStops.GetTabArray(idx);
+                        double val = Units.ToPoints(ts.pos);
+                        SetValue(val);
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
         /**
          * Add a single tab stop to be used on a line of text when there are one or more tab characters
@@ -548,10 +699,9 @@ namespace NPOI.XSSF.UserModel
          */
         public void AddTabStop(double value)
         {
-            //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-            //CTTextTabStopList tabStops = pr.IsSetTabLst() ? pr.GetTabLst() : pr.AddNewTabLst();
-            //tabStops.AddNewTab().SetPos(Units.ToEMU(value));
-            throw new NotImplementedException();
+            CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+            CT_TextTabStopList tabStops = pr.IsSetTabLst() ? pr.tabLst : pr.AddNewTabLst();
+            tabStops.AddNewTab().pos = (Units.ToEMU(value));
         }
 
         /**
@@ -600,32 +750,48 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
+                ParagraphPropertyFetcherLineSpacing fetcher = new ParagraphPropertyFetcherLineSpacing(Level);
+                fetchParagraphProperty(fetcher);
 
-                //double lnSpc = fetcher.GetValue() == null ? 100 : fetcher.GetValue();
-                //if(lnSpc > 0) {
-                //    // check if the percentage value is scaled
-                //    CTTextNormalAutofit normAutofit = _shape.GetTxBody().GetBodyPr().GetNormAutofit();
-                //    if(normAutofit != null) {
-                //        double scale = 1 - (double)normAutofit.GetLnSpcReduction() / 100000;
-                //        lnSpc *= scale;
-                //    }
-                //}
+                double lnSpc = fetcher.GetValue() == null ? 100 : fetcher.GetValue().Value;
+                if (lnSpc > 0)
+                {
+                    // check if the percentage value is scaled
+                    CT_TextNormalAutofit normAutofit = _shape.txBody.bodyPr.normAutofit;
+                    if (normAutofit != null)
+                    {
+                        double scale = 1 - (double)normAutofit.lnSpcReduction / 100000;
+                        lnSpc *= scale;
+                    }
+                }
 
-                //return lnSpc;
-                throw new NotImplementedException();
+                return lnSpc;
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //CTTextSpacing spc = CTTextSpacing.Factory.newInstance();
-                //if(linespacing >= 0) spc.AddNewSpcPct().SetVal((int)(linespacing*1000));
-                //else spc.AddNewSpcPts().SetVal((int)(-linespacing*100));
-                //pr.SetLnSpc(spc);
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                CT_TextSpacing spc = new CT_TextSpacing();
+                if (value >= 0) spc.AddNewSpcPct().val = ((int)(value * 1000));
+                else spc.AddNewSpcPts().val = ((int)(-value * 100));
+                pr.lnSpc = (spc);
             }
         }
+        class ParagraphPropertyFetcherLineSpacing : ParagraphPropertyFetcher<double?>
+        {
+            public ParagraphPropertyFetcherLineSpacing(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetLnSpc())
+                {
+                    CT_TextSpacing spc = props.lnSpc;
 
+                    if (spc.IsSetSpcPct()) SetValue(spc.spcPct.val * 0.001);
+                    else if (spc.IsSetSpcPts()) SetValue(-spc.spcPts.val * 0.01);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * Set the amount of vertical white space that will be present before the paragraph.
          * This space is specified in either percentage or points:
@@ -670,23 +836,36 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
+                ParagraphPropertyFetcherSpaceBefore fetcher = new ParagraphPropertyFetcherSpaceBefore(Level);
+                fetchParagraphProperty(fetcher);
 
-                //double spcBef = fetcher.GetValue() == null ? 0 : fetcher.GetValue();
-                //return spcBef;
-                throw new NotImplementedException();
+                double spcBef = fetcher.GetValue();
+                return spcBef;
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //CTTextSpacing spc = CTTextSpacing.Factory.newInstance();
-                //if(spaceBefore >= 0) spc.AddNewSpcPct().SetVal((int)(spaceBefore*1000));
-                //else spc.AddNewSpcPts().SetVal((int)(-spaceBefore*100));
-                //pr.SetSpcBef(spc);
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                CT_TextSpacing spc = new CT_TextSpacing();
+                if (value >= 0) spc.AddNewSpcPct().val = ((int)(value * 1000));
+                else spc.AddNewSpcPts().val = ((int)(-value * 100));
+                pr.spcBef = (spc);
             }
         }
+        class ParagraphPropertyFetcherSpaceBefore : ParagraphPropertyFetcher<double>
+        {
+            public ParagraphPropertyFetcherSpaceBefore(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if(props.IsSetSpcBef()){
+                    CT_TextSpacing spc = props.spcBef;
 
+                    if (spc.IsSetSpcPct()) SetValue(spc.spcPct.val * 0.001);
+                    else if (spc.IsSetSpcPts()) SetValue(-spc.spcPts.val * 0.01);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * Set the amount of vertical white space that will be present After the paragraph.
          * This space is specified in either percentage or points:
@@ -731,21 +910,35 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? 0 : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherSpaceAfter fetcher = new ParagraphPropertyFetcherSpaceAfter(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-                //CTTextSpacing spc = CTTextSpacing.Factory.newInstance();
-                //if(spaceAfter >= 0) spc.AddNewSpcPct().SetVal((int)(spaceAfter*1000));
-                //else spc.AddNewSpcPts().SetVal((int)(-spaceAfter*100));
-                //pr.SetSpcAft(spc);
-                throw new NotImplementedException();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                CT_TextSpacing spc = new CT_TextSpacing();
+                if (value >= 0) spc.AddNewSpcPct().val = ((int)(value * 1000));
+                else spc.AddNewSpcPts().val = ((int)(-value * 100));
+                pr.spcAft = (spc);
             }
         }
+        class ParagraphPropertyFetcherSpaceAfter : ParagraphPropertyFetcher<double>
+        {
+            public ParagraphPropertyFetcherSpaceAfter(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetSpcAft())
+                {
+                    CT_TextSpacing spc = props.spcAft;
 
+                    if (spc.IsSetSpcPct()) SetValue(spc.spcPct.val * 0.001);
+                    else if (spc.IsSetSpcPts()) SetValue(-spc.spcPts.val * 0.01);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * Specifies the particular level text properties that this paragraph will follow.
          * The value for this attribute formats the text according to the corresponding level
@@ -764,18 +957,16 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                //CTTextParagraphProperties pr = _p.GetPPr();
-                //if(pr == null) return 0;
+                CT_TextParagraphProperties pr = _p.pPr;
+                if(pr == null) return 0;
 
-                //return pr.GetLvl();
-                throw new NotImplementedException();
+                return pr.lvl;
             }
             set
             {
-                //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
 
-                //pr.SetLvl(level);
-                throw new NotImplementedException();
+                pr.lvl = (value);
             }
         }
 
@@ -783,61 +974,87 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns whether this paragraph has bullets
          */
-        public bool IsBullet()
+        public bool IsBullet
         {
-            //ParagraphPropertyFetcher<Boolean> fetcher = new ParagraphPropertyFetcher<Boolean>(getLevel()){
-            //    public bool fetch(CTTextParagraphProperties props){
-            //        if (props.IsSetBuNone()) {
-            //            SetValue(false);
-            //            return true;
-            //        }
-            //        if (props.IsSetBuFont()) {
-            //            if (props.IsSetBuChar() || props.IsSetBuAutoNum()) {
-            //                SetValue(true);
-            //                return true;
-            //            } else {
-            //                // Excel treats text with buFont but no char/autonum
-            //                //  as not bulleted
-            //                // Possibly the font is just used if bullets turned on again?
-            //            }
-            //        }
-            //        return false;
-            //    }
-            //};
-            //fetchParagraphProperty(fetcher);
-            //return fetcher.GetValue() == null ? false : fetcher.GetValue();
-            throw new NotImplementedException();
+            get
+            {
+                //ParagraphPropertyFetcher<Boolean> fetcher = new ParagraphPropertyFetcher<Boolean>(getLevel()){
+                //    public bool fetch(CTTextParagraphProperties props){
+                //        if (props.IsSetBuNone()) {
+                //            SetValue(false);
+                //            return true;
+                //        }
+                //        if (props.IsSetBuFont()) {
+                //            if (props.IsSetBuChar() || props.IsSetBuAutoNum()) {
+                //                SetValue(true);
+                //                return true;
+                //            } else {
+                //                // Excel treats text with buFont but no char/autonum
+                //                //  as not bulleted
+                //                // Possibly the font is just used if bullets turned on again?
+                //            }
+                //        }
+                //        return false;
+                //    }
+                //};
+                ParagraphPropertyFetcherBullet fetcher = new ParagraphPropertyFetcherBullet(this.Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue() == null ? false : fetcher.GetValue().Value;
+            }
+            set
+            {
+                if(IsBullet == value) return;
+
+                CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+                if (!value)
+                {
+                    pr.AddNewBuNone();
+
+                    if (pr.IsSetBuAutoNum()) pr.UnsetBuAutoNum();
+                    if (pr.IsSetBuBlip()) pr.UnsetBuBlip();
+                    if (pr.IsSetBuChar()) pr.UnsetBuChar();
+                    if (pr.IsSetBuClr()) pr.UnsetBuClr();
+                    if (pr.IsSetBuClrTx()) pr.UnsetBuClrTx();
+                    if (pr.IsSetBuFont()) pr.UnsetBuFont();
+                    if (pr.IsSetBuFontTx()) pr.UnsetBuFontTx();
+                    if (pr.IsSetBuSzPct()) pr.UnsetBuSzPct();
+                    if (pr.IsSetBuSzPts()) pr.UnsetBuSzPts();
+                    if (pr.IsSetBuSzTx()) pr.UnsetBuSzTx();
+                }
+                else
+                {
+                    if (pr.IsSetBuNone()) pr.UnsetBuNone();
+                    if (!pr.IsSetBuFont()) pr.AddNewBuFont().typeface = ("Arial");
+                    if (!pr.IsSetBuAutoNum()) pr.AddNewBuChar().@char = ("\u2022");
+                }
+            }
         }
-
-        /**
-         * Set or unset this paragraph as a bullet point
-         * 
-         * @param flag whether text in this paragraph has bullets
-         */
-        public void SetBullet(bool flag)
+        class ParagraphPropertyFetcherBullet : ParagraphPropertyFetcher<bool?>
         {
-            //if(isBullet() == flag) return;
-
-            //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-            //if(!flag) {
-            //    pr.AddNewBuNone();
-
-            //    if(pr.IsSetBuAutoNum()) pr.unsetBuAutoNum();
-            //    if(pr.IsSetBuBlip()) pr.unsetBuBlip();
-            //    if(pr.IsSetBuChar()) pr.unsetBuChar();
-            //    if(pr.IsSetBuClr()) pr.unsetBuClr();
-            //    if(pr.IsSetBuClrTx()) pr.unsetBuClrTx();
-            //    if(pr.IsSetBuFont()) pr.unsetBuFont();
-            //    if(pr.IsSetBuFontTx()) pr.unsetBuFontTx();
-            //    if(pr.IsSetBuSzPct()) pr.unsetBuSzPct();
-            //    if(pr.IsSetBuSzPts()) pr.unsetBuSzPts();
-            //    if(pr.IsSetBuSzTx()) pr.unsetBuSzTx();
-            //} else {
-            //    if(pr.IsSetBuNone()) pr.unsetBuNone();
-            //    if(!pr.IsSetBuFont()) pr.AddNewBuFont().SetTypeface("Arial");
-            //    if(!pr.IsSetBuAutoNum()) pr.AddNewBuChar().SetChar("\u2022");
-            //}
-            throw new NotImplementedException();
+            public ParagraphPropertyFetcherBullet(int level) : base(level){}
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuNone())
+                {
+                    SetValue(false);
+                    return true;
+                }
+                if (props.IsSetBuFont())
+                {
+                    if (props.IsSetBuChar() || props.IsSetBuAutoNum())
+                    {
+                        SetValue(true);
+                        return true;
+                    }
+                    else
+                    {
+                        // Excel treats text with buFont but no char/autonum
+                        //  as not bulleted
+                        // Possibly the font is just used if bullets turned on again?
+                    }
+                }
+                return false;
+            }
         }
 
         /**
@@ -849,18 +1066,17 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetBullet(ListAutoNumber scheme, int startAt)
         {
-            //if(startAt < 1) throw new ArgumentException("Start Number must be greater or equal that 1") ;
-            //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-            //CTTextAutonumberBullet lst = pr.IsSetBuAutoNum() ? pr.GetBuAutoNum() : pr.AddNewBuAutoNum();        
-            //lst.SetType(STTextAutonumberScheme.Enum.forInt(scheme.ordinal() + 1));
-            //lst.SetStartAt(startAt);
+            if (startAt < 1) throw new ArgumentException("Start Number must be greater or equal that 1");
+            CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+            CT_TextAutonumberBullet lst = pr.IsSetBuAutoNum() ? pr.buAutoNum : pr.AddNewBuAutoNum();
+            lst.type = (ST_TextAutonumberScheme)(int)scheme;
+            lst.startAt = (startAt);
 
-            //if(!pr.IsSetBuFont()) pr.AddNewBuFont().SetTypeface("Arial");
-            //if(pr.IsSetBuNone()) pr.unsetBuNone();        
-            //// remove these elements if present as it results in invalid content when opening in Excel.
-            //if(pr.IsSetBuBlip()) pr.unsetBuBlip();
-            //if(pr.IsSetBuChar()) pr.unsetBuChar();        
-            throw new NotImplementedException();
+            if (!pr.IsSetBuFont()) pr.AddNewBuFont().typeface = ("Arial");
+            if (pr.IsSetBuNone()) pr.UnsetBuNone();
+            // remove these elements if present as it results in invalid content when opening in Excel.
+            if (pr.IsSetBuBlip()) pr.UnsetBuBlip();
+            if (pr.IsSetBuChar()) pr.UnsetBuChar();        
         }
 
         /**
@@ -870,16 +1086,15 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetBullet(ListAutoNumber scheme)
         {
-            //CTTextParagraphProperties pr = _p.IsSetPPr() ? _p.GetPPr() : _p.AddNewPPr();
-            //CTTextAutonumberBullet lst = pr.IsSetBuAutoNum() ? pr.GetBuAutoNum() : pr.AddNewBuAutoNum();
-            //lst.SetType(STTextAutonumberScheme.Enum.forInt(scheme.ordinal() + 1));
+            CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+            CT_TextAutonumberBullet lst = pr.IsSetBuAutoNum() ? pr.buAutoNum : pr.AddNewBuAutoNum();
+            lst.type = (ST_TextAutonumberScheme)(int)scheme;
 
-            //if(!pr.IsSetBuFont()) pr.AddNewBuFont().SetTypeface("Arial");
-            //if(pr.IsSetBuNone()) pr.unsetBuNone();
-            //// remove these elements if present as it results in invalid content when opening in Excel.
-            //if(pr.IsSetBuBlip()) pr.unsetBuBlip();
-            //if(pr.IsSetBuChar()) pr.unsetBuChar();
-            throw new NotImplementedException();
+            if (!pr.IsSetBuFont()) pr.AddNewBuFont().typeface = ("Arial");
+            if (pr.IsSetBuNone()) pr.UnsetBuNone();
+            // remove these elements if present as it results in invalid content when opening in Excel.
+            if (pr.IsSetBuBlip()) pr.UnsetBuBlip();
+            if (pr.IsSetBuChar()) pr.UnsetBuChar();
         }
 
         /**
@@ -898,12 +1113,24 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? false : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherIsBulletAutoNumber fetcher = new ParagraphPropertyFetcherIsBulletAutoNumber(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
         }
-
+        class ParagraphPropertyFetcherIsBulletAutoNumber : ParagraphPropertyFetcher<bool>
+        {
+            public ParagraphPropertyFetcherIsBulletAutoNumber(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuAutoNum())
+                {
+                    SetValue(true);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * Returns the starting number if this paragraph has automatic numbered bullets, otherwise returns 0
          */
@@ -920,12 +1147,25 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
-                //return fetcher.GetValue() == null ? 0 : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherBulletAutoNumberStart fetcher =
+                    new ParagraphPropertyFetcherBulletAutoNumberStart(Level);
+                fetchParagraphProperty(fetcher);
+                return fetcher.GetValue();
             }
         }
-
+        class ParagraphPropertyFetcherBulletAutoNumberStart : ParagraphPropertyFetcher<int>
+        {
+            public ParagraphPropertyFetcherBulletAutoNumberStart(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuAutoNum() && props.buAutoNum.IsSetStartAt())
+                {
+                    SetValue(props.buAutoNum.startAt);
+                    return true;
+                }
+                return false;
+            }
+        }
         /**
          * Returns the auto number scheme if this paragraph has automatic numbered bullets, otherwise returns ListAutoNumber.ARABIC_PLAIN
          */
@@ -942,15 +1182,29 @@ namespace NPOI.XSSF.UserModel
                 //        return false;
                 //    }
                 //};
-                //fetchParagraphProperty(fetcher);
 
-                //// Note: documentation does not define a default, return ListAutoNumber.ARABIC_PLAIN (1,2,3...)
-                //return fetcher.GetValue() == null ? ListAutoNumber.ARABIC_PLAIN : fetcher.GetValue();
-                throw new NotImplementedException();
+                ParagraphPropertyFetcherBulletAutoNumberScheme fetcher =
+                    new ParagraphPropertyFetcherBulletAutoNumberScheme(Level);
+                fetchParagraphProperty(fetcher);
+
+                // Note: documentation does not define a default, return ListAutoNumber.ARABIC_PLAIN (1,2,3...)
+                return fetcher.GetValue() == null ? ListAutoNumber.ARABIC_PLAIN : fetcher.GetValue().Value;
             }
         }
 
-
+        class ParagraphPropertyFetcherBulletAutoNumberScheme : ParagraphPropertyFetcher<ListAutoNumber?>
+        {
+            public ParagraphPropertyFetcherBulletAutoNumberScheme(int level) : base(level) { }
+            public override bool Fetch(CT_TextParagraphProperties props)
+            {
+                if (props.IsSetBuAutoNum())
+                {
+                    SetValue((ListAutoNumber)(int)props.buAutoNum.type);
+                    return true;
+                }
+                return false;
+            }
+        }
         private bool fetchParagraphProperty(ParagraphPropertyFetcher visitor)
         {
             bool ok = false;

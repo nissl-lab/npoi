@@ -251,7 +251,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public int SizeOfRArray()
         {
-            throw new NotImplementedException();
+            return r.Count;
         }
     }
 }

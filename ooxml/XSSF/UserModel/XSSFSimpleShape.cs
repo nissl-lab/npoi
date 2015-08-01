@@ -154,7 +154,7 @@ namespace NPOI.XSSF.UserModel
                     if (out1.Length > 0) out1.Append('\n');
                     p = _paragraphs[(i)];
 
-                    if (p.IsBullet() && p.Text.Length > 0)
+                    if (p.IsBullet && p.Text.Length > 0)
                     {
 
                         int level = Math.Min(p.Level, MAX_LEVELS - 1);
@@ -230,7 +230,7 @@ namespace NPOI.XSSF.UserModel
             {
                 nextp = (index + 1) == _paragraphs.Count ? null : _paragraphs[(index + 1)];
                 if (nextp == null) break; // out of paragraphs
-                if (!(nextp.IsBullet() && p.IsBulletAutoNumber)) break; // not an auto-number bullet                      
+                if (!(nextp.IsBullet && p.IsBulletAutoNumber)) break; // not an auto-number bullet                      
                 if (nextp.Level > level)
                 {
                     // recurse into the new level group
@@ -555,7 +555,7 @@ namespace NPOI.XSSF.UserModel
                 CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
                 if (bodyPr != null)
                 {
-                    if (value == null)
+                    if (value == TextHorizontalOverflow.None)
                     {
                         if (bodyPr.IsSetHorzOverflow()) bodyPr.UnsetHorzOverflow();
                     }
@@ -591,7 +591,7 @@ namespace NPOI.XSSF.UserModel
                 CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
                 if (bodyPr != null)
                 {
-                    if (value == null)
+                    if (value == TextVerticalOverflow.None)
                     {
                         if (bodyPr.IsSetVertOverflow()) bodyPr.UnsetVertOverflow();
                     }
@@ -617,7 +617,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     if (bodyPr.IsSetAnchor())
                     {
-                        return (VerticalAlignment)((int)bodyPr.anchor - 1);
+                        return (VerticalAlignment)((int)bodyPr.anchor);
                     }
                 }
                 return VerticalAlignment.Top;
@@ -627,13 +627,13 @@ namespace NPOI.XSSF.UserModel
                 CT_TextBodyProperties bodyPr = ctShape.txBody.bodyPr;
                 if (bodyPr != null)
                 {
-                    if (value == null)
+                    if (value == VerticalAlignment.None)
                     {
                         if (bodyPr.IsSetAnchor()) bodyPr.UnsetAnchor();
                     }
                     else
                     {
-                        bodyPr.anchor = (/*setter*/(ST_TextAnchoringType)((int)value + 1));
+                        bodyPr.anchor = (/*setter*/(ST_TextAnchoringType)((int)value));
                     }
                 }
             }
@@ -652,7 +652,7 @@ namespace NPOI.XSSF.UserModel
                 if (bodyPr != null)
                 {
                     ST_TextVerticalType val = bodyPr.vert;
-                    if (val != null)
+                    if (val != ST_TextVerticalType.horz)
                     {
                         return (TextDirection)(val - 1);
                     }

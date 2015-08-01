@@ -2911,6 +2911,12 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.sysClrField != null;
         }
+
+        public CT_SRgbColor AddNewSrgbClr()
+        {
+            this.srgbClrField = new CT_SRgbColor();
+            return this.srgbClrField;
+        }
     }
 
     [Serializable]
