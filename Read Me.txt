@@ -7,6 +7,17 @@ server and more efficient than call Microsoft Excel ActiveX at background; you c
 text from Office documents to help you implement full-text indexing feature (most of time this feature is 
 used to create search engines).
 
+=========================
+* Neuzilla Introduction *
+=========================
+Neuzilla is the studio behind NPOI. While using NPOI, you are becoming one of Neuzilla's clients. 
+
+Neuzilla's homepage: http://blog.neuzilla.com
+To follow us, please visit http://www.linkedin.com/company/neuzilla 
+Neuzilla WeChat Public Account: Neuzilla or 架构师联盟
+
+Neuzilla's logo: /logo/neuzilla
+
 ==================
 *  NPOI Website *
 ==================
@@ -17,6 +28,7 @@ http://www.npoi.info (Official Tutorial in Chinese)
 ======================
 * System Requirement *
 ======================
+VS2013
 VS2010 with .NET 2.0 or .NET 4.0
 VS2005 or VS2008 with .NET 2.0 Runtime (SP1) 
 vs2003 with .NET 1.1 
@@ -25,10 +37,10 @@ medium trust environment in ASP.NET
 =================
 *  Neuzilla on SNS  *
 =================
-Twitter: http://twitter.com/tonyqus 
 Linkedin Homepage: http://www.linkedin.com/company/neuzilla
 Linkedin User Group: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
 新浪微博: http://t.sina.com.cn/npoi 
+Twitter: http://twitter.com/tonyqus 
 企业客户QQ群: 116053476
 个人客户QQ群：20144214
 
@@ -126,7 +138,11 @@ Phil Rykoff - developer
 ------------------------------
 Main contribution: XSSF bug fixing and feature implement
 
+NPOI 2.2
+--------------------------------------------------------------------------------
+Antony - main contributor
+
 ==================
 * How to join us *
 ==================
-If you are interested in this project and want to join me, please write mail to tony.qu@neuzilla.com
+If you are interested in this project and want to join me, please write mail to npoi@neuzilla.com
