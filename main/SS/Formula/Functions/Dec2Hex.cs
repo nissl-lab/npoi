@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.Functions
      * Negative numbers are represented using two's-complement notation.
      *
      * <ul>
-     * <li>If number < -549,755,813,888 or if number > 549,755,813,887, this function returns the #NUM! error value.</li>
+     * <li>If number &lt; -549,755,813,888 or if number &gt; 549,755,813,887, this function returns the #NUM! error value.</li>
      * <li>If number is nonnumeric, this function returns the #VALUE! error value.</li>
      * </ul>
      *

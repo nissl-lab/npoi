@@ -421,7 +421,7 @@ namespace NPOI.HSSF.Record
         /**
          * Collapses the drawing records into an aggregate.
          * read Drawing, Obj, TxtObj, Note and Continue records into single byte array,
-         * create Escher tree from byte array, create map <EscherRecord, Record>
+         * create Escher tree from byte array, create map &lt;EscherRecord, Record&gt;
          *
          * @param records - list of all records inside sheet
          * @param locFirstDrawingRecord - location of the first DrawingRecord inside sheet
@@ -712,7 +712,7 @@ namespace NPOI.HSSF.Record
                 }
 
                 int drawingRecordSize = rawEscherSize + (shapeToObj.Count) * 4;
-                if (rawEscherSize != 0 && spEndingOffsets.Count == 1/**EMPTY**/)
+                if (rawEscherSize != 0 && spEndingOffsets.Count == 1/*EMPTY*/)
                 {
                     continueRecordsHeadersSize += 4;
                 }

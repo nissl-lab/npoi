@@ -54,7 +54,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 serialNum = NumericFunction.SingleOperandEvaluate(serialNumVE, srcRowIndex, srcColumnIndex);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -68,7 +68,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval ve = OperandResolver.GetSingleValue(returnTypeVE, srcRowIndex, srcColumnIndex);
                 returnType = OperandResolver.CoerceValueToInt(ve);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.NUM_ERROR;
             }

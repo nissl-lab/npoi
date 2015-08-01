@@ -295,11 +295,12 @@ namespace NPOI.SS.UserModel
 
         /// <summary>
         /// Adds the linking required to allow formulas referencing the specified 
-        /// external workbook to be added to this one. <p>In order for formulas 
+        /// external workbook to be added to this one. In order for formulas 
         /// such as "[MyOtherWorkbook]Sheet3!$A$5" to be added to the file, 
         /// some linking information must first be recorded. Once a given external 
         /// workbook has been linked, then formulas using it can added. Each workbook 
-        /// needs linking only once. <p>This linking only applies for writing formulas. 
+        /// needs linking only once. <br/>
+        /// This linking only applies for writing formulas. 
         /// To link things for evaluation, see {@link FormulaEvaluator#setupReferencedWorkbooks(java.util.Map)}
         /// </summary>
         /// <param name="name">The name the workbook will be referenced as in formulas</param>

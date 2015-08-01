@@ -622,11 +622,11 @@ namespace NPOI.SS.Util
          *  cell who's contents are Shown in a given position in the sheet.
          * 
          * <p>If the cell at the given co-ordinates is a merged cell, this will
-         *  return the primary (top-left) most cell of the merged region.
+         *  return the primary (top-left) most cell of the merged region.</p>
          * <p>If the cell at the given co-ordinates is not in a merged region,
-         *  then will return the cell itself.
+         *  then will return the cell itself.</p>
          * <p>If there is no cell defined at the given co-ordinates, will return
-         *  null.
+         *  null.</p>
          */
         public static ICell GetCellWithMerges(ISheet sheet, int rowIx, int colIx)
         {

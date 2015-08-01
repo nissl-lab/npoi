@@ -58,7 +58,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 number = OperandResolver.CoerceValueToInt(numberVE);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }

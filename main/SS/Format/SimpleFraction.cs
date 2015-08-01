@@ -85,7 +85,7 @@ namespace NPOI.SS.Format
             long a0 = (long)Math.Floor(r0);
             if (a0 > overflow)
             {
-                throw new ArgumentException("Overflow trying to convert " + value + " to fraction (" + a0 + "/" + 1l + ")");
+                throw new ArgumentException("Overflow trying to convert " + value + " to fraction (" + a0 + "/" + 1L + ")");
             }
 
             // check for (almost) integer arguments, which should not go

@@ -55,7 +55,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval ve = OperandResolver.GetSingleValue(numberVE, srcRowIndex, srcColumnIndex);
                 number = OperandResolver.CoerceValueToInt(ve);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -78,7 +78,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval ve = OperandResolver.GetSingleValue(formVE, srcRowIndex, srcColumnIndex);
                 form = OperandResolver.CoerceValueToInt(ve);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.NUM_ERROR;
             }

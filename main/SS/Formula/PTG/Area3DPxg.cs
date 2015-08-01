@@ -23,8 +23,8 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.Util;
 
     /**
-     * <p>Title:        XSSF Area 3D Reference (Sheet + Area)<P>
-     * <p>Description:  Defined an area in an external or different sheet. <P>
+     * <p>Title:        XSSF Area 3D Reference (Sheet + Area)</p>
+     * <p>Description:  Defined an area in an external or different sheet. </p>
      * <p>REFERENCE:  </p>
      * 
      * <p>This is XSSF only, as it stores the sheet / book references
