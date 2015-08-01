@@ -797,7 +797,7 @@ namespace NPOI.HSSF.UserModel
         /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
         /// if you care which one it is.
         /// </returns>
-        public IEnumerator<IRow> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             return rows.Values.GetEnumerator();
         }
@@ -2921,12 +2921,5 @@ namespace NPOI.HSSF.UserModel
             }
             return isNew;
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        // end of POI CopySheets
     }
 }

@@ -16,7 +16,6 @@
 ==================================================================== */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.XPath;
@@ -38,7 +37,7 @@ namespace NPOI.Util
             settings.ValidationFlags = XmlSchemaValidationFlags.None;
             settings.ValidationType = ValidationType.None;
             settings.XmlResolver = null;
-            settings.DtdProcessing = DtdProcessing.Ignore;
+            settings.ProhibitDtd = true;
             //settings.ConformanceLevel = ConformanceLevel.Document;
             XmlReader xr = XmlReader.Create(stream, settings);
             
@@ -52,7 +51,7 @@ namespace NPOI.Util
             settings.ValidationFlags = XmlSchemaValidationFlags.None;
             settings.ValidationType = ValidationType.Schema;
             settings.XmlResolver = null;
-            settings.DtdProcessing = DtdProcessing.Ignore;
+            settings.ProhibitDtd = true; 
             settings.ConformanceLevel = ConformanceLevel.Auto;
             settings.IgnoreProcessingInstructions = true;
             try

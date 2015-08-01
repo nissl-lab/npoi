@@ -53,7 +53,7 @@ namespace NPOI.SS.UserModel
     /// This interface is shared between the implementation specific to xls and xlsx.
     /// This way it is possible to access Excel workbooks stored in both formats.
     /// </summary>
-    public interface IWorkbook : IEnumerable<ISheet>
+    public interface IWorkbook
     {
 
         /// <summary>
@@ -165,7 +165,11 @@ namespace NPOI.SS.UserModel
         /// <param name="index"></param>
         void RemoveSheetAt(int index);
 
-
+        /// <summary>
+        /// Enumerate sheets
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator GetEnumerator();
         /**
          * To set just repeating columns:
          *  workbook.SetRepeatingRowsAndColumns(0,0,1,-1-1);

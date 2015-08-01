@@ -31,6 +31,7 @@ using System.IO;
 
 using NPOI.Util;
 using NPOI.POIFS.EventFileSystem;
+using NPOI.Util.Collections;
 
 
 namespace NPOI.POIFS.FileSystem
@@ -61,7 +62,7 @@ namespace NPOI.POIFS.FileSystem
         /// <value>the names of all the entries that may be retrieved with
         /// getEntry(String), which may be empty (if this DirectoryEntry is empty
         /// </value>
-        HashSet<String> EntryNames { get; }
+        List<String> EntryNames { get; }
 
         /// <summary>
         ///is this DirectoryEntry empty?

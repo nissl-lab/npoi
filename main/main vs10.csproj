@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
     <AssemblyName>NPOI</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
@@ -1189,7 +1189,6 @@
     <Compile Include="Util\CodePageUtil.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
-    <Compile Include="Util\Collections\ISet.cs" />
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />

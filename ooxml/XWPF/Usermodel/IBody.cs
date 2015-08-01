@@ -23,10 +23,10 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
 
     /**
-     * <p>An IBody represents the different parts of the document which
+     * An IBody represents the different parts of the document which
      * can contain collections of Paragraphs and Tables. It provides a
-     * common way to work with these and their contents.</p>
-     * <p>Typically, this is something like a XWPFDocument, or one of
+     * common way to work with these and their contents.
+     * Typically, this is something like a XWPFDocument, or one of
      *  the parts in it like XWPFHeader, XWPFFooter, XWPFTableCell
      *
      */
