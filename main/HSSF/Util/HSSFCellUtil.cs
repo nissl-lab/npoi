@@ -291,7 +291,7 @@ namespace NPOI.HSSF.Util
                             newCell.SetCellType(CellType.Numeric);
                             newCell.SetCellValue(oldCell.NumericCellValue);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             newCell.SetCellType(CellType.String);
                             newCell.SetCellValue(oldCell.ToString());

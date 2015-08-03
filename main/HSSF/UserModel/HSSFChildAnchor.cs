@@ -141,6 +141,13 @@ namespace NPOI.HSSF.UserModel
             return anchor.Dx1 == Dx1 && anchor.Dx2 == Dx2 && anchor.Dy1 == Dy1
                     && anchor.Dy2 == Dy2;
         }
+
+        public override int GetHashCode()
+        {
+            return Dx1.GetHashCode() ^ Dx2.GetHashCode() ^ Dy1.GetHashCode()
+                    ^ Dy2.GetHashCode();
+        }
+
         internal override EscherRecord GetEscherAnchor()
         {
             return _escherChildAnchor;

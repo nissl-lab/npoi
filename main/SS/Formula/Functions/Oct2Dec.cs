@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
 
     /**
-     * <p>Implementation for Excel Oct2Dec() function.<p/>
+     * <p>Implementation for Excel Oct2Dec() function.</p>
      * <p>
      * Converts an octal number to decimal.
      * </p>

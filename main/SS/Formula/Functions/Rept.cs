@@ -44,7 +44,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 numberOfTime = OperandResolver.CoerceValueToDouble(number_times);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }

@@ -65,7 +65,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 fc = GetColumnForName(filterColumn, db);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -85,7 +85,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     matches = FullFillsConditions(db, row, cdb);
                 }
-                catch (EvaluationException e)
+                catch (EvaluationException)
                 {
                     return ErrorEval.VALUE_INVALID;
                 }
@@ -235,7 +235,7 @@ namespace NPOI.SS.Formula.Functions
                         // The condition to Apply.
                         condition = solveReference(cdb.GetValue(conditionRow, column));
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // It might be a special formula, then it is ok if it fails.
                         columnCondition = false;
@@ -282,7 +282,7 @@ namespace NPOI.SS.Formula.Functions
         }
 
         /**
-         * Test a value against a simple (< > <= >= = starts-with) condition string.
+         * Test a value against a simple (&lt; &gt; &lt;= &gt;= = starts-with) condition string.
          *
          * @param value The value to Check.
          * @param condition The condition to check for.
@@ -316,11 +316,11 @@ namespace NPOI.SS.Formula.Functions
             try {
                 Int32.Parse(stringOrNumber);
                 itsANumber = true;
-            } catch (FormatException e) { // It's not an int.
+            } catch (FormatException) { // It's not an int.
                 try {
                     Double.Parse(stringOrNumber);
                     itsANumber = true;
-                } catch (FormatException e2) { // It's a string.
+                } catch (FormatException) { // It's a string.
                     itsANumber = false;
                 }
             }
@@ -359,13 +359,13 @@ namespace NPOI.SS.Formula.Functions
                 int intValue = Int32.Parse(condition);
                 conditionValue = intValue;
             }
-            catch (FormatException e)
+            catch (FormatException)
             { // It's not an int.
                 try
                 {
                     conditionValue = Double.Parse(condition);
                 }
-                catch (FormatException e2)
+                catch (FormatException)
                 { // It's not a double.
                     throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }

@@ -192,7 +192,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval ve1 = OperandResolver.GetSingleValue(arg1, srcRowIndex, srcColumnIndex);
                 dn = OperandResolver.CoerceValueToDouble(ve1);
             }
-            catch (EvaluationException e1)
+            catch (EvaluationException)
             {
                 // all errors in the second arg translate to #VALUE!
                 return ErrorEval.VALUE_INVALID;
@@ -238,7 +238,7 @@ namespace NPOI.SS.Formula.Functions
      * <ul>
      *     <li>if array is empty or Contains more than 8,191 data points, PERCENTILE returns the #NUM! error value.</li>
      *     <li>If k is nonnumeric, PERCENTILE returns the #VALUE! error value.</li>
-     *     <li>If k is < 0 or if k > 1, PERCENTILE returns the #NUM! error value.</li>
+     *     <li>If k is &lt; 0 or if k &gt; 1, PERCENTILE returns the #NUM! error value.</li>
      *     <li>If k is not a multiple of 1/(n - 1), PERCENTILE interpolates to determine the value at the k-th percentile.</li>
      * </ul>
      */
@@ -253,7 +253,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval ve1 = OperandResolver.GetSingleValue(arg1, srcRowIndex, srcColumnIndex);
                 dn = OperandResolver.CoerceValueToDouble(ve1);
             }
-            catch (EvaluationException e1)
+            catch (EvaluationException)
             {
                 // all errors in the second arg translate to #VALUE!
                 return ErrorEval.VALUE_INVALID;

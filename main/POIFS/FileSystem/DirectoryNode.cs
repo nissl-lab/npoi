@@ -215,7 +215,7 @@ namespace NPOI.POIFS.FileSystem
                     {
                         _nFilesSystem.Remove(entry);
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                         // TODO Work out how to report this, given we can't change the method signature...
                     }

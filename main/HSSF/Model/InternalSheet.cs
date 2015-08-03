@@ -141,7 +141,7 @@ namespace NPOI.HSSF.Model
 
                 if (rb is EscherAggregate)
                 {
-                    /**
+                    /*
                      * this record will be removed after reading actual data from EscherAggregate
                      */
                     rb = new DrawingRecord();

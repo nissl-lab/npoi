@@ -303,7 +303,12 @@ namespace NPOI.HSSF.UserModel
                     && anchor.Dx2 == Dx2 && anchor.Dy1 == Dy1 && anchor.Dy2 == Dy2
                     && anchor.Row1 == Row1 && anchor.Row2 == Row2 && anchor.AnchorType == AnchorType;
         }
-
+        public override int GetHashCode()
+        {
+            return Col1.GetHashCode() ^ Col2.GetHashCode() ^ Dx1.GetHashCode()
+                   ^ Dx2.GetHashCode() ^ Dy1.GetHashCode() ^ Dy2.GetHashCode()
+                    ^Row1.GetHashCode() ^  Row2.GetHashCode() ^ AnchorType.GetHashCode();
+        }
         public override int Dx1
         {
             get

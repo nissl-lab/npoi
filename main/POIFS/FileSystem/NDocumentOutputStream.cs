@@ -162,8 +162,9 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        public void Close()
+        public override void Close()
         {
+            base.Close();
             // Do we have a pending buffer for the mini stream?
             if (_buffer != null)
             {

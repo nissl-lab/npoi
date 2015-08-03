@@ -34,21 +34,21 @@ namespace NPOI.DDF
                 SysIndexSource.FILL_OR_LINE_COLOR
             };
         }
-        /** Use the fill color of the shape. */
+        /* Use the fill color of the shape. */
         public static SysIndexSource FILL_COLOR = new SysIndexSource(0xF0),
-            /** If the shape Contains a line, use the line color of the shape. Otherwise, use the fill color. */
+        /* If the shape Contains a line, use the line color of the shape. Otherwise, use the fill color. */
         LINE_OR_FILL_COLOR = new SysIndexSource(0xF1),
-            /** Use the line color of the shape. */
+        /* Use the line color of the shape. */
         LINE_COLOR = new SysIndexSource(0xF2),
-            /** Use the shadow color of the shape. */
+            /* Use the shadow color of the shape. */
         SHADOW_COLOR = new SysIndexSource(0xF3),
-            /** Use the current, or last-used, color. */
+            /* Use the current, or last-used, color. */
         CURRENT_OR_LAST_COLOR = new SysIndexSource(0xF4),
-            /** Use the fill background color of the shape. */
+            /* Use the fill background color of the shape. */
         FILL_BACKGROUND_COLOR = new SysIndexSource(0xF5),
-            /** Use the line background color of the shape. */
+            /* Use the line background color of the shape. */
         LINE_BACKGROUND_COLOR = new SysIndexSource(0xF6),
-            /** If the shape Contains a Fill, use the fill color of the shape. Otherwise, use the line color. */
+            /* If the shape Contains a Fill, use the fill color of the shape. Otherwise, use the line color. */
         FILL_OR_LINE_COLOR = new SysIndexSource(0xF7)
         ;
         internal int value;
@@ -75,46 +75,46 @@ namespace NPOI.DDF
                 SysIndexProcedure.INVERT_HIGHBIT_AFTER
             };
         }
-        /**
+        /*
          * Darken the color by the value that is specified in the blue field.
          * A blue value of 0xFF specifies that the color is to be left unChanged,
          * whereas a blue value of 0x00 specifies that the color is to be completely darkened.
          */
         public static SysIndexProcedure DARKEN_COLOR = new SysIndexProcedure(0x01),
-            /**
+            /*
              * Lighten the color by the value that is specified in the blue field.
              * A blue value of 0xFF specifies that the color is to be left unChanged,
              * whereas a blue value of 0x00 specifies that the color is to be completely lightened.
              */
         LIGHTEN_COLOR = new SysIndexProcedure(0x02),
-            /**
+            /*
              * Add a gray level RGB value. The blue field Contains the gray level to Add:
              * NewColor = SourceColor + gray
              */
         ADD_GRAY_LEVEL = new SysIndexProcedure(0x03),
-            /**
+            /*
              * Subtract a gray level RGB value. The blue field Contains the gray level to subtract:
              * NewColor = SourceColor - gray
              */
         SUB_GRAY_LEVEL = new SysIndexProcedure(0x04),
-            /**
+            /*
              * Reverse-subtract a gray level RGB value. The blue field Contains the gray level from
              * which to subtract:
              * NewColor = gray - SourceColor
              */
         REVERSE_GRAY_LEVEL = new SysIndexProcedure(0x05),
-            /**
+            /*
              * If the color component being modified is less than the parameter Contained in the blue
              * field, Set it to the minimum intensity. If the color component being modified is greater
              * than or equal to the parameter, Set it to the maximum intensity.
              */
         THRESHOLD = new SysIndexProcedure(0x06),
-            /**
+            /*
              * After making other modifications, invert the color.
              * This enum value is only for documentation and won't be directly returned.
              */
         INVERT_AFTER = new SysIndexProcedure(0x20),
-            /**
+            /*
              * After making other modifications, invert the color by toggling just the high bit of each
              * color channel.
              * This enum value is only for documentation and won't be directly returned.
@@ -135,54 +135,54 @@ namespace NPOI.DDF
         int opid = -1;
         int colorRef = 0;
 
-        /**
+        /*
          * A bit that specifies whether the system color scheme will be used to determine the color. 
          * A value of 0x1 specifies that green and red will be treated as an unsigned 16-bit index
          * into the system color table. Values less than 0x00F0 map directly to system colors.
          */
         private static BitField FLAG_SYS_INDEX = new BitField(0x10000000);
 
-        /**
+        /*
          * A bit that specifies whether the current application-defined color scheme will be used
          * to determine the color. A value of 0x1 specifies that red will be treated as an index
          * into the current color scheme table. If this value is 0x1, green and blue MUST be 0x00.
          */
         private static BitField FLAG_SCHEME_INDEX = new BitField(0x08000000);
 
-        /**
+        /*
          * A bit that specifies whether the color is a standard RGB color.
          * 0x0 : The RGB color MAY use halftone dithering to display.
          * 0x1 : The color MUST be a solid color.
          */
         private static BitField FLAG_SYSTEM_RGB = new BitField(0x04000000);
 
-        /**
+        /*
          * A bit that specifies whether the current palette will be used to determine the color.
          * A value of 0x1 specifies that red, green, and blue contain an RGB value that will be
          * matched in the current color palette. This color MUST be solid.
          */
         private static BitField FLAG_PALETTE_RGB = new BitField(0x02000000);
 
-        /**
+        /*
          * A bit that specifies whether the current palette will be used to determine the color.
          * A value of 0x1 specifies that green and red will be treated as an unsigned 16-bit index into 
          * the current color palette. This color MAY be dithered. If this value is 0x1, blue MUST be 0x00.
          */
         private static BitField FLAG_PALETTE_INDEX = new BitField(0x01000000);
 
-        /**
+        /*
          * An unsigned integer that specifies the intensity of the blue color channel. A value
          * of 0x00 has the minimum blue intensity. A value of 0xFF has the maximum blue intensity.
          */
         private static BitField FLAG_BLUE = new BitField(0x00FF0000);
 
-        /**
+        /*
          * An unsigned integer that specifies the intensity of the green color channel. A value
          * of 0x00 has the minimum green intensity. A value of 0xFF has the maximum green intensity.
          */
         private static BitField FLAG_GREEN = new BitField(0x0000FF00);
 
-        /**
+        /*
          * An unsigned integer that specifies the intensity of the red color channel. A value
          * of 0x00 has the minimum red intensity. A value of 0xFF has the maximum red intensity.
          */

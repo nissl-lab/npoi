@@ -699,7 +699,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Sets whether sheet is selected.
         /// </summary>
-        /// <param name="sel">Whether to select the sheet or deselect the sheet.</param> 
+        /// <param name="value">Whether to select the sheet or deselect the sheet.</param> 
         void SetActive(bool value);
 
         /// <summary>

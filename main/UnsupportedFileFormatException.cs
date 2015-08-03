@@ -24,8 +24,6 @@ namespace NPOI
      */
     public abstract class UnsupportedFileFormatException : ArgumentException
     {
-        private static long serialVersionUID = -8281969197282030046L;
-
         public UnsupportedFileFormatException(String s)
             : base(s)
         {

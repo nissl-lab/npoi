@@ -94,7 +94,7 @@ namespace NPOI.HSSF.UserModel
         protected internal void PreSerialize()
         {
             Dictionary<int, NoteRecord> tailRecords = _boundAggregate.TailRecords;
-            /**
+            /*
              * contains coordinates of comments we iterate over
              */
             Hashtable coordinates = new Hashtable(tailRecords.Count);
