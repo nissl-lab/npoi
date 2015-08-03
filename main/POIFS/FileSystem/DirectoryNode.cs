@@ -36,6 +36,7 @@ using NPOI.POIFS.Dev;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.EventFileSystem;
 using NPOI.Util;
+using NPOI.Util.Collections;
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -214,7 +215,7 @@ namespace NPOI.POIFS.FileSystem
                     {
                         _nFilesSystem.Remove(entry);
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                         // TODO Work out how to report this, given we can't change the method signature...
                     }
@@ -271,11 +272,11 @@ namespace NPOI.POIFS.FileSystem
          *         getEntry(String), which may be empty (if this 
          *         DirectoryEntry is empty)
          */
-        public HashSet<String> EntryNames
+        public List<String> EntryNames
         {
             get
             {
-                return new HashSet<string>(_byname.Keys);
+                return new List<string>(_byname.Keys);
             }
         }
 

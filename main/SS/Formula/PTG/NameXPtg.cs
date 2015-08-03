@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula.PTG
      * A Name, be that a Named Range or a Function / User Defined
      *  Function, addressed in the HSSF External Sheet style.
      *  
-     * <p>This is HSSF only, as it matches the HSSF file format way of
+     * This is HSSF only, as it matches the HSSF file format way of
      *  referring to the sheet by an extern index. The XSSF equivalent
      *  is {@link NameXPxg}
      */

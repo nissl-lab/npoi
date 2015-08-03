@@ -24,7 +24,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private CT_SheetFormatPr sheetFormatPrField = null;
 
-        private List<CT_Cols> colsField = null;
+        private List<CT_Cols> colsField = new List<CT_Cols>();
 
         private CT_SheetData sheetDataField = new CT_SheetData();
 

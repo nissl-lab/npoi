@@ -156,7 +156,7 @@ namespace NPOI.SS.UserModel
                     fract = SimpleFraction.BuildFractionMaxDenominator(decPart, maxDenom);
                 }
             }
-            catch (SimpleFractionException e)
+            catch (SimpleFractionException)
             {
                 return doubleValue.ToString();
             }

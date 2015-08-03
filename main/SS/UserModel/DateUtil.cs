@@ -332,6 +332,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="date">The Excel date.</param>
         /// <param name="use1904windowing">true if date uses 1904 windowing, or false if using 1900 date windowing.</param>
+        /// <param name="roundSeconds"></param>
         /// <returns>null if date is not a valid Excel date</returns>
         public static DateTime GetJavaCalendar(double date, bool use1904windowing, bool roundSeconds)
         {

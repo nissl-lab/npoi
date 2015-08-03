@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.PTG
      * <p>Description:  Defined an area in Extern Sheet. </p>
      * <p>REFERENCE:  </p>
      * 
-     * <p>This is HSSF only, as it matches the HSSF file format way of
+     * This is HSSF only, as it matches the HSSF file format way of
      *  referring to the sheet by an extern index. The XSSF equivalent
      *  is {@link Area3DPxg}
      */

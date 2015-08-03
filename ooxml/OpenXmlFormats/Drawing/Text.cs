@@ -488,9 +488,9 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_TextBodyProperties()
         {
             this.uprightField = false;
-            this.vert = ST_TextVerticalType.horz;
-            this.wrap = ST_TextWrappingType.none;
-            this.spcFirstLastPara = false;
+            this.vertField = ST_TextVerticalType.horz;
+            this.wrapField = ST_TextWrappingType.none;
+            this.spcFirstLastParaField = false;
         }
         public static CT_TextBodyProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -702,6 +702,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.rotField = value;
+                this.rotFieldSpecified = true;
             }
         }
 
@@ -730,6 +731,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.spcFirstLastParaField = value;
+                this.spcFirstLastParaFieldSpecified = value;
             }
         }
 
@@ -758,6 +760,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.vertOverflowField = value;
+                this.vertOverflowFieldSpecified = true;
             }
         }
 
@@ -786,6 +789,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.horzOverflowField = value;
+                this.horzOverflowFieldSpecified = true;
             }
         }
 
@@ -814,6 +818,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.vertField = value;
+                this.vertFieldSpecified = true;
             }
         }
 
@@ -842,6 +847,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.wrapField = value;
+                this.wrapFieldSpecified = true;
             }
         }
 
@@ -870,6 +876,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.lInsField = value;
+                this.lInsFieldSpecified = true;
             }
         }
 
@@ -898,6 +905,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.tInsField = value;
+                this.tInsFieldSpecified = true;
             }
         }
 
@@ -926,6 +934,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.rInsField = value;
+                this.rInsFieldSpecified = true;
             }
         }
 
@@ -954,6 +963,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.bInsField = value;
+                this.bInsFieldSpecified = true;
             }
         }
 
@@ -982,6 +992,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.numColField = value;
+                this.numColFieldSpecified = true;
             }
         }
 
@@ -1010,6 +1021,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.spcColField = value;
+                this.spcColFieldSpecified = true;
             }
         }
 
@@ -1038,6 +1050,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.rtlColField = value;
+                this.rtlColFieldSpecified = value;
             }
         }
 
@@ -1066,6 +1079,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.fromWordArtField = value;
+                this.fromWordArtFieldSpecified = value;
             }
         }
 
@@ -1094,6 +1108,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.anchorField = value;
+                this.anchorFieldSpecified = true;
             }
         }
 
@@ -1122,6 +1137,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.anchorCtrField = value;
+                this.anchorCtrFieldSpecified = value;
             }
         }
 
@@ -1150,6 +1166,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.forceAAField = value;
+                this.forceAAFieldSpecified = value;
             }
         }
 
@@ -1193,6 +1210,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.compatLnSpcField = value;
+                this.compatLnSpcFieldSpecified = value;
             }
         }
 
@@ -1212,133 +1230,140 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void UnsetTIns()
         {
-            throw new NotImplementedException();
+            this.tInsFieldSpecified = false;
         }
 
         public void UnsetVertOverflow()
         {
-            throw new NotImplementedException();
+            this.vertOverflowFieldSpecified = false;
         }
 
         public void UnsetVert()
         {
-            throw new NotImplementedException();
+            this.vertFieldSpecified = false;
         }
 
         public bool IsSetVert()
         {
-            throw new NotImplementedException();
+            return this.vertFieldSpecified;
         }
 
         public bool IsSetBIns()
         {
-            throw new NotImplementedException();
+            return this.bInsFieldSpecified;
         }
 
         public bool IsSetLIns()
         {
-            throw new NotImplementedException();
+            return this.lInsFieldSpecified;
         }
 
         public bool IsSetRIns()
         {
-            throw new NotImplementedException();
+            return this.rInsFieldSpecified;
         }
 
         public bool IsSetTIns()
         {
-            throw new NotImplementedException();
+            return this.tInsFieldSpecified;
         }
 
         public void UnsetBIns()
         {
-            throw new NotImplementedException();
+            this.bInsFieldSpecified = false;
         }
 
         public void UnsetLIns()
         {
-            throw new NotImplementedException();
+            this.lInsFieldSpecified = false;
         }
 
         public void UnsetRIns()
         {
-            throw new NotImplementedException();
+            this.rInsFieldSpecified = false;
         }
 
         public bool IsSetSpAutoFit()
         {
-            throw new NotImplementedException();
+            return this.spAutoFitField != null;
         }
 
         public bool IsSetNoAutofit()
         {
-            throw new NotImplementedException();
+            return this.noAutofitField != null;
         }
 
         public bool IsSetNormAutofit()
         {
-            throw new NotImplementedException();
+            return this.normAutofitField != null;
         }
 
         public void UnsetSpAutoFit()
         {
-            throw new NotImplementedException();
+            this.spAutoFitField = null;
         }
 
         public void UnsetNoAutofit()
         {
-            throw new NotImplementedException();
+            this.noAutofitField = null;
         }
 
         public void UnsetNormAutofit()
         {
-            throw new NotImplementedException();
+            this.normAutofitField = null;
         }
 
-        public void AddNewNoAutofit()
+        public CT_TextNoAutofit AddNewNoAutofit()
         {
-            throw new NotImplementedException();
+            this.noAutofitField = new CT_TextNoAutofit();
+            return this.noAutofitField;
         }
 
-        public void AddNewNormAutofit()
+        public CT_TextNormalAutofit AddNewNormAutofit()
         {
-            throw new NotImplementedException();
+            this.normAutofitField = new CT_TextNormalAutofit();
+            return this.normAutofitField;
         }
 
-        public void AddNewSpAutoFit()
+        public CT_TextShapeAutofit AddNewSpAutoFit()
         {
-            throw new NotImplementedException();
+            this.spAutoFitField = new CT_TextShapeAutofit();
+            return this.spAutoFitField;
         }
 
         public void UnsetHorzOverflow()
         {
-            throw new NotImplementedException();
+            this.horzOverflowFieldSpecified = false;
         }
 
         public bool IsSetHorzOverflow()
         {
-            throw new NotImplementedException();
+            return this.horzOverflowFieldSpecified;
         }
 
 
         public bool IsSetVertOverflow()
         {
-            throw new NotImplementedException();
+            return this.vertOverflowFieldSpecified;
         }
 
         public bool IsSetAnchor()
         {
-            throw new NotImplementedException();
+            return this.anchorFieldSpecified;
         }
 
         public void UnsetAnchor()
         {
-            throw new NotImplementedException();
+            this.anchorFieldSpecified = false;
         }
 
         public bool IsSetWrap()
         {
-            throw new NotImplementedException();
+            return this.wrapFieldSpecified;
+        }
+        public void UnsetWrap()
+        {
+            this.wrapFieldSpecified = false;
         }
     }
     

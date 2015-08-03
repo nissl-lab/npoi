@@ -18,8 +18,6 @@
 namespace NPOI.SS.Formula
 {
     using System;
-
-    using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Eval;
 
     /**

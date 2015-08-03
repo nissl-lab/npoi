@@ -126,7 +126,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != rFontField); }
         }
-        public int sizeOfRFontArray()
+        public int SizeOfRFontArray()
         {
             return this.rFontField == null ? 0 : 1;
         }
@@ -182,7 +182,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != familyField); }
         }
-        public int sizeOfFamilyArray()
+        public int SizeOfFamilyArray()
         {
             return this.familyField == null ? 0 : 1;
         }
@@ -214,7 +214,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != bField); }
         }
-        public int sizeOfBArray()
+        public int SizeOfBArray()
         {
             return this.bField == null ? 0 : 1;
         }
@@ -246,7 +246,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != iField); }
         }
-        public int sizeOfIArray()
+        public int SizeOfIArray()
         {
             return this.iField == null ? 0 : 1;
         }
@@ -426,7 +426,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != colorField); }
         }
-        public int sizeOfColorArray()
+        public int SizeOfColorArray()
         {
             return this.colorField == null ? 0 : 1;
         }
@@ -458,7 +458,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != szField); }
         }
-        public int sizeOfSzArray()
+        public int SizeOfSzArray()
         {
             return this.szField == null ? 0 : 1;
         }
@@ -490,7 +490,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             get { return (null != uField); }
         }
-        public int sizeOfUArray()
+        public int SizeOfUArray()
         {
             return this.uField == null ? 0 : 1;
         }
@@ -570,34 +570,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         #endregion scheme
 
-        public int SizeOfUArray()
-        {
-            throw new NotImplementedException();
-        }
+        //public int SizeOfUArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public int SizeOfBArray()
-        {
-            throw new NotImplementedException();
-        }
+        //public int SizeOfBArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public int SizeOfSzArray()
-        {
-            throw new NotImplementedException();
-        }
+        //public int SizeOfSzArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public int SizeOfRFontArray()
-        {
-            throw new NotImplementedException();
-        }
+        //public int SizeOfRFontArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public int SizeOfIArray()
-        {
-            throw new NotImplementedException();
-        }
+        //public int SizeOfIArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public int SizeOfColorArray()
-        {
-            throw new NotImplementedException();
-        }
+        //public int SizeOfColorArray()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

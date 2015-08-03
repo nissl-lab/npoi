@@ -154,18 +154,18 @@ namespace TestCases.HSSF.UserModel
             // And in rich text
 
             // RTR 1 had f1 and f2, unchanged 
-            Assert.AreEqual(5, r.GetCell(0).RichStringCellValue.GetFontAtIndex(0));
-            Assert.AreEqual(5, r.GetCell(0).RichStringCellValue.GetFontAtIndex(1));
-            Assert.AreEqual(6, r.GetCell(0).RichStringCellValue.GetFontAtIndex(3));
-            Assert.AreEqual(6, r.GetCell(0).RichStringCellValue.GetFontAtIndex(4));
+            Assert.AreEqual(5, (r.GetCell(0).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(0));
+            Assert.AreEqual(5, (r.GetCell(0).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(1));
+            Assert.AreEqual(6, (r.GetCell(0).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(3));
+            Assert.AreEqual(6, (r.GetCell(0).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(4));
 
             // RTR 2 had f3 (unchanged), f5 (=f2) and f6 (moved down)
-            Assert.AreEqual(7, r.GetCell(1).RichStringCellValue.GetFontAtIndex(0));
-            Assert.AreEqual(7, r.GetCell(1).RichStringCellValue.GetFontAtIndex(1));
-            Assert.AreEqual(6, r.GetCell(1).RichStringCellValue.GetFontAtIndex(3));
-            Assert.AreEqual(6, r.GetCell(1).RichStringCellValue.GetFontAtIndex(4));
-            Assert.AreEqual(8, r.GetCell(1).RichStringCellValue.GetFontAtIndex(6));
-            Assert.AreEqual(8, r.GetCell(1).RichStringCellValue.GetFontAtIndex(7));
+            Assert.AreEqual(7, (r.GetCell(1).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(0));
+            Assert.AreEqual(7, (r.GetCell(1).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(1));
+            Assert.AreEqual(6, (r.GetCell(1).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(3));
+            Assert.AreEqual(6, (r.GetCell(1).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(4));
+            Assert.AreEqual(8, (r.GetCell(1).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(6));
+            Assert.AreEqual(8, (r.GetCell(1).RichStringCellValue as HSSFRichTextString).GetFontAtIndex(7));
         }
         [Test]
         public void TestOptimiseStyles()

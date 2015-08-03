@@ -70,7 +70,7 @@ using NPOI.POIFS.FileSystem;
                 {
                     return Create(inp);
                 }
-                catch (MarkUnsupportedException e) { return null; }
+                catch (MarkUnsupportedException) { return null; }
             }
             finally
             {

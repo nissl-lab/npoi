@@ -17,7 +17,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public static ChartsheetDocument Parse(XmlDocument xmldoc, XmlNamespaceManager nsmgr)
         {
-            CT_Chartsheet obj = CT_Chartsheet.Parse(xmldoc, nsmgr);
+            CT_Chartsheet obj = CT_Chartsheet.Parse(xmldoc.DocumentElement, nsmgr);
             return new ChartsheetDocument(obj);
         }
         public CT_Chartsheet GetChartsheet()

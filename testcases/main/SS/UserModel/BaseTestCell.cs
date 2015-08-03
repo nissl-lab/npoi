@@ -799,7 +799,7 @@ namespace TestCases.SS.UserModel
             CheckUnicodeValues(wbBack);
         }
 
-        private void CheckUnicodeValues(IWorkbook wb)
+        protected void CheckUnicodeValues(IWorkbook wb)
         {
             Assert.AreEqual((wb is HSSFWorkbook ? "row 0, cell 0 _x0046_ without Changes" : "row 0, cell 0 F without Changes"),
                     wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());

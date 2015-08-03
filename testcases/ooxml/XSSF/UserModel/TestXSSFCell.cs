@@ -497,7 +497,6 @@ namespace NPOI.XSSF.UserModel
                 pos += SpreadsheetVersion.EXCEL97.MaxTextLength;
             }
         }
-
     }
 
 }

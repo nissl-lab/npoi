@@ -184,7 +184,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * Companion to HSSFWorkbook(POIFSFileSystem), this constructs the 
          *  POI filesystem around your inputstream, including all nodes.
-         * <p>This calls {@link #HSSFWorkbook(InputStream, boolean)} with
+         * This calls {@link #HSSFWorkbook(InputStream, boolean)} with
          *  preserve nodes set to true. 
          *
          * @see #HSSFWorkbook(InputStream, boolean)
@@ -248,7 +248,7 @@ namespace NPOI.HSSF.UserModel
                 throw new EncryptedDocumentException("The supplied spreadsheet seems to be an Encrypted .xlsx file. " +
                         "It must be decrypted before use by XSSF, it cannot be used by HSSF");
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 // fall through
             }
@@ -1144,7 +1144,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="italic">if set to <c>true</c> [italic].</param>
         /// <param name="strikeout">if set to <c>true</c> [strikeout].</param>
         /// <param name="typeOffset">The type offset.</param>
-        /// <param name="Underline">The underline.</param>
+        /// <param name="underline">The underline.</param>
         /// <returns></returns>
         public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
                          String name, bool italic, bool strikeout,
@@ -1873,8 +1873,8 @@ namespace NPOI.HSSF.UserModel
             r.BlipTypeMacOS = (byte)format;
             r.BlipTypeWin32 = (byte)format;
             r.UID = uid;
-            r.Tag = (short)0xFF;
-            r.Size = pictureData.Length + 25;
+            r.Tag = escherTag;
+            r.Size = blipSize;
             r.Ref = 0;
             r.Offset = 0;
             r.BlipRecord = blipRecord;
@@ -2070,7 +2070,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Gets all embedded OLE2 objects from the Workbook.
         /// </summary>
-        /// <param name="records">the list of records to search.</param>
+        /// <param name="sheet">the list of records to search.</param>
         /// <param name="objects">the list of embedded objects to populate.</param>
         private void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
         {
@@ -2117,7 +2117,7 @@ namespace NPOI.HSSF.UserModel
         /// foreach(ISheet sheet in workbook) ...
         /// </summary>
         /// <returns>Enumeration of all the sheets of this workbook</returns>
-        public IEnumerator<ISheet> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             return _sheets.GetEnumerator();
         }
@@ -2244,11 +2244,6 @@ namespace NPOI.HSSF.UserModel
         public bool Remove(ISheet item)
         {
             return this._sheets.Remove((HSSFSheet)item);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

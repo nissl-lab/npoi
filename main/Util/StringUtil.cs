@@ -602,7 +602,7 @@ namespace NPOI.Util
          * specified character is equal to or greater than 0x10000, then
          * the method returns 2. Otherwise, the method returns 1.
          *
-         * <p>This method doesn't validate the specified character to be a
+         * This method doesn't validate the specified character to be a
          * valid Unicode code point. The caller must validate the
          * character value using {@link #isValidCodePoint(int) isValidCodePoint}
          * if necessary.

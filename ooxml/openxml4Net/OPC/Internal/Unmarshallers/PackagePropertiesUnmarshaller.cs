@@ -134,12 +134,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             }
             catch (XmlException ex)
             {
-                if (ex.Message.Contains("MaxCharactersFromEntities"))
-                {
-                    //
-                }
-                else
-                    throw ex;
+                throw new IOException(ex.Message, ex);
             }
             if (xmlDoc!=null && xmlDoc.DocumentElement != null)
             {

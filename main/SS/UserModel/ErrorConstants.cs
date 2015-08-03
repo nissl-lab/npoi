@@ -23,6 +23,7 @@ namespace NPOI.SS.UserModel
      * 
      * @author  Michael Harhen
      */
+    [Obsolete("Use FormulaError instead where possible")]
     public class ErrorConstants
     {
         protected ErrorConstants()

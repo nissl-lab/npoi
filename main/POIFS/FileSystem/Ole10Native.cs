@@ -84,18 +84,6 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>Returns an instance of this class</returns>
         public static Ole10Native CreateFromEmbeddedOleObject(DirectoryNode directory)
         {
-            bool plain = false;
-
-            try
-            {
-                directory.GetEntry("\u0001Ole10ItemName");
-                plain = true;
-            }
-            catch (FileNotFoundException)
-            {
-                plain = false;
-            }
-
             DocumentEntry nativeEntry =
                (DocumentEntry)directory.GetEntry(OLE10_NATIVE);
             byte[] data = new byte[nativeEntry.Size];

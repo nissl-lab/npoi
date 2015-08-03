@@ -27,7 +27,6 @@ namespace NPOI.SS.Formula.Constant
     /// <c>ErrorEval</c>
     /// </summary>
     ///<remarks> @author Josh Micich</remarks>
-    [Obsolete("Use FormulaError instead where possible")]
     public class ErrorConstant
     {
         private static readonly ErrorConstant NULL = new ErrorConstant(HSSFErrorConstants.ERROR_NULL);

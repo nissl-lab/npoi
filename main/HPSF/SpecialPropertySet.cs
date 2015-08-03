@@ -228,22 +228,6 @@ namespace NPOI.HPSF
             get { return delegate1.OSVersion; }
         }
 
-
-        /// <summary>
-        /// Returns the contents of this property Set stream as an input stream.
-        /// The latter can be used for example To Write the property Set into a POIFS
-        /// document. The input stream represents a snapshot of the property Set.
-        /// If the latter is modified while the input stream is still being
-        /// Read, the modifications will not be reflected in the input stream but in
-        /// the {@link MutablePropertySet} only.
-        /// </summary>
-        /// <returns>the contents of this PropertySet stream</returns>
-        //public override Stream GetStream()
-        //{
-        //    return delegate1.GetStream();
-        //}
-
-
         /// <summary>
         /// Writes a property Set To a document in a POI filesystem directory.
         /// </summary>

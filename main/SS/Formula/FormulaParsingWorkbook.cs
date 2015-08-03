@@ -44,6 +44,7 @@ namespace NPOI.SS.Formula
         /// Gets the name XPTG.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <param name="sheet"></param>
         /// <returns></returns>
         Ptg GetNameXPtg(String name, SheetIdentifier sheet);
 

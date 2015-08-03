@@ -199,7 +199,6 @@ namespace NPOI.HSSF.Util
         /**
          * @return  triplet representation like that in Excel
          */
-        [Obsolete]
         public virtual byte[] GetTriplet()
         {
             return Black.Triplet;

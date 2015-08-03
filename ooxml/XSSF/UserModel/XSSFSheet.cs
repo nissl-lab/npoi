@@ -168,15 +168,15 @@ namespace NPOI.XSSF.UserModel
             hyperlinks = new List<XSSFHyperlink>();
         }
 
-        private void InitRows(CT_Worksheet worksheet)
+        private void InitRows(CT_Worksheet worksheetParam)
         {
             _rows = new SortedList<int, XSSFRow>();
             tables = new Dictionary<String, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
-            if (0 < worksheet.sheetData.SizeOfRowArray())
+            if (0 < worksheetParam.sheetData.SizeOfRowArray())
             {
-                foreach (CT_Row row in worksheet.sheetData.row)
+                foreach (CT_Row row in worksheetParam.sheetData.row)
                 {
                     XSSFRow r = new XSSFRow(row, this);
                     if (!_rows.ContainsKey(r.RowNum))
@@ -210,10 +210,7 @@ namespace NPOI.XSSF.UserModel
                         hyperRel = hyperRels.GetRelationshipByID(hyperlink.id);
                     }
 
-                    if (hyperRel != null)
-                    {
-                        hyperlinks.Add(new XSSFHyperlink(hyperlink, hyperRel));
-                    }
+                    hyperlinks.Add(new XSSFHyperlink(hyperlink, hyperRel));
                 }
             }
             catch (InvalidFormatException e)
@@ -1442,7 +1439,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                String cellRef = GetPane().topLeftCell;
+                String cellRef = GetSheetTypeSheetView().topLeftCell;
                 if (cellRef == null)
                     return 0;
                 CellReference cellReference = new CellReference(cellRef);
@@ -1794,7 +1791,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param indices A Set of the regions to unmerge
          */
-        public void RemoveMergedRegions(HashSet<int> indices)
+        public void RemoveMergedRegions(NPOI.Util.Collections.HashSet<int> indices)
         {
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
 
@@ -3972,9 +3969,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public IEnumerator<IRow> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
-            return _rows.Values.GetEnumerator();
+            return _rows.Values.GetEnumerator(); 
         }
 
         public IEnumerator GetRowEnumerator()
@@ -4352,11 +4349,6 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             return clonedSheet;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         public int GetColumnOutlineLevel(int columnIndex)

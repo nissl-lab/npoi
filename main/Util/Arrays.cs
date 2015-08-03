@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Collections.Generic;
+using NPOI.Util.Collections;
 
 
 namespace NPOI.Util
@@ -300,7 +301,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link Long}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -329,7 +330,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link int}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -356,7 +357,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link short}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -383,7 +384,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link Character}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -410,7 +411,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link Byte}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -437,7 +438,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link Boolean}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -464,7 +465,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link Float}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -493,7 +494,7 @@ namespace NPOI.Util
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is the same value that would be
+         * The value returned by this method is the same value that would be
          * obtained by invoking the {@link List#hashCode() <tt>hashCode</tt>}
          * method on a {@link List} Containing a sequence of {@link Double}
          * instances representing the elements of <tt>a</tt> in the same order.
@@ -523,11 +524,11 @@ namespace NPOI.Util
          * element,  either directly or indirectly through one or more levels of
          * arrays.
          *
-         * <p>For any two arrays <tt>a</tt> and <tt>b</tt> such that
+         * For any two arrays <tt>a</tt> and <tt>b</tt> such that
          * <tt>Arrays.Equals(a, b)</tt>, it is also the case that
          * <tt>Arrays.HashCode(a) == Arrays.HashCode(b)</tt>.
          *
-         * <p>The value returned by this method is equal to the value that would
+         * The value returned by this method is equal to the value that would
          * be returned by <tt>Arrays.AsList(a).HashCode()</tt>, unless <tt>a</tt>
          * is <tt>null</tt>, in which case <tt>0</tt> is returned.
          *
@@ -557,11 +558,11 @@ namespace NPOI.Util
          * one or more levels of arrays.  The behavior of such an invocation is
          * undefined.
          *
-         * <p>For any two arrays <tt>a</tt> and <tt>b</tt> such that
+         * For any two arrays <tt>a</tt> and <tt>b</tt> such that
          * <tt>Arrays.DeepEquals(a, b)</tt>, it is also the case that
          * <tt>Arrays.DeepHashCode(a) == Arrays.DeepHashCode(b)</tt>.
          *
-         * <p>The computation of the value returned by this method is similar to
+         * The computation of the value returned by this method is similar to
          * that of the value returned by {@link List#hashCode()} on a list
          * Containing the same elements as <tt>a</tt> in the same order, with one
          * difference: If an element <tt>e</tt> of <tt>a</tt> is itself an array,
@@ -618,25 +619,25 @@ namespace NPOI.Util
          * method, this method is appropriate for use with nested arrays of
          * arbitrary depth.
          *
-         * <p>Two array references are considered deeply equal if both
+         * Two array references are considered deeply equal if both
          * are <tt>null</tt>, or if they refer to arrays that contain the same
          * number of elements and all corresponding pairs of elements in the two
          * arrays are deeply Equal.
          *
-         * <p>Two possibly <tt>null</tt> elements <tt>e1</tt> and <tt>e2</tt> are
+         * Two possibly <tt>null</tt> elements <tt>e1</tt> and <tt>e2</tt> are
          * deeply equal if any of the following conditions hold:
          * <ul>
          *    <li> <tt>e1</tt> and <tt>e2</tt> are both arrays of object reference
-         *         types, and <tt>Arrays.DeepEquals(e1, e2) would return true</tt>
+         *         types, and <tt>Arrays.DeepEquals(e1, e2) would return true</tt></li>
          *    <li> <tt>e1</tt> and <tt>e2</tt> are arrays of the same primitive
          *         type, and the appropriate overloading of
-         *         <tt>Arrays.Equals(e1, e2)</tt> would return true.
-         *    <li> <tt>e1 == e2</tt>
-         *    <li> <tt>e1.Equals(e2)</tt> would return true.
+         *         <tt>Arrays.Equals(e1, e2)</tt> would return true.</li>
+         *    <li> <tt>e1 == e2</tt></li>
+         *    <li> <tt>e1.Equals(e2)</tt> would return true.</li>
          * </ul>
          * Note that this defInition permits <tt>null</tt> elements at any depth.
          *
-         * <p>If either of the specified arrays contain themselves as elements
+         * If either of the specified arrays contain themselves as elements
          * either directly or indirectly through one or more levels of arrays,
          * the behavior of this method is undefined.
          *
@@ -947,26 +948,26 @@ namespace NPOI.Util
          * representation Contains their contents and so on.  This method is
          * designed for Converting multidimensional arrays to strings.
          *
-         * <p>The string representation consists of a list of the array's
+         * The string representation consists of a list of the array's
          * elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent
          * elements are Separated by the characters <tt>", "</tt> (a comma
          * followed by a space).  Elements are Converted to strings as by
          * <tt>String.ValueOf(Object)</tt>, unless they are themselves
          * arrays.
          *
-         * <p>If an element <tt>e</tt> is an array of a primitive type, it is
+         * If an element <tt>e</tt> is an array of a primitive type, it is
          * Converted to a string as by invoking the appropriate overloading of
          * <tt>Arrays.ToString(e)</tt>.  If an element <tt>e</tt> is an array of a
          * reference type, it is Converted to a string as by invoking
          * this method recursively.
          *
-         * <p>To avoid infInite recursion, if the specified array Contains itself
+         * To avoid infInite recursion, if the specified array Contains itself
          * as an element, or Contains an indirect reference to itself through one
          * or more levels of arrays, the self-reference is Converted to the string
          * <tt>"[...]"</tt>.  For example, an array Containing only a reference
          * to itself would be rendered as <tt>"[[...]]"</tt>.
          *
-         * <p>This method returns <tt>"null"</tt> if the specified array
+         * This method returns <tt>"null"</tt> if the specified array
          * is <tt>null</tt>.
          *
          * @param a the array whose string representation to return
@@ -982,12 +983,12 @@ namespace NPOI.Util
             if (a.Length != 0 && bufLen <= 0)
                 bufLen = Int32.MaxValue;
             StringBuilder buf = new StringBuilder(bufLen);
-            DeepToString(a, buf, new HashSet<Object[]>());
+            DeepToString(a, buf, new NPOI.Util.Collections.HashSet<Object[]>());
             return buf.ToString();
         }
 
         private static void DeepToString(Object[] a, StringBuilder buf,
-                                         HashSet<Object[]> dejaVu)
+                                         NPOI.Util.Collections.HashSet<Object[]> dejaVu)
         {
             if (a == null)
             {

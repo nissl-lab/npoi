@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula.Functions
     using System;
 
     /**
-     * <p>Some utils for Converting from and to any base<p/>
+     * <p>Some utils for Converting from and to any base</p>
      *
      * @author cedric dot walter @ gmail dot com
      */

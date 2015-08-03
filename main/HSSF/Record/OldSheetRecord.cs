@@ -22,7 +22,7 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
 
     /**
-     * Title:        Bound Sheet Record (aka BundleSheet) (0x0085) for BIFF 5<P>
+     * Title:        Bound Sheet Record (aka BundleSheet) (0x0085) for BIFF 5<br/>
      * Description:  Defines a sheet within a workbook.  Basically stores the sheet name
      *               and tells where the Beginning of file record is within the HSSF
      *               file.

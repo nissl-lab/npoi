@@ -27,7 +27,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFTextBox : XSSFSimpleShape, ITextbox
+    public class XSSFTextBox : XSSFSimpleShape //, ITextbox
     {
 
         internal XSSFTextBox(XSSFDrawing drawing, CT_Shape ctShape)
@@ -36,140 +36,140 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        public short HorizontalAlignment
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public short HorizontalAlignment
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public int MarginBottom
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public int MarginBottom
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public int MarginLeft
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public int MarginLeft
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public int MarginRight
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public int MarginRight
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public int MarginTop
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public int MarginTop
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public IRichTextString String
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public IRichTextString String
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public short VerticalAlignment
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public short VerticalAlignment
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public int CountOfAllChildren
-        {
-            get { throw new System.NotImplementedException(); }
-        }
+        //public int CountOfAllChildren
+        //{
+        //    get { throw new System.NotImplementedException(); }
+        //}
 
-        public int FillColor
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public int FillColor
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public override LineStyle LineStyle
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public override LineStyle LineStyle
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public override int LineStyleColor
-        {
-            get { throw new System.NotImplementedException(); }
-        }
+        //public override int LineStyleColor
+        //{
+        //    get { throw new System.NotImplementedException(); }
+        //}
 
-        public override double LineWidth
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public override double LineWidth
+        //{
+        //    get
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public void SetLineStyleColor(int lineStyleColor)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public void SetLineStyleColor(int lineStyleColor)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 }
 

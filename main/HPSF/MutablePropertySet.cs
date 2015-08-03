@@ -234,24 +234,6 @@ namespace NPOI.HPSF
         }
 
         /// <summary>
-        /// Returns the contents of this property Set stream as an input stream.
-        /// The latter can be used for example To Write the property Set into a POIFS
-        /// document. The input stream represents a snapshot of the property Set.
-        /// If the latter is modified while the input stream is still being
-        /// Read, the modifications will not be reflected in the input stream but in
-        /// the {@link MutablePropertySet} only.
-        /// </summary>
-        /// <returns>the contents of this property Set stream</returns>
-        //public virtual Stream GetStream()
-        //{
-        //    MemoryStream psStream = new MemoryStream();
-        //    Write(psStream);
-        //    psStream.Position = 0;  //tony Qu changed, otherwise this cause a bug
-        //    return psStream;
-        //}
-
-
-        /// <summary>
         /// Returns the contents of this property set stream as an input stream.
         /// The latter can be used for example to write the property set into a POIFS
         /// document. The input stream represents a snapshot of the property set.

@@ -67,6 +67,25 @@ namespace NPOI.XSSF.Model
             //    CT_TextParagraphProperties props = (CT_TextParagraphProperties)o[0];
             //    return Fetch(props);
             //}
+            if (shape != null && shape.txBody != null && shape.txBody.lstStyle != null)
+            {
+                CT_TextParagraphProperties props;
+                switch(this._level+1)
+                {
+                    case 1: props = shape.txBody.lstStyle.lvl1pPr; break;
+                    case 2: props = shape.txBody.lstStyle.lvl2pPr; break;
+                    case 3: props = shape.txBody.lstStyle.lvl3pPr; break;
+                    case 4: props = shape.txBody.lstStyle.lvl4pPr; break;
+                    case 5: props = shape.txBody.lstStyle.lvl5pPr; break;
+                    case 6: props = shape.txBody.lstStyle.lvl6pPr; break;
+                    case 7: props = shape.txBody.lstStyle.lvl7pPr; break;
+                    case 8: props = shape.txBody.lstStyle.lvl8pPr; break;
+                    case 9: props = shape.txBody.lstStyle.lvl9pPr; break;
+                    default: props = null; break;
+                }
+                if (props != null)
+                    return Fetch(props);
+            }
             return false;
         }
 

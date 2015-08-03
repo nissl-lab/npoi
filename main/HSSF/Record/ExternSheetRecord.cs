@@ -159,14 +159,14 @@ namespace NPOI.HSSF.Record
         *    see {@link org.apache.poi.hssf.record.SupBookRecord#getSheetNames()}.
         *    This referenced string specifies the name of the first sheet within the external workbook that is in scope.
         *    This sheet MUST be a worksheet or macro sheet.
-        *    <p>
+        *    </p>
         *    <p>
         *    If the supporting link type is self-referencing, then this value specifies the zero-based index of a
         *    {@link org.apache.poi.hssf.record.BoundSheetRecord} record in the workbook stream that specifies
         *    the first sheet within the scope of this reference. This sheet MUST be a worksheet or a macro sheet.
         *    </p>
         *    </li>
-        *  </ol>
+        *  </ol></p>
         *
         * @param firstSheetIndex  the scope, must be -2 for add-in references
         * @param lastSheetIndex   the scope, must be -2 for add-in references

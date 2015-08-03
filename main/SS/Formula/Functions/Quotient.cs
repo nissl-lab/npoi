@@ -3,16 +3,16 @@ using NPOI.SS.Formula.Eval;
 namespace NPOI.SS.Formula.Functions
 {
     /**
-     * <p>Implementation for Excel QUOTIENT () function.<p/>
+     * <p>Implementation for Excel QUOTIENT () function.</p>
      * <p>
      * <b>Syntax</b>:<br/> <b>QUOTIENT</b>(<b>Numerator</b>,<b>Denominator</b>)<br/>
-     * <p/>
+     * </p>
      * <p>
      * Numerator     is the dividend.
      * Denominator     is the divisor.
      *
      * Returns the integer portion of a division. Use this function when you want to discard the remainder of a division.
-     * <p/>
+     * </p>
      *
      * If either enumerator/denominator is non numeric, QUOTIENT returns the #VALUE! error value.
      * If denominator is Equals to zero, QUOTIENT returns the #DIV/0! error value.
@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 enumerator = OperandResolver.CoerceValueToDouble(venumerator);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -40,7 +40,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 denominator = OperandResolver.CoerceValueToDouble(vedenominator);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }

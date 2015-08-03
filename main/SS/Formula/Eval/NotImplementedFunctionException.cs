@@ -25,8 +25,6 @@ namespace NPOI.SS.Formula.Eval
      */
     public class NotImplementedFunctionException : NotImplementedException
     {
-        private static long serialVersionUID = 1208119411557559057L;
-
         private String functionName;
 
         public NotImplementedFunctionException(string functionName)

@@ -118,7 +118,7 @@ namespace NPOI.SS.UserModel
         /**
          * Sets up the Formula Evaluator to be able to reference and resolve
          *  links to other workbooks, eg [Test.xls]Sheet1!A1.
-         * <p>For a workbook referenced as [Test.xls]Sheet1!A1, you should
+         * For a workbook referenced as [Test.xls]Sheet1!A1, you should
          *  supply a map containing the key Test.xls (no square brackets),
          *  and an open FormulaEvaluator onto that Workbook.
          * @param otherWorkbooks Map of workbook names (no square brackets) to an evaluator on that workbook
@@ -128,7 +128,7 @@ namespace NPOI.SS.UserModel
         /**
          * Whether to ignore missing references to external workbooks and
          * use cached formula results in the main workbook instead.
-         * <p>
+         * <br/>
          * In some cases external workbooks referenced by formulas in the main workbook are not available.
          * With this method you can control how POI handles such missing references:
          * <ul>

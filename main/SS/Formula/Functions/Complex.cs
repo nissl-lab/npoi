@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 realNum = OperandResolver.CoerceValueToDouble(veText1);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 realINum = OperandResolver.CoerceValueToDouble(veINum);
             }
-            catch (EvaluationException e)
+            catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }

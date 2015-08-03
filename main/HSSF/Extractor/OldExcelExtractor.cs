@@ -61,11 +61,11 @@ namespace NPOI.HSSF.Extractor
             {
                 Open(new NPOIFSFileSystem(f, true));
             }
-            catch (OldExcelFormatException oe)
+            catch (OldExcelFormatException)
             {
                 Open(new FileStream(f.FullName, FileMode.Open, FileAccess.Read));
             }
-            catch (NotOLE2FileException e)
+            catch (NotOLE2FileException)
             {
                 Open(new FileStream(f.FullName, FileMode.Open, FileAccess.Read));
             }
@@ -277,7 +277,7 @@ namespace NPOI.HSSF.Extractor
                 {
                     streamInput.Close();
                 }
-                catch (IOException e) { }
+                catch (IOException) { }
                 streamInput = null;
             }
             if (fsInput != null)

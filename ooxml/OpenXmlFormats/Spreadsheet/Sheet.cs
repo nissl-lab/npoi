@@ -9068,7 +9068,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     }
 
     [Serializable]
-    [DebuggerStepThroughAttribute]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot("chartsheet", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public class CT_Chartsheet

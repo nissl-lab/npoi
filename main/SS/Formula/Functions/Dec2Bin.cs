@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
      * <p/>
      * Remarks
      * <ul>
-     * <li>If number < -512 or if number > 511, DEC2BIN returns the #NUM! error value.</li>
+     * <li>If number &lt; -512 or if number &gt; 511, DEC2BIN returns the #NUM! error value.</li>
      * <li>If number is nonnumeric, DEC2BIN returns the #VALUE! error value.</li>
      * <li>If DEC2BIN requires more than places characters, it returns the #NUM! error value.</li>
      * <li>If places is not an integer, it is tRuncated.</li>

@@ -918,7 +918,7 @@ namespace TestCases.SS.UserModel
      * @
      */
         [Test]
-        public void bug48325()
+        public void Bug48325()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Test");
