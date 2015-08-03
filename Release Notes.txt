@@ -1,3 +1,27 @@
+2.2 (??, 2015)
+
+New feature
+1. Implement FIXED, PROPER, DMIN and DGET functions
+2. XSSF support for evaluating formula references to other Workbooks
+3. Read text from SDTs at the table cell level, including (sometimes) Cover Page, Table of Contents and Bibliography
+4. Double Strikethrough support for XWPF runs
+5. XSSFSheet support for getDrawingPatriarch(), alongside the existing createDrawingPatriarch() method
+6. Start on common interfaces for Paragraphs and Character Runs for XWPF
+7. Basic text extractor for older Excel 4,5 and 95 formats
+8. Add NPOIFS in-place write support, including updating the contents of existing entries
+9. Support loading .xlsx files with no Styles Table
+
+Poi bug fixes
+57880 - Handle >32,767 cell styles and formats in XSSF (file format limit is 64,000)
+57826 - If a XSSF shape has a buFont but no bullet character, mirror Excel and treat as un-bulleted
+56017 - Fix shifting comments with shifted rows
+56295 - Fix cloning of styles across workbooks and handling of default value of attribute applyFill
+56380 - Remove limitation of 1024 comments per Workbook
+56467 - Fix cloning of sheets with pictures
+57171 - Adjust the active sheet in setSheetOrder()
+57163 - Adjust the active sheet in removeSheet()
+
+
 2.1.3.1 (Feb., 2015)
 Bug Fixes
 a. fix word serialization issues
