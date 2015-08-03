@@ -115,6 +115,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public static CT_PivotCache Parse(Stream is1)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
