@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
+using NPOI.OpenXml4Net.Util;
+using System.IO;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -12,7 +15,297 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot("pivotTableDefinition", Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = false)]
     public partial class CT_PivotTableDefinition
     {
+        public static CT_PivotTableDefinition Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotTableDefinition ctObj = new CT_PivotTableDefinition();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            if (node.Attributes["cacheId"] != null)
+                ctObj.cacheId = XmlHelper.ReadUInt(node.Attributes["cacheId"]);
+            if (node.Attributes["dataOnRows"] != null)
+                ctObj.dataOnRows = XmlHelper.ReadBool(node.Attributes["dataOnRows"]);
+            if (node.Attributes["dataPosition"] != null)
+                ctObj.dataPosition = XmlHelper.ReadUInt(node.Attributes["dataPosition"]);
+            if (node.Attributes["autoFormatId"] != null)
+                ctObj.autoFormatId = XmlHelper.ReadUInt(node.Attributes["autoFormatId"]);
+            if (node.Attributes["applyNumberFormats"] != null)
+                ctObj.applyNumberFormats = XmlHelper.ReadBool(node.Attributes["applyNumberFormats"]);
+            if (node.Attributes["applyBorderFormats"] != null)
+                ctObj.applyBorderFormats = XmlHelper.ReadBool(node.Attributes["applyBorderFormats"]);
+            if (node.Attributes["applyFontFormats"] != null)
+                ctObj.applyFontFormats = XmlHelper.ReadBool(node.Attributes["applyFontFormats"]);
+            if (node.Attributes["applyPatternFormats"] != null)
+                ctObj.applyPatternFormats = XmlHelper.ReadBool(node.Attributes["applyPatternFormats"]);
+            if (node.Attributes["applyAlignmentFormats"] != null)
+                ctObj.applyAlignmentFormats = XmlHelper.ReadBool(node.Attributes["applyAlignmentFormats"]);
+            if (node.Attributes["applyWidthHeightFormats"] != null)
+                ctObj.applyWidthHeightFormats = XmlHelper.ReadBool(node.Attributes["applyWidthHeightFormats"]);
+            ctObj.dataCaption = XmlHelper.ReadString(node.Attributes["dataCaption"]);
+            ctObj.grandTotalCaption = XmlHelper.ReadString(node.Attributes["grandTotalCaption"]);
+            ctObj.errorCaption = XmlHelper.ReadString(node.Attributes["errorCaption"]);
+            if (node.Attributes["showError"] != null)
+                ctObj.showError = XmlHelper.ReadBool(node.Attributes["showError"]);
+            ctObj.missingCaption = XmlHelper.ReadString(node.Attributes["missingCaption"]);
+            if (node.Attributes["showMissing"] != null)
+                ctObj.showMissing = XmlHelper.ReadBool(node.Attributes["showMissing"]);
+            ctObj.pageStyle = XmlHelper.ReadString(node.Attributes["pageStyle"]);
+            ctObj.pivotTableStyle = XmlHelper.ReadString(node.Attributes["pivotTableStyle"]);
+            ctObj.vacatedStyle = XmlHelper.ReadString(node.Attributes["vacatedStyle"]);
+            ctObj.tag = XmlHelper.ReadString(node.Attributes["tag"]);
+            if (node.Attributes["updatedVersion"] != null)
+                ctObj.updatedVersion = XmlHelper.ReadByte(node.Attributes["updatedVersion"]);
+            if (node.Attributes["minRefreshableVersion"] != null)
+                ctObj.minRefreshableVersion = XmlHelper.ReadByte(node.Attributes["minRefreshableVersion"]);
+            if (node.Attributes["asteriskTotals"] != null)
+                ctObj.asteriskTotals = XmlHelper.ReadBool(node.Attributes["asteriskTotals"]);
+            if (node.Attributes["showItems"] != null)
+                ctObj.showItems = XmlHelper.ReadBool(node.Attributes["showItems"]);
+            if (node.Attributes["editData"] != null)
+                ctObj.editData = XmlHelper.ReadBool(node.Attributes["editData"]);
+            if (node.Attributes["disableFieldList"] != null)
+                ctObj.disableFieldList = XmlHelper.ReadBool(node.Attributes["disableFieldList"]);
+            if (node.Attributes["showCalcMbrs"] != null)
+                ctObj.showCalcMbrs = XmlHelper.ReadBool(node.Attributes["showCalcMbrs"]);
+            if (node.Attributes["visualTotals"] != null)
+                ctObj.visualTotals = XmlHelper.ReadBool(node.Attributes["visualTotals"]);
+            if (node.Attributes["showMultipleLabel"] != null)
+                ctObj.showMultipleLabel = XmlHelper.ReadBool(node.Attributes["showMultipleLabel"]);
+            if (node.Attributes["showDataDropDown"] != null)
+                ctObj.showDataDropDown = XmlHelper.ReadBool(node.Attributes["showDataDropDown"]);
+            if (node.Attributes["showDrill"] != null)
+                ctObj.showDrill = XmlHelper.ReadBool(node.Attributes["showDrill"]);
+            if (node.Attributes["printDrill"] != null)
+                ctObj.printDrill = XmlHelper.ReadBool(node.Attributes["printDrill"]);
+            if (node.Attributes["showMemberPropertyTips"] != null)
+                ctObj.showMemberPropertyTips = XmlHelper.ReadBool(node.Attributes["showMemberPropertyTips"]);
+            if (node.Attributes["showDataTips"] != null)
+                ctObj.showDataTips = XmlHelper.ReadBool(node.Attributes["showDataTips"]);
+            if (node.Attributes["enableWizard"] != null)
+                ctObj.enableWizard = XmlHelper.ReadBool(node.Attributes["enableWizard"]);
+            if (node.Attributes["enableDrill"] != null)
+                ctObj.enableDrill = XmlHelper.ReadBool(node.Attributes["enableDrill"]);
+            if (node.Attributes["enableFieldProperties"] != null)
+                ctObj.enableFieldProperties = XmlHelper.ReadBool(node.Attributes["enableFieldProperties"]);
+            if (node.Attributes["preserveFormatting"] != null)
+                ctObj.preserveFormatting = XmlHelper.ReadBool(node.Attributes["preserveFormatting"]);
+            if (node.Attributes["useAutoFormatting"] != null)
+                ctObj.useAutoFormatting = XmlHelper.ReadBool(node.Attributes["useAutoFormatting"]);
+            if (node.Attributes["pageWrap"] != null)
+                ctObj.pageWrap = XmlHelper.ReadUInt(node.Attributes["pageWrap"]);
+            if (node.Attributes["pageOverThenDown"] != null)
+                ctObj.pageOverThenDown = XmlHelper.ReadBool(node.Attributes["pageOverThenDown"]);
+            if (node.Attributes["subtotalHiddenItems"] != null)
+                ctObj.subtotalHiddenItems = XmlHelper.ReadBool(node.Attributes["subtotalHiddenItems"]);
+            if (node.Attributes["rowGrandTotals"] != null)
+                ctObj.rowGrandTotals = XmlHelper.ReadBool(node.Attributes["rowGrandTotals"]);
+            if (node.Attributes["colGrandTotals"] != null)
+                ctObj.colGrandTotals = XmlHelper.ReadBool(node.Attributes["colGrandTotals"]);
+            if (node.Attributes["fieldPrintTitles"] != null)
+                ctObj.fieldPrintTitles = XmlHelper.ReadBool(node.Attributes["fieldPrintTitles"]);
+            if (node.Attributes["itemPrintTitles"] != null)
+                ctObj.itemPrintTitles = XmlHelper.ReadBool(node.Attributes["itemPrintTitles"]);
+            if (node.Attributes["mergeItem"] != null)
+                ctObj.mergeItem = XmlHelper.ReadBool(node.Attributes["mergeItem"]);
+            if (node.Attributes["showDropZones"] != null)
+                ctObj.showDropZones = XmlHelper.ReadBool(node.Attributes["showDropZones"]);
+            if (node.Attributes["createdVersion"] != null)
+                ctObj.createdVersion = XmlHelper.ReadByte(node.Attributes["createdVersion"]);
+            if (node.Attributes["indent"] != null)
+                ctObj.indent = XmlHelper.ReadUInt(node.Attributes["indent"]);
+            if (node.Attributes["showEmptyRow"] != null)
+                ctObj.showEmptyRow = XmlHelper.ReadBool(node.Attributes["showEmptyRow"]);
+            if (node.Attributes["showEmptyCol"] != null)
+                ctObj.showEmptyCol = XmlHelper.ReadBool(node.Attributes["showEmptyCol"]);
+            if (node.Attributes["showHeaders"] != null)
+                ctObj.showHeaders = XmlHelper.ReadBool(node.Attributes["showHeaders"]);
+            if (node.Attributes["compact"] != null)
+                ctObj.compact = XmlHelper.ReadBool(node.Attributes["compact"]);
+            if (node.Attributes["outline"] != null)
+                ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"]);
+            if (node.Attributes["outlineData"] != null)
+                ctObj.outlineData = XmlHelper.ReadBool(node.Attributes["outlineData"]);
+            if (node.Attributes["compactData"] != null)
+                ctObj.compactData = XmlHelper.ReadBool(node.Attributes["compactData"]);
+            if (node.Attributes["published"] != null)
+                ctObj.published = XmlHelper.ReadBool(node.Attributes["published"]);
+            if (node.Attributes["gridDropZones"] != null)
+                ctObj.gridDropZones = XmlHelper.ReadBool(node.Attributes["gridDropZones"]);
+            if (node.Attributes["immersive"] != null)
+                ctObj.immersive = XmlHelper.ReadBool(node.Attributes["immersive"]);
+            if (node.Attributes["multipleFieldFilters"] != null)
+                ctObj.multipleFieldFilters = XmlHelper.ReadBool(node.Attributes["multipleFieldFilters"]);
+            if (node.Attributes["chartFormat"] != null)
+                ctObj.chartFormat = XmlHelper.ReadUInt(node.Attributes["chartFormat"]);
+            ctObj.rowHeaderCaption = XmlHelper.ReadString(node.Attributes["rowHeaderCaption"]);
+            ctObj.colHeaderCaption = XmlHelper.ReadString(node.Attributes["colHeaderCaption"]);
+            if (node.Attributes["fieldListSortAscending"] != null)
+                ctObj.fieldListSortAscending = XmlHelper.ReadBool(node.Attributes["fieldListSortAscending"]);
+            if (node.Attributes["mdxSubqueries"] != null)
+                ctObj.mdxSubqueries = XmlHelper.ReadBool(node.Attributes["mdxSubqueries"]);
+            if (node.Attributes["customListSort"] != null)
+                ctObj.customListSort = XmlHelper.ReadBool(node.Attributes["customListSort"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "location")
+                    ctObj.location = CT_Location.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pivotFields")
+                    ctObj.pivotFields = CT_PivotFields.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rowFields")
+                    ctObj.rowFields = CT_RowFields.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rowItems")
+                    ctObj.rowItems = CT_rowItems.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "colFields")
+                    ctObj.colFields = CT_ColFields.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "colItems")
+                    ctObj.colItems = CT_colItems.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pageFields")
+                    ctObj.pageFields = CT_PageFields.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "dataFields")
+                    ctObj.dataFields = CT_DataFields.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "formats")
+                    ctObj.formats = CT_Formats.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "conditionalFormats")
+                    ctObj.conditionalFormats = CT_ConditionalFormats.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "chartFormats")
+                    ctObj.chartFormats = CT_ChartFormats.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pivotHierarchies")
+                    ctObj.pivotHierarchies = CT_PivotHierarchies.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pivotTableStyleInfo")
+                    ctObj.pivotTableStyleInfo = CT_PivotTableStyle.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "filters")
+                    ctObj.filters = CT_PivotFilters.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "rowHierarchiesUsage")
+                    ctObj.rowHierarchiesUsage = CT_RowHierarchiesUsage.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "colHierarchiesUsage")
+                    ctObj.colHierarchiesUsage = CT_ColHierarchiesUsage.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
 
+
+
+        internal void Write(StreamWriter sw)
+        {
+            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+            sw.Write("<pivotTableDefinition xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" ");
+            sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" ");
+            sw.Write("xmlns:s=\"http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes\" ");
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId);
+            XmlHelper.WriteAttribute(sw, "dataOnRows", this.dataOnRows);
+            XmlHelper.WriteAttribute(sw, "dataPosition", this.dataPosition);
+            XmlHelper.WriteAttribute(sw, "autoFormatId", this.autoFormatId);
+            XmlHelper.WriteAttribute(sw, "applyNumberFormats", this.applyNumberFormats);
+            XmlHelper.WriteAttribute(sw, "applyBorderFormats", this.applyBorderFormats);
+            XmlHelper.WriteAttribute(sw, "applyFontFormats", this.applyFontFormats);
+            XmlHelper.WriteAttribute(sw, "applyPatternFormats", this.applyPatternFormats);
+            XmlHelper.WriteAttribute(sw, "applyAlignmentFormats", this.applyAlignmentFormats);
+            XmlHelper.WriteAttribute(sw, "applyWidthHeightFormats", this.applyWidthHeightFormats);
+            XmlHelper.WriteAttribute(sw, "dataCaption", this.dataCaption);
+            XmlHelper.WriteAttribute(sw, "grandTotalCaption", this.grandTotalCaption);
+            XmlHelper.WriteAttribute(sw, "errorCaption", this.errorCaption);
+            XmlHelper.WriteAttribute(sw, "showError", this.showError);
+            XmlHelper.WriteAttribute(sw, "missingCaption", this.missingCaption);
+            XmlHelper.WriteAttribute(sw, "showMissing", this.showMissing);
+            XmlHelper.WriteAttribute(sw, "pageStyle", this.pageStyle);
+            XmlHelper.WriteAttribute(sw, "pivotTableStyle", this.pivotTableStyle);
+            XmlHelper.WriteAttribute(sw, "vacatedStyle", this.vacatedStyle);
+            XmlHelper.WriteAttribute(sw, "tag", this.tag);
+            XmlHelper.WriteAttribute(sw, "updatedVersion", this.updatedVersion);
+            XmlHelper.WriteAttribute(sw, "minRefreshableVersion", this.minRefreshableVersion);
+            XmlHelper.WriteAttribute(sw, "asteriskTotals", this.asteriskTotals);
+            XmlHelper.WriteAttribute(sw, "showItems", this.showItems);
+            XmlHelper.WriteAttribute(sw, "editData", this.editData);
+            XmlHelper.WriteAttribute(sw, "disableFieldList", this.disableFieldList);
+            XmlHelper.WriteAttribute(sw, "showCalcMbrs", this.showCalcMbrs);
+            XmlHelper.WriteAttribute(sw, "visualTotals", this.visualTotals);
+            XmlHelper.WriteAttribute(sw, "showMultipleLabel", this.showMultipleLabel);
+            XmlHelper.WriteAttribute(sw, "showDataDropDown", this.showDataDropDown);
+            XmlHelper.WriteAttribute(sw, "showDrill", this.showDrill);
+            XmlHelper.WriteAttribute(sw, "printDrill", this.printDrill);
+            XmlHelper.WriteAttribute(sw, "showMemberPropertyTips", this.showMemberPropertyTips);
+            XmlHelper.WriteAttribute(sw, "showDataTips", this.showDataTips);
+            XmlHelper.WriteAttribute(sw, "enableWizard", this.enableWizard);
+            XmlHelper.WriteAttribute(sw, "enableDrill", this.enableDrill);
+            XmlHelper.WriteAttribute(sw, "enableFieldProperties", this.enableFieldProperties);
+            XmlHelper.WriteAttribute(sw, "preserveFormatting", this.preserveFormatting);
+            XmlHelper.WriteAttribute(sw, "useAutoFormatting", this.useAutoFormatting);
+            XmlHelper.WriteAttribute(sw, "pageWrap", this.pageWrap);
+            XmlHelper.WriteAttribute(sw, "pageOverThenDown", this.pageOverThenDown);
+            XmlHelper.WriteAttribute(sw, "subtotalHiddenItems", this.subtotalHiddenItems);
+            XmlHelper.WriteAttribute(sw, "rowGrandTotals", this.rowGrandTotals);
+            XmlHelper.WriteAttribute(sw, "colGrandTotals", this.colGrandTotals);
+            XmlHelper.WriteAttribute(sw, "fieldPrintTitles", this.fieldPrintTitles);
+            XmlHelper.WriteAttribute(sw, "itemPrintTitles", this.itemPrintTitles);
+            XmlHelper.WriteAttribute(sw, "mergeItem", this.mergeItem);
+            XmlHelper.WriteAttribute(sw, "showDropZones", this.showDropZones);
+            XmlHelper.WriteAttribute(sw, "createdVersion", this.createdVersion);
+            XmlHelper.WriteAttribute(sw, "indent", this.indent);
+            XmlHelper.WriteAttribute(sw, "showEmptyRow", this.showEmptyRow);
+            XmlHelper.WriteAttribute(sw, "showEmptyCol", this.showEmptyCol);
+            XmlHelper.WriteAttribute(sw, "showHeaders", this.showHeaders);
+            XmlHelper.WriteAttribute(sw, "compact", this.compact);
+            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            XmlHelper.WriteAttribute(sw, "outlineData", this.outlineData);
+            XmlHelper.WriteAttribute(sw, "compactData", this.compactData);
+            XmlHelper.WriteAttribute(sw, "published", this.published);
+            XmlHelper.WriteAttribute(sw, "gridDropZones", this.gridDropZones);
+            XmlHelper.WriteAttribute(sw, "immersive", this.immersive);
+            XmlHelper.WriteAttribute(sw, "multipleFieldFilters", this.multipleFieldFilters);
+            XmlHelper.WriteAttribute(sw, "chartFormat", this.chartFormat);
+            XmlHelper.WriteAttribute(sw, "rowHeaderCaption", this.rowHeaderCaption);
+            XmlHelper.WriteAttribute(sw, "colHeaderCaption", this.colHeaderCaption);
+            XmlHelper.WriteAttribute(sw, "fieldListSortAscending", this.fieldListSortAscending);
+            XmlHelper.WriteAttribute(sw, "mdxSubqueries", this.mdxSubqueries);
+            XmlHelper.WriteAttribute(sw, "customListSort", this.customListSort);
+            sw.Write(">");
+            if (this.location != null)
+                this.location.Write(sw, "location");
+            if (this.pivotFields != null)
+                this.pivotFields.Write(sw, "pivotFields");
+            if (this.rowFields != null)
+                this.rowFields.Write(sw, "rowFields");
+            if (this.rowItems != null)
+                this.rowItems.Write(sw, "rowItems");
+            if (this.colFields != null)
+                this.colFields.Write(sw, "colFields");
+            if (this.colItems != null)
+                this.colItems.Write(sw, "colItems");
+            if (this.pageFields != null)
+                this.pageFields.Write(sw, "pageFields");
+            if (this.dataFields != null)
+                this.dataFields.Write(sw, "dataFields");
+            if (this.formats != null)
+                this.formats.Write(sw, "formats");
+            if (this.conditionalFormats != null)
+                this.conditionalFormats.Write(sw, "conditionalFormats");
+            if (this.chartFormats != null)
+                this.chartFormats.Write(sw, "chartFormats");
+            if (this.pivotHierarchies != null)
+                this.pivotHierarchies.Write(sw, "pivotHierarchies");
+            if (this.pivotTableStyleInfo != null)
+                this.pivotTableStyleInfo.Write(sw, "pivotTableStyleInfo");
+            if (this.filters != null)
+                this.filters.Write(sw, "filters");
+            if (this.rowHierarchiesUsage != null)
+                this.rowHierarchiesUsage.Write(sw, "rowHierarchiesUsage");
+            if (this.colHierarchiesUsage != null)
+                this.colHierarchiesUsage.Write(sw, "colHierarchiesUsage");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</pivotTableDefinition>"));
+        }
+        public void Save(Stream stream)
+        {
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                //TODO add namespaceUri
+                this.Write(sw);
+            }
+        }
         private CT_Location locationField;
 
         private CT_PivotFields pivotFieldsField;
@@ -1525,15 +1818,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public static CT_PivotTableDefinition Parse(System.IO.Stream is1)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(System.IO.Stream out1)
-        {
-            throw new NotImplementedException();
-        }
 
         public CT_PivotTableStyle AddNewPivotTableStyleInfo()
         {
@@ -1578,6 +1862,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Location
     {
+        public static CT_Location Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Location ctObj = new CT_Location();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            if (node.Attributes["firstHeaderRow"] != null)
+                ctObj.firstHeaderRow = XmlHelper.ReadUInt(node.Attributes["firstHeaderRow"]);
+            if (node.Attributes["firstDataRow"] != null)
+                ctObj.firstDataRow = XmlHelper.ReadUInt(node.Attributes["firstDataRow"]);
+            if (node.Attributes["firstDataCol"] != null)
+                ctObj.firstDataCol = XmlHelper.ReadUInt(node.Attributes["firstDataCol"]);
+            if (node.Attributes["rowPageCount"] != null)
+                ctObj.rowPageCount = XmlHelper.ReadUInt(node.Attributes["rowPageCount"]);
+            if (node.Attributes["colPageCount"] != null)
+                ctObj.colPageCount = XmlHelper.ReadUInt(node.Attributes["colPageCount"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            XmlHelper.WriteAttribute(sw, "firstHeaderRow", this.firstHeaderRow);
+            XmlHelper.WriteAttribute(sw, "firstDataRow", this.firstDataRow);
+            XmlHelper.WriteAttribute(sw, "firstDataCol", this.firstDataCol);
+            XmlHelper.WriteAttribute(sw, "rowPageCount", this.rowPageCount);
+            XmlHelper.WriteAttribute(sw, "colPageCount", this.colPageCount);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string refField;
 
@@ -1685,6 +2002,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotFields
     {
+        public static CT_PivotFields Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotFields ctObj = new CT_PivotFields();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.pivotField = new List<CT_PivotField>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotField")
+                    ctObj.pivotField.Add(CT_PivotField.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.pivotField != null)
+            {
+                foreach (CT_PivotField x in this.pivotField)
+                {
+                    x.Write(sw, "pivotField");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_PivotField> pivotFieldField;
 
@@ -1759,6 +2108,178 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotField
     {
+        public static CT_PivotField Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotField ctObj = new CT_PivotField();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            if (node.Attributes["axis"] != null)
+                ctObj.axis = (ST_Axis)Enum.Parse(typeof(ST_Axis), node.Attributes["axis"].Value);
+            if (node.Attributes["dataField"] != null)
+                ctObj.dataField = XmlHelper.ReadBool(node.Attributes["dataField"]);
+            ctObj.subtotalCaption = XmlHelper.ReadString(node.Attributes["subtotalCaption"]);
+            if (node.Attributes["showDropDowns"] != null)
+                ctObj.showDropDowns = XmlHelper.ReadBool(node.Attributes["showDropDowns"]);
+            if (node.Attributes["hiddenLevel"] != null)
+                ctObj.hiddenLevel = XmlHelper.ReadBool(node.Attributes["hiddenLevel"]);
+            ctObj.uniqueMemberProperty = XmlHelper.ReadString(node.Attributes["uniqueMemberProperty"]);
+            if (node.Attributes["compact"] != null)
+                ctObj.compact = XmlHelper.ReadBool(node.Attributes["compact"]);
+            if (node.Attributes["allDrilled"] != null)
+                ctObj.allDrilled = XmlHelper.ReadBool(node.Attributes["allDrilled"]);
+            if (node.Attributes["numFmtId"] != null)
+                ctObj.numFmtId = XmlHelper.ReadUInt(node.Attributes["numFmtId"]);
+            if (node.Attributes["outline"] != null)
+                ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"]);
+            if (node.Attributes["subtotalTop"] != null)
+                ctObj.subtotalTop = XmlHelper.ReadBool(node.Attributes["subtotalTop"]);
+            if (node.Attributes["dragToRow"] != null)
+                ctObj.dragToRow = XmlHelper.ReadBool(node.Attributes["dragToRow"]);
+            if (node.Attributes["dragToCol"] != null)
+                ctObj.dragToCol = XmlHelper.ReadBool(node.Attributes["dragToCol"]);
+            if (node.Attributes["multipleItemSelectionAllowed"] != null)
+                ctObj.multipleItemSelectionAllowed = XmlHelper.ReadBool(node.Attributes["multipleItemSelectionAllowed"]);
+            if (node.Attributes["dragToPage"] != null)
+                ctObj.dragToPage = XmlHelper.ReadBool(node.Attributes["dragToPage"]);
+            if (node.Attributes["dragToData"] != null)
+                ctObj.dragToData = XmlHelper.ReadBool(node.Attributes["dragToData"]);
+            if (node.Attributes["dragOff"] != null)
+                ctObj.dragOff = XmlHelper.ReadBool(node.Attributes["dragOff"]);
+            if (node.Attributes["showAll"] != null)
+                ctObj.showAll = XmlHelper.ReadBool(node.Attributes["showAll"]);
+            if (node.Attributes["insertBlankRow"] != null)
+                ctObj.insertBlankRow = XmlHelper.ReadBool(node.Attributes["insertBlankRow"]);
+            if (node.Attributes["serverField"] != null)
+                ctObj.serverField = XmlHelper.ReadBool(node.Attributes["serverField"]);
+            if (node.Attributes["insertPageBreak"] != null)
+                ctObj.insertPageBreak = XmlHelper.ReadBool(node.Attributes["insertPageBreak"]);
+            if (node.Attributes["autoShow"] != null)
+                ctObj.autoShow = XmlHelper.ReadBool(node.Attributes["autoShow"]);
+            if (node.Attributes["topAutoShow"] != null)
+                ctObj.topAutoShow = XmlHelper.ReadBool(node.Attributes["topAutoShow"]);
+            if (node.Attributes["hideNewItems"] != null)
+                ctObj.hideNewItems = XmlHelper.ReadBool(node.Attributes["hideNewItems"]);
+            if (node.Attributes["measureFilter"] != null)
+                ctObj.measureFilter = XmlHelper.ReadBool(node.Attributes["measureFilter"]);
+            if (node.Attributes["includeNewItemsInFilter"] != null)
+                ctObj.includeNewItemsInFilter = XmlHelper.ReadBool(node.Attributes["includeNewItemsInFilter"]);
+            if (node.Attributes["itemPageCount"] != null)
+                ctObj.itemPageCount = XmlHelper.ReadUInt(node.Attributes["itemPageCount"]);
+            if (node.Attributes["sortType"] != null)
+                ctObj.sortType = (ST_FieldSortType)Enum.Parse(typeof(ST_FieldSortType), node.Attributes["sortType"].Value);
+            if (node.Attributes["dataSourceSort"] != null)
+                ctObj.dataSourceSort = XmlHelper.ReadBool(node.Attributes["dataSourceSort"]);
+            if (node.Attributes["nonAutoSortDefault"] != null)
+                ctObj.nonAutoSortDefault = XmlHelper.ReadBool(node.Attributes["nonAutoSortDefault"]);
+            if (node.Attributes["rankBy"] != null)
+                ctObj.rankBy = XmlHelper.ReadUInt(node.Attributes["rankBy"]);
+            if (node.Attributes["defaultSubtotal"] != null)
+                ctObj.defaultSubtotal = XmlHelper.ReadBool(node.Attributes["defaultSubtotal"]);
+            if (node.Attributes["sumSubtotal"] != null)
+                ctObj.sumSubtotal = XmlHelper.ReadBool(node.Attributes["sumSubtotal"]);
+            if (node.Attributes["countASubtotal"] != null)
+                ctObj.countASubtotal = XmlHelper.ReadBool(node.Attributes["countASubtotal"]);
+            if (node.Attributes["avgSubtotal"] != null)
+                ctObj.avgSubtotal = XmlHelper.ReadBool(node.Attributes["avgSubtotal"]);
+            if (node.Attributes["maxSubtotal"] != null)
+                ctObj.maxSubtotal = XmlHelper.ReadBool(node.Attributes["maxSubtotal"]);
+            if (node.Attributes["minSubtotal"] != null)
+                ctObj.minSubtotal = XmlHelper.ReadBool(node.Attributes["minSubtotal"]);
+            if (node.Attributes["productSubtotal"] != null)
+                ctObj.productSubtotal = XmlHelper.ReadBool(node.Attributes["productSubtotal"]);
+            if (node.Attributes["countSubtotal"] != null)
+                ctObj.countSubtotal = XmlHelper.ReadBool(node.Attributes["countSubtotal"]);
+            if (node.Attributes["stdDevSubtotal"] != null)
+                ctObj.stdDevSubtotal = XmlHelper.ReadBool(node.Attributes["stdDevSubtotal"]);
+            if (node.Attributes["stdDevPSubtotal"] != null)
+                ctObj.stdDevPSubtotal = XmlHelper.ReadBool(node.Attributes["stdDevPSubtotal"]);
+            if (node.Attributes["varSubtotal"] != null)
+                ctObj.varSubtotal = XmlHelper.ReadBool(node.Attributes["varSubtotal"]);
+            if (node.Attributes["varPSubtotal"] != null)
+                ctObj.varPSubtotal = XmlHelper.ReadBool(node.Attributes["varPSubtotal"]);
+            if (node.Attributes["showPropCell"] != null)
+                ctObj.showPropCell = XmlHelper.ReadBool(node.Attributes["showPropCell"]);
+            if (node.Attributes["showPropTip"] != null)
+                ctObj.showPropTip = XmlHelper.ReadBool(node.Attributes["showPropTip"]);
+            if (node.Attributes["showPropAsCaption"] != null)
+                ctObj.showPropAsCaption = XmlHelper.ReadBool(node.Attributes["showPropAsCaption"]);
+            if (node.Attributes["defaultAttributeDrillState"] != null)
+                ctObj.defaultAttributeDrillState = XmlHelper.ReadBool(node.Attributes["defaultAttributeDrillState"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "items")
+                    ctObj.items = CT_Items.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "autoSortScope")
+                    ctObj.autoSortScope = CT_AutoSortScope.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "axis", this.axis.ToString());
+            XmlHelper.WriteAttribute(sw, "dataField", this.dataField);
+            XmlHelper.WriteAttribute(sw, "subtotalCaption", this.subtotalCaption);
+            XmlHelper.WriteAttribute(sw, "showDropDowns", this.showDropDowns);
+            XmlHelper.WriteAttribute(sw, "hiddenLevel", this.hiddenLevel);
+            XmlHelper.WriteAttribute(sw, "uniqueMemberProperty", this.uniqueMemberProperty);
+            XmlHelper.WriteAttribute(sw, "compact", this.compact);
+            XmlHelper.WriteAttribute(sw, "allDrilled", this.allDrilled);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            XmlHelper.WriteAttribute(sw, "subtotalTop", this.subtotalTop);
+            XmlHelper.WriteAttribute(sw, "dragToRow", this.dragToRow);
+            XmlHelper.WriteAttribute(sw, "dragToCol", this.dragToCol);
+            XmlHelper.WriteAttribute(sw, "multipleItemSelectionAllowed", this.multipleItemSelectionAllowed);
+            XmlHelper.WriteAttribute(sw, "dragToPage", this.dragToPage);
+            XmlHelper.WriteAttribute(sw, "dragToData", this.dragToData);
+            XmlHelper.WriteAttribute(sw, "dragOff", this.dragOff);
+            XmlHelper.WriteAttribute(sw, "showAll", this.showAll);
+            XmlHelper.WriteAttribute(sw, "insertBlankRow", this.insertBlankRow);
+            XmlHelper.WriteAttribute(sw, "serverField", this.serverField);
+            XmlHelper.WriteAttribute(sw, "insertPageBreak", this.insertPageBreak);
+            XmlHelper.WriteAttribute(sw, "autoShow", this.autoShow);
+            XmlHelper.WriteAttribute(sw, "topAutoShow", this.topAutoShow);
+            XmlHelper.WriteAttribute(sw, "hideNewItems", this.hideNewItems);
+            XmlHelper.WriteAttribute(sw, "measureFilter", this.measureFilter);
+            XmlHelper.WriteAttribute(sw, "includeNewItemsInFilter", this.includeNewItemsInFilter);
+            XmlHelper.WriteAttribute(sw, "itemPageCount", this.itemPageCount);
+            XmlHelper.WriteAttribute(sw, "sortType", this.sortType.ToString());
+            XmlHelper.WriteAttribute(sw, "dataSourceSort", this.dataSourceSort);
+            XmlHelper.WriteAttribute(sw, "nonAutoSortDefault", this.nonAutoSortDefault);
+            XmlHelper.WriteAttribute(sw, "rankBy", this.rankBy);
+            XmlHelper.WriteAttribute(sw, "defaultSubtotal", this.defaultSubtotal);
+            XmlHelper.WriteAttribute(sw, "sumSubtotal", this.sumSubtotal);
+            XmlHelper.WriteAttribute(sw, "countASubtotal", this.countASubtotal);
+            XmlHelper.WriteAttribute(sw, "avgSubtotal", this.avgSubtotal);
+            XmlHelper.WriteAttribute(sw, "maxSubtotal", this.maxSubtotal);
+            XmlHelper.WriteAttribute(sw, "minSubtotal", this.minSubtotal);
+            XmlHelper.WriteAttribute(sw, "productSubtotal", this.productSubtotal);
+            XmlHelper.WriteAttribute(sw, "countSubtotal", this.countSubtotal);
+            XmlHelper.WriteAttribute(sw, "stdDevSubtotal", this.stdDevSubtotal);
+            XmlHelper.WriteAttribute(sw, "stdDevPSubtotal", this.stdDevPSubtotal);
+            XmlHelper.WriteAttribute(sw, "varSubtotal", this.varSubtotal);
+            XmlHelper.WriteAttribute(sw, "varPSubtotal", this.varPSubtotal);
+            XmlHelper.WriteAttribute(sw, "showPropCell", this.showPropCell);
+            XmlHelper.WriteAttribute(sw, "showPropTip", this.showPropTip);
+            XmlHelper.WriteAttribute(sw, "showPropAsCaption", this.showPropAsCaption);
+            XmlHelper.WriteAttribute(sw, "defaultAttributeDrillState", this.defaultAttributeDrillState);
+            sw.Write(">");
+            if (this.items != null)
+                this.items.Write(sw, "items");
+            if (this.autoSortScope != null)
+                this.autoSortScope.Write(sw, "autoSortScope");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_Items itemsField;
 
@@ -2687,6 +3208,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Items
     {
+        public static CT_Items Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Items ctObj = new CT_Items();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.item = new List<CT_Item>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "item")
+                    ctObj.item.Add(CT_Item.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.item != null)
+            {
+                foreach (CT_Item x in this.item)
+                {
+                    x.Write(sw, "item");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Item> itemField;
 
@@ -2756,6 +3309,54 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Item
     {
+        public static CT_Item Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Item ctObj = new CT_Item();
+            ctObj.n = XmlHelper.ReadString(node.Attributes["n"]);
+            if (node.Attributes["t"] != null)
+                ctObj.t = (ST_ItemType)Enum.Parse(typeof(ST_ItemType), node.Attributes["t"].Value);
+            if (node.Attributes["h"] != null)
+                ctObj.h = XmlHelper.ReadBool(node.Attributes["h"]);
+            if (node.Attributes["s"] != null)
+                ctObj.s = XmlHelper.ReadBool(node.Attributes["s"]);
+            if (node.Attributes["sd"] != null)
+                ctObj.sd = XmlHelper.ReadBool(node.Attributes["sd"]);
+            if (node.Attributes["f"] != null)
+                ctObj.f = XmlHelper.ReadBool(node.Attributes["f"]);
+            if (node.Attributes["m"] != null)
+                ctObj.m = XmlHelper.ReadBool(node.Attributes["m"]);
+            if (node.Attributes["c"] != null)
+                ctObj.c = XmlHelper.ReadBool(node.Attributes["c"]);
+            if (node.Attributes["x"] != null)
+                ctObj.x = XmlHelper.ReadUInt(node.Attributes["x"]);
+            if (node.Attributes["d"] != null)
+                ctObj.d = XmlHelper.ReadBool(node.Attributes["d"]);
+            if (node.Attributes["e"] != null)
+                ctObj.e = XmlHelper.ReadBool(node.Attributes["e"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "n", this.n);
+            XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
+            XmlHelper.WriteAttribute(sw, "h", this.h);
+            XmlHelper.WriteAttribute(sw, "s", this.s);
+            XmlHelper.WriteAttribute(sw, "sd", this.sd);
+            XmlHelper.WriteAttribute(sw, "f", this.f);
+            XmlHelper.WriteAttribute(sw, "m", this.m);
+            XmlHelper.WriteAttribute(sw, "c", this.c);
+            XmlHelper.WriteAttribute(sw, "x", this.x);
+            XmlHelper.WriteAttribute(sw, "d", this.d);
+            XmlHelper.WriteAttribute(sw, "e", this.e);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string nField;
 
@@ -3020,6 +3621,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_AutoSortScope
     {
+        public static CT_AutoSortScope Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_AutoSortScope ctObj = new CT_AutoSortScope();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotArea")
+                    ctObj.pivotArea = CT_PivotArea.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write(">");
+            if (this.pivotArea != null)
+                this.pivotArea.Write(sw, "pivotArea");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_PivotArea pivotAreaField;
 
@@ -3066,6 +3690,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_RowFields
     {
+        public static CT_RowFields Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RowFields ctObj = new CT_RowFields();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.field = new List<CT_Field>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "field")
+                    ctObj.field.Add(CT_Field.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.field != null)
+            {
+                foreach (CT_Field x in this.field)
+                {
+                    x.Write(sw, "field");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Field> fieldField;
 
@@ -3127,6 +3783,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Field
     {
+        public static CT_Field Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Field ctObj = new CT_Field();
+            if (node.Attributes["x"] != null)
+                ctObj.x = XmlHelper.ReadInt(node.Attributes["x"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "x", this.x);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private int xField;
 
@@ -3151,6 +3826,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_rowItems
     {
+        public static CT_rowItems Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_rowItems ctObj = new CT_rowItems();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.i = new List<CT_I>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "i")
+                    ctObj.i.Add(CT_I.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.i != null)
+            {
+                foreach (CT_I x in this.i)
+                {
+                    x.Write(sw, "i");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_I> iField;
 
@@ -3210,6 +3917,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_I
     {
+        public static CT_I Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_I ctObj = new CT_I();
+            if (node.Attributes["t"] != null)
+                ctObj.t = (ST_ItemType)Enum.Parse(typeof(ST_ItemType), node.Attributes["t"].Value);
+            if (node.Attributes["r"] != null)
+                ctObj.r = XmlHelper.ReadUInt(node.Attributes["r"]);
+            if (node.Attributes["i"] != null)
+                ctObj.i = XmlHelper.ReadUInt(node.Attributes["i"]);
+            ctObj.x = new List<CT_X>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "x")
+                    ctObj.x.Add(CT_X.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
+            XmlHelper.WriteAttribute(sw, "r", this.r);
+            XmlHelper.WriteAttribute(sw, "i", this.i);
+            sw.Write(">");
+            if (this.x != null)
+            {
+                foreach (CT_X x in this.x)
+                {
+                    x.Write(sw, "x");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_X> xField;
 
@@ -3290,6 +4035,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_ColFields
     {
+        public static CT_ColFields Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ColFields ctObj = new CT_ColFields();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.field = new List<CT_Field>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "field")
+                    ctObj.field.Add(CT_Field.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.field != null)
+            {
+                foreach (CT_Field x in this.field)
+                {
+                    x.Write(sw, "field");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Field> fieldField;
 
@@ -3346,6 +4123,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_colItems
     {
+        public static CT_colItems Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_colItems ctObj = new CT_colItems();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.i = new List<CT_I>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "i")
+                    ctObj.i.Add(CT_I.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.i != null)
+            {
+                foreach (CT_I x in this.i)
+                {
+                    x.Write(sw, "i");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_I> iField;
 
@@ -3405,6 +4214,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PageFields
     {
+        public static CT_PageFields Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageFields ctObj = new CT_PageFields();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.pageField = new List<CT_PageField>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pageField")
+                    ctObj.pageField.Add(CT_PageField.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.pageField != null)
+            {
+                foreach (CT_PageField x in this.pageField)
+                {
+                    x.Write(sw, "pageField");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_PageField> pageFieldField;
 
@@ -3474,6 +4315,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PageField
     {
+        public static CT_PageField Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PageField ctObj = new CT_PageField();
+            if (node.Attributes["fld"] != null)
+                ctObj.fld = XmlHelper.ReadInt(node.Attributes["fld"]);
+            if (node.Attributes["item"] != null)
+                ctObj.item = XmlHelper.ReadUInt(node.Attributes["item"]);
+            if (node.Attributes["hier"] != null)
+                ctObj.hier = XmlHelper.ReadInt(node.Attributes["hier"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.cap = XmlHelper.ReadString(node.Attributes["cap"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "fld", this.fld);
+            XmlHelper.WriteAttribute(sw, "item", this.item);
+            XmlHelper.WriteAttribute(sw, "hier", this.hier);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "cap", this.cap);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_ExtensionList extLstField;
 
@@ -3608,6 +4485,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_DataFields
     {
+        public static CT_DataFields Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataFields ctObj = new CT_DataFields();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.dataField = new List<CT_DataField>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "dataField")
+                    ctObj.dataField.Add(CT_DataField.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.dataField != null)
+            {
+                foreach (CT_DataField x in this.dataField)
+                {
+                    x.Write(sw, "dataField");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_DataField> dataFieldField;
 
@@ -3677,6 +4586,49 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_DataField
     {
+        public static CT_DataField Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_DataField ctObj = new CT_DataField();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            if (node.Attributes["fld"] != null)
+                ctObj.fld = XmlHelper.ReadUInt(node.Attributes["fld"]);
+            if (node.Attributes["subtotal"] != null)
+                ctObj.subtotal = (ST_DataConsolidateFunction)Enum.Parse(typeof(ST_DataConsolidateFunction), node.Attributes["subtotal"].Value);
+            if (node.Attributes["showDataAs"] != null)
+                ctObj.showDataAs = (ST_ShowDataAs)Enum.Parse(typeof(ST_ShowDataAs), node.Attributes["showDataAs"].Value);
+            if (node.Attributes["baseField"] != null)
+                ctObj.baseField = XmlHelper.ReadInt(node.Attributes["baseField"]);
+            if (node.Attributes["baseItem"] != null)
+                ctObj.baseItem = XmlHelper.ReadUInt(node.Attributes["baseItem"]);
+            if (node.Attributes["numFmtId"] != null)
+                ctObj.numFmtId = XmlHelper.ReadUInt(node.Attributes["numFmtId"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "fld", this.fld);
+            XmlHelper.WriteAttribute(sw, "subtotal", this.subtotal.ToString());
+            XmlHelper.WriteAttribute(sw, "showDataAs", this.showDataAs.ToString());
+            XmlHelper.WriteAttribute(sw, "baseField", this.baseField);
+            XmlHelper.WriteAttribute(sw, "baseItem", this.baseItem);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            sw.Write(">");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_ExtensionList extLstField;
 
@@ -3869,6 +4821,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Formats
     {
+        public static CT_Formats Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Formats ctObj = new CT_Formats();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.format = new List<CT_Format>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "format")
+                    ctObj.format.Add(CT_Format.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.format != null)
+            {
+                foreach (CT_Format x in this.format)
+                {
+                    x.Write(sw, "format");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Format> formatField;
 
@@ -3915,6 +4899,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Format
     {
+        public static CT_Format Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Format ctObj = new CT_Format();
+            if (node.Attributes["action"] != null)
+                ctObj.action = (ST_FormatAction)Enum.Parse(typeof(ST_FormatAction), node.Attributes["action"].Value);
+            if (node.Attributes["dxfId"] != null)
+                ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotArea")
+                    ctObj.pivotArea = CT_PivotArea.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "action", this.action.ToString());
+            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
+            sw.Write(">");
+            if (this.pivotArea != null)
+                this.pivotArea.Write(sw, "pivotArea");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_PivotArea pivotAreaField;
 
@@ -4027,6 +5044,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_ConditionalFormats
     {
+        public static CT_ConditionalFormats Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ConditionalFormats ctObj = new CT_ConditionalFormats();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.conditionalFormat = new List<CT_ConditionalFormat>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "conditionalFormat")
+                    ctObj.conditionalFormat.Add(CT_ConditionalFormat.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.conditionalFormat != null)
+            {
+                foreach (CT_ConditionalFormat x in this.conditionalFormat)
+                {
+                    x.Write(sw, "conditionalFormat");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_ConditionalFormat> conditionalFormatField;
 
@@ -4073,6 +5122,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_ConditionalFormat
     {
+        public static CT_ConditionalFormat Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ConditionalFormat ctObj = new CT_ConditionalFormat();
+            if (node.Attributes["scope"] != null)
+                ctObj.scope = (ST_Scope)Enum.Parse(typeof(ST_Scope), node.Attributes["scope"].Value);
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_Type)Enum.Parse(typeof(ST_Type), node.Attributes["type"].Value);
+            if (node.Attributes["priority"] != null)
+                ctObj.priority = XmlHelper.ReadUInt(node.Attributes["priority"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotAreas")
+                    ctObj.pivotAreas = CT_PivotAreas.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "scope", this.scope.ToString());
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "priority", this.priority);
+            sw.Write(">");
+            if (this.pivotAreas != null)
+                this.pivotAreas.Write(sw, "pivotAreas");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_PivotAreas pivotAreasField;
 
@@ -4167,6 +5252,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotAreas
     {
+        public static CT_PivotAreas Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotAreas ctObj = new CT_PivotAreas();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.pivotArea = new List<CT_PivotArea>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotArea")
+                    ctObj.pivotArea.Add(CT_PivotArea.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.pivotArea != null)
+            {
+                foreach (CT_PivotArea x in this.pivotArea)
+                {
+                    x.Write(sw, "pivotArea");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_PivotArea> pivotAreaField;
 
@@ -4263,6 +5380,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_ChartFormats
     {
+        public static CT_ChartFormats Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ChartFormats ctObj = new CT_ChartFormats();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.chartFormat = new List<CT_ChartFormat>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "chartFormat")
+                    ctObj.chartFormat.Add(CT_ChartFormat.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.chartFormat != null)
+            {
+                foreach (CT_ChartFormat x in this.chartFormat)
+                {
+                    x.Write(sw, "chartFormat");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_ChartFormat> chartFormatField;
 
@@ -4309,6 +5458,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_ChartFormat
     {
+        public static CT_ChartFormat Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ChartFormat ctObj = new CT_ChartFormat();
+            if (node.Attributes["chart"] != null)
+                ctObj.chart = XmlHelper.ReadUInt(node.Attributes["chart"]);
+            if (node.Attributes["format"] != null)
+                ctObj.format = XmlHelper.ReadUInt(node.Attributes["format"]);
+            if (node.Attributes["series"] != null)
+                ctObj.series = XmlHelper.ReadBool(node.Attributes["series"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotArea")
+                    ctObj.pivotArea = CT_PivotArea.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "chart", this.chart);
+            XmlHelper.WriteAttribute(sw, "format", this.format);
+            XmlHelper.WriteAttribute(sw, "series", this.series);
+            sw.Write(">");
+            if (this.pivotArea != null)
+                this.pivotArea.Write(sw, "pivotArea");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_PivotArea pivotAreaField;
 
@@ -4385,6 +5566,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotHierarchies
     {
+        public static CT_PivotHierarchies Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotHierarchies ctObj = new CT_PivotHierarchies();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.pivotHierarchy = new List<CT_PivotHierarchy>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "pivotHierarchy")
+                    ctObj.pivotHierarchy.Add(CT_PivotHierarchy.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.pivotHierarchy != null)
+            {
+                foreach (CT_PivotHierarchy x in this.pivotHierarchy)
+                {
+                    x.Write(sw, "pivotHierarchy");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_PivotHierarchy> pivotHierarchyField;
 
@@ -4444,6 +5657,75 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotHierarchy
     {
+        public static CT_PivotHierarchy Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotHierarchy ctObj = new CT_PivotHierarchy();
+            if (node.Attributes["outline"] != null)
+                ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"]);
+            if (node.Attributes["multipleItemSelectionAllowed"] != null)
+                ctObj.multipleItemSelectionAllowed = XmlHelper.ReadBool(node.Attributes["multipleItemSelectionAllowed"]);
+            if (node.Attributes["subtotalTop"] != null)
+                ctObj.subtotalTop = XmlHelper.ReadBool(node.Attributes["subtotalTop"]);
+            if (node.Attributes["showInFieldList"] != null)
+                ctObj.showInFieldList = XmlHelper.ReadBool(node.Attributes["showInFieldList"]);
+            if (node.Attributes["dragToRow"] != null)
+                ctObj.dragToRow = XmlHelper.ReadBool(node.Attributes["dragToRow"]);
+            if (node.Attributes["dragToCol"] != null)
+                ctObj.dragToCol = XmlHelper.ReadBool(node.Attributes["dragToCol"]);
+            if (node.Attributes["dragToPage"] != null)
+                ctObj.dragToPage = XmlHelper.ReadBool(node.Attributes["dragToPage"]);
+            if (node.Attributes["dragToData"] != null)
+                ctObj.dragToData = XmlHelper.ReadBool(node.Attributes["dragToData"]);
+            if (node.Attributes["dragOff"] != null)
+                ctObj.dragOff = XmlHelper.ReadBool(node.Attributes["dragOff"]);
+            if (node.Attributes["includeNewItemsInFilter"] != null)
+                ctObj.includeNewItemsInFilter = XmlHelper.ReadBool(node.Attributes["includeNewItemsInFilter"]);
+            ctObj.caption = XmlHelper.ReadString(node.Attributes["caption"]);
+            ctObj.members = new List<CT_Members>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "mps")
+                    ctObj.mps = CT_MemberProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "members")
+                    ctObj.members.Add(CT_Members.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            XmlHelper.WriteAttribute(sw, "multipleItemSelectionAllowed", this.multipleItemSelectionAllowed);
+            XmlHelper.WriteAttribute(sw, "subtotalTop", this.subtotalTop);
+            XmlHelper.WriteAttribute(sw, "showInFieldList", this.showInFieldList);
+            XmlHelper.WriteAttribute(sw, "dragToRow", this.dragToRow);
+            XmlHelper.WriteAttribute(sw, "dragToCol", this.dragToCol);
+            XmlHelper.WriteAttribute(sw, "dragToPage", this.dragToPage);
+            XmlHelper.WriteAttribute(sw, "dragToData", this.dragToData);
+            XmlHelper.WriteAttribute(sw, "dragOff", this.dragOff);
+            XmlHelper.WriteAttribute(sw, "includeNewItemsInFilter", this.includeNewItemsInFilter);
+            XmlHelper.WriteAttribute(sw, "caption", this.caption);
+            sw.Write(">");
+            if (this.mps != null)
+                this.mps.Write(sw, "mps");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            if (this.members != null)
+            {
+                foreach (CT_Members x in this.members)
+                {
+                    x.Write(sw, "members");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_MemberProperties mpsField;
 
@@ -4690,6 +5972,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_MemberProperties
     {
+        public static CT_MemberProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_MemberProperties ctObj = new CT_MemberProperties();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.mp = new List<CT_MemberProperty>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "mp")
+                    ctObj.mp.Add(CT_MemberProperty.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.mp != null)
+            {
+                foreach (CT_MemberProperty x in this.mp)
+                {
+                    x.Write(sw, "mp");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_MemberProperty> mpField;
 
@@ -4749,6 +6063,48 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_MemberProperty
     {
+        public static CT_MemberProperty Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_MemberProperty ctObj = new CT_MemberProperty();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            if (node.Attributes["showCell"] != null)
+                ctObj.showCell = XmlHelper.ReadBool(node.Attributes["showCell"]);
+            if (node.Attributes["showTip"] != null)
+                ctObj.showTip = XmlHelper.ReadBool(node.Attributes["showTip"]);
+            if (node.Attributes["showAsCaption"] != null)
+                ctObj.showAsCaption = XmlHelper.ReadBool(node.Attributes["showAsCaption"]);
+            if (node.Attributes["nameLen"] != null)
+                ctObj.nameLen = XmlHelper.ReadUInt(node.Attributes["nameLen"]);
+            if (node.Attributes["pPos"] != null)
+                ctObj.pPos = XmlHelper.ReadUInt(node.Attributes["pPos"]);
+            if (node.Attributes["pLen"] != null)
+                ctObj.pLen = XmlHelper.ReadUInt(node.Attributes["pLen"]);
+            if (node.Attributes["level"] != null)
+                ctObj.level = XmlHelper.ReadUInt(node.Attributes["level"]);
+            if (node.Attributes["field"] != null)
+                ctObj.field = XmlHelper.ReadUInt(node.Attributes["field"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "showCell", this.showCell);
+            XmlHelper.WriteAttribute(sw, "showTip", this.showTip);
+            XmlHelper.WriteAttribute(sw, "showAsCaption", this.showAsCaption);
+            XmlHelper.WriteAttribute(sw, "nameLen", this.nameLen);
+            XmlHelper.WriteAttribute(sw, "pPos", this.pPos);
+            XmlHelper.WriteAttribute(sw, "pLen", this.pLen);
+            XmlHelper.WriteAttribute(sw, "level", this.level);
+            XmlHelper.WriteAttribute(sw, "field", this.field);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string nameField;
 
@@ -4963,6 +6319,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Members
     {
+        public static CT_Members Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Members ctObj = new CT_Members();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            if (node.Attributes["level"] != null)
+                ctObj.level = XmlHelper.ReadUInt(node.Attributes["level"]);
+            ctObj.member = new List<CT_Member>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "member")
+                    ctObj.member.Add(CT_Member.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "level", this.level);
+            sw.Write(">");
+            if (this.member != null)
+            {
+                foreach (CT_Member x in this.member)
+                {
+                    x.Write(sw, "member");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_Member> memberField;
 
@@ -5052,6 +6443,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_Member
     {
+        public static CT_Member Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Member ctObj = new CT_Member();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string nameField;
 
@@ -5076,6 +6485,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotTableStyle
     {
+        public static CT_PivotTableStyle Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotTableStyle ctObj = new CT_PivotTableStyle();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            if (node.Attributes["showRowHeaders"] != null)
+                ctObj.showRowHeaders = XmlHelper.ReadBool(node.Attributes["showRowHeaders"]);
+            if (node.Attributes["showColHeaders"] != null)
+                ctObj.showColHeaders = XmlHelper.ReadBool(node.Attributes["showColHeaders"]);
+            if (node.Attributes["showRowStripes"] != null)
+                ctObj.showRowStripes = XmlHelper.ReadBool(node.Attributes["showRowStripes"]);
+            if (node.Attributes["showColStripes"] != null)
+                ctObj.showColStripes = XmlHelper.ReadBool(node.Attributes["showColStripes"]);
+            if (node.Attributes["showLastColumn"] != null)
+                ctObj.showLastColumn = XmlHelper.ReadBool(node.Attributes["showLastColumn"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "showRowHeaders", this.showRowHeaders);
+            XmlHelper.WriteAttribute(sw, "showColHeaders", this.showColHeaders);
+            XmlHelper.WriteAttribute(sw, "showRowStripes", this.showRowStripes);
+            XmlHelper.WriteAttribute(sw, "showColStripes", this.showColStripes);
+            XmlHelper.WriteAttribute(sw, "showLastColumn", this.showLastColumn);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private string nameField;
 
@@ -5250,6 +6692,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotFilters
     {
+        public static CT_PivotFilters Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotFilters ctObj = new CT_PivotFilters();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.filter = new List<CT_PivotFilter>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "filter")
+                    ctObj.filter.Add(CT_PivotFilter.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.filter != null)
+            {
+                foreach (CT_PivotFilter x in this.filter)
+                {
+                    x.Write(sw, "filter");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_PivotFilter> filterField;
 
@@ -5296,6 +6770,62 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_PivotFilter
     {
+        public static CT_PivotFilter Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PivotFilter ctObj = new CT_PivotFilter();
+            if (node.Attributes["fld"] != null)
+                ctObj.fld = XmlHelper.ReadUInt(node.Attributes["fld"]);
+            if (node.Attributes["mpFld"] != null)
+                ctObj.mpFld = XmlHelper.ReadUInt(node.Attributes["mpFld"]);
+            if (node.Attributes["type"] != null)
+                ctObj.type = (ST_PivotFilterType)Enum.Parse(typeof(ST_PivotFilterType), node.Attributes["type"].Value);
+            if (node.Attributes["evalOrder"] != null)
+                ctObj.evalOrder = XmlHelper.ReadInt(node.Attributes["evalOrder"]);
+            if (node.Attributes["id"] != null)
+                ctObj.id = XmlHelper.ReadUInt(node.Attributes["id"]);
+            if (node.Attributes["iMeasureHier"] != null)
+                ctObj.iMeasureHier = XmlHelper.ReadUInt(node.Attributes["iMeasureHier"]);
+            if (node.Attributes["iMeasureFld"] != null)
+                ctObj.iMeasureFld = XmlHelper.ReadUInt(node.Attributes["iMeasureFld"]);
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.description = XmlHelper.ReadString(node.Attributes["description"]);
+            ctObj.stringValue1 = XmlHelper.ReadString(node.Attributes["stringValue1"]);
+            ctObj.stringValue2 = XmlHelper.ReadString(node.Attributes["stringValue2"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "autoFilter")
+                    ctObj.autoFilter = CT_AutoFilter.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "extLst")
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "fld", this.fld);
+            XmlHelper.WriteAttribute(sw, "mpFld", this.mpFld);
+            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "evalOrder", this.evalOrder);
+            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "iMeasureHier", this.iMeasureHier);
+            XmlHelper.WriteAttribute(sw, "iMeasureFld", this.iMeasureFld);
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "description", this.description);
+            XmlHelper.WriteAttribute(sw, "stringValue1", this.stringValue1);
+            XmlHelper.WriteAttribute(sw, "stringValue2", this.stringValue2);
+            sw.Write(">");
+            if (this.autoFilter != null)
+                this.autoFilter.Write(sw, "autoFilter");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private CT_AutoFilter autoFilterField;
 
@@ -5759,6 +7289,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_RowHierarchiesUsage
     {
+        public static CT_RowHierarchiesUsage Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RowHierarchiesUsage ctObj = new CT_RowHierarchiesUsage();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.rowHierarchyUsage = new List<CT_HierarchyUsage>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "rowHierarchyUsage")
+                    ctObj.rowHierarchyUsage.Add(CT_HierarchyUsage.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.rowHierarchyUsage != null)
+            {
+                foreach (CT_HierarchyUsage x in this.rowHierarchyUsage)
+                {
+                    x.Write(sw, "rowHierarchyUsage");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_HierarchyUsage> rowHierarchyUsageField;
 
@@ -5818,6 +7380,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_HierarchyUsage
     {
+        public static CT_HierarchyUsage Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_HierarchyUsage ctObj = new CT_HierarchyUsage();
+            if (node.Attributes["hierarchyUsage"] != null)
+                ctObj.hierarchyUsage = XmlHelper.ReadInt(node.Attributes["hierarchyUsage"]);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "hierarchyUsage", this.hierarchyUsage);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private int hierarchyUsageField;
 
@@ -5842,6 +7423,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_ColHierarchiesUsage
     {
+        public static CT_ColHierarchiesUsage Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ColHierarchiesUsage ctObj = new CT_ColHierarchiesUsage();
+            if (node.Attributes["count"] != null)
+                ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.colHierarchyUsage = new List<CT_HierarchyUsage>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "colHierarchyUsage")
+                    ctObj.colHierarchyUsage.Add(CT_HierarchyUsage.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "count", this.count);
+            sw.Write(">");
+            if (this.colHierarchyUsage != null)
+            {
+                foreach (CT_HierarchyUsage x in this.colHierarchyUsage)
+                {
+                    x.Write(sw, "colHierarchyUsage");
+                }
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
 
         private List<CT_HierarchyUsage> colHierarchyUsageField;
 

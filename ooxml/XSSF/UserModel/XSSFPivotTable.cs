@@ -73,7 +73,8 @@ namespace NPOI.XSSF.UserModel
                 //XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
                 //Removing root element
                 //options.LoadReplaceDocumentElement=(/*setter*/null);
-                pivotTableDefinition = CT_PivotTableDefinition.Parse(is1);
+                XmlDocument xmlDoc = ConvertStreamToXml(is1);
+                pivotTableDefinition = CT_PivotTableDefinition.Parse(xmlDoc.DocumentElement, NamespaceManager);
             }
             catch (XmlException e)
             {
@@ -161,8 +162,8 @@ namespace NPOI.XSSF.UserModel
         {
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             //Sets the pivotTableDefInition tag
-            //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CTPivotTableDefInition.type.Name.
-            //        GetNamespaceURI(), "pivotTableDefInition"));
+            //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CTPivotTableDefinition.type.Name.
+            //        GetNamespaceURI(), "pivotTableDefinition"));
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             pivotTableDefinition.Save(out1);

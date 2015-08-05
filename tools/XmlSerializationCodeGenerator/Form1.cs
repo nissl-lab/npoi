@@ -31,12 +31,8 @@ namespace XmlSerializationCodeGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Missing);
-            Assembly assembly = Assembly.GetAssembly(targetType);
-            targetType = assembly.GetType(textType.Text);
-            if (targetType == null)
-                throw new Exception("not find type " + textType.Text);
+
+            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_PivotTableDefinition);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
             //treeView1.ExpandAll();
@@ -65,7 +61,7 @@ namespace XmlSerializationCodeGenerator
 
             node.Tag = c;
 
-            if (level >4)
+            if (level >7)
                 return;
 
             var properties = c.GetProperties();

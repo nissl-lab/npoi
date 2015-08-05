@@ -64,7 +64,8 @@ namespace NPOI.XSSF.UserModel
                 //XmlOptions options = new XmlOptions(DEFAULT_XML_OPTIONS);
                 ////Removing root element
                 //options.LoadReplaceDocumentElement = (/*setter*/null);
-                ctPivotCache = CT_PivotCache.Parse(is1);
+                XmlDocument xmlDoc = ConvertStreamToXml(is1);
+                ctPivotCache = CT_PivotCache.Parse(xmlDoc.DocumentElement, NamespaceManager);
             }
             catch (XmlException e)
             {
