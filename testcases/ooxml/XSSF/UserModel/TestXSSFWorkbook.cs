@@ -30,6 +30,7 @@ using System.Collections;
 using System;
 using TestCases.SS.UserModel;
 using System.Text;
+using NPOI.SS.Util;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -709,18 +710,17 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        [Ignore]
         public void AddPivotCache()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             try
             {
                 CT_Workbook ctWb = wb.GetCTWorkbook();
-                //CTPivotCache pivotCache = wb.AddPivotCache("0");
-                ////Ensures that pivotCaches is Initiated
-                //Assert.IsTrue(ctWb.IsSetPivotCaches());
-                //Assert.AreSame(pivotCache, ctWb.PivotCaches.GetPivotCacheArray(0));
-                //Assert.AreEqual("0", pivotCache.Id);
+                CT_PivotCache pivotCache = wb.AddPivotCache("0");
+                //Ensures that pivotCaches is Initiated
+                Assert.IsTrue(ctWb.IsSetPivotCaches());
+                Assert.AreSame(pivotCache, ctWb.pivotCaches.GetPivotCacheArray(0));
+                Assert.AreEqual("0", pivotCache.id);
             }
             finally
             {
@@ -757,12 +757,11 @@ namespace NPOI.XSSF.UserModel
             ICell cell9 = row3.CreateCell(2);
             cell9.SetCellValue("Bepa");
 
-            //AreaReference source = new AreaReference("A1:B2");
-            //sheet.CreatePivotTable(source, new CellReference("H5"));
+            AreaReference source = new AreaReference("A1:B2");
+            sheet.CreatePivotTable(source, new CellReference("H5"));
         }
 
         [Test]
-        [Ignore]
         public void LoadWorkbookWithPivotTable()
         {
             String fileName = "ooxml-pivottable.xlsx";
@@ -770,16 +769,15 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             SetPivotData(wb);
 
-            //FileOutputStream fileOut = new FileOutputStream(fileName);
-            //wb.Write(fileOut);
-            //fileOut.Close();
+            FileStream fileOut = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+            wb.Write(fileOut);
+            fileOut.Close();
 
-            //XSSFWorkbook wb2 = (XSSFWorkbook)WorkbookFactory.Create(new File(fileName));
-            //Assert.IsTrue(wb2.PivotTables.Count == 1);
+            XSSFWorkbook wb2 = (XSSFWorkbook)WorkbookFactory.Create(fileName);
+            Assert.IsTrue(wb2.PivotTables.Count == 1);
         }
 
         [Test]
-        [Ignore]
         public void AddPivotTableToWorkbookWithLoadedPivotTable()
         {
             String fileName = "ooxml-pivottable.xlsx";
@@ -787,13 +785,13 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             SetPivotData(wb);
 
-            //FileOutputStream fileOut = new FileOutputStream(fileName);
-            //wb.Write(fileOut);
-            //fileOut.Close();
+            FileStream fileOut = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+            wb.Write(fileOut);
+            fileOut.Close();
 
-            //XSSFWorkbook wb2 = (XSSFWorkbook)WorkbookFactory.Create(new File(fileName));
-            //SetPivotData(wb2);
-            //Assert.IsTrue(wb2.PivotTables.Count == 2);
+            XSSFWorkbook wb2 = (XSSFWorkbook)WorkbookFactory.Create(fileName);
+            SetPivotData(wb2);
+            Assert.IsTrue(wb2.PivotTables.Count == 2);
         }
 
         [Test]

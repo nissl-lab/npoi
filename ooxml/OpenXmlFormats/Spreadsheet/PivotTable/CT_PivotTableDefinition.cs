@@ -302,7 +302,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             using (StreamWriter sw = new StreamWriter(stream))
             {
-                //TODO add namespaceUri
                 this.Write(sw);
             }
         }
@@ -494,23 +493,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PivotTableDefinition()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.colHierarchiesUsageField = new CT_ColHierarchiesUsage();
-            this.rowHierarchiesUsageField = new CT_RowHierarchiesUsage();
-            this.filtersField = new CT_PivotFilters();
-            this.pivotTableStyleInfoField = new CT_PivotTableStyle();
-            this.pivotHierarchiesField = new CT_PivotHierarchies();
-            this.chartFormatsField = new CT_ChartFormats();
-            this.conditionalFormatsField = new CT_ConditionalFormats();
-            this.formatsField = new CT_Formats();
-            this.dataFieldsField = new CT_DataFields();
-            this.pageFieldsField = new CT_PageFields();
-            this.colItemsField = new CT_colItems();
-            this.colFieldsField = new CT_ColFields();
-            this.rowItemsField = new CT_rowItems();
-            this.rowFieldsField = new CT_RowFields();
-            this.pivotFieldsField = new CT_PivotFields();
-            this.locationField = new CT_Location();
+            //this.extLstField = new CT_ExtensionList();
+            //this.colHierarchiesUsageField = new CT_ColHierarchiesUsage();
+            //this.rowHierarchiesUsageField = new CT_RowHierarchiesUsage();
+            //this.filtersField = new CT_PivotFilters();
+            //this.pivotTableStyleInfoField = new CT_PivotTableStyle();
+            //this.pivotHierarchiesField = new CT_PivotHierarchies();
+            //this.chartFormatsField = new CT_ChartFormats();
+            //this.conditionalFormatsField = new CT_ConditionalFormats();
+            //this.formatsField = new CT_Formats();
+            //this.dataFieldsField = new CT_DataFields();
+            //this.pageFieldsField = new CT_PageFields();
+            //this.colItemsField = new CT_colItems();
+            //this.colFieldsField = new CT_ColFields();
+            //this.rowItemsField = new CT_rowItems();
+            //this.rowFieldsField = new CT_RowFields();
+            //this.pivotFieldsField = new CT_PivotFields();
+            //this.locationField = new CT_Location();
             this.dataOnRowsField = false;
             this.showErrorField = false;
             this.showMissingField = true;
@@ -1821,37 +1820,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PivotTableStyle AddNewPivotTableStyleInfo()
         {
-            throw new NotImplementedException();
+            this.pivotTableStyleInfoField = new CT_PivotTableStyle();
+            return this.pivotTableStyleInfoField;
         }
 
         public CT_RowFields AddNewRowFields()
         {
-            throw new NotImplementedException();
+            this.rowFieldsField = new CT_RowFields();
+            return this.rowFieldsField;
         }
 
         public CT_ColFields AddNewColFields()
         {
-            throw new NotImplementedException();
+            this.colFieldsField = new CT_ColFields();
+            return this.colFieldsField;
         }
 
         public CT_DataFields AddNewDataFields()
         {
-            throw new NotImplementedException();
+            this.dataFieldsField = new CT_DataFields();
+            return this.dataFieldsField;
         }
 
         public CT_PageFields AddNewPageFields()
         {
-            throw new NotImplementedException();
+            this.pageFieldsField = new CT_PageFields();
+            return this.pageFieldsField;
         }
 
         public CT_PivotFields AddNewPivotFields()
         {
-            throw new NotImplementedException();
+            this.pivotFieldsField = new CT_PivotFields();
+            return this.pivotFieldsField;
         }
 
         public CT_Location AddNewLocation()
         {
-            throw new NotImplementedException();
+            this.locationField = new CT_Location();
+            return this.locationField;
         }
     }
 
@@ -2087,17 +2093,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public void SetPivotFieldArray(int columnIndex, CT_PivotField pivotField)
         {
-            throw new NotImplementedException();
+            this.pivotFieldField[columnIndex] = pivotField;
         }
 
         public CT_PivotField AddNewPivotField()
         {
-            throw new NotImplementedException();
+            if (this.pivotFieldField == null)
+                this.pivotFieldField = new List<CT_PivotField>();
+            CT_PivotField f = new CT_PivotField();
+            this.pivotFieldField.Add(f);
+            return f;
         }
 
         public uint SizeOfPivotFieldArray()
         {
-            throw new NotImplementedException();
+            if (this.pivotFieldField == null)
+                this.pivotFieldField = new List<CT_PivotField>();
+            return (uint)this.pivotFieldField.Count;
+        }
+
+        public CT_PivotField GetPivotFieldArray(int columnIndex)
+        {
+            if (this.pivotFieldField == null)
+                this.pivotFieldField = new List<CT_PivotField>();
+            return this.pivotFieldField[columnIndex];
         }
     }
 
@@ -3197,7 +3216,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Items AddNewItems()
         {
-            throw new NotImplementedException();
+            this.itemsField = new CT_Items();
+            return this.itemsField;
         }
     }
 
@@ -3293,12 +3313,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Item AddNewItem()
         {
-            throw new NotImplementedException();
+            if (this.itemField == null)
+                this.itemField = new List<CT_Item>();
+            CT_Item i = new CT_Item();
+            this.itemField.Add(i);
+            return i;
         }
 
         public uint SizeOfItemArray()
         {
-            throw new NotImplementedException();
+            if (this.itemField == null)
+                this.itemField = new List<CT_Item>();
+            return (uint)this.itemField.Count;
         }
     }
 
@@ -3762,17 +3788,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Field AddNewField()
         {
-            throw new NotImplementedException();
+            CT_Field f = new CT_Field();
+            this.fieldField.Add(f);
+            return f;
         }
 
         public uint SizeOfFieldArray()
         {
-            throw new NotImplementedException();
+            return (uint)this.fieldField.Count;
         }
 
-        public IEnumerable<CT_Field> GetFieldArray()
+        public List<CT_Field> GetFieldArray()
         {
-            throw new NotImplementedException();
+            return this.fieldField;
+        }
+
+        public CT_Field GetFieldArray(int p)
+        {
+            return this.fieldField[p];
         }
     }
 
@@ -4107,12 +4140,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public uint SizeOfFieldArray()
         {
-            throw new NotImplementedException();
+            if (this.fieldField == null)
+                this.fieldField = new List<CT_Field>();
+            return (uint)this.fieldField.Count;
         }
 
         public CT_Field AddNewField()
         {
-            throw new NotImplementedException();
+            if (this.fieldField == null)
+                this.fieldField = new List<CT_Field>();
+            CT_Field f = new CT_Field();
+            this.fieldField.Add(f);
+            return f;
         }
     }
 
@@ -4299,12 +4338,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PageField AddNewPageField()
         {
-            throw new NotImplementedException();
+            if (this.pageFieldField == null)
+                this.pageFieldField = new List<CT_PageField>();
+            CT_PageField f = new CT_PageField();
+            this.pageFieldField.Add(f);
+            return f;
         }
 
         public uint SizeOfPageFieldArray()
         {
-            throw new NotImplementedException();
+            if (this.pageFieldField == null)
+                this.pageFieldField = new List<CT_PageField>();
+            return (uint)this.pageFieldField.Count;
         }
     }
 
@@ -4570,12 +4615,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_DataField AddNewDataField()
         {
-            throw new NotImplementedException();
+            if (this.dataFieldField == null)
+                this.dataFieldField = new List<CT_DataField>();
+            CT_DataField f = new CT_DataField();
+            this.dataFieldField.Add(f);
+            return f;
         }
 
         public uint SizeOfDataFieldArray()
         {
-            throw new NotImplementedException();
+            return (uint)this.dataFieldField.Count;
         }
     }
 

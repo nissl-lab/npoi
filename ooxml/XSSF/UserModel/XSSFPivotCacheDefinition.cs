@@ -90,7 +90,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        protected void Commit()
+        protected internal override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
@@ -107,7 +107,7 @@ namespace NPOI.XSSF.UserModel
          * @param sheet The sheet where the data i collected from
          */
 
-        protected void CreateCacheFields(ISheet sheet)
+        protected internal void CreateCacheFields(ISheet sheet)
         {
             //Get values for start row, start and end column
             AreaReference ar = new AreaReference(ctPivotCacheDefinition.cacheSource.worksheetSource.@ref);

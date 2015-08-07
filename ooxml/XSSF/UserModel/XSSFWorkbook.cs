@@ -156,6 +156,11 @@ namespace NPOI.XSSF.UserModel
         private XSSFCreationHelper _creationHelper;
 
         /**
+         * List of all pivot tables in workbook
+         */
+        private List<XSSFPivotTable> pivotTables;
+        private List<CT_PivotCache> pivotCaches;
+        /**
          * Create a new SpreadsheetML workbook.
          */
         public XSSFWorkbook()
@@ -293,9 +298,8 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Create arrays for parts attached to the workbook itself
-            Console.WriteLine("XSSFPivotTable is not implemented");
-            //pivotTables = new List<XSSFPivotTable>();
-            //pivotCaches = new List<CTPivotCache>();
+            pivotTables = new List<XSSFPivotTable>();
+            pivotCaches = new List<CT_PivotCache>();
         }
 
         WorkbookDocument doc = null;
@@ -433,6 +437,8 @@ namespace NPOI.XSSF.UserModel
 
             namedRanges = new List<XSSFName>();
             sheets = new List<XSSFSheet>();
+
+            pivotTables = new List<XSSFPivotTable>();
         }
 
         /**
@@ -2007,6 +2013,46 @@ namespace NPOI.XSSF.UserModel
                 arrayBook.activeTab = (uint)(sheetIndex);
             }
         }
+       /**
+         * Add pivotCache to the workbook
+         */
+        protected internal CT_PivotCache AddPivotCache(String rId)
+        {
+            CT_Workbook ctWorkbook = GetCTWorkbook();
+            CT_PivotCaches caches;
+            if (ctWorkbook.IsSetPivotCaches())
+            {
+                caches = ctWorkbook.pivotCaches;
+            }
+            else
+            {
+                caches = ctWorkbook.AddNewPivotCaches();
+            }
+            CT_PivotCache cache = caches.AddNewPivotCache();
+
+            int tableId = PivotTables.Count + 1;
+            cache.cacheId = (uint)tableId;
+            cache.id = (/*setter*/rId);
+            if (pivotCaches == null)
+            {
+                pivotCaches = new List<CT_PivotCache>();
+            }
+            pivotCaches.Add(cache);
+            return cache;
+        }
+
+        public List<XSSFPivotTable> PivotTables
+        {
+            get
+            {
+                return pivotTables;
+            }
+            set
+            {
+                this.pivotTables = value;
+            }
+        }
+
 
         #region IWorkbook Members
 

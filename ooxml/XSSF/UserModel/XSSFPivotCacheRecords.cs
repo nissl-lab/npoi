@@ -75,7 +75,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        protected void Commit()
+        protected internal override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();

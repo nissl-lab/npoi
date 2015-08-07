@@ -34,19 +34,19 @@ namespace NPOI.XSSF.UserModel
         protected internal static short UPDATED_VERSION = 3;
 
         private CT_PivotTableDefinition pivotTableDefinition;
-        private XSSFPivotCacheDefinition pivotCacheDefInition;
+        private XSSFPivotCacheDefinition pivotCacheDefinition;
         private XSSFPivotCache pivotCache;
         private XSSFPivotCacheRecords pivotCacheRecords;
         private ISheet parentSheet;
         private ISheet dataSheet;
 
 
-        protected XSSFPivotTable()
+        public XSSFPivotTable()
             : base()
         {
             pivotTableDefinition = new CT_PivotTableDefinition();
             pivotCache = new XSSFPivotCache();
-            pivotCacheDefInition = new XSSFPivotCacheDefinition();
+            pivotCacheDefinition = new XSSFPivotCacheDefinition();
             pivotCacheRecords = new XSSFPivotCacheRecords();
         }
 
@@ -108,28 +108,28 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        public CT_PivotTableDefinition GetCTPivotTableDefInition()
+        public CT_PivotTableDefinition GetCTPivotTableDefinition()
         {
             return pivotTableDefinition;
         }
 
 
 
-        public void SetCTPivotTableDefInition(CT_PivotTableDefinition pivotTableDefInition)
+        public void SetCTPivotTableDefinition(CT_PivotTableDefinition pivotTableDefinition)
         {
-            this.pivotTableDefinition = pivotTableDefInition;
+            this.pivotTableDefinition = pivotTableDefinition;
         }
 
 
-        public XSSFPivotCacheDefinition GetPivotCacheDefInition()
+        public XSSFPivotCacheDefinition GetPivotCacheDefinition()
         {
-            return pivotCacheDefInition;
+            return pivotCacheDefinition;
         }
 
 
-        public void SetPivotCacheDefInition(XSSFPivotCacheDefinition pivotCacheDefInition)
+        public void SetPivotCacheDefinition(XSSFPivotCacheDefinition pivotCacheDefinition)
         {
-            this.pivotCacheDefInition = pivotCacheDefInition;
+            this.pivotCacheDefinition = pivotCacheDefinition;
         }
 
 
@@ -158,7 +158,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        protected void Commit()
+        protected internal override void Commit()
         {
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
             //Sets the pivotTableDefInition tag
@@ -174,7 +174,7 @@ namespace NPOI.XSSF.UserModel
          * Set default values for the table defInition.
          */
 
-        protected void SetDefaultPivotTableDefInition()
+        protected internal void SetDefaultPivotTableDefinition()
         {
             //Not more than one until more Created
             pivotTableDefinition.multipleFieldFilters = (/*setter*/false);
@@ -212,7 +212,7 @@ namespace NPOI.XSSF.UserModel
 
         protected AreaReference GetPivotArea()
         {
-            AreaReference pivotArea = new AreaReference(GetPivotCacheDefInition().
+            AreaReference pivotArea = new AreaReference(GetPivotCacheDefinition().
                     GetCTPivotCacheDefInition().cacheSource.worksheetSource.@ref);
             return pivotArea;
         }
@@ -442,7 +442,7 @@ namespace NPOI.XSSF.UserModel
          * @param sourceSheet Sheet where the source will be collected from
          */
 
-        protected void CreateSourceReferences(AreaReference source, CellReference position, ISheet sourceSheet)
+        protected internal void CreateSourceReferences(AreaReference source, CellReference position, ISheet sourceSheet)
         {
             //Get cell one to the right and one down from position, add both to AreaReference and Set pivot table location.
             AreaReference destination = new AreaReference(position, new CellReference(position.Row + 1, position.Col + 1));
@@ -463,7 +463,7 @@ namespace NPOI.XSSF.UserModel
             pivotTableDefinition.location = (/*setter*/location);
 
             //Set source for the pivot table
-            CT_PivotCacheDefinition cacheDef = GetPivotCacheDefInition().GetCTPivotCacheDefInition();
+            CT_PivotCacheDefinition cacheDef = GetPivotCacheDefinition().GetCTPivotCacheDefInition();
             CT_CacheSource cacheSource = cacheDef.AddNewCacheSource();
             cacheSource.type = (/*setter*/ST_SourceType.worksheet);
             CT_WorksheetSource worksheetSource = cacheSource.AddNewWorksheetSource();
@@ -476,7 +476,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        protected void CreateDefaultDataColumns()
+        protected internal void CreateDefaultDataColumns()
         {
             CT_PivotFields pivotFields;
             if (pivotTableDefinition.pivotFields != null)

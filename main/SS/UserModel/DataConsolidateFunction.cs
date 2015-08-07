@@ -26,7 +26,7 @@ namespace NPOI.SS.UserModel
      */
     public class DataConsolidateFunction
     {
-        DataConsolidateFunction AVERAGE = new DataConsolidateFunction(1, "Average"),
+        public static DataConsolidateFunction AVERAGE = new DataConsolidateFunction(1, "Average"),
         COUNT = new DataConsolidateFunction(2, "Count"),
         COUNT_NUMS = new DataConsolidateFunction(3, "Count"),
         MAX = new DataConsolidateFunction(4, "Max"),

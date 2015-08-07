@@ -1594,7 +1594,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_WorksheetSource AddNewWorksheetSource()
         {
-            throw new NotImplementedException();
+            this.worksheetSourceField = new CT_WorksheetSource();
+            return this.worksheetSourceField;
         }
     }
 
@@ -1690,12 +1691,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CacheField AddNewCacheField()
         {
-            throw new NotImplementedException();
+            CT_CacheField f = new CT_CacheField();
+            this.cacheFieldField.Add(f);
+            return f;
         }
 
         public uint SizeOfCacheFieldArray()
         {
-            throw new NotImplementedException();
+            if (this.cacheFieldField == null)
+                return 0;
+            return (uint)this.cacheFieldField.Count;
         }
     }
     
@@ -2535,9 +2540,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public void AddNewSharedItems()
+        public CT_SharedItems AddNewSharedItems()
         {
-            throw new NotImplementedException();
+            this.sharedItemsField = new CT_SharedItems();
+            return this.sharedItemsField;
         }
     }
 
