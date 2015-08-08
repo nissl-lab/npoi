@@ -478,5 +478,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLstField = value;
             }
         }
+
+        public bool IsSetPivotCaches()
+        {
+            return this.pivotCachesField != null;
+        }
+
+        public CT_PivotCaches AddNewPivotCaches()
+        {
+            this.pivotCachesField = new CT_PivotCaches();
+            return this.pivotCachesField;
+        }
     }
 }

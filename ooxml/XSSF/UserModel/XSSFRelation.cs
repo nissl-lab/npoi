@@ -281,6 +281,24 @@ namespace NPOI.XSSF.UserModel
               null
        );
 
+        public static  XSSFRelation PIVOT_TABLE = new XSSFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.pivotTable+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable",
+            "/xl/pivotTables/pivotTable#.xml",
+            typeof(XSSFPivotTable)
+        );
+        public static  XSSFRelation PIVOT_CACHE_DEFINITION = new XSSFRelation(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.pivotCacheDefinition+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheDefinition",
+                "/xl/pivotCache/pivotCacheDefinition#.xml",
+                typeof(XSSFPivotCacheDefinition)
+        );
+        public static  XSSFRelation PIVOT_CACHE_RECORDS = new XSSFRelation(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.pivotCacheRecords+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheRecords",
+                "/xl/pivotCache/pivotCacheRecords#.xml",
+                typeof(XSSFPivotCacheRecords)
+        );
 
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)

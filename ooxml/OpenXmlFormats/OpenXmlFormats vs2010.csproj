@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheRecords.cs" />
     <Compile Include="Drawing\ChartDrawing.cs" />
     <Compile Include="Drawing\Chart\ChartSpaceDocument.cs" />
     <Compile Include="Drawing\Chart\AreaChart.cs" />
@@ -129,7 +130,9 @@
     <Compile Include="Drawing\WordprocessingDrawing.cs" />
     <Compile Include="ExtendedPropertiesDocument.cs" />
     <Compile Include="Shared\Math.cs" />
+    <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheDefinition.cs" />
     <Compile Include="Spreadsheet\Document\ExternalLinkDocument.cs" />
+    <Compile Include="Spreadsheet\PivotTable\CT_PivotTableDefinition.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Dxfs.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Table.cs" />
     <Compile Include="Spreadsheet\Styles\CT_TableStyles.cs" />
@@ -291,6 +294,7 @@
       <Name>OpenXml4Net vs2010</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

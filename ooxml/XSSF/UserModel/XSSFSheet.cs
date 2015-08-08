@@ -150,6 +150,10 @@ namespace NPOI.XSSF.UserModel
                 {
                     tables[p.GetPackageRelationship().Id] = (XSSFTable)p;
                 }
+                if (p is XSSFPivotTable)
+                {
+                    GetWorkbook().PivotTables.Add((XSSFPivotTable)p);
+                }
             }
 
             // Process external hyperlinks for the sheet, if there are any
@@ -4349,6 +4353,112 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             return clonedSheet;
+        }
+        public XSSFWorkbook GetWorkbook()
+        {
+            return (XSSFWorkbook)GetParent();
+        }
+        /**
+         * Creates an empty XSSFPivotTable and Sets up all its relationships
+         * including: pivotCacheDefInition, pivotCacheRecords
+         * @return returns a pivotTable
+         */
+        private XSSFPivotTable CreatePivotTable()
+        {
+            XSSFWorkbook wb = GetWorkbook();
+            List<XSSFPivotTable> pivotTables = wb.PivotTables;
+            int tableId = GetWorkbook().PivotTables.Count + 1;
+            //Create relationship between pivotTable and the worksheet
+            XSSFPivotTable pivotTable = (XSSFPivotTable)CreateRelationship(XSSFRelation.PIVOT_TABLE,
+                    XSSFFactory.GetInstance(), tableId);
+            pivotTable.SetParentSheet(this);
+            pivotTables.Add(pivotTable);
+            XSSFWorkbook workbook = GetWorkbook();
+
+            //Create relationship between the pivot cache defintion and the workbook
+            XSSFPivotCacheDefinition pivotCacheDefinition = (XSSFPivotCacheDefinition)workbook.
+                    CreateRelationship(XSSFRelation.PIVOT_CACHE_DEFINITION, XSSFFactory.GetInstance(), tableId);
+            String rId = workbook.GetRelationId(pivotCacheDefinition);
+            //Create relationship between pivotTable and pivotCacheDefInition without creating a new instance
+            PackagePart pivotPackagePart = pivotTable.GetPackagePart();
+            pivotPackagePart.AddRelationship(pivotCacheDefinition.GetPackagePart().PartName,
+                    TargetMode.Internal, XSSFRelation.PIVOT_CACHE_DEFINITION.Relation);
+
+            pivotTable.SetPivotCacheDefinition(pivotCacheDefinition);
+
+            //Create pivotCache and Sets up it's relationship with the workbook
+            pivotTable.SetPivotCache(new XSSFPivotCache(workbook.AddPivotCache(rId)));
+
+            //Create relationship between pivotcacherecord and pivotcachedefInition
+            XSSFPivotCacheRecords pivotCacheRecords = (XSSFPivotCacheRecords)pivotCacheDefinition.
+                    CreateRelationship(XSSFRelation.PIVOT_CACHE_RECORDS, XSSFFactory.GetInstance(), tableId);
+
+            //Set relationships id for pivotCacheDefInition to pivotCacheRecords
+            pivotTable.GetPivotCacheDefinition().GetCTPivotCacheDefInition().id = (/*setter*/pivotCacheDefinition.GetRelationId(pivotCacheRecords));
+
+            wb.PivotTables = (/*setter*/pivotTables);
+
+            return pivotTable;
+        }
+
+        /**
+         * Create a pivot table and Set area of source, source sheet and a position for pivot table
+         * @param source Area from where data will be collected
+         * @param position A reference to the cell where the table will start
+         * @param sourceSheet The sheet where source will be collected from
+         * @return The pivot table
+         */
+        public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position, ISheet sourceSheet)
+        {
+
+            if (source.FirstCell.SheetName != null && !source.FirstCell.SheetName.Equals(sourceSheet.SheetName))
+            {
+                throw new ArgumentException("The area is referenced in another sheet than the "
+                        + "defined source sheet " + sourceSheet.SheetName + ".");
+            }
+            XSSFPivotTable pivotTable = CreatePivotTable();
+            //Creates default Settings for the pivot table
+            pivotTable.SetDefaultPivotTableDefinition();
+
+            //Set sources and references
+            pivotTable.CreateSourceReferences(source, position, sourceSheet);
+
+            //Create cachefield/s and empty SharedItems
+            pivotTable.GetPivotCacheDefinition().CreateCacheFields(sourceSheet);
+            pivotTable.CreateDefaultDataColumns();
+
+            return pivotTable;
+        }
+
+        /**
+         * Create a pivot table and Set area of source and a position for pivot table
+         * @param source Area from where data will be collected
+         * @param position A reference to the cell where the table will start
+         * @return The pivot table
+         */
+        public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position)
+        {
+            if (source.FirstCell.SheetName != null && !source.FirstCell.SheetName.Equals(this.SheetName))
+            {
+                return CreatePivotTable(source, position, GetWorkbook().GetSheet(source.FirstCell.SheetName));
+            }
+            return CreatePivotTable(source, position, this);
+        }
+
+        /**
+         * Returns all the pivot tables for this Sheet
+         */
+        public List<XSSFPivotTable> GetPivotTables()
+        {
+            List<XSSFPivotTable> tables = new List<XSSFPivotTable>();
+            foreach (XSSFPivotTable table in GetWorkbook().PivotTables)
+            {
+                if (table.GetParent() == this)
+                {
+                    tables.Add(table);
+                }
+            }
+            return tables;
         }
 
         public int GetColumnOutlineLevel(int columnIndex)

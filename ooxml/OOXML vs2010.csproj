@@ -206,6 +206,10 @@
     <Compile Include="XSSF\UserModel\XSSFPatternFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFPicture.cs" />
     <Compile Include="XSSF\UserModel\XSSFPictureData.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotCache.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotCacheDefinition.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotCacheRecords.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotTable.cs" />
     <Compile Include="XSSF\UserModel\XSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\XSSFRelation.cs" />
     <Compile Include="XSSF\UserModel\XSSFRichTextString.cs" />
@@ -323,6 +327,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="OpenXmlFormats\xsd\" />
     <Folder Include="XWPF\Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

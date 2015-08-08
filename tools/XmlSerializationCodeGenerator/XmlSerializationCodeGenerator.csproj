@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.TextEditor">
+      <HintPath>..\Libs\ICSharpCode.TextEditor.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\NPOI.OpenXmlFormats.dll</HintPath>

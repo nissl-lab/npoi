@@ -1238,6 +1238,125 @@ namespace NPOI.XSSF.UserModel
             XSSFTestDataSamples.OpenSampleWorkbook("51585.xlsx");
         }
 
+        private XSSFWorkbook SetupSheet()
+        {
+            //set up workbook
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+
+            IRow row1 = sheet.CreateRow((short)0);
+            ICell cell = row1.CreateCell((short)0);
+            cell.SetCellValue("Names");
+            ICell cell2 = row1.CreateCell((short)1);
+            cell2.SetCellValue("#");
+
+            IRow row2 = sheet.CreateRow((short)1);
+            ICell cell3 = row2.CreateCell((short)0);
+            cell3.SetCellValue("Jane");
+            ICell cell4 = row2.CreateCell((short)1);
+            cell4.SetCellValue(3);
+
+            IRow row3 = sheet.CreateRow((short)2);
+            ICell cell5 = row3.CreateCell((short)0);
+            cell5.SetCellValue("John");
+            ICell cell6 = row3.CreateCell((short)1);
+            cell6.SetCellValue(3);
+
+            return wb;
+        }
+
+        [Test]
+        public void TestCreateTwoPivotTablesInOneSheet()
+        {
+            XSSFWorkbook wb = SetupSheet();
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            Assert.IsNotNull(wb);
+            Assert.IsNotNull(sheet);
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
+            Assert.IsNotNull(pivotTable);
+            Assert.IsTrue(wb.PivotTables.Count > 0);
+            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("L5"), sheet);
+            Assert.IsNotNull(pivotTable2);
+            Assert.IsTrue(wb.PivotTables.Count > 1);
+        }
+
+        [Test]
+        public void TestCreateTwoPivotTablesInTwoSheets()
+        {
+            XSSFWorkbook wb = SetupSheet();
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            Assert.IsNotNull(wb);
+            Assert.IsNotNull(sheet);
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
+            Assert.IsNotNull(pivotTable);
+            Assert.IsTrue(wb.PivotTables.Count > 0);
+            Assert.IsNotNull(wb);
+            XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
+            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"), sheet);
+            Assert.IsNotNull(pivotTable2);
+            Assert.IsTrue(wb.PivotTables.Count > 1);
+        }
+
+        [Test]
+        public void TestCreatePivotTable()
+        {
+            XSSFWorkbook wb = SetupSheet();
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            Assert.IsNotNull(wb);
+            Assert.IsNotNull(sheet);
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
+            Assert.IsNotNull(pivotTable);
+            Assert.IsTrue(wb.PivotTables.Count > 0);
+        }
+
+        [Test]
+        public void TestCreatePivotTableInOtherSheetThanDataSheet()
+        {
+            XSSFWorkbook wb = SetupSheet();
+            XSSFSheet sheet1 = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
+
+            XSSFPivotTable pivotTable = sheet2.CreatePivotTable
+                    (new AreaReference("A1:B2"), new CellReference("H5"), sheet1);
+            Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
+
+            Assert.AreEqual(1, wb.PivotTables.Count);
+            Assert.AreEqual(0, sheet1.GetPivotTables().Count);
+            Assert.AreEqual(1, sheet2.GetPivotTables().Count);
+        }
+
+        [Test]
+        public void TestCreatePivotTableInOtherSheetThanDataSheetUsingAreaReference()
+        {
+            XSSFWorkbook wb = SetupSheet();
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
+
+            XSSFPivotTable pivotTable = sheet2.CreatePivotTable
+                    (new AreaReference(sheet.SheetName + "!A$1:B$2"), new CellReference("H5"));
+            Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
+        }
+
+        [Test]
+        public void TestCreatePivotTableWithConflictingDataSheets()
+        {
+            XSSFWorkbook wb = SetupSheet();
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
+
+            try
+            {
+                sheet2.CreatePivotTable(new AreaReference(sheet.SheetName + "!A$1:B$2"), new CellReference("H5"), sheet2);
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+            Assert.Fail();
+        }
 
         [Test]
         public void TestReadFails()

@@ -62,6 +62,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.pivotCacheField = value;
             }
         }
+
+        public CT_PivotCache AddNewPivotCache()
+        {
+            if (this.pivotCacheField == null)
+                this.pivotCacheField = new List<CT_PivotCache>();
+            CT_PivotCache c = new CT_PivotCache();
+            this.pivotCacheField.Add(c);
+            return c;
+        }
+
+        public CT_PivotCache GetPivotCacheArray(int p)
+        {
+            if (pivotCacheField == null || p < 0 || p >= pivotCacheField.Count)
+                return null;
+            return pivotCacheField[p];
+        }
     }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]

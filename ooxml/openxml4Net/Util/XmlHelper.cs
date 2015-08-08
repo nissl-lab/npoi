@@ -170,6 +170,14 @@ namespace NPOI.OpenXml4Net.Util
                 return false;
             }
         }
+        public static DateTime? ReadDateTime(XmlAttribute attr)
+        {
+            if (attr == null)
+                return null;
+            //TODO make this stable.
+            return DateTime.Parse(attr.Value);
+        }
+
         public static string ExcelEncodeString(string t)
         {
             StringWriter sw = new StringWriter();
@@ -293,6 +301,15 @@ namespace NPOI.OpenXml4Net.Util
         public static void WriteAttribute(StreamWriter sw, string attributeName, uint value)
         {
             WriteAttribute(sw, attributeName, (int)value, false);
+        }
+
+        public static void WriteAttribute(StreamWriter sw, string attributeName, DateTime? value)
+        {
+            if (value == null)
+                return;
+            WriteAttribute(sw, attributeName, value.ToString(), false);
+            //how to write xsd:datetime data
+            throw new NotImplementedException();
         }
         public static void LoadXmlSafe(XmlDocument xmlDoc, Stream stream)
         {

@@ -1,4 +1,5 @@
 ﻿
+using ICSharpCode.TextEditor.Document;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
 using System.Collections;
@@ -20,13 +21,18 @@ namespace XmlSerializationCodeGenerator
         public Form1()
         {
             InitializeComponent();
+            editCSharp.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("C#");
+            editCSharp.Encoding = System.Text.Encoding.UTF8;
         }
-
+        List<string> keywords = new List<string>() { 
+            "in", "out", "ref", "string", "double", "int", "float", "uint", "long", "ulong", "byte"
+        };
         List<Type> types = new List<Type>();
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_Chartsheet);
+
+            Type targetType = typeof(NPOI.OpenXmlFormats.Spreadsheet.CT_PivotTableDefinition);
             var rootNode = treeView1.Nodes.Add(targetType.Name);
             RecursiveRun(targetType, rootNode, 0);
             //treeView1.ExpandAll();
@@ -46,7 +52,7 @@ namespace XmlSerializationCodeGenerator
                         sb.AppendLine("- Write");
                 }
             }
-            textBox1.Text = sb.ToString();
+            editCSharp.Text = sb.ToString();
         }
         void RecursiveRun(Type c, TreeNode node, int level)
         {
@@ -55,7 +61,7 @@ namespace XmlSerializationCodeGenerator
 
             node.Tag = c;
 
-            if (level >4)
+            if (level >7)
                 return;
 
             var properties = c.GetProperties();
@@ -121,12 +127,15 @@ namespace XmlSerializationCodeGenerator
             List<PropertyInfo> listProps = new List<PropertyInfo>();
 
             var properties = t.GetProperties();
+            string varName;
             foreach (var p in properties)
             {
                 //忽略Specified结尾的Property
                 if (p.Name.EndsWith("Specified"))
                     continue;
-
+                varName = p.Name;
+                if (this.keywords.Contains(p.Name))
+                    varName = "@" + p.Name;
                 if (p.GetCustomAttributes(typeof(XmlElementAttribute), false).Length > 0)
                 {
                     if (typeof(IList).IsAssignableFrom(p.PropertyType)
@@ -140,49 +149,55 @@ namespace XmlSerializationCodeGenerator
                 if (p.PropertyType.IsValueType)
                 {
                     sb.AppendLine(string.Format("\tif (node.Attributes[\"{1}{0}\"]!=null)", p.Name, attributePrefix));
+                    sb.Append("\t");
+
                     if (p.PropertyType.Name == "Int32")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadInt(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadInt(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "Int64")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadLong(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadLong(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "Double")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadDouble(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadDouble(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "Byte")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadByte(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadByte(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "SByte")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadSByte(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadSByte(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "Int16")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadShort(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadShort(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "UInt16")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadUShort(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadUShort(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "UInt32")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadUInt(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadUInt(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "UInt64")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadULong(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadULong(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "Boolean")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBool(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadBool(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                     }
                     else if (p.PropertyType.Name == "Decimal")
                     {
-                        sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadDecimal(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadDecimal(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
+                    }
+                    else if (p.PropertyType.Name == "DateTime")
+                    {
+                        sb.AppendFormat("\tctObj.{2} = XmlHelper.ReadDateTime(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName).AppendLine();
                     }
                     else if (p.PropertyType.IsEnum)
                     {
@@ -196,11 +211,11 @@ namespace XmlSerializationCodeGenerator
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadString(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                    sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadString(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                 }
                 else if (p.PropertyType.Name == "Byte[]")
                 {
-                    sb.AppendLine(string.Format("\tctObj.{0} = XmlHelper.ReadBytes(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix));
+                    sb.AppendLine(string.Format("\tctObj.{2} = XmlHelper.ReadBytes(node.Attributes[\"{1}{0}\"]);", p.Name, attributePrefix, varName));
                 }
                 else if (p.PropertyType.IsClass)
                 {
@@ -318,46 +333,52 @@ namespace XmlSerializationCodeGenerator
                 {
                     continue;
                 }
+                varName = p.Name;
+                if (this.keywords.Contains(p.Name))
+                    varName = "@" + p.Name;
                 string attributePrefix = GetXmlAttributePrefix(p);
                 if (p.PropertyType.IsValueType)
                 {
                     if (p.PropertyType.IsEnum)
                     {
                         if (p.PropertyType.Name == "ST_TrueFalse" || p.PropertyType.Name == "ST_TrueFalseBlank")
-                            sb.AppendLine(string.Format("\tNPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
+                            sb.AppendLine(string.Format("\tNPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{2});", p.Name, attributePrefix, varName));
                         else if (p.PropertyType.Name == "ST_Ext")
                         {
                             sb.AppendLine("\tif(this.ext!=ST_Ext.NONE)");
-                            sb.AppendLine(string.Format("\t\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0}.ToString());", p.Name, attributePrefix));
+                            sb.AppendLine(string.Format("\t\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{2}.ToString());", p.Name, attributePrefix, varName));
                         }
                         else
-                            sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0}.ToString());", p.Name, attributePrefix));
+                            sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{2}.ToString());", p.Name, attributePrefix, varName));
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
+                        sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{2});", p.Name, attributePrefix, varName));
                     }
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
+                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{2});", p.Name, attributePrefix, varName));
                 }
                 else if (p.PropertyType.Name == "Byte[]")
                 {
-                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{0});", p.Name, attributePrefix));
+                    sb.AppendLine(string.Format("\tXmlHelper.WriteAttribute(sw, \"{1}{0}\", this.{2});", p.Name, attributePrefix, varName));
                 }
             }
             sb.AppendLine("\tsw.Write(\">\");");
             foreach (var p in subProperties)
             {
-                sb.AppendLine(string.Format("\tif(this.{0}!=null)", p.Name));
+                varName = p.Name;
+                if (this.keywords.Contains(p.Name))
+                    varName = "@" + p.Name;
+                sb.AppendLine(string.Format("\tif(this.{0}!=null)", varName));
                 if (p.PropertyType.IsValueType)
                 {
-                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}));", p.Name, GetXmlPrefix(p.PropertyType)));
+                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{2}));", p.Name, GetXmlPrefix(p.PropertyType), varName));
                 }
                 else if (p.PropertyType.Name == "String")
                 {
-                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}));", p.Name, GetXmlPrefix(p.PropertyType)));
+                    sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{2}));", p.Name, GetXmlPrefix(p.PropertyType), varName));
                 }
                 else if (p.PropertyType.Name == "Boolean")
                 {
@@ -366,16 +387,16 @@ namespace XmlSerializationCodeGenerator
                     {
                         if (((bool)((DefaultValueAttribute)defaultAttrs[0]).Value) == true)
                         {
-                            sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}, true));", p.Name, GetXmlPrefix(p.PropertyType)));
+                            sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{2}, true));", p.Name, GetXmlPrefix(p.PropertyType), varName));
                         }
                         else
                         {
-                            sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}));", p.Name, GetXmlPrefix(p.PropertyType)));
+                            sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{2}));", p.Name, GetXmlPrefix(p.PropertyType), varName));
                         }
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{0}));", p.Name, GetXmlPrefix(p.PropertyType)));
+                        sb.AppendLine(string.Format("\t\tsw.Write(string.Format(\"<{1}{0}>{{0}}</{1}{0}>\",this.{2}));", p.Name, GetXmlPrefix(p.PropertyType), varName));
                     }
                 }
                 else if (p.PropertyType.GetProperties().Length == 0)
@@ -418,7 +439,9 @@ namespace XmlSerializationCodeGenerator
             sb.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}>\",nodeName));");
             sb.AppendLine("}");
             #endregion
-            textBox1.Text= sb.ToString();
+            editCSharp.Text = sb.ToString();
+
+            Clipboard.SetText(editCSharp.Text);
         }
         public string GetXmlAttributePrefix(PropertyInfo p)
         { 
@@ -552,7 +575,7 @@ namespace XmlSerializationCodeGenerator
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(textBox1.Text);
+            Clipboard.SetDataObject(editCSharp.Text);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -575,7 +598,7 @@ namespace XmlSerializationCodeGenerator
                     sb.AppendLine("}");
                     sb.AppendLine();
                 }
-                textBox1.Text = sb.ToString();
+                editCSharp.Text = sb.ToString();
             }
             else
             {
@@ -594,7 +617,7 @@ namespace XmlSerializationCodeGenerator
                        sb.AppendLine("}");
                        sb.AppendLine();
                    }
-                   textBox1.Text = sb.ToString();
+                   editCSharp.Text = sb.ToString();
                }
             }
         }
@@ -676,9 +699,9 @@ namespace XmlSerializationCodeGenerator
             writeCode.AppendLine("\tsw.Write(string.Format(\"</" + xmlPrefix + "{0}>\",nodeName));");
             writeCode.AppendLine("}");
 
-            textBox1.Text = parseCode.ToString();
-            textBox1.Text += Environment.NewLine;
-            textBox1.Text += writeCode.ToString();
+            editCSharp.Text = parseCode.ToString();
+            editCSharp.Text += Environment.NewLine;
+            editCSharp.Text += writeCode.ToString();
         }
     }
 }
