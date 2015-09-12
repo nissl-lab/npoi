@@ -99,9 +99,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_PhoneticRun ctObj = new CT_PhoneticRun();
-            ctObj.t = XmlHelper.ReadString(node.Attributes["t"]);
             ctObj.sb = XmlHelper.ReadUInt(node.Attributes["sb"]);
             ctObj.eb = XmlHelper.ReadUInt(node.Attributes["eb"]);
+
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "t")
+                    ctObj.t = childNode.InnerText;
+            }
             return ctObj;
         }
 
@@ -110,10 +115,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "t", this.t);
-            XmlHelper.WriteAttribute(sw, "sb", this.sb);
-            XmlHelper.WriteAttribute(sw, "eb", this.eb);
-            sw.Write("/>");
+            XmlHelper.WriteAttribute(sw, "sb", this.sb.ToString(), true);
+            XmlHelper.WriteAttribute(sw, "eb", this.eb.ToString(), true);
+            sw.Write(">");
+            sw.Write("<t>");
+            if (this.t != null)
+            {
+                sw.Write(XmlHelper.EncodeXml(this.t));
+            }
+            sw.Write("</t>");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
     }
