@@ -100,5 +100,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.styleField = value;
             }
         }
+
+        public CT_BorderPr Copy()
+        {
+            var res = new CT_BorderPr();
+            res.colorField = this.colorField == null ? null : this.colorField.Copy();
+            res.style = this.style;
+            return res;
+        }
     }
 }

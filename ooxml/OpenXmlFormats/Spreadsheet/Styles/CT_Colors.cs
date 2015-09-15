@@ -372,8 +372,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("/>");
         }
 
+        public CT_Color Copy()
+        {
+            var res = new CT_Color();
+            res.autoField = this.autoField;
 
+            res.indexedField = this.indexedField;
 
+            res.rgbField = this.rgbField == null ? null : (byte[])this.rgbField.Clone(); // type ST_UnsignedIntHex is xsd:hexBinary restricted to length 4 (octets!? - see http://www.grokdoc.net/index.php/EOOXML_Objections_Clearinghouse)
+
+            res.themeField = this.themeField; // TODO change all the uses theme to use uint instead of signed integer variants
+
+            res.tintField = this.tintField;
+
+            return res;
+        }
     }
 
 }
