@@ -3577,7 +3577,7 @@ namespace NPOI.XSSF.UserModel
         public void LockFormatCells()
         {
             CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.deleteColumns = (true);
+            worksheet.sheetProtection.formatCells = (true);
         }
 
         /**
