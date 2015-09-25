@@ -3548,6 +3548,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Autofilters locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockAutoFilter()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.autoFilter = (false);
+        }
+
+        /**
          * Enable Deleting columns locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3556,6 +3566,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.deleteColumns = true;
+        }
+
+        /**
+         * Disable Deleting columns locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockDeleteColumns()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.deleteColumns = false;
         }
 
         /**
@@ -3570,6 +3590,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Deleting rows locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockDeleteRows()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.deleteRows = false;
+        }
+
+        /**
          * Enable Formatting cells locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3578,6 +3608,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.formatCells = (true);
+        }
+
+        /**
+         * Disable Formatting cells locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockFormatCells()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.formatCells = (false);
         }
 
         /**
@@ -3592,6 +3632,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Formatting columns locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockFormatColumns()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.formatColumns = (false);
+        }
+
+        /**
          * Enable Formatting rows locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3600,6 +3650,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.formatRows = (true);
+        }
+
+        /**
+         * Disable Formatting rows locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockFormatRows()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.formatRows = (false);
         }
 
         /**
@@ -3614,6 +3674,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Inserting columns locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockInsertColumns()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.insertColumns = (false);
+        }
+
+        /**
          * Enable Inserting hyperlinks locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3622,6 +3692,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.insertHyperlinks = (true);
+        }
+
+        /**
+         * Disable Inserting hyperlinks locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockInsertHyperlinks()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.insertHyperlinks = (false);
         }
 
         /**
@@ -3636,6 +3716,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Inserting rows locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockInsertRows()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.insertRows = (false);
+        }
+
+        /**
          * Enable Pivot Tables locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3644,6 +3734,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.pivotTables = (true);
+        }
+
+        /**
+         * Disable Pivot Tables locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockPivotTables()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.pivotTables = (false);
         }
 
         /**
@@ -3658,6 +3758,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Sort locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockSort()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.sort = (false);
+        }
+
+        /**
          * Enable Objects locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3666,6 +3776,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.objects = (true);
+        }
+
+        /**
+         * Disable Objects locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockObjects()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.objects = (false);
         }
 
         /**
@@ -3680,6 +3800,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Scenarios locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockScenarios()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.scenarios = (false);
+        }
+
+        /**
          * Enable Selection of locked cells locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3691,6 +3821,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Disable Selection of locked cells locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockSelectLockedCells()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.selectLockedCells = (false);
+        }
+
+        /**
          * Enable Selection of unlocked cells locking.
          * This does not modify sheet protection status.
          * To enforce this locking, call {@link #enableLocking()}
@@ -3699,6 +3839,16 @@ namespace NPOI.XSSF.UserModel
         {
             CreateProtectionFieldIfNotPresent();
             worksheet.sheetProtection.selectUnlockedCells = (true);
+        }
+
+        /**
+         * Disable Selection of unlocked cells locking.
+         * This does not modify sheet protection status.
+         */
+        public void UnlockSelectUnlockedCells()
+        {
+            CreateProtectionFieldIfNotPresent();
+            worksheet.sheetProtection.selectUnlockedCells = (false);
         }
 
         private void CreateProtectionFieldIfNotPresent()
