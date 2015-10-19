@@ -1225,12 +1225,11 @@ namespace NPOI.XWPF.UserModel
          * the content of parameter run
          * @param run
          */
-        protected internal void AddRun(CT_R Run)
+        protected internal void AddRun(CT_R run)
         {
-            int pos;
-            pos = paragraph.GetRList().Count;
+            int pos= paragraph.GetRList().Count;
             paragraph.AddNewR();
-            paragraph.SetRArray(pos, Run);
+            paragraph.SetRArray(pos, run);
         }
         /// <summary>
         /// Replace text inside each run (cross run is not supported yet)
@@ -1239,9 +1238,19 @@ namespace NPOI.XWPF.UserModel
         /// <param name="newText">replacement text</param>
         public void ReplaceText(string oldText, string newText)
         {
-            for (int i = 0; i < this.runs.Count; i++)
+            TextSegment ts= this.SearchText(oldText, new PositionInParagraph() { Run = 0 });
+            if (ts.BeginRun == ts.EndRun)
             {
-                this.runs[i].ReplaceText(oldText, newText);
+                this.runs[ts.BeginRun].ReplaceText(oldText, newText);
+            }
+            else
+            {
+                this.runs[ts.BeginRun].ReplaceText(this.runs[ts.BeginRun].Text.Substring(ts.BeginChar), newText);
+                this.runs[ts.EndRun].ReplaceText(this.runs[ts.EndRun].Text.Substring(0, ts.EndChar + 1), "");
+                for (int i = ts.EndRun-1; i > ts.BeginRun; i--)
+                {
+                    RemoveRun(i);
+                }
             }
         }
         /// <summary>
@@ -1251,7 +1260,7 @@ namespace NPOI.XWPF.UserModel
         /// <param name="searched"></param>
         /// <param name="startPos"></param>
         /// <returns></returns>
-        public TextSegement SearchText(String searched, PositionInParagraph startPos)
+        public TextSegment SearchText(String searched, PositionInParagraph startPos)
         {
 
             int startRun = startPos.Run,
@@ -1291,7 +1300,7 @@ namespace NPOI.XWPF.UserModel
                                     }
                                     else if (newList)
                                     {
-                                        TextSegement segement = new TextSegement();
+                                        TextSegment segement = new TextSegment();
                                         segement.BeginRun = (beginRunPos);
                                         segement.BeginText = (beginTextPos);
                                         segement.BeginChar = (beginCharPos);
@@ -1374,7 +1383,7 @@ namespace NPOI.XWPF.UserModel
          * Get a Text
          * @param segment
          */
-        public String GetText(TextSegement segment)
+        public String GetText(TextSegment segment)
         {
             int RunBegin = segment.BeginRun;
             int textBegin = segment.BeginText;

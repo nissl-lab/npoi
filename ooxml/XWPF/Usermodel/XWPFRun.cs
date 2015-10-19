@@ -343,14 +343,17 @@ namespace NPOI.XWPF.UserModel
             string text = this.Text.Replace(oldText, newText);
             this.SetText(text);
         }
-        /**
-         * Sets the text of this text run
-         *
-         * @param value the literal text which shall be displayed in the document
-         */
+        /// <summary>
+        ///Sets the text of this text run
+        /// </summary>
+        /// <param name="value">the literal text which shall be displayed in the document</param>
         public void SetText(String value)
         {
-            this.SetText(value, run.SizeOfTArray());
+            run.GetTArray(0).Value = value;
+            for (int i = 1; i < run.SizeOfTArray(); i++)
+            {
+                run.RemoveT(i);
+            }
         }
 
 
@@ -368,8 +371,8 @@ namespace NPOI.XWPF.UserModel
         public void SetText(String value, int pos)
         {
             int length = run.SizeOfTArray();
-            if (pos > length) throw new IndexOutOfRangeException("Value too large for the parameter position in XWPFrun.Text=(String value,int pos)");
-            CT_Text t = (pos < length && pos >= 0) ? run.GetTArray(pos) as CT_Text : run.AddNewT();
+            if (pos > length) throw new IndexOutOfRangeException("Value too large for the parameter position");
+            CT_Text t = (pos < length && pos >= 0) ? run.GetTArray(pos): run.AddNewT();
             t.Value = (value);
             preserveSpaces(t);
         }
