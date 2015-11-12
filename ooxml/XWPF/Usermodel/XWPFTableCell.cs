@@ -204,7 +204,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_P ctP = (ctTc.SizeOfPArray() == 0) ? ctTc.AddNewP() : ctTc.GetPArray(0);
             XWPFParagraph par = new XWPFParagraph(ctP, this);
-            par.CreateRun().SetText(text);
+            par.CreateRun().AppendText(text);
         }
 
         public XWPFTableRow GetTableRow()
