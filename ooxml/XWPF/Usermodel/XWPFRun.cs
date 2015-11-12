@@ -349,10 +349,17 @@ namespace NPOI.XWPF.UserModel
         /// <param name="value">the literal text which shall be displayed in the document</param>
         public void SetText(String value)
         {
-            run.GetTArray(0).Value = value;
-            for (int i = 1; i < run.SizeOfTArray(); i++)
+            if (run.SizeOfTArray() == 0)
             {
-                run.RemoveT(i);
+                run.AddNewT().Value = value;
+            }
+            else
+            {
+                run.GetTArray(0).Value = value;
+                for (int i = 1; i < run.SizeOfTArray(); i++)
+                {
+                    run.RemoveT(i);
+                }
             }
         }
 
