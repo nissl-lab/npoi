@@ -219,7 +219,7 @@ namespace NPOI.XSSF.UserModel
          * make sure we insert xml:space="preserve" attribute
          * if a string has leading or trailing white spaces
          */
-        [Test]
+        [Ignore]
         public void TestPreserveSpaces()
         {
             //XSSFRichTextString rt = new XSSFRichTextString("Apache");
@@ -397,7 +397,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        [Test]
+        [Ignore]
         public void TestLineBreaks_bug48877()
         {
 
