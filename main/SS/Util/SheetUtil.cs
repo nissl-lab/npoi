@@ -312,7 +312,7 @@ namespace NPOI.SS.Util
             //TextLayout layout;
 
             double width = -1;
-            using (Bitmap bmp = new Bitmap(2048, 100))
+            using (Bitmap bmp = new Bitmap(1,1))
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 if (cellType == CellType.String)
