@@ -25,7 +25,7 @@ namespace NPOI.Util
             }
             // Generate a unique new filename 
             Random rnd = new Random(DateTime.Now.Millisecond);
-            string file=prefix + rnd.Next() + suffix;
+            string file = dir + Path.DirectorySeparatorChar + prefix + rnd.Next() + suffix;
             if (File.Exists(file))
             {
                 // That name is already taken, try another
