@@ -111,16 +111,14 @@ namespace NPOI.SS.UserModel
             {
                 throw new FileNotFoundException(file);
             }
-            //FileStream fStream = null;
+            FileStream fStream = null;
             try
             {
-                //using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
-                //{
-                //    IWorkbook wb = new HSSFWorkbook(fStream);
-                //    return wb;
-                //}
-                NPOIFSFileSystem fs = new NPOIFSFileSystem(new FileInfo(file), true);
-                return new HSSFWorkbook(fs.Root, true);
+                using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                {
+                    IWorkbook wb = new HSSFWorkbook(fStream);
+                    return wb;
+                }
             }
             catch (OfficeXmlFileException e)
             {

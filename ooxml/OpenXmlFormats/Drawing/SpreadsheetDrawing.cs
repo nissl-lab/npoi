@@ -1246,10 +1246,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             sw.Write(string.Format("<xdr:{0}", nodeName));
             sw.Write(">");
-            if (this.cNvCxnSpPr != null)
-                this.cNvCxnSpPr.Write(sw, "cNvCxnSpPr");
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
+            if (this.cNvCxnSpPr != null)
+                this.cNvCxnSpPr.Write(sw, "cNvCxnSpPr");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
 

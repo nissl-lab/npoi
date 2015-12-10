@@ -22,18 +22,18 @@ namespace NPOI.XWPF.UserModel
     /**
      * saves the begin and end position  of a text in a Paragraph
     */
-    public class TextSegement
+    public class TextSegment
     {
         private PositionInParagraph beginPos;
         private PositionInParagraph endPos;
 
-        public TextSegement()
+        public TextSegment()
         {
             this.beginPos = new PositionInParagraph();
             this.endPos = new PositionInParagraph();
         }
 
-        public TextSegement(int beginRun, int endRun, int beginText, int endText, int beginChar, int endChar)
+        public TextSegment(int beginRun, int endRun, int beginText, int endText, int beginChar, int endChar)
         {
             PositionInParagraph beginPos = new PositionInParagraph(beginRun, beginText, beginChar);
             PositionInParagraph endPos = new PositionInParagraph(endRun, endText, endChar);
@@ -41,7 +41,7 @@ namespace NPOI.XWPF.UserModel
             this.endPos = endPos;
         }
 
-        public TextSegement(PositionInParagraph beginPos, PositionInParagraph endPos)
+        public TextSegment(PositionInParagraph beginPos, PositionInParagraph endPos)
         {
             this.beginPos = beginPos;
             this.endPos = endPos;

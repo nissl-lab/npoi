@@ -509,7 +509,7 @@ namespace NPOI.XWPF.UserModel
 
             XWPFParagraph p = ps[(0)];
 
-            TextSegement segment = p.SearchText("sample word document", new PositionInParagraph());
+            TextSegment segment = p.SearchText("sample word document", new PositionInParagraph());
             Assert.IsNotNull(segment);
 
             Assert.AreEqual("sample word document", p.GetText(segment));

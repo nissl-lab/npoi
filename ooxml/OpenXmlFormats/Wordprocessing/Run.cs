@@ -153,6 +153,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return AddNewObject<CT_Text>(RunItemsChoiceType.t);
         }
+        public void RemoveT(int pos)
+        {
+            RemoveObject(RunItemsChoiceType.t, pos);
+        }
 
         public CT_RPr AddNewRPr()
         {

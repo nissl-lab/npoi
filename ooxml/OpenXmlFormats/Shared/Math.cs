@@ -1366,8 +1366,6 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private ST_Script valField;
 
-        private bool valFieldSpecified;
-
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Script val
         {
@@ -1381,17 +1379,23 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [XmlIgnore]
-        public bool valSpecified
+        public static CT_Script Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
+            if (node == null)
+                return null;
+            CT_Script ctObj = new CT_Script();
+            if (node.Attributes["m:val"] != null)
+                ctObj.val = (ST_Script)Enum.Parse(typeof(ST_Script), node.Attributes["m:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<m:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
+            sw.Write("/>");
         }
     }
 
@@ -1432,8 +1436,6 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private ST_Style valField;
 
-        private bool valFieldSpecified;
-
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Style val
         {
@@ -1447,17 +1449,23 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [XmlIgnore]
-        public bool valSpecified
+        public static CT_Style Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            get
-            {
-                return this.valFieldSpecified;
-            }
-            set
-            {
-                this.valFieldSpecified = value;
-            }
+            if (node == null)
+                return null;
+            CT_Style ctObj = new CT_Style();
+            if (node.Attributes["m:val"] != null)
+                ctObj.val = (ST_Style)Enum.Parse(typeof(ST_Style), node.Attributes["m:val"].Value);
+            return ctObj;
+        }
+
+
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<m:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "m:val", this.val.ToString());
+            sw.Write("/>");
         }
     }
 
@@ -1532,7 +1540,9 @@ namespace NPOI.OpenXmlFormats.Shared
 
         private CT_OnOff litField;
 
-        private object[] itemsField;
+        private CT_OnOff norField;
+        private CT_Script scrField;
+        private CT_Style styField;
 
         private CT_ManualBreak brkField;
 
@@ -1543,10 +1553,7 @@ namespace NPOI.OpenXmlFormats.Shared
         /// </summary>
         public CT_RPR()
         {
-            this.alnField = new CT_OnOff();
-            this.brkField = new CT_ManualBreak();
-            this.itemsField = new object[0];
-            this.litField = new CT_OnOff();
+
         }
 
         [XmlElement(Order = 0)]
@@ -1562,18 +1569,37 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
 
-        [XmlElement("nor", typeof(CT_OnOff), Order = 1)]
-        [XmlElement("scr", typeof(CT_Script), Order = 1)]
-        [XmlElement("sty", typeof(CT_Style), Order = 1)]
-        public object[] Items
+        public CT_OnOff nor
         {
             get
             {
-                return this.itemsField;
+                return this.norField;
             }
             set
             {
-                this.itemsField = value;
+                this.norField = value;
+            }
+        }
+        public CT_Script scr
+        {
+            get
+            {
+                return this.scrField;
+            }
+            set
+            {
+                this.scrField = value;
+            }
+        }
+        public CT_Style sty
+        {
+            get
+            {
+                return this.styField;
+            }
+            set
+            {
+                this.styField = value;
             }
         }
 
@@ -1602,6 +1628,63 @@ namespace NPOI.OpenXmlFormats.Shared
                 this.alnField = value;
             }
         }
+
+        internal static CT_RPR Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_RPR ctObj = new CT_RPR();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "lit")
+                {
+                    ctObj.litField = CT_OnOff.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "nor")
+                {
+                    ctObj.norField = CT_OnOff.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "aln")
+                {
+                    ctObj.alnField = CT_OnOff.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "brk")
+                {
+                    ctObj.brkField = CT_ManualBreak.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "scr")
+                {
+                    ctObj.scrField = CT_Script.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "sty")
+                {
+                    ctObj.styField = CT_Style.Parse(childNode, namespaceManager);
+                }
+            }
+            return ctObj;
+
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<m:{0}>", nodeName));
+            if (this.litField != null)
+                this.litField.Write(sw,"lit");
+            #region order=1
+            if (this.norField != null)
+                this.norField.Write(sw, "nor");
+            if (this.scrField != null)
+                this.scrField.Write(sw, "scr");
+            if (this.styField != null)
+                this.styField.Write(sw, "sty");
+            #endregion
+            if (this.brkField != null)
+                this.brkField.Write(sw, "brk");
+            if (this.alnField != null)
+                this.alnField.Write(sw, "aln");
+
+            sw.Write(string.Format("</m:{0}>", nodeName));
+        }
     }
 
     
@@ -1615,6 +1698,7 @@ namespace NPOI.OpenXmlFormats.Shared
         private string spaceField;
 
         private string valueField;
+        private string textField;
         public static CT_Text1 Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -1622,6 +1706,7 @@ namespace NPOI.OpenXmlFormats.Shared
             CT_Text1 ctObj = new CT_Text1();
             ctObj.space = XmlHelper.ReadString(node.Attributes["m:space"]);
             ctObj.Value = XmlHelper.ReadString(node.Attributes["m:Value"]);
+            ctObj.textField = node.InnerText;
             return ctObj;
         }
 
@@ -1633,6 +1718,8 @@ namespace NPOI.OpenXmlFormats.Shared
             XmlHelper.WriteAttribute(sw, "m:space", this.space);
             XmlHelper.WriteAttribute(sw, "m:Value", this.Value);
             sw.Write(">");
+            if(this.textField!=null)
+                sw.Write(XmlHelper.EncodeXml(this.textField));
             sw.Write(string.Format("</m:{0}>", nodeName));
         }
 
@@ -1671,9 +1758,9 @@ namespace NPOI.OpenXmlFormats.Shared
     public class CT_R
     {
 
-        private CT_RPR rPrField;
+        private CT_RPR rPrField;    //m:rPr
 
-        private CT_RPr rPr1Field;
+        private CT_RPr rPr1Field;   //w:rPr
 
         private ArrayList itemsField;
 
@@ -1686,8 +1773,6 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             this.itemsElementNameField = new List<ItemsChoiceType6>();
             this.itemsField = new ArrayList();
-            //this.rPr1Field = new CT_RPr();
-            //this.rPrField = new CT_RPR();
         }
 
         [XmlElement(Order = 0)]
@@ -1887,6 +1972,14 @@ namespace NPOI.OpenXmlFormats.Shared
                     ctObj.Items.Add(new CT_Empty());
                     ctObj.ItemsElementName.Add(ItemsChoiceType6.footnoteRef);
                 }
+                else if (childNode.LocalName == "rPr" && childNode.Prefix == "m")
+                {
+                    ctObj.rPr=CT_RPR.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "rPr" && childNode.Prefix == "w")
+                {
+                    ctObj.rPr1 = CT_RPr.Parse(childNode,namespaceManager);
+                }
             }
             return ctObj;
         }
@@ -1895,53 +1988,58 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             sw.Write(">");
+            if(this.rPr!=null)
+                this.rPr.Write(sw, "rPr");
+            if(this.rPr1!=null)
+                this.rPr1.Write(sw, "rPr");
+
             for (int i=0;i<this.Items.Count;i++)
             {
                 object o = Items[i];
                 ItemsChoiceType6 t= ItemsElementName[i];
-                if (o is CT_FtnEdnRef && t== ItemsChoiceType6.endnoteReference)
+                if (o is CT_FtnEdnRef && t == ItemsChoiceType6.endnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "endnoteReference");
                 else if (o is CT_Drawing)
                     ((CT_Drawing)o).Write(sw, "drawing");
-                else if (o is CT_Empty&&t== ItemsChoiceType6.tab)
+                else if (o is CT_Empty && t == ItemsChoiceType6.tab)
                     sw.Write("<tab/>");
                 else if (o is CT_Empty && t == ItemsChoiceType6.dayLong)
                     sw.Write("<dayLong/>");
-                else if (o is CT_Text1 && t== ItemsChoiceType6.t)
+                else if (o is CT_Text1 && t == ItemsChoiceType6.t)
                     ((CT_Text1)o).Write(sw, "t");
                 else if (o is CT_Empty && t == ItemsChoiceType6.dayShort)
                     sw.Write("<dayShort/>");
-                else if (o is CT_Empty&& t== ItemsChoiceType6.annotationRef)
+                else if (o is CT_Empty && t == ItemsChoiceType6.annotationRef)
                     sw.Write("<annotationRef/>");
-                else if (o is CT_Empty&& t== ItemsChoiceType6.endnoteRef)
+                else if (o is CT_Empty && t == ItemsChoiceType6.endnoteRef)
                     sw.Write("<endnoteRef/>");
                 else if (o is CT_FldChar)
                     ((CT_FldChar)o).Write(sw, "fldChar");
-                else if (o is CT_Empty&& t== ItemsChoiceType6.lastRenderedPageBreak)
+                else if (o is CT_Empty && t == ItemsChoiceType6.lastRenderedPageBreak)
                     sw.Write("<lastRenderedPageBreak/>");
-                else if (o is CT_FtnEdnRef && t== ItemsChoiceType6.footnoteReference)
+                else if (o is CT_FtnEdnRef && t == ItemsChoiceType6.footnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
                 else if ((o is CT_Text) && t == ItemsChoiceType6.delInstrText)
                     ((CT_Text)o).Write(sw, "delInstrText");
                 else if (o is CT_Text && t == ItemsChoiceType6.delText)
                     ((CT_Text)o).Write(sw, "delText");
-                else if (o is CT_Markup&& t== ItemsChoiceType6.commentReference)
+                else if (o is CT_Markup && t == ItemsChoiceType6.commentReference)
                     ((CT_Markup)o).Write(sw, "commentReference");
-                else if (o is CT_Empty&& t== ItemsChoiceType6.monthLong)
+                else if (o is CT_Empty && t == ItemsChoiceType6.monthLong)
                     sw.Write("<monthLong/>");
-                else if (o is CT_Empty&& t==ItemsChoiceType6.monthShort)
+                else if (o is CT_Empty && t == ItemsChoiceType6.monthShort)
                     sw.Write("<monthShort/>");
-                else if (o is CT_Empty && t== ItemsChoiceType6.continuationSeparator)
+                else if (o is CT_Empty && t == ItemsChoiceType6.continuationSeparator)
                     sw.Write("<continuationSeparator/>");
-                else if (o is CT_Empty&& t== ItemsChoiceType6.cr)
+                else if (o is CT_Empty && t == ItemsChoiceType6.cr)
                     sw.Write("<cr/>");
-                else if (o is CT_Empty&& t== ItemsChoiceType6.noBreakHyphen)
+                else if (o is CT_Empty && t == ItemsChoiceType6.noBreakHyphen)
                     sw.Write("<noBreakHyphen/>");
                 else if (o is CT_Object)
                     ((CT_Object)o).Write(sw, "object");
                 else if (o is CT_Br)
                     ((CT_Br)o).Write(sw, "br");
-                else if (o is CT_Empty&& t==ItemsChoiceType6.pgNum)
+                else if (o is CT_Empty && t == ItemsChoiceType6.pgNum)
                     sw.Write("<pgNum/>");
                 else if (o is CT_Picture)
                     ((CT_Picture)o).Write(sw, "pict");
@@ -1949,21 +2047,21 @@ namespace NPOI.OpenXmlFormats.Shared
                     ((CT_PTab)o).Write(sw, "ptab");
                 else if (o is CT_Ruby)
                     ((CT_Ruby)o).Write(sw, "ruby");
-                else if (o is CT_Empty&& t==ItemsChoiceType6.separator)
+                else if (o is CT_Empty && t == ItemsChoiceType6.separator)
                     sw.Write("<separator/>");
-                else if (o is CT_Empty && t==ItemsChoiceType6.softHyphen)
+                else if (o is CT_Empty && t == ItemsChoiceType6.softHyphen)
                     sw.Write("<softHyphen/>");
                 else if (o is CT_Sym)
                     ((CT_Sym)o).Write(sw, "sym");
-                else if (o is CT_Text && t== ItemsChoiceType6.t)
+                else if (o is CT_Text && t == ItemsChoiceType6.t)
                     ((CT_Text)o).Write(sw, "t");
-                else if (o is CT_Empty&& t==ItemsChoiceType6.yearLong)
+                else if (o is CT_Empty && t == ItemsChoiceType6.yearLong)
                     sw.Write("<yearLong/>");
-                else if (o is CT_Empty&& t==ItemsChoiceType6.yearShort)
+                else if (o is CT_Empty && t == ItemsChoiceType6.yearShort)
                     sw.Write("<yearShort/>");
                 else if (o is CT_Text && t == ItemsChoiceType6.instrText)
                     ((CT_Text)o).Write(sw, "instrText");
-                else if (o is CT_Empty&& t==ItemsChoiceType6.footnoteRef)
+                else if (o is CT_Empty && t == ItemsChoiceType6.footnoteRef)
                     sw.Write("<footnoteRef/>");
             }
             sw.Write(string.Format("</m:{0}>", nodeName));
@@ -2877,7 +2975,7 @@ namespace NPOI.OpenXmlFormats.Shared
             }
             if (this.ctrlPr != null)
                 this.ctrlPr.Write(sw, "ctrlPr");
-            sw.Write(string.Format("</m:{0}", nodeName));
+            sw.Write(string.Format("</m:{0}>", nodeName));
         }
 
     }
@@ -7454,7 +7552,7 @@ namespace NPOI.OpenXmlFormats.Shared
                 else if (o is CT_ProofErr)
                     ((CT_ProofErr)o).Write(sw, "proofErr");
             }
-            sw.Write(string.Format("</m:{0}", nodeName));
+            sw.Write(string.Format("</m:{0}>", nodeName));
         }
 
     }

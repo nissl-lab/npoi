@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-        [Test]
+        [Ignore]
         public void Test54071Simple()
         {
             double value1 = 41224.999988425923;

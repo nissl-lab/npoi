@@ -190,10 +190,10 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(2, ctRun.SizeOfCrArray());
 
             XWPFRun run = new XWPFRun(new CT_R(), p);
-            run.SetText("T1");
+            run.AppendText("T1");
             run.AddCarriageReturn();
             run.AddCarriageReturn();
-            run.SetText("T2");
+            run.AppendText("T2");
             run.AddCarriageReturn();
             Assert.AreEqual(3, run.GetCTR().GetCrList().Count);
             Assert.AreEqual("T1\n\nT2\n", run.ToString());
