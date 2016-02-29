@@ -270,8 +270,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "x", this.x, true);
             XmlHelper.WriteAttribute(sw, "y", this.y, true);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
 

@@ -34,8 +34,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
             XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

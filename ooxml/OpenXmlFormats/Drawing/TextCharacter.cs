@@ -483,9 +483,9 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "lang", this.lang);
             XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
             XmlHelper.WriteAttribute(sw, "sz", this.sz);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            if(i)
-                XmlHelper.WriteAttribute(sw, "i", this.i);
+            if(this.b)
+                XmlHelper.WriteAttribute(sw, "b", this.b);
+            XmlHelper.WriteAttribute(sw, "i", this.i);
             if(this.u!= ST_TextUnderlineType.none)
                 XmlHelper.WriteAttribute(sw, "u", this.u.ToString());
             if(strike!= ST_TextStrikeType.noStrike)
@@ -495,7 +495,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
             XmlHelper.WriteAttribute(sw, "spc", this.spc);
             XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH, false);
-            XmlHelper.WriteAttribute(sw, "baseline", this.baseline);
+            XmlHelper.WriteAttribute(sw, "baseline", this.baseline, true);
             XmlHelper.WriteAttribute(sw, "noProof", this.noProof, false);
             if (!dirty)
                 XmlHelper.WriteAttribute(sw, "dirty", this.dirty);

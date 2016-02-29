@@ -6803,8 +6803,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_DataBar()
         {
-            this.colorField = new CT_Color();
-            this.cfvoField = new List<CT_Cfvo>();
+            //this.colorField = new CT_Color();
+            //this.cfvoField = new List<CT_Cfvo>();
             this.minLengthField = ((uint)(10));
             this.maxLengthField = ((uint)(90));
             this.showValueField = true;
@@ -6880,7 +6880,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_DataBar ctObj = new CT_DataBar();
             ctObj.minLength = XmlHelper.ReadUInt(node.Attributes["minLength"]);
             ctObj.maxLength = XmlHelper.ReadUInt(node.Attributes["maxLength"]);
-            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
+            if (node.Attributes["showValue"] == null)
+                ctObj.showValue = true;
+            else
+                ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
+
             ctObj.cfvo = new List<CT_Cfvo>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -6899,10 +6903,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "minLength", this.minLength);
             XmlHelper.WriteAttribute(sw, "maxLength", this.maxLength);
-            XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
+            if(showValue)
+                XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
             sw.Write(">");
-            if (this.color != null)
-                this.color.Write(sw, "color");
             if (this.cfvo != null)
             {
                 foreach (CT_Cfvo x in this.cfvo)
@@ -6910,6 +6913,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "cfvo");
                 }
             }
+            if (this.color != null)
+                this.color.Write(sw, "color");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 

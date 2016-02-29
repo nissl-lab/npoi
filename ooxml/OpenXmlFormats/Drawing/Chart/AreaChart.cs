@@ -573,8 +573,6 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.grouping.Write(sw, "grouping");
             if (this.varyColors != null)
                 this.varyColors.Write(sw, "varyColors");
-            if (this.dLbls != null)
-                this.dLbls.Write(sw, "dLbls");
             if (this.dropLines != null)
                 this.dropLines.Write(sw, "dropLines");
             if (this.ser != null)
@@ -584,6 +582,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "ser");
                 }
             }
+            if (this.dLbls != null)
+                this.dLbls.Write(sw, "dLbls");
             if (this.axId != null)
             {
                 foreach (CT_UnsignedInt x in this.axId)
