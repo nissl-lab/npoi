@@ -1257,7 +1257,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             XmlHelper.WriteAttribute(sw, "customList", this.customList);
             XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            XmlHelper.WriteAttribute(sw, "iconSet", this.iconSet.ToString());
+            XmlHelper.WriteAttribute(sw, "iconSet",  XmlHelper.GetEnumValue(this.iconSet));
             XmlHelper.WriteAttribute(sw, "iconId", this.iconId);
             sw.Write("/>");
         }

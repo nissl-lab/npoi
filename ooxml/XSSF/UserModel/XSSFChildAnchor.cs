@@ -22,11 +22,11 @@ namespace NPOI.XSSF.UserModel
 {
     public class XSSFChildAnchor : XSSFAnchor
     {
-        private NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D t2d;
+        private CT_Transform2D t2d;
 
         public XSSFChildAnchor(int x, int y, int cx, int cy)
         {
-            t2d = new NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D();
+            t2d = new CT_Transform2D();
             CT_Point2D off = t2d.AddNewOff();
             CT_PositiveSize2D ext = t2d.AddNewExt();
 
@@ -38,13 +38,13 @@ namespace NPOI.XSSF.UserModel
             if (y > cy) t2d.flipV = (true);
         }
 
-        public XSSFChildAnchor(NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D t2d)
+        public XSSFChildAnchor(CT_Transform2D t2d)
         {
             this.t2d = t2d;
         }
 
 
-        public NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D GetCTTransform2D()
+        public CT_Transform2D GetCTTransform2D()
         {
             return t2d;
         }

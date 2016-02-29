@@ -486,7 +486,6 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (fromCol.IsSetStyle())
             {
                 toCol.style = (fromCol.style);
-                toCol.styleSpecified = fromCol.styleSpecified;
             }
             if (fromCol.IsSetWidth())
             {
@@ -560,7 +559,6 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             CT_Col col = GetOrCreateColumn1Based(index + 1, true);
             col.style = (uint)styleId;
-            col.styleSpecified = true;
         }
 
         // Returns -1 if no column is found for the given index
