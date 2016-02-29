@@ -3934,19 +3934,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnore]
-        public bool numFmtIdSpecified
-        {
-            get
-            {
-                return this.numFmtIdFieldSpecified;
-            }
-            set
-            {
-                this.numFmtIdFieldSpecified = value;
-            }
-        }
-
         public static CT_InputCells Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -3969,7 +3956,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "deleted", this.deleted);
             XmlHelper.WriteAttribute(sw, "undone", this.undone);
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId,true);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
