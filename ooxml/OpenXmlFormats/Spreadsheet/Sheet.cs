@@ -3443,7 +3443,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte[] passwordField;
 
-        private List<string> sqrefField;
+        private string sqrefField;
 
         private string nameField;
 
@@ -3456,12 +3456,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.password = XmlHelper.ReadBytes(node.Attributes["password"]);
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
             ctObj.securityDescriptor = XmlHelper.ReadString(node.Attributes["securityDescriptor"]);
-            ctObj.sqref = new List<String>();
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "sqref")
-                    ctObj.sqref.Add(childNode.InnerText);
-            }
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
             return ctObj;
         }
 
@@ -3473,15 +3468,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "password", this.password);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "securityDescriptor", this.securityDescriptor);
-            sw.Write(">");
-            if (this.sqref != null)
-            {
-                foreach (String x in this.sqref)
-                {
-                    sw.Write(string.Format("<sqref><![CDATA[{0}]]></sqref>", x));
-                }
-            }
-            sw.Write(string.Format("</{0}>", nodeName));
+            if(this.sqref!=null)
+                XmlHelper.WriteAttribute(sw, "sqref", XmlHelper.EncodeXml(this.sqref));
+            sw.Write("/>");
         }
 
         public CT_ProtectedRange()
@@ -3501,7 +3490,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public List<string> sqref
+        public string sqref
         {
             get
             {
