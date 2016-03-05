@@ -12340,7 +12340,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
-                this.xfrm.Write(sw, "xfrm");
+                this.xfrm.Write(sw, "a:xfrm");
             if (this.custGeom != null)
                 this.custGeom.Write(sw, "custGeom");
             if (this.prstGeom != null)

@@ -916,7 +916,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
-                this.xfrm.Write(sw, "xfrm");
+                this.xfrm.Write(sw, "xdr:xfrm");
             if (this.custGeom != null)
                 this.custGeom.Write(sw, "custGeom");
             if (this.prstGeom != null)
@@ -1047,7 +1047,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if (this.nvGraphicFramePr != null)
                 this.nvGraphicFramePr.Write(sw, "nvGraphicFramePr");
             if (this.xfrm != null)
-                this.xfrm.Write(sw, "xfrm");
+                this.xfrm.Write(sw, "xdr:xfrm");
             if (this.graphic != null)
                 this.graphic.Write(sw, "graphic");
             sw.Write(string.Format("</xdr:{0}>", nodeName));
