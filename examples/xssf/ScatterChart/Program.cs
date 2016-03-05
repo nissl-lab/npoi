@@ -39,19 +39,19 @@ namespace ScatterChart
             IChartLegend legend = chart.GetOrCreateLegend();
             legend.Position = (LegendPosition.TopRight);
 
-            IScatterChartData<double, double> data = chart.GetChartDataFactory().CreateScatterChartData<double, double>();
+            IScatterChartData<double, double> data = chart.ChartDataFactory.CreateScatterChartData<double, double>();
 
-            IValueAxis bottomAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Bottom);
-            IValueAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Left);
-            leftAxis.SetCrosses(AxisCrosses.AutoZero);
+            IValueAxis bottomAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Bottom);
+            IValueAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            leftAxis.Crosses = AxisCrosses.AutoZero;
 
             IChartDataSource<double> xs = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(0, 0, 0, NUM_OF_COLUMNS - 1));
             IChartDataSource<double> ys1 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(1, 1, 0, NUM_OF_COLUMNS - 1));
             IChartDataSource<double> ys2 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(2, 2, 0, NUM_OF_COLUMNS - 1));
 
 
-            data.AddSerie(xs, ys1);
-            data.AddSerie(xs, ys2);
+            data.AddSeries(xs, ys1);
+            data.AddSeries(xs, ys2);
             chart.Plot(data, bottomAxis, leftAxis);
 
             // Write the output to a file

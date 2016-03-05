@@ -11,7 +11,7 @@ namespace NPOI.XSSF.UserModel.Charts
     {
         private String titleValue;
         private CellReference titleRef;
-        private TitleType titleType;
+        private TitleType? titleType;
         public void SetTitle(string title)
         {
             titleType = TitleType.String;
@@ -42,7 +42,7 @@ namespace NPOI.XSSF.UserModel.Charts
             throw new InvalidOperationException("Title type is not CellReference.");
         }
 
-        public TitleType GetTitleType()
+        public TitleType? GetTitleType()
         {
             return titleType;
         }
