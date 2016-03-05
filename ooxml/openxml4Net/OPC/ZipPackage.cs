@@ -508,7 +508,8 @@ namespace NPOI.OpenXml4Net.OPC
                                             + defaultPartMarshaller);
                     }
                 }
-                zos.Close();
+                //Finishes writing the contents of the ZIP output stream without closing the underlying stream.
+                zos.Finish();   //instead of use zos.Close, it will close the stream
             }
             catch (Exception e)
             {
