@@ -212,11 +212,11 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, ctRun.SizeOfTabArray());
 
             XWPFRun run = new XWPFRun(new CT_R(), p);
-            run.SetText("T1");
+            run.AppendText("T1");
             run.AddCarriageReturn();
-            run.SetText("T2");
+            run.AppendText("T2");
             run.AddTab();
-            run.SetText("T3");
+            run.AppendText("T3");
             Assert.AreEqual(1, run.GetCTR().GetCrList().Count);
             Assert.AreEqual(1, run.GetCTR().GetTabList().Count);
 

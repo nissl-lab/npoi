@@ -572,7 +572,6 @@ namespace TestCases.SS.UserModel
         }
 
 
-        [Ignore]
         [Test]
         public void TestCustomFormats()
         {
