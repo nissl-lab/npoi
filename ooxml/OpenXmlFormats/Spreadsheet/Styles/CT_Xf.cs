@@ -110,15 +110,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "xfId", this.xfId, true);
             XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix,false);
             XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
-
-            XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
+            if(this.applyNumberFormat)
+                XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
+            XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
             if (this.applyBorder)
                 XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder, true);
-            XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
             if(this.applyFill)
                 XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill);
             XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment, true);
-            XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection, true);
+            if(this.applyProtection)
+                XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection, true);
             if (this.alignment == null && this.protection == null && this.extLst == null)
             {
                 sw.Write("/>");

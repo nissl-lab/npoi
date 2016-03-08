@@ -358,25 +358,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         public static CT_SheetDimension Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-{
-    if(node==null)
-        return null;
-    CT_SheetDimension ctObj = new CT_SheetDimension();
-    ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
-    return ctObj;
-}
+        {
+            if (node == null)
+                return null;
+            CT_SheetDimension ctObj = new CT_SheetDimension();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            return ctObj;
+        }
 
 
 
         internal void Write(StreamWriter sw, string nodeName)
-{
-    sw.Write(string.Format("<{0}",nodeName));
-    XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-    sw.Write(">");
-    sw.Write(string.Format("</{0}>",nodeName));
-}
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            sw.Write("/>");
+        }
 
-    
+
 
     }
 

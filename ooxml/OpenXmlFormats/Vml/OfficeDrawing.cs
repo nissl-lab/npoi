@@ -402,8 +402,8 @@ namespace NPOI.OpenXmlFormats.Vml.Office
     [XmlType(TypeName="ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office")]
     [XmlRoot("ST_TrueFalse", Namespace="urn:schemas-microsoft-com:office:office", IsNullable=false)]
     public enum ST_TrueFalse {
-        t,
         f,
+        t,
         @true,
         @false,
     }
@@ -1736,8 +1736,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "text", this.text);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "aspectratio", this.aspectratio);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "shapetype", this.shapetype);
-            sw.Write(">");
-            sw.Write(string.Format("</o:{0}>", nodeName));
+            sw.Write("/>");
         }
     }
     
@@ -2304,8 +2303,7 @@ namespace NPOI.OpenXmlFormats.Vml.Office
             sw.Write(string.Format("<o:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "v:ext", this.ext.ToString());
             XmlHelper.WriteAttribute(sw, "data", this.data);
-            sw.Write(">");
-            sw.Write(string.Format("</o:{0}>", nodeName));
+            sw.Write("/>");
         }
 
     }
