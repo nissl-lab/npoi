@@ -2132,7 +2132,7 @@ namespace NPOI.XSSF.UserModel
 
         public bool Contains(ISheet item)
         {
-            throw new NotImplementedException();
+            return this.sheets.Contains(item as XSSFSheet);
         }
 
         public void CopyTo(ISheet[] array, int arrayIndex)
