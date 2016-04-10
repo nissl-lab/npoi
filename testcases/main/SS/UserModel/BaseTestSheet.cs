@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+
 namespace TestCases.SS.UserModel
 {
     using System;
@@ -126,6 +127,18 @@ namespace TestCases.SS.UserModel
             {
                 Assert.AreEqual("Specified row does not belong to this sheet", e.Message);
             }
+
+            IRow row20 = sheet2.CreateRow(0);
+            row20.CreateCell(0).SetCellValue("row20");
+            IRow row24 = sheet2.CreateRow(4);
+            row24.CreateCell(0).SetCellValue("row24");
+            sheet2.RemoveRow(row24);
+
+            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            sheet2 = workbook.GetSheetAt(1);
+
+            Assert.IsNull(sheet2.GetRow(4));
+            Assert.AreEqual("row20", sheet2.GetRow(0).GetCell(0).StringCellValue);
         }
         [Test]
         public void TestCloneSheet()
