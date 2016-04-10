@@ -1241,7 +1241,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node.Attributes["dxfId"] != null)
                 ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
             if (node.Attributes["iconSet"] != null)
-                ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), node.Attributes["iconSet"].Value);
+                ctObj.iconSet = XmlHelper.GetEnumValueFromString<ST_IconSetType>(node.Attributes["iconSet"].Value);
             if (node.Attributes["iconId"] != null)
                 ctObj.iconId = XmlHelper.ReadUInt(node.Attributes["iconId"]);
             return ctObj;
