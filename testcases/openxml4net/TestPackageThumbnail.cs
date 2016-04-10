@@ -45,35 +45,39 @@ namespace TestCases.OPC
             FileInfo outputFile = OpenXml4NetTestDataSamples.GetOutputFile("TestPackageThumbnailOUTPUT.docx");
 
             // Open namespace
-            OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
-            try
+            using (Stream inputfile = File.OpenRead(inputPath))
             {
-                FileStream fs = outputFile.OpenWrite();
-                p.AddThumbnail(imagePath);
-                // Save the namespace in the output directory
-                p.Save(fs);
-
-                // Open the newly Created file to check core properties saved values.
-                OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
+                OPCPackage p = OPCPackage.Open(inputfile);
                 try
                 {
-                    if (p2.GetRelationshipsByType(PackageRelationshipTypes.THUMBNAIL)
-                            .Size == 0)
-                        Assert.Fail("Thumbnail not Added to the namespace !");
-                    p2.Revert();
-                    
+                    using (FileStream fs = outputFile.OpenWrite())
+                    {
+                        p.AddThumbnail(imagePath);
+                        // Save the namespace in the output directory
+                        p.Save(fs);
+                        p.Close();
+                    }
+
+                    // Open the newly created file to check core properties saved values.
+                    OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
+                    try
+                    {
+                        if (p2.GetRelationshipsByType(PackageRelationshipTypes.THUMBNAIL)
+                                .Size == 0)
+                            Assert.Fail("Thumbnail not added to the namespace !");
+                        p2.Revert();
+
+                    }
+                    finally
+                    {
+                        p2.Revert();
+                        p2.Close();
+                    }
                 }
                 finally
                 {
-                    p2.Revert();
-                    p2.Close();
+                    File.Delete(outputFile.Name);
                 }
-
-            }
-            finally
-            {
-                p.Revert();
-                File.Delete(outputFile.Name);
             }
         }
     }
