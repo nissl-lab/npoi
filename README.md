@@ -2,7 +2,7 @@ NPOI
 ====
 
 [![Join the chat at https://gitter.im/tonyqus/npoi](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tonyqus/npoi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/) [![NuGet Downloads](https://img.shields.io/nuget/dt/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)<br />
+[![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/) <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
 Support and Service
@@ -40,5 +40,3 @@ System Requirement
 VS2010 with .NET 4.0 runtime<br />
 VS2005 or VS2008 with .NET 2.0 Runtime (SP1) <br />
 vs2003 with .NET 1.1 (Obselete, last version is 1.2.1. No further support)<br />
-
-![stats](http://www.myworldmaps.net/map.ashx/19bc7f7d-0e69-4f29-ba7e-c325a77d66fa/thumb_160)
