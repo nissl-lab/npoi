@@ -40,3 +40,5 @@ System Requirement
 VS2010 with .NET 4.0 runtime<br />
 VS2005 or VS2008 with .NET 2.0 Runtime (SP1) <br />
 vs2003 with .NET 1.1 (Obselete, last version is 1.2.1. No further support)<br />
+
+![stats](http://www.myworldmaps.net/map.ashx/19bc7f7d-0e69-4f29-ba7e-c325a77d66fa/thumb_160)
