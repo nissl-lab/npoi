@@ -3,27 +3,52 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</ProjectGuid>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>4.0</SchemaVersion>
+    <ProjectGuid>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
     <AssemblyName>NPOI</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <ReleaseVersion>1.2.4</ReleaseVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\solution\Lib\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,8 +56,32 @@
     <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
+    <OutputPath>..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <DocumentationFile>..\solution\Lib\.net4\NPOI.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
+    <OutputPath>..\solution\Lib\.net2\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <DocumentationFile>..\solution\Lib\.net2\NPOI.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
@@ -48,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
+    <Compile Include="DDF\EscherColorRef.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HPSF\Array.cs" />
@@ -59,6 +109,7 @@
     <Compile Include="HPSF\Decimal.cs" />
     <Compile Include="HPSF\Filetime.cs" />
     <Compile Include="HPSF\GUID.cs" />
+    <Compile Include="HPSF\HPSFPropertiesOnlyDocument.cs" />
     <Compile Include="HPSF\IndirectPropertyName.cs" />
     <Compile Include="HPSF\TypedPropertyValue.cs" />
     <Compile Include="HPSF\UnicodeString.cs" />
@@ -66,6 +117,9 @@
     <Compile Include="HPSF\VariantBool.cs" />
     <Compile Include="HPSF\Vector.cs" />
     <Compile Include="HPSF\VersionedStream.cs" />
+    <Compile Include="HSSF\Extractor\OldExcelExtractor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HSSF\Record\Aggregates\Chart\AttachedLabelAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxesAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\AxisParentAggregate.cs" />
@@ -133,12 +187,21 @@
     <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\DConRefRecord.cs" />
+    <Compile Include="HSSF\Record\FtCfSubRecord.cs" />
+    <Compile Include="HSSF\Record\FtPioGrbitSubRecord.cs" />
+    <Compile Include="HSSF\Record\OldCellRecord.cs" />
+    <Compile Include="HSSF\Record\OldFormulaRecord.cs" />
+    <Compile Include="HSSF\Record\OldLabelRecord.cs" />
+    <Compile Include="HSSF\Record\OldSheetRecord.cs" />
+    <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
     <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
+    <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />
+    <Compile Include="POIFS\FileSystem\NotOLE2FileException.cs" />
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -146,17 +209,61 @@
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\IfError.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\BaseNumberUtils.cs" />
+    <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
     <Compile Include="SS\Formula\Functions\Complex.cs" />
+    <Compile Include="SS\Formula\Functions\Countifs.cs" />
+    <Compile Include="SS\Formula\Functions\Dec2Bin.cs" />
+    <Compile Include="SS\Formula\Functions\Dec2Hex.cs" />
+    <Compile Include="SS\Formula\Functions\Delta.cs" />
+    <Compile Include="SS\Formula\Functions\DGet.cs" />
+    <Compile Include="SS\Formula\Functions\DMin.cs" />
+    <Compile Include="SS\Formula\Functions\DStarRunner.cs" />
+    <Compile Include="SS\Formula\Functions\EOMonth.cs" />
     <Compile Include="SS\Formula\Functions\Errortype.cs" />
+    <Compile Include="SS\Formula\Functions\FactDouble.cs" />
+    <Compile Include="SS\Formula\Functions\Finance.cs" />
+    <Compile Include="SS\Formula\Functions\Fixed.cs" />
+    <Compile Include="SS\Formula\Functions\Hex2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Hyperlink.cs" />
+    <Compile Include="SS\Formula\Functions\IDStarAlgorithm.cs" />
+    <Compile Include="SS\Formula\Functions\Imaginary.cs" />
+    <Compile Include="SS\Formula\Functions\ImReal.cs" />
+    <Compile Include="SS\Formula\Functions\Intercept.cs" />
+    <Compile Include="SS\Formula\Functions\IPMT.cs" />
+    <Compile Include="SS\Formula\Functions\LinearRegressionFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Mirr.cs" />
+    <Compile Include="SS\Formula\Functions\Oct2Dec.cs" />
+    <Compile Include="SS\Formula\Functions\PPMT.cs" />
+    <Compile Include="SS\Formula\Functions\Quotient.cs" />
     <Compile Include="SS\Formula\Functions\Rank.cs" />
     <Compile Include="SS\Formula\Functions\Rate.cs" />
     <Compile Include="SS\Formula\Functions\Rept.cs" />
+    <Compile Include="SS\Formula\Functions\Roman.cs" />
+    <Compile Include="SS\Formula\Functions\Slope.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
+    <Compile Include="SS\Formula\Functions\Text\Proper.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
+    <Compile Include="SS\Formula\Functions\WeekNum.cs" />
+    <Compile Include="SS\Formula\ISheetRange.cs" />
+    <Compile Include="SS\Formula\NameIdentifier.cs" />
+    <Compile Include="SS\Formula\PTG\Area3DPxg.cs" />
+    <Compile Include="SS\Formula\PTG\Deleted3DPxg.cs" />
+    <Compile Include="SS\Formula\PTG\NameXPxg.cs" />
+    <Compile Include="SS\Formula\PTG\Pxg.cs" />
+    <Compile Include="SS\Formula\PTG\Pxg3D.cs" />
+    <Compile Include="SS\Formula\PTG\Ref3DPxg.cs" />
+    <Compile Include="SS\Formula\SheetIdentifier.cs" />
+    <Compile Include="SS\Formula\SheetRangeEvaluator.cs" />
+    <Compile Include="SS\Formula\SheetRangeIdentifier.cs" />
+    <Compile Include="SS\Formula\ThreeDEval.cs" />
+    <Compile Include="SS\Formula\TwoDEval.cs" />
+    <Compile Include="SS\Formula\Udf\IndexedUDFFinder.cs" />
+    <Compile Include="SS\Formula\WorkbookEvaluatorProvider.cs" />
     <Compile Include="SS\HtmlDocumentFacade.cs" />
     <Compile Include="HSSF\EventUserModel\DummyRecord\DummyRecordBase.cs" />
     <Compile Include="HSSF\Record\Aggregates\ChartSubstreamRecordAggregate.cs" />
@@ -195,7 +302,6 @@
     <Compile Include="DDF\EscherArrayProperty.cs" />
     <Compile Include="DDF\EscherBitmapBlip.cs" />
     <Compile Include="DDF\EscherBlipRecord.cs" />
-    <Compile Include="DDF\EscherBlipWMFRecord.cs" />
     <Compile Include="DDF\EscherBoolProperty.cs" />
     <Compile Include="DDF\EscherBSERecord.cs" />
     <Compile Include="DDF\EscherChildAnchorRecord.cs" />
@@ -405,7 +511,7 @@
     <Compile Include="SS\Format\CellGeneralFormatter.cs" />
     <Compile Include="SS\Format\CellNumberFormatter.cs" />
     <Compile Include="SS\Format\CellTextFormatter.cs" />
-    <Compile Include="SS\Formula\Atp\EDate.cs" />
+    <Compile Include="SS\Formula\Functions\EDate.cs" />
     <Compile Include="SS\Formula\Constant\ConstantValueParser.cs" />
     <Compile Include="SS\Formula\Constant\ErrorConstant.cs" />
     <Compile Include="HSSF\Record\ContinueRecord.cs" />
@@ -571,16 +677,25 @@
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
-    <Compile Include="SS\UserModel\Charts\ChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
-    <Compile Include="SS\UserModel\Charts\LineChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
+    <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
+    <Compile Include="SS\UserModel\FractionFormat.cs" />
+    <Compile Include="SS\Format\SimpleFraction.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
+    <Compile Include="SS\Util\ImageUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnsupportedFileFormatException.cs" />
+    <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
+    <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryEntry.cs" />
     <Compile Include="POIFS\FileSystem\DirectoryNode.cs" />
@@ -709,10 +824,9 @@
     <Compile Include="SS\Formula\Eval\FunctionEval.cs" />
     <Compile Include="SS\Formula\Eval\IntersectionEval.cs" />
     <Compile Include="SS\Formula\Eval\MissingArgEval.cs" />
-    <Compile Include="SS\Formula\Eval\NameEval.cs" />
-    <Compile Include="SS\Formula\Eval\NameXEval.cs" />
+    <Compile Include="SS\Formula\Eval\FunctionNameEval.cs" />
+    <Compile Include="SS\Formula\Eval\ExternalNameEval.cs" />
     <Compile Include="SS\Formula\Eval\NumberEval.cs" />
-    <Compile Include="SS\Formula\Eval\NumericOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\NumericValueEval.cs" />
     <Compile Include="SS\Formula\Eval\OperandResolver.cs" />
     <Compile Include="SS\Formula\Eval\OperationEval.cs" />
@@ -728,7 +842,6 @@
     <Compile Include="SS\Formula\Eval\RelationalOperationEval\NotEqualEval.cs" />
     <Compile Include="SS\Formula\Eval\RelationalOperationEval\RelationalOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\StringEval.cs" />
-    <Compile Include="SS\Formula\Eval\StringOperationEval.cs" />
     <Compile Include="SS\Formula\Eval\StringValueEval.cs" />
     <Compile Include="SS\Formula\Eval\TwoOperandNumeric\AddEval.cs" />
     <Compile Include="SS\Formula\Eval\TwoOperandNumeric\DivideEval.cs" />
@@ -739,7 +852,6 @@
     <Compile Include="SS\Formula\Eval\UnaryMinusEval.cs" />
     <Compile Include="SS\Formula\Eval\UnaryPlusEval.cs" />
     <Compile Include="SS\Formula\Eval\ValueEval.cs" />
-    <Compile Include="SS\Formula\Eval\ValueEvalToNumericXlator.cs" />
     <Compile Include="SS\Formula\ExternSheetReferenceToken.cs" />
     <Compile Include="SS\Formula\Formula.cs" />
     <Compile Include="SS\Formula\FormulaCellCache.cs" />
@@ -957,7 +1069,6 @@
     <Compile Include="SS\Formula\PTG\StringPtg.cs" />
     <Compile Include="SS\Formula\PTG\SubtractPtg.cs" />
     <Compile Include="SS\Formula\PTG\TblPtg.cs" />
-    <Compile Include="SS\Formula\PTG\TwoDEval.cs" />
     <Compile Include="SS\Formula\PTG\UnaryMinusPtg.cs" />
     <Compile Include="SS\Formula\PTG\UnaryPlusPtg.cs" />
     <Compile Include="SS\Formula\PTG\UnionPtg.cs" />
@@ -996,7 +1107,7 @@
     <Compile Include="SS\UserModel\Charts\ManualLayout.cs" />
     <Compile Include="SS\UserModel\Charts\ManuallyPositionable.cs" />
     <Compile Include="SS\UserModel\Charts\ScatterChartData.cs" />
-    <Compile Include="SS\UserModel\Charts\ScatterChartSerie.cs" />
+    <Compile Include="SS\UserModel\Charts\ScatterChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ValueAxis.cs" />
     <Compile Include="SS\UserModel\ClientAnchor.cs" />
     <Compile Include="SS\UserModel\Color.cs" />
@@ -1076,10 +1187,9 @@
     <Compile Include="Util\BitFieldFactory.cs" />
     <Compile Include="Util\ByteField.cs" />
     <Compile Include="Util\Character.cs" />
-    <Compile Include="Util\ClassID.cs" />
+    <Compile Include="Util\CodePageUtil.cs" />
     <Compile Include="Util\Collections\EmptyEnumerable.cs" />
     <Compile Include="Util\Collections\HashSet.cs" />
-    <Compile Include="Util\Collections\ISet.cs" />
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
@@ -1119,6 +1229,9 @@
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />
     <Compile Include="SS\UserModel\FillPattern.cs" />
+    <Compile Include="Util\Units.cs" />
+    <Compile Include="WP\UserModel\ICharacterRun.cs" />
+    <Compile Include="WP\UserModel\IParagraph.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
@@ -1134,7 +1247,24 @@
   <ItemGroup>
     <Folder Include="HSSF\Dev\" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

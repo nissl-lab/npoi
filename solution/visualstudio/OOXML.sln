@@ -1,44 +1,55 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOXML", "..\..\ooxml\OOXML.csproj", "{6BEED965-B9A0-4FFA-B96D-0F380A97331A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenXml4Net", "..\..\ooxml\openxml4Net\OpenXml4Net.csproj", "{D907A7AD-A67A-4492-A117-594D2168B7B8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenXmlFormats", "..\..\ooxml\OpenXmlFormats\OpenXmlFormats.csproj", "{29E4D389-8B1B-45D8-B197-06116395F5ED}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41A0D04F-B087-4F46-86A9-FE12D300A9AF}"
-	ProjectSection(SolutionItems) = preProject
-		OOXML.TestRunConfig.testrunconfig = OOXML.TestRunConfig.testrunconfig
-		OOXML.vsmdi = OOXML.vsmdi
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main", "..\..\main\main.csproj", "{4704E545-CEFF-46B6-ACEF-C8927830FA1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOXML vs2010", "..\..\ooxml\NPOI.OOXML.csproj", "{6BEED965-B9A0-4FFA-B96D-0F380A97331A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenXml4Net vs2010", "..\..\ooxml\openxml4Net\NPOI.OpenXml4Net.csproj", "{C9F265B7-ECE3-4755-B0B1-79536575C2A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenXmlFormats vs2010", "..\..\ooxml\OpenXmlFormats\NPOI.OpenXmlFormats.csproj", "{A6874784-2875-4F40-9E8F-8385A640F5D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "main vs10", "..\..\main\NPOI.csproj", "{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = OOXML.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		.net 2 Release|Any CPU = .net 2 Release|Any CPU
+		.net 4 Release|Any CPU = .net 4 Release|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}..net 2 Release|Any CPU.ActiveCfg = .net 2 Release|Any CPU
+		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}..net 2 Release|Any CPU.Build.0 = .net 2 Release|Any CPU
+		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}..net 4 Release|Any CPU.ActiveCfg = .net 4 Release|Any CPU
+		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}..net 4 Release|Any CPU.Build.0 = .net 4 Release|Any CPU
 		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BEED965-B9A0-4FFA-B96D-0F380A97331A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D907A7AD-A67A-4492-A117-594D2168B7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D907A7AD-A67A-4492-A117-594D2168B7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D907A7AD-A67A-4492-A117-594D2168B7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D907A7AD-A67A-4492-A117-594D2168B7B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29E4D389-8B1B-45D8-B197-06116395F5ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29E4D389-8B1B-45D8-B197-06116395F5ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29E4D389-8B1B-45D8-B197-06116395F5ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29E4D389-8B1B-45D8-B197-06116395F5ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4704E545-CEFF-46B6-ACEF-C8927830FA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4704E545-CEFF-46B6-ACEF-C8927830FA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4704E545-CEFF-46B6-ACEF-C8927830FA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4704E545-CEFF-46B6-ACEF-C8927830FA1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}..net 2 Release|Any CPU.ActiveCfg = .net 2 Release|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}..net 2 Release|Any CPU.Build.0 = .net 2 Release|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}..net 4 Release|Any CPU.ActiveCfg = .net 4 Release|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}..net 4 Release|Any CPU.Build.0 = .net 4 Release|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F265B7-ECE3-4755-B0B1-79536575C2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}..net 2 Release|Any CPU.ActiveCfg = .net 2 Release|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}..net 2 Release|Any CPU.Build.0 = .net 2 Release|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}..net 4 Release|Any CPU.ActiveCfg = .net 4 Release|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}..net 4 Release|Any CPU.Build.0 = .net 4 Release|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}..net 2 Release|Any CPU.ActiveCfg = .net 2 Release|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}..net 2 Release|Any CPU.Build.0 = .net 2 Release|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}..net 4 Release|Any CPU.ActiveCfg = .net 4 Release|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}..net 4 Release|Any CPU.Build.0 = .net 4 Release|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -291,20 +291,6 @@
     <Compile Include="Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\main\main vs10.csproj">
-      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
-      <Name>main vs10</Name>
-    </ProjectReference>
-    <ProjectReference Include="openxml4Net\OpenXml4Net vs2010.csproj">
-      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
-      <Name>OpenXml4Net vs2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="OpenXmlFormats\OpenXmlFormats vs2010.csproj">
-      <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
-      <Name>OpenXmlFormats vs2010</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -327,10 +313,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="OpenXmlFormats\xsd\" />
     <Folder Include="XWPF\Util\" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.net2.csproj">
+      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
+      <Name>NPOI.net2</Name>
+    </ProjectReference>
+    <ProjectReference Include="openxml4Net\NPOI.OpenXml4Net.net2.csproj">
+      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
+      <Name>NPOI.OpenXml4Net.net2</Name>
+    </ProjectReference>
+    <ProjectReference Include="OpenXmlFormats\NPOI.OpenXmlFormats.net2.csproj">
+      <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
+      <Name>NPOI.OpenXmlFormats.net2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

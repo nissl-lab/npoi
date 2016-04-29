@@ -203,25 +203,25 @@
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\main\main vs10.csproj">
+    <ProjectReference Include="..\..\main\NPOI.csproj">
       <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
-      <Name>main vs10</Name>
+      <Name>NPOI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\OOXML vs2010.csproj">
+    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.csproj">
       <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
-      <Name>OOXML vs2010</Name>
+      <Name>NPOI.OOXML</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\openxml4Net\OpenXml4Net vs2010.csproj">
+    <ProjectReference Include="..\..\ooxml\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
-      <Name>OpenXml4Net vs2010</Name>
+      <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\OpenXmlFormats\OpenXmlFormats vs2010.csproj">
+    <ProjectReference Include="..\..\ooxml\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
       <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
-      <Name>OpenXmlFormats vs2010</Name>
+      <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>
-    <ProjectReference Include="..\main\testcases vs10.csproj">
+    <ProjectReference Include="..\main\NPOI.TestCases.csproj">
       <Project>{a920c2ba-8bfd-4f54-8401-7d1c0730f1f0}</Project>
-      <Name>testcases vs10</Name>
+      <Name>NPOI.TestCases</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

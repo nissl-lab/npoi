@@ -1,9 +1,0 @@
-﻿<NUnitProject>
-  <Settings activeconfig="Debug" processModel="Default" domainUsage="Default" />
-  <Config name="Debug" binpathtype="Auto" configfile="app.config">
-    <assembly path="..\..\solution\Lib\OOXML\.net4\NPOI.OOXML.Testcases.dll" />
-  </Config>
-  <Config name="Release" binpathtype="Auto">
-    <assembly path="..\..\solution\Lib\Release.net4\NPOI.OOXML.Testcases.dll" />
-  </Config>
-</NUnitProject>

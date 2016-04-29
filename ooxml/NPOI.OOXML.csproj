@@ -1,16 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <SchemaVersion>4.0</SchemaVersion>
     <ProjectGuid>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
     <AssemblyName>NPOI.OOXML</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\main\npoi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -22,23 +44,56 @@
     <DefineConstants>TRACE;DEBUG;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>..\solution\Lib\NPOI.OOXML.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\solution\Lib\OOXML\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\solution\Lib\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
+    <OutputPath>..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\solution\Lib\.net4\NPOI.OOXML.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
+    <OutputPath>..\solution\Lib\.net2\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\solution\Lib\.net2\NPOI.OOXML.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POIXMLDocument.cs" />
@@ -56,20 +111,20 @@
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
-    <Compile Include="Util\Units.cs" />
     <Compile Include="XSSF\Extractor\XSSFExcelExtractor.cs" />
     <Compile Include="XSSF\Extractor\XSSFExportToXml.cs" />
     <Compile Include="XSSF\Model\CalculationChain.cs" />
     <Compile Include="XSSF\Model\CommentsTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XSSF\Model\IndexedUDFFinder.cs" />
+    <Compile Include="XSSF\Model\ExternalLinksTable.cs" />
     <Compile Include="XSSF\Model\MapInfo.cs" />
+    <Compile Include="XSSF\Model\ParagraphPropertyFetcher.cs" />
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
-    <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSerie.cs" />
+    <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSeries.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs">
       <SubType>Code</SubType>
@@ -101,6 +156,14 @@
     <Compile Include="XSSF\UserModel\Helpers\XSSFRowShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
+    <Compile Include="XSSF\UserModel\ListAutoNumber.cs" />
+    <Compile Include="XSSF\UserModel\TextAlign.cs" />
+    <Compile Include="XSSF\UserModel\TextAutofit.cs" />
+    <Compile Include="XSSF\UserModel\TextCap.cs" />
+    <Compile Include="XSSF\UserModel\TextDirection.cs" />
+    <Compile Include="XSSF\UserModel\TextFontAlign.cs" />
+    <Compile Include="XSSF\UserModel\TextHorizontalOverflow.cs" />
+    <Compile Include="XSSF\UserModel\TextVerticalOverflow.cs" />
     <Compile Include="XSSF\UserModel\XSSFAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFAutoFilter.cs" />
     <Compile Include="XSSF\UserModel\XSSFBorderFormatting.cs" />
@@ -134,6 +197,7 @@
     <Compile Include="XSSF\UserModel\XSSFFontFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\UserModel\XSSFGraphicFrame.cs" />
+    <Compile Include="XSSF\UserModel\XSSFLineBreak.cs" />
     <Compile Include="XSSF\UserModel\XSSFMap.cs" />
     <Compile Include="XSSF\UserModel\XSSFName.cs" />
     <Compile Include="XSSF\UserModel\XSSFHyperlink.cs" />
@@ -142,6 +206,10 @@
     <Compile Include="XSSF\UserModel\XSSFPatternFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFPicture.cs" />
     <Compile Include="XSSF\UserModel\XSSFPictureData.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotCache.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotCacheDefinition.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotCacheRecords.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotTable.cs" />
     <Compile Include="XSSF\UserModel\XSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\XSSFRelation.cs" />
     <Compile Include="XSSF\UserModel\XSSFRichTextString.cs" />
@@ -153,17 +221,21 @@
     <Compile Include="XSSF\UserModel\XSSFSimpleShape.cs" />
     <Compile Include="XSSF\UserModel\XSSFTable.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTextParagraph.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTextRun.cs" />
     <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
     <Compile Include="XSSF\Util\CTColComparator.cs" />
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />
+    <Compile Include="XSSF\XLSBUnsupportedException.cs" />
     <Compile Include="XWPF\Extractor\XWPFWordExtractor.cs" />
     <Compile Include="XWPF\Model\XMLParagraph.cs" />
     <Compile Include="XWPF\Model\XWPFCommentsDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
     <Compile Include="XWPF\Model\XWPFHyperlinkDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
+    <Compile Include="XWPF\Usermodel\AbstractXWPFSDT.cs" />
     <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
     <Compile Include="XWPF\Usermodel\BodyType.cs" />
     <Compile Include="XWPF\Usermodel\Borders.cs" />
@@ -172,6 +244,11 @@
     <Compile Include="XWPF\Usermodel\Document.cs" />
     <Compile Include="XWPF\Usermodel\IBody.cs" />
     <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
+    <Compile Include="XWPF\Usermodel\ICell.cs" />
+    <Compile Include="XWPF\Usermodel\IRunBody.cs" />
+    <Compile Include="XWPF\Usermodel\IRunElement.cs" />
+    <Compile Include="XWPF\Usermodel\ISDTContent.cs" />
+    <Compile Include="XWPF\Usermodel\ISDTContents.cs" />
     <Compile Include="XWPF\Usermodel\LineSpacingRule.cs" />
     <Compile Include="XWPF\Usermodel\ParagraphAlignment.cs" />
     <Compile Include="XWPF\Usermodel\PositionInParagraph.cs" />
@@ -182,6 +259,8 @@
     <Compile Include="XWPF\Usermodel\VerticalAlign.cs" />
     <Compile Include="XWPF\Usermodel\XWPFAbstractNum.cs" />
     <Compile Include="XWPF\Usermodel\XWPFComment.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFDefaultParagraphStyle.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFDefaultRunStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFooter.cs" />
@@ -199,35 +278,59 @@
     <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
     <Compile Include="XWPF\Usermodel\XWPFRelation.cs" />
     <Compile Include="XWPF\Usermodel\XWPFRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDT.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDTCell.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDTContent.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSDTContentCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
-    <Compile Include="XWPF\Util\EnumConverter.cs" />
+    <Compile Include="Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="openxml4Net\OpenXml4Net.csproj">
-      <Project>{D907A7AD-A67A-4492-A117-594D2168B7B8}</Project>
-      <Name>OpenXml4Net</Name>
+    <ProjectReference Include="..\main\NPOI.csproj">
+      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
+      <Name>NPOI</Name>
     </ProjectReference>
-    <ProjectReference Include="OpenXmlFormats\OpenXmlFormats.csproj">
-      <Project>{29E4D389-8B1B-45D8-B197-06116395F5ED}</Project>
-      <Name>OpenXmlFormats</Name>
+    <ProjectReference Include="openxml4Net\NPOI.OpenXml4Net.csproj">
+      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
+      <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\main\main.csproj">
-      <Project>{4704E545-CEFF-46B6-ACEF-C8927830FA1C}</Project>
-      <Name>main</Name>
+    <ProjectReference Include="OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
+      <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
+      <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\main\npoi.snk">
       <Link>npoi.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="XWPF\Util\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
