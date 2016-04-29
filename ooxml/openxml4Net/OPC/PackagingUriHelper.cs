@@ -142,7 +142,7 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         private static readonly bool IsMono = Type.GetType("Mono.Runtime") != null;
-        public static Uri ParseUri(string s, UriKind kind = UriKind.Absolute)
+        public static Uri ParseUri(string s, UriKind kind)
         {
             if (IsMono)
             {
@@ -221,7 +221,7 @@ namespace NPOI.OpenXml4Net.OPC
                     {
                         try
                         {
-                            return ParseUri(path.Substring(0, num2));
+                            return ParseUri(path.Substring(0, num2), UriKind.Absolute);
                         }
                         catch (UriFormatException)
                         {
@@ -246,7 +246,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri retUri = null;
             try
             {
-                retUri = ParseUri(Combine(prefix.OriginalString, suffix.OriginalString));
+                retUri = ParseUri(Combine(prefix.OriginalString, suffix.OriginalString), UriKind.Absolute);
             }
             catch (UriFormatException)
             {
