@@ -245,8 +245,10 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Border ct = GetCTBorder();
                 CT_BorderPr pr = ct.IsSetBottom() ? ct.bottom : ct.AddNewBottom();
-                if (value == BorderStyle.None) ct.unsetBottom();
-                else pr.style = (ST_BorderStyle)value;
+                if (value == BorderStyle.None) 
+                    ct.UnsetBottom();
+                else 
+                    pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
 
@@ -1034,7 +1036,7 @@ namespace NPOI.XSSF.UserModel
                 int idx = (int)_cellXf.borderId;
                 XSSFCellBorder cf = _stylesSource.GetBorderAt(idx);
 
-                ctBorder = (CT_Border)cf.GetCTBorder().Copy();
+                ctBorder = (CT_Border)cf.GetCTBorder();
             }
             else
             {
