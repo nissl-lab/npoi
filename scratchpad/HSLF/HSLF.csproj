@@ -53,8 +53,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\solution\Lib\.net2\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI">
-      <HintPath>..\..\solution\Lib\.net2\NPOI.dll</HintPath>
+    <Reference Include="NPOI, Version=2.2.0.2, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Release\Net20\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

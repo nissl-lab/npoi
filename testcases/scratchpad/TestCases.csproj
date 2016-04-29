@@ -59,10 +59,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\solution\Lib\.net2\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\build\Release\Net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\solution\Lib\.net2\NPOI.dll</HintPath>
+      <HintPath>..\..\build\Release\Net20\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\solution\Lib\nunit.framework.dll</HintPath>
