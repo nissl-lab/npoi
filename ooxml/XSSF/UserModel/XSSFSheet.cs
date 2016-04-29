@@ -1845,9 +1845,8 @@ namespace NPOI.XSSF.UserModel
 
             foreach (XSSFCell cell in cellsToDelete) row.RemoveCell(cell);
 
-            int idx = HeadMap(_rows, row.RowNum).Count;
             _rows.Remove(row.RowNum);
-            worksheet.sheetData.RemoveRow(idx);
+            worksheet.sheetData.RemoveRow(row.RowNum + 1); // Note that rows in worksheet.sheetData is 1-based.
         }
 
         /**
