@@ -171,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.topField = null;
         }
-        public void unsetBottom()
+        public void UnsetBottom()
         {
             this.bottomField = null;
         }

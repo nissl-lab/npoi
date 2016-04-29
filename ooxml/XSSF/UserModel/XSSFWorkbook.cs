@@ -539,35 +539,29 @@ namespace NPOI.XSSF.UserModel
             return srcSheet.CopySheet(srcSheet.SheetName);
         }
 
-
-        /**
-         * Create a new XSSFCellStyle and add it to the workbook's style table
-         *
-         * @return the new XSSFCellStyle object
-         */
+        /// <summary>
+        /// Create a new XSSFCellStyle and add it to the workbook's style table
+        /// </summary>
+        /// <returns>the new XSSFCellStyle object</returns>
         public ICellStyle CreateCellStyle()
         {
             return stylesSource.CreateCellStyle();
         }
 
-        /**
-         * Returns the instance of XSSFDataFormat for this workbook.
-         *
-         * @return the XSSFDataFormat object
-         * @see NPOI.ss.usermodel.DataFormat
-         */
+        /// <summary>
+        /// Returns the instance of XSSFDataFormat for this workbook.
+        /// </summary>
+        /// <returns>the XSSFDataFormat object</returns>
         public IDataFormat CreateDataFormat()
         {
             if (formatter == null)
                 formatter = new XSSFDataFormat(stylesSource);
             return formatter;
         }
-
-        /**
-         * Create a new Font and add it to the workbook's font table
-         *
-         * @return new font object
-         */
+        /// <summary>
+        /// Create a new Font and add it to the workbook's font table
+        /// </summary>
+        /// <returns></returns>
         public IFont CreateFont()
         {
             XSSFFont font = new XSSFFont();
