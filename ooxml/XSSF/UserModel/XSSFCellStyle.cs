@@ -1036,7 +1036,7 @@ namespace NPOI.XSSF.UserModel
                 int idx = (int)_cellXf.borderId;
                 XSSFCellBorder cf = _stylesSource.GetBorderAt(idx);
 
-                ctBorder = (CT_Border)cf.GetCTBorder();
+                ctBorder = cf.GetCTBorder().Copy();
             }
             else
             {
@@ -1405,6 +1405,10 @@ namespace NPOI.XSSF.UserModel
                     ct.diagonalUp = false;
                     ct.diagonalUpSpecified = false;
                 }
+
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+
+                _cellXf.borderId = (uint)idx;
             }
         }
 

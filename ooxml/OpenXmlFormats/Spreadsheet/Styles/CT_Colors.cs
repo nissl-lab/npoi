@@ -375,14 +375,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             var res = new CT_Color();
             res.autoField = this.autoField;
-
+            res.autoSpecifiedField = this.autoSpecifiedField;
             res.indexedField = this.indexedField;
-
+            res.indexedSpecifiedField = this.indexedSpecifiedField;
             res.rgbField = this.rgbField == null ? null : (byte[])this.rgbField.Clone(); // type ST_UnsignedIntHex is xsd:hexBinary restricted to length 4 (octets!? - see http://www.grokdoc.net/index.php/EOOXML_Objections_Clearinghouse)
-
+            res.rgbSpecifiedField = this.rgbSpecifiedField;
             res.themeField = this.themeField; // TODO change all the uses theme to use uint instead of signed integer variants
-
+            res.themeSpecifiedField = this.themeSpecifiedField;
             res.tintField = this.tintField;
+            res.tintSpecifiedField = this.tintSpecifiedField;
 
             return res;
         }
