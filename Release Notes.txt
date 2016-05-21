@@ -1,4 +1,21 @@
-2.2 (?, 2015)
+2.2.1 (May,2016)
+Bug Fixes
+- Fix a lot of serialization issue of ooxml issue
+- Fix phonetic guides tag reading/writing issue
+- Fix XWPFRun SetText exception issue
+- Fix xml security issue
+- Optimize memory for AutoResizeColumn
+- Fix sqref property is missing on ProtectedRange
+- Fix drawing ooxml issue and cell value bug
+- Fix numFmtId property issue on NumFmt node
+- Fix ooxml issues for RadarChart and CellStyle
+- Fix xfrm namespace issue in ooxml
+- Fix ScatterChart issue in ooxml
+- Fix ooxml bugs in Vml entities
+- fix bug when call ISheet.RemoveRow, it removes a wrong row
+- Don't close zip stream when zipoutputstream finish writing
+
+2.2.0 (Aug, 2015)
 New Feature
 1. Implement FIXED, PROPER, DMIN and DGET functions
 2. XSSF support for evaluating formula references to other Workbooks

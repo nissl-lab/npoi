@@ -932,15 +932,11 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * Specifies how the spacing between lines is calculated as stored in the
-         * line attribute. If this attribute is omitted, then it shall be assumed to
-         * be of a value auto if a line attribute value is present.
-         *
-         * @return rule
-         * @see LineSpacingRule
-         * @see #setSpacingLineRule(LineSpacingRule)
-         */
+        /// <summary>
+        ///Specifies how the spacing between lines is calculated as stored in the
+        /// line attribute. If this attribute is omitted, then it shall be assumed to
+        /// be of a value auto if a line attribute value is present.
+        /// </summary>
         public LineSpacingRule SpacingLineRule
         {
             get

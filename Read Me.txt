@@ -12,18 +12,14 @@ used to create search engines).
 =========================
 Neuzilla is the studio behind NPOI. While using NPOI, you are becoming one of Neuzilla's clients. 
 
-Neuzilla's homepage: http://blog.neuzilla.com
-To follow us, please visit http://www.linkedin.com/company/neuzilla 
-Neuzilla WeChat Public Account: Neuzilla or 架构师联盟
-
-Neuzilla's logo: /logo/neuzilla
+For commercial cooperation or support service consulting, please contact support@neuzilla.com
 
 ==================
 *  NPOI Website *
 ==================
 https://github.com/tonyqus/npoi/ (Latest source code available)
-http://npoi.codeplex.com (No latest source code available)
-http://www.npoi.info (Official Tutorial in Chinese)
+http://npoi.codeplex.com (Deprecated)
+http://npoi.neuzilla.com (coming soon)
 
 ======================
 * System Requirement *
@@ -35,14 +31,14 @@ vs2003 with .NET 1.1
 medium trust environment in ASP.NET
 
 =================
-*  Neuzilla on SNS  *
+*  Neuzilla on Internet  *
 =================
-Linkedin Homepage: http://www.linkedin.com/company/neuzilla
-Linkedin User Group: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
-新浪微博: http://t.sina.com.cn/npoi 
-Twitter: http://twitter.com/tonyqus 
-企业客户QQ群: 116053476
-个人客户QQ群：20144214
+Neuzilla's homepage: http://blog.neuzilla.com
+Homepage on Linkedin: http://www.linkedin.com/company/neuzilla
+User Group on Linkedin: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
+企业客户QQ群: 116053476 
+WeChat Official AccountID: neuzilla
+微信公众号ID：neuzilla
 
 ================
 * Team Members *
@@ -140,7 +136,8 @@ Main contribution: XSSF bug fixing and feature implement
 
 NPOI 2.2
 --------------------------------------------------------------------------------
-Antony - main contributor
+Antony
+Tony Qu
 
 ==================
 * How to join us *
