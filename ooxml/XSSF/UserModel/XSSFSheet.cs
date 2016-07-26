@@ -1177,6 +1177,9 @@ namespace NPOI.XSSF.UserModel
             if (ctMergeCells == null) throw new InvalidOperationException("This worksheet does not contain merged regions");
 
             CT_MergeCell ctMergeCell = ctMergeCells.GetMergeCellArray(index);
+
+            if (ctMergeCell == null) { return null; }
+
             String ref1 = ctMergeCell.@ref;
             return CellRangeAddress.ValueOf(ref1);
         }
@@ -1800,7 +1803,7 @@ namespace NPOI.XSSF.UserModel
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
 
             int size = ctMergeCells.sizeOfMergeCellArray();
-            List<CT_MergeCell> mergeCellsArray = new List<CT_MergeCell>(ctMergeCells.sizeOfMergeCellArray());
+            List<CT_MergeCell> mergeCellsArray = new List<CT_MergeCell>(new CT_MergeCell[ctMergeCells.sizeOfMergeCellArray()]);
             for (int i = 0, d = 0; i < size; i++)
             {
                 if (!indices.Contains(i))

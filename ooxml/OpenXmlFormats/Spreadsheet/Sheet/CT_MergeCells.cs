@@ -47,7 +47,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 foreach (CT_MergeCell x in this.mergeCell)
                 {
-                    x.Write(sw, "mergeCell");
+                    if (x != null) {
+                        x.Write(sw, "mergeCell");
+                    }
                 }
             }
             sw.Write(string.Format("</{0}>", nodeName));
