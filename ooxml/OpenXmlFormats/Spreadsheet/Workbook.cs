@@ -324,7 +324,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.iterate = XmlHelper.ReadBool(node.Attributes["iterate"]);
             ctObj.iterateCount = XmlHelper.ReadUInt(node.Attributes["iterateCount"]);
             ctObj.iterateDelta = XmlHelper.ReadDouble(node.Attributes["iterateDelta"]);
-            ctObj.fullPrecision = XmlHelper.ReadBool(node.Attributes["fullPrecision"]);
+            ctObj.fullPrecision = XmlHelper.ReadBool(node.Attributes["fullPrecision"], true);
             ctObj.calcCompleted = XmlHelper.ReadBool(node.Attributes["calcCompleted"]);
             ctObj.calcOnSave = XmlHelper.ReadBool(node.Attributes["calcOnSave"]);
             ctObj.concurrentCalc = XmlHelper.ReadBool(node.Attributes["concurrentCalc"]);
