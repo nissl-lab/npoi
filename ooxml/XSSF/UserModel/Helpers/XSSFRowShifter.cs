@@ -54,6 +54,8 @@ namespace NPOI.XSSF.UserModel.Helpers
             {
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
 
+                if (merged == null) { continue; }
+
                 bool inStart = (merged.FirstRow >= startRow || merged.LastRow >= startRow);
                 bool inEnd = (merged.FirstRow <= endRow || merged.LastRow <= endRow);
 
