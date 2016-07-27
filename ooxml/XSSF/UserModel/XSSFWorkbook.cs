@@ -364,7 +364,9 @@ namespace NPOI.XSSF.UserModel
                 sheets = new List<XSSFSheet>(shIdMap.Count);
                 foreach (CT_Sheet ctSheet in this.workbook.sheets.sheet)
                 {
-                    XSSFSheet sh = shIdMap[ctSheet.id];
+                    XSSFSheet sh = null;
+                    if(shIdMap.ContainsKey(ctSheet.id))
+                        sh = shIdMap[ctSheet.id];
                     if (sh == null)
                     {
                         logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
