@@ -134,5 +134,61 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNull(vml.FindCommentShape(0, 0));
 
         }
+        [Test]
+        public void TestCommentShowsBox()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            wb.CreateSheet();
+            XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
+            XSSFCell cell = (XSSFCell)sheet.CreateRow(0).CreateCell(0);
+            XSSFDrawing drawing = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            XSSFCreationHelper factory = (XSSFCreationHelper)wb.GetCreationHelper();
+            XSSFClientAnchor anchor = (XSSFClientAnchor)factory.CreateClientAnchor();
+            anchor.Col1 = cell.ColumnIndex;
+            anchor.Col2 = cell.ColumnIndex + 3;
+            anchor.Row1 = cell.RowIndex;
+            anchor.Row2 = cell.RowIndex + 5;
+            XSSFComment comment = (XSSFComment)drawing.CreateCellComment(anchor);
+            XSSFRichTextString str = (XSSFRichTextString)factory.CreateRichTextString("this is a comment");
+            comment.String = str;
+            cell.CellComment = comment;
+
+            XSSFVMLDrawing vml = sheet.GetVMLDrawing(false);
+            CT_Shapetype shapetype = null;
+            ArrayList items = vml.GetItems();
+            foreach (object o in items)
+                if (o is CT_Shapetype)
+                    shapetype = (CT_Shapetype)o;
+            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
+            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
+
+            using (MemoryStream ws = new MemoryStream())
+            {
+                wb.Write(ws);
+
+                using (MemoryStream rs = new MemoryStream(ws.GetBuffer()))
+                {
+                    wb = new XSSFWorkbook(rs);
+                    sheet = (XSSFSheet)wb.GetSheetAt(0);
+
+                    vml = sheet.GetVMLDrawing(false);
+                    shapetype = null;
+                    items = vml.GetItems();
+                    foreach (object o in items)
+                        if (o is CT_Shapetype)
+                            shapetype = (CT_Shapetype)o;
+
+                    //wb.Write(new FileStream("comments.xlsx", FileMode.Create));
+                    //using (MemoryStream ws2 = new MemoryStream())
+                    //{
+                    //    vml.Write(ws2);
+                    //    throw new System.Exception(System.Text.Encoding.UTF8.GetString(ws2.GetBuffer()));
+                    //}
+
+                    Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
+                    Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
+                }
+            }
+        }
     }
 }
