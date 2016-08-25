@@ -3688,8 +3688,8 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string adjField;
         private string idField;
-        private ST_TrueFalse filledField;
-        private ST_TrueFalse strokedField;
+        private ST_TrueFalse filledField = ST_TrueFalse.t;
+        private ST_TrueFalse strokedField = ST_TrueFalse.t;
         private ST_TrueFalse preferrelativeField;
         //private string styleField;
         private float sptField;
