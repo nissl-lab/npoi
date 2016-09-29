@@ -24,8 +24,8 @@ namespace LineChart
             ILineChartData<double, double> data = chart.ChartDataFactory.CreateLineChartData<double, double>();
 
             // Use a category axis for the bottom axis.
-            IChartAxis bottomAxis = p10Chart.GetChartAxisFactory().CreateCategoryAxis(AxisPosition.Bottom);
-            IValueAxis leftAxis = p10Chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Left);
+            IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateCategoryAxis(AxisPosition.Bottom);
+            IValueAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.Left);
             leftAxis.SetCrosses(AxisCrosses.AutoZero);
 
             IChartDataSource<double> xs = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(0, 0, 0, NUM_OF_COLUMNS - 1));
