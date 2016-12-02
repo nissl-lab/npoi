@@ -19,6 +19,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
 
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.Model;
 
     /// <summary>
     /// Excel can Get cranky if you give it files containing too
@@ -196,15 +197,39 @@ namespace NPOI.HSSF.UserModel
         {
             // Where each style has ended up, and if we need to
             //  delete the record for it. Start off with no change
-            short[] newPos =
-                new short[workbook.Workbook.NumExFormats];
+            short off = 16;
+            InternalWorkbook iwb = workbook.Workbook;
+
+            short[] newPos = new short[iwb.NumExFormats];
             bool[] isUsed = new bool[newPos.Length];
             bool[] zapRecords = new bool[newPos.Length];
+            short[] oldParent = new short[newPos.Length];
+            int colmin = 0;
+            int colmax = 255;
+
             for (int i = 0; i < newPos.Length; i++)
             {
+                HSSFCellStyle cs, csp;
                 isUsed[i] = false;
                 newPos[i] = (short)i;
                 zapRecords[i] = false;
+
+                // Preserve parent indexes
+                oldParent[i] = 0;
+                cs = (HSSFCellStyle)workbook.GetCellStyleAt((short)i);
+                csp = cs.ParentStyle;
+
+                if (csp != null)
+                {
+                    oldParent[i] = csp.Index;
+                }
+
+                //cell style is used if style exists
+                StyleRecord sr = iwb.GetStyleRecord(i);
+                if (sr != null)
+                {
+                    isUsed[i] = true;
+                }
             }
 
             // Get each style record, so we can do deletes
@@ -212,7 +237,7 @@ namespace NPOI.HSSF.UserModel
             ExtendedFormatRecord[] xfrs = new ExtendedFormatRecord[newPos.Length];
             for (int i = 0; i < newPos.Length; i++)
             {
-                xfrs[i] = workbook.Workbook.GetExFormatAt(i);
+                xfrs[i] = iwb.GetExFormatAt(i);   //workbook.Workbook.GetExFormatAt(i);
             }
 
             // Loop over each style, seeing if it is the same
@@ -220,17 +245,23 @@ namespace NPOI.HSSF.UserModel
             //  later duplicate copy to the earlier one, and 
             //  mark the later one as needing deleting
             // Only work on user added ones, which come after 20
-            for (int i = 21; i < newPos.Length; i++)
+            for (int i = off; i < newPos.Length; i++)
             {
+                if (isUsed[i])
+                {
+                    continue;
+                }
+
                 // Check this one for being a duplicate
                 //  of an earlier one
                 int earlierDuplicate = -1;
-                for (int j = 0; j < i && earlierDuplicate == -1; j++)
+                for (int j = 0; j < i; j++)
                 {
-                    ExtendedFormatRecord xfCheck = workbook.Workbook.GetExFormatAt(j);
+                    ExtendedFormatRecord xfCheck = iwb.GetExFormatAt(j);
                     if (xfCheck.Equals(xfrs[i]))
                     {
                         earlierDuplicate = j;
+                        break;
                     }
                 }
 
@@ -246,36 +277,63 @@ namespace NPOI.HSSF.UserModel
                     isUsed[earlierDuplicate] = true;
                 }
             }
+
             // Loop over all the cells in the file, and identify any user defined
             //  styles aren't actually being used (don't touch built-in ones)
             for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
             {
+                int ci;
+                ICellStyle cs;
+                short oldXf;
+
                 HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
+
                 foreach (IRow row in s)
                 {
+                    cs = row.RowStyle;
+
+                    if (cs != null)
+                    {
+                        oldXf = cs.Index;
+                        isUsed[newPos[oldXf]] = true;
+                        isUsed[oldParent[oldXf]] = true;
+                    }
+
                     foreach (ICell cellI in row)
                     {
                         HSSFCell cell = (HSSFCell)cellI;
-                        short oldXf = cell.CellValueRecord.XFIndex;
-                        isUsed[oldXf] = true;
+                        oldXf = cell.CellValueRecord.XFIndex;
+                        isUsed[newPos[oldXf]] = true;
+                        isUsed[oldParent[oldXf]] = true;
+                    }
+                }
+
+                for (ci = colmin; ci <= colmax; ci++)
+                {
+                    cs = s.GetColumnStyle(ci);
+                    if (cs != null)
+                    {
+                        oldXf = cs.Index;
+                        isUsed[newPos[oldXf]] = true;
+                        isUsed[oldParent[oldXf]] = true;
                     }
                 }
             }
+
             // Mark any that aren't used as needing zapping
-            for (int i = 21; i < isUsed.Length; i++)
+            for (int i = off; i < isUsed.Length; i++)
             {
                 if (!isUsed[i])
                 {
                     // Un-used style, can be removed
                     zapRecords[i] = true;
-                    newPos[i] = 0;
                 }
             }
             // Update the new positions based on
             //  deletes that have occurred between
             //  the start and them
             // Only work on user added ones, which come after 20
-            for (int i = 21; i < newPos.Length; i++)
+            for (int i = off; i < newPos.Length; i++)
             {
                 // Find the number deleted to that
                 //  point, and adjust
@@ -283,48 +341,99 @@ namespace NPOI.HSSF.UserModel
                 short newPosition = preDeletePos;
                 for (int j = 0; j < preDeletePos; j++)
                 {
-                    if (zapRecords[j]) newPosition--;
+                    if (zapRecords[j])
+                    {
+                        newPosition--;
+                    }
                 }
 
                 // Update the new position
                 newPos[i] = newPosition;
             }
 
-            // Zap the un-needed user style records
+            //Finally, update the cells to point at thir new extended format records
+            for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
+            {
+                short oldXf;
+                HSSFCellStyle newStyle;
+                HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
+
+                foreach (IRow row in s)
+                {
+                    newStyle = (HSSFCellStyle)row.RowStyle;
+                    if (newStyle != null)
+                    {
+                        oldXf = newStyle.Index;
+                        newStyle = (HSSFCellStyle)workbook.GetCellStyleAt(newPos[oldXf]);
+                        row.RowStyle = newStyle;
+                    }
+
+                    foreach (ICell cellI in row)
+                    {
+                        HSSFCell cell = (HSSFCell)cellI;
+                        oldXf = cell.CellValueRecord.XFIndex;
+                        newStyle = (HSSFCellStyle)workbook.GetCellStyleAt(newPos[oldXf]);
+                        cell.CellStyle = newStyle;
+                    }
+                }
+
+                for (int ci = colmin; ci <= colmax; ci++)
+                {
+                    newStyle = (HSSFCellStyle)s.GetColumnStyle(ci);
+                    if (newStyle != null)
+                    {
+                        oldXf = newStyle.Index;
+                        newStyle = (HSSFCellStyle)workbook.GetCellStyleAt(newPos[oldXf]);
+                        s.SetDefaultColumnStyle(ci, newStyle);
+                    }
+                }
+            }
+
+            // To fix "Excel found unreadable content" error
+            // The StyleRecords seem to still point to the wrong 
+            // XF, so go through and change it.
+            foreach (Record record in iwb.Records)
+            {
+                if (record is StyleRecord)
+                {
+                    StyleRecord styleRecord = (StyleRecord)record;
+                    short oldXf = styleRecord.XFIndex;
+                    styleRecord.XFIndex = newPos[oldXf];
+                }
+            }
+
+            // Zap the un-needed user style records.
             // removing by index, because removing by object may delete
             // styles we did not intend to (the ones that _were_ duplicated and not the duplicates)
             int max = newPos.Length;
             int removed = 0; // to adjust index after deletion
-            for (int i = 21; i < max; i++)
+            for (int i = off; i < max; i++)
             {
                 if (zapRecords[i + removed])
                 {
-                    workbook.Workbook.RemoveExFormatRecord(i);
+                    iwb.RemoveExFormatRecord(i);
                     i--;
                     max--;
                     removed++;
                 }
             }
 
-            // Finally, update the cells to point at their new extended format records
-            for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
+            for (int i = off; i < newPos.Length; i++)
             {
-                HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
-                //IEnumerator rIt = s.GetRowEnumerator();
-                //while (rIt.MoveNext())
-                foreach(IRow row in s)
+                if (!zapRecords[i])
                 {
-                    //HSSFRow row = (HSSFRow)rIt.Current;
-                    //IEnumerator cIt = row.GetEnumerator();
-                    //while (cIt.MoveNext())
-                    foreach (ICell cell in row)
+                    //Change parent index
+                    iwb.GetExFormatAt(newPos[i]).ParentIndex = newPos[oldParent[i]];
+                    
+                    //Style record move to the new position
+                    if (newPos[i] < i)
                     {
-                        //ICell cell = (HSSFCell)cIt.Current;
-                        short oldXf = ((HSSFCell)cell).CellValueRecord.XFIndex;
-                        NPOI.SS.UserModel.ICellStyle newStyle = workbook.GetCellStyleAt(
-                                newPos[oldXf]
-                        );
-                        cell.CellStyle = (newStyle);
+                        //Move style record
+                        StyleRecord sr = iwb.GetStyleRecord(i);
+                        if (sr != null)
+                        {
+                            sr.XFIndex = newPos[i];
+                        }
                     }
                 }
             }
