@@ -35,17 +35,17 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\solution\Lib\.net4\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.dll</HintPath>
+    <Reference Include="NPOI">
+      <HintPath>..\..\..\solution\Lib\NPOI.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OOXML.dll</HintPath>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\..\solution\Lib\NPOI.OOXML.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXmlFormats.dll</HintPath>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\..\solution\Lib\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\..\solution\Lib\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

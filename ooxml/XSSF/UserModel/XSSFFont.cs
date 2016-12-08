@@ -528,7 +528,7 @@ namespace NPOI.XSSF.UserModel
          */
         internal void SetUnderline(FontUnderlineType underline)
         {
-            if (underline == FontUnderlineType.None && _ctFont.sizeOfUArray() > 0)
+            if (underline == FontUnderlineType.None)
             {
                 _ctFont.SetUArray(null);
             }

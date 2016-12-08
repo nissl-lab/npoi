@@ -25,8 +25,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private double widthField;  // optional, but width has no default value
         private bool widthSpecifiedField;
 
-        private uint styleField;// optional, as are the following attributes
-        private bool styleSpecifiedField;
+        private uint? styleField;// optional, as are the following attributes
 
         private bool hiddenField;
 
@@ -108,7 +107,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetStyle()
         {
-            return this.styleSpecifiedField;
+            return this.styleField!=null;
         }
         public bool IsSetWidth()
         {
@@ -138,9 +137,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
 
-        [DefaultValue(typeof(uint), "0")]
         [XmlAttribute]
-        public uint style
+        public uint? style
         {
             get
             {
@@ -150,12 +148,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.styleField = value;
             }
-        }
-        [XmlIgnore]
-        public bool styleSpecified
-        {
-            get { return this.styleSpecifiedField; }
-            set { this.styleSpecifiedField = value; }
         }
 
         [DefaultValue(false)]
@@ -262,7 +254,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
             ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
             ctObj.width = XmlHelper.ReadDouble(node.Attributes["width"]);
-            ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
+            if (node.Attributes["style"] != null)
+                ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
+            else
+                ctObj.style = null;
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.bestFit = XmlHelper.ReadBool(node.Attributes["bestFit"]);
             ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes["outlineLevel"]);
@@ -280,7 +275,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "min", this.min);
             XmlHelper.WriteAttribute(sw, "max", this.max);
             XmlHelper.WriteAttribute(sw, "width", this.width);
-            XmlHelper.WriteAttribute(sw, "style", this.style,true);
+            if(this.style!=null)
+                XmlHelper.WriteAttribute(sw, "style", (uint)this.style,true);
             XmlHelper.WriteAttribute(sw, "hidden", this.hidden,false);
             XmlHelper.WriteAttribute(sw, "bestFit", this.bestFit,false);
             XmlHelper.WriteAttribute(sw, "customWidth", this.customWidth,false);
@@ -307,7 +303,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             col.outlineLevelField = this.outlineLevelField;
             col.phoneticField = this.phoneticField;
             col.styleField = this.styleField;
-            col.styleSpecifiedField = this.styleSpecifiedField;
             col.widthField = this.widthField;
             col.widthSpecifiedField = this.widthSpecifiedField;
             

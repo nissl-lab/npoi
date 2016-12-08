@@ -66,7 +66,7 @@ namespace TestCases
 
         public static POIDataSamples GetOpenXml4NetInstance()
         {
-            if (_instDiagram == null) _instDiagram = new POIDataSamples("OpenXml4Net");
+            if (_instDiagram == null) _instDiagram = new POIDataSamples("openxml4j");
             return _instDiagram;
         }
 

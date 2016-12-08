@@ -32,10 +32,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId,true);
             XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

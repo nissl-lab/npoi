@@ -177,7 +177,8 @@ namespace NPOI.XSSF.UserModel.Helpers
             }
             public void Add(T item)
             {
-                this.innerObj.Add(item,null);
+                if(!this.innerObj.ContainsKey(item))
+                    this.innerObj.Add(item,null);
             }
             public bool Remove(T item)
             {
@@ -235,8 +236,9 @@ namespace NPOI.XSSF.UserModel.Helpers
                 while (iter.MoveNext())
                 {
                     CT_Col elem = iter.Current;
-                    if (currentIndex <= elem.max) break; // all passed elements have been purged
-                    //iter.remove();
+                    if (currentIndex <= elem.max) 
+                        break; // all passed elements have been purged
+                    
                     toRemove.Add(elem);
                 }
 
@@ -486,7 +488,6 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (fromCol.IsSetStyle())
             {
                 toCol.style = (fromCol.style);
-                toCol.styleSpecified = fromCol.styleSpecified;
             }
             if (fromCol.IsSetWidth())
             {
@@ -560,7 +561,6 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             CT_Col col = GetOrCreateColumn1Based(index + 1, true);
             col.style = (uint)styleId;
-            col.styleSpecified = true;
         }
 
         // Returns -1 if no column is found for the given index

@@ -28,6 +28,7 @@ namespace NPOI.OpenXml4Net.OPC
          *  or a stream
          */
         private Util.ZipEntrySource zipArchive;
+        bool isStream = false;  // whether the file is passed in with stream, no means passed in with string path
 
         /**
          * Constructor. Creates a new ZipPackage.
@@ -53,10 +54,11 @@ namespace NPOI.OpenXml4Net.OPC
          *             If the specified input stream not an instance of
          *             ZipInputStream.
          */
-        public ZipPackage(Stream in1, PackageAccess access)
+        public ZipPackage(Stream filestream, PackageAccess access)
             : base(access)
         {
-            this.zipArchive = new ZipInputStreamZipEntrySource(new ZipInputStream(in1));
+            isStream = true;
+            this.zipArchive = new ZipInputStreamZipEntrySource(new ZipInputStream(filestream));
         }
 
         /**
@@ -508,7 +510,11 @@ namespace NPOI.OpenXml4Net.OPC
                                             + defaultPartMarshaller);
                     }
                 }
-                zos.Close();
+                //Finishes writing the contents of the ZIP output stream without closing the underlying stream.
+                if (isStream)
+                    zos.Finish();   //instead of use zos.Close, it will close the stream
+                else
+                    zos.Close();
             }
             catch (Exception e)
             {

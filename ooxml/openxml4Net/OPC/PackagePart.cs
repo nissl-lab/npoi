@@ -501,7 +501,7 @@ namespace NPOI.OpenXml4Net.OPC
                 String t = target.ToString();
                 try
                 {
-                    target = PackagingUriHelper.ParseUri(t.Substring(0, t.IndexOf('#')));
+                    target = PackagingUriHelper.ParseUri(t.Substring(0, t.IndexOf('#')), UriKind.Absolute);
                 }
                 catch (UriFormatException e)
                 {

@@ -50,7 +50,7 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 CT_BorderPr pr = _border.IsSetBottom() ? _border.bottom : _border.AddNewBottom();
-                if (value == BorderStyle.None) _border.unsetBottom();
+                if (value == BorderStyle.None) _border.UnsetBottom();
                 else pr.style = (ST_BorderStyle)value;
             }
         }

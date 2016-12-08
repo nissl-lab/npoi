@@ -282,7 +282,6 @@ namespace NPOI.XSSF.UserModel.Helpers
             col_2.min = (10);
             col_2.max = (12);
             col_2.style = (1);
-            col_2.styleSpecified = true;
             Assert.AreEqual(1, columnHelper.GetColDefaultStyle(11));
             XSSFCellStyle cellStyle = new XSSFCellStyle(0, 0, stylesTable, null);
             columnHelper.SetColDefaultStyle(11, cellStyle);

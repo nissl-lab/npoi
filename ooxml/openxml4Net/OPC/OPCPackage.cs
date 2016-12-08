@@ -1325,7 +1325,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri targetURI;
             try
             {
-                targetURI = PackagingUriHelper.ParseUri(target);
+                targetURI = PackagingUriHelper.ParseUri(target,UriKind.Absolute);
             }
             catch (UriFormatException e)
             {

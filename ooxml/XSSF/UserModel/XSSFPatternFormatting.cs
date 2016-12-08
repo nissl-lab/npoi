@@ -70,14 +70,14 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public short FillPattern
+        public FillPattern FillPattern
         {
             get
             {
                 if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetPatternType())
                     return 0;
 
-                return (short)_fill.GetPatternFill().patternType;
+                return (FillPattern) _fill.GetPatternFill().patternType;
             }
             set 
             {

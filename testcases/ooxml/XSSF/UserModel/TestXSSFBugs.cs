@@ -1647,15 +1647,6 @@ namespace NPOI.XSSF.UserModel
             bug53798Work(wb, xlsOutput);
         }
 
-        [Ignore("Shifting rows is not yet implemented in XSSFSheet")]
-        [Test]
-        public void TestBug53798XLSXStream()
-        {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xlsx");
-            //FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
-            //bug53798Work(new SXSSFWorkbook(wb), xlsOutput);
-        }
-
         [Test]
         public void TestBug53798XLS()
         {

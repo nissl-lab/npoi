@@ -680,8 +680,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "sheetId", this.sheetIdField);
-            XmlHelper.WriteAttribute(sw, "refreshError", this.refreshErrorField);
+            XmlHelper.WriteAttribute(sw, "sheetId", this.sheetIdField,true);
+            if(this.refreshError)
+                XmlHelper.WriteAttribute(sw, "refreshError", this.refreshErrorField);
             sw.Write(">");
             foreach (CT_ExternalRow ctObj in this.rowField)
             {
@@ -856,7 +857,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             else
             {
                 sw.Write(">");
-                sw.Write(string.Format("<v>{0}</v>", this.v));
+                sw.Write(string.Format("<v>{0}</v>", XmlHelper.EncodeXml(this.v)));
                 sw.Write(string.Format("</{0}>", nodeName));
             }
         }

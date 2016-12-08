@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A6874784-2875-4F40-9E8F-8385A640F5D6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
+    <AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
+    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
+    <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheRecords.cs" />
+    <Compile Include="Drawing\ChartDrawing.cs" />
+    <Compile Include="Drawing\Chart\ChartSpaceDocument.cs" />
+    <Compile Include="Drawing\Chart\AreaChart.cs" />
+    <Compile Include="Drawing\Chart\BubbleChart.cs" />
+    <Compile Include="Drawing\Chart\BarChart.cs" />
+    <Compile Include="Drawing\Chart\RadarChart.cs" />
+    <Compile Include="Drawing\Chart\PieChart.cs" />
+    <Compile Include="Drawing\Chart\ScatterChart.cs" />
+    <Compile Include="Drawing\Chart\SurfaceChart.cs" />
+    <Compile Include="Drawing\Chart\LineChart.cs" />
+    <Compile Include="Drawing\DiagramColorTransform.cs" />
+    <Compile Include="Drawing\DiagramDataModel.cs" />
+    <Compile Include="Drawing\DiagramDefinition.cs" />
+    <Compile Include="Drawing\DiagramElementPropertySet.cs" />
+    <Compile Include="Drawing\DiagramLayoutVariables.cs" />
+    <Compile Include="Drawing\DiagramStyleDefinition.cs" />
+    <Compile Include="Drawing\Chart\Chart.cs" />
+    <Compile Include="Drawing\Gvml.cs" />
+    <Compile Include="Drawing\AudioVideo.cs" />
+    <Compile Include="Drawing\GraphicalObjectFormat.cs" />
+    <Compile Include="Drawing\Picture.cs" />
+    <Compile Include="Drawing\spreadsheetShape.cs" />
+    <Compile Include="Drawing\Table.cs" />
+    <Compile Include="Drawing\TableStyle.cs" />
+    <Compile Include="Drawing\StyleDefaults.cs" />
+    <Compile Include="Drawing\TextParagraph.cs" />
+    <Compile Include="Drawing\TextBullet.cs" />
+    <Compile Include="Drawing\TextRun.cs" />
+    <Compile Include="Drawing\TextCharacter.cs" />
+    <Compile Include="Drawing\BaseStylesheet.cs" />
+    <Compile Include="Drawing\ShapeLineProperties.cs" />
+    <Compile Include="Drawing\Shape3DStyles.cs" />
+    <Compile Include="Drawing\Shape3DScene.cs" />
+    <Compile Include="Drawing\Shape3DScenePlane.cs" />
+    <Compile Include="Drawing\Shape3DLighting.cs" />
+    <Compile Include="Drawing\Shape3DCamera.cs" />
+    <Compile Include="CustomPropertiesDocument.cs" />
+    <Compile Include="Drawing\WordprocessingDrawing.cs" />
+    <Compile Include="ExtendedPropertiesDocument.cs" />
+    <Compile Include="Shared\Math.cs" />
+    <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheDefinition.cs" />
+    <Compile Include="Spreadsheet\Document\ExternalLinkDocument.cs" />
+    <Compile Include="Spreadsheet\PivotTable\CT_PivotTableDefinition.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Dxfs.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Table.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_TableStyles.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Border.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_BorderPr.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Borders.cs" />
+    <Compile Include="Spreadsheet\CT_CalcChain.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Authors.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyleXfs.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_RElt.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_RPrElt.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_Rst.cs" />
+    <Compile Include="Spreadsheet\SharedString\CT_Sst.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellAlignment.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellProtection.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyle.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellStyles.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_CellXfs.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Colors.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fill.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fills.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Font.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Fonts.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_NumFmt.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_NumFmts.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Cell.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Col.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Cols.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Comment.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Comments.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Hyperlink.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_MergeCell.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Row.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Sheet.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_SheetData.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_Worksheet.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_SheetPr.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_MergeCells.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_PatternFill.cs" />
+    <Compile Include="Spreadsheet\Styles\CT_Xf.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_Workbook.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_Sheets.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_BookViews.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_ExternalReferences.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_DefinedNames.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_PivotCache.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_SmartTags.cs" />
+    <Compile Include="Spreadsheet\Workbook\CT_WebPublishObjects.cs" />
+    <Compile Include="Wordprocessing\BaseTypes.cs" />
+    <Compile Include="Wordprocessing\Document\CommentsDocument.cs" />
+    <Compile Include="Wordprocessing\Document\FootnotesDocument.cs" />
+    <Compile Include="Wordprocessing\Document\HdrDocument.cs" />
+    <Compile Include="Wordprocessing\Document\FtrDocument.cs" />
+    <Compile Include="Wordprocessing\Document\SettingsDocument.cs" />
+    <Compile Include="Wordprocessing\Document\NumberingDocument.cs" />
+    <Compile Include="Wordprocessing\Document\StylesDocument.cs" />
+    <Compile Include="Wordprocessing\Document\EndnotesDocument.cs" />
+    <Compile Include="Wordprocessing\Markup.cs" />
+    <Compile Include="Wordprocessing\CustomXml.cs" />
+    <Compile Include="Wordprocessing\Document.cs" />
+    <Compile Include="Wordprocessing\Font.cs" />
+    <Compile Include="Wordprocessing\FormField.cs" />
+    <Compile Include="Wordprocessing\Frame.cs" />
+    <Compile Include="Wordprocessing\Numbering.cs" />
+    <Compile Include="Wordprocessing\RangePermission.cs" />
+    <Compile Include="Wordprocessing\PageSetup.cs" />
+    <Compile Include="Wordprocessing\Sdt.cs" />
+    <Compile Include="Wordprocessing\Tab.cs" />
+    <Compile Include="Wordprocessing\wml.cs" />
+    <Compile Include="Wordprocessing\HdrFtr.cs" />
+    <Compile Include="Wordprocessing\Picture.cs" />
+    <Compile Include="Wordprocessing\Run.cs" />
+    <Compile Include="Wordprocessing\Styles.cs" />
+    <Compile Include="CustomXmlSchemaProperties.cs" />
+    <Compile Include="Drawing\BaseTypes.cs" />
+    <Compile Include="DocumentPropertiesCustom.cs" />
+    <Compile Include="Drawing\Compatibility.cs" />
+    <Compile Include="Drawing\GraphicalObjectAnimation.cs" />
+    <Compile Include="Drawing\GraphicalObject.cs" />
+    <Compile Include="Drawing\SpreadsheetPicture.cs" />
+    <Compile Include="Drawing\ShapeGeometry.cs" />
+    <Compile Include="Drawing\ShapeStyle.cs" />
+    <Compile Include="Drawing\ShapeProperties.cs" />
+    <Compile Include="Drawing\SpreadsheetDrawing.cs" />
+    <Compile Include="Drawing\Text.cs" />
+    <Compile Include="Drawing\ShapeEffects.cs" />
+    <Compile Include="Drawing\StyleSheet.cs" />
+    <Compile Include="OOXMLFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomXmlDataProperties.cs" />
+    <Compile Include="DocumentPropertiesExtended.cs" />
+    <Compile Include="DocumentPropertiesVariantTypes.cs" />
+    <Compile Include="AdditionalCharacteristics.cs" />
+    <Compile Include="Bibliography.cs" />
+    <Compile Include="RelationshipReference.cs" />
+    <Compile Include="Spreadsheet\AutoFilter.cs" />
+    <Compile Include="Spreadsheet\BaseTypes.cs" />
+    <Compile Include="Spreadsheet\Document\CalcChainDocument.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_CommentList.cs" />
+    <Compile Include="Spreadsheet\Document\CommentsDocument.cs" />
+    <Compile Include="Spreadsheet\Document\ChartsheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\WorksheetDocument.cs" />
+    <Compile Include="Spreadsheet\Document\MapInfoDocument.cs" />
+    <Compile Include="Spreadsheet\SharedStringTable.cs" />
+    <Compile Include="Spreadsheet\SharedWorkbookRevisions.cs" />
+    <Compile Include="Spreadsheet\SharedWorkbookUserNames.cs" />
+    <Compile Include="Spreadsheet\Sheet.cs" />
+    <Compile Include="Spreadsheet\SheetMetadata.cs" />
+    <Compile Include="Spreadsheet\SingleCellTable.cs" />
+    <Compile Include="Spreadsheet\CT_CalcCell.cs" />
+    <Compile Include="Spreadsheet\ExternalConnections.cs" />
+    <Compile Include="Spreadsheet\QueryTable.cs" />
+    <Compile Include="Spreadsheet\CustomXmlMappings.cs" />
+    <Compile Include="Spreadsheet\Document\SingleXmlCellsDocument.cs" />
+    <Compile Include="Spreadsheet\Document\SstDocument.cs" />
+    <Compile Include="Spreadsheet\Document\StyleSheetDocument.cs" />
+    <Compile Include="Spreadsheet\SupplementaryWorkbooks.cs" />
+    <Compile Include="Spreadsheet\Styles.cs" />
+    <Compile Include="Spreadsheet\Document\TableDocument.cs" />
+    <Compile Include="Spreadsheet\Document\ThemeDocument.cs" />
+    <Compile Include="Spreadsheet\Workbook.cs" />
+    <Compile Include="Spreadsheet\Document\WorkbookDocument.cs" />
+    <Compile Include="Vml\Main.cs" />
+    <Compile Include="Vml\OfficeDrawing.cs" />
+    <Compile Include="Vml\PresentationDrawing.cs" />
+    <Compile Include="Vml\SpreadsheetDrawing.cs" />
+    <Compile Include="Vml\WordprocessingDrawing.cs" />
+    <Compile Include="Wordprocessing\Paragraph.cs" />
+    <Compile Include="Wordprocessing\Settings.cs" />
+    <Compile Include="Wordprocessing\Table.cs" />
+    <Compile Include="Wordprocessing\Document\DocumentDocument.cs" />
+    <Compile Include="XmlHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\main\npoi.snk">
+      <Link>npoi.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.net2.csproj">
+      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
+      <Name>NPOI.OpenXml4Net.net2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

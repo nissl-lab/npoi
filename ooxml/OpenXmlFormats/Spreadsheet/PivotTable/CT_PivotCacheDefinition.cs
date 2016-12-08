@@ -8798,8 +8798,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "measureGroup", this.measureGroup);
             XmlHelper.WriteAttribute(sw, "dimension", this.dimension);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private uint measureGroupField;

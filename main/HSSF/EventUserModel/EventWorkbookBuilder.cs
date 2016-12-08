@@ -48,16 +48,6 @@ namespace NPOI.HSSF.EventUserModel
     public class EventWorkbookBuilder
     {
         /// <summary>
-        /// Wraps up your stub Workbook as a stub HSSFWorkbook, ready for passing to HSSFFormulaParser
-        /// </summary>
-        /// <param name="workbook">The stub workbook.</param>
-        /// <returns></returns>
-        public static HSSFWorkbook CreateStubHSSFWorkbook(InternalWorkbook workbook)
-        {
-            return new StubHSSFWorkbook(workbook);
-        }
-
-        /// <summary>
         /// Creates a stub Workbook from the supplied records,
         /// suitable for use with the {@link HSSFFormulaParser}
         /// </summary>
@@ -173,9 +163,14 @@ namespace NPOI.HSSF.EventUserModel
             /// <returns></returns>
             public HSSFWorkbook GetStubHSSFWorkbook()
             {
-                return CreateStubHSSFWorkbook(
-                        GetStubWorkbook()
-                );
+	            // Create a base workbook
+		            HSSFWorkbook wb = HSSFWorkbook.Create(GetStubWorkbook());
+		            // Stub the sheets, so sheet name lookups work
+		            foreach (BoundSheetRecord bsr in boundSheetRecords) {
+		                wb.CreateSheet(bsr.Sheetname);
+		            }
+		            // Ready for Formula use!
+		            return wb;
             }
             /// <summary>
             /// Gets the stub workbook.
@@ -223,19 +218,6 @@ namespace NPOI.HSSF.EventUserModel
                 {
                     sstRecord = (SSTRecord)record;
                 }
-            }
-        }
-
-        /**
-         * Let us at the {@link Workbook} constructor on
-         *  {@link HSSFWorkbook}
-         */
-        private class StubHSSFWorkbook : HSSFWorkbook
-        {
-            public StubHSSFWorkbook(InternalWorkbook wb)
-                : base(wb)
-            {
-
             }
         }
     }

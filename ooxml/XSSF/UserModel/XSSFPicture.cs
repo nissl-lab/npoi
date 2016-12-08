@@ -100,7 +100,7 @@ namespace NPOI.XSSF.UserModel
                 blip.AddNewStretch().AddNewFillRect();
 
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sppr = pic.AddNewSpPr();
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Transform2D t2d = sppr.AddNewXfrm();
+                CT_Transform2D t2d = sppr.AddNewXfrm();
                 CT_PositiveSize2D ext = t2d.AddNewExt();
                 //should be original picture width and height expressed in EMUs
                 ext.cx = (0);

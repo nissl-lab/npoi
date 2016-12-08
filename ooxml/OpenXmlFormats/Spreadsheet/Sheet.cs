@@ -358,25 +358,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         public static CT_SheetDimension Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-{
-    if(node==null)
-        return null;
-    CT_SheetDimension ctObj = new CT_SheetDimension();
-    ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
-    return ctObj;
-}
+        {
+            if (node == null)
+                return null;
+            CT_SheetDimension ctObj = new CT_SheetDimension();
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            return ctObj;
+        }
 
 
 
         internal void Write(StreamWriter sw, string nodeName)
-{
-    sw.Write(string.Format("<{0}",nodeName));
-    XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-    sw.Write(">");
-    sw.Write(string.Format("</{0}>",nodeName));
-}
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+            sw.Write("/>");
+        }
 
-    
+
 
     }
 
@@ -3443,7 +3442,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte[] passwordField;
 
-        private List<string> sqrefField;
+        private string sqrefField;
 
         private string nameField;
 
@@ -3456,12 +3455,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.password = XmlHelper.ReadBytes(node.Attributes["password"]);
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
             ctObj.securityDescriptor = XmlHelper.ReadString(node.Attributes["securityDescriptor"]);
-            ctObj.sqref = new List<String>();
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "sqref")
-                    ctObj.sqref.Add(childNode.InnerText);
-            }
+            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
             return ctObj;
         }
 
@@ -3473,15 +3467,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "password", this.password);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "securityDescriptor", this.securityDescriptor);
-            sw.Write(">");
-            if (this.sqref != null)
-            {
-                foreach (String x in this.sqref)
-                {
-                    sw.Write(string.Format("<sqref><![CDATA[{0}]]></sqref>", x));
-                }
-            }
-            sw.Write(string.Format("</{0}>", nodeName));
+            if(this.sqref!=null)
+                XmlHelper.WriteAttribute(sw, "sqref", XmlHelper.EncodeXml(this.sqref));
+            sw.Write("/>");
         }
 
         public CT_ProtectedRange()
@@ -3501,7 +3489,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public List<string> sqref
+        public string sqref
         {
             get
             {
@@ -3934,19 +3922,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlIgnore]
-        public bool numFmtIdSpecified
-        {
-            get
-            {
-                return this.numFmtIdFieldSpecified;
-            }
-            set
-            {
-                this.numFmtIdFieldSpecified = value;
-            }
-        }
-
         public static CT_InputCells Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -3969,7 +3944,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "deleted", this.deleted);
             XmlHelper.WriteAttribute(sw, "undone", this.undone);
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId,true);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
@@ -6803,8 +6778,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_DataBar()
         {
-            this.colorField = new CT_Color();
-            this.cfvoField = new List<CT_Cfvo>();
+            //this.colorField = new CT_Color();
+            //this.cfvoField = new List<CT_Cfvo>();
             this.minLengthField = ((uint)(10));
             this.maxLengthField = ((uint)(90));
             this.showValueField = true;
@@ -6880,7 +6855,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_DataBar ctObj = new CT_DataBar();
             ctObj.minLength = XmlHelper.ReadUInt(node.Attributes["minLength"]);
             ctObj.maxLength = XmlHelper.ReadUInt(node.Attributes["maxLength"]);
-            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
+            if (node.Attributes["showValue"] == null)
+                ctObj.showValue = true;
+            else
+                ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
+
             ctObj.cfvo = new List<CT_Cfvo>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -6899,10 +6878,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "minLength", this.minLength);
             XmlHelper.WriteAttribute(sw, "maxLength", this.maxLength);
-            XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
+            if(showValue)
+                XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
             sw.Write(">");
-            if (this.color != null)
-                this.color.Write(sw, "color");
             if (this.cfvo != null)
             {
                 foreach (CT_Cfvo x in this.cfvo)
@@ -6910,6 +6888,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "cfvo");
                 }
             }
+            if (this.color != null)
+                this.color.Write(sw, "color");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 

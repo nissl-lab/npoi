@@ -96,13 +96,13 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the fill pattern.
         /// </summary>
         /// <value>The fill pattern.</value>
-        public short FillPattern
+        public FillPattern FillPattern
         {
             get {
-                return (short)patternFormatting.FillPattern;
+                return patternFormatting.FillPattern;
             }
             set {
-                patternFormatting.FillPattern = (FillPattern)value;
+                patternFormatting.FillPattern = value;
                 if (value != 0)
                     cfRuleRecord.IsPatternStyleModified = true;
             }

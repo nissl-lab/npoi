@@ -548,19 +548,20 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "rot", this.rot);
+            XmlHelper.WriteAttribute(sw, "rot", this.rot,true);
             if(spcFirstLastPara)
                 XmlHelper.WriteAttribute(sw, "spcFirstLastPara", this.spcFirstLastPara);
             XmlHelper.WriteAttribute(sw, "vertOverflow", this.vertOverflow.ToString());
-            XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflow.ToString());
-            if(this.vert!= ST_TextVerticalType.horz)
+            if(this.horzOverflow!= ST_TextHorzOverflowType.overflow)
+                XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflow.ToString());
+            if(this.vert!= ST_TextVerticalType.vert)
                 XmlHelper.WriteAttribute(sw, "vert", this.vert.ToString());
             if(this.wrap!= ST_TextWrappingType.none)
                 XmlHelper.WriteAttribute(sw, "wrap", this.wrap.ToString());
-            XmlHelper.WriteAttribute(sw, "lIns", this.lIns,true);
-            XmlHelper.WriteAttribute(sw, "tIns", this.tIns, true);
-            XmlHelper.WriteAttribute(sw, "rIns", this.rIns, true);
-            XmlHelper.WriteAttribute(sw, "bIns", this.bIns, true);
+            XmlHelper.WriteAttribute(sw, "lIns", this.lIns);
+            XmlHelper.WriteAttribute(sw, "tIns", this.tIns);
+            XmlHelper.WriteAttribute(sw, "rIns", this.rIns);
+            XmlHelper.WriteAttribute(sw, "bIns", this.bIns);
             XmlHelper.WriteAttribute(sw, "numCol", this.numCol);
             XmlHelper.WriteAttribute(sw, "spcCol", this.spcCol);
             XmlHelper.WriteAttribute(sw, "rtlCol", this.rtlCol);

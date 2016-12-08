@@ -567,16 +567,9 @@ namespace NPOI.OpenXmlFormats.Vml
     public enum ST_TrueFalse
     {
 
-
-        t,
-
-
         f,
-
-
+        t,
         @true,
-
-
         @false,
     }
 
@@ -1191,8 +1184,7 @@ namespace NPOI.OpenXmlFormats.Vml
         {
             sw.Write(string.Format("<v:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "eqn", this.eqn);
-            sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("/>");
         }
 
     }
@@ -1567,8 +1559,7 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "o:title", this.title);
             XmlHelper.WriteAttribute(sw, "o:movie", this.movie);
             XmlHelper.WriteAttribute(sw, "o:oleid", this.oleid);
-            sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -2207,7 +2198,7 @@ namespace NPOI.OpenXmlFormats.Vml
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "insetpenok", this.insetpenok);
             XmlHelper.WriteAttribute(sw, "connectlocs", this.connectlocs);
             XmlHelper.WriteAttribute(sw, "connectangles", this.connectangles);
-            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "o:extrusionok", this.extrusionok);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "o:extrusionok", this.extrusionok, false);
             sw.Write(">");
             sw.Write(string.Format("</v:{0}>", nodeName));
         }
@@ -2564,35 +2555,127 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.color = XmlHelper.ReadString(node.Attributes["color"]);
             ctObj.opacity = XmlHelper.ReadString(node.Attributes["opacity"]);
             if (node.Attributes["linestyle"] != null)
+            {
                 ctObj.linestyle = (ST_StrokeLineStyle)Enum.Parse(typeof(ST_StrokeLineStyle), node.Attributes["linestyle"].Value);
+                ctObj.linestyleFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.linestyleFieldSpecified = false;
+            }
             if (node.Attributes["miterlimit"] != null)
+            {
                 ctObj.miterlimit = XmlHelper.ReadDecimal(node.Attributes["miterlimit"]);
-           if (node.Attributes["joinstyle"] != null)
-                    ctObj.joinstyle = (ST_StrokeJoinStyle)Enum.Parse(typeof(ST_StrokeJoinStyle), node.Attributes["joinstyle"].Value);
+                ctObj.miterlimitFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.miterlimitFieldSpecified = false;
+            }
+            if (node.Attributes["joinstyle"] != null)
+            {
+                ctObj.joinstyleFieldSpecified = true;
+                ctObj.joinstyle = (ST_StrokeJoinStyle)Enum.Parse(typeof(ST_StrokeJoinStyle), node.Attributes["joinstyle"].Value);
+            }
+            else
+            {
+                ctObj.joinstyleFieldSpecified = false;
+            }
             if (node.Attributes["endcap"] != null)
+            {
                 ctObj.endcap = (ST_StrokeEndCap)Enum.Parse(typeof(ST_StrokeEndCap), node.Attributes["endcap"].Value);
+                ctObj.endcapFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.endcapFieldSpecified = false;
+            }
             ctObj.dashstyle = XmlHelper.ReadString(node.Attributes["dashstyle"]);
+
             if (node.Attributes["filltype"] != null)
+            {
                 ctObj.filltype = (ST_FillType)Enum.Parse(typeof(ST_FillType), node.Attributes["filltype"].Value);
+                ctObj.filltypeFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.filltypeFieldSpecified = false;
+            }
             ctObj.src = XmlHelper.ReadString(node.Attributes["src"]);
             if (node.Attributes["imageaspect"] != null)
+            {
                 ctObj.imageaspect = (ST_ImageAspect)Enum.Parse(typeof(ST_ImageAspect), node.Attributes["imageaspect"].Value);
+                ctObj.imageaspectFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.imageaspectFieldSpecified = false;
+            }
             ctObj.imagesize = XmlHelper.ReadString(node.Attributes["imagesize"]);
             if (node.Attributes["imagealignshape"] != null)
+            {
                 ctObj.imagealignshape = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse2(node.Attributes["imagealignshape"]);
+                ctObj.imagealignshapeSpecified = true;
+            }
+            else
+            {
+                ctObj.imagealignshapeSpecified = false;
+            }
             ctObj.color2 = XmlHelper.ReadString(node.Attributes["color2"]);
             if (node.Attributes["startarrow"] != null)
+            {
                 ctObj.startarrow = (ST_StrokeArrowType)Enum.Parse(typeof(ST_StrokeArrowType), node.Attributes["startarrow"].Value);
+                ctObj.startarrowFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.startarrowFieldSpecified = false;
+            }
             if (node.Attributes["startarrowwidth"] != null)
+            {
                 ctObj.startarrowwidth = (ST_StrokeArrowWidth)Enum.Parse(typeof(ST_StrokeArrowWidth), node.Attributes["startarrowwidth"].Value);
+                ctObj.startarrowwidthFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.startarrowwidthFieldSpecified = false;
+            }
             if (node.Attributes["startarrowlength"] != null)
+            {
                 ctObj.startarrowlength = (ST_StrokeArrowLength)Enum.Parse(typeof(ST_StrokeArrowLength), node.Attributes["startarrowlength"].Value);
+                ctObj.startarrowlengthFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.startarrowlengthFieldSpecified = false;
+            }
             if (node.Attributes["endarrow"] != null)
+            {
                 ctObj.endarrow = (ST_StrokeArrowType)Enum.Parse(typeof(ST_StrokeArrowType), node.Attributes["endarrow"].Value);
+                ctObj.endarrowFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.endarrowFieldSpecified = false;
+            }
             if (node.Attributes["endarrowwidth"] != null)
+            {
                 ctObj.endarrowwidth = (ST_StrokeArrowWidth)Enum.Parse(typeof(ST_StrokeArrowWidth), node.Attributes["endarrowwidth"].Value);
+                ctObj.endarrowwidthFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.endarrowwidthFieldSpecified = false;
+            }
             if (node.Attributes["endarrowlength"] != null)
+            {
                 ctObj.endarrowlength = (ST_StrokeArrowLength)Enum.Parse(typeof(ST_StrokeArrowLength), node.Attributes["endarrowlength"].Value);
+                ctObj.endarrowlengthFieldSpecified = true;
+            }
+            else
+            {
+                ctObj.endarrowlengthFieldSpecified = false;
+            }
             if (node.Attributes["insetpen"] != null)
                 ctObj.insetpen = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse2(node.Attributes["insetpen"]);
             return ctObj;
@@ -2608,26 +2691,38 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "weight", this.weight);
             XmlHelper.WriteAttribute(sw, "color", this.color);
             XmlHelper.WriteAttribute(sw, "opacity", this.opacity);
-            XmlHelper.WriteAttribute(sw, "linestyle", this.linestyle.ToString());
-            XmlHelper.WriteAttribute(sw, "miterlimit", (float)this.miterlimit);
-            XmlHelper.WriteAttribute(sw, "joinstyle", this.joinstyle.ToString());
-            XmlHelper.WriteAttribute(sw, "endcap", this.endcap.ToString());
+            if(linestyleFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "linestyle", this.linestyle.ToString());
+            if(miterlimitFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "miterlimit", (float)this.miterlimit);
+            if(joinstyleFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "joinstyle", this.joinstyle.ToString());
+            if(endcapFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "endcap", this.endcap.ToString());
             XmlHelper.WriteAttribute(sw, "dashstyle", this.dashstyle);
-            XmlHelper.WriteAttribute(sw, "filltype", this.filltype.ToString());
+            if(filltypeFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "filltype", this.filltype.ToString());
             XmlHelper.WriteAttribute(sw, "src", this.src);
-            XmlHelper.WriteAttribute(sw, "imageaspect", this.imageaspect.ToString());
+            if(imageaspectFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "imageaspect", this.imageaspect.ToString());
             XmlHelper.WriteAttribute(sw, "imagesize", this.imagesize);
-            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "imagealignshape", this.imagealignshape);
+            if(imagealignshapeFieldSpecified)
+                NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "imagealignshape", this.imagealignshape);
             XmlHelper.WriteAttribute(sw, "color2", this.color2);
-            XmlHelper.WriteAttribute(sw, "startarrow", this.startarrow.ToString());
-            XmlHelper.WriteAttribute(sw, "startarrowwidth", this.startarrowwidth.ToString());
-            XmlHelper.WriteAttribute(sw, "startarrowlength", this.startarrowlength.ToString());
-            XmlHelper.WriteAttribute(sw, "endarrow", this.endarrow.ToString());
-            XmlHelper.WriteAttribute(sw, "endarrowwidth", this.endarrowwidth.ToString());
-            XmlHelper.WriteAttribute(sw, "endarrowlength", this.endarrowlength.ToString());
+            if(startarrowSpecified)
+                XmlHelper.WriteAttribute(sw, "startarrow", this.startarrow.ToString());
+            if(startarrowwidthFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "startarrowwidth", this.startarrowwidth.ToString());
+            if(startarrowlengthFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "startarrowlength", this.startarrowlength.ToString());
+            if(endarrowFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "endarrow", this.endarrow.ToString());
+            if(endarrowwidthFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "endarrowwidth", this.endarrowwidth.ToString());
+            if(endarrowlengthFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "endarrowlength", this.endarrowlength.ToString());
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "insetpen", this.insetpen);
-            sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -2704,6 +2799,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.linestyleField = value;
+                this.linestyleFieldSpecified = true;
             }
         }
         
@@ -2726,6 +2822,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.miterlimitField = value;
+                this.miterlimitFieldSpecified = true;
             }
         }
         
@@ -2748,6 +2845,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.joinstyleField = value;
+                this.joinstyleFieldSpecified = true;
             }
         }
         
@@ -2770,6 +2868,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.endcapField = value;
+                this.endcapFieldSpecified = true;
             }
         }
         
@@ -2803,6 +2902,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.filltypeField = value;
+                this.filltypeFieldSpecified = true;
             }
         }
         
@@ -2836,6 +2936,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.imageaspectField = value;
+                this.imageaspectFieldSpecified = true;
             }
         }
         
@@ -2869,6 +2970,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.imagealignshapeField = value;
+                this.imagealignshapeFieldSpecified = true;
             }
         }
         
@@ -2902,6 +3004,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.startarrowField = value;
+                this.startarrowFieldSpecified = true;
             }
         }
         
@@ -2924,6 +3027,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.startarrowwidthField = value;
+                this.startarrowwidthFieldSpecified = true;
             }
         }
         
@@ -2946,6 +3050,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.startarrowlengthField = value;
+                this.startarrowlengthFieldSpecified = true;
             }
         }
         
@@ -2968,6 +3073,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.endarrowField = value;
+                this.endarrowFieldSpecified = true;
             }
         }
         
@@ -2990,6 +3096,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.endarrowwidthField = value;
+                this.endarrowwidthFieldSpecified = true;
             }
         }
         
@@ -3012,6 +3119,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.endarrowlengthField = value;
+                this.endarrowlengthFieldSpecified = true;
             }
         }
         
@@ -3034,6 +3142,7 @@ namespace NPOI.OpenXmlFormats.Vml
             }
             set {
                 this.insetpenField = value;
+                this.insetpenFieldSpecified = true;
             }
         }
         
@@ -3579,8 +3688,8 @@ namespace NPOI.OpenXmlFormats.Vml
         
         private string adjField;
         private string idField;
-        private ST_TrueFalse filledField;
-        private ST_TrueFalse strokedField;
+        private ST_TrueFalse filledField = ST_TrueFalse.t;
+        private ST_TrueFalse strokedField = ST_TrueFalse.t;
         private ST_TrueFalse preferrelativeField;
         //private string styleField;
         private float sptField;
@@ -3608,7 +3717,7 @@ namespace NPOI.OpenXmlFormats.Vml
                 ctObj.preferrelative = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse2(node.Attributes["o:preferrelative"]);
             ctObj.coordsize = XmlHelper.ReadString(node.Attributes["coordsize"]);
             if (node.Attributes["o:spt"] != null)
-                ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
+                ctObj.id = XmlHelper.ReadString(node.Attributes["o:spt"]);
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.path2 = XmlHelper.ReadString(node.Attributes["path"]);
             ctObj.formulas = new List<CT_Formulas>();
@@ -3673,8 +3782,8 @@ namespace NPOI.OpenXmlFormats.Vml
         public void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<v:{0}", nodeName));
-            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "stroked", this.stroked);
-            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "filled", this.filled);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "stroked", this.stroked, true);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "filled", this.filled, true);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "o:preferrelative", this.preferrelative);
             XmlHelper.WriteAttribute(sw, "coordsize", this.coordsize);
             XmlHelper.WriteAttribute(sw, "o:spt", this.spt);

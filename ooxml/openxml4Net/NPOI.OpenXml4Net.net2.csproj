@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>4.0</SchemaVersion>
+    <ProjectGuid>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NPOI.OpenXml4Net</RootNamespace>
+    <AssemblyName>NPOI.OpenXml4Net</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>..\..\solution\Lib\NPOI.OpenXml4Net.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
+    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\solution\Lib\.net4\NPOI.OpenXml4Net.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
+    <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\solution\Lib\.net2\NPOI.OpenXml4Net.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions\InvalidFormatException.cs" />
+    <Compile Include="Exceptions\OpenXML4NetException.cs" />
+    <Compile Include="Exceptions\PartAlreadyExistsException.cs" />
+    <Compile Include="OPC\CertificateEmbeddingOption.cs" />
+    <Compile Include="OPC\CompressionOption.cs" />
+    <Compile Include="OPC\Configuration.cs" />
+    <Compile Include="OPC\ContentTypes.cs" />
+    <Compile Include="OPC\EncryptionOption.cs" />
+    <Compile Include="OPC\Internal\ContentType.cs" />
+    <Compile Include="OPC\Internal\ContentTypeManager.cs" />
+    <Compile Include="OPC\Internal\FileHelper.cs" />
+    <Compile Include="OPC\Internal\Marshallers\DefaultMarshaller.cs" />
+    <Compile Include="OPC\Internal\Marshallers\PackagePropertiesMarshaller.cs" />
+    <Compile Include="OPC\Internal\Marshallers\ZipPackagePropertiesMarshaller.cs" />
+    <Compile Include="OPC\Internal\Marshallers\ZipPartMarshaller.cs" />
+    <Compile Include="OPC\Internal\MemoryPackagePart.cs" />
+    <Compile Include="OPC\Internal\MemoryPackagePartOutputStream.cs" />
+    <Compile Include="OPC\Internal\PackagePropertiesPart.cs" />
+    <Compile Include="OPC\Internal\PartMarshaller.cs" />
+    <Compile Include="OPC\Internal\PartUnmarshaller.cs" />
+    <Compile Include="OPC\Internal\Unmarshallers\PackagePropertiesUnmarshaller.cs" />
+    <Compile Include="OPC\Internal\Unmarshallers\UnmarshallContext.cs" />
+    <Compile Include="OPC\Internal\ZipContentTypeManager.cs" />
+    <Compile Include="OPC\Internal\ZipHelper.cs" />
+    <Compile Include="OPC\OPCPackage.cs" />
+    <Compile Include="OPC\PackageAccess.cs" />
+    <Compile Include="OPC\PackageNamespaces.cs" />
+    <Compile Include="OPC\PackagePart.cs" />
+    <Compile Include="OPC\PackagePartCollection.cs" />
+    <Compile Include="OPC\PackagePartName.cs" />
+    <Compile Include="OPC\PackageProperties.cs" />
+    <Compile Include="OPC\PackageRelationship.cs" />
+    <Compile Include="OPC\PackageRelationshipCollection.cs" />
+    <Compile Include="OPC\PackageRelationshipTypes.cs" />
+    <Compile Include="OPC\PackagingUriHelper.cs" />
+    <Compile Include="OPC\RelationshipSource.cs" />
+    <Compile Include="OPC\StreamHelper.cs" />
+    <Compile Include="OPC\TargetMode.cs" />
+    <Compile Include="OPC\ZipPackage.cs" />
+    <Compile Include="OPC\ZipPackagePart.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\DocumentHelper.cs" />
+    <Compile Include="Util\XmlHelper.cs" />
+    <Compile Include="Util\ZipEntrySource.cs" />
+    <Compile Include="Util\ZipFileZipEntrySource.cs" />
+    <Compile Include="Util\ZipInputStreamZipEntrySource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\main\npoi.snk">
+      <Link>npoi.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\NPOI.net2.csproj">
+      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
+      <Name>NPOI.net2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

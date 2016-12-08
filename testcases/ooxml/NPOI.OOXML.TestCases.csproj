@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NPOI.OOXML.Testcases</RootNamespace>
+    <AssemblyName>NPOI.OOXML.Testcases</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
+    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
+    <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\Release.net4\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\solution\Lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SS\Converter\TestExcelToHtmlConverterSuite.cs" />
+    <Compile Include="SS\Format\TestCellFormatPart.cs" />
+    <Compile Include="SS\Formula\Eval\TestXSSFCircularReferences.cs" />
+    <Compile Include="SS\Formula\Functions\TestProper.cs" />
+    <Compile Include="SS\TestWorkbookFactory.cs" />
+    <Compile Include="SS\UserModel\BaseTestXCell.cs" />
+    <Compile Include="TestDetectAsOOXML.cs" />
+    <Compile Include="TestEmbeded.cs" />
+    <Compile Include="TestPOIXMLDocument.cs" />
+    <Compile Include="TestPOIXMLProperties.cs" />
+    <Compile Include="Util\TestIdentifierManager.cs" />
+    <Compile Include="XSSF\Extractor\TestXSSFExcelExtractor.cs" />
+    <Compile Include="XSSF\Extractor\TestXSSFExportToXML.cs" />
+    <Compile Include="XSSF\IO\TestLoadSaveXSSF.cs" />
+    <Compile Include="XSSF\Model\TestCalculationChain.cs" />
+    <Compile Include="XSSF\Model\TestCommentsTable.cs" />
+    <Compile Include="XSSF\Model\TestExternalLinksTable.cs" />
+    <Compile Include="XSSF\Model\TestMapInfo.cs" />
+    <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
+    <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFLineChartData.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFManualLayout.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFScatterChartData.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFValueAxis.cs" />
+    <Compile Include="XSSF\UserModel\TestFormulaEvaluatorOnXSSF.cs" />
+    <Compile Include="XSSF\UserModel\TestMissingWorkbookOnXSSF.cs" />
+    <Compile Include="XSSF\UserModel\TestMultiSheetFormulaEvaluatorOnXSSF.cs" />
+    <Compile Include="XSSF\UserModel\Extensions\TestXSSFBorder.cs" />
+    <Compile Include="XSSF\UserModel\Extensions\TestXSSFCellFill.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\TestColumnHelper.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\TestHeaderFooterHelper.cs" />
+    <Compile Include="XSSF\UserModel\TestSheetHiding.cs" />
+    <Compile Include="XSSF\UserModel\TestUnfixedBugs.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFBugs.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFCell.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFCellStyle.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFChart.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFChartSheet.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFColGrouping.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFColor.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFComment.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFConditionalFormatting.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFDataFormat.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFDataValidation.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFDrawing.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFExternalFunctions.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFFont.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFFormulaEvaluation.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFFormulaParser.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFHeaderFooter.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFHyperlink.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFName.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPicture.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPictureData.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPivotTable.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPrintSetup.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFRichTextString.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFRow.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheet.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheetAutosizeColumn.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheetRowGrouping.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheetShiftRows.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheetUpdateArrayFormulas.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSimpleShape.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFTable.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFTextParagraph.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFTextRun.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFVMLDrawing.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFWorkbook.cs" />
+    <Compile Include="XSSF\Util\TestCTColComparator.cs" />
+    <Compile Include="XSSF\Util\TestEvilUnclosedBRFixingInputStream.cs" />
+    <Compile Include="XSSF\Util\TestNumericRanges.cs" />
+    <Compile Include="XSSF\XSSFITestDataProvider.cs" />
+    <Compile Include="XSSF\XSSFTestDataSamples.cs" />
+    <Compile Include="XWPF\Extractor\TestExternalEntities.cs" />
+    <Compile Include="XWPF\Extractor\TestXWPFWordExtractor.cs" />
+    <Compile Include="XWPF\Model\TestXWPFDecorators.cs" />
+    <Compile Include="XWPF\Model\TestXWPFHeaderFooterPolicy.cs" />
+    <Compile Include="XWPF\TestAllExtendedProperties.cs" />
+    <Compile Include="XWPF\TestDocumentProtection.cs" />
+    <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
+    <Compile Include="XWPF\TestXWPFBugs.cs" />
+    <Compile Include="XWPF\UserModel\TestChangeTracking.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFBugs.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFHeader.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFHeadings.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFNumbering.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFParagraph.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFPictureData.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFRun.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFSDT.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFSmartTag.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFStyles.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTable.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTableCell.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTableRow.cs" />
+    <Compile Include="XWPF\XWPFTestDataSamples.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\NPOI.csproj">
+      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
+      <Name>NPOI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.csproj">
+      <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
+      <Name>NPOI.OOXML</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ooxml\openxml4Net\NPOI.OpenXml4Net.csproj">
+      <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
+      <Name>NPOI.OpenXml4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ooxml\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
+      <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
+      <Name>NPOI.OpenXmlFormats</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\main\NPOI.TestCases.csproj">
+      <Project>{a920c2ba-8bfd-4f54-8401-7d1c0730f1f0}</Project>
+      <Name>NPOI.TestCases</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\main\npoi.snk">
+      <Link>npoi.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

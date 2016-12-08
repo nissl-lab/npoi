@@ -1,14 +1,61 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXml4Net.Util
 {
     public static class XmlHelper
     {
+        public static string GetEnumValue(Enum e)
+        {
+            // Get the Type of the enum
+            Type t = e.GetType();
+
+            // Get the FieldInfo for the member field with the enums name
+            FieldInfo info = t.GetField(e.ToString("G"));
+
+            // Check to see if the XmlEnumAttribute is defined on this field
+            if (!info.IsDefined(typeof(XmlEnumAttribute), false))
+            {
+                // If no XmlEnumAttribute then return the string version of the enum.
+                return e.ToString("G");
+            }
+
+            // Get the XmlEnumAttribute
+            object[] o = info.GetCustomAttributes(typeof(XmlEnumAttribute), false);
+            XmlEnumAttribute att = (XmlEnumAttribute)o[0];
+            return att.Name;
+        }
+
+        public static string GetXmlAttrNameFromEnumValue<T>(T pEnumVal)
+        {
+            // http://stackoverflow.com/q/3047125/194717
+            Type type = pEnumVal.GetType();
+            FieldInfo info = type.GetField(Enum.GetName(typeof(T), pEnumVal));
+            XmlEnumAttribute att = (XmlEnumAttribute)info.GetCustomAttributes(typeof(XmlEnumAttribute), false)[0];
+            //If there is an xmlattribute defined, return the name
+
+            return att.Name;
+        }
+        public static T GetEnumValueFromString<T>(string value)
+        {
+            // http://stackoverflow.com/a/3073272/194717
+            foreach (object o in System.Enum.GetValues(typeof(T)))
+            {
+                T enumValue = (T)o;
+                if (GetXmlAttrNameFromEnumValue<T>(enumValue).Equals(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return (T)o;
+                }
+            }
+
+            throw new ArgumentException("No XmlEnumAttribute code exists for type " + typeof(T).ToString() + " corresponding to value of " + value);
+        }
         public static int ReadInt(XmlAttribute attr)
         {
             if (attr == null)
@@ -248,7 +295,7 @@ namespace NPOI.OpenXml4Net.Util
         }
         public static string EncodeXml(string xml)
         {
-            return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
+            return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;");//.Replace("'", "&apos;");
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value)
         {

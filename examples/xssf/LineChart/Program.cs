@@ -17,13 +17,11 @@ namespace LineChart
 
           static void CreateChart(IDrawing drawing, ISheet sheet, IClientAnchor anchor, string serie1, string serie2)
         {
-
-
             IChart chart = drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();
             legend.Position = LegendPosition.TopRight;
 
-            ILineChartData<double, double> data = chart.GetChartDataFactory().CreateLineChartData<double, double>();
+            ILineChartData<double, double> data = chart.ChartDataFactory.CreateLineChartData<double, double>();
 
             // Use a category axis for the bottom axis.
             IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateCategoryAxis(AxisPosition.Bottom);
@@ -34,10 +32,9 @@ namespace LineChart
             IChartDataSource<double> ys1 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(1, 1, 0, NUM_OF_COLUMNS - 1));
             IChartDataSource<double> ys2 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(2, 2, 0, NUM_OF_COLUMNS - 1));
 
-
-            var s1 = data.AddSerie(xs, ys1);
+            var s1 = data.AddSeries(xs, ys1);
             s1.SetTitle(serie1);
-            var s2 = data.AddSerie(xs, ys2);
+            var s2 = data.AddSeries(xs, ys2);
             s2.SetTitle(serie2);
 
             chart.Plot(data, bottomAxis, leftAxis);

@@ -56,7 +56,7 @@ namespace NPOI.SS.UserModel
         /**
          * No underline.
          */
-        public static readonly FontUnderline NONE = new FontUnderline(5);
+        public static readonly FontUnderline NONE = new FontUnderline(0);
 
 
         private int value;
@@ -112,12 +112,12 @@ namespace NPOI.SS.UserModel
         {
             if (_table == null)
             {
-                _table = new FontUnderline[6];
+                _table = new FontUnderline[5];
+                _table[0] = FontUnderline.NONE;
                 _table[1] = FontUnderline.SINGLE;
                 _table[2] = FontUnderline.DOUBLE;
                 _table[3] = FontUnderline.SINGLE_ACCOUNTING;
                 _table[4] = FontUnderline.DOUBLE_ACCOUNTING;
-                _table[5] = FontUnderline.NONE;
             }
         }
         public static FontUnderline ValueOf(int value)

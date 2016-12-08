@@ -39,16 +39,16 @@
       <HintPath>..\..\..\solution\Lib\.net4\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\solution\Lib\.net4\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\..\solution\Lib\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -39,6 +39,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
     }
 
+    public class CT_GradientStop
+    {
+        private int positionField;
+        private CT_Color colorField;
+
+        public static CT_GradientStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_GradientStop ctObj = new CT_GradientStop();
+            ctObj.positionField = XmlHelper.ReadInt(node.Attributes["position"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "color")
+                {
+                    ctObj.colorField = CT_Color.Parse(childNode, namespaceManager);
+                    break;
+                }
+            }
+            return ctObj;
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "position", this.positionField,true);
+            sw.Write(">");
+            if (this.colorField != null)
+            {
+                this.colorField.Write(sw, "color");
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+    }
+
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_GradientFill

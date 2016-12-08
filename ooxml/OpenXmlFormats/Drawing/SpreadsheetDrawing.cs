@@ -10,135 +10,6 @@ using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
-
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing", IsNullable = true)]
-    public class CT_Transform2D
-    {
-
-        private CT_Point2D offField = null;
-
-        private CT_PositiveSize2D extField = null;
-
-        private int? rotField = null;
-
-        private bool? flipHField = null;
-
-        private bool? flipVField = null;
-        public static CT_Transform2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_Transform2D ctObj = new CT_Transform2D();
-            ctObj.rot = XmlHelper.ReadInt(node.Attributes["rot"]);
-            ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
-            ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "off")
-                    ctObj.off = CT_Point2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "ext")
-                    ctObj.ext = CT_PositiveSize2D.Parse(childNode, namespaceManager);
-            }
-            return ctObj;
-        }
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
-            sw.Write(">");
-            if (this.off != null)
-                this.off.Write(sw, "off");
-            if (this.ext != null)
-                this.ext.Write(sw, "a:ext");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
-        }
-
-
-        public CT_PositiveSize2D AddNewExt()
-        {
-            this.extField = new CT_PositiveSize2D();
-            return this.extField;
-        }
-        public CT_Point2D AddNewOff()
-        {
-            this.offField = new CT_Point2D();
-            return this.offField;
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Point2D off
-        {
-            get
-            {
-                return this.offField;
-            }
-            set
-            {
-                this.offField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_PositiveSize2D ext
-        {
-            get
-            {
-                return this.extField;
-            }
-            set
-            {
-                this.extField = value;
-            }
-        }
-
-        [XmlAttribute]
-        [DefaultValue(0)]
-        public int rot
-        {
-            get
-            {
-                return null == this.rotField ? 0 : (int)rotField;
-            }
-            set
-            {
-                this.rotField = value;
-            }
-        }
-
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool flipH
-        {
-            get
-            {
-                return null == this.flipHField ? false : (bool)flipHField;
-            }
-            set
-            {
-                this.flipHField = value;
-            }
-        }
-        [XmlAttribute]
-        [DefaultValue(false)]
-        public bool flipV
-        {
-            get
-            {
-                return null == this.flipVField ? false : (bool)flipVField;
-            }
-            set
-            {
-                this.flipVField = value;
-            }
-        }
-    }
-
     [Serializable]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
@@ -1045,7 +916,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
             if (this.xfrm != null)
-                this.xfrm.Write(sw, "xfrm");
+                this.xfrm.Write(sw, "a:xfrm");
             if (this.custGeom != null)
                 this.custGeom.Write(sw, "custGeom");
             if (this.prstGeom != null)
@@ -1176,7 +1047,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if (this.nvGraphicFramePr != null)
                 this.nvGraphicFramePr.Write(sw, "nvGraphicFramePr");
             if (this.xfrm != null)
-                this.xfrm.Write(sw, "xfrm");
+                this.xfrm.Write(sw, "xdr:xfrm");
             if (this.graphic != null)
                 this.graphic.Write(sw, "graphic");
             sw.Write(string.Format("</xdr:{0}>", nodeName));

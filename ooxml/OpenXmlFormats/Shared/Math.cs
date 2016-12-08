@@ -718,20 +718,8 @@ namespace NPOI.OpenXmlFormats.Shared
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<m:{0}", nodeName));
-            if (this.val == ST_BreakBinSub.Item)
-            {
-                XmlHelper.WriteAttribute(sw, "m:val", "--");
-            }
-            else if (this.val == ST_BreakBinSub.Item1)
-            {
-                XmlHelper.WriteAttribute(sw, "m:val", "-+");
-            }
-            else if (this.val == ST_BreakBinSub.Item2)
-            {
-                XmlHelper.WriteAttribute(sw, "m:val", "+-");
-            }
-            sw.Write(">");
-            sw.Write(string.Format("</m:{0}>", nodeName));
+            XmlHelper.WriteAttribute(sw, "m:val", XmlHelper.GetEnumValue(this.val));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

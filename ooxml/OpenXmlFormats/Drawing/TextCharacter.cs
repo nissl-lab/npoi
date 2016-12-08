@@ -405,9 +405,9 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.altLang = XmlHelper.ReadString(node.Attributes["altLang"]);
             ctObj.sz = XmlHelper.ReadInt(node.Attributes["sz"]);
             if (node.Attributes["b"] != null)
-            ctObj.b = XmlHelper.ReadBool(node.Attributes["b"]);
+                ctObj.b = XmlHelper.ReadBool(node.Attributes["b"]);
             if (node.Attributes["i"] != null)
-            ctObj.i = XmlHelper.ReadBool(node.Attributes["i"]);
+                ctObj.i = XmlHelper.ReadBool(node.Attributes["i"]);
             if (node.Attributes["u"] != null)
                 ctObj.u = (ST_TextUnderlineType)Enum.Parse(typeof(ST_TextUnderlineType), node.Attributes["u"].Value);
             if (node.Attributes["strike"] != null)
@@ -483,8 +483,8 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "lang", this.lang);
             XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
             XmlHelper.WriteAttribute(sw, "sz", this.sz);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            if(i)
+            XmlHelper.WriteAttribute(sw, "b", this.b, true);
+            if (this.i)
                 XmlHelper.WriteAttribute(sw, "i", this.i);
             if(this.u!= ST_TextUnderlineType.none)
                 XmlHelper.WriteAttribute(sw, "u", this.u.ToString());

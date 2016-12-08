@@ -2419,7 +2419,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "pos", this.pos);
             sw.Write(">");
             if (this.scrgbClr != null)
@@ -2434,7 +2434,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]

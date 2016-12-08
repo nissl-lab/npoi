@@ -177,7 +177,7 @@ namespace NPOI.POIFS.FileSystem
                 if (srcFile != null)
                 {
                     //FileBackedDataSource d = new FileBackedDataSource(srcFile, readOnly);
-                    channel = new FileStream(srcFile.FullName, FileMode.Open, FileAccess.ReadWrite);
+                    channel = new FileStream(srcFile.FullName, FileMode.Open, FileAccess.Read);
                     _data = new FileBackedDataSource(channel, readOnly);
                 }
                 else

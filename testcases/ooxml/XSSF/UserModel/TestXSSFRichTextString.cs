@@ -214,29 +214,26 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(font2.IsBold, font2FR.IsBold);
             Assert.AreEqual(font2.FontName, font2FR.FontName);
         }
-
+        [Test]
         /**
          * make sure we insert xml:space="preserve" attribute
          * if a string has leading or trailing white spaces
          */
-        [Ignore]
         public void TestPreserveSpaces()
         {
-            //XSSFRichTextString rt = new XSSFRichTextString("Apache");
-            //CT_Rst ct = rt.GetCTRst();
-            //STXstring xs = ct.xgetT();
+            XSSFRichTextString rt = new XSSFRichTextString("Apache");
+            CT_Rst ct = rt.GetCTRst();
+            string t=ct.t;
             
-            //Assert.AreEqual("<xml-fragment>Apache</xml-fragment>", xs.xmlText());
-            //rt.String = ("  Apache");
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", xs.xmlText());
-            //rt.Append(" POI");
-            //rt.Append(" ");
-            //Assert.AreEqual("  Apache POI ", rt.String);
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</xml-fragment>", rt.getCTRst().getRArray(0).xgetT().xmlText());
+            Assert.AreEqual("<t>Apache</t>", ct.XmlText);
+            rt.String = "  Apache";
+            Assert.AreEqual("<t xml:space=\"preserve\">  Apache</t>", ct.XmlText);
+            rt.Append(" POI");
+            rt.Append(" ");
+            Assert.AreEqual("  Apache POI ", rt.String);
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</t>", rt.GetCTRst().GetRArray(0).xmlText());
             //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> POI</xml-fragment>", rt.getCTRst().getRArray(1).xgetT().xmlText());
             //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> </xml-fragment>", rt.getCTRst().getRArray(2).xgetT().xmlText());
-
-            Assert.Fail("implement STXString");
         }
 
         /**

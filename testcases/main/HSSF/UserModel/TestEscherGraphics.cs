@@ -27,6 +27,7 @@ namespace TestCases.HSSF.UserModel
 
 
     using NUnit.Framework;
+    using System.Windows.Forms;
 
     /**
      * Tests the capabilities of the EscherGraphics class.
@@ -71,15 +72,16 @@ namespace TestCases.HSSF.UserModel
                 Assert.AreEqual("[Font: Name=Arial, Size=10, Units=3, GdiCharSet=1, GdiVerticalFont=False]", f.ToString());
             }
         }
-        [Ignore("which class can be used instead of FontMetrics")]
         [Test]
         public void TestGetFontMetrics()
         {
             Font f = graphics.Font;
             if (f.ToString().IndexOf("dialog") != -1 || f.ToString().IndexOf("Dialog") != -1)
                 return;
-            //FontMetrics fontMetrics = graphics.GetFontMetrics(graphics.Font);
-            //Assert.AreEqual(7, fontMetrics.charWidth('X'));
+
+            Assert.AreEqual(7, TextRenderer.MeasureText("X", f).Width);
+            Assert.AreEqual("Arial", f.FontFamily.Name);
+            Assert.AreEqual(10, f.Size);
             //Assert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
         }
         [Test]

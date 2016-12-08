@@ -40,6 +40,6 @@ namespace NPOI.SS.UserModel.Charts
         /**
          * @return title type.
          */
-        TitleType GetTitleType();
+        TitleType? GetTitleType();
     }
 }

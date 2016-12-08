@@ -128,12 +128,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Border Copy()
         {
             CT_Border obj = new CT_Border();
-            obj.bottomField = this.bottomField;
-            obj.topField = this.topField;
-            obj.rightField = this.rightField;
-            obj.leftField = this.leftField;
-            obj.horizontalField = this.horizontalField;
-            obj.verticalField = this.verticalField;
+            obj.bottomField = this.bottomField == null ? null : this.bottomField.Copy();
+            obj.topField = this.topField == null ? null : this.topField.Copy();
+            obj.rightField = this.rightField == null ? null : this.rightField.Copy();
+            obj.leftField = this.leftField == null ? null : this.leftField.Copy();
+
+            obj.diagonalField = this.diagonalField == null ? null : this.diagonalField.Copy();
+            obj.verticalField = this.verticalField == null ? null : this.verticalField.Copy();
+            obj.horizontalField = this.horizontalField == null ? null : this.horizontalField.Copy();
+
+            obj.diagonalUpField = this.diagonalUpField;
+            obj.diagonalUpFieldSpecified = this.diagonalUpFieldSpecified;
+            obj.diagonalDownField = this.diagonalDownField;
+            obj.diagonalDownFieldSpecified = this.diagonalDownFieldSpecified;
             obj.outlineField = this.outlineField;
             return obj;
         }
@@ -164,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.topField = null;
         }
-        public void unsetBottom()
+        public void UnsetBottom()
         {
             this.bottomField = null;
         }
