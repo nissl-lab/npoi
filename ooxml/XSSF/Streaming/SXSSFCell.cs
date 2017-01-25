@@ -70,7 +70,7 @@ namespace NPOI.XSSF.Streaminging
         }
 
         //TODO: thismight be a little messed up.
-        private CellType GetCachedFormulaResultTypeEnum()
+        public CellType GetCachedFormulaResultTypeEnum()
         {
             if (_value.GetType() != CellType.Formula)
             {

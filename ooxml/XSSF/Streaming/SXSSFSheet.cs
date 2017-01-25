@@ -779,5 +779,10 @@ namespace NPOI.XSSF.Streaming
         {
             throw new NotImplementedException();
         }
+
+        public bool IsDate1904()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

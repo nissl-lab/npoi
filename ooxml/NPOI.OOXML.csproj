@@ -124,9 +124,11 @@
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
+    <Compile Include="XSSF\Streaming\GZIPSheetDataWriter.cs" />
     <Compile Include="XSSF\Streaming\Properties\CommentProperty.cs" />
     <Compile Include="XSSF\Streaming\Properties\HyperlinkProperty.cs" />
     <Compile Include="XSSF\Streaming\Properties\Property.cs" />
+    <Compile Include="XSSF\Streaming\SheetDataWriter.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCell.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCreationHelper.cs" />
     <Compile Include="XSSF\Streaming\SXSSFFormulaEvaluator.cs" />
