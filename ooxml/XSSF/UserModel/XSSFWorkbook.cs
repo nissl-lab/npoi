@@ -1619,7 +1619,7 @@ namespace NPOI.XSSF.UserModel
          * </p>
          * @return true if the date systems used in the workbook starts in 1904
          */
-        internal bool IsDate1904()
+        public bool IsDate1904()
         {
             CT_WorkbookPr workbookPr = workbook.workbookPr;
             return workbookPr.date1904Specified && workbookPr.date1904;

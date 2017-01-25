@@ -670,6 +670,22 @@ namespace NPOI.XSSF.UserModel
             if (styles == null) return null;
             return styles.GetTheme();
         }
+
+        public bool HasFormatting()
+        {
+            //noinspection deprecation - for performance reasons!
+            CT_RElt[] rs = st.r.ToArray();
+            if (rs == null || rs.Length == 0)
+            {
+                return false;
+            }
+            foreach (CT_RElt r in rs)
+            {
+                //TODO: check that this functions the same.
+                if (r.rPr != null) return true;
+            }
+            return false;
+        }
     }
 }
 
