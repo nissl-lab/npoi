@@ -124,6 +124,7 @@
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
+    <Compile Include="XSSF\Streaming\AutoSizeColumnTracker.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriter.cs" />
     <Compile Include="XSSF\Streaming\Properties\CommentProperty.cs" />
     <Compile Include="XSSF\Streaming\Properties\HyperlinkProperty.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="XSSF\Streaming\SXSSFCell.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCreationHelper.cs" />
     <Compile Include="XSSF\Streaming\SXSSFFormulaEvaluator.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFRow.cs" />
     <Compile Include="XSSF\Streaming\SXSSFSheet.cs" />
     <Compile Include="XSSF\Streaming\SXSSFWorkbook.cs" />
     <Compile Include="XSSF\Streaming\Values\BlankValue.cs" />

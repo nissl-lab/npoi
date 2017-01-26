@@ -249,7 +249,7 @@ namespace NPOI.XSSF.Streaming
             return _randomAccessWindowSize;
         }
 
-        protected SheetDataWriter createSheetDataWriter()
+        public SheetDataWriter createSheetDataWriter()
         {
             if (_compressTmpFiles)
             {

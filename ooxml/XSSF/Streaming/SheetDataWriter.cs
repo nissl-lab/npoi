@@ -18,11 +18,11 @@ namespace NPOI.XSSF.Streaming
 
         public FileInfo _fd;
         public BufferedStream _out;
-        private int _rownum;
-        private int _numberOfFlushedRows;
-        private int _lowestIndexOfFlushedRows; // meaningful only of _numberOfFlushedRows>0
-        private int _numberOfCellsOfLastFlushedRow; // meaningful only of _numberOfFlushedRows>0
-        private int _numberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
+        public int _rownum;
+        public int _numberOfFlushedRows;
+        public int _lowestIndexOfFlushedRows; // meaningful only of _numberOfFlushedRows>0
+        public int _numberOfCellsOfLastFlushedRow; // meaningful only of _numberOfFlushedRows>0
+        public int _numberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
 
         /**
  * Table of strings shared across this workbook.
