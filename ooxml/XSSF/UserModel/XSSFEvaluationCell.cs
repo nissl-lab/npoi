@@ -45,6 +45,12 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        //TODO: RYe added.
+        public XSSFEvaluationCell()
+        {
+            
+        }
+
         public Object IdentityKey
         {
             get

@@ -221,7 +221,7 @@ namespace NPOI.XSSF.Streaming
             // ensure that the writer is closed in all cases to not have lingering writers
             try
             {
-                sxSheet.getSheetDataWriter().close();
+                sxSheet._writer.Close();
             }
             catch (IOException e)
             {
@@ -285,7 +285,7 @@ namespace NPOI.XSSF.Streaming
                         if (xSheet != null)
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
-                            var xis = sxSheet.GetWorksheetXMLInputStream();
+                            var xis = sxSheet.getWorksheetXMLInputStream();
                             try
                             {
                                 CopyStreamAndInjectWorksheet(inputStream, zos, xis);
@@ -500,7 +500,7 @@ namespace NPOI.XSSF.Streaming
             // Clean up temporary resources
             try
             {
-                sxSheet.Dispose();
+                sxSheet.dispose();
             }
             catch (IOException e)
             {
@@ -580,7 +580,7 @@ namespace NPOI.XSSF.Streaming
         {
             foreach (SXSSFSheet sheet in _xFromSxHash.Values)
             {
-                sheet.FlushRows();
+                sheet.flushRows();
             }
         }
 
@@ -596,7 +596,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    success = sheet.Dispose() && success;
+                    success = sheet.dispose() && success;
                 }
                 catch (IOException e)
                 {
@@ -722,7 +722,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    sheet.GetSheetDataWriter().close();
+                    sheet._writer.Close();
                 }
                 catch (IOException e)
                 {

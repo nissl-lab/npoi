@@ -50,7 +50,7 @@ namespace NPOI.XSSF.UserModel
             return new XSSFEvaluationWorkbook(book);
         }
 
-        private XSSFEvaluationWorkbook(IWorkbook book)
+        protected XSSFEvaluationWorkbook(IWorkbook book)
         {
             _uBook = (XSSFWorkbook)book;
         }

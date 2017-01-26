@@ -32,16 +32,16 @@ namespace NPOI.XSSF.Streaming
     public class SXSSFSheet : ISheet
     {
         /*package*/
-        private XSSFSheet _sh;
-        private SXSSFWorkbook _workbook;
+        public XSSFSheet _sh;
+        public SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        private Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
-        private SheetDataWriter _writer;
-        private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
-        private object _autoSizeColumnTracker;
-        private int outlineLevelRow = 0;
-        private int lastFlushedRowNumber = -1;
-        private bool allFlushed = false;
+        public Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
+        public SheetDataWriter _writer;
+        public int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
+        public AutoSizeColumnTracker _autoSizeColumnTracker;
+        public int outlineLevelRow = 0;
+        public int lastFlushedRowNumber = -1;
+        public bool allFlushed = false;
 
 
         public SXSSFSheet(SXSSFWorkbook workbook, XSSFSheet xSheet)
@@ -468,16 +468,17 @@ namespace NPOI.XSSF.Streaming
                 // get the best fit width of rows already flushed to disk
                 flushedWidth = _autoSizeColumnTracker.getBestFitColumnWidth(column, useMergedCells);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 throw new InvalidOperationException("Could not auto-size column. Make sure the column was tracked prior to auto-sizing the column.", e);
             }
 
             // get the best-fit width of rows currently in the random access window
-             int activeWidth = (int)(256 * SheetUtil.GetColumnWidth(this, column, useMergedCells));
+            int activeWidth = (int)(256 * SheetUtil.GetColumnWidth(this, column, useMergedCells));
 
             // the best-fit width for both flushed rows and random access window rows
             // flushedWidth or activeWidth may be negative if column contains only blank cells
-             int bestFitWidth = Math.Max(flushedWidth, activeWidth);
+            int bestFitWidth = Math.Max(flushedWidth, activeWidth);
 
             if (bestFitWidth > 0)
             {
@@ -485,7 +486,7 @@ namespace NPOI.XSSF.Streaming
                 int width = Math.Max(bestFitWidth, maxColumnWidth);
                 SetColumnWidth(column, width);
             }
-            }
+        }
 
         public IRow CopyRow(int sourceIndex, int targetIndex)
         {
@@ -509,7 +510,7 @@ namespace NPOI.XSSF.Streaming
 
         public void CreateFreezePane(int colSplit, int rowSplit)
         {
-            _sh.CreateFreezePane(colSplit,rowSplit);
+            _sh.CreateFreezePane(colSplit, rowSplit);
         }
 
         public void CreateFreezePane(int colSplit, int rowSplit, int leftmostColumn, int topRow)
@@ -561,12 +562,13 @@ namespace NPOI.XSSF.Streaming
 
         public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, PanePosition activePane)
         {
-            _sh.CreateSplitPane(xSplitPos,ySplitPos,leftmostColumn,topRow,activePane);
+            _sh.CreateSplitPane(xSplitPos, ySplitPos, leftmostColumn, topRow, activePane);
         }
 
         public IComment GetCellComment(int row, int column)
         {
-            return _sh.GetCellComment(new CellRangeAddress(row, column));
+            throw new NotImplementedException();
+           // return _sh.GetCellComment(new CellRangeAddress(row, column));
         }
 
         public int GetColumnOutlineLevel(int columnIndex)
@@ -588,7 +590,7 @@ namespace NPOI.XSSF.Streaming
         {
             return _sh.GetColumnWidthInPixels(columnIndex);
         }
-        
+
 
         public IDataValidationHelper GetDataValidationHelper()
         {
@@ -662,7 +664,9 @@ namespace NPOI.XSSF.Streaming
         public void setRowOutlineLevel(int rownum, int level)
         {
             SXSSFRow row = _rows[rownum];
-            row.setOutlineLevel(level);
+
+            //TODO: should be OutlineLevl?
+            row._outlineLevel=level;
             if (level > 0 && level > outlineLevelRow)
             {
                 outlineLevelRow = level;
@@ -722,20 +726,22 @@ namespace NPOI.XSSF.Streaming
         //TODO:FixME!
         public void RemoveRow(IRow row)
         {
-            if (row.Sheet != this)
-            {
-                throw new InvalidOperationException("Specified row does not belong to this sheet");
-            }
+            throw new NotImplementedException();
+            //if (row.Sheet != this)
+            //{
+            //    throw new InvalidOperationException("Specified row does not belong to this sheet");
+            //}
 
-            for (Iterator<Map.Entry<Integer, SXSSFRow>> iter = _rows.entrySet().iterator(); iter.hasNext();)
-            {
-                Map.Entry<Integer, SXSSFRow> entry = iter.next();
-                if (entry.getValue() == row)
-                {
-                    iter.remove();
-                    return;
-                }
-            }
+          
+            //for (Iterator<Map.Entry<Integer, SXSSFRow>> iter = _rows.entrySet().iterator(); iter.hasNext();)
+            //{
+            //    Map.Entry<int, SXSSFRow> entry = iter.next();
+            //    if (entry.getValue() == row)
+            //    {
+            //        iter.remove();
+            //        return;
+            //    }
+            //}
         }
 
         public void RemoveRowBreak(int row)
@@ -780,12 +786,12 @@ namespace NPOI.XSSF.Streaming
 
         public void SetColumnGroupCollapsed(int columnNumber, bool collapsed)
         {
-            _sh.SetColumnGroupCollapsed(columnNumber,collapsed);
+            _sh.SetColumnGroupCollapsed(columnNumber, collapsed);
         }
 
         public void SetColumnHidden(int columnIndex, bool hidden)
         {
-            _sh.SetColumnHidden(columnIndex,hidden);
+            _sh.SetColumnHidden(columnIndex, hidden);
         }
 
         public void SetColumnWidth(int columnIndex, int width)
@@ -800,7 +806,7 @@ namespace NPOI.XSSF.Streaming
 
         public void SetMargin(MarginType margin, double size)
         {
-            _sh.SetMargin(margin,size);
+            _sh.SetMargin(margin, size);
         }
 
         public void SetRowBreak(int row)
@@ -823,7 +829,7 @@ namespace NPOI.XSSF.Streaming
 
         private void collapseRow(int rowIndex)
         {
-            SXSSFRow row = GetRow(rowIndex);
+            SXSSFRow row = (SXSSFRow)GetRow(rowIndex);
             if (row == null)
             {
                 throw new InvalidOperationException("Invalid row number(" + rowIndex + "). Row does not exist.");
@@ -834,15 +840,16 @@ namespace NPOI.XSSF.Streaming
 
                 // Hide all the columns until the end of the group
                 int lastRow = writeHidden(row, startRow, true);
-                SXSSFRow lastRowObj = GetRow(lastRow);
+                SXSSFRow lastRowObj = (SXSSFRow)GetRow(lastRow);
                 if (lastRowObj != null)
                 {
-                    lastRowObj.setCollapsed(true);
+                    //TODO: properly set this shit
+                    lastRowObj._collapsed = true;
                 }
                 else
                 {
-                    SXSSFRow newRow = CreateRow(lastRow);
-                    newRow.setCollapsed(true);
+                    SXSSFRow newRow = (SXSSFRow)CreateRow(lastRow);
+                    newRow._collapsed = true;
                 }
             }
         }
@@ -853,8 +860,8 @@ namespace NPOI.XSSF.Streaming
         private int findStartOfRowOutlineGroup(int rowIndex)
         {
             // Find the start of the group.
-            Row row = GetRow(rowIndex);
-            int level = ((SXSSFRow)row).getOutlineLevel();
+            IRow row = GetRow(rowIndex);
+            int level = ((SXSSFRow)row).OutlineLevel;
             if (level == 0)
             {
                 throw new InvalidOperationException("Outline level is zero for the row (" + rowIndex + ").");
@@ -871,14 +878,15 @@ namespace NPOI.XSSF.Streaming
 
         private int writeHidden(SXSSFRow xRow, int rowIndex, bool hidden)
         {
-            int level = xRow.getOutlineLevel();
-            SXSSFRow currRow = GetRow(rowIndex);
+            //TODO: or _.outlinelevel
+            int level = xRow.OutlineLevel;
+            var currRow = (SXSSFRow)GetRow(rowIndex);
 
-            while (currRow != null && currRow.getOutlineLevel() >= level)
+            while (currRow != null && currRow.OutlineLevel >= level)
             {
-                currRow.setHidden(hidden);
+                currRow._hidden =hidden;
                 rowIndex++;
-                currRow = GetRow(rowIndex);
+                currRow = (SXSSFRow)GetRow(rowIndex);
             }
             return rowIndex;
         }
@@ -906,13 +914,13 @@ namespace NPOI.XSSF.Streaming
 
         public void ShowInPane(int toprow, int leftcol)
         {
-            _sh.ShowInPane(toprow,leftcol);
+            _sh.ShowInPane(toprow, leftcol);
         }
 
         public void UngroupColumn(int fromColumn, int toColumn)
         {
             _sh.UngroupColumn(fromColumn, toColumn);
-            
+
         }
 
         public void UngroupRow(int fromRow, int toRow)
@@ -930,6 +938,58 @@ namespace NPOI.XSSF.Streaming
 
             RemoveRow(row);
             _rows.Add(newRowNum, row);
+        }
+
+        public bool dispose()
+        {
+            if (!allFlushed) flushRows();
+            return _writer.dispose();
+        }
+
+        /**
+ * Specifies how many rows can be accessed at most via getRow().
+ * The exeeding rows (if any) are flushed to the disk while rows
+ * with lower index values are flushed first.
+ */
+        public void flushRows(int remaining)
+        {
+            //TODO: lenght?
+            while (_rows.Count > remaining) flushOneRow();
+            if (remaining == 0) allFlushed = true;
+        }
+
+        public void flushRows()
+        {
+            flushRows(0);
+        }
+
+        private void flushOneRow()
+        {
+            //TODO sorted dictionrary?
+            int firstRowNum = _rows.Keys.First();
+        if (firstRowNum!=null) {
+                int rowIndex = firstRowNum;
+                SXSSFRow row = _rows[firstRowNum];
+                // Update the best fit column widths for auto-sizing just before the rows are flushed
+                _autoSizeColumnTracker.updateColumnWidths(row);
+                _writer.WriteRow(rowIndex, row);
+                _rows.Remove(firstRowNum);
+                lastFlushedRowNumber = rowIndex;
+            }
+        }
+
+        /* Gets "<sheetData>" document fragment*/
+        public Stream getWorksheetXMLInputStream()
+        {
+            // flush all remaining data and close the temp file writer
+            flushRows(0);
+            _writer.Close();
+        return _writer.GetWorksheetXMLInputStream();
+        }
+
+        public SheetDataWriter getSheetDataWriter()
+        {
+            return _writer;
         }
     }
 }

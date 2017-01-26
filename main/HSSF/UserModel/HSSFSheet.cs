@@ -2920,5 +2920,10 @@ namespace NPOI.HSSF.UserModel
             }
             return isNew;
         }
+
+        public bool IsDate1904()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

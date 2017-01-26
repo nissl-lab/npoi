@@ -7,6 +7,7 @@ using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula.Udf;
 using NPOI.SS.UserModel;
 using NPOI.Util;
+using NPOI.XSSF.Streaminging;
 using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
@@ -61,7 +62,7 @@ namespace NPOI.XSSF.Streaming
             // Check they're all available
             foreach (ISheet sheet in wb)
             {
-                if (((SXSSFSheet)sheet).AreAllRowsFlushed())
+                if (((SXSSFSheet)sheet).allFlushed)
                 {
                     throw new SheetsFlushedException();
                 }
@@ -72,7 +73,7 @@ namespace NPOI.XSSF.Streaming
             {
 
                 // Check if any rows have already been flushed out
-                int lastFlushedRowNum = ((SXSSFSheet)sheet).GetLastFlushedRowNum();
+                int lastFlushedRowNum = ((SXSSFSheet)sheet).lastFlushedRowNumber;
                 if (lastFlushedRowNum > -1)
                 {
                     if (!skipOutOfWindow) throw new RowFlushedException(0);

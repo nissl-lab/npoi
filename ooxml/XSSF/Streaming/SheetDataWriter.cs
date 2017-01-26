@@ -160,14 +160,14 @@ namespace NPOI.XSSF.Streaming
             if (_numberOfFlushedRows == 0)
                 _lowestIndexOfFlushedRows = rownum;
             _numberLastFlushedRow = Math.Max(rownum, _numberLastFlushedRow);
-            _numberOfCellsOfLastFlushedRow = row.getLastCellNum();
+            _numberOfCellsOfLastFlushedRow = row.LastCellNum;
             _numberOfFlushedRows++;
             BeginRow(rownum, row);
-            var cells = row.allCellsIterator();
+            var cells = row.GetEnumerator();
             int columnIndex = 0;
-            while (cells.hasNext())
+            while (cells.MoveNext())
             {
-                writeCell(columnIndex++, cells.next());
+                writeCell(columnIndex++, cells.Current);
             }
             endRow();
         }
@@ -179,34 +179,35 @@ namespace NPOI.XSSF.Streaming
             _out.Write(text, 0, text.Length);
             if (row.hasCustomHeight())
             {
-                text = Encoding.ASCII.GetBytes(" customHeight=\"true\"  ht=\"" + row.getHeightInPoints() + "\"");
+                text = Encoding.ASCII.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row.getZeroHeight())
+            if (row.ZeroHeight)
             {
                 text = Encoding.ASCII.GetBytes(" hidden=\"true\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row.isFormatted())
+            if (row.IsFormatted)
             {
-                text = Encoding.ASCII.GetBytes(" s=\"" + row.getRowStyleIndex() + "\"");
+                text = Encoding.ASCII.GetBytes(" s=\"" + row.RowStyle.Index + "\"");
                 _out.Write(text, 0, text.Length);
                 text = Encoding.ASCII.GetBytes(" customFormat=\"1\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row.getOutlineLevel() != 0)
+            //TODO: _outlinelevel or OUTLINE LEVEL
+            if (row.OutlineLevel != 0)
             {
-                text = Encoding.ASCII.GetBytes(" outlineLevel=\"" + row.getOutlineLevel() + "\"");
+                text = Encoding.ASCII.GetBytes(" outlineLevel=\"" + row._outlineLevel + "\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row.getHidden() != null)
+            if (row._hidden != null)
             {
-                text = Encoding.ASCII.GetBytes(" hidden=\"" + (row.getHidden() ? "1" : "0") + "\"");
+                text = Encoding.ASCII.GetBytes(" hidden=\"" + (row._hidden.Value ? "1" : "0") + "\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row.getCollapsed() != null)
+            if (row._collapsed != null)
             {
-                text = Encoding.ASCII.GetBytes(" collapsed=\"" + (row.getCollapsed() ? "1" : "0") + "\"");
+                text = Encoding.ASCII.GetBytes(" collapsed=\"" + (row._collapsed.Value ? "1" : "0") + "\"");
                 _out.Write(text, 0, text.Length);
             }
 
@@ -488,7 +489,7 @@ namespace NPOI.XSSF.Streaming
          * Deletes the temporary file that backed this sheet on disk.
          * @return true if the file was deleted, false if it wasn't.
          */
-        bool dispose()
+        public bool dispose()
         {
             bool ret;
             try

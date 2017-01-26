@@ -4622,6 +4622,11 @@ namespace NPOI.XSSF.UserModel
             }
             return col.outlineLevel;
         }
+
+        public bool IsDate1904()
+        {
+           throw new NotImplementedException();
+        }
     }
 
 }

@@ -31,7 +31,8 @@ namespace NPOI.Util
                 // That name is already taken, try another
                 file = CreateTempFile(prefix, suffix).FullName;
             }
-            FileStream newFile = File.Create(file);
+            //TODO:RyeEdits
+            FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite);
             newFile.Close();
 
             return new FileInfo(file);

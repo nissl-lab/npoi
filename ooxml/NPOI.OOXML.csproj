@@ -132,6 +132,9 @@
     <Compile Include="XSSF\Streaming\SheetDataWriter.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCell.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCreationHelper.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationCell.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationSheet.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationWorkbook.cs" />
     <Compile Include="XSSF\Streaming\SXSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\Streaming\SXSSFRow.cs" />
     <Compile Include="XSSF\Streaming\SXSSFSheet.cs" />

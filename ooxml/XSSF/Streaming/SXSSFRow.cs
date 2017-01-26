@@ -15,18 +15,31 @@ namespace NPOI.XSSF.Streaming
     {
         private static bool? UNDEFINED = null;
 
-        private SXSSFSheet _sheet; // parent sheet
+        public SXSSFSheet _sheet; // parent sheet
         //TODO: replacing with dict to get compling may need to alter for performance.
-        private Dictionary<int,SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        public Dictionary<int,SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
         //private SortedMap<Integer, SXSSFCell> _cells = new TreeMap<Integer, SXSSFCell>();
-        private short _style = -1; // index of cell style in style table
-        private short _height = -1; // row height in twips (1/20 point)
-        private bool _zHeight = false; // row zero-height (this is somehow different than being hidden)
-        private int _outlineLevel = 0;   // Outlining level of the row, when outlining is on
+        public short _style = -1; // index of cell style in style table
+        public short _height = -1; // row height in twips (1/20 point)
+        public bool _zHeight = false; // row zero-height (this is somehow different than being hidden)
+        public int _outlineLevel = 0;   // Outlining level of the row, when outlining is on
                                          // use Boolean to have a tri-state for on/off/undefined 
-        private bool? _hidden = UNDEFINED;
-        private bool? _collapsed = UNDEFINED;
+        public bool? _hidden = UNDEFINED;
+        public bool? _collapsed = UNDEFINED;
 
+        public SXSSFRow(SXSSFSheet sheet)
+        {
+            _sheet = sheet;
+        }
+
+        public IEnumerator<ICell> allCellsIterator()
+        {
+            return new CellIterator(LastCellNum, _cells);
+        }
+        public bool hasCustomHeight()
+        {
+            return _height != -1;
+        }
         public List<ICell> Cells
         {
             get
@@ -110,7 +123,8 @@ namespace NPOI.XSSF.Streaming
 
             set
             {
-                _sheet.
+                throw new NotImplementedException();
+                
             }
         }
 
@@ -179,7 +193,7 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(column);
             SXSSFCell cell = new SXSSFCell(this, type);
-            _cells.put(column, cell);
+            _cells.Add(column, cell);
             return cell;
         }
 
@@ -211,17 +225,20 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(cellnum);
 
-            var cell = _cells.get(cellnum);
+            var cell = _cells[cellnum];
 
             //TODO come bakc and do comparision with if statement, may need to deep 
-            switch (policy)
+            switch (policy._policy)
             {
-                case MissingCellPolicy.RETURN_NULL_AND_BLANK:
+                //case MissingCellPolicy.RETURN_NULL_AND_BLANK:
+                case MissingCellPolicy.Policy.RETURN_NULL_AND_BLANK:
                     return cell;
-                case MissingCellPolicy.RETURN_BLANK_AS_NULL:
-                    bool isBlank = (cell != null && cell.getCellTypeEnum() == CellType.Blank);
+                //case MissingCellPolicy.RETURN_BLANK_AS_NULL:
+                case MissingCellPolicy.Policy.RETURN_BLANK_AS_NULL:
+                    bool isBlank = (cell != null && cell.CellType == CellType.Blank);
                     return (isBlank) ? null : cell;
-                case MissingCellPolicy.CREATE_NULL_AS_BLANK:
+                // case MissingCellPolicy.CREATE_NULL_AS_BLANK:
+                case MissingCellPolicy.Policy.CREATE_NULL_AS_BLANK:
                     return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
                 default:
                     throw new InvalidOperationException("Illegal policy " + policy + " (" + policy.id + ")");
@@ -230,7 +247,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator<ICell> GetEnumerator()
         {
-            return new FilledCellIterator(_cells.Values.GetEnumberable());
+            return new FilledCellIterator(_cells.Values);
         }
 
         public void MoveCell(ICell cell, int newColumn)
@@ -241,7 +258,7 @@ namespace NPOI.XSSF.Streaming
         public void RemoveCell(ICell cell)
         {
             int index = getCellIndex((SXSSFCell)cell);
-            _cells.remove(index);
+            _cells.Remove(index);
         }
         /**
  * Return the column number of a cell if it is in this row
@@ -251,7 +268,7 @@ namespace NPOI.XSSF.Streaming
  * @return cell column index if it is in this row, -1 otherwise
  */
         /*package*/
-        int getCellIndex(SXSSFCell cell)
+        public int getCellIndex(SXSSFCell cell)
         {
             foreach (var entry in _cells)
             {
@@ -276,46 +293,107 @@ namespace NPOI.XSSF.Streaming
 * Throws ConcurrentModificationException if cells are added, moved, or
 * removed after the iterator is created.
 */
-        public class FilledCellIterator : IEnumerable<ICell>
+        public class FilledCellIterator : IEnumerator<ICell>
         {
             private IEnumerable<ICell> _cells;
             public FilledCellIterator(IEnumerable<SXSSFCell> cells)
             {
                 _cells = cells;
             }
-           
+
+            public ICell Current
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            object IEnumerator.Current
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
 
             public IEnumerator<ICell> GetEnumerator()
             {
                 return _cells.GetEnumerator();
             }
 
-            IEnumerator IEnumerable.GetEnumerator()
+            public bool MoveNext()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Reset()
             {
                 throw new NotImplementedException();
             }
         }
 
-        public class CellIterator : IEnumerable<ICell>
+        //TODO: enumerator or enumberabl?
+        public class CellIterator : IEnumerator<ICell>
         {
-            //TODO: Should be static so I don't know if i can just pass this to here
-            int maxColumn = LastCellNum; //last column PLUS ONE
-            int pos = 0;
+            private Dictionary<int, SXSSFCell> _cells;
+            private int maxColumn;
+            private int pos;
+            public CellIterator(int lastCellNum, Dictionary<int, SXSSFCell> cells)
+            {
+                //TODO: Should be static so I don't know if i can just pass this to here
+                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
+                 pos = 0;
+                _cells = cells;
+            }
+
+
+            public ICell Current
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            object IEnumerator.Current
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
 
             public IEnumerator<ICell> GetEnumerator()
             {
                 throw new NotImplementedException();
             }
 
+            //TODO THese do need to get implemented and translated 
             public bool hasNext()
             {
                 return pos < maxColumn;
             }
 
+            public bool MoveNext()
+            {
+                throw new NotImplementedException();
+            }
+
             public ICell next()
             {
                 if (hasNext())
-                    return _cells.get(pos++);
+                    return _cells[pos++];
                 else
                     throw new NullReferenceException();
             }
@@ -325,10 +403,12 @@ namespace NPOI.XSSF.Streaming
                 throw new InvalidOperationException();
             }
 
-            IEnumerator IEnumerable.GetEnumerator()
+            public void Reset()
             {
                 throw new NotImplementedException();
             }
+
+            
         }
     }
 

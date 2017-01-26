@@ -24,6 +24,12 @@ namespace NPOI.XSSF.Streaminging
         private ICellStyle _style;
         private Property _firstProperty;
 
+        public SXSSFCell(SXSSFRow row, CellType cellType)
+        {
+            _row = row;
+            setType(cellType);
+        }
+
         public CellRangeAddress ArrayFormulaRange
         {
             get
@@ -61,7 +67,7 @@ namespace NPOI.XSSF.Streaminging
         private string BuildTypeMismatchMessage(CellType expectedTypeCode, CellType actualTypeCode,
             bool isFormulaCell)
         {
-            return $"Cannot get a {expectedTypeCode} value from a {actualTypeCode} {(isFormulaCell ? "formula " : "")} cell";
+            return string.Format("Cannot get a {0} value from a {1} {2} cell", expectedTypeCode, actualTypeCode,(isFormulaCell ? "formula " : ""));
         }
 
         public CellType CachedFormulaResultType
@@ -202,22 +208,23 @@ namespace NPOI.XSSF.Streaminging
 
             set
             {
-                //TODO: may need to set private _link
-                if (Hyperlink == null)
-                {
-                    RemoveHyperlink();
-                    return;
-                }
+                ////TODO: may need to set private _link
+                throw new NotImplementedException();
+                //if (Hyperlink == null)
+                //{
+                //    RemoveHyperlink();
+                //    return;
+                //}
 
-                SetProperty(Property.HYPERLINK, Hyperlink);
+                //SetProperty(Property.HYPERLINK, Hyperlink);
 
-                XSSFHyperlink xssfobj = (XSSFHyperlink)Hyperlink;
-                // Assign to us
-                CellReference reference = new CellReference(RowIndex, ColumnIndex);
-                xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
+                //XSSFHyperlink xssfobj = (XSSFHyperlink)Hyperlink;
+                //// Assign to us
+                //CellReference reference = new CellReference(RowIndex, ColumnIndex);
+                //xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
 
-                // Add to the lists
-                Sheet._sh.addHyperlink(xssfobj);
+                //// Add to the lists
+                //Sheet._sh.addHyperlink(xssfobj);
             }
         }
 
@@ -292,7 +299,7 @@ namespace NPOI.XSSF.Streaminging
         {
             get
             {
-                return _row.getRowNum();
+                return _row.RowNum;
             }
         }
 
@@ -300,7 +307,7 @@ namespace NPOI.XSSF.Streaminging
         {
             get
             {
-                return _row.getSheet();
+                return _row.Sheet;
             }
         }
 
@@ -346,15 +353,17 @@ namespace NPOI.XSSF.Streaminging
 
         public void RemoveHyperlink()
         {
-            RemoveProperty(Property.HYPERLINK);
+            throw new NotImplementedException();
+            //RemoveProperty(Property.HYPERLINK);
 
-            Sheet._sh.removeHyperlink(RowIndex, ColumnIndex);
+            //Sheet._sh.removeHyperlink(RowIndex, ColumnIndex);
         }
 
         public void SetAsActiveCell()
         {
             //TODO: Fixme!
-            Sheet.SetActiveCell(CellAddress);
+            throw new NotImplementedException();
+           // Sheet.SetActiveCell(CellAddress);
         }
 
         public void SetCellErrorValue(byte value)
@@ -766,5 +775,10 @@ namespace NPOI.XSSF.Streaminging
         //END OF COPIED CODE
         #endregion
 
+
+        public void SetCellValue(DateTime value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
