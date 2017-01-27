@@ -17,7 +17,7 @@ namespace NPOI.XSSF.Streaming
         private static POILogger logger = POILogFactory.GetLogger(typeof(SheetDataWriter));
 
         public FileInfo _fd;
-        public BufferedStream _out;
+        public FileStream _out;
         public int _rownum;
         public int _numberOfFlushedRows;
         public int _lowestIndexOfFlushedRows; // meaningful only of _numberOfFlushedRows>0
@@ -58,7 +58,7 @@ namespace NPOI.XSSF.Streaming
          * 
          * @param  fd the file to write to
          */
-        public BufferedStream createWriter(FileInfo fd)
+        public FileStream createWriter(FileInfo fd)
         {
             FileStream fos = new FileStream(fd.FullName, FileMode.Open, FileAccess.ReadWrite);
             FileStream decorated;
@@ -72,9 +72,10 @@ namespace NPOI.XSSF.Streaming
                 throw e;
             }
             //TODO: this is the decorate?
-
-            return new BufferedStream(
-                    new BinaryWriter(fos, Encoding.UTF8).BaseStream);
+            //StreamWriter sw = new StreamWriter(fos, Encoding.UTF8);
+            return fos;
+            //return new BufferedStream(
+            //        new BinaryWriter(fos, Encoding.UTF8).BaseStream);
         }
 
         /**
@@ -99,8 +100,24 @@ namespace NPOI.XSSF.Streaming
          */
         public void Close()
         {
-            _out.Flush();
-            _out.Close();
+            try
+            {
+                _out.Flush();
+            }
+            catch (Exception e)
+            {
+                
+            }
+            try
+            {
+                _out.Close();
+            }
+            catch (Exception e)
+            {
+
+            }
+          
+            
         }
 
         /**
@@ -175,53 +192,54 @@ namespace NPOI.XSSF.Streaming
         void BeginRow(int rownum, SXSSFRow row)
         {
             //TODO: make sure this isn't off.
-            var text = Encoding.ASCII.GetBytes("<row r=\"" + (rownum + 1) + "\"");
+            var text = Encoding.UTF8.GetBytes("<row r=\"" + (rownum + 1) + "\"");
             _out.Write(text, 0, text.Length);
             if (row.hasCustomHeight())
             {
-                text = Encoding.ASCII.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
+                text = Encoding.UTF8.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
                 _out.Write(text, 0, text.Length);
             }
             if (row.ZeroHeight)
             {
-                text = Encoding.ASCII.GetBytes(" hidden=\"true\"");
+                text = Encoding.UTF8.GetBytes(" hidden=\"true\"");
                 _out.Write(text, 0, text.Length);
             }
             if (row.IsFormatted)
             {
-                text = Encoding.ASCII.GetBytes(" s=\"" + row.RowStyle.Index + "\"");
+                text = Encoding.UTF8.GetBytes(" s=\"" + row.RowStyle.Index + "\"");
                 _out.Write(text, 0, text.Length);
-                text = Encoding.ASCII.GetBytes(" customFormat=\"1\"");
+                text = Encoding.UTF8.GetBytes(" customFormat=\"1\"");
                 _out.Write(text, 0, text.Length);
             }
             //TODO: _outlinelevel or OUTLINE LEVEL
             if (row.OutlineLevel != 0)
             {
-                text = Encoding.ASCII.GetBytes(" outlineLevel=\"" + row._outlineLevel + "\"");
+                text = Encoding.UTF8.GetBytes(" outlineLevel=\"" + row._outlineLevel + "\"");
                 _out.Write(text, 0, text.Length);
             }
             if (row._hidden != null)
             {
-                text = Encoding.ASCII.GetBytes(" hidden=\"" + (row._hidden.Value ? "1" : "0") + "\"");
+                text = Encoding.UTF8.GetBytes(" hidden=\"" + (row._hidden.Value ? "1" : "0") + "\"");
                 _out.Write(text, 0, text.Length);
             }
             if (row._collapsed != null)
             {
-                text = Encoding.ASCII.GetBytes(" collapsed=\"" + (row._collapsed.Value ? "1" : "0") + "\"");
+                text = Encoding.UTF8.GetBytes(" collapsed=\"" + (row._collapsed.Value ? "1" : "0") + "\"");
                 _out.Write(text, 0, text.Length);
             }
 
-            text = Encoding.ASCII.GetBytes(">\n");
+            text = Encoding.UTF8.GetBytes(">\n");
             _out.Write(text, 0, text.Length);
             this._rownum = rownum;
         }
 
         void endRow()
         {
-            var text = Encoding.ASCII.GetBytes("</row>\n");
+            var text = Encoding.UTF8.GetBytes("</row>\n");
             _out.Write(text, 0, text.Length);
         }
 
+        //TODO: The strings that need to be written are probably wrong. :\
         public void writeCell(int columnIndex, ICell cell)
         {
             if (cell == null)
@@ -229,7 +247,7 @@ namespace NPOI.XSSF.Streaming
                 return;
             }
             string cellRef = new CellReference(_rownum, columnIndex).FormatAsString();
-            var text = Encoding.ASCII.GetBytes("<c r=\"" + cellRef + "\"");
+            var text = Encoding.UTF8.GetBytes("<c r=\"" + cellRef + "\"");
             _out.Write(text, 0, text.Length);
             ICellStyle cellStyle = cell.CellStyle;
             if (cellStyle.Index != 0)
@@ -237,7 +255,7 @@ namespace NPOI.XSSF.Streaming
                 // need to convert the short to unsigned short as the indexes can be up to 64k
                 // ideally we would use int for this index, but that would need changes to some more 
                 // APIs
-                text = Encoding.ASCII.GetBytes(" s=\"" + (cellStyle.Index & 0xffff) + "\"");
+                text = Encoding.UTF8.GetBytes(" s=\"" + (cellStyle.Index & 0xffff) + "\"");
                 _out.Write(text, 0, text.Length);
             }
             CellType cellType = cell.CellType;
@@ -245,19 +263,19 @@ namespace NPOI.XSSF.Streaming
             {
                 case CellType.Blank:
                     {
-                        text = Encoding.ASCII.GetBytes(">");
+                        text = Encoding.UTF8.GetBytes(">");
                         _out.Write(text, 0, text.Length);
                         break;
                     }
                 case CellType.Formula:
                     {
                         //TODO: I may have fucked this up. :)
-                        text = Encoding.ASCII.GetBytes(">");
+                        text = Encoding.UTF8.GetBytes(">");
                         _out.Write(text, 0, text.Length);
-                        text = Encoding.ASCII.GetBytes("<f>");
+                        text = Encoding.UTF8.GetBytes("<f>");
                         _out.Write(text, 0, text.Length);
-                        outputQuotedString(cell.CellFormula);
-                        text = Encoding.ASCII.GetBytes("</f>");
+                        outputQuotedString(cell.CellFormula);//THis don't work
+                        text = Encoding.UTF8.GetBytes("</f>");
                         _out.Write(text, 0, text.Length);
                         switch (cell.GetCachedFormulaResultTypeEnum())
                         {
@@ -265,7 +283,7 @@ namespace NPOI.XSSF.Streaming
                                 double nval = cell.NumericCellValue;
                                 if (!Double.IsNaN(nval))
                                 {
-                                    text = Encoding.ASCII.GetBytes("<v>" + nval + "</v>");
+                                    text = Encoding.UTF8.GetBytes("<v>" + nval + "</v>");
                                     _out.Write(text, 0, text.Length);
                                 }
                                 break;
@@ -283,34 +301,34 @@ namespace NPOI.XSSF.Streaming
 
 
                             //TODO: is this supposed to be and s=\"
-                            text = Encoding.ASCII.GetBytes(" t=\"" + ST_CellType.s.ToString() + "\">");
+                            text = Encoding.UTF8.GetBytes(" t=\"" + ST_CellType.s.ToString() + "\">");
                             _out.Write(text, 0, text.Length);
-                            text = Encoding.ASCII.GetBytes("<v>");
+                            text = Encoding.UTF8.GetBytes("<v>");
                             _out.Write(text, 0, text.Length);
-                            text = Encoding.ASCII.GetBytes(sRef.ToString());
+                            text = Encoding.UTF8.GetBytes(sRef.ToString());
                             _out.Write(text, 0, text.Length);
-                            text = Encoding.ASCII.GetBytes("</v>");
+                            text = Encoding.UTF8.GetBytes("</v>");
                             _out.Write(text, 0, text.Length);
 
                         }
                         else
                         {
-                            text = Encoding.ASCII.GetBytes(" t=\"inlineStr\">");
+                            text = Encoding.UTF8.GetBytes(" t=\"inlineStr\">");
                             _out.Write(text, 0, text.Length);
-                            text = Encoding.ASCII.GetBytes("<is><t");
+                            text = Encoding.UTF8.GetBytes("<is><t");
                             _out.Write(text, 0, text.Length);
 
                             if (hasLeadingTrailingSpaces(cell.StringCellValue))
                             {
-                                text = Encoding.ASCII.GetBytes(" xml:space=\"preserve\"");
+                                text = Encoding.UTF8.GetBytes(" xml:space=\"preserve\"");
                                 _out.Write(text, 0, text.Length);
                                 //_out.write(" xml:space=\"preserve\"");
                             }
-                            text = Encoding.ASCII.GetBytes(">");
+                            text = Encoding.UTF8.GetBytes(">");
                             _out.Write(text, 0, text.Length);
                             // _out.write(">");
-                            outputQuotedString(cell.StringCellValue);
-                            text = Encoding.ASCII.GetBytes("</t></is>");
+                            outputQuotedString(cell.StringCellValue);//TODO: doesn't work
+                            text = Encoding.UTF8.GetBytes("</t></is>");
                             _out.Write(text, 0, text.Length);
                             //_out.write("</t></is>");
                         }
@@ -318,20 +336,20 @@ namespace NPOI.XSSF.Streaming
                     }
                 case CellType.Numeric:
                     {
-                        text = Encoding.ASCII.GetBytes("</t></is>");
+                        text = Encoding.UTF8.GetBytes(" t=\"n\">");
                         _out.Write(text, 0, text.Length);
                         //_out.write(" t=\"n\">");
-                        text = Encoding.ASCII.GetBytes("</t></is>");
+                        text = Encoding.UTF8.GetBytes("<v>" + cell.NumericCellValue + "</v>");
                         _out.Write(text, 0, text.Length);
                         //_out.write("<v>" + cell.NumericCellValue + "</v>");
                         break;
                     }
                 case CellType.Boolean:
                     {
-                        text = Encoding.ASCII.GetBytes(" t=\"b\">");
+                        text = Encoding.UTF8.GetBytes(" t=\"b\">");
                         _out.Write(text, 0, text.Length);
                         //_out.write(" t=\"b\">");
-                        text = Encoding.ASCII.GetBytes("<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
+                        text = Encoding.UTF8.GetBytes("<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
                         _out.Write(text, 0, text.Length);
                        // _out.write("<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
                         break;
@@ -341,10 +359,10 @@ namespace NPOI.XSSF.Streaming
                         FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
 
                        // _out.write(" t=\"e\">");
-                        text = Encoding.ASCII.GetBytes(" t=\"e\">");
+                        text = Encoding.UTF8.GetBytes(" t=\"e\">");
                         _out.Write(text, 0, text.Length);
                         //_out.write("<v>" + error.String + "</v>");
-                        text = Encoding.ASCII.GetBytes("<v>" + error.String + "</v>");
+                        text = Encoding.UTF8.GetBytes("<v>" + error.String + "</v>");
                         _out.Write(text, 0, text.Length);
                         break;
                     }
@@ -354,7 +372,7 @@ namespace NPOI.XSSF.Streaming
                     }
             }
             //_out.write("</c>");
-            text = Encoding.ASCII.GetBytes("</c>");
+            text = Encoding.UTF8.GetBytes("</c>");
             _out.Write(text, 0, text.Length);
         }
 
@@ -470,7 +488,7 @@ namespace NPOI.XSSF.Streaming
         //                        _out.write(chars, last, counter - last);
         //                    }
         //                    last = counter + 1;
-        //                    // If the character is outside of ascii, write the
+        //                    // If the character is outside of UTF8, write the
         //                    // numeric value.
         //                    _out.write("&#");
         //                    _out.write(((int)c).ToString());

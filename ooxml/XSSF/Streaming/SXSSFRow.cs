@@ -18,6 +18,7 @@ namespace NPOI.XSSF.Streaming
         public SXSSFSheet _sheet; // parent sheet
         //TODO: replacing with dict to get compling may need to alter for performance.
         public Dictionary<int,SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        //public List<Tuple<int,SXSSFCell>> _cells = new List<Tuple<int, SXSSFCell>>();
         //private SortedMap<Integer, SXSSFCell> _cells = new TreeMap<Integer, SXSSFCell>();
         public short _style = -1; // index of cell style in style table
         public short _height = -1; // row height in twips (1/20 point)
@@ -34,7 +35,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator<ICell> allCellsIterator()
         {
-            return new CellIterator(LastCellNum, _cells);
+            return new CellIterator(LastCellNum, null);
         }
         public bool hasCustomHeight()
         {
@@ -86,7 +87,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                throw new NotImplementedException();
+                return _style > -1;
             }
         }
 
@@ -94,16 +95,15 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                throw new NotImplementedException();
+                //TODO:should make this work with dictionary
+                return _cells.Count == 0 ? (short) -1 : Convert.ToInt16(_cells.Last().Key + 1);
+                
             }
         }
 
         public int OutlineLevel
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return _outlineLevel; }
         }
 
         public int PhysicalNumberOfCells
@@ -143,18 +143,12 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet Sheet
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return _sheet; }
         }
 
         public bool ZeroHeight
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return _zHeight; }
 
             set
             {
@@ -247,7 +241,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator<ICell> GetEnumerator()
         {
-            return new FilledCellIterator(_cells.Values);
+            return new FilledCellIterator(_cells);
         }
 
         public void MoveCell(ICell cell, int newColumn)
@@ -295,18 +289,17 @@ namespace NPOI.XSSF.Streaming
 */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            private IEnumerable<ICell> _cells;
-            public FilledCellIterator(IEnumerable<SXSSFCell> cells)
+            private Dictionary<int, SXSSFCell> _cells;
+            private int pos = -1;
+            public FilledCellIterator(Dictionary<int, SXSSFCell> cells)
             {
                 _cells = cells;
             }
 
             public ICell Current
             {
-                get
-                {
-                    throw new NotImplementedException();
-                }
+                //TODO: this seems slopy
+                get { return _cells[pos]; }
             }
 
             object IEnumerator.Current
@@ -319,17 +312,19 @@ namespace NPOI.XSSF.Streaming
 
             public void Dispose()
             {
-                throw new NotImplementedException();
+               throw new NotImplementedException();
             }
 
             public IEnumerator<ICell> GetEnumerator()
             {
-                return _cells.GetEnumerator();
+                return _cells.Values.GetEnumerator();
             }
 
             public bool MoveNext()
             {
-                throw new NotImplementedException();
+                //TODO: in my case, i can assume no skipped cells
+                pos += 1;
+                return _cells.ContainsKey(pos);
             }
 
             public void Reset()

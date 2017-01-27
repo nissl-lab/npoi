@@ -971,7 +971,7 @@ namespace NPOI.XSSF.Streaming
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];
                 // Update the best fit column widths for auto-sizing just before the rows are flushed
-                _autoSizeColumnTracker.updateColumnWidths(row);
+                //TODO _autoSizeColumnTracker.updateColumnWidths(row);
                 _writer.WriteRow(rowIndex, row);
                 _rows.Remove(firstRowNum);
                 lastFlushedRowNumber = rowIndex;

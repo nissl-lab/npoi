@@ -317,25 +317,29 @@ namespace NPOI.XSSF.Streaming
         {
             var chunk = new byte[1024];
             int count;
-            while ((count = inputStream.Read(chunk, 0, chunk.Length)) >= 0)
+            bool flag = true;
+            while ((count = inputStream.Read(chunk, 0, chunk.Length)) >= 0 && flag)
             {
                 outputStream.Write(chunk, 0, count);
+                if (count == 0) flag = false;
             }
         }
 
         private static void CopyStreamAndInjectWorksheet(Stream inputStream, Stream outputStream, Stream worksheetData)
         {
-            var inReader = new StreamReader(inputStream, Encoding.UTF8); //TODO: Is it always UTF-8 or do we need to read the xml encoding declaration in the file? If not, we should perhaps use a SAX reader instead.
-            var outWriter = new StreamWriter(outputStream, Encoding.UTF8);
+            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8); //TODO: Is it always UTF-8 or do we need to read the xml encoding declaration in the file? If not, we should perhaps use a SAX reader instead.
+            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8);
             bool needsStartTag = true;
             int c;
             int pos = 0;
-            string s = "<sheetData";
+            String s = "<sheetData";
+
+            StringBuilder sb = new StringBuilder();
             int n = s.Length;
             //Copy from "in" to "out" up to the string "<sheetData/>" or "</sheetData>" (excluding).
             while (((c = inReader.Read()) != -1))
             {
-                if (c == s[pos])
+                if ((char)c == (char)s[pos])
                 {
                     pos++;
                     if (pos == n)
@@ -346,44 +350,54 @@ namespace NPOI.XSSF.Streaming
                             if (c == -1)
                             {
                                 outWriter.Write(s);
+                                sb.Append(s);
                                 break;
                             }
-                            if (c == '>')
+                            if ((char)c == '>')
                             {
                                 // Found <sheetData>
                                 outWriter.Write(s);
-                                outWriter.Write(c);
+                                sb.Append(s);
+                                outWriter.Write((char)c);
+                                sb.Append((char) c);
                                 s = "</sheetData>";
                                 n = s.Length;
                                 pos = 0;
                                 needsStartTag = false;
                                 continue;
                             }
-                            if (c == '/')
+                            if ((char)c == '/')
                             {
                                 // Found <sheetData/
                                 c = inReader.Read();
                                 if (c == -1)
                                 {
                                     outWriter.Write(s);
+                                    sb.Append(s);
                                     break;
                                 }
-                                if (c == '>')
+                                if ((char)c == '>')
                                 {
                                     // Found <sheetData/>
                                     break;
                                 }
 
                                 outWriter.Write(s);
+                                sb.Append(s);
                                 outWriter.Write('/');
-                                outWriter.Write(c);
+                                sb.Append('/');
+                                outWriter.Write((char)c);
+                                sb.Append((char) c);
                                 pos = 0;
                                 continue;
                             }
 
                             outWriter.Write(s);
+                            sb.Append(s);
                             outWriter.Write('/');
-                            outWriter.Write(c);
+                            sb.Append('/');
+                            outWriter.Write((char)c);
+                            sb.Append((char)c);
                             pos = 0;
                             continue;
                         }
@@ -396,14 +410,20 @@ namespace NPOI.XSSF.Streaming
                 }
                 else
                 {
-                    if (pos > 0) outWriter.Write(s, 0, pos);
+                    if (pos > 0)
+                    {
+                        //outWriter.Write(s, 0, pos);//this is a little wierd, I think they are just trying to write the '<' character? //TODO this might be my issue
+                        outWriter.Write(s.Substring(0,pos));
+                        sb.Append(s, 0, pos);
+                    }
                     if (c == s[0])
                     {
                         pos = 1;
                     }
                     else
                     {
-                        outWriter.Write(c);
+                        outWriter.Write((char)c);
+                        sb.Append((char) c);
                         pos = 0;
                     }
                 }
@@ -412,6 +432,7 @@ namespace NPOI.XSSF.Streaming
             if (needsStartTag)
             {
                 outWriter.Write("<sheetData>\n");
+                sb.Append("<sheetData>\n");
                 outWriter.Flush();
             }
             //Copy the worksheet data to "out".
@@ -421,10 +442,110 @@ namespace NPOI.XSSF.Streaming
             //Copy the rest of "in" to "out".
             while (((c = inReader.Read()) != -1))
             {
-                outWriter.Write(c);
+                outWriter.Write((char) c);
+                sb.Append((char)c);
             }
-
             outWriter.Flush();
+            //var inReader = new StreamReader(inputStream, Encoding.UTF8); //TODO: Is it always UTF-8 or do we need to read the xml encoding declaration in the file? If not, we should perhaps use a SAX reader instead.
+            //var outWriter = new StreamWriter(outputStream, Encoding.UTF8);
+            //bool needsStartTag = true;
+            //int c;
+            //int pos = 0;
+            //string s = "<sheetData";
+            //int n = s.Length;
+            ////Copy from "in" to "out" up to the string "<sheetData/>" or "</sheetData>" (excluding).
+            //while (((c = inReader.Read()) != -1))
+            //{
+            //    if (c == s[pos])
+            //    {
+            //        pos++;
+            //        if (pos == n)
+            //        {
+            //            if ("<sheetData".Equals(s))
+            //            {
+            //                c = inReader.Read();
+            //                if (c == -1)
+            //                {
+            //                    outWriter.Write(s);
+            //                    break;
+            //                }
+            //                if (c == '>')
+            //                {
+            //                    // Found <sheetData>
+            //                    outWriter.Write(s);
+            //                    outWriter.Write((char)c);
+            //                    s = "</sheetData>";
+            //                    n = s.Length;
+            //                    pos = 0;
+            //                    needsStartTag = false;
+            //                    continue;
+            //                }
+            //                if (c == '/')
+            //                {
+            //                    // Found <sheetData/
+            //                    c = inReader.Read();
+            //                    if (c == -1)
+            //                    {
+            //                        outWriter.Write(s);
+            //                        break;
+            //                    }
+            //                    if (c == '>')
+            //                    {
+            //                        // Found <sheetData/>
+            //                        break;
+            //                    }
+
+            //                    outWriter.Write(s);
+            //                    outWriter.Write('/');
+            //                    outWriter.Write((char)c);
+            //                    pos = 0;
+            //                    continue;
+            //                }
+
+            //                outWriter.Write(s);
+            //                outWriter.Write('/');
+            //                outWriter.Write((char)c);
+            //                pos = 0;
+            //                continue;
+            //            }
+            //            else
+            //            {
+            //                // Found </sheetData>
+            //                break;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (pos > 0) outWriter.Write(s, 0, pos);
+            //        if (c == s[0])
+            //        {
+            //            pos = 1;
+            //        }
+            //        else
+            //        {
+            //            outWriter.Write((char)c);
+            //            pos = 0;
+            //        }
+            //    }
+            //}
+            //outWriter.Flush();
+            //if (needsStartTag)
+            //{
+            //    outWriter.Write("<sheetData>\n");
+            //    outWriter.Flush();
+            //}
+            ////Copy the worksheet data to "out".
+            //CopyStream(worksheetData, outputStream);
+            //outWriter.Write("</sheetData>");
+            //outWriter.Flush();
+            ////Copy the rest of "in" to "out".
+            //while (((c = inReader.Read()) != -1))
+            //{
+            //    outWriter.Write((char)c);
+            //}
+
+            //outWriter.Flush();
         }
 
         public void SetSheetOrder(string sheetname, int pos)

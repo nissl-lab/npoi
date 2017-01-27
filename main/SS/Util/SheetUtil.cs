@@ -663,8 +663,9 @@ namespace NPOI.SS.Util
 
         public static int getDefaultCharWidth(IWorkbook wb)
         {
-            
-            throw new NotImplementedException();
+            //TODO: Implement!
+            return 1;
+            //throw new NotImplementedException();
             //IFont defaultFont = wb.GetFontAt(0);
 
             //IAttributedString str = new AttributedString(defaultChar.ToString());
