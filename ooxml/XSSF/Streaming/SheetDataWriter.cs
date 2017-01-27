@@ -60,15 +60,21 @@ namespace NPOI.XSSF.Streaming
          */
         public FileStream createWriter(FileInfo fd)
         {
-            FileStream fos = new FileStream(fd.FullName, FileMode.Open, FileAccess.ReadWrite);
+
+            FileStream fos = null;
             FileStream decorated;
             try
             {
+                 fos = new FileStream(fd.FullName, FileMode.Open, FileAccess.ReadWrite);
                 //decorated = decorateOutputStream(fos);
             }
             catch (Exception e)
             {
-                fos.Close();
+                if (fos != null)
+                {
+                    fos.Close();
+                }
+                
                 throw e;
             }
             //TODO: this is the decorate?

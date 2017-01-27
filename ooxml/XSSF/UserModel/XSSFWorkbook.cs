@@ -662,6 +662,7 @@ namespace NPOI.XSSF.UserModel
             CT_Sheet sheet = AddSheet(sheetname);
 
             int sheetNumber = 1;
+            //TODO: this is extra somehow
             foreach (XSSFSheet sh in sheets) sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
 
             outerloop:
