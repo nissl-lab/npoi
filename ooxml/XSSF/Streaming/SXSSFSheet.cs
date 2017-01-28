@@ -35,7 +35,7 @@ namespace NPOI.XSSF.Streaming
         public XSSFSheet _sh;
         public SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        public Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
+        public SortedDictionary<int, SXSSFRow> _rows = new SortedDictionary<int, SXSSFRow>();
         public SheetDataWriter _writer;
         public int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
         public AutoSizeColumnTracker _autoSizeColumnTracker;
@@ -966,7 +966,7 @@ namespace NPOI.XSSF.Streaming
         private void flushOneRow()
         {
             //TODO sorted dictionrary?
-            int firstRowNum = _rows.Keys.First();
+            int firstRowNum = _rows.FirstOrDefault().Key;
         if (firstRowNum!=null) {
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];

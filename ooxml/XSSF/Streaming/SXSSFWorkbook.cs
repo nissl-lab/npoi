@@ -184,7 +184,7 @@ namespace NPOI.XSSF.Streaming
 
         #endregion
 
-        private void SetRandomAccessWindowSize(int rowAccessWindowSize)
+        public void SetRandomAccessWindowSize(int rowAccessWindowSize)
         {
             if (rowAccessWindowSize == 0 || rowAccessWindowSize < -1)
             {

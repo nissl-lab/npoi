@@ -65,7 +65,7 @@ namespace NPOI.XSSF.Streaming
             FileStream decorated;
             try
             {
-                 fos = new FileStream(fd.FullName, FileMode.Open, FileAccess.ReadWrite);
+                 fos = new FileStream(fd.FullName, FileMode.Append, FileAccess.Write);
                 //decorated = decorateOutputStream(fos);
             }
             catch (Exception e)

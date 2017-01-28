@@ -17,7 +17,7 @@ namespace NPOI.XSSF.Streaming
 
         public SXSSFSheet _sheet; // parent sheet
         //TODO: replacing with dict to get compling may need to alter for performance.
-        public Dictionary<int,SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        public SortedDictionary<int,SXSSFCell> _cells = new SortedDictionary<int, SXSSFCell>();
         //public List<Tuple<int,SXSSFCell>> _cells = new List<Tuple<int, SXSSFCell>>();
         //private SortedMap<Integer, SXSSFCell> _cells = new TreeMap<Integer, SXSSFCell>();
         public short _style = -1; // index of cell style in style table
@@ -289,9 +289,9 @@ namespace NPOI.XSSF.Streaming
 */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            private Dictionary<int, SXSSFCell> _cells;
+            private SortedDictionary<int, SXSSFCell> _cells;
             private int pos = -1;
-            public FilledCellIterator(Dictionary<int, SXSSFCell> cells)
+            public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
             {
                 _cells = cells;
             }
