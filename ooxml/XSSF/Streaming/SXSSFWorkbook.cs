@@ -317,11 +317,10 @@ namespace NPOI.XSSF.Streaming
         {
             var chunk = new byte[1024];
             int count;
-            bool flag = true;
-            while ((count = inputStream.Read(chunk, 0, chunk.Length)) >= 0 && flag)
+
+            while ((count = inputStream.Read(chunk, 0, chunk.Length)) > 0)
             {
                 outputStream.Write(chunk, 0, count);
-                if (count == 0) flag = false;
             }
         }
 
@@ -446,106 +445,7 @@ namespace NPOI.XSSF.Streaming
                 sb.Append((char)c);
             }
             outWriter.Flush();
-            //var inReader = new StreamReader(inputStream, Encoding.UTF8); //TODO: Is it always UTF-8 or do we need to read the xml encoding declaration in the file? If not, we should perhaps use a SAX reader instead.
-            //var outWriter = new StreamWriter(outputStream, Encoding.UTF8);
-            //bool needsStartTag = true;
-            //int c;
-            //int pos = 0;
-            //string s = "<sheetData";
-            //int n = s.Length;
-            ////Copy from "in" to "out" up to the string "<sheetData/>" or "</sheetData>" (excluding).
-            //while (((c = inReader.Read()) != -1))
-            //{
-            //    if (c == s[pos])
-            //    {
-            //        pos++;
-            //        if (pos == n)
-            //        {
-            //            if ("<sheetData".Equals(s))
-            //            {
-            //                c = inReader.Read();
-            //                if (c == -1)
-            //                {
-            //                    outWriter.Write(s);
-            //                    break;
-            //                }
-            //                if (c == '>')
-            //                {
-            //                    // Found <sheetData>
-            //                    outWriter.Write(s);
-            //                    outWriter.Write((char)c);
-            //                    s = "</sheetData>";
-            //                    n = s.Length;
-            //                    pos = 0;
-            //                    needsStartTag = false;
-            //                    continue;
-            //                }
-            //                if (c == '/')
-            //                {
-            //                    // Found <sheetData/
-            //                    c = inReader.Read();
-            //                    if (c == -1)
-            //                    {
-            //                        outWriter.Write(s);
-            //                        break;
-            //                    }
-            //                    if (c == '>')
-            //                    {
-            //                        // Found <sheetData/>
-            //                        break;
-            //                    }
-
-            //                    outWriter.Write(s);
-            //                    outWriter.Write('/');
-            //                    outWriter.Write((char)c);
-            //                    pos = 0;
-            //                    continue;
-            //                }
-
-            //                outWriter.Write(s);
-            //                outWriter.Write('/');
-            //                outWriter.Write((char)c);
-            //                pos = 0;
-            //                continue;
-            //            }
-            //            else
-            //            {
-            //                // Found </sheetData>
-            //                break;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (pos > 0) outWriter.Write(s, 0, pos);
-            //        if (c == s[0])
-            //        {
-            //            pos = 1;
-            //        }
-            //        else
-            //        {
-            //            outWriter.Write((char)c);
-            //            pos = 0;
-            //        }
-            //    }
-            //}
-            //outWriter.Flush();
-            //if (needsStartTag)
-            //{
-            //    outWriter.Write("<sheetData>\n");
-            //    outWriter.Flush();
-            //}
-            ////Copy the worksheet data to "out".
-            //CopyStream(worksheetData, outputStream);
-            //outWriter.Write("</sheetData>");
-            //outWriter.Flush();
-            ////Copy the rest of "in" to "out".
-            //while (((c = inReader.Read()) != -1))
-            //{
-            //    outWriter.Write((char)c);
-            //}
-
-            //outWriter.Flush();
+            
         }
 
         public void SetSheetOrder(string sheetname, int pos)
@@ -674,7 +574,7 @@ namespace NPOI.XSSF.Streaming
             try
             {
                 //TODO: may just want to be a filestream
-                var os = new FileStream(tmplFile.FullName, FileMode.Open, FileAccess.Write);
+                var os = new FileStream(tmplFile.FullName, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
                     xssfWorkbook.Write(os);

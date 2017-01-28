@@ -108,7 +108,7 @@ namespace NPOI.XSSF.Streaming
         {
             try
             {
-                _out.Flush();
+                _out.Flush(true);
             }
             catch (Exception e)
             {
@@ -380,6 +380,7 @@ namespace NPOI.XSSF.Streaming
             //_out.write("</c>");
             text = Encoding.UTF8.GetBytes("</c>");
             _out.Write(text, 0, text.Length);
+            _out.Flush();
         }
 
 
