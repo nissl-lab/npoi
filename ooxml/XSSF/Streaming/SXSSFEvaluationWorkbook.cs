@@ -22,7 +22,7 @@ namespace NPOI.XSSF.Streaming
         return new SXSSFEvaluationWorkbook(book);
     }
 
-    private SXSSFEvaluationWorkbook(SXSSFWorkbook book) : base(book.xssfWorkbook)
+    private SXSSFEvaluationWorkbook(SXSSFWorkbook book) : base(book.XssfWorkbook)
     {
         _uBook = book;
     }

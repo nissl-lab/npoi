@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NPOI.SS.UserModel;
@@ -11,12 +27,17 @@ namespace NPOI.XSSF.Streaming
         private int defaultCharWidth;
         private DataFormatter dataFormatter = new DataFormatter();
 
-        // map of tracked columns, with values containing the best-fit width for the column
-        // Using a HashMap instead of a TreeMap because insertion (trackColumn), removal (untrackColumn), and membership (everything)
-        // will be called more frequently than getTrackedColumns(). The O(1) cost of insertion, removal, and membership operations
-        // outweigh the infrequent O(n*log n) cost of sorting getTrackedColumns().
-        // Memory consumption for a HashMap and TreeMap is about the same
+
+        /// <summary>
+        /// map of tracked columns, with values containing the best-fit width for the column
+        /// Using a HashMap instead of a TreeMap because insertion (trackColumn), removal (untrackColumn), and membership (everything)
+        /// will be called more frequently than getTrackedColumns(). The O(1) cost of insertion, removal, and membership operations
+        /// outweigh the infrequent O(n*log n) cost of sorting getTrackedColumns().
+        /// Memory consumption for a HashMap and TreeMap is about the same
+        /// </summary>
         private Dictionary<int, ColumnWidthPair> maxColumnWidths = new Dictionary<int, ColumnWidthPair>();
+
+
         // untrackedColumns stores columns have been explicitly untracked so they aren't implicitly re-tracked by trackAllColumns
         // Using a HashSet instead of a TreeSet because we don't care about order.
         private HashSet<int> untrackedColumns = new HashSet<int>();
@@ -86,7 +107,7 @@ namespace NPOI.XSSF.Streaming
         {
             throw new NotImplementedException();
             //var sorted = new ColumnHelper.TreeSet<int>(maxColumnWidths.Keys);
-            //return Collection.unmodifiableSortedSet(sorted); <-- this is in collections need to find equivalent
+            //return Collection.unmodifiableSortedSet(sorted); 
         }
 
         /**
@@ -198,7 +219,7 @@ namespace NPOI.XSSF.Streaming
          * @return true if one or more columns were untracked as a result of this call
          * @since 3.14beta1
          */
-        public bool untrackColumns(Collection<int> columns)
+        public bool UntrackColumns(Collection<int> columns)
         {
             //TODO: CHeck for parity
             bool result = false;
@@ -283,10 +304,10 @@ namespace NPOI.XSSF.Streaming
          * @param row the row to get the cells
          * @since 3.14beta1
          */
-        public void updateColumnWidths(IRow row)//TODO: may be a different kind of row
+        public void UpdateColumnWidths(IRow row)
         {
             // track new columns
-            implicitlyTrackColumnsInRow(row);
+            ImplicitlyTrackColumnsInRow(row);
 
             // update the widths
             // for-loop over the shorter of the number of cells in the row and the number of tracked columns
@@ -308,7 +329,7 @@ namespace NPOI.XSSF.Streaming
                     if (cell != null)
                     {
                         ColumnWidthPair pair = e.Value;
-                        updateColumnWidth(cell, pair);
+                        UpdateColumnWidth(cell, pair);
                     }
                 }
             }
@@ -329,7 +350,7 @@ namespace NPOI.XSSF.Streaming
                     {
                         //TODO: pretty sure get doesn't remove entry
                         ColumnWidthPair pair = maxColumnWidths[column];
-                        updateColumnWidth(cell, pair);
+                        UpdateColumnWidth(cell, pair);
                     }
                 }
             }
@@ -344,7 +365,7 @@ namespace NPOI.XSSF.Streaming
          * @param row the row containing cells to implicitly track the columns
          * @since 3.14beta1
          */
-        private void implicitlyTrackColumnsInRow(IRow row)
+        private void ImplicitlyTrackColumnsInRow(IRow row)
         {
             // track new columns
             if (trackAllColumns)
@@ -365,7 +386,7 @@ namespace NPOI.XSSF.Streaming
          * @param pair the column width pair to update
          * @since 3.14beta1
          */
-        private void updateColumnWidth(ICell cell, ColumnWidthPair pair)
+        private void UpdateColumnWidth(ICell cell, ColumnWidthPair pair)
         {
             double unmergedWidth = SheetUtil.GetCellWidth(cell, defaultCharWidth, dataFormatter, false);
             double mergedWidth = SheetUtil.GetCellWidth(cell, defaultCharWidth, dataFormatter, true);

@@ -1,7 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -106,6 +120,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void Close()
         {
+            //TODO: test
             try
             {
                 _out.Flush(true);
@@ -131,7 +146,6 @@ namespace NPOI.XSSF.Streaming
          */
         public Stream GetWorksheetXMLInputStream()
         {
-            ;
             Stream fis = new FileStream(_fd.FullName, FileMode.Open, FileAccess.ReadWrite);
             try
             {
@@ -193,11 +207,11 @@ namespace NPOI.XSSF.Streaming
                 writeCell(columnIndex++, cells.Current);
             }
             endRow();
+            cells.Dispose();
         }
 
-        void BeginRow(int rownum, SXSSFRow row)
+        private void BeginRow(int rownum, SXSSFRow row)
         {
-            //TODO: make sure this isn't off.
             var text = Encoding.UTF8.GetBytes("<row r=\"" + (rownum + 1) + "\"");
             _out.Write(text, 0, text.Length);
             if (row.hasCustomHeight())

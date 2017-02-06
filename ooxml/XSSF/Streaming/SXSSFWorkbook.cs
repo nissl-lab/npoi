@@ -18,8 +18,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.OpenXml4Net.Util;
@@ -36,15 +36,30 @@ namespace NPOI.XSSF.Streaming
     /// </summary>
     public class SXSSFWorkbook : IWorkbook
     {
-        public static readonly int DEFAULT_WINDOW_SIZE = 100;
         private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFWorkbook));
 
-        public XSSFWorkbook xssfWorkbook;
+        public const int DEFAULT_WINDOW_SIZE = 100;
+        
+        public XSSFWorkbook XssfWorkbook;
 
         private Dictionary<SXSSFSheet, XSSFSheet> _sxFromXHash = new Dictionary<SXSSFSheet, XSSFSheet>();
         private Dictionary<XSSFSheet, SXSSFSheet> _xFromSxHash = new Dictionary<XSSFSheet, SXSSFSheet>();
 
         private int _randomAccessWindowSize = DEFAULT_WINDOW_SIZE;
+
+        public int RandomAccessWindowSize
+        {
+            get { return _randomAccessWindowSize; }
+            set
+            {
+                if (value <= 0)
+                {
+                    throw new ArgumentException("rowAccessWindowSize must be greater than 0 or -1");
+                }
+                _randomAccessWindowSize = value;
+            }
+
+        }
 
         /// <summary>
         /// whether temp file should be compresss.
@@ -79,10 +94,7 @@ namespace NPOI.XSSF.Streaming
 
         public int NumberOfSheets
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.NumberOfSheets; }
         }
 
         public short NumberOfFonts
@@ -162,36 +174,29 @@ namespace NPOI.XSSF.Streaming
 
         public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles, bool useSharedStringsTable)
         {
-            SetRandomAccessWindowSize(rowAccessWindowSize);
+            RandomAccessWindowSize = rowAccessWindowSize;
+
             _compressTmpFiles = compressTmpFiles;
+
             if (workbook == null)
             {
-                xssfWorkbook = new XSSFWorkbook();
-                _sharedStringSource = useSharedStringsTable ? xssfWorkbook.GetSharedStringSource() : null;
+                XssfWorkbook = new XSSFWorkbook();
+                _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
             }
             else
             {
-                xssfWorkbook = workbook;
-                _sharedStringSource = useSharedStringsTable ? xssfWorkbook.GetSharedStringSource() : null;
-                var numberOfSheets = xssfWorkbook.NumberOfSheets;
+                XssfWorkbook = workbook;
+                _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
+                var numberOfSheets = XssfWorkbook.NumberOfSheets;
                 for (int i = 0; i < numberOfSheets; i++)
                 {
-                    XSSFSheet sheet = (XSSFSheet)xssfWorkbook.GetSheetAt(i);
+                    XSSFSheet sheet = (XSSFSheet)XssfWorkbook.GetSheetAt(i);
                     CreateAndRegisterSXSSFSheet(sheet);
                 }
             }
         }
 
         #endregion
-
-        public void SetRandomAccessWindowSize(int rowAccessWindowSize)
-        {
-            if (rowAccessWindowSize == 0 || rowAccessWindowSize < -1)
-            {
-                throw new ArgumentException("rowAccessWindowSize must be greater than 0 or -1");
-            }
-            _randomAccessWindowSize = rowAccessWindowSize;
-        }
 
         private SXSSFSheet CreateAndRegisterSXSSFSheet(ISheet xSheet)
         {
@@ -204,11 +209,11 @@ namespace NPOI.XSSF.Streaming
             {
                 throw new RuntimeException(ioe);
             }
-            registerSheetMapping(sxSheet, (XSSFSheet)xSheet);
+            RegisterSheetMapping(sxSheet, (XSSFSheet)xSheet);
             return sxSheet;
         }
 
-        private void registerSheetMapping(SXSSFSheet sxSheet, XSSFSheet xSheet)
+        private void RegisterSheetMapping(SXSSFSheet sxSheet, XSSFSheet xSheet)
         {
             _sxFromXHash.Add(sxSheet, xSheet);
             _xFromSxHash.Add(xSheet, sxSheet);
@@ -218,7 +223,6 @@ namespace NPOI.XSSF.Streaming
         {
             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
 
-            // ensure that the writer is closed in all cases to not have lingering writers
             try
             {
                 sxSheet._writer.Close();
@@ -234,7 +238,7 @@ namespace NPOI.XSSF.Streaming
         }
 
 
-        private XSSFSheet getXSSFSheet(SXSSFSheet sheet)
+        private XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
             return _sxFromXHash[sheet];
         }
@@ -244,12 +248,7 @@ namespace NPOI.XSSF.Streaming
             return _xFromSxHash[sheet];
         }
 
-        public int GetRandomAccessWindowSize()
-        {
-            return _randomAccessWindowSize;
-        }
-
-        public SheetDataWriter createSheetDataWriter()
+        public SheetDataWriter CreateSheetDataWriter()
         {
             if (_compressTmpFiles)
             {
@@ -268,7 +267,7 @@ namespace NPOI.XSSF.Streaming
             return null;
         }
 
-        protected void InjectData(ZipEntrySource zipEntrySource, Stream outStream)
+        private void InjectData(ZipEntrySource zipEntrySource, Stream outStream)
         {
             try
             {
@@ -411,7 +410,6 @@ namespace NPOI.XSSF.Streaming
                 {
                     if (pos > 0)
                     {
-                        //outWriter.Write(s, 0, pos);//this is a little wierd, I think they are just trying to write the '<' character? //TODO this might be my issue
                         outWriter.Write(s.Substring(0,pos));
                         sb.Append(s, 0, pos);
                     }
@@ -450,12 +448,12 @@ namespace NPOI.XSSF.Streaming
 
         public void SetSheetOrder(string sheetname, int pos)
         {
-            xssfWorkbook.SetSheetOrder(sheetname, pos);
+            XssfWorkbook.SetSheetOrder(sheetname, pos);
         }
 
         public void SetSelectedTab(int index)
         {
-            xssfWorkbook.SetSelectedTab(index);
+            XssfWorkbook.SetSelectedTab(index);
         }
 
         public void SetActiveSheet(int sheetIndex)
@@ -465,32 +463,32 @@ namespace NPOI.XSSF.Streaming
 
         public string GetSheetName(int sheet)
         {
-            return xssfWorkbook.GetSheetName(sheet);
+            return XssfWorkbook.GetSheetName(sheet);
         }
 
         public void SetSheetName(int sheet, string name)
         {
-            xssfWorkbook.SetSheetName(sheet, name);
+            XssfWorkbook.SetSheetName(sheet, name);
         }
 
         public int GetSheetIndex(string name)
         {
-            return xssfWorkbook.GetSheetIndex(name);
+            return XssfWorkbook.GetSheetIndex(name);
         }
 
         public int GetSheetIndex(ISheet sheet)
         {
-            return xssfWorkbook.GetSheetIndex(getXSSFSheet((SXSSFSheet)sheet));
+            return XssfWorkbook.GetSheetIndex(GetXSSFSheet((SXSSFSheet)sheet));
         }
 
         public ISheet CreateSheet()
         {
-            return CreateAndRegisterSXSSFSheet(xssfWorkbook.CreateSheet());
+            return CreateAndRegisterSXSSFSheet(XssfWorkbook.CreateSheet());
         }
 
         public ISheet CreateSheet(string sheetname)
         {
-            return CreateAndRegisterSXSSFSheet(xssfWorkbook.CreateSheet(sheetname));
+            return CreateAndRegisterSXSSFSheet(XssfWorkbook.CreateSheet(sheetname));
         }
 
         public ISheet CloneSheet(int sheetNum)
@@ -500,22 +498,22 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet GetSheetAt(int index)
         {
-            return GetSXSSFSheet((XSSFSheet)xssfWorkbook.GetSheetAt(index));
+            return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheetAt(index));
         }
 
         public ISheet GetSheet(string name)
         {
-            return GetSXSSFSheet((XSSFSheet)xssfWorkbook.GetSheet(name));
+            return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheet(name));
         }
 
         public void RemoveSheetAt(int index)
         {
             // Get the sheet to be removed
-            var xSheet = (XSSFSheet)xssfWorkbook.GetSheetAt(index);
+            var xSheet = (XSSFSheet)XssfWorkbook.GetSheetAt(index);
             var sxSheet = GetSXSSFSheet(xSheet);
 
             // De-register it
-            xssfWorkbook.RemoveSheetAt(index);
+            XssfWorkbook.RemoveSheetAt(index);
             DeregisterSheetMapping(xSheet);
 
             // Clean up temporary resources
@@ -541,28 +539,28 @@ namespace NPOI.XSSF.Streaming
 
         public IFont CreateFont()
         {
-            return xssfWorkbook.CreateFont();
+            return XssfWorkbook.CreateFont();
         }
 
         [Obsolete("deprecated in poi 3.16")]
         public IFont FindFont(short boldWeight, short color, short fontHeight, string name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
-            return xssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
+            return XssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
 
         public IFont GetFontAt(short idx)
         {
-            return xssfWorkbook.GetFontAt(idx);
+            return XssfWorkbook.GetFontAt(idx);
         }
 
         public ICellStyle CreateCellStyle()
         {
-            return xssfWorkbook.CreateCellStyle();
+            return XssfWorkbook.CreateCellStyle();
         }
 
         public ICellStyle GetCellStyleAt(short idx)
         {
-            return xssfWorkbook.GetCellStyleAt(idx);
+            return XssfWorkbook.GetCellStyleAt(idx);
         }
 
         public void Write(Stream stream)
@@ -577,7 +575,7 @@ namespace NPOI.XSSF.Streaming
                 var os = new FileStream(tmplFile.FullName, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
-                    xssfWorkbook.Write(os);
+                    XssfWorkbook.Write(os);
                 }
                 finally
                 {
@@ -630,35 +628,35 @@ namespace NPOI.XSSF.Streaming
 
         public IName GetName(string name)
         {
-            return xssfWorkbook.GetName(name);
+            return XssfWorkbook.GetName(name);
         }
         [Obsolete("Deprecated in 3.16 throws an error.")]
         public IName GetNameAt(int nameIndex)
         {
-            return xssfWorkbook.GetNameAt(nameIndex);
+            return XssfWorkbook.GetNameAt(nameIndex);
         }
 
         public IName CreateName()
         {
-            return xssfWorkbook.CreateName();
+            return XssfWorkbook.CreateName();
         }
 
         [Obsolete("deprecated in 3.16 New projects should avoid accessing named ranges by index. GetName(String)} instead.")]
         public int GetNameIndex(string name)
         {
-            return xssfWorkbook.GetNameIndex(name);
+            return XssfWorkbook.GetNameIndex(name);
         }
 
         [Obsolete("deprecated in 3.16 New projects should use RemoveName(Name)")]
         public void RemoveName(int index)
         {
-            xssfWorkbook.RemoveName(index);
+            XssfWorkbook.RemoveName(index);
         }
 
         [Obsolete("deprecated in 3.16 New projects should use RemoveName(IName Name)")]
         public void RemoveName(string name)
         {
-            xssfWorkbook.RemoveName(name);
+            XssfWorkbook.RemoveName(name);
         }
 
         public int LinkExternalWorkbook(string name, IWorkbook workbook)
@@ -668,22 +666,22 @@ namespace NPOI.XSSF.Streaming
 
         public void SetPrintArea(int sheetIndex, string reference)
         {
-            xssfWorkbook.SetPrintArea(sheetIndex, reference);
+            XssfWorkbook.SetPrintArea(sheetIndex, reference);
         }
 
         public void SetPrintArea(int sheetIndex, int startColumn, int endColumn, int startRow, int endRow)
         {
-            xssfWorkbook.SetPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow);
+            XssfWorkbook.SetPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow);
         }
 
         public string GetPrintArea(int sheetIndex)
         {
-            return xssfWorkbook.GetPrintArea(sheetIndex);
+            return XssfWorkbook.GetPrintArea(sheetIndex);
         }
 
         public void RemovePrintArea(int sheetIndex)
         {
-            xssfWorkbook.RemovePrintArea(sheetIndex);
+            XssfWorkbook.RemovePrintArea(sheetIndex);
         }
 
         //TODO: missing methods Get/Set MissingCellPolicy
@@ -691,17 +689,17 @@ namespace NPOI.XSSF.Streaming
 
         public IDataFormat CreateDataFormat()
         {
-            return xssfWorkbook.CreateDataFormat();
+            return XssfWorkbook.CreateDataFormat();
         }
 
         public int AddPicture(byte[] pictureData, PictureType format)
         {
-            return xssfWorkbook.AddPicture(pictureData, format);
+            return XssfWorkbook.AddPicture(pictureData, format);
         }
 
         public IList GetAllPictures()
         {
-            return xssfWorkbook.GetAllPictures();
+            return XssfWorkbook.GetAllPictures();
         }
 
         public ICreationHelper GetCreationHelper()
@@ -713,27 +711,27 @@ namespace NPOI.XSSF.Streaming
 
         public bool IsSheetHidden(int sheetIx)
         {
-            return xssfWorkbook.IsSheetHidden(sheetIx);
+            return XssfWorkbook.IsSheetHidden(sheetIx);
         }
 
         public bool IsSheetVeryHidden(int sheetIx)
         {
-            return xssfWorkbook.IsSheetVeryHidden(sheetIx);
+            return XssfWorkbook.IsSheetVeryHidden(sheetIx);
         }
 
         public void SetSheetHidden(int sheetIx, SheetState hidden)
         {
-            xssfWorkbook.SetSheetHidden(sheetIx, hidden);
+            XssfWorkbook.SetSheetHidden(sheetIx, hidden);
         }
 
         public void SetSheetHidden(int sheetIx, int hidden)
         {
-            xssfWorkbook.SetSheetHidden(sheetIx, hidden);
+            XssfWorkbook.SetSheetHidden(sheetIx, hidden);
         }
 
         public void AddToolPack(UDFFinder toopack)
         {
-            xssfWorkbook.AddToolPack(toopack);
+            XssfWorkbook.AddToolPack(toopack);
         }
 
         public void Close()
@@ -756,7 +754,7 @@ namespace NPOI.XSSF.Streaming
 
             // Tell the base workbook to close, does nothing if 
             //  it's a newly created one
-            xssfWorkbook.Close();
+            XssfWorkbook.Close();
         }
 
         //TODO: missing methods setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion

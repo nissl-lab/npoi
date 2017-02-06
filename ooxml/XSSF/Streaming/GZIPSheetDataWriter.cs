@@ -1,8 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
 using System.IO;
-using System.Linq;
-using System.Text;
 using ICSharpCode.SharpZipLib.GZip;
 using NPOI.Util;
 using NPOI.XSSF.Model;
@@ -11,9 +23,9 @@ namespace NPOI.XSSF.Streaming
 {
     public class GZIPSheetDataWriter : SheetDataWriter
     {
-        public GZIPSheetDataWriter() :base()
+        public GZIPSheetDataWriter() : base()
         {
-           
+
         }
 
         /**
@@ -21,27 +33,27 @@ namespace NPOI.XSSF.Streaming
          */
         public GZIPSheetDataWriter(SharedStringsTable sharedStringsTable) : base(sharedStringsTable)
         {
-            
+
         }
 
         /**
          * @return temp file to write sheet data
          */
 
-    public FileInfo createTempFile()
+        public FileInfo CreateTempFile()
         {
-        return TempFile.CreateTempFile("poi-sxssf-sheet-xml", ".gz");
+            return TempFile.CreateTempFile("poi-sxssf-sheet-xml", ".gz");
         }
 
 
-    protected Stream decorateInputStream(Stream fis)
+        protected Stream decorateInputStream(Stream fis)
         {
-        return new GZipInputStream(fis);
-    }
+            return new GZipInputStream(fis);
+        }
 
-    protected Stream decorateOutputStream(Stream fos)
-    {
-        return new GZipOutputStream(fos);
-}
+        protected Stream decorateOutputStream(Stream fos)
+        {
+            return new GZipOutputStream(fos);
+        }
     }
 }

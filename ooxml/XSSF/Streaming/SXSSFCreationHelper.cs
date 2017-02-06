@@ -15,7 +15,7 @@ namespace NPOI.XSSF.Streaming
         //TODO: @internal
         public SXSSFCreationHelper(SXSSFWorkbook workbook)
         {
-            this.helper = new XSSFCreationHelper(workbook.xssfWorkbook);
+            this.helper = new XSSFCreationHelper(workbook.XssfWorkbook);
             this.wb = workbook;
         }
 

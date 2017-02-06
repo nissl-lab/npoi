@@ -48,8 +48,8 @@ namespace NPOI.XSSF.Streaming
         {
             _workbook = workbook;
             _sh = xSheet;
-            _writer = workbook.createSheetDataWriter();
-            SetRandomAccessWindowSize(_workbook.GetRandomAccessWindowSize());
+            _writer = workbook.CreateSheetDataWriter();
+            SetRandomAccessWindowSize(_workbook.RandomAccessWindowSize);
             _autoSizeColumnTracker = new AutoSizeColumnTracker(this);
         }
         public void SetRandomAccessWindowSize(int value)
