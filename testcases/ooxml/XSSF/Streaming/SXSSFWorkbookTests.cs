@@ -271,7 +271,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         }
 
         [Test]
-        public void IfWriting10x10CellsShouldWriteStringValuesForCells()
+        public void IfWriting10x10CellsShouldWriteNumericValuesForCells()
         {
             _objectToTest = new SXSSFWorkbook();
             var sheets = 1;
@@ -279,13 +279,8 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var cols = 10;
             AddCells(_objectToTest, sheets,rows,cols,CellType.Numeric);
             var savePath = Environment.CurrentDirectory + "\\numericTest.xlsx";
-            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                _objectToTest.Write(fs);
-            }
-
-            _objectToTest.Dispose();
-
+            WriteFile(savePath, _objectToTest);
+           
             Assert.True(File.Exists(savePath));
             File.Delete(savePath);
         }
@@ -300,12 +295,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
             var savePath = Environment.CurrentDirectory + "\\numericTest.xlsx";
             var reSavePath = Environment.CurrentDirectory + "\\numericTest2.xlsx";
-            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                _objectToTest.Write(fs);
-            }
-
-            _objectToTest.Dispose();
+            WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
 
@@ -313,12 +303,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
 
             var result = new SXSSFWorkbook(xssfWorkbook);
 
-            using (FileStream fs = new FileStream(reSavePath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                result.Write(fs);
-            }
-
-            result.Dispose();
+            WriteFile(reSavePath, result);
             xssfWorkbook.Close();
 
             File.Delete(reSavePath);
@@ -326,7 +311,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         }
 
         [Test]
-        public void IfWriting10x10CellsShouldWriteNumericValuesForCells()
+        public void IfWriting10x10CellsShouldWriteStringValuesForCells()
         {
             _objectToTest = new SXSSFWorkbook();
             var sheets = 1;
@@ -334,18 +319,14 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.String);
             var savePath = Environment.CurrentDirectory + "\\plainStringTest.xlsx";
-            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                _objectToTest.Write(fs);
-            }
-
-            _objectToTest.Dispose();
+            WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
             File.Delete(savePath);
         }
 
-        //TODO: add tests for formulas and the other value
+
+        //TODO: add tests for formulas and the other values
 
         private void AddCells(IWorkbook wb, int sheets, int rows, int columns, CellType type)
         {
@@ -361,6 +342,18 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
                     }
                 }
             }
+        }
+
+        
+        private void WriteFile(string saveAsPath, SXSSFWorkbook wb)
+        {
+            //Passing SXSSFWorkbook because IWorkbook does not implement .Dispose which cleans ups temporary files.
+            using (FileStream fs = new FileStream(saveAsPath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                wb.Write(fs);
+            }
+
+            wb.Dispose();
         }
 
         private void WriteCellValue(IRow row, CellType type, int col, object val)

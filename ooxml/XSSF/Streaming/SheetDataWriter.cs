@@ -315,7 +315,7 @@ namespace NPOI.XSSF.Streaming
                             int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
 
                             //TODO: is this supposed to be and s=\"
-                            WriteAsBytes(_out, " t=\"" + ST_CellType.s.ToString() + "\">");
+                            WriteAsBytes(_out, " t=\"" + ST_CellType.s + "\">");
                             WriteAsBytes(_out, "<v>");
                             WriteAsBytes(_out, sRef.ToString());
                             WriteAsBytes(_out, "</v>");
@@ -332,7 +332,7 @@ namespace NPOI.XSSF.Streaming
 
                             WriteAsBytes(_out, ">");
 
-                            outputQuotedString(cell.StringCellValue);//TODO: doesn't work
+                            outputQuotedString(cell.StringCellValue);
 
                             WriteAsBytes(_out, "</t></is>");
                         }
@@ -413,42 +413,34 @@ namespace NPOI.XSSF.Streaming
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                            //_out.Write(chars, last, counter - last);
                         }
                         last = counter + 1;
                       
                         WriteAsBytes(_out, "&lt;".ToCharArray());
-                       // _out.write("&lt;");
                         break;
                     case '>':
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                            //_out.write(chars, last, counter - last);
                         }
                         last = counter + 1;
                         WriteAsBytes(_out, "&gt;".ToCharArray());
-                       // _out.write("&gt;");
                         break;
                     case '&':
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                            //_out.write(chars, last, counter - last);
                         }
                         last = counter + 1;
                         WriteAsBytes(_out, "&amp;".ToCharArray());
-                        //_out.write("&amp;");
                         break;
                     case '"':
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                           // _out.write(chars, last, counter - last);
                         }
                         last = counter + 1;
                         WriteAsBytes(_out, "&quot;".ToCharArray());
-                        //_out.write("&quot;");
                         break;
                     // Special characters
                     case '\n':
@@ -456,30 +448,24 @@ namespace NPOI.XSSF.Streaming
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                            //_out.write(chars, last, counter - last);
                         }
                         WriteAsBytes(_out, "&#xa;".ToCharArray());
-                        //_out.write("&#xa;");
                         last = counter + 1;
                         break;
                     case '\t':
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                            //_out.write(chars, last, counter - last);
                         }
                         WriteAsBytes(_out, "&#x9;".ToCharArray());
-                        //_out.write("&#x9;");
                         last = counter + 1;
                         break;
                     case (char)0xa0:
                         if (counter > last)
                         {
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                           // _out.write(chars, last, counter - last);
                         }
                         WriteAsBytes(_out, "&#xa0;".ToCharArray());
-                        //_out.write("&#xa0;");
                         last = counter + 1;
                         break;
                     default:
@@ -491,10 +477,8 @@ namespace NPOI.XSSF.Streaming
                             if (counter > last)
                             {
                                 WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                                //_out.write(chars, last, counter - last);
                             }
                             WriteAsBytes(_out, "?");
-                           // _out.write('?');
                             last = counter + 1;
                         }
                         else if (c > 127)
@@ -502,17 +486,13 @@ namespace NPOI.XSSF.Streaming
                             if (counter > last)
                             {
                                 WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
-                               // _out.write(chars, last, counter - last);
                             }
                             last = counter + 1;
                             // If the character is outside of UTF8, write the
                             // numeric value.
                             WriteAsBytes(_out, "&#".ToCharArray());
-                            //_out.write("&#");
                             WriteAsBytes(_out, ((int)c).ToString());
-                            //_out.write(((int)c).ToString());
                             WriteAsBytes(_out, ";");
-                            //_out.write(";");
                         }
                         break;
                 }
@@ -520,7 +500,6 @@ namespace NPOI.XSSF.Streaming
             if (last < length)
             {
                 WriteAsBytes(_out, chars.Skip(last).Take(length - last).ToArray());
-               // _out.write(chars, last, length - last);
             }
         }
 
