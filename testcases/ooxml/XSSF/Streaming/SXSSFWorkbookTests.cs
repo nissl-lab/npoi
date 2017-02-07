@@ -16,8 +16,10 @@
 ==================================================================== */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
@@ -99,7 +101,278 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             Assert.AreEqual("test1", _objectToTest.GetSheetName(1));
         }
 
+        [Test]
+        public void IfSettingSelectedTabShouldSetSelectedTabOfXssfWorkbook()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("test1");
+            _objectToTest.CreateSheet("test2");
+
+            _objectToTest.SetSelectedTab(0);
+
+            Assert.IsTrue(_objectToTest.GetSheetAt(0).IsSelected);
+
+        }
+
+        [Test]
+        public void IfSheetNameByIndexShouldGetSheetNameFromXssfWorkbook()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("test1");
+            _objectToTest.CreateSheet("test2");
+
+            _objectToTest.SetSelectedTab(0);
+
+            Assert.IsTrue(_objectToTest.GetSheetAt(0).IsSelected);
+
+        }
+
+        [Test]
+        public void IfSettingSheetNameShouldChangeTheSheetNameAtTheSpecifiedIndex()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("test1");
+            _objectToTest.SetSheetName(0,"renamed");
+            
+            Assert.AreEqual("renamed", _objectToTest.GetSheetAt(0).SheetName);
+
+        }
+
+        [Test]
+        public void IfRequestingTheSheetIndexBySheetNameShouldReturnTheIndexOfTheXssfSheet()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("test0");
+            _objectToTest.CreateSheet("test1");
+            _objectToTest.CreateSheet("test2");
+
+            var first = _objectToTest.GetSheetIndex("test0");
+            var second = _objectToTest.GetSheetIndex("test1");
+            var third = _objectToTest.GetSheetIndex("test2");
+            Assert.AreEqual(0, first);
+            Assert.AreEqual(1, second);
+            Assert.AreEqual(2, third);
+        }
+
+        [Test]
+        public void IfGivenASheetOfAWorkbookShouldGetTheIndexIfTheSheetExists()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheet = _objectToTest.CreateSheet("test");
+
+            var index = _objectToTest.GetSheetIndex(sheet);
+
+            Assert.AreEqual(0, index);
+        }
+
+        [Test]
+        public void IfCreatingASheetShouldCreateASheetInTheXssfWorkbookWithTheGivenName()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheet = _objectToTest.CreateSheet("test");
+
+            Assert.NotNull(sheet);
+            Assert.AreEqual("test",sheet.SheetName);
+        }
+
+        [Test]
+        public void IfCreatingASheetShouldCreateASheetInTheXssfWorkbookWithDefaultName()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheet = _objectToTest.CreateSheet();
+            var sheet2 = _objectToTest.CreateSheet();
+
+            Assert.NotNull(sheet);
+            Assert.AreEqual("Sheet0", sheet.SheetName);
+            Assert.AreEqual("Sheet1", sheet2.SheetName);
+        }
+
+        [Test]
+        public void IfGivenTheNameOfAnExistingSheetShouldReturnTheSheet()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("1");
+            _objectToTest.CreateSheet("2");
+
+            var sheet1 = _objectToTest.GetSheet("1");
+            var sheet2 = _objectToTest.GetSheet("2");
+
+            Assert.AreEqual("1", sheet1.SheetName);
+            Assert.AreEqual("2", sheet2.SheetName);
+
+        }
 
 
+        [Test]
+        public void IfGivenTheIndexOfAnExistingSheetShouldReturnTheSheet()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("1");
+            _objectToTest.CreateSheet("2");
+
+            var sheet1 = _objectToTest.GetSheetAt(0);
+            var sheet2 = _objectToTest.GetSheetAt(1);
+
+            Assert.AreEqual("1", sheet1.SheetName);
+            Assert.AreEqual("2", sheet2.SheetName);
+
+        }
+
+        [Test]
+        public void IfGivenThePositionOfAnExistingSheetShouldRemoveThatSheet()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateSheet("1");
+            _objectToTest.CreateSheet("2");
+
+            _objectToTest.RemoveSheetAt(0);
+            var sheet = _objectToTest.GetSheetAt(0);
+            Assert.IsTrue(_objectToTest.NumberOfSheets == 1);
+            Assert.AreEqual("2", sheet.SheetName);
+
+        }
+
+        [Test]
+        public void IfAFontIsCreatedItShouldBeReturnedAndAddedToTheExistingWorkbook()
+        {
+            _objectToTest=new SXSSFWorkbook();
+            var font = _objectToTest.CreateFont();
+
+            Assert.NotNull(font);
+        }
+
+        [Test]
+        public void IfGivenZeroBasedIndexShouldReturnExistingFont()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateFont();
+
+            var font = _objectToTest.GetFontAt(0);
+            Assert.NotNull(font);
+        }
+
+        [Test]
+        public void IfACellStyleIsCreatedItShouldBeReturnedAndAddedToTheExistingWorkbook()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var cellStyle = _objectToTest.CreateCellStyle();
+
+            Assert.NotNull(cellStyle);
+        }
+
+        [Test]
+        public void IfGivenZeroBasedIndexShouldReturnExistingCellStyle()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            _objectToTest.CreateFont();
+
+            var cellStyle = _objectToTest.GetCellStyleAt(0);
+            Assert.NotNull(cellStyle);
+        }
+
+        [Test]
+        public void IfWriting10x10CellsShouldWriteStringValuesForCells()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets,rows,cols,CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\numericTest.xlsx";
+            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                _objectToTest.Write(fs);
+            }
+
+            _objectToTest.Dispose();
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfOpeningExistingWorkbookShouldWriteAllPreviouslyExistingColumns()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\numericTest.xlsx";
+            var reSavePath = Environment.CurrentDirectory + "\\numericTest2.xlsx";
+            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                _objectToTest.Write(fs);
+            }
+
+            _objectToTest.Dispose();
+
+            Assert.True(File.Exists(savePath));
+
+            var xssfWorkbook = new XSSFWorkbook(savePath);
+
+            var result = new SXSSFWorkbook(xssfWorkbook);
+
+            using (FileStream fs = new FileStream(reSavePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                result.Write(fs);
+            }
+
+            result.Dispose();
+            xssfWorkbook.Close();
+
+            File.Delete(reSavePath);
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWriting10x10CellsShouldWriteNumericValuesForCells()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.String);
+            var savePath = Environment.CurrentDirectory + "\\plainStringTest.xlsx";
+            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                _objectToTest.Write(fs);
+            }
+
+            _objectToTest.Dispose();
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        //TODO: add tests for formulas and the other value
+
+        private void AddCells(IWorkbook wb, int sheets, int rows, int columns, CellType type)
+        {
+            for (int j = 0; j < sheets; j++)
+            {
+                var sheet = wb.CreateSheet(j.ToString());
+                for (int k = 0; k < rows; k++)
+                {
+                    var row = sheet.CreateRow(k);
+                    for (int i = 0; i < columns; i++)
+                    {
+                        WriteCellValue(row, type, i, i); 
+                    }
+                }
+            }
+        }
+
+        private void WriteCellValue(IRow row, CellType type, int col, object val)
+        {
+            if (type == CellType.Numeric)
+            {
+                row.CreateCell(col).SetCellValue(Convert.ToInt32(val));
+            }
+            else if (type == CellType.String)
+            {
+                row.CreateCell(col).SetCellValue("value: " + val.ToString());
+            }
+        }
     }
 }

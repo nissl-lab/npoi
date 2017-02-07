@@ -172,6 +172,13 @@ namespace NPOI.XSSF.Streaming
 
         }
 
+        /// <summary>
+        /// Currently only supports writing not reading. E.g. the number of rows returned from a worksheet will be wrong etc.
+        /// </summary>
+        /// <param name="workbook"></param>
+        /// <param name="rowAccessWindowSize"></param>
+        /// <param name="compressTmpFiles"></param>
+        /// <param name="useSharedStringsTable"></param>
         public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles, bool useSharedStringsTable)
         {
             RandomAccessWindowSize = rowAccessWindowSize;
@@ -595,7 +602,8 @@ namespace NPOI.XSSF.Streaming
                 }
             }
         }
-        protected void FlushSheets()
+
+        private void FlushSheets()
         {
             foreach (SXSSFSheet sheet in _xFromSxHash.Values)
             {

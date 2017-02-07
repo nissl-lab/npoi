@@ -312,7 +312,7 @@ namespace NPOI.XSSF.Streaming
 
             public void Dispose()
             {
-               throw new NotImplementedException();
+                throw new NotImplementedException();
             }
 
             public IEnumerator<ICell> GetEnumerator()
@@ -333,7 +333,6 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        //TODO: enumerator or enumberabl?
         public class CellIterator : IEnumerator<ICell>
         {
             private Dictionary<int, SXSSFCell> _cells;

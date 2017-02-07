@@ -16,6 +16,7 @@
 ==================================================================== */
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -79,7 +80,7 @@ namespace NPOI.XSSF.Streaming
             FileStream decorated;
             try
             {
-                 fos = new FileStream(fd.FullName, FileMode.Append, FileAccess.Write);
+                fos = new FileStream(fd.FullName, FileMode.Append, FileAccess.Write);
                 //decorated = decorateOutputStream(fos);
             }
             catch (Exception e)
@@ -88,7 +89,7 @@ namespace NPOI.XSSF.Streaming
                 {
                     fos.Close();
                 }
-                
+
                 throw e;
             }
             //TODO: this is the decorate?
@@ -127,7 +128,7 @@ namespace NPOI.XSSF.Streaming
             }
             catch (Exception e)
             {
-                
+
             }
             try
             {
@@ -137,8 +138,8 @@ namespace NPOI.XSSF.Streaming
             {
 
             }
-          
-            
+
+
         }
 
         /**
@@ -207,7 +208,6 @@ namespace NPOI.XSSF.Streaming
                 writeCell(columnIndex++, cells.Current);
             }
             endRow();
-            cells.Dispose();
         }
 
         private void BeginRow(int rownum, SXSSFRow row)
@@ -267,44 +267,39 @@ namespace NPOI.XSSF.Streaming
                 return;
             }
             string cellRef = new CellReference(_rownum, columnIndex).FormatAsString();
-            var text = Encoding.UTF8.GetBytes("<c r=\"" + cellRef + "\"");
-            _out.Write(text, 0, text.Length);
+            WriteAsBytes(_out, "<c r=\"" + cellRef + "\"");
             ICellStyle cellStyle = cell.CellStyle;
             if (cellStyle.Index != 0)
             {
                 // need to convert the short to unsigned short as the indexes can be up to 64k
                 // ideally we would use int for this index, but that would need changes to some more 
                 // APIs
-                text = Encoding.UTF8.GetBytes(" s=\"" + (cellStyle.Index & 0xffff) + "\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " s=\"" + (cellStyle.Index & 0xffff) + "\"");
             }
             CellType cellType = cell.CellType;
             switch (cellType)
             {
                 case CellType.Blank:
                     {
-                        text = Encoding.UTF8.GetBytes(">");
-                        _out.Write(text, 0, text.Length);
+                        WriteAsBytes(_out, ">");
                         break;
                     }
                 case CellType.Formula:
                     {
-                        //TODO: I may have fucked this up. :)
-                        text = Encoding.UTF8.GetBytes(">");
-                        _out.Write(text, 0, text.Length);
-                        text = Encoding.UTF8.GetBytes("<f>");
-                        _out.Write(text, 0, text.Length);
-                        outputQuotedString(cell.CellFormula);//THis don't work
-                        text = Encoding.UTF8.GetBytes("</f>");
-                        _out.Write(text, 0, text.Length);
+                        WriteAsBytes(_out, ">");
+                        WriteAsBytes(_out, "<f>");
+
+                        outputQuotedString(cell.CellFormula);//TODO: this doesn't work
+
+                        WriteAsBytes(_out, "</f>");
+
                         switch (cell.GetCachedFormulaResultTypeEnum())
                         {
                             case CellType.Numeric:
                                 double nval = cell.NumericCellValue;
                                 if (!Double.IsNaN(nval))
                                 {
-                                    text = Encoding.UTF8.GetBytes("<v>" + nval + "</v>");
-                                    _out.Write(text, 0, text.Length);
+                                    WriteAsBytes(_out, "<v>" + nval + "</v>");
                                 }
                                 break;
                             default:
@@ -319,71 +314,48 @@ namespace NPOI.XSSF.Streaming
                             XSSFRichTextString rt = new XSSFRichTextString(cell.StringCellValue);
                             int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
 
-
                             //TODO: is this supposed to be and s=\"
-                            text = Encoding.UTF8.GetBytes(" t=\"" + ST_CellType.s.ToString() + "\">");
-                            _out.Write(text, 0, text.Length);
-                            text = Encoding.UTF8.GetBytes("<v>");
-                            _out.Write(text, 0, text.Length);
-                            text = Encoding.UTF8.GetBytes(sRef.ToString());
-                            _out.Write(text, 0, text.Length);
-                            text = Encoding.UTF8.GetBytes("</v>");
-                            _out.Write(text, 0, text.Length);
-
+                            WriteAsBytes(_out, " t=\"" + ST_CellType.s.ToString() + "\">");
+                            WriteAsBytes(_out, "<v>");
+                            WriteAsBytes(_out, sRef.ToString());
+                            WriteAsBytes(_out, "</v>");
                         }
                         else
                         {
-                            text = Encoding.UTF8.GetBytes(" t=\"inlineStr\">");
-                            _out.Write(text, 0, text.Length);
-                            text = Encoding.UTF8.GetBytes("<is><t");
-                            _out.Write(text, 0, text.Length);
+                            WriteAsBytes(_out, " t=\"inlineStr\">");
+                            WriteAsBytes(_out, "<is><t");
 
                             if (hasLeadingTrailingSpaces(cell.StringCellValue))
                             {
-                                text = Encoding.UTF8.GetBytes(" xml:space=\"preserve\"");
-                                _out.Write(text, 0, text.Length);
-                                //_out.write(" xml:space=\"preserve\"");
+                                WriteAsBytes(_out, " xml:space=\"preserve\"");
                             }
-                            text = Encoding.UTF8.GetBytes(">");
-                            _out.Write(text, 0, text.Length);
-                            // _out.write(">");
+
+                            WriteAsBytes(_out, ">");
+
                             outputQuotedString(cell.StringCellValue);//TODO: doesn't work
-                            text = Encoding.UTF8.GetBytes("</t></is>");
-                            _out.Write(text, 0, text.Length);
-                            //_out.write("</t></is>");
+
+                            WriteAsBytes(_out, "</t></is>");
                         }
                         break;
                     }
                 case CellType.Numeric:
                     {
-                        text = Encoding.UTF8.GetBytes(" t=\"n\">");
-                        _out.Write(text, 0, text.Length);
-                        //_out.write(" t=\"n\">");
-                        text = Encoding.UTF8.GetBytes("<v>" + cell.NumericCellValue + "</v>");
-                        _out.Write(text, 0, text.Length);
-                        //_out.write("<v>" + cell.NumericCellValue + "</v>");
+                        WriteAsBytes(_out, " t=\"n\">");
+                        WriteAsBytes(_out, "<v>" + cell.NumericCellValue + "</v>");
                         break;
                     }
                 case CellType.Boolean:
                     {
-                        text = Encoding.UTF8.GetBytes(" t=\"b\">");
-                        _out.Write(text, 0, text.Length);
-                        //_out.write(" t=\"b\">");
-                        text = Encoding.UTF8.GetBytes("<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
-                        _out.Write(text, 0, text.Length);
-                       // _out.write("<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
+                        WriteAsBytes(_out, " t=\"b\">");
+                        WriteAsBytes(_out, "<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
                         break;
                     }
                 case CellType.Error:
                     {
                         FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
 
-                       // _out.write(" t=\"e\">");
-                        text = Encoding.UTF8.GetBytes(" t=\"e\">");
-                        _out.Write(text, 0, text.Length);
-                        //_out.write("<v>" + error.String + "</v>");
-                        text = Encoding.UTF8.GetBytes("<v>" + error.String + "</v>");
-                        _out.Write(text, 0, text.Length);
+                        WriteAsBytes(_out, " t=\"e\">");
+                        WriteAsBytes(_out, "<v>" + error.String + "</v>");
                         break;
                     }
                 default:
@@ -391,13 +363,21 @@ namespace NPOI.XSSF.Streaming
                         throw new InvalidOperationException("Invalid cell type: " + cellType);
                     }
             }
-            //_out.write("</c>");
-            text = Encoding.UTF8.GetBytes("</c>");
-            _out.Write(text, 0, text.Length);
+            WriteAsBytes(_out, "</c>");
             _out.Flush();
         }
 
+        private void WriteAsBytes(Stream outStream, string text)
+        {
+            var bytes = Encoding.UTF8.GetBytes(text);
+            outStream.Write(bytes, 0, bytes.Length);
+        }
 
+        private void WriteAsBytes(Stream outStream, char[] chars)
+        {
+            var bytes = Encoding.UTF8.GetBytes(chars);
+            outStream.Write(bytes, 0, bytes.Length);
+        }
         /**
          * @return  whether the string has leading / trailing spaces that
          *  need to be preserved with the xml:space=\"preserve\" attribute
@@ -416,112 +396,132 @@ namespace NPOI.XSSF.Streaming
         //Taken from jdk1.3/src/javax/swing/text/html/HTMLWriter.java
         protected void outputQuotedString(String s)
         {
-            throw new NotImplementedException();
-        //    if (s == null || s.Length == 0)
-        //    {
-        //        return;
-        //    }
+            if (s == null || s.Length == 0)
+            {
+                return;
+            }
 
-        //    char[]
-        //chars = s.ToCharArray();
-        //    int last = 0;
-        //    int length = s.Length;
-        //    for (int counter = 0; counter < length; counter++)
-        //    {
-        //        char c = chars[counter];
-        //        switch (c)
-        //        {
-        //            case '<':
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                last = counter + 1;
-        //                _out.write("&lt;");
-        //                break;
-        //            case '>':
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                last = counter + 1;
-        //                _out.write("&gt;");
-        //                break;
-        //            case '&':
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                last = counter + 1;
-        //                _out.write("&amp;");
-        //                break;
-        //            case '"':
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                last = counter + 1;
-        //                _out.write("&quot;");
-        //                break;
-        //            // Special characters
-        //            case '\n':
-        //            case '\r':
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                _out.write("&#xa;");
-        //                last = counter + 1;
-        //                break;
-        //            case '\t':
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                _out.write("&#x9;");
-        //                last = counter + 1;
-        //                break;
-        //            case 0xa0:
-        //                if (counter > last)
-        //                {
-        //                    _out.write(chars, last, counter - last);
-        //                }
-        //                _out.write("&#xa0;");
-        //                last = counter + 1;
-        //                break;
-        //            default:
-        //                // YK: XmlBeans silently replaces all ISO control characters ( < 32) with question marks.
-        //                // the same rule applies to unicode surrogates and "not a character" symbols.
-        //                if (c < ' ' || Character.isLowSurrogate(c) || Character.isHighSurrogate(c) ||
-        //                        ('\uFFFE' <= c && c <= '\uFFFF'))
-        //                {
-        //                    if (counter > last)
-        //                    {
-        //                        _out.write(chars, last, counter - last);
-        //                    }
-        //                    _out.write('?');
-        //                    last = counter + 1;
-        //                }
-        //                else if (c > 127)
-        //                {
-        //                    if (counter > last)
-        //                    {
-        //                        _out.write(chars, last, counter - last);
-        //                    }
-        //                    last = counter + 1;
-        //                    // If the character is outside of UTF8, write the
-        //                    // numeric value.
-        //                    _out.write("&#");
-        //                    _out.write(((int)c).ToString());
-        //                    _out.write(";");
-        //                }
-        //                break;
-        //        }
-        //    }
-        //    if (last < length)
-        //    {
-        //        _out.write(chars, last, length - last);
-        //    }
+            char[] chars = s.ToCharArray();
+            int last = 0;
+            int length = s.Length;
+            for (int counter = 0; counter < length; counter++)
+            {
+                char c = chars[counter];
+                switch (c)
+                {
+                    case '<':
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            //_out.Write(chars, last, counter - last);
+                        }
+                        last = counter + 1;
+                      
+                        WriteAsBytes(_out, "&lt;".ToCharArray());
+                       // _out.write("&lt;");
+                        break;
+                    case '>':
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            //_out.write(chars, last, counter - last);
+                        }
+                        last = counter + 1;
+                        WriteAsBytes(_out, "&gt;".ToCharArray());
+                       // _out.write("&gt;");
+                        break;
+                    case '&':
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            //_out.write(chars, last, counter - last);
+                        }
+                        last = counter + 1;
+                        WriteAsBytes(_out, "&amp;".ToCharArray());
+                        //_out.write("&amp;");
+                        break;
+                    case '"':
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                           // _out.write(chars, last, counter - last);
+                        }
+                        last = counter + 1;
+                        WriteAsBytes(_out, "&quot;".ToCharArray());
+                        //_out.write("&quot;");
+                        break;
+                    // Special characters
+                    case '\n':
+                    case '\r':
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            //_out.write(chars, last, counter - last);
+                        }
+                        WriteAsBytes(_out, "&#xa;".ToCharArray());
+                        //_out.write("&#xa;");
+                        last = counter + 1;
+                        break;
+                    case '\t':
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            //_out.write(chars, last, counter - last);
+                        }
+                        WriteAsBytes(_out, "&#x9;".ToCharArray());
+                        //_out.write("&#x9;");
+                        last = counter + 1;
+                        break;
+                    case (char)0xa0:
+                        if (counter > last)
+                        {
+                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                           // _out.write(chars, last, counter - last);
+                        }
+                        WriteAsBytes(_out, "&#xa0;".ToCharArray());
+                        //_out.write("&#xa0;");
+                        last = counter + 1;
+                        break;
+                    default:
+                        // YK: XmlBeans silently replaces all ISO control characters ( < 32) with question marks.
+                        // the same rule applies to unicode surrogates and "not a character" symbols.
+                        if (c < ' ' || Char.IsLowSurrogate(c) || Char.IsHighSurrogate(c) ||
+                                ('\uFFFE' <= c && c <= '\uFFFF'))
+                        {
+                            if (counter > last)
+                            {
+                                WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                                //_out.write(chars, last, counter - last);
+                            }
+                            WriteAsBytes(_out, "?");
+                           // _out.write('?');
+                            last = counter + 1;
+                        }
+                        else if (c > 127)
+                        {
+                            if (counter > last)
+                            {
+                                WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                               // _out.write(chars, last, counter - last);
+                            }
+                            last = counter + 1;
+                            // If the character is outside of UTF8, write the
+                            // numeric value.
+                            WriteAsBytes(_out, "&#".ToCharArray());
+                            //_out.write("&#");
+                            WriteAsBytes(_out, ((int)c).ToString());
+                            //_out.write(((int)c).ToString());
+                            WriteAsBytes(_out, ";");
+                            //_out.write(";");
+                        }
+                        break;
+                }
+            }
+            if (last < length)
+            {
+                WriteAsBytes(_out, chars.Skip(last).Take(length - last).ToArray());
+               // _out.write(chars, last, length - last);
+            }
         }
 
         /**
