@@ -668,13 +668,13 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(HSSFColor.Blue.Index, patternFmt.FillForegroundColor);
 
             Assert.AreEqual((short)FillPattern.NoFill, patternFmt.FillPattern);
-            patternFmt.FillPattern = (short)FillPattern.SolidForeground;
+            patternFmt.FillPattern = FillPattern.SolidForeground;
             Assert.AreEqual((short)FillPattern.SolidForeground, patternFmt.FillPattern);
             patternFmt.FillPattern = (short)FillPattern.NoFill;
             Assert.AreEqual((short)FillPattern.NoFill, patternFmt.FillPattern);
             if (this._testDataProvider.GetSpreadsheetVersion() == SpreadsheetVersion.EXCEL97)
             {
-                patternFmt.FillPattern = (short)FillPattern.Bricks;
+                patternFmt.FillPattern = FillPattern.Bricks;
                 Assert.AreEqual((short)FillPattern.Bricks, patternFmt.FillPattern);
             }
 
