@@ -73,23 +73,14 @@ namespace NPOI.XSSF.Streaming
 
         public int ActiveSheetIndex
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.ActiveSheetIndex; }
         }
 
         public int FirstVisibleTab
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.FirstVisibleTab; }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { XssfWorkbook.FirstVisibleTab = value; }
         }
 
         public int NumberOfSheets
@@ -99,52 +90,31 @@ namespace NPOI.XSSF.Streaming
 
         public short NumberOfFonts
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.NumberOfFonts; }
         }
 
         public short NumCellStyles
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.NumCellStyles; }
         }
 
         public int NumberOfNames
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.NumberOfNames; }
         }
 
         public MissingCellPolicy MissingCellPolicy
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.MissingCellPolicy; }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { XssfWorkbook.MissingCellPolicy = value; }
         }
 
         public bool IsHidden
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return XssfWorkbook.IsHidden; }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { XssfWorkbook.IsHidden = value; }
         }
 
 
@@ -332,7 +302,7 @@ namespace NPOI.XSSF.Streaming
 
         private static void CopyStreamAndInjectWorksheet(Stream inputStream, Stream outputStream, Stream worksheetData)
         {
-            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8); //TODO: Is it always UTF-8 or do we need to read the xml encoding declaration in the file? If not, we should perhaps use a SAX reader instead.
+            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8);
             StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8);
             bool needsStartTag = true;
             int c;
@@ -465,7 +435,7 @@ namespace NPOI.XSSF.Streaming
 
         public void SetActiveSheet(int sheetIndex)
         {
-            throw new NotImplementedException();
+            XssfWorkbook.SetActiveSheet(sheetIndex);
         }
 
         public string GetSheetName(int sheet)
@@ -578,7 +548,6 @@ namespace NPOI.XSSF.Streaming
             var tmplFile = TempFile.CreateTempFile("poi-sxssf-template", ".xlsx");
             try
             {
-                //TODO: may just want to be a filestream
                 var os = new FileStream(tmplFile.FullName, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
@@ -692,8 +661,6 @@ namespace NPOI.XSSF.Streaming
             XssfWorkbook.RemovePrintArea(sheetIndex);
         }
 
-        //TODO: missing methods Get/Set MissingCellPolicy
-
 
         public IDataFormat CreateDataFormat()
         {
@@ -714,8 +681,6 @@ namespace NPOI.XSSF.Streaming
         {
             return new SXSSFCreationHelper(this);
         }
-
-        //TODO: missing method isDate1904, isHidden, setHidden
 
         public bool IsSheetHidden(int sheetIx)
         {
@@ -766,5 +731,6 @@ namespace NPOI.XSSF.Streaming
         }
 
         //TODO: missing methods setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion
+        //TODO: missing method isDate1904, isHidden, setHidden
     }
 }
