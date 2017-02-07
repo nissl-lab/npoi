@@ -17,11 +17,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using NPOI.SS;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
@@ -567,8 +565,7 @@ namespace NPOI.XSSF.Streaming
 
         public IComment GetCellComment(int row, int column)
         {
-            throw new NotImplementedException();
-           // return _sh.GetCellComment(new CellRangeAddress(row, column));
+            return _sh.GetCellComment(row, column);
         }
 
         public int GetColumnOutlineLevel(int columnIndex)
@@ -633,18 +630,19 @@ namespace NPOI.XSSF.Streaming
         }
 
 
-        //TODO: fix
+        //TODO: test
         public void GroupRow(int fromRow, int toRow)
         {
-            //foreach (SXSSFRow row in _rows.Values.(fromRow, toRow + 1).values())
-            //{
-            //    int level = row.getOutlineLevel() + 1;
-            //    row.setOutlineLevel(level);
+            var groupRows = _rows.Where(kvp => kvp.Key >= fromRow && kvp.Key <= toRow + 1).Select(r => r.Value);
+            foreach (SXSSFRow row in groupRows)
+            {
+                int level = row.OutlineLevel + 1;
+                row.OutlineLevel = level;
 
-            //    if (level > outlineLevelRow) outlineLevelRow = level;
-            //}
+                if (level > outlineLevelRow) outlineLevelRow = level;
+            }
 
-            setWorksheetOutlineLevelRow();
+            SetWorksheetOutlineLevelRow();
         }
 
         /**
@@ -661,20 +659,19 @@ namespace NPOI.XSSF.Streaming
  * @param rownum    index of row to update (0-based)
  * @param level     outline level (greater than 0)
  */
-        public void setRowOutlineLevel(int rownum, int level)
+        public void SetRowOutlineLevel(int rownum, int level)
         {
             SXSSFRow row = _rows[rownum];
 
-            //TODO: should be OutlineLevl?
-            row._outlineLevel=level;
+            row.OutlineLevel = level;
             if (level > 0 && level > outlineLevelRow)
             {
                 outlineLevelRow = level;
-                setWorksheetOutlineLevelRow();
+                SetWorksheetOutlineLevelRow();
             }
         }
 
-        private void setWorksheetOutlineLevelRow()
+        private void SetWorksheetOutlineLevelRow()
         {
             var ct = _sh.GetCTWorksheet();
             var pr = ct.IsSetSheetFormatPr() ?
@@ -732,7 +729,7 @@ namespace NPOI.XSSF.Streaming
             //    throw new InvalidOperationException("Specified row does not belong to this sheet");
             //}
 
-          
+
             //for (Iterator<Map.Entry<Integer, SXSSFRow>> iter = _rows.entrySet().iterator(); iter.hasNext();)
             //{
             //    Map.Entry<int, SXSSFRow> entry = iter.next();
@@ -836,20 +833,19 @@ namespace NPOI.XSSF.Streaming
             }
             else
             {
-                int startRow = findStartOfRowOutlineGroup(rowIndex);
+                int startRow = FindStartOfRowOutlineGroup(rowIndex);
 
                 // Hide all the columns until the end of the group
-                int lastRow = writeHidden(row, startRow, true);
+                int lastRow = WriteHidden(row, startRow, true);
                 SXSSFRow lastRowObj = (SXSSFRow)GetRow(lastRow);
                 if (lastRowObj != null)
                 {
-                    //TODO: properly set this shit
-                    lastRowObj._collapsed = true;
+                    lastRowObj.Collapsed = true;
                 }
                 else
                 {
                     SXSSFRow newRow = (SXSSFRow)CreateRow(lastRow);
-                    newRow._collapsed = true;
+                    newRow.Collapsed = true;
                 }
             }
         }
@@ -857,7 +853,7 @@ namespace NPOI.XSSF.Streaming
         /**
  * @param rowIndex the zero based row index to find from
  */
-        private int findStartOfRowOutlineGroup(int rowIndex)
+        private int FindStartOfRowOutlineGroup(int rowIndex)
         {
             // Find the start of the group.
             IRow row = GetRow(rowIndex);
@@ -876,15 +872,14 @@ namespace NPOI.XSSF.Streaming
             return currentRow + 1;
         }
 
-        private int writeHidden(SXSSFRow xRow, int rowIndex, bool hidden)
+        private int WriteHidden(SXSSFRow xRow, int rowIndex, bool hidden)
         {
-            //TODO: or _.outlinelevel
             int level = xRow.OutlineLevel;
             var currRow = (SXSSFRow)GetRow(rowIndex);
 
             while (currRow != null && currRow.OutlineLevel >= level)
             {
-                currRow._hidden =hidden;
+                currRow.Hidden = hidden;
                 rowIndex++;
                 currRow = (SXSSFRow)GetRow(rowIndex);
             }
@@ -951,9 +946,8 @@ namespace NPOI.XSSF.Streaming
  * The exeeding rows (if any) are flushed to the disk while rows
  * with lower index values are flushed first.
  */
-        public void flushRows(int remaining)
+        private void flushRows(int remaining)
         {
-            //TODO: lenght?
             while (_rows.Count > remaining) flushOneRow();
             if (remaining == 0) allFlushed = true;
         }
@@ -965,13 +959,14 @@ namespace NPOI.XSSF.Streaming
 
         private void flushOneRow()
         {
-            //TODO sorted dictionrary?
+
             int firstRowNum = _rows.FirstOrDefault().Key;
-        if (firstRowNum!=null) {
+            if (firstRowNum != null)
+            {
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];
                 // Update the best fit column widths for auto-sizing just before the rows are flushed
-                //TODO _autoSizeColumnTracker.updateColumnWidths(row);
+                 _autoSizeColumnTracker.UpdateColumnWidths(row);
                 _writer.WriteRow(rowIndex, row);
                 _rows.Remove(firstRowNum);
                 lastFlushedRowNumber = rowIndex;
@@ -984,7 +979,7 @@ namespace NPOI.XSSF.Streaming
             // flush all remaining data and close the temp file writer
             flushRows(0);
             _writer.Close();
-        return _writer.GetWorksheetXMLInputStream();
+            return _writer.GetWorksheetXMLInputStream();
         }
 
         public SheetDataWriter getSheetDataWriter()

@@ -18,9 +18,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaminging;
@@ -31,15 +28,16 @@ namespace NPOI.XSSF.Streaming
     {
         private static bool? UNDEFINED = null;
 
-        public SXSSFSheet _sheet; // parent sheet
-        public SortedDictionary<int,SXSSFCell> _cells = new SortedDictionary<int, SXSSFCell>();
-        public short _style = -1; // index of cell style in style table
-        public short _height = -1; // row height in twips (1/20 point)
-        public bool _zHeight = false; // row zero-height (this is somehow different than being hidden)
-        public int _outlineLevel = 0;   // Outlining level of the row, when outlining is on
-                                         // use Boolean to have a tri-state for on/off/undefined 
-        public bool? _hidden = UNDEFINED;
-        public bool? _collapsed = UNDEFINED;
+        private SXSSFSheet _sheet; // parent sheet
+        private SortedDictionary<int, SXSSFCell> _cells = new SortedDictionary<int, SXSSFCell>();
+        private short _style = -1; // index of cell style in style table
+        private bool _zHeight; // row zero-height (this is somehow different than being hidden)
+        private float _height;
+
+
+        // use Boolean to have a tri-state for on/off/undefined 
+        public bool? Hidden = UNDEFINED;
+        public bool? Collapsed = UNDEFINED;
 
         public SXSSFRow(SXSSFSheet sheet)
         {
@@ -50,23 +48,30 @@ namespace NPOI.XSSF.Streaming
         {
             return new CellIterator(LastCellNum, null);
         }
-        public bool hasCustomHeight()
+        public bool HasCustomHeight()
         {
-            return _height != -1;
+            return Height != -1;
         }
+
+        //TODO; Do we lose methods here? SSXSSFCELL -> ICell
         public List<ICell> Cells
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return _cells.Values.Select(cell => (ICell) cell).ToList(); }
         }
 
         public short FirstCellNum
         {
             get
             {
-                throw new NotImplementedException();
+                try
+                {
+                    return (short) _cells.Keys.First();
+                }
+                catch
+                {
+                    return -1;
+
+                }
             }
         }
 
@@ -74,25 +79,21 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                throw new NotImplementedException();
+                return (short)(_height == -1 ? Sheet.DefaultRowHeightInPoints * 20 : _height);
             }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { _height = value; }
         }
 
         public float HeightInPoints
         {
             get
             {
-                throw new NotImplementedException();
+                return (float)(_height == -1 ? Sheet.DefaultRowHeightInPoints : _height / 20.0);
             }
 
             set
             {
-                throw new NotImplementedException();
+                _height = (value == -1) ? -1 : (value*20);
             }
         }
 
@@ -109,35 +110,26 @@ namespace NPOI.XSSF.Streaming
             get
             {
                 //TODO:should make this work with dictionary
-                return _cells.Count == 0 ? (short) -1 : Convert.ToInt16(_cells.Last().Key + 1);
-                
+                return _cells.Count == 0 ? (short)-1 : Convert.ToInt16(_cells.Last().Key + 1);
+
             }
         }
 
-        public int OutlineLevel
-        {
-            get { return _outlineLevel; }
-        }
+        public int OutlineLevel { get; set; }
 
         public int PhysicalNumberOfCells
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return Cells.Count; }
         }
 
         public int RowNum
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException();/*return Sheet.GetRow(this);*/ }
 
             set
             {
                 throw new NotImplementedException();
-                
+
             }
         }
 
@@ -145,12 +137,21 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                throw new NotImplementedException();
+                if (!IsFormatted) return null;
+
+                return Sheet.Workbook.GetCellStyleAt(_style);
             }
 
             set
             {
-                throw new NotImplementedException();
+                if (value == null)
+                {
+                    _style = -1;
+                }
+                else
+                {
+                    _style = value.Index;
+                }
             }
         }
 
@@ -163,10 +164,7 @@ namespace NPOI.XSSF.Streaming
         {
             get { return _zHeight; }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { _zHeight = value; }
         }
 
         public int CompareTo(SXSSFRow other)
@@ -228,13 +226,13 @@ namespace NPOI.XSSF.Streaming
             return GetCell(cellnum, policy);
         }
 
+        //TODO: Test
         public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
             CheckBounds(cellnum);
 
             var cell = _cells[cellnum];
 
-            //TODO come bakc and do comparision with if statement, may need to deep 
             switch (policy._policy)
             {
                 //case MissingCellPolicy.RETURN_NULL_AND_BLANK:
@@ -311,7 +309,6 @@ namespace NPOI.XSSF.Streaming
 
             public ICell Current
             {
-                //TODO: this seems slopy
                 get { return _cells[pos]; }
             }
 
@@ -354,8 +351,8 @@ namespace NPOI.XSSF.Streaming
             public CellIterator(int lastCellNum, Dictionary<int, SXSSFCell> cells)
             {
                 //TODO: Should be static so I don't know if i can just pass this to here
-                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
-                 pos = 0;
+                maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
+                pos = 0;
                 _cells = cells;
             }
 
@@ -386,7 +383,6 @@ namespace NPOI.XSSF.Streaming
                 throw new NotImplementedException();
             }
 
-            //TODO THese do need to get implemented and translated 
             public bool hasNext()
             {
                 return pos < maxColumn;
@@ -415,7 +411,7 @@ namespace NPOI.XSSF.Streaming
                 throw new NotImplementedException();
             }
 
-            
+
         }
     }
 

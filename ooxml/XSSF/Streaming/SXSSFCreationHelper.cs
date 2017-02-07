@@ -22,13 +22,11 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFCreationHelper : ICreationHelper
     {
-        //TODO: readonly?
         private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFCreationHelper));
 
         private SXSSFWorkbook wb;
         private XSSFCreationHelper helper;
 
-        //TODO: @internal
         public SXSSFCreationHelper(SXSSFWorkbook workbook)
         {
             this.helper = new XSSFCreationHelper(workbook.XssfWorkbook);

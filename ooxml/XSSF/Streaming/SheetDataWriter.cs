@@ -214,7 +214,7 @@ namespace NPOI.XSSF.Streaming
         {
             var text = Encoding.UTF8.GetBytes("<row r=\"" + (rownum + 1) + "\"");
             _out.Write(text, 0, text.Length);
-            if (row.hasCustomHeight())
+            if (row.HasCustomHeight())
             {
                 text = Encoding.UTF8.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
                 _out.Write(text, 0, text.Length);
@@ -231,20 +231,20 @@ namespace NPOI.XSSF.Streaming
                 text = Encoding.UTF8.GetBytes(" customFormat=\"1\"");
                 _out.Write(text, 0, text.Length);
             }
-            //TODO: _outlinelevel or OUTLINE LEVEL
+
             if (row.OutlineLevel != 0)
             {
-                text = Encoding.UTF8.GetBytes(" outlineLevel=\"" + row._outlineLevel + "\"");
+                text = Encoding.UTF8.GetBytes(" outlineLevel=\"" + row.OutlineLevel + "\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row._hidden != null)
+            if (row.Hidden != null)
             {
-                text = Encoding.UTF8.GetBytes(" hidden=\"" + (row._hidden.Value ? "1" : "0") + "\"");
+                text = Encoding.UTF8.GetBytes(" hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
                 _out.Write(text, 0, text.Length);
             }
-            if (row._collapsed != null)
+            if (row.Collapsed != null)
             {
-                text = Encoding.UTF8.GetBytes(" collapsed=\"" + (row._collapsed.Value ? "1" : "0") + "\"");
+                text = Encoding.UTF8.GetBytes(" collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
                 _out.Write(text, 0, text.Length);
             }
 
