@@ -2,7 +2,7 @@
 {
     public class PlainStringValue : StringValue
     {
-        public string _value;
+        public string Value;
 
         public override bool IsRichText()
         {

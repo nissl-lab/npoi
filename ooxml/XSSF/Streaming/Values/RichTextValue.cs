@@ -4,7 +4,7 @@ namespace NPOI.XSSF.Streaming.Values
 {
     public class RichTextValue : StringValue
     {
-        public IRichTextString _value;
+        public IRichTextString Value;
 
         public CellType GetType()
         {

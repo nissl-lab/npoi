@@ -4,7 +4,7 @@ namespace NPOI.XSSF.Streaming.Values
 {
     public class BooleanFormulaValue : FormulaValue
     {
-        public bool _preEvaluatedValue;
+        public bool PreEvaluatedValue { get; set; }
 
         public override CellType GetFormulaType()
         {

@@ -52,11 +52,11 @@ namespace NPOI.XSSF.Streaminging
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.Boolean)
                                 throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Boolean, CellType.Formula, false));
-                            return ((BooleanFormulaValue)_value)._preEvaluatedValue;
+                            return ((BooleanFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.Boolean:
                         {
-                            return ((BooleanValue)_value)._value;
+                            return ((BooleanValue)_value).Value;
                         }
                     default:
                         throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Boolean, cellType, false));
@@ -105,7 +105,7 @@ namespace NPOI.XSSF.Streaminging
             {
                 if (_value.GetType() != CellType.Formula)
                     throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Formula, _value.GetType(), false));
-                return ((FormulaValue) _value)._value;
+                return ((FormulaValue) _value).Value;
             }
 
             set
@@ -117,7 +117,7 @@ namespace NPOI.XSSF.Streaminging
                 }
 
                 EnsureFormulaType(ComputeTypeFromFormula(value));
-                ((FormulaValue)_value)._value = value;
+                ((FormulaValue)_value).Value = value;
             }
         }
 
@@ -187,11 +187,11 @@ namespace NPOI.XSSF.Streaminging
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.Error)
                                 new InvalidOperationException(BuildTypeMismatchMessage(CellType.Error, CellType.Formula, false));
-                            return ((ErrorFormulaValue)_value)._preEvaluatedValue;
+                            return ((ErrorFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.Error:
                         {
-                            return ((ErrorValue)_value)._value;
+                            return ((ErrorValue)_value).Value;
                         }
                     default:
                         throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Error, cellType, false));
@@ -259,10 +259,10 @@ namespace NPOI.XSSF.Streaminging
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.Numeric)
                                 throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Numeric, CellType.Formula, false));
-                            return ((NumericFormulaValue)_value)._preEvaluatedValue;
+                            return ((NumericFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.Numeric:
-                        return ((NumericValue) _value)._value;
+                        return ((NumericValue) _value).Value;
                     default:
                         throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Numeric, cellType, false));
                 }
@@ -280,7 +280,7 @@ namespace NPOI.XSSF.Streaminging
 
                 StringValue sval = (StringValue)_value;
                 if (sval.IsRichText())
-                    return ((RichTextValue) _value)._value;
+                    return ((RichTextValue) _value).Value;
                 else
                 {
                     string plainText = StringCellValue;
@@ -325,14 +325,14 @@ namespace NPOI.XSSF.Streaminging
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.String)
                                 throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.String, CellType.Formula, false));
-                            return ((StringFormulaValue)_value)._preEvaluatedValue;
+                            return ((StringFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.String:
                     {
                         if (((StringValue) _value).IsRichText())
-                            return ((RichTextValue) _value)._value.String;
+                            return ((RichTextValue) _value).Value.String;
                         else
-                            return ((PlainStringValue) _value)._value;
+                            return ((PlainStringValue) _value).Value;
                     }
                     default:
                         throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.String, cellType, false));
@@ -370,9 +370,9 @@ namespace NPOI.XSSF.Streaminging
         {
             EnsureType(CellType.Error);
             if (_value.GetType() == CellType.Formula)
-                ((ErrorFormulaValue)_value)._preEvaluatedValue = value;
+                ((ErrorFormulaValue)_value).PreEvaluatedValue = value;
             else
-                ((ErrorValue)_value)._value = value;
+                ((ErrorValue)_value).Value = value;
         }
 
         public void SetCellFormula(string formula)
@@ -384,7 +384,7 @@ namespace NPOI.XSSF.Streaminging
             }
 
             EnsureFormulaType(ComputeTypeFromFormula(formula));
-            ((FormulaValue)_value)._value = formula;
+            ((FormulaValue)_value).Value = formula;
         }
         
         private CellType ComputeTypeFromFormula(String formula)
@@ -409,12 +409,12 @@ namespace NPOI.XSSF.Streaminging
 
                 if (_value.GetType() == CellType.Formula)
                     if (_value is NumericFormulaValue) {
-                    ((NumericFormulaValue)_value)._preEvaluatedValue = Double.Parse(value);
+                    ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
                 } else {
-                    ((StringFormulaValue)_value)._value = value;
+                    ((StringFormulaValue)_value).Value = value;
                 }
             else
-                ((PlainStringValue)_value)._value = value;
+                ((PlainStringValue)_value).Value = value;
             }
             else
             {
@@ -424,7 +424,11 @@ namespace NPOI.XSSF.Streaminging
 
         public void SetCellValue(bool value)
         {
-            throw new NotImplementedException();
+            EnsureTypeOrFormulaType(CellType.Boolean);
+            if (_value.GetType() == CellType.Formula)
+                ((BooleanFormulaValue)_value).PreEvaluatedValue = value;
+            else
+                ((BooleanValue)_value).Value = value;
         }
 
         public void SetCellValue(IRichTextString value)
@@ -443,7 +447,7 @@ namespace NPOI.XSSF.Streaminging
                 if (xvalue.HasFormatting())
                     logger.Log(POILogger.WARN, "SXSSF doesn't support Shared Strings, rich text formatting information has be lost");
 
-                ((RichTextValue)_value)._value = xvalue;
+                ((RichTextValue)_value).Value = xvalue;
             }
             else
             {
@@ -480,9 +484,9 @@ namespace NPOI.XSSF.Streaminging
             {
                 EnsureTypeOrFormulaType(CellType.Numeric);
                 if (_value.GetType() == CellType.Formula)
-                    ((NumericFormulaValue)_value)._preEvaluatedValue = value;
+                    ((NumericFormulaValue)_value).PreEvaluatedValue = value;
                 else
-                    ((NumericValue)_value)._value = value;
+                    ((NumericValue)_value).Value = value;
             }
         }
 
@@ -630,7 +634,7 @@ namespace NPOI.XSSF.Streaminging
                         {
                             // if a cell is not blank then convert the old value to string
                             String str = convertCellValueToString();
-                            sval._value = str;
+                            sval.Value = str;
                         }
                         _value = sval;
                         break;
@@ -652,7 +656,7 @@ namespace NPOI.XSSF.Streaminging
                         {
                             // if a cell is not blank then convert the old value to string
                             bool val = convertCellValueToBoolean();
-                            bval._value = val;
+                            bval.Value = val;
                         }
                         _value = bval;
                         break;
@@ -703,7 +707,7 @@ namespace NPOI.XSSF.Streaminging
             // if we had a Formula before, we should copy over the _value of the formula
             if (prevValue is FormulaValue)
             {
-                ((FormulaValue)_value)._value = ((FormulaValue)prevValue)._value;
+                ((FormulaValue)_value).Value = ((FormulaValue)prevValue).Value;
             }
         }
 

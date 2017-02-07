@@ -4,7 +4,7 @@ namespace NPOI.XSSF.Streaming.Values
 {
     public class StringFormulaValue : FormulaValue
     {
-        public string _preEvaluatedValue;
+        public string PreEvaluatedValue;
 
         public override CellType GetFormulaType()
         {

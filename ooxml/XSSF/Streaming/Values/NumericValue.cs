@@ -4,7 +4,7 @@ namespace NPOI.XSSF.Streaming.Values
 {
     public class NumericValue : Value
     {
-        public double _value;
+        public double Value;
         public CellType GetType()
         {
             return CellType.Numeric;

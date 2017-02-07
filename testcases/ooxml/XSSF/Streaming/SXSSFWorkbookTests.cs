@@ -325,8 +325,81 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             File.Delete(savePath);
         }
 
+        [Test]
+        public void IfWriting10x10CellsShouldWriteBooleanValuesForCells()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Boolean);
+            var savePath = Environment.CurrentDirectory + "\\boolTest.xlsx";
+            WriteFile(savePath, _objectToTest);
 
-        //TODO: add tests for formulas and the other values
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWriting10x10CellsShouldWriteBlankValuesForCells()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Blank);
+            var savePath = Environment.CurrentDirectory + "\\blankTest.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWriting10x10CellsShouldWriteFormulaValuesForCells()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Formula);
+            var savePath = Environment.CurrentDirectory + "\\formulaTest.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWriting10x10CellsShouldWriteErrorValuesForCells()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10;
+            var cols = 10;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Error);
+            var savePath = Environment.CurrentDirectory + "\\errorTest.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWritingMaxCellsForWorksheetShouldNotThrowOutOfMemoryException()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 1048576;
+            var cols = 16384;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheet.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
 
         private void AddCells(IWorkbook wb, int sheets, int rows, int columns, CellType type)
         {
@@ -365,6 +438,22 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             else if (type == CellType.String)
             {
                 row.CreateCell(col).SetCellValue("value: " + val.ToString());
+            }
+            else if (type == CellType.Boolean)
+            {
+                row.CreateCell(col).SetCellValue(true);
+            }
+            else if (type == CellType.Blank)
+            {
+                row.CreateCell(col);
+            }
+            else if (type == CellType.Error)
+            {
+                row.CreateCell(col).SetCellErrorValue(0);
+            }
+            else if (type == CellType.Formula)
+            {
+                row.CreateCell(col).SetCellFormula("SUM(A1:A2)");
             }
         }
     }

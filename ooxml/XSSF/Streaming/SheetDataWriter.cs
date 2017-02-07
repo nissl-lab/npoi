@@ -259,7 +259,6 @@ namespace NPOI.XSSF.Streaming
             _out.Write(text, 0, text.Length);
         }
 
-        //TODO: The strings that need to be written are probably wrong. :\
         public void writeCell(int columnIndex, ICell cell)
         {
             if (cell == null)
@@ -382,7 +381,7 @@ namespace NPOI.XSSF.Streaming
          * @return  whether the string has leading / trailing spaces that
          *  need to be preserved with the xml:space=\"preserve\" attribute
          */
-        bool hasLeadingTrailingSpaces(string str)
+        private bool hasLeadingTrailingSpaces(string str)
         {
             if (str != null && str.Length > 0)
             {
