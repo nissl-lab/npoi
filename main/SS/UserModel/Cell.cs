@@ -246,8 +246,7 @@ namespace NPOI.SS.UserModel
         bool IsPartOfArrayFormulaGroup { get; }
 
         bool IsMergedCell { get; }
-
-        //TODO: Comment and rye added this.
+        
         CellType GetCachedFormulaResultTypeEnum();
     }
 }

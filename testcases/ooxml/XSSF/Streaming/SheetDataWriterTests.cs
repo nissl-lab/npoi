@@ -15,11 +15,13 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
     {
         private SheetDataWriter _objectToTest;
         private IRow _row;
+        private ICell _cell;
 
         [SetUp]
         public void Init()
         {
             _row = Substitute.For<IRow>();
+            _cell = Substitute.For<ICell>();
         }
 
         [TearDown]
@@ -192,6 +194,116 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
 
         }
 
+        [Test]
+        public void IfCellTypeIsBlankShouldWriteBlankCellXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.Blank);
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\"></c>", lines[0]);
+
+        }
+
+        [Test]
+        public void IfCellTypeIsFormulaShouldWriteFormulaCellXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.Formula);
+            _cell.CellFormula.Returns("SUM(A1:A3)");
+            _cell.GetCachedFormulaResultTypeEnum().Returns(CellType.Numeric);
+            _cell.NumericCellValue.Returns(1);
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\"><f>SUM(A1:A3)</f><v>1</v></c>", lines[0]);
+
+        }
+
+        [Test]
+        public void IfCellTypeIsNumericShouldWriteNumericCellXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.Numeric);
+            _cell.NumericCellValue.Returns(1);
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\" t=\"n\"><v>1</v></c>", lines[0]);
+
+        }
+
+        [Test]
+        public void IfCellTypeIsBooleanTrueShouldWriteBooleanCellTrueXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.Boolean);
+            _cell.BooleanCellValue.Returns(true);
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\" t=\"b\"><v>1</v></c>", lines[0]);
+
+        }
+
+        [Test]
+        public void IfCellTypeIsBooleanFalseShouldWriteBooleanCellFalseXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.Boolean);
+            _cell.BooleanCellValue.Returns(false);
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\" t=\"b\"><v>0</v></c>", lines[0]);
+
+        }
+
+        [Test]
+        public void IfCellTypeIsErrorShouldWriteErrorCellXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.Error);
+            _cell.ErrorCellValue.Returns((byte)0x00);
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\" t=\"e\"><v>#NULL!</v></c>", lines[0]);
+
+        }
+
+        //TODO: outputQuotedStringTests
 
     }
 }

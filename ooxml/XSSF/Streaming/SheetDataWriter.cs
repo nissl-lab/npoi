@@ -33,7 +33,7 @@ namespace NPOI.XSSF.Streaming
 
         protected FileInfo TemporaryFileInfo { get; set; }
         protected Stream OutputStream { get; set; }
-        public int RowNum { get; set; }
+        private int RowNum { get; set; }
         public int NumberOfFlushedRows { get; set; }
         public int LowestIndexOfFlushedRows { get; set; } // meaningful only of _numberOfFlushedRows>0
         public int NumberOfCellsOfLastFlushedRow { get; set; } // meaningful only of _numberOfFlushedRows>0
@@ -258,16 +258,15 @@ namespace NPOI.XSSF.Streaming
             }
             string cellRef = new CellReference(RowNum, columnIndex).FormatAsString();
             WriteAsBytes(OutputStream, "<c r=\"" + cellRef + "\"");
-            ICellStyle cellStyle = cell.CellStyle;
-            if (cellStyle.Index != 0)
+
+            if (cell.CellStyle.Index != 0)
             {
                 // need to convert the short to unsigned short as the indexes can be up to 64k
                 // ideally we would use int for this index, but that would need changes to some more 
                 // APIs
-                WriteAsBytes(OutputStream, " s=\"" + (cellStyle.Index & 0xffff) + "\"");
+                WriteAsBytes(OutputStream, " s=\"" + (cell.CellStyle.Index & 0xffff) + "\"");
             }
-            CellType cellType = cell.CellType;
-            switch (cellType)
+            switch (cell.CellType)
             {
                 case CellType.Blank:
                     {
@@ -350,7 +349,7 @@ namespace NPOI.XSSF.Streaming
                     }
                 default:
                     {
-                        throw new InvalidOperationException("Invalid cell type: " + cellType);
+                        throw new InvalidOperationException("Invalid cell type: " + cell.CellType);
                     }
             }
             WriteAsBytes(OutputStream, "</c>");
