@@ -26,8 +26,6 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFRow : IRow, IComparable<SXSSFRow>
     {
-        private static bool? UNDEFINED = null;
-
         private SXSSFSheet _sheet; // parent sheet
         private SortedDictionary<int, SXSSFCell> _cells = new SortedDictionary<int, SXSSFCell>();
         private short _style = -1; // index of cell style in style table
@@ -36,8 +34,8 @@ namespace NPOI.XSSF.Streaming
 
 
         // use Boolean to have a tri-state for on/off/undefined 
-        public bool? Hidden = UNDEFINED;
-        public bool? Collapsed = UNDEFINED;
+        public bool? Hidden { get; set; }
+        public bool? Collapsed { get; set; }
 
         public SXSSFRow(SXSSFSheet sheet)
         {
@@ -166,31 +164,31 @@ namespace NPOI.XSSF.Streaming
             set { _zHeight = value; }
         }
 
-        bool? IRow.Hidden
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
+        //bool? IRow.Hidden
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
-        bool? IRow.Collapsed
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
+        //bool? IRow.Collapsed
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         public int CompareTo(SXSSFRow other)
         {
