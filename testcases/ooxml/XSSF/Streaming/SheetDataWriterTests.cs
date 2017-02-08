@@ -303,7 +303,23 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
 
         }
 
-        //TODO: outputQuotedStringTests
+        [Test]
+        public void IfCellTypeIsStringShouldWriteStringCellXml()
+        {
+            _objectToTest = new SheetDataWriter();
+            _cell.CellStyle.Index.Returns((short)0);
+            _cell.CellType.Returns(CellType.String);
+            _cell.StringCellValue.Returns("''<>\t\n\r&\"?         test:SLDFKj    ");
+
+            _objectToTest.WriteCell(0, _cell);
+            _objectToTest.Close();
+
+            var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
+
+            Assert.True(lines.Length == 1);
+            Assert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xa;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
+
+        }
 
     }
 }

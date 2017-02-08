@@ -469,7 +469,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             }
             else if (type == CellType.String)
             {
-                row.CreateCell(col).SetCellValue("value: " + val.ToString());
+                row.CreateCell(col).SetCellValue("\"\'\'<>\\t\\n\\r&\\\"?         test:SLDFKj    \"");
             }
             else if (type == CellType.Boolean)
             {
