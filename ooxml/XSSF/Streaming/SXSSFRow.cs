@@ -32,7 +32,7 @@ namespace NPOI.XSSF.Streaming
         private SortedDictionary<int, SXSSFCell> _cells = new SortedDictionary<int, SXSSFCell>();
         private short _style = -1; // index of cell style in style table
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
-        private float _height;
+        private float _height = -1;
 
 
         // use Boolean to have a tri-state for on/off/undefined 
@@ -109,7 +109,6 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                //TODO:should make this work with dictionary
                 return _cells.Count == 0 ? (short)-1 : Convert.ToInt16(_cells.Last().Key + 1);
 
             }
@@ -213,9 +212,8 @@ namespace NPOI.XSSF.Streaming
             int maxcol = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
             if (cellIndex < 0 || cellIndex > maxcol)
             {
-                //TODO: v shoulod be v.name(); as in the name of the enum
                 throw new InvalidOperationException("Invalid column index (" + cellIndex
-                        + ").  Allowable column range for " + v + " is (0.."
+                        + ").  Allowable column range for " + v.DefaultExtension + " is (0.."
                         + maxcol + ") or ('A'..'" + v.LastColumnName + "')");
             }
         }

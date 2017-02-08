@@ -388,12 +388,28 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         [Test]
         public void IfWritingMaxCellsForWorksheetShouldNotThrowOutOfMemoryException()
         {
+            Assert.Fail("This takes a long time to run.");
             _objectToTest = new SXSSFWorkbook();
             var sheets = 1;
             var rows = 1048576;
             var cols = 16384;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
             var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheet.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWriting20WorksheetsWith10000x100CellsShouldNotThrowOutOfMemoryException()
+        {
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 20;
+            var rows = 10000;
+            var cols = 100;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\largeWorksheet.xlsx";
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));

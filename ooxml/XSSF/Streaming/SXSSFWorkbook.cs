@@ -730,7 +730,7 @@ namespace NPOI.XSSF.Streaming
             XssfWorkbook.Close();
         }
 
-        //TODO: missing methods setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion
+        //TODO: missing methods from POI 3.16 setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion
         //TODO: missing method isDate1904, isHidden, setHidden
     }
 }

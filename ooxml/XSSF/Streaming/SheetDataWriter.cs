@@ -77,11 +77,9 @@ namespace NPOI.XSSF.Streaming
         {
 
             FileStream fos = null;
-            FileStream decorated;
             try
             {
                 fos = new FileStream(fd.FullName, FileMode.Append, FileAccess.Write);
-                //decorated = decorateOutputStream(fos);
             }
             catch (Exception e)
             {
@@ -92,11 +90,8 @@ namespace NPOI.XSSF.Streaming
 
                 throw e;
             }
-            //TODO: this is the decorate?
-            //StreamWriter sw = new StreamWriter(fos, Encoding.UTF8);
+
             return fos;
-            //return new BufferedStream(
-            //        new BinaryWriter(fos, Encoding.UTF8).BaseStream);
         }
 
         /**
@@ -121,7 +116,6 @@ namespace NPOI.XSSF.Streaming
          */
         public void Close()
         {
-            //TODO: test
             try
             {
                 _out.Flush(true);
@@ -183,8 +177,6 @@ namespace NPOI.XSSF.Streaming
             {
                 logger.Log(POILogger.ERROR, "Can't delete temporary encryption file: " + _fd);
             }
-            //TODO: accomplish whatever this does.
-            //super.finalize();
         }
 
         /**
@@ -212,51 +204,61 @@ namespace NPOI.XSSF.Streaming
 
         private void BeginRow(int rownum, SXSSFRow row)
         {
-            var text = Encoding.UTF8.GetBytes("<row r=\"" + (rownum + 1) + "\"");
-            _out.Write(text, 0, text.Length);
+            WriteAsBytes(_out, "<row r=\"" + (rownum + 1) + "\"");
+            //var text = Encoding.UTF8.GetBytes("<row r=\"" + (rownum + 1) + "\"");
+            //_out.Write(text, 0, text.Length);
             if (row.HasCustomHeight())
             {
-                text = Encoding.UTF8.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
+                //text = Encoding.UTF8.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
+                //_out.Write(text, 0, text.Length);
             }
             if (row.ZeroHeight)
             {
-                text = Encoding.UTF8.GetBytes(" hidden=\"true\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " hidden=\"true\"");
+                //text = Encoding.UTF8.GetBytes(" hidden=\"true\"");
+                //_out.Write(text, 0, text.Length);
             }
             if (row.IsFormatted)
             {
-                text = Encoding.UTF8.GetBytes(" s=\"" + row.RowStyle.Index + "\"");
-                _out.Write(text, 0, text.Length);
-                text = Encoding.UTF8.GetBytes(" customFormat=\"1\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " s=\"" + row.RowStyle.Index + "\"");
+                //text = Encoding.UTF8.GetBytes(" s=\"" + row.RowStyle.Index + "\"");
+                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " customFormat=\"1\"");
+                //text = Encoding.UTF8.GetBytes(" customFormat=\"1\"");
+                //_out.Write(text, 0, text.Length);
             }
 
             if (row.OutlineLevel != 0)
             {
-                text = Encoding.UTF8.GetBytes(" outlineLevel=\"" + row.OutlineLevel + "\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " outlineLevel=\"" + row.OutlineLevel + "\"");
+                //text = Encoding.UTF8.GetBytes(" outlineLevel=\"" + row.OutlineLevel + "\"");
+                //_out.Write(text, 0, text.Length);
             }
             if (row.Hidden != null)
             {
-                text = Encoding.UTF8.GetBytes(" hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
+                //text = Encoding.UTF8.GetBytes(" hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
+                //_out.Write(text, 0, text.Length);
             }
             if (row.Collapsed != null)
             {
-                text = Encoding.UTF8.GetBytes(" collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
-                _out.Write(text, 0, text.Length);
+                WriteAsBytes(_out, " collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
+                //text = Encoding.UTF8.GetBytes(" collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
+                //_out.Write(text, 0, text.Length);
             }
 
-            text = Encoding.UTF8.GetBytes(">\n");
-            _out.Write(text, 0, text.Length);
+            WriteAsBytes(_out, ">\n");
+            //text = Encoding.UTF8.GetBytes(">\n");
+            //_out.Write(text, 0, text.Length);
             this._rownum = rownum;
         }
 
         void endRow()
         {
-            var text = Encoding.UTF8.GetBytes("</row>\n");
-            _out.Write(text, 0, text.Length);
+            WriteAsBytes(_out, "</row>\n");
+            //var text = Encoding.UTF8.GetBytes("</row>\n");
+            //_out.Write(text, 0, text.Length);
         }
 
         public void writeCell(int columnIndex, ICell cell)
@@ -414,7 +416,7 @@ namespace NPOI.XSSF.Streaming
                             WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
                         }
                         last = counter + 1;
-                      
+
                         WriteAsBytes(_out, "&lt;".ToCharArray());
                         break;
                     case '>':

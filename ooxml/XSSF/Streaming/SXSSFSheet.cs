@@ -904,7 +904,7 @@ namespace NPOI.XSSF.Streaming
 
         public void ShowInPane(short toprow, short leftcol)
         {
-            throw new NotImplementedException();
+            _sh.ShowInPane(toprow, leftcol);
         }
 
         public void ShowInPane(int toprow, int leftcol)
@@ -920,7 +920,7 @@ namespace NPOI.XSSF.Streaming
 
         public void UngroupRow(int fromRow, int toRow)
         {
-            throw new NotImplementedException();
+            _sh.UngroupRow(fromRow, toRow);
         }
 
         public bool IsDate1904()
@@ -966,7 +966,7 @@ namespace NPOI.XSSF.Streaming
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];
                 // Update the best fit column widths for auto-sizing just before the rows are flushed
-                 _autoSizeColumnTracker.UpdateColumnWidths(row);
+                // _autoSizeColumnTracker.UpdateColumnWidths(row);
                 _writer.WriteRow(rowIndex, row);
                 _rows.Remove(firstRowNum);
                 lastFlushedRowNumber = rowIndex;
