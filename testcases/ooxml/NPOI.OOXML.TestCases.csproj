@@ -135,6 +135,8 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\Streaming\GZIPSheetDataWriterTests.cs" />
+    <Compile Include="XSSF\Streaming\SheetDataWriterTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFWorkbookTests.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />

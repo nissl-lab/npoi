@@ -938,7 +938,7 @@ namespace NPOI.XSSF.Streaming
         public bool dispose()
         {
             if (!allFlushed) flushRows();
-            return _writer.dispose();
+            return _writer.Dispose();
         }
 
         /**
@@ -979,7 +979,7 @@ namespace NPOI.XSSF.Streaming
             // flush all remaining data and close the temp file writer
             flushRows(0);
             _writer.Close();
-            return _writer.GetWorksheetXMLInputStream();
+            return _writer.GetWorksheetXmlInputStream();
         }
 
         public SheetDataWriter getSheetDataWriter()

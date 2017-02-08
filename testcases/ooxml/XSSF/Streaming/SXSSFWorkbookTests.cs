@@ -84,7 +84,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             _objectToTest = new SXSSFWorkbook();
             var result = _objectToTest.CreateSheetDataWriter();
 
-            Assert.IsTrue(result is SheetDataWriter);
+            Assert.IsTrue(result is SheetDataWriterTests);
 
         }
 
@@ -411,22 +411,6 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var cols = 100;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
             var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheetZip.xlsx";
-            WriteFile(savePath, _objectToTest);
-
-            Assert.True(File.Exists(savePath));
-            File.Delete(savePath);
-        }
-
-        [Test]
-        public void IfWorkbookIsSetToUseCompressionShouldUseGZIPDataWriter2()
-        {
-            //Assert.Fail("This takes a long time to run.");
-            _objectToTest = new SXSSFWorkbook();
-            var sheets = 1;
-            var rows = 10000;
-            var cols = 100;
-            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheetZip2.xlsx";
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));

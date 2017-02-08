@@ -31,8 +31,8 @@ namespace NPOI.XSSF.Streaming
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(SheetDataWriter));
 
-        protected FileInfo _fd;
-        protected FileStream _out;
+        protected FileInfo TemporaryFileInfo { get; set; }
+        protected Stream OutputStream { get; set; }
         public int RowNum { get; set; }
         public int NumberOfFlushedRows { get; set; }
         public int LowestIndexOfFlushedRows { get; set; } // meaningful only of _numberOfFlushedRows>0
@@ -47,11 +47,8 @@ namespace NPOI.XSSF.Streaming
 
         public SheetDataWriter()
         {
-            if (_fd == null)
-            {
-                _fd = createTempFile();
-            }
-            _out = createWriter(_fd);
+            TemporaryFileInfo = CreateTempFile();
+            OutputStream = CreateWriter(TemporaryFileInfo);
         }
         public SheetDataWriter(SharedStringsTable sharedStringsTable) : this()
         {
@@ -66,7 +63,7 @@ namespace NPOI.XSSF.Streaming
  * @return temp file to write sheet data
  */
        
-        public virtual FileInfo createTempFile()
+        public virtual FileInfo CreateTempFile()
         {
             return TempFile.CreateTempFile("poi-sxssf-sheet", ".xml");
         }
@@ -76,25 +73,22 @@ namespace NPOI.XSSF.Streaming
          * 
          * @param  fd the file to write to
          */
-        public FileStream createWriter(FileInfo fd)
+        public virtual Stream CreateWriter(FileInfo fd)
         {
 
-            FileStream fos = null;
+            FileStream fos = new FileStream(fd.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            Stream outputStream = null;
             try
             {
-                fos = new FileStream(fd.FullName, FileMode.Append, FileAccess.Write);
+                outputStream = DecorateOutputStream(fos);
             }
             catch (Exception e)
             {
-                if (fos != null)
-                {
-                    fos.Close();
-                }
-
+                fos.Close();
                 throw e;
             }
 
-            return fos;
+            return outputStream;
         }
 
         /**
@@ -107,8 +101,7 @@ namespace NPOI.XSSF.Streaming
          * @throws IOException
          * @see #decorateInputStream(FileInputStream)
          */
-        //TODO: may not need to decorate in C#
-        protected Stream decorateOutputStream(Stream fos)
+        protected virtual Stream DecorateOutputStream(Stream fos)
         {
             return fos;
         }
@@ -121,7 +114,7 @@ namespace NPOI.XSSF.Streaming
         {
             try
             {
-                _out.Flush(true);
+                OutputStream.Flush();
             }
             catch (Exception e)
             {
@@ -129,7 +122,7 @@ namespace NPOI.XSSF.Streaming
             }
             try
             {
-                _out.Close();
+                OutputStream.Close();
             }
             catch (Exception e)
             {
@@ -142,12 +135,12 @@ namespace NPOI.XSSF.Streaming
         /**
          * @return a stream to read temp file with the sheet data
          */
-        public Stream GetWorksheetXMLInputStream()
+        public Stream GetWorksheetXmlInputStream()
         {
-            Stream fis = new FileStream(_fd.FullName, FileMode.Open, FileAccess.ReadWrite);
+            Stream fis = new FileStream(TemporaryFileInfo.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             try
             {
-                return decorateInputStream(fis);
+                return DecorateInputStream(fis);
             }
             catch (IOException e)
             {
@@ -166,7 +159,7 @@ namespace NPOI.XSSF.Streaming
          * @throws IOException
          * @see #decorateOutputStream(FileOutputStream)
          */
-        protected Stream decorateInputStream(Stream fis)
+        protected virtual Stream DecorateInputStream(Stream fis)
         {
             return fis;
         }
@@ -175,10 +168,10 @@ namespace NPOI.XSSF.Streaming
 
         protected void Finalize()
         {
-            _fd.Delete();
-            if (File.Exists(_fd.FullName))
+            TemporaryFileInfo.Delete();
+            if (File.Exists(TemporaryFileInfo.FullName))
             {
-                logger.Log(POILogger.ERROR, "Can't delete temporary encryption file: " + _fd);
+                logger.Log(POILogger.ERROR, "Can't delete temporary encryption file: " + TemporaryFileInfo);
             }
         }
 
@@ -191,7 +184,10 @@ namespace NPOI.XSSF.Streaming
         public void WriteRow(int rownum, SXSSFRow row)
         {
             if (NumberOfFlushedRows == 0)
+            {
                 LowestIndexOfFlushedRows = rownum;
+            }
+                
             NumberLastFlushedRow = Math.Max(rownum, NumberLastFlushedRow);
             NumberOfCellsOfLastFlushedRow = row.LastCellNum;
             NumberOfFlushedRows++;
@@ -200,102 +196,92 @@ namespace NPOI.XSSF.Streaming
             int columnIndex = 0;
             while (cells.MoveNext())
             {
-                writeCell(columnIndex++, cells.Current);
+                WriteCell(columnIndex++, cells.Current);
             }
-            endRow();
+            EndRow();
         }
 
         private void BeginRow(int rownum, SXSSFRow row)
         {
-            WriteAsBytes(_out, "<row r=\"" + (rownum + 1) + "\"");
-            //var text = Encoding.UTF8.GetBytes("<row r=\"" + (rownum + 1) + "\"");
-            //_out.Write(text, 0, text.Length);
+            WriteAsBytes(OutputStream, "<row r=\"" + (rownum + 1) + "\"");
+
             if (row.HasCustomHeight())
             {
-                WriteAsBytes(_out, " customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
-                //text = Encoding.UTF8.GetBytes(" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
-                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(OutputStream, " customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\"");
+
             }
             if (row.ZeroHeight)
             {
-                WriteAsBytes(_out, " hidden=\"true\"");
-                //text = Encoding.UTF8.GetBytes(" hidden=\"true\"");
-                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(OutputStream, " hidden=\"true\"");
+
             }
             if (row.IsFormatted)
             {
-                WriteAsBytes(_out, " s=\"" + row.RowStyle.Index + "\"");
-                //text = Encoding.UTF8.GetBytes(" s=\"" + row.RowStyle.Index + "\"");
-                //_out.Write(text, 0, text.Length);
-                WriteAsBytes(_out, " customFormat=\"1\"");
-                //text = Encoding.UTF8.GetBytes(" customFormat=\"1\"");
-                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(OutputStream, " s=\"" + row.RowStyle.Index + "\"");
+
+                WriteAsBytes(OutputStream, " customFormat=\"1\"");
+
             }
 
             if (row.OutlineLevel != 0)
             {
-                WriteAsBytes(_out, " outlineLevel=\"" + row.OutlineLevel + "\"");
-                //text = Encoding.UTF8.GetBytes(" outlineLevel=\"" + row.OutlineLevel + "\"");
-                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(OutputStream, " outlineLevel=\"" + row.OutlineLevel + "\"");
+
             }
             if (row.Hidden != null)
             {
-                WriteAsBytes(_out, " hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
-                //text = Encoding.UTF8.GetBytes(" hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
-                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(OutputStream, " hidden=\"" + (row.Hidden.Value ? "1" : "0") + "\"");
+
             }
             if (row.Collapsed != null)
             {
-                WriteAsBytes(_out, " collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
-                //text = Encoding.UTF8.GetBytes(" collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
-                //_out.Write(text, 0, text.Length);
+                WriteAsBytes(OutputStream, " collapsed=\"" + (row.Collapsed.Value ? "1" : "0") + "\"");
+
             }
 
-            WriteAsBytes(_out, ">\n");
-            //text = Encoding.UTF8.GetBytes(">\n");
-            //_out.Write(text, 0, text.Length);
+            WriteAsBytes(OutputStream, ">\n");
+
             this.RowNum = rownum;
         }
 
-        void endRow()
+        private void EndRow()
         {
-            WriteAsBytes(_out, "</row>\n");
-            //var text = Encoding.UTF8.GetBytes("</row>\n");
-            //_out.Write(text, 0, text.Length);
+            WriteAsBytes(OutputStream, "</row>\n");
+
         }
 
-        public void writeCell(int columnIndex, ICell cell)
+        public void WriteCell(int columnIndex, ICell cell)
         {
             if (cell == null)
             {
                 return;
             }
             string cellRef = new CellReference(RowNum, columnIndex).FormatAsString();
-            WriteAsBytes(_out, "<c r=\"" + cellRef + "\"");
+            WriteAsBytes(OutputStream, "<c r=\"" + cellRef + "\"");
             ICellStyle cellStyle = cell.CellStyle;
             if (cellStyle.Index != 0)
             {
                 // need to convert the short to unsigned short as the indexes can be up to 64k
                 // ideally we would use int for this index, but that would need changes to some more 
                 // APIs
-                WriteAsBytes(_out, " s=\"" + (cellStyle.Index & 0xffff) + "\"");
+                WriteAsBytes(OutputStream, " s=\"" + (cellStyle.Index & 0xffff) + "\"");
             }
             CellType cellType = cell.CellType;
             switch (cellType)
             {
                 case CellType.Blank:
                     {
-                        WriteAsBytes(_out, ">");
+                        WriteAsBytes(OutputStream, ">");
                         break;
                     }
                 case CellType.Formula:
                     {
-                        WriteAsBytes(_out, ">");
-                        WriteAsBytes(_out, "<f>");
+                        WriteAsBytes(OutputStream, ">");
+                        WriteAsBytes(OutputStream, "<f>");
 
-                        outputQuotedString(cell.CellFormula);//TODO: this doesn't work
+                        OutputQuotedString(cell.CellFormula);
 
-                        WriteAsBytes(_out, "</f>");
+                        WriteAsBytes(OutputStream, "</f>");
 
                         switch (cell.GetCachedFormulaResultTypeEnum())
                         {
@@ -303,7 +289,7 @@ namespace NPOI.XSSF.Streaming
                                 double nval = cell.NumericCellValue;
                                 if (!Double.IsNaN(nval))
                                 {
-                                    WriteAsBytes(_out, "<v>" + nval + "</v>");
+                                    WriteAsBytes(OutputStream, "<v>" + nval + "</v>");
                                 }
                                 break;
                             default:
@@ -319,47 +305,47 @@ namespace NPOI.XSSF.Streaming
                             int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
 
                             //TODO: is this supposed to be and s=\"
-                            WriteAsBytes(_out, " t=\"" + ST_CellType.s + "\">");
-                            WriteAsBytes(_out, "<v>");
-                            WriteAsBytes(_out, sRef.ToString());
-                            WriteAsBytes(_out, "</v>");
+                            WriteAsBytes(OutputStream, " t=\"" + ST_CellType.s + "\">");
+                            WriteAsBytes(OutputStream, "<v>");
+                            WriteAsBytes(OutputStream, sRef.ToString());
+                            WriteAsBytes(OutputStream, "</v>");
                         }
                         else
                         {
-                            WriteAsBytes(_out, " t=\"inlineStr\">");
-                            WriteAsBytes(_out, "<is><t");
+                            WriteAsBytes(OutputStream, " t=\"inlineStr\">");
+                            WriteAsBytes(OutputStream, "<is><t");
 
-                            if (hasLeadingTrailingSpaces(cell.StringCellValue))
+                            if (HasLeadingTrailingSpaces(cell.StringCellValue))
                             {
-                                WriteAsBytes(_out, " xml:space=\"preserve\"");
+                                WriteAsBytes(OutputStream, " xml:space=\"preserve\"");
                             }
 
-                            WriteAsBytes(_out, ">");
+                            WriteAsBytes(OutputStream, ">");
 
-                            outputQuotedString(cell.StringCellValue);
+                            OutputQuotedString(cell.StringCellValue);
 
-                            WriteAsBytes(_out, "</t></is>");
+                            WriteAsBytes(OutputStream, "</t></is>");
                         }
                         break;
                     }
                 case CellType.Numeric:
                     {
-                        WriteAsBytes(_out, " t=\"n\">");
-                        WriteAsBytes(_out, "<v>" + cell.NumericCellValue + "</v>");
+                        WriteAsBytes(OutputStream, " t=\"n\">");
+                        WriteAsBytes(OutputStream, "<v>" + cell.NumericCellValue + "</v>");
                         break;
                     }
                 case CellType.Boolean:
                     {
-                        WriteAsBytes(_out, " t=\"b\">");
-                        WriteAsBytes(_out, "<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
+                        WriteAsBytes(OutputStream, " t=\"b\">");
+                        WriteAsBytes(OutputStream, "<v>" + (cell.BooleanCellValue ? "1" : "0") + "</v>");
                         break;
                     }
                 case CellType.Error:
                     {
                         FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
 
-                        WriteAsBytes(_out, " t=\"e\">");
-                        WriteAsBytes(_out, "<v>" + error.String + "</v>");
+                        WriteAsBytes(OutputStream, " t=\"e\">");
+                        WriteAsBytes(OutputStream, "<v>" + error.String + "</v>");
                         break;
                     }
                 default:
@@ -367,8 +353,8 @@ namespace NPOI.XSSF.Streaming
                         throw new InvalidOperationException("Invalid cell type: " + cellType);
                     }
             }
-            WriteAsBytes(_out, "</c>");
-            _out.Flush();
+            WriteAsBytes(OutputStream, "</c>");
+            OutputStream.Flush();
         }
 
         private void WriteAsBytes(Stream outStream, string text)
@@ -386,7 +372,7 @@ namespace NPOI.XSSF.Streaming
          * @return  whether the string has leading / trailing spaces that
          *  need to be preserved with the xml:space=\"preserve\" attribute
          */
-        private bool hasLeadingTrailingSpaces(string str)
+        private bool HasLeadingTrailingSpaces(string str)
         {
             if (str != null && str.Length > 0)
             {
@@ -398,7 +384,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         //Taken from jdk1.3/src/javax/swing/text/html/HTMLWriter.java
-        protected void outputQuotedString(String s)
+        protected void OutputQuotedString(String s)
         {
             if (s == null || s.Length == 0)
             {
@@ -416,60 +402,60 @@ namespace NPOI.XSSF.Streaming
                     case '<':
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
                         last = counter + 1;
 
-                        WriteAsBytes(_out, "&lt;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&lt;".ToCharArray());
                         break;
                     case '>':
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
                         last = counter + 1;
-                        WriteAsBytes(_out, "&gt;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&gt;".ToCharArray());
                         break;
                     case '&':
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
                         last = counter + 1;
-                        WriteAsBytes(_out, "&amp;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&amp;".ToCharArray());
                         break;
                     case '"':
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
                         last = counter + 1;
-                        WriteAsBytes(_out, "&quot;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&quot;".ToCharArray());
                         break;
                     // Special characters
                     case '\n':
                     case '\r':
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
-                        WriteAsBytes(_out, "&#xa;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&#xa;".ToCharArray());
                         last = counter + 1;
                         break;
                     case '\t':
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
-                        WriteAsBytes(_out, "&#x9;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&#x9;".ToCharArray());
                         last = counter + 1;
                         break;
                     case (char)0xa0:
                         if (counter > last)
                         {
-                            WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                            WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                         }
-                        WriteAsBytes(_out, "&#xa0;".ToCharArray());
+                        WriteAsBytes(OutputStream, "&#xa0;".ToCharArray());
                         last = counter + 1;
                         break;
                     default:
@@ -480,30 +466,30 @@ namespace NPOI.XSSF.Streaming
                         {
                             if (counter > last)
                             {
-                                WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                                WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                             }
-                            WriteAsBytes(_out, "?");
+                            WriteAsBytes(OutputStream, "?");
                             last = counter + 1;
                         }
                         else if (c > 127)
                         {
                             if (counter > last)
                             {
-                                WriteAsBytes(_out, chars.Skip(last).Take(counter - last).ToArray());
+                                WriteAsBytes(OutputStream, chars.Skip(last).Take(counter - last).ToArray());
                             }
                             last = counter + 1;
                             // If the character is outside of UTF8, write the
                             // numeric value.
-                            WriteAsBytes(_out, "&#".ToCharArray());
-                            WriteAsBytes(_out, ((int)c).ToString());
-                            WriteAsBytes(_out, ";");
+                            WriteAsBytes(OutputStream, "&#".ToCharArray());
+                            WriteAsBytes(OutputStream, ((int)c).ToString());
+                            WriteAsBytes(OutputStream, ";");
                         }
                         break;
                 }
             }
             if (last < length)
             {
-                WriteAsBytes(_out, chars.Skip(last).Take(length - last).ToArray());
+                WriteAsBytes(OutputStream, chars.Skip(last).Take(length - last).ToArray());
             }
         }
 
@@ -511,19 +497,31 @@ namespace NPOI.XSSF.Streaming
          * Deletes the temporary file that backed this sheet on disk.
          * @return true if the file was deleted, false if it wasn't.
          */
-        public bool dispose()
+        public bool Dispose()
         {
             bool ret;
             try
             {
-                _out.Close();
+                OutputStream.Close();
             }
             finally
             {
-                _fd.Delete();
-                ret = File.Exists(_fd.FullName);
+                TemporaryFileInfo.Delete();
+                ret = File.Exists(TemporaryFileInfo.FullName);
             }
             return ret;
+        }
+
+        public string TemporaryFilePath()
+        {
+            if (TemporaryFileInfo != null)
+            {
+                return TemporaryFileInfo.FullName;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 }

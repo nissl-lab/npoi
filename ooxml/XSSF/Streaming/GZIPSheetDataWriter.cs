@@ -33,25 +33,23 @@ namespace NPOI.XSSF.Streaming
          */
         public GZIPSheetDataWriter(SharedStringsTable sharedStringsTable) : base(sharedStringsTable)
         {
-            _fd = CreateTempFile();
         }
 
         /**
          * @return temp file to write sheet data
          */
 
-        public FileInfo CreateTempFile()
+        public override FileInfo CreateTempFile()
         {
             return TempFile.CreateTempFile("poi-sxssf-sheet-xml", ".gz");
         }
-
-
-        protected Stream decorateInputStream(Stream fis)
+        
+        protected override Stream DecorateInputStream(Stream fis)
         {
             return new GZipInputStream(fis);
         }
 
-        protected Stream decorateOutputStream(Stream fos)
+        protected override Stream DecorateOutputStream(Stream fos)
         {
             return new GZipOutputStream(fos);
         }
