@@ -166,6 +166,32 @@ namespace NPOI.XSSF.Streaming
             set { _zHeight = value; }
         }
 
+        bool? IRow.Hidden
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        bool? IRow.Collapsed
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public int CompareTo(SXSSFRow other)
         {
             if (this.Sheet != other.Sheet)

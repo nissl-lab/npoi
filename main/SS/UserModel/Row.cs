@@ -231,6 +231,12 @@ namespace NPOI.SS.UserModel
         /// you take it out of them.
         /// </summary>
         int OutlineLevel { get; }
+
+        bool HasCustomHeight();
+
+        bool? Hidden { get; set; }
+
+        bool? Collapsed { get; set; }
     }
 }
 

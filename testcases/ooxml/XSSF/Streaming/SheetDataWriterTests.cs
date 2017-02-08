@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,12 +14,12 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
     class SheetDataWriterTests
     {
         private SheetDataWriter _objectToTest;
-        private SXSSFRow _row;
+        private IRow _row;
 
         [SetUp]
         public void Init()
         {
-            _row = Substitute.For<SXSSFRow>(null);
+            _row = Substitute.For<IRow>();
         }
 
         [TearDown]
@@ -65,11 +66,11 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         public void IfWritingRowWithZeroHeightShouldIncludeHiddenAttributeXml()
         {
             _objectToTest = new SheetDataWriter();
-            var row = new SXSSFRow(null);
-            row.HasCustomHeight().Returns(false);
-            row.ZeroHeight.Returns(true);
 
-            _objectToTest.WriteRow(0, row);
+            _row.HasCustomHeight().Returns(false);
+            _row.ZeroHeight.Returns(true);
+
+            _objectToTest.WriteRow(0, _row);
             _objectToTest.Close();
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
@@ -79,7 +80,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             Assert.AreEqual("</row>", lines[1]);
 
 
-        }
+         moc}
 
 
     }
