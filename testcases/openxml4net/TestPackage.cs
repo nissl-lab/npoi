@@ -151,7 +151,7 @@ namespace TestCases.OPC
          *  document and another part, save and re-load and
          *  have everything Setup as expected
          */
-        [Test]
+        [Test, RunSerialyAndSweepTmpFiles]
         //[Ignore("add relation Uri #Sheet1!A1")]
         public void TestCreatePackageWithCoreDocument()
         {
@@ -236,6 +236,7 @@ namespace TestCases.OPC
                 pkg.Close();
             }
 
+            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
 
         private void assertMSCompatibility(OPCPackage pkg)
@@ -260,7 +261,7 @@ namespace TestCases.OPC
         /**
          * Test namespace opening.
          */
-        [Test]
+        [Test, RunSerialyAndSweepTmpFiles]
         public void TestOpenPackage()
         {
             FileInfo targetFile = OpenXml4NetTestDataSamples.GetOutputFile("TestOpenPackageTMP.docx");
@@ -321,6 +322,8 @@ namespace TestCases.OPC
 
             ZipFileAssert.AssertEqual(expectedFile, targetFile);
             File.Delete(targetFile.FullName);
+
+            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
 
         /**
@@ -507,7 +510,7 @@ namespace TestCases.OPC
          * Test that we can open a file by path, and then
          *  write Changes to it.
          */
-        [Test]
+        [Test, RunSerialyAndSweepTmpFiles]
         public void TestOpenFileThenOverWrite()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");
@@ -543,12 +546,14 @@ namespace TestCases.OPC
             p = OPCPackage.Open(tempFile, PackageAccess.READ);
             p.Close();
             File.Delete(tempFile);
+
+            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
         /**
          * Test that we can open a file by path, save it
          *  to another file, then delete both
          */
-        [Test]
+        [Test, RunSerialyAndSweepTmpFiles]
         public void TestOpenFileThenSaveDelete()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");
@@ -566,6 +571,8 @@ namespace TestCases.OPC
             // Delete both the files
             File.Delete(tempFile);
             File.Delete(tempFile2);
+
+            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
 
         private static ContentTypeManager GetContentTypeManager(OPCPackage pkg)
