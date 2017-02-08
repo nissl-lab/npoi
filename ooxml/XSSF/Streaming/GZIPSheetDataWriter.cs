@@ -33,7 +33,7 @@ namespace NPOI.XSSF.Streaming
          */
         public GZIPSheetDataWriter(SharedStringsTable sharedStringsTable) : base(sharedStringsTable)
         {
-
+            _fd = CreateTempFile();
         }
 
         /**

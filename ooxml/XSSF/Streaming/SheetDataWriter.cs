@@ -31,13 +31,13 @@ namespace NPOI.XSSF.Streaming
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(SheetDataWriter));
 
-        public FileInfo _fd;
-        public FileStream _out;
-        public int _rownum;
-        public int _numberOfFlushedRows;
-        public int _lowestIndexOfFlushedRows; // meaningful only of _numberOfFlushedRows>0
-        public int _numberOfCellsOfLastFlushedRow; // meaningful only of _numberOfFlushedRows>0
-        public int _numberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
+        protected FileInfo _fd;
+        protected FileStream _out;
+        public int RowNum { get; set; }
+        public int NumberOfFlushedRows { get; set; }
+        public int LowestIndexOfFlushedRows { get; set; } // meaningful only of _numberOfFlushedRows>0
+        public int NumberOfCellsOfLastFlushedRow { get; set; } // meaningful only of _numberOfFlushedRows>0
+        public int NumberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
 
         /**
  * Table of strings shared across this workbook.
@@ -47,7 +47,10 @@ namespace NPOI.XSSF.Streaming
 
         public SheetDataWriter()
         {
-            _fd = createTempFile();
+            if (_fd == null)
+            {
+                _fd = createTempFile();
+            }
             _out = createWriter(_fd);
         }
         public SheetDataWriter(SharedStringsTable sharedStringsTable) : this()
@@ -62,8 +65,8 @@ namespace NPOI.XSSF.Streaming
  * 
  * @return temp file to write sheet data
  */
-        //TODO: may want to use a different writer object
-        public FileInfo createTempFile()
+       
+        public virtual FileInfo createTempFile()
         {
             return TempFile.CreateTempFile("poi-sxssf-sheet", ".xml");
         }
@@ -187,11 +190,11 @@ namespace NPOI.XSSF.Streaming
          */
         public void WriteRow(int rownum, SXSSFRow row)
         {
-            if (_numberOfFlushedRows == 0)
-                _lowestIndexOfFlushedRows = rownum;
-            _numberLastFlushedRow = Math.Max(rownum, _numberLastFlushedRow);
-            _numberOfCellsOfLastFlushedRow = row.LastCellNum;
-            _numberOfFlushedRows++;
+            if (NumberOfFlushedRows == 0)
+                LowestIndexOfFlushedRows = rownum;
+            NumberLastFlushedRow = Math.Max(rownum, NumberLastFlushedRow);
+            NumberOfCellsOfLastFlushedRow = row.LastCellNum;
+            NumberOfFlushedRows++;
             BeginRow(rownum, row);
             var cells = row.GetEnumerator();
             int columnIndex = 0;
@@ -251,7 +254,7 @@ namespace NPOI.XSSF.Streaming
             WriteAsBytes(_out, ">\n");
             //text = Encoding.UTF8.GetBytes(">\n");
             //_out.Write(text, 0, text.Length);
-            this._rownum = rownum;
+            this.RowNum = rownum;
         }
 
         void endRow()
@@ -267,7 +270,7 @@ namespace NPOI.XSSF.Streaming
             {
                 return;
             }
-            string cellRef = new CellReference(_rownum, columnIndex).FormatAsString();
+            string cellRef = new CellReference(RowNum, columnIndex).FormatAsString();
             WriteAsBytes(_out, "<c r=\"" + cellRef + "\"");
             ICellStyle cellStyle = cell.CellStyle;
             if (cellStyle.Index != 0)

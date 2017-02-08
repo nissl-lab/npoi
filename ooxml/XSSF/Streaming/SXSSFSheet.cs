@@ -186,8 +186,8 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                if (_writer._numberOfFlushedRows > 0)
-                    return _writer._lowestIndexOfFlushedRows;
+                if (_writer.NumberOfFlushedRows > 0)
+                    return _writer.LowestIndexOfFlushedRows;
                 return _rows.Count == 0 ? 0 : _rows.Keys.First();
             }
         }
@@ -316,7 +316,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _rows.Count + _writer._numberOfFlushedRows;
+                return _rows.Count + _writer.NumberOfFlushedRows;
             }
         }
 
@@ -526,11 +526,11 @@ namespace NPOI.XSSF.Streaming
             }
 
             // attempt to overwrite a row that is already flushed to disk
-            if (rownum <= _writer._numberLastFlushedRow)
+            if (rownum <= _writer.NumberLastFlushedRow)
             {
                 throw new InvalidOperationException(
                         "Attempting to write a row[" + rownum + "] " +
-                        "in the range [0," + _writer._numberLastFlushedRow + "] that is already written to disk.");
+                        "in the range [0," + _writer.NumberLastFlushedRow + "] that is already written to disk.");
             }
 
             // attempt to overwrite a existing row in the input template

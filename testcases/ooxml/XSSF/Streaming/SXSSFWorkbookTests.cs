@@ -388,13 +388,45 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         [Test]
         public void IfWritingMaxCellsForWorksheetShouldNotThrowOutOfMemoryException()
         {
-            Assert.Fail("This takes a long time to run.");
+            //Assert.Fail("This takes a long time to run.");
             _objectToTest = new SXSSFWorkbook();
             var sheets = 1;
             var rows = 1048576;
             var cols = 16384;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
             var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheet.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWorkbookIsSetToUseCompressionShouldUseGZIPDataWriter()
+        {
+            //Assert.Fail("This takes a long time to run.");
+            _objectToTest = new SXSSFWorkbook(null, 100, true);
+            var sheets = 1;
+            var rows = 10000;
+            var cols = 100;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheetZip.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
+        [Test]
+        public void IfWorkbookIsSetToUseCompressionShouldUseGZIPDataWriter2()
+        {
+            //Assert.Fail("This takes a long time to run.");
+            _objectToTest = new SXSSFWorkbook();
+            var sheets = 1;
+            var rows = 10000;
+            var cols = 100;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheetZip2.xlsx";
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -442,7 +474,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
                 wb.Write(fs);
             }
 
-            wb.Dispose();
+            //wb.Dispose();
         }
 
         private void WriteCellValue(IRow row, CellType type, int col, object val)
