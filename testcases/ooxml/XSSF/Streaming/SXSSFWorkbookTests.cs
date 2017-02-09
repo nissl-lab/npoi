@@ -84,7 +84,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             _objectToTest = new SXSSFWorkbook();
             var result = _objectToTest.CreateSheetDataWriter();
 
-            Assert.IsTrue(result is SheetDataWriterTests);
+            Assert.IsTrue(result is SheetDataWriter);
 
         }
 
@@ -388,7 +388,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         [Test]
         public void IfWritingMaxCellsForWorksheetShouldNotThrowOutOfMemoryException()
         {
-            //Assert.Fail("This takes a long time to run.");
+            Assert.Fail("This takes a long time to run.");
             _objectToTest = new SXSSFWorkbook();
             var sheets = 1;
             var rows = 1048576;
@@ -458,7 +458,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
                 wb.Write(fs);
             }
 
-            //wb.Dispose();
+            wb.Dispose();
         }
 
         private void WriteCellValue(IRow row, CellType type, int col, object val)
