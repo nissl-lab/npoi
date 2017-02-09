@@ -15,11 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NPOI.SS;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
@@ -43,7 +39,7 @@ namespace NPOI.XSSF.Streaminging
         public SXSSFCell(SXSSFRow row, CellType cellType)
         {
             _row = row;
-            setType(cellType);
+            SetType(cellType);
         }
 
         public CellRangeAddress ArrayFormulaRange
@@ -127,7 +123,7 @@ namespace NPOI.XSSF.Streaminging
             {
                 if (value == null)
                 {
-                    setType(CellType.Blank);
+                    SetType(CellType.Blank);
                     return;
                 }
 
@@ -140,7 +136,6 @@ namespace NPOI.XSSF.Streaminging
         {
             get
             {
-                //TODO: seems like off functionality.
                 if (_style == null)
                 {
                     SXSSFWorkbook wb = (SXSSFWorkbook)Row.Sheet.Workbook;
@@ -158,7 +153,6 @@ namespace NPOI.XSSF.Streaminging
             }
         }
 
-        //TODO: can replace CellType cellType = _value.GetType();
         public CellType CellType
         {
             get { return _value.GetType(); }
@@ -223,7 +217,6 @@ namespace NPOI.XSSF.Streaminging
 
             set
             {
-                ////TODO: may need to set private _link
                 throw new NotImplementedException();
                 //if (Hyperlink == null)
                 //{
@@ -288,7 +281,6 @@ namespace NPOI.XSSF.Streaminging
         {
             get
             {
-                //TODO: make sure this first line is equiv
                 CellType cellType = _value.GetType();
                 if (cellType != CellType.String)
                     throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.String, cellType, false));
@@ -306,7 +298,6 @@ namespace NPOI.XSSF.Streaminging
 
         public IRow Row
         {
-            //TODO: fixed when implemeneted
             get { return _row; }
         }
 
@@ -366,23 +357,25 @@ namespace NPOI.XSSF.Streaminging
             RemoveProperty(Property.COMMENT);
         }
 
+        //TODO: implement correctly
         public void RemoveHyperlink()
         {
             throw new NotImplementedException();
             //RemoveProperty(Property.HYPERLINK);
 
-            //Sheet._sh.removeHyperlink(RowIndex, ColumnIndex);
+            //Sheet.RemoveHyperlink(getRowIndex(), getColumnIndex());
         }
 
         public void SetAsActiveCell()
         {
-            //TODO: Fixme!
+            //TODO: 
             throw new NotImplementedException();
            // Sheet.SetActiveCell(CellAddress);
         }
 
         public void SetCellErrorValue(byte value)
         {
+            //ensure type garuntees that the type is error so the if condition is never true.
             EnsureType(CellType.Error);
             if (_value.GetType() == CellType.Formula)
                 ((ErrorFormulaValue)_value).PreEvaluatedValue = value;
@@ -394,7 +387,7 @@ namespace NPOI.XSSF.Streaminging
         {
             if (formula == null)
             {
-                setType(CellType.Blank);
+                SetType(CellType.Blank);
                 return;
             }
 
@@ -402,13 +395,15 @@ namespace NPOI.XSSF.Streaminging
             ((FormulaValue)_value).Value = formula;
         }
         
+        //TODO: not implemented correctly in poi 3.16 beta
         private CellType ComputeTypeFromFormula(String formula)
         {
             return CellType.Numeric;
         }
+
         public void SetCellType(CellType cellType)
         {
-            throw new NotImplementedException();
+            EnsureType(cellType);
         }
 
         public void SetCellValue(string value)
@@ -458,7 +453,7 @@ namespace NPOI.XSSF.Streaminging
                 {
                     throw new InvalidOperationException("The maximum length of cell contents (text) is 32,767 characters");
                 }
-                //TODO: this might just be the length > 0 investigate more.
+
                 if (xvalue.HasFormatting())
                     logger.Log(POILogger.WARN, "SXSSF doesn't support Shared Strings, rich text formatting information has be lost");
 
@@ -478,7 +473,6 @@ namespace NPOI.XSSF.Streaminging
                 return;
             }
 
-            //TODO: add is date to IWorkbook
             bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value.Value, date1904));
         }
@@ -505,7 +499,6 @@ namespace NPOI.XSSF.Streaminging
             }
         }
 
-        #region Weird extra stuff
         private void RemoveProperty(int type)
         {
             Property current = _firstProperty;
@@ -528,7 +521,6 @@ namespace NPOI.XSSF.Streaminging
             }
         }
 
-        //TODO; type needs to be an enum or the class type
         private void SetProperty(int type, object value)
         {
             Property current = _firstProperty;
@@ -601,7 +593,7 @@ namespace NPOI.XSSF.Streaminging
         private void EnsureType(CellType type)
         {
             if (_value.GetType() != type)
-                setType(type);
+                SetType(type);
         }
 
         private void EnsureFormulaType(CellType type)
@@ -619,7 +611,7 @@ namespace NPOI.XSSF.Streaminging
             if (_value.GetType() == type)
             {
                 if (type == CellType.String && ((StringValue)_value).IsRichText())
-                    setType(CellType.String);
+                    SetType(CellType.String);
                 return;
             }
             if (_value.GetType() == CellType.Formula)
@@ -629,11 +621,11 @@ namespace NPOI.XSSF.Streaminging
                 setFormulaType(type); // once a formula, always a formula
                 return;
             }
-            setType(type);
+            SetType(type);
         }
 
         /*package*/
-        private void setType(CellType type)
+        private void SetType(CellType type)
         {
             switch (type)
             {
@@ -727,8 +719,6 @@ namespace NPOI.XSSF.Streaminging
         }
 
         //COPIED FROM https://svn.apache.org/repos/asf/poi/trunk/src/ooxml/java/org/apache/poi/xssf/usermodel/XSSFCell.java since the functions are declared private there
-        //TODO: may already exist in NPOI
-
         private bool convertCellValueToBoolean()
         {
             CellType cellType = _value.GetType();
@@ -792,7 +782,6 @@ namespace NPOI.XSSF.Streaminging
         }
 
         //END OF COPIED CODE
-        #endregion
 
 
         public void SetCellValue(DateTime value)

@@ -139,8 +139,16 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\Streaming\AutoSizeColumnTrackerTests.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriterTests.cs" />
     <Compile Include="XSSF\Streaming\SheetDataWriterTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFCellTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFCreationHelperTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationCellTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationWorkbookTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFFormulaEvaluatorTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFRowTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFSheetTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFWorkbookTests.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />

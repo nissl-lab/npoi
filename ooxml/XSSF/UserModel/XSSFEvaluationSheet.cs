@@ -35,7 +35,6 @@ namespace NPOI.XSSF.UserModel
             _xs = (XSSFSheet)sheet;
         }
 
-        //TODO: Rye added.
         public XSSFEvaluationSheet()
         {
             
