@@ -39,7 +39,6 @@ namespace NPOI.XSSF.Streaming
 
     public SXSSFEvaluationCell getCell(int rowIndex, int columnIndex)
         {
-            //TODO: maybe why we want a sorted dict.
             SXSSFRow row = _xs._rows[rowIndex];
             if (row == null)
             {

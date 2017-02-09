@@ -221,7 +221,6 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumns(Collection<int> columns)
         {
-            //TODO: CHeck for parity
             bool result = false;
             foreach (var col in columns)
             {
@@ -291,7 +290,6 @@ namespace NPOI.XSSF.Streaming
                             "Either explicitly track the column or track all columns.", reason);
                 }
             }
-            //TODO: does java get remove the item from the set
             double width = maxColumnWidths[column].getMaxColumnWidth(useMergedCells);
             return (int)(256 * width);
         }
@@ -305,7 +303,6 @@ namespace NPOI.XSSF.Streaming
          * @since 3.14beta1
          */
 
-            //TODO: fix
         public void UpdateColumnWidths(IRow row)
         {
             // track new columns
@@ -350,7 +347,6 @@ namespace NPOI.XSSF.Streaming
 
                     if (maxColumnWidths.ContainsKey(column))
                     {
-                        //TODO: pretty sure get doesn't remove entry
                         ColumnWidthPair pair = maxColumnWidths[column];
                         UpdateColumnWidth(cell, pair);
                     }

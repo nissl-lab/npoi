@@ -30,7 +30,6 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFFormulaEvaluator : XSSFFormulaEvaluator
     {
-        //TODO: Readonly?
         private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFFormulaEvaluator));
 
         private IWorkbook wb;
@@ -44,7 +43,6 @@ namespace NPOI.XSSF.Streaming
 
         }
 
-        //TODO: implemented new constructor
         private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, WorkbookEvaluator bookEvaluator) : base(bookEvaluator)
         {
             this.wb = workbook;

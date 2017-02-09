@@ -720,7 +720,6 @@ namespace NPOI.XSSF.Streaming
             _sh.RemoveMergedRegion(index);
         }
 
-        //TODO:FixME!
         public void RemoveRow(IRow row)
         {
             throw new NotImplementedException();

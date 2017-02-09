@@ -51,7 +51,6 @@ namespace NPOI.XSSF.Streaming
             return Height != -1;
         }
 
-        //TODO; Do we lose methods here? SSXSSFCELL -> ICell
         public List<ICell> Cells
         {
             get { return _cells.Values.Select(cell => (ICell) cell).ToList(); }
@@ -222,7 +221,6 @@ namespace NPOI.XSSF.Streaming
             return GetCell(cellnum, policy);
         }
 
-        //TODO: Test
         public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
             CheckBounds(cellnum);
@@ -325,7 +323,6 @@ namespace NPOI.XSSF.Streaming
 
             public bool MoveNext()
             {
-                //TODO: in my case, i can assume no skipped cells
                 pos += 1;
                 return _cells.ContainsKey(pos);
             }
@@ -343,7 +340,6 @@ namespace NPOI.XSSF.Streaming
             private int pos;
             public CellIterator(int lastCellNum, Dictionary<int, SXSSFCell> cells)
             {
-                //TODO: Should be static so I don't know if i can just pass this to here
                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
                 pos = 0;
                 _cells = cells;
