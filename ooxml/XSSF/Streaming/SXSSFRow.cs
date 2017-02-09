@@ -164,32 +164,6 @@ namespace NPOI.XSSF.Streaming
             set { _zHeight = value; }
         }
 
-        //bool? IRow.Hidden
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    set
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        //bool? IRow.Collapsed
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    set
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
         public int CompareTo(SXSSFRow other)
         {
             if (this.Sheet != other.Sheet)
@@ -257,14 +231,11 @@ namespace NPOI.XSSF.Streaming
 
             switch (policy._policy)
             {
-                //case MissingCellPolicy.RETURN_NULL_AND_BLANK:
                 case MissingCellPolicy.Policy.RETURN_NULL_AND_BLANK:
                     return cell;
-                //case MissingCellPolicy.RETURN_BLANK_AS_NULL:
                 case MissingCellPolicy.Policy.RETURN_BLANK_AS_NULL:
                     bool isBlank = (cell != null && cell.CellType == CellType.Blank);
                     return (isBlank) ? null : cell;
-                // case MissingCellPolicy.CREATE_NULL_AS_BLANK:
                 case MissingCellPolicy.Policy.CREATE_NULL_AS_BLANK:
                     return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
                 default:
