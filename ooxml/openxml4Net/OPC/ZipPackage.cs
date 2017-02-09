@@ -343,7 +343,7 @@ namespace NPOI.OpenXml4Net.OPC
                     {
                         // Either the save operation succeed or not, we delete the
                         // temporary file
-                        File.Delete(tempfilePath);
+                        File.Delete(fi.FullName);
                         
                             logger
                                     .Log(POILogger.WARN, "The temporary file: '"

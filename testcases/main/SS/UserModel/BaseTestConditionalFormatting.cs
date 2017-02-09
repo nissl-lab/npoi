@@ -668,7 +668,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(HSSFColor.Blue.Index, patternFmt.FillForegroundColor);
 
             Assert.AreEqual((short)FillPattern.NoFill, patternFmt.FillPattern);
-            patternFmt.FillPattern =FillPattern.SolidForeground;
+            patternFmt.FillPattern = FillPattern.SolidForeground;
             Assert.AreEqual((short)FillPattern.SolidForeground, patternFmt.FillPattern);
             patternFmt.FillPattern = (short)FillPattern.NoFill;
             Assert.AreEqual((short)FillPattern.NoFill, patternFmt.FillPattern);
