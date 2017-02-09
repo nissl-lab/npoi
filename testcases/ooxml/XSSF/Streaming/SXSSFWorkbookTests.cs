@@ -432,6 +432,21 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             File.Delete(savePath);
         }
 
+        [Test]
+        public void IfWriting20WorksheetsWith10000x100CellsUsingGzipShouldNotThrowOutOfMemoryException()
+        {
+            _objectToTest = new SXSSFWorkbook(null, 100, true);
+            var sheets = 20;
+            var rows = 10000;
+            var cols = 100;
+            AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
+            var savePath = Environment.CurrentDirectory + "\\largeGzipWorksheet.xlsx";
+            WriteFile(savePath, _objectToTest);
+
+            Assert.True(File.Exists(savePath));
+            File.Delete(savePath);
+        }
+
 
         private void AddCells(IWorkbook wb, int sheets, int rows, int columns, CellType type)
         {
