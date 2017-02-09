@@ -641,11 +641,43 @@ namespace NPOI.XSSF.UserModel
         {
             return GetEnumerator();
         }
+
+        public bool HasCustomHeight()
+        {
+            throw new NotImplementedException();
+        }
+
         public int OutlineLevel
         {
             get
             {
                 return _row.outlineLevel;
+            }
+        }
+
+        public bool? Hidden
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool? Collapsed
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion

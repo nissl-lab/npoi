@@ -661,5 +661,18 @@ namespace NPOI.SS.Util
             return null;
         }
 
+        public static int getDefaultCharWidth(IWorkbook wb)
+        {
+            //TODO: Implement!
+            return 1;
+            //throw new NotImplementedException();
+            //IFont defaultFont = wb.GetFontAt(0);
+
+            //IAttributedString str = new AttributedString(defaultChar.ToString());
+            //copyAttributes(defaultFont, str, 0, 1);
+            //ITextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
+            //return (int)layout.getAdvance();
+        }
+
     }
 }
