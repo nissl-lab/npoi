@@ -19,13 +19,12 @@ using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
-using NPOI.XSSF.Streaming;
 using NPOI.XSSF.Streaming.Properties;
 using NPOI.XSSF.Streaming.Values;
 using NPOI.XSSF.UserModel;
 using Value = NPOI.XSSF.Streaming.Values.Value;
 
-namespace NPOI.XSSF.Streaminging
+namespace NPOI.XSSF.Streaming
 {
     public class SXSSFCell : ICell
     {

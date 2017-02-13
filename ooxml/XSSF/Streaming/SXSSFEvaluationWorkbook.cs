@@ -15,12 +15,8 @@
    limitations under the License.
 ==================================================================== */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.PTG;
-using NPOI.XSSF.Streaminging;
 using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming

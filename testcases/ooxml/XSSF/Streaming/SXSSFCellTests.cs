@@ -15,8 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using NPOI.SS.UserModel;
-using NPOI.XSSF.Streaminging;
-using NUnit.Core;
+using NPOI.XSSF.Streaming;
 using NUnit.Framework;
 
 namespace NPOI.OOXML.Testcases.XSSF.Streaming

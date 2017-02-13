@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.Streaminging;
 
 namespace NPOI.XSSF.Streaming
 {
