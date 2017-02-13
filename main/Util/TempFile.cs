@@ -25,12 +25,12 @@ namespace NPOI.Util
             }
             // Generate a unique new filename 
             Random rnd = new Random(DateTime.Now.Millisecond);
+            Thread.Sleep(1);
             string file= dir + "\\" + prefix + rnd.Next() + suffix;
-            if (File.Exists(file))
+            while (File.Exists(file))
             {
-                // That name is already taken, try another
-                //TODO: recursion should be fixed.
-                return CreateTempFile(prefix, suffix);
+                file = dir + "\\" + prefix + rnd.Next() + suffix;
+                Thread.Sleep(1);
             }
             FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite);
             newFile.Close();

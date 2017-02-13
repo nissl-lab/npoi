@@ -2073,6 +2073,11 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        public bool Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         #endregion

@@ -423,5 +423,7 @@ namespace NPOI.SS.UserModel
         void AddToolPack(UDFFinder toopack);
 
         void Close();
+
+        bool Dispose();
     }
 }
