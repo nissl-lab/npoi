@@ -32,7 +32,6 @@ namespace NPOI.Util
                 //TODO: recursion should be fixed.
                 return CreateTempFile(prefix, suffix);
             }
-            //TODO:RyeEdits
             FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite);
             newFile.Close();
 
