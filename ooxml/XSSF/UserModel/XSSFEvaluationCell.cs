@@ -45,6 +45,11 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        public XSSFEvaluationCell()
+        {
+            
+        }
+
         public Object IdentityKey
         {
             get

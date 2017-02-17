@@ -662,6 +662,7 @@ namespace NPOI.XSSF.UserModel
             CT_Sheet sheet = AddSheet(sheetname);
 
             int sheetNumber = 1;
+            //TODO: this is extra somehow
             foreach (XSSFSheet sh in sheets) sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
 
             outerloop:
@@ -1619,7 +1620,7 @@ namespace NPOI.XSSF.UserModel
          * </p>
          * @return true if the date systems used in the workbook starts in 1904
          */
-        internal bool IsDate1904()
+        public bool IsDate1904()
         {
             CT_WorkbookPr workbookPr = workbook.workbookPr;
             return workbookPr.date1904Specified && workbookPr.date1904;
@@ -2070,6 +2071,11 @@ namespace NPOI.XSSF.UserModel
             pictures.Add(img);
             return imageNumber - 1;
 
+        }
+
+        public bool Dispose()
+        {
+            throw new NotImplementedException();
         }
 
 

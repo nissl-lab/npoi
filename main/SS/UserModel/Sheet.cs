@@ -817,6 +817,8 @@ namespace NPOI.SS.UserModel
         /// <param name="columnIndex"></param>
         /// <returns></returns>
         int GetColumnOutlineLevel(int columnIndex);
+
+        bool IsDate1904();
     }
 
 }

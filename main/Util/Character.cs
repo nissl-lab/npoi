@@ -18,5 +18,11 @@
             }
             return -1;
         }
+
+        //TODO: this should work but maybe not.
+        public static bool isWhitespace(char src)
+        {
+            return char.IsWhiteSpace(src);
+        }
     }
 }
