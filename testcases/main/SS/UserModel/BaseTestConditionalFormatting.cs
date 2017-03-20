@@ -557,7 +557,7 @@ namespace TestCases.SS.UserModel
             IPatternFormatting fmt4 = rule3.GetPatternFormatting();
             //        Assert.AreEqual(HSSFColor.LIGHT_CORNFLOWER_BLUE.index, fmt4.FillBackgroundColor);
             //        Assert.AreEqual(HSSFColor.Automatic.index, fmt4.FillForegroundColor);
-            Assert.AreEqual((short)FillPattern.NoFill, fmt4.FillPattern);
+            Assert.AreEqual(FillPattern.NoFill, fmt4.FillPattern);
             // borders are not Set
             Assert.IsNull(rule3.GetBorderFormatting());
 
