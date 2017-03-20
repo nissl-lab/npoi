@@ -1,3 +1,13 @@
+2.3.0 (Mar, 2017£©
+New Features
+- implement XSSF Streaming
+
+BUG Fixes
+- Fix GZIPSheetDataWriter
+- Hold file handler when OOXML zip package is closed
+- Fix test cases
+
+
 2.2.1 (May,2016)
 Bug Fixes
 - Fix a lot of serialization issue of ooxml issue
