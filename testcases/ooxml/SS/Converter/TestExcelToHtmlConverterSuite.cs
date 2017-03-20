@@ -14,7 +14,7 @@ namespace NPOI.SS.Converter
         private static List<String> failingFiles = new List<string>();
 
         [Test]
-        [Ignore]
+        [Ignore("test")]
         public void TestExcelToHtmlConverter()
         {
             string[] fileNames = POIDataSamples.GetSpreadSheetInstance().GetFiles("*.xls");

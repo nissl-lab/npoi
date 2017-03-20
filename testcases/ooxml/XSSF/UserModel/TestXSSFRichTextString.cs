@@ -394,7 +394,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        [Ignore]
+        [Ignore("test")]
         public void TestLineBreaks_bug48877()
         {
 
