@@ -1741,7 +1741,7 @@ namespace NPOI.SS.Formula
                 number.Append(number1);
             }
 
-            number.Append('.');
+            number.Append(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             number.Append(number2);
 
             if (exponent != null)
