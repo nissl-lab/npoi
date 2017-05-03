@@ -302,6 +302,7 @@ namespace NPOI.SS.UserModel
 
             // Strip off the locale information, we use an instance-wide locale for everything
             MatchCollection matches = Regex.Matches(formatStr, localePatternGroup);
+	        int diff = 0;
             foreach (Match match in matches)
             {
                 string matchedstring = match.Value;
@@ -319,8 +320,11 @@ namespace NPOI.SS.UserModel
                 }
                 matchedstring = Regex.Replace(matchedstring, localePatternGroup, symbol);
 
-                formatStr = formatStr.Remove(match.Index, match.Length);
-                formatStr = formatStr.Insert(match.Index, matchedstring);
+				// match.Length and matchedstring.Length may be different, so index correction is needed
+				diff += matchedstring.Length - match.Length;
+	            var correctedIndex = match.Index + diff;
+				formatStr = formatStr.Remove(correctedIndex, match.Length);
+				formatStr = formatStr.Insert(correctedIndex, matchedstring);
             }
 
             // Check for special cases
