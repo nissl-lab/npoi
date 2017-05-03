@@ -107,6 +107,8 @@ namespace NPOI.SS.UserModel
         /// </param>
         void SetCellValue(double value);
 
+        void SetCellValue(double value, ICellStyle style);
+
         /// <summary>
         /// Set a error value for the cell
         /// </summary>
@@ -125,6 +127,8 @@ namespace NPOI.SS.UserModel
         /// </param>
         void SetCellValue(DateTime value);
 
+        void SetCellValue(DateTime value, ICellStyle style);
+
         /// <summary>
         /// Set a rich string value for the cell.
         /// </summary>
@@ -135,6 +139,8 @@ namespace NPOI.SS.UserModel
         ///  </param>
         void SetCellValue(IRichTextString value);
 
+        void SetCellValue(IRichTextString value, ICellStyle style);
+
         /// <summary>
         /// Set a string value for the cell.
         /// </summary>
@@ -144,6 +150,8 @@ namespace NPOI.SS.UserModel
         /// If value is null then we will change the cell to a blank cell.
         /// </param>
         void SetCellValue(String value);
+
+        void SetCellValue(String value, ICellStyle style);
 
         /// <summary>
         /// Copy the cell to the target index. If the target cell exists, a new cell will be inserted before the existing cell.
@@ -198,6 +206,8 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="value"></param>
         void SetCellValue(bool value);
+
+        void SetCellValue(bool value, ICellStyle style);
 
         /// <summary>
         /// Get the value of the cell as a bool.
