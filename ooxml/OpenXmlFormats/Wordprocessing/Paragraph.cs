@@ -3292,7 +3292,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:beforeLines", this.beforeLines);
             if(this.beforeAutospacing!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:beforeAutospacing", this.beforeAutospacing.ToString());
-            XmlHelper.WriteAttribute(sw, "w:after", this.after);
+            XmlHelper.WriteAttribute(sw, "w:after", this.after, true);
             XmlHelper.WriteAttribute(sw, "w:afterLines", this.afterLines);
             if (this.afterAutospacing != ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:afterAutospacing", this.afterAutospacing.ToString());
