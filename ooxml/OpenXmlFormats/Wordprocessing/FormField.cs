@@ -358,7 +358,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 //}
                 else if (childNode.LocalName == "enabled")
                 {
-                    ctObj.AddNewObject(CT_OnOff.Parse(childNode, namespaceManager), FFDataItemsType.name);
+                    ctObj.AddNewObject(CT_OnOff.Parse(childNode, namespaceManager), FFDataItemsType.enabled);
                 }
                 else if (childNode.LocalName == "calcOnExit")
                 {
@@ -397,7 +397,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(string.Format("<w:{0}>", nodeName));
 
             for (int i=0;i<this.itemsElementNameField.Count;i++)
             {
@@ -423,7 +423,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     (this.itemsField[i] as CT_FFTextInput).Write(sw, "textInput");
             }
 
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
         private void AddNewObject(object obj, FFDataItemsType type)
         {
@@ -1031,17 +1031,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.typeField == null)
-                this.typeField.Write(sw, "w:type");
+                this.typeField.Write(sw, "type");
             if (this.defaultField != null)
-                this.defaultField.Write(sw, "w:default");
+                this.defaultField.Write(sw, "default");
             if (this.formatField != null)
-                this.formatField.Write(sw, "w:format");
+                this.formatField.Write(sw, "format");
             if (this.maxLengthField != null)
-                this.maxLengthField.Write(sw, "w:maxLength");
+                this.maxLengthField.Write(sw, "maxLength");
             
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</w:kp{0}>", nodeName));
         }
     }
 
