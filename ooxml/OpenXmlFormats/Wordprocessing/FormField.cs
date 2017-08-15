@@ -1041,7 +1041,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.maxLengthField != null)
                 this.maxLengthField.Write(sw, "maxLength");
             
-            sw.Write(string.Format("</w:kp{0}>", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
     }
 
