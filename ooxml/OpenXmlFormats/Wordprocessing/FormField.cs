@@ -639,15 +639,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.defaultField != null)
-                this.defaultField.Write(sw, "w:default");
+                this.defaultField.Write(sw, "default");
             if (this.checkedField != null)
-                this.checkedField.Write(sw, "w:checked");
+                this.checkedField.Write(sw, "checked");
             if (this.itemField != null)
             {
                 if (this.itemField is CT_OnOff)
-                    (this.itemField as CT_OnOff).Write(sw, "w:sizeAuto");
+                    (this.itemField as CT_OnOff).Write(sw, "sizeAuto");
                 else
-                    (this.itemField as CT_HpsMeasure).Write(sw, "w:size");
+                    (this.itemField as CT_HpsMeasure).Write(sw, "size");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
@@ -742,12 +742,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.defaultField != null)
-                this.defaultField.Write(sw, "w:default");
+                this.defaultField.Write(sw, "default");
             if (this.resultField != null)
-                this.resultField.Write(sw, "w:result");
+                this.resultField.Write(sw, "result");
             foreach (CT_String str in listEntry)
             {
-                str.Write(sw, "w:listEntry");
+                str.Write(sw, "listEntry");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
