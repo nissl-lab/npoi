@@ -358,7 +358,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 //}
                 else if (childNode.LocalName == "enabled")
                 {
-                    ctObj.AddNewObject(CT_OnOff.Parse(childNode, namespaceManager), FFDataItemsType.name);
+                    ctObj.AddNewObject(CT_OnOff.Parse(childNode, namespaceManager), FFDataItemsType.enabled);
                 }
                 else if (childNode.LocalName == "calcOnExit")
                 {
@@ -397,7 +397,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(string.Format("<w:{0}>", nodeName));
 
             for (int i=0;i<this.itemsElementNameField.Count;i++)
             {
@@ -423,7 +423,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     (this.itemsField[i] as CT_FFTextInput).Write(sw, "textInput");
             }
 
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
         private void AddNewObject(object obj, FFDataItemsType type)
         {
@@ -639,15 +639,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.defaultField != null)
-                this.defaultField.Write(sw, "w:default");
+                this.defaultField.Write(sw, "default");
             if (this.checkedField != null)
-                this.checkedField.Write(sw, "w:checked");
+                this.checkedField.Write(sw, "checked");
             if (this.itemField != null)
             {
                 if (this.itemField is CT_OnOff)
-                    (this.itemField as CT_OnOff).Write(sw, "w:sizeAuto");
+                    (this.itemField as CT_OnOff).Write(sw, "sizeAuto");
                 else
-                    (this.itemField as CT_HpsMeasure).Write(sw, "w:size");
+                    (this.itemField as CT_HpsMeasure).Write(sw, "size");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
@@ -742,12 +742,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.defaultField != null)
-                this.defaultField.Write(sw, "w:default");
+                this.defaultField.Write(sw, "default");
             if (this.resultField != null)
-                this.resultField.Write(sw, "w:result");
+                this.resultField.Write(sw, "result");
             foreach (CT_String str in listEntry)
             {
-                str.Write(sw, "w:listEntry");
+                str.Write(sw, "listEntry");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
@@ -1031,17 +1031,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.typeField == null)
-                this.typeField.Write(sw, "w:type");
+                this.typeField.Write(sw, "type");
             if (this.defaultField != null)
-                this.defaultField.Write(sw, "w:default");
+                this.defaultField.Write(sw, "default");
             if (this.formatField != null)
-                this.formatField.Write(sw, "w:format");
+                this.formatField.Write(sw, "format");
             if (this.maxLengthField != null)
-                this.maxLengthField.Write(sw, "w:maxLength");
+                this.maxLengthField.Write(sw, "maxLength");
             
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</w:{0}>", nodeName));
         }
     }
 

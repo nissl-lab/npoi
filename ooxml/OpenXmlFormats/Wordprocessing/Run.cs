@@ -553,7 +553,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Br)
                     ((CT_Br)o).Write(sw, "br");
                 else if (o is CT_Markup)
-                    ((CT_Markup)o).Write(sw, "w:commentReference");
+                    ((CT_Markup)o).Write(sw, "commentReference");
                 else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.continuationSeparator)
                     sw.Write("<w:continuationSeparator/>");
                 else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.cr)

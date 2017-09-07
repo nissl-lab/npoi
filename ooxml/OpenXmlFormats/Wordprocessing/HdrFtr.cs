@@ -670,13 +670,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
             if (this.pos != null)
-                this.pos.Write(sw, "w:pos");
+                this.pos.Write(sw, "pos");
             if (this.numFmt != null)
-                this.numFmt.Write(sw, "w:numFmt");
+                this.numFmt.Write(sw, "numFmt");
             if (this.numStart != null)
-                this.numStart.Write(sw, "w:numStart");
+                this.numStart.Write(sw, "numStart");
             if (this.numRestart != null)
-                this.numRestart.Write(sw, "w:numRestart");
+                this.numRestart.Write(sw, "numRestart");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
@@ -1649,13 +1649,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
             if (this.pos != null)
-                this.pos.Write(sw, "w:pos");
+                this.pos.Write(sw, "pos");
             if (this.numFmt != null)
-                this.numFmt.Write(sw, "w:numFmt");
+                this.numFmt.Write(sw, "numFmt");
             if (this.numStart != null)
-                this.numStart.Write(sw, "w:numStart");
+                this.numStart.Write(sw, "numStart");
             if (this.numRestart != null)
-                this.numRestart.Write(sw, "w:numRestart");
+                this.numRestart.Write(sw, "numRestart");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 

@@ -2068,43 +2068,43 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:rsidSect", this.rsidSect);
             sw.Write(">");
             if (this.footnotePr != null)
-                this.footnotePr.Write(sw, "w:footnotePr");
+                this.footnotePr.Write(sw, "footnotePr");
             if (this.endnotePr != null)
-                this.endnotePr.Write(sw, "w:endnotePr");
+                this.endnotePr.Write(sw, "endnotePr");
             if (this.type != null)
-                this.type.Write(sw, "w:type");
+                this.type.Write(sw, "type");
             if (this.pgSz != null)
-                this.pgSz.Write(sw, "w:pgSz");
+                this.pgSz.Write(sw, "pgSz");
             if (this.pgMar != null)
-                this.pgMar.Write(sw, "w:pgMar");
+                this.pgMar.Write(sw, "pgMar");
             if (this.paperSrc != null)
-                this.paperSrc.Write(sw, "w:paperSrc");
+                this.paperSrc.Write(sw, "paperSrc");
             if (this.pgBorders != null)
-                this.pgBorders.Write(sw, "w:pgBorders");
+                this.pgBorders.Write(sw, "pgBorders");
             if (this.lnNumType != null)
-                this.lnNumType.Write(sw, "w:lnNumType");
+                this.lnNumType.Write(sw, "lnNumType");
             if (this.pgNumType != null)
-                this.pgNumType.Write(sw, "w:pgNumType");
+                this.pgNumType.Write(sw, "pgNumType");
             if (this.cols != null)
-                this.cols.Write(sw, "w:cols");
+                this.cols.Write(sw, "cols");
             if (this.formProt != null)
-                this.formProt.Write(sw, "w:formProt");
+                this.formProt.Write(sw, "formProt");
             if (this.vAlign != null)
-                this.vAlign.Write(sw, "w:vAlign");
+                this.vAlign.Write(sw, "vAlign");
             if (this.noEndnote != null)
-                this.noEndnote.Write(sw, "w:noEndnote");
+                this.noEndnote.Write(sw, "noEndnote");
             if (this.titlePg != null)
-                this.titlePg.Write(sw, "w:titlePg");
+                this.titlePg.Write(sw, "titlePg");
             if (this.textDirection != null)
-                this.textDirection.Write(sw, "w:textDirection");
+                this.textDirection.Write(sw, "textDirection");
             if (this.bidi != null)
-                this.bidi.Write(sw, "w:bidi");
+                this.bidi.Write(sw, "bidi");
             if (this.rtlGutter != null)
-                this.rtlGutter.Write(sw, "w:rtlGutter");
+                this.rtlGutter.Write(sw, "rtlGutter");
             if (this.docGrid != null)
-                this.docGrid.Write(sw, "w:docGrid");
+                this.docGrid.Write(sw, "docGrid");
             if (this.printerSettings != null)
-                this.printerSettings.Write(sw, "w:printerSettings");
+                this.printerSettings.Write(sw, "printerSettings");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
@@ -3292,7 +3292,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:beforeLines", this.beforeLines);
             if(this.beforeAutospacing!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:beforeAutospacing", this.beforeAutospacing.ToString());
-            XmlHelper.WriteAttribute(sw, "w:after", this.after);
+            XmlHelper.WriteAttribute(sw, "w:after", this.after, true);
             XmlHelper.WriteAttribute(sw, "w:afterLines", this.afterLines);
             if (this.afterAutospacing != ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:afterAutospacing", this.afterAutospacing.ToString());
@@ -6690,7 +6690,7 @@ cnfStyleField == null;
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
             if (this.rPr != null)
-                this.rPr.Write(sw, "w:rPr");
+                this.rPr.Write(sw, "rPr");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
