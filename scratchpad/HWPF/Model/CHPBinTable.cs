@@ -282,10 +282,20 @@ namespace NPOI.HWPF.Model
             start = DateTime.Now.Ticks;
 
             CHPX previous = null;
-            for (List<CHPX>.Enumerator iterator = _textRuns.GetEnumerator(); iterator
-                    .MoveNext(); )
+            List<CHPX>.Enumerator iterator2 = _textRuns.GetEnumerator();
+
+            do
             {
-                CHPX current = iterator.Current;
+                try
+                {
+                    iterator2.MoveNext();
+                }
+                catch { break; }
+
+                CHPX current = iterator2.Current;
+                if (current == null)
+                    break;
+
                 if (previous == null)
                 {
                     previous = current;
@@ -303,6 +313,7 @@ namespace NPOI.HWPF.Model
 
                 previous = current;
             }
+            while (true);
 
             logger.Log(POILogger.DEBUG, "CHPX compacted in ",
                     DateTime.Now.Ticks - start, " ms (",
