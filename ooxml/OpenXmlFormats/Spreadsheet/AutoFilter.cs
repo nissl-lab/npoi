@@ -218,7 +218,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "colId", this.colId);
+            XmlHelper.WriteAttribute(sw, "colId", this.colId, true);
             XmlHelper.WriteAttribute(sw, "hiddenButton", this.hiddenButton);
             XmlHelper.WriteAttribute(sw, "showButton", this.showButton);
             sw.Write(">");

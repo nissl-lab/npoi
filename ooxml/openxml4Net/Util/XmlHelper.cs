@@ -345,9 +345,9 @@ namespace NPOI.OpenXml4Net.Util
 
             WriteAttribute(sw, attributeName, BitConverter.ToString(value).Replace("-", ""), false);
         }
-        public static void WriteAttribute(StreamWriter sw, string attributeName, uint value)
+        public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, bool writeIfBlank = false)
         {
-            WriteAttribute(sw, attributeName, (int)value, false);
+            WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
         }
 
         public static void WriteAttribute(StreamWriter sw, string attributeName, DateTime? value)
