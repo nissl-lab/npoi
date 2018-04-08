@@ -211,6 +211,21 @@ namespace NPOI.XSSF.UserModel
             axis.Add(categoryAxis);
             return categoryAxis;
         }
+
+        public IChartAxis CreateDateAxis(AxisPosition pos)
+        {
+            long id = axis.Count + 1;
+            XSSFDateAxis dateAxis = new XSSFDateAxis(this, id, pos);
+            if (axis.Count == 1)
+            {
+                IChartAxis ax = axis[0];
+                ax.CrossAxis(dateAxis);
+                dateAxis.CrossAxis(ax);
+            }
+            axis.Add(dateAxis);
+            return dateAxis;
+        }
+
         public List<IChartAxis> GetAxis()
         {
             if (axis.Count == 0 && HasAxis())
@@ -312,7 +327,6 @@ namespace NPOI.XSSF.UserModel
                 axis.Add(new XSSFValueAxis(this, valAx));
             }
         }
-
     }
 }
 
