@@ -99,6 +99,11 @@ namespace NPOI.XSSF.UserModel.Charts
             ctDateAx.baseTimeUnit = unit;
         }
 
+        public void SetAuto(CT_Boolean au)
+        {
+            ctDateAx.auto = au;
+        }
+
         private void createAxis(long id, AxisPosition pos)
         {
             ctDateAx = chart.GetCTChart().plotArea.AddNewDateAx();

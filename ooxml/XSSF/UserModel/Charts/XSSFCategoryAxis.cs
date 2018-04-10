@@ -78,6 +78,11 @@ namespace NPOI.XSSF.UserModel.Charts
             ctCatAx.crossAx.val = (uint)axis.Id;
         }
 
+        public void SetAuto(CT_Boolean au)
+        {
+            ctCatAx.auto = au;
+        }
+
         private void createAxis(long id, AxisPosition pos)
         {
             ctCatAx = chart.GetCTChart().plotArea.AddNewCatAx();

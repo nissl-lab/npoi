@@ -10549,6 +10549,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
+        public CT_BarChart AddNewBarChart()
+        {
+            CT_BarChart ctchart = new CT_BarChart();
+            if (this.barChartField == null)
+            {
+                this.barChartField = new List<CT_BarChart>();
+            }
+            this.barChartField.Add(ctchart);
+            return ctchart;
+        }
+
         public CT_LineChart AddNewLineChart()
         {
             CT_LineChart ctchart = new CT_LineChart();
