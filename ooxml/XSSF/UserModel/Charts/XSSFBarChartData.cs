@@ -1,7 +1,9 @@
-﻿using NPOI.OpenXmlFormats.Dml.Chart;
+﻿using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace NPOI.XSSF.UserModel.Charts
@@ -27,6 +29,7 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             private int id;
             private int order;
+            private byte[] fillColor;
             private IChartDataSource<Tx> categories;
             private IChartDataSource<Ty> values;
 
@@ -48,6 +51,14 @@ namespace NPOI.XSSF.UserModel.Charts
             public void SetOrder(int order)
             {
                 this.order = order;
+            }
+
+            public void SetFillColor(Color color)
+            {
+                fillColor = new byte[3];
+                fillColor[0] = color.R;
+                fillColor[1] = color.G;
+                fillColor[2] = color.B;
             }
 
             public IChartDataSource<Tx> GetCategoryAxisData()
@@ -79,6 +90,14 @@ namespace NPOI.XSSF.UserModel.Charts
                 if (IsTitleSet)
                 {
                     ctBarSer.tx = GetCTSerTx();
+                }
+
+                if (fillColor != null)
+                {
+                    ctBarSer.spPr = new OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
+                    CT_SolidColorFillProperties ctSolidColorFillProperties = ctBarSer.spPr.AddNewSolidFill();
+                    CT_SRgbColor ctSRgbColor = ctSolidColorFillProperties.AddNewSrgbClr();
+                    ctSRgbColor.val = fillColor;
                 }
             }
         }
