@@ -293,6 +293,11 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public void SetCTDispBlanksAs(CT_DispBlanksAs disp)
+        {
+            chart.dispBlanksAs = disp;
+        }
+
         private bool HasAxis()
         {
             CT_PlotArea ctPlotArea = chart.plotArea;

@@ -74,6 +74,11 @@ namespace NPOI.XSSF.UserModel.Charts
             return ctDateAx.majorTickMark;
         }
 
+        public void SetMajorCTTickMark(CT_TickMark tm)
+        {
+            ctDateAx.majorTickMark = tm;
+        }
+
         protected override CT_TickMark GetMinorCTTickMark()
         {
             return ctDateAx.minorTickMark;
