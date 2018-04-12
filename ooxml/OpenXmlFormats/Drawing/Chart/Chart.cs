@@ -14,6 +14,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.ComponentModel;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
     using System.Text;
@@ -9579,6 +9580,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
+
         [XmlElement("ser", Order = 1)]
         public List<CT_SurfaceSer> ser
         {
@@ -10348,6 +10354,27 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.scatterChartField.Add(newobj);
             return newobj;
         }
+
+        public int GetAllSeriesCount()
+        {
+            return (surfaceChartField == null ? 0 : surfaceChartField.Select(x=>x.GetSeriesCount()).Sum())
+                + (lineChartField == null ? 0 : lineChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (bubbleChartField == null ? 0 : bubbleChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (bar3DChartField == null ? 0 : bar3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (area3DChartField == null ? 0 : area3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (doughnutChartField == null ? 0 : doughnutChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (pie3DChartField == null ? 0 : pie3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (line3DChartField == null ? 0 : line3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (surface3DChartField == null ? 0 : surface3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (barChartField == null ? 0 : barChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (radarChartField == null ? 0 : radarChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (areaChartField == null ? 0 : areaChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (scatterChartField == null ? 0 : scatterChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (ofPieChartField == null ? 0 : ofPieChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (pieChartField == null ? 0 : pieChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (stockChartField == null ? 0 : stockChartField.Select(x => x.GetSeriesCount()).Sum());
+        }
+
         List<CT_SurfaceChart> surfaceChartField;
         public List<CT_SurfaceChart> surfaceChart
         {

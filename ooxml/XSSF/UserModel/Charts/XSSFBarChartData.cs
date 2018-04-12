@@ -40,6 +40,16 @@ namespace NPOI.XSSF.UserModel.Charts
                 this.values = values;
             }
 
+            public void SetId(int id)
+            {
+                this.id = id;
+            }
+
+            public void SetOrder(int order)
+            {
+                this.order = order;
+            }
+
             public IChartDataSource<Tx> GetCategoryAxisData()
             {
                 return categories;
@@ -99,11 +109,15 @@ namespace NPOI.XSSF.UserModel.Charts
 
             XSSFChart xssfChart = (XSSFChart)chart;
             CT_PlotArea plotArea = xssfChart.GetCTChart().plotArea;
+            int allSeriesCount = plotArea.GetAllSeriesCount();
             CT_BarChart barChart = plotArea.AddNewBarChart();
             barChart.AddNewVaryColors().val = 0;
 
-            foreach (Series s in series)
+            for (int i = 0; i < series.Count; ++i)
             {
+                Series s = (Series)series[i];
+                s.SetId(allSeriesCount + i);
+                s.SetOrder(allSeriesCount + i);
                 s.AddToChart(barChart);
             }
 

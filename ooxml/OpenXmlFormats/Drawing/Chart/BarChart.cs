@@ -126,6 +126,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
 
         [XmlElement(Order = 0)]
         public CT_BarDir barDir
@@ -811,6 +815,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.varyColorsField = new CT_Boolean();
             this.groupingField = new CT_BarGrouping();
             this.barDirField = new CT_BarDir();
+        }
+
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
         }
 
         [XmlElement(Order = 0)]

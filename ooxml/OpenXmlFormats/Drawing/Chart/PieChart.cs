@@ -78,6 +78,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
 
         [XmlElement(Order = 0)]
         public CT_Boolean varyColors
@@ -204,6 +208,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 }
             }
             sw.Write(string.Format("</c:{0}>", nodeName));
+        }
+
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
         }
 
         [XmlElement(Order = 0)]
@@ -690,6 +699,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
+
         [XmlElement(Order = 0)]
         public CT_Boolean varyColors
         {
@@ -953,6 +967,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 }
             }
             sw.Write(string.Format("</c:{0}>", nodeName));
+        }
+
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
         }
 
         [XmlElement(Order = 0)]
