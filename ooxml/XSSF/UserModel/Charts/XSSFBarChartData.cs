@@ -78,6 +78,9 @@ namespace NPOI.XSSF.UserModel.Charts
                 ctGrouping.val = ST_BarGrouping.clustered;
                 ctBarSer.AddNewIdx().val = (uint)id;
                 ctBarSer.AddNewOrder().val = (uint)order;
+                CT_Boolean ctNoInvertIfNegative = new CT_Boolean();
+                ctNoInvertIfNegative.val = 0;
+                ctBarSer.invertIfNegative = ctNoInvertIfNegative;
 
                 CT_BarDir ctBarDir = ctBarChart.AddNewBarDir();
                 ctBarDir.val = ST_BarDir.col;
