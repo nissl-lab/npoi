@@ -1269,5 +1269,10 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(found, "Should find some images via Client or Child anchors, but did not find any at all");
         }
 
-    }
+	    [Test]
+	    public void Bug47245()
+	    {
+		    Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("47245_test.xls"));
+	    }
+	}
 }
