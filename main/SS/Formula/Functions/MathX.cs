@@ -66,20 +66,12 @@ namespace NPOI.SS.Formula.Functions
             {
                 if (p >= 0)
                 {
-                    int temp = (int)Math.Pow(10, p);
-                    double delta = 0.5;
-                    int x = p + 1;
-                    while (x > 0)
-                    {
-                        delta = delta / 10;
-                        x--;
-                    }
-                    retval = (double)(Math.Round((decimal)(n + delta) * temp) / temp);
+                    retval = (double)Math.Round((decimal)n, p, MidpointRounding.AwayFromZero);
                 }
                 else
                 {
                     int temp = (int)Math.Pow(10, Math.Abs(p));
-                    retval = (double)(Math.Round((decimal)(n) / temp) * temp);
+                    retval = (double)(Math.Round((decimal)(n) / temp, MidpointRounding.AwayFromZero) * temp);
                 }
             }
 

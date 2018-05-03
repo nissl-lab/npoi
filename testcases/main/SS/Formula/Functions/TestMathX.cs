@@ -735,6 +735,9 @@ namespace TestCases.SS.Formula.Functions
 
             d = Double.MinValue; p = 1;
             AssertEquals("round ", 0.0d, MathX.Round(d, p));
+
+            d = 481.75478; p = 2;
+            AssertEquals("round ", 481.75d, MathX.Round(d, p));
         }
         [Test]
         public void TestRoundDown()
