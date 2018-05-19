@@ -41,7 +41,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFWorkbook : POIXMLDocument, IWorkbook
     {
-        private static Regex COMMA_PATTERN = new Regex(",");
+        private static readonly Regex COMMA_PATTERN = new Regex(",", RegexOptions.Compiled);
 
         /**
          * Width of one character of the default font in pixels. Same for Calibry and Arial.

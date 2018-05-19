@@ -39,7 +39,7 @@ namespace NPOI.SS.UserModel
 
     public class FractionFormat : FormatBase
     {
-        private static Regex DENOM_FORMAT_PATTERN = new Regex("(?:(#+)|(\\d+))");
+        private static readonly Regex DENOM_FORMAT_PATTERN = new Regex("(?:(#+)|(\\d+))", RegexOptions.Compiled);
 
         //this was chosen to match the earlier limitation of max denom power
         //it can be expanded to Get closer to Excel's calculations

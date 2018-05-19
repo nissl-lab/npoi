@@ -187,7 +187,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private static readonly Regex RegexFraction = new Regex("#+/#+");
+        private static readonly Regex RegexFraction = new Regex("#+/#+", RegexOptions.Compiled);
         public override string Format(Object obj)
         {
             return Format(obj, System.Globalization.CultureInfo.CurrentCulture);

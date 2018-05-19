@@ -127,7 +127,7 @@ namespace NPOI.OpenXml4Net.OPC
             CORE_PROPERTIES_PART_NAME = tmpCORE_PROPERTIES_URI;
             PACKAGE_ROOT_PART_NAME = tmpPACKAGE_ROOT_PART_NAME;
         }
-        private static Regex missingAuthPattern = new Regex("\\w+://$");
+        private static readonly Regex missingAuthPattern = new Regex("\\w+://$", RegexOptions.Compiled);
         /**
          * Gets the Uri for the package root.
          *

@@ -67,7 +67,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFRichTextString : IRichTextString
     {
-        private static Regex utfPtrn = new Regex("_x([0-9A-F]{4})_");
+        private static readonly Regex utfPtrn = new Regex("_x([0-9A-F]{4})_", RegexOptions.Compiled);
 
         private CT_Rst st;
         private StylesTable styles;

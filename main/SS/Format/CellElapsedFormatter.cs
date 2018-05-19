@@ -31,7 +31,7 @@ namespace NPOI.SS.Format
         private TimeSpec topmost;
         private String printfFmt;
 
-        private static readonly Regex PERCENTS = new Regex("%");
+        private static readonly Regex PERCENTS = new Regex("%", RegexOptions.Compiled);
 
         private const double HOUR__FACTOR = 1.0 / 24.0;
         private const double MIN__FACTOR = HOUR__FACTOR / 60.0;

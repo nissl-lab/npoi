@@ -75,7 +75,7 @@ namespace NPOI.SS.Format
         private CellFormatPart textFmt;
         private int formatPartCount;
 
-        private static readonly Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+        private static readonly Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         private static readonly CellFormatPart DEFAULT_TEXT_FORMAT =
                 new CellFormatPart("@");
