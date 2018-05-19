@@ -21,6 +21,7 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Text.RegularExpressions;
     using System.Text;
+    using System.Threading;
 
     /// <summary>
     /// Contains methods for dealing with Excel dates.
@@ -403,9 +404,9 @@ namespace NPOI.SS.UserModel
         // avoid re-checking DataUtil.isADateFormat(int, String) if a given format
         // string represents a date format if the same string is passed multiple times.
         // see https://issues.apache.org/bugzilla/show_bug.cgi?id=55611
-        private static int lastFormatIndex = -1;
-        private static String lastFormatString = null;
-        private static bool cached = false;
+        private static readonly ThreadLocal<int> lastFormatIndex = new ThreadLocal<int>(() => -1);
+        private static readonly ThreadLocal<String> lastFormatString = new ThreadLocal<string>(() => null);
+        private static readonly ThreadLocal<bool> cached = new ThreadLocal<bool>(() => false);
         private static string syncIsADateFormat = "IsADateFormat";
         /// <summary>
         /// Given a format ID and its format String, will Check to see if the
@@ -425,25 +426,25 @@ namespace NPOI.SS.UserModel
         {
             lock (syncIsADateFormat)
             {
-                if (formatString != null && formatIndex == lastFormatIndex && formatString.Equals(lastFormatString))
+                if (formatString != null && formatIndex == lastFormatIndex.Value && formatString.Equals(lastFormatString.Value))
                 {
-                    return cached;
+                    return cached.Value;
                 }
                 // First up, Is this an internal date format?
                 if (IsInternalDateFormat(formatIndex))
                 {
-                    lastFormatIndex = formatIndex;
-                    lastFormatString = formatString;
-                    cached = true;
+                    lastFormatIndex.Value = formatIndex;
+                    lastFormatString.Value = formatString;
+                    cached.Value = true;
                     return true;
                 }
 
                 // If we didn't get a real string, it can't be
                 if (formatString == null || formatString.Length == 0)
                 {
-                    lastFormatIndex = formatIndex;
-                    lastFormatString = formatString;
-                    cached = false;
+                    lastFormatIndex.Value = formatIndex;
+                    lastFormatString.Value = formatString;
+                    cached.Value = false;
                     return false;
                 }
 
@@ -488,9 +489,9 @@ namespace NPOI.SS.UserModel
                 //if (Regex.IsMatch(fs, "^\\[([hH]+|[mM]+|[sS]+)\\]"))
                 if (date_ptrn4.IsMatch(fs))
                 {
-                    lastFormatIndex = formatIndex;
-                    lastFormatString = formatString;
-                    cached = true;
+                    lastFormatIndex.Value = formatIndex;
+                    lastFormatString.Value = formatString;
+                    cached.Value = true;
                     return true;
                 }
 
@@ -533,9 +534,9 @@ namespace NPOI.SS.UserModel
                 //return false;
 
                 bool result = date_ptrn3b.IsMatch(fs);
-                lastFormatIndex = formatIndex;
-                lastFormatString = formatString;
-                cached = result;
+                lastFormatIndex.Value = formatIndex;
+                lastFormatString.Value = formatString;
+                cached.Value = result;
                 return result;
             }
         }
