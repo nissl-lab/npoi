@@ -407,7 +407,6 @@ namespace NPOI.SS.UserModel
         private static readonly ThreadLocal<int> lastFormatIndex = new ThreadLocal<int>(() => -1);
         private static readonly ThreadLocal<String> lastFormatString = new ThreadLocal<string>(() => null);
         private static readonly ThreadLocal<bool> cached = new ThreadLocal<bool>(() => false);
-        private static string syncIsADateFormat = "IsADateFormat";
         /// <summary>
         /// Given a format ID and its format String, will Check to see if the
         /// format represents a date format or not.
@@ -424,121 +423,118 @@ namespace NPOI.SS.UserModel
         /// </returns>
         public static bool IsADateFormat(int formatIndex, String formatString)
         {
-            lock (syncIsADateFormat)
+            if (formatString != null && formatIndex == lastFormatIndex.Value && formatString.Equals(lastFormatString.Value))
             {
-                if (formatString != null && formatIndex == lastFormatIndex.Value && formatString.Equals(lastFormatString.Value))
-                {
-                    return cached.Value;
-                }
-                // First up, Is this an internal date format?
-                if (IsInternalDateFormat(formatIndex))
-                {
-                    lastFormatIndex.Value = formatIndex;
-                    lastFormatString.Value = formatString;
-                    cached.Value = true;
-                    return true;
-                }
-
-                // If we didn't get a real string, it can't be
-                if (formatString == null || formatString.Length == 0)
-                {
-                    lastFormatIndex.Value = formatIndex;
-                    lastFormatString.Value = formatString;
-                    cached.Value = false;
-                    return false;
-                }
-
-                String fs = formatString;
-
-                // If it end in ;@, that's some crazy dd/mm vs mm/dd
-                //  switching stuff, which we can ignore
-                fs = Regex.Replace(fs, ";@", "");
-                StringBuilder sb = new StringBuilder(fs.Length);
-                for (int i = 0; i < fs.Length; i++)
-                {
-                    char c = fs[i];
-                    if (i < fs.Length - 1)
-                    {
-                        char nc = fs[i + 1];
-                        if (c == '\\')
-                        {
-                            switch (nc)
-                            {
-                                case '-':
-                                case ',':
-                                case '.':
-                                case ' ':
-                                case '\\':
-                                    // skip current '\' and continue to the next char
-                                    continue;
-                            }
-                        }
-                        else if (c == ';' && nc == '@')
-                        {
-                            i++;
-                            // skip ";@" duplets
-                            continue;
-                        }
-                    }
-                    sb.Append(c);
-                }
-                fs = sb.ToString();
-
-
-                // short-circuit if it indicates elapsed time: [h], [m] or [s]
-                //if (Regex.IsMatch(fs, "^\\[([hH]+|[mM]+|[sS]+)\\]"))
-                if (date_ptrn4.IsMatch(fs))
-                {
-                    lastFormatIndex.Value = formatIndex;
-                    lastFormatString.Value = formatString;
-                    cached.Value = true;
-                    return true;
-                }
-
-                // If it starts with [$-...], then could be a date, but
-                //  who knows what that starting bit Is all about
-                //fs = Regex.Replace(fs, "^\\[\\$\\-.*?\\]", "");
-                fs = date_ptrn1.Replace(fs, "");
-
-                // If it starts with something like [Black] or [Yellow],
-                //  then it could be a date
-                //fs = Regex.Replace(fs, "^\\[[a-zA-Z]+\\]", "");
-                fs = date_ptrn2.Replace(fs, "");
-                // You're allowed something like dd/mm/yy;[red]dd/mm/yy
-                //  which would place dates before 1900/1904 in red
-                // For now, only consider the first one
-                if (fs.IndexOf(';') > 0 && fs.IndexOf(';') < fs.Length - 1)
-                {
-                    fs = fs.Substring(0, fs.IndexOf(';'));
-                }
-                // Ensure it has some date letters in it
-                // (Avoids false positives on the rest of pattern 3)
-                if (!date_ptrn3a.Match(fs).Success)
-                //if (!Regex.Match(fs, "[yYmMdDhHsS]").Success)
-                {
-                    return false;
-                }
-
-                // If we get here, check it's only made up, in any case, of:
-                //  y m d h s - \ / , . : [ ] T
-                // optionally followed by AM/PM
-
-                // Delete any string literals.
-                fs = Regex.Replace(fs, @"""[^""\\]*(?:\\.[^""\\]*)*""", "");
-
-                //if (Regex.IsMatch(fs, @"^[\[\]yYmMdDhHsS\-/,. :\""\\]+0*[ampAMP/]*$"))
-                //{
-                //    return true;
-                //}
-
-                //return false;
-
-                bool result = date_ptrn3b.IsMatch(fs);
+                return cached.Value;
+            }
+            // First up, Is this an internal date format?
+            if (IsInternalDateFormat(formatIndex))
+            {
                 lastFormatIndex.Value = formatIndex;
                 lastFormatString.Value = formatString;
-                cached.Value = result;
-                return result;
+                cached.Value = true;
+                return true;
             }
+
+            // If we didn't get a real string, it can't be
+            if (formatString == null || formatString.Length == 0)
+            {
+                lastFormatIndex.Value = formatIndex;
+                lastFormatString.Value = formatString;
+                cached.Value = false;
+                return false;
+            }
+
+            String fs = formatString;
+
+            // If it end in ;@, that's some crazy dd/mm vs mm/dd
+            //  switching stuff, which we can ignore
+            fs = Regex.Replace(fs, ";@", "");
+            StringBuilder sb = new StringBuilder(fs.Length);
+            for (int i = 0; i < fs.Length; i++)
+            {
+                char c = fs[i];
+                if (i < fs.Length - 1)
+                {
+                    char nc = fs[i + 1];
+                    if (c == '\\')
+                    {
+                        switch (nc)
+                        {
+                            case '-':
+                            case ',':
+                            case '.':
+                            case ' ':
+                            case '\\':
+                                // skip current '\' and continue to the next char
+                                continue;
+                        }
+                    }
+                    else if (c == ';' && nc == '@')
+                    {
+                        i++;
+                        // skip ";@" duplets
+                        continue;
+                    }
+                }
+                sb.Append(c);
+            }
+            fs = sb.ToString();
+
+
+            // short-circuit if it indicates elapsed time: [h], [m] or [s]
+            //if (Regex.IsMatch(fs, "^\\[([hH]+|[mM]+|[sS]+)\\]"))
+            if (date_ptrn4.IsMatch(fs))
+            {
+                lastFormatIndex.Value = formatIndex;
+                lastFormatString.Value = formatString;
+                cached.Value = true;
+                return true;
+            }
+
+            // If it starts with [$-...], then could be a date, but
+            //  who knows what that starting bit Is all about
+            //fs = Regex.Replace(fs, "^\\[\\$\\-.*?\\]", "");
+            fs = date_ptrn1.Replace(fs, "");
+
+            // If it starts with something like [Black] or [Yellow],
+            //  then it could be a date
+            //fs = Regex.Replace(fs, "^\\[[a-zA-Z]+\\]", "");
+            fs = date_ptrn2.Replace(fs, "");
+            // You're allowed something like dd/mm/yy;[red]dd/mm/yy
+            //  which would place dates before 1900/1904 in red
+            // For now, only consider the first one
+            if (fs.IndexOf(';') > 0 && fs.IndexOf(';') < fs.Length - 1)
+            {
+                fs = fs.Substring(0, fs.IndexOf(';'));
+            }
+            // Ensure it has some date letters in it
+            // (Avoids false positives on the rest of pattern 3)
+            if (!date_ptrn3a.Match(fs).Success)
+            //if (!Regex.Match(fs, "[yYmMdDhHsS]").Success)
+            {
+                return false;
+            }
+
+            // If we get here, check it's only made up, in any case, of:
+            //  y m d h s - \ / , . : [ ] T
+            // optionally followed by AM/PM
+
+            // Delete any string literals.
+            fs = Regex.Replace(fs, @"""[^""\\]*(?:\\.[^""\\]*)*""", "");
+
+            //if (Regex.IsMatch(fs, @"^[\[\]yYmMdDhHsS\-/,. :\""\\]+0*[ampAMP/]*$"))
+            //{
+            //    return true;
+            //}
+
+            //return false;
+
+            bool result = date_ptrn3b.IsMatch(fs);
+            lastFormatIndex.Value = formatIndex;
+            lastFormatString.Value = formatString;
+            cached.Value = result;
+            return result;
         }
         /// <summary>
         /// Converts a string of format "YYYY/MM/DD" to its (Excel) numeric equivalent
