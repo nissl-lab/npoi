@@ -685,6 +685,7 @@
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
     <Compile Include="SS\Format\SimpleFraction.cs" />
+    <Compile Include="SS\UserModel\IDataFormat.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
     <Compile Include="SS\Util\ImageUtils.cs">
@@ -1116,7 +1117,6 @@
     <Compile Include="SS\UserModel\ConditionalFormatting.cs" />
     <Compile Include="SS\UserModel\ConditionalFormattingRule.cs" />
     <Compile Include="SS\UserModel\CreationHelper.cs" />
-    <Compile Include="SS\UserModel\DataFormat.cs" />
     <Compile Include="SS\UserModel\DataFormatter.cs" />
     <Compile Include="SS\UserModel\DataValidation.cs" />
     <Compile Include="SS\UserModel\DataValidationConstraint.cs" />
