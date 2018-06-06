@@ -39,7 +39,7 @@ namespace NPOI.Util.Collections
         private readonly Dictionary<T, object> impl = new Dictionary<T, object>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HashSet"/> class.
+        /// Initializes a new instance of the class.
         /// </summary>
 		public HashSet()
 		{
