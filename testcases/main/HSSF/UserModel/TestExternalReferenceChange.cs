@@ -34,7 +34,7 @@ namespace TestCases.HSSF.UserModel
 
         private HSSFWorkbook mainWorkbook;
         private HSSFWorkbook sourceWorkbook;
-        [TestFixtureSetUp]
+        [SetUp]
         protected void SetUp()
         {
             mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);

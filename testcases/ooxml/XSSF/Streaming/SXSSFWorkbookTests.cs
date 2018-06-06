@@ -386,6 +386,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         }
 
         [Test]
+        [Ignore("This takes a long time to run.")]
         public void IfWritingMaxCellsForWorksheetShouldNotThrowOutOfMemoryException()
         {
             Assert.Fail("This takes a long time to run.");
@@ -402,6 +403,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         }
 
         [Test]
+        [Ignore("consume memory")]
         public void IfWorkbookIsSetToUseCompressionShouldUseGZIPDataWriter()
         {
             //Assert.Fail("This takes a long time to run.");
@@ -418,6 +420,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         }
 
         [Test]
+        [Ignore("consume memory")]
         public void IfWriting20WorksheetsWith10000x100CellsShouldNotThrowOutOfMemoryException()
         {
             _objectToTest = new SXSSFWorkbook();
@@ -433,6 +436,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         }
 
         [Test]
+        [Ignore("consume memory")]
         public void IfWriting20WorksheetsWith10000x100CellsUsingGzipShouldNotThrowOutOfMemoryException()
         {
             _objectToTest = new SXSSFWorkbook(null, 100, true);

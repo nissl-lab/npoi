@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using NPOI.HSSF.UserModel;
+using NUnit.Framework;
 
 namespace TestCases
 {
@@ -122,7 +123,7 @@ namespace TestCases
                         + TEST_PROPERTY
                         + "' before running tests");
 
-            string dataDir = Path.Combine(dataDirName, _moduleDir);
+            string dataDir = Path.Combine(TestContext.CurrentContext.TestDirectory,dataDirName, _moduleDir);
             if (!Directory.Exists(dataDir))
             {
                 throw new IOException("Data dir '" + dataDir

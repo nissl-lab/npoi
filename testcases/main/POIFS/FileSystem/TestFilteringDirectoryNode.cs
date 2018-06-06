@@ -37,7 +37,7 @@ namespace TestCases.POIFS.FileSystem
         private DocumentEntry eRoot;
         private DocumentEntry eA;
         private DocumentEntry eAA;
-        [TestFixtureSetUp]
+        [SetUp]
         protected void setUp()
         {
             fs = new POIFSFileSystem();

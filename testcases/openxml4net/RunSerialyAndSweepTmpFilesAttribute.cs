@@ -19,6 +19,8 @@ using System;
 using System.IO;
 using System.Threading;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+
 namespace TestCases
 {
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
@@ -28,24 +30,24 @@ namespace TestCases
 
         public ActionTargets Targets { get { return ActionTargets.Test; } }
 
-        public void BeforeTest(TestDetails testDetails)
-        {
-            Monitor.Enter(syncSequential);
-            SweepTemporaryFiles();
-        }
-
-        public void AfterTest(TestDetails testDetails)
-        {
-            SweepTemporaryFiles();
-            Monitor.Exit(syncSequential);
-        }
-
         private static void SweepTemporaryFiles()
         {
             foreach (var tempFilePath in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp"))
             {
                 File.Delete(tempFilePath);
             }
+        }
+
+        public void BeforeTest(ITest test)
+        {
+            Monitor.Enter(syncSequential);
+            SweepTemporaryFiles();
+        }
+
+        public void AfterTest(ITest test)
+        {
+            SweepTemporaryFiles();
+            Monitor.Exit(syncSequential);
         }
     }
 }

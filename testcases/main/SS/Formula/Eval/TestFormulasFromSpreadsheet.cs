@@ -147,7 +147,7 @@ namespace TestCases.SS.Formula.Eval
             }
         }
 
-        [TestFixtureSetUp]
+        [SetUp]
         protected void SetUp()
         {
             if (workbook == null)

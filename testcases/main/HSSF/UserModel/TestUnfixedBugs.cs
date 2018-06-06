@@ -41,7 +41,7 @@ namespace TestCases.HSSF.UserModel
     {
         //In POI bugzilla, this bug is taged as "RESOLVED WON'T FIX"
         [Test]
-        [Ignore] // because of WON'T FIX
+        [Ignore("WON'T FIX")]
         public void Test43493()
         {
             // Has crazy corrupt sub-records on
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        [Ignore] //TestUnfixedBugs
+        [Ignore("TestUnfixedBugs")] 
         public void Test49612()
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49612.xls");

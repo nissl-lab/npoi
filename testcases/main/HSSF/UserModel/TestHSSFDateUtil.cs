@@ -199,7 +199,7 @@ namespace TestCases.HSSF.UserModel
         /**
          * Tests that we deal with time-zones properly
          */
-        [Ignore]
+        [Ignore("always fail")]
         public void TestCalendarConversion()
         {
             DateTime date = new DateTime(2002, 1, 1, 12, 1, 1);
