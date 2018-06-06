@@ -212,11 +212,11 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             get
             {
-                return GetDelete().val == 1;
+                return GetDelete().val == 0;
             }
             set
             {
-                GetDelete().val = value ? 1 : 0;
+                GetDelete().val = value ? 0 : 1;
             }
         }
 

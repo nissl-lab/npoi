@@ -676,6 +676,8 @@
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
+    <Compile Include="SS\UserModel\Charts\BarChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
     <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />

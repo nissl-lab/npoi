@@ -126,6 +126,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
 
         [XmlElement(Order = 0)]
         public CT_BarDir barDir
@@ -256,6 +260,43 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_BarGrouping AddNewGrouping()
+        {
+            this.groupingField = new CT_BarGrouping();
+            return this.groupingField;
+        }
+        public CT_BarSer AddNewSer()
+        {
+            CT_BarSer newSer = new CT_BarSer();
+            if (this.serField == null)
+            {
+                this.serField = new List<CT_BarSer>();
+            }
+            this.serField.Add(newSer);
+            return newSer;
+        }
+
+        public CT_Boolean AddNewVaryColors()
+        {
+            this.varyColorsField = new CT_Boolean();
+            return this.varyColorsField;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            CT_UnsignedInt si = new CT_UnsignedInt();
+            if (this.axIdField == null)
+                this.axIdField = new List<CT_UnsignedInt>();
+            axIdField.Add(si);
+            return si;
+        }
+
+        public CT_BarDir AddNewBarDir()
+        {
+            this.barDirField = new CT_BarDir();
+            return this.barDirField;
         }
     }
 
@@ -707,6 +748,30 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public CT_UnsignedInt AddNewIdx()
+        {
+            this.idxField = new CT_UnsignedInt();
+            return this.idxField;
+        }
+
+        public CT_UnsignedInt AddNewOrder()
+        {
+            this.orderField = new CT_UnsignedInt();
+            return this.orderField;
+        }
+
+        public CT_AxDataSource AddNewCat()
+        {
+            this.catField = new CT_AxDataSource();
+            return this.catField;
+        }
+
+        public CT_NumDataSource AddNewVal()
+        {
+            this.valField = new CT_NumDataSource();
+            return this.valField;
+        }
     }
 
 
@@ -750,6 +815,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.varyColorsField = new CT_Boolean();
             this.groupingField = new CT_BarGrouping();
             this.barDirField = new CT_BarDir();
+        }
+
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
         }
 
         [XmlElement(Order = 0)]

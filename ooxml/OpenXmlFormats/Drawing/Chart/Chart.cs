@@ -14,6 +14,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.ComponentModel;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
     using System.Text;
@@ -4218,7 +4219,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_UnsignedInt crossAxField;
 
-        private object itemField;
+        //private object itemField;
 
         private CT_Boolean autoField;
 
@@ -4275,8 +4276,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     ctObj.txPr = CT_TextBody.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "crossAx")
                     ctObj.crossAx = CT_UnsignedInt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "Item")
-                    ctObj.Item = new Object();
+                else if (childNode.LocalName == "crosses")
+                    ctObj.crosses = CT_Crosses.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "auto")
                     ctObj.auto = CT_Boolean.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "lblOffset")
@@ -4331,8 +4332,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.txPr.Write(sw, "txPr");
             if (this.crossAx != null)
                 this.crossAx.Write(sw, "crossAx");
-            if (this.Item != null)
-                sw.Write("<Item/>");
+            if (this.crosses != null)
+                this.crosses.Write(sw, "crosses");
             if (this.auto != null)
                 this.auto.Write(sw, "auto");
             if (this.lblOffset != null)
@@ -4540,18 +4541,20 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        [XmlElement("crosses", typeof(CT_Crosses), Order = 14)]
-        [XmlElement("crossesAt", typeof(CT_Double), Order = 14)]
-        public object Item
+        CT_Double crossesAtField;
+        [XmlElement(Order = 14)]
+        public CT_Double crossesAt
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            get { return this.crossesAtField; }
+            set { this.crossesAtField = value; }
+        }
+
+        CT_Crosses crossesField;
+        [XmlElement(Order = 14)]
+        public CT_Crosses crosses
+        {
+            get { return this.crossesField; }
+            set { this.crossesField = value; }
         }
 
         [XmlElement(Order = 15)]
@@ -4656,6 +4659,71 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_NumFmt AddNewNumFmt()
+        {
+            this.numFmtField = new CT_NumFmt();
+            return numFmtField;
+        }
+
+        public bool IsSetNumFmt()
+        {
+            return this.numFmtField != null;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            this.axIdField = new CT_UnsignedInt();
+            return this.axIdField;
+        }
+
+        public CT_AxPos AddNewAxPos()
+        {
+            this.axPosField = new CT_AxPos();
+            return this.axPosField;
+        }
+
+        public CT_Scaling AddNewScaling()
+        {
+            this.scalingField = new CT_Scaling();
+            return this.scalingField;
+        }
+
+        public CT_Crosses AddNewCrosses()
+        {
+            this.crossesField = new CT_Crosses();
+            return this.crossesField;
+        }
+
+        public CT_UnsignedInt AddNewCrossAx()
+        {
+            this.crossAxField = new CT_UnsignedInt();
+            return this.crossAxField;
+        }
+
+        public CT_TickLblPos AddNewTickLblPos()
+        {
+            this.tickLblPosField = new CT_TickLblPos();
+            return this.tickLblPosField;
+        }
+
+        public CT_Boolean AddNewDelete()
+        {
+            this.deleteField = new CT_Boolean();
+            return this.deleteField;
+        }
+
+        public CT_TickMark AddNewMajorTickMark()
+        {
+            this.majorTickMarkField = new CT_TickMark();
+            return this.majorTickMarkField;
+        }
+
+        public CT_TickMark AddNewMinorTickMark()
+        {
+            this.minorTickMarkField = new CT_TickMark();
+            return this.minorTickMarkField;
         }
     }
 
@@ -9512,6 +9580,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
+
         [XmlElement("ser", Order = 1)]
         public List<CT_SurfaceSer> ser
         {
@@ -10281,6 +10354,27 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.scatterChartField.Add(newobj);
             return newobj;
         }
+
+        public int GetAllSeriesCount()
+        {
+            return (surfaceChartField == null ? 0 : surfaceChartField.Select(x=>x.GetSeriesCount()).Sum())
+                + (lineChartField == null ? 0 : lineChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (bubbleChartField == null ? 0 : bubbleChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (bar3DChartField == null ? 0 : bar3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (area3DChartField == null ? 0 : area3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (doughnutChartField == null ? 0 : doughnutChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (pie3DChartField == null ? 0 : pie3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (line3DChartField == null ? 0 : line3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (surface3DChartField == null ? 0 : surface3DChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (barChartField == null ? 0 : barChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (radarChartField == null ? 0 : radarChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (areaChartField == null ? 0 : areaChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (scatterChartField == null ? 0 : scatterChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (ofPieChartField == null ? 0 : ofPieChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (pieChartField == null ? 0 : pieChartField.Select(x => x.GetSeriesCount()).Sum())
+                + (stockChartField == null ? 0 : stockChartField.Select(x => x.GetSeriesCount()).Sum());
+        }
+
         List<CT_SurfaceChart> surfaceChartField;
         public List<CT_SurfaceChart> surfaceChart
         {
@@ -10482,6 +10576,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
+        public CT_BarChart AddNewBarChart()
+        {
+            CT_BarChart ctchart = new CT_BarChart();
+            if (this.barChartField == null)
+            {
+                this.barChartField = new List<CT_BarChart>();
+            }
+            this.barChartField.Add(ctchart);
+            return ctchart;
+        }
+
         public CT_LineChart AddNewLineChart()
         {
             CT_LineChart ctchart = new CT_LineChart();
@@ -10497,6 +10602,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if(this.catAxField==null)
                 this.catAxField = new List<CT_CatAx>();
             this.catAxField.Add(newax);
+            return newax;
+        }
+
+        public CT_DateAx AddNewDateAx()
+        {
+            CT_DateAx newax = new CT_DateAx();
+            if (this.dateAxField == null)
+            {
+                this.dateAxField = new List<CT_DateAx>();
+            }
+            this.dateAxField.Add(newax);
             return newax;
         }
     }

@@ -13,19 +13,19 @@ namespace NPOI.XSSF.UserModel.Charts
     /// </summary>
     /// <typeparam name="Tx"></typeparam>
     /// <typeparam name="Ty"></typeparam>
-    public class XSSFLineChartData<Tx, Ty> : ILineChartData<Tx,Ty>
+    public class XSSFBarChartData<Tx, Ty> : IBarChartData<Tx, Ty>
     {
         /**
          * List of all data series.
          */
-        private List<ILineChartSeries<Tx, Ty>> series;
+        private List<IBarChartSeries<Tx, Ty>> series;
 
-        public XSSFLineChartData()
+        public XSSFBarChartData()
         {
-            series = new List<ILineChartSeries<Tx, Ty>>();
+            series = new List<IBarChartSeries<Tx, Ty>>();
         }
 
-        public class Series:AbstractXSSFChartSeries, ILineChartSeries<Tx,Ty> 
+        public class Series : AbstractXSSFChartSeries, IBarChartSeries<Tx, Ty>
         {
             private int id;
             private int order;
@@ -35,7 +35,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
             internal Series(int id, int order,
                             IChartDataSource<Tx> categories,
-                            IChartDataSource<Ty> values) 
+                            IChartDataSource<Ty> values)
             {
                 this.id = id;
                 this.order = order;
@@ -61,44 +61,51 @@ namespace NPOI.XSSF.UserModel.Charts
                 fillColor[2] = color.B;
             }
 
-            public IChartDataSource<Tx> GetCategoryAxisData() {
+            public IChartDataSource<Tx> GetCategoryAxisData()
+            {
                 return categories;
             }
 
-            public IChartDataSource<Ty> GetValues() {
+            public IChartDataSource<Ty> GetValues()
+            {
                 return values;
             }
 
-            internal void AddToChart(CT_LineChart ctLineChart) {
-                CT_LineSer ctLineSer = ctLineChart.AddNewSer();
-                CT_Grouping ctGrouping = ctLineChart.AddNewGrouping();
-                ctGrouping.val = ST_Grouping.standard;
-                ctLineSer.AddNewIdx().val= (uint)id;
-                ctLineSer.AddNewOrder().val = (uint)order;
+            internal void AddToChart(CT_BarChart ctBarChart)
+            {
+                CT_BarSer ctBarSer = ctBarChart.AddNewSer();
+                CT_BarGrouping ctGrouping = ctBarChart.AddNewGrouping();
+                ctGrouping.val = ST_BarGrouping.clustered;
+                ctBarSer.AddNewIdx().val = (uint)id;
+                ctBarSer.AddNewOrder().val = (uint)order;
+                CT_Boolean ctNoInvertIfNegative = new CT_Boolean();
+                ctNoInvertIfNegative.val = 0;
+                ctBarSer.invertIfNegative = ctNoInvertIfNegative;
 
-                // No marker symbol on the chart line.
-                ctLineSer.AddNewMarker().AddNewSymbol().val = ST_MarkerStyle.none;
+                CT_BarDir ctBarDir = ctBarChart.AddNewBarDir();
+                ctBarDir.val = ST_BarDir.col;
 
-                CT_AxDataSource catDS = ctLineSer.AddNewCat();
+                CT_AxDataSource catDS = ctBarSer.AddNewCat();
                 XSSFChartUtil.BuildAxDataSource(catDS, categories);
-                CT_NumDataSource valueDS = ctLineSer.AddNewVal();
+                CT_NumDataSource valueDS = ctBarSer.AddNewVal();
                 XSSFChartUtil.BuildNumDataSource(valueDS, values);
 
-                if (IsTitleSet) {
-                    ctLineSer.tx = GetCTSerTx();
+                if (IsTitleSet)
+                {
+                    ctBarSer.tx = GetCTSerTx();
                 }
 
                 if (fillColor != null)
                 {
-                    ctLineSer.spPr = new OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
-                    CT_LineProperties ctLineProperties = ctLineSer.spPr.AddNewLn();
-                    CT_SolidColorFillProperties ctSolidColorFillProperties = ctLineProperties.AddNewSolidFill();
+                    ctBarSer.spPr = new OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
+                    CT_SolidColorFillProperties ctSolidColorFillProperties = ctBarSer.spPr.AddNewSolidFill();
                     CT_SRgbColor ctSRgbColor = ctSolidColorFillProperties.AddNewSrgbClr();
                     ctSRgbColor.val = fillColor;
                 }
             }
         }
-        public ILineChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categoryAxisData, IChartDataSource<Ty> values)
+
+        public IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categoryAxisData, IChartDataSource<Ty> values)
         {
             if (!values.IsNumeric)
             {
@@ -110,7 +117,7 @@ namespace NPOI.XSSF.UserModel.Charts
             return newSeries;
         }
 
-        public List<ILineChartSeries<Tx, Ty>> GetSeries()
+        public List<IBarChartSeries<Tx, Ty>> GetSeries()
         {
             return series;
         }
@@ -125,20 +132,20 @@ namespace NPOI.XSSF.UserModel.Charts
             XSSFChart xssfChart = (XSSFChart)chart;
             CT_PlotArea plotArea = xssfChart.GetCTChart().plotArea;
             int allSeriesCount = plotArea.GetAllSeriesCount();
-            CT_LineChart lineChart = plotArea.AddNewLineChart();
-            lineChart.AddNewVaryColors().val = 0;
+            CT_BarChart barChart = plotArea.AddNewBarChart();
+            barChart.AddNewVaryColors().val = 0;
 
-            for(int i = 0; i < series.Count; ++i)
+            for (int i = 0; i < series.Count; ++i)
             {
                 Series s = (Series)series[i];
                 s.SetId(allSeriesCount + i);
                 s.SetOrder(allSeriesCount + i);
-                s.AddToChart(lineChart);
+                s.AddToChart(barChart);
             }
 
             foreach (IChartAxis ax in axis)
             {
-                lineChart.AddNewAxId().val = (uint)ax.Id;
+                barChart.AddNewAxId().val = (uint)ax.Id;
             }
         }
     }

@@ -70,6 +70,16 @@ namespace NPOI.XSSF.UserModel.Charts
                 this.ys = ys;
             }
 
+            public void SetId(int id)
+            {
+                this.id = id;
+            }
+
+            public void SetOrder(int order)
+            {
+                this.order = order;
+            }
+
             /**
              * Returns data source used for X axis values.
              * @return data source used for X axis values
@@ -136,11 +146,15 @@ namespace NPOI.XSSF.UserModel.Charts
 
             XSSFChart xssfChart = (XSSFChart)chart;
             CT_PlotArea plotArea = xssfChart.GetCTChart().plotArea;
+            int allSeriesCount = plotArea.GetAllSeriesCount();
             CT_ScatterChart scatterChart = plotArea.AddNewScatterChart();
             AddStyle(scatterChart);
 
-            foreach (Series s in series)
+            for (int i = 0; i < series.Count; ++i)
             {
+                Series s = (Series)series[i];
+                s.SetId(allSeriesCount + i);
+                s.SetOrder(allSeriesCount + i);
                 s.AddToChart(scatterChart);
             }
 

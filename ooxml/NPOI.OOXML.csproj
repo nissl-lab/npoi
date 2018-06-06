@@ -153,6 +153,7 @@
     <Compile Include="XSSF\Streaming\Values\StringValue.cs" />
     <Compile Include="XSSF\Streaming\Values\Value.cs" />
     <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSeries.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFBarChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs">
       <SubType>Code</SubType>
@@ -164,6 +165,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSSF\UserModel\Charts\XSSFChartUtil.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFDateAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFLineChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs">
       <SubType>Code</SubType>

@@ -524,6 +524,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.serField.Add(ser);
             return ser;
         }
+
+        public int GetSeriesCount()
+        {
+            return this.serField == null ? 0 : this.serField.Count;
+        }
+
         [XmlElement(Order = 0)]
         public CT_ScatterStyle scatterStyle
         {
