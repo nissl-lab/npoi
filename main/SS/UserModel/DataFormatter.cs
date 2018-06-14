@@ -76,9 +76,6 @@ namespace NPOI.SS.UserModel
         /** Pattern to find a number FormatBase: "0" or  "#" */
         private static string numPattern = "[0#]+";
 
-        /** Pattern to find days of week as text "ddd...." */
-        private static string daysAsText = "([d]{3,})";
-
         /** Pattern to find "AM/PM" marker */
         private static string amPmPattern = "((A|P)[M/P]*)";
 
@@ -415,14 +412,6 @@ namespace NPOI.SS.UserModel
                 formatStr = Regex.Replace(formatStr, amPmPattern, "@");
             }
             formatStr = formatStr.Replace("@", "tt");
-
-
-            MatchCollection match = Regex.Matches(formatStr, daysAsText);
-            if (match.Count > 0)
-            {
-                string replacement = match[0].Groups[0].Value.ToUpper().Replace("D", "E");
-                formatStr = Regex.Replace(formatStr, daysAsText, replacement);
-            }
 
 
             // Convert excel date FormatBase to SimpleDateFormat.
