@@ -118,7 +118,7 @@ namespace NPOI.SS.UserModel
         private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
 
         /** <em>General</em> FormatBase for decimal numbers. */
-        private static DecimalFormat generalDecimalNumFormat = new DecimalFormat("#.##########");
+        private static DecimalFormat generalDecimalNumFormat = new DecimalFormat("0.##########");
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
