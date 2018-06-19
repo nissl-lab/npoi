@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 using NPOI.XSSF.Model;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel.Extensions;
@@ -22,7 +23,11 @@ using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using System.Drawing;
+using System.IO;
 using NPOI.HSSF.Util;
+using NPOI.Util;
+using TestCases.HSSF.UserModel;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -1050,6 +1055,40 @@ namespace NPOI.XSSF.UserModel
             wbBack.Close();
 
             wb.Close();
+        }
+
+        [Test]
+        public void TestDataStyle()
+
+        {
+            string filepath = TempFile.GetTempFilePath("TestWriteSheetStyleDate",
+                ".xls");
+            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet s = wb.CreateSheet();
+            ICellStyle tempCellStyle = wb.CreateCellStyle();
+            IRow row = s.CreateRow(0);
+
+
+            var dataFormat = wb.CreateDataFormat();
+            tempCellStyle.DataFormat = dataFormat.GetFormat("m/d/yy");
+
+            // with Date:
+            ICell cell = row.CreateCell(1);
+            cell.CellStyle = tempCellStyle;
+            cell.SetCellValue(DateTime.Now);
+
+            // with Calendar:
+            cell = row.CreateCell(2);
+            cell.CellStyle = tempCellStyle;
+            cell.SetCellValue(DateTime.Now);
+
+            wb.Write(out1);
+            out1.Close();
+
+            Assert.AreEqual(0, s.LastRowNum, "LAST ROW ");
+            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
+
         }
 
     }
