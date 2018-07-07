@@ -121,7 +121,7 @@ namespace NPOI.XSSF.Model
                     foreach (CT_NumFmt nfmt in ctfmts.numFmt)
                     {
                         int formatId = (int)nfmt.numFmtId;
-                        numberFormats.Add(formatId, nfmt.formatCode);
+                        numberFormats[formatId] = nfmt.formatCode;
                         usedNumberFormats[formatId] = true;
                     }
                 }
@@ -671,8 +671,3 @@ namespace NPOI.XSSF.Model
         }
     }
 }
-
-
-
-
-
