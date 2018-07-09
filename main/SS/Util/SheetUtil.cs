@@ -159,6 +159,7 @@ namespace NPOI.SS.Util
             for (int i = 0; i < sourceSheet.NumMergedRegions; i++)
             {
                 CellRangeAddress cellRangeAddress = sourceSheet.GetMergedRegion(i);
+				if (cellRangeAddress == null) continue;
                 if (cellRangeAddress.FirstRow == sourceRow.RowNum)
                 {
                     CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
@@ -185,10 +186,8 @@ namespace NPOI.SS.Util
             {
                 sheet.ShiftRows(targetRowIndex, sheet.LastRowNum, 1);
             }
-            else
-            {
-                newRow = sheet.CreateRow(targetRowIndex);
-            }
+			//创建用来复制的新行
+            newRow = sheet.CreateRow(targetRowIndex);
 
             // Loop through source columns to add to new row
             for (int i = sourceRow.FirstCellNum; i < sourceRow.LastCellNum; i++)
@@ -252,6 +251,7 @@ namespace NPOI.SS.Util
             for (int i = 0; i < sheet.NumMergedRegions; i++)
             {
                 CellRangeAddress cellRangeAddress = sheet.GetMergedRegion(i);
+				if (cellRangeAddress == null) continue;
                 if (cellRangeAddress.FirstRow == sourceRow.RowNum)
                 {
                     CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
