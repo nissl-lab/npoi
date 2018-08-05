@@ -193,13 +193,8 @@ namespace NPOI.XWPF.UserModel
         /// <param name="rgbColor">Border Color</param>
         public void SetBorderBottom(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
         {
-            CT_TcPr ctTcPr = null;
-            if (!GetCTTc().IsSetTcPr())
-            {
-                ctTcPr = GetCTTc().AddNewTcPr();
-            }
-            
-            CT_TcBorders borders = ctTcPr.AddNewTcBorders();
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
             borders.bottom = CreateBorder(type, size, space, rgbColor);
         }
 
@@ -212,12 +207,8 @@ namespace NPOI.XWPF.UserModel
         /// <param name="rgbColor">Border Color</param>
         public void SetBorderTop(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
         {
-            CT_TcPr ctTcPr = null;
-            if (!GetCTTc().IsSetTcPr())
-            {
-                ctTcPr = GetCTTc().AddNewTcPr();
-            }
-            CT_TcBorders borders = ctTcPr.AddNewTcBorders();
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
             borders.top = CreateBorder(type, size, space, rgbColor);
         }
 
@@ -230,12 +221,8 @@ namespace NPOI.XWPF.UserModel
         /// <param name="rgbColor">Border Color</param>
         public void SetBorderLeft(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
         {
-            CT_TcPr ctTcPr = null;
-            if (!GetCTTc().IsSetTcPr())
-            {
-                ctTcPr = GetCTTc().AddNewTcPr();
-            }
-            CT_TcBorders borders = ctTcPr.AddNewTcBorders();
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
             borders.left = CreateBorder(type, size, space, rgbColor);
         }
 
@@ -248,12 +235,8 @@ namespace NPOI.XWPF.UserModel
         /// <param name="rgbColor">Border Color</param>
         public void SetBorderRight(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
         {
-            CT_TcPr ctTcPr = null;
-            if (!GetCTTc().IsSetTcPr())
-            {
-                ctTcPr = GetCTTc().AddNewTcPr();
-            }
-            CT_TcBorders borders = ctTcPr.AddNewTcBorders();
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
             borders.right = CreateBorder(type, size, space, rgbColor);
         }
 
