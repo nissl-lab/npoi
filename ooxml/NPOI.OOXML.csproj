@@ -303,6 +303,7 @@
     <Compile Include="XWPF\Usermodel\XWPFLatentStyles.cs" />
     <Compile Include="XWPF\Usermodel\XWPFNum.cs" />
     <Compile Include="XWPF\Usermodel\XWPFNumbering.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFOMath.cs" />
     <Compile Include="XWPF\Usermodel\XWPFParagraph.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPicture.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="XWPF\Usermodel\XWPFSDTContent.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSDTContentCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSharedRun.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />

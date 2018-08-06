@@ -1686,15 +1686,13 @@ namespace NPOI.OpenXmlFormats.Shared
         private string spaceField;
 
         private string valueField;
-        private string textField;
         public static CT_Text1 Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Text1 ctObj = new CT_Text1();
             ctObj.space = XmlHelper.ReadString(node.Attributes["m:space"]);
-            ctObj.Value = XmlHelper.ReadString(node.Attributes["m:Value"]);
-            ctObj.textField = node.InnerText;
+            ctObj.Value = node.InnerText;
             return ctObj;
         }
 
@@ -1704,10 +1702,9 @@ namespace NPOI.OpenXmlFormats.Shared
         {
             sw.Write(string.Format("<m:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "m:space", this.space);
-            XmlHelper.WriteAttribute(sw, "m:Value", this.Value);
             sw.Write(">");
-            if(this.textField!=null)
-                sw.Write(XmlHelper.EncodeXml(this.textField));
+            if(this.valueField != null)
+                sw.Write(XmlHelper.EncodeXml(this.valueField));
             sw.Write(string.Format("</m:{0}>", nodeName));
         }
 
@@ -2055,6 +2052,88 @@ namespace NPOI.OpenXmlFormats.Shared
             sw.Write(string.Format("</m:{0}>", nodeName));
         }
 
+        public CT_Text1 AddNewT()
+        {
+            return AddNewObject<CT_Text1>(ItemsChoiceType6.t);
+        }
+
+        private T AddNewObject<T>(ItemsChoiceType6 type) where T : class, new()
+        {
+            T t = new T();
+            lock (this)
+            {
+                this.itemsElementNameField.Add(type);
+                this.itemsField.Add(t);
+            }
+            return t;
+        }
+
+        public int SizeOfTArray()
+        {
+            return SizeOfArray(ItemsChoiceType6.t);
+        }
+
+        private int SizeOfArray(ItemsChoiceType6 type)
+        {
+            lock (this)
+            {
+                int size = 0;
+                for (int i = 0; i < itemsElementNameField.Count; i++)
+                {
+                    if (itemsElementNameField[i] == type)
+                        size++;
+                }
+                return size;
+            }
+        }
+
+        public CT_Text1 GetTArray(int pos)
+        {
+            return GetObjectArray<CT_Text1>(pos, ItemsChoiceType6.t);
+        }
+
+        private T GetObjectArray<T>(int p, ItemsChoiceType6 type) where T : class
+        {
+            lock (this)
+            {
+                int pos = GetObjectIndex(type, p);
+                if (pos < 0 || pos >= this.itemsField.Count)
+                    return null;
+                return itemsField[pos] as T;
+            }
+        }
+
+        private int GetObjectIndex(ItemsChoiceType6 type, int p)
+        {
+            int index = -1;
+            int pos = 0;
+            for (int i = 0; i < itemsElementNameField.Count; i++)
+            {
+                if (itemsElementNameField[i] == type)
+                {
+                    if (pos == p)
+                    {
+                        index = i;
+                        break;
+                    }
+                    else
+                        pos++;
+                }
+            }
+            return index;
+        }
+
+        public bool IsSetRPr1()
+        {
+            return this.rPr1Field != null;
+        }
+
+        public CT_RPr AddNewRPr1()
+        {
+            if (this.rPr1Field == null)
+                this.rPr1Field = new CT_RPr();
+            return this.rPr1Field;
+        }
 
         [XmlElement("t", typeof(CT_Text1), Order = 2)]
         [XmlElement("annotationRef", typeof(CT_Empty), Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", Order = 2)]
@@ -7441,6 +7520,17 @@ namespace NPOI.OpenXmlFormats.Shared
                 }
             }
             return ctObj;
+        }
+
+        public CT_R AddNewR()
+        {
+            CT_R r = new CT_R();
+            lock (this)
+            {
+                itemsField.Add(r);
+                itemsElementNameField.Add(ItemsChoiceType8.r);
+            }
+            return r;
         }
 
         internal void Write(StreamWriter sw, string nodeName)

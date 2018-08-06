@@ -371,6 +371,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return r;
         }
 
+        public CT_OMath AddNewOMath()
+        {
+            CT_OMath oMath = new CT_OMath();
+            lock (this)
+            {
+                itemsField.Add(oMath);
+                itemsElementNameField.Add(ParagraphItemsChoiceType.oMath);
+            }
+            return oMath;
+        }
+
         [XmlElement("ItemsElementName", Order = 2)]
         [XmlIgnore]
         public List<ParagraphItemsChoiceType> ItemsElementName

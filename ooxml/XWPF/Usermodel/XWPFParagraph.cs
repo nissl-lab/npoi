@@ -23,13 +23,15 @@ namespace NPOI.XWPF.UserModel
     using NPOI.Util;
     using System.Collections;
     using NPOI.WP.UserModel;
+    using S=NPOI.OpenXmlFormats.Shared;
+
     /**
-     * <p>A Paragraph within a Document, Table, Header etc.</p> 
-     * 
-     * <p>A paragraph has a lot of styling information, but the
-     *  actual text (possibly along with more styling) is held on
-     *  the child {@link XWPFRun}s.</p>
-     */
+* <p>A Paragraph within a Document, Table, Header etc.</p> 
+* 
+* <p>A paragraph has a lot of styling information, but the
+*  actual text (possibly along with more styling) is held on
+*  the child {@link XWPFRun}s.</p>
+*/
     public class XWPFParagraph : IBodyElement, IRunBody, ISDTContents, IParagraph
     {
         private CT_P paragraph;
@@ -38,6 +40,8 @@ namespace NPOI.XWPF.UserModel
         protected XWPFDocument document;
         protected List<XWPFRun> runs;
         protected List<IRunElement> iRuns;
+
+        protected List<XWPFOMath> oMaths;
 
         private StringBuilder footnoteText = new StringBuilder();
 
@@ -57,6 +61,9 @@ namespace NPOI.XWPF.UserModel
             iRuns = new List<IRunElement>();
 
             BuildRunsInOrderFromXml(paragraph.Items);
+
+            oMaths = new List<XWPFOMath>();
+            BuildOMathsInOrderFromXml(paragraph.Items);
             // Look for bits associated with the runs
             foreach (XWPFRun run in runs)
             {
@@ -170,6 +177,17 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        private void BuildOMathsInOrderFromXml(ArrayList items)
+        {
+            foreach (object o in items)
+            {
+                if(o is S.CT_OMath)
+                {
+                    oMaths.Add(new XWPFOMath(o as S.CT_OMath, this));
+                }
+            }
+        }
+
 
         internal CT_P GetCTP()
         {
@@ -193,6 +211,14 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 return iRuns;
+            }
+        }
+
+        public IList<XWPFOMath> OMaths
+        {
+            get
+            {
+                return oMaths.AsReadOnly();
             }
         }
 
@@ -1338,6 +1364,18 @@ namespace NPOI.XWPF.UserModel
             runs.Add(xwpfRun);
             iRuns.Add(xwpfRun);
             return xwpfRun;
+        }
+
+        /**
+         * Appends a new OMath to this paragraph
+         *
+         * @return a new text run
+         */
+        public XWPFOMath CreateOMath()
+        {
+            XWPFOMath oMath = new XWPFOMath(paragraph.AddNewOMath(), this);
+            oMaths.Add(oMath);            
+            return oMath;
         }
 
         /**
