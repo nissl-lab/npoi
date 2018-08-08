@@ -24,58 +24,12 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Shared;
     using NPOI.XWPF.Usermodel;
 
-    public class XWPFOMath : IRunBody
+    public class XWPFOMath : MathContainer
     {
-        protected CT_OMath oMath;
-        protected IRunBody parent;
-
-        protected List<XWPFSharedRun> runs;
-        protected XWPFDocument document;
-
-        public XWPFOMath(CT_OMath oMath, IRunBody p)
+        protected CT_OMath oMath { get { return (CT_OMath)container; } }
+        
+        public XWPFOMath(CT_OMath oMath, IRunBody p):base(oMath, p)
         {
-            this.oMath = oMath;
-            this.parent = p;
-            this.document = p.Document;
-
-            runs = new List<XWPFSharedRun>();
-
-            BuildRunsInOrderFromXml(oMath.Items);
         }
-
-        public XWPFDocument Document
-        {
-            get { return document; }
-        }
-
-        public POIXMLDocumentPart Part { get { return parent.Part; } }
-
-        private void BuildRunsInOrderFromXml(ArrayList items)
-        {
-            foreach (object o in items)
-            {
-                if (o is CT_R)
-                {
-                    runs.Add(new XWPFSharedRun(o as CT_R, this));
-                }
-            }
-        }
-
-        public XWPFSharedRun CreateRun()
-        {
-            XWPFSharedRun run = new XWPFSharedRun(oMath.AddNewR(), this);
-            runs.Add(run);
-            return run;
-        }
-
-        public IList<XWPFSharedRun> Runs
-        {
-            get
-            {
-                return runs.AsReadOnly();
-            }
-        }
-
-
     }
 }

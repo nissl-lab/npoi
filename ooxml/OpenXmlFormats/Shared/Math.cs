@@ -2578,7 +2578,7 @@ namespace NPOI.OpenXmlFormats.Shared
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMathArg
+    public class CT_OMathArg : IOMathContainer
     {
 
         private CT_OMathArgPr argPrField;
@@ -2939,6 +2939,61 @@ namespace NPOI.OpenXmlFormats.Shared
 
             }
             return ctObj;
+        }
+
+        public CT_Acc AddNewAcc()
+        {
+            CT_Acc acc = new CT_Acc();
+            lock (this)
+            {
+                itemsField.Add(acc);
+                itemsElementNameField.Add(ItemsChoiceType7.acc);
+            }
+            return acc;
+        }
+
+        public CT_F AddNewF()
+        {
+            CT_F f = new CT_F();
+            lock (this)
+            {
+                itemsField.Add(f);
+                itemsElementNameField.Add(ItemsChoiceType7.f);
+            }
+            return f;
+        }
+
+        public CT_Nary AddNewNary()
+        {
+            CT_Nary nary = new CT_Nary();
+            lock (this)
+            {
+                itemsField.Add(nary);
+                itemsElementNameField.Add(ItemsChoiceType7.nary);
+            }
+            return nary;
+        }
+
+        public CT_R AddNewR()
+        {
+            CT_R r = new CT_R();
+            lock (this)
+            {
+                itemsField.Add(r);
+                itemsElementNameField.Add(ItemsChoiceType7.r);
+            }
+            return r;
+        }
+
+        public CT_SSub AddNewSSub()
+        {
+            CT_SSub sSub = new CT_SSub();
+            lock (this)
+            {
+                itemsField.Add(sSub);
+                itemsElementNameField.Add(ItemsChoiceType7.sSub);
+            }
+            return sSub;
         }
 
         internal void Write(StreamWriter sw, string nodeName)
@@ -7199,7 +7254,7 @@ namespace NPOI.OpenXmlFormats.Shared
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
-    public class CT_OMath
+    public class CT_OMath : IOMathContainer
     {
 
         private ArrayList itemsField;
@@ -7522,6 +7577,39 @@ namespace NPOI.OpenXmlFormats.Shared
             return ctObj;
         }
 
+        public CT_Acc AddNewAcc()
+        {
+            CT_Acc acc = new CT_Acc();
+            lock (this)
+            {
+                itemsField.Add(acc);
+                itemsElementNameField.Add(ItemsChoiceType8.acc);
+            }
+            return acc;
+        }
+
+        public CT_F AddNewF()
+        {
+            CT_F f = new CT_F();
+            lock (this)
+            {
+                itemsField.Add(f);
+                itemsElementNameField.Add(ItemsChoiceType8.f);
+            }
+            return f;
+        }
+
+        public CT_Nary AddNewNary()
+        {
+            CT_Nary nary = new CT_Nary();
+            lock (this)
+            {
+                itemsField.Add(nary);
+                itemsElementNameField.Add(ItemsChoiceType8.nary);
+            }
+            return nary;
+        }
+
         public CT_R AddNewR()
         {
             CT_R r = new CT_R();
@@ -7531,6 +7619,17 @@ namespace NPOI.OpenXmlFormats.Shared
                 itemsElementNameField.Add(ItemsChoiceType8.r);
             }
             return r;
+        }
+
+        public CT_SSub AddNewSSub()
+        {
+            CT_SSub sSub = new CT_SSub();
+            lock (this)
+            {
+                itemsField.Add(sSub);
+                itemsElementNameField.Add(ItemsChoiceType8.sSub);
+            }
+            return sSub;
         }
 
         internal void Write(StreamWriter sw, string nodeName)

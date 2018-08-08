@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Shared\IOMathContainer.cs" />
     <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheRecords.cs" />
     <Compile Include="Drawing\ChartDrawing.cs" />
     <Compile Include="Drawing\Chart\ChartSpaceDocument.cs" />

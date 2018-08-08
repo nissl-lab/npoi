@@ -12,12 +12,13 @@ namespace NPOI.XWPF.Usermodel
     public class XWPFSharedRun : ICharacterRun
     {
         private CT_R run;
-        private IRunBody oMath;
+        private IRunBody parent;
 
-        public XWPFSharedRun(CT_R ctR, IRunBody oMath)
+        public XWPFSharedRun(CT_R ctR, IRunBody p)
         {
             this.run = ctR;
-            this.oMath = oMath;
+            this.parent = p;
+            SetFontFamily("Cambria Math", FontCharRange.None);
         }
 
         public bool IsBold { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -100,6 +101,9 @@ namespace NPOI.XWPF.Usermodel
         /// <summary>
         /// Gets the font family for the specified font char range.
         /// If fcr is null, the font char range "ascii" is used
+        /// Please use "Cambria Math"(set as default) font otherwise MS Word 
+        /// don't open file, LibreOffice Writer open it normaly.
+        /// I think this is MS Word bug, because this is not standart.
         /// </summary>
         /// <param name="fcr">the font char range, defaults to "ansi"</param>
         /// <returns>a string representing the font famil</returns>
@@ -147,9 +151,10 @@ namespace NPOI.XWPF.Usermodel
         ///Sets the text of this text run
         /// </summary>
         /// <param name="value">the literal text which shall be displayed in the document</param>
-        public void SetText(string value)
+        public XWPFSharedRun SetText(string value)
         {
-            SetText(value, 0);           
+            SetText(value, 0);
+            return this;
         }
 
         /// <summary>
@@ -157,13 +162,14 @@ namespace NPOI.XWPF.Usermodel
         /// </summary>
         /// <param name="value">the literal text which shall be displayed in the document</param>
         /// <param name="pos">position in the text array (NB: 0 based)</param>
-        private void SetText(String value, int pos)
+        private XWPFSharedRun SetText(String value, int pos)
         {
             int length = run.SizeOfTArray();
             if (pos > length) throw new IndexOutOfRangeException("Value too large for the parameter position");
             CT_Text1 t = (pos < length && pos >= 0) ? run.GetTArray(pos) : run.AddNewT();
             t.Value = (value);
             preserveSpaces(t);
+            return this;
         }
 
         /// <summary>
