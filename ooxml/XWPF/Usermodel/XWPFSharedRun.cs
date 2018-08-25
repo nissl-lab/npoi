@@ -22,7 +22,31 @@ namespace NPOI.XWPF.Usermodel
         }
 
         public bool IsBold { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsItalic { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsItalic {
+            get {
+                W.CT_RPr pr = run.rPr1;
+                if (pr == null || !pr.IsSetI())
+                    return false;
+                return IsCTOnOff(pr.i);
+            }
+            set
+            {
+                W.CT_RPr pr = run.IsSetRPr1() ? run.rPr1 : run.AddNewRPr1();
+                W.CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
+                italic.val = value;
+            }
+        }
+
+        /**
+         * For isBold, isItalic etc
+         */
+        private bool IsCTOnOff(W.CT_OnOff onoff)
+        {
+            if (!onoff.IsSetVal())
+                return true;
+            return onoff.val;
+        }
+
         public bool IsSmallCaps { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool IsCapitalized { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool IsStrikeThrough { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

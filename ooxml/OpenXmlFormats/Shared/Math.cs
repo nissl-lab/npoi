@@ -1673,6 +1673,18 @@ namespace NPOI.OpenXmlFormats.Shared
 
             sw.Write(string.Format("</m:{0}>", nodeName));
         }
+
+        public bool IsSetI()
+        {
+            return this.litField != null;
+        }
+
+        public CT_OnOff AddNewI()
+        {
+            if (this.litField == null)
+                this.litField = new CT_OnOff();
+            return this.litField;
+        }
     }
 
     
