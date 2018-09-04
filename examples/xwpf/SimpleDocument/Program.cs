@@ -15,18 +15,18 @@ namespace SimpleDocument
 
             XWPFParagraph p1 = doc.CreateParagraph();
             p1.Alignment = ParagraphAlignment.CENTER;
-            p1.BorderBottom = Borders.DOUBLE;
-            p1.BorderTop = Borders.DOUBLE;
+            p1.BorderBottom = Borders.Double;
+            p1.BorderTop = Borders.Double;
 
-            p1.BorderRight = Borders.DOUBLE;
-            p1.BorderLeft = Borders.DOUBLE;
-            p1.BorderBetween = Borders.SINGLE;
+            p1.BorderRight = Borders.Double;
+            p1.BorderLeft = Borders.Double;
+            p1.BorderBetween = Borders.Single;
 
             p1.VerticalAlignment = TextAlignment.TOP;
 
             XWPFRun r1 = p1.CreateRun();
             r1.SetText("The quick brown fox");
-            r1.SetBold(true);
+            r1.IsBold = true;
             r1.FontFamily = "Courier";
             r1.SetUnderline(UnderlinePatterns.DotDotDash);
             r1.SetTextPosition(100);
@@ -35,21 +35,21 @@ namespace SimpleDocument
             p2.Alignment = ParagraphAlignment.RIGHT;
 
             //BORDERS
-            p2.BorderBottom = Borders.DOUBLE;
-            p2.BorderTop = Borders.DOUBLE;
-            p2.BorderRight = Borders.DOUBLE;
-            p2.BorderLeft = Borders.DOUBLE;
-            p2.BorderBetween = Borders.SINGLE;
+            p2.BorderBottom = Borders.Double;
+            p2.BorderTop = Borders.Double;
+            p2.BorderRight = Borders.Double;
+            p2.BorderLeft = Borders.Double;
+            p2.BorderBetween = Borders.Single;
 
             XWPFRun r2 = p2.CreateRun();
             r2.SetText("jumped over the lazy dog");
-            r2.SetStrike(true);
+            r2.IsStrike = true;
             r2.FontSize = 20;
            
 
             XWPFRun r3 = p2.CreateRun();
             r3.SetText("and went away");
-            r3.SetStrike(true);
+            r3.IsStrike = true;
             r3.FontSize = 20;
             r3.Subscript = VerticalAlign.SUPERSCRIPT;
             r3.SetColor("FF0000");

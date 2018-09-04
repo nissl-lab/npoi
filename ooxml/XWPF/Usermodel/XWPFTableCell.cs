@@ -184,20 +184,78 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
+        /// <summary>
+        /// Add bottom border to cell
+        /// </summary>
+        /// <param name="type">Border Style</param>
+        /// <param name="size">Border Width</param>
+        /// <param name="space">Border Spacing Measurement</param>
+        /// <param name="rgbColor">Border Color</param>
         public void SetBorderBottom(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
         {
-            CT_TcPr ctTcPr = null;
-            if (!GetCTTc().IsSetTcPr())
-            {
-                ctTcPr = GetCTTc().AddNewTcPr();
-            }
-            CT_TcBorders borders = ctTcPr.AddNewTcBorders();
-            borders.bottom = new CT_Border();
-            CT_Border b = borders.bottom;
-            b.val = XWPFTable.xwpfBorderTypeMap[type];
-            b.sz = (ulong)size;
-            b.space = (ulong)space;
-            b.color = (rgbColor);
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
+            borders.bottom = CreateBorder(type, size, space, rgbColor);
+        }
+
+        /// <summary>
+        /// Add top border to cell
+        /// </summary>
+        /// <param name="type">Border Style</param>
+        /// <param name="size">Border Width</param>
+        /// <param name="space">Border Spacing Measurement</param>
+        /// <param name="rgbColor">Border Color</param>
+        public void SetBorderTop(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
+            borders.top = CreateBorder(type, size, space, rgbColor);
+        }
+
+        /// <summary>
+        /// Add left border to cell
+        /// </summary>
+        /// <param name="type">Border Style</param>
+        /// <param name="size">Border Width</param>
+        /// <param name="space">Border Spacing Measurement</param>
+        /// <param name="rgbColor">Border Color</param>
+        public void SetBorderLeft(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
+            borders.left = CreateBorder(type, size, space, rgbColor);
+        }
+
+        /// <summary>
+        /// Add right border to cell
+        /// </summary>
+        /// <param name="type">Border Style</param>
+        /// <param name="size">Border Width</param>
+        /// <param name="space"></param>
+        /// <param name="rgbColor">Border Color</param>
+        public void SetBorderRight(XWPFTable.XWPFBorderType type, int size, int space, String rgbColor)
+        {
+            CT_TcPr ctTcPr = GetCTTc().IsSetTcPr() ? GetCTTc().tcPr : GetCTTc().AddNewTcPr();
+            CT_TcBorders borders = ctTcPr.tcBorders == null ? ctTcPr.AddNewTcBorders() : ctTcPr.tcBorders;
+            borders.right = CreateBorder(type, size, space, rgbColor);
+        }
+
+        /// <summary>
+        /// Creates border with parameters
+        /// </summary>
+        /// <param name="type">Border Style</param>
+        /// <param name="size">Border Width</param>
+        /// <param name="space">Border Spacing Measurement</param>
+        /// <param name="rgbColor">Border Color</param>
+        /// <returns>CT_Border object</returns>
+        private static CT_Border CreateBorder(XWPFTable.XWPFBorderType type, int size, int space, string rgbColor)
+        {
+            CT_Border border = new CT_Border();
+            border.val = XWPFTable.xwpfBorderTypeMap[type];
+            border.sz = (ulong)size;
+            border.space = (ulong)space;
+            border.color = (rgbColor);
+            return border;
         }
 
         public void SetText(String text)

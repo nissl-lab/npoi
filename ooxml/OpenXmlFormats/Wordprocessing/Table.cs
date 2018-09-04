@@ -5089,8 +5089,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            if(valField != ST_Merge.@continue)
+            if (valField != ST_Merge.@continue)
+            {
                 XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            }
             sw.Write("/>");
         }
 
