@@ -21,7 +21,6 @@ namespace NPOI.SS.Util
 
     using NPOI.SS.UserModel;
     using System.Drawing;
-    using System.Windows.Forms;
     using System.Collections.Generic;
 
     /**
@@ -428,99 +427,6 @@ namespace NPOI.SS.Util
             return width;
         }
 
-
-        // /**
-        // * Drawing context to measure text
-        // */
-        //private static FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
-
-        /**
-         * Compute width of a column and return the result
-         *
-         * @param sheet the sheet to calculate
-         * @param column    0-based index of the column
-         * @param useMergedCells    whether to use merged cells
-         * @return  the width in pixels
-         */
-
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
-        {
-            //AttributedString str;
-            //TextLayout layout;
-
-            IWorkbook wb = sheet.Workbook;
-            DataFormatter formatter = new DataFormatter();
-            IFont defaultFont = wb.GetFontAt((short) 0);
-
-            //str = new AttributedString((defaultChar));
-            //copyAttributes(defaultFont, str, 0, 1);
-            //layout = new TextLayout(str.Iterator, fontRenderContext);
-            //int defaultCharWidth = (int)layout.Advance;
-            Font font = IFont2Font(defaultFont);
-            int defaultCharWidth = TextRenderer.MeasureText("" + new String(defaultChar, 1), font).Width;
-            //DummyEvaluator dummyEvaluator = new DummyEvaluator();
-
-            double width = -1;
-            foreach (IRow row in sheet)
-            {
-                ICell cell = row.GetCell(column);
-
-                if (cell == null)
-                {
-                    continue;
-                }
-
-                double cellWidth = GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
-                width = Math.Max(width, cellWidth);
-            }
-            return width;
-        }
-
-
-        /**
-         * Compute width of a column based on a subset of the rows and return the result
-         *
-         * @param sheet the sheet to calculate
-         * @param column    0-based index of the column
-         * @param useMergedCells    whether to use merged cells
-         * @param firstRow  0-based index of the first row to consider (inclusive)
-         * @param lastRow   0-based index of the last row to consider (inclusive)
-         * @return  the width in pixels
-         */
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow)
-        {
-            IWorkbook wb = sheet.Workbook;
-            DataFormatter formatter = new DataFormatter();
-
-            IFont defaultFont = wb.GetFontAt((short)0);
-
-            //str = new AttributedString((defaultChar));
-            //copyAttributes(defaultFont, str, 0, 1);
-            //layout = new TextLayout(str.Iterator, fontRenderContext);
-            //int defaultCharWidth = (int)layout.Advance;
-            Font font = IFont2Font(defaultFont);
-            int defaultCharWidth = TextRenderer.MeasureText("" + new String(defaultChar, 1), font).Width;
-
-            double width = -1;
-            for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
-            {
-                IRow row = sheet.GetRow(rowIdx);
-                if (row != null)
-                {
-
-                    ICell cell = row.GetCell(column);
-
-                    if (cell == null)
-                    {
-                        continue;
-                    }
-
-                    double cellWidth = GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
-                    width = Math.Max(width, cellWidth);
-                }
-            }
-            return width;
-        }
 
         // /**
         // * Copy text attributes from the supplied Font to Java2D AttributedString
