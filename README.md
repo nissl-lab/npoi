@@ -1,14 +1,9 @@
-NPOI (moved from https://npoi.codeplex.com)
+NPOI - .NET Core
 ===================
 
-[![Join the chat at https://gitter.im/tonyqus/npoi](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tonyqus/npoi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/) <br />
+**We are working on NPOI .NET Core version. Since .NET Core 2.1 is stable enough, we decide to migrate NPOI to .NET core.**
+
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
-
-Support and Service
-===================
-Neuzilla is the studio behind NPOI. <br />
-To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
 Advantage of NPOI
 =================
@@ -31,11 +26,8 @@ Neuzilla on SNS
 Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
 QQ Group: 20144214<br />
-Email: support@neuzilla.com
+Commercial Email: support@neuzilla.com
 
 System Requirement
 ===================
-VS2017<br />
-VS2015<br />
-VS2010 with .NET 4.0 runtime<br />
-VS2005 or VS2008 with .NET 2.0 Runtime (SP1) <br />
+.NET Core 2.1
