@@ -107,7 +107,7 @@ namespace TestCases
  */
         private Stream OpenClasspathResource(String sampleFileName)
         {
-            FileStream file = new FileStream(_resolvedDataDir + sampleFileName, FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(Path.Combine(_resolvedDataDir,sampleFileName), FileMode.Open, FileAccess.Read);
             return file;
         }
 
