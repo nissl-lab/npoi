@@ -429,6 +429,25 @@ namespace NPOI.SS.Util
 
 
         // /**
+        // * Drawing context to measure text
+        // */
+        //private static FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+
+        /**
+         * Compute width of a column and return the result
+         *
+         * @param sheet the sheet to calculate
+         * @param column    0-based index of the column
+         * @param useMergedCells    whether to use merged cells
+         * @return  the width in pixels
+         */
+
+        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
+        {
+            throw new NotImplementedException();
+        }
+
+        // /**
         // * Copy text attributes from the supplied Font to Java2D AttributedString
         // */
         //private static void copyAttributes(IFont font, AttributedString str, int startIdx, int endIdx)
