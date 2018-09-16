@@ -75,16 +75,16 @@ namespace TestCases.SS.Util
                 {
                     if (times)
                     {
-                        csharpDateFormatPattern = DateFormat.GetDateTimeInstance(style, style, locale);
+                        csharpDateFormatPattern = DateFormat.GetDateTimePattern(style, style, locale);
                     }
                     else
                     {
-                        csharpDateFormatPattern = DateFormat.GetDateInstance(style, locale);
+                        csharpDateFormatPattern = DateFormat.GetDatePattern(style, locale);
                     }
                 }
                 else
                 {
-                    csharpDateFormatPattern = DateFormat.GetTimeInstance(style, locale);
+                    csharpDateFormatPattern = DateFormat.GetTimePattern(style, locale);
                 }
 
                 //Excel Date Value

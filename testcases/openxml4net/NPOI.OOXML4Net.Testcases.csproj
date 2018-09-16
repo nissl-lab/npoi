@@ -141,11 +141,11 @@
       <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
       <Name>NPOI.OOXML</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\openxml4Net\NPOI.OpenXml4Net.csproj">
+    <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
+    <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
       <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
       <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>

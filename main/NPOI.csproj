@@ -88,12 +88,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.XML.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.configuration.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
@@ -149,7 +159,8 @@
     <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisLineRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />

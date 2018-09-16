@@ -21,7 +21,7 @@ namespace TestCases.SS.Format
     using System.Globalization;
     using System.Text;
     using System.Threading;
-    using System.Windows.Forms;
+
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Format;
@@ -47,10 +47,9 @@ namespace TestCases.SS.Format
         [Test]
         public void TestSome()
         {
-            Label l = new Label();
             CellFormat fmt = CellFormat.GetInstance(
                     "\"$\"#,##0.00_);[Red]\\(\"$\"#,##0.00\\)");
-            fmt.Apply(l, 1.1);
+            fmt.Apply(1.1);
         }
 
         [Test]

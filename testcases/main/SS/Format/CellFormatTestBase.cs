@@ -21,7 +21,7 @@ namespace TestCases.SS.Format
     using System.Collections.Generic;
     using System.Drawing;
     using System.Text.RegularExpressions;
-    using System.Windows.Forms;
+
     using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Format;
@@ -29,6 +29,7 @@ namespace TestCases.SS.Format
     using NPOI.Util;
     using TestCases.SS;
     using System.Diagnostics;
+    using System.Windows.Forms;
 
     /**
      * This class is a base class for spreadsheet-based tests, such as are used for
@@ -53,7 +54,7 @@ namespace TestCases.SS.Format
         private String testFile;
         private Dictionary<String, String> testFlags;
         private bool tryAllColors;
-        private Label label;
+        //private Label label;
 
         private static String[] COLOR_NAMES =
             {"Black", "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta",
