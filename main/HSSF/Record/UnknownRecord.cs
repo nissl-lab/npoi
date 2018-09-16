@@ -280,7 +280,7 @@ namespace NPOI.HSSF.Record
                 case 0x1043: //LegendException
                 case 0x1044: //ShtProps
                 case 0x1045:  //SerToCrt
-                case 0x1046: //AxesUsed
+                //case 0x1046: //AxesUsed
                 case 0x104A: //SerParent
                 case 0x104B: //SerAuxTrend
                 case 0x104E:  //IFmtRecord
