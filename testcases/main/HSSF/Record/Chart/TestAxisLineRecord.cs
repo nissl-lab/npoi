@@ -34,21 +34,22 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestAxisLineRecord
+    public class TestAxisLineFormatRecord
     {
         byte[] data = new byte[] {
-        (byte)0x01,(byte)0x00
-    };
 
-        public TestAxisLineRecord()
+            (byte)0x01,(byte)0x00
+        };
+
+        public TestAxisLineFormatRecord()
         {
 
         }
         [Test]
         public void TestLoad()
         {
-            AxisLineRecord record = new AxisLineRecord(TestcaseRecordInputStream.Create((short)0x1021, data));
-            Assert.AreEqual(AxisLineRecord.AXIS_TYPE_MAJOR_GRID_LINE, record.AxisType);
+            AxisLineFormatRecord record = new AxisLineFormatRecord(TestcaseRecordInputStream.Create((short)0x1021, data));
+            Assert.AreEqual(AxisLineFormatRecord.AXIS_TYPE_MAJOR_GRID_LINE, record.AxisType);
 
 
             Assert.AreEqual(6, record.RecordSize);
@@ -56,8 +57,8 @@ namespace TestCases.HSSF.Record.Chart
         [Test]
         public void TestStore()
         {
-            AxisLineRecord record = new AxisLineRecord();
-            record.AxisType = (AxisLineRecord.AXIS_TYPE_MAJOR_GRID_LINE);
+            AxisLineFormatRecord record = new AxisLineFormatRecord();
+            record.AxisType = (AxisLineFormatRecord.AXIS_TYPE_MAJOR_GRID_LINE);
 
 
             byte[] recordBytes = record.Serialize();
