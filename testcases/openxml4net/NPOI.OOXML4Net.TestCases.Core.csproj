@@ -3,17 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<AssemblyName>NPOI.TestCases</AssemblyName>
+	<AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
 	<SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
 	<RootNamespace>TestCases</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="HSSF\UserModel\TestEscherGraphics2d.cs" />
-    <Compile Remove="SS\Formula\Eval\TestMultiSheetEval.cs" />
-    <Compile Remove="SS\Formula\Function\ExcelFileFormatDocFunctionExtractor.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
@@ -26,6 +20,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
+    <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+    <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

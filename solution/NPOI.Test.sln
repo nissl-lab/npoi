@@ -4,17 +4,17 @@ VisualStudioVersion = 15.0.28010.2019
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41A0D04F-B087-4F46-86A9-FE12D300A9AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI", "..\..\main\NPOI.csproj", "{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI", "..\main\NPOI.csproj", "{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.TestCases", "..\..\testcases\main\NPOI.TestCases.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.TestCases", "..\testcases\main\NPOI.TestCases.csproj", "{A920C2BA-8BFD-4F54-8401-7D1C0730F1F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXml4Net", "..\..\openxml4Net\NPOI.OpenXml4Net.csproj", "{C9F265B7-ECE3-4755-B0B1-79536575C2A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXml4Net", "..\openxml4Net\NPOI.OpenXml4Net.csproj", "{C9F265B7-ECE3-4755-B0B1-79536575C2A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXmlFormats", "..\..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj", "{A6874784-2875-4F40-9E8F-8385A640F5D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXmlFormats", "..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj", "{A6874784-2875-4F40-9E8F-8385A640F5D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML4Net.Testcases", "..\..\testcases\openxml4net\NPOI.OOXML4Net.Testcases.csproj", "{F5A6FF78-2C51-44E8-9E31-CD1B3EF784E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML4Net.Testcases", "..\testcases\openxml4net\NPOI.OOXML4Net.Testcases.csproj", "{F5A6FF78-2C51-44E8-9E31-CD1B3EF784E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML.TestCases", "..\..\testcases\ooxml\NPOI.OOXML.TestCases.csproj", "{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML.TestCases", "..\testcases\ooxml\NPOI.OOXML.TestCases.csproj", "{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

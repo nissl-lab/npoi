@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.Core", "..\..\main\NPOI.Core.csproj", "{ABACCCA8-0E50-4008-9D4A-41A87348CA2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.Core", "..\main\NPOI.Core.csproj", "{ABACCCA8-0E50-4008-9D4A-41A87348CA2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML.Core", "..\..\ooxml\NPOI.OOXML.Core.csproj", "{C0200521-265C-4ADB-82D8-54C93F0E9CE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML.Core", "..\ooxml\NPOI.OOXML.Core.csproj", "{C0200521-265C-4ADB-82D8-54C93F0E9CE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXml4Net.Core", "..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj", "{5AD4BFA9-BC25-4513-A4CB-173F90BB882A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXml4Net.Core", "..\openxml4Net\NPOI.OpenXml4Net.Core.csproj", "{5AD4BFA9-BC25-4513-A4CB-173F90BB882A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXmlFormats.Core", "..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj", "{66A6935B-BCDB-4F95-9E79-E755958B786B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.TestCases.Core", "..\..\testcases\main\NPOI.TestCases.Core.csproj", "{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXmlFormats.Core", "..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj", "{66A6935B-BCDB-4F95-9E79-E755958B786B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{66A6935B-BCDB-4F95-9E79-E755958B786B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66A6935B-BCDB-4F95-9E79-E755958B786B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66A6935B-BCDB-4F95-9E79-E755958B786B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

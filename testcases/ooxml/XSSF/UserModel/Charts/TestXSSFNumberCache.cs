@@ -26,9 +26,9 @@ namespace NPOI.XSSF.UserModel.Charts
     public class TestXSSFNumberCache
     {
         private static Object[][] plotData = {
-	new object[]{0,      1,       2,       3,       4},
-	new object[]{0, "=B1*2", "=C1*2", "=D1*2", "=E1*4"}
-    };
+	        new object[]{0,      1,       2,       3,       4},
+	        new object[]{0, "=B1*2", "=C1*2", "=D1*2", "=E1*4"}
+            };
         [Test]
         public void TestFormulaCache()
         {
@@ -38,11 +38,11 @@ namespace NPOI.XSSF.UserModel.Charts
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.BOTTOM);
-            IChartAxis leftAxis = chart.GetChartAxisFactory().CreateValueAxis(AxisPosition.LEFT);
+            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Bottom);
+            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
 
             IScatterChartData scatterChartData =
-                chart.GetChartDataFactory().CreateScatterChartData();
+                chart.ChartDataFactory.CreateScatterChartData();
 
             DataMarker xMarker = new DataMarker(sheet, CellRangeAddress.ValueOf("A1:E1"));
             DataMarker yMarker = new DataMarker(sheet, CellRangeAddress.ValueOf("A2:E2"));
