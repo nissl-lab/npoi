@@ -87,5 +87,12 @@ namespace NPOI.SS.UserModel
          */
         void ApplyFont(short fontIndex);
 
+        /**
+         * Gets the index of the font used in a particular formatting Run.
+         *
+         * @param index     the index of the formatting run
+         * @return  The index of the  font used or -1 if no formatting is applied to the specified text Run.
+         */
+        short GetFontOfFormattingRun(int index);
     }
 }

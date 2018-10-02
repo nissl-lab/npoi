@@ -145,6 +145,100 @@ namespace NPOI.SS.Util
             }
             return newCell;
         }
+        public static void CopyCell(ICell oldCell, ICell newCell, IDictionary<Int32, ICellStyle> styleMap, Boolean keepFormulas)
+        {
+            if (styleMap != null)
+            {
+                if (oldCell.CellStyle != null)
+                {
+                    if (oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
+                    {
+                        newCell.CellStyle = oldCell.CellStyle;
+                    }
+                    else
+                    {
+                        int styleHashCode = oldCell.CellStyle.GetHashCode();
+                        if (styleMap.ContainsKey(styleHashCode))
+                        {
+                            newCell.CellStyle = styleMap[styleHashCode];
+                        }
+                        else
+                        {
+                            ICellStyle newCellStyle = (ICellStyle)newCell.Sheet.Workbook.CreateCellStyle();
+                            newCellStyle.CloneStyleFrom(oldCell.CellStyle);
+                            newCell.CellStyle = newCellStyle;
+                            styleMap.Add(styleHashCode, newCellStyle);
+                        }
+                    }
+                }
+                else
+                {
+                    newCell.CellStyle = null;
+                }
+            }
+            switch (oldCell.CellType)
+            {
+                case CellType.String:
+                    IRichTextString rts = oldCell.RichStringCellValue as IRichTextString;
+                    newCell.SetCellValue(rts);
+                    if (rts != null)
+                    {
+                        for (int j = 0; j < rts.NumFormattingRuns; j++)
+                        {
+                            int startIndex = rts.GetIndexOfFormattingRun(j);
+                            int endIndex = 0;
+                            if (j + 1 == rts.NumFormattingRuns)
+                            {
+                                endIndex = rts.Length;
+                            }
+                            else
+                            {
+                                endIndex = rts.GetIndexOfFormattingRun(j + 1);
+                            }
+                            IFont fr = newCell.Sheet.Workbook.CreateFont();
+                            short fontIndex = rts.GetFontOfFormattingRun(j);
+                            fr.CloneStyleFrom(oldCell.Sheet.Workbook.GetFontAt(fontIndex));
+                            newCell.RichStringCellValue.ApplyFont(startIndex, endIndex, fr);
+                        }
+                    }
+                    break;
+                case CellType.Numeric:
+                    newCell.SetCellValue(oldCell.NumericCellValue);
+                    break;
+                case CellType.Blank:
+                    newCell.SetCellType(CellType.Blank);
+                    break;
+                case CellType.Boolean:
+                    newCell.SetCellValue(oldCell.BooleanCellValue);
+                    break;
+                case CellType.Error:
+                    newCell.SetCellValue(oldCell.ErrorCellValue);
+                    break;
+                case CellType.Formula:
+                    if (keepFormulas)
+                    {
+                        newCell.SetCellType(CellType.Formula);
+                        newCell.CellFormula = oldCell.CellFormula;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            newCell.SetCellType(CellType.Numeric);
+                            newCell.SetCellValue(oldCell.NumericCellValue);
+                        }
+                        catch (Exception)
+                        {
+                            newCell.SetCellType(CellType.String);
+                            newCell.SetCellValue(oldCell.ToString());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         /**
          * Get a row from the spreadsheet, and create it if it doesn't exist.
          *

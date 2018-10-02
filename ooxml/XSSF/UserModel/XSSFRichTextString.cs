@@ -454,23 +454,23 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Gets a copy of the font used in a particular formatting Run.
+         * Gets the index of the font used in a particular formatting Run.
          *
          * @param index     the index of the formatting run
-         * @return  A copy of the  font used or null if no formatting is applied to the specified text Run.
+         * @return  The index of the  font used or -1 if no formatting is applied to the specified text Run.
          */
-        public IFont GetFontOfFormattingRun(int index)
+        public short GetFontOfFormattingRun(int index)
         {
-            if (st.sizeOfRArray() == 0 || index >= st.sizeOfRArray()) return null;
+            if (st.sizeOfRArray() == 0 || index >= st.sizeOfRArray()) return -1;
 
             CT_RElt r = st.GetRArray(index);
             if (r.rPr != null)
             {
                 XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
                 fnt.SetThemesTable(GetThemesTable());
-                return fnt;
+                return fnt.Index;
             }
-            return null;
+            return -1;
         }
 
         /**

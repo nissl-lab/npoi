@@ -59,9 +59,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             obj.applyNumberFormat = this.applyNumberFormat;
             obj.applyProtection = this.applyProtection;
             obj.borderId = this.borderId;
+            obj.borderIdSpecified = this.borderIdSpecified;
             obj.fillId = this.fillId;
+            obj.fillIdSpecifiedField = this.fillIdSpecifiedField;
             obj.fontId = this.fontId;
+            obj.fontIdSpecified = this.fontIdSpecified;
             obj.numFmtId = this.numFmtId;
+            obj.numFmtIdSpecified = this.numFmtIdSpecified;
             obj.pivotButtonField = this.pivotButtonField;
             obj.quotePrefixField = this.quotePrefixField;
             obj.xfIdField = this.xfIdField;
@@ -137,14 +141,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        //public override string ToString()
-        //{
-        //    using (StringWriter stream = new StringWriter())
-        //    {
-        //        serializer.Serialize(stream, this, namespaces);
-        //        return stream.ToString();
-        //    }
-        //}
+        public override string ToString()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
+            using (StringWriter stream = new StringWriter())
+            {
+                serializer.Serialize(stream, this);
+                return stream.ToString();
+            }
+        }
 
         public bool IsSetFontId()
         {

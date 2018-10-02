@@ -146,12 +146,21 @@ namespace NPOI.XSSF.UserModel
                             _cellXf.UnsetExtLst();
 
                         // Create a new Xf with the same contents
-                        _cellXf =
-                              src.GetCoreXf().Copy();
+                        _cellXf = src.GetCoreXf().Copy();
+                        if (_cellXf.applyBorder)
+                        {
+                            //CellXF is copied with existing Ids, but those are different if you're copying between two documents
+                            _cellXf.borderId = FindAddBorder(src._stylesSource.GetBorderAt((int)_cellXf.borderId).GetCTBorder());
+                        }
 
                         // bug 56295: ensure that the fills is available and set correctly
                         CT_Fill fill = CT_Fill.Parse(src.GetCTFill().ToString());
                         AddFill(fill);
+
+                        if (src._cellStyleXf.applyBorder)
+                        {
+                            _cellStyleXf.borderId = FindAddBorder(src.GetCTBorder());
+                        }
 
                         // Swap it over
                         _stylesSource.ReplaceCellXfAt(_cellXfId, _cellXf);
@@ -197,6 +206,22 @@ namespace NPOI.XSSF.UserModel
 
             _cellXf.fillId = (uint)(idx);
             _cellXf.applyFill = (true);
+        }
+        private uint FindAddBorder(CT_Border border)
+        {
+            //Find an existing border that matches this one, if not add a copy to the current source and update the reference.
+            int findThis = border.ToString().GetHashCode();
+            uint index = 0;
+            foreach (XSSFCellBorder existing in _stylesSource.GetBorders())
+            {
+                if (findThis == existing.GetCTBorder().ToString().GetHashCode())
+                {
+                    return index;
+                }
+                index++;
+            }
+            //404 border not found. Add it
+            return (uint)_stylesSource.PutBorder(new XSSFCellBorder(border.Copy()));
         }
         public HorizontalAlignment Alignment
         {
@@ -1054,7 +1079,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Set the font for this style
          *
-         * @param font  a font object Created or retreived from the XSSFWorkbook object
+         * @param font  a font object Created or retrieved from the XSSFWorkbook object
          * @see NPOI.xssf.usermodel.XSSFWorkbook#CreateFont()
          * @see NPOI.xssf.usermodel.XSSFWorkbook#getFontAt(short)
          */

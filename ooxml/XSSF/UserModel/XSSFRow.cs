@@ -659,12 +659,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                throw new NotImplementedException();
+                return _row.hidden;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _row.hidden = value ?? false;
             }
         }
 
@@ -672,12 +672,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                throw new NotImplementedException();
+                return _row.collapsed;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _row.collapsed = value ?? false;
             }
         }
         #endregion

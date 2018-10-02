@@ -78,6 +78,7 @@ namespace NPOI.XSSF.UserModel
         public static int PICTURE_TYPE_EPS = 10;
         public static int PICTURE_TYPE_BMP = 11;
         public static int PICTURE_TYPE_WPG = 12;
+        public static int PICTURE_TYPE_JPG = 13; //Alias for JPEG to handle image/jpg content type
         /**
          * The underlying XML bean
          */
