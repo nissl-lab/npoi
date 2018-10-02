@@ -1543,8 +1543,27 @@ namespace NPOI.XSSF.UserModel
             doc.Save(part.GetOutputStream());
         }
 
+        /// <summary>
+        /// Write the document to the specified stream, and optionally leave the stream open without closing it.
+        /// </summary>
+        public void Write(Stream stream, bool leaveOpen)
+        {
+            bool? originalValue = null;
+            if (Package is ZipPackage)
+            {
+                //By default ZipPackage closes the stream if it wasn't constructed from a stream.
+                originalValue = ((ZipPackage)Package).IsExternalStream;
+                ((ZipPackage)Package).IsExternalStream = leaveOpen;
+            }
+            Write(stream);
+            if(originalValue.HasValue && Package is ZipPackage)
+            {
+                ((ZipPackage)Package).IsExternalStream = originalValue.Value;
+            }
+        }
+
         /**
-         * Returns SharedStringsTable - tha cache of string for this workbook
+         * Returns SharedStringsTable - the cache of strings for this workbook
          *
          * @return the shared string table
          */
