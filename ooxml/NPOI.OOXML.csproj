@@ -325,11 +325,11 @@
       <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
       <Name>NPOI</Name>
     </ProjectReference>
-    <ProjectReference Include="openxml4Net\NPOI.OpenXml4Net.csproj">
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
       <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
       <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>
