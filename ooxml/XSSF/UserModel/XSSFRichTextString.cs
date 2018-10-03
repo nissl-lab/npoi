@@ -454,10 +454,10 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Gets the index of the font used in a particular formatting Run.
+         * Gets a copy of the font used in a particular formatting Run.
          *
          * @param index     the index of the formatting run
-         * @return  The index of the  font used or -1 if no formatting is applied to the specified text Run.
+         * @return  A copy of the  font used or null if no formatting is applied to the specified text Run.
          */
         public IFont GetFontOfFormattingRun(int index)
         {
