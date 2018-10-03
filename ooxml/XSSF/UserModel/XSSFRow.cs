@@ -653,6 +653,10 @@ namespace NPOI.XSSF.UserModel
             {
                 return _row.outlineLevel;
             }
+            set
+            {
+                _row.outlineLevel = (byte)value;
+            }
         }
 
         public bool? Hidden

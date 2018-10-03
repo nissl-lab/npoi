@@ -4529,7 +4529,6 @@ namespace NPOI.XSSF.UserModel
         }
         public void CopyTo(XSSFWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
         {
-            int maxColumnNum = 0;
             StylesTable styles = dest.GetStylesSource();
             if (copyStyle && dest.NumberOfSheets == 0 && dest.NumberOfFonts == 1 && Workbook.NumberOfFonts > 0)
             {
@@ -4546,15 +4545,19 @@ namespace NPOI.XSSF.UserModel
                 if (srcRow != null)
                 {
                     CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
-                    if (srcRow.LastCellNum > maxColumnNum)
-                    {
-                        maxColumnNum = srcRow.LastCellNum;
-                    }
                 }
             }
-            for (int i = 0; i < maxColumnNum; i++)
+            List<CT_Cols> srcCols = worksheet.GetColsList();
+            List<CT_Cols> dstCols = newSheet.worksheet.GetColsList();
+            dstCols.Clear(); //Should already be empty since this is a new sheet.
+            foreach (CT_Cols srcCol in srcCols)
             {
-                newSheet.SetColumnWidth(i, GetColumnWidth(i));
+                CT_Cols dstCol = new CT_Cols();
+                foreach (var column in srcCol.col)
+                {
+                    dstCol.col.Add(column.Copy());
+                }
+                dstCols.Add(dstCol);
             }
             newSheet.ForceFormulaRecalculation = true;
             newSheet.PrintSetup.Landscape = PrintSetup.Landscape;
@@ -4576,6 +4579,10 @@ namespace NPOI.XSSF.UserModel
             newSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
             newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
             newSheet.DisplayGridlines = DisplayGridlines;
+            if (worksheet.IsSetSheetPr())
+            {
+                newSheet.worksheet.sheetPr = worksheet.sheetPr.Clone();
+            }
             if (GetDefaultSheetView().pane != null)
             {
                 var oldPane = GetDefaultSheetView().pane;
@@ -4659,6 +4666,8 @@ namespace NPOI.XSSF.UserModel
                 destRow.GetCTRow().unSetCustomHeight();
             }
             destRow.Hidden = srcRow.Hidden;
+            destRow.Collapsed = srcRow.Collapsed;
+            destRow.OutlineLevel = srcRow.OutlineLevel;
             
             if(srcRow.FirstCellNum < 0)
             {
