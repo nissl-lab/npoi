@@ -40,7 +40,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -54,7 +54,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -64,7 +64,7 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
-    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <OutputPath>..\solution\Lib\.net4\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
@@ -74,7 +74,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
-    <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
+    <OutputPath>..\solution\Lib\.net2\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
