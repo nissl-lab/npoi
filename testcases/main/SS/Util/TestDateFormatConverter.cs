@@ -65,6 +65,8 @@ namespace TestCases.SS.Util
             int rowNum = 1;
             foreach (CultureInfo locale in CultureInfo.GetCultures(CultureTypes.AllCultures))
             {
+                if (string.IsNullOrEmpty(locale.ToString()))
+                    continue;
                 IRow row = sheet.CreateRow(rowNum++);
 
                 row.CreateCell(0).SetCellValue(locale.ToString());
