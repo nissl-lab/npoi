@@ -51,7 +51,7 @@ namespace NPOI.XSSF.Model
                 XSSFFont font = (XSSFFont)row.GetCell(0).CellStyle.GetFont(workbook);
 
                 XSSFColor color = ((XSSFFont)font).GetXSSFColor();
-                Assert.AreEqual(rgbExpected[i], BitConverter.ToString(color.GetRgb()), "Failed color theme " + i);
+                Assert.AreEqual(rgbExpected[i], BitConverter.ToString(color.GetRgb()).Replace("-","").ToLower(), "Failed color theme " + i);
                 long themeIdx = font.GetCTFont().color[0].theme;
                 Assert.AreEqual(i, themeIdx, "Failed color theme " + i);
                 i++;
