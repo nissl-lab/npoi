@@ -116,7 +116,7 @@ namespace TestCases
             //  Some of the tests are depending on the american culture.
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-            String dataDirName = System.Configuration.ConfigurationManager.AppSettings[TEST_PROPERTY];
+            String dataDirName = TestContext.Parameters[TEST_PROPERTY];
 
             if (dataDirName == null)
                 throw new Exception("Must set system property '"
