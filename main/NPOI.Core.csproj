@@ -10,9 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\font_metrics.properties" />
+    <None Remove="Resources\functionMetadata.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\font_metrics.properties" />
+    <EmbeddedResource Include="Resources\functionMetadata.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SharpZipLib" Version="1.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
