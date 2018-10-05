@@ -212,6 +212,7 @@
     <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Averageifs.cs" />
     <Compile Include="SS\Formula\Functions\BaseNumberUtils.cs" />
     <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="SS\Formula\Functions\Rept.cs" />
     <Compile Include="SS\Formula\Functions\Roman.cs" />
     <Compile Include="SS\Formula\Functions\Slope.cs" />
+    <Compile Include="SS\Formula\Functions\Averageif.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
     <Compile Include="SS\Formula\Functions\Text\Proper.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
@@ -1267,7 +1269,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
