@@ -449,7 +449,7 @@ namespace NPOI.SS.Util
 
             IWorkbook wb = sheet.Workbook;
             DataFormatter formatter = new DataFormatter();
-            IFont defaultFont = wb.GetFontAt((short)0);
+            IFont defaultFont = wb.GetFontAt(0);
 
             //str = new AttributedString((defaultChar));
             //copyAttributes(defaultFont, str, 0, 1);
@@ -462,8 +462,7 @@ namespace NPOI.SS.Util
                 using (var g = Graphics.FromImage(image))
                 {
                     g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, 
-                        int.MaxValue, StringFormat.GenericTypographic).Width;
+                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue).Width;
                 }
             }
             //DummyEvaluator dummyEvaluator = new DummyEvaluator();
