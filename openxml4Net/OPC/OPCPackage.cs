@@ -282,7 +282,7 @@ namespace NPOI.OpenXml4Net.OPC
             // Creates a new package
             OPCPackage pkg = null;
             pkg = new ZipPackage();
-            pkg.originalPackagePath = (new FileInfo(path)).Name;
+            pkg.originalPackagePath = (new FileInfo(path)).FullName;
 
             ConfigurePackage(pkg);
             return pkg;

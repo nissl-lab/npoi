@@ -123,7 +123,7 @@ namespace TestCases
                         + TEST_PROPERTY
                         + "' before running tests");
 
-            string dataDir = Path.Combine(TestContext.CurrentContext.TestDirectory,dataDirName, _moduleDir);
+            string dataDir = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory,dataDirName, _moduleDir));
             if (!Directory.Exists(dataDir))
             {
                 throw new IOException("Data dir '" + dataDir
