@@ -117,7 +117,7 @@ namespace TestCases.SS.Util
 
             //FileInfo outputFile = TempFile.CreateTempFile("Locale" + sheetName + styleName, ".xlsx");
             string filename = "Locale" + sheetName + styleName + ".xls";
-            FileStream outputStream = new FileStream(filename, FileMode.CreateNew);
+            FileStream outputStream = new FileStream(filename, FileMode.Create);
             try
             {
                 workbook.Write(outputStream);

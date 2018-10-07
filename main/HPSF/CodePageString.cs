@@ -57,7 +57,9 @@ namespace NPOI.HPSF
 
         public String GetJavaValue(int codepage)
         {
+#if NETSTANDARD2_0
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif 
             String result;
             if (codepage == -1)
                 result = Encoding.UTF8.GetString(_value);
