@@ -25,10 +25,9 @@
     <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+	  <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+	</Target>
+
 
 </Project>

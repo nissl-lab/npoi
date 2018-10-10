@@ -65,6 +65,8 @@ namespace TestCases.SS.Util
             int rowNum = 1;
             foreach (CultureInfo locale in CultureInfo.GetCultures(CultureTypes.AllCultures))
             {
+                if (string.IsNullOrEmpty(locale.ToString()))
+                    continue;
                 IRow row = sheet.CreateRow(rowNum++);
 
                 row.CreateCell(0).SetCellValue(locale.ToString());
@@ -115,7 +117,7 @@ namespace TestCases.SS.Util
 
             //FileInfo outputFile = TempFile.CreateTempFile("Locale" + sheetName + styleName, ".xlsx");
             string filename = "Locale" + sheetName + styleName + ".xls";
-            FileStream outputStream = new FileStream(filename, FileMode.CreateNew);
+            FileStream outputStream = new FileStream(filename, FileMode.Create);
             try
             {
                 workbook.Write(outputStream);

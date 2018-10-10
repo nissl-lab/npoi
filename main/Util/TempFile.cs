@@ -46,8 +46,8 @@ namespace NPOI.Util
             }
             Random rnd = new Random(DateTime.Now.Millisecond);
             Thread.Sleep(10);
-            return prefix + rnd.Next() + suffix;
-            //return dir.Name + "\\" + prefix + rnd.Next() + suffix;
+            //return prefix + rnd.Next() + suffix;
+            return dir + "\\" + prefix + rnd.Next() + suffix;
         }
     }
 }

@@ -245,13 +245,14 @@ namespace TestCases.SS.Format
                 desc = "[" + cname + "]" + desc;
             Color origColor = labelForeColor;
             CellFormatPart format = new CellFormatPart(desc);
-            if (!format.Apply(value).Applies)
+            CellFormatResult result = format.Apply(value);
+            if (!result.Applies)
             {
                 // If this doesn't Apply, no color change is expected
                 expectedColor = origColor;
             }
 
-            String actualText = labelText;
+            String actualText = result.Text;
             Color actualColor = labelForeColor;
             getter.Equivalent(expectedText, actualText, format);
             Assert.AreEqual(

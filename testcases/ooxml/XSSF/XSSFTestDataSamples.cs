@@ -25,6 +25,8 @@ using NPOI.Util;
 using NPOI.HSSF;
 using TestCases.HSSF;
 using System.Diagnostics;
+using NUnit.Framework;
+
 namespace NPOI.XSSF
 {
 
@@ -103,7 +105,7 @@ namespace NPOI.XSSF
 
             try
             {
-                string filename = Path.Combine(Environment.CurrentDirectory, testName + ".xlsx");
+                string filename = Path.Combine(TestContext.CurrentContext.TestDirectory, testName + ".xlsx");
 
                 if (File.Exists(filename))
                 {

@@ -444,7 +444,43 @@ namespace NPOI.SS.Util
 
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
         {
-            throw new NotImplementedException();
+            //AttributedString str;
+            //TextLayout layout;
+
+            IWorkbook wb = sheet.Workbook;
+            DataFormatter formatter = new DataFormatter();
+            IFont defaultFont = wb.GetFontAt(0);
+
+            //str = new AttributedString((defaultChar));
+            //copyAttributes(defaultFont, str, 0, 1);
+            //layout = new TextLayout(str.Iterator, fontRenderContext);
+            //int defaultCharWidth = (int)layout.Advance;
+            int defaultCharWidth = 0;
+            Font font = IFont2Font(defaultFont);
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue).Width;
+                }
+            }
+            //DummyEvaluator dummyEvaluator = new DummyEvaluator();
+
+            double width = -1;
+            foreach (IRow row in sheet)
+            {
+                ICell cell = row.GetCell(column);
+
+                if (cell == null)
+                {
+                    continue;
+                }
+
+                double cellWidth = GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
+                width = Math.Max(width, cellWidth);
+            }
+            return width;
         }
 
         // /**

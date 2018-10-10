@@ -77,7 +77,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, workbook.GetSheetAt(2).LastRowNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
-            Stream out1 = File.OpenWrite(file.Name);
+            Stream out1 = File.OpenWrite(file.FullName);
             workbook.Write(out1);
             out1.Close();
 
@@ -767,7 +767,7 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void LoadWorkbookWithPivotTable()
         {
-            String fileName = "ooxml-pivottable.xlsx";
+            String fileName = Path.Combine(TestContext.CurrentContext.TestDirectory,"ooxml-pivottable.xlsx");
 
             XSSFWorkbook wb = new XSSFWorkbook();
             SetPivotData(wb);
