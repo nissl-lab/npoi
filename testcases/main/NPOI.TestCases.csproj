@@ -205,6 +205,8 @@
     <Compile Include="SS\Formula\Functions\TestReptFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestRomanFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestSlope.cs" />
+    <Compile Include="SS\Formula\Functions\TestAverageif.cs" />
+    <Compile Include="SS\Formula\Functions\TestAverageifs.cs" />
     <Compile Include="SS\Formula\Functions\TestSumifs.cs" />
     <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet2013.cs" />

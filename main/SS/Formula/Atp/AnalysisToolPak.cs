@@ -19,13 +19,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NPOI.SS.Formula.Function;
 
-namespace NPOI.SS.Formula.Atp
-{
+namespace NPOI.SS.Formula.Atp {
     using System;
     using System.Collections;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Udf;
 
     public class NotImplemented : FreeRefFunction
@@ -65,14 +64,14 @@ namespace NPOI.SS.Formula.Atp
 
         private static Hashtable CreateFunctionsMap()
         {
-            Hashtable m = new Hashtable(100);
+            Hashtable m = new Hashtable(120);
 
             r(m, "ACCRINT", null);
             r(m, "ACCRINTM", null);
             r(m, "AMORDEGRC", null);
             r(m, "AMORLINC", null);
-            r(m, "AVERAGEIF", null);
-            r(m, "AVERAGEIFS", null);
+            r(m, "AVERAGEIF", AverageIf.instance);
+            r(m, "AVERAGEIFS", AverageIfs.instance);
             r(m, "BAHTTEXT", null);
             r(m, "BESSELI", null);
             r(m, "BESSELJ", null);
