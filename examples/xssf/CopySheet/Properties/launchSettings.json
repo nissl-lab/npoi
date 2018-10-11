@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CopySheet": {
+      "commandName": "Project",
+      "workingDirectory": "."
+    }
+  }
+}

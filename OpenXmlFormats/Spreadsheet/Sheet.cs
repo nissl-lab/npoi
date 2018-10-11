@@ -219,6 +219,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.summaryRightField = true;
             this.showOutlineSymbolsField = true;
         }
+        public CT_OutlinePr Clone()
+        {
+            CT_OutlinePr newPr = new CT_OutlinePr();
+            newPr.applyStylesField = applyStylesField;
+            newPr.showOutlineSymbolsField = showOutlineSymbolsField;
+            newPr.summaryBelowField = summaryBelowField;
+            newPr.summaryRightField = summaryRightField;
+            return newPr;
+        }
 
         [DefaultValue(false)]
         public bool applyStyles
@@ -308,6 +317,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.autoPageBreaksField = true;
             this.fitToPageField = false;
+        }
+        public CT_PageSetUpPr Clone()
+        {
+            CT_PageSetUpPr newPr = new CT_PageSetUpPr();
+            newPr.autoPageBreaksField = autoPageBreaksField;
+            newPr.fitToPageField = fitToPageField;
+            return newPr;
         }
 
         [DefaultValue(true)]

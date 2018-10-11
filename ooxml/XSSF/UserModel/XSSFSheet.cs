@@ -1184,6 +1184,27 @@ namespace NPOI.XSSF.UserModel
             return CellRangeAddress.ValueOf(ref1);
         }
 
+        public CellRangeAddress GetMergedRegion(CellRangeAddress mergedRegion)
+        {
+            if (worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
+                return null;
+            foreach (CT_MergeCell mc in worksheet.mergeCells.mergeCell)
+            {
+                if (!string.IsNullOrEmpty(mc.@ref))
+                {
+                    CellRangeAddress range = CellRangeAddress.ValueOf(mc.@ref);
+                    if (range.FirstColumn <= mergedRegion.FirstColumn
+                     && range.LastColumn >= mergedRegion.LastColumn
+                     && range.FirstRow <= mergedRegion.FirstRow
+                     && range.LastRow >= mergedRegion.LastRow)
+                    {
+                        return range;
+                    }
+                }
+            }
+            return null;
+        }
+
         /**
          * Returns the number of merged regions defined in this worksheet
          *
@@ -4166,7 +4187,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             return false;
-            }
+        }
         public void SetActive(bool value)
         {
             this.IsSelected = value;
@@ -4506,6 +4527,274 @@ namespace NPOI.XSSF.UserModel
             }
             return clonedSheet;
         }
+        public void CopyTo(XSSFWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
+        {
+            StylesTable styles = dest.GetStylesSource();
+            if (copyStyle && dest.NumberOfSheets == 0 && dest.NumberOfFonts == 1 && Workbook.NumberOfFonts > 0)
+            {
+                //The destination is a new document, so replace the default font with the one from this document.
+                styles.GetFonts()[0] = ((XSSFWorkbook)Workbook).GetStylesSource().GetFontAt(0);
+            }
+            XSSFSheet newSheet = (XSSFSheet)dest.CreateSheet(name);
+            newSheet.sheet.state = sheet.state;
+            IDictionary<Int32, ICellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, ICellStyle>() : null;
+            for (int i = FirstRowNum; i <= LastRowNum; i++)
+            {
+                XSSFRow srcRow = (XSSFRow)GetRow(i);
+                XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
+                if (srcRow != null)
+                {
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
+                }
+            }
+            List<CT_Cols> srcCols = worksheet.GetColsList();
+            List<CT_Cols> dstCols = newSheet.worksheet.GetColsList();
+            dstCols.Clear(); //Should already be empty since this is a new sheet.
+            foreach (CT_Cols srcCol in srcCols)
+            {
+                CT_Cols dstCol = new CT_Cols();
+                foreach (var column in srcCol.col)
+                {
+                    dstCol.col.Add(column.Copy());
+                }
+                dstCols.Add(dstCol);
+            }
+            newSheet.ForceFormulaRecalculation = true;
+            newSheet.PrintSetup.Landscape = PrintSetup.Landscape;
+            newSheet.PrintSetup.HResolution = PrintSetup.HResolution;
+            newSheet.PrintSetup.VResolution = PrintSetup.VResolution;
+            newSheet.SetMargin(MarginType.LeftMargin, GetMargin(MarginType.LeftMargin));
+            newSheet.SetMargin(MarginType.RightMargin, GetMargin(MarginType.RightMargin));
+            newSheet.SetMargin(MarginType.TopMargin, GetMargin(MarginType.TopMargin));
+            newSheet.SetMargin(MarginType.BottomMargin, GetMargin(MarginType.BottomMargin));
+            newSheet.PrintSetup.HeaderMargin = PrintSetup.HeaderMargin;
+            newSheet.PrintSetup.FooterMargin = PrintSetup.FooterMargin;
+            newSheet.Header.Left = Header.Left;
+            newSheet.Header.Center = Header.Center;
+            newSheet.Header.Right = Header.Right;
+            newSheet.Footer.Left = Footer.Left;
+            newSheet.Footer.Center = Footer.Center;
+            newSheet.Footer.Right = Footer.Right;
+            newSheet.PrintSetup.Scale = PrintSetup.Scale;
+            newSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
+            newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
+            newSheet.DisplayGridlines = DisplayGridlines;
+            if (worksheet.IsSetSheetPr())
+            {
+                newSheet.worksheet.sheetPr = worksheet.sheetPr.Clone();
+            }
+            if (GetDefaultSheetView().pane != null)
+            {
+                var oldPane = GetDefaultSheetView().pane;
+                var newPane = newSheet.GetPane();
+                newPane.activePane = oldPane.activePane;
+                newPane.state = oldPane.state;
+                newPane.topLeftCell = oldPane.topLeftCell;
+                newPane.xSplit = oldPane.xSplit;
+                newPane.ySplit = oldPane.ySplit;
+            }
+            CopySheetImages(dest, newSheet);
+        }
+        private void CopySheetImages(XSSFWorkbook destWorkbook, XSSFSheet destSheet)
+        {
+            XSSFDrawing sheetDrawing = GetDrawingPatriarch();
+            if (sheetDrawing != null)
+            {
+                IDrawing destDraw = destSheet.CreateDrawingPatriarch();
+                List<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
+                Dictionary<string, uint> pictureIdMapping = new Dictionary<string, uint>();
+                foreach (OpenXmlFormats.Dml.Spreadsheet.IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)
+                {
+                    OpenXmlFormats.Dml.Spreadsheet.CT_TwoCellAnchor cellAnchor = anchor as OpenXmlFormats.Dml.Spreadsheet.CT_TwoCellAnchor;
+                    if (cellAnchor != null)
+                    {
+                        XSSFClientAnchor newAnchor = new XSSFClientAnchor((int)cellAnchor.from.colOff, (int)cellAnchor.from.rowOff,
+                            (int)cellAnchor.to.colOff, (int)cellAnchor.to.rowOff, cellAnchor.from.col, cellAnchor.from.row, cellAnchor.to.col, cellAnchor.to.row);
+                        if (cellAnchor.editAsSpecified)
+                        {
+                            switch (cellAnchor.editAs)
+                            {
+                                case OpenXmlFormats.Dml.Spreadsheet.ST_EditAs.twoCell:
+                                    newAnchor.AnchorType = AnchorType.MoveAndResize;
+                                    break;
+                                case OpenXmlFormats.Dml.Spreadsheet.ST_EditAs.oneCell:
+                                    newAnchor.AnchorType = AnchorType.MoveDontResize;
+                                    break;
+                                case OpenXmlFormats.Dml.Spreadsheet.ST_EditAs.absolute:
+                                case OpenXmlFormats.Dml.Spreadsheet.ST_EditAs.NONE:
+                                default:
+                                    newAnchor.AnchorType = AnchorType.DontMoveAndResize;
+                                    break;
+                            }
+                        }
+
+                        string oldPictureId = anchor.picture.blipFill.blip.embed;
+                        if (!pictureIdMapping.ContainsKey(oldPictureId))
+                        {
+                            XSSFPictureData srcPic = FindPicture(sheetPictures, oldPictureId);
+                            if (srcPic != null && srcPic.PictureType != PictureType.None)
+                            {
+                                pictureIdMapping.Add(oldPictureId, (uint)destWorkbook.AddPicture(srcPic.Data, srcPic.PictureType));
+                            }
+                            else
+                            {
+                                continue; //Unable to find this picture, so skip it
+                            }
+                        }
+                        destDraw.CreatePicture(newAnchor, (int)pictureIdMapping[oldPictureId]);
+                    }
+                }
+            }
+        }
+        private XSSFPictureData FindPicture(List<POIXMLDocumentPart> sheetPictures, string id)
+        {
+            foreach (POIXMLDocumentPart item in sheetPictures)
+            {
+                if(item.GetPackageRelationship().Id == id)
+                {
+                    return item as XSSFPictureData;
+                }
+            }
+            return null;
+        }
+        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<Int32, ICellStyle> styleMap, bool keepFormulas)
+        {
+            destRow.Height = srcRow.Height;
+            if (!srcRow.GetCTRow().IsSetCustomHeight())
+            {
+                //Copying height sets the custom height flag, but Excel will set a value for height even if it's auto-sized.
+                destRow.GetCTRow().unSetCustomHeight();
+            }
+            destRow.Hidden = srcRow.Hidden;
+            destRow.Collapsed = srcRow.Collapsed;
+            destRow.OutlineLevel = srcRow.OutlineLevel;
+            
+            if(srcRow.FirstCellNum < 0)
+            {
+                return; //Row has no cells, this sometimes happens with hidden or blank rows
+            }
+            for (int j = srcRow.FirstCellNum; j <= srcRow.LastCellNum; j++)
+            {
+                XSSFCell oldCell = (XSSFCell)srcRow.GetCell(j);
+                XSSFCell newCell = (XSSFCell)destRow.GetCell(j);
+                if (srcSheet.Workbook == destSheet.Workbook)
+                {
+                    newCell = (XSSFCell)destRow.GetCell(j);
+                }
+                if (oldCell != null)
+                {
+                    if (newCell == null)
+                    {
+                        newCell = (XSSFCell)destRow.CreateCell(j);
+                    }
+                    XSSFSheet.CopyCell(oldCell, newCell, styleMap, keepFormulas);
+                    CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(new CellRangeAddress(srcRow.RowNum, srcRow.RowNum, (short)oldCell.ColumnIndex, (short)oldCell.ColumnIndex));
+                    if (mergedRegion != null)
+                    {
+                        CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
+                                mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
+
+                        if (!destSheet.IsMergedRegion(newMergedRegion))
+                        {
+                            destSheet.AddMergedRegion(newMergedRegion);
+                        }
+                    }
+                }
+            }
+        }
+        private static void CopyCell(ICell oldCell, ICell newCell, IDictionary<Int32, ICellStyle> styleMap, Boolean keepFormulas)
+        {
+            if (styleMap != null)
+            {
+                if (oldCell.CellStyle != null)
+                {
+                    if (oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
+                    {
+                        newCell.CellStyle = oldCell.CellStyle;
+                    }
+                    else
+                    {
+                        int styleHashCode = oldCell.CellStyle.GetHashCode();
+                        if (styleMap.ContainsKey(styleHashCode))
+                        {
+                            newCell.CellStyle = styleMap[styleHashCode];
+                        }
+                        else
+                        {
+                            ICellStyle newCellStyle = (ICellStyle)newCell.Sheet.Workbook.CreateCellStyle();
+                            newCellStyle.CloneStyleFrom(oldCell.CellStyle);
+                            newCell.CellStyle = newCellStyle;
+                            styleMap.Add(styleHashCode, newCellStyle);
+                        }
+                    }
+                }
+                else
+                {
+                    newCell.CellStyle = null;
+                }
+            }
+            switch (oldCell.CellType)
+            {
+                case CellType.String:
+                    XSSFRichTextString rts = oldCell.RichStringCellValue as XSSFRichTextString;
+                    newCell.SetCellValue(rts);
+                    if (rts != null)
+                    {
+                        for (int j = 0; j < rts.NumFormattingRuns; j++)
+                        {
+                            int startIndex = rts.GetIndexOfFormattingRun(j);
+                            int endIndex = 0;
+                            if (j + 1 == rts.NumFormattingRuns)
+                            {
+                                endIndex = rts.Length;
+                            }
+                            else
+                            {
+                                endIndex = rts.GetIndexOfFormattingRun(j + 1);
+                            }
+                            IFont fr = newCell.Sheet.Workbook.CreateFont();
+                            fr.CloneStyleFrom(rts.GetFontOfFormattingRun(j));
+                            newCell.RichStringCellValue.ApplyFont(startIndex, endIndex, fr);
+                        }
+                    }
+                    break;
+                case CellType.Numeric:
+                    newCell.SetCellValue(oldCell.NumericCellValue);
+                    break;
+                case CellType.Blank:
+                    newCell.SetCellType(CellType.Blank);
+                    break;
+                case CellType.Boolean:
+                    newCell.SetCellValue(oldCell.BooleanCellValue);
+                    break;
+                case CellType.Error:
+                    newCell.SetCellValue(oldCell.ErrorCellValue);
+                    break;
+                case CellType.Formula:
+                    if (keepFormulas)
+                    {
+                        newCell.SetCellType(CellType.Formula);
+                        newCell.CellFormula = oldCell.CellFormula;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            newCell.SetCellType(CellType.Numeric);
+                            newCell.SetCellValue(oldCell.NumericCellValue);
+                        }
+                        catch (Exception)
+                        {
+                            newCell.SetCellType(CellType.String);
+                            newCell.SetCellValue(oldCell.ToString());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public XSSFWorkbook GetWorkbook()
         {
             return (XSSFWorkbook)GetParent();

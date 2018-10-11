@@ -192,5 +192,10 @@ namespace NPOI.SS.UserModel
         short Boldweight { get; set; }
 
         bool IsBold { get; set; }
+
+        /// <summary>
+        /// Copies the style from another font into this one
+        /// </summary>
+        void CloneStyleFrom(IFont src);
     }
 }
