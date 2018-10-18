@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
         internal static Dictionary<int, POIXMLRelation> RELATIONS;
         static XSSFPictureData()
         {
-            RELATIONS = new Dictionary<int,POIXMLRelation>(8);
+            RELATIONS = new Dictionary<int,POIXMLRelation>(12);
             RELATIONS[(int)PictureType.EMF] = XSSFRelation.IMAGE_EMF;
             RELATIONS[(int)PictureType.WMF] = XSSFRelation.IMAGE_WMF;
             RELATIONS[(int)PictureType.PICT] = XSSFRelation.IMAGE_PICT;
@@ -50,6 +50,7 @@ namespace NPOI.XSSF.UserModel
             RELATIONS[XSSFWorkbook.PICTURE_TYPE_EPS] = XSSFRelation.IMAGE_EPS;
             RELATIONS[XSSFWorkbook.PICTURE_TYPE_BMP] = XSSFRelation.IMAGE_BMP;
             RELATIONS[XSSFWorkbook.PICTURE_TYPE_WPG] = XSSFRelation.IMAGE_WPG;
+            RELATIONS[XSSFWorkbook.PICTURE_TYPE_JPG] = XSSFRelation.IMAGE_JPG;
         }
 
         /**

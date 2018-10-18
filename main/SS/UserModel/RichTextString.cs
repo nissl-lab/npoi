@@ -86,6 +86,5 @@ namespace NPOI.SS.UserModel
          * @param fontIndex  the font to apply.
          */
         void ApplyFont(short fontIndex);
-
     }
 }

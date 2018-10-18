@@ -254,5 +254,19 @@ namespace NPOI.HSSF.UserModel
             }
             return false;
         }
+
+        public void CloneStyleFrom(IFont src)
+        {
+            FontName = src.FontName;
+            FontHeight = src.FontHeight;
+            IsBold = src.IsBold;
+            Boldweight = src.Boldweight;
+            IsItalic = src.IsItalic;
+            IsStrikeout = src.IsStrikeout;
+            Color = src.Color;
+            Underline = src.Underline;
+            Charset = src.Charset;
+            TypeOffset = src.TypeOffset;
+        }
     }
 }
