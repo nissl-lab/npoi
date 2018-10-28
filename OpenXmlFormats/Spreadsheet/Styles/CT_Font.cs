@@ -704,7 +704,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 foreach (CT_BooleanProperty ctI in this.i)
                 {
-                    CT_BooleanProperty newI = ctFont.AddNewB();
+                    CT_BooleanProperty newI = ctFont.AddNewI();
                     newI.val = ctI.val;
                 }
             }
@@ -741,7 +741,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 foreach (CT_Color ctColor in this.color)
                 {
                     CT_Color newColor = ctFont.AddNewColor();
-                    newColor.theme = ctColor.theme;
+                    newColor.theme = ctColor.theme; //Forces themeSpecified to true even if a theme wasn't specified.
+                    newColor.themeSpecified = ctColor.themeSpecified;
+                    newColor.rgb = ctColor.rgb;
+                    newColor.rgbSpecified = ctColor.rgbSpecified;
+                    newColor.tint = ctColor.tint;
+                    newColor.tintSpecified = ctColor.tintSpecified;
+                    newColor.auto = ctColor.auto;
+                    newColor.autoSpecified = ctColor.autoSpecified;
+                    //Does not copy indexed color field because we don't support indexed colors for XSSF.
+                    //If copying indexed colors between two documents you need to account for the color palettes
+                    //potentially being different between two documents. (MSSQL Reporting Services did this in HSSF)
                 }
             }
             if (this.sz != null)

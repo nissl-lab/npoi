@@ -103,6 +103,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.filterModeField = false;
             this.enableFormatConditionsCalculationField = true;
         }
+        public CT_SheetPr Clone()
+        {
+            CT_SheetPr newPr = new CT_SheetPr();
+            newPr.codeNameField = codeNameField;
+            newPr.enableFormatConditionsCalculationField = enableFormatConditionsCalculationField;
+            newPr.filterModeField = filterModeField;
+            newPr.publishedField = publishedField;
+            newPr.syncHorizontalField = syncHorizontalField;
+            newPr.syncRefField = syncRefField;
+            newPr.syncVerticalField = syncVerticalField;
+            newPr.transitionEntryField = transitionEntryField;
+            newPr.transitionEvaluationField = transitionEvaluationField;
+            if (outlinePrField != null)
+            {
+                newPr.outlinePrField = outlinePrField.Clone();
+            }
+            if (pageSetUpPrField != null)
+            {
+                newPr.pageSetUpPrField = pageSetUpPrField.Clone();
+            }
+            if (tabColorField != null)
+            {
+                newPr.tabColorField = tabColorField.Copy();
+            }
+            return newPr;
+        }
+
         public bool IsSetOutlinePr()
         {
             return this.outlinePrField != null;

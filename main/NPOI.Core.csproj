@@ -18,6 +18,7 @@
     <None Remove="Resources\functionMetadata.txt" />
   </ItemGroup>
 
+  
   <ItemGroup>
     <EmbeddedResource Include="Resources\font_metrics.properties" />
     <EmbeddedResource Include="Resources\functionMetadata.txt" />

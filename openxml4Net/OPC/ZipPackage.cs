@@ -29,6 +29,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         private Util.ZipEntrySource zipArchive;
         bool isStream = false;  // whether the file is passed in with stream, no means passed in with string path
+        public bool IsExternalStream { get { return isStream; } set { isStream = value; } }
 
         /**
          * Constructor. Creates a new ZipPackage.

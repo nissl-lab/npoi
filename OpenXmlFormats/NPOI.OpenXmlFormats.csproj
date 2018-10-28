@@ -40,7 +40,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,7 +55,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\solution\Lib\</OutputPath>
+    <OutputPath>..\solution\Lib\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -66,7 +66,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
-    <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
+    <OutputPath>..\solution\Lib\.net4\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
@@ -77,7 +77,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
-    <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
+    <OutputPath>..\solution\Lib\.net2\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
@@ -288,14 +288,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="npoi.snk" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="npoi.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
