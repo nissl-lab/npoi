@@ -33,8 +33,10 @@ using System.Security;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.3.0.0")]
-[assembly: AssemblyFileVersion("2.3.0.0")]
+[assembly: AssemblyVersion("2.4.0.0")]
+[assembly: AssemblyFileVersion("2.4.0.0")]
 [assembly: AssemblyInformationalVersion("2.0.0.0")]
 [assembly: AllowPartiallyTrustedCallers]
+#if NETSTANDARD2_0 || NET40 || NET45
 [assembly: SecurityRules(SecurityRuleSet.Level1)]
+#endif

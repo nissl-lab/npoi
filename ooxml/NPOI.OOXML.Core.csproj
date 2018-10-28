@@ -9,6 +9,10 @@
 	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
     <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
