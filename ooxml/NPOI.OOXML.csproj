@@ -273,6 +273,8 @@
     <Compile Include="XWPF\Usermodel\Borders.cs" />
     <Compile Include="XWPF\Usermodel\BreakClear.cs" />
     <Compile Include="XWPF\Usermodel\BreakType.cs" />
+    <Compile Include="XWPF\Usermodel\MathContainer.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFAcc.cs" />
     <Compile Include="XWPF\Usermodel\Document.cs" />
     <Compile Include="XWPF\Usermodel\IBody.cs" />
     <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
@@ -294,6 +296,7 @@
     <Compile Include="XWPF\Usermodel\XWPFDefaultParagraphStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDefaultRunStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFF.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFooter.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFootnote.cs" />
@@ -303,8 +306,11 @@
     <Compile Include="XWPF\Usermodel\XWPFHyperlink.cs" />
     <Compile Include="XWPF\Usermodel\XWPFHyperlinkRun.cs" />
     <Compile Include="XWPF\Usermodel\XWPFLatentStyles.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFNary.cs" />
     <Compile Include="XWPF\Usermodel\XWPFNum.cs" />
     <Compile Include="XWPF\Usermodel\XWPFNumbering.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFOMath.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFOMathArg.cs" />
     <Compile Include="XWPF\Usermodel\XWPFParagraph.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPicture.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
@@ -315,6 +321,8 @@
     <Compile Include="XWPF\Usermodel\XWPFSDTContent.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSDTContentCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSharedRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSSub.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />

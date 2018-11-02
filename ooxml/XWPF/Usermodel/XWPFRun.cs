@@ -358,12 +358,11 @@ namespace NPOI.XWPF.UserModel
             SetText(value, run.GetTList().Count);
         }
 
-        /**
-         * Sets the text of this text run.in the 
-         *
-         * @param value the literal text which shall be displayed in the document
-         * @param pos - position in the text array (NB: 0 based)
-         */
+        /// <summary>
+        /// Sets the text of this text run.in the 
+        /// </summary>
+        /// <param name="value">the literal text which shall be displayed in the document</param>
+        /// <param name="pos">position in the text array (NB: 0 based)</param>
         public void SetText(String value, int pos)
         {
             int length = run.SizeOfTArray();
