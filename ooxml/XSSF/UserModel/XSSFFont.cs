@@ -464,7 +464,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                throw new POIXMLException("Attention: an attempt to set a type of unknow charset and charSet");
+                throw new POIXMLException("Attention: An attempt was made to set an unknown character set");
             }
         }
 
@@ -653,5 +653,25 @@ namespace NPOI.XSSF.UserModel
             return _ctFont.ToString().Equals(cf.GetCTFont().ToString());
         }
 
+        public void CloneStyleFrom(IFont src)
+        {
+            if(src is XSSFFont)
+            {
+                _ctFont = ((XSSFFont)src)._ctFont;
+            }
+            else
+            {
+                FontName = src.FontName;
+                FontHeight = src.FontHeight;
+                IsBold = src.IsBold;
+                Boldweight = src.Boldweight;
+                IsItalic = src.IsItalic;
+                IsStrikeout = src.IsStrikeout;
+                Color = src.Color;
+                Underline = src.Underline;
+                Charset = src.Charset;
+                TypeOffset = src.TypeOffset;
+            }
+        }
     }
 }

@@ -132,26 +132,26 @@ namespace TestCases.SS.Util
             return sb.ToString();
         }
 
-        public static void Main(String[] args)
-        {
+        //public static void Main(String[] args)
+        //{
 
-            IWorkbook wb = new HSSFWorkbook();
-            SheetWriter sw = new SheetWriter(wb);
-            ComparisonExample[] ces = NumberComparisonExamples.GetComparisonExamples();
-            for (int i = 0; i < ces.Length; i++)
-            {
-                ComparisonExample ce = ces[i];
-                sw.AddTestRow(ce.GetA(), ce.GetB(), ce.GetExpectedResult());
-            }
+        //    IWorkbook wb = new HSSFWorkbook();
+        //    SheetWriter sw = new SheetWriter(wb);
+        //    ComparisonExample[] ces = NumberComparisonExamples.GetComparisonExamples();
+        //    for (int i = 0; i < ces.Length; i++)
+        //    {
+        //        ComparisonExample ce = ces[i];
+        //        sw.AddTestRow(ce.GetA(), ce.GetB(), ce.GetExpectedResult());
+        //    }
 
 
-            FileInfo outputFile = new FileInfo("ExcelNumberCompare.xls");
+        //    FileInfo outputFile = new FileInfo("ExcelNumberCompare.xls");
 
-            FileStream os = File.OpenWrite(outputFile.FullName);
-            wb.Write(os);
-            os.Close();
+        //    FileStream os = File.OpenWrite(outputFile.FullName);
+        //    wb.Write(os);
+        //    os.Close();
 
-            Console.WriteLine("Finished writing '" + outputFile.FullName + "'");
-        }
+        //    Console.WriteLine("Finished writing '" + outputFile.FullName + "'");
+        //}
     }
 }

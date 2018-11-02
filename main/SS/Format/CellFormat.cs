@@ -22,7 +22,6 @@ namespace NPOI.SS.Format
     using NPOI.SS.UserModel;
     using System.Text.RegularExpressions;
     using System.Collections.Generic;
-    using System.Windows.Forms;
     using System.Drawing;
 
     /**
@@ -306,85 +305,6 @@ namespace NPOI.SS.Format
             }
         }
 
-        /**
-         * Uses the result of Applying this format to the value, Setting the text
-         * and color of a label before returning the result.
-         *
-         * @param label The label to apply to.
-         * @param value The value to Process.
-         *
-         * @return The result, in a {@link CellFormatResult}.
-         */
-        public CellFormatResult Apply(Label label, Object value)
-        {
-            CellFormatResult result = Apply(value);
-            label.Text = (/*setter*/result.Text);
-            if (result.TextColor != Color.Empty)
-            {
-                label.ForeColor = (/*setter*/result.TextColor);
-            }
-            return result;
-        }
-        /**
-     * Uses the result of applying this format to the given date, setting the text
-     * and color of a label before returning the result.
-     *
-     * @param label        The label to apply to.
-     * @param date         The date.
-     * @param numericValue The numeric value for the date.
-     *
-     * @return The result, in a {@link CellFormatResult}.
-     */
-        private CellFormatResult Apply(Label label, DateTime date, double numericValue)
-        {
-            CellFormatResult result = Apply(date, numericValue);
-            label.Text = (result.Text);
-            if (result.TextColor != Color.Empty)
-            {
-                label.ForeColor = (result.TextColor);
-            }
-            return result;
-        }
-        /**
-         * Fetches the appropriate value from the cell, and uses the result, Setting
-         * the text and color of a label before returning the result.
-         *
-         * @param label The label to apply to.
-         * @param c     The cell.
-         *
-         * @return The result, in a {@link CellFormatResult}.
-         */
-        public CellFormatResult Apply(Label label, ICell c)
-        {
-            switch (UltimateType(c))
-            {
-                case CellType.Blank:
-                    return Apply(label, "");
-                case CellType.Boolean:
-                    return Apply(label, c.BooleanCellValue);
-                case CellType.Numeric:
-                    Double value = c.NumericCellValue;
-                    if (GetApplicableFormatPart(value).CellFormatType == CellFormatType.DATE)
-                    {
-                        if (DateUtil.IsValidExcelDate(value))
-                        {
-                            return Apply(label, c.DateCellValue, value);
-                        }
-                        else
-                        {
-                            return Apply(label, INVALID_VALUE_FOR_FORMAT);
-                        }
-                    }
-                    else
-                    {
-                        return Apply(label, value);
-                    }
-                case CellType.String:
-                    return Apply(label, c.StringCellValue);
-                default:
-                    return Apply(label, "?");
-            }
-        }
         /**
          * Returns the {@link CellFormatPart} that applies to the value.  Result
          * depends on how many parts the cell format has, the cell value and any

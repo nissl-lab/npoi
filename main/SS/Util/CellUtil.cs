@@ -145,6 +145,7 @@ namespace NPOI.SS.Util
             }
             return newCell;
         }
+
         /**
          * Get a row from the spreadsheet, and create it if it doesn't exist.
          *

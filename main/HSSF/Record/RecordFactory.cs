@@ -247,7 +247,7 @@ namespace NPOI.HSSF.Record
                 typeof(AreaRecord),
                 typeof(AttachedLabelRecord),
                 typeof(AxcExtRecord),
-                typeof(AxisLineRecord),
+                typeof(AxisLineFormatRecord),
                 typeof(AxisParentRecord),
                 typeof(AxisRecord),
                 typeof(AxesUsedRecord),

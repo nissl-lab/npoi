@@ -342,17 +342,24 @@ namespace NPOI.SS.Util
         public static string GetPrefixForLocale(CultureInfo locale)
         {
             string localeString = locale.ToString().ToLower();
-            string result = localePrefixes[localeString];
-            if (result == null)
+            string result = null;
+            if (!localePrefixes.ContainsKey(localeString))
             {
-                result = localePrefixes[localeString.Substring(0, 2)];
-                if (result == null)
+                if (!localePrefixes.ContainsKey(localeString.Substring(0, 2)))
                 {
                     CultureInfo parentLocale = CultureInfo.GetCultureInfo(localeString.Substring(0, 2));
                     logger.Log(POILogger.ERROR, "Unable to find prefix for " + locale + "(" + locale.DisplayName + ") or "
                             + localeString.Substring(0, 2) + "(" + parentLocale.DisplayName + ")");
                     return "";
                 }
+                else
+                {
+                    result = localePrefixes[localeString.Substring(0, 2)];
+                }
+            }
+            else
+            {
+                result = localePrefixes[localeString];
             }
             return result;
         }
@@ -383,8 +390,14 @@ namespace NPOI.SS.Util
                 else
                 {
                     // It's a code, translate it if necessary
-                    string mappedToken = tokenConversions[(token)];
-                    result.Append(mappedToken == null ? token : mappedToken);
+                    if (!tokenConversions.ContainsKey(token))
+                    {
+                        result.Append(token);
+                    } else
+                    {
+                        string mappedToken = tokenConversions[(token)];
+                        result.Append(mappedToken);
+                    }
                 }
             }
             result.Append(";@");

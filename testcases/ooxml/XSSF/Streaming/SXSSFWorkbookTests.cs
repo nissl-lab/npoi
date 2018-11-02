@@ -278,7 +278,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets,rows,cols,CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\numericTest.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "numericTest.xlsx");
             WriteFile(savePath, _objectToTest);
            
             Assert.True(File.Exists(savePath));
@@ -293,8 +293,8 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\numericTest.xlsx";
-            var reSavePath = Environment.CurrentDirectory + "\\numericTest2.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "numericTest.xlsx");
+            var reSavePath = Path.Combine(TestContext.CurrentContext.TestDirectory , "numericTest2.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -318,7 +318,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.String);
-            var savePath = Environment.CurrentDirectory + "\\plainStringTest.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "plainStringTest.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -333,7 +333,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Boolean);
-            var savePath = Environment.CurrentDirectory + "\\boolTest.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "boolTest.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -348,7 +348,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Blank);
-            var savePath = Environment.CurrentDirectory + "\\blankTest.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "blankTest.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -363,7 +363,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Formula);
-            var savePath = Environment.CurrentDirectory + "\\formulaTest.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "formulaTest.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -378,7 +378,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10;
             var cols = 10;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Error);
-            var savePath = Environment.CurrentDirectory + "\\errorTest.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "errorTest.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -395,7 +395,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 1048576;
             var cols = 16384;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheet.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "maxCellsWorksheet.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -412,7 +412,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10000;
             var cols = 100;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\maxCellsWorksheetZip.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "maxCellsWorksheetZip.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -428,7 +428,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10000;
             var cols = 100;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\largeWorksheet.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "largeWorksheet.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));
@@ -444,7 +444,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             var rows = 10000;
             var cols = 100;
             AddCells(_objectToTest, sheets, rows, cols, CellType.Numeric);
-            var savePath = Environment.CurrentDirectory + "\\largeGzipWorksheet.xlsx";
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "largeGzipWorksheet.xlsx");
             WriteFile(savePath, _objectToTest);
 
             Assert.True(File.Exists(savePath));

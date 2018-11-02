@@ -116,14 +116,14 @@ namespace TestCases
             //  Some of the tests are depending on the american culture.
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-            String dataDirName = System.Configuration.ConfigurationManager.AppSettings[TEST_PROPERTY];
+            String dataDirName = TestContext.Parameters[TEST_PROPERTY];
 
             if (dataDirName == null)
                 throw new Exception("Must set system property '"
                         + TEST_PROPERTY
                         + "' before running tests");
 
-            string dataDir = Path.Combine(TestContext.CurrentContext.TestDirectory,dataDirName, _moduleDir);
+            string dataDir = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory,dataDirName, _moduleDir));
             if (!Directory.Exists(dataDir))
             {
                 throw new IOException("Data dir '" + dataDir

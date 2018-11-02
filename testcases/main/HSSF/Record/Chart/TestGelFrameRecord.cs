@@ -58,11 +58,5 @@ namespace TestCases.HSSF.Record.Chart
             GelFrameRecord record = new GelFrameRecord(TestcaseRecordInputStream.Create((short)0x1066, data));
             //Assert.AreEqual(0xD, record.Options);
         }
-        [Test]
-        public void TestStore()
-        {
-            //TODO: complete this test
-            Assert.Fail();
-        }
     }
 }

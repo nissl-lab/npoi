@@ -174,29 +174,6 @@ namespace TestCases.HSSF.UserModel
 
             byte[] wbData = baos.ToArray();
 
-#if !HIDE_UNREACHABLE_CODE
-            if (false)
-            { // TODO (Jul 2008) fix EventRecordFactory to process unknown records, (and DV records for that matter)
-
-                ERFListener erfListener = null; // new MyERFListener();
-                EventRecordFactory erf = new EventRecordFactory(erfListener, null);
-                try
-                {
-                    POIFSFileSystem fs = new POIFSFileSystem(new MemoryStream(baos.ToArray()));
-                    throw new NotImplementedException("The method CreateDocumentInputStream of POIFSFileSystem is not implemented.");
-                    //erf.ProcessRecords(fs.CreateDocumentInputStream("Workbook"));
-                }
-                catch (RecordFormatException e)
-                {
-                    throw new RuntimeException(e);
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-            // else verify record ordering by navigating the raw bytes
-#endif
 
             byte[] dvHeaderRecStart = { (byte)0xB2, 0x01, 0x12, 0x00, };
             int dvHeaderOffset = FindIndex(wbData, dvHeaderRecStart);

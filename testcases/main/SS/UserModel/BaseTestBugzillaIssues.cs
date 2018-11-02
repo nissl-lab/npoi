@@ -67,8 +67,8 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet();
             IRow r = s.CreateRow(0);
-            r.CreateCell(0).CellFormula = (/*setter*/"HYPERLINK(\"http://jakarta.apache.org\",\"Jakarta\")");
-            r.CreateCell(1).CellFormula = (/*setter*/"HYPERLINK(\"http://google.com\",\"Google\")");
+            r.CreateCell(0).CellFormula = "HYPERLINK(\"http://jakarta.apache.org\",\"Jakarta\")";
+            r.CreateCell(1).CellFormula = "HYPERLINK(\"http://google.com\",\"Google\")";
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             r = wb.GetSheetAt(0).GetRow(0);

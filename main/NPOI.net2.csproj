@@ -17,8 +17,6 @@
     <ReleaseVersion>1.2.4</ReleaseVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -149,7 +147,7 @@
     <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisLineRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisLineFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
@@ -681,6 +679,8 @@
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
+	<Compile Include="SS\UserModel\Charts\BarChartData.cs" />
+	<Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
