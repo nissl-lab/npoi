@@ -20,6 +20,8 @@ Support and Service
 Neuzilla is the studio behind NPOI. <br />
 To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
+We are going to provide .NET core version in Oct, 2018.
+
 Advantage of NPOI
 =================
 a. It's totally free to use<br />
