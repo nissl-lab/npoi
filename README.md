@@ -1,17 +1,24 @@
-NPOI - .NET Core Support
+NPOI
 ===================
-
-**We are working on NPOI .NET Core version. Since .NET Core 2.1 is stable enough, we decide to migrate NPOI to .NET core.**
-
+[![Join the chat at https://gitter.im/tonyqus/npoi](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tonyqus/npoi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
+[![NuGet](https://img.shields.io/nuget/dt/NPOI.svg)](https://www.nuget.org/packages/NPOI) 
+[![Analytics](https://ga-beacon.appspot.com/UA-39118634-1/readme)](https://github.com/tonyqus/npoi)
+<br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-How to use NPOI in Linux
-======================
+How to use NPOI in Linux (based on .NET Standard 2.0)
+===================
 According to [Scott's post](https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx), you must install the following libraries before using NPOI. 
 ```
 sudo apt install libc6-dev 
 sudo apt install libgdiplus
 ```
+
+Support and Service
+===================
+Neuzilla is the studio behind NPOI. <br />
+To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
 Advantage of NPOI
 =================
@@ -34,8 +41,9 @@ Neuzilla on SNS
 Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
 QQ Group: 20144214<br />
-Commercial Email Support: support@neuzilla.com
+Email: support@neuzilla.com
 
 System Requirement
 ===================
+.NET Framework 4.0 and above
 .NET Standard 2.0
