@@ -7,20 +7,12 @@ NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-How to use NPOI in Linux (based on .NET Standard 2.0)
-===================
-According to [Scott's post](https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx), you must install the following libraries before using NPOI. 
-```
-sudo apt install libc6-dev 
-sudo apt install libgdiplus
-```
-
 Support and Service
 ===================
 Neuzilla is the studio behind NPOI. <br />
 To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
-We are going to provide .NET core version in Oct, 2018.
+We are going to provide .NET core version in Oct, 2018. 
 
 Advantage of NPOI
 =================
@@ -47,5 +39,7 @@ Email: support@neuzilla.com
 
 System Requirement
 ===================
-.NET Framework 4.0 and above
-.NET Standard 2.0
+VS2017<br />
+VS2015<br />
+VS2010 with .NET 4.0 runtime<br />
+VS2005 or VS2008 with .NET 2.0 Runtime (SP1) <br />
