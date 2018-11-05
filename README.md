@@ -42,7 +42,7 @@ Neuzilla on SNS
 ============
 Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
-QQ Group: 20144214<br />
+QQ Group: 189925337, 20144214<br />
 
 System Requirement
 ===================
