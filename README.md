@@ -10,6 +10,8 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 Support and Service
 ===================
 Neuzilla is the studio behind NPOI. <br />
+Our Email: support@neuzilla.com<br />
+
 To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
 How to use NPOI in Linux (based on .NET Standard 2.0)
@@ -41,9 +43,8 @@ Neuzilla on SNS
 Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
 QQ Group: 20144214<br />
-Email: support@neuzilla.com
 
 System Requirement
 ===================
-.NET Framework 4.0 and above
+.NET Framework 4.0 and above<br />
 .NET Standard 2.0
