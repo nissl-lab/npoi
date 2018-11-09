@@ -14,13 +14,7 @@ Our Email: support@neuzilla.com<br />
 
 To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
-How to use NPOI in Linux (based on .NET Standard 2.0)
-===================
-According to [Scott's post](https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx), you must install the following libraries before using NPOI. 
-```
-sudo apt install libc6-dev 
-sudo apt install libgdiplus
-```
+[How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
 
 Advantage of NPOI
 =================
