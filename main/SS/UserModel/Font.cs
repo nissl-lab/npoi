@@ -109,43 +109,37 @@ namespace NPOI.SS.UserModel
     public interface IFont
     {
 
-        /**
-         * get the name for the font (i.e. Arial)
-         * @return String representing the name of the font to use
-         */
-
+        /// <summary>
+        /// get the name for the font (i.e. Arial)
+        /// </summary>
         String FontName { get; set; }
 
-        /**
-         * get the font height in unit's of 1/20th of a point.  Maybe you might want to
-         * use the GetFontHeightInPoints which matches to the familiar 10, 12, 14 etc..
-         * @return short - height in 1/20ths of a point
-         * @see #GetFontHeightInPoints()
-         */
-
+        /// <summary>
+        ///  Get the font height in unit's of 1/20th of a point.
+        /// </summary>
+        /// <remarks>
+        /// Maybe you might want to use the GetFontHeightInPoints which matches to the familiar 10, 12, 14 etc..
+        /// </remarks>
+        /// <see cref="FontHeightInPoints"/>
         double FontHeight { get; set; }
 
-        /**
-         * get the font height
-         * @return short - height in the familiar unit of measure - points
-         * @see #GetFontHeight()
-         */
-
-        short FontHeightInPoints { get; set; }
-
-        /**
-         * get whether to use italics or not
-         * @return italics or not
-         */
-
+        /// <summary>
+        /// Get the font height in points.
+        /// </summary>
+        /// <remarks>
+        /// This will return the same font height that is shown in Excel, such as 10 or 14 or 28.
+        /// </remarks>
+        /// <see cref="FontHeight"/>
+        double FontHeightInPoints { get; set; }
+ 
+        /// <summary>
+        /// get whether to use italics or not
+        /// </summary>
         bool IsItalic { get; set; }
 
-
-        /**
-         * get whether to use a strikeout horizontal line through the text or not
-         * @return strikeout or not
-         */
-
+        /// <summary>
+        /// get whether to use a strikeout horizontal line through the text or not
+        /// </summary>
         bool IsStrikeout { get; set; }
 
         /**
@@ -157,19 +151,14 @@ namespace NPOI.SS.UserModel
          */
         short Color { get; set; }
 
-
-        /**
-         * get normal,super or subscript.
-         * @return offset type to use (none,super,sub)
-         */
-
+        /// <summary>
+        ///  get type of text underlining to use
+        /// </summary>
         FontSuperScript TypeOffset { get; set; }
 
-        /**
-         * get type of text underlining to use
-         * @return underlining type
-         */
-
+        /// <summary>
+        /// get type of text underlining to use
+        /// </summary>
         FontUnderlineType Underline { get; set; }
 
         /**

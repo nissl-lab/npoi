@@ -226,13 +226,35 @@ namespace NPOI.XSSF.UserModel
             long index = ((color == null) || !color.themeSpecified) ? 0 : color.theme;
             return (short)index;
         }
-
-        /**
-         * get the font height in point.
-         *
-         * @return short - height in point
-         */
+        /// <summary>
+        ///  Get the font height in unit's of 1/20th of a point.
+        /// </summary>
         public double FontHeight
+        {
+            get
+            {
+                return FontHeightRaw * 20.0;
+            }
+            set 
+            {
+                FontHeightRaw = value / 20.0;
+            }
+        }
+        /// <summary>
+        ///  Get the font height in points.
+        /// </summary>
+        public double FontHeightInPoints
+        {
+            get
+            {
+                return FontHeightRaw;
+            }
+            set 
+            {
+                FontHeightRaw = value;
+            }
+        }
+        private double FontHeightRaw
         {
             get
             {
@@ -240,34 +262,15 @@ namespace NPOI.XSSF.UserModel
                 if (size != null)
                 {
                     double fontHeight = size.val;
-                    return (short)(fontHeight * 20);
+                    return fontHeight;
                 }
-                return (short)(DEFAULT_FONT_SIZE * 20);
+                return DEFAULT_FONT_SIZE;
             }
-            set 
-            {
+            set {
                 CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
                 fontSize.val = value;
             }
         }
-
-
-        /**
-         * @see #GetFontHeight()
-         */
-        public short FontHeightInPoints
-        {
-            get
-            {
-                return (short)(FontHeight / 20);
-            }
-            set 
-            {
-                CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
-                fontSize.val = value;
-            }
-        }
-
         /**
          * get the name of the font (i.e. Arial)
          *
