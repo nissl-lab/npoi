@@ -10,15 +10,11 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 Support and Service
 ===================
 Neuzilla is the studio behind NPOI. <br />
+Our Email: support@neuzilla.com<br />
+
 To follow us, please visit http://www.linkedin.com/company/neuzilla <br />
 
-How to use NPOI in Linux (based on .NET Standard 2.0)
-===================
-According to [Scott's post](https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx), you must install the following libraries before using NPOI. 
-```
-sudo apt install libc6-dev 
-sudo apt install libgdiplus
-```
+[How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
 
 Advantage of NPOI
 =================
@@ -40,10 +36,9 @@ Neuzilla on SNS
 ============
 Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065 <br/>
 Twitter: http://twitter.com/tonyqus <br />
-QQ Group: 20144214<br />
-Email: support@neuzilla.com
+QQ Group: 189925337, 20144214<br />
 
 System Requirement
 ===================
-.NET Framework 4.0 and above
+.NET Framework 4.0 and above<br />
 .NET Standard 2.0
