@@ -92,7 +92,7 @@ namespace NPOI.SS
             Assert.IsTrue(wb is XSSFWorkbook);
             // File -> either
             wb = WorkbookFactory.Create(
-                  testdataPath + xls
+                  Path.GetFullPath(testdataPath + xls)
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
