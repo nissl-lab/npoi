@@ -184,7 +184,10 @@ namespace NPOI.SS.Util
             {
                 sheet.ShiftRows(targetRowIndex, sheet.LastRowNum, 1);
             }
-            else
+
+            //Jacky: the newRow point to an incorrect row (targetRowIndex + 1) after ShiftRows, should check it again
+            newRow = sheet.GetRow(targetRowIndex);
+            if (newRow == null)
             {
                 newRow = sheet.CreateRow(targetRowIndex);
             }
