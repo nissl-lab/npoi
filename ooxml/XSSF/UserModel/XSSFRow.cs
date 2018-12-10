@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using NPOI.Util;
 using NPOI.SS;
 using System.Collections;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -44,7 +45,7 @@ namespace NPOI.XSSF.UserModel
          * Cells of this row keyed by their column indexes.
          * The TreeMap ensures that the cells are ordered by columnIndex in the ascending order.
          */
-        private SortedDictionary<int, ICell> _cells;
+        private SortedList<int, ICell> _cells;
 
         /**
          * the parent sheet
@@ -61,7 +62,7 @@ namespace NPOI.XSSF.UserModel
         {
             _row = row;
             _sheet = sheet;
-            _cells = new SortedDictionary<int, ICell>();
+            _cells = new SortedList<int, ICell>();
             if (0 < row.SizeOfCArray())
             {
                 foreach (CT_Cell c in row.c)
@@ -87,22 +88,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Cell iterator over the physically defined cells:
-         * <blockquote><pre>
-         * for (Iterator<Cell> it = row.cellIterator(); it.HasNext(); ) {
-         *     Cell cell = it.next();
-         *     ...
-         * }
-         * </pre></blockquote>
-         *
-         * @return an iterator over cells in this row.
-         */
-        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
-        {
-            return _cells.Values.GetEnumerator();
-        }
-
-        /**
          * Alias for {@link #cellIterator()} to allow  foreach loops:
          * <blockquote><pre>
          * for(Cell cell : row){
@@ -114,7 +99,7 @@ namespace NPOI.XSSF.UserModel
          */
         public IEnumerator<ICell> GetEnumerator()
         {
-            return CellIterator();
+            return _cells.Values.GetEnumerator();
         }
 
         /**
@@ -256,8 +241,9 @@ namespace NPOI.XSSF.UserModel
             }
             throw new ArgumentException("Illegal policy " + policy + " (" + policy.id + ")");
         }
-        int GetFirstKey(SortedDictionary<int, ICell>.KeyCollection keys)
+        int GetFirstKey(IList<int> keys)
         {
+            return keys[0];
             int i = 0;
             foreach (int key in keys)
             {
@@ -266,16 +252,9 @@ namespace NPOI.XSSF.UserModel
             }
             throw new ArgumentOutOfRangeException();
         }
-        int GetLastKey(SortedDictionary<int, ICell>.KeyCollection keys)
+        int GetLastKey(IList<int> keys)
         {
-            int i = 0;
-            foreach (int key in keys)
-            {
-                if (i == keys.Count - 1)
-                    return key;
-                i++;
-            }
-            throw new ArgumentOutOfRangeException();
+            return keys[keys.Count - 1];
         }
         /**
          * Get the number of the first cell Contained in this row.
