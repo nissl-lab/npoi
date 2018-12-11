@@ -244,13 +244,6 @@ namespace NPOI.XSSF.UserModel
         int GetFirstKey(IList<int> keys)
         {
             return keys[0];
-            int i = 0;
-            foreach (int key in keys)
-            {
-                if (i == 0)
-                    return key;
-            }
-            throw new ArgumentOutOfRangeException();
         }
         int GetLastKey(IList<int> keys)
         {
