@@ -5247,11 +5247,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_Columns ctObj = new CT_Columns();
             if (node.Attributes["w:equalWidth"] != null)
-                ctObj.equalWidth = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:equalWidth"].Value);
+                ctObj.equalWidth = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:equalWidth"].Value,true);
             ctObj.space = XmlHelper.ReadULong(node.Attributes["w:space"]);
             ctObj.num = XmlHelper.ReadString(node.Attributes["w:num"]);
             if (node.Attributes["w:sep"] != null)
-                ctObj.sep = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:sep"].Value);
+                ctObj.sep = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:sep"].Value,true);
             ctObj.col = new List<CT_Column>();
             foreach (XmlNode childNode in node.ChildNodes)
             {

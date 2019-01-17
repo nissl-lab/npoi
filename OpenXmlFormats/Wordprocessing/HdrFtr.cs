@@ -1864,7 +1864,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_FtnEdnRef ctObj = new CT_FtnEdnRef();
             if (node.Attributes["w:customMarkFollows"] != null)
-                ctObj.customMarkFollows = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:customMarkFollows"].Value);
+                ctObj.customMarkFollows = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:customMarkFollows"].Value,true);
             ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
             ctObj.DomNode = node;
             return ctObj;
