@@ -86,6 +86,22 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public void SetFillForegroundColor(XSSFColor color)
+        {
+            CT_PatternFill ptrn =
+                _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
+            CT_Color bgColor = color.GetCTColor();
+            ptrn.fgColor = (bgColor);
+        }
+
+        public void SetFillBackgroundColor(XSSFColor color)
+        {
+            CT_PatternFill ptrn =
+                _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
+            CT_Color bgColor = color.GetCTColor();
+            ptrn.bgColor = (bgColor);
+        }
+
     }
 
 }
