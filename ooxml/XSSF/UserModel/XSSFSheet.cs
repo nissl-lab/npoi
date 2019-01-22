@@ -2887,6 +2887,9 @@ namespace NPOI.XSSF.UserModel
                 map.Add(r.RowNum, r);
             }
             _rows = map;
+
+            // Sort CTRows by index asc.
+            worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
         }
         private class ShiftCommentComparator : IComparer<XSSFComment>
         {
