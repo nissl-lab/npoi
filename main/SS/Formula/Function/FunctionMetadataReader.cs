@@ -24,6 +24,7 @@ namespace NPOI.SS.Formula.Function
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula.PTG;
     using System.Globalization;
+    using System.Text;
 
     /**
      * Converts the text meta-data file into a <c>FunctionMetadataRegistry</c>
@@ -32,8 +33,11 @@ namespace NPOI.SS.Formula.Function
      */
     class FunctionMetadataReader
     {
-
+#if NETSTANDARD2_0
+        private const String METADATA_FILE_NAME = "NPOI.Resources.functionMetadata.txt";
+#else
         private const String METADATA_FILE_NAME = "functionMetadata.txt";
+#endif
 
         /** plain ASCII text metadata file uses three dots for ellipsis */
         private const string ELLIPSIS = "...";

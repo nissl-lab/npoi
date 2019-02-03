@@ -1,3 +1,21 @@
+2.4.0 (Oct, 2018£©
+New features
+.NET Standard 2.0 support
+stop .NET Framework 2.0 support (some contributed code start using System.Linq)
+Add Excel function support for AVERAGEIF and AVERAGEIFS
+CopySheet support in XSSFSheet
+Implemented OMath formula edit/creation in XWPF
+Support line and bar mixed chart 
+
+BUG Fixes
+fix SharpZipLib 0.86 dependency issue in .NET Framework
+solve SecurityRules issue since .NET 4.0 while using AllowPartiallyTrustedCallers 
+AutoFilter colId must have value even when it equals 0
+Fix NUnit Test cases in VS2017 (development purpose only)
+MathX.Round() - fixing some instances of incorrect rounding and adding
+Fix Word processing fields issue in XWPF
+Fix a bug of 'adding picture to word' failed
+
 2.3.0 (Mar, 2017£©
 New Features
 - implement XSSF Streaming

@@ -27,14 +27,14 @@ namespace NPOI.SS.Formula.Functions
 
     /**
      * Implementation for the function COUNTIF<p/>
-     * 
+     *
      * Syntax: COUNTIF ( range, criteria )
      *    <table border="0" cellpAdding="1" cellspacing="0" summary="Parameter descriptions">
      *      <tr><th>range </th><td>is the range of cells to be Counted based on the criteria</td></tr>
      *      <tr><th>criteria</th><td>is used to determine which cells to Count</td></tr>
      *    </table>
      * <p/>
-     * 
+     *
      * @author Josh Micich
      */
     public class Countif : Fixed2ArgFunction
@@ -424,7 +424,8 @@ namespace NPOI.SS.Formula.Functions
                 }
                 if (!(x is StringEval))
                 {
-                    // must always be string
+                    if (_operator.Code is CmpOp.NE) return true;
+                    // must almost always be string
                     // even if match str is wild, but contains only digits
                     // e.g. '4*7', NumberEval(4567) does not match
                     return false;
@@ -501,7 +502,7 @@ namespace NPOI.SS.Formula.Functions
                         case ']':
                         case '(':
                         case ')':
-                            // escape literal characters that would have special meaning in regex 
+                            // escape literal characters that would have special meaning in regex
                             sb.Append("\\").Append(ch);
                             continue;
                     }
@@ -528,7 +529,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        
+
         /**
      * @return the number of evaluated cells in the range that match the specified criteria
      */
@@ -547,8 +548,8 @@ namespace NPOI.SS.Formula.Functions
                 throw new ArgumentException("Bad range arg type (" + rangeArg.GetType().Name + ")");
             }
         }
-        
-        
+
+
         /**
      *
      * @return the de-referenced criteria arg (possibly {@link ErrorEval})
@@ -643,7 +644,7 @@ namespace NPOI.SS.Formula.Functions
             return null;
         }
         /**
-         * bool literals ('TRUE', 'FALSE') treated similarly but NOT same as numbers. 
+         * bool literals ('TRUE', 'FALSE') treated similarly but NOT same as numbers.
          */
         /* package */
         public static bool? ParseBoolean(String strRep)

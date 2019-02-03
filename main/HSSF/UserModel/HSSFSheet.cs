@@ -2225,7 +2225,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public System.Drawing.Font HSSFFont2Font(HSSFFont font1)
         {
-            return new System.Drawing.Font(font1.FontName, font1.FontHeightInPoints);
+            return new System.Drawing.Font(font1.FontName, (float)font1.FontHeightInPoints);
         }
 
         /// <summary>

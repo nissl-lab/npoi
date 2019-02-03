@@ -21,7 +21,6 @@ namespace NPOI.SS.Util
 
     using NPOI.SS.UserModel;
     using System.Drawing;
-    using System.Windows.Forms;
     using System.Collections.Generic;
 
     /**
@@ -450,14 +449,22 @@ namespace NPOI.SS.Util
 
             IWorkbook wb = sheet.Workbook;
             DataFormatter formatter = new DataFormatter();
-            IFont defaultFont = wb.GetFontAt((short) 0);
+            IFont defaultFont = wb.GetFontAt(0);
 
             //str = new AttributedString((defaultChar));
             //copyAttributes(defaultFont, str, 0, 1);
             //layout = new TextLayout(str.Iterator, fontRenderContext);
             //int defaultCharWidth = (int)layout.Advance;
+            int defaultCharWidth = 0;
             Font font = IFont2Font(defaultFont);
-            int defaultCharWidth = TextRenderer.MeasureText("" + new String(defaultChar, 1), font).Width;
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue).Width;
+                }
+            }
             //DummyEvaluator dummyEvaluator = new DummyEvaluator();
 
             double width = -1;
@@ -472,52 +479,6 @@ namespace NPOI.SS.Util
 
                 double cellWidth = GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
                 width = Math.Max(width, cellWidth);
-            }
-            return width;
-        }
-
-
-        /**
-         * Compute width of a column based on a subset of the rows and return the result
-         *
-         * @param sheet the sheet to calculate
-         * @param column    0-based index of the column
-         * @param useMergedCells    whether to use merged cells
-         * @param firstRow  0-based index of the first row to consider (inclusive)
-         * @param lastRow   0-based index of the last row to consider (inclusive)
-         * @return  the width in pixels
-         */
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow)
-        {
-            IWorkbook wb = sheet.Workbook;
-            DataFormatter formatter = new DataFormatter();
-
-            IFont defaultFont = wb.GetFontAt((short)0);
-
-            //str = new AttributedString((defaultChar));
-            //copyAttributes(defaultFont, str, 0, 1);
-            //layout = new TextLayout(str.Iterator, fontRenderContext);
-            //int defaultCharWidth = (int)layout.Advance;
-            Font font = IFont2Font(defaultFont);
-            int defaultCharWidth = TextRenderer.MeasureText("" + new String(defaultChar, 1), font).Width;
-
-            double width = -1;
-            for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
-            {
-                IRow row = sheet.GetRow(rowIdx);
-                if (row != null)
-                {
-
-                    ICell cell = row.GetCell(column);
-
-                    if (cell == null)
-                    {
-                        continue;
-                    }
-
-                    double cellWidth = GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
-                    width = Math.Max(width, cellWidth);
-                }
             }
             return width;
         }
@@ -552,7 +513,7 @@ namespace NPOI.SS.Util
             {
                 style |= FontStyle.Underline;
             }
-            Font font = new Font(font1.FontName, font1.FontHeightInPoints, style, GraphicsUnit.Point);
+            Font font = new Font(font1.FontName, (float)font1.FontHeightInPoints, style, GraphicsUnit.Point);
             return font;
             //return new System.Drawing.Font(font1.FontName, font1.FontHeightInPoints);
         }

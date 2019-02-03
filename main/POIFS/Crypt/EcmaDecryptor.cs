@@ -139,8 +139,11 @@ namespace NPOI.POIFS.Crypt
         {
             byte[] key = GenerateKey(0);
             //System.Security.Cryptography
-
+#if NETSTANDARD2_0
+            var cipher = Aes.Create();
+#else
             SymmetricAlgorithm cipher = SymmetricAlgorithm.Create();  //  AES/ECB/NoPadding
+#endif
             cipher.Mode = CipherMode.ECB;
             cipher.Padding = PaddingMode.None;
             cipher.Key = key;

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\solution\visualstudio\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\solution\visualstudio\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\..\solution\visualstudio\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\..\solution\visualstudio\packages\NUnit.3.10.1\build\NUnit.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OOXML.Testcases</RootNamespace>
     <AssemblyName>NPOI.OOXML.Testcases</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileUpgradeFlags>
@@ -37,6 +38,7 @@
     <AssemblyOriginatorKeyFile>..\..\main\npoi.snk</AssemblyOriginatorKeyFile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +50,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +60,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
     <OutputPath>..\..\solution\Lib\.net4\</OutputPath>
@@ -66,6 +70,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
     <OutputPath>..\..\solution\Lib\.net2\</OutputPath>
@@ -75,17 +80,18 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute, Version=2.0.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\..\solution\visualstudio\packages\NSubstitute.2.0.2\lib\net40\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\solution\packages\NSubstitute.2.0.2\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\solution\visualstudio\packages\NUnit.3.10.1\lib\net40\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\solution\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -123,6 +129,7 @@
     <Compile Include="XSSF\Model\TestMapInfo.cs" />
     <Compile Include="XSSF\Model\TestSharedStringsTable.cs" />
     <Compile Include="XSSF\Model\TestStylesTable.cs" />
+    <Compile Include="XSSF\Model\TestThemesTable.cs" />
     <Compile Include="XSSF\Streaming\AutoSizeColumnTrackerTests.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriterTests.cs" />
     <Compile Include="XSSF\Streaming\SheetDataWriterTests.cs" />
@@ -134,6 +141,7 @@
     <Compile Include="XSSF\Streaming\SXSSFRowTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFSheetTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFWorkbookTests.cs" />
+    <Compile Include="XSSF\TestSheetProtection.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
@@ -214,6 +222,7 @@
     <Compile Include="XWPF\UserModel\TestXWPFStyles.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTable.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFTableCell.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFTableRow.cs" />
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -225,11 +234,11 @@
       <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
       <Name>NPOI.OOXML</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\openxml4Net\NPOI.OpenXml4Net.csproj">
+    <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ooxml\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
+    <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
       <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
       <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>
@@ -278,12 +287,6 @@
   <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\solution\visualstudio\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\solution\visualstudio\packages\NUnit.3.10.1\build\NUnit.props'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

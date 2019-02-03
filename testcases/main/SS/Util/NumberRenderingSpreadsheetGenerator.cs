@@ -140,33 +140,33 @@ namespace TestCases.SS.Util
             return sb.ToString();
         }
 
-        public static void Main(String[] args)
-        {
-            WriteJavaDoc();
+        //public static void Main(String[] args)
+        //{
+        //    WriteJavaDoc();
 
-            HSSFWorkbook wb = new HSSFWorkbook();
-            SheetWriter sw = new SheetWriter(wb);
+        //    HSSFWorkbook wb = new HSSFWorkbook();
+        //    SheetWriter sw = new SheetWriter(wb);
 
-            NumberToTextConversionExamples.ExampleConversion[] exampleValues = NumberToTextConversionExamples.GetExampleConversions();
-            for (int i = 0; i < exampleValues.Length; i++)
-            {
-                TestCases.SS.Util.NumberToTextConversionExamples.ExampleConversion example = exampleValues[i];
-                sw.AddTestRow(example.RawDoubleBits, example.ExcelRendering);
-            }
+        //    NumberToTextConversionExamples.ExampleConversion[] exampleValues = NumberToTextConversionExamples.GetExampleConversions();
+        //    for (int i = 0; i < exampleValues.Length; i++)
+        //    {
+        //        TestCases.SS.Util.NumberToTextConversionExamples.ExampleConversion example = exampleValues[i];
+        //        sw.AddTestRow(example.RawDoubleBits, example.ExcelRendering);
+        //    }
 
-            MemoryStream baos = new MemoryStream();
-            wb.Write(baos);
-            byte[] fileContent = baos.ToArray();
-            ReplaceNaNs(fileContent, sw.GetReplacementNaNs());
+        //    MemoryStream baos = new MemoryStream();
+        //    wb.Write(baos);
+        //    byte[] fileContent = baos.ToArray();
+        //    ReplaceNaNs(fileContent, sw.GetReplacementNaNs());
 
 
-            FileInfo outputFile = new FileInfo("ExcelNumberRendering.xls");
+        //    FileInfo outputFile = new FileInfo("ExcelNumberRendering.xls");
 
-            FileStream os = File.OpenWrite(outputFile.FullName);
-            os.Write(fileContent, 0, fileContent.Length);
-            os.Close();
-            Console.WriteLine("Finished writing '" + outputFile.FullName + "'");
-        }
+        //    FileStream os = File.OpenWrite(outputFile.FullName);
+        //    os.Write(fileContent, 0, fileContent.Length);
+        //    os.Close();
+        //    Console.WriteLine("Finished writing '" + outputFile.FullName + "'");
+        //}
 
         public static void WriteJavaDoc()
         {

@@ -107,13 +107,13 @@ namespace TestCases
  */
         private Stream OpenClasspathResource(String sampleFileName)
         {
-            FileStream file = new FileStream(_resolvedDataDir + sampleFileName, FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(Path.Combine(_resolvedDataDir,sampleFileName), FileMode.Open, FileAccess.Read);
             return file;
         }
 
         private void Initialise()
         {
-            String dataDirName = System.Configuration.ConfigurationSettings.AppSettings[TEST_PROPERTY];
+            String dataDirName = TestContext.Parameters[TEST_PROPERTY];
 
             if (dataDirName == null)
                 throw new Exception("Must set system property '"
@@ -170,7 +170,7 @@ namespace TestCases
             }
 
 
-            if (!File.Exists(_resolvedDataDir + sampleFileName))
+            if (!File.Exists(Path.Combine(_resolvedDataDir,sampleFileName)))
             {
                 throw new Exception("Sample file '" + sampleFileName
                         + "' not found in data dir '" + _resolvedDataDir + "'");
@@ -190,7 +190,7 @@ namespace TestCases
 
         public FileInfo GetFileInfo(string sampleFileName)
         {
-            string path = _resolvedDataDir + sampleFileName;
+            string path = Path.Combine(_resolvedDataDir, sampleFileName);
             if (!File.Exists(path))
             {
                 throw new Exception("Sample file '" + sampleFileName
@@ -207,7 +207,7 @@ namespace TestCases
          */
         public FileStream GetFile(String sampleFileName)
         {
-            string path=_resolvedDataDir+sampleFileName;
+            string path= Path.Combine(_resolvedDataDir, sampleFileName);
             if (!File.Exists(path))
             {
                 throw new Exception("Sample file '" + sampleFileName
