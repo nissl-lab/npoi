@@ -16,6 +16,8 @@
 ==================================================================== */
 
 using System;
+using System.Collections.Generic;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NUnit.Framework;
@@ -96,6 +98,47 @@ namespace NPOI.XSSF.UserModel
             verifyCellContent(readSheet, 6, null);
             verifyCellContent(readSheet, 7, "6.0");
             verifyCellContent(readSheet, 8, "7.0");
+        }
+
+        // CT_Rows should stay sorted in ascending order after a call to ShiftRows.
+        [Test]
+        public void TestBug57423()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            CT_Worksheet wsh = sheet.GetCTWorksheet();
+            CT_SheetData sheetData = wsh.sheetData;
+
+            XSSFRow row1 = (XSSFRow)sheet.CreateRow(0);
+            row1.CreateCell(0).SetCellValue("a");
+
+            XSSFRow row2 = (XSSFRow) sheet.CreateRow(1);
+            row2.CreateCell(0).SetCellValue("b");
+
+            XSSFRow row3 = (XSSFRow) sheet.CreateRow(2);
+            row3.CreateCell(0).SetCellValue("c");
+
+            sheet.ShiftRows(0, 1, 3); //move "a" and "b" 3 rows down
+            //      Before:    After:
+            //         A        A
+            // 1       a        <empty>
+            // 2       b        <empty>
+            // 3       c        c
+            // 4                a
+            // 5                b
+
+            List<CT_Row> xrow = sheetData.row;
+            Assert.AreEqual(3, xrow.Count);
+
+            // Rows are sorted: [3, 4, 5]
+            Assert.AreEqual(3u, xrow[0].r);
+            Assert.IsTrue(xrow[0].Equals(row3.GetCTRow()));
+
+            Assert.AreEqual(4u, xrow[1].r);
+            Assert.IsTrue(xrow[1].Equals(row1.GetCTRow()));
+
+            Assert.AreEqual(5u, xrow[2].r);
+            Assert.IsTrue(xrow[2].Equals(row2.GetCTRow()));
         }
 
         private void verifyCellContent(ISheet readSheet, int row, String expect)
