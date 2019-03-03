@@ -2997,6 +2997,17 @@ namespace NPOI.OpenXmlFormats.Shared
             return r;
         }
 
+        public CT_Rad AddNewRad()
+        {
+            CT_Rad rad = new CT_Rad();
+            lock (this)
+            {
+                itemsField.Add(rad);
+                itemsElementNameField.Add(ItemsChoiceType7.rad);
+            }
+            return rad;
+        }
+
         public CT_SSub AddNewSSub()
         {
             CT_SSub sSub = new CT_SSub();
@@ -3006,6 +3017,17 @@ namespace NPOI.OpenXmlFormats.Shared
                 itemsElementNameField.Add(ItemsChoiceType7.sSub);
             }
             return sSub;
+        }
+
+        public CT_SSup AddNewSSup()
+        {
+            CT_SSup sSup = new CT_SSup();
+            lock (this)
+            {
+                itemsField.Add(sSup);
+                itemsElementNameField.Add(ItemsChoiceType7.sSup);
+            }
+            return sSup;
         }
 
         internal void Write(StreamWriter sw, string nodeName)
@@ -7633,6 +7655,17 @@ namespace NPOI.OpenXmlFormats.Shared
             return r;
         }
 
+        public CT_Rad AddNewRad()
+        {
+            CT_Rad rad = new CT_Rad();
+            lock (this)
+            {
+                itemsField.Add(rad);
+                itemsElementNameField.Add(ItemsChoiceType8.rad);
+            }
+            return rad;
+        }
+
         public CT_SSub AddNewSSub()
         {
             CT_SSub sSub = new CT_SSub();
@@ -7642,6 +7675,17 @@ namespace NPOI.OpenXmlFormats.Shared
                 itemsElementNameField.Add(ItemsChoiceType8.sSub);
             }
             return sSub;
+        }
+
+        public CT_SSup AddNewSSup()
+        {
+            CT_SSup sSup = new CT_SSup();
+            lock (this)
+            {
+                itemsField.Add(sSup);
+                itemsElementNameField.Add(ItemsChoiceType8.sSup);
+            }
+            return sSup;
         }
 
         internal void Write(StreamWriter sw, string nodeName)
