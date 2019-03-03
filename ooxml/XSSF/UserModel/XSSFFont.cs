@@ -75,7 +75,7 @@ namespace NPOI.XSSF.UserModel
         {
             this._ctFont = new CT_Font();
             FontName = DEFAULT_FONT_NAME;
-            FontHeight =DEFAULT_FONT_SIZE;
+            FontHeightInPoints =DEFAULT_FONT_SIZE;
         }
 
         /**
