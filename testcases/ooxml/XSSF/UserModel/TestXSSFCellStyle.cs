@@ -1052,5 +1052,44 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestUpdateAnyBorderSideNotAffectsOthersSameXSSFCellBorder()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+
+            var cell1 = row.CreateCell(0);
+
+            var style1 = wb.CreateCellStyle();
+
+            style1.BorderBottom = BorderStyle.Double;
+
+            style1.BottomBorderColor = global::NPOI.SS.UserModel.IndexedColors.Black.Index;
+
+            cell1.CellStyle = style1;
+
+            Assert.AreEqual(BorderStyle.None, style1.BorderTop);
+
+            var cell2 = row.CreateCell(1);
+
+            var style2 = wb.CreateCellStyle();
+
+            style2.BorderBottom = BorderStyle.Double;
+
+            style2.BottomBorderColor = global::NPOI.SS.UserModel.IndexedColors.Black.Index;
+
+            style2.BorderTop = BorderStyle.Thin;
+
+            style2.TopBorderColor = global::NPOI.SS.UserModel.IndexedColors.Black.Index;
+
+            cell2.CellStyle = style2;
+
+            Assert.AreEqual(BorderStyle.None, style1.BorderTop);
+
+            wb.Close();
+        }
+
     }
 }
