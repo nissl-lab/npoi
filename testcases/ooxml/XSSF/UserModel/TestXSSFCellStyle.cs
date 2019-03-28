@@ -668,7 +668,7 @@ namespace NPOI.XSSF.UserModel
             wb2.Close();
         }
 
-        [Ignore]
+        [Ignore("test")]
         public void TestGetFillForegroundColor()
         {
 

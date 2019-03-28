@@ -69,7 +69,7 @@ namespace TestCases.SS.Formula.Eval
          * Gets to the comparison operator)
          */
         [Test]
-        [Ignore] //no representation for -0.0 in c#, this test always failed.
+        [Ignore("no representation for -0.0 in c#, this test always failed.")]
         public void TestComparisonOperators()
         {
             CheckEval(false, EvalInstances.Equal, 0.0, MINUS_ZERO);

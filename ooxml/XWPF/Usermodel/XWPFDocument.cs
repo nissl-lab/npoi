@@ -47,7 +47,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
          */
-        private IdentifierManager drawingIdManager = new IdentifierManager(0L, 4294967295L);
+        private IdentifierManager drawingIdManager = new IdentifierManager(1L, 4294967295L);
         protected List<XWPFFooter> footers = new List<XWPFFooter>();
         protected List<XWPFHeader> headers = new List<XWPFHeader>();
         protected List<XWPFComment> comments = new List<XWPFComment>();

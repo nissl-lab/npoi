@@ -126,11 +126,8 @@ namespace NPOI.WP.UserModel
         //    int GetLvl();
 
         /**
-         * Returns number of tabs stops defined for paragraph. Must be >= 0 and <=
-         * 64.
+         * Returns number of tabs stops defined for paragraph. Must be >= 0 and less than 64.
          * 
-         * @return number of tabs stops defined for paragraph. Must be >= 0 and <=
-         *         64
          */
         //    int GetTabStopsNumber();
 

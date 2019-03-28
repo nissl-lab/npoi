@@ -31,6 +31,7 @@ using System;
 using TestCases.SS.UserModel;
 using System.Text;
 using NPOI.SS.Util;
+using TestCases;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -47,7 +48,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Tests that we can save, and then re-load a new document
          */
-        [Test]
+        [Test, RunSerialyAndSweepTmpFiles]
         public void SaveLoadNew()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -76,7 +77,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, workbook.GetSheetAt(2).LastRowNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
-            Stream out1 = File.OpenWrite(file.Name);
+            Stream out1 = File.OpenWrite(file.FullName);
             workbook.Write(out1);
             out1.Close();
 
@@ -116,6 +117,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("hello world", sheet1.GetRow(1).GetCell(0).RichStringCellValue.String);
 
             pkg.Close();
+
+            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
         [Test]
         public void Existing()
@@ -764,7 +767,7 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void LoadWorkbookWithPivotTable()
         {
-            String fileName = "ooxml-pivottable.xlsx";
+            String fileName = Path.Combine(TestContext.CurrentContext.TestDirectory,"ooxml-pivottable.xlsx");
 
             XSSFWorkbook wb = new XSSFWorkbook();
             SetPivotData(wb);

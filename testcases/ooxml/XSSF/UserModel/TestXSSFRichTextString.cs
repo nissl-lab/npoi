@@ -249,19 +249,19 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("abc\r2ef\r", rt.String);
 
         }
-        [Test]
+        [Ignore("Not Implemented")]
         public void TestApplyFont_lowlevel()
         {
-            //CT_Rst st = new CT_Rst();
-            //String text = "Apache Software Foundation";
-            //XSSFRichTextString str = new XSSFRichTextString(text);
-            //Assert.AreEqual(26, text.Length);
+            CT_Rst st = new CT_Rst();
+            String text = "Apache Software Foundation";
+            XSSFRichTextString str = new XSSFRichTextString(text);
+            Assert.AreEqual(26, text.Length);
 
-            //st.AddNewR().t = (text);
+            st.AddNewR().t = (text);
 
-            //Dictionary<int, CT_RPrElt> formats = str.GetFormatMap(st);
+            //SortedDictionary<int, CT_RPrElt> formats = str.GetFormatMap(st);
             //Assert.AreEqual(1, formats.Count);
-            //Assert.AreEqual(26, (int)formats.firstKey());
+            //Assert.AreEqual(26, (int)formats.Keys[0]);
             //Assert.IsNull(formats.Get(formats.firstKey()));
 
             //CT_RPrElt fmt1 = new CT_RPrElt();
@@ -394,7 +394,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        [Ignore]
+        [Ignore("test")]
         public void TestLineBreaks_bug48877()
         {
 

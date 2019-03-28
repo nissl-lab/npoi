@@ -16,20 +16,21 @@
 ==================================================================== */
 namespace NPOI
 {
+    using System;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.Util;
+    using NPOI.XSSF.Extractor;
+    using NPOI.XSSF.UserModel;
+    using NUnit.Framework;
+    using TestCases;
 
-    using junit.framework.TestCase;
-
-    using org.apache.poi.Openxml4j.opc.OPCPackage;
-    using NPOI.UTIL.PackageHelper;
-    using NPOI.XSLF.XSLFSlideShow;
-    using NPOI.XSSF.extractor.XSSFExcelExtractor;
-    using NPOI.XSSF.usermodel.XSSFWorkbook;
-
+    [TestFixture]
     public class TestXMLPropertiesTextExtractor
     {
         private static POIDataSamples _ssSamples = POIDataSamples.GetSpreadSheetInstance();
         private static POIDataSamples _slSamples = POIDataSamples.GetSlideShowInstance();
-        [TestMethod]
+
+        [Test]
         public void TestGetFromMainExtractor()
         {
             OPCPackage pkg = PackageHelper.Open(_ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm"));
@@ -37,14 +38,14 @@ namespace NPOI
             XSSFWorkbook wb = new XSSFWorkbook(pkg);
 
             XSSFExcelExtractor ext = new XSSFExcelExtractor(wb);
-            POIXMLPropertiesTextExtractor textExt = ext.GetMetadataTextExtractor();
+            POIXMLPropertiesTextExtractor textExt = (POIXMLPropertiesTextExtractor)ext.MetadataTextExtractor;
 
             // Check basics
-            assertNotNull(textExt);
-            Assert.IsTrue(textExt.GetText().Length > 0);
+            Assert.IsNotNull(textExt);
+            Assert.IsTrue(textExt.Text.Length > 0);
 
             // Check some of the content
-            String text = textExt.GetText();
+            String text = textExt.Text;
             String cText = textExt.GetCorePropertiesText();
 
             Assert.IsTrue(text.Contains("LastModifiedBy = Yury Batrakov"));
@@ -53,7 +54,7 @@ namespace NPOI
             textExt.Close();
             ext.Close();
         }
-        [TestMethod]
+        [Test]
         public void TestCore()
         {
             OPCPackage pkg = PackageHelper.Open(
@@ -62,10 +63,9 @@ namespace NPOI
             XSSFWorkbook wb = new XSSFWorkbook(pkg);
 
             POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
-            ext.GetText();
 
             // Now check
-            String text = ext.GetText();
+            String text = ext.Text;
             String cText = ext.GetCorePropertiesText();
 
             Assert.IsTrue(text.Contains("LastModifiedBy = Yury Batrakov"));
@@ -73,7 +73,7 @@ namespace NPOI
 
             ext.Close();
         }
-        [TestMethod]
+        [Test]
         public void TestExtended()
         {
             OPCPackage pkg = OPCPackage.Open(
@@ -82,10 +82,9 @@ namespace NPOI
             XSSFWorkbook wb = new XSSFWorkbook(pkg);
 
             POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
-            ext.GetText();
 
             // Now check
-            String text = ext.GetText();
+            String text = ext.Text;
             String eText = ext.GetExtendedPropertiesText();
 
             Assert.IsTrue(text.Contains("Application = Microsoft Excel"));
@@ -96,33 +95,6 @@ namespace NPOI
             ext.Close();
         }
 
-        public void TestCustom()
-        {
-            // TODO!
-        }
-
-        /**
-         * Bug #49386 - some properties, especially
-         *  dates can be null
-         */
-        [TestMethod]
-        public void TestWithSomeNulls()
-        {
-            OPCPackage pkg = OPCPackage.Open(
-                  _slSamples.OpenResourceAsStream("49386-null_dates.pptx")
-            );
-            XSLFSlideShow sl = new XSLFSlideShow(pkg);
-
-            POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(sl);
-            ext.GetText();
-
-            String text = ext.GetText();
-            Assert.IsFalse(text.Contains("Created =")); // With date is null
-            Assert.IsTrue(text.Contains("CreatedString = ")); // Via string is blank
-            Assert.IsTrue(text.Contains("LastModifiedBy = IT Client Services"));
-
-            ext.Close();
-        }
     }
 
 }

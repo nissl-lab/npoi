@@ -88,9 +88,9 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the font height in points.
         /// </summary>
         /// <value>height in the familiar Unit of measure - points.</value>
-        public short FontHeightInPoints
+        public double FontHeightInPoints
         {
-            get { return (short)(font.FontHeight / 20); }
+            get { return font.FontHeight / 20.0; }
             set { font.FontHeight=(short)(value * 20); }
         }
 
@@ -253,6 +253,20 @@ namespace NPOI.HSSF.UserModel
                 return true;
             }
             return false;
+        }
+
+        public void CloneStyleFrom(IFont src)
+        {
+            FontName = src.FontName;
+            FontHeight = src.FontHeight;
+            IsBold = src.IsBold;
+            Boldweight = src.Boldweight;
+            IsItalic = src.IsItalic;
+            IsStrikeout = src.IsStrikeout;
+            Color = src.Color;
+            Underline = src.Underline;
+            Charset = src.Charset;
+            TypeOffset = src.TypeOffset;
         }
     }
 }

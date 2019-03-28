@@ -350,7 +350,7 @@ namespace NPOI.HSSF.Model
             records.Add(new BeginRecord());
             records.Add(CreateValueRangeRecord());
             records.Add(CreateTickRecord2());
-            records.Add(CreateAxisLineFormatRecord(AxisLineRecord.AXIS_TYPE_MAJOR_GRID_LINE));
+            records.Add(CreateAxisLineFormatRecord(AxisLineFormatRecord.AXIS_TYPE_MAJOR_GRID_LINE));
             records.Add(CreateLineFormatRecord(false));
             records.Add(new EndRecord());
             records.Add(CreatePlotAreaRecord());
@@ -392,9 +392,9 @@ namespace NPOI.HSSF.Model
             return r;
         }
 
-        private static AxisLineRecord CreateAxisLineFormatRecord(short format)
+        private static AxisLineFormatRecord CreateAxisLineFormatRecord(short format)
         {
-            AxisLineRecord r = new AxisLineRecord();
+            AxisLineFormatRecord r = new AxisLineFormatRecord();
             r.AxisType = (format);
             return r;
         }

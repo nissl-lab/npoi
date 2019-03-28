@@ -19,26 +19,24 @@ For commercial cooperation or support service consulting, please contact support
 ==================
 https://github.com/tonyqus/npoi/ (Latest source code available)
 http://npoi.codeplex.com (Deprecated)
-http://npoi.neuzilla.com (coming soon)
+
 
 ======================
 * System Requirement *
 ======================
+VS2017
 VS2013
 VS2010 with .NET 2.0 or .NET 4.0
-VS2005 or VS2008 with .NET 2.0 Runtime (SP1) 
-vs2003 with .NET 1.1 
+VS2005 or VS2008 with .NET 2.0 Runtime (SP1) (Deprecated)
+vs2003 with .NET 1.1 (Deprecated)
 medium trust environment in ASP.NET
 
 =================
 *  Neuzilla on Internet  *
 =================
-Neuzilla's homepage: http://blog.neuzilla.com
 Homepage on Linkedin: http://www.linkedin.com/company/neuzilla
 User Group on Linkedin: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
-企业客户QQ群: 116053476 
-WeChat Official AccountID: neuzilla
-微信公众号ID：neuzilla
+QQ Group: 116053476 
 
 ================
 * Team Members *
@@ -52,7 +50,7 @@ Time Zone: GMT+8
 --------------------------------------------------------------------------------
 NPOI 1.2.1
 --------------------------------------------------------------------------------
-Hüseyin Tüfekcilerli - developer
+H锟斤拷seyin T锟斤拷fekcilerli - developer
 --------------------
 From: Istanbul, Turkey
 Participated since Nov, 2008

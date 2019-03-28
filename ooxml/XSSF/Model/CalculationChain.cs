@@ -105,6 +105,7 @@ namespace NPOI.XSSF.Model
                     if (c[i].iSpecified && i < c.Count - 1 && !c[i + 1].iSpecified)
                     {
                         c[i + 1].i = id;
+                        c[i + 1].iSpecified = true;
                     }
                     chain.RemoveC(i);
                     break;

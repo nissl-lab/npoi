@@ -50,17 +50,6 @@ namespace NPOI.SS.Formula.Eval
         int Row { get; }
 
         /**
-         * returns the first sheet index this applies to
-         */
-        int FirstSheetIndex { get; }
-
-        /**
-         * returns the last sheet index this applies to, which
-         *  will be the same as the first for a 2D and many 3D references
-         */
-        int LastSheetIndex { get; }
-
-        /**
          * returns the number of sheets this applies to
          */
         int NumberOfSheets { get; }

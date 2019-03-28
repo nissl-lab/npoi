@@ -56,7 +56,42 @@ namespace NPOI.XSSF.Model
             Assert.AreEqual(CellType.String, cell.CellType);
         }
 
+        [Test]
+        public void RemoveAllFormulas()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("TwoFunctions.xlsx");
 
+            CalculationChain chain = wb.GetCalculationChain();
+            //the bean holding the reference to the formula to be deleted
+            CT_CalcCell c = chain.GetCTCalcChain().GetCArray(0);
+            int cnt = chain.GetCTCalcChain().c.Count;
+            Assert.AreEqual(1, c.i);
+            Assert.AreEqual("A5", c.r);
+            Assert.AreEqual(2, cnt);
+
+            ISheet sheet = wb.GetSheet("Sheet1");
+            ICell cell = sheet.GetRow(4).GetCell(0);
+
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            cell.SetCellFormula(null);
+
+            //the count of items is less by one
+            c = chain.GetCTCalcChain().GetCArray(0);
+            int cnt2 = chain.GetCTCalcChain().c.Count;
+            Assert.AreEqual(cnt - 1, cnt2);
+            //the first item in the calculation chain is the former second one
+            Assert.AreEqual(1, c.i);
+            Assert.AreEqual("A4", c.r);
+            Assert.AreEqual(1, cnt2);
+
+            //remove final formula from spread sheet
+            ICell cell2 = sheet.GetRow(3).GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell2.CellType);
+            cell2.SetCellFormula(null);
+
+            //the count of items within the chain should be 0
+            int cnt3 = chain.GetCTCalcChain().c.Count;
+            Assert.AreEqual(0, cnt3);
+        }
     }
 }
-

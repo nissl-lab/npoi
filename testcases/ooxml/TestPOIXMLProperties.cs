@@ -156,7 +156,7 @@ namespace NPOI
             //Assert.AreEqual("2.0.9", p.Item);
             //Assert.AreEqual(7, p.pid);
         }
-        [Ignore]
+        [Ignore("test")]
         public void TestDocumentProperties()
         {
             String category = _coreProperties.Category;
@@ -190,7 +190,7 @@ namespace NPOI
             Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
         }
-        [Ignore]
+        [Ignore("test")]
         public void TestGetSetRevision()
         {
             String revision = _coreProperties.Revision;

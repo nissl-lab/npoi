@@ -1153,6 +1153,11 @@ namespace NPOI.XSSF.UserModel
         {
             return CellUtil.CopyCell(this.Row, this.ColumnIndex, targetIndex);
         }
+
+        public CellType GetCachedFormulaResultTypeEnum()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

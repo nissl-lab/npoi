@@ -75,7 +75,7 @@ namespace NPOI.XSSF.UserModel
         {
             this._ctFont = new CT_Font();
             FontName = DEFAULT_FONT_NAME;
-            FontHeight =DEFAULT_FONT_SIZE;
+            FontHeightInPoints =DEFAULT_FONT_SIZE;
         }
 
         /**
@@ -226,13 +226,35 @@ namespace NPOI.XSSF.UserModel
             long index = ((color == null) || !color.themeSpecified) ? 0 : color.theme;
             return (short)index;
         }
-
-        /**
-         * get the font height in point.
-         *
-         * @return short - height in point
-         */
+        /// <summary>
+        ///  Get the font height in unit's of 1/20th of a point.
+        /// </summary>
         public double FontHeight
+        {
+            get
+            {
+                return FontHeightRaw * 20.0;
+            }
+            set 
+            {
+                FontHeightRaw = value / 20.0;
+            }
+        }
+        /// <summary>
+        ///  Get the font height in points.
+        /// </summary>
+        public double FontHeightInPoints
+        {
+            get
+            {
+                return FontHeightRaw;
+            }
+            set 
+            {
+                FontHeightRaw = value;
+            }
+        }
+        private double FontHeightRaw
         {
             get
             {
@@ -240,34 +262,15 @@ namespace NPOI.XSSF.UserModel
                 if (size != null)
                 {
                     double fontHeight = size.val;
-                    return (short)(fontHeight * 20);
+                    return fontHeight;
                 }
-                return (short)(DEFAULT_FONT_SIZE * 20);
+                return DEFAULT_FONT_SIZE;
             }
-            set 
-            {
+            set {
                 CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
                 fontSize.val = value;
             }
         }
-
-
-        /**
-         * @see #GetFontHeight()
-         */
-        public short FontHeightInPoints
-        {
-            get
-            {
-                return (short)(FontHeight / 20);
-            }
-            set 
-            {
-                CT_FontSize fontSize = _ctFont.sizeOfSzArray() == 0 ? _ctFont.AddNewSz() : _ctFont.GetSzArray(0);
-                fontSize.val = value;
-            }
-        }
-
         /**
          * get the name of the font (i.e. Arial)
          *
@@ -464,7 +467,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                throw new POIXMLException("Attention: an attempt to set a type of unknow charset and charSet");
+                throw new POIXMLException("Attention: An attempt was made to set an unknown character set");
             }
         }
 
@@ -653,5 +656,25 @@ namespace NPOI.XSSF.UserModel
             return _ctFont.ToString().Equals(cf.GetCTFont().ToString());
         }
 
+        public void CloneStyleFrom(IFont src)
+        {
+            if(src is XSSFFont)
+            {
+                _ctFont = ((XSSFFont)src)._ctFont;
+            }
+            else
+            {
+                FontName = src.FontName;
+                FontHeight = src.FontHeight;
+                IsBold = src.IsBold;
+                Boldweight = src.Boldweight;
+                IsItalic = src.IsItalic;
+                IsStrikeout = src.IsStrikeout;
+                Color = src.Color;
+                Underline = src.Underline;
+                Charset = src.Charset;
+                TypeOffset = src.TypeOffset;
+            }
+        }
     }
 }

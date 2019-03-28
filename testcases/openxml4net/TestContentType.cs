@@ -167,7 +167,7 @@ namespace TestCase.OPC
          * OOXML content types don't need entities, but we shouldn't
          * barf if we Get one from a third party system that Added them
          */
-        [Ignore]
+        [Ignore("always fail")]
         public void TestFileWithContentTypeEntities()
         {
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("ContentTypeHasEntities.ooxml");

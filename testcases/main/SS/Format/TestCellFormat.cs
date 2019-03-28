@@ -21,7 +21,7 @@ namespace TestCases.SS.Format
     using System.Globalization;
     using System.Text;
     using System.Threading;
-    using System.Windows.Forms;
+
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Format;
@@ -47,10 +47,9 @@ namespace TestCases.SS.Format
         [Test]
         public void TestSome()
         {
-            Label l = new Label();
             CellFormat fmt = CellFormat.GetInstance(
                     "\"$\"#,##0.00_);[Red]\\(\"$\"#,##0.00\\)");
-            fmt.Apply(l, 1.1);
+            fmt.Apply(1.1);
         }
 
         [Test]
@@ -282,185 +281,6 @@ namespace TestCases.SS.Format
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
             Assert.AreEqual("(1)", result1.Text);
-        }
-
-        [Test]
-        public void TestApplyLabelCellForGeneralFormat()
-        {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
-            // Create a workbook, IRow and ICell to test with
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell0 = row.CreateCell(0);
-            ICell cell1 = row.CreateCell(1);
-            ICell cell2 = row.CreateCell(2);
-            ICell cell3 = row.CreateCell(3);
-            ICell cell4 = row.CreateCell(4);
-
-            CellFormat cf = CellFormat.GetInstance("General");
-
-            Label label0 = new Label();
-            Label label1 = new Label();
-            Label label2 = new Label();
-            Label label3 = new Label();
-            Label label4 = new Label();
-
-            // case Cell.CELL_TYPE_BLANK
-            CellFormatResult result0 = cf.Apply(label0, cell0);
-            Assert.AreEqual(string.Empty, result0.Text);
-            Assert.AreEqual(string.Empty, label0.Text);
-
-            // case Cell.CELL_TYPE_BOOLEAN
-            cell1.SetCellValue(true);
-            CellFormatResult result1 = cf.Apply(label1, cell1);
-            Assert.AreEqual("TRUE", result1.Text);
-            Assert.AreEqual("TRUE", label1.Text);
-
-            // case Cell.CELL_TYPE_NUMERIC
-            cell2.SetCellValue(1.23);
-            CellFormatResult result2 = cf.Apply(label2, cell2);
-            Assert.AreEqual("1.23", result2.Text);
-            Assert.AreEqual("1.23", label2.Text);
-
-            cell3.SetCellValue(123.0);
-            CellFormatResult result3 = cf.Apply(label3, cell3);
-            Assert.AreEqual("123", result3.Text);
-            Assert.AreEqual("123", label3.Text);
-
-            // case Cell.CELL_TYPE_STRING
-            cell4.SetCellValue("abc");
-            CellFormatResult result4 = cf.Apply(label4, cell4);
-            Assert.AreEqual("abc", result4.Text);
-            Assert.AreEqual("abc", label4.Text);
-        }
-
-        [Test]
-        public void TestApplyLabelCellForAtFormat()
-        {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
-            // Create a workbook, IRow and ICell to test with
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell0 = row.CreateCell(0);
-            ICell cell1 = row.CreateCell(1);
-            ICell cell2 = row.CreateCell(2);
-            ICell cell3 = row.CreateCell(3);
-            ICell cell4 = row.CreateCell(4);
-
-            CellFormat cf = CellFormat.GetInstance("@");
-
-            Label label0 = new Label();
-            Label label1 = new Label();
-            Label label2 = new Label();
-            Label label3 = new Label();
-            Label label4 = new Label();
-
-            // case Cell.CELL_TYPE_BLANK
-            CellFormatResult result0 = cf.Apply(label0, cell0);
-            Assert.AreEqual(string.Empty, result0.Text);
-            Assert.AreEqual(string.Empty, label0.Text);
-
-            // case Cell.CELL_TYPE_BOOLEAN
-            cell1.SetCellValue(true);
-            CellFormatResult result1 = cf.Apply(label1, cell1);
-            Assert.AreEqual("TRUE", result1.Text);
-            Assert.AreEqual("TRUE", label1.Text);
-
-            // case Cell.CELL_TYPE_NUMERIC
-            cell2.SetCellValue(1.23);
-            CellFormatResult result2 = cf.Apply(label2, cell2);
-            Assert.AreEqual("1.23", result2.Text);
-            Assert.AreEqual("1.23", label2.Text);
-
-            cell3.SetCellValue(123.0);
-            CellFormatResult result3 = cf.Apply(label3, cell3);
-            Assert.AreEqual("123", result3.Text);
-            Assert.AreEqual("123", label3.Text);
-
-            // case Cell.CELL_TYPE_STRING
-            cell4.SetCellValue("abc");
-            CellFormatResult result4 = cf.Apply(label4, cell4);
-            Assert.AreEqual("abc", result4.Text);
-            Assert.AreEqual("abc", label4.Text);
-        }
-
-        [Test]
-        public void TestApplyLabelCellForDateFormat()
-        {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
-            // Create a workbook, IRow and ICell to test with
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell0 = row.CreateCell(0);
-            ICell cell1 = row.CreateCell(1);
-
-            CellFormat cf = CellFormat.GetInstance("dd/mm/yyyy");
-
-            Label label0 = new Label();
-            Label label1 = new Label();
-
-            cell0.SetCellValue(10);
-            CellFormatResult result0 = cf.Apply(label0, cell0);
-            Assert.AreEqual("10/01/1900", result0.Text);
-            Assert.AreEqual("10/01/1900", label0.Text);
-
-            cell1.SetCellValue(-1);
-            CellFormatResult result1 = cf.Apply(label1, cell1);
-            Assert.AreEqual(_255_POUND_SIGNS, result1.Text);
-            Assert.AreEqual(_255_POUND_SIGNS, label1.Text);
-        }
-
-        [Test]
-        public void TestApplyLabelCellForTimeFormat()
-        {
-            // Create a workbook, IRow and ICell to test with
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-
-            CellFormat cf = CellFormat.GetInstance("hh:mm");
-
-            Label label = new Label();
-
-            cell.SetCellValue(DateUtil.ConvertTime("03:04:05"));
-            CellFormatResult result = cf.Apply(label, cell);
-            Assert.AreEqual("03:04", result.Text);
-            Assert.AreEqual("03:04", label.Text);
-        }
-
-        [Test]
-        public void TestApplyLabelCellForDateFormatAndNegativeFormat()
-        {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
-            // Create a workbook, IRow and ICell to test with
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell0 = row.CreateCell(0);
-            ICell cell1 = row.CreateCell(1);
-
-            CellFormat cf = CellFormat.GetInstance("dd/mm/yyyy;(0)");
-
-            Label label0 = new Label();
-            Label label1 = new Label();
-
-            cell0.SetCellValue(10);
-            CellFormatResult result0 = cf.Apply(label0, cell0);
-            Assert.AreEqual("10/01/1900", result0.Text);
-            Assert.AreEqual("10/01/1900", label0.Text);
-
-            cell1.SetCellValue(-1);
-            CellFormatResult result1 = cf.Apply(label1, cell1);
-            Assert.AreEqual("(1)", result1.Text);
-            Assert.AreEqual("(1)", label1.Text);
         }
 
         [Test]

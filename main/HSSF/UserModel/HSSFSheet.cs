@@ -185,13 +185,14 @@ namespace NPOI.HSSF.UserModel
                     hrow = (HSSFRow)GetRow(cval.Row);
                     if (hrow == null)
                     {
+                        /* we removed this check, see bug 47245 for the discussion around this
                         // Some tools (like Perl module SpReadsheet::WriteExcel - bug 41187) skip the RowRecords 
                         // Excel, OpenOffice.org and GoogleDocs are all OK with this, so POI should be too.
                         if (rowRecordsAlreadyPresent)
                         {
                             // if at least one row record is present, all should be present.
                             throw new Exception("Unexpected missing row when some rows already present, the file is wrong");
-                        }
+                        }*/
                         // Create the row record on the fly now.
                         RowRecord rowRec = new RowRecord(cval.Row);
                         _sheet.AddRow(rowRec);
@@ -2224,7 +2225,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public System.Drawing.Font HSSFFont2Font(HSSFFont font1)
         {
-            return new System.Drawing.Font(font1.FontName, font1.FontHeightInPoints);
+            return new System.Drawing.Font(font1.FontName, (float)font1.FontHeightInPoints);
         }
 
         /// <summary>
@@ -2919,6 +2920,11 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             return isNew;
+        }
+
+        public bool IsDate1904()
+        {
+            throw new NotImplementedException();
         }
     }
 }

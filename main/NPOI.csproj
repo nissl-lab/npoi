@@ -49,6 +49,7 @@
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +61,7 @@
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
     <OutputPath>..\solution\Lib\.net4\</OutputPath>
@@ -71,6 +73,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
     <OutputPath>..\solution\Lib\.net2\</OutputPath>
@@ -82,18 +85,29 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\solution\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.XML.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.configuration.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
@@ -149,7 +163,8 @@
     <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\AxisLineRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
@@ -212,6 +227,7 @@
     <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Functions\Averageifs.cs" />
     <Compile Include="SS\Formula\Functions\BaseNumberUtils.cs" />
     <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\Code.cs" />
@@ -245,6 +261,7 @@
     <Compile Include="SS\Formula\Functions\Rept.cs" />
     <Compile Include="SS\Formula\Functions\Roman.cs" />
     <Compile Include="SS\Formula\Functions\Slope.cs" />
+    <Compile Include="SS\Formula\Functions\Averageif.cs" />
     <Compile Include="SS\Formula\Functions\Sumifs.cs" />
     <Compile Include="SS\Formula\Functions\Text\Proper.cs" />
     <Compile Include="SS\Formula\Functions\WeekdayFunc.cs" />
@@ -676,6 +693,8 @@
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
+    <Compile Include="SS\UserModel\Charts\BarChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
     <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
@@ -1235,6 +1254,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="npoi.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\functionMetadata.txt">
@@ -1265,7 +1285,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

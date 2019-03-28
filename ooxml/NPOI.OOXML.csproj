@@ -49,6 +49,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <DocumentationFile>..\solution\Lib\NPOI.OOXML.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -61,6 +62,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
     <OutputPath>..\solution\Lib\.net4\</OutputPath>
@@ -72,6 +74,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\solution\Lib\.net4\NPOI.OOXML.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
     <OutputPath>..\solution\Lib\.net2\</OutputPath>
@@ -83,12 +86,12 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\solution\Lib\.net2\NPOI.OOXML.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\solution\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -124,7 +127,36 @@
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
+    <Compile Include="XSSF\Streaming\AutoSizeColumnTracker.cs" />
+    <Compile Include="XSSF\Streaming\GZIPSheetDataWriter.cs" />
+    <Compile Include="XSSF\Streaming\Properties\CommentProperty.cs" />
+    <Compile Include="XSSF\Streaming\Properties\HyperlinkProperty.cs" />
+    <Compile Include="XSSF\Streaming\Properties\Property.cs" />
+    <Compile Include="XSSF\Streaming\SheetDataWriter.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFCell.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFCreationHelper.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationCell.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationSheet.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFEvaluationWorkbook.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFFormulaEvaluator.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFRow.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFSheet.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFWorkbook.cs" />
+    <Compile Include="XSSF\Streaming\Values\BlankValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\BooleanFormulaValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\BooleanValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\ErrorFormulaValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\ErrorValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\FormulaValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\NumericFormulaValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\NumericValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\PlainStringValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\RichTextValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\StringFormulaValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\StringValue.cs" />
+    <Compile Include="XSSF\Streaming\Values\Value.cs" />
     <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSeries.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFBarChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs">
       <SubType>Code</SubType>
@@ -136,6 +168,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSSF\UserModel\Charts\XSSFChartUtil.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFDateAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFLineChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs">
       <SubType>Code</SubType>
@@ -241,6 +274,8 @@
     <Compile Include="XWPF\Usermodel\Borders.cs" />
     <Compile Include="XWPF\Usermodel\BreakClear.cs" />
     <Compile Include="XWPF\Usermodel\BreakType.cs" />
+    <Compile Include="XWPF\Usermodel\MathContainer.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFAcc.cs" />
     <Compile Include="XWPF\Usermodel\Document.cs" />
     <Compile Include="XWPF\Usermodel\IBody.cs" />
     <Compile Include="XWPF\Usermodel\IBodyElement.cs" />
@@ -262,6 +297,7 @@
     <Compile Include="XWPF\Usermodel\XWPFDefaultParagraphStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDefaultRunStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFF.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFooter.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFootnote.cs" />
@@ -271,8 +307,11 @@
     <Compile Include="XWPF\Usermodel\XWPFHyperlink.cs" />
     <Compile Include="XWPF\Usermodel\XWPFHyperlinkRun.cs" />
     <Compile Include="XWPF\Usermodel\XWPFLatentStyles.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFNary.cs" />
     <Compile Include="XWPF\Usermodel\XWPFNum.cs" />
     <Compile Include="XWPF\Usermodel\XWPFNumbering.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFOMath.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFOMathArg.cs" />
     <Compile Include="XWPF\Usermodel\XWPFParagraph.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPicture.cs" />
     <Compile Include="XWPF\Usermodel\XWPFPictureData.cs" />
@@ -283,6 +322,8 @@
     <Compile Include="XWPF\Usermodel\XWPFSDTContent.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSDTContentCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSharedRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSSub.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTable.cs" />
@@ -295,11 +336,11 @@
       <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
       <Name>NPOI</Name>
     </ProjectReference>
-    <ProjectReference Include="openxml4Net\NPOI.OpenXml4Net.csproj">
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
-    <ProjectReference Include="OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
       <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
       <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>

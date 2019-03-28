@@ -35,6 +35,11 @@ namespace NPOI.XSSF.UserModel
             _xs = (XSSFSheet)sheet;
         }
 
+        public XSSFEvaluationSheet()
+        {
+            
+        }
+
         public XSSFSheet GetXSSFSheet()
         {
             return _xs;

@@ -713,6 +713,32 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        public bool? Hidden
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool? Collapsed
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Gets the cell enumerator of the physically defined cells.
         /// </summary>
@@ -868,6 +894,11 @@ namespace NPOI.HSSF.UserModel
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public bool HasCustomHeight()
+        {
+            throw new NotImplementedException();
         }
     }
 }

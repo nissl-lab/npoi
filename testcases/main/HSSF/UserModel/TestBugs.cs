@@ -117,7 +117,7 @@ namespace TestCases.HSSF.UserModel
         /**Test writing a hyperlink
          * Open resulting sheet in Excel and Check that A1 contains a hyperlink*/
         [Test]
-        [Ignore]//not found in poi
+        [Ignore("not found in poi")]
         public void Test23094()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -211,7 +211,7 @@ namespace TestCases.HSSF.UserModel
         /** another Test for the number of unique strings issue
          *Test Opening the resulting file in Excel*/
         [Test]
-        [Ignore] //this test was not found in poi 3.8beta4
+        [Ignore("this test was not found in poi 3.8beta4")]
         public void Test22568()
         {
             int r = 2000; int c = 3;
@@ -329,7 +329,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
-        [Ignore] ///not found in poi 3.8beat4
+        [Ignore("not found in poi 3.8beat4")]
         public void Test18800()
         {
             HSSFWorkbook book = new HSSFWorkbook();
@@ -349,7 +349,7 @@ namespace TestCases.HSSF.UserModel
          * Merged regions were being Removed from the parent in cloned sheets
          */
         [Test]
-        [Ignore] //this test was not found in poi 3.8beta4
+        [Ignore("this test was not found in poi 3.8beta4")] 
         public void Test22720()
         {
             HSSFWorkbook workBook = new HSSFWorkbook();
@@ -490,7 +490,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
         [Test]
-        [Ignore]// not found in poi
+        [Ignore("not found in poi")]
         public void Test28031()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1425,7 +1425,7 @@ namespace TestCases.HSSF.UserModel
          *  Expected ExpPtg to be converted from Shared to Non-Shared...
          */
         [Test]
-        [Ignore]//this test is disabled in poi.
+        [Ignore("this test is disabled in poi.")]
         public void DISABLED_Test43623()
         {
             HSSFWorkbook wb = OpenSample("43623.xls");

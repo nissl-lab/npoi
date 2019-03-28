@@ -155,7 +155,11 @@ namespace NPOI.POIFS.Crypt
                     chain = "CFB";
 
                 //SymmetricAlgorithm cipher = SymmetricAlgorithm.Create(name + "/" + chain + "/Nopadding");
+#if NETSTANDARD2_0
+                var cipher = Aes.Create();
+#else
                 SymmetricAlgorithm cipher = SymmetricAlgorithm.Create();
+#endif
                 cipher.Key = key;
                 cipher.IV = vec;
                 cipher.Padding = PaddingMode.None;

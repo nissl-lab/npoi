@@ -78,7 +78,7 @@ namespace TestCases.DDF
                     "05, 00, 00, 00, " +    // field_9_cacheOfSavedSize
                     "08, " +                // field_10_compressionFlag
                     "07, " +                // field_11_filter
-                    "01, 02, ]",            // field_12_data
+                    "01, 02]",            // field_12_data
                     HexDump.ToHex(buf));
             Assert.AreEqual(60, r.RecordSize);
 
@@ -98,11 +98,11 @@ namespace TestCases.DDF
             Assert.AreEqual(6, r.CacheOfSize);
             Assert.AreEqual(7, r.Filter);
             Assert.AreEqual(8, r.CompressionFlag);
-            Assert.AreEqual("[01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, ]", HexDump.ToHex(r.SecondaryUID));
+            Assert.AreEqual("[01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01]", HexDump.ToHex(r.SecondaryUID));
             Assert.AreEqual(10, r.Width);
             Assert.AreEqual(11, r.Height);
             Assert.AreEqual((short)5420, r.Options);
-            Assert.AreEqual("[01, 02, ]", HexDump.ToHex(r.Data));
+            Assert.AreEqual("[01, 02]", HexDump.ToHex(r.Data));
         }
         [Test]
         public void TestToString()
@@ -116,7 +116,7 @@ namespace TestCases.DDF
                     "  RecordId: 0xF018" + nl +
                     "  Version: 0x000C" + nl +
                     "  Instance: 0x0152" + nl +
-                    "  Secondary UID: [01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, ]" + nl +
+                    "  Secondary UID: [01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01]" + nl +
                     "  CacheOfSize: 6" + nl +
                     "  BoundaryTop: 3" + nl +
                     "  BoundaryLeft: 1" + nl +

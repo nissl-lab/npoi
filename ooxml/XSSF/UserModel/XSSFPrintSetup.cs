@@ -153,6 +153,10 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                if(pageSetup.scale == 0)
+                {
+                    return 100;
+                }
                 return (short)pageSetup.scale;
             }
             set 

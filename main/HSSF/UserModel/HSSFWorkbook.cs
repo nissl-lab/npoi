@@ -2245,5 +2245,9 @@ namespace NPOI.HSSF.UserModel
         {
             return this._sheets.Remove((HSSFSheet)item);
         }
+        public bool Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

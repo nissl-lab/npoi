@@ -1332,6 +1332,11 @@ namespace NPOI.HSSF.UserModel
             NotifyArrayFormulaChanging(msg);
         }
 
+        public CellType GetCachedFormulaResultTypeEnum()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsMergedCell
         {
             get
