@@ -2158,7 +2158,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_WriteProtection ctObj = new CT_WriteProtection();
             if (node.Attributes["w:recommended"] != null)
-                ctObj.recommended = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:recommended"].Value);
+                ctObj.recommended = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:recommended"].Value,true);
             if (node.Attributes["w:cryptProviderType"] != null)
                 ctObj.cryptProviderType = (ST_CryptProv)Enum.Parse(typeof(ST_CryptProv), node.Attributes["w:cryptProviderType"].Value);
             if (node.Attributes["w:cryptAlgorithmClass"] != null)
@@ -2651,9 +2651,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.vendorID = XmlHelper.ReadString(node.Attributes["w:vendorID"]);
             ctObj.dllVersion = XmlHelper.ReadString(node.Attributes["w:dllVersion"]);
             if (node.Attributes["w:nlCheck"] != null)
-                ctObj.nlCheck = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:nlCheck"].Value);
+                ctObj.nlCheck = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:nlCheck"].Value,true);
             if (node.Attributes["w:checkStyle"] != null)
-                ctObj.checkStyle = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:checkStyle"].Value);
+                ctObj.checkStyle = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:checkStyle"].Value,true);
             ctObj.appName = XmlHelper.ReadString(node.Attributes["w:appName"]);
             return ctObj;
         }
@@ -4004,15 +4004,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_TrackChangesView ctObj = new CT_TrackChangesView();
             if (node.Attributes["w:markup"] != null)
-                ctObj.markup = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:markup"].Value);
+                ctObj.markup = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:markup"].Value,true);
             if (node.Attributes["w:comments"] != null)
-                ctObj.comments = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:comments"].Value);
+                ctObj.comments = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:comments"].Value,true);
             if (node.Attributes["w:insDel"] != null)
-                ctObj.insDel = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:insDel"].Value);
+                ctObj.insDel = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:insDel"].Value,true);
             if (node.Attributes["w:formatting"] != null)
-                ctObj.formatting = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:formatting"].Value);
+                ctObj.formatting = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:formatting"].Value,true);
             if (node.Attributes["w:inkAnnotations"] != null)
-                ctObj.inkAnnotations = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:inkAnnotations"].Value);
+                ctObj.inkAnnotations = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:inkAnnotations"].Value,true);
             return ctObj;
         }
 
@@ -4218,9 +4218,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node.Attributes["w:edit"] != null)
                 ctObj.edit = (ST_DocProtect)Enum.Parse(typeof(ST_DocProtect), node.Attributes["w:edit"].Value);
             if (node.Attributes["w:formatting"] != null)
-                ctObj.formatting = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:formatting"].Value);
+                ctObj.formatting = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:formatting"].Value,true);
             if (node.Attributes["w:enforcement"] != null)
-                ctObj.enforcement = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:enforcement"].Value);
+                ctObj.enforcement = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:enforcement"].Value,true);
             if (node.Attributes["w:cryptProviderType"] != null)
                 ctObj.cryptProviderType = (ST_CryptProv)Enum.Parse(typeof(ST_CryptProv), node.Attributes["w:cryptProviderType"].Value);
             if (node.Attributes["w:cryptAlgorithmClass"] != null)
@@ -6800,10 +6800,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node.Attributes["w:pos"] != null)
                 ctObj.pos = (ST_CaptionPos)Enum.Parse(typeof(ST_CaptionPos), node.Attributes["w:pos"].Value);
             if (node.Attributes["w:chapNum"] != null)
-                ctObj.chapNum = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:chapNum"].Value);
+                ctObj.chapNum = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:chapNum"].Value,true);
             ctObj.heading = XmlHelper.ReadString(node.Attributes["w:heading"]);
             if (node.Attributes["w:noLabel"] != null)
-                ctObj.noLabel = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:noLabel"].Value);
+                ctObj.noLabel = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:noLabel"].Value,true);
             if (node.Attributes["w:numFmt"] != null)
                 ctObj.numFmt = (ST_NumberFormat)Enum.Parse(typeof(ST_NumberFormat), node.Attributes["w:numFmt"].Value);
             if (node.Attributes["w:sep"] != null)
@@ -7083,7 +7083,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_ReadingModeInkLockDown ctObj = new CT_ReadingModeInkLockDown();
             if (node.Attributes["w:actualPg"] != null)
-                ctObj.actualPg = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:actualPg"].Value);
+                ctObj.actualPg = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:actualPg"].Value,true);
             ctObj.w = XmlHelper.ReadULong(node.Attributes["w:w"]);
             ctObj.h = XmlHelper.ReadULong(node.Attributes["w:h"]);
             ctObj.fontSz = XmlHelper.ReadString(node.Attributes["w:fontSz"]);

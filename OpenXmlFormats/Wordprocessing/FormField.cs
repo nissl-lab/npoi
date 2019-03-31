@@ -173,9 +173,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node.Attributes["w:fldCharType"] != null)
                 ctObj.fldCharType = (ST_FldCharType)Enum.Parse(typeof(ST_FldCharType), node.Attributes["w:fldCharType"].Value);
             if (node.Attributes["w:fldLock"] != null)
-                ctObj.fldLock = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:fldLock"].Value);
+                ctObj.fldLock = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:fldLock"].Value,true);
             if (node.Attributes["w:dirty"] != null)
-                ctObj.dirty = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:dirty"].Value);
+                ctObj.dirty = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:dirty"].Value,true);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "ffData")
