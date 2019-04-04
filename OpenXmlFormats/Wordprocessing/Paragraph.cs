@@ -3283,11 +3283,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.before = XmlHelper.ReadULong(node.Attributes["w:before"]);
             ctObj.beforeLines = XmlHelper.ReadString(node.Attributes["w:beforeLines"]);
             if (node.Attributes["w:beforeAutospacing"] != null)
-                ctObj.beforeAutospacing = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:beforeAutospacing"].Value);
+                ctObj.beforeAutospacing = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:beforeAutospacing"].Value,true);
             ctObj.after = XmlHelper.ReadULong(node.Attributes["w:after"]);
             ctObj.afterLines = XmlHelper.ReadString(node.Attributes["w:afterLines"]);
             if (node.Attributes["w:afterAutospacing"] != null)
-                ctObj.afterAutospacing = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:afterAutospacing"].Value);
+                ctObj.afterAutospacing = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:afterAutospacing"].Value,true);
             ctObj.line = XmlHelper.ReadString(node.Attributes["w:line"]);
             if (node.Attributes["w:lineRule"] != null)
                 ctObj.lineRule = (ST_LineSpacingRule)Enum.Parse(typeof(ST_LineSpacingRule), node.Attributes["w:lineRule"].Value);

@@ -613,7 +613,7 @@ namespace NPOI.OpenXmlFormats.Shared
                 return null;
             CT_OnOff ctObj = new CT_OnOff();
             if (node.Attributes["m:val"] != null)
-                ctObj.val = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["m:val"].Value);
+                ctObj.val = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["m:val"].Value,true);
             return ctObj;
         }
 
