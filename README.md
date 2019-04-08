@@ -19,7 +19,8 @@ To follow us, please visit http://www.linkedin.com/company/neuzilla
 Advantage of NPOI
 =================
 a. It's totally free to use
-b. Cover most features of Excel (cell style, data format, formula and so on)
+
+b. Covers most of the main features of Excel (cell style, data format, formula and so on)
 
 c. Professional support service (even 24*7) from NPOI team (not free)
 
@@ -27,13 +28,19 @@ d. Supported formats: xls, xlsx, docx.
 
 e. Designed to be interface-oriented (take a look at NPOI.SS namespace)
 
-f. Support not only export but also import
+f. Supports not only export, but import
 
 g. .Net 2.0 based even for xlsx and docx (though we also support .NET 4.0)
 
-h. Real successful cases all over the world
+h. Successful usage all over the world
 
-i. huge amout of basic examples
+i. Lots of code samples!
+
+
+Code Samples
+=================
+
+* [See the GitHub wiki:](https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI)
 
 How to join
 ============
