@@ -16,7 +16,7 @@ To follow us, please visit http://www.linkedin.com/company/neuzilla
 
 [How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
 
-Advantage of NPOI
+Advantages of NPOI
 =================
 a. It's totally free to use
 b. Cover most features of Excel (cell style, data format, formula and so on)
