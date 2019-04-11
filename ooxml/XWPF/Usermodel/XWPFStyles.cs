@@ -195,6 +195,21 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
+        /**
+         *get the style with the specified name, if any.
+         * @param styleName The name of the style to get, e.g., "Heading 1"
+         * @return style
+         */
+        public XWPFStyle GetStyleWithName(string styleName)
+        {
+            foreach (XWPFStyle style in listStyle)
+            {
+                if (style.Name == styleName)
+                    return style;
+            }
+            return null;
+        }
+
         public int NumberOfStyles
         {
             get
