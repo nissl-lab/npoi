@@ -472,7 +472,7 @@ namespace NPOI.XSSF.Streaming
                 return;
             }
 
-            bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+            bool date1904 = ((SXSSFWorkbook)Sheet.Workbook).XssfWorkbook.IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value.Value, date1904));
         }
 
