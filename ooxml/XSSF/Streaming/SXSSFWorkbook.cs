@@ -273,7 +273,7 @@ namespace NPOI.XSSF.Streaming
                         }
                         else
                         {
-                            CopyStream(inputStream, zos);
+                            inputStream.CopyTo(zos);
                         }
                         inputStream.Close();
                     }
@@ -286,17 +286,6 @@ namespace NPOI.XSSF.Streaming
             finally
             {
                 zipEntrySource.Close();
-            }
-        }
-
-        private static void CopyStream(Stream inputStream, Stream outputStream)
-        {
-            var chunk = new byte[1024];
-            int count;
-
-            while ((count = inputStream.Read(chunk, 0, chunk.Length)) > 0)
-            {
-                outputStream.Write(chunk, 0, count);
             }
         }
 
@@ -410,7 +399,7 @@ namespace NPOI.XSSF.Streaming
                 outWriter.Flush();
             }
             //Copy the worksheet data to "out".
-            CopyStream(worksheetData, outputStream);
+            worksheetData.CopyTo(outputStream);
             outWriter.Write("</sheetData>");
             outWriter.Flush();
             //Copy the rest of "in" to "out".

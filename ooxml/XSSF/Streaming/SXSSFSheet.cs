@@ -548,7 +548,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    flushRows(_randomAccessWindowSize);
+                    flushRows(_randomAccessWindowSize, false);
                 }
                 catch (IOException ioe)
                 {
@@ -945,38 +945,46 @@ namespace NPOI.XSSF.Streaming
  * The exeeding rows (if any) are flushed to the disk while rows
  * with lower index values are flushed first.
  */
-        private void flushRows(int remaining)
+        private void flushRows(int remaining, bool flushOnDisk)
         {
-            while (_rows.Count > remaining) flushOneRow();
-            if (remaining == 0) allFlushed = true;
+            KeyValuePair<int, SXSSFRow>? lastRow = null;
+            var flushedRowsCount = 0;
+            while (_rows.Count > remaining)
+            {
+                flushedRowsCount++;
+                lastRow = flushOneRow();
+            }
+            if (remaining == 0) 
+                allFlushed = true;
+
+            if (lastRow != null && flushOnDisk)
+                _writer.FlushRows(flushedRowsCount, lastRow.Value.Key, lastRow.Value.Value.LastCellNum);
         }
 
         public void flushRows()
         {
-            flushRows(0);
+            flushRows(0, true);
         }
 
-        private void flushOneRow()
+        private KeyValuePair<int, SXSSFRow>? flushOneRow()
         {
+            if (_rows.Count == 0)
+                return null;
 
-            int firstRowNum = _rows.FirstOrDefault().Key;
-            if (firstRowNum != null)
-            {
-                int rowIndex = firstRowNum;
-                SXSSFRow row = _rows[firstRowNum];
-                // Update the best fit column widths for auto-sizing just before the rows are flushed
-                // _autoSizeColumnTracker.UpdateColumnWidths(row);
-                _writer.WriteRow(rowIndex, row);
-                _rows.Remove(firstRowNum);
-                lastFlushedRowNumber = rowIndex;
-            }
+            var firstRow = _rows.FirstOrDefault();
+            // Update the best fit column widths for auto-sizing just before the rows are flushed
+            // _autoSizeColumnTracker.UpdateColumnWidths(row);
+            _writer.WriteRow(firstRow.Key, firstRow.Value);
+            _rows.Remove(firstRow.Key);
+            lastFlushedRowNumber = firstRow.Key;
+            return firstRow;
         }
 
         /* Gets "<sheetData>" document fragment*/
         public Stream getWorksheetXMLInputStream()
         {
             // flush all remaining data and close the temp file writer
-            flushRows(0);
+            flushRows(0, true);
             _writer.Close();
             return _writer.GetWorksheetXmlInputStream();
         }
