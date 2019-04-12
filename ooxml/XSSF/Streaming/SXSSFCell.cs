@@ -785,7 +785,7 @@ namespace NPOI.XSSF.Streaming
 
         public void SetCellValue(DateTime value)
         {
-            throw new NotImplementedException();
+            SetCellValue((DateTime?)value);
         }
     }
 }
