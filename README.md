@@ -1,6 +1,3 @@
-***Tony Qu is visiting Great Seattle Area these days. He will stay in Redmond for one week (Apr 23-Apr 27, 2019). If you want to talk to him and ask some questions about NPOI, join the meetup https://www.meetup.com/NEX-seattle/***
-
-
 NPOI
 ===================
 [![Join the chat at https://gitter.im/tonyqus/npoi](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tonyqus/npoi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
