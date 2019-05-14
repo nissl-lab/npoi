@@ -17,54 +17,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_Col
     {
-
-        private uint minField; // required
-
-        private uint maxField; // required
-
         private double widthField;  // optional, but width has no default value
-        private bool widthSpecifiedField;
-
-        private uint? styleField;// optional, as are the following attributes
-
-        private bool hiddenField;
-
-        private bool bestFitField;
-
-        private bool customWidthField;
-
-        private bool phoneticField;
-
-        private byte outlineLevelField;
-
         private bool collapsedField = true;
-        private bool collapsedSpecifiedField = true;
 
         [XmlAttribute]
-        public uint min
-        {
-            get
-            {
-                return this.minField;
-            }
-            set
-            {
-                this.minField = value;
-            }
-        }
+        public uint min { get; set; }
 
         [XmlAttribute]
-        public uint max
-        {
-            get
-            {
-                return this.maxField;
-            }
-            set
-            {
-                this.maxField = value;
-            }
-        }
+        public uint max { get; set; }
 
         [XmlAttribute]
         public double width
@@ -80,34 +40,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
         [XmlIgnore]
-        public bool widthSpecified
-        {
-            get
-            {
-                return this.widthSpecifiedField;
-            }
-            set
-            {
-                this.widthSpecifiedField = value;
-            }
-        }
+        public bool widthSpecified { get; set; }
 
 
         public bool IsSetBestFit()
         {
-            return this.bestFitField != false;
+            return this.bestFit != false;
         }
         public bool IsSetCustomWidth()
         {
-            return this.customWidthField != false;
+            return this.customWidth != false;
         }
         public bool IsSetHidden()
         {
-            return this.hiddenField != false;
+            return this.hidden != false;
         }
         public bool IsSetStyle()
         {
-            return this.styleField!=null;
+            return this.style!=null;
         }
         public bool IsSetWidth()
         {
@@ -115,19 +65,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetCollapsed()
         {
-            return this.collapsedSpecifiedField;
+            return this.collapsedSpecified;
         }
         public bool IsSetPhonetic()
         {
-            return this.phoneticField != false;
+            return this.phonetic != false;
         }
         public bool IsSetOutlineLevel()
         {
-            return this.outlineLevelField != 0;
+            return this.outlineLevel != 0;
         }
         public void UnsetHidden()
         {
-            this.hiddenField = false;
+            this.hidden = false;
         }
         public void UnsetCollapsed()
         {
@@ -138,87 +88,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
         [XmlAttribute]
-        public uint? style
-        {
-            get
-            {
-                return styleField;
-            }
-            set
-            {
-                this.styleField = value;
-            }
-        }
+        public uint? style { get; set; }
 
         [DefaultValue(false)]
         [XmlAttribute]
-        public bool hidden
-        {
-            get
-            {
-                return hiddenField;
-            }
-            set
-            {
-                this.hiddenField = value;
-            }
-        }
+        public bool hidden { get; set; }
 
         [DefaultValue(false)]
         [XmlAttribute]
-        public bool bestFit
-        {
-            get
-            {
-                return bestFitField;
-            }
-            set
-            {
-                this.bestFitField = value;
-            }
-        }
+        public bool bestFit { get; set; }
         [DefaultValue(false)]
         [XmlAttribute]
-        public bool customWidth
-        {
-            get
-            {
-                return customWidthField;
-            }
-            set
-            {
-                this.customWidthField = value;
-            }
-        }
+        public bool customWidth { get; set; }
 
         [DefaultValue(false)]
         [XmlAttribute]
-        public bool phonetic
-        {
-            get
-            {
-                return phoneticField;
-            }
-            set
-            {
-                this.phoneticField = value;
-            }
-        }
+        public bool phonetic { get; set; }
 
 
         [DefaultValue(typeof(byte), "0")]
         [XmlAttribute]
-        public byte outlineLevel
-        {
-            get
-            {
-                return outlineLevelField;
-            }
-            set
-            {
-                this.outlineLevelField = value;
-            }
-        }
+        public byte outlineLevel { get; set; }
 
         [DefaultValue(true)]
         [XmlAttribute]
@@ -231,15 +121,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.collapsedField = value;
-                this.collapsedSpecifiedField = true;
+                this.collapsedSpecified = true;
             }
         }
         [XmlIgnore]
-        public bool collapsedSpecified
-        {
-            get { return this.collapsedSpecifiedField; }
-            set { this.collapsedSpecifiedField = value; }
-        }
+        public bool collapsedSpecified { get; set; } = true;
 
         public CT_Col()
         {
@@ -251,19 +137,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_Col ctObj = new CT_Col();
-            ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
-            ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
-            ctObj.width = XmlHelper.ReadDouble(node.Attributes["width"]);
-            if (node.Attributes["style"] != null)
-                ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
+            ctObj.min = XmlHelper.ReadUInt(node.Attributes[nameof(min)]);
+            ctObj.max = XmlHelper.ReadUInt(node.Attributes[nameof(max)]);
+            ctObj.width = XmlHelper.ReadDouble(node.Attributes[nameof(width)]);
+            if (node.Attributes[nameof(style)] != null)
+                ctObj.style = XmlHelper.ReadUInt(node.Attributes[nameof(style)]);
             else
                 ctObj.style = null;
-            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
-            ctObj.bestFit = XmlHelper.ReadBool(node.Attributes["bestFit"]);
-            ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes["outlineLevel"]);
-            ctObj.customWidth = XmlHelper.ReadBool(node.Attributes["customWidth"]);
-            ctObj.phonetic = XmlHelper.ReadBool(node.Attributes["phonetic"]);
-            ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes[nameof(hidden)]);
+            ctObj.bestFit = XmlHelper.ReadBool(node.Attributes[nameof(bestFit)]);
+            ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes[nameof(outlineLevel)]);
+            ctObj.customWidth = XmlHelper.ReadBool(node.Attributes[nameof(customWidth)]);
+            ctObj.phonetic = XmlHelper.ReadBool(node.Attributes[nameof(phonetic)]);
+            ctObj.collapsed = XmlHelper.ReadBool(node.Attributes[nameof(collapsed)]);
             return ctObj;
         }
 
@@ -271,18 +157,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "min", this.min);
-            XmlHelper.WriteAttribute(sw, "max", this.max);
-            XmlHelper.WriteAttribute(sw, "width", this.width);
+            sw.Write($"<{nodeName}");
+            XmlHelper.WriteAttribute(sw, nameof(min), this.min);
+            XmlHelper.WriteAttribute(sw, nameof(max), this.max);
+            XmlHelper.WriteAttribute(sw, nameof(width), this.width);
             if(this.style!=null)
-                XmlHelper.WriteAttribute(sw, "style", (uint)this.style,true);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden,false);
-            XmlHelper.WriteAttribute(sw, "bestFit", this.bestFit,false);
-            XmlHelper.WriteAttribute(sw, "customWidth", this.customWidth,false);
-            XmlHelper.WriteAttribute(sw, "phonetic", this.phonetic,false);
-            XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
-            XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed,false);
+                XmlHelper.WriteAttribute(sw, nameof(style), (uint)this.style,true);
+            XmlHelper.WriteAttribute(sw, nameof(hidden), this.hidden,false);
+            XmlHelper.WriteAttribute(sw, nameof(bestFit), this.bestFit,false);
+            XmlHelper.WriteAttribute(sw, nameof(customWidth), this.customWidth,false);
+            XmlHelper.WriteAttribute(sw, nameof(phonetic), this.phonetic,false);
+            XmlHelper.WriteAttribute(sw, nameof(outlineLevel), this.outlineLevel);
+            XmlHelper.WriteAttribute(sw, nameof(collapsed), this.collapsed,false);
             sw.Write("/>");
         }
 
@@ -293,18 +179,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Col Copy()
         {
             CT_Col col = new CT_Col();
-            col.bestFitField = this.bestFitField;
+            col.bestFit = this.bestFit;
             col.collapsedField = this.collapsedField;
-            col.collapsedSpecifiedField = this.collapsedSpecifiedField;
-            col.customWidthField = this.customWidthField;
-            col.hiddenField = this.hiddenField;
-            col.maxField = this.maxField;
-            col.minField = this.minField;
-            col.outlineLevelField = this.outlineLevelField;
-            col.phoneticField = this.phoneticField;
-            col.styleField = this.styleField;
+            col.collapsedSpecified = this.collapsedSpecified;
+            col.customWidth = this.customWidth;
+            col.hidden = this.hidden;
+            col.max = this.max;
+            col.min = this.min;
+            col.outlineLevel = this.outlineLevel;
+            col.phonetic = this.phonetic;
+            col.style = this.style;
             col.widthField = this.widthField;
-            col.widthSpecifiedField = this.widthSpecifiedField;
+            col.widthSpecified = this.widthSpecified;
             
             return col;
         }
@@ -316,7 +202,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (!(obj is CT_Col))
                 return false;
             CT_Col col = obj as CT_Col;
-            return col.min == this.min && col.max == this.max;
+            return (col.min == this.min) && (col.max == this.max);
         }
 
         public override int GetHashCode()
@@ -326,7 +212,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public override string ToString()
         {
-            return string.Format("min:{0}, max:{1}, width:{2}", this.min, this.max, this.width);
+            return $"min:{this.min}, max:{this.max}, width:{this.width}";
         }
     }
 }

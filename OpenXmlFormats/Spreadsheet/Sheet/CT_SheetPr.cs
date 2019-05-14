@@ -14,52 +14,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetPr
     {
-
-        private CT_Color tabColorField;
-
-        private CT_OutlinePr outlinePrField;
-
-        private CT_PageSetUpPr pageSetUpPrField;
-
-        private bool syncHorizontalField;
-
-        private bool syncVerticalField;
-
-        private string syncRefField;
-
-        private bool transitionEvaluationField;
-
-        private bool transitionEntryField;
-
-        private bool publishedField;
-
-        private string codeNameField;
-
-        private bool filterModeField;
-
-        private bool enableFormatConditionsCalculationField;
-
         public static CT_SheetPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_SheetPr ctObj = new CT_SheetPr();
-            ctObj.syncHorizontal = XmlHelper.ReadBool(node.Attributes["syncHorizontal"]);
-            ctObj.syncVertical = XmlHelper.ReadBool(node.Attributes["syncVertical"]);
-            ctObj.syncRef = XmlHelper.ReadString(node.Attributes["syncRef"]);
-            ctObj.transitionEvaluation = XmlHelper.ReadBool(node.Attributes["transitionEvaluation"]);
-            ctObj.transitionEntry = XmlHelper.ReadBool(node.Attributes["transitionEntry"]);
-            ctObj.published = XmlHelper.ReadBool(node.Attributes["published"]);
-            ctObj.codeName = XmlHelper.ReadString(node.Attributes["codeName"]);
-            ctObj.filterMode = XmlHelper.ReadBool(node.Attributes["filterMode"]);
-            ctObj.enableFormatConditionsCalculation = XmlHelper.ReadBool(node.Attributes["enableFormatConditionsCalculation"]);
+            ctObj.syncHorizontal = XmlHelper.ReadBool(node.Attributes[nameof(syncHorizontal)]);
+            ctObj.syncVertical = XmlHelper.ReadBool(node.Attributes[nameof(syncVertical)]);
+            ctObj.syncRef = XmlHelper.ReadString(node.Attributes[nameof(syncRef)]);
+            ctObj.transitionEvaluation = XmlHelper.ReadBool(node.Attributes[nameof(transitionEvaluation)]);
+            ctObj.transitionEntry = XmlHelper.ReadBool(node.Attributes[nameof(transitionEntry)]);
+            ctObj.published = XmlHelper.ReadBool(node.Attributes[nameof(published)]);
+            ctObj.codeName = XmlHelper.ReadString(node.Attributes[nameof(codeName)]);
+            ctObj.filterMode = XmlHelper.ReadBool(node.Attributes[nameof(filterMode)]);
+            ctObj.enableFormatConditionsCalculation = XmlHelper.ReadBool(node.Attributes[nameof(enableFormatConditionsCalculation)]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "tabColor")
+                if (childNode.LocalName == nameof(tabColor))
                     ctObj.tabColor = CT_Color.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "outlinePr")
+                else if (childNode.LocalName == nameof(outlinePr))
                     ctObj.outlinePr = CT_OutlinePr.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "pageSetUpPr")
+                else if (childNode.LocalName == nameof(pageSetUpPr))
                     ctObj.pageSetUpPr = CT_PageSetUpPr.Parse(childNode, namespaceManager);
             }
             return ctObj;
@@ -69,24 +44,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "syncHorizontal", this.syncHorizontal, false);
-            XmlHelper.WriteAttribute(sw, "syncVertical", this.syncVertical, false);
-            XmlHelper.WriteAttribute(sw, "syncRef", this.syncRef);
-            XmlHelper.WriteAttribute(sw, "transitionEvaluation", this.transitionEvaluation, false);
-            XmlHelper.WriteAttribute(sw, "transitionEntry", this.transitionEntry, false);
-            XmlHelper.WriteAttribute(sw, "published", this.published, false);
-            XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
-            XmlHelper.WriteAttribute(sw, "filterMode", this.filterMode,false);
-            XmlHelper.WriteAttribute(sw, "enableFormatConditionsCalculation", this.enableFormatConditionsCalculation, false);
+            sw.Write($"<{nodeName}");
+            XmlHelper.WriteAttribute(sw, nameof(syncHorizontal), this.syncHorizontal, false);
+            XmlHelper.WriteAttribute(sw, nameof(syncVertical), this.syncVertical, false);
+            XmlHelper.WriteAttribute(sw, nameof(syncRef), this.syncRef);
+            XmlHelper.WriteAttribute(sw, nameof(transitionEvaluation), this.transitionEvaluation, false);
+            XmlHelper.WriteAttribute(sw, nameof(transitionEntry), this.transitionEntry, false);
+            XmlHelper.WriteAttribute(sw, nameof(published), this.published, false);
+            XmlHelper.WriteAttribute(sw, nameof(codeName), this.codeName);
+            XmlHelper.WriteAttribute(sw, nameof(filterMode), this.filterMode,false);
+            XmlHelper.WriteAttribute(sw, nameof(enableFormatConditionsCalculation), this.enableFormatConditionsCalculation, false);
             sw.Write(">");
-            if (this.tabColor != null)
-                this.tabColor.Write(sw, "tabColor");
-            if (this.outlinePr != null)
-                this.outlinePr.Write(sw, "outlinePr");
-            if (this.pageSetUpPr != null)
-                this.pageSetUpPr.Write(sw, "pageSetUpPr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            this.tabColor?.Write(sw, nameof(tabColor));
+            this.outlinePr?.Write(sw, nameof(outlinePr));
+            this.pageSetUpPr?.Write(sw, nameof(pageSetUpPr));
+            sw.Write($"</{nodeName}>");
         }
 
 
@@ -95,211 +67,94 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             //this.pageSetUpPrField = new CT_PageSetUpPr();
             //this.outlinePrField = new CT_OutlinePr();
             //this.tabColorField = new CT_Color();
-            this.syncHorizontalField = false;
-            this.syncVerticalField = false;
-            this.transitionEvaluationField = false;
-            this.transitionEntryField = false;
-            this.publishedField = true;
-            this.filterModeField = false;
-            this.enableFormatConditionsCalculationField = true;
+            this.syncHorizontal = false;
+            this.syncVertical = false;
+            this.transitionEvaluation = false;
+            this.transitionEntry = false;
+            this.published = true;
+            this.filterMode = false;
+            this.enableFormatConditionsCalculation = true;
         }
         public CT_SheetPr Clone()
         {
-            CT_SheetPr newPr = new CT_SheetPr();
-            newPr.codeNameField = codeNameField;
-            newPr.enableFormatConditionsCalculationField = enableFormatConditionsCalculationField;
-            newPr.filterModeField = filterModeField;
-            newPr.publishedField = publishedField;
-            newPr.syncHorizontalField = syncHorizontalField;
-            newPr.syncRefField = syncRefField;
-            newPr.syncVerticalField = syncVerticalField;
-            newPr.transitionEntryField = transitionEntryField;
-            newPr.transitionEvaluationField = transitionEvaluationField;
-            if (outlinePrField != null)
+            CT_SheetPr newPr = new CT_SheetPr
             {
-                newPr.outlinePrField = outlinePrField.Clone();
+                codeName = codeName,
+                enableFormatConditionsCalculation = enableFormatConditionsCalculation,
+                filterMode = filterMode,
+                published = published,
+                syncHorizontal = syncHorizontal,
+                syncRef = syncRef,
+                syncVertical = syncVertical,
+                transitionEntry = transitionEntry,
+                transitionEvaluation = transitionEvaluation
+            };
+
+            if (outlinePr != null)
+            {
+                newPr.outlinePr = outlinePr.Clone();
             }
-            if (pageSetUpPrField != null)
+            if (pageSetUpPr != null)
             {
-                newPr.pageSetUpPrField = pageSetUpPrField.Clone();
+                newPr.pageSetUpPr = pageSetUpPr.Clone();
             }
-            if (tabColorField != null)
+            if (tabColor != null)
             {
-                newPr.tabColorField = tabColorField.Copy();
+                newPr.tabColor = tabColor.Copy();
             }
             return newPr;
         }
 
         public bool IsSetOutlinePr()
         {
-            return this.outlinePrField != null;
+            return this.outlinePr != null;
         }
         public bool IsSetPageSetUpPr()
         {
-            return this.pageSetUpPrField != null;
+            return this.pageSetUpPr != null;
         }
         public CT_PageSetUpPr AddNewPageSetUpPr()
         {
-            this.pageSetUpPrField = new CT_PageSetUpPr();
-            return this.pageSetUpPrField;
+            this.pageSetUpPr = new CT_PageSetUpPr();
+            return this.pageSetUpPr;
         }
         public CT_OutlinePr AddNewOutlinePr()
         {
-            this.outlinePrField = new CT_OutlinePr();
-            return this.outlinePrField;
+            this.outlinePr = new CT_OutlinePr();
+            return this.outlinePr;
         }
 
 
-        public CT_Color tabColor
-        {
-            get
-            {
-                return this.tabColorField;
-            }
-            set
-            {
-                this.tabColorField = value;
-            }
-        }
+        public CT_Color tabColor { get; set; }
 
-        public CT_OutlinePr outlinePr
-        {
-            get
-            {
-                return this.outlinePrField;
-            }
-            set
-            {
-                this.outlinePrField = value;
-            }
-        }
+        public CT_OutlinePr outlinePr { get; set; }
 
-        public CT_PageSetUpPr pageSetUpPr
-        {
-            get
-            {
-                return this.pageSetUpPrField;
-            }
-            set
-            {
-                this.pageSetUpPrField = value;
-            }
-        }
+        public CT_PageSetUpPr pageSetUpPr { get; set; }
 
         [DefaultValue(false)]
-        public bool syncHorizontal
-        {
-            get
-            {
-                return this.syncHorizontalField;
-            }
-            set
-            {
-                this.syncHorizontalField = value;
-            }
-        }
+        public bool syncHorizontal { get; set; }
 
         [DefaultValue(false)]
-        public bool syncVertical
-        {
-            get
-            {
-                return this.syncVerticalField;
-            }
-            set
-            {
-                this.syncVerticalField = value;
-            }
-        }
+        public bool syncVertical { get; set; }
 
-        public string syncRef
-        {
-            get
-            {
-                return this.syncRefField;
-            }
-            set
-            {
-                this.syncRefField = value;
-            }
-        }
+        public string syncRef { get; set; }
 
         [DefaultValue(false)]
-        public bool transitionEvaluation
-        {
-            get
-            {
-                return this.transitionEvaluationField;
-            }
-            set
-            {
-                this.transitionEvaluationField = value;
-            }
-        }
+        public bool transitionEvaluation { get; set; }
 
         [DefaultValue(false)]
-        public bool transitionEntry
-        {
-            get
-            {
-                return this.transitionEntryField;
-            }
-            set
-            {
-                this.transitionEntryField = value;
-            }
-        }
+        public bool transitionEntry { get; set; }
 
         [DefaultValue(true)]
-        public bool published
-        {
-            get
-            {
-                return this.publishedField;
-            }
-            set
-            {
-                this.publishedField = value;
-            }
-        }
+        public bool published { get; set; }
 
-        public string codeName
-        {
-            get
-            {
-                return this.codeNameField;
-            }
-            set
-            {
-                this.codeNameField = value;
-            }
-        }
+        public string codeName { get; set; }
 
         [DefaultValue(false)]
-        public bool filterMode
-        {
-            get
-            {
-                return this.filterModeField;
-            }
-            set
-            {
-                this.filterModeField = value;
-            }
-        }
+        public bool filterMode { get; set; }
 
         [DefaultValue(true)]
-        public bool enableFormatConditionsCalculation
-        {
-            get
-            {
-                return this.enableFormatConditionsCalculationField;
-            }
-            set
-            {
-                this.enableFormatConditionsCalculationField = value;
-            }
-        }
+        public bool enableFormatConditionsCalculation { get; set; }
 
         public bool IsSetTabColor()
         {

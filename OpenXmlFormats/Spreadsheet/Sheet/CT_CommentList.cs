@@ -7,6 +7,7 @@
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.IO;
     using System.Xml;
@@ -25,7 +26,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.comment = new List<CT_Comment>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "comment")
+                if (childNode.LocalName == nameof(comment))
                     ctObj.comment.Add(CT_Comment.Parse(childNode, namespaceManager));
             }
             return ctObj;
@@ -35,15 +36,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
-            if (this.comment != null)
-            {
-                foreach (CT_Comment x in this.comment)
-                {
-                    x.Write(sw, "comment");
-                }
-            }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write($"<{nodeName}>");
+            this.comment?.ForEach(x => x.Write(sw, nameof(this.comment)));
+            sw.Write($"</{nodeName}>");
         }
 
         private List<CT_Comment> commentField = null; // optional field [0..*]
@@ -69,18 +64,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             if (null == commentField) { commentField = new List<CT_Comment>(); }
             CT_Comment com = new CT_Comment();
-            commentField.Insert(index,com);
-            return com;            
+            commentField.Insert(index, com);
+            return com;
         }
         public CT_Comment AddNewComment()
         {
             if (null == commentField) { commentField = new List<CT_Comment>(); }
-            CT_Comment com= new CT_Comment();
+            CT_Comment com = new CT_Comment();
             commentField.Add(com);
             return com;
         }
 
-        [XmlElement("comment")]
+        [XmlElement(nameof(comment))]
         public List<CT_Comment> comment
         {
             get

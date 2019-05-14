@@ -18,7 +18,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_MergeCell ctObj = new CT_MergeCell();
-            ctObj.@ref = XmlHelper.ReadString(node.Attributes["ref"]);
+            ctObj.@ref = XmlHelper.ReadString(node.Attributes[nameof(@ref)]);
             return ctObj;
         }
 
@@ -26,24 +26,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     internal void Write(StreamWriter sw, string nodeName)
     {
-        sw.Write(string.Format("<{0}", nodeName));
-        XmlHelper.WriteAttribute(sw, "ref", this.@ref);
+        sw.Write($"<{nodeName}");
+        XmlHelper.WriteAttribute(sw, nameof(@ref), this.@ref);
         sw.Write("/>");
     }
-
-
-        private string refField;
         [XmlAttribute]
-        public string @ref
-        {
-            get
-            {
-                return this.refField;
-            }
-            set
-            {
-                this.refField = value;
-            }
-        }
+        public string @ref { get; set; }
     }
 }

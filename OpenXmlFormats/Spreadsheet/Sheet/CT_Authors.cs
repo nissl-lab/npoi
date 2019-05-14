@@ -13,8 +13,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     // not needed because it not used as a root [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", ElementName = "authors")]
     public class CT_Authors
     {
-
-        private List<string> authorField = null; // optional field [0..*]
+        [XmlElement(nameof(author))] // this is serialized into multiple author entries
+        public List<string> author { get; set; } = null;
 
         //public CT_Authors()
         //{
@@ -22,36 +22,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //}
         public int SizeOfAuthorArray()
         {
-            return (null == authorField) ? 0 : authorField.Count;
+            return (int)author?.Count;
         }
         public string GetAuthorArray(int index)
         {
-            return (null == authorField) ? null : authorField[index];
+            return author?[index];
         }
         public void Insert(int index, string author)
         {
-            if (null == authorField) { authorField = new List<string>(); }
-            authorField.Insert(index, author);
+            if (null == this.author) { this.author = new List<string>(); }
+            this.author.Insert(index, author);
         }
         public void AddAuthor(string name)
         {
-            if (null == authorField) { authorField = new List<string>(); }
-            authorField.Add(name);
+            if (null == author) { author = new List<string>(); }
+            author.Add(name);
         }
         //[XmlArray("authors", Order = 0)] // - encapsulates the following items, but the outer element already provides the container.
         //[XmlArrayItem("author")]
-        [XmlElement("author")] // this is serialized into multiple author entries
-        public List<string> author
-        {
-            get
-            {
-                return this.authorField;
-            }
-            set
-            {
-                this.authorField = value;
-            }
-        }
         public static CT_Authors Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -70,15 +58,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.Write($"<{nodeName}>");
             if (this.author != null)
             {
                 foreach (String x in this.author)
                 {
-                    sw.Write(string.Format("<author>{0}</author>", XmlHelper.EncodeXml(x)));
+                    sw.Write($"<author>{XmlHelper.EncodeXml(x)}</author>");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write($"</{nodeName}>");
         }
 
     }

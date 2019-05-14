@@ -14,31 +14,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_Cols
     {
 
-        private List<CT_Col> colField = new List<CT_Col>(); // required
-
         //public CT_Cols()
         //{
         //    this.colField = new List<CT_Col>();
         //}
         public void SetColArray(List<CT_Col> array)
         {
-            colField = array;
+            col = array;
         }
         public CT_Col AddNewCol()
         {
             CT_Col newCol = new CT_Col();
-            this.colField.Add(newCol);
+            this.col.Add(newCol);
             return newCol;
         }
         public CT_Col InsertNewCol(int index)
         {
             CT_Col newCol = new CT_Col();
-            this.colField.Insert(index, newCol);
+            this.col.Insert(index, newCol);
             return newCol;
         }
         public void RemoveCol(int index)
         {
-            this.colField.RemoveAt(index);
+            this.col.RemoveAt(index);
         }
 
         public int sizeOfColArray()
@@ -47,36 +45,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Col GetColArray(int index)
         {
-            return colField[index];
+            return col[index];
         }
 
 
         public List<CT_Col> GetColList()
         {
-            return colField;
+            return col;
         }
         [XmlElement]
-        public List<CT_Col> col
-        {
-            get
-            {
-                return this.colField;
-            }
-            set
-            {
-                this.colField = value;
-            }
-        }
+        public List<CT_Col> col { get; set; } = new List<CT_Col>();
 
         public static CT_Cols Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
-            CT_Cols ctObj = new CT_Cols();
-            ctObj.col = new List<CT_Col>();
+            CT_Cols ctObj = new CT_Cols
+            {
+                col = new List<CT_Col>()
+            };
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "col")
+                if (childNode.LocalName == nameof(col))
                     ctObj.col.Add(CT_Col.Parse(childNode, namespaceManager));
             }
             return ctObj;
@@ -86,23 +76,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write($"<{nodeName}");
             sw.Write(">");
             if (this.col != null)
             {
                 foreach (CT_Col x in this.col)
                 {
-                    x.Write(sw, "col");
+                    x.Write(sw, nameof(col));
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write($"</{nodeName}>");
         }
 
 
 
-        public void SetColArray(CT_Col[] colArray)
+        public void SetColArray(IEnumerable<CT_Col> colArray)
         {
-            this.colField = new List<CT_Col>(colArray);
+            this.col = new List<CT_Col>(colArray);
         }
     }
 }
