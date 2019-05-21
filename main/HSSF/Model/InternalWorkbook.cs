@@ -1603,7 +1603,7 @@ namespace NPOI.HSSF.Model
         
         //protected Record CreateFormat(int id)
         //{   // we'll need multiple editions for
-        //    FormatRecord retval = new FormatRecord();   // the differnt formats
+        //    FormatRecord retval = new FormatRecord();   // the different formats
 
         //    switch (id)
         //    {
