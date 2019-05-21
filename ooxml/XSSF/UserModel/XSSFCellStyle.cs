@@ -104,7 +104,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (this._stylesSource != src)
             {
-                throw new ArgumentException("This Style does not belong to the supplied Workbook Stlyes Source. Are you trying to assign a style from one workbook to the cell of a differnt workbook?");
+                throw new ArgumentException("This Style does not belong to the supplied Workbook Stlyes Source. Are you trying to assign a style from one workbook to the cell of a different workbook?");
             }
         }
 
