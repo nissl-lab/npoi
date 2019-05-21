@@ -312,7 +312,7 @@ namespace NPOI.HSSF.UserModel
         {
             if (wb.Workbook != _workbook)
             {
-                throw new ArgumentException("This Style does not belong to the supplied Workbook. Are you trying to assign a style from one workbook to the cell of a differnt workbook?");
+                throw new ArgumentException("This Style does not belong to the supplied Workbook. Are you trying to assign a style from one workbook to the cell of a different workbook?");
             }
         }
 
