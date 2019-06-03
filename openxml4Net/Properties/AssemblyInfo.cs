@@ -36,7 +36,9 @@ using System.Security;
 [assembly: AssemblyVersion("2.4.1.0")]
 [assembly: AssemblyFileVersion("2.4.1.0")]
 [assembly: AssemblyInformationalVersion("2.0.0.0")]
+#if NETSTANDARD2_0 || NET40
 [assembly: AllowPartiallyTrustedCallers]
+#endif
 #if NETSTANDARD2_0 || NET40 || NET45
 [assembly: SecurityRules(SecurityRuleSet.Level1)]
 #endif
