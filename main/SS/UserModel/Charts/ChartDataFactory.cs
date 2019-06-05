@@ -32,6 +32,9 @@ namespace NPOI.SS.UserModel.Charts
         IScatterChartData<Tx, Ty> CreateScatterChartData<Tx, Ty>();
         ILineChartData<Tx, Ty> CreateLineChartData<Tx, Ty>();
         IBarChartData<Tx, Ty> CreateBarChartData<Tx, Ty>();
+        IPieChartData<Tx, Ty> CreatePieChartData<Tx, Ty>();
+        IColumnChartData<Tx, Ty> CreateColumnChartData<Tx, Ty>();
+        IAreaChartData<Tx, Ty> CreateAreaChartData<Tx, Ty>();
     }
 
 }

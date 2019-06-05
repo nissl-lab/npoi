@@ -777,11 +777,15 @@
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\CellCopyPolicy.cs" />
+    <Compile Include="SS\UserModel\Charts\AreaChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\AreaChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartData.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
     <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
+    <Compile Include="SS\UserModel\Charts\ColumnChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\ColumnChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
@@ -789,6 +793,8 @@
     <Compile Include="SS\UserModel\ConditionalFormattingThreshold.cs" />
     <Compile Include="SS\UserModel\ConditionType.cs" />
     <Compile Include="SS\UserModel\DataBarFormatting.cs" />
+    <Compile Include="SS\UserModel\Charts\PieChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\PieChartSeries.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
     <Compile Include="SS\UserModel\ExcelGeneralNumberFormat.cs" />
     <Compile Include="SS\UserModel\ExtendedColor.cs" />

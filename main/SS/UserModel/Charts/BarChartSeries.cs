@@ -9,11 +9,11 @@ namespace NPOI.SS.UserModel.Charts
         /**
          * @return data source used for category axis data.
          */
-        IChartDataSource<Tx> GetCategoryAxisData();
+        IChartDataSource<Ty> GetCategoryAxisData();
 
         /**
          * @return data source used for value axis.
          */
-        IChartDataSource<Ty> GetValues();
+        IChartDataSource<Tx> GetValues();
     }
 }
