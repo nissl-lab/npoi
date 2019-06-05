@@ -50,6 +50,21 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             return new XSSFBarChartData<Tx, Ty>();
         }
+
+        public IPieChartData<Tx, Ty> CreatePieChartData<Tx, Ty>()
+        {
+            return new XSSFPieChartData<Tx, Ty>();
+        }
+
+        public IColumnChartData<Tx, Ty> CreateColumnChartData<Tx, Ty>()
+        {
+            return new XSSFColumnChartData<Tx, Ty>();
+        }
+
+        public IAreaChartData<Tx, Ty> CreateAreaChartData<Tx, Ty>()
+        {
+            return new XSSFAreaChartData<Tx, Ty>();
+        }
         /**
          * @return factory instance
          */

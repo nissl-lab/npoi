@@ -9,33 +9,33 @@ using System.Text;
 namespace NPOI.XSSF.UserModel.Charts
 {
     /// <summary>
-    /// Holds data for a XSSF Bar Chart
+    /// Holds data for a XSSF Column Chart
     /// </summary>
     /// <typeparam name="Tx"></typeparam>
     /// <typeparam name="Ty"></typeparam>
-    public class XSSFBarChartData<Tx, Ty> : IBarChartData<Tx, Ty>
+    public class XSSFColumnChartData<Tx, Ty> : IColumnChartData<Tx, Ty>
     {
         /**
          * List of all data series.
          */
-        private List<IBarChartSeries<Tx, Ty>> series;
+        private List<IColumnChartSeries<Tx, Ty>> series;
 
-        public XSSFBarChartData()
+        public XSSFColumnChartData()
         {
-            series = new List<IBarChartSeries<Tx, Ty>>();
+            series = new List<IColumnChartSeries<Tx, Ty>>();
         }
 
-        public class Series : AbstractXSSFChartSeries, IBarChartSeries<Tx, Ty>
+        public class Series : AbstractXSSFChartSeries, IColumnChartSeries<Tx, Ty>
         {
             private int id;
             private int order;
             private byte[] fillColor;
-            private IChartDataSource<Tx> values;
-            private IChartDataSource<Ty> categories;
+            private IChartDataSource<Tx> categories;
+            private IChartDataSource<Ty> values;
 
             internal Series(int id, int order,
-                            IChartDataSource<Tx> values,
-                            IChartDataSource<Ty> categories)
+                            IChartDataSource<Tx> categories,
+                            IChartDataSource<Ty> values)
             {
                 this.id = id;
                 this.order = order;
@@ -61,12 +61,12 @@ namespace NPOI.XSSF.UserModel.Charts
                 fillColor[2] = color.B;
             }
 
-            public IChartDataSource<Ty> GetCategoryAxisData()
+            public IChartDataSource<Tx> GetCategoryAxisData()
             {
                 return categories;
             }
 
-            public IChartDataSource<Tx> GetValues()
+            public IChartDataSource<Ty> GetValues()
             {
                 return values;
             }
@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 ctBarSer.invertIfNegative = ctNoInvertIfNegative;
 
                 CT_BarDir ctBarDir = ctBarChart.AddNewBarDir();
-                ctBarDir.val = ST_BarDir.bar;
+                ctBarDir.val = ST_BarDir.col;
 
                 CT_AxDataSource catDS = ctBarSer.AddNewCat();
                 XSSFChartUtil.BuildAxDataSource(catDS, categories);
@@ -97,7 +97,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
                 if (fillColor != null)
                 {
-                    ctBarSer.spPr = new OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
+                    ctBarSer.spPr = new NPOI.OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
                     CT_SolidColorFillProperties ctSolidColorFillProperties = ctBarSer.spPr.AddNewSolidFill();
                     CT_SRgbColor ctSRgbColor = ctSolidColorFillProperties.AddNewSrgbClr();
                     ctSRgbColor.val = fillColor;
@@ -105,19 +105,19 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> values, IChartDataSource<Ty> categoryAxisData)
+        public IColumnChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categoryAxisData, IChartDataSource<Ty> values)
         {
             if (!values.IsNumeric)
             {
                 throw new ArgumentException("Value data source must be numeric.");
             }
             int numOfSeries = series.Count;
-            Series newSeries = new Series(numOfSeries, numOfSeries, values, categoryAxisData);
+            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values);
             series.Add(newSeries);
             return newSeries;
         }
 
-        public List<IBarChartSeries<Tx, Ty>> GetSeries()
+        public List<IColumnChartSeries<Tx, Ty>> GetSeries()
         {
             return series;
         }
