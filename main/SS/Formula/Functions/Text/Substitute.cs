@@ -75,6 +75,10 @@ namespace NPOI.SS.Formula.Functions
 
         private static String ReplaceAllOccurrences(String oldStr, String searchStr, String newStr)
         {
+            if (searchStr.Length < 1)
+            {
+                return oldStr;
+            }
             StringBuilder sb = new StringBuilder();
             int startIndex = 0;
             int nextMatch = -1;
