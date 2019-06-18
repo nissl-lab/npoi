@@ -621,7 +621,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return "";
             else {
                 SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATEFORMAT);
-                return df.Format(d.Value, CultureInfo.CurrentCulture);
+                return df.Format(d.Value, CultureInfo.InvariantCulture);
             }
         }
 
