@@ -963,6 +963,8 @@ namespace NPOI.XWPF.UserModel
         /// line attribute. If this attribute is omitted, then it shall be assumed to
         /// be of a value auto if a line attribute value is present.
         /// </summary>
+        
+        
         public LineSpacingRule SpacingLineRule
         {
             get
@@ -978,6 +980,27 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        /// <summary>
+        /// Return the spacing between lines of a paragraph. The units of the return value depends on the
+        /// LineSpacingRule. If AUTO, the return value is in lines, otherwise the return
+        /// value is in points.
+        /// </summary>
+        public double SpacingBetween
+        {
+            get
+            {
+                CT_Spacing spacing = GetCTSpacing(false);
+                return (spacing != null && spacing.IsSetBetweenLines()) ? double.Parse(spacing.line) : -1;
+            }
+
+            set
+            {
+                CT_Spacing spacing = GetCTSpacing(true);
+                //BigInteger bi = new BigInteger("" + spaces);
+                spacing.line = value.ToString();
+            }
+
+        }
 
         /**
          * Specifies the indentation which shall be placed between the left text

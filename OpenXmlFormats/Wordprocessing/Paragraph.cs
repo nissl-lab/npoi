@@ -3497,7 +3497,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return !(this.lineRuleField == ST_LineSpacingRule.nil);
         }
-
+        public bool IsSetBetweenLines()
+        {
+            return !string.IsNullOrEmpty(this.lineField);
+        }
         public bool IsSetAfter()
         {
             return !(this.afterField == 0);
