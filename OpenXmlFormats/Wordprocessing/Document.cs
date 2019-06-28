@@ -108,7 +108,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Document()
         {
-            //this.bodyField = new CT_Body();
+            this.bodyField = new CT_Body();
         }
 
         [XmlElement(Order = 0)]
@@ -146,7 +146,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Body()
         {
-            //this.sectPrField = new CT_SectPr();
+            this.sectPrField = new CT_SectPr();
             this.itemsElementNameField = new List<DocumentBodyItemChoiceType>();
             this.itemsField = new ArrayList();
         }

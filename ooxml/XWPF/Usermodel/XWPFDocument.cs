@@ -291,8 +291,21 @@ namespace NPOI.XWPF.UserModel
             {
                 return ctDocument;
             }
+            set
+            {
+                ctDocument = value;
+            }
         }
-
+        /**
+         * Sets columns on document base object
+         */
+        public void setColumnCount(int num)
+        {
+            if(ctDocument != null)
+            {
+                ctDocument.body.sectPr.cols.num = num.ToString();
+            }
+        }
         internal IdentifierManager DrawingIdManager
         {
             get
