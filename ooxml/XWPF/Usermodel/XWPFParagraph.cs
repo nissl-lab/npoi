@@ -960,13 +960,14 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /// <summary>
-        ///Specifies how the spacing between lines is calculated as stored in the
-        /// line attribute. If this attribute is omitted, then it shall be assumed to
-        /// be of a value auto if a line attribute value is present.
-        /// </summary>
-        
-        
+        /**
+         * Specifies how the spacing between lines is calculated as stored in the
+         * line attribute. If this attribute is omitted, then it shall be assumed to
+         * be of a value auto if a line attribute value is present.
+         *
+         * @param rule
+         * @see LineSpacingRule
+         */
         public LineSpacingRule SpacingLineRule
         {
             get
@@ -982,11 +983,13 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /// <summary>
-        /// Return the spacing between lines of a paragraph. The units of the return value depends on the
-        /// LineSpacingRule. If AUTO, the return value is in lines, otherwise the return
-        /// value is in points.
-        /// </summary>
+        /**
+        * Return the spacing between lines of a paragraph. The units of the return value depends on the
+        * {@see LineSpacingRule}. If AUTO, the return value is in lines, otherwise the return
+        * value is in points
+        *
+        * @return a double specifying points or lines.
+        */
         public double SpacingBetween
         {
             get
@@ -997,10 +1000,23 @@ namespace NPOI.XWPF.UserModel
 
             set
             {
-                CT_Spacing spacing = GetCTSpacing(true);
-                //BigInteger bi = new BigInteger("" + spaces);
-                spacing.line = value.ToString();
+                setSpacingBetween(value, LineSpacingRule.AUTO);
             }
+
+        }
+        public void setSpacingBetween(double spacing, LineSpacingRule rule)
+        {
+            CT_Spacing ctSp = GetCTSpacing(true);
+            switch(rule)
+            {
+                case LineSpacingRule.AUTO:
+                    ctSp.line = Math.Round(spacing * 240.0).ToString();
+                    break;
+                default:
+                    ctSp.line = Math.Round(spacing * 20.0).ToString();
+                    break;
+            }
+            ctSp.lineRule = EnumConverter.ValueOf<ST_LineSpacingRule, LineSpacingRule>(rule);
 
         }
 

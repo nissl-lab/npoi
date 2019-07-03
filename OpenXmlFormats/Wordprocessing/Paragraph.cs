@@ -1893,7 +1893,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPrChange()
         {
-            //this.sectPrField = new CT_SectPrBase();
+            this.sectPrField = new CT_SectPrBase();
         }
         public static new CT_SectPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
