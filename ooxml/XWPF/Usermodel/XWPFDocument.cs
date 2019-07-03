@@ -306,6 +306,16 @@ namespace NPOI.XWPF.UserModel
                 ctDocument.body.sectPr.cols.num = num.ToString();
             }
         }
+        /**
+         * Sets Text Direction of Document
+         */
+         public void setTextDirection(ST_TextDirection direction)
+        {
+            if (ctDocument != null)
+            {
+                ctDocument.body.sectPr.textDirection.val = direction;
+            }
+        }
         internal IdentifierManager DrawingIdManager
         {
             get

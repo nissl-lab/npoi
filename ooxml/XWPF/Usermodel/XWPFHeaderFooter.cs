@@ -53,8 +53,8 @@ namespace NPOI.XWPF.UserModel
         protected XWPFHeaderFooter()
         {
 
-            //headerFooter = new CT_HdrFtr();
-            //ReadHdrFtr();
+            headerFooter = new CT_HdrFtr();
+            ReadHdrFtr();
         }
 
         public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel) :

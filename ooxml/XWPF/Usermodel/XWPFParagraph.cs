@@ -570,9 +570,11 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        
         /**
          * @return The raw alignment value, {@link #getAlignment()} is suggested
          */
+
         public int FontAlignment
         {
             get
