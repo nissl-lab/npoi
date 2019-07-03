@@ -424,10 +424,6 @@ using System.Xml;
         {
             return CreateRelationship(descriptor, factory, idx, false);
         }
-        public POIXMLDocumentPart CreateRelation(POIXMLRelation descriptor, POIXMLFactory factory, int idx,bool noRelation)
-        {
-            return CreateRelationship(descriptor, factory, idx, noRelation);
-        }
 
         /**
          * Create a new child POIXMLDocumentPart
