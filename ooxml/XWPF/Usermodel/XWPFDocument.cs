@@ -62,6 +62,7 @@ namespace NPOI.XWPF.UserModel
         protected XWPFNumbering numbering;
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
+        protected int columnCountField;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -299,12 +300,20 @@ namespace NPOI.XWPF.UserModel
         /**
          * Sets columns on document base object
          */
-        public void setColumnCount(int num)
+        public int ColumnCount
         {
-            if(ctDocument != null)
+            get
             {
-                ctDocument.body.sectPr.cols.num = num.ToString();
+                return this.columnCountField;
             }
+            set
+            {
+                if (ctDocument != null)
+                {
+                    ctDocument.body.sectPr.cols.num = value.ToString();
+                }
+            }
+            
         }
         /**
          * Sets Text Direction of Document

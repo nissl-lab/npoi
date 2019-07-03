@@ -960,14 +960,11 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * Specifies how the spacing between lines is calculated as stored in the
-         * line attribute. If this attribute is omitted, then it shall be assumed to
-         * be of a value auto if a line attribute value is present.
-         *
-         * @param rule
-         * @see LineSpacingRule
-         */
+        /// <summary>
+        ///Specifies how the spacing between lines is calculated as stored in the
+        /// line attribute. If this attribute is omitted, then it shall be assumed to
+        /// be of a value auto if a line attribute value is present.
+        /// </summary>
         public LineSpacingRule SpacingLineRule
         {
             get
@@ -983,21 +980,15 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-        * Return the spacing between lines of a paragraph. The units of the return value depends on the
-        * {@see LineSpacingRule}. If AUTO, the return value is in lines, otherwise the return
-        * value is in points
-        *
-        * @return a double specifying points or lines.
-        */
+        ///<summary>
+        /// Return the spacing between lines of a paragraph. The units of the return value depends on the
+        /// <see cref="LineSpacingRule"/>. If AUTO, the return value is in lines, otherwise the return
+        /// value is in points
+        /// 
+        /// <return>a double specifying points or lines.</return>
+        ///</summary>
         public double SpacingBetween
         {
-            get
-            {
-                CT_Spacing spacing = GetCTSpacing(false);
-                return (spacing != null && spacing.IsSetBetweenLines()) ? double.Parse(spacing.line) : -1;
-            }
-
             set
             {
                 setSpacingBetween(value, LineSpacingRule.AUTO);

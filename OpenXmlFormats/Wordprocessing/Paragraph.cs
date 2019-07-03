@@ -752,6 +752,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
 
         }
+        public CT_SectPr createSectPr()
+        {
+            this.sectPrField = new CT_SectPr();
+            return this.sectPrField;
+        }
         public override bool IsEmpty
         {
             get
