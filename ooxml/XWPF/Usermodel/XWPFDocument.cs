@@ -62,8 +62,6 @@ namespace NPOI.XWPF.UserModel
         protected XWPFNumbering numbering;
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
-        protected int columnCountField;
-        protected ST_TextDirection textDirectionField;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -305,7 +303,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return this.columnCountField;
+                return int.Parse(ctDocument.body.sectPr.cols.num);
             }
             set
             {
@@ -313,7 +311,6 @@ namespace NPOI.XWPF.UserModel
                 {
                     ctDocument.body.sectPr.cols.num = value.ToString();
                 }
-                this.columnCountField = value;
 
             }
             
@@ -325,7 +322,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return this.textDirectionField;
+                return ctDocument.body.sectPr.textDirection.val;
             }
             set
             {
@@ -333,7 +330,6 @@ namespace NPOI.XWPF.UserModel
                 {
                     ctDocument.body.sectPr.textDirection.val = value;
                 }
-                this.textDirectionField = value;
             }
             
         }
