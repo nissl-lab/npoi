@@ -63,6 +63,7 @@ namespace NPOI.XWPF.UserModel
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
         protected int columnCountField;
+        protected ST_TextDirection textDirectionField;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -312,18 +313,29 @@ namespace NPOI.XWPF.UserModel
                 {
                     ctDocument.body.sectPr.cols.num = value.ToString();
                 }
+                this.columnCountField = value;
+
             }
             
         }
         /**
          * Sets Text Direction of Document
          */
-         public void setTextDirection(ST_TextDirection direction)
+         public ST_TextDirection TextDirection
         {
-            if (ctDocument != null)
+            get
             {
-                ctDocument.body.sectPr.textDirection.val = direction;
+                return this.textDirectionField;
             }
+            set
+            {
+                if (ctDocument != null)
+                {
+                    ctDocument.body.sectPr.textDirection.val = value;
+                }
+                this.textDirectionField = value;
+            }
+            
         }
         internal IdentifierManager DrawingIdManager
         {
