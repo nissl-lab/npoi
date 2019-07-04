@@ -41,7 +41,7 @@ i. huge amout of basic examples
 
 Neuzilla on SNS
 ============
-Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065
+Linkedin Group: https://www.linkedin.com/groups/6655065/
 
 Twitter: http://twitter.com/tonyqus
 
