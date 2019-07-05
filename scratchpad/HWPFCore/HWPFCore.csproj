@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>NPOI.ScratchPad.HWPF</AssemblyName>
+    <RootNamespace>NPOI.HWPF</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NPOI" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Converter\AbstractWordUtils.cs" />
+    <Compile Update="Converter\DefaultFontReplacer.cs" />
+    <Compile Update="Model\EscherRecordHolder.cs" />
+    <Compile Update="Model\GenericPropertyNode.cs" />
+    <Compile Update="Model\IO\HWPFFileSystem.cs" />
+    <Compile Update="Model\IO\HWPFOutputStream.cs" />
+    <Compile Update="Model\PicturesTable.cs" />
+    <Compile Update="Model\PieceDescriptor.cs" />
+    <Compile Update="Model\PropertyNode.cs" />
+    <Compile Update="Model\SavedByEntry.cs" />
+    <Compile Update="Model\SavedByTable.cs" />
+    <Compile Update="Model\ShapesTable.cs" />
+    <Compile Update="Model\Types\CHPAbstractType.cs" />
+    <Compile Update="Model\Types\DOPAbstractType.cs" />
+    <Compile Update="Model\Types\FIBAbstractType.cs" />
+    <Compile Update="Model\Types\PAPAbstractType.cs" />
+    <Compile Update="Model\Types\SEPAbstractType.cs" />
+    <Compile Update="Model\Types\TAPAbstractType.cs" />
+    <Compile Update="Model\Types\TCAbstractType.cs" />
+    <Compile Update="Model\UPX.cs" />
+    <Compile Update="SPRM\CharacterSprmCompressor.cs" />
+    <Compile Update="SPRM\ParagraphSprmCompressor.cs" />
+    <Compile Update="SPRM\SectionSprmCompressor.cs" />
+    <Compile Update="SPRM\SectionSprmUncompressor.cs" />
+    <Compile Update="SPRM\SprmBuffer.cs" />
+    <Compile Update="SPRM\SprmIterator.cs" />
+    <Compile Update="SPRM\SprmOperation.cs" />
+    <Compile Update="SPRM\SprmUncompressor.cs" />
+    <Compile Update="SPRM\SprmUtils.cs" />
+    <Compile Update="SPRM\TableSprmCompressor.cs" />
+    <Compile Update="UserModel\CharacterRun.cs" />
+    <Compile Update="UserModel\Section.cs" />
+  </ItemGroup>
+
+</Project>
