@@ -197,7 +197,7 @@ namespace NPOI.XSSF.Extractor
                         IRow row = (IRow)rawR;
                         IEnumerator ri =row.GetEnumerator();
                         bool firsttime=true;
-                        while (ri.MoveNext())
+                        for (int j = 0; j < row.LastCellNum; j++)
                         {
                             if (!firsttime)
                             {
@@ -207,7 +207,9 @@ namespace NPOI.XSSF.Extractor
                             {
                                 firsttime = false;
                             }
-                            ICell cell = (ICell)ri.Current;
+                            ICell cell = (ICell)row.GetCell(j);
+                            if (cell == null)
+                                continue;
 
                             // Is it a formula one?
                             if (cell.CellType == CellType.Formula)
