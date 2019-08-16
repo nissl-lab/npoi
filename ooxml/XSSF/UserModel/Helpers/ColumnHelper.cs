@@ -566,9 +566,10 @@ namespace NPOI.XSSF.UserModel.Helpers
         // Returns -1 if no column is found for the given index
         public int GetColDefaultStyle(long index)
         {
-            if (GetColumn(index, false) != null)
+            CT_Col col = GetColumn(index, false);
+            if (col != null && col.style != null)
             {
-                return (int)GetColumn(index, false).style;
+                return (int)col.style;
             }
             return -1;
         }
