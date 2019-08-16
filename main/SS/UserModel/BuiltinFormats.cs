@@ -121,7 +121,7 @@ namespace NPOI.SS.UserModel
             PutFormat(m, 0xb, "0.00E+00");
             PutFormat(m, 0xc, "# ?/?");
             PutFormat(m, 0xd, "# ??/??");
-            PutFormat(m, 0xe, "m/d/yy");
+            PutFormat(m, 0xe, "yyyy-mm-dd");
             PutFormat(m, 0xf, "d-mmm-yy");
             PutFormat(m, 0x10, "d-mmm");
             PutFormat(m, 0x11, "mmm-yy");
