@@ -770,11 +770,11 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
-                return pr == null ? 8 : (int)pr.baseColWidth;
+                return pr == null ? 8 : (int)pr.defaultColWidth;
             }
             set
             {
-                GetSheetTypeSheetFormatPr().baseColWidth = (uint)value;
+                GetSheetTypeSheetFormatPr().defaultColWidth = (uint)value;
             }
         }
 
