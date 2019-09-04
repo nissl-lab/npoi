@@ -496,7 +496,7 @@ namespace NPOI.HSSF.UserModel
         /// will Change the cell to a numeric cell and Set its value.</param>
         public void SetCellValue(DateTime value)
         {
-            SetCellValue(DateUtil.GetExcelDate(value, this.book.Workbook.IsUsing1904DateWindowing));
+            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 
 
@@ -761,7 +761,7 @@ namespace NPOI.HSSF.UserModel
                         "You cannot get a date value from an error cell");
                 }
                 double value = this.NumericCellValue;
-                if (book.Workbook.IsUsing1904DateWindowing)
+                if (book.IsDate1904())
                 {
                     return DateUtil.GetJavaDate(value, true);
                 }

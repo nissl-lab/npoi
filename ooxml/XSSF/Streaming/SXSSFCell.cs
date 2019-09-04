@@ -176,7 +176,7 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 double value = NumericCellValue;
-                bool date1904= ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+                bool date1904 = Sheet.Workbook.IsDate1904();
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
@@ -472,8 +472,7 @@ namespace NPOI.XSSF.Streaming
                 return;
             }
 
-            bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
-            SetCellValue(DateUtil.GetExcelDate(value.Value, date1904));
+            SetCellValue(value.Value);
         }
 
         public void SetCellValue(double value)
@@ -785,7 +784,8 @@ namespace NPOI.XSSF.Streaming
 
         public void SetCellValue(DateTime value)
         {
-            throw new NotImplementedException();
+            bool date1904 = Sheet.Workbook.IsDate1904();
+            SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
     }
 }

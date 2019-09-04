@@ -2249,5 +2249,16 @@ namespace NPOI.HSSF.UserModel
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Gets a bool value that indicates whether the date systems used in the workbook starts in 1904.
+        /// The default value is false, meaning that the workbook uses the 1900 date system,
+        /// where 1/1/1900 is the first day in the system.
+        /// </summary>
+        /// <returns>True if the date systems used in the workbook starts in 1904</returns>
+        public bool IsDate1904()
+        {
+            return Workbook.IsUsing1904DateWindowing;
+        }
     }
 }
