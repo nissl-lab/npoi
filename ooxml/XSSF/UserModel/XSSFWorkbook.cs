@@ -1941,6 +1941,28 @@ namespace NPOI.XSSF.UserModel
             workbook.workbookProtection.lockRevision = (false);
         }
 
+        /**
+         * Remove Pivot Tables and PivotCaches from the workbooka
+         */
+        public void RemovePivotTables()
+        {
+            foreach (var xssfPivotTable in pivotTables)
+            {
+                if (xssfPivotTable.GetParent() is XSSFSheet sheet)
+                {
+                    sheet.RemoveRelation(xssfPivotTable);
+                }
+            }
+
+            foreach (var poixmlDocumentPart in GetRelations())
+            {
+                if (poixmlDocumentPart is XSSFPivotCacheDefinition pivotCacheDefinition)
+                {
+                    RemoveRelation(pivotCacheDefinition);
+                }
+            }
+        }
+
         private bool WorkbookProtectionPresent()
         {
             return workbook.workbookProtection != null;
