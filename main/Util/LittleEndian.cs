@@ -218,7 +218,10 @@ namespace NPOI.Util
             //PutNumber(data, offset, value, LittleEndianConsts.BYTE_SIZE);
         }
 
-
+        public static void PutUByte(byte[] data, int offset, short value)
+        {
+            data[offset] = (byte)(value & 0xFF);
+        }
         /// <summary>
         /// Puts the U short.
         /// </summary>
@@ -594,7 +597,14 @@ namespace NPOI.Util
         {
             PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConsts.UINT_SIZE);
         }
-
+        public static void PutUInt(byte[] data, int offset, long value)
+        {
+            int i = offset;
+            data[i++] = (byte)((value >> 0) & 0xFF);
+            data[i++] = (byte)((value >> 8) & 0xFF);
+            data[i++] = (byte)((value >> 16) & 0xFF);
+            data[i++] = (byte)((value >> 24) & 0xFF);
+        }
         /// <summary>
         /// Puts the long.
         /// </summary>

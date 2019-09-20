@@ -713,6 +713,7 @@
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
+    <Compile Include="Util\ByteArrayOutputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
