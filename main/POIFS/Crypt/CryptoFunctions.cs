@@ -532,10 +532,55 @@ namespace NPOI.POIFS.Crypt
             {
                 throw new NotImplementedException();
             }
+
+            public byte[] DoFinal(object encoded)
+            {
+                throw new NotImplementedException();
+            }
+
+            public byte[] DoFinal()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Init(ISecretKey secretKey)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Update(byte[] buf, int v, int readBytes)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
+    public class SecretKeySpec : ISecretKey
+    {
+        private byte[] keyspec;
+        private string jceId;
 
-    internal class RC2ParameterSpec : AlgorithmParameterSpec
+        public SecretKeySpec(byte[] keyspec, string jceId)
+        {
+            this.keyspec = keyspec;
+            this.jceId = jceId;
+        }
+
+        public string GetAlgorithm()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public byte[] GetEncoded()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetFormat()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+    public class RC2ParameterSpec : AlgorithmParameterSpec
     {
         private int v;
         private byte[] vec;
@@ -547,7 +592,7 @@ namespace NPOI.POIFS.Crypt
         }
     }
 
-    internal class IvParameterSpec : AlgorithmParameterSpec
+    public class IvParameterSpec : AlgorithmParameterSpec
     {
         private byte[] vec;
 
@@ -557,7 +602,7 @@ namespace NPOI.POIFS.Crypt
         }
     }
 
-    internal class AlgorithmParameterSpec
+    public class AlgorithmParameterSpec
     {
     }
 }

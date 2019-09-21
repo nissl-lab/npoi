@@ -30,12 +30,13 @@ namespace NPOI.POIFS.Crypt
 
         byte[] GetEncoded();
     }
-    public interface ISecretKey : IKey
+
+    public interface ISecretKey: IKey
     {
-        
+
     }
 
-	public abstract class Encryptor
+    public abstract class Encryptor
 	{
 		internal static string DEFAULT_POIFS_ENTRY = Decryptor.DEFAULT_POIFS_ENTRY;
 		private ISecretKey secretKey;

@@ -34,7 +34,10 @@ namespace NPOI.POIFS.Crypt
 
         private long _pos = 0;
         private Cipher _cipher;
-
+        public Stream GetStream()
+        {
+            return out1;
+        }
         public ChunkedCipherOutputStream(DirectoryNode dir, int chunkSize)
             : base(null)
         {

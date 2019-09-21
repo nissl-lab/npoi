@@ -99,6 +99,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="POIFS\Crypt\Agile\AgileDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptor.cs" />
+    <Compile Include="POIFS\Crypt\Agile\KeyPair.cs" />
     <Compile Include="POIXMLDocument.cs" />
     <Compile Include="POIXMLDocumentPart.cs" />
     <Compile Include="POIXmlException.cs" />

@@ -237,30 +237,5 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
         }
     }
 
-    internal class SecretKeySpec : ISecretKey
-    {
-        private byte[] encKey;
-        private string v;
 
-        public SecretKeySpec(byte[] encKey, string v)
-        {
-            this.encKey = encKey;
-            this.v = v;
-        }
-
-        public string GetAlgorithm()
-        {
-            throw new NotImplementedException();
-        }
-
-        public byte[] GetEncoded()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetFormat()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

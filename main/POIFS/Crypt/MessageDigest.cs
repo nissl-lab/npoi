@@ -37,10 +37,6 @@ namespace NPOI.POIFS.Crypt
             throw new NotImplementedException();
         }
 
-        internal byte[] Digest(byte[] v)
-        {
-            throw new NotImplementedException();
-        }
 
         internal Array Digest()
         {
@@ -48,6 +44,11 @@ namespace NPOI.POIFS.Crypt
         }
 
         internal void Update(byte[] hash, int v1, int v2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] Digest(byte[] verifier)
         {
             throw new NotImplementedException();
         }
