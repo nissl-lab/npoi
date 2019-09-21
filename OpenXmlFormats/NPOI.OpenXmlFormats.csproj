@@ -93,6 +93,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Encryption\Encryption.cs" />
+    <Compile Include="Encryption\EncryptionDocument.cs" />
+    <Compile Include="Encryption\KeyEncryptorCertificate.cs" />
+    <Compile Include="Encryption\KeyEncryptorPassword.cs" />
     <Compile Include="Shared\IOMathContainer.cs" />
     <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheRecords.cs" />
     <Compile Include="Drawing\ChartDrawing.cs" />
