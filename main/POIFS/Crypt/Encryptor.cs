@@ -35,7 +35,10 @@ namespace NPOI.POIFS.Crypt
     {
 
     }
+    public interface IPrivateKey: IKey
+    {
 
+    }
     public abstract class Encryptor
 	{
 		internal static string DEFAULT_POIFS_ENTRY = Decryptor.DEFAULT_POIFS_ENTRY;
