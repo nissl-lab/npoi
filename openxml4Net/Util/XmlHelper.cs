@@ -11,6 +11,12 @@ namespace NPOI.OpenXml4Net.Util
 {
     public static class XmlHelper
     {
+        public static T ReadEnum<T>(XmlAttribute attr)
+        {
+            if (attr != null)
+                return (T)Enum.Parse(typeof(T), attr.Value);
+            return default(T);
+        }
         public static string GetEnumValue(Enum e)
         {
             // Get the Type of the enum

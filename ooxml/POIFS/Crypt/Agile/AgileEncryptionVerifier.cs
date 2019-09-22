@@ -46,7 +46,7 @@ namespace NPOI.POIFS.Crypt.Agile
 
         protected internal AgileEncryptionVerifier(EncryptionDocument ed)
         {
-            IEnumerator<CT_KeyEncryptor> encList = ed.GetEncryption().keyEncryptors.GetEnumerator();
+            IEnumerator<CT_KeyEncryptor> encList = ed.GetEncryption().keyEncryptors.keyEncryptor.GetEnumerator();
             CT_PasswordKeyEncryptor keyData;
             try
             {
@@ -104,14 +104,14 @@ namespace NPOI.POIFS.Crypt.Agile
 
             try
             {
-                CertificateFactory cf = CertificateFactory.GetInstance("X.509");
+                //CertificateFactory cf = CertificateFactory.GetInstance("X.509");
                 while (encList.MoveNext())
                 {
                     CT_CertificateKeyEncryptor certKey = encList.Current.Item as CT_CertificateKeyEncryptor;
                     AgileCertificateEntry ace = new AgileCertificateEntry();
                     ace.certVerifier = certKey.certVerifier;
                     ace.encryptedKey = certKey.encryptedKeyValue;
-                    ace.x509 = (X509Certificate)cf.GenerateCertificate(new MemoryStream(certKey.X509Certificate));
+                    ace.x509 = new X509Certificate(certKey.X509Certificate);
                     certList.Add(ace);
                 }
             }

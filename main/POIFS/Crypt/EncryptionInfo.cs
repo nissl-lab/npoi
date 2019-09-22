@@ -22,6 +22,7 @@ using NPOI.Util;
 namespace NPOI.POIFS.Crypt
 {
     using System;
+    using System.Reflection;
 
     public class EncryptionInfo
     {
@@ -292,11 +293,21 @@ namespace NPOI.POIFS.Crypt
 
         protected static IEncryptionInfoBuilder GetBuilder(EncryptionMode encryptionMode)
         {
-            //ClassLoader cl = Thread.CurrentThread().ContextClassLoader;
-            //EncryptionInfoBuilder eib = null;
-            //eib = (EncryptionInfoBuilder)cl.LoadClass(encryptionMode.builder).newInstance();
-            //return eib;
-            throw new NotImplementedException();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Type t = null;
+            foreach (Assembly assembly in assemblies)
+            {
+                t = assembly.GetType(encryptionMode.Builder);
+                if (t != null)
+                    break;
+            }
+            if (t == null)
+            {
+                throw new EncryptedDocumentException("Not found type " + encryptionMode.Builder);
+            }
+            IEncryptionInfoBuilder eib = null;
+            eib = (IEncryptionInfoBuilder)t.Assembly.CreateInstance(encryptionMode.Builder);
+            return eib;
         }
 
         public int VersionMajor { get; }

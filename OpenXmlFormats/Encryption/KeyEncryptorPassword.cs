@@ -14,7 +14,7 @@ namespace NPOI.OpenXmlFormats.Encryption
     using System.ComponentModel;
     using System.Xml;
     using System.Collections.Generic;
-
+    using NPOI.OpenXml4Net.Util;
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
     [System.SerializableAttribute()]
@@ -204,14 +204,32 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_PasswordKeyEncryptor object
-        /// </summary>
-        public virtual CT_PasswordKeyEncryptor Clone()
+
+
+        public static CT_PasswordKeyEncryptor Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
         {
-            return ((CT_PasswordKeyEncryptor)(this.MemberwiseClone()));
+            if (node == null)
+                return null;
+            CT_PasswordKeyEncryptor ctObj = new CT_PasswordKeyEncryptor();
+            ctObj.spinCount = XmlHelper.ReadUInt(node.Attributes["spinCount"]);
+            ctObj.saltSize = XmlHelper.ReadUInt(node.Attributes["saltSize"]);
+            ctObj.blockSize = XmlHelper.ReadUInt(node.Attributes["blockSize"]);
+            ctObj.keyBits = XmlHelper.ReadUInt(node.Attributes["keyBits"]);
+            ctObj.hashSize = XmlHelper.ReadUInt(node.Attributes["hashSize"]);
+            ctObj.cipherAlgorithm = XmlHelper.ReadEnum<ST_CipherAlgorithm>(node.Attributes["cipherAlgorithm"]);
+            ctObj.cipherChaining = XmlHelper.ReadEnum<ST_CipherChaining>(node.Attributes["cipherChaining"]);
+            ctObj.hashAlgorithm = XmlHelper.ReadEnum<ST_HashAlgorithm>(node.Attributes["hashAlgorithm"]);
+
+            if (node.Attributes["saltValue"] != null)
+                ctObj.saltValue = Convert.FromBase64String(node.Attributes["saltValue"].Value);
+            if (node.Attributes["encryptedVerifierHashInput"] != null)
+                ctObj.encryptedVerifierHashInput = Convert.FromBase64String(node.Attributes["encryptedVerifierHashInput"].Value);
+            if (node.Attributes["encryptedVerifierHashValue"] != null)
+                ctObj.encryptedVerifierHashValue = Convert.FromBase64String(node.Attributes["encryptedVerifierHashValue"].Value);
+            if (node.Attributes["encryptedKeyValue"] != null)
+                ctObj.encryptedKeyValue = Convert.FromBase64String(node.Attributes["encryptedKeyValue"].Value);
+            return ctObj;
+           
         }
-        #endregion
     }
 }

@@ -69,14 +69,18 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_CertificateKeyEncryptor object
-        /// </summary>
-        public virtual CT_CertificateKeyEncryptor Clone()
+        public static CT_CertificateKeyEncryptor Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
         {
-            return ((CT_CertificateKeyEncryptor)(this.MemberwiseClone()));
+            if (node == null)
+                return null;
+            CT_CertificateKeyEncryptor ctObj = new CT_CertificateKeyEncryptor();
+            if (node.Attributes["certVerifier"] != null)
+                ctObj.certVerifier = Convert.FromBase64String(node.Attributes["certVerifier"].Value);
+            if (node.Attributes["encryptedKeyValue"] != null)
+                ctObj.encryptedKeyValue = Convert.FromBase64String(node.Attributes["encryptedKeyValue"].Value);
+            if (node.Attributes["x509Certificate"] != null)
+                ctObj.X509Certificate = Convert.FromBase64String(node.Attributes["x509Certificate"].Value);
+            return ctObj;
         }
-        #endregion
     }
 }

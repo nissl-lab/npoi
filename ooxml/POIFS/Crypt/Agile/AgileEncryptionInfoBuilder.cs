@@ -18,9 +18,11 @@ namespace NPOI.POIFS.Crypt.Agile
 {
     using System;
     using System.IO;
+    using System.Text;
     using System.Xml;
     using NPOI.OpenXmlFormats.Encryption;
     using NPOI.POIFS.Crypt;
+    using NPOI.POIFS.FileSystem;
     using NPOI.Util;
 
     public class AgileEncryptionInfoBuilder : IEncryptionInfoBuilder
@@ -36,7 +38,7 @@ namespace NPOI.POIFS.Crypt.Agile
         {
             this.info = info;
 
-            EncryptionDocument ed = ParseDescriptor((Stream)dis);
+            EncryptionDocument ed = ParseDescriptor((DocumentInputStream)dis);
             header = new AgileEncryptionHeader(ed);
             verifier = new AgileEncryptionVerifier(ed);
             if (info.VersionMajor == EncryptionMode.Agile.VersionMajor
@@ -131,11 +133,17 @@ namespace NPOI.POIFS.Crypt.Agile
             }
         }
 
-        protected static EncryptionDocument ParseDescriptor(Stream descriptor)
+        protected static EncryptionDocument ParseDescriptor(DocumentInputStream descriptor)
         {
             try
             {
-                return EncryptionDocument.Parse(descriptor);
+                XmlDocument xmlDoc = new XmlDocument();
+                byte[] buf = new byte[descriptor.Length - descriptor.Position];
+                descriptor.ReadFully(buf);
+                string xml = Encoding.UTF8.GetString(buf);
+                OpenXml4Net.Util.XmlHelper.LoadXmlSafe(xmlDoc, xml, Encoding.UTF8);
+
+                return EncryptionDocument.Parse(xmlDoc);
             }
             catch (Exception e)
             {
@@ -145,22 +153,22 @@ namespace NPOI.POIFS.Crypt.Agile
 
         EncryptionHeader IEncryptionInfoBuilder.GetHeader()
         {
-            throw new NotImplementedException();
+            return this.header;
         }
 
         EncryptionVerifier IEncryptionInfoBuilder.GetVerifier()
         {
-            throw new NotImplementedException();
+            return this.verifier;
         }
 
         Decryptor IEncryptionInfoBuilder.GetDecryptor()
         {
-            throw new NotImplementedException();
+            return this.decryptor;
         }
 
         Encryptor IEncryptionInfoBuilder.GetEncryptor()
         {
-            throw new NotImplementedException();
+            return this.encryptor;
         }
     }
 }

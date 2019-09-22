@@ -16,7 +16,7 @@ namespace NPOI.OpenXmlFormats.Encryption
     using System.Text;
     using System.Xml;
     using System.Collections.Generic;
-
+    using NPOI.OpenXml4Net.Util;
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
     [System.SerializableAttribute()]
@@ -30,21 +30,19 @@ namespace NPOI.OpenXmlFormats.Encryption
 
         private CT_DataIntegrity dataIntegrityField;
 
-        private List<CT_KeyEncryptor> keyEncryptorsField;
-
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private CT_KeyEncryptors keyEncryptorsField;
 
         /// <summary>
         /// CT_Encryption class constructor
         /// </summary>
         public CT_Encryption()
         {
-            this.keyEncryptorsField = new List<CT_KeyEncryptor>();
-            this.dataIntegrityField = new CT_DataIntegrity();
-            this.keyDataField = new CT_KeyData();
+            //this.keyEncryptorsField = new List<CT_KeyEncryptor>();
+            //this.dataIntegrityField = new CT_DataIntegrity();
+            //this.keyDataField = new CT_KeyData();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [XmlElement(Order = 0)]
         public CT_KeyData keyData
         {
             get
@@ -57,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [XmlElement(Order = 1)]
         public CT_DataIntegrity dataIntegrity
         {
             get
@@ -70,9 +68,8 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("keyEncryptor", IsNullable = false)]
-        public List<CT_KeyEncryptor> keyEncryptors
+        [XmlElement(Order = 2)]
+        public CT_KeyEncryptors keyEncryptors
         {
             get
             {
@@ -84,226 +81,8 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        private static System.Xml.Serialization.XmlSerializer Serializer
-        {
-            get
-            {
-                if ((serializer == null))
-                {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(CT_Encryption));
-                }
-                return serializer;
-            }
-        }
 
-        #region Serialize/Deserialize
-        /// <summary>
-        /// Serializes current CT_Encryption object into an XML document
-        /// </summary>
-        /// <returns>string XML value</returns>
-        public virtual string Serialize(System.Text.Encoding encoding)
-        {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                memoryStream = new System.IO.MemoryStream();
-                System.Xml.XmlWriterSettings xmlWriterSettings = new System.Xml.XmlWriterSettings();
-                xmlWriterSettings.Encoding = encoding;
-                System.Xml.XmlWriter xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings);
-                Serializer.Serialize(xmlWriter, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
-                return streamReader.ReadToEnd();
-            }
-            finally
-            {
-                if ((streamReader != null))
-                {
-                    streamReader.Dispose();
-                }
-                if ((memoryStream != null))
-                {
-                    memoryStream.Dispose();
-                }
-            }
-        }
 
-        public virtual string Serialize()
-        {
-            return Serialize(Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Deserializes workflow markup into an CT_Encryption object
-        /// </summary>
-        /// <param name="xml">string workflow markup to deserialize</param>
-        /// <param name="obj">Output CT_Encryption object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out CT_Encryption obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_Encryption);
-            try
-            {
-                obj = Deserialize(xml);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool Deserialize(string xml, out CT_Encryption obj)
-        {
-            System.Exception exception = null;
-            return Deserialize(xml, out obj, out exception);
-        }
-
-        public static CT_Encryption Deserialize(string xml)
-        {
-            System.IO.StringReader stringReader = null;
-            try
-            {
-                stringReader = new System.IO.StringReader(xml);
-                return ((CT_Encryption)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
-            }
-            finally
-            {
-                if ((stringReader != null))
-                {
-                    stringReader.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Serializes current CT_Encryption object into file
-        /// </summary>
-        /// <param name="fileName">full path of outupt xml file</param>
-        /// <param name="exception">output Exception value if failed</param>
-        /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, System.Text.Encoding encoding, out System.Exception exception)
-        {
-            exception = null;
-            try
-            {
-                SaveToFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception e)
-            {
-                exception = e;
-                return false;
-            }
-        }
-
-        public virtual bool SaveToFile(string fileName, out System.Exception exception)
-        {
-            return SaveToFile(fileName, Encoding.UTF8, out exception);
-        }
-
-        public virtual void SaveToFile(string fileName)
-        {
-            SaveToFile(fileName, Encoding.UTF8);
-        }
-
-        public virtual void SaveToFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.StreamWriter streamWriter = null;
-            try
-            {
-                string xmlString = Serialize(encoding);
-                streamWriter = new System.IO.StreamWriter(fileName, false, Encoding.UTF8);
-                streamWriter.WriteLine(xmlString);
-                streamWriter.Close();
-            }
-            finally
-            {
-                if ((streamWriter != null))
-                {
-                    streamWriter.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deserializes xml markup from file into an CT_Encryption object
-        /// </summary>
-        /// <param name="fileName">string xml file to load and deserialize</param>
-        /// <param name="obj">Output CT_Encryption object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, System.Text.Encoding encoding, out CT_Encryption obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_Encryption);
-            try
-            {
-                obj = LoadFromFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_Encryption obj, out System.Exception exception)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8, out obj, out exception);
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_Encryption obj)
-        {
-            System.Exception exception = null;
-            return LoadFromFile(fileName, out obj, out exception);
-        }
-
-        public static CT_Encryption LoadFromFile(string fileName)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8);
-        }
-
-        public static CT_Encryption LoadFromFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
-            try
-            {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file, encoding);
-                string xmlString = sr.ReadToEnd();
-                sr.Close();
-                file.Close();
-                return Deserialize(xmlString);
-            }
-            finally
-            {
-                if ((file != null))
-                {
-                    file.Dispose();
-                }
-                if ((sr != null))
-                {
-                    sr.Dispose();
-                }
-            }
-        }
-        #endregion
-
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_Encryption object
-        /// </summary>
-        public virtual CT_Encryption Clone()
-        {
-            return ((CT_Encryption)(this.MemberwiseClone()));
-        }
 
         public CT_KeyData AddNewKeyData()
         {
@@ -319,7 +98,26 @@ namespace NPOI.OpenXmlFormats.Encryption
         {
             throw new NotImplementedException();
         }
-        #endregion
+
+        internal static CT_Encryption Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_Encryption encryption = new CT_Encryption();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "keyData")
+                    encryption.keyData = CT_KeyData.Parse(childNode, nameSpaceManager);
+                else if (childNode.LocalName == "dataIntegrity")
+                    encryption.dataIntegrity = CT_DataIntegrity.Parse(childNode, nameSpaceManager);
+                else if (childNode.LocalName == "keyEncryptors")
+                {
+                    encryption.keyEncryptorsField = CT_KeyEncryptors.Parse(childNode, nameSpaceManager);
+                }
+                    
+            }
+            return encryption;
+        }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
@@ -345,8 +143,6 @@ namespace NPOI.OpenXmlFormats.Encryption
         private ST_HashAlgorithm hashAlgorithmField;
 
         private byte[] saltValueField;
-
-        private static System.Xml.Serialization.XmlSerializer serializer;
 
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public uint saltSize
@@ -452,227 +248,25 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        private static System.Xml.Serialization.XmlSerializer Serializer
+        internal static CT_KeyData Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
         {
-            get
-            {
-                if ((serializer == null))
-                {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(CT_KeyData));
-                }
-                return serializer;
-            }
-        }
+            if (node == null)
+                return null;
+            CT_KeyData ctObj = new CT_KeyData();
+            ctObj.saltSize = XmlHelper.ReadUInt(node.Attributes["saltSize"]);
+            ctObj.blockSize = XmlHelper.ReadUInt(node.Attributes["blockSize"]);
+            ctObj.keyBits = XmlHelper.ReadUInt(node.Attributes["keyBits"]);
+            ctObj.hashSize = XmlHelper.ReadUInt(node.Attributes["hashSize"]);
+            ctObj.cipherAlgorithm = XmlHelper.ReadEnum<ST_CipherAlgorithm>(node.Attributes["cipherAlgorithm"]);
+            ctObj.cipherChaining = XmlHelper.ReadEnum<ST_CipherChaining>(node.Attributes["cipherChaining"]);
+            ctObj.hashAlgorithm = XmlHelper.ReadEnum<ST_HashAlgorithm>(node.Attributes["hashAlgorithm"]);
 
-        #region Serialize/Deserialize
-        /// <summary>
-        /// Serializes current CT_KeyData object into an XML document
-        /// </summary>
-        /// <returns>string XML value</returns>
-        public virtual string Serialize(System.Text.Encoding encoding)
-        {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                memoryStream = new System.IO.MemoryStream();
-                System.Xml.XmlWriterSettings xmlWriterSettings = new System.Xml.XmlWriterSettings();
-                xmlWriterSettings.Encoding = encoding;
-                System.Xml.XmlWriter xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings);
-                Serializer.Serialize(xmlWriter, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
-                return streamReader.ReadToEnd();
-            }
-            finally
-            {
-                if ((streamReader != null))
-                {
-                    streamReader.Dispose();
-                }
-                if ((memoryStream != null))
-                {
-                    memoryStream.Dispose();
-                }
-            }
+            if (node.Attributes["saltValue"] != null)
+                ctObj.saltValue = Convert.FromBase64String(node.Attributes["saltValue"].Value);
+            
+            return ctObj;
         }
-
-        public virtual string Serialize()
-        {
-            return Serialize(Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Deserializes workflow markup into an CT_KeyData object
-        /// </summary>
-        /// <param name="xml">string workflow markup to deserialize</param>
-        /// <param name="obj">Output CT_KeyData object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out CT_KeyData obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_KeyData);
-            try
-            {
-                obj = Deserialize(xml);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool Deserialize(string xml, out CT_KeyData obj)
-        {
-            System.Exception exception = null;
-            return Deserialize(xml, out obj, out exception);
-        }
-
-        public static CT_KeyData Deserialize(string xml)
-        {
-            System.IO.StringReader stringReader = null;
-            try
-            {
-                stringReader = new System.IO.StringReader(xml);
-                return ((CT_KeyData)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
-            }
-            finally
-            {
-                if ((stringReader != null))
-                {
-                    stringReader.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Serializes current CT_KeyData object into file
-        /// </summary>
-        /// <param name="fileName">full path of outupt xml file</param>
-        /// <param name="exception">output Exception value if failed</param>
-        /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, System.Text.Encoding encoding, out System.Exception exception)
-        {
-            exception = null;
-            try
-            {
-                SaveToFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception e)
-            {
-                exception = e;
-                return false;
-            }
-        }
-
-        public virtual bool SaveToFile(string fileName, out System.Exception exception)
-        {
-            return SaveToFile(fileName, Encoding.UTF8, out exception);
-        }
-
-        public virtual void SaveToFile(string fileName)
-        {
-            SaveToFile(fileName, Encoding.UTF8);
-        }
-
-        public virtual void SaveToFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.StreamWriter streamWriter = null;
-            try
-            {
-                string xmlString = Serialize(encoding);
-                streamWriter = new System.IO.StreamWriter(fileName, false, Encoding.UTF8);
-                streamWriter.WriteLine(xmlString);
-                streamWriter.Close();
-            }
-            finally
-            {
-                if ((streamWriter != null))
-                {
-                    streamWriter.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deserializes xml markup from file into an CT_KeyData object
-        /// </summary>
-        /// <param name="fileName">string xml file to load and deserialize</param>
-        /// <param name="obj">Output CT_KeyData object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, System.Text.Encoding encoding, out CT_KeyData obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_KeyData);
-            try
-            {
-                obj = LoadFromFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_KeyData obj, out System.Exception exception)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8, out obj, out exception);
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_KeyData obj)
-        {
-            System.Exception exception = null;
-            return LoadFromFile(fileName, out obj, out exception);
-        }
-
-        public static CT_KeyData LoadFromFile(string fileName)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8);
-        }
-
-        public static CT_KeyData LoadFromFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
-            try
-            {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file, encoding);
-                string xmlString = sr.ReadToEnd();
-                sr.Close();
-                file.Close();
-                return Deserialize(xmlString);
-            }
-            finally
-            {
-                if ((file != null))
-                {
-                    file.Dispose();
-                }
-                if ((sr != null))
-                {
-                    sr.Dispose();
-                }
-            }
-        }
-        #endregion
-
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_KeyData object
-        /// </summary>
-        public virtual CT_KeyData Clone()
-        {
-            return ((CT_KeyData)(this.MemberwiseClone()));
-        }
-        #endregion
+        
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
@@ -774,8 +368,6 @@ namespace NPOI.OpenXmlFormats.Encryption
 
         private bool uriFieldSpecified;
 
-        private static System.Xml.Serialization.XmlSerializer serializer;
-
         [System.Xml.Serialization.XmlElementAttribute("encryptedKey", typeof(CT_CertificateKeyEncryptor), Namespace = "http://schemas.microsoft.com/office/2006/keyEncryptor/certificate", Order = 0)]
         [System.Xml.Serialization.XmlElementAttribute("encryptedKey", typeof(CT_PasswordKeyEncryptor), Namespace = "http://schemas.microsoft.com/office/2006/keyEncryptor/password", Order = 0)]
         public object Item
@@ -816,237 +408,47 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        private static System.Xml.Serialization.XmlSerializer Serializer
-        {
-            get
-            {
-                if ((serializer == null))
-                {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(CT_KeyEncryptor));
-                }
-                return serializer;
-            }
-        }
 
-        #region Serialize/Deserialize
-        /// <summary>
-        /// Serializes current CT_KeyEncryptor object into an XML document
-        /// </summary>
-        /// <returns>string XML value</returns>
-        public virtual string Serialize(System.Text.Encoding encoding)
-        {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                memoryStream = new System.IO.MemoryStream();
-                System.Xml.XmlWriterSettings xmlWriterSettings = new System.Xml.XmlWriterSettings();
-                xmlWriterSettings.Encoding = encoding;
-                System.Xml.XmlWriter xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings);
-                Serializer.Serialize(xmlWriter, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
-                return streamReader.ReadToEnd();
-            }
-            finally
-            {
-                if ((streamReader != null))
-                {
-                    streamReader.Dispose();
-                }
-                if ((memoryStream != null))
-                {
-                    memoryStream.Dispose();
-                }
-            }
-        }
 
-        public virtual string Serialize()
-        {
-            return Serialize(Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Deserializes workflow markup into an CT_KeyEncryptor object
-        /// </summary>
-        /// <param name="xml">string workflow markup to deserialize</param>
-        /// <param name="obj">Output CT_KeyEncryptor object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out CT_KeyEncryptor obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_KeyEncryptor);
-            try
-            {
-                obj = Deserialize(xml);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool Deserialize(string xml, out CT_KeyEncryptor obj)
-        {
-            System.Exception exception = null;
-            return Deserialize(xml, out obj, out exception);
-        }
-
-        public static CT_KeyEncryptor Deserialize(string xml)
-        {
-            System.IO.StringReader stringReader = null;
-            try
-            {
-                stringReader = new System.IO.StringReader(xml);
-                return ((CT_KeyEncryptor)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
-            }
-            finally
-            {
-                if ((stringReader != null))
-                {
-                    stringReader.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Serializes current CT_KeyEncryptor object into file
-        /// </summary>
-        /// <param name="fileName">full path of outupt xml file</param>
-        /// <param name="exception">output Exception value if failed</param>
-        /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, System.Text.Encoding encoding, out System.Exception exception)
-        {
-            exception = null;
-            try
-            {
-                SaveToFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception e)
-            {
-                exception = e;
-                return false;
-            }
-        }
-
-        public virtual bool SaveToFile(string fileName, out System.Exception exception)
-        {
-            return SaveToFile(fileName, Encoding.UTF8, out exception);
-        }
-
-        public virtual void SaveToFile(string fileName)
-        {
-            SaveToFile(fileName, Encoding.UTF8);
-        }
-
-        public virtual void SaveToFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.StreamWriter streamWriter = null;
-            try
-            {
-                string xmlString = Serialize(encoding);
-                streamWriter = new System.IO.StreamWriter(fileName, false, Encoding.UTF8);
-                streamWriter.WriteLine(xmlString);
-                streamWriter.Close();
-            }
-            finally
-            {
-                if ((streamWriter != null))
-                {
-                    streamWriter.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deserializes xml markup from file into an CT_KeyEncryptor object
-        /// </summary>
-        /// <param name="fileName">string xml file to load and deserialize</param>
-        /// <param name="obj">Output CT_KeyEncryptor object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, System.Text.Encoding encoding, out CT_KeyEncryptor obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_KeyEncryptor);
-            try
-            {
-                obj = LoadFromFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_KeyEncryptor obj, out System.Exception exception)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8, out obj, out exception);
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_KeyEncryptor obj)
-        {
-            System.Exception exception = null;
-            return LoadFromFile(fileName, out obj, out exception);
-        }
-
-        public static CT_KeyEncryptor LoadFromFile(string fileName)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8);
-        }
-
-        public static CT_KeyEncryptor LoadFromFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
-            try
-            {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file, encoding);
-                string xmlString = sr.ReadToEnd();
-                sr.Close();
-                file.Close();
-                return Deserialize(xmlString);
-            }
-            finally
-            {
-                if ((file != null))
-                {
-                    file.Dispose();
-                }
-                if ((sr != null))
-                {
-                    sr.Dispose();
-                }
-            }
-        }
-        #endregion
-
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_KeyEncryptor object
-        /// </summary>
-        public virtual CT_KeyEncryptor Clone()
-        {
-            return ((CT_KeyEncryptor)(this.MemberwiseClone()));
-        }
 
         public CT_PasswordKeyEncryptor AddNewEncryptedPasswordKey()
         {
-            throw new NotImplementedException();
+            CT_PasswordKeyEncryptor t = new CT_PasswordKeyEncryptor();
+            this.itemField = t;
+            return t;
         }
 
         public CT_CertificateKeyEncryptor AddNewEncryptedCertificateKey()
         {
-            throw new NotImplementedException();
+            CT_CertificateKeyEncryptor t = new CT_CertificateKeyEncryptor();
+            this.itemField = t;
+            return t;
         }
-        #endregion
+
+        public static CT_KeyEncryptor Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_KeyEncryptor ctObj = new CT_KeyEncryptor();
+            if (node.Attributes["uri"] != null)
+            {
+                ctObj.uriFieldSpecified = true;
+                ctObj.uriField = XmlHelper.GetEnumValueFromString<CT_KeyEncryptorUri>(node.Attributes["uri"].Value);
+            }
+            foreach(XmlNode child in node.ChildNodes)
+            {
+                if(ctObj.uriField == CT_KeyEncryptorUri.httpschemasmicrosoftcomoffice2006keyEncryptorcertificate)
+                {
+                    ctObj.itemField = CT_CertificateKeyEncryptor.Parse(child, nameSpaceManager);
+                }
+                else
+                {
+                    ctObj.itemField = CT_PasswordKeyEncryptor.Parse(child, nameSpaceManager);
+                }
+                
+            }
+            return ctObj;
+        }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
@@ -1076,7 +478,6 @@ namespace NPOI.OpenXmlFormats.Encryption
 
         private byte[] encryptedHmacValueField;
 
-        private static System.Xml.Serialization.XmlSerializer serializer;
 
         [System.Xml.Serialization.XmlAttributeAttribute(DataType = "base64Binary")]
         public byte[] encryptedHmacKey
@@ -1104,227 +505,20 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        private static System.Xml.Serialization.XmlSerializer Serializer
-        {
-            get
-            {
-                if ((serializer == null))
-                {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(CT_DataIntegrity));
-                }
-                return serializer;
-            }
-        }
 
-        #region Serialize/Deserialize
-        /// <summary>
-        /// Serializes current CT_DataIntegrity object into an XML document
-        /// </summary>
-        /// <returns>string XML value</returns>
-        public virtual string Serialize(System.Text.Encoding encoding)
-        {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                memoryStream = new System.IO.MemoryStream();
-                System.Xml.XmlWriterSettings xmlWriterSettings = new System.Xml.XmlWriterSettings();
-                xmlWriterSettings.Encoding = encoding;
-                System.Xml.XmlWriter xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings);
-                Serializer.Serialize(xmlWriter, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
-                return streamReader.ReadToEnd();
-            }
-            finally
-            {
-                if ((streamReader != null))
-                {
-                    streamReader.Dispose();
-                }
-                if ((memoryStream != null))
-                {
-                    memoryStream.Dispose();
-                }
-            }
-        }
 
-        public virtual string Serialize()
+        internal static CT_DataIntegrity Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
         {
-            return Serialize(Encoding.UTF8);
-        }
+            if (node == null)
+                return null;
+            CT_DataIntegrity ctObj = new CT_DataIntegrity();
 
-        /// <summary>
-        /// Deserializes workflow markup into an CT_DataIntegrity object
-        /// </summary>
-        /// <param name="xml">string workflow markup to deserialize</param>
-        /// <param name="obj">Output CT_DataIntegrity object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out CT_DataIntegrity obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_DataIntegrity);
-            try
-            {
-                obj = Deserialize(xml);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
+            if (node.Attributes["encryptedHmacKey"] != null)
+                ctObj.encryptedHmacKey = Convert.FromBase64String(node.Attributes["encryptedHmacKey"].Value);
+            if (node.Attributes["encryptedHmacValue"] != null)
+                ctObj.encryptedHmacValue = Convert.FromBase64String(node.Attributes["encryptedHmacValue"].Value);
+            return ctObj;
         }
-
-        public static bool Deserialize(string xml, out CT_DataIntegrity obj)
-        {
-            System.Exception exception = null;
-            return Deserialize(xml, out obj, out exception);
-        }
-
-        public static CT_DataIntegrity Deserialize(string xml)
-        {
-            System.IO.StringReader stringReader = null;
-            try
-            {
-                stringReader = new System.IO.StringReader(xml);
-                return ((CT_DataIntegrity)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
-            }
-            finally
-            {
-                if ((stringReader != null))
-                {
-                    stringReader.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Serializes current CT_DataIntegrity object into file
-        /// </summary>
-        /// <param name="fileName">full path of outupt xml file</param>
-        /// <param name="exception">output Exception value if failed</param>
-        /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, System.Text.Encoding encoding, out System.Exception exception)
-        {
-            exception = null;
-            try
-            {
-                SaveToFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception e)
-            {
-                exception = e;
-                return false;
-            }
-        }
-
-        public virtual bool SaveToFile(string fileName, out System.Exception exception)
-        {
-            return SaveToFile(fileName, Encoding.UTF8, out exception);
-        }
-
-        public virtual void SaveToFile(string fileName)
-        {
-            SaveToFile(fileName, Encoding.UTF8);
-        }
-
-        public virtual void SaveToFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.StreamWriter streamWriter = null;
-            try
-            {
-                string xmlString = Serialize(encoding);
-                streamWriter = new System.IO.StreamWriter(fileName, false, Encoding.UTF8);
-                streamWriter.WriteLine(xmlString);
-                streamWriter.Close();
-            }
-            finally
-            {
-                if ((streamWriter != null))
-                {
-                    streamWriter.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deserializes xml markup from file into an CT_DataIntegrity object
-        /// </summary>
-        /// <param name="fileName">string xml file to load and deserialize</param>
-        /// <param name="obj">Output CT_DataIntegrity object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, System.Text.Encoding encoding, out CT_DataIntegrity obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_DataIntegrity);
-            try
-            {
-                obj = LoadFromFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_DataIntegrity obj, out System.Exception exception)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8, out obj, out exception);
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_DataIntegrity obj)
-        {
-            System.Exception exception = null;
-            return LoadFromFile(fileName, out obj, out exception);
-        }
-
-        public static CT_DataIntegrity LoadFromFile(string fileName)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8);
-        }
-
-        public static CT_DataIntegrity LoadFromFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
-            try
-            {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file, encoding);
-                string xmlString = sr.ReadToEnd();
-                sr.Close();
-                file.Close();
-                return Deserialize(xmlString);
-            }
-            finally
-            {
-                if ((file != null))
-                {
-                    file.Dispose();
-                }
-                if ((sr != null))
-                {
-                    sr.Dispose();
-                }
-            }
-        }
-        #endregion
-
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_DataIntegrity object
-        /// </summary>
-        public virtual CT_DataIntegrity Clone()
-        {
-            return ((CT_DataIntegrity)(this.MemberwiseClone()));
-        }
-        #endregion
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
@@ -1336,8 +530,6 @@ namespace NPOI.OpenXmlFormats.Encryption
     {
 
         private List<CT_KeyEncryptor> keyEncryptorField;
-
-        private static System.Xml.Serialization.XmlSerializer serializer;
 
         /// <summary>
         /// CT_KeyEncryptors class constructor
@@ -1360,231 +552,21 @@ namespace NPOI.OpenXmlFormats.Encryption
             }
         }
 
-        private static System.Xml.Serialization.XmlSerializer Serializer
-        {
-            get
-            {
-                if ((serializer == null))
-                {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(CT_KeyEncryptors));
-                }
-                return serializer;
-            }
-        }
-
-        #region Serialize/Deserialize
-        /// <summary>
-        /// Serializes current CT_KeyEncryptors object into an XML document
-        /// </summary>
-        /// <returns>string XML value</returns>
-        public virtual string Serialize(System.Text.Encoding encoding)
-        {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                memoryStream = new System.IO.MemoryStream();
-                System.Xml.XmlWriterSettings xmlWriterSettings = new System.Xml.XmlWriterSettings();
-                xmlWriterSettings.Encoding = encoding;
-                System.Xml.XmlWriter xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings);
-                Serializer.Serialize(xmlWriter, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
-                return streamReader.ReadToEnd();
-            }
-            finally
-            {
-                if ((streamReader != null))
-                {
-                    streamReader.Dispose();
-                }
-                if ((memoryStream != null))
-                {
-                    memoryStream.Dispose();
-                }
-            }
-        }
-
-        public virtual string Serialize()
-        {
-            return Serialize(Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Deserializes workflow markup into an CT_KeyEncryptors object
-        /// </summary>
-        /// <param name="xml">string workflow markup to deserialize</param>
-        /// <param name="obj">Output CT_KeyEncryptors object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out CT_KeyEncryptors obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_KeyEncryptors);
-            try
-            {
-                obj = Deserialize(xml);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool Deserialize(string xml, out CT_KeyEncryptors obj)
-        {
-            System.Exception exception = null;
-            return Deserialize(xml, out obj, out exception);
-        }
-
-        public static CT_KeyEncryptors Deserialize(string xml)
-        {
-            System.IO.StringReader stringReader = null;
-            try
-            {
-                stringReader = new System.IO.StringReader(xml);
-                return ((CT_KeyEncryptors)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
-            }
-            finally
-            {
-                if ((stringReader != null))
-                {
-                    stringReader.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Serializes current CT_KeyEncryptors object into file
-        /// </summary>
-        /// <param name="fileName">full path of outupt xml file</param>
-        /// <param name="exception">output Exception value if failed</param>
-        /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, System.Text.Encoding encoding, out System.Exception exception)
-        {
-            exception = null;
-            try
-            {
-                SaveToFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception e)
-            {
-                exception = e;
-                return false;
-            }
-        }
-
-        public virtual bool SaveToFile(string fileName, out System.Exception exception)
-        {
-            return SaveToFile(fileName, Encoding.UTF8, out exception);
-        }
-
-        public virtual void SaveToFile(string fileName)
-        {
-            SaveToFile(fileName, Encoding.UTF8);
-        }
-
-        public virtual void SaveToFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.StreamWriter streamWriter = null;
-            try
-            {
-                string xmlString = Serialize(encoding);
-                streamWriter = new System.IO.StreamWriter(fileName, false, Encoding.UTF8);
-                streamWriter.WriteLine(xmlString);
-                streamWriter.Close();
-            }
-            finally
-            {
-                if ((streamWriter != null))
-                {
-                    streamWriter.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deserializes xml markup from file into an CT_KeyEncryptors object
-        /// </summary>
-        /// <param name="fileName">string xml file to load and deserialize</param>
-        /// <param name="obj">Output CT_KeyEncryptors object</param>
-        /// <param name="exception">output Exception value if deserialize failed</param>
-        /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, System.Text.Encoding encoding, out CT_KeyEncryptors obj, out System.Exception exception)
-        {
-            exception = null;
-            obj = default(CT_KeyEncryptors);
-            try
-            {
-                obj = LoadFromFile(fileName, encoding);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_KeyEncryptors obj, out System.Exception exception)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8, out obj, out exception);
-        }
-
-        public static bool LoadFromFile(string fileName, out CT_KeyEncryptors obj)
-        {
-            System.Exception exception = null;
-            return LoadFromFile(fileName, out obj, out exception);
-        }
-
-        public static CT_KeyEncryptors LoadFromFile(string fileName)
-        {
-            return LoadFromFile(fileName, Encoding.UTF8);
-        }
-
-        public static CT_KeyEncryptors LoadFromFile(string fileName, System.Text.Encoding encoding)
-        {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
-            try
-            {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file, encoding);
-                string xmlString = sr.ReadToEnd();
-                sr.Close();
-                file.Close();
-                return Deserialize(xmlString);
-            }
-            finally
-            {
-                if ((file != null))
-                {
-                    file.Dispose();
-                }
-                if ((sr != null))
-                {
-                    sr.Dispose();
-                }
-            }
-        }
-        #endregion
-
-        #region Clone method
-        /// <summary>
-        /// Create a clone of this CT_KeyEncryptors object
-        /// </summary>
-        public virtual CT_KeyEncryptors Clone()
-        {
-            return ((CT_KeyEncryptors)(this.MemberwiseClone()));
-        }
-
         public CT_KeyEncryptor AddNewKeyEncryptor()
         {
-            throw new NotImplementedException();
+            CT_KeyEncryptor item = new CT_KeyEncryptor();
+            this.keyEncryptorField.Add(item);
+            return item;
         }
-        #endregion
+
+        internal static CT_KeyEncryptors Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_KeyEncryptors ctObj = new CT_KeyEncryptors();
+            foreach (XmlNode childNode in node.ChildNodes)
+                ctObj.keyEncryptorField.Add(CT_KeyEncryptor.Parse(childNode, nameSpaceManager));
+            return ctObj;
+        }
     }
 }
