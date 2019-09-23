@@ -104,7 +104,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="POIFS\Crypt\TestAgileEncryptionParameters.cs" />
+    <Compile Include="POIFS\Crypt\TestCertificateEncryption.cs" />
+    <Compile Include="POIFS\Crypt\TestDecryptor.cs" />
     <Compile Include="POIFS\Crypt\TestEncryptionInfo.cs" />
+    <Compile Include="POIFS\Crypt\TestEncryptor.cs" />
+    <Compile Include="POIFS\Crypt\TestSignatureInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

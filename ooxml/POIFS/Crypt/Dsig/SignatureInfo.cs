@@ -160,7 +160,7 @@ namespace NPOI.POIFS.Crypt.Dsig
              * 
              * @throws EncryptedDocumentException if the signature can't be extracted or if its malformed
              */
-            public bool validate()
+            public bool Validate()
             {
                 //    KeyInfoKeySelector keySelector = new KeyInfoKeySelector();
                 //    try {
@@ -240,7 +240,7 @@ namespace NPOI.POIFS.Crypt.Dsig
         /**
          * @return true, if first signature part is valid
          */
-        public bool verifySignature()
+        public bool VerifySignature()
         {
             // http://www.oracle.com/technetwork/articles/javase/dig-signature-api-140772.html
             //foreach (SignaturePart sp in GetSignatureParts()) {
@@ -301,7 +301,7 @@ namespace NPOI.POIFS.Crypt.Dsig
          * @return a signature part for each signature document.
          * the parts can be validated independently.
          */
-        public IEnumerator<SignaturePart> GetSignatureParts()
+        public IEnumerable<SignaturePart> GetSignatureParts()
         {
             signatureConfig.Init(true);
             throw new NotImplementedException();
