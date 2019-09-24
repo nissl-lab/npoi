@@ -75,7 +75,7 @@ namespace NPOI.XSSF.UserModel
         {
             this._ctFont = new CT_Font();
             FontName = DEFAULT_FONT_NAME;
-            FontHeight =DEFAULT_FONT_SIZE;
+            FontHeightInPoints =DEFAULT_FONT_SIZE;
         }
 
         /**
@@ -658,22 +658,25 @@ namespace NPOI.XSSF.UserModel
 
         public void CloneStyleFrom(IFont src)
         {
-            if(src is XSSFFont)
+            if (src != null)
             {
-                _ctFont = ((XSSFFont)src)._ctFont;
-            }
-            else
-            {
-                FontName = src.FontName;
-                FontHeight = src.FontHeight;
-                IsBold = src.IsBold;
-                Boldweight = src.Boldweight;
-                IsItalic = src.IsItalic;
-                IsStrikeout = src.IsStrikeout;
-                Color = src.Color;
-                Underline = src.Underline;
-                Charset = src.Charset;
-                TypeOffset = src.TypeOffset;
+                if (src is XSSFFont)
+                {
+                    _ctFont = ((XSSFFont)src)._ctFont;
+                }
+                else
+                {
+                    FontName = src.FontName;
+                    FontHeight = src.FontHeight;
+                    IsBold = src.IsBold;
+                    Boldweight = src.Boldweight;
+                    IsItalic = src.IsItalic;
+                    IsStrikeout = src.IsStrikeout;
+                    Color = src.Color;
+                    Underline = src.Underline;
+                    Charset = src.Charset;
+                    TypeOffset = src.TypeOffset;
+                }
             }
         }
     }

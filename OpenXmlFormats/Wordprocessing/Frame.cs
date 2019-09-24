@@ -466,7 +466,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node.Attributes["w:hRule"] != null)
                 ctObj.hRule = (ST_HeightRule)Enum.Parse(typeof(ST_HeightRule), node.Attributes["w:hRule"].Value);
             if (node.Attributes["w:anchorLock"] != null)
-                ctObj.anchorLock = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:anchorLock"].Value);
+                ctObj.anchorLock = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:anchorLock"].Value,true);
             return ctObj;
         }
 

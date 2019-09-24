@@ -7,6 +7,10 @@ NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
+Donation
+===============
+Paypal account: tonyqus@gmail.com
+
 Support and Service
 ===================
 Neuzilla is the studio behind NPOI.
@@ -35,13 +39,9 @@ h. Real successful cases all over the world
 
 i. huge amout of basic examples
 
-How to join
-============
-If you have passion to contribute code, please contact tony.qu@neuzilla.com
-
 Neuzilla on SNS
 ============
-Linkedin Group: http://www.linkedin.com/groups/Neuzilla-User-Group-6655065
+Linkedin Group: https://www.linkedin.com/groups/6655065/
 
 Twitter: http://twitter.com/tonyqus
 
