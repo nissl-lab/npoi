@@ -1324,6 +1324,72 @@ namespace TestCases.POIFS.FileSystem
             assertContentsMatches(main4106, normDoc);
         }
 
+        [Ignore("POI ignore")]
+        [Test]
+        public void WriteZeroLengthEntries()
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            DirectoryNode testDir = fs.Root;
+            DocumentEntry miniDoc;
+            DocumentEntry normDoc;
+            DocumentEntry emptyDoc;
+
+            byte[] mini2;
+            // Add mini and normal sized entries to start
+            unchecked
+            {
+                mini2 = new byte[] { (byte)-42, 0, (byte)-1, (byte)-2, (byte)-3, (byte)-4, (byte)-42 };
+            }
+            
+            testDir.CreateDocument("Mini2", new ByteArrayInputStream(mini2));
+
+            // Add to the main stream
+            byte[] main4106 = new byte[4106];
+            main4106[0] = 41;
+            main4106[4105] = 42;
+            testDir.CreateDocument("Normal4106", new ByteArrayInputStream(main4106));
+
+            // Now add some empty ones
+            byte[] empty = new byte[0];
+            testDir.CreateDocument("empty-1", new ByteArrayInputStream(empty));
+            testDir.CreateDocument("empty-2", new ByteArrayInputStream(empty));
+            testDir.CreateDocument("empty-3", new ByteArrayInputStream(empty));
+
+            // Check
+            miniDoc = (DocumentEntry)testDir.GetEntry("Mini2");
+            assertContentsMatches(mini2, miniDoc);
+
+            normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
+            assertContentsMatches(main4106, normDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-1");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-2");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
+            assertContentsMatches(empty, emptyDoc);
+
+            // Save and re-check
+            fs = WriteOutAndReadBack(fs);
+
+            miniDoc = (DocumentEntry)testDir.GetEntry("Mini2");
+            assertContentsMatches(mini2, miniDoc);
+
+            normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
+            assertContentsMatches(main4106, normDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-1");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-2");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
+            assertContentsMatches(empty, emptyDoc);
+        }
+
         /**
         * Test that we can read a file with NPOIFS, create a new NPOIFS instance,
         *  write it out, read it with POIFS, and see the original data
