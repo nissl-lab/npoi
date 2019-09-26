@@ -14,15 +14,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
+    <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
     <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
     <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
     <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
     <PackageReference Include="SharpZipLib" Version="1.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
