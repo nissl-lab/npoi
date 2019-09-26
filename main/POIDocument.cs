@@ -23,6 +23,8 @@ namespace NPOI
     using NPOI.POIFS.FileSystem;
     using NPOI.HPSF;
     using System.Collections.Generic;
+    using NPOI.POIFS.Crypt;
+    using NPOI.Util;
 
 
     /// <summary>
@@ -166,17 +168,47 @@ namespace NPOI
             // Mark the fact that we've now loaded up the properties
             initialized = true;
         }
-
         /// <summary>
         /// For a given named property entry, either return it or null if
         /// if it wasn't found
         /// </summary>
-        /// <param name="setName">Name of the set.</param>
-        /// <returns></returns>
-        protected PropertySet GetPropertySet(String setName)
+        /// <param name="setName">The property to read</param>
+        /// <returns>The value of the given property or null if it wasn't found.</returns>
+        /// <exception cref="IOException">If retrieving properties fails</exception>
+        protected PropertySet GetPropertySet(string setName)
         {
+            return GetPropertySet(setName, null);
+        }
+        /// <summary>
+        /// For a given named property entry, either return it or null if
+        /// if it wasn't found
+        /// </summary>
+        /// <param name="setName">The property to read</param>
+        /// <param name="encryptionInfo">the encryption descriptor in case of cryptoAPI encryption</param>
+        /// <returns>The value of the given property or null if it wasn't found.</returns>
+        /// <exception cref="IOException">If retrieving properties fails</exception>
+        protected PropertySet GetPropertySet(string setName, EncryptionInfo encryptionInfo)
+        {
+            DirectoryNode dirNode = directory;
+            if (encryptionInfo != null)
+            {
+                try
+                {
+                    InputStream is1 = encryptionInfo.Decryptor.GetDataStream(directory);
+                    NPOIFSFileSystem poifs = new NPOIFSFileSystem(is1);
+                    is1.Close();
+                    dirNode = poifs.Root;
+                }
+                catch (Exception e)
+                {
+                    //logger.log(POILogger.ERROR, "Error getting encrypted property set with name " + setName, e);
+                    return null;
+                }
+            }
             //directory can be null when creating new documents
-            if (directory == null || !directory.HasEntry(setName)) return null;
+            if (dirNode == null || !dirNode.HasEntry(setName))
+                return null;
+
             DocumentInputStream dis;
             try
             {
