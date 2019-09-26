@@ -45,7 +45,7 @@ namespace NPOI.HPSF
          */
         public override void Write(Stream out1)
         {
-            POIFSFileSystem fs = new POIFSFileSystem();
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
 
             // For tracking what we've written out, so far
             List<String> excepts = new List<String>(1);

@@ -43,6 +43,14 @@ namespace NPOI
         /**	The directory that our document lives in */
         protected DirectoryNode directory;
 
+        /// <summary>
+        /// just for test case  TestPOIDocumentMain.TestWriteReadProperties
+        /// </summary>
+        protected internal void SetDirectoryNode(DirectoryNode directory)
+        {
+            this.directory = directory;
+        }
+
         /** For our own logging use */
         //protected POILogger logger;
 
@@ -53,17 +61,7 @@ namespace NPOI
         {
             this.directory = dir;
         }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="POIDocument"/> class.
-        /// </summary>
-        /// <param name="dir">The dir.</param>
-        /// <param name="fs">The fs.</param>
-        [Obsolete]
-        public POIDocument(DirectoryNode dir, POIFSFileSystem fs)
-        {
-            this.directory = dir;
-            //POILogFactory.GetLogger(this.GetType());
-        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="POIDocument"/> class.
         /// </summary>
@@ -74,14 +72,14 @@ namespace NPOI
             
         }
         /**
-     * Will create whichever of SummaryInformation
-     *  and DocumentSummaryInformation (HPSF) properties
-     *  are not already part of your document.
-     * This is normally useful when creating a new
-     *  document from scratch.
-     * If the information properties are already there,
-     *  then nothing will happen.
-     */
+         * Will create whichever of SummaryInformation
+         *  and DocumentSummaryInformation (HPSF) properties
+         *  are not already part of your document.
+         * This is normally useful when creating a new
+         *  document from scratch.
+         * If the information properties are already there,
+         *  then nothing will happen.
+         */
         public void CreateInformationProperties()
         {
             if (!initialized) ReadProperties();
@@ -139,7 +137,7 @@ namespace NPOI
         /// If a given property Set is missing or corrupt,
         /// it will remain null;
         /// </summary>
-        protected void ReadProperties()
+        protected internal void ReadProperties()
         {
             PropertySet ps;
 
@@ -190,14 +188,16 @@ namespace NPOI
         protected PropertySet GetPropertySet(string setName, EncryptionInfo encryptionInfo)
         {
             DirectoryNode dirNode = directory;
+
+            NPOIFSFileSystem encPoifs = null;
             if (encryptionInfo != null)
             {
                 try
                 {
                     InputStream is1 = encryptionInfo.Decryptor.GetDataStream(directory);
-                    NPOIFSFileSystem poifs = new NPOIFSFileSystem(is1);
+                    encPoifs = new NPOIFSFileSystem(is1);
                     is1.Close();
-                    dirNode = poifs.Root;
+                    dirNode = encPoifs.Root;
                 }
                 catch (Exception e)
                 {
@@ -226,6 +226,12 @@ namespace NPOI
             {
                 // Create the Property Set
                 PropertySet Set = PropertySetFactory.Create(dis);
+                // Tidy up if needed
+                if (encPoifs != null)
+                {
+                    encPoifs.Close();
+                }
+                // Return the properties
                 return Set;
             }
             catch (IOException)
@@ -240,12 +246,24 @@ namespace NPOI
             }
             return null;
         }
-
+        /**
+         * Writes out the updated standard Document Information Properties (HPSF)
+         *  into the currently open NPOIFSFileSystem
+         * TODO Implement in-place update
+         * 
+         * @throws IOException if an error when writing to the open
+         *      {@link NPOIFSFileSystem} occurs
+         * TODO throws exception if open from stream not file
+         */
+        protected internal void WriteProperties()
+        {
+            throw new InvalidOperationException("In-place write is not yet supported");
+        }
         /// <summary>
         /// Writes out the standard Documment Information Properties (HPSF)
         /// </summary>
         /// <param name="outFS">the POIFSFileSystem to Write the properties into</param>
-        protected void WriteProperties(POIFSFileSystem outFS)
+        protected internal void WriteProperties(NPOIFSFileSystem outFS)
         {
             WriteProperties(outFS, null);
         }
@@ -254,7 +272,7 @@ namespace NPOI
         /// </summary>
         /// <param name="outFS">the POIFSFileSystem to Write the properties into.</param>
         /// <param name="writtenEntries">a list of POIFS entries to Add the property names too.</param>
-        protected void WriteProperties(POIFSFileSystem outFS, IList writtenEntries)
+        protected internal void WriteProperties(NPOIFSFileSystem outFS, IList writtenEntries)
         {
             if (sInf != null)
             {
@@ -280,7 +298,7 @@ namespace NPOI
         /// <param name="name">the (POIFS Level) name of the property to Write.</param>
         /// <param name="Set">the PropertySet to Write out.</param>
         /// <param name="outFS">the POIFSFileSystem to Write the property into.</param>
-        protected void WritePropertySet(String name, PropertySet Set, POIFSFileSystem outFS)
+        protected void WritePropertySet(String name, PropertySet Set, NPOIFSFileSystem outFS)
         {
             try
             {

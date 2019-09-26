@@ -1306,7 +1306,7 @@ namespace NPOI.HSSF.UserModel
         public override void Write(Stream stream)
         {
             byte[] bytes = GetBytes();
-            POIFSFileSystem fs = new POIFSFileSystem();
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
 
             if (this.DocumentSummaryInformation == null)
             {
