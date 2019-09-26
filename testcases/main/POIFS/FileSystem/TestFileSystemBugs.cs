@@ -146,45 +146,45 @@ namespace TestCases.POIFS.FileSystem
         /**
          * With heavily nested documents, ensure we still re-write the same
          */
-        [Ignore("poi ignore")]
+        [Test]
         public void TestHeavilyNestedReWrite()
         {
-            //foreach (DirectoryNode root in openSSSample("ex42570-20305.xls", false))
-            //{
-            //    // Record the structure
-            //    Dictionary<String, int> entries = new Dictionary<String, int>();
-            //    fetchSizes("/", root, entries);
+            foreach (DirectoryNode root in openSSSample("ex42570-20305.xls", false))
+            {
+                // Record the structure
+                Dictionary<String, int> entries = new Dictionary<String, int>();
+                fetchSizes("/", root, entries);
 
-            //    // Prepare to copy
-            //    DirectoryNode dest;
-            //    if (root.NFileSystem != null)
-            //    {
-            //        dest = (new NPOIFSFileSystem()).Root;
-            //    }
-            //    else
-            //    {
-            //        dest = (new OPOIFSFileSystem()).Root;
-            //    }
+                // Prepare to copy
+                DirectoryNode dest;
+                if (root.NFileSystem != null)
+                {
+                    dest = (new NPOIFSFileSystem()).Root;
+                }
+                else
+                {
+                    dest = (new OPOIFSFileSystem()).Root;
+                }
 
-            //    // Copy over
-            //    EntryUtils.CopyNodes(root, dest);
+                // Copy over
+                EntryUtils.CopyNodes(root, dest);
 
-            //    // Re-load, always as NPOIFS
-            //    MemoryStream baos = new MemoryStream();
-            //    if (root.NFileSystem != null)
-            //    {
-            //        root.NFileSystem.WriteFileSystem(baos);
-            //    }
-            //    else
-            //    {
-            //        root.OFileSystem.WriteFilesystem(baos);
-            //    }
-            //    NPOIFSFileSystem read = new NPOIFSFileSystem(
-            //            new MemoryStream(baos.ToArray()));
+                // Re-load, always as NPOIFS
+                MemoryStream baos = new MemoryStream();
+                if (root.NFileSystem != null)
+                {
+                    root.NFileSystem.WriteFileSystem(baos);
+                }
+                else
+                {
+                    root.OFileSystem.WriteFileSystem(baos);
+                }
+                NPOIFSFileSystem read = new NPOIFSFileSystem(
+                        new MemoryStream(baos.ToArray()));
 
-            //    // Check the structure matches
-            //    CheckSizes("/", read.Root, entries);
-            //}
+                // Check the structure matches
+                CheckSizes("/", read.Root, entries);
+            }
         }
         private void fetchSizes(String path, DirectoryNode dir, Dictionary<String, int> entries)
         {
