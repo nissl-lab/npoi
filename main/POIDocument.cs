@@ -303,68 +303,10 @@ namespace NPOI
         }
 
         /// <summary>
-        /// Writes the document out to the specified output stream
+        /// Writes the document out to the specified output stream. The
+        /// stream is not closed as part of this operation.
         /// </summary>
-        /// <param name="out1">The out1.</param>
+        /// <param name="out1">The stream to write to.</param>
         public abstract void Write(Stream out1);
-
-        /// <summary>
-        /// Copies nodes from one POIFS to the other minus the excepts
-        /// </summary>
-        /// <param name="source">the source POIFS to copy from.</param>
-        /// <param name="target">the target POIFS to copy to</param>
-        /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
-        [Obsolete]
-        protected void CopyNodes(POIFSFileSystem source, POIFSFileSystem target,
-                                  List<String> excepts)
-        {
-            EntryUtils.CopyNodes(source, target, excepts);
-        }
-        /// <summary>
-        /// Copies nodes from one POIFS to the other minus the excepts
-        /// </summary>
-        /// <param name="sourceRoot">the source POIFS to copy from.</param>
-        /// <param name="targetRoot">the target POIFS to copy to</param>
-        /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
-        [Obsolete]
-        protected void CopyNodes(DirectoryNode sourceRoot,
-                DirectoryNode targetRoot, List<String> excepts)
-        {
-            EntryUtils.CopyNodes(sourceRoot, targetRoot, excepts);
-        }
-
-        /// <summary>
-        /// Checks to see if the String is in the list, used when copying
-        /// nodes between one POIFS and another
-        /// </summary>
-        /// <param name="entry">The entry.</param>
-        /// <param name="list">The list.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is in list] [the specified entry]; otherwise, <c>false</c>.
-        /// </returns>
-        private bool isInList(String entry, IList list)
-        {
-            for (int k = 0; k < list.Count; k++)
-            {
-                if (list[k].Equals(entry))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Copies an Entry into a target POIFS directory, recursively
-        /// </summary>
-        /// <param name="entry">The entry.</param>
-        /// <param name="target">The target.</param>
-        [Obsolete]
-        private void CopyNodeRecursively(Entry entry, DirectoryEntry target)
-        {
-            //System.err.println("copyNodeRecursively called with "+entry.Name+
-            //                   ","+target.Name);
-            EntryUtils.CopyNodeRecursively(entry, target);
-        }
     }
 }
