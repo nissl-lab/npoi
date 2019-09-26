@@ -158,7 +158,7 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         /// <param name="document">the name of the new documentEntry</param>
         /// <returns>the new DocumentEntry</returns>
-        public DocumentEntry CreateDocument(POIFSDocument document)
+        public DocumentEntry CreateDocument(OPOIFSDocument document)
         {
             DocumentProperty property = document.DocumentProperty;
             DocumentNode     rval     = new DocumentNode(property, this);
@@ -505,7 +505,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 else
                 {
-                    return CreateDocument(new POIFSDocument(name, stream));
+                    return CreateDocument(new OPOIFSDocument(name, stream));
                 }
             }
             catch (IOException ex)
@@ -523,7 +523,7 @@ namespace NPOI.POIFS.FileSystem
             }
             else
             {
-                return CreateDocument(new POIFSDocument(name, size, _path, writer));
+                return CreateDocument(new OPOIFSDocument(name, size, _path, writer));
             }
         }
 

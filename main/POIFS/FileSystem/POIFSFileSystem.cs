@@ -381,7 +381,7 @@ namespace NPOI.POIFS.FileSystem
         /// Add a new POIFSDocument
         /// </summary>
         /// <param name="document">the POIFSDocument being Added</param>
-        public void AddDocument(POIFSDocument document)
+        public void AddDocument(OPOIFSDocument document)
         {
             _documents.Add(document);
             _property_table.AddProperty(document.DocumentProperty);
@@ -438,18 +438,18 @@ namespace NPOI.POIFS.FileSystem
                 {
                     int           startBlock = property.StartBlock;
                     int           size       = property.Size;
-                    POIFSDocument document   = null;
+                    OPOIFSDocument document   = null;
 
                     if (property.ShouldUseSmallBlocks)
                     {
                         document =
-                            new POIFSDocument(name, small_blocks
+                            new OPOIFSDocument(name, small_blocks
                                 .FetchBlocks(startBlock, headerPropertiesStartAt), size);
                     }
                     else
                     {
                         document =
-                            new POIFSDocument(name,
+                            new OPOIFSDocument(name,
                                               big_blocks.FetchBlocks(startBlock,headerPropertiesStartAt),
                                               size);
                     }

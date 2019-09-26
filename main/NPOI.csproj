@@ -546,7 +546,7 @@
     <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
+    <Compile Include="POIFS\FileSystem\OPOIFSDocument.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />

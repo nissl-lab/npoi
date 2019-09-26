@@ -45,7 +45,7 @@ namespace NPOI.POIFS.FileSystem
     /// This class manages a document in the POIFS filesystem.
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class POIFSDocument : BATManaged, BlockWritable, POIFSViewable
+    public class OPOIFSDocument : BATManaged, BlockWritable, POIFSViewable
     {
         private static DocumentBlock[] EMPTY_BIG_BLOCK_ARRAY = { };
         private static SmallDocumentBlock[] EMPTY_SMALL_BLOCK_ARRAY = { };
@@ -58,7 +58,7 @@ namespace NPOI.POIFS.FileSystem
 
         private BigBlockStore _big_store;
 
-        public POIFSDocument(string name, RawDataBlock[] blocks, int length)
+        public OPOIFSDocument(string name, RawDataBlock[] blocks, int length)
         {
             _size = length;
             if (blocks.Length == 0)
@@ -92,7 +92,7 @@ namespace NPOI.POIFS.FileSystem
             return result;
         }
 
-        public POIFSDocument(string name, SmallDocumentBlock[] blocks, int length)
+        public OPOIFSDocument(string name, SmallDocumentBlock[] blocks, int length)
         {
             _size = length;
             if(blocks.Length == 0)
@@ -106,7 +106,7 @@ namespace NPOI.POIFS.FileSystem
             _property.Document = this;
         }
 
-        public POIFSDocument(string name, POIFSBigBlockSize bigBlockSize, ListManagedBlock[] blocks, int length)
+        public OPOIFSDocument(string name, POIFSBigBlockSize bigBlockSize, ListManagedBlock[] blocks, int length)
         {
             _size = length;
             _bigBigBlockSize = bigBlockSize;
@@ -125,7 +125,7 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        public POIFSDocument(string name, POIFSBigBlockSize bigBlockSize, Stream stream)
+        public OPOIFSDocument(string name, POIFSBigBlockSize bigBlockSize, Stream stream)
         {
             List<DocumentBlock> blocks = new List<DocumentBlock>();
 
@@ -162,16 +162,16 @@ namespace NPOI.POIFS.FileSystem
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="POIFSDocument"/> class.
+        /// Initializes a new instance of the <see cref="OPOIFSDocument"/> class.
         /// </summary>
         /// <param name="name">the name of the POIFSDocument</param>
         /// <param name="stream">the InputStream we read data from</param>
-        public POIFSDocument(string name, Stream stream)
+        public OPOIFSDocument(string name, Stream stream)
             : this(name, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, stream)
         {
         }
 
-        public POIFSDocument(string name, int size, POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, POIFSWriterListener writer)
+        public OPOIFSDocument(string name, int size, POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, POIFSWriterListener writer)
             {
             _size = size;
             _bigBigBlockSize = bigBlockSize;
@@ -189,7 +189,7 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        public POIFSDocument(string name, int size, POIFSDocumentPath path, POIFSWriterListener writer)
+        public OPOIFSDocument(string name, int size, POIFSDocumentPath path, POIFSWriterListener writer)
             :this(name, size, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, path, writer)
         {
         }
@@ -199,7 +199,7 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="name">the name of the POIFSDocument</param>
         /// <param name="blocks">the small blocks making up the POIFSDocument</param>
         /// <param name="length">the actual length of the POIFSDocument</param>
-        public POIFSDocument(string name, ListManagedBlock[] blocks, int length)
+        public OPOIFSDocument(string name, ListManagedBlock[] blocks, int length)
             :this(name, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, blocks, length)
             {
         }

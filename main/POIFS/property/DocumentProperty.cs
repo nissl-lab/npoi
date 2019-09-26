@@ -38,7 +38,7 @@ namespace NPOI.POIFS.Properties
     public class DocumentProperty:Property
     {
        // the POIFSDocument this property is associated with
-        private POIFSDocument _document;
+        private OPOIFSDocument _document;
 
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace NPOI.POIFS.Properties
         /// Gets or sets the document.
         /// </summary>
         /// <value>the associated POIFSDocument</value>
-        public POIFSDocument Document
+        public OPOIFSDocument Document
         {
             set { _document = value; }
             get{ return _document;}

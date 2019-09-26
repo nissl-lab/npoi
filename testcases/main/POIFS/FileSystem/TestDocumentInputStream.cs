@@ -76,7 +76,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 rawBlocks[j] = new RawDataBlock(stream);
             }
-            POIFSDocument document = new POIFSDocument("Workbook", rawBlocks,
+            OPOIFSDocument document = new OPOIFSDocument("Workbook", rawBlocks,
                                                        _workbook_size);
 
             _workbook_o = new DocumentNode(

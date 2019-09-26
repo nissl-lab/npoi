@@ -63,7 +63,7 @@ namespace NPOI.POIFS.Storage
 
             while (iter.MoveNext())
             {
-                POIFSDocument   doc    = ( POIFSDocument ) iter.Current;
+                OPOIFSDocument   doc    = ( OPOIFSDocument ) iter.Current;
                 BlockWritable[] blocks = doc.SmallBlocks;
 
                 if (blocks.Length != 0)

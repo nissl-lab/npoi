@@ -214,7 +214,7 @@ namespace NPOI.POIFS.EventFileSystem
                 {
                     int startBlock = property.StartBlock;
                     IEnumerator listeners = registry.GetListeners(path, name);
-                    POIFSDocument document = null;
+                    OPOIFSDocument document = null;
                     if (listeners.MoveNext())
                     {
                         listeners.Reset();
@@ -224,13 +224,13 @@ namespace NPOI.POIFS.EventFileSystem
                         if (property.ShouldUseSmallBlocks)
                         {
                             document =
-                                new POIFSDocument(name, small_blocks
+                                new OPOIFSDocument(name, small_blocks
                                     .FetchBlocks(startBlock, -1), size);
                         }
                         else
                         {
                             document =
-                                new POIFSDocument(name, big_blocks
+                                new OPOIFSDocument(name, big_blocks
                                     .FetchBlocks(startBlock, -1), size);
                         }
                         //POIFSReaderListener listener =

@@ -82,7 +82,7 @@ namespace NPOI.POIFS.Dev
                                 inspected.ShortDescription));
              if (drilldown)
              {
-                 if (inspected is POIFSDocument)
+                 if (inspected is OPOIFSDocument)
                  {
                      ((ArrayList)objects).AddRange(InspectViewable("POIFSDocument content is too long so ignored", drilldown,
                                                        indentLevel + 1,

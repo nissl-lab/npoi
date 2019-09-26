@@ -102,7 +102,7 @@ namespace NPOI.POIFS.FileSystem
          * 
          * @param document the Document to be read
          */
-        public DocumentInputStream(POIFSDocument document)
+        public DocumentInputStream(OPOIFSDocument document)
         {
             delegate1 = new ODocumentInputStream(document);
         }
