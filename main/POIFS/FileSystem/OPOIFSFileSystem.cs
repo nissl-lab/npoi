@@ -45,12 +45,10 @@ namespace NPOI.POIFS.FileSystem
     /// @author Marc Johnson (mjohnson at apache dot org) 
     /// </summary>
     [Serializable]
-    public class POIFSFileSystem :
-        OPOIFSFileSystem // TODO Temporary workaround during #56791
-        , POIFSViewable
+    public class OPOIFSFileSystem : POIFSViewable
     {
         //private static POILogger _logger =
-        //        POILogFactory.GetLogger(typeof(POIFSFileSystem));
+        //        POILogFactory.GetLogger(typeof(OPOIFSFileSystem));
         /// <summary>
         /// Convenience method for clients that want to avoid the auto-Close behaviour of the constructor.
         /// </summary>
@@ -58,7 +56,7 @@ namespace NPOI.POIFS.FileSystem
         /// <example>
         /// A convenience method (
         /// CreateNonClosingInputStream()) has been provided for this purpose:
-        /// StreamwrappedStream = POIFSFileSystem.CreateNonClosingInputStream(is);
+        /// StreamwrappedStream = OPOIFSFileSystem.CreateNonClosingInputStream(is);
         /// HSSFWorkbook wb = new HSSFWorkbook(wrappedStream);
         /// is.reset();
         /// doSomethingElse(is);
@@ -93,9 +91,9 @@ namespace NPOI.POIFS.FileSystem
         //}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="POIFSFileSystem"/> class.  intended for writing
+        /// Initializes a new instance of the <see cref="OPOIFSFileSystem"/> class.  intended for writing
         /// </summary>
-        public POIFSFileSystem()
+        public OPOIFSFileSystem()
         {
             HeaderBlock headerBlock = new HeaderBlock(bigBlockSize);
             _property_table = new PropertyTable(headerBlock);
@@ -104,13 +102,13 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /// <summary>
-        /// Create a POIFSFileSystem from an Stream. Normally the stream is Read until
+        /// Create a OPOIFSFileSystem from an Stream. Normally the stream is Read until
         /// EOF.  The stream is always Closed.  In the unlikely case that the caller has such a stream and
         /// needs to use it after this constructor completes, a work around is to wrap the
         /// stream in order to trap the Close() call.  
         /// </summary>
         /// <param name="stream">the Streamfrom which to Read the data</param>
-        public POIFSFileSystem(Stream stream)
+        public OPOIFSFileSystem(Stream stream)
             : this()
         {
             bool success = false;

@@ -52,17 +52,24 @@ namespace NPOI.POIFS.FileSystem
 
         private List<Entry> _entries;
 
+        // Only one of these two will exist
         // the POIFSFileSystem we belong to
-        private POIFSFileSystem _oFilesSystem;
-
+        private OPOIFSFileSystem _oFilesSystem;
+        // the NPOIFSFileSytem we belong to
         private NPOIFSFileSystem _nFilesSystem;
 
         // the path described by this document
         private POIFSDocumentPath _path;
 
-
-        public DirectoryNode(DirectoryProperty property,
-                        POIFSFileSystem fileSystem,
+        /// <summary>
+        /// Create a DirectoryNode. This method Is not public by design; it
+        /// Is intended strictly for the internal use of this package
+        /// </summary>
+        /// <param name="property">the DirectoryProperty for this DirectoryEntry</param>
+        /// <param name="fileSystem">the OPOIFSFileSystem we belong to</param>
+        /// <param name="parent">the parent of this entry</param>
+        internal DirectoryNode(DirectoryProperty property,
+                        OPOIFSFileSystem fileSystem,
                         DirectoryNode parent)
             : this(property, parent, fileSystem, (NPOIFSFileSystem)null)
         {
@@ -75,16 +82,16 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="property">the DirectoryProperty for this DirectoryEntry</param>
         /// <param name="nFileSystem">the POIFSFileSystem we belong to</param>
         /// <param name="parent">the parent of this entry</param>
-        public DirectoryNode(DirectoryProperty property,
+        internal DirectoryNode(DirectoryProperty property,
                 NPOIFSFileSystem nFileSystem,
                 DirectoryNode parent)
-            : this(property, parent, (POIFSFileSystem)null, nFileSystem)
+            : this(property, parent, (OPOIFSFileSystem)null, nFileSystem)
         {
         }
 
         private DirectoryNode(DirectoryProperty property,
                         DirectoryNode parent,
-                        POIFSFileSystem oFileSystem,
+                        OPOIFSFileSystem oFileSystem,
                         NPOIFSFileSystem nFileSystem)
             : base(property, parent)
         {
@@ -232,12 +239,24 @@ namespace NPOI.POIFS.FileSystem
         {
             get { return _path; }
         }
-
+        /// <summary>
+        /// return the filesystem that this belongs to
+        /// TODO: Temporary workaround during #56791
+        /// </summary>
         public POIFSFileSystem FileSystem
+        {
+            get { return (POIFSFileSystem)_oFilesSystem; }
+        }
+        /// <summary>
+        /// return the filesystem that this belongs to
+        /// </summary>
+        public OPOIFSFileSystem OFileSystem
         {
             get { return _oFilesSystem; }
         }
-
+        /// <summary>
+        /// return the filesystem that this belongs to
+        /// </summary>
         public NPOIFSFileSystem NFileSystem
         {
             get { return _nFilesSystem; }

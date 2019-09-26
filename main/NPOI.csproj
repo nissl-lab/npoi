@@ -253,6 +253,7 @@
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />
     <Compile Include="POIFS\FileSystem\NotOLE2FileException.cs" />
+    <Compile Include="POIFS\FileSystem\OPOIFSFileSystem.cs" />
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
