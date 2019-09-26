@@ -18,11 +18,11 @@ namespace NPOI.POIFS.Crypt
 {
     using System;
     using System.IO;
-    using System.Security.Cryptography.X509Certificates;
     using NPOI.POIFS.Crypt.Agile;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using NUnit.Framework;
+    using Org.BouncyCastle.X509;
     using TestCases;
 
 

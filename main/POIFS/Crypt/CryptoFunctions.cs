@@ -17,6 +17,8 @@
 namespace NPOI.POIFS.Crypt
 {
     using NPOI.Util;
+    using Org.BouncyCastle.Crypto;
+    using Org.BouncyCastle.Security;
     using System;
     using System.Text;
 
@@ -276,7 +278,7 @@ namespace NPOI.POIFS.Crypt
             }
         }
 
-        //@SuppressWarnings("unChecked")
+        [Obsolete("not necessary for npoi")]
         public static void registerBouncyCastle() {
             //if (Security.GetProvider("BC") != null) return;
             //try {
@@ -287,7 +289,6 @@ namespace NPOI.POIFS.Crypt
             //} catch (Exception e) {
             //    throw new EncryptedDocumentException("Only the BouncyCastle provider supports your encryption Settings - please add it to the classpath.");
             //}
-            throw new NotImplementedException();
         }
 
         private static int[] InitialCodeArray = {
@@ -410,7 +411,7 @@ namespace NPOI.POIFS.Crypt
         /**
          * This method generates the xored-hashed password for word documents &lt; 2007.
          */
-        public static String xorHashPassword(String password) {
+        public static String XorHashPassword(String password) {
             int hashedPassword = CreateXorVerifier2(password);
             return String.Format("%1$08X", hashedPassword);
         }
@@ -419,7 +420,7 @@ namespace NPOI.POIFS.Crypt
          * Convenience function which returns the reversed xored-hashed password for further 
          * Processing in word documents 2007 and newer, which utilize a real hashing algorithm like sha1.
          */
-        public static String xorHashPasswordReversed(String password) {
+        public static String XorHashPasswordReversed(String password) {
             int hashedPassword = CreateXorVerifier2(password);
 
             return String.Format("%1$02X%2$02X%3$02X%4$02X"
@@ -554,51 +555,77 @@ namespace NPOI.POIFS.Crypt
             }
         }
     }
-    public class SecretKeySpec : ISecretKey
+    public interface IKeySpec { }
+    public class SecretKeySpec : IKeySpec, ISecretKey
     {
-        private byte[] keyspec;
-        private string jceId;
+        private byte[] key;
+        private string algorithm;
 
-        public SecretKeySpec(byte[] keyspec, string jceId)
+        public SecretKeySpec(byte[] key, string algorithm)
         {
-            this.keyspec = keyspec;
-            this.jceId = jceId;
+            if ((key == null) || (algorithm == null))
+            {
+                throw new ArgumentException("Missing argument");
+            }
+            if (key.Length == 0)
+            {
+                throw new ArgumentException("Empty key");
+            }
+            this.key = new byte[key.Length];
+            Array.Copy(key, this.key, key.Length);
+            this.algorithm = algorithm;
         }
 
         public string GetAlgorithm()
         {
-            throw new System.NotImplementedException();
+            return algorithm;
         }
 
         public byte[] GetEncoded()
         {
-            throw new System.NotImplementedException();
+            byte[] ret = new byte[key.Length];
+            Array.Copy(key, ret, key.Length);
+            return ret;
         }
 
         public string GetFormat()
         {
-            throw new System.NotImplementedException();
+            return "RAW";
         }
+
     }
     public class RC2ParameterSpec : AlgorithmParameterSpec
     {
-        private int v;
-        private byte[] vec;
+        private byte[] iv = null;
+        private int effectiveKeyBits;
 
         public RC2ParameterSpec(int v, byte[] vec)
         {
-            this.v = v;
-            this.vec = vec;
+            this.effectiveKeyBits = v;
+            this.iv = vec;
+        }
+        public int GetEffectiveKeyBits()
+        {
+            return this.effectiveKeyBits;
+        }
+
+        public byte[] GetIV()
+        {
+            return this.iv;
         }
     }
 
     public class IvParameterSpec : AlgorithmParameterSpec
     {
-        private byte[] vec;
+        private byte[] iv;
 
-        public IvParameterSpec(byte[] vec)
+        public IvParameterSpec(byte[] iv)
         {
-            this.vec = vec;
+            this.iv = iv;
+        }
+        public byte[] GetIV()
+        {
+            return this.iv;
         }
     }
 

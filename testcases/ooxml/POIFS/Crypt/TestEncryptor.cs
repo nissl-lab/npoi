@@ -70,7 +70,7 @@ namespace NPOI.POIFS.Crypt
         }
 
         [Test]
-        public void agileEncryption()
+        public void AgileEncryption()
         {
             int maxKeyLen = Cipher.GetMaxAllowedKeyLength("AES");
             Assume.That(maxKeyLen == 2147483647, "Please install JCE Unlimited Strength Jurisdiction Policy files for AES 256");
@@ -165,7 +165,7 @@ namespace NPOI.POIFS.Crypt
         }
 
         [Test]
-        public void standardEncryption()
+        public void StandardEncryption()
         {
             FileStream file = POIDataSamples.GetDocumentInstance().GetFile("bug53475-password-is-solrcell.docx");
             String pass = "solrcell";
@@ -232,7 +232,7 @@ namespace NPOI.POIFS.Crypt
             bos.Seek(0, SeekOrigin.Begin); //bos.Reset();
             fs.WriteFileSystem(bos);
 
-            MemoryStream bis = new MemoryStream(bos.ToArray());
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.ToArray());
 
             // FileOutputStream fos = new FileOutputStream("encrypted.docx");
             // IOUtils.Copy(bis, fos);
@@ -263,7 +263,7 @@ namespace NPOI.POIFS.Crypt
          * http://stackoverflow.com/questions/28593223
          */
         [Test]
-        public void encryptPackageWithoutCoreProperties()
+        public void EncryptPackageWithoutCoreProperties()
         {
             // Open our file without core properties
             FileStream inp = POIDataSamples.GetOpenXML4JInstance().GetFile("OPCCompliance_NoCoreProperties.xlsx");
@@ -308,7 +308,7 @@ namespace NPOI.POIFS.Crypt
 
         [Test]
         [Ignore("poi")]
-        public void inPlaceReWrite()
+        public void InPlaceReWrite()
         {
             FileInfo f = TempFile.CreateTempFile("protected_agile", ".docx");
             // File f = new File("protected_agile.docx");
@@ -340,12 +340,12 @@ namespace NPOI.POIFS.Crypt
         }
 
 
-        private void listEntry(DocumentNode de, String ext, String path)
+        private void ListEntry(DocumentNode de, string ext, string path)
         {
             path += "\\" + de.Name.Replace("[\\p{Cntrl}]", "_");
-            System.Console.WriteLine(ext + ": " + path + " (" + de.Size + " bytes)");
+            Console.WriteLine(ext + ": " + path + " (" + de.Size + " bytes)");
 
-            String name = de.Name.Replace("[\\p{Cntrl}]", "_");
+            string name = de.Name.Replace("[\\p{Cntrl}]", "_");
 
             Stream is1 = ((DirectoryNode)de.Parent).CreateDocumentInputStream(de);
             FileStream fos = new FileStream("solr." + name + "." + ext, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -355,10 +355,10 @@ namespace NPOI.POIFS.Crypt
         }
 
 
-        private void listDir(DirectoryNode dn, String ext, String path)
+        private void ListDir(DirectoryNode dn, string ext, string path)
         {
             path += "\\" + dn.Name.Replace('\u0006', '_');
-            System.Console.WriteLine(ext + ": " + path + " (" + dn.StorageClsid + ")");
+            Console.WriteLine(ext + ": " + path + " (" + dn.StorageClsid + ")");
 
             IEnumerator<Entry> iter = dn.Entries;
             while (iter.MoveNext())
@@ -366,11 +366,11 @@ namespace NPOI.POIFS.Crypt
                 Entry ent = iter.Current;
                 if (ent is DirectoryNode)
                 {
-                    listDir((DirectoryNode)ent, ext, path);
+                    ListDir((DirectoryNode)ent, ext, path);
                 }
                 else
                 {
-                    listEntry((DocumentNode)ent, ext, path);
+                    ListEntry((DocumentNode)ent, ext, path);
                 }
             }
         }

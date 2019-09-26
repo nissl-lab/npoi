@@ -88,6 +88,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\solution\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\solution\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -745,6 +748,7 @@
     <Compile Include="UnsupportedFileFormatException.cs" />
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
+    <Compile Include="Util\BoundedInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
     <Compile Include="Util\ByteArrayOutputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />

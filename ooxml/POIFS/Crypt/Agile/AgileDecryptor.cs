@@ -18,11 +18,11 @@ namespace NPOI.POIFS.Crypt.Agile
 {
     using System;
     using System.IO;
-    using System.Security.Cryptography.X509Certificates;
     using NPOI.POIFS.Crypt;
 
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using Org.BouncyCastle.X509;
     using static NPOI.POIFS.Crypt.Agile.AgileEncryptionVerifier;
     using static NPOI.POIFS.Crypt.CryptoFunctions;
 
@@ -202,7 +202,7 @@ namespace NPOI.POIFS.Crypt.Agile
 
             Mac x509Hmac = CryptoFunctions.GetMac(hashAlgo);
             x509Hmac.Init(secretKey);
-            byte[] certVerifier = x509Hmac.DoFinal(ace.x509.Export(X509ContentType.Cert));
+            byte[] certVerifier = x509Hmac.DoFinal(ace.x509.GetEncoded());
 
             byte[] vec = CryptoFunctions.GenerateIv(hashAlgo, header.KeySalt, kIntegrityKeyBlock, blockSize);
             cipher = GetCipher(secretKey, cipherAlgo, ver.ChainingMode, vec, Cipher.DECRYPT_MODE);

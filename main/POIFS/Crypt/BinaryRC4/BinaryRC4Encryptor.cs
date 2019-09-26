@@ -32,8 +32,6 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
 
         protected class BinaryRC4CipherOutputStream : ChunkedCipherOutputStream
         {
-            private BinaryRC4Encryptor encryptor;
-            BinaryRC4EncryptionInfoBuilder builder;
             protected override Cipher InitCipherForBlock(Cipher cipher, int block, bool lastChunk)
             {
                 return BinaryRC4Decryptor.InitCipherForBlock(cipher, block, builder, encryptor.GetSecretKey(), Cipher.ENCRYPT_MODE);
@@ -45,14 +43,13 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
 
             protected override void CreateEncryptionInfoEntry(DirectoryNode dir, FileInfo tmpFile)
             {
-                encryptor.CreateEncryptionInfoEntry(dir);
+                ((BinaryRC4Encryptor)encryptor).CreateEncryptionInfoEntry(dir);
             }
 
             public BinaryRC4CipherOutputStream(DirectoryNode dir, BinaryRC4EncryptionInfoBuilder builder, BinaryRC4Encryptor encryptor)
-                : base(dir, 512)
+                : base(dir, 512, builder, encryptor)
             {
-                this.builder = builder;
-                this.encryptor = encryptor;
+                
             }
         }
 
@@ -84,12 +81,12 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
                 Cipher cipher = BinaryRC4Decryptor.InitCipherForBlock(null, 0, builder, skey, Cipher.ENCRYPT_MODE);
                 byte[] encryptedVerifier = new byte[16];
                 cipher.Update(verifier, 0, 16, encryptedVerifier);
-                ver.SetEncryptedVerifier(encryptedVerifier);
+                ver.EncryptedVerifier = (encryptedVerifier);
                 HashAlgorithm hashAlgo = ver.HashAlgorithm;
                 MessageDigest hashAlg = CryptoFunctions.GetMessageDigest(hashAlgo);
                 byte[] calcVerifierHash = hashAlg.Digest(verifier);
                 byte[] encryptedVerifierHash = cipher.DoFinal(calcVerifierHash);
-                ver.SetEncryptedVerifierHash(encryptedVerifierHash);
+                ver.EncryptedVerifierHash = (encryptedVerifierHash);
             }
             catch (Exception e)
             {
@@ -108,7 +105,7 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             return builder.GetHeader().KeySize / 8;
         }
 
-        protected void CreateEncryptionInfoEntry(DirectoryNode dir)
+        protected internal void CreateEncryptionInfoEntry(DirectoryNode dir)
         {
             DataSpaceMapUtils.AddDefaultDataSpace(dir);
             EncryptionInfo info = builder.GetEncryptionInfo();

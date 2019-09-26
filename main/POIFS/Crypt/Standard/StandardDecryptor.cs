@@ -23,6 +23,7 @@ namespace NPOI.POIFS.Crypt.Standard
 
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using Org.BouncyCastle.Crypto;
 
     /**
      */
@@ -32,7 +33,7 @@ namespace NPOI.POIFS.Crypt.Standard
         internal StandardDecryptor(IEncryptionInfoBuilder builder)
             : base(builder)
         {
-            
+
         }
 
         public override bool VerifyPassword(String password) {
@@ -65,7 +66,7 @@ namespace NPOI.POIFS.Crypt.Standard
             }
         }
 
-        protected internal static ISecretKey GenerateSecretKey(String password, EncryptionVerifier ver, int keySize) {
+        protected internal static ISecretKey GenerateSecretKey(string password, EncryptionVerifier ver, int keySize) {
             HashAlgorithm hashAlgo = ver.HashAlgorithm;
 
             byte[] pwHash = CryptoFunctions.HashPassword(password, hashAlgo, ver.Salt, ver.SpinCount);
@@ -83,9 +84,8 @@ namespace NPOI.POIFS.Crypt.Standard
 
             byte[] key = Arrays.CopyOf(x3, keySize);
 
-            throw new NotImplementedException();
-            //SecretKey skey = new SecretKeySpec(key, ver.CipherAlgorithm.jceId);
-            //return skey;
+            ISecretKey skey = new SecretKeySpec(key, ver.CipherAlgorithm.jceId);
+            return skey;
         }
 
         protected static byte[] FillAndXor(byte[] hash, byte FillByte) {
@@ -96,17 +96,16 @@ namespace NPOI.POIFS.Crypt.Standard
                 buff[i] = (byte)(buff[i] ^ hash[i]);
             }
 
-            throw new NotImplementedException();
-            //MessageDigest sha1 = CryptoFunctions.GetMessageDigest(HashAlgorithm.sha1);
-            //return sha1.Digest(buff);
+            MessageDigest sha1 = CryptoFunctions.GetMessageDigest(HashAlgorithm.sha1);
+            return sha1.Digest(buff);
         }
 
         private Cipher GetCipher(ISecretKey key) {
             EncryptionHeader em = builder.GetHeader();
             ChainingMode cm = em.ChainingMode;
             Debug.Assert(cm == ChainingMode.ecb);
-            throw new NotImplementedException();
-            //return CryptoFunctions.GetCipher(key, em.GetCipherAlgorithm(), cm, null, Cipher.DECRYPT_MODE);
+
+            return CryptoFunctions.GetCipher(key, em.CipherAlgorithm, cm, null, Cipher.DECRYPT_MODE);
         }
 
         public override Stream GetDataStream(DirectoryNode dir) {
@@ -121,9 +120,9 @@ namespace NPOI.POIFS.Crypt.Standard
             long cipherLen = (_length / blockSize + 1) * blockSize;
             Cipher cipher = GetCipher(GetSecretKey());
 
-            throw new NotImplementedException();
-            //InputStream boundedDis = new BoundedInputStream(dis, cipherLen);
-            //return new BoundedInputStream(new CipherInputStream(boundedDis, cipher), _length);
+
+            ByteArrayInputStream boundedDis = new BoundedInputStream(dis, cipherLen);
+            return new BoundedInputStream(new CipherInputStream(boundedDis, cipher), _length);
         }
 
         /**
@@ -135,4 +134,271 @@ namespace NPOI.POIFS.Crypt.Standard
         }
     }
 
+    public class CipherInputStream : ByteArrayInputStream
+    {
+        private Cipher cipher;
+        private ByteArrayInputStream input;
+        private byte[] ibuffer = new byte['?'];
+        private bool done = false;
+        private byte[] obuffer;
+        private int ostart = 0;
+        private int ofinish = 0;
+        private bool closed = false;
+        public CipherInputStream(ByteArrayInputStream paramInputStream, Cipher paramCipher)
+        //: base(paramInputStream)
+        {
+            this.input = paramInputStream;
+            this.cipher = paramCipher;
+        }
+        protected CipherInputStream(ByteArrayInputStream paramInputStream)
+        //   : base(paramInputStream)
+        {
+            this.input = paramInputStream;
+            this.cipher = new NullCipher();
+        }
+        private int getMoreData()
+        {
+            if (this.done)
+            {
+                return -1;
+            }
+            int i = this.input.Read(this.ibuffer, 0, this.ibuffer.Length);
+            if (i == -1)
+            {
+                this.done = true;
+                try
+                {
+                    this.obuffer = this.cipher.DoFinal();
+                }
+                catch (Exception ex)
+                {
+                    this.obuffer = null;
+                    throw new IOException(ex.Message);
+                }
+                if (this.obuffer == null)
+                {
+                    return -1;
+                }
+                this.ostart = 0;
+                this.ofinish = this.obuffer.Length;
+                return this.ofinish;
+            }
+            try
+            {
+                this.obuffer = this.cipher.Update(this.ibuffer, 0, i);
+            }
+            catch (Exception ex)
+            {
+                this.obuffer = null;
+                throw ex;
+            }
+            this.ostart = 0;
+            if (this.obuffer == null)
+            {
+                this.ofinish = 0;
+            }
+            else
+            {
+                this.ofinish = this.obuffer.Length;
+            }
+            return this.ofinish;
+        }
+        public override int Read()
+        {
+            if (this.ostart >= this.ofinish)
+            {
+                int i = 0;
+                while (i == 0)
+                {
+                    i = getMoreData();
+                }
+                if (i == -1)
+                {
+                    return -1;
+                }
+            }
+            return this.obuffer[(this.ostart++)] & 0xFF;
+        }
+        public int Read(byte[] b)
+        {
+            return Read(b, 0, b.Length);
+        }
+
+        public override int Read(byte[] b, int off, int len)
+        {
+            int i;
+            if (this.ostart >= this.ofinish)
+            {
+                i = 0;
+                while (i == 0)
+                {
+                    i = getMoreData();
+                }
+                if (i == -1)
+                {
+                    return -1;
+                }
+            }
+            if (len <= 0)
+            {
+                return 0;
+            }
+            i = this.ofinish - this.ostart;
+            if (len < i)
+            {
+                i = len;
+            }
+            if (b != null)
+            {
+                Array.Copy(this.obuffer, this.ostart, b, off, i);
+            }
+            this.ostart += i;
+            return i;
+        }
+
+        public long Skip(long paramLong)
+        {
+            int i = this.ofinish - this.ostart;
+            if (paramLong > i)
+            {
+                paramLong = i;
+            }
+            if (paramLong < 0L)
+            {
+                return 0L;
+            }
+            this.ostart = ((int)(this.ostart + paramLong));
+            return paramLong;
+        }
+
+        public override int Available()
+        {
+            return this.ofinish - this.ostart;
+        }
+
+        public override void Close()
+        {
+            if (this.closed)
+            {
+                return;
+            }
+            this.closed = true;
+            this.input.Close();
+            if (!this.done)
+            {
+                try
+                {
+                    this.cipher.DoFinal();
+                }
+                catch (Exception)
+                {
+                }
+            }
+            this.ostart = 0;
+            this.ofinish = 0;
+        }
+
+
+        public bool MarkSupported()
+        {
+            return false;
+        }
+    }
+
+    public class NullBufferedCipher : IBufferedCipher
+    {
+        public string AlgorithmName => "Null";
+
+        public byte[] DoFinal()
+        {
+            return new byte[0];
+        }
+
+        public byte[] DoFinal(byte[] input)
+        {
+            return new byte[0];
+        }
+
+        public byte[] DoFinal(byte[] input, int inOff, int length)
+        {
+            return new byte[0];
+        }
+
+        public int DoFinal(byte[] output, int outOff)
+        {
+            return 0;
+        }
+
+        public int DoFinal(byte[] input, byte[] output, int outOff)
+        {
+            return 0;
+        }
+
+        public int DoFinal(byte[] input, int inOff, int length, byte[] output, int outOff)
+        {
+            return 0;
+        }
+
+        public int GetBlockSize()
+        {
+            return 0;
+        }
+
+        public int GetOutputSize(int inputLen)
+        {
+            return 0;
+        }
+
+        public int GetUpdateOutputSize(int inputLen)
+        {
+            return 0;
+        }
+
+        public void Init(bool forEncryption, ICipherParameters parameters)
+        {
+            
+        }
+
+        public byte[] ProcessByte(byte input)
+        {
+            return new byte[0];
+        }
+
+        public int ProcessByte(byte input, byte[] output, int outOff)
+        {
+            return 0;
+        }
+
+        public byte[] ProcessBytes(byte[] input)
+        {
+            return new byte[0];
+        }
+
+        public byte[] ProcessBytes(byte[] input, int inOff, int length)
+        {
+            return new byte[0];
+        }
+
+        public int ProcessBytes(byte[] input, byte[] output, int outOff)
+        {
+            return 0;
+        }
+
+        public int ProcessBytes(byte[] input, int inOff, int length, byte[] output, int outOff)
+        {
+            return 0;
+        }
+
+        public void Reset()
+        {
+            
+        }
+    }
+    public class NullCipher : Cipher
+    {
+        public NullCipher()
+        {
+            cipherImpl = new NullBufferedCipher();
+        }
+    }
 }

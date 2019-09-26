@@ -42,10 +42,10 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             SetSalt(salt);
             byte[] encryptedVerifier = new byte[16];
             is1.ReadFully(encryptedVerifier);
-            SetEncryptedVerifier(encryptedVerifier);
+            EncryptedVerifier = (encryptedVerifier);
             byte[] encryptedVerifierHash = new byte[16];
             is1.ReadFully(encryptedVerifierHash);
-            SetEncryptedVerifierHash(encryptedVerifierHash);
+            EncryptedVerifierHash = (encryptedVerifierHash);
             SpinCount = (-1);
             CipherAlgorithm = (CipherAlgorithm.rc4);
             ChainingMode = (null);
@@ -63,15 +63,15 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             base.Salt = (salt);
         }
 
-        protected internal new void SetEncryptedVerifier(byte[] encryptedVerifier)
-        {
-            base.EncryptedVerifier = (encryptedVerifier);
-        }
+        //protected internal void SetEncryptedVerifier(byte[] encryptedVerifier)
+        //{
+        //    base.EncryptedVerifier = (encryptedVerifier);
+        //}
 
-        protected internal new void SetEncryptedVerifierHash(byte[] encryptedVerifierHash)
-        {
-            base.EncryptedVerifierHash = (encryptedVerifierHash);
-        }
+        //protected internal void SetEncryptedVerifierHash(byte[] encryptedVerifierHash)
+        //{
+        //    base.EncryptedVerifierHash = (encryptedVerifierHash);
+        //}
 
         public void Write(LittleEndianByteArrayOutputStream bos)
         {

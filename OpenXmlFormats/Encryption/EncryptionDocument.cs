@@ -69,6 +69,7 @@ namespace NPOI.OpenXmlFormats.Encryption
             sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>");
 
             sw.Flush();
+            throw new NotImplementedException();
         }
 
         public static EncryptionDocument NewInstance()

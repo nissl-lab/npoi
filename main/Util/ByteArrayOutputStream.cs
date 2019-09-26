@@ -63,13 +63,13 @@ namespace NPOI.Util
                 Int32.MaxValue :
                 MAX_ARRAY_SIZE;
         }
-        public void Write(int b)
+        public virtual void Write(int b)
         {
             EnsureCapacity(count + 1);
             buf[count] = (byte)b;
             count += 1;
         }
-        public void Write(byte[] b)
+        public virtual void Write(byte[] b)
         {
             Write(b, 0, b.Length);
         }
@@ -84,7 +84,7 @@ namespace NPOI.Util
             Array.Copy(b, off, buf, count, len);
             count += len;
         }
-        public void WriteTo(Stream out1)
+        public virtual void WriteTo(Stream out1)
         {
             out1.Write(buf, 0, count);
         }

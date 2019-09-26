@@ -19,9 +19,10 @@ namespace NPOI.POIFS.Crypt.Agile
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Security.Cryptography.X509Certificates;
     using NPOI.OpenXmlFormats.Encryption;
     using NPOI.POIFS.Crypt;
+    using Org.BouncyCastle.Asn1.X509;
+    using Org.BouncyCastle.X509;
 
     /**
      * Used when Checking if a key is valid for a document 
@@ -111,7 +112,7 @@ namespace NPOI.POIFS.Crypt.Agile
                     AgileCertificateEntry ace = new AgileCertificateEntry();
                     ace.certVerifier = certKey.certVerifier;
                     ace.encryptedKey = certKey.encryptedKeyValue;
-                    ace.x509 = new X509Certificate(certKey.X509Certificate);
+                    ace.x509 = new X509Certificate(X509CertificateStructure.GetInstance(certKey.X509Certificate));
                     certList.Add(ace);
                 }
             }

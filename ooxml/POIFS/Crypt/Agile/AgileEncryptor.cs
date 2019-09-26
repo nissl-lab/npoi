@@ -162,7 +162,7 @@ namespace NPOI.POIFS.Crypt.Agile
                     ace.encryptedKey = cipher.DoFinal(GetSecretKey().GetEncoded());
                     Mac x509Hmac = CryptoFunctions.GetMac(hashAlgo);
                     x509Hmac.Init(GetSecretKey());
-                    ace.certVerifier = x509Hmac.DoFinal(ace.x509.Export(X509ContentType.Cert));
+                    ace.certVerifier = x509Hmac.DoFinal(ace.x509.GetEncoded());
                 }
             } catch (Exception e) {
                 throw new EncryptedDocumentException(e);
@@ -293,7 +293,7 @@ namespace NPOI.POIFS.Crypt.Agile
                 keyEnc.uri = (/*setter*/certificateUri);
                 CT_CertificateKeyEncryptor certData = keyEnc.AddNewEncryptedCertificateKey();
                 try {
-                    certData.X509Certificate = ace.x509.Export(X509ContentType.Cert);
+                    certData.X509Certificate = ace.x509.GetEncoded();
                 } catch (Exception e) {
                     throw new EncryptedDocumentException(e);
                 }
@@ -369,11 +369,9 @@ namespace NPOI.POIFS.Crypt.Agile
          * unencrypted data as specified in section 2.3.4.4.
          */
         private class AgileCipherOutputStream : ChunkedCipherOutputStream {
-            IEncryptionInfoBuilder builder;
             ISecretKey skey;
-            AgileEncryptor encryptor;
             public AgileCipherOutputStream(DirectoryNode dir, IEncryptionInfoBuilder builder, ISecretKey skey, AgileEncryptor encryptor)
-                    : base(dir, 4096)
+                    : base(dir, 4096, builder, encryptor)
             {
                 this.builder = builder;
                 this.skey = skey;
@@ -390,13 +388,13 @@ namespace NPOI.POIFS.Crypt.Agile
             protected override void CalculateChecksum(FileInfo fileOut, int oleStreamSize)
             {
                 // integrityHMAC needs to be updated before the encryption document is Created
-                encryptor.UpdateIntegrityHMAC(fileOut, oleStreamSize);
+                ((AgileEncryptor)encryptor).UpdateIntegrityHMAC(fileOut, oleStreamSize);
             }
 
 
             protected override void CreateEncryptionInfoEntry(DirectoryNode dir, FileInfo tmpFile)
             {
-                encryptor.CreateEncryptionInfoEntry(dir, tmpFile);
+                ((AgileEncryptor)encryptor).CreateEncryptionInfoEntry(dir, tmpFile);
             }
         }
 

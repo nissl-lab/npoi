@@ -76,18 +76,28 @@ namespace NPOI.POIFS.Crypt
                 dir.GetEntry(fileName).Delete();
             }
 
-            //return dir.CreateDocument(fileName, bos.WriteIndex, new POIFSWriterListener(){
-            //    public void ProcessPOIFSWriterEvent(POIFSWriterEvent event) {
-            //        try {
-            //            event.Stream.Write(buf, 0, event.Limit);
-            //        } catch (IOException e) {
-            //            throw new EncryptedDocumentException(e);
-            //        }
-            //    }
-            //});
-            throw new NotImplementedException();
+            return dir.CreateDocument(fileName, bos.WriteIndex, new POIFSWriterListenerImpl(buf));
+            
         }
-
+        public class POIFSWriterListenerImpl : POIFSWriterListener
+        {
+            byte[] buf;
+            public POIFSWriterListenerImpl(byte[] buf)
+            {
+                this.buf = buf;
+            }
+            public void ProcessPOIFSWriterEvent(POIFSWriterEvent event1)
+            {
+                try
+                {
+                    event1.Stream.Write(buf, 0, event1.Limit);
+                }
+                catch (IOException e)
+                {
+                    throw new EncryptedDocumentException(e);
+                }
+            }
+        }
         public class DataSpaceMap : EncryptionRecord
         {
             DataSpaceMapEntry[] entries;

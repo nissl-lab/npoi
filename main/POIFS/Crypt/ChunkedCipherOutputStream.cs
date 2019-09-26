@@ -34,11 +34,13 @@ namespace NPOI.POIFS.Crypt
 
         private long _pos = 0;
         private Cipher _cipher;
+        protected IEncryptionInfoBuilder builder;
+        protected Encryptor encryptor;
         public Stream GetStream()
         {
             return out1;
         }
-        public ChunkedCipherOutputStream(DirectoryNode dir, int chunkSize)
+        public ChunkedCipherOutputStream(DirectoryNode dir, int chunkSize, IEncryptionInfoBuilder builder, Encryptor encryptor)
             : base(null)
         {
             this.chunkSize = chunkSize;
@@ -50,6 +52,8 @@ namespace NPOI.POIFS.Crypt
             //fileOut.DeleteOnExit();
             this.out1 = fileOut.Create();
             this.dir = dir;
+            this.builder = builder;
+            this.encryptor = encryptor;
             _cipher = InitCipherForBlock(null, 0, false);
         }
 
