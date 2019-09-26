@@ -141,6 +141,12 @@ namespace NPOI.POIFS.FileSystem
                 length += readBytes;
                 outStream.Write(buf, 0, readBytes);
             }
+
+            // If this is an empty document, write a single byte
+            //  to force a block allocation for this document
+            if (length == 0) outStream.Write(new byte[1] { 0 }, 0, 1);
+
+            // Tidy and return the length
             outStream.Close();
             return length;
         }

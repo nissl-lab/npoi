@@ -1324,7 +1324,6 @@ namespace TestCases.POIFS.FileSystem
             assertContentsMatches(main4106, normDoc);
         }
 
-        [Ignore("POI ignore")]
         [Test]
         public void WriteZeroLengthEntries()
         {
