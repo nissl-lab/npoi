@@ -146,7 +146,7 @@ namespace TestCases.POIFS.FileSystem
         /**
          * With heavily nested documents, ensure we still re-write the same
          */
-        [Test]
+        [Ignore("poi ignore")]
         public void TestHeavilyNestedReWrite()
         {
             //foreach (DirectoryNode root in openSSSample("ex42570-20305.xls", false))
