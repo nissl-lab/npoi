@@ -111,7 +111,23 @@ namespace NPOI.POIFS.FileSystem
 
             _property_table.StartBlock = (POIFSConstants.END_OF_CHAIN);
         }
-
+        /**
+         * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
+         *  creating from an <tt>InputStream</tt>. The File will be opened read-only</p>
+         *  
+         * <p>Note that with this constructor, you will need to call {@link #close()}
+         *  when you're done to have the underlying file closed, as the file is
+         *  kept open during normal operation to read the data out.</p> 
+         *  
+         * @param file the File from which to read the data
+         *
+         * @exception IOException on errors reading, or on invalid data
+         */
+        public NPOIFSFileSystem(FileInfo file)
+            : this(file, true)
+        {
+            
+        }
         /**
          * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
          *  creating from an <tt>InputStream</tt>.</p>
@@ -342,7 +358,13 @@ namespace NPOI.POIFS.FileSystem
             LongField signature = new LongField(HeaderBlockConstants._signature_offset, header);
 
             // Wind back those 8 bytes
-            inp.Position = 0;
+            if (inp is PushbackInputStream) {
+                PushbackInputStream pin = (PushbackInputStream)inp;
+                pin.Unread(header);
+            } else {
+                inp.Position = 0;
+            }
+            
 
             // Did it match the signature?
             return (signature.Value == HeaderBlockConstants._signature);

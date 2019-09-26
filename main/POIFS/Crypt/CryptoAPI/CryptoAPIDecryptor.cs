@@ -179,7 +179,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
 
         public override InputStream GetDataStream(DirectoryNode dir)
         {
-            POIFSFileSystem fsOut = new POIFSFileSystem();
+            NPOIFSFileSystem fsOut = new NPOIFSFileSystem();
             DocumentNode es = (DocumentNode)dir.GetEntry("EncryptedSummary");
             DocumentInputStream dis = dir.CreateDocumentInputStream(es);
             MemoryStream bos = new MemoryStream();
@@ -221,6 +221,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             
             bos.Seek(0, SeekOrigin.Begin); //bos.Reset();
             fsOut.WriteFileSystem(bos);
+            fsOut.Close();
             _length = bos.Length;
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.ToArray());
             throw new NotImplementedException("ByteArrayInputStream should be derived from InputStream");

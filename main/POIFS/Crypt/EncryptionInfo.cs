@@ -64,9 +64,10 @@ namespace NPOI.POIFS.Crypt
         /**
      * Opens for decryption
      */
-        //public EncryptionInfo(OPOIFSFileSystem fs) {
-        //   this(fs.Root);
-        //}
+        public EncryptionInfo(OPOIFSFileSystem fs)
+            : this(fs.Root)
+        {
+        }
         /**
      * Opens for decryption
      */

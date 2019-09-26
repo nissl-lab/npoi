@@ -1914,7 +1914,10 @@ namespace TestCases.HSSF.UserModel
         {
             try
             {
-                OpenSample("46904.xls");
+                //OpenSample("46904.xls");
+                OPOIFSFileSystem fs = new OPOIFSFileSystem(
+                    HSSFITestDataProvider.Instance.OpenWorkbookStream("46904.xls"));
+                new HSSFWorkbook(fs.Root, false);
                 Assert.Fail();
             }
             catch (NPOI.HSSF.OldExcelFormatException e)
@@ -1923,6 +1926,19 @@ namespace TestCases.HSSF.UserModel
                         "The supplied spreadsheet seems to be Excel"
                 ));
             }
+            // TODO Fix this to work with NPOIFS as well
+            /*
+                    try {
+                        NPOIFSFileSystem fs = new NPOIFSFileSystem(
+                                HSSFITestDataProvider.instance.openWorkbookStream("46904.xls"));
+                        new HSSFWorkbook(fs.getRoot(), false);
+                        fail();
+                    } catch(OldExcelFormatException e) {
+                        assertTrue(e.getMessage().startsWith(
+                                "The supplied spreadsheet seems to be Excel"
+                        ));
+                    }
+            */
         }
 
         /**

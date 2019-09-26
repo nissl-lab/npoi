@@ -1279,6 +1279,7 @@
     <Compile Include="Util\PngUtils.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
+    <Compile Include="Util\PushbackInputStream.cs" />
     <Compile Include="Util\PushbackStream.cs" />
     <Compile Include="Util\RecordFormatException.cs" />
     <Compile Include="Util\RuntimeException.cs" />

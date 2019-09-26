@@ -197,7 +197,21 @@ namespace NPOI.HSSF.UserModel
         {
 
         }
-
+        /**
+         * Given a POI POIFSFileSystem object, read in its Workbook along
+         *  with all related nodes, and populate the high and low level models.
+         * <p>This calls {@link #HSSFWorkbook(POIFSFileSystem, boolean)} with
+         *  preserve nodes set to true. 
+         * 
+         * @see #HSSFWorkbook(POIFSFileSystem, boolean)
+         * @see org.apache.poi.poifs.filesystem.POIFSFileSystem
+         * @exception IOException if the stream cannot be read
+         */
+        public HSSFWorkbook(NPOIFSFileSystem fs)
+            : this(fs.Root, true)
+        {
+            
+        }
         /// <summary>
         /// given a POI POIFSFileSystem object, Read in its Workbook and populate the high and
         /// low level models.  If you're Reading in a workbook...start here.

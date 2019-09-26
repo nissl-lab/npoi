@@ -61,7 +61,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 delegate1 = new ODocumentInputStream(document);
             }
-            else if (parentNode.FileSystem != null)
+            else if (parentNode.OFileSystem != null)
             {
                 delegate1 = new ODocumentInputStream(document);
             }

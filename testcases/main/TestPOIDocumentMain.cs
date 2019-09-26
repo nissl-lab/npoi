@@ -79,7 +79,7 @@ namespace TestCases
 
             // Create a new version
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.ToByteArray());
-            POIFSFileSystem inFS = new POIFSFileSystem(bais);
+            OPOIFSFileSystem inFS = new OPOIFSFileSystem(bais);
 
             // Check they're still there
             doc.SetDirectoryNode(inFS.Root);

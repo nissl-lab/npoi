@@ -67,6 +67,10 @@ namespace NPOI.POIFS.Crypt
 		{
 			return GetDataStream(fs.Root);
 		}
+        public OutputStream GetDataStream(OPOIFSFileSystem fs)
+        {
+            return GetDataStream(fs.Root);
+        }
 
         public OutputStream GetDataStream(POIFSFileSystem fs)
 		{

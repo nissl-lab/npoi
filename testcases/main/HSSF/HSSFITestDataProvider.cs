@@ -5,6 +5,7 @@ using TestCases.SS;
 using NPOI.HSSF.UserModel;
 using NPOI.SS;
 using NPOI.SS.UserModel;
+using System.IO;
 
 namespace TestCases.HSSF
 {
@@ -13,6 +14,10 @@ namespace TestCases.HSSF
         public IWorkbook OpenSampleWorkbook(String sampleFileName)
         {
             return HSSFTestDataSamples.OpenSampleWorkbook(sampleFileName);
+        }
+        public Stream OpenWorkbookStream(String sampleFileName)
+        {
+            return HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);
         }
 
         public IWorkbook WriteOutAndReadBack(IWorkbook original)

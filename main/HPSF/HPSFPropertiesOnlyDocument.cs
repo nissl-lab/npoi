@@ -35,6 +35,11 @@ namespace NPOI.HPSF
         {
 
         }
+        public HPSFPropertiesOnlyDocument(OPOIFSFileSystem fs)
+            : base(fs)
+        {
+            
+        }
         public HPSFPropertiesOnlyDocument(POIFSFileSystem fs)
             : base(fs)
         {

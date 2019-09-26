@@ -27,10 +27,40 @@
 
 namespace NPOI.Util
 {
+    using System;
     using System.IO;
+    using System.Runtime.Serialization;
 
     public class IOUtils
     {
+        /**
+         * Peeks at the first 8 bytes of the stream. Returns those bytes, but
+         *  with the stream unaffected. Requires a stream that supports mark/reset,
+         *  or a PushbackInputStream. If the stream has &gt;0 but &lt;8 bytes, 
+         *  remaining bytes will be zero.
+         * @throws EmptyFileException if the stream is empty
+         */
+        public static byte[] PeekFirst8Bytes(InputStream stream)
+        {
+            // We want to peek at the first 8 bytes
+            stream.Mark(8);
+
+            byte[] header = new byte[8];
+            int read = IOUtils.ReadFully(stream, header);
+
+            if (read < 1)
+                throw new EmptyFileException();
+
+            // Wind back those 8 bytes
+            if (stream is PushbackInputStream) {
+                PushbackInputStream pin = (PushbackInputStream)stream;
+                pin.Unread(header, 0, read);
+            } else {
+                stream.Reset();
+            }
+
+            return header;
+        }
         /// <summary>
         /// Reads all the data from the input stream, and returns
         /// the bytes Read.
@@ -125,6 +155,26 @@ namespace NPOI.Util
         {
             CRC32 sum = new CRC32();
             return (long)sum.ByteCRC(ref data);
+        }
+    }
+
+    [Serializable]
+    internal class EmptyFileException : IOException
+    {
+        public EmptyFileException()
+        {
+        }
+
+        public EmptyFileException(string message) : base(message)
+        {
+        }
+
+        public EmptyFileException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        protected EmptyFileException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

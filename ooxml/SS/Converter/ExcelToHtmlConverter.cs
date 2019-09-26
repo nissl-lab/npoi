@@ -115,7 +115,7 @@ namespace NPOI.SS.Converter
         }
         public static XmlDocument Process(string excelFile)
         {
-            IWorkbook workbook = WorkbookFactory.Create(excelFile);
+            IWorkbook workbook = WorkbookFactory.Create(excelFile, null);
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
             excelToHtmlConverter.ProcessWorkbook(workbook);
             return excelToHtmlConverter.Document;

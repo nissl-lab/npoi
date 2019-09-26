@@ -61,15 +61,28 @@ namespace NPOI
         {
             this.directory = dir;
         }
-
+        /**
+     * Constructs from an old-style OPOIFS
+     */
+        protected POIDocument(OPOIFSFileSystem fs)
+            : this(fs.Root)
+        {
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="POIDocument"/> class.
         /// </summary>
         /// <param name="fs">The fs.</param>
-        public POIDocument(POIFSFileSystem fs)
+        public POIDocument(NPOIFSFileSystem fs)
             : this(fs.Root) 
         {
             
+        }
+        /**
+     * Constructs from the default POIFS
+     */
+        protected POIDocument(POIFSFileSystem fs)
+            : this(fs.Root)
+        {
         }
         /**
          * Will create whichever of SummaryInformation

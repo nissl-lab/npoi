@@ -17,11 +17,14 @@
 
 using System;
 using System.IO;
+using NPOI.HSSF.Record.Crypto;
 using NPOI.HSSF.UserModel;
 using NPOI.OpenXml4Net.OPC;
+using NPOI.POIFS.Crypt;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
+using Org.BouncyCastle.Security;
 
 namespace NPOI.SS.UserModel
 {
@@ -63,7 +66,64 @@ namespace NPOI.SS.UserModel
         {
             return new HSSFWorkbook(fs.Root, true);
         }
+        /**
+     * Creates a Workbook from the given NPOIFSFileSystem, which may
+     *  be password protected
+     */
+        private static IWorkbook Create(NPOIFSFileSystem fs, string password)
+        {
+            DirectoryNode root = fs.Root;
 
+            // Encrypted OOXML files go inside OLE2 containers, is this one?
+            if (root.HasEntry(Decryptor.DEFAULT_POIFS_ENTRY))
+            {
+                EncryptionInfo info = new EncryptionInfo(fs);
+                Decryptor d = Decryptor.GetInstance(info);
+
+                bool passwordCorrect = false;
+                InputStream stream = null;
+                try
+                {
+                    if (password != null && d.VerifyPassword(password))
+                    {
+                        passwordCorrect = true;
+                    }
+                    if (!passwordCorrect && d.VerifyPassword(Decryptor.DEFAULT_PASSWORD))
+                    {
+                        passwordCorrect = true;
+                    }
+                    if (passwordCorrect)
+                    {
+                        stream = d.GetDataStream(root);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new IOException("error with encryption file", e);
+                }
+
+                if (!passwordCorrect)
+                {
+                    if (password != null)
+                        throw new EncryptedDocumentException("Password incorrect");
+                    else
+                        throw new EncryptedDocumentException("The supplied spreadsheet is protected, but no password was supplied");
+                }
+
+                OPCPackage pkg = OPCPackage.Open(stream);
+                return Create(pkg);
+            }
+
+            // If we get here, it isn't an encrypted XLSX file
+            // So, treat it as a regular HSSF XLS one
+            if (password != null)
+            {
+                Biff8EncryptionKey.CurrentUserPassword = (password);
+            }
+            IWorkbook wb = new HSSFWorkbook(root, true);
+            Biff8EncryptionKey.CurrentUserPassword = (null);
+            return wb;
+        }
         /// <summary>
         /// Creates an XSSFWorkbook from the given OOXML Package
         /// </summary>
@@ -71,16 +131,20 @@ namespace NPOI.SS.UserModel
         {
             return new XSSFWorkbook(pkg);
         }
-
+        public static IWorkbook Create(Stream inp)
+        {
+            return Create(inp, null);
+        }
         /// <summary>
         /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from
         /// the given InputStream. The Stream is wraped inside a PushbackInputStream.
         /// </summary>
         /// <param name="inputStream">Input Stream of .xls or .xlsx file</param>
+        /// <param name="password"></param>
         /// <returns>IWorkbook depending on the input HSSFWorkbook or XSSFWorkbook is returned.</returns>
         // Your input stream MUST either support mark/reset, or
         //  be wrapped as a {@link PushbackInputStream}!
-        public static IWorkbook Create(Stream inputStream)
+        public static IWorkbook Create(Stream inputStream, string password)
         {
             // If Clearly doesn't do mark/reset, wrap up
             //if (!inp.MarkSupported())
@@ -88,8 +152,13 @@ namespace NPOI.SS.UserModel
             //    inp = new PushbackInputStream(inp, 8);
             //}
             inputStream = new PushbackStream(inputStream);
+            // Ensure that there is at least some data there
+            //byte[] header8 = IOUtils.PeekFirst8Bytes(inputStream);
+
             if (POIFSFileSystem.HasPOIFSHeader(inputStream))
             {
+                //NPOIFSFileSystem fs = new NPOIFSFileSystem(inputStream);
+                //return Create(fs, password);
                 return new HSSFWorkbook(inputStream);
             }
             inputStream.Position = 0;
@@ -105,20 +174,22 @@ namespace NPOI.SS.UserModel
         * <p>Note that for Workbooks opened this way, it is not possible
         *  to explicitly close the underlying File resource.
         */
-        public static IWorkbook Create(string file)
+        public static IWorkbook Create(string file, string password)
         {
             if (!File.Exists(file))
             {
                 throw new FileNotFoundException(file);
             }
-            FileStream fStream = null;
+            FileInfo fInfo = new FileInfo(file);
             try
             {
-                using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
-                {
-                    IWorkbook wb = new HSSFWorkbook(fStream);
-                    return wb;
-                }
+                //using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                //{
+                //    IWorkbook wb = new HSSFWorkbook(fStream);
+                //    return wb;
+                //}
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(fInfo);
+                return Create(fs, password);
             }
             catch (OfficeXmlFileException e)
             {
@@ -158,7 +229,7 @@ namespace NPOI.SS.UserModel
         public static IWorkbook Create(Stream inputStream, ImportOption importOption)
         {
             SetImportOption(importOption);
-            IWorkbook workbook = Create(inputStream);
+            IWorkbook workbook = Create(inputStream, null);
             return workbook;
         }
 
