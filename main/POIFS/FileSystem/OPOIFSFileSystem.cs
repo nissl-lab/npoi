@@ -196,7 +196,17 @@ namespace NPOI.POIFS.FileSystem
             
             return (signature.Value == HeaderBlockConstants._signature);
         }
+        /**
+         * Checks if the supplied first 8 bytes of a stream / file
+         *  has a POIFS (OLE2) header.
+         */
+        public static bool HasPOIFSHeader(byte[] header8Bytes)
+        {
+            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header8Bytes);
 
+            // Did it match the signature?
+            return (signature.Value == HeaderBlockConstants._signature);
+        }
         /// <summary>
         /// Create a new document to be Added to the root directory
         /// </summary>
