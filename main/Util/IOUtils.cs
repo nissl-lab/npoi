@@ -113,7 +113,7 @@ namespace NPOI.Util
         public static void Copy(Stream inp, Stream out1)
         {
             byte[] buff = new byte[4096];
-            inp.Position = 0;
+            //inp.Position = 0;
             int count;
             while ((count = inp.Read(buff, 0, buff.Length)) >0)
             {

@@ -108,7 +108,7 @@ namespace NPOI.POIFS.Crypt.Standard
             return CryptoFunctions.GetCipher(key, em.CipherAlgorithm, cm, null, Cipher.DECRYPT_MODE);
         }
 
-        public override Stream GetDataStream(DirectoryNode dir) {
+        public override InputStream GetDataStream(DirectoryNode dir) {
             DocumentInputStream dis = dir.CreateDocumentInputStream(Encryptor.DEFAULT_POIFS_ENTRY);
 
             _length = dis.ReadLong();

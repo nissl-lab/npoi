@@ -169,11 +169,12 @@ namespace NPOI.POIFS.Crypt.Agile
             }
         }
 
-        public override Stream GetDataStream(DirectoryNode dir)
+        public override OutputStream GetDataStream(DirectoryNode dir)
         {
             // TODO: Initialize headers
             AgileCipherOutputStream countStream = new AgileCipherOutputStream(dir, builder, GetSecretKey(), this);
-            return countStream.GetStream();
+            //return countStream.GetStream();
+            throw new NotImplementedException("AgileCipherOutputStream should be derived from OutputStream");
         }
 
         /**

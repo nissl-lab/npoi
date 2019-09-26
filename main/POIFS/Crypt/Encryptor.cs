@@ -20,7 +20,8 @@ using NPOI.POIFS.FileSystem;
 
 namespace NPOI.POIFS.Crypt
 {
-	using System;
+    using NPOI.Util;
+    using System;
 
     public interface IKey
     {
@@ -50,7 +51,7 @@ namespace NPOI.POIFS.Crypt
 	 * @param dir the node to write to
 	 * @return encrypted stream
 	 */
-		public abstract Stream GetDataStream(DirectoryNode dir);
+		public abstract OutputStream GetDataStream(DirectoryNode dir);
 
 		// for tests
 		public abstract void ConfirmPassword(string password, byte[] keySpec, byte[] keySalt, byte[] verifier, byte[] verifierSalt , byte[] integritySalt);
@@ -62,17 +63,12 @@ namespace NPOI.POIFS.Crypt
 			return info.Encryptor;
 		}
 
-		public Stream GetDataStream(NPOIFSFileSystem fs)
+		public OutputStream GetDataStream(NPOIFSFileSystem fs)
 		{
 			return GetDataStream(fs.Root);
 		}
 
-		//public Stream GetDataStream(OPOIFSFileSystem fs)
-		//{
-		//    return GetDataStream(fs.Root);
-		//}
-
-		public Stream GetDataStream(POIFSFileSystem fs)
+        public OutputStream GetDataStream(POIFSFileSystem fs)
 		{
 			return GetDataStream(fs.Root);
 		}

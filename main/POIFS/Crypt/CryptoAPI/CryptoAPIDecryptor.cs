@@ -177,7 +177,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
          * @see <a href="http://msdn.microsoft.com/en-us/library/dd943321(v=office.12).aspx">2.3.5.4 RC4 CryptoAPI Encrypted Summary Stream</a>
          */
 
-        public override Stream GetDataStream(DirectoryNode dir)
+        public override InputStream GetDataStream(DirectoryNode dir)
         {
             POIFSFileSystem fsOut = new POIFSFileSystem();
             DocumentNode es = (DocumentNode)dir.GetEntry("EncryptedSummary");
@@ -222,8 +222,8 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             bos.Seek(0, SeekOrigin.Begin); //bos.Reset();
             fsOut.WriteFileSystem(bos);
             _length = bos.Length;
-            MemoryStream bis = new MemoryStream(bos.ToArray());
-            return bis;
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.ToArray());
+            throw new NotImplementedException("ByteArrayInputStream should be derived from InputStream");
         }
 
         /**

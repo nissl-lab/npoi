@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NPOI.Util
 {
-    public abstract class InputStream : IDisposable
+    public abstract class InputStream : Stream
     {
         // MAX_SKIP_BUFFER_SIZE is used to determine the maximum buffer size to
         // use when skipping.
@@ -121,7 +121,7 @@ namespace NPOI.Util
         /// <c>len</c> is negative, or <c>len</c> is greater than
         /// <c>b.length - off</c></exception>
         /// <see cref="Read()"/>
-        public virtual int Read(byte[] b, int off, int len)
+        public override int Read(byte[] b, int off, int len)
         {
             if (b == null)
             {
@@ -230,9 +230,9 @@ namespace NPOI.Util
         /// <p> This method should be overridden by subclasses.</p>
         /// </summary>
         /// <exception cref="IOException">if an I/O error occurs.</exception>
-        public virtual int Available
+        public virtual int Available()
         {
-            get { return 0; }
+            return 0;
         }
         /// <summary>
         /// Closes this input stream and releases any system resources associated
@@ -331,10 +331,6 @@ namespace NPOI.Util
         public virtual bool MarkSupported()
         {
             return false;
-        }
-        public void Dispose()
-        {
-            
         }
     }
 }

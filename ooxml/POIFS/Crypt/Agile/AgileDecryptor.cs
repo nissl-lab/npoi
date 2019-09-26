@@ -254,12 +254,13 @@ namespace NPOI.POIFS.Crypt.Agile
             }
         }
 
-        public override Stream GetDataStream(DirectoryNode dir) {
+        public override InputStream GetDataStream(DirectoryNode dir) {
             DocumentInputStream dis = dir.CreateDocumentInputStream(DEFAULT_POIFS_ENTRY);
             _length = dis.ReadLong();
 
             ChunkedCipherInputStream cipherStream = new AgileCipherInputStream(dis, _length, builder, this);
-            return cipherStream.GetStream();
+            throw new NotImplementedException("AgileCipherInputStream should be derived from InputStream");
+            //return cipherStream.GetStream();
         }
 
         public override long GetLength() {
@@ -281,17 +282,18 @@ namespace NPOI.POIFS.Crypt.Agile
             LittleEndian.PutInt(blockKey, 0, block);
             byte[] iv = GenerateIv(header.HashAlgorithm, header.KeySalt, blockKey, header.BlockSize);
 
-            //AlgorithmParameterSpec aps;
-            //if (header.CipherAlgorithm == CipherAlgorithm.rc2) {
-            //    aps = new RC2ParameterSpec(skey.Encoded.Length * 8, iv);
-            //} else {
-            //    aps = new IvParameterSpec(iv);
-            //}
+            AlgorithmParameterSpec aps;
+            if (header.CipherAlgorithm == CipherAlgorithm.rc2)
+            {
+                aps = new RC2ParameterSpec(skey.GetEncoded().Length * 8, iv);
+            }
+            else
+            {
+                aps = new IvParameterSpec(iv);
+            }
 
-            //existing.Init(encryptionMode, skey, aps);
-
-            //return existing;
-            throw new NotImplementedException();
+            existing.Init(encryptionMode, skey, aps);
+            return existing;
         }
 
         /**
@@ -310,11 +312,10 @@ namespace NPOI.POIFS.Crypt.Agile
          * unencrypted data as specified in section 2.3.4.4.
          */
         private class AgileCipherInputStream : ChunkedCipherInputStream {
-            IEncryptionInfoBuilder builder;
-            AgileDecryptor decryptor;
+
             public AgileCipherInputStream(DocumentInputStream stream, long size,
                 IEncryptionInfoBuilder builder, AgileDecryptor decryptor)
-                    : base(stream, size, 4096)
+                    : base(stream, size, 4096, builder, decryptor)
             {
                 this.builder = builder;
                 this.decryptor = decryptor;

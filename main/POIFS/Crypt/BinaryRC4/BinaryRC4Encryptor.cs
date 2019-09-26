@@ -94,10 +94,11 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             }
         }
 
-        public override Stream GetDataStream(DirectoryNode dir)
+        public override OutputStream GetDataStream(DirectoryNode dir)
         {
             Stream countStream = new BinaryRC4CipherOutputStream(dir, builder, this).out1;
-            return countStream;
+            throw new NotImplementedException("BinaryRC4CipherOutputStream should be derived from OutputStream");
+            //return countStream;
         }
 
         protected int GetKeySizeInBytes()

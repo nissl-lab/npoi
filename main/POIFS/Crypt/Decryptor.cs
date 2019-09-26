@@ -22,7 +22,7 @@ namespace NPOI.POIFS.Crypt
     using System;
 
     using NPOI.POIFS.FileSystem;
-
+    using NPOI.Util;
 
     public abstract class Decryptor
     {
@@ -49,7 +49,7 @@ namespace NPOI.POIFS.Crypt
      * @param dir the node to read from
      * @return decrypted stream
      */
-        public abstract Stream GetDataStream(DirectoryNode dir);
+        public abstract InputStream GetDataStream(DirectoryNode dir);
 
         public abstract bool VerifyPassword(String password);
 
@@ -80,15 +80,12 @@ namespace NPOI.POIFS.Crypt
             return d;
         }
 
-        public Stream GetDataStream(NPOIFSFileSystem fs)
+        public InputStream GetDataStream(NPOIFSFileSystem fs)
         {
             return GetDataStream(fs.Root);
         }
 
-        //public Stream GetDataStream(OPOIFSFileSystem fs)  {
-        //    return GetDataStream(fs.Root);
-        //}
-        public Stream GetDataStream(POIFSFileSystem fs)
+        public InputStream GetDataStream(POIFSFileSystem fs)
         {
             return GetDataStream(fs.Root);
         }

@@ -15,10 +15,10 @@ namespace NPOI.Util
         private long max;
 
         //the number of bytes already returned
-        private long pos = 0;
+        //private long pos = 0;
 
         //the marked position
-        private long mark = -1;
+        //private long mark = -1;
 
         // flag if close shoud be propagated
         //private bool propagateClose = true;
@@ -63,7 +63,7 @@ namespace NPOI.Util
             pos++;
             return result;
         }
-        public int Read(byte[] b)
+        public override int Read(byte[] b)
         {
             return this.Read(b, 0, b.Length);
         }
@@ -95,7 +95,6 @@ namespace NPOI.Util
         public override void Reset()
         {
             in1.Reset();
-            //in1.Seek(0, SeekOrigin.Begin);
             pos = mark;
         }
         public override void Mark(int readlimit)
@@ -105,8 +104,7 @@ namespace NPOI.Util
         }
         public override bool MarkSupported()
         {
-            return true;
-            //return in1.MarkSupported();
+            return in1.MarkSupported();
         }
         public bool IsPropagateClose { get; set; }
     }

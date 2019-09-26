@@ -147,6 +147,7 @@ namespace NPOI.POIFS.Crypt
             {
                 //bos.Reset();
                 bos.Seek(0, SeekOrigin.Begin);
+                bos.SetLength(0);
                 IOUtils.Copy(zis, bos);
                 Assert.AreEqual(ze.Size, bos.Length);
             }

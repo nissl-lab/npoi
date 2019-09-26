@@ -281,7 +281,7 @@ namespace NPOI.POIFS.Crypt
 
             Encryptor enc = info.Encryptor;
             enc.ConfirmPassword("password");
-            Stream os = enc.GetDataStream(fs);
+            OutputStream os = enc.GetDataStream(fs);
             pkg.Save(os);
             pkg.Revert();
 

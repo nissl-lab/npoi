@@ -30,7 +30,6 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
 
         private class BinaryRC4CipherInputStream : ChunkedCipherInputStream
         {
-            private Decryptor decryptor;
             protected override Cipher InitCipherForBlock(Cipher existing, int block)
             {
                 return BinaryRC4Decryptor.InitCipherForBlock(existing, block,
@@ -38,7 +37,7 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             }
 
             public BinaryRC4CipherInputStream(DocumentInputStream stream, long size, Decryptor decryptor)
-                : base(stream, size, 512)
+                : base(stream, size, 512, decryptor.builder, decryptor)
             {
                 this.decryptor = decryptor;
             }
@@ -122,12 +121,13 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             return skey;
         }
 
-        public override Stream GetDataStream(DirectoryNode dir)
+        public override InputStream GetDataStream(DirectoryNode dir)
         {
             DocumentInputStream dis = dir.CreateDocumentInputStream(DEFAULT_POIFS_ENTRY);
             _length = dis.ReadLong();
             BinaryRC4CipherInputStream cipherStream = new BinaryRC4CipherInputStream(dis, _length, this);
-            return cipherStream.GetStream();
+            //return cipherStream.GetStream();
+            throw new NotImplementedException("BinaryRC4CipherInputStream should be derived from InputStream");
         }
 
         public override long GetLength()

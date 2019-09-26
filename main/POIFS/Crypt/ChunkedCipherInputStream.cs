@@ -35,8 +35,10 @@ namespace NPOI.POIFS.Crypt
         private long _size;
         private byte[] _chunk;
         private Cipher _cipher;
-        
-        public ChunkedCipherInputStream(ILittleEndianInput stream, long size, int chunkSize)
+        protected IEncryptionInfoBuilder builder;
+        protected Decryptor decryptor;
+        public ChunkedCipherInputStream(ILittleEndianInput stream, long size, int chunkSize
+            , IEncryptionInfoBuilder builder, Decryptor decryptor)
             : base((Stream)stream)
         {
             
@@ -44,7 +46,8 @@ namespace NPOI.POIFS.Crypt
             this.chunkSize = chunkSize;
             chunkMask = chunkSize - 1;
             chunkBits = Number.BitCount(chunkMask);
-
+            this.builder = builder;
+            this.decryptor = decryptor;
             _cipher = InitCipherForBlock(null, 0);
         }
 

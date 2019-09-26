@@ -94,12 +94,13 @@ namespace NPOI.POIFS.Crypt.Standard
             return CryptoFunctions.GetCipher(key, ver.CipherAlgorithm, ver.ChainingMode, null, Cipher.ENCRYPT_MODE, padding);
         }
 
-        public override Stream GetDataStream(DirectoryNode dir)
+        public override OutputStream GetDataStream(DirectoryNode dir)
         {
             CreateEncryptionInfoEntry(dir);
             DataSpaceMapUtils.AddDefaultDataSpace(dir);
             Stream countStream = new StandardCipherOutputStream(dir, this);
-            return countStream;
+            //return countStream;
+            throw new NotImplementedException("StandardCipherOutputStream should be derived from OutputStream");
         }
 
         protected class StandardCipherOutputStream : ByteArrayOutputStream, POIFSWriterListener

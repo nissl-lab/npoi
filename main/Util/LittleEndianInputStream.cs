@@ -32,10 +32,6 @@ namespace NPOI.Util
     public class LittleEndianInputStream : ILittleEndianInput
     {
         Stream in1 = null;
-        public Stream GetStream()
-        {
-            return in1;
-        }
 
         /// <summary>
         /// Reads up to <code>byte.length</code> bytes of data from this

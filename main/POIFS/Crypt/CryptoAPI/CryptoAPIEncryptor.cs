@@ -95,7 +95,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
          * 
          * @see <a href="http://msdn.microsoft.com/en-us/library/dd943321(v=office.12).aspx">2.3.5.4 RC4 CryptoAPI Encrypted Summary Stream</a>
          */
-        public override Stream GetDataStream(DirectoryNode dir)
+        public override OutputStream GetDataStream(DirectoryNode dir)
         {
             CipherByteArrayOutputStream bos = new CipherByteArrayOutputStream(this);
             byte[] buf = new byte[8];
@@ -180,7 +180,8 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
                 throw new IOException(e.Message);
             }
 
-            return bos;
+            //return bos;
+            throw new NotImplementedException("CipherByteArrayOutputStream should be derived from OutputStream");
         }
 
         protected int GetKeySizeInBytes()
