@@ -170,12 +170,19 @@ namespace NPOI.OOXML
         {
             OPCPackage pkg = PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"));
             OPCParser doc = new OPCParser(pkg);
-            doc.Parse(new TestFactory());
-
-            foreach (POIXMLDocumentPart rel in doc.GetRelations())
+            try
             {
-                //TODO finish me
-                Assert.IsNotNull(rel);
+                doc.Parse(new TestFactory());
+
+                foreach (POIXMLDocumentPart rel in doc.GetRelations())
+                {
+                    //TODO finish me
+                    Assert.IsNotNull(rel);
+                }
+            }
+            finally
+            {
+                doc.Close();
             }
 
         }
