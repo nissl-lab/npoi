@@ -261,8 +261,10 @@ namespace NPOI.POIFS.FileSystem
                 toFree.Free(loopDetector);
 
                 // Mark the end of the stream
-                pStream.blockStore.SetNextBlock(prevBlock, POIFSConstants.END_OF_CHAIN);
-
+                if (prevBlock != POIFSConstants.END_OF_CHAIN)
+                {
+                    pStream.blockStore.SetNextBlock(prevBlock, POIFSConstants.END_OF_CHAIN);
+                }
                 base.Close();
             }
         }

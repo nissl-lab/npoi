@@ -29,6 +29,7 @@ using NPOI.POIFS.NIO;
 using NPOI.Util;
 using NPOI.POIFS.EventFileSystem;
 using NUnit.Framework.Constraints;
+using Property = NPOI.POIFS.Properties.Property;
 
 namespace TestCases.POIFS.FileSystem
 {
@@ -1322,6 +1323,9 @@ namespace TestCases.POIFS.FileSystem
 
             normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
             assertContentsMatches(main4106, normDoc);
+
+            // All done
+            fs.Close();
         }
         [Test]
         public void ReadZeroLengthEntries()
@@ -1351,6 +1355,9 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual("test-zero-", prop.Name.Substring(0, 10));
                 Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
             }
+
+            // All done
+            fs.Close();
         }
 
         [Test]
@@ -1399,6 +1406,41 @@ namespace TestCases.POIFS.FileSystem
             emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
             assertContentsMatches(empty, emptyDoc);
 
+            // Look at the properties entry, and check the empty ones
+            //  have zero size and no start block
+            NPropertyTable props = fs.PropertyTable;
+            IEnumerator<Property> propsIt = props.Root.Children;
+
+            propsIt.MoveNext();
+            Property prop = propsIt.Current;
+            Assert.AreEqual("Mini2", prop.Name);
+            Assert.AreEqual(0, prop.StartBlock);
+            Assert.AreEqual(7, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("Normal4106", prop.Name);
+            Assert.AreEqual(4, prop.StartBlock); // BAT, Props, SBAT, MIni
+            Assert.AreEqual(4106, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("empty-1", prop.Name);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            Assert.AreEqual(0, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("empty-2", prop.Name);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            Assert.AreEqual(0, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("empty-3", prop.Name);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            Assert.AreEqual(0, prop.Size);
+
             // Save and re-check
             fs = WriteOutAndReadBack(fs);
 
@@ -1416,6 +1458,9 @@ namespace TestCases.POIFS.FileSystem
 
             emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
             assertContentsMatches(empty, emptyDoc);
+
+            // All done
+            fs.Close();
         }
 
         /**
