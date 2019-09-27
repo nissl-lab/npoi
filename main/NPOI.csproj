@@ -1270,6 +1270,7 @@
     <Compile Include="Util\LittleEndianOutputStream.cs" />
     <Compile Include="Util\LittleEndian.cs" />
     <Compile Include="Util\LittleEndianConsts.cs" />
+    <Compile Include="Util\LocaleUtil.cs" />
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />

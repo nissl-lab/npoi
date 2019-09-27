@@ -235,6 +235,7 @@
     <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
     <Compile Include="SS\UserModel\Charts\TestDataSources.cs" />
+    <Compile Include="SS\UserModel\TestDateUtil.cs" />
     <Compile Include="SS\UserModel\TestFractionFormat.cs" />
     <Compile Include="SS\Util\TestSheetUtil.cs" />
     <Compile Include="TestPOIDocumentMain.cs" />
