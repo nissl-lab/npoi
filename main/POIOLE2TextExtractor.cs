@@ -33,16 +33,27 @@ namespace NPOI
     /// </remarks>
     public abstract class POIOLE2TextExtractor : POITextExtractor
     {
+        /** The POIDocument that's open */
+        protected POIDocument document;
+
         /// <summary>
         /// Creates a new text extractor for the given document
         /// </summary>
         /// <param name="document"></param>
         public POIOLE2TextExtractor(POIDocument document)
-            : base(document)
         {
-
+            this.document = document;
         }
-
+       
+        /// <summary>
+        /// Creates a new text extractor, using the same document as another
+        /// text extractor. Normally only used by properties extractors.
+        /// </summary>
+        /// <param name="otherExtractor"></param>
+        protected POIOLE2TextExtractor(POIOLE2TextExtractor otherExtractor)
+        {
+            this.document = otherExtractor.document;
+        }
         /// <summary>
         /// Returns the document information metadata for the document
         /// </summary>

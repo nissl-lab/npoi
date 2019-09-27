@@ -30,27 +30,6 @@ namespace NPOI
     /// @see org.apache.poi.hwpf.extractor.WordExtractor
     public abstract class POITextExtractor 
     {
-        /** The POIDocument that's open */
-        protected POIDocument document;
-
-        /// <summary>
-        /// Creates a new text extractor for the given document
-        /// </summary>
-        /// <param name="document">The document.</param>
-        public POITextExtractor(POIDocument document)
-        {
-            this.document = document;
-        }
-        /// <summary>
-        /// Creates a new text extractor, using the same
-        /// document as another text extractor. Normally
-        /// only used by properties extractors.
-        /// </summary>
-        /// <param name="otherExtractor">The other extractor.</param>
-        protected POITextExtractor(POITextExtractor otherExtractor)
-        {
-            this.document = otherExtractor.document;
-        }
 
         /// <summary>
         /// Retrieves all the text from the document.
