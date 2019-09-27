@@ -170,7 +170,11 @@ namespace NPOI.SS.UserModel
         }
         public static IWorkbook Create(string file)
         {
-            return Create(file, null);
+            return Create(file, null, false);
+        }
+        public static IWorkbook Create(string file, string password)
+        {
+            return Create(file, password, false);
         }
         /**
         * Creates the appropriate HSSFWorkbook / XSSFWorkbook from
@@ -178,7 +182,7 @@ namespace NPOI.SS.UserModel
         * <p>Note that for Workbooks opened this way, it is not possible
         *  to explicitly close the underlying File resource.
         */
-        public static IWorkbook Create(string file, string password)
+        public static IWorkbook Create(string file, string password, bool readOnly)
         {
             if (!File.Exists(file))
             {
@@ -192,13 +196,13 @@ namespace NPOI.SS.UserModel
                 //    IWorkbook wb = new HSSFWorkbook(fStream);
                 //    return wb;
                 //}
-                NPOIFSFileSystem fs = new NPOIFSFileSystem(fInfo);
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(fInfo, readOnly);
                 return Create(fs, password);
             }
             catch (OfficeXmlFileException e)
             {
                 // opening as .xls failed => try opening as .xlsx
-                OPCPackage pkg = OPCPackage.Open(file);
+                OPCPackage pkg = OPCPackage.Open(file, readOnly ? PackageAccess.READ : PackageAccess.READ_WRITE);
                 try
                 {
                     return new XSSFWorkbook(pkg);

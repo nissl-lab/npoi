@@ -66,7 +66,23 @@ namespace NPOI.SS
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
         }
+        [Test]
+        public void TestCreateReadOnly()
+        {
+            IWorkbook wb;
 
+            // POIFS -> hssf
+            wb = WorkbookFactory.Create(HSSFTestDataSamples.GetSampleFile(xls).FullName, null, true);
+            Assert.IsNotNull(wb);
+            Assert.IsTrue(wb is HSSFWorkbook);
+            wb.Close();
+
+            // Package -> xssf
+            wb = WorkbookFactory.Create(HSSFTestDataSamples.GetSampleFile(xlsx).FullName, null, true);
+            Assert.IsNotNull(wb);
+            Assert.IsTrue(wb is XSSFWorkbook);
+            wb.Close();
+        }
         /**
          * Creates the appropriate kind of Workbook, but
          *  Checking the mime magic at the start of the
