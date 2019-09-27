@@ -73,10 +73,10 @@ namespace TestCases.POIFS.FileSystem
             if (openedFSs == null) openedFSs = new List<NPOIFSFileSystem>();
             openedFSs.Add(nfs);
 
-            POIFSFileSystem ofs = null;
+            OPOIFSFileSystem ofs = null;
             try
             {
-                ofs = new POIFSFileSystem(inps[1]);
+                ofs = new OPOIFSFileSystem(inps[1]);
                 if (oldFails) Assert.Fail("POIFSFileSystem should have failed but didn't");
             }
             catch (Exception e)
