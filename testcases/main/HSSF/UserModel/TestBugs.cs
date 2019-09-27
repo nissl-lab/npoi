@@ -3276,5 +3276,26 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test53109()
+        {
+            HSSFWorkbook wb = OpenSample("53109.xls");
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test53109a()
+        {
+            HSSFWorkbook wb = OpenSample("com.aida-tour.www_SPO_files_maldives%20august%20october.xls");
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            wb.Close();
+        }
     }
 }
