@@ -48,14 +48,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("21600,21600", type.coordsize);
             Assert.AreEqual(202.0f, type.spt);
             Assert.AreEqual("m,l,21600r21600,l21600,xe", type.path2);
-            Assert.IsTrue(type.id.StartsWith("_x0000_"));
+            Assert.AreEqual("_x0000_t202", type.id);
             Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, type.path.gradientshapeok);
             Assert.AreEqual(ST_ConnectType.rect, type.path.connecttype);
 
             CT_Shape shape = vml.newCommentShape();
             Assert.AreEqual(3, items.Count);
             Assert.AreSame(items[2], shape);
-            Assert.IsTrue(shape.type.StartsWith("#_x0000_"));
+            Assert.AreEqual("#_x0000_t202", shape.type);
             Assert.AreEqual("position:absolute; visibility:hidden", shape.style);
             Assert.AreEqual("#ffffe1", shape.fillcolor);
             Assert.AreEqual(ST_InsetMode.auto, shape.insetmode);

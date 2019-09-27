@@ -63,7 +63,7 @@ namespace NPOI.XSSF.UserModel
         private static XmlQualifiedName QNAME_SHAPE_LAYOUT = new XmlQualifiedName("shapelayout", "urn:schemas-microsoft-com:office:office");
         private static XmlQualifiedName QNAME_SHAPE_TYPE = new XmlQualifiedName("shapetype", "urn:schemas-microsoft-com:vml");
         private static XmlQualifiedName QNAME_SHAPE = new XmlQualifiedName("shape", "urn:schemas-microsoft-com:vml");
-        
+        private static string COMMENT_SHAPE_TYPE_ID = "_x0000_t202"; // this ID value seems to have significance to Excel >= 2010; see https://issues.apache.org/bugzilla/show_bug.cgi?id=55409
         /**
          * regexp to parse shape ids, in VML they have weird form of id="_x0000_s1026"
          */
@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
         private static Regex ptrn_shapeTypeId = new Regex("_x0000_[tm](\\d+)");
 
         private ArrayList _items = new ArrayList();
-        private int _shapeTypeId=202;
+        private string _shapeTypeId;
         private int _shapeId = 1024;
         /**
          * Create a new SpreadsheetML Drawing
@@ -131,14 +131,15 @@ namespace NPOI.XSSF.UserModel
                 else if (nd.LocalName == QNAME_SHAPE_TYPE.Name)
                 {
                     CT_Shapetype st = CT_Shapetype.Parse(nd, nsmgr);
-                                        String typeid = st.id;
-                                        if (typeid != null)
-                    {
-                        MatchCollection m = ptrn_shapeTypeId.Matches(typeid);
-                        if (m.Count>0)
-                            _shapeTypeId = Math.Max(_shapeTypeId, int.Parse(m[0].Groups[1].Value));
-                    }
+                    //String typeid = st.id;
+                    //if (typeid != null)
+                    //{
+                    //    MatchCollection m = ptrn_shapeTypeId.Matches(typeid);
+                    //    if (m.Count>0)
+                    //        _shapeTypeId = Math.Max(_shapeTypeId, int.Parse(m[0].Groups[1].Value));
+                    //}
                     _items.Add(st);
+                    _shapeTypeId = st.id;
                 }
                 else if (nd.LocalName == QNAME_SHAPE.Name)
                 {
@@ -229,7 +230,8 @@ namespace NPOI.XSSF.UserModel
             _items.Add(layout);
 
             CT_Shapetype shapetype = new CT_Shapetype();
-            shapetype.id= "_x0000_t" + _shapeTypeId;
+            _shapeTypeId = COMMENT_SHAPE_TYPE_ID;
+            shapetype.id = _shapeTypeId;// "_x0000_t" + _shapeTypeId;
             shapetype.coordsize="21600,21600";
             shapetype.spt=202;
             //_shapeTypeId = 202;
@@ -246,7 +248,7 @@ namespace NPOI.XSSF.UserModel
             CT_Shape shape = new CT_Shape();
 
             shape.id = "_x0000_s" + (++_shapeId);
-            shape.type ="#_x0000_t" + _shapeTypeId;
+            shape.type ="#" + _shapeTypeId;
             shape.style="position:absolute; visibility:hidden";
             shape.fillcolor = ("#ffffe1");
             shape.insetmode = (ST_InsetMode.auto);
