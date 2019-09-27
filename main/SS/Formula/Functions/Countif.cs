@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Countif : Fixed2ArgFunction
     {
-        internal class CmpOp
+        public class CmpOp
         {
             public const int NONE = 0;
             public const int EQ = 1;
@@ -168,11 +168,11 @@ namespace NPOI.SS.Formula.Functions
                 }
             }
         }
-        internal abstract class MatcherBase : IMatchPredicate
+        public abstract class MatcherBase : IMatchPredicate
         {
             private CmpOp _operator;
 
-            protected MatcherBase(CmpOp operator1)
+            public MatcherBase(CmpOp operator1)
             {
                 _operator = operator1;
             }
@@ -205,7 +205,7 @@ namespace NPOI.SS.Formula.Functions
             public abstract bool Matches(ValueEval x);
         }
 
-        private class ErrorMatcher : MatcherBase
+        public class ErrorMatcher : MatcherBase
         {
 
             private int _value;
@@ -220,7 +220,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 get
                 {
-                    return ErrorConstants.GetText(_value);
+                    return FormulaError.ForInt(_value).String;
                 }
             }
 
@@ -232,6 +232,13 @@ namespace NPOI.SS.Formula.Functions
                     return Evaluate(testValue - _value);
                 }
                 return false;
+            }
+            public int Value
+            {
+                get
+                {
+                    return _value;
+                }
             }
         }
         private class NumberMatcher : MatcherBase
