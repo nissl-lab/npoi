@@ -243,11 +243,13 @@ namespace NPOI.POIFS.FileSystem
         /// return the filesystem that this belongs to
         /// TODO: Temporary workaround during #56791
         /// </summary>
-        public POIFSFileSystem FileSystem
+        public NPOIFSFileSystem FileSystem
         {
-            get { return (POIFSFileSystem)_oFilesSystem; }
+            get { return _nFilesSystem; }
         }
         /// <summary>
+        ///  If this is OPOIFS based, return the NPOIFSFileSystem
+        ///  that this belong to, otherwise Null if NPOIFS based
         /// return the filesystem that this belongs to
         /// </summary>
         public OPOIFSFileSystem OFileSystem
@@ -255,6 +257,8 @@ namespace NPOI.POIFS.FileSystem
             get { return _oFilesSystem; }
         }
         /// <summary>
+        /// If this is NPOIFS based, return the NPOIFSFileSystem
+        /// that this belong to, otherwise Null if OPOIFS based.
         /// return the filesystem that this belongs to
         /// </summary>
         public NPOIFSFileSystem NFileSystem

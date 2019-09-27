@@ -46,7 +46,7 @@ namespace NPOI.POIFS.FileSystem
     /// </summary>
     [Serializable]
     public class POIFSFileSystem :
-        OPOIFSFileSystem // TODO Temporary workaround during #56791
+        NPOIFSFileSystem // TODO Temporary workaround during #56791
         , POIFSViewable
     {
 
@@ -103,15 +103,15 @@ namespace NPOI.POIFS.FileSystem
         /// </returns>
         public static new bool HasPOIFSHeader(Stream inp){
 
-            return OPOIFSFileSystem.HasPOIFSHeader(inp);
+            return NPOIFSFileSystem.HasPOIFSHeader(inp);
         }
         /**
-     * Checks if the supplied first 8 bytes of a stream / file
-     *  has a POIFS (OLE2) header.
-     */
+         * Checks if the supplied first 8 bytes of a stream / file
+         *  has a POIFS (OLE2) header.
+         */
         public static new bool HasPOIFSHeader(byte[] header8Bytes)
         {
-            return OPOIFSFileSystem.HasPOIFSHeader(header8Bytes);
+            return NPOIFSFileSystem.HasPOIFSHeader(header8Bytes);
         }
 
     }
