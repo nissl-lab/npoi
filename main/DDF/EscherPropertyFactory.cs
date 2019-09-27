@@ -93,7 +93,7 @@ namespace NPOI.DDF
                         int leftover = data.Length - pos;
                         if (leftover < complexData.Length)
                         {
-                            throw new InvalidOperationException("Could not read complex escher property, lenght was " + complexData.length + ", but had only " +
+                            throw new InvalidOperationException("Could not read complex escher property, lenght was " + complexData.Length + ", but had only " +
                                     leftover + " bytes left");
                         }
                         Array.Copy(data, pos, complexData, 0, complexData.Length);

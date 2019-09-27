@@ -156,6 +156,7 @@ namespace TestCases.HSSF.UserModel
             row.RemoveCell(cell);
             Assert.AreEqual(-1, row.FirstCellNum);
             Assert.AreEqual(-1, row.LastCellNum);
+            workbook.Close();
         }
 
         [Test]
@@ -175,6 +176,7 @@ namespace TestCases.HSSF.UserModel
             row.Height = ((short)-1);
             Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
             Assert.AreEqual(row.RowRecord.BadFontHeight, false);
+            workbook.Close();
         }
     }
 }

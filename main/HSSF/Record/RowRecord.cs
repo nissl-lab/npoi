@@ -72,7 +72,7 @@ namespace NPOI.HSSF.Record
         {
             if (rowNumber < 0)
             {
-                throw new ArgumentException("Invalid row number " + rowNumber + " specified");
+                throw new ArgumentException("Invalid row number (" + rowNumber + ")");
             }
             field_1_row_number = rowNumber;
             //field_2_first_col = -1;

@@ -148,7 +148,8 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 // expected during successful Test
-                Assert.IsTrue(e.Message.StartsWith("Invalid row number (-1)"));
+                Assert.IsTrue(e.Message.StartsWith("Invalid row number (-1)"),
+                    "Did not find expected error message, had: " + e);
             }
 
             //Test high row bound
