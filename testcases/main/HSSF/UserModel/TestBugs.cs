@@ -42,6 +42,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.Extractor;
     using NPOI.HSSF.Record.Crypto;
+    using NPOI.HSSF;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -1920,25 +1921,24 @@ namespace TestCases.HSSF.UserModel
                 new HSSFWorkbook(fs.Root, false);
                 Assert.Fail();
             }
-            catch (NPOI.HSSF.OldExcelFormatException e)
+            catch (OldExcelFormatException e)
             {
                 Assert.IsTrue(e.Message.StartsWith(
                         "The supplied spreadsheet seems to be Excel"
                 ));
             }
-            // TODO Fix this to work with NPOIFS as well
-            /*
-                    try {
-                        NPOIFSFileSystem fs = new NPOIFSFileSystem(
-                                HSSFITestDataProvider.instance.openWorkbookStream("46904.xls"));
-                        new HSSFWorkbook(fs.getRoot(), false);
-                        fail();
-                    } catch(OldExcelFormatException e) {
-                        assertTrue(e.getMessage().startsWith(
-                                "The supplied spreadsheet seems to be Excel"
-                        ));
-                    }
-            */
+            
+            try {
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(
+                        HSSFITestDataProvider.Instance.OpenWorkbookStream("46904.xls"));
+                new HSSFWorkbook(fs.Root, false);
+                Assert.Fail();
+            } catch(OldExcelFormatException e) {
+                Assert.IsTrue(e.Message.StartsWith(
+                        "The supplied spreadsheet seems to be Excel"
+                ));
+            }
+            
         }
 
         /**

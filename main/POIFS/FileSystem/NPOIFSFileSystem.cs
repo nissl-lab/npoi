@@ -434,7 +434,7 @@ namespace NPOI.POIFS.FileSystem
             List<BATBlock> sbats = new List<BATBlock>();
             _mini_store = new NPOIFSMiniStore(this, _property_table.Root, sbats, _header);
             nextAt = _header.SBATStart;
-            for (int i = 0; i < _header.SBATCount; i++)
+            for (int i = 0; i < _header.SBATCount && nextAt != POIFSConstants.END_OF_CHAIN; i++)
             {
                 loopDetector.Claim(nextAt);
                 ByteBuffer fatData = GetBlockAt(nextAt);
