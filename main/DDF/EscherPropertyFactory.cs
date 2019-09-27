@@ -90,6 +90,12 @@ namespace NPOI.DDF
                     else
                     {
                         byte[] complexData = ((EscherComplexProperty)p).ComplexData;
+                        int leftover = data.Length - pos;
+                        if (leftover < complexData.Length)
+                        {
+                            throw new InvalidOperationException("Could not read complex escher property, lenght was " + complexData.length + ", but had only " +
+                                    leftover + " bytes left");
+                        }
                         Array.Copy(data, pos, complexData, 0, complexData.Length);
                         pos += complexData.Length;
                     }
