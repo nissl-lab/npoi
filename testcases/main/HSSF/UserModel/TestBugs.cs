@@ -350,7 +350,7 @@ namespace TestCases.HSSF.UserModel
          * Merged regions were being Removed from the parent in cloned sheets
          */
         [Test]
-        [Ignore("this test was not found in poi 3.8beta4")] 
+        [Ignore("this test was not found in poi 3.8beta4")]
         public void Test22720()
         {
             HSSFWorkbook workBook = new HSSFWorkbook();
@@ -1043,7 +1043,7 @@ namespace TestCases.HSSF.UserModel
 
             // Now Check the iterator
             int rowsSeen = 0;
-            for (IEnumerator i = s.GetRowEnumerator(); i.MoveNext(); )
+            for (IEnumerator i = s.GetRowEnumerator(); i.MoveNext();)
             {
                 IRow r = (IRow)i.Current;
                 Assert.IsNotNull(r);
@@ -1300,6 +1300,8 @@ namespace TestCases.HSSF.UserModel
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    )
             );
+
+            wb.Close();
         }
 
         /**
@@ -1504,6 +1506,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, r.FirstCellNum);
             Assert.AreEqual(5, r.LastCellNum); // last cell # + 1
             Assert.AreEqual(3, r.PhysicalNumberOfCells);
+
+            wb.Close();
         }
 
         /**
@@ -1918,7 +1922,7 @@ namespace TestCases.HSSF.UserModel
                 //OpenSample("46904.xls");
                 OPOIFSFileSystem fs = new OPOIFSFileSystem(
                     HSSFITestDataProvider.Instance.OpenWorkbookStream("46904.xls"));
-                new HSSFWorkbook(fs.Root, false);
+                new HSSFWorkbook(fs.Root, false).Close();
                 Assert.Fail();
             }
             catch (OldExcelFormatException e)
@@ -1927,18 +1931,28 @@ namespace TestCases.HSSF.UserModel
                         "The supplied spreadsheet seems to be Excel"
                 ));
             }
-            
-            try {
+
+            try
+            {
                 NPOIFSFileSystem fs = new NPOIFSFileSystem(
                         HSSFITestDataProvider.Instance.OpenWorkbookStream("46904.xls"));
-                new HSSFWorkbook(fs.Root, false);
-                Assert.Fail();
-            } catch(OldExcelFormatException e) {
+                try
+                {
+                    new HSSFWorkbook(fs.Root, false).Close();
+                    Assert.Fail();
+                }
+                finally
+                {
+                    fs.Close();
+                }
+            }
+            catch (OldExcelFormatException e)
+            {
                 Assert.IsTrue(e.Message.StartsWith(
                         "The supplied spreadsheet seems to be Excel"
                 ));
             }
-            
+
         }
 
         /**
@@ -2635,6 +2649,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
             Assert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);
             Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
+
+            workbook.Close();
         }
         [Test]
         public void Test50426()
@@ -2728,7 +2744,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("50939.xls");
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        
+
         /**
          * File with exactly 256 data blocks (+header block)
          *  shouldn't break on POIFS loading 
@@ -2913,6 +2929,8 @@ namespace TestCases.HSSF.UserModel
 
             HSSFSheet sh2 = wb.CloneSheet(0) as HSSFSheet;
             Assert.IsNotNull(sh2.DrawingPatriarch);
+
+            wb.Close();
         }
 
         [Test]
@@ -2922,6 +2940,7 @@ namespace TestCases.HSSF.UserModel
             wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
             Assert.AreEqual(wb.GetAllPictures().Count, 1);
 
+            wb.Close();
             wb = new HSSFWorkbook();
             wb = WriteOutAndReadBack((HSSFWorkbook)wb);
             Assert.AreEqual(wb.GetAllPictures().Count, 0);
@@ -2930,6 +2949,8 @@ namespace TestCases.HSSF.UserModel
 
             wb = WriteOutAndReadBack((HSSFWorkbook)wb);
             Assert.AreEqual(wb.GetAllPictures().Count, 1);
+
+            wb.Close();
         }
         [Test]
         public void Test46250()
@@ -2941,8 +2962,8 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch patriarch = (HSSFPatriarch)cSh.CreateDrawingPatriarch();
             HSSFTextbox tb = (HSSFTextbox)patriarch.Children[2];
 
-            tb.String=(new HSSFRichTextString("POI test"));
-            tb.Anchor=(new HSSFClientAnchor(0, 0, 0, 0, (short)0, 0, (short)10, 10));
+            tb.String = (new HSSFRichTextString("POI test"));
+            tb.Anchor = (new HSSFClientAnchor(0, 0, 0, 0, (short)0, 0, (short)10, 10));
 
             wb = WriteOutAndReadBack((HSSFWorkbook)wb);
         }
@@ -3093,12 +3114,15 @@ namespace TestCases.HSSF.UserModel
             IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             Assert.AreEqual(4, wbBack.NumberOfSheets);
 
-            //        OutputStream fOut = new FileOutputStream("/tmp/56325a.xls");
-            //        try {
-            //        	wb.Write(fOut);
-            //        } finally {
-            //        	fOut.Close();
-            //        }
+            FileStream fOut = new FileStream("c:\\temp\\56325a.xls", FileMode.Create, FileAccess.ReadWrite);
+            try
+            {
+                wb.Write(fOut);
+            }
+            finally
+            {
+                fOut.Close();
+            }
         }
 
 
@@ -3134,7 +3158,7 @@ namespace TestCases.HSSF.UserModel
             //assertEquals("'56737.xls'!NR_Global_B2", cRefWName.getCellFormula());
             // TODO This isn't right, but it's what we currently generate....
             Assert.AreEqual("NR_Global_B2", cRefWName.CellFormula);
-        
+
 
             // Try to Evaluate them
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
@@ -3297,5 +3321,41 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
+        [Test]
+        public void Test48043()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
+
+            wb.RemoveSheetAt(2);
+            wb.RemoveSheetAt(1);
+
+            //Sheet s = wb.createSheet("sheetname");
+            ISheet s = wb.GetSheetAt(0);
+            IRow row = s.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellFormula(
+                    "IF(AND(ISBLANK(A10)," +
+                    "ISBLANK(B10)),\"\"," +
+                    "CONCATENATE(A10,\"-\",B10))");
+
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            eval.EvaluateAll();
+
+            /*OutputStream out = new FileOutputStream("C:\\temp\\48043.xls");
+            try {
+              wb.write(out);
+            } finally {
+              out.close();
+            }*/
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+            wbBack.Close();
+
+            wb.Close();
+        }
+
     }
 }

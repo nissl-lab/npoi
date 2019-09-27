@@ -851,6 +851,217 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+
+        /**
+         * With HSSF, if you create a font, don't change it, and
+         *  create a 2nd, you really do get two fonts that you
+         *  can alter as and when you want.
+         * With XSSF, that wasn't the case, but this verfies
+         *  that it now is again
+         */
+        [Test]
+        public void Bug48718()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            int startingFonts = wb is HSSFWorkbook ? 4 : 1;
+
+            Assert.AreEqual(startingFonts, wb.NumberOfFonts);
+
+            // Get a font, and slightly change it
+            IFont a = wb.CreateFont();
+            Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
+            a.FontHeightInPoints = ((short)23);
+            Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
+
+            // Get two more, unchanged
+            /*Font b =*/
+            wb.CreateFont();
+            Assert.AreEqual(startingFonts + 2, wb.NumberOfFonts);
+            /*Font c =*/
+            wb.CreateFont();
+            Assert.AreEqual(startingFonts + 3, wb.NumberOfFonts);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug57430()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("Sheet1");
+
+            IName name1 = wb.CreateName();
+            name1.NameName = ("FMLA");
+            name1.RefersToFormula = ("Sheet1!$B$3");
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug56981()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICellStyle vertTop = wb.CreateCellStyle();
+            vertTop.VerticalAlignment = VerticalAlignment.Top;
+            ICellStyle vertBottom = wb.CreateCellStyle();
+            vertBottom.VerticalAlignment = VerticalAlignment.Bottom;
+            ISheet sheet = wb.CreateSheet("Sheet 1");
+            IRow row = sheet.CreateRow(0);
+            ICell top = row.CreateCell(0);
+            ICell bottom = row.CreateCell(1);
+            top.SetCellValue("Top");
+            top.CellStyle = (vertTop); // comment this out to get all bottom-aligned
+                                       // cells
+            bottom.SetCellValue("Bottom");
+            bottom.CellStyle = (vertBottom);
+            row.HeightInPoints = (85.75f); // make it obvious
+
+            /*FileOutputStream out = new FileOutputStream("c:\\temp\\56981.xlsx");
+            try {
+                wb.write(out);
+            } finally {
+                out.close();
+            }*/
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test57973()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            ICreationHelper factory = wb.GetCreationHelper();
+
+            ISheet sheet = wb.CreateSheet();
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = factory.CreateClientAnchor();
+
+            ICell cell0 = sheet.CreateRow(0).CreateCell(0);
+            cell0.SetCellValue("Cell0");
+
+            IComment comment0 = drawing.CreateCellComment(anchor);
+            IRichTextString str0 = factory.CreateRichTextString("Hello, World1!");
+            comment0.String = (str0);
+            comment0.Author = ("Apache POI");
+            cell0.CellComment = (comment0);
+
+            anchor = factory.CreateClientAnchor();
+            anchor.Col1=(1);
+            anchor.Col2=(1);
+            anchor.Row1=(1);
+            anchor.Row2=(1);
+            ICell cell1 = sheet.CreateRow(3).CreateCell(5);
+            cell1.SetCellValue("F4");
+            IComment comment1 = drawing.CreateCellComment(anchor);
+            IRichTextString str1 = factory.CreateRichTextString("Hello, World2!");
+            comment1.String = (str1);
+            comment1.Author = ("Apache POI");
+            cell1.CellComment=(comment1);
+
+            ICell cell2 = sheet.CreateRow(2).CreateCell(2);
+            cell2.SetCellValue("C3");
+
+            anchor = factory.CreateClientAnchor();
+            anchor.Col1=(2);
+            anchor.Col2=(2);
+            anchor.Row1=(2);
+            anchor.Row2=(2);
+
+            IComment comment2 = drawing.CreateCellComment(anchor);
+            IRichTextString str2 = factory.CreateRichTextString("XSSF can set cell comments");
+            //apply custom font to the text in the comment
+            IFont font = wb.CreateFont();
+            font.FontName = ("Arial");
+            font.FontHeightInPoints = ((short)14);
+            font.Boldweight = (short) FontBoldWeight.Bold;// (Font.BOLDWEIGHT_BOLD);
+            font.Color = (IndexedColors.Red.Index);
+            str2.ApplyFont(font);
+
+            comment2.String=(str2);
+            comment2.Author=("Apache POI");
+            comment2.Column=(2);
+            comment2.Row=(2);
+
+            wb.Close();
+        }
+
+        /**
+         * Ensures that XSSF and HSSF agree with each other,
+         *  and with the docs on when fetching the wrong
+         *  kind of value from a Formula cell
+         */
+        [Test]
+        public void Bug47815()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r = s.CreateRow(0);
+
+            // Setup
+            ICell cn = r.CreateCell(0, CellType.Numeric);
+            cn.SetCellValue(1.2);
+            ICell cs = r.CreateCell(1, CellType.String);
+            cs.SetCellValue("Testing");
+
+            ICell cfn = r.CreateCell(2, CellType.Formula);
+            cfn.SetCellFormula("A1");
+            ICell cfs = r.CreateCell(3, CellType.Formula);
+            cfs.SetCellFormula("B1");
+
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual(CellType.Numeric, fe.Evaluate(cfn).CellType);
+            Assert.AreEqual(CellType.String, fe.Evaluate(cfs).CellType);
+            fe.EvaluateFormulaCell(cfn);
+            fe.EvaluateFormulaCell(cfs);
+
+            // Now test
+            Assert.AreEqual(CellType.Numeric, cn.CellType);
+            Assert.AreEqual(CellType.String, cs.CellType);
+            Assert.AreEqual(CellType.Formula, cfn.CellType);
+            Assert.AreEqual(CellType.Numeric, cfn.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cfs.CellType);
+            Assert.AreEqual(CellType.String, cfs.CachedFormulaResultType);
+
+            // Different ways of retrieving
+            Assert.AreEqual(1.2, cn.NumericCellValue, 0);
+            try
+            {
+                var tmp = cn.RichStringCellValue;
+                Assert.Fail();
+            }
+            catch (Exception e) { }
+
+            Assert.AreEqual("Testing", cs.StringCellValue);
+            try
+            {
+                var tmp = cs.NumericCellValue;
+                Assert.Fail();
+            }
+            catch (Exception e) { }
+
+            Assert.AreEqual(1.2, cfn.NumericCellValue, 0);
+            try
+            {
+                var tmp = cfn.RichStringCellValue;
+                Assert.Fail();
+            }
+            catch (Exception e) { }
+
+            Assert.AreEqual("Testing", cfs.StringCellValue);
+            try
+            {
+                var tmp = cfs.NumericCellValue;
+                Assert.Fail();
+            }
+            catch (Exception e) { }
+
+            wb.Close();
+        }
     }
 
 }
