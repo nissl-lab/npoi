@@ -361,5 +361,12 @@ using NPOI.HSSF.Record.Crypto;
 
             Assert.IsTrue(text.Contains("ZIP"));
         }
+        [Test]
+        public void TestNullPointerException()
+        {
+            ExcelExtractor extractor = CreateExtractor("ar.org.apsme.www_Form%20Inscripcion%20Curso%20NO%20Socios.xls");
+            Assert.IsNotNull(extractor);
+            Assert.IsNotNull(extractor.Text);
+        }
     }
 }

@@ -28,12 +28,6 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFShapeFactory
     {
-        private const short OBJECT_TYPE_LINE = 1;
-        private const short OBJECT_TYPE_RECTANGLE = 2;
-        private const short OBJECT_TYPE_OVAL = 3;
-        private const short OBJECT_TYPE_ARC = 4;
-        private const short OBJECT_TYPE_PICTURE = 8;
-
         /**
          * build shape tree from escher container
          * @param container root escher container from which escher records must be taken
@@ -107,14 +101,21 @@ namespace NPOI.HSSF.UserModel
                         break;
                     case CommonObjectType.MicrosoftOfficeDrawing:
                         EscherOptRecord optRecord = (EscherOptRecord)container.GetChildById(EscherOptRecord.RECORD_ID);
-                        EscherProperty property = optRecord.Lookup(EscherProperties.GEOMETRY__VERTICES);
-                        if (null != property)
+                        if (optRecord == null)
                         {
-                            shape = new HSSFPolygon(container, objRecord, txtRecord);
+                            shape = new HSSFSimpleShape(container, objRecord, txtRecord);
                         }
                         else
                         {
-                            shape = new HSSFSimpleShape(container, objRecord, txtRecord);
+                            EscherProperty property = optRecord.Lookup(EscherProperties.GEOMETRY__VERTICES);
+                            if (null != property)
+                            {
+                                shape = new HSSFPolygon(container, objRecord, txtRecord);
+                            }
+                            else
+                            {
+                                shape = new HSSFSimpleShape(container, objRecord, txtRecord);
+                            }
                         }
                         break;
                     case CommonObjectType.Text:
