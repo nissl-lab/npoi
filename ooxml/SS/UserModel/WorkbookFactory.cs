@@ -168,6 +168,10 @@ namespace NPOI.SS.UserModel
             }
             throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
+        public static IWorkbook Create(string file)
+        {
+            return Create(file, null);
+        }
         /**
         * Creates the appropriate HSSFWorkbook / XSSFWorkbook from
         *  the given File, which must exist and be readable.

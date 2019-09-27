@@ -622,6 +622,15 @@ namespace NPOI.XSSF.UserModel
             XSSFRow prev = _rows.ContainsKey(rownum) ? _rows[rownum] : null;
             if (prev != null)
             {
+                // the Cells in an existing row are invalidated on-purpose, in order to clean up correctly, we
+                // need to call the remove, so things like ArrayFormulas and CalculationChain updates are done 
+                // correctly. 
+                // We remove the cell this way as the internal cell-list is changed by the remove call and 
+                // thus would cause ConcurrentModificationException otherwise
+                while (prev.FirstCellNum != -1)
+                {
+                    prev.RemoveCell(prev.GetCell(prev.FirstCellNum));
+                }
                 ctRow = prev.GetCTRow();
                 ctRow.Set(new CT_Row());
             }

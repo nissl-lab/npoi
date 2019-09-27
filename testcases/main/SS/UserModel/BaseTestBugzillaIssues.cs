@@ -679,7 +679,7 @@ namespace TestCases.SS.UserModel
             // Next up, SEARCH on its own
             cf.SetCellFormula("SEARCH(\"am\", A1)");
             cf = EvaluateCell(wb, cf);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+            Assert.AreEqual(FormulaError.VALUE.Code, cf.ErrorCellValue);
 
             cf.SetCellFormula("SEARCH(\"am\", B1)");
             cf = EvaluateCell(wb, cf);
@@ -687,11 +687,11 @@ namespace TestCases.SS.UserModel
 
             cf.SetCellFormula("SEARCH(\"am\", C1)");
             cf = EvaluateCell(wb, cf);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+            Assert.AreEqual(FormulaError.VALUE.Code, cf.ErrorCellValue);
 
             cf.SetCellFormula("SEARCH(\"am\", D1)");
             cf = EvaluateCell(wb, cf);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+            Assert.AreEqual(FormulaError.VALUE.Code, cf.ErrorCellValue);
 
 
             // Finally, bring it all together
@@ -805,7 +805,52 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(otherCellText, c1.StringCellValue);
             Assert.AreEqual(otherCellText, c2.StringCellValue);
         }
+        [Test]
+        public void Test56574OverwriteExistingRow()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
 
+            { // create the Formula-Cell
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellFormula("A2");
+            }
+
+            { // check that it is there now
+                IRow row = sheet.GetRow(0);
+
+                /* CTCell[] cArray = ((XSSFRow)row).getCTRow().getCArray();
+                 assertEquals(1, cArray.length);*/
+
+                ICell cell = row.GetCell(0);
+                Assert.AreEqual(CellType.Formula, cell.CellType);
+            }
+
+            { // overwrite the row
+                IRow row = sheet.CreateRow(0);
+                Assert.IsNotNull(row);
+            }
+
+            { // creating a row in place of another should remove the existing data,
+              // check that the cell is gone now
+                IRow row = sheet.GetRow(0);
+
+                /*CTCell[] cArray = ((XSSFRow)row).getCTRow().getCArray();
+                assertEquals(0, cArray.length);*/
+
+                ICell cell = row.GetCell(0);
+                Assert.IsNull(cell);
+            }
+
+            // the calculation chain in XSSF is empty in a newly created workbook, so we cannot check if it is correctly updated
+            /*assertNull(((XSSFWorkbook)wb).getCalculationChain());
+            assertNotNull(((XSSFWorkbook)wb).getCalculationChain().getCTCalcChain());
+            assertNotNull(((XSSFWorkbook)wb).getCalculationChain().getCTCalcChain().getCArray());
+            assertEquals(0, ((XSSFWorkbook)wb).getCalculationChain().getCTCalcChain().getCArray().length);*/
+
+            wb.Close();
+        }
     }
 
 }

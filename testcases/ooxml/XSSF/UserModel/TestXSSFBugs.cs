@@ -2606,7 +2606,113 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
+        [Test]
+        public void Test56574()
+        {
+            RunTest56574(false);
+            RunTest56574(true);
+        }
 
+        private void RunTest56574(bool CreateRow)
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56574.xlsx");
+
+            ISheet sheet = wb.GetSheet("Func");
+            Assert.IsNotNull(sheet);
+
+            Dictionary<String, Object[]> data;
+            data = new Dictionary<String, Object[]>();
+            data.Add("1", new Object[] { "ID", "NAME", "LASTNAME" });
+            data.Add("2", new Object[] { 2, "Amit", "Shukla" });
+            data.Add("3", new Object[] { 1, "Lokesh", "Gupta" });
+            data.Add("4", new Object[] { 4, "John", "Adwards" });
+            data.Add("5", new Object[] { 2, "Brian", "Schultz" });
+
+            var keyset = data.Keys;
+            int rownum = 1;
+            foreach (String key in keyset)
+            {
+                IRow row;
+                if (CreateRow)
+                {
+                    row = sheet.CreateRow(rownum++);
+                }
+                else
+                {
+                    row = sheet.GetRow(rownum++);
+                }
+                Assert.IsNotNull(row);
+
+                Object[] objArr = data[(key)];
+                int cellnum = 0;
+                foreach (Object obj in objArr)
+                {
+                    ICell cell = row.GetCell(cellnum);
+                    if (cell == null)
+                    {
+                        cell = row.CreateCell(cellnum);
+                    }
+                    else
+                    {
+                        if (cell.CellType == CellType.Formula)
+                        {
+                            cell.CellFormula = (/*setter*/null);
+                            cell.CellStyle.DataFormat = (/*setter*/(short)0);
+                        }
+                    }
+                    if (obj is String)
+                    {
+                        cell.SetCellValue((String)obj);
+                    }
+                    else if (obj is int)
+                    {
+                        cell.SetCellValue((int)obj);
+                    }
+                    cellnum++;
+                }
+            }
+
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells((XSSFWorkbook)wb);
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            CalculationChain chain = ((XSSFWorkbook)wb).GetCalculationChain();
+            CT_CalcCell[] cArray = chain.GetCTCalcChain().c.ToArray();
+            foreach (CT_CalcCell calc in cArray)
+            {
+                // A2 to A6 should be gone
+                Assert.IsFalse(calc.r.Equals("A2"));
+                Assert.IsFalse(calc.r.Equals("A3"));
+                Assert.IsFalse(calc.r.Equals("A4"));
+                Assert.IsFalse(calc.r.Equals("A5"));
+                Assert.IsFalse(calc.r.Equals("A6"));
+            }
+
+            /*FileOutputStream out1 = new FileOutputStream(new File("C:\\temp\\56574.xlsx"));
+            try {
+                wb.Write(out1);
+            } finally {
+                out1.Close();
+            }*/
+
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            ISheet sheetBack = wbBack.GetSheet("Func");
+            Assert.IsNotNull(sheetBack);
+
+            chain = ((XSSFWorkbook)wbBack).GetCalculationChain();
+            cArray = chain.GetCTCalcChain().c.ToArray();
+            foreach (CT_CalcCell calc in cArray)
+            {
+                // A2 to A6 should be gone
+                Assert.IsFalse(calc.r.Equals("A2"));
+                Assert.IsFalse(calc.r.Equals("A3"));
+                Assert.IsFalse(calc.r.Equals("A4"));
+                Assert.IsFalse(calc.r.Equals("A5"));
+                Assert.IsFalse(calc.r.Equals("A6"));
+            }
+
+            wbBack.Close();
+            wb.Close();
+        }
     }
 
 }
