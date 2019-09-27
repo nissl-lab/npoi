@@ -748,11 +748,11 @@ namespace NPOI.SS.Formula
             }
             if (part1.IsRow)
             {
-                return AreaReference.GetWholeRow(part1.Rep, part2.Rep);
+                return AreaReference.GetWholeRow(_ssVersion, part1.Rep, part2.Rep);
             }
             if (part1.IsColumn)
             {
-                return AreaReference.GetWholeColumn(part1.Rep, part2.Rep);
+                return AreaReference.GetWholeColumn(_ssVersion, part1.Rep, part2.Rep);
             }
             return new AreaReference(part1.CellReference, part2.CellReference);
         }

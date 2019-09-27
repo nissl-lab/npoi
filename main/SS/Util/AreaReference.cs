@@ -35,14 +35,22 @@ namespace NPOI.SS.Util
         private CellReference _firstCell;
         private CellReference _lastCell;
         private bool _isSingleCell;
+        private SpreadsheetVersion _version;
 
+        [Obsolete]
+        public AreaReference(String reference)
+            : this(reference, SpreadsheetVersion.EXCEL97)
+        {
+            
+        }
         /**
          * Create an area ref from a string representation.  Sheet names containing special Chars should be
          * delimited and escaped as per normal syntax rules for formulas.<br/> 
          * The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
          */
-        public AreaReference(String reference)
+        public AreaReference(String reference, SpreadsheetVersion version)
         {
+            _version = version;
             if (!IsContiguous(reference))
             {
                 throw new ArgumentException(
@@ -113,14 +121,14 @@ namespace NPOI.SS.Util
             }
             return true;
         }
-        public static AreaReference GetWholeRow(String start, String end)
+        public static AreaReference GetWholeRow(SpreadsheetVersion version, String start, String end)
         {
-            return new AreaReference("$A" + start + ":$IV" + end);
+            return new AreaReference("$A" + start + ":$" + version.LastColumnName + end, version);
         }
 
-        public static AreaReference GetWholeColumn(String start, String end)
+        public static AreaReference GetWholeColumn(SpreadsheetVersion version, String start, String end)
         {
-            return new AreaReference(start + "$1:" + end + "$65536");
+            return new AreaReference(start + "$1:" + end + "$" + version.MaxRows, version);
         }
 
 
@@ -212,13 +220,17 @@ namespace NPOI.SS.Util
          * is the reference for a whole-column reference,
          *  such as C:C or D:G ?
          */
-        public static bool IsWholeColumnReference(CellReference topLeft, CellReference botRight)
+        public static bool IsWholeColumnReference(SpreadsheetVersion version, CellReference topLeft, CellReference botRight)
         {
+            if (null == version)
+            {
+                version = SpreadsheetVersion.EXCEL97; // how the code used to behave.
+            }
             // These are represented as something like
             //   C$1:C$65535 or D$1:F$0
             // i.e. absolute from 1st row to 0th one
             if (topLeft.Row == 0 && topLeft.IsRowAbsolute &&
-                (botRight.Row == -1 || botRight.Row == 65535) && botRight.IsRowAbsolute)
+                (botRight.Row == version.LastRowIndex) && botRight.IsRowAbsolute)
             {
                 return true;
             }
@@ -226,7 +238,7 @@ namespace NPOI.SS.Util
         }
         public bool IsWholeColumnReference()
         {
-            return IsWholeColumnReference(_firstCell, _lastCell);
+            return IsWholeColumnReference(_version, _firstCell, _lastCell);
         }
 
         /**

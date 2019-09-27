@@ -270,7 +270,7 @@ namespace NPOI.SS.Formula.PTG
             CellReference topLeft = new CellReference(FirstRow, FirstColumn, !IsFirstRowRelative, !IsFirstColRelative);
             CellReference botRight = new CellReference(LastRow, LastColumn, !IsLastRowRelative, !IsLastColRelative);
 
-            if (AreaReference.IsWholeColumnReference(topLeft, botRight))
+            if (AreaReference.IsWholeColumnReference(SpreadsheetVersion.EXCEL97, topLeft, botRight))
             {
                 return (new AreaReference(topLeft, botRight)).FormatAsString();
             }

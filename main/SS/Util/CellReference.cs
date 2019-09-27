@@ -96,9 +96,9 @@ namespace NPOI.SS.Util
             {
                 throw new ArgumentException("Cell reference invalid: " + cellRef);
             }
-            String[] parts = SeparateRefParts(cellRef);
-            _sheetName = parts[0];
-            String colRef = parts[1];
+            CellRefPartsInner parts = SeparateRefParts(cellRef);
+            _sheetName = parts.sheetName;//parts[0];
+            String colRef = parts.colRef;// parts[1];
             //if (colRef.Length < 1)
             //{
             //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
@@ -117,9 +117,9 @@ namespace NPOI.SS.Util
             {
                 _colIndex = ConvertColStringToIndex(colRef);
             }
-            
 
-            String rowRef = parts[2];
+
+            String rowRef = parts.rowRef;// parts[2];
             //if (rowRef.Length < 1)
             //{
             //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
@@ -345,19 +345,32 @@ namespace NPOI.SS.Util
 
             return colRef.ToString();
         }
+        internal class CellRefPartsInner
+        {
+            public String sheetName;
+            public String rowRef;
+            public String colRef;
 
+            public CellRefPartsInner(String sheetName, String rowRef, String colRef)
+            {
+                this.sheetName = sheetName;
+                this.rowRef = rowRef;
+                this.colRef = colRef;
+            }
+        }
         /**
          * Separates the row from the columns and returns an array of three Strings.  The first element
          * is the sheet name. Only the first element may be null.  The second element in is the column 
          * name still in ALPHA-26 number format.  The third element is the row.
          */
-        private static String[] SeparateRefParts(String reference)
+        private static CellRefPartsInner SeparateRefParts(String reference)
         {
 
             int plingPos = reference.LastIndexOf(SHEET_NAME_DELIMITER);
             String sheetName = ParseSheetName(reference, plingPos);
             int start = plingPos + 1;
-
+            String row;
+            String col;
             int Length = reference.Length;
 
 
@@ -376,11 +389,15 @@ namespace NPOI.SS.Util
                     break;
                 }
             }
-            return new String[] {
-               sheetName,
-               reference.Substring(start,loc-start),
-               reference.Substring(loc),
-            };
+            col = reference.Substring(start, loc - start).ToUpper();
+            row = reference.Substring(loc);
+            CellRefPartsInner cellRefParts = new CellRefPartsInner(sheetName, row, col);
+            return cellRefParts;
+            //return new String[] {
+            //   sheetName,
+            //   reference.Substring(start,loc-start),
+            //   reference.Substring(loc),
+            //};
         }
 
         private static String ParseSheetName(String reference, int indexOfSheetNameDelimiter)
