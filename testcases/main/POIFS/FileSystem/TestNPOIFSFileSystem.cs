@@ -1323,6 +1323,35 @@ namespace TestCases.POIFS.FileSystem
             normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
             assertContentsMatches(main4106, normDoc);
         }
+        [Test]
+        public void ReadZeroLengthEntries()
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("only-zero-byte-streams.ole2"));
+            DirectoryNode testDir = fs.Root;
+            Assert.AreEqual(3, testDir.EntryCount);
+            DocumentEntry entry;
+
+            entry = (DocumentEntry)testDir.GetEntry("test-zero-1");
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(0, entry.Size);
+
+            entry = (DocumentEntry)testDir.GetEntry("test-zero-2");
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(0, entry.Size);
+
+            entry = (DocumentEntry)testDir.GetEntry("test-zero-3");
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(0, entry.Size);
+
+            // Check properties, all have zero length, no blocks
+            NPropertyTable props = fs.PropertyTable;
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, props.Root.StartBlock);
+            foreach (NPOI.POIFS.Properties.Property prop in props.Root)
+            {
+                Assert.AreEqual("test-zero-", prop.Name.Substring(0, 10));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            }
+        }
 
         [Test]
         public void WriteZeroLengthEntries()
