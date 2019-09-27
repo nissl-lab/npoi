@@ -61,7 +61,7 @@ namespace NPOI.SS.UserModel
         /// <param name="cal">the date</param>
         /// <param name="use1904windowing">if set to <c>true</c> [use1904windowing].</param>
         /// <returns>number of days since 1899/12/31</returns>
-        public static int AbsoluteDay(DateTime cal, bool use1904windowing)
+        public static int absoluteDay(DateTime cal, bool use1904windowing)
         {
             int daynum = (cal - new DateTime(1899, 12, 31)).Days;
             if (cal > new DateTime(1900, 3, 1) && use1904windowing)
@@ -69,6 +69,32 @@ namespace NPOI.SS.UserModel
                 daynum++;
             }
             return daynum;
+        }
+        public static int AbsoluteDay(DateTime cal, bool use1904windowing)
+        {
+            return cal.DayOfYear
+                   + DaysInPriorYears(cal.Year, use1904windowing);
+        }
+        /// <summary>
+        /// Return the number of days in prior years since 1900
+        /// </summary>
+        /// <param name="yr">a year (1900 &lt; yr &gt; 4000).</param>
+        /// <param name="use1904windowing"></param>
+        /// <returns>number of days in years prior to yr</returns>
+        private static int DaysInPriorYears(int yr, bool use1904windowing)
+        {
+            if ((!use1904windowing && yr < 1900) || (use1904windowing && yr < 1904))
+            {
+                throw new ArgumentException("'year' must be 1900 or greater");
+            }
+
+            int yr1 = yr - 1;
+            int leapDays = yr1 / 4   // plus julian leap days in prior years
+                           - yr1 / 100 // minus prior century years
+                           + yr1 / 400 // plus years divisible by 400
+                           - 460;      // leap days in previous 1900 years
+
+            return 365 * (yr - (use1904windowing ? 1904 : 1900)) + leapDays;
         }
         /// <summary>
         /// Given a Date, Converts it into a double representing its internal Excel representation,
@@ -265,7 +291,7 @@ namespace NPOI.SS.UserModel
          *   or false if using 1900 date windowing.
          *  @return Java representation of the date, or null if date is not a valid Excel date
          */
-        public static DateTime getJavaDate(double date, bool use1904windowing, TimeZone tz)
+        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZone tz)
         {
             return GetJavaCalendar(date, use1904windowing, false);
         }

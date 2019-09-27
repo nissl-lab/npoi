@@ -364,6 +364,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("DateFormats.xls");
             NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
             InternalWorkbook wb = workbook.Workbook;
+            Assert.IsNotNull(wb);
 
             IRow row;
             ICell cell;
@@ -477,6 +478,32 @@ namespace TestCases.HSSF.UserModel
             // 1 Jan 1901 is 366 days after 31 Dec 1899
             calendar = new DateTime(1901, 1, 1);
             Assert.AreEqual(366, DateUtil.AbsoluteDay(calendar, false), "Checking absolute day (1 Jan 1901)");
+        }
+
+        [Test]
+        public void AbsoluteDayYearTooLow()
+        {
+            DateTime calendar = new DateTime(1899, 1, 1);
+            try
+            {
+                HSSFDateUtil.AbsoluteDay(calendar, false);
+                Assert.Fail("Should fail here");
+            }
+            catch (ArgumentException e)
+            {
+                // expected here
+            }
+
+            try
+            {
+                calendar = new DateTime(1903, 1, 1);
+                HSSFDateUtil.AbsoluteDay(calendar, true);
+                Assert.Fail("Should fail here");
+            }
+            catch (ArgumentException e)
+            {
+                // expected here
+            }
         }
         [Test]
         public void TestConvertTime()
