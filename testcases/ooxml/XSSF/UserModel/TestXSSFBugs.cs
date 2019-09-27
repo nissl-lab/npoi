@@ -1132,14 +1132,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
 
-            XSSFPrintSetup ps1 = s1.PrintSetup as XSSFPrintSetup;
+            IPrintSetup ps1 = s1.PrintSetup;
             Assert.AreEqual(false, ps1.ValidSettings);
             Assert.AreEqual(false, ps1.Landscape);
 
 
             // Had valid print Settings before repeating
             XSSFSheet s2 = wb2.CreateSheet() as XSSFSheet;
-            XSSFPrintSetup ps2 = s2.PrintSetup as XSSFPrintSetup;
+            IPrintSetup ps2 = s2.PrintSetup;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
 
@@ -1149,7 +1149,7 @@ namespace NPOI.XSSF.UserModel
 
             wb2.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
 
-            ps2 = s2.PrintSetup as XSSFPrintSetup;
+            ps2 = s2.PrintSetup;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
             Assert.AreEqual(true, ps2.ValidSettings);
@@ -1390,7 +1390,7 @@ namespace NPOI.XSSF.UserModel
         public void Test51963()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
-            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            ISheet sheet = wb.GetSheetAt(0);
             Assert.AreEqual("Abc,1", sheet.SheetName);
 
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
@@ -1658,7 +1658,6 @@ namespace NPOI.XSSF.UserModel
          * SUMIF was throwing a NPE on some formulas
          */
         [Test]
-        [Ignore("This bug is still to be fixed")]
         public void TestBug56420SumIfNPE()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56420.xlsx");
@@ -1670,6 +1669,9 @@ namespace NPOI.XSSF.UserModel
             ICell c = r.GetCell(2);
             Assert.AreEqual("SUMIF($A$1:$A$4,A3,$B$1:$B$4)", c.CellFormula);
             evaluator.EvaluateInCell(c);
+
+            ICell eval = evaluator.EvaluateInCell(c);
+            Assert.AreEqual(0.0, eval.NumericCellValue, 0.0001);
         }
         private void bug53798Work(IWorkbook wb, FileInfo xlsOutput)
         {
