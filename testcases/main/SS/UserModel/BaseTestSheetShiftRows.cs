@@ -491,6 +491,16 @@ namespace TestCases.SS.UserModel
                 w.Close();
             }
         }
+        [Test]
+        public void Test47169()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            sheet.CreateRow(30);
+            sheet.ShiftRows(29, 29, 1, true, true);
+            sheet.CreateRow(30);
 
-    }
+            wb.Close();
+        }
+}
 }
