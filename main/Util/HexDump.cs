@@ -359,13 +359,16 @@ namespace NPOI.Util
         {
             StringBuilder buffer = new StringBuilder();
             buffer.Append('[');
-            for (int i = 0; i < value.Length; i++)
+            if (value != null && value.Length > 0)
             {
-                if (i > 0)
+                for (int i = 0; i < value.Length; i++)
                 {
-                    buffer.Append(", ");
+                    if (i > 0)
+                    {
+                        buffer.Append(", ");
+                    }
+                    buffer.Append(ToHex(value[i]));
                 }
-                buffer.Append(ToHex(value[i]));
             }
             buffer.Append(']');
             return buffer.ToString();
