@@ -1062,6 +1062,38 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+        [Test]
+        public void Test58113()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            // verify that null-values can be set, this was possible up to 3.11, but broken in 3.12 
+            cell.SetCellValue((String)null);
+            String value = cell.StringCellValue;
+            Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
+
+            cell = row.CreateCell(1);
+            // also verify that setting formulas to null works  
+            cell.SetCellType(CellType.Formula);
+            cell.SetCellValue((String)null);
+
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            value = cell.StringCellValue;
+            Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
+
+            // set some value
+            cell.SetCellType(CellType.String);
+            cell.SetCellValue("somevalue");
+            value = cell.StringCellValue;
+            Assert.IsTrue(value.Equals("somevalue"), "can set value afterwards: " + value);
+            // verify that the null-value is actually set even if there was some value in the cell before  
+            cell.SetCellValue((String)null);
+            value = cell.StringCellValue;
+            Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
+        }
     }
+    
 
 }
