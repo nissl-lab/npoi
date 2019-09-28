@@ -76,9 +76,10 @@ namespace TestCases.HSSF.Record
             name.RefersToFormula = (/*setter*/"Sheet1!$B$3");
             if (name.RefersToFormula.Equals("Sheet1!B3"))
             {
-                throw new AssertionException("Identified bug 46174");
+                Assert.Fail("Identified bug 46174");
             }
             Assert.AreEqual("Sheet1!$B$3", name.RefersToFormula);
+            wb.Close();
         }
         [Test]
         public void TestFormulaGeneral()
@@ -92,6 +93,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("Sheet1!A1+Sheet1!A2", name.RefersToFormula);
             name.RefersToFormula = (/*setter*/"5*6");
             Assert.AreEqual("5*6", name.RefersToFormula);
+            wb.Close();
         }
 
         /**
@@ -699,6 +701,24 @@ namespace TestCases.HSSF.Record
             Object[][] vals = arr.GetTokenArrayValues();
             Assert.AreEqual("1.T20.001", vals[0][0]);
             Assert.AreEqual("1.T20.010", vals[vals.Length - 1][0]);
+        }
+        [Test]
+        public void TestBug57923()
+        {
+            NameRecord record = new NameRecord();
+            Assert.AreEqual(0, record.ExternSheetNumber);
+
+            record.NameDefinition = (new Ptg[] { });
+            Assert.AreEqual(0, record.ExternSheetNumber);
+
+            record.NameDefinition = (new Ptg[] { new NamePtg(1) });
+            Assert.AreEqual(0, record.ExternSheetNumber);
+
+            record.NameDefinition = (new Ptg[] { new Area3DPtg("area", 1) });
+            Assert.AreEqual(1, record.ExternSheetNumber);
+
+            record.NameDefinition = (new Ptg[] { new Ref3DPtg("A1", 1) });
+            Assert.AreEqual(1, record.ExternSheetNumber);
         }
     }
 
