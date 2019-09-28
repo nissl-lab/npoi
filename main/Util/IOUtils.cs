@@ -156,6 +156,38 @@ namespace NPOI.Util
             CRC32 sum = new CRC32();
             return (long)sum.ByteCRC(ref data);
         }
+
+        /**
+         * Quietly (no exceptions) close Closable resource. In case of error it will
+         * be printed to {@link IOUtils} class logger.
+         * 
+         * @param closeable
+         *            resource to close
+         */
+        public static void CloseQuietly(Stream closeable )
+        {
+            try
+            {
+                closeable.Close();
+            }
+            catch (Exception exc)
+            {
+                //logger.log(POILogger.ERROR, "Unable to close resource: " + exc,
+                //        exc);
+            }
+        }
+        public static void CloseQuietly(IDisposable closeable)
+        {
+            try
+            {
+                closeable.Dispose();
+            }
+            catch (Exception exc)
+            {
+                //logger.log(POILogger.ERROR, "Unable to close resource: " + exc,
+                //        exc);
+            }
+        }
     }
 
     [Serializable]

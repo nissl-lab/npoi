@@ -32,6 +32,8 @@ using TestCases.SS.UserModel;
 using System.Text;
 using NPOI.SS.Util;
 using TestCases;
+using NPOI.SS;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -94,6 +96,7 @@ namespace NPOI.XSSF.UserModel
             // Links to the three sheets, shared strings and styles
             Assert.IsTrue(wbPart.HasRelationships);
             Assert.AreEqual(5, wbPart.Relationships.Size);
+            workbook.Close();
 
             // Load back the XSSFWorkbook
             workbook = new XSSFWorkbook(pkg);
@@ -760,7 +763,7 @@ namespace NPOI.XSSF.UserModel
             ICell cell9 = row3.CreateCell(2);
             cell9.SetCellValue("Bepa");
 
-            AreaReference source = new AreaReference("A1:B2");
+            AreaReference source = new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007);
             sheet.CreatePivotTable(source, new CellReference("H5"));
         }
 
@@ -835,6 +838,60 @@ namespace NPOI.XSSF.UserModel
             finally
             {
                 wb.Close();
+            }
+        }
+
+        /**
+         * Tests that we can save a workbook with macros and reload it.
+         */
+        [Test]
+        public void TestSetVBAProject()
+        {
+            XSSFWorkbook workbook = null;
+            Stream out1 = null;
+            FileInfo file;
+            byte[] allBytes = new byte[256];
+            for (int i = 0; i < 256; i++)
+            {
+                allBytes[i] = (byte)(i - 128);
+            }
+            try
+            {
+                workbook = new XSSFWorkbook();
+                workbook.CreateSheet();
+                workbook.SetVBAProject(new ByteArrayInputStream(allBytes));
+                file = TempFile.CreateTempFile("poi-", ".xlsm");
+                out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
+                workbook.Write(out1);
+            }
+            finally
+            {
+                IOUtils.CloseQuietly(out1);
+                IOUtils.CloseQuietly(workbook);
+            }
+            try
+            {
+                // Check the package contains what we'd expect it to
+                OPCPackage pkg = OPCPackage.Open(file);
+                PackagePart wbPart = pkg.GetPart(PackagingUriHelper.CreatePartName("/xl/workbook.xml"));
+                Assert.IsTrue(wbPart.HasRelationships);
+                PackageRelationshipCollection relationships = wbPart.Relationships.GetRelationships(XSSFRelation.VBA_MACROS.Relation);
+                Assert.AreEqual(1, relationships.Size);
+                Assert.AreEqual(XSSFRelation.VBA_MACROS.DefaultFileName, relationships.GetRelationship(0).TargetUri.ToString());
+                PackagePart vbaPart = pkg.GetPart(PackagingUriHelper.CreatePartName(XSSFRelation.VBA_MACROS.DefaultFileName));
+                Assert.IsNotNull(vbaPart);
+                Assert.IsFalse(vbaPart.IsRelationshipPart);
+                Assert.AreEqual(XSSFRelation.VBA_MACROS.ContentType, vbaPart.ContentType);
+                byte[] fromFile = IOUtils.ToByteArray(vbaPart.GetInputStream());
+                CollectionAssert.AreEqual(allBytes, fromFile);
+                // Load back the XSSFWorkbook just to check nothing explodes
+                workbook = new XSSFWorkbook(pkg);
+                Assert.AreEqual(1, workbook.NumberOfSheets);
+                Assert.AreEqual(XSSFWorkbookType.XLSM, workbook.WorkbookType);
+            }
+            finally
+            {
+                IOUtils.CloseQuietly(workbook);
             }
         }
 

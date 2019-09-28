@@ -32,6 +32,8 @@ using NPOI.XSSF.UserModel.Helpers;
 using NPOI.SS.Formula.Udf;
 using NPOI.OpenXmlFormats;
 using System.Collections;
+using NPOI.OpenXml4Net.Exceptions;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -165,7 +167,17 @@ namespace NPOI.XSSF.UserModel
          * Create a new SpreadsheetML workbook.
          */
         public XSSFWorkbook()
-            : base(newPackage())
+            : this(XSSFWorkbookType.XLSX)
+        { 
+            
+    }
+
+        /**
+         * Create a new SpreadsheetML workbook.
+         * @param workbookType The type of workbook to make (.xlsx or .xlsm).
+         */
+        public XSSFWorkbook(XSSFWorkbookType workbookType) :
+                base(newPackage(workbookType))
         {
 
             OnWorkbookCreate();
@@ -447,7 +459,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create a new SpreadsheetML namespace and Setup the default minimal content
          */
-        protected static OPCPackage newPackage()
+        protected static OPCPackage newPackage(XSSFWorkbookType workbookType)
         {
             try
             {
@@ -457,7 +469,7 @@ namespace NPOI.XSSF.UserModel
                 // Create main part relationship
                 pkg.AddRelationship(corePartName, TargetMode.Internal, PackageRelationshipTypes.CORE_DOCUMENT);
                 // Create main document part
-                pkg.CreatePart(corePartName, XSSFRelation.WORKBOOK.ContentType);
+                pkg.CreatePart(corePartName, workbookType.ContentType);
 
                 pkg.GetPackageProperties().SetCreatorProperty(DOCUMENT_CREATOR);
 
@@ -2097,12 +2109,79 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        public bool Dispose()
+        public new bool Dispose()
         {
             throw new NotImplementedException();
         }
 
+        public XSSFWorkbookType WorkbookType
+        {
+            get
+            {
+                return IsMacroEnabled() ? XSSFWorkbookType.XLSM : XSSFWorkbookType.XLSX;
+            }
+            set
+            {
+                try
+                {
+                    GetPackagePart().ContentType = (value.ContentType);
+                }
+                catch (InvalidFormatException e)
+                {
+                    throw new POIXMLException(e);
+                }
+            }
+        }
 
+
+        /**
+         * Adds a vbaProject.bin file to the workbook.  This will change the workbook
+         * type if necessary.
+         *
+         * @throws IOException
+         */
+        public void SetVBAProject(Stream vbaProjectStream)
+        {
+            if (!IsMacroEnabled()) {
+                WorkbookType = (XSSFWorkbookType.XLSM);
+            }
+
+            PackagePartName ppName;
+            try {
+                ppName = PackagingUriHelper.CreatePartName(XSSFRelation.VBA_MACROS.DefaultFileName);
+            } catch (InvalidFormatException e) {
+                throw new POIXMLException(e);
+            }
+            OPCPackage opc = Package;
+            Stream outputStream;
+            if (!opc.ContainPart(ppName)) {
+                POIXMLDocumentPart relationship = CreateRelationship(XSSFRelation.VBA_MACROS, XSSFFactory.GetInstance());
+                outputStream = relationship.GetPackagePart().GetOutputStream();
+            } else {
+                PackagePart part = opc.GetPart(ppName);
+                outputStream = part.GetOutputStream();
+            }
+            try {
+                IOUtils.Copy(vbaProjectStream, outputStream);
+            } finally {
+                IOUtils.CloseQuietly(outputStream);
+            }
+        }
+
+        /**
+         * Adds a vbaProject.bin file taken from another, given workbook to this one.
+         * @throws IOException
+         * @throws InvalidFormatException
+         */
+        public void SetVBAProject(XSSFWorkbook macroWorkbook) {
+            if (!macroWorkbook.IsMacroEnabled()) {
+                return;
+            }
+            Stream vbaProjectStream = XSSFRelation.VBA_MACROS.GetContents(macroWorkbook.CorePart);
+            if (vbaProjectStream != null) {
+                SetVBAProject(vbaProjectStream);
+            }
+        }
 
         #endregion
 

@@ -247,7 +247,7 @@ namespace NPOI.XSSF.UserModel
                 "application/vnd.ms-office.vbaProject",
                 "http://schemas.microsoft.com/office/2006/relationships/vbaProject",
                 "/xl/vbaProject.bin",
-                null
+                typeof(XSSFVBAPart)
         );
         public static XSSFRelation ACTIVEX_CONTROLS = new XSSFRelation(
                 "application/vnd.ms-office.activeX+xml",

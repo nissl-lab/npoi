@@ -643,10 +643,15 @@ namespace NPOI.OpenXml4Net.OPC
             set
             {
                 if (_container == null)
-                    this._contentType = new ContentType(value);
+                {
+                    _contentType = new ContentType(value);
+                }
                 else
-                    throw new InvalidOperationException(
-                            "You can't change the content type of a part.");
+                {
+                    _container.UnregisterPartAndContentType(_partName);
+                    _contentType = new ContentType(value);
+                    _container.RegisterPartAndContentType(this);
+                }
             }
         }
         /**

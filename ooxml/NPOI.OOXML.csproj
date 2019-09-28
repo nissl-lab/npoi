@@ -288,8 +288,10 @@
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextParagraph.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextRun.cs" />
+    <Compile Include="XSSF\UserModel\XSSFVBAPart.cs" />
     <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
+    <Compile Include="XSSF\UserModel\XSSFWorkbookType.cs" />
     <Compile Include="XSSF\Util\CTColComparator.cs" />
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />

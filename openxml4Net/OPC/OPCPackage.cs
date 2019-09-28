@@ -1708,6 +1708,34 @@ namespace NPOI.OpenXml4Net.OPC
             }
             return success;
         }
+
+        /**
+        * Add the specified part, and register its content type with the content
+        * type manager.
+        *
+        * @param part
+        *            The part to add.
+        */
+        public void RegisterPartAndContentType(PackagePart part)
+        {
+            AddPackagePart(part);
+            this.contentTypeManager.AddContentType(part.PartName, part.ContentType);
+            this.isDirty = true;
+        }
+
+        /**
+         * Remove the specified part, and clear its content type from the content
+         * type manager.
+         *
+         * @param partName
+         *            The part name of the part to remove.
+         */
+        public void UnregisterPartAndContentType(PackagePartName partName)
+        {
+            RemovePart(partName);
+            this.contentTypeManager.RemoveContentType(partName);
+            this.isDirty = true;
+        }
     }
 
 }
