@@ -27,8 +27,8 @@ namespace NPOI.HSSF.Record
 
     /**
      * Conditional Formatting Header record (CFHEADER)
-     * 
-     * @author Dmitriy Kumshayev
+     * Used to describe a {@link CFRuleRecord}.
+     * @see CFHeader12Record
      */
     public class CFHeaderRecord : StandardRecord
     {

@@ -44,7 +44,9 @@ namespace NPOI.HSSF.Record
     //}
     /**
      * Conditional Formatting Rule Record.
-     * @author Dmitriy Kumshayev
+     * <p>This is for the older-style Excel conditional formattings,
+     *  new-style (Excel 2007+) also make use of {@link CFRule12Record}
+     *  and {@link CFExRuleRecord} for their rules.
      */
     public class CFRuleRecord : StandardRecord
     {
