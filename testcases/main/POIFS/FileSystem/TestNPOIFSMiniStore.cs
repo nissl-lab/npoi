@@ -468,6 +468,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
 
+            // First 2 Mini blocks will be used
             Assert.AreEqual(2, ministore.GetFreeBlock());
 
             // Add one more mini-stream, and check
@@ -479,6 +480,7 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
 
+            // One more mini-block will be used
             Assert.AreEqual(3, ministore.GetFreeBlock());
 
             // Check the contents too

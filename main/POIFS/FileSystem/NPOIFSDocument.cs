@@ -141,6 +141,15 @@ namespace NPOI.POIFS.FileSystem
                 length += readBytes;
                 outStream.Write(buf, 0, readBytes);
             }
+            // Pad to the end of the block with -1s
+            int usedInBlock = length % _block_size;
+            if (usedInBlock != 0 && usedInBlock != _block_size)
+            {
+                int toBlockEnd = _block_size - usedInBlock;
+                byte[] padding = new byte[toBlockEnd];
+                Arrays.Fill(padding, (byte)0xFF);
+                outStream.Write(padding, 0, padding.Length);
+            }
 
             // Tidy and return the length
             outStream.Close();
