@@ -756,14 +756,14 @@ namespace TestCases.OPC
             //    // use values close to, but within the limits 
             //    ZipSecureFile.SetMinInflateRatio(min_ratio - 0.002);
             //    ZipSecureFile.SetMaxEntrySize(max_size + 1);
-            //    IWorkbook wb = WorkbookFactory.Create(file.FullName);
+            //    IWorkbook wb = WorkbookFactory.Create(file.FullName, null, true);
             //    wb.Close();
 
             //    // check ratio ouf of bounds
             //    ZipSecureFile.setMinInflateRatio(min_ratio + 0.002);
             //    try
             //    {
-            //        wb = WorkbookFactory.Create(file.FullName);
+            //        wb = WorkbookFactory.Create(file.FullName, null, true);
             //        wb.Close();
             //        // this is a bit strange, as there will be different exceptions thrown
             //        // depending if this executed via "ant test" or within eclipse
