@@ -409,6 +409,13 @@ namespace TestCases.HSSF.Record
             byte[] SerializedClone = clone.Serialize();
             Assert.That(SerializedRecord, new EqualConstraint(SerializedClone));
         }
-
+        [Test]
+        public void TestBug57231_rewrite()
+        {
+            HSSFWorkbook wb = HSSFITestDataProvider.Instance.OpenSampleWorkbook("57231_MixedGasReport.xls") as HSSFWorkbook;
+            Assert.AreEqual(7, wb.NumberOfSheets);
+            wb = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb) as HSSFWorkbook;
+            Assert.AreEqual(7, wb.NumberOfSheets);
+        }
     }
 }

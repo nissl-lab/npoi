@@ -135,6 +135,7 @@ namespace NPOI.HSSF.Record
 		        typeof(CFHeaderRecord),
                 typeof(CFHeader12Record),
                 typeof(CFRuleRecord),
+                typeof(CFRule12Record),
                 typeof(ChartRecord),
                 typeof(AlRunsRecord),
                 //typeof(CodeNameRecord),
