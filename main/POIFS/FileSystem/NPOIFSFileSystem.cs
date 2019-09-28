@@ -786,6 +786,10 @@ namespace NPOI.POIFS.FileSystem
          */
         private void syncWithDataSource()
         {
+            // Mini Stream + SBATs first, as mini-stream details have
+            //  to be stored in the Root Property
+            _mini_store.SyncWithDataSource();
+
             // Properties
             NPOIFSStream propStream = new NPOIFSStream(this, _header.PropertyStart);
             _property_table.PreWrite();
@@ -808,8 +812,6 @@ namespace NPOI.POIFS.FileSystem
                 ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
                 BlockAllocationTableWriter.WriteBlock(bat, block);
             }
-            // SBATs
-            _mini_store.SyncWithDataSource();
         }
 
         /**

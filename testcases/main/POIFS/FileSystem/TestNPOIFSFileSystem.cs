@@ -1454,6 +1454,9 @@ namespace TestCases.POIFS.FileSystem
             emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
             assertContentsMatches(empty, emptyDoc);
 
+            // Check that a mini-stream was assigned, with one block used
+            Assert.AreEqual(3, testDir.Property.StartBlock);
+            Assert.AreEqual(64, testDir.Property.Size);
             // All done
             fs.Close();
         }
