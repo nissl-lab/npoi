@@ -35,7 +35,7 @@ using NPOI.POIFS.Storage;
 using NPOI.POIFS.EventFileSystem;
 using NPOI.POIFS.Common;
 using NPOI.Util;
-
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -67,7 +67,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
         private PropertyTable _property_table;
-        private IList          _documents;
+        private IList<OPOIFSDocument>  _documents;
         private DirectoryNode _root;
         /**
  * What big block size the file uses. Most files
@@ -97,7 +97,7 @@ namespace NPOI.POIFS.FileSystem
         {
             HeaderBlock headerBlock = new HeaderBlock(bigBlockSize);
             _property_table = new PropertyTable(headerBlock);
-            _documents      = new ArrayList();
+            _documents      = new List<OPOIFSDocument>();
             _root           = null;
         }
 
@@ -272,7 +272,7 @@ namespace NPOI.POIFS.FileSystem
 
             // Create the small block store, and the SBAT
             SmallBlockTableWriter      sbtw       =
-                new SmallBlockTableWriter(bigBlockSize,_documents, _property_table.Root);
+                new SmallBlockTableWriter(bigBlockSize, _documents, _property_table.Root);
 
             // Create the block allocation table
             BlockAllocationTableWriter bat        =
@@ -280,7 +280,7 @@ namespace NPOI.POIFS.FileSystem
 
             // Create a list of BATManaged objects: the documents plus the
             // property table and the small block table
-            ArrayList bm_objects = new ArrayList();
+            List<object> bm_objects = new List<object>();
 
             bm_objects.AddRange(_documents);
             bm_objects.Add(_property_table);
@@ -333,7 +333,7 @@ namespace NPOI.POIFS.FileSystem
             // property table, the small block store, the small block
             // allocation table, the block allocation table, and the
             // extended block allocation table blocks)
-            ArrayList Writers = new ArrayList();
+            List<object> Writers = new List<object>();
 
             Writers.Add(header_block_Writer);
             Writers.AddRange(_documents);

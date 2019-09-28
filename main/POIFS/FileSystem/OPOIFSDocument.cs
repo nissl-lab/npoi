@@ -318,7 +318,7 @@ namespace NPOI.POIFS.FileSystem
         /// Gets the small blocks.
         /// </summary>
         /// <value>The small blocks.</value>
-        public virtual BlockWritable[] SmallBlocks
+        public virtual SmallDocumentBlock[] SmallBlocks
         {
             get
             {
