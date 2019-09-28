@@ -390,6 +390,25 @@ namespace NPOI.POIFS.Storage
             }
         }
 
+        /**
+         * How many sectors in this block are taken?
+         * Note that calling {@link #hasFreeSectors()} is much quicker
+         */
+        public int GetUsedSectors(bool isAnXBAT)
+        {
+            int usedSectors = 0;
+            int toCheck = _values.Length;
+            if (isAnXBAT) toCheck--; // Last is a chain location
+            for (int k = 0; k < toCheck; k++)
+            {
+                if (_values[k] != POIFSConstants.UNUSED_BLOCK)
+                {
+                    usedSectors++;
+                }
+            }
+            return usedSectors;
+        }
+
         public int GetValueAt(int relativeOffset)
         {
             if (relativeOffset >= _values.Length)
