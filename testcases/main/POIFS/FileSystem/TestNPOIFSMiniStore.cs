@@ -368,9 +368,9 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
             NPOIFSMiniStore ministore = fs.GetMiniStore();
 
-            // Initially has BAT + Properties but nothing else
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            // Initially has Properties + BAT but nothing else
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
             // Ministore has no blocks, so can't iterate until used
             try
@@ -388,8 +388,8 @@ namespace TestCases.POIFS.FileSystem
             fs.Root.CreateDocument("mini", new ByteArrayInputStream(data));
 
             // Should now have a mini-fat and a mini-stream
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
@@ -401,8 +401,8 @@ namespace TestCases.POIFS.FileSystem
             fs.Root.CreateDocument("mini2", new ByteArrayInputStream(data));
 
             // Main unchanged, ministore has a second
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));

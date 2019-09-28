@@ -98,18 +98,19 @@ namespace NPOI.POIFS.FileSystem
             : this(true)
         {
 
-            // Mark us as having a single empty BAT at offset 0
+            // Reserve block 0 for the start of the Properties Table
+            // Create a single empty BAT, at pop that at offset 1
             _header.BATCount = 1;
-            _header.BATArray = new int[] { 0 };
+            _header.BATArray = new int[] { 1 };
 
             BATBlock bb = BATBlock.CreateEmptyBATBlock(bigBlockSize, false);
-            bb.OurBlockIndex = 0;
+            bb.OurBlockIndex = 1;
             _bat_blocks.Add(bb);
 
-            SetNextBlock(0, POIFSConstants.FAT_SECTOR_BLOCK);
-            SetNextBlock(1, POIFSConstants.END_OF_CHAIN);
+            SetNextBlock(0, POIFSConstants.END_OF_CHAIN);
+            SetNextBlock(1, POIFSConstants.FAT_SECTOR_BLOCK);
 
-            _property_table.StartBlock = (POIFSConstants.END_OF_CHAIN);
+            _property_table.StartBlock = 0;
         }
         /**
          * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
