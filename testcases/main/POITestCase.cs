@@ -35,7 +35,22 @@ namespace TestCases
                   "Unable to find expected text '" + needle + "' in text:\n" + haystack
             );
         }
-
+        public static void AssertEquals<T>(T[] expected, T[] actual)
+        {
+            Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
+            }
+        }
+        public static void AssertEquals(byte[] expected, byte[] actual)
+        {
+            Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
+            }
+        }
         public static void AssertContains<T>(T needle, T[] haystack)
         {
             // Check
