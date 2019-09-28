@@ -27,6 +27,11 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Xml;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
+using System.Collections;
+using NPOI.SS.UserModel;
+using NPOI;
+
 namespace TestCases.OPC
 {
     [TestFixture]
@@ -387,8 +392,8 @@ namespace TestCases.OPC
         /**
          * TODO: fix and enable
          */
-        //[Test]
-        public void disabled_testRemovePartRecursive()
+        [Test, Ignore("by poi")]
+        public void TestRemovePartRecursive()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
             FileInfo targetFile = OpenXml4NetTestDataSamples.GetOutputFile("TestPackageRemovePartRecursiveOUTPUT.docx");
@@ -668,6 +673,160 @@ namespace TestCases.OPC
 
             Assert.False(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
             Assert.True(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
+        }
+
+        [Test, Ignore("need ZipSecureFile and ByteArrayOutputStream class")]
+        public void ZipBombCreateAndHandle()
+        {
+            // #50090 / #56865
+            ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ZipOutputStream append = new ZipOutputStream(bos);
+            // first, copy contents from existing war
+            IEnumerator entries = zipFile.GetEnumerator();
+            while (entries.MoveNext())
+            {
+                ZipEntry e2 = (ZipEntry)entries.Current;
+                ZipEntry e = new ZipEntry(e2.Name);
+                
+                e.DateTime = (e2.DateTime);
+                e.Comment = (e2.Comment);
+                e.Size = (e2.Size);
+
+                append.PutNextEntry(e);
+                if (!e.IsDirectory)
+                {
+                    Stream is1 = zipFile.GetInputStream(e);
+                    if (e.Name.Equals("[Content_Types].xml"))
+                    {
+                        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+                        IOUtils.Copy(is1, bos2);
+                        long size = bos2.Size() - "</Types>".Length;
+                        append.Write(bos2.ToByteArray(), 0, (int)size);
+                        byte[] spam = new byte[0x7FFF];
+                        for (int i = 0; i < spam.Length; i++) spam[i] = (byte)' ';
+                        while (size < 0x7FFF0000)
+                        {
+                            append.Write(spam, 0, spam.Length);
+                            size += spam.Length;
+                        }
+                        append.Write(Encoding.ASCII.GetBytes("</Types>"), 0, 8);
+                        size += 8;
+                        e.Size = (size);
+                    }
+                    else
+                    {
+                        IOUtils.Copy(is1, append);
+                    }
+                }
+                append.CloseEntry();
+            }
+
+            append.Close();
+            zipFile.Close();
+
+            byte[] buf = bos.ToByteArray();
+            bos = null;
+
+            IWorkbook wb = WorkbookFactory.Create(new ByteArrayInputStream(buf));
+            wb.GetSheetAt(0);
+            wb.Close();
+        }
+
+        [Test, Ignore("need ZipSecureFile class")]
+        public void ZipBombCheckSizes()
+        {
+            //FileInfo file = OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx");
+
+            //try
+            //{
+            //    double min_ratio = Double.MaxValue;
+            //    long max_size = 0;
+            //    ZipFile zf = ZipHelper.OpenZipFile(file);
+            //    IEnumerator entries = zf.GetEnumerator();
+            //    while (entries.MoveNext())
+            //    {
+            //        ZipEntry ze = (ZipEntry)entries.Current;
+            //        double ratio = (double)ze.CompressedSize / (double)ze.Size;
+            //        min_ratio = Math.Min(min_ratio, ratio);
+            //        max_size = Math.Max(max_size, ze.Size);
+            //    }
+            //    zf.Close();
+
+            //    // use values close to, but within the limits 
+            //    ZipSecureFile.SetMinInflateRatio(min_ratio - 0.002);
+            //    ZipSecureFile.SetMaxEntrySize(max_size + 1);
+            //    IWorkbook wb = WorkbookFactory.Create(file.FullName);
+            //    wb.Close();
+
+            //    // check ratio ouf of bounds
+            //    ZipSecureFile.setMinInflateRatio(min_ratio + 0.002);
+            //    try
+            //    {
+            //        wb = WorkbookFactory.Create(file.FullName);
+            //        wb.Close();
+            //        // this is a bit strange, as there will be different exceptions thrown
+            //        // depending if this executed via "ant test" or within eclipse
+            //        // maybe a difference in JDK ...
+            //    }
+            //    catch (InvalidDataException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+            //    catch (POIXMLException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+
+            //    // check max entry size ouf of bounds
+            //    ZipSecureFile.SetMinInflateRatio(min_ratio - 0.002);
+            //    ZipSecureFile.SetMaxEntrySize(max_size - 1);
+            //    try
+            //    {
+            //        wb = WorkbookFactory.Create(file.FullName, null, true);
+            //        wb.Close();
+            //    }
+            //    catch (InvalidDataException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+            //    catch (POIXMLException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+            //}
+            //finally
+            //{
+            //    // reset otherwise a lot of ooxml tests will fail
+            //    ZipSecureFile.SetMinInflateRatio(0.01d);
+            //    ZipSecureFile.SetMaxEntrySize(0xFFFFFFFFl);
+            //}
+        }
+
+        private void checkForZipBombException(Exception e)
+        {
+            //if (e is InvocationTargetException) {
+            //    InvocationTargetException t = (InvocationTargetException)e;
+            //    IOException t2 = (IOException)t.getTargetException();
+            //    if ("Zip bomb detected! Exiting.".Equals(t2.Message))
+            //    {
+            //        return;
+            //    }
+            //}
+
+            if ("Zip bomb detected! Exiting.".Equals(e.Message))
+            {
+                return;
+            }
+
+            // recursively check the causes for the message as it can be nested further down in the exception-tree
+            if (e.InnerException != null && e.InnerException != e)
+            {
+                checkForZipBombException(e.InnerException);
+                return;
+            }
+
+            throw new InvalidOperationException("Expected to catch an Exception because of a detected Zip Bomb, but did not find the related error message in the exception", e);
         }
     }
 }

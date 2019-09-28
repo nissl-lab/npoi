@@ -241,7 +241,7 @@ namespace NPOI.Util
         /// <p> The <c>Close</c> method of <c>InputStream</c> does nothing.</p>
         /// </summary>
         /// <exception cref="IOException">if an I/O error occurs.</exception>
-        public virtual void Close()
+        public override void Close()
         {
 
         }
