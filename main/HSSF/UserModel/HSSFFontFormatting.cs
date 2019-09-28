@@ -112,7 +112,7 @@ namespace NPOI.HSSF.UserModel
          */
         protected byte[] GetRawRecord()
         {
-            return fontFormatting.GetRawRecord();
+            return fontFormatting.RawRecord;
         }
 
         /**

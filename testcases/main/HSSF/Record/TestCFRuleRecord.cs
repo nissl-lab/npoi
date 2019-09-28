@@ -92,20 +92,34 @@ namespace TestCases.HSSF.Record
                 Assert.AreEqual(recordData[i], output[i + 4], "CFRuleRecord doesn't match");
             }
         }
+        [Test]
+        public void TestCreateCFRule12Record()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
+            CFRule12Record record = CFRule12Record.Create(sheet, "7");
+            testCFRule12Record(record);
+            // Serialize
+            byte[] serializedRecord = record.Serialize();
+            // Strip header
+            byte[] recordData = new byte[serializedRecord.Length - 4];
+            Array.Copy(serializedRecord, 4, recordData, 0, recordData.Length);
+            // Deserialize
+            record = new CFRule12Record(TestcaseRecordInputStream.Create(CFRule12Record.sid, recordData));
+            // Serialize again
+            byte[] output = record.Serialize();
+            // Compare
+            Assert.AreEqual(recordData.Length + 4, output.Length, "Output size"); //includes sid+recordlength
+            for (int i = 0; i < recordData.Length; i++)
+            {
+                Assert.AreEqual(recordData[i], output[i + 4], "CFRule12Record doesn't match");
+            }
+        }
 
         private void TestCFRuleRecord1(CFRuleRecord record)
         {
-            FontFormatting fontFormatting = new FontFormatting();
-            TestFontFormattingAccessors(fontFormatting);
-            Assert.IsFalse(record.ContainsFontFormattingBlock);
-            record.FontFormatting = (fontFormatting);
-            Assert.IsTrue(record.ContainsFontFormattingBlock);
-
-            BorderFormatting borderFormatting = new BorderFormatting();
-            TestBorderFormattingAccessors(borderFormatting);
-            Assert.IsFalse(record.ContainsBorderFormattingBlock);
-            record.BorderFormatting = (borderFormatting);
-            Assert.IsTrue(record.ContainsBorderFormattingBlock);
+            testCFRuleBase(record);
+            
 
             Assert.IsFalse(record.IsLeftBorderModified);
             record.IsLeftBorderModified = (true);
@@ -131,13 +145,6 @@ namespace TestCases.HSSF.Record
             record.IsBottomLeftTopRightBorderModified = (true);
             Assert.IsTrue(record.IsBottomLeftTopRightBorderModified);
 
-
-            PatternFormatting patternFormatting = new PatternFormatting();
-            TestPatternFormattingAccessors(patternFormatting);
-            Assert.IsFalse(record.ContainsPatternFormattingBlock);
-            record.PatternFormatting = (patternFormatting);
-            Assert.IsTrue(record.ContainsPatternFormattingBlock);
-
             Assert.IsFalse(record.IsPatternBackgroundColorModified);
             record.IsPatternBackgroundColorModified = (true);
             Assert.IsTrue(record.IsPatternBackgroundColorModified);
@@ -149,6 +156,32 @@ namespace TestCases.HSSF.Record
             Assert.IsFalse(record.IsPatternStyleModified);
             record.IsPatternStyleModified = (true);
             Assert.IsTrue(record.IsPatternStyleModified);
+        }
+        private void testCFRule12Record(CFRule12Record record)
+        {
+            Assert.AreEqual(CFRule12Record.sid, record.GetFutureRecordType());
+            Assert.AreEqual("A1", record.GetAssociatedRange().FormatAsString());
+            testCFRuleBase(record);
+        }
+        private void testCFRuleBase(CFRuleBase record)
+        {
+            FontFormatting fontFormatting = new FontFormatting();
+            TestFontFormattingAccessors(fontFormatting);
+            Assert.IsFalse(record.ContainsFontFormattingBlock);
+            record.FontFormatting = (fontFormatting);
+            Assert.IsTrue(record.ContainsFontFormattingBlock);
+
+            BorderFormatting borderFormatting = new BorderFormatting();
+            TestBorderFormattingAccessors(borderFormatting);
+            Assert.IsFalse(record.ContainsBorderFormattingBlock);
+            record.BorderFormatting = (borderFormatting);
+            Assert.IsTrue(record.ContainsBorderFormattingBlock);
+
+            PatternFormatting patternFormatting = new PatternFormatting();
+            TestPatternFormattingAccessors(patternFormatting);
+            Assert.IsFalse(record.ContainsPatternFormattingBlock);
+            record.PatternFormatting = (patternFormatting);
+            Assert.IsTrue(record.ContainsPatternFormattingBlock);
         }
 
         private void TestPatternFormattingAccessors(PatternFormatting patternFormatting)

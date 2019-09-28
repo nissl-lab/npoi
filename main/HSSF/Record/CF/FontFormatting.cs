@@ -135,11 +135,22 @@ namespace NPOI.HSSF.Record.CF
             LittleEndian.PutInt(_rawData, offset, value);
         }
 
-        public byte[] GetRawRecord()
+        public byte[] RawRecord
         {
-            return _rawData;
+            get
+            {
+                return _rawData;
+            }
+            
         }
-
+        public int DataLength
+        {
+            get
+            {
+                return RAW_DATA_SIZE;
+            }
+            
+        }
         /**
          * Gets the height of the font in 1/20th point Units
          *

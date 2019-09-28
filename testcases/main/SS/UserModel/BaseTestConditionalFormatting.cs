@@ -579,7 +579,33 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("\"A\"", rule5.Formula1);
             Assert.AreEqual("\"AAA\"", rule5.Formula2);
         }
+        
+        public void testReadOffice2007(String filename)
+        {
+            IWorkbook wb = _testDataProvider.OpenSampleWorkbook(filename);
+            ISheet s = wb.GetSheet("CF");
+            IConditionalFormatting cf = null;
 
+            // Sanity check data
+            Assert.AreEqual("Values", s.GetRow(0).GetCell(0).ToString());
+            Assert.AreEqual("10.0", s.GetRow(2).GetCell(0).ToString());
+
+            // Check we found all the conditional formattings rules we should have
+            ISheetConditionalFormatting sheetCF = s.SheetConditionalFormatting;
+            Assert.AreEqual(1, sheetCF.NumConditionalFormattings); // TODO Should be more!
+
+            cf = sheetCF.GetConditionalFormattingAt(0);
+            //System.out.println(cf);
+
+
+            // Check the rules / values in detail
+
+            // Highlight Positive values - Column C
+            // TODO
+
+            // Highlight 10-30 - Column D
+            // TODO
+        }
         [Test]
         public void TestCreateFontFormatting()
         {
