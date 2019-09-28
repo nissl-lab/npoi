@@ -54,11 +54,55 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(65535, enclosingCellRange.LastRow);
             Assert.AreEqual(0, enclosingCellRange.FirstColumn);
             Assert.AreEqual(6, enclosingCellRange.LastColumn);
+
+            Assert.AreEqual(false, record.NeedRecalculation);
+            Assert.AreEqual(0, record.ID);
+
             record.NeedRecalculation = (true);
-            Assert.IsTrue(record.NeedRecalculation);
+            Assert.AreEqual(true, record.NeedRecalculation);
+            Assert.AreEqual(0, record.ID);
+
+            record.ID = (7);
             record.NeedRecalculation = (false);
-            Assert.IsFalse(record.NeedRecalculation);
+            Assert.AreEqual(false, record.NeedRecalculation);
+            Assert.AreEqual(7, record.ID);
+
         }
+
+        [Test]
+        public void TestCreateCFHeader12Record()
+        {
+            CFHeader12Record record = new CFHeader12Record();
+            CellRangeAddress[] ranges = {
+            new CellRangeAddress(0,0xFFFF,5,5),
+            new CellRangeAddress(0,0xFFFF,6,6),
+            new CellRangeAddress(0,1,0,1),
+            new CellRangeAddress(0,1,2,3),
+            new CellRangeAddress(2,3,0,1),
+            new CellRangeAddress(2,3,2,3),
+        };
+            record.CellRanges = (ranges);
+            ranges = record.CellRanges;
+            Assert.AreEqual(6, ranges.Length);
+            CellRangeAddress enclosingCellRange = record.EnclosingCellRange;
+            Assert.AreEqual(0, enclosingCellRange.FirstRow);
+            Assert.AreEqual(65535, enclosingCellRange.LastRow);
+            Assert.AreEqual(0, enclosingCellRange.FirstColumn);
+            Assert.AreEqual(6, enclosingCellRange.LastColumn);
+            Assert.AreEqual(false, record.NeedRecalculation);
+            Assert.AreEqual(0, record.ID);
+
+            record.NeedRecalculation = (true);
+            Assert.AreEqual(true, record.NeedRecalculation);
+            Assert.AreEqual(0, record.ID);
+
+            record.ID = (7);
+            record.NeedRecalculation = (false);
+            Assert.AreEqual(false, record.NeedRecalculation);
+            Assert.AreEqual(7, record.ID);
+        }
+
+
         [Test]
         public void TestSerialization()
         {

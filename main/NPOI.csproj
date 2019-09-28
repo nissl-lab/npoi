@@ -162,6 +162,8 @@
     <Compile Include="HSSF\Record\Aggregates\Chart\ShapePropsAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\SSAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\TextPropsAggregate.cs" />
+    <Compile Include="HSSF\Record\CFHeader12Record.cs" />
+    <Compile Include="HSSF\Record\CFHeaderBase.cs" />
     <Compile Include="HSSF\Record\Chart\AlRunsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="HSSF\Record\Chart\SurfRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TextPropsStreamRecord.cs" />
     <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
+    <Compile Include="HSSF\Record\Common\FutureRecord.cs" />
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\DConRefRecord.cs" />
     <Compile Include="HSSF\Record\FtCfSubRecord.cs" />
