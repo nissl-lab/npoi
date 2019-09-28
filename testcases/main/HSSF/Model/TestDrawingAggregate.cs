@@ -193,7 +193,18 @@ namespace TestCases.HSSF.Model
             //        // Console.WriteLine("[WARN]  Cannot read " + file.GetName());
             //        continue;
             //    }
+            //try
+            //{
             //    assertWriteAndReadBack(wb);
+            //}
+            //catch (Exception e)
+            //{
+            //    String filename = file.getName();
+            //    System.out.println("Drawing Aggregate re-write test failed for " + filename);
+            //    e.printStackTrace(System.out);
+
+            //    fail("Error when writing and re-reading workbook " + filename + "\n" + e);
+            //}
             //}
         }
 
