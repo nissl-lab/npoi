@@ -750,6 +750,8 @@ namespace NPOI.HSSF.UserModel
             _sheet.RemoveMergedRegion(index);
         }
 
+
+
         /// <summary>
         /// returns the number of merged regions
         /// </summary>
@@ -2217,6 +2219,23 @@ namespace NPOI.HSSF.UserModel
         public CellRangeAddress GetMergedRegion(int index)
         {
             return _sheet.GetMergedRegionAt(index);
+        }
+
+        /// <summary>
+        /// get the list of merged regions
+        /// </summary>
+        /// <returns>return the list of merged regions</returns>
+        public List<CellRangeAddress> MergedRegions
+        {
+            get
+            {
+                List<CellRangeAddress> addresses = new List<CellRangeAddress>();
+                for (int i = 0; i < _sheet.NumMergedRegions; i++)
+                {
+                    addresses.Add(_sheet.GetMergedRegionAt(i));
+                }
+                return addresses;
+            }
         }
         /// <summary>
         /// Convert HSSFFont to Font.

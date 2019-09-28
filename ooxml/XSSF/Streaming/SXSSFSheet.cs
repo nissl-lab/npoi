@@ -307,6 +307,16 @@ namespace NPOI.XSSF.Streaming
             get { return _sh.NumMergedRegions; }
         }
 
+        /**
+         * Returns the list of merged regions. If you want multiple regions, this is
+         * faster than calling {@link #getMergedRegion(int)} each time.
+         *
+         * @return the list of merged regions
+         */
+        public List<CellRangeAddress> MergedRegions
+        {
+            get { return _sh.MergedRegions; }
+        }
         public PaneInformation PaneInformation
         {
             get { return _sh.PaneInformation; }

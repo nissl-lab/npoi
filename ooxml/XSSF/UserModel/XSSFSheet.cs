@@ -1215,6 +1215,32 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Returns the list of merged regions. If you want multiple regions, this is
+         * faster than calling {@link #getMergedRegion(int)} each time.
+         *
+         * @return the list of merged regions
+         * @throws IllegalStateException if this worksheet does not contain merged regions
+         */
+
+        public List<CellRangeAddress> MergedRegions
+        {
+            get
+            {
+                CT_MergeCells ctMergeCells = worksheet.mergeCells;
+                if (ctMergeCells == null) throw new NullReferenceException("This worksheet does not contain merged regions");
+
+                List<CellRangeAddress> addresses = new List<CellRangeAddress>();
+                foreach (CT_MergeCell ctMergeCell in ctMergeCells.mergeCell)
+                {
+                    String ref1 = ctMergeCell.@ref;
+                    addresses.Add(CellRangeAddress.ValueOf(ref1));
+                }
+                return addresses;
+            }
+
+        }
+
+        /**
          * Returns the number of merged regions defined in this worksheet
          *
          * @return number of merged regions in this worksheet

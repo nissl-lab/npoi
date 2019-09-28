@@ -242,7 +242,12 @@ namespace NPOI.SS.UserModel
         /// Returns the merged region at the specified index
         /// </summary>
         /// <param name="index">The index.</param>      
-        NPOI.SS.Util.CellRangeAddress GetMergedRegion(int index);
+        CellRangeAddress GetMergedRegion(int index);
+
+        /// <summary>
+        /// Returns the list of merged regions.
+        /// </summary>
+        List<CellRangeAddress> MergedRegions { get; }
 
         /// <summary>
         /// Gets the row enumerator.

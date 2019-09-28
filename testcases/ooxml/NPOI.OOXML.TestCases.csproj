@@ -196,6 +196,7 @@
     <Compile Include="XSSF\UserModel\TestXSSFRow.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheet.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetAutosizeColumn.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheetMergeRegions.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetRowGrouping.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetShiftRows.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetUpdateArrayFormulas.cs" />
