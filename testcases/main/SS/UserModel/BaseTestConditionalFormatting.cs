@@ -598,6 +598,7 @@ namespace TestCases.SS.UserModel
             ISheet s = wb.GetSheet("CF");
             IConditionalFormatting cf = null;
             IConditionalFormattingRule cr = null;
+            IIconMultiStateFormatting icon = null;
 
             // Sanity check data
             Assert.AreEqual("Values", s.GetRow(0).GetCell(0).ToString());
@@ -707,6 +708,28 @@ namespace TestCases.SS.UserModel
             // Colours R->G - Column F
             // Colours BWR - Column G
             // Icons : Default - Column H
+            cf = sheetCF.GetConditionalFormattingAt(5);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("H2:H17", cf.GetFormattingRanges()[0].FormatAsString());
+
+            Assert.AreEqual(1, cf.NumberOfRules);
+            cr = cf.GetRule(0);
+            Assert.AreEqual(ConditionType.IconSet, cr.ConditionTypeType);
+            Assert.AreEqual(ComparisonOperator.NoComparison, cr.ComparisonOperation);
+            Assert.AreEqual(null, cr.Formula1);
+            Assert.AreEqual(null, cr.Formula2);
+            if (cr is HSSFConditionalFormattingRule) {
+                HSSFConditionalFormattingRule hcr = (HSSFConditionalFormattingRule)cr;
+                icon = hcr.MultiStateFormatting;
+                Assert.IsNotNull(icon);
+                Assert.AreEqual(IconSet.GYR_3_TRAFFIC_LIGHTS, icon.IconSet);
+                Assert.AreEqual(false, icon.isIconOnly());
+                Assert.AreEqual(false, icon.isReversed());
+                // TODO Check the rest
+            } else {
+                // TODO XSSF Support
+            }
+
             // Icons : 3 signs - Column I
             // Icons : 3 traffic lights 2 - Column J
             // Icons : 4 traffic lights - Column K
@@ -906,6 +929,12 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(BorderStyle.Hair, r1fp.BorderRight);
 
         }
+
+        public void testCreateIconFormatting()
+        {
+            // TODO Implement for XSSF, then test here
+        }
+
         [Test]
         public void TestBug55380()
         {

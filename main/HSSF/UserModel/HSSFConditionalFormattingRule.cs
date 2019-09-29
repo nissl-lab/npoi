@@ -217,13 +217,21 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private String ToFormulaString(Ptg[] ParsedExpression)
+        protected internal String ToFormulaString(Ptg[] ParsedExpression)
         {
             if (ParsedExpression == null)
             {
                 return null;
             }
-            return HSSFFormulaParser.ToFormulaString(workbook, ParsedExpression);
+            return HSSFFormulaParser.ToFormulaString(this.workbook, ParsedExpression);
+        }
+        protected internal static String ToFormulaString(Ptg[] parsedExpression, HSSFWorkbook workbook)
+        {
+            if (parsedExpression == null || parsedExpression.Length == 0)
+            {
+                return null;
+            }
+            return HSSFFormulaParser.ToFormulaString(workbook, parsedExpression);
         }
     }
 }

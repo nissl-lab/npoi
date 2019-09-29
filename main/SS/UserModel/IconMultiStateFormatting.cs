@@ -8,10 +8,10 @@ namespace NPOI.SS.UserModel
     public interface IIconMultiStateFormatting
     {
 
-        /**
-         * Get the Icon Set used
-         */
-        IconSet getIconSet();
+        /// <summary>
+        ///Get or set the Icon Set used
+        /// </summary>
+        IconSet IconSet { get; set; }
 
         /**
          * Changes the Icon Set used
@@ -20,33 +20,26 @@ namespace NPOI.SS.UserModel
          *  icons to the old one, you <em>must</em> update the
          *  thresholds before saving!</p>
          */
-        void setIconSet(IconSet set);
 
         /**
          * Should Icon + Value be displayed, or only the Icon?
          */
-        bool isIconOnly();
-        /**
-         * Control if only the Icon is shown, or Icon + Value
-         */
-        void setIconOnly(bool only);
+        bool IsIconOnly { get; set; }
 
-        bool isReversed();
-        void setReversed(bool reversed);
-
+        bool IsReversed { get; set; }
         /**
          * Gets the list of thresholds
          */
-        IConditionalFormattingThreshold[] getThresholds();
         /**
-         * Sets the of thresholds. The number must match
-         *  {@link IconSet#num} for the current {@link #getIconSet()}
-         */
-        void setThresholds(IConditionalFormattingThreshold[] thresholds);
+        * Sets the of thresholds. The number must match
+        *  {@link IconSet#num} for the current {@link #getIconSet()}
+        */
+
+        IConditionalFormattingThreshold[] Thresholds { get; set; }
         /**
          * Creates a new, empty Threshold
          */
-        IConditionalFormattingThreshold createThreshold();
+        IConditionalFormattingThreshold CreateThreshold();
     }
 
     public class IconSet

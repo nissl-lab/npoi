@@ -60,23 +60,26 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        public byte getType()
+        public byte Type
         {
-            return type;
-        }
-        public void SetType(byte type)
-        {
-            this.type = type;
-
-            // Ensure the value presence / absence is consistent for the new type
-            if (type == RangeType.MIN.id || type == RangeType.MAX.id ||
-                   type == RangeType.FORMULA.id)
+            get
             {
-                this.value = null;
+                return type;
             }
-            else if (value == null)
+            set
             {
-                this.value = 0d;
+                this.type = value;
+
+                // Ensure the value presence / absence is consistent for the new type
+                if (type == RangeType.MIN.id || type == RangeType.MAX.id ||
+                       type == RangeType.FORMULA.id)
+                {
+                    this.value = null;
+                }
+                else if (this.value == null)
+                {
+                    this.value = 0d;
+                }
             }
         }
         public void SetType(int type)

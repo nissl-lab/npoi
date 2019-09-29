@@ -37,7 +37,7 @@ namespace NPOI.SS.UserModel
         /**
          * Get the Range Type used
          */
-        RangeType GetRangeType();
+        RangeType RangeType { get; set; }
 
         /**
          * Changes the Range Type used
@@ -46,25 +46,24 @@ namespace NPOI.SS.UserModel
          *  ensure that the Formula and Value parameters
          *  are compatible with it before saving</p>
          */
-        void SetRangeType(RangeType type);
+        
 
         /**
          * Formula to use to calculate the threshold,
          *  or <code>null</code> if no formula 
          */
-        String GetFormula();
+        String Formula { get; set; }
 
         /**
          * Sets the formula used to calculate the threshold,
          *  or unsets it if <code>null</code> is given.
          */
-        void SetFormula(String formula);
 
         /**
          * Gets the value used for the threshold, or 
          *  <code>null</code> if there isn't one.
          */
-        Double GetValue();
+        double Value { get; set; }
 
         /**
          * Sets the value used for the threshold. 
@@ -74,7 +73,6 @@ namespace NPOI.SS.UserModel
          *  or {@link RangeType#FORMULA} it shouldn't be Set.
          * <p>Use <code>null</code> to unset
          */
-        void SetValue(Double value);
     }
 }
 public class RangeType

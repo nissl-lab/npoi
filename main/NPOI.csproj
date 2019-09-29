@@ -227,6 +227,8 @@
     <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
+    <Compile Include="HSSF\UserModel\HSSFConditionalFormattingThreshold.cs" />
+    <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Decryptor.cs" />
