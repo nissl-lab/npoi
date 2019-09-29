@@ -214,11 +214,7 @@ namespace NPOI.XSSF.UserModel
             }
             foreach (byte c in rgb)
             {
-                int i = (int)c;
-                if (i < 0)
-                {
-                    i += 256;
-                }
+                int i = c & 0xff;
                 String cs = StringUtil.ToHexString(i);
                 if (cs.Length == 1)
                 {

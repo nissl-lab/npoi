@@ -35,7 +35,7 @@ namespace TestCases.SS.UserModel
      * @author Yegor Kozlov
      */
     [TestFixture]
-    public class BaseTestConditionalFormatting
+    public abstract class BaseTestConditionalFormatting
     {
         private ITestDataProvider _testDataProvider;
         public BaseTestConditionalFormatting()
@@ -46,6 +46,7 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
+        protected abstract void AssertColour(String hexExpected, IColor actual);
         [Test]
         public void TestBasic()
         {
@@ -654,9 +655,20 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(ComparisonOperator.GreaterThan, cr.ComparisonOperation);
             Assert.AreEqual("0", cr.Formula1);
             Assert.AreEqual(null, cr.Formula2);
-            //        assertColourGreen(cr);
-            // TODO Colour checking
-
+            // When it matches:
+            //   Sets the font colour to dark green
+            //   Sets the background colour to lighter green
+            // TODO Should the colours be slightly different between formats?
+            if (cr is HSSFConditionalFormattingRule)
+            {
+                AssertColour("0:8080:0", cr.GetFontFormatting().FontColor);
+                AssertColour("CCCC:FFFF:CCCC", cr.GetPatternFormatting().FillBackgroundColorColor);
+            }
+            else
+            {
+                AssertColour("006100", cr.GetFontFormatting().FontColor);
+                AssertColour("C6EFCE", cr.GetPatternFormatting().FillBackgroundColorColor);
+            }
 
             // Highlight 10-30 - Column D
             cf = sheetCF.GetConditionalFormattingAt(1);
@@ -669,9 +681,17 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(ComparisonOperator.Between, cr.ComparisonOperation);
             Assert.AreEqual("10", cr.Formula1);
             Assert.AreEqual("30", cr.Formula2);
-            //        assertColourGreen(cr);
-            //        assertColourRed(cr);
-            // TODO Colour checking
+            // When it matches:
+            //   Sets the font colour to dark red
+            //   Sets the background colour to lighter red
+            // TODO Should the colours be slightly different between formats?
+            if (cr is HSSFConditionalFormattingRule) {
+                AssertColour("8080:0:8080", cr.GetFontFormatting().FontColor);
+                AssertColour("FFFF:9999:CCCC", cr.GetPatternFormatting().FillBackgroundColorColor);
+            } else {
+                AssertColour("9C0006", cr.GetFontFormatting().FontColor);
+                AssertColour("FFC7CE", cr.GetPatternFormatting().FillBackgroundColorColor);
+            }
 
             // Data Bars - Column E
             cf = sheetCF.GetConditionalFormattingAt(2);

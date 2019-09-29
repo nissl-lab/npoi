@@ -35,7 +35,12 @@ namespace TestCases.HSSF.UserModel
     [TestFixture]
     public class TestHSSFConditionalFormatting : BaseTestConditionalFormatting
     {
-        
+        protected override void AssertColour(String hexExpected, IColor actual)
+        {
+            Assert.IsNotNull(actual, "Colour must be given");
+            HSSFColor colour = (HSSFColor)actual;
+            Assert.AreEqual(hexExpected, colour.GetHexString());
+        }
         [Test]
         public void TestReadOffice2007()
         {
