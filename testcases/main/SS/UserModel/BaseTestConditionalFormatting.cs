@@ -28,6 +28,7 @@ namespace TestCases.SS.UserModel
     using TestCases.SS;
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
+    using NPOI.HSSF.UserModel;
 
     /**
      * @author Dmitriy Kumshayev
@@ -579,33 +580,63 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("\"A\"", rule5.Formula1);
             Assert.AreEqual("\"AAA\"", rule5.Formula2);
         }
-        
-        public void testReadOffice2007(String filename)
+
+        protected void testReadOffice2007(String filename)
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(filename);
             ISheet s = wb.GetSheet("CF");
             IConditionalFormatting cf = null;
+            IConditionalFormattingRule cr = null;
 
             // Sanity check data
             Assert.AreEqual("Values", s.GetRow(0).GetCell(0).ToString());
-            Assert.AreEqual("10.0", s.GetRow(2).GetCell(0).ToString());
+            Assert.AreEqual("10", s.GetRow(2).GetCell(0).ToString());
+            //Assert.AreEqual("10.0", s.GetRow(2).GetCell(0).ToString());
 
             // Check we found all the conditional formattings rules we should have
             ISheetConditionalFormatting sheetCF = s.SheetConditionalFormatting;
-            Assert.AreEqual(1, sheetCF.NumConditionalFormattings); // TODO Should be more!
+            int numCF = 3;
+            int numCF12 = 15;
+            int numCFEX = 0; // TODO This should be 1, but we don't support CFEX formattings yet
+            Assert.AreEqual(numCF + numCF12 + numCFEX, sheetCF.NumConditionalFormattings);
 
-            cf = sheetCF.GetConditionalFormattingAt(0);
-            //System.out.println(cf);
+            int fCF = 0, fCF12 = 0, fCFEX = 0;
+            for (int i = 0; i < sheetCF.NumConditionalFormattings; i++)
+            {
+                cf = sheetCF.GetConditionalFormattingAt(i);
+                if (cf is HSSFConditionalFormatting)
+                {
+                    String str = cf.ToString();
+                    if (str.Contains("[CF]")) fCF++;
+                    if (str.Contains("[CF12]")) fCF12++;
+                    if (str.Contains("[CFEX]")) fCFEX++;
+                }
+                else
+                {
+                    Assert.Fail("TODO!");
+                }
+            }
+            Assert.AreEqual(numCF, fCF);
+            Assert.AreEqual(numCF12, fCF12);
+            Assert.AreEqual(numCFEX, fCFEX);
 
 
             // Check the rules / values in detail
 
             // Highlight Positive values - Column C
-            // TODO
+            cf = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("C2:C17", cf.GetFormattingRanges()[0].FormatAsString());
+
+            Assert.AreEqual(1, cf.NumberOfRules);
+            cr = cf.GetRule(0);
+            // TODO Check the rest of this
+
 
             // Highlight 10-30 - Column D
             // TODO
         }
+
         [Test]
         public void TestCreateFontFormatting()
         {
