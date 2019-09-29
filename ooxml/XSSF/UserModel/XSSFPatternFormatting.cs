@@ -44,13 +44,21 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
-                SetFillBackgroundColor(xcolor.GetCTColor());
+                if (value == null) SetFillBackgroundColor((CT_Color)null);
+                else SetFillBackgroundColor(xcolor.GetCTColor());
             }
         }
-        public void SetFillBackgroundColor(CT_Color color)
+        private void SetFillBackgroundColor(CT_Color color)
         {
             CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.patternFill : _fill.AddNewPatternFill();
-            ptrn.bgColor = (color);
+            if (color == null)
+            {
+                ptrn.UnsetBgColor();
+            }
+            else
+            {
+                ptrn.bgColor = (color);
+            }
         }
 
         public IColor FillForegroundColorColor
@@ -64,13 +72,21 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
-                SetFillForegroundColor(xcolor.GetCTColor());
+                if (value == null) SetFillForegroundColor((CT_Color)null);
+                else SetFillForegroundColor(xcolor.GetCTColor());
             }
         }
-        public void SetFillForegroundColor(CT_Color color)
+        private void SetFillForegroundColor(CT_Color color)
         {
             CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
-            ptrn.fgColor = (color);
+            if (color == null)
+            {
+                ptrn.UnsetFgColor();
+            }
+            else
+            {
+                ptrn.fgColor = (color);
+            }
         }
         public short FillBackgroundColor
         {
