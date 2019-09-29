@@ -377,15 +377,24 @@ namespace TestCases.SS.UserModel
 
             cell0.SetCellValue(longValue);
 
-            sheet.AutoSizeColumn(0);
 
             // autoSize will fail if required fonts are not installed, skip this test then
             IFont font = wb.GetFontAt(cell0.CellStyle.FontIndex);
             Assume.That(SheetUtil.CanComputeColumnWidht(font), 
                 "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
 
-            double width = SheetUtil.GetCellWidth(cell0, 8, null, false);
-            Assert.IsTrue(width > 0, "Expected to have cell width > 0 after auto-size, but had " + width);
+            Assert.AreEqual(0, cell0.CellStyle.Indention, "Expecting no indentation in this test");
+            double width = SheetUtil.GetColumnWidth(sheet, 0, false);
+            Assert.IsTrue(width > 0, "Expected to have column width > 0 BEFORE auto-size, but had " + width);
+            width = SheetUtil.GetCellWidth(cell0, 8, null, false);
+            Assert.IsTrue(width > 0, "Expected to have cell width > 0 BEFORE auto-size, but had " + width);
+
+            sheet.AutoSizeColumn(0);
+
+            width = SheetUtil.GetColumnWidth(sheet, 0, false);
+            Assert.IsTrue(width > 0, "Expected to have column width > 0 AFTER auto-size, but had " + width);
+            width = SheetUtil.GetCellWidth(cell0, 8, null, false);
+            Assert.IsTrue(width > 0, "Expected to have cell width > 0 AFTER auto-size, but had " + width);
 
 
             Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
