@@ -104,6 +104,16 @@ namespace TestCases.HSSF.Record
             String actual = in1.ReadString();
             Assert.AreEqual("Multilingual - \u591A\u8A00\u8A9E", actual);
         }
+
+        [Test]
+        public void TestLeftoverDataException()
+        {
+            // just ensure that the exception is created correctly, even with unknown sids
+            new LeftoverDataException(1, 200);
+            new LeftoverDataException(0, 200);
+            new LeftoverDataException(999999999, 200);
+            new LeftoverDataException(HeaderRecord.sid, 200);
+        }
     }
 
 }
