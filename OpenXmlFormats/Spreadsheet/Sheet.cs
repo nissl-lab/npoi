@@ -6271,6 +6271,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ret;
         }
 
+        public bool IsSetIconSet()
+        {
+            return this.iconSetField != null;
+        }
+
         [XmlElement]
         public List<string> formula
         {

@@ -197,6 +197,57 @@ namespace NPOI.XSSF.UserModel
             return new XSSFPatternFormatting(dxf.fill);
         }
 
+        public XSSFIconMultiStateFormatting CreateMultiStateFormatting(IconSet iconSet)
+        {
+            // Is it already there?
+            if (_cfRule.IsSetIconSet() && _cfRule.type == ST_CfType.iconSet)
+                return GetMultiStateFormatting();
+
+            // Mark it as being an Icon Set
+            _cfRule.type = (ST_CfType.iconSet);
+
+            // Ensure the right element
+            CT_IconSet icons = null;
+            if (_cfRule.IsSetIconSet())
+            {
+                icons = _cfRule.iconSet;
+            }
+            else
+            {
+                icons = _cfRule.AddNewIconSet();
+            }
+            // Set the type of the icon set
+            if (iconSet.name != null)
+            {
+                ST_IconSetType xIconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), iconSet.name);
+                icons.iconSet = (xIconSet);
+            }
+
+            // Add a default set of thresholds
+            int jump = 100 / iconSet.num;
+            ST_CfvoType type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.PERCENT.name);
+            for (int i = 0; i < iconSet.num; i++)
+            {
+                CT_Cfvo cfvo = icons.AddNewCfvo();
+                cfvo.type = (type);
+                cfvo.val = (i * jump).ToString();
+            }
+
+            // Wrap and return
+            return new XSSFIconMultiStateFormatting(icons);
+        }
+        public XSSFIconMultiStateFormatting GetMultiStateFormatting()
+        {
+            if (_cfRule.IsSetIconSet())
+            {
+                CT_IconSet icons = _cfRule.iconSet;
+                return new XSSFIconMultiStateFormatting(icons);
+            }
+            else
+            {
+                return null;
+            }
+        }
         /**
          * Type of conditional formatting rule.
          * <p>

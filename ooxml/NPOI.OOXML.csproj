@@ -263,6 +263,7 @@
     <Compile Include="XSSF\UserModel\XSSFFontFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\UserModel\XSSFGraphicFrame.cs" />
+    <Compile Include="XSSF\UserModel\XSSFIconMultiStateFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFLineBreak.cs" />
     <Compile Include="XSSF\UserModel\XSSFMap.cs" />
     <Compile Include="XSSF\UserModel\XSSFName.cs" />

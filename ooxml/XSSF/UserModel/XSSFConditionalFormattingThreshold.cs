@@ -32,12 +32,12 @@ namespace NPOI.XSSF.UserModel
     {
         private CT_Cfvo cfvo;
 
-        protected XSSFConditionalFormattingThreshold(CT_Cfvo cfvo)
+        protected internal XSSFConditionalFormattingThreshold(CT_Cfvo cfvo)
         {
             this.cfvo = cfvo;
         }
 
-        protected CT_Cfvo CTCfvo
+        protected internal CT_Cfvo CTCfvo
         {
             get { return cfvo; }
         }
