@@ -242,6 +242,7 @@
     <Compile Include="XSSF\UserModel\XSSFComment.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormattingRule.cs" />
+    <Compile Include="XSSF\UserModel\XSSFConditionalFormattingThreshold.cs" />
     <Compile Include="XSSF\UserModel\XSSFConnector.cs" />
     <Compile Include="XSSF\UserModel\XSSFCreationHelper.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataFormat.cs" />

@@ -64,7 +64,7 @@ namespace NPOI.HSSF.UserModel
             set { threshold.ParsedExpression = (ParseFormula(value, sheet)); }
         }
 
-        public double Value
+        public double? Value
         {
             get { return threshold.Value; }
             set { threshold.Value = (value); }

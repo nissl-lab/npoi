@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record.CF
     {
         private byte type;
         private Formula formula;
-        private Double? value;
+        private double? value;
 
         protected Threshold()
         {
@@ -106,7 +106,7 @@ namespace NPOI.HSSF.Record.CF
             }
         }
 
-        public double Value
+        public double? Value
         {
             get
             {

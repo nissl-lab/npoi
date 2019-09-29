@@ -6255,7 +6255,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.iconSet = src.iconSet;
             this.extLst = src.extLst;
         }
-        public int sizeOfFormulaArray()
+        public int SizeOfFormulaArray()
         {
             return formula.Count;
         }
@@ -6263,6 +6263,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return formula[index];
         }
+
+        public CT_IconSet AddNewIconSet()
+        {
+            var ret = new CT_IconSet();
+            this.iconSet = ret;
+            return ret;
+        }
+
         [XmlElement]
         public List<string> formula
         {
@@ -6731,7 +6739,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public bool IsSetVal()
+        {
+            return !string.IsNullOrEmpty(this.val);
+        }
 
+        public void UnsetVal()
+        {
+            this.val = string.Empty;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -7019,7 +7035,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            if (cfvoField == null)
+                cfvoField = new List<CT_Cfvo>();
 
+            var ret = new CT_Cfvo();
+            cfvoField.Add(ret);
+            return ret;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {

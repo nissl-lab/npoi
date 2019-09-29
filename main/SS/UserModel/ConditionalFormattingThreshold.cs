@@ -63,7 +63,7 @@ namespace NPOI.SS.UserModel
          * Gets the value used for the threshold, or 
          *  <code>null</code> if there isn't one.
          */
-        double Value { get; set; }
+        double? Value { get; set; }
 
         /**
          * Sets the value used for the threshold. 

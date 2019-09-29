@@ -129,6 +129,45 @@ namespace NPOI.XSSF.UserModel
             return rule;
         }
 
+        /**
+         * A factory method allowing the creation of conditional formatting
+         *  rules using an Icon Set / Multi-State formatting.
+         * The thresholds for it will be created, but will be empty
+         *  and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getMultiStateFormatting()}
+         *  then
+         *  {@link XSSFIconMultiStateFormatting#getThresholds()}
+         */
+        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(IconSet iconSet)
+        {
+            XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+
+            // Mark it as being an Icon Set
+            CT_CfRule cfRule = rule.GetCTCfRule();
+            cfRule.type = (ST_CfType.iconSet);
+
+            // Set the type of the icon set
+            CT_IconSet icons = cfRule.AddNewIconSet();
+            if (iconSet.name != null)
+            {
+                ST_IconSetType xIconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), iconSet.name);
+                icons.iconSet = (xIconSet);
+            }
+
+            // Add a default set of thresholds
+            int jump = 100 / iconSet.num;
+            ST_CfvoType type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.PERCENT.name);
+            for (int i = 0; i < iconSet.num; i++)
+            {
+                CT_Cfvo cfvo = icons.AddNewCfvo();
+                cfvo.type = (type);
+                cfvo.val = (i * jump).ToString();
+            }
+
+            // All done!
+            return rule;
+        }
+
         public int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules)
         {
             if (regions == null)

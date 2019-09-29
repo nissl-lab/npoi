@@ -275,7 +275,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cfRule.sizeOfFormulaArray() > 0 ? _cfRule.GetFormulaArray(0) : null;
+                return _cfRule.SizeOfFormulaArray() > 0 ? _cfRule.GetFormulaArray(0) : null;
             }
         }
 
@@ -290,7 +290,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cfRule.sizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
+                return _cfRule.SizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
             }
         }
     }
