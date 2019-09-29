@@ -18,6 +18,8 @@
  */
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -32,6 +34,50 @@ namespace NPOI.XSSF.UserModel
             _fill = fill;
         }
 
+        public  IColor FillBackgroundColorColor
+        {
+            get
+            {
+                if (!_fill.IsSetPatternFill()) return null;
+                return new XSSFColor(_fill.GetPatternFill().bgColor);
+            }
+            set
+            {
+                if (value != null && !(value is XSSFColor)) {
+                    throw new ArgumentException("Only XSSFColor objects are supported");
+                }
+                XSSFColor xcolor = (XSSFColor)value;
+                SetFillBackgroundColor(xcolor.GetCTColor());
+            }
+        }
+        public void SetFillBackgroundColor(CT_Color color)
+        {
+            CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.patternFill : _fill.AddNewPatternFill();
+            ptrn.bgColor = (color);
+        }
+
+        public IColor FillForegroundColorColor
+        {
+            get
+            {
+                if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
+                    return null;
+                return new XSSFColor(_fill.GetPatternFill().bgColor);
+            }
+            set
+            {
+                if (value != null && !(value is XSSFColor)) {
+                    throw new ArgumentException("Only XSSFColor objects are supported");
+                }
+                XSSFColor xcolor = (XSSFColor)value;
+                SetFillForegroundColor(xcolor.GetCTColor());
+            }
+        }
+        public void SetFillForegroundColor(CT_Color color)
+        {
+            CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
+            ptrn.fgColor = (color);
+        }
         public short FillBackgroundColor
         {
             get

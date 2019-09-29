@@ -131,13 +131,13 @@ namespace NPOI.HSSF.UserModel
             if (patternFormatting != null)
             {
                 cfRuleRecord.PatternFormatting=(patternFormatting);
-                return new HSSFPatternFormatting(cfRuleRecord);
+                return new HSSFPatternFormatting(cfRuleRecord, workbook);
             }
             else if (Create)
             {
                 patternFormatting = new PatternFormatting();
                 cfRuleRecord.PatternFormatting=(patternFormatting);
-                return new HSSFPatternFormatting(cfRuleRecord);
+                return new HSSFPatternFormatting(cfRuleRecord, workbook);
             }
             else
             {
