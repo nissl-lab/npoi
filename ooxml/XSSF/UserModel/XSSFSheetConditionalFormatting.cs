@@ -32,10 +32,12 @@ namespace NPOI.XSSF.UserModel
 
 
     /**
-     * @author Yegor Kozlov
+     * XSSF Conditional Formattings
      */
     public class XSSFSheetConditionalFormatting : ISheetConditionalFormatting
     {
+        /** Office 2010 Conditional Formatting extensions namespace */
+        protected static string CF_EXT_2009_NS_X14 = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main";
         private XSSFSheet _sheet;
 
         /* namespace */

@@ -58,13 +58,13 @@ namespace NPOI.HSSF.UserModel
             if (fontFormatting != null)
             {
                 cfRuleRecord.FontFormatting=(fontFormatting);
-                return new HSSFFontFormatting(cfRuleRecord);
+                return new HSSFFontFormatting(cfRuleRecord, workbook);
             }
             else if (Create)
             {
                 fontFormatting = new FontFormatting();
                 cfRuleRecord.FontFormatting=(fontFormatting);
-                return new HSSFFontFormatting(cfRuleRecord);
+                return new HSSFFontFormatting(cfRuleRecord, workbook);
             }
             else
             {
