@@ -63,10 +63,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (value != null && !(value is HSSFColor)) {
-                    throw new ArgumentException("Only HSSFColor objects are supported");
-                }
-                HSSFColor hcolor = (HSSFColor)value;
+                HSSFColor hcolor = HSSFColor.ToHSSFColor(value);
                 if (hcolor == null)
                 {
                     FillBackgroundColor = ((short)0);
@@ -85,10 +82,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (value != null && !(value is HSSFColor)) {
-                    throw new ArgumentException("Only HSSFColor objects are supported");
-                }
-                HSSFColor hcolor = (HSSFColor)value;
+                HSSFColor hcolor = HSSFColor.ToHSSFColor(value);
                 if (hcolor == null)
                 {
                     FillForegroundColor = ((short)0);

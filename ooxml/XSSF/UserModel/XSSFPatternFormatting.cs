@@ -43,10 +43,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                if (value != null && !(value is XSSFColor)) {
-                    throw new ArgumentException("Only XSSFColor objects are supported");
-                }
-                XSSFColor xcolor = (XSSFColor)value;
+                XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
                 SetFillBackgroundColor(xcolor.GetCTColor());
             }
         }
@@ -66,10 +63,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                if (value != null && !(value is XSSFColor)) {
-                    throw new ArgumentException("Only XSSFColor objects are supported");
-                }
-                XSSFColor xcolor = (XSSFColor)value;
+                XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
                 SetFillForegroundColor(xcolor.GetCTColor());
             }
         }

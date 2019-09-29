@@ -101,11 +101,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                if (value != null && !(value is XSSFColor)) {
-                    throw new ArgumentException("Only XSSFColor objects are supported");
-                }
-
-                XSSFColor xcolor = (XSSFColor)value;
+                XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
                 if (xcolor == null)
                 {
                     _font.color.Clear();

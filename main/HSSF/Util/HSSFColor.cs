@@ -17,6 +17,7 @@
 
 namespace NPOI.HSSF.Util
 {
+    using NPOI.SS.UserModel;
     using System;
     using System.Collections;
     using System.IO;
@@ -215,6 +216,13 @@ namespace NPOI.HSSF.Util
             return Black.HexString;
         }
 
+        public static HSSFColor ToHSSFColor(IColor color)
+        {
+            if (color != null && !(color is HSSFColor)) {
+                throw new ArgumentException("Only HSSFColor objects are supported");
+            }
+            return (HSSFColor)color;
+        }
         /**
          * Class BLACK
          *

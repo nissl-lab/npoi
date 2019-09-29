@@ -94,12 +94,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (value != null && !(value is HSSFColor))
-                {
-                    throw new ArgumentException("Only HSSFColor objects are supported");
-                }
-
-                HSSFColor hcolor = (HSSFColor)value;
+                HSSFColor hcolor = HSSFColor.ToHSSFColor(value);
                 if (hcolor == null)
                 {
                     fontFormatting.FontColorIndex = ((short)0);

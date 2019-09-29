@@ -378,6 +378,14 @@ namespace NPOI.XSSF.UserModel
             return ctColor;
         }
 
+        public static XSSFColor ToXSSFColor(IColor color)
+        {
+            if (color != null && !(color is XSSFColor)) {
+                throw new ArgumentException("Only XSSFColor objects are supported");
+            }
+            return (XSSFColor)color;
+        }
+
         public override int GetHashCode()
         {
             return ctColor.ToString().GetHashCode();
