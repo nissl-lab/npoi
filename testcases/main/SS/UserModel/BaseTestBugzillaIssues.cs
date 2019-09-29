@@ -360,7 +360,7 @@ namespace TestCases.SS.UserModel
             return fmla.ToString();
         }
         [Test]
-        public void TestAutoSize_bug506819()
+        public void Bug50681_TestAutoSize()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             BaseTestSheetAutosizeColumn.FixFonts(wb);
@@ -378,6 +378,12 @@ namespace TestCases.SS.UserModel
             cell0.SetCellValue(longValue);
 
             sheet.AutoSizeColumn(0);
+
+            // autoSize will fail if required fonts are not installed, skip this test then
+            IFont font = wb.GetFontAt(cell0.CellStyle.FontIndex);
+            Assume.That(SheetUtil.CanComputeColumnWidht(font), 
+                "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
+
             Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
             sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 506819 reports exception at this point
         }

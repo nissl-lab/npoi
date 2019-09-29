@@ -22,6 +22,8 @@ using NUnit.Framework;
 using System;
 using NPOI.Util;
 using System.Text;
+using NPOI.SS.Util;
+
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -79,6 +81,8 @@ namespace NPOI.XSSF.UserModel
             // And Set with the Charset index
             xssfFont.SetCharSet(FontCharset.ARABIC.Value);
             Assert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
+            xssfFont.SetCharSet((byte)(FontCharset.ARABIC.Value));
+            Assert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
 
             // This one isn't allowed
             Assert.AreEqual(null, FontCharset.ValueOf(9999));
@@ -110,7 +114,7 @@ namespace NPOI.XSSF.UserModel
             CT_Font ctFont = new CT_Font();
             CT_FontName fname = ctFont.AddNewName();
             fname.val = "Arial";
-            ctFont.name =  fname;
+            ctFont.name = fname;
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
             Assert.AreEqual("Arial", xssfFont.FontName);
@@ -130,7 +134,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(false, xssfFont.IsItalic);
 
             xssfFont.IsItalic = (true);
-            Assert.AreEqual(1,ctFont.i.Count);
+            Assert.AreEqual(1, ctFont.i.Count);
             Assert.AreEqual(true, ctFont.GetIArray(0).val);
             Assert.AreEqual(true, ctFont.GetIArray(0).val);
         }
@@ -190,11 +194,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(FontUnderlineType.Single, xssfFont.Underline);
 
             xssfFont.SetUnderline(FontUnderlineType.Double);
-            Assert.AreEqual(1,ctFont.u.Count);
+            Assert.AreEqual(1, ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.@double, ctFont.GetUArray(0).val);
 
             xssfFont.SetUnderline(FontUnderlineType.DoubleAccounting);
-            Assert.AreEqual(1,ctFont.u.Count);
+            Assert.AreEqual(1, ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.doubleAccounting, ctFont.GetUArray(0).val);
         }
         [Test]
@@ -286,6 +290,29 @@ namespace NPOI.XSSF.UserModel
 
             font.TypeOffset = FontSuperScript.Super;
             Assert.AreEqual(ST_VerticalAlignRun.superscript, ctFont.GetVertAlignArray(0).val);
+        }
+
+        // store test from TestSheetUtil here as it uses XSSF
+        [Test]
+        public void TestCanComputeWidthXSSF()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+
+            // cannot check on result because on some machines we get back false here!
+            SheetUtil.CanComputeColumnWidht(wb.GetFontAt((short)0));
+
+            wb.Close();
+        }
+
+        // store test from TestSheetUtil here as it uses XSSF
+        [Test]
+        public void TestCanComputeWidthInvalidFont()
+        {
+            IFont font = new XSSFFont(new CT_Font());
+            font.FontName = ("some non existing font name");
+
+            // Even with invalid fonts we still get back useful data most of the time... 
+            SheetUtil.CanComputeColumnWidht(font);
         }
     }
 }
