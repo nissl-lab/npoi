@@ -44,5 +44,14 @@ namespace NPOI.SS.UserModel
         short RightBorderColor { get; set; }
 
         short TopBorderColor { get; set; }
+
+        IColor BottomBorderColorColor { get; set; }
+
+        IColor DiagonalBorderColorColor { get; set; }
+
+        IColor LeftBorderColorColor { get; set; }
+
+        IColor RightBorderColorColor { get; set; }
+        IColor TopBorderColorColor { get; set; }
     }
 }
