@@ -613,7 +613,17 @@ namespace TestCases.SS.UserModel
                 }
                 else
                 {
-                    Assert.Fail("TODO!");
+                    ConditionType type = cf.GetRule(cf.NumberOfRules - 1).ConditionTypeType;
+                    if (type == ConditionType.CellValueIs ||
+                        type == ConditionType.Formula)
+                    {
+                        fCF++;
+                    }
+                    else
+                    {
+                        // TODO Detect Ext ones
+                        fCF12++;
+                    }
                 }
             }
             Assert.AreEqual(numCF, fCF);

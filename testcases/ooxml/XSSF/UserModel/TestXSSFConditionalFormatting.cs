@@ -36,8 +36,8 @@ namespace NPOI.XSSF.UserModel
         {
             this.TestRead("WithConditionalFormatting.xlsx");
         }
-        [Test, Ignore("ignore in poi")]
-        public void IGNORED_testReadOffice2007()
+        [Test]
+        public void TestReadOffice2007()
         {
             // TODO Bring the XSSF support up to the same level
             testReadOffice2007("NewStyleConditionalFormattings.xlsx");

@@ -49,8 +49,25 @@ namespace NPOI.SS.UserModel
 
 
         public byte Id { get; set; }
-        public String Type { get; set; }
+        public string Type { get; set; }
 
+        public override string ToString()
+        {
+            return Id + " - " + Type;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode() ^ Type.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is ConditionType))
+                return false;
+            ConditionType other =  obj as ConditionType;
+            return this.Id == other.Id && this.Type == other.Type;
+        }
 
         public static ConditionType ForId(byte id)
         {
