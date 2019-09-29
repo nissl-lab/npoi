@@ -384,6 +384,10 @@ namespace TestCases.SS.UserModel
             Assume.That(SheetUtil.CanComputeColumnWidht(font), 
                 "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
 
+            double width = SheetUtil.GetCellWidth(cell0, 8, null, false);
+            Assert.IsTrue(width > 0, "Expected to have cell width > 0 after auto-size, but had " + width);
+
+
             Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
             sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 506819 reports exception at this point
         }
