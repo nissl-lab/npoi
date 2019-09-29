@@ -178,7 +178,7 @@ namespace NPOI.HSSF.Record
         public CFRule12Record(RecordInputStream in1) {
             futureHeader = new FtrHeader(in1);
             ConditionType = ((byte)in1.ReadByte());
-            SetComparisonOperation((byte)in1.ReadByte());
+            ComparisonOperation = ((byte)in1.ReadByte());
             int field_3_formula1_len = in1.ReadUShort();
             int field_4_formula2_len = in1.ReadUShort();
 

@@ -136,7 +136,7 @@ namespace NPOI.HSSF.Record
         /** Creates new CFRuleRecord */
         protected CFRuleBase(byte conditionType, byte comparisonOperation) {
             ConditionType = (conditionType);
-            SetComparisonOperation(comparisonOperation);
+            ComparisonOperation = (comparisonOperation);
             formula1 = Formula.Create(Ptg.EMPTY_PTG_ARRAY);
             formula2 = Formula.Create(Ptg.EMPTY_PTG_ARRAY);
         }
@@ -194,9 +194,6 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public void SetComparisonOperation(byte operation) {
-            
-        }
         public byte ComparisonOperation
         {
             get { return comparison_operator; }

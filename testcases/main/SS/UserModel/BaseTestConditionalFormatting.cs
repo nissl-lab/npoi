@@ -135,7 +135,8 @@ namespace TestCases.SS.UserModel
             ISheetConditionalFormatting sheetCF = sh.SheetConditionalFormatting;
 
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("SUM(A1:A5)>10");
-            Assert.AreEqual(ConditionType.Formula, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.Formula.Id, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.Formula, rule1.ConditionTypeType);
             Assert.AreEqual("SUM(A1:A5)>10", rule1.Formula1);
             int formatIndex1 = sheetCF.AddConditionalFormatting(
                     new CellRangeAddress[]{
@@ -171,56 +172,65 @@ namespace TestCases.SS.UserModel
 
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.Equal, "SUM(A1:A5)+10");
-            Assert.AreEqual(ConditionType.CellValueIs, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule1.ConditionTypeType);
             Assert.AreEqual("SUM(A1:A5)+10", rule1.Formula1);
             Assert.AreEqual(ComparisonOperator.Equal, rule1.ComparisonOperation);
 
             IConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.NotEqual, "15");
-            Assert.AreEqual(ConditionType.CellValueIs, rule2.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule2.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule2.ConditionTypeType);
             Assert.AreEqual("15", rule2.Formula1);
             Assert.AreEqual(ComparisonOperator.NotEqual, rule2.ComparisonOperation);
 
             IConditionalFormattingRule rule3 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.NotEqual, "15");
-            Assert.AreEqual(ConditionType.CellValueIs, rule3.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule3.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule3.ConditionTypeType);
             Assert.AreEqual("15", rule3.Formula1);
             Assert.AreEqual(ComparisonOperator.NotEqual, rule3.ComparisonOperation);
 
             IConditionalFormattingRule rule4 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.GreaterThan, "0");
-            Assert.AreEqual(ConditionType.CellValueIs, rule4.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule4.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule4.ConditionTypeType);
             Assert.AreEqual("0", rule4.Formula1);
             Assert.AreEqual(ComparisonOperator.GreaterThan, rule4.ComparisonOperation);
 
             IConditionalFormattingRule rule5 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.LessThan, "0");
-            Assert.AreEqual(ConditionType.CellValueIs, rule5.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule5.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule5.ConditionTypeType);
             Assert.AreEqual("0", rule5.Formula1);
             Assert.AreEqual(ComparisonOperator.LessThan, rule5.ComparisonOperation);
 
             IConditionalFormattingRule rule6 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.GreaterThanOrEqual, "0");
-            Assert.AreEqual(ConditionType.CellValueIs, rule6.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule6.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule6.ConditionTypeType);
             Assert.AreEqual("0", rule6.Formula1);
             Assert.AreEqual(ComparisonOperator.GreaterThanOrEqual, rule6.ComparisonOperation);
 
             IConditionalFormattingRule rule7 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.LessThanOrEqual, "0");
-            Assert.AreEqual(ConditionType.CellValueIs, rule7.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule7.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule7.ConditionTypeType);
             Assert.AreEqual("0", rule7.Formula1);
             Assert.AreEqual(ComparisonOperator.LessThanOrEqual, rule7.ComparisonOperation);
 
             IConditionalFormattingRule rule8 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.Between, "0", "5");
-            Assert.AreEqual(ConditionType.CellValueIs, rule8.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule8.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule8.ConditionTypeType);
             Assert.AreEqual("0", rule8.Formula1);
             Assert.AreEqual("5", rule8.Formula2);
             Assert.AreEqual(ComparisonOperator.Between, rule8.ComparisonOperation);
 
             IConditionalFormattingRule rule9 = sheetCF.CreateConditionalFormattingRule(
                     ComparisonOperator.NotBetween, "0", "5");
-            Assert.AreEqual(ConditionType.CellValueIs, rule9.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, rule9.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule9.ConditionTypeType);
             Assert.AreEqual("0", rule9.Formula1);
             Assert.AreEqual("5", rule9.Formula2);
             Assert.AreEqual(ComparisonOperator.NotBetween, rule9.ComparisonOperation);
@@ -259,10 +269,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, sheet2cf.NumberOfRules);
             Assert.AreEqual("SUM(A1:A5)+10", sheet2cf.GetRule(0).Formula1);
             Assert.AreEqual(ComparisonOperator.Equal, sheet2cf.GetRule(0).ComparisonOperation);
-            Assert.AreEqual(ConditionType.CellValueIs, sheet2cf.GetRule(0).ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, sheet2cf.GetRule(0).ConditionType);
             Assert.AreEqual("15", sheet2cf.GetRule(1).Formula1);
             Assert.AreEqual(ComparisonOperator.NotEqual, sheet2cf.GetRule(1).ComparisonOperation);
-            Assert.AreEqual(ConditionType.CellValueIs, sheet2cf.GetRule(1).ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs.Id, sheet2cf.GetRule(1).ConditionType);
         }
         [Test]
         public void TestRemove()
@@ -493,8 +503,8 @@ namespace TestCases.SS.UserModel
 
         }
         //
-        
-        public void TestRead(string sampleFile)
+
+        protected void TestRead(string sampleFile)
         {
 
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(sampleFile);
@@ -511,7 +521,7 @@ namespace TestCases.SS.UserModel
 
             // CF1 has two rules: values less than -3 are bold-italic red, values greater than 3 are green
             IConditionalFormattingRule rule1 = cf1.GetRule(0);
-            Assert.AreEqual(ConditionType.CellValueIs, rule1.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule1.ConditionTypeType);
             Assert.AreEqual(ComparisonOperator.GreaterThan, rule1.ComparisonOperation);
             Assert.AreEqual("3", rule1.Formula1);
             Assert.IsNull(rule1.Formula2);
@@ -525,7 +535,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(fmt1.IsItalic);
 
             IConditionalFormattingRule rule2 = cf1.GetRule(1);
-            Assert.AreEqual(ConditionType.CellValueIs, rule2.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule2.ConditionTypeType);
             Assert.AreEqual(ComparisonOperator.LessThan, rule2.ComparisonOperation);
             Assert.AreEqual("-3", rule2.Formula1);
             Assert.IsNull(rule2.Formula2);
@@ -545,7 +555,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("B9", regions2[0].FormatAsString());
 
             IConditionalFormattingRule rule3 = cf2.GetRule(0);
-            Assert.AreEqual(ConditionType.Formula, rule3.ConditionType);
+            Assert.AreEqual(ConditionType.Formula, rule3.ConditionTypeType);
             Assert.AreEqual(ComparisonOperator.NoComparison, rule3.ComparisonOperation);
             Assert.AreEqual("$A$8>5", rule3.Formula1);
             Assert.IsNull(rule3.Formula2);
@@ -569,13 +579,13 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, cf3.NumberOfRules);
 
             IConditionalFormattingRule rule4 = cf3.GetRule(0);
-            Assert.AreEqual(ConditionType.CellValueIs, rule4.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule4.ConditionTypeType);
             Assert.AreEqual(ComparisonOperator.LessThanOrEqual, rule4.ComparisonOperation);
             Assert.AreEqual("\"AAA\"", rule4.Formula1);
             Assert.IsNull(rule4.Formula2);
 
             IConditionalFormattingRule rule5 = cf3.GetRule(1);
-            Assert.AreEqual(ConditionType.CellValueIs, rule5.ConditionType);
+            Assert.AreEqual(ConditionType.CellValueIs, rule5.ConditionTypeType);
             Assert.AreEqual(ComparisonOperator.Between, rule5.ComparisonOperation);
             Assert.AreEqual("\"A\"", rule5.Formula1);
             Assert.AreEqual("\"AAA\"", rule5.Formula2);
@@ -640,11 +650,57 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(1, cf.NumberOfRules);
             cr = cf.GetRule(0);
-            // TODO Check the rest of this
+            Assert.AreEqual(ConditionType.CellValueIs, cr.ConditionTypeType);
+            Assert.AreEqual(ComparisonOperator.GreaterThan, cr.ComparisonOperation);
+            Assert.AreEqual("0", cr.Formula1);
+            Assert.AreEqual(null, cr.Formula2);
+            //        assertColourGreen(cr);
+            // TODO Colour checking
 
 
             // Highlight 10-30 - Column D
-            // TODO
+            cf = sheetCF.GetConditionalFormattingAt(1);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("D2:D17", cf.GetFormattingRanges()[0].FormatAsString());
+
+            Assert.AreEqual(1, cf.NumberOfRules);
+            cr = cf.GetRule(0);
+            Assert.AreEqual(ConditionType.CellValueIs, cr.ConditionTypeType);
+            Assert.AreEqual(ComparisonOperator.Between, cr.ComparisonOperation);
+            Assert.AreEqual("10", cr.Formula1);
+            Assert.AreEqual("30", cr.Formula2);
+            //        assertColourGreen(cr);
+            //        assertColourRed(cr);
+            // TODO Colour checking
+
+            // Data Bars - Column E
+            cf = sheetCF.GetConditionalFormattingAt(2);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("E2:E17", cf.GetFormattingRanges()[0].FormatAsString());
+
+            Assert.AreEqual(1, cf.NumberOfRules);
+            cr = cf.GetRule(0);
+            Assert.AreEqual(ConditionType.DataBar, cr.ConditionTypeType);
+            // TODO Support then check the rest
+
+
+            // Colours R->G - Column F
+            // Colours BWR - Column G
+            // Icons : Default - Column H
+            // Icons : 3 signs - Column I
+            // Icons : 3 traffic lights 2 - Column J
+            // Icons : 4 traffic lights - Column K
+            // Icons : 3 symbols - Column L
+            // Icons : 3 flags - Column M
+            // Icons : 3 symbols 2 - Column N
+            // Icons : 3 arrows - Column O     
+            // Icons : 5 arrows grey - Column P    
+            // Icons : 3 stars (ext) - Column Q
+            // Icons : 4 ratings - Column R
+            // Icons : 5 ratings - Column S
+            // Custom Icon+Format - Column T
+            // Mixed icons - Column U
+
         }
 
         [Test]
