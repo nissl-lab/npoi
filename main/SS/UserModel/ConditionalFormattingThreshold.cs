@@ -113,6 +113,20 @@ public class RangeType
     {
         return id + " - " + name;
     }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || !(obj is RangeType))
+        {
+            return false;
+        }
+        RangeType other = obj as RangeType;
+        return this.id == other.id && this.name == other.name;
+    }
+
+    public override int GetHashCode()
+    {
+        return id.GetHashCode() ^ name.GetHashCode();
+    }
 
     public static RangeType ById(int id)
     {

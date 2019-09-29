@@ -123,12 +123,15 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - border formatting object  if defined,  <code>null</code> otherwise
          */
-        public IBorderFormatting GetBorderFormatting()
+        public IBorderFormatting BorderFormatting
         {
-            CT_Dxf dxf = GetDxf(false);
-            if (dxf == null || !dxf.IsSetBorder()) return null;
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetBorder()) return null;
 
-            return new XSSFBorderFormatting(dxf.border);
+                return new XSSFBorderFormatting(dxf.border);
+            }
         }
 
         /**
@@ -156,12 +159,15 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - font formatting object  if defined,  <code>null</code> otherwise
          */
-        public IFontFormatting GetFontFormatting()
+        public IFontFormatting FontFormatting
         {
-            CT_Dxf dxf = GetDxf(false);
-            if (dxf == null || !dxf.IsSetFont()) return null;
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetFont()) return null;
 
-            return new XSSFFontFormatting(dxf.font);
+                return new XSSFFontFormatting(dxf.font);
+            }
         }
 
         /**
@@ -189,19 +195,22 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - pattern formatting object  if defined,  <code>null</code> otherwise
          */
-        public IPatternFormatting GetPatternFormatting()
+        public IPatternFormatting PatternFormatting
         {
-            CT_Dxf dxf = GetDxf(false);
-            if (dxf == null || !dxf.IsSetFill()) return null;
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetFill()) return null;
 
-            return new XSSFPatternFormatting(dxf.fill);
+                return new XSSFPatternFormatting(dxf.fill);
+            }
         }
 
         public XSSFIconMultiStateFormatting CreateMultiStateFormatting(IconSet iconSet)
         {
             // Is it already there?
             if (_cfRule.IsSetIconSet() && _cfRule.type == ST_CfType.iconSet)
-                return GetMultiStateFormatting();
+                return MultiStateFormatting as XSSFIconMultiStateFormatting;
 
             // Mark it as being an Icon Set
             _cfRule.type = (ST_CfType.iconSet);
@@ -236,16 +245,19 @@ namespace NPOI.XSSF.UserModel
             // Wrap and return
             return new XSSFIconMultiStateFormatting(icons);
         }
-        public XSSFIconMultiStateFormatting GetMultiStateFormatting()
+        public IIconMultiStateFormatting MultiStateFormatting
         {
-            if (_cfRule.IsSetIconSet())
+            get
             {
-                CT_IconSet icons = _cfRule.iconSet;
-                return new XSSFIconMultiStateFormatting(icons);
-            }
-            else
-            {
-                return null;
+                if (_cfRule.IsSetIconSet())
+                {
+                    CT_IconSet icons = _cfRule.iconSet;
+                    return new XSSFIconMultiStateFormatting(icons);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
         /**
@@ -344,6 +356,10 @@ namespace NPOI.XSSF.UserModel
                 return _cfRule.SizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
             }
         }
+
+        public IDataBarFormatting DataBarFormatting => throw new NotImplementedException();
+
+        public IColorScaleFormatting ColorScaleFormatting => throw new NotImplementedException();
     }
 }
 

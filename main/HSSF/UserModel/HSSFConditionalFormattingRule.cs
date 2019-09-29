@@ -85,9 +85,9 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return - font formatting object  if defined,  <c>null</c> otherwise
          */
-        public IFontFormatting GetFontFormatting()
+        public IFontFormatting FontFormatting
         {
-            return GetFontFormatting(false);
+            get { return GetFontFormatting(false); }
         }
         /**
          * Create a new font formatting structure if it does not exist, 
@@ -121,9 +121,9 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return - border formatting object  if defined,  <c>null</c> otherwise
          */
-        public IBorderFormatting GetBorderFormatting()
+        public IBorderFormatting BorderFormatting
         {
-            return GetBorderFormatting(false);
+            get { return GetBorderFormatting(false); }
         }
         /**
          * Create a new border formatting structure if it does not exist, 
@@ -158,9 +158,9 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return - pattern formatting object  if defined, <c>null</c> otherwise
          */
-        public IPatternFormatting GetPatternFormatting()
+        public IPatternFormatting PatternFormatting
         {
-            return GetPatternFormatting(false);
+            get { return GetPatternFormatting(false); }
         }
         /**
          * Create a new pattern formatting structure if it does not exist, 
@@ -200,7 +200,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * @return icon / multi-state formatting object if defined, <code>null</code> otherwise
          */
-        public HSSFIconMultiStateFormatting MultiStateFormatting
+        public IIconMultiStateFormatting MultiStateFormatting
         {
             get { return GetMultiStateFormatting(false); }
         }
@@ -270,6 +270,10 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
         }
+
+        public IDataBarFormatting DataBarFormatting => throw new NotImplementedException();
+
+        public IColorScaleFormatting ColorScaleFormatting => throw new NotImplementedException();
 
         protected internal String ToFormulaString(Ptg[] ParsedExpression)
         {

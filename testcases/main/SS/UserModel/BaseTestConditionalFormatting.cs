@@ -382,20 +382,20 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("7", rule1.Formula1);
             Assert.IsNull(rule1.Formula2);
 
-            IFontFormatting r1fp = rule1.GetFontFormatting();
+            IFontFormatting r1fp = rule1.FontFormatting;
             Assert.IsNotNull(r1fp);
 
             Assert.IsTrue(r1fp.IsItalic);
             Assert.IsFalse(r1fp.IsBold);
 
-            IBorderFormatting r1bf = rule1.GetBorderFormatting();
+            IBorderFormatting r1bf = rule1.BorderFormatting;
             Assert.IsNotNull(r1bf);
             Assert.AreEqual(BorderStyle.Thin, r1bf.BorderBottom);
             Assert.AreEqual(BorderStyle.Thick, r1bf.BorderTop);
             Assert.AreEqual(BorderStyle.Dashed, r1bf.BorderLeft);
             Assert.AreEqual(BorderStyle.Dotted, r1bf.BorderRight);
 
-            IPatternFormatting r1pf = rule1.GetPatternFormatting();
+            IPatternFormatting r1pf = rule1.PatternFormatting;
             Assert.IsNotNull(r1pf);
             //        Assert.AreEqual(HSSFColor.Yellow.index,r1pf.FillBackgroundColor);
 
@@ -527,10 +527,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("3", rule1.Formula1);
             Assert.IsNull(rule1.Formula2);
             // Fills and borders are not Set
-            Assert.IsNull(rule1.GetPatternFormatting());
-            Assert.IsNull(rule1.GetBorderFormatting());
+            Assert.IsNull(rule1.PatternFormatting);
+            Assert.IsNull(rule1.BorderFormatting);
 
-            IFontFormatting fmt1 = rule1.GetFontFormatting();
+            IFontFormatting fmt1 = rule1.FontFormatting;
             //        Assert.AreEqual(HSSFColor.GREEN.index, fmt1.FontColorIndex);
             Assert.IsTrue(fmt1.IsBold);
             Assert.IsFalse(fmt1.IsItalic);
@@ -540,10 +540,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(ComparisonOperator.LessThan, rule2.ComparisonOperation);
             Assert.AreEqual("-3", rule2.Formula1);
             Assert.IsNull(rule2.Formula2);
-            Assert.IsNull(rule2.GetPatternFormatting());
-            Assert.IsNull(rule2.GetBorderFormatting());
+            Assert.IsNull(rule2.PatternFormatting);
+            Assert.IsNull(rule2.BorderFormatting);
 
-            IFontFormatting fmt2 = rule2.GetFontFormatting();
+            IFontFormatting fmt2 = rule2.FontFormatting;
             //        Assert.AreEqual(HSSFColor.Red.index, fmt2.FontColorIndex);
             Assert.IsTrue(fmt2.IsBold);
             Assert.IsTrue(fmt2.IsItalic);
@@ -561,17 +561,17 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("$A$8>5", rule3.Formula1);
             Assert.IsNull(rule3.Formula2);
 
-            IFontFormatting fmt3 = rule3.GetFontFormatting();
+            IFontFormatting fmt3 = rule3.FontFormatting;
             //        Assert.AreEqual(HSSFColor.Red.index, fmt3.FontColorIndex);
             Assert.IsTrue(fmt3.IsBold);
             Assert.IsTrue(fmt3.IsItalic);
 
-            IPatternFormatting fmt4 = rule3.GetPatternFormatting();
+            IPatternFormatting fmt4 = rule3.PatternFormatting;
             //        Assert.AreEqual(HSSFColor.LIGHT_CORNFLOWER_BLUE.index, fmt4.FillBackgroundColor);
             //        Assert.AreEqual(HSSFColor.Automatic.index, fmt4.FillForegroundColor);
             Assert.AreEqual(FillPattern.NoFill, fmt4.FillPattern);
             // borders are not Set
-            Assert.IsNull(rule3.GetBorderFormatting());
+            Assert.IsNull(rule3.BorderFormatting);
 
             IConditionalFormatting cf3 = sheetCF.GetConditionalFormattingAt(2);
             CellRangeAddress[] regions3 = cf3.GetFormattingRanges();
@@ -599,6 +599,7 @@ namespace TestCases.SS.UserModel
             IConditionalFormatting cf = null;
             IConditionalFormattingRule cr = null;
             IIconMultiStateFormatting icon = null;
+            IConditionalFormattingThreshold th = null;
 
             // Sanity check data
             Assert.AreEqual("Values", s.GetRow(0).GetCell(0).ToString());
@@ -633,7 +634,7 @@ namespace TestCases.SS.UserModel
                     }
                     else
                     {
-                        // TODO Detect Ext ones
+                        // TODO Properly detect Ext ones from the xml
                         fCF12++;
                     }
                 }
@@ -662,13 +663,13 @@ namespace TestCases.SS.UserModel
             // TODO Should the colours be slightly different between formats?
             if (cr is HSSFConditionalFormattingRule)
             {
-                AssertColour("0:8080:0", cr.GetFontFormatting().FontColor);
-                AssertColour("CCCC:FFFF:CCCC", cr.GetPatternFormatting().FillBackgroundColorColor);
+                AssertColour("0:8080:0", cr.FontFormatting.FontColor);
+                AssertColour("CCCC:FFFF:CCCC", cr.PatternFormatting.FillBackgroundColorColor);
             }
             else
             {
-                AssertColour("006100", cr.GetFontFormatting().FontColor);
-                AssertColour("C6EFCE", cr.GetPatternFormatting().FillBackgroundColorColor);
+                AssertColour("006100", cr.FontFormatting.FontColor);
+                AssertColour("C6EFCE", cr.PatternFormatting.FillBackgroundColorColor);
             }
 
             // Highlight 10-30 - Column D
@@ -687,11 +688,11 @@ namespace TestCases.SS.UserModel
             //   Sets the background colour to lighter red
             // TODO Should the colours be slightly different between formats?
             if (cr is HSSFConditionalFormattingRule) {
-                AssertColour("8080:0:8080", cr.GetFontFormatting().FontColor);
-                AssertColour("FFFF:9999:CCCC", cr.GetPatternFormatting().FillBackgroundColorColor);
+                AssertColour("8080:0:8080", cr.FontFormatting.FontColor);
+                AssertColour("FFFF:9999:CCCC", cr.PatternFormatting.FillBackgroundColorColor);
             } else {
-                AssertColour("9C0006", cr.GetFontFormatting().FontColor);
-                AssertColour("FFC7CE", cr.GetPatternFormatting().FillBackgroundColorColor);
+                AssertColour("9C0006", cr.FontFormatting.FontColor);
+                AssertColour("FFC7CE", cr.PatternFormatting.FillBackgroundColorColor);
             }
 
             // Data Bars - Column E
@@ -702,53 +703,164 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, cf.NumberOfRules);
             cr = cf.GetRule(0);
             Assert.AreEqual(ConditionType.DataBar, cr.ConditionTypeType);
-            // TODO Support then check the rest
+            // TODO Support Data Bars, then check the rest of this rule
 
 
             // Colours R->G - Column F
-            // Colours BWR - Column G
-            // Icons : Default - Column H
-            cf = sheetCF.GetConditionalFormattingAt(5);
+            cf = sheetCF.GetConditionalFormattingAt(3);
             Assert.AreEqual(1, cf.GetFormattingRanges().Length);
-            Assert.AreEqual("H2:H17", cf.GetFormattingRanges()[0].FormatAsString());
+            Assert.AreEqual("F2:F17", cf.GetFormattingRanges()[0].FormatAsString());
 
             Assert.AreEqual(1, cf.NumberOfRules);
             cr = cf.GetRule(0);
+            Assert.AreEqual(ConditionType.ColorScale, cr.ConditionTypeType);
+            // TODO Support Color Scales, then check the rest of this rule
+
+            // Colours BWR - Column G
+            cf = sheetCF.GetConditionalFormattingAt(4);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("G2:G17", cf.GetFormattingRanges()[0].FormatAsString());
+
+            Assert.AreEqual(1, cf.NumberOfRules);
+            cr = cf.GetRule(0);
+            Assert.AreEqual(ConditionType.ColorScale, cr.ConditionTypeType);
+            // TODO Support Color Scales, then check the rest of this rule
+
+            // TODO Simplify asserts
+
+            // Icons : Default - Column H, percentage thresholds
+
+            cf = sheetCF.GetConditionalFormattingAt(5);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("H2:H17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_TRAFFIC_LIGHTS, 0d, 33d, 67d);
+
+            // Icons : 3 signs - Column I
+            cf = sheetCF.GetConditionalFormattingAt(6);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("I2:I17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_SHAPES, 0d, 33d, 67d);
+
+
+            // Icons : 3 traffic lights 2 - Column J
+            cf = sheetCF.GetConditionalFormattingAt(7);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("J2:J17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_TRAFFIC_LIGHTS_BOX, 0d, 33d, 67d);
+
+            // Icons : 4 traffic lights - Column K
+            cf = sheetCF.GetConditionalFormattingAt(8);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("K2:K17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYRB_4_TRAFFIC_LIGHTS, 0d, 25d, 50d, 75d);
+
+            // Icons : 3 symbols with backgrounds - Column L
+            cf = sheetCF.GetConditionalFormattingAt(9);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("L2:L17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_SYMBOLS_CIRCLE, 0d, 33d, 67d);
+
+            // Icons : 3 flags - Column M2 Only
+            cf = sheetCF.GetConditionalFormattingAt(10);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("M2", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_FLAGS, 0d, 33d, 67d);
+            // Icons : 3 flags - Column M (all)
+            cf = sheetCF.GetConditionalFormattingAt(11);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("M2:M17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_FLAGS, 0d, 33d, 67d);
+
+            // Icons : 3 symbols 2 (no background) - Column N
+            cf = sheetCF.GetConditionalFormattingAt(12);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("N2:N17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_SYMBOLS, 0d, 33d, 67d);
+
+            // Icons : 3 arrows - Column O
+            cf = sheetCF.GetConditionalFormattingAt(13);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("O2:O17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GYR_3_ARROW, 0d, 33d, 67d);
+
+            // Icons : 5 arrows grey - Column P    
+            cf = sheetCF.GetConditionalFormattingAt(14);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("P2:P17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.GREY_5_ARROWS, 0d, 20d, 40d, 60d, 80d);
+
+            // Icons : 3 stars (ext) - Column Q
+            // TODO Support EXT formattings
+
+            // Icons : 4 ratings - Column R
+            cf = sheetCF.GetConditionalFormattingAt(15);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("R2:R17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.RATINGS_4, 0d, 25d, 50d, 75d);
+
+            // Icons : 5 ratings - Column S
+            cf = sheetCF.GetConditionalFormattingAt(16);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("S2:S17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertIconSetPercentages(cf, IconSet.RATINGS_5, 0d, 20d, 40d, 60d, 80d);
+
+            // Custom Icon+Format - Column T
+            cf = sheetCF.GetConditionalFormattingAt(17);
+            Assert.AreEqual(1, cf.GetFormattingRanges().Length);
+            Assert.AreEqual("T2:T17", cf.GetFormattingRanges()[0].FormatAsString());
+
+            // TODO Support IconSet + Other CFs with 2 rules
+            //        Assert.AreEqual(2, cf.NumberOfRules);
+            //        cr = cf.getRule(0);
+            //        assertIconSetPercentages(cr, IconSet.GYR_3_TRAFFIC_LIGHTS_BOX, 0d, 33d, 67d);
+            //        cr = cf.getRule(1);
+            //        Assert.AreEqual(ConditionType.FORMULA, cr.ConditionTypeType);
+            //        Assert.AreEqual(ComparisonOperator.NO_COMPARISON, cr.ComparisonOperation);
+            //        // TODO Why aren't these two the same between formats?
+            //        if (cr instanceof HSSFConditionalFormattingRule) {
+            //            Assert.AreEqual("MOD(ROW($T1),2)=1", cr.Formula1);
+            //        } else {
+            //            Assert.AreEqual("MOD(ROW($T2),2)=1", cr.Formula1);
+            //        }
+            //        Assert.AreEqual(null, cr.Formula2);
+
+
+            // Mixed icons - Column U
+            // TODO Support EXT formattings
+
+
+        }
+
+        private void assertIconSetPercentages(IConditionalFormatting cf, IconSet iconset, params double[] vals)
+        {
+            Assert.AreEqual(1, cf.NumberOfRules);
+            IConditionalFormattingRule cr = cf.GetRule(0);
+            assertIconSetPercentages(cr, iconset, vals);
+        }
+        private void assertIconSetPercentages(IConditionalFormattingRule cr, IconSet iconset, params double[] vals)
+        {
             Assert.AreEqual(ConditionType.IconSet, cr.ConditionTypeType);
             Assert.AreEqual(ComparisonOperator.NoComparison, cr.ComparisonOperation);
             Assert.AreEqual(null, cr.Formula1);
             Assert.AreEqual(null, cr.Formula2);
-            if (cr is HSSFConditionalFormattingRule)
-            {
-                HSSFConditionalFormattingRule hcr = (HSSFConditionalFormattingRule)cr;
-                icon = hcr.MultiStateFormatting;
-                Assert.IsNotNull(icon);
-                Assert.AreEqual(IconSet.GYR_3_TRAFFIC_LIGHTS, icon.IconSet);
-                Assert.AreEqual(false, icon.IsIconOnly);
-                Assert.AreEqual(false, icon.IsReversed);
-                // TODO Check the rest
-            }
-            else
-            {
-                // TODO XSSF Support
-            }
 
-            // Icons : 3 signs - Column I
-            // Icons : 3 traffic lights 2 - Column J
-            // Icons : 4 traffic lights - Column K
-            // Icons : 3 symbols - Column L
-            // Icons : 3 flags - Column M
-            // Icons : 3 symbols 2 - Column N
-            // Icons : 3 arrows - Column O     
-            // Icons : 5 arrows grey - Column P    
-            // Icons : 3 stars (ext) - Column Q
-            // Icons : 4 ratings - Column R
-            // Icons : 5 ratings - Column S
-            // Custom Icon+Format - Column T
-            // Mixed icons - Column U
+            IconMultiStateFormatting icon = cr.MultiStateFormatting as IconMultiStateFormatting;
+            Assert.IsNotNull(icon);
+            Assert.AreEqual(iconset, icon.IconSet);
+            Assert.AreEqual(false, icon.IsIconOnly);
+            Assert.AreEqual(false, icon.IsReversed);
 
+            Assert.IsNotNull(icon.Thresholds);
+            Assert.AreEqual(vals.Length, icon.Thresholds.Length);
+            for (int i = 0; i < vals.Length; i++)
+            {
+                Double v = vals[i];
+                IConditionalFormattingThreshold th = icon.Thresholds[i] as IConditionalFormattingThreshold;
+                Assert.AreEqual(RangeType.PERCENT, th.RangeType);
+                Assert.AreEqual(v, th.Value);
+                Assert.AreEqual(null, th.Formula);
+            }
         }
-
         [Test]
         public void TestCreateFontFormatting()
         {
@@ -807,7 +919,7 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(1, cf.NumberOfRules);
 
-            IFontFormatting r1fp = cf.GetRule(0).GetFontFormatting();
+            IFontFormatting r1fp = cf.GetRule(0).FontFormatting;
             Assert.IsNotNull(r1fp);
 
             Assert.IsTrue(r1fp.IsItalic);
@@ -859,7 +971,7 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(1, cf.NumberOfRules);
 
-            IPatternFormatting r1fp = cf.GetRule(0).GetPatternFormatting();
+            IPatternFormatting r1fp = cf.GetRule(0).PatternFormatting;
             Assert.IsNotNull(r1fp);
 
             Assert.AreEqual(HSSFColor.Red.Index, r1fp.FillBackgroundColor);
@@ -924,7 +1036,7 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(1, cf.NumberOfRules);
 
-            IBorderFormatting r1fp = cf.GetRule(0).GetBorderFormatting();
+            IBorderFormatting r1fp = cf.GetRule(0).BorderFormatting;
             Assert.IsNotNull(r1fp);
             Assert.AreEqual(BorderStyle.Thick, r1fp.BorderBottom);
             Assert.AreEqual(BorderStyle.Thick, r1fp.BorderTop);
@@ -933,10 +1045,56 @@ namespace TestCases.SS.UserModel
 
         }
 
-        public void testCreateIconFormatting()
+        [Test]
+        public void TestCreateIconFormatting()
         {
-            // TODO Implement for XSSF, then test here
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            IConditionalFormattingRule rule1 =
+                    sheetCF.CreateConditionalFormattingRule(IconSet.GYRB_4_TRAFFIC_LIGHTS.name);
+            IconMultiStateFormatting iconFmt = rule1.MultiStateFormatting as IconMultiStateFormatting;
+
+            Assert.AreEqual(IconSet.GYRB_4_TRAFFIC_LIGHTS, iconFmt.IconSet);
+            Assert.AreEqual(4, iconFmt.Thresholds.Length);
+            Assert.AreEqual(false, iconFmt.IsIconOnly);
+            Assert.AreEqual(false, iconFmt.IsReversed);
+
+            iconFmt.IsIconOnly = (true);
+            iconFmt.Thresholds[0].Type = (byte)(RangeType.MIN.id);
+            iconFmt.Thresholds[1].Type = (byte)(RangeType.NUMBER.id);
+            iconFmt.Thresholds[1].Value = (10d);
+            iconFmt.Thresholds[2].Type = (byte)(RangeType.PERCENT.id);
+            iconFmt.Thresholds[2].Value = (75d);
+            iconFmt.Thresholds[3].Type = (byte)(RangeType.MAX.id);
+
+            CellRangeAddress[] regions = { CellRangeAddress.ValueOf("A1:A5") };
+            sheetCF.AddConditionalFormatting(regions, rule1);
+
+            // Save, re-load and re-check
+            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            sheetCF = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
+
+            IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual(1, cf.NumberOfRules);
+            rule1 = cf.GetRule(0);
+            iconFmt = rule1.MultiStateFormatting as IconMultiStateFormatting;
+
+            Assert.AreEqual(IconSet.GYRB_4_TRAFFIC_LIGHTS, iconFmt.IconSet);
+            Assert.AreEqual(4, iconFmt.Thresholds.Length);
+            Assert.AreEqual(true, iconFmt.IsIconOnly);
+            Assert.AreEqual(false, iconFmt.IsReversed);
+            Assert.AreEqual(RangeType.MIN, RangeType.ById(iconFmt.Thresholds[0].Type));
+            Assert.AreEqual(RangeType.NUMBER, RangeType.ById(iconFmt.Thresholds[1].Type));
+            Assert.AreEqual(RangeType.PERCENT, RangeType.ById(iconFmt.Thresholds[2].Type));
+            Assert.AreEqual(RangeType.MAX, RangeType.ById(iconFmt.Thresholds[3].Type));
+            Assert.AreEqual(null, iconFmt.Thresholds[0].Value);
+            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value);
+            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value);
+            Assert.AreEqual(null, iconFmt.Thresholds[3].Value);
         }
+
 
         [Test]
         public void TestBug55380()

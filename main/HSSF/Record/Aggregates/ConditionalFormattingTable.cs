@@ -72,6 +72,7 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public int Add(CFRecordsAggregate cfAggregate)
         {
+            cfAggregate.Header.ID = (_cfHeaders.Count);
             _cfHeaders.Add(cfAggregate);
             return _cfHeaders.Count - 1;
         }

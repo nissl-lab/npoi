@@ -116,6 +116,43 @@ namespace TestCases.HSSF.Record
             }
         }
 
+        [Test]
+        public void TestCreateIconCFRule12Record()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
+            CFRule12Record record = CFRule12Record.Create(sheet, IconSet.GREY_5_ARROWS);
+            record.MultiStateFormatting.Thresholds[1].Type = (byte)(RangeType.PERCENT.id);
+            record.MultiStateFormatting.Thresholds[1].Value = (10d);
+            record.MultiStateFormatting.Thresholds[2].Type = (byte)(RangeType.NUMBER.id);
+            record.MultiStateFormatting.Thresholds[2].Value = (-4d);
+
+            // Check it 
+            testCFRule12Record(record);
+            Assert.AreEqual(IconSet.GREY_5_ARROWS, record.MultiStateFormatting.IconSet);
+            Assert.AreEqual(5, record.MultiStateFormatting.Thresholds.Length);
+            // Serialize
+            byte[] serializedRecord = record.Serialize();
+            // Strip header
+            byte[] recordData = new byte[serializedRecord.Length - 4];
+            Array.Copy(serializedRecord, 4, recordData, 0, recordData.Length);
+            // Deserialize
+            record = new CFRule12Record(TestcaseRecordInputStream.Create(CFRule12Record.sid, recordData));
+
+            // Check it has the icon, and the right number of thresholds
+            Assert.AreEqual(IconSet.GREY_5_ARROWS, record.MultiStateFormatting.IconSet);
+            Assert.AreEqual(5, record.MultiStateFormatting.Thresholds.Length);
+            // Serialize again
+            byte[] output = record.Serialize();
+            // Compare
+            Assert.AreEqual(recordData.Length + 4, output.Length, "Output size"); //includes sid+recordlength
+            for (int i = 0; i < recordData.Length; i++)
+            {
+                Assert.AreEqual(recordData[i], output[i + 4], "CFRule12Record doesn't match");
+            }
+        }
+
+
         private void TestCFRuleRecord1(CFRuleRecord record)
         {
             testCFRuleBase(record);

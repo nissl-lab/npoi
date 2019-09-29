@@ -40,7 +40,7 @@ namespace NPOI.SS.UserModel
         /**
          * @return - border formatting object  if defined,  <code>null</code> otherwise
          */
-        IBorderFormatting GetBorderFormatting();
+        IBorderFormatting BorderFormatting { get; }
 
         /**
          * Create a new font formatting structure if it does not exist,
@@ -53,7 +53,7 @@ namespace NPOI.SS.UserModel
         /**
          * @return - font formatting object  if defined,  <code>null</code> otherwise
          */
-        IFontFormatting GetFontFormatting();
+        IFontFormatting FontFormatting { get; }
 
         /**
          * Create a new pattern formatting structure if it does not exist,
@@ -66,7 +66,23 @@ namespace NPOI.SS.UserModel
         /**
          * @return - pattern formatting object  if defined,  <code>null</code> otherwise
          */
-        IPatternFormatting GetPatternFormatting();
+        IPatternFormatting PatternFormatting { get; }
+
+
+        /**
+         * @return - databar / data-bar formatting object if defined, <code>null</code> otherwise
+         */
+        IDataBarFormatting DataBarFormatting { get; }
+
+        /**
+         * @return - icon / multi-state formatting object if defined, <code>null</code> otherwise
+         */
+        IIconMultiStateFormatting MultiStateFormatting { get; }
+
+        /**
+         * @return color scale / color grate formatting object if defined, <code>null</code> otherwise
+         */
+        IColorScaleFormatting ColorScaleFormatting { get; }
 
         /**
          * Type of conditional formatting rule.
@@ -76,7 +92,7 @@ namespace NPOI.SS.UserModel
          *
          * @return the type of condition
          */
-         [Obsolete("Use ConditionTypeType")]
+        [Obsolete("Use ConditionTypeType")]
         byte ConditionType { get; }
         ConditionType ConditionTypeType { get; }
 
