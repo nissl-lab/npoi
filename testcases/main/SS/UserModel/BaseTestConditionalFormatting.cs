@@ -706,25 +706,19 @@ namespace TestCases.SS.UserModel
             // TODO Support Data Bars, then check the rest of this rule
 
 
-            // Colours R->G - Column F
+            // Colours Red->Yellow->Green - Column F
             cf = sheetCF.GetConditionalFormattingAt(3);
             Assert.AreEqual(1, cf.GetFormattingRanges().Length);
             Assert.AreEqual("F2:F17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertColorScale(cf, "F8696B", "FFEB84", "63BE7B");
 
-            Assert.AreEqual(1, cf.NumberOfRules);
-            cr = cf.GetRule(0);
-            Assert.AreEqual(ConditionType.ColorScale, cr.ConditionTypeType);
-            // TODO Support Color Scales, then check the rest of this rule
 
-            // Colours BWR - Column G
+            // Colours Blue->White->Red - Column G
             cf = sheetCF.GetConditionalFormattingAt(4);
             Assert.AreEqual(1, cf.GetFormattingRanges().Length);
             Assert.AreEqual("G2:G17", cf.GetFormattingRanges()[0].FormatAsString());
+            assertColorScale(cf, "5A8AC6", "FCFCFF", "F8696B");
 
-            Assert.AreEqual(1, cf.NumberOfRules);
-            cr = cf.GetRule(0);
-            Assert.AreEqual(ConditionType.ColorScale, cr.ConditionTypeType);
-            // TODO Support Color Scales, then check the rest of this rule
 
             // TODO Simplify asserts
 
@@ -860,6 +854,52 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(v, th.Value);
                 Assert.AreEqual(null, th.Formula);
             }
+        }
+
+        private void assertColorScale(IConditionalFormatting cf, params string[] colors)
+        {
+            Assert.AreEqual(1, cf.NumberOfRules);
+            IConditionalFormattingRule cr = cf.GetRule(0);
+            assertColorScale(cr, colors);
+        }
+        private void assertColorScale(IConditionalFormattingRule cr, params string[] colors)
+        {
+            Assert.AreEqual(ConditionType.ColorScale, cr.ConditionTypeType);
+            Assert.AreEqual(ComparisonOperator.NoComparison, cr.ComparisonOperation);
+            Assert.AreEqual(null, cr.Formula1);
+            Assert.AreEqual(null, cr.Formula2);
+
+            // TODO Implement
+            /*
+                    ColorScaleFormatting color = cr.ColorScaleFormatting;
+                    assertNotNull(color);
+                    assertNotNull(color.Colors);
+                    assertNotNull(color.Thresholds);
+                    Assert.AreEqual(colors.length, color.NumControlPoints);
+                    Assert.AreEqual(colors.length, color.Colors.length);
+                    Assert.AreEqual(colors.length, color.Thresholds.length);
+
+                    // Thresholds should be Min / (evenly spaced) / Max
+                    int steps = 100 / (colors.length-1);
+                    for (int i=0; i<colors.length; i++) {
+                        ConditionalFormattingThreshold th = color.Thresholds[i];
+                        if (i == 0) {
+                            Assert.AreEqual(RangeType.MIN, th.RangeType);
+                        } else if (i == colors.length-1) {
+                            Assert.AreEqual(RangeType.MAX, th.RangeType);
+                        } else {
+                            Assert.AreEqual(RangeType.PERCENT, th.RangeType);
+                            Assert.AreEqual(steps*i, th.Value);
+                        }
+                        Assert.AreEqual(null, th.Formula);
+                    }
+
+                    // Colors should match
+                    for (int i=0; i<colors.length; i++) {
+                        Color c = color.Colors[i];
+                        Assert.AreEqual(colors[i], c.toString());
+                    }
+            */
         }
         [Test]
         public void TestCreateFontFormatting()
