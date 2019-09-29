@@ -95,13 +95,13 @@ namespace NPOI.HSSF.UserModel
             if (borderFormatting != null)
             {
                 cfRuleRecord.BorderFormatting=(borderFormatting);
-                return new HSSFBorderFormatting(cfRuleRecord);
+                return new HSSFBorderFormatting(cfRuleRecord, workbook);
             }
             else if (Create)
             {
                 borderFormatting = new BorderFormatting();
                 cfRuleRecord.BorderFormatting=(borderFormatting);
-                return new HSSFBorderFormatting(cfRuleRecord);
+                return new HSSFBorderFormatting(cfRuleRecord, workbook);
             }
             else
             {
