@@ -34,15 +34,15 @@ namespace NPOI.HSSF.UserModel
         private HSSFSheet sheet;
         private HSSFWorkbook workbook;
 
-        protected HSSFConditionalFormattingThreshold(Threshold threshold, HSSFSheet sheet)
+        protected internal HSSFConditionalFormattingThreshold(Threshold threshold, HSSFSheet sheet)
         {
             this.threshold = threshold;
             this.sheet = sheet;
             this.workbook = sheet.Workbook as HSSFWorkbook;
         }
-        protected Threshold GetThreshold()
+        protected internal Threshold Threshold
         {
-            return threshold;
+            get { return threshold; }
         }
 
         public RangeType RangeType

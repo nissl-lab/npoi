@@ -718,15 +718,18 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(ComparisonOperator.NoComparison, cr.ComparisonOperation);
             Assert.AreEqual(null, cr.Formula1);
             Assert.AreEqual(null, cr.Formula2);
-            if (cr is HSSFConditionalFormattingRule) {
+            if (cr is HSSFConditionalFormattingRule)
+            {
                 HSSFConditionalFormattingRule hcr = (HSSFConditionalFormattingRule)cr;
                 icon = hcr.MultiStateFormatting;
                 Assert.IsNotNull(icon);
                 Assert.AreEqual(IconSet.GYR_3_TRAFFIC_LIGHTS, icon.IconSet);
-                Assert.AreEqual(false, icon.isIconOnly());
-                Assert.AreEqual(false, icon.isReversed());
+                Assert.AreEqual(false, icon.IsIconOnly);
+                Assert.AreEqual(false, icon.IsReversed);
                 // TODO Check the rest
-            } else {
+            }
+            else
+            {
                 // TODO XSSF Support
             }
 

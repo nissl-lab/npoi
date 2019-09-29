@@ -40,10 +40,20 @@ namespace NPOI.HSSF.UserModel
 
         private CFRuleBase cfRuleRecord;
         private HSSFWorkbook workbook;
+        private HSSFSheet sheet;
 
-        public HSSFConditionalFormattingRule(HSSFWorkbook pWorkbook, CFRuleBase pRuleRecord)
+        public HSSFConditionalFormattingRule(HSSFSheet pSheet, CFRuleBase pRuleRecord)
         {
-            workbook = pWorkbook;
+            if (pSheet == null)
+            {
+                throw new ArgumentException("pSheet must not be null");
+            }
+            if (pRuleRecord == null)
+            {
+                throw new ArgumentException("pRuleRecord must not be null");
+            }
+            sheet = pSheet;
+            workbook = pSheet.Workbook as HSSFWorkbook;
             cfRuleRecord = pRuleRecord;
         }
 
@@ -161,6 +171,50 @@ namespace NPOI.HSSF.UserModel
         {
             return GetPatternFormatting(true);
         }
+
+        private HSSFIconMultiStateFormatting GetMultiStateFormatting(bool create)
+        {
+            if (cfRuleRecord is CFRule12Record) {
+                // Good
+            } else {
+                if (create) throw new ArgumentException("Can't convert a CF into a CF12 record");
+                return null;
+            }
+            CFRule12Record cfRule12Record = (CFRule12Record)cfRuleRecord;
+            IconMultiStateFormatting iconFormatting = cfRule12Record.MultiStateFormatting;
+            if (iconFormatting != null)
+            {
+                return new HSSFIconMultiStateFormatting(cfRule12Record, sheet);
+            }
+            else if (create)
+            {
+                iconFormatting = cfRule12Record.CreateMultiStateFormatting();
+                return new HSSFIconMultiStateFormatting(cfRule12Record, sheet);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /**
+         * @return icon / multi-state formatting object if defined, <code>null</code> otherwise
+         */
+        public HSSFIconMultiStateFormatting MultiStateFormatting
+        {
+            get { return GetMultiStateFormatting(false); }
+        }
+
+        /**
+         * create a new icon / multi-state formatting object if it does not exist,
+         * otherwise just return the existing object.
+         */
+        public HSSFIconMultiStateFormatting CreateMultiStateFormatting()
+        {
+            return GetMultiStateFormatting(true);
+        }
+
+
         public byte ConditionType
         {
             get

@@ -62,10 +62,8 @@ namespace NPOI.HSSF.UserModel
                 String formula1,
                 String formula2)
         {
-
-            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
             CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, formula2);
-            return new HSSFConditionalFormattingRule(wb, rr);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
         }
 
         /// <summary>
@@ -77,17 +75,15 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public IConditionalFormattingRule CreateConditionalFormattingRule(String formula)
         {
-            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
             CFRuleRecord rr = CFRuleRecord.Create(_sheet, formula);
-            return new HSSFConditionalFormattingRule(wb, rr);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
         }
         public IConditionalFormattingRule CreateConditionalFormattingRule(
             ComparisonOperator comparisonOperation,
             String formula1)
         {
-            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
             CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, null);
-            return new HSSFConditionalFormattingRule(wb, rr);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
         }
         /// <summary>
         /// Adds a copy of HSSFConditionalFormatting object to the sheet
@@ -194,7 +190,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return null;
             }
-            return new HSSFConditionalFormatting((HSSFWorkbook)_sheet.Workbook, cf);
+            return new HSSFConditionalFormatting(_sheet, cf);
         }
 
         /// <summary>

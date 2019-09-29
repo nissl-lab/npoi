@@ -33,7 +33,7 @@ namespace NPOI.HSSF.UserModel
         private CFRule12Record cfRule12Record;
         private IconMultiStateFormatting iconFormatting;
 
-        protected HSSFIconMultiStateFormatting(CFRule12Record cfRule12Record, HSSFSheet sheet)
+        protected internal HSSFIconMultiStateFormatting(CFRule12Record cfRule12Record, HSSFSheet sheet)
         {
             this.sheet = sheet;
             this.cfRule12Record = cfRule12Record;
