@@ -124,7 +124,7 @@ namespace NPOI.POIFS.Crypt
                 base.Close();
 
                 int oleStreamSize = (int)(fileOut.Length + LittleEndianConsts.LONG_SIZE);
-                CalculateChecksum(fileOut, oleStreamSize);
+                CalculateChecksum(fileOut, (int)_pos);
                 dir.CreateDocument(Decryptor.DEFAULT_POIFS_ENTRY, oleStreamSize, new EncryptedPackageWriter(this));
                 CreateEncryptionInfoEntry(dir, fileOut);
             } catch (Exception e) {
