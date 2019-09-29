@@ -29,6 +29,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
+    using System.Collections.Generic;
 
     /**
      * Tests the serialization and deserialization of the CFRecordsAggregate
@@ -45,11 +46,11 @@ namespace TestCases.HSSF.Record.Aggregates
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
-            IList recs = new ArrayList();
-            CFHeaderRecord header = new CFHeaderRecord();
-            CFRuleRecord rule1 = CFRuleRecord.Create(sheet, "7");
-            CFRuleRecord rule2 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "2", "5");
-            CFRuleRecord rule3 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.GreaterThanOrEqual, "100", null);
+            List<Record> recs = new List<Record>();
+            CFHeaderBase header = new CFHeaderRecord();
+            CFRuleBase rule1 = CFRuleRecord.Create(sheet, "7");
+            CFRuleBase rule2 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "2", "5");
+            CFRuleBase rule3 = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.GreaterThanOrEqual, "100", null);
             header.NumberOfConditionalFormats = (3);
             CellRangeAddress[] cellRanges = {
 				new CellRangeAddress(0,1,0,0),
@@ -127,5 +128,37 @@ namespace TestCases.HSSF.Record.Aggregates
             }
             Assert.AreEqual(rules.Length, nRules);
         }
+
+        [Test]
+        public void TestCantMixTypes()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
+            CellRangeAddress[] cellRanges = {
+                new CellRangeAddress(0,1,0,0),
+                new CellRangeAddress(0,1,2,2),
+            };
+            CFRuleBase[] rules = {
+                CFRuleRecord.Create(sheet, "7"),
+                CFRule12Record.Create(sheet, (byte)ComparisonOperator.Between, "2", "5"),
+            };
+            try
+            {
+                new CFRecordsAggregate(cellRanges, rules);
+                Assert.Fail("Shouldn't be able to mix between types");
+            }
+            catch (ArgumentException e) { }
+
+            rules = new CFRuleBase[] { CFRuleRecord.Create(sheet, "7") };
+            CFRecordsAggregate agg = new CFRecordsAggregate(cellRanges, rules);
+
+            try
+            {
+                agg.AddRule(CFRule12Record.Create(sheet, "7"));
+                Assert.Fail("Shouldn't be able to mix between types");
+            }
+            catch (ArgumentException e) { }
+        }
+
     }
 }

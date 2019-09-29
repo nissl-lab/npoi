@@ -33,7 +33,7 @@ namespace NPOI.HSSF.UserModel
 
         private FontFormatting fontFormatting;
 
-        public HSSFFontFormatting(CFRuleRecord cfRuleRecord)
+        public HSSFFontFormatting(CFRuleBase cfRuleRecord)
         {
             this.fontFormatting = cfRuleRecord.FontFormatting;
         }

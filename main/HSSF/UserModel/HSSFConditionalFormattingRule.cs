@@ -38,16 +38,16 @@ namespace NPOI.HSSF.UserModel
     {
         private const byte CELL_COMPARISON = CFRuleRecord.CONDITION_TYPE_CELL_VALUE_IS;
 
-        private CFRuleRecord cfRuleRecord;
+        private CFRuleBase cfRuleRecord;
         private HSSFWorkbook workbook;
 
-        public HSSFConditionalFormattingRule(HSSFWorkbook pWorkbook, CFRuleRecord pRuleRecord)
+        public HSSFConditionalFormattingRule(HSSFWorkbook pWorkbook, CFRuleBase pRuleRecord)
         {
             workbook = pWorkbook;
             cfRuleRecord = pRuleRecord;
         }
 
-        public CFRuleRecord CfRuleRecord
+        public CFRuleBase CfRuleRecord
         {
             get { return cfRuleRecord; }
         }

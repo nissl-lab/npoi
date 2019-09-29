@@ -43,12 +43,12 @@ namespace NPOI.HSSF.Record.Aggregates
 
         //private static POILogger log = POILogFactory.GetLogger(typeof(CFRecordsAggregate));
 
-        private CFHeaderRecord header;
+        private CFHeaderBase header;
 
         /** List of CFRuleRecord objects */
-        private List<CFRuleRecord> rules;
+        private List<CFRuleBase> rules;
 
-        private CFRecordsAggregate(CFHeaderRecord pHeader, CFRuleRecord[] pRules)
+        private CFRecordsAggregate(CFHeaderBase pHeader, CFRuleBase[] pRules)
         {
             if (pHeader == null)
             {
@@ -66,20 +66,27 @@ namespace NPOI.HSSF.Record.Aggregates
                     + " this file will cause problems with old Excel versions");
             }
             header = pHeader;
-            rules = new List<CFRuleRecord>(3);
+            rules = new List<CFRuleBase>(pRules.Length);
             for (int i = 0; i < pRules.Length; i++)
             {
+                checkRuleType(pRules[i]);
                 rules.Add(pRules[i]);
             }
         }
 
 
-        public CFRecordsAggregate(CellRangeAddress[] regions, CFRuleRecord[] rules)
-            : this(new CFHeaderRecord(regions, rules.Length), rules)
+        public CFRecordsAggregate(CellRangeAddress[] regions, CFRuleBase[] rules)
+            : this(createHeader(regions, rules), rules)
         {
 
         }
-
+        private static CFHeaderBase createHeader(CellRangeAddress[] regions, CFRuleBase[] rules)
+        {
+            if (rules.Length == 0 || rules[0] is CFRuleRecord) {
+                return new CFHeaderRecord(regions, rules.Length);
+            }
+            return new CFHeader12Record(regions, rules.Length);
+        }
         /// <summary>
         /// Create CFRecordsAggregate from a list of CF Records
         /// </summary>
@@ -87,19 +94,21 @@ namespace NPOI.HSSF.Record.Aggregates
         public static CFRecordsAggregate CreateCFAggregate(RecordStream rs)
         {
             Record rec = rs.GetNext();
-            if (rec.Sid != CFHeaderRecord.sid)
+            if (rec.Sid != CFHeaderRecord.sid &&
+                rec.Sid != CFHeader12Record.sid)
             {
                 throw new InvalidOperationException("next record sid was " + rec.Sid
-                        + " instead of " + CFHeaderRecord.sid + " as expected");
+                        + " instead of " + CFHeaderRecord.sid + " or " 
+                        + CFHeader12Record.sid + " as expected");
             }
 
-            CFHeaderRecord header = (CFHeaderRecord)rec;
+            CFHeaderBase header = (CFHeaderBase)rec;
             int nRules = header.NumberOfConditionalFormats;
 
-            CFRuleRecord[] rules = new CFRuleRecord[nRules];
+            CFRuleBase[] rules = new CFRuleBase[nRules];
             for (int i = 0; i < rules.Length; i++)
             {
-                rules[i] = (CFRuleRecord)rs.GetNext();
+                rules[i] = (CFRuleBase)rs.GetNext();
             }
 
             return new CFRecordsAggregate(header, rules);
@@ -109,6 +118,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /// </summary>
         /// <param name="recs">list of Record objects</param>
         /// <param name="pOffset">position of CFHeaderRecord object in the list of Record objects</param>
+        [Obsolete("Not found in poi(2015-07-14), maybe was removed")]
         public static CFRecordsAggregate CreateCFAggregate(IList recs, int pOffset)
         {
             Record rec = (Record)recs[pOffset];
@@ -163,7 +173,7 @@ namespace NPOI.HSSF.Record.Aggregates
             rv.VisitRecord(header);
             for (int i = 0; i < rules.Count; i++)
             {
-                CFRuleRecord rule = rules[i];
+                CFRuleBase rule = rules[i];
                 rv.VisitRecord(rule);
             }
         }
@@ -174,12 +184,12 @@ namespace NPOI.HSSF.Record.Aggregates
         public CFRecordsAggregate CloneCFAggregate()
         {
 
-            CFRuleRecord[] newRecs = new CFRuleRecord[rules.Count];
+            CFRuleBase[] newRecs = new CFRuleBase[rules.Count];
             for (int i = 0; i < newRecs.Length; i++)
             {
                 newRecs[i] = (CFRuleRecord)GetRule(i).Clone();
             }
-            return new CFRecordsAggregate((CFHeaderRecord)header.Clone(), newRecs);
+            return new CFRecordsAggregate((CFHeaderBase)header.Clone(), newRecs);
         }
 
         public override short Sid
@@ -210,7 +220,7 @@ namespace NPOI.HSSF.Record.Aggregates
             return pos - offset;
         }
 
-        public CFHeaderRecord Header
+        public CFHeaderBase Header
         {
             get { return header; }
         }
@@ -223,14 +233,27 @@ namespace NPOI.HSSF.Record.Aggregates
                         + ") nRules=" + rules.Count);
             }
         }
-        public CFRuleRecord GetRule(int idx)
+        private void checkRuleType(CFRuleBase r)
+        {
+            if (header is CFHeaderRecord &&
+                     r is CFRuleRecord) {
+                return;
+            }
+            if (header is CFHeader12Record &&
+                     r is CFRule12Record) {
+                return;
+            }
+            throw new ArgumentException("Header and Rule must both be CF or both be CF12, can't mix");
+        }
+        public CFRuleBase GetRule(int idx)
         {
             CheckRuleIndex(idx);
             return rules[idx];
         }
-        public void SetRule(int idx, CFRuleRecord r)
+        public void SetRule(int idx, CFRuleBase r)
         {
             CheckRuleIndex(idx);
+            checkRuleType(r);
             rules[idx] = r;
         }
 
@@ -272,7 +295,7 @@ namespace NPOI.HSSF.Record.Aggregates
 
             for (int i = 0; i < rules.Count; i++)
             {
-                CFRuleRecord rule = rules[i];
+                CFRuleBase rule = rules[i];
                 Ptg[] ptgs;
                 ptgs = rule.ParsedExpression1;
                 if (ptgs != null && shifter.AdjustFormula(ptgs, currentExternSheetIx))
@@ -284,7 +307,16 @@ namespace NPOI.HSSF.Record.Aggregates
                 {
                     rule.ParsedExpression2 = (ptgs);
                 }
-            }
+                if (rule is CFRule12Record)
+                {
+                    CFRule12Record rule12 = (CFRule12Record)rule;
+                    ptgs = rule12.ParsedExpressionScale;
+                    if (ptgs != null && shifter.AdjustFormula(ptgs, currentExternSheetIx))
+                    {
+                        rule12.ParsedExpressionScale = (ptgs);
+                    }
+                }
+        }
             return true;
         }
         private static CellRangeAddress ShiftRange(FormulaShifter shifter, CellRangeAddress cra, int currentExternSheetIx)
@@ -309,7 +341,7 @@ namespace NPOI.HSSF.Record.Aggregates
             }
             throw new InvalidCastException("Unexpected shifted ptg class (" + ptg0.GetType().Name + ")");
         }
-        public void AddRule(CFRuleRecord r)
+        public void AddRule(CFRuleBase r)
         {
             if (rules.Count >= MAX_97_2003_CONDTIONAL_FORMAT_RULES)
             {
@@ -317,6 +349,7 @@ namespace NPOI.HSSF.Record.Aggregates
                     + " any more than " + MAX_97_2003_CONDTIONAL_FORMAT_RULES
                     + " - this file will cause problems with old Excel versions");
             }
+            checkRuleType(r);
             rules.Add(r);
             header.NumberOfConditionalFormats = (rules.Count);
         }
@@ -325,41 +358,21 @@ namespace NPOI.HSSF.Record.Aggregates
             get { return rules.Count; }
         }
 
-        /**
-         *  @return sum of sizes of all aggregated records
-         */
-        //public override int RecordSize
-        //{
-        //    get
-        //    {
-        //        int size = 0;
-        //        if (header != null)
-        //        {
-        //            size += header.RecordSize;
-        //        }
-        //        if (rules != null)
-        //        {
-        //            for (IEnumerator irecs = rules.GetEnumerator(); irecs.MoveNext(); )
-        //            {
-        //                size += ((Record)irecs.Current).RecordSize;
-        //            }
-        //        }
-        //        return size;
-        //    }
-        //}
-
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
-
-            buffer.Append("[CF]\n");
+            String type = "CF";
+            if (header is CFHeader12Record) {
+                type = "CF12";
+            }
+            buffer.Append("[").Append(type).Append("]\n");
             if (header != null)
             {
                 buffer.Append(header.ToString());
             }
             for (int i = 0; i < rules.Count; i++)
             {
-                CFRuleRecord cfRule = rules[i];
+                CFRuleBase cfRule = rules[i];
                 if (cfRule != null)
                 {
                     buffer.Append(cfRule.ToString());

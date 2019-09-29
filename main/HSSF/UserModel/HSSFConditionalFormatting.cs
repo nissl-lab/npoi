@@ -142,7 +142,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public IConditionalFormattingRule GetRule(int idx)
         {
-            CFRuleRecord ruleRecord = cfAggregate.GetRule(idx);
+            CFRuleBase ruleRecord = cfAggregate.GetRule(idx);
             return new HSSFConditionalFormattingRule(_workbook, ruleRecord);
         }
         /// <summary>

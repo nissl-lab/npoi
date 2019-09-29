@@ -132,7 +132,7 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("Number of rules must not exceed 3");
             }
 
-            CFRuleRecord[] rules = new CFRuleRecord[cfRules.Length];
+            CFRuleBase[] rules = new CFRuleBase[cfRules.Length];
             for (int i = 0; i != cfRules.Length; i++)
             {
                 rules[i] = ((HSSFConditionalFormattingRule)cfRules[i]).CfRuleRecord;

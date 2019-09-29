@@ -30,10 +30,10 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFBorderFormatting : IBorderFormatting
     {
-        private CFRuleRecord cfRuleRecord;
+        private CFRuleBase cfRuleRecord;
         private BorderFormatting borderFormatting;
 
-        public HSSFBorderFormatting(CFRuleRecord cfRuleRecord)
+        public HSSFBorderFormatting(CFRuleBase cfRuleRecord)
         {
             this.cfRuleRecord = cfRuleRecord;
             this.borderFormatting = cfRuleRecord.BorderFormatting;

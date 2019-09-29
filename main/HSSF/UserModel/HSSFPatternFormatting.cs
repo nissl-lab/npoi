@@ -27,14 +27,14 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFPatternFormatting : IPatternFormatting
     {
-        private CFRuleRecord cfRuleRecord;
+        private CFRuleBase cfRuleRecord;
         private PatternFormatting patternFormatting;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFPatternFormatting"/> class.
         /// </summary>
         /// <param name="cfRuleRecord">The cf rule record.</param>
-        public HSSFPatternFormatting(CFRuleRecord cfRuleRecord)
+        public HSSFPatternFormatting(CFRuleBase cfRuleRecord)
         {
             this.cfRuleRecord = cfRuleRecord;
             this.patternFormatting = cfRuleRecord.PatternFormatting;
