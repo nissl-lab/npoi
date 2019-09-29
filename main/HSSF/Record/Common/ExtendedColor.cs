@@ -51,14 +51,14 @@ namespace NPOI.HSSF.Record.Common
         // This one is SheetEx only, not allowed in CFs
         public static int THEME_FOLLOWED_HYPERLINK = 11;
 
-        private int type;
+        public int type;
 
         // Type = Indexed
-        private int colorIndex;
+        public int colorIndex;
         // Type = RGB
-        private byte[] rgba;
+        public byte[] rgba;
         // Type = Theme
-        private int themeIndex;
+        public int themeIndex;
 
         private double tint;
 

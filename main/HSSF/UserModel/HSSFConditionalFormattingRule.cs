@@ -61,7 +61,19 @@ namespace NPOI.HSSF.UserModel
         {
             get { return cfRuleRecord; }
         }
-
+        private CFRule12Record GetCFRule12Record(bool create)
+        {
+            if (cfRuleRecord is CFRule12Record)
+            {
+                // Good
+            }
+            else
+            {
+                if (create) throw new ArgumentException("Can't convert a CF into a CF12 record");
+                return null;
+            }
+            return (CFRule12Record)cfRuleRecord;
+        }
         private HSSFFontFormatting GetFontFormatting(bool Create)
         {
             FontFormatting fontFormatting = cfRuleRecord.FontFormatting;
@@ -174,13 +186,7 @@ namespace NPOI.HSSF.UserModel
 
         private HSSFIconMultiStateFormatting GetMultiStateFormatting(bool create)
         {
-            if (cfRuleRecord is CFRule12Record) {
-                // Good
-            } else {
-                if (create) throw new ArgumentException("Can't convert a CF into a CF12 record");
-                return null;
-            }
-            CFRule12Record cfRule12Record = (CFRule12Record)cfRuleRecord;
+            CFRule12Record cfRule12Record = GetCFRule12Record(create);
             IconMultiStateFormatting iconFormatting = cfRule12Record.MultiStateFormatting;
             if (iconFormatting != null)
             {
@@ -214,6 +220,43 @@ namespace NPOI.HSSF.UserModel
             return GetMultiStateFormatting(true);
         }
 
+        private HSSFColorScaleFormatting GetColorScaleFormatting(bool create)
+        {
+            CFRule12Record cfRule12Record = GetCFRule12Record(create);
+            ColorGradientFormatting colorFormatting = cfRule12Record.ColorGradientFormatting;
+            if (colorFormatting != null)
+            {
+                return new HSSFColorScaleFormatting(cfRule12Record, sheet);
+            }
+            else if (create)
+            {
+                colorFormatting = cfRule12Record.CreateColorGradientFormatting();
+                return new HSSFColorScaleFormatting(cfRule12Record, sheet);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        /**
+         * @return color scale / gradient formatting object if defined, <code>null</code> otherwise
+         */
+        public IColorScaleFormatting ColorScaleFormatting
+        {
+            get
+            {
+                return GetColorScaleFormatting(false);
+            }
+            
+        }
+        /**
+         * create a new color scale / gradient formatting object if it does not exist,
+         * otherwise just return the existing object.
+         */
+        public HSSFColorScaleFormatting CreateColorScaleFormatting()
+        {
+            return GetColorScaleFormatting(true);
+        }
 
         public byte ConditionType
         {
@@ -273,7 +316,6 @@ namespace NPOI.HSSF.UserModel
 
         public IDataBarFormatting DataBarFormatting => throw new NotImplementedException();
 
-        public IColorScaleFormatting ColorScaleFormatting => throw new NotImplementedException();
 
         protected internal String ToFormulaString(Ptg[] ParsedExpression)
         {

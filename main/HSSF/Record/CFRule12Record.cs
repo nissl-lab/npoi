@@ -27,6 +27,7 @@ namespace NPOI.HSSF.Record
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
+    using ExtendedColorR = NPOI.HSSF.Record.Common.ExtendedColor;
 
     /**
      * Conditional Formatting v12 Rule Record (0x087A). 
@@ -120,7 +121,7 @@ namespace NPOI.HSSF.Record
         /**
          * Creates a new Data Bar formatting
          */
-        public static CFRule12Record Create(HSSFSheet sheet, ExtendedColor color) {
+        public static CFRule12Record Create(HSSFSheet sheet, ExtendedColorR color) {
             CFRule12Record r = new CFRule12Record(CONDITION_TYPE_DATA_BAR,
                                                   ComparisonOperator.NO_COMPARISON);
             DataBarFormatting dbf = r.CreateDataBarFormatting();
@@ -159,11 +160,11 @@ namespace NPOI.HSSF.Record
          */
         public static CFRule12Record CreateColorScale(HSSFSheet sheet) {
             int numPoints = 3;
-            ExtendedColor[] colors = new ExtendedColor[numPoints];
+            ExtendedColorR[] colors = new ExtendedColorR[numPoints];
             ColorGradientThreshold[] ts = new ColorGradientThreshold[numPoints];
             for (int i = 0; i < ts.Length; i++) {
                 ts[i] = new ColorGradientThreshold();
-                colors[i] = new ExtendedColor();
+                colors[i] = new ExtendedColorR();
             }
 
             CFRule12Record r = new CFRule12Record(CONDITION_TYPE_COLOR_SCALE,

@@ -226,8 +226,10 @@
     <Compile Include="HSSF\Record\OldSheetRecord.cs" />
     <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="HSSF\UserModel\HSSFColorScaleFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFConditionalFormattingThreshold.cs" />
+    <Compile Include="HSSF\UserModel\HSSFExtendedColor.cs" />
     <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
@@ -757,6 +759,7 @@
     <Compile Include="SS\UserModel\ConditionType.cs" />
     <Compile Include="SS\UserModel\DataBarFormatting.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
+    <Compile Include="SS\UserModel\ExtendedColor.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
     <Compile Include="SS\Format\SimpleFraction.cs" />
