@@ -21,6 +21,9 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
 using System;
+using System.Collections.Generic;
+using ConditionTypeClass = NPOI.SS.UserModel.ConditionType;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -31,9 +34,33 @@ namespace NPOI.XSSF.UserModel
     {
         private CT_CfRule _cfRule;
         private XSSFSheet _sh;
+        
+        private static Dictionary<ST_CfType, ConditionType> typeLookup = new Dictionary<ST_CfType, ConditionType>();
+        static XSSFConditionalFormattingRule()
+        {
+            typeLookup.Add(ST_CfType.cellIs, ConditionTypeClass.CellValueIs);
+            typeLookup.Add(ST_CfType.expression, ConditionTypeClass.Formula);
+            typeLookup.Add(ST_CfType.colorScale, ConditionTypeClass.ColorScale);
+            typeLookup.Add(ST_CfType.dataBar, ConditionTypeClass.DataBar);
+            typeLookup.Add(ST_CfType.iconSet, ConditionTypeClass.IconSet);
 
-        /*package*/
-        public XSSFConditionalFormattingRule(XSSFSheet sh)
+            // These are all subtypes of Filter, we think...
+            typeLookup.Add(ST_CfType.top10, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.uniqueValues, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.duplicateValues, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.containsText, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.notContainsText, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.beginsWith, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.endsWith, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.containsBlanks, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.notContainsBlanks, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.containsErrors, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.notContainsErrors, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.timePeriod, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.aboveAverage, ConditionTypeClass.Filter);
+        }
+    /*package*/
+    public XSSFConditionalFormattingRule(XSSFSheet sh)
         {
             _cfRule = new CT_CfRule();
             _sh = sh;
@@ -173,25 +200,31 @@ namespace NPOI.XSSF.UserModel
         /**
          * Type of conditional formatting rule.
          * <p>
-         * MUST be either {@link ConditionalFormattingRule#CONDITION_TYPE_CELL_VALUE_IS}
-         * or  {@link ConditionalFormattingRule#CONDITION_TYPE_FORMULA}
+         * MUST be one of the IDs of a {@link ConditionType}
          * </p>
          *
          * @return the type of condition
          */
-        public ConditionType ConditionType
+        public byte ConditionType
         {
             get
             {
-                switch (_cfRule.type)
-                {
-                    case ST_CfType.expression: return ConditionType.Formula;
-                    case ST_CfType.cellIs: return ConditionType.CellValueIs;
-                }
+                ConditionType type = ConditionTypeType;
+                if (type != null) return type.Id;
                 return 0;
             }
         }
-
+        /**
+         * Type of conditional formatting rule.
+         */
+        public ConditionType ConditionTypeType
+        {
+            get
+            {
+                return typeLookup[(_cfRule.type)];
+            }
+            
+        }
         /**
          * The comparison function used when the type of conditional formatting is Set to
          * {@link ConditionalFormattingRule#CONDITION_TYPE_CELL_VALUE_IS}

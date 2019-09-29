@@ -751,6 +751,7 @@
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
     <Compile Include="SS\UserModel\ConditionalFormattingThreshold.cs" />
+    <Compile Include="SS\UserModel\ConditionType.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />

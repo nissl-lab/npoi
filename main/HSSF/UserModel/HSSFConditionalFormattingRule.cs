@@ -161,14 +161,22 @@ namespace NPOI.HSSF.UserModel
         {
             return GetPatternFormatting(true);
         }
-        /**
-	     * @return -  the conditiontype for the cfrule
-	     */
-        public ConditionType ConditionType
+        public byte ConditionType
         {
             get
             {
-                return (ConditionType)cfRuleRecord.ConditionType;
+                return cfRuleRecord.ConditionType;
+            }
+        }
+
+        /**
+	     * @return -  the conditiontype for the cfrule
+	     */
+        public ConditionType ConditionTypeType
+        {
+            get
+            {
+                return NPOI.SS.UserModel.ConditionType.ForId(cfRuleRecord.ConditionType);
             }
         }
         /**

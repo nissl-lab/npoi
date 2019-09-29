@@ -21,23 +21,6 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    public enum ConditionType : byte
-    {
-        /// <summary>
-        /// Allow accessing the Initial value.
-        /// </summary>
-        None = 0,
-        /**
-         * This conditional formatting rule Compares a cell value
-         * to a formula calculated result, using an operator
-         */
-        CellValueIs = 1,
-        /**
-         *  This conditional formatting rule Contains a formula to Evaluate.
-         *  When the formula result is true, the cell is highlighted.
-         */
-        Formula = 2
-    }
     /**
      * Represents a description of a conditional formatting rule
      *
@@ -93,7 +76,9 @@ namespace NPOI.SS.UserModel
          *
          * @return the type of condition
          */
-        ConditionType ConditionType { get; }
+         [Obsolete("Use ConditionTypeType")]
+        byte ConditionType { get; }
+        ConditionType ConditionTypeType { get; }
 
         /**
          * The comparison function used when the type of conditional formatting is Set to
