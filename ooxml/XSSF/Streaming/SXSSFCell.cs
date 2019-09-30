@@ -561,10 +561,10 @@ namespace NPOI.XSSF.Streaming
 
         private object GetPropertyValue(int type)
         {
-            return getPropertyValue(type, null);
+            return GetPropertyValue(type, null);
         }
 
-        private object getPropertyValue(int type, string defaultValue)
+        private object GetPropertyValue(int type, string defaultValue)
         {
             Property current = _firstProperty;
             while (current != null && current.GetType() != type) current = current._next;
@@ -635,7 +635,7 @@ namespace NPOI.XSSF.Streaming
                         if (_value != null)
                         {
                             // if a cell is not blank then convert the old value to string
-                            String str = convertCellValueToString();
+                            String str = ConvertCellValueToString();
                             sval.Value = str;
                         }
                         _value = sval;
@@ -740,12 +740,12 @@ namespace NPOI.XSSF.Streaming
             }
 
         }
-        private String convertCellValueToString()
+        private String ConvertCellValueToString()
         {
             CellType cellType = _value.GetType();
-            return convertCellValueToString(cellType);
+            return ConvertCellValueToString(cellType);
         }
-        private String convertCellValueToString(CellType cellType)
+        private String ConvertCellValueToString(CellType cellType)
         {
             switch (cellType)
             {
@@ -767,7 +767,7 @@ namespace NPOI.XSSF.Streaming
                         FormulaValue fv = (FormulaValue)_value;
                         if (fv.GetFormulaType() != CellType.Formula)
                         {
-                            return convertCellValueToString(fv.GetFormulaType());
+                            return ConvertCellValueToString(fv.GetFormulaType());
                         }
                     }
                     return "";

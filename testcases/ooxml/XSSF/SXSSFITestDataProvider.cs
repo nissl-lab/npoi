@@ -105,7 +105,7 @@ namespace NPOI.XSSF
             }
         }
 
-        public bool cleanup()
+        public bool Cleanup()
         {
             bool ok = true;
             for (int i = 0; i < instances.Count; i++)
