@@ -22,17 +22,17 @@ namespace NPOI.XSSF.Streaming
     {
         private SXSSFSheet _xs;
 
-    public SXSSFEvaluationSheet(SXSSFSheet sheet)
+        public SXSSFEvaluationSheet(SXSSFSheet sheet)
         {
             _xs = sheet;
         }
 
-        public SXSSFSheet getSXSSFSheet()
+        public SXSSFSheet GetSXSSFSheet()
         {
             return _xs;
         }
 
-    public SXSSFEvaluationCell getCell(int rowIndex, int columnIndex)
+        public SXSSFEvaluationCell getCell(int rowIndex, int columnIndex)
         {
             SXSSFRow row = _xs._rows[rowIndex];
             if (row == null)
@@ -55,7 +55,7 @@ namespace NPOI.XSSF.Streaming
          * @since POI 3.15 beta 3
          */
 
-    public void clearAllCachedResultValues()
+        public void clearAllCachedResultValues()
         {
             // nothing to do
         }

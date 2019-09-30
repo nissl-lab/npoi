@@ -37,14 +37,14 @@ namespace NPOI.XSSF.Streaming
     }
 
 
-    public Object getIdentityKey()
+    public Object GetIdentityKey()
     {
         // save memory by just using the cell itself as the identity key
         // Note - this assumes SXSSFCell has not overridden hashCode and equals
         return _cell;
     }
 
-    public SXSSFCell getSXSSFCell()
+    public SXSSFCell GetSXSSFCell()
     {
         return _cell;
     }

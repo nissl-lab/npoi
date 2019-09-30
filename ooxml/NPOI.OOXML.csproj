@@ -187,6 +187,7 @@
     <Compile Include="XSSF\Streaming\Values\StringFormulaValue.cs" />
     <Compile Include="XSSF\Streaming\Values\StringValue.cs" />
     <Compile Include="XSSF\Streaming\Values\Value.cs" />
+    <Compile Include="XSSF\UserModel\BaseXSSFEvaluationWorkbook.cs" />
     <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSeries.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFBarChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
