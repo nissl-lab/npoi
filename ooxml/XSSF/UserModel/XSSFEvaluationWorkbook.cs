@@ -55,9 +55,9 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        public override int GetSheetIndex(XSSFEvaluationSheet evalSheet)
+        public override int GetSheetIndex(IEvaluationSheet evalSheet)
         {
-            XSSFSheet sheet = evalSheet.GetXSSFSheet();
+            XSSFSheet sheet = ((XSSFEvaluationSheet)evalSheet).GetXSSFSheet();
             return _uBook.GetSheetIndex(sheet);
         }
 
@@ -66,10 +66,11 @@ namespace NPOI.XSSF.UserModel
             return new XSSFEvaluationSheet(_uBook.GetSheetAt(sheetIndex));
         }
 
-        public override Ptg[] GetFormulaTokens(XSSFEvaluationCell evalCell)
+        public override Ptg[] GetFormulaTokens(IEvaluationCell evalCell)
         {
-            XSSFCell cell = evalCell.GetXSSFCell();
-            return FormulaParser.Parse(cell.CellFormula, this, FormulaType.Cell, _uBook.GetSheetIndex(cell.Sheet));
+            XSSFCell cell = ((XSSFEvaluationCell)evalCell).GetXSSFCell();
+            XSSFEvaluationWorkbook frBook = XSSFEvaluationWorkbook.Create(_uBook);
+            return FormulaParser.Parse(cell.CellFormula, frBook, FormulaType.Cell, _uBook.GetSheetIndex(cell.Sheet));
         }
     }
 }

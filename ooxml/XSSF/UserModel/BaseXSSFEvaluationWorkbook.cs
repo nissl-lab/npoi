@@ -414,44 +414,12 @@ namespace NPOI.XSSF.UserModel
         {
             return SpreadsheetVersion.EXCEL2007;
         }
-        public virtual int GetSheetIndex(SXSSFEvaluationSheet evalSheet)
-        {
-            throw new NotImplementedException();
-        }
-        public virtual int GetSheetIndex(XSSFEvaluationSheet evalSheet)
-        {
-            throw new NotImplementedException();
-        }
-        public int GetSheetIndex(IEvaluationSheet sheet)
-        {
-            if (sheet is SXSSFEvaluationSheet)
-                return GetSheetIndex(sheet as SXSSFEvaluationSheet);
-            if (sheet is XSSFEvaluationSheet)
-                return GetSheetIndex(sheet as XSSFEvaluationSheet);
-            throw new NotImplementedException("unknown sheet type:" + sheet.GetType().Name);
-        }
+        
+        public abstract int GetSheetIndex(IEvaluationSheet sheet);
 
-        public virtual IEvaluationSheet GetSheet(int sheetIndex)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract IEvaluationSheet GetSheet(int sheetIndex);
 
-        public virtual Ptg[] GetFormulaTokens(SXSSFEvaluationCell evalCell)
-        {
-            throw new NotImplementedException();
-        }
-        public virtual Ptg[] GetFormulaTokens(XSSFEvaluationCell evalCell)
-        {
-            throw new NotImplementedException();
-        }
-        public Ptg[] GetFormulaTokens(IEvaluationCell cell)
-        {
-            if (cell is SXSSFEvaluationCell)
-                return GetFormulaTokens(cell as SXSSFEvaluationCell);
-            if (cell is XSSFEvaluationCell)
-                return GetFormulaTokens(cell as XSSFEvaluationCell);
-            throw new NotImplementedException("unknown sheet type:" + cell.GetType().Name);
-        }
+        public abstract Ptg[] GetFormulaTokens(IEvaluationCell cell);
     }
 
 }

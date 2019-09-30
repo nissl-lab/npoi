@@ -29,7 +29,7 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFSheet : ISheet
     {
-        /*package*/
+        // TODO: fields should be private and use public property
         public XSSFSheet _sh;
         public SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();

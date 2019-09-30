@@ -56,12 +56,15 @@ namespace NPOI.XSSF.UserModel
         }
 
         private XSSFFormulaEvaluator(XSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+            : this(workbook, new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder))
         {
-            _bookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder);
-            _book = workbook;
         }
 
-
+        protected XSSFFormulaEvaluator(XSSFWorkbook workbook, WorkbookEvaluator bookEvaluator)
+        {
+            _bookEvaluator = bookEvaluator;
+            _book = workbook;
+        }
 
         /**
          * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>

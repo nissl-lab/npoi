@@ -40,9 +40,9 @@ namespace NPOI.XSSF.Streaming
         }
 
 
-        public override int GetSheetIndex(SXSSFEvaluationSheet evalSheet)
+        public override int GetSheetIndex(IEvaluationSheet evalSheet)
         {
-            SXSSFSheet sheet = evalSheet.GetSXSSFSheet();
+            SXSSFSheet sheet = ((SXSSFEvaluationSheet)evalSheet).GetSXSSFSheet();
             return _xBook.GetSheetIndex(sheet);
         }
 
@@ -53,9 +53,10 @@ namespace NPOI.XSSF.Streaming
         }
 
 
-        public override Ptg[] GetFormulaTokens(SXSSFEvaluationCell evalCell)
+        public override Ptg[] GetFormulaTokens(IEvaluationCell evalCell)
         {
-            SXSSFCell cell = evalCell.GetSXSSFCell();
+            SXSSFCell cell = ((SXSSFEvaluationCell)evalCell).GetSXSSFCell();
+            SXSSFEvaluationWorkbook frBook = SXSSFEvaluationWorkbook.Create(_xBook);
             return FormulaParser.Parse(cell.CellFormula, this, FormulaType.Cell, _xBook.GetSheetIndex(cell.Sheet));
         }
     }
