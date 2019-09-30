@@ -478,7 +478,18 @@ namespace NPOI.XWPF.UserModel
         {
             return headerFooterPolicy;
         }
-
+        public XWPFHeaderFooterPolicy CreateHeaderFooterPolicy()
+        {
+            if (headerFooterPolicy == null)
+            {
+                if (!ctDocument.body.IsSetSectPr())
+                {
+                    ctDocument.body.AddNewSectPr();
+                }
+                headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
+            }
+            return headerFooterPolicy;
+        }
         /**
          * Returns the styles object used
          */

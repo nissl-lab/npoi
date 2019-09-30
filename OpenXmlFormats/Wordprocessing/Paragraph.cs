@@ -231,6 +231,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
+        public bool IsSetRsidR()
+        {
+            return this.rsidRField != null && rsidRField.Length > 0;
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));

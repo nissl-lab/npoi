@@ -627,7 +627,15 @@ namespace NPOI.XWPF.UserModel
                 throw new NotImplementedException();
             }
         }
-
+        /**
+         * Adds a new paragraph at the end of the header or footer
+         */
+        public XWPFParagraph CreateParagraph()
+        {
+            XWPFParagraph paragraph = new XWPFParagraph(headerFooter.AddNewP(), this);
+            paragraphs.Add(paragraph);
+            return paragraph;
+        }
         public XWPFParagraph InsertNewParagraph(System.Xml.XmlDocument cursor)
         {
             throw new NotImplementedException();

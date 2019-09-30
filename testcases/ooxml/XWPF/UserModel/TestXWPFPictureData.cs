@@ -26,6 +26,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
     using System.Xml;
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
     [TestFixture]
     public class TestXWPFPictureData
@@ -63,6 +64,39 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument readBack = XWPFTestDataSamples.WriteOutAndReadBack(sampleDoc);
             verifyOneHeaderPicture(readBack);
         }
+
+        public void FIXMEtestCreateHeaderPicture()
+        { // TODO Fix
+            XWPFDocument doc = new XWPFDocument();
+
+            // Starts with no header
+            XWPFHeaderFooterPolicy policy = doc.GetHeaderFooterPolicy();
+            Assert.IsNull(policy);
+
+            // Add a default header
+            policy = doc.CreateHeaderFooterPolicy();
+
+            XWPFParagraph[] hparas = new XWPFParagraph[] {
+                new XWPFParagraph(new CT_P(), doc)
+        };
+            hparas[0].CreateRun().SetText("Header Hello World!");
+            XWPFHeader header = policy.CreateHeader(XWPFHeaderFooterPolicy.DEFAULT, hparas);
+            Assert.AreEqual(0, header.AllPictures.Count);
+            Assert.AreEqual(1, header.Paragraphs.Count);
+
+            // Add a picture to it
+            header.Paragraphs[0].Runs[0].AddPicture(
+                    new ByteArrayInputStream(new byte[] { 1, 2, 3, 4 }),
+                    (int)PictureType.JPEG, "test.jpg", 2, 2);
+
+            // Check
+            verifyOneHeaderPicture(doc);
+
+            // Save, re-load, re-check
+            XWPFDocument readBack = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            verifyOneHeaderPicture(readBack);
+        }
+
 
         private void verifyOneHeaderPicture(XWPFDocument sampleDoc)
         {
