@@ -443,13 +443,9 @@ namespace NPOI.XSSF.UserModel
          * @param charset - charset
          * @see FontCharset
          */
-        public void SetCharSet(byte charSet)
+        public void SetCharSet(byte charset)
         {
-            int cs = (int)charSet;
-            if (cs < 0)
-            {
-                cs += 256;
-            }
+            int cs = charset & 0xff;
             SetCharSet(cs);
         }
         /**

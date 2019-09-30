@@ -26,6 +26,7 @@ namespace NPOI.XSSF.Model
     using System.Collections.Generic;
     using NPOI.SS.Util;
     using NPOI.Util;
+    using NPOI.OpenXmlFormats.Spreadsheet;
 
     [TestFixture]
     public class TestThemesTable
@@ -34,21 +35,6 @@ namespace NPOI.XSSF.Model
         private String testFileComplex = "Themes2.xlsx";
         // TODO .xls version available too, add HSSF support then check 
 
-        // What our theme names are
-        private static String[] themeEntries = {
-            "lt1",
-            "dk1",
-            "lt2",
-            "dk2",
-            "accent1",
-            "accent2",
-            "accent3",
-            "accent4",
-            "accent5",
-            "accent6",
-            "hlink",
-            "folhlink"
-        };
         // What colours they should show up as
         private static String[] rgbExpected = {
             "ffffff", // Lt1
@@ -85,7 +71,7 @@ namespace NPOI.XSSF.Model
             //        workbooks.put("Re-Saved_" + testFileComplex, complexRS);
 
             // Sanity check
-            Assert.AreEqual(themeEntries.Length, rgbExpected.Length);
+            //Assert.AreEqual(rgbExpected.Length, rgbExpected.Length);
 
             // For offline testing
             bool createFiles = false;
@@ -99,7 +85,7 @@ namespace NPOI.XSSF.Model
                 int startRN = 0;
                 if (whatWorkbook.EndsWith(testFileComplex)) startRN++;
 
-                for (int rn = startRN; rn < themeEntries.Length + startRN; rn++)
+                for (int rn = startRN; rn < rgbExpected.Length + startRN; rn++)
                 {
                     XSSFRow row = sheet.GetRow(rn) as XSSFRow;
                     Assert.IsNotNull(row, "Missing row " + rn + " in " + whatWorkbook);
@@ -107,17 +93,26 @@ namespace NPOI.XSSF.Model
                     XSSFCell cell = row.GetCell(0) as XSSFCell;
                     Assert.IsNotNull(cell,
                             "Missing cell " + ref1 +" in " + whatWorkbook);
-                    Assert.AreEqual(
-                            "Wrong theme at " + ref1 +" in " + whatWorkbook,
-                            themeEntries[rn], cell.StringCellValue);
+
+                    ThemeElement themeElem = ThemeElement.ById(rn - startRN);
+                    Assert.AreEqual(themeElem.name.ToLower(), cell.StringCellValue,
+                            "Wrong theme at " + ref1 +" in " + whatWorkbook);
+
+                    // Fonts are theme-based in their colours
                     XSSFFont font = (cell.CellStyle as XSSFCellStyle).GetFont();
+                    CT_Color ctColor = font.GetCTFont().GetColorArray(0);
+                    Assert.IsNotNull(ctColor);
+                    Assert.AreEqual(true, ctColor.IsSetTheme());
+                    Assert.AreEqual(themeElem.idx, ctColor.theme);
+
+                    // Get the colour, via the theme
                     XSSFColor color = font.GetXSSFColor();
 
                     // Theme colours aren't tinted
                     Assert.AreEqual(color.HasTint, false);
                     // Check the RGB part (no tint)
                     Assert.AreEqual(rgbExpected[rn], HexDump.ToHex(color.RGB),
-                            "Wrong theme colour " + themeEntries[rn] + " on " + whatWorkbook);
+                            "Wrong theme colour " + themeElem.name + " on " + whatWorkbook);
                     // Check the Theme ID
                     int expectedThemeIdx = rn - startRN;
                     long themeIdx = font.GetCTFont().GetColorArray(0).theme;
