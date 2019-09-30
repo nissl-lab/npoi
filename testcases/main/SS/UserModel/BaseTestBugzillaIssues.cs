@@ -28,6 +28,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
+    using System.Drawing;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
@@ -384,14 +385,29 @@ namespace TestCases.SS.UserModel
                 "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
 
             Assert.AreEqual(0, cell0.CellStyle.Indention, "Expecting no indentation in this test");
-            double width = SheetUtil.GetColumnWidth(sheet, 0, false);
-            Assert.IsTrue(width > 0, "Expected to have column width > 0 BEFORE auto-size, but had " + width);
-            width = SheetUtil.GetCellWidth(cell0, 8, null, false);
-            Assert.IsTrue(width > 0, "Expected to have cell width > 0 BEFORE auto-size, but had " + width);
+            Assert.AreEqual(0, cell0.CellStyle.Rotation ,"Expecting no rotation in this test");
+
+            // check computing size up to a large size
+            StringBuilder b = new StringBuilder();
+            for (int i = 0; i < longValue.Length * 5; i++)
+            {
+                b.Append("w");
+                Assert.IsTrue(ComputeCellWidthFixed(font, b.ToString()) > 0, "Had zero length starting at length " + i);
+            }
+
+            double widthManual = ComputeCellWidthManually(cell0, font);
+            double widthBeforeCell = SheetUtil.GetCellWidth(cell0, 8, null, false);
+            double widthBeforeCol = SheetUtil.GetColumnWidth(sheet, 0, false);
+            Assert.IsTrue(widthManual > 0, "Expected to have cell width > 0 when computing manually, but had " + widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
+                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue));
+            Assert.IsTrue(widthBeforeCell > 0, "Expected to have cell width > 0 BEFORE auto-size, but had " + widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
+                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue));
+            Assert.IsTrue(widthBeforeCol > 0, "Expected to have column width > 0 BEFORE auto-size, but had " + widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
+                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue));
 
             sheet.AutoSizeColumn(0);
 
-            width = SheetUtil.GetColumnWidth(sheet, 0, false);
+            double width = SheetUtil.GetColumnWidth(sheet, 0, false);
             Assert.IsTrue(width > 0, "Expected to have column width > 0 AFTER auto-size, but had " + width);
             width = SheetUtil.GetCellWidth(cell0, 8, null, false);
             Assert.IsTrue(width > 0, "Expected to have cell width > 0 AFTER auto-size, but had " + width);
@@ -400,6 +416,61 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
             sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 506819 reports exception at this point
         }
+
+        private double ComputeCellWidthManually(ICell cell0, IFont font)
+        {
+            double width;
+            //FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+            IRichTextString rt = cell0.RichStringCellValue;
+            String[] lines = rt.String.Split("\\n".ToCharArray());
+            Assert.AreEqual(1, lines.Length);
+            String txt = lines[0] + "0";
+
+            //AttributedString str = new AttributedString(txt);
+            //copyAttributes(font, str, 0, txt.length());
+
+            if (rt.NumFormattingRuns > 0)
+            {
+                // TODO: support rich text fragments
+            }
+
+            //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
+            //width = ((layout.getBounds().getWidth() / 1) / 8);
+            Font wfont = SheetUtil.IFont2Font(font);
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    width = (int)g.MeasureString(txt, wfont, int.MaxValue).Width;
+                }
+            }
+            return width;
+        }
+
+        private double ComputeCellWidthFixed(IFont font, String txt)
+        {
+            double width;
+            Font wfont = SheetUtil.IFont2Font(font);
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    width = (int)g.MeasureString(txt, wfont, int.MaxValue).Width;
+                }
+            }
+            return width;
+        }
+
+        //private static void copyAttributes(Font font, AttributedString str, int startIdx, int endIdx)
+        //{
+        //    str.addAttribute(TextAttribute.FAMILY, font.getFontName(), startIdx, endIdx);
+        //    str.addAttribute(TextAttribute.SIZE, (float)font.getFontHeightInPoints());
+        //    if (font.getBoldweight() == Font.BOLDWEIGHT_BOLD) str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
+        //    if (font.getItalic()) str.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
+        //    if (font.getUnderline() == Font.U_SINGLE) str.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
+        //}
 
         /**
          * CreateFreezePane column/row order check
