@@ -285,8 +285,12 @@ namespace NPOI.XSSF.UserModel
             CT_RElt lt2 = st.AddNewR();
             lt2.t= (text);
             PreserveSpaces(lt2.t);
-            CT_RPrElt pr = lt2.AddNewRPr();
-            if (font != null) SetRunAttributes(font.GetCTFont(), pr);
+            
+            if (font != null)
+            {
+                CT_RPrElt pr = lt2.AddNewRPr();
+                SetRunAttributes(font.GetCTFont(), pr);
+            }   
         }
 
         /**
@@ -349,6 +353,24 @@ namespace NPOI.XSSF.UserModel
             if (ctFont.sizeOfOutlineArray() > 0) pr.AddNewOutline().val =(ctFont.GetOutlineArray(0).val);
             if (ctFont.sizeOfShadowArray() > 0) pr.AddNewShadow().val =(ctFont.GetShadowArray(0).val);
             if (ctFont.sizeOfStrikeArray() > 0) pr.AddNewStrike().val = (ctFont.GetStrikeArray(0).val);
+        }
+
+        /**
+         * Does this string have any explicit formatting applied, or is 
+         *  it just text in the default style?
+         */
+        public bool HasFormatting()
+        {
+            List<CT_RElt> rs = st.r;
+            if (rs == null || rs.Count == 0)
+            {
+                return false;
+            }
+            foreach (CT_RElt r in rs)
+            {
+                if (r.isSetRPr()) return true;
+            }
+            return false;
         }
 
         /**
@@ -669,22 +691,6 @@ namespace NPOI.XSSF.UserModel
         {
             if (styles == null) return null;
             return styles.GetTheme();
-        }
-
-        public bool HasFormatting()
-        {
-            //noinspection deprecation - for performance reasons!
-            CT_RElt[] rs = st.r.ToArray();
-            if (rs == null || rs.Length == 0)
-            {
-                return false;
-            }
-            foreach (CT_RElt r in rs)
-            {
-                //TODO: check that this functions the same.
-                if (r.rPr != null) return true;
-            }
-            return false;
         }
     }
 }
