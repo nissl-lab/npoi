@@ -260,6 +260,28 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        public XSSFColorScaleFormatting CreateColorScaleFormatting()
+        {
+            // TODO Implement
+            return null;
+        }
+        public IColorScaleFormatting ColorScaleFormatting
+        {
+            get
+            {
+                if (_cfRule.IsSetColorScale())
+                {
+                    CT_ColorScale scale = _cfRule.colorScale;
+                    return new XSSFColorScaleFormatting(scale);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            
+        }
         /**
          * Type of conditional formatting rule.
          * <p>
@@ -359,7 +381,6 @@ namespace NPOI.XSSF.UserModel
 
         public IDataBarFormatting DataBarFormatting => throw new NotImplementedException();
 
-        public IColorScaleFormatting ColorScaleFormatting => throw new NotImplementedException();
     }
 }
 

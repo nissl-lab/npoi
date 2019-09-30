@@ -6276,6 +6276,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.iconSetField != null;
         }
 
+        public bool IsSetColorScale()
+        {
+            return this.colorScale != null;
+        }
+
         [XmlElement]
         public List<string> formula
         {
@@ -6634,7 +6639,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            CT_Cfvo cfvox = new CT_Cfvo();
+            cfvo.Add(cfvox);
+            return cfvox;
+        }
 
+        public CT_Color AddNewColor()
+        {
+            CT_Color colorx = new CT_Color();
+            color.Add(colorx);
+            return colorx;
+        }
+
+        public void RemoveCfvo(int p)
+        {
+            this.cfvo.RemoveAt(p);
+        }
+
+        public void RemoveColor(int p)
+        {
+            this.color.RemoveAt(p);
+        }
+
+        public int SizeOfCfvoArray()
+        {
+            return cfvo == null ? 0 : cfvo.Count;
+        }
+
+        public int SizeOfColorArray()
+        {
+            return color == null ? 0 : color.Count;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {

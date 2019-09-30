@@ -239,6 +239,7 @@
     <Compile Include="XSSF\UserModel\XSSFChildAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFClientAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFColor.cs" />
+    <Compile Include="XSSF\UserModel\XSSFColorScaleFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFComment.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormattingRule.cs" />
