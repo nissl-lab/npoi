@@ -35,6 +35,12 @@ namespace TestCases
                   "Unable to find expected text '" + needle + "' in text:\n" + haystack
             );
         }
+        public static void AssertNotContained(String haystack, String needle)
+        {
+            Assert.IsFalse(haystack.Contains(needle),
+                  "Unexpectedly found text '" + needle + "' in text:\n" + haystack
+            );
+        }
         public static void AssertEquals<T>(T[] expected, T[] actual)
         {
             Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");

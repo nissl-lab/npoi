@@ -377,17 +377,8 @@ namespace NPOI.XSSF.UserModel
                 sheets = new List<XSSFSheet>(shIdMap.Count);
                 foreach (CT_Sheet ctSheet in this.workbook.sheets.sheet)
                 {
-                    XSSFSheet sh = null;
-                    if(shIdMap.ContainsKey(ctSheet.id))
-                        sh = shIdMap[ctSheet.id];
-                    if (sh == null)
-                    {
-                        logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
-                        continue;
-                    }
-                    sh.sheet = ctSheet;
-                    sh.OnDocumentRead();
-                    sheets.Add(sh);
+                    ParseSheet(shIdMap, ctSheet);
+                    
                 }
                 // Load the external links tables. Their order is defined by the order 
                 //  of CTExternalReference elements in the workbook
@@ -416,6 +407,24 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /**
+         * Not normally to be called externally, but possibly to be overridden to avoid
+         * the DOM based parse of large sheets (see examples).
+         */
+        private void ParseSheet(Dictionary<String, XSSFSheet> shIdMap, CT_Sheet ctSheet)
+        {
+            XSSFSheet sh = null;
+            if (shIdMap.ContainsKey(ctSheet.id))
+                sh = shIdMap[ctSheet.id];
+            if (sh == null)
+            {
+                logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
+                return;
+            }
+            sh.sheet = ctSheet;
+            sh.OnDocumentRead();
+            sheets.Add(sh);
+        }
         /**
          * Create a new CT_Workbook with all values Set to default
          */
