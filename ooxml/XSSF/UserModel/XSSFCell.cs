@@ -586,6 +586,19 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        private bool IsFormulaCell
+        {
+            get
+            {
+                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
+                {
+                    return true;
+                }
+                return false;
+            }
+            
+        }
         /// <summary>
         /// Return the cell type.
         /// </summary>
@@ -594,7 +607,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
 
-                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
+                if (IsFormulaCell)
                 {
                     return CellType.Formula;
                 }
@@ -609,7 +622,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_cell.f == null)
+                if (!IsFormulaCell)
                 {
                     throw new InvalidOperationException("Only formula cells have cached results");
                 }
@@ -894,11 +907,11 @@ namespace NPOI.XSSF.UserModel
         /**
          * Used to help format error messages
          */
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool IsFormulaCell)
+        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "
-                + GetCellTypeName(actualTypeCode) + " " + (IsFormulaCell ? "formula " : "") + "cell";
+                + GetCellTypeName(actualTypeCode) + " " + (isFormulaCell ? "formula " : "") + "cell";
             return new InvalidOperationException(msg);
         }
 
