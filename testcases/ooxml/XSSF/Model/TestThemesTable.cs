@@ -66,9 +66,8 @@ namespace NPOI.XSSF.Model
             Dictionary<String, XSSFWorkbook> workbooks = new Dictionary<String, XSSFWorkbook>();
             workbooks.Add(testFileSimple, simple);
             workbooks.Add("Re-Saved_" + testFileSimple, simpleRS);
-            // TODO Fix these to work!
-            //        workbooks.put(testFileComplex, complex);
-            //        workbooks.put("Re-Saved_" + testFileComplex, complexRS);
+            workbooks.Add(testFileComplex, complex);
+            workbooks.Add("Re-Saved_" + testFileComplex, complexRS);
 
             // Sanity check
             //Assert.AreEqual(rgbExpected.Length, rgbExpected.Length);
@@ -94,7 +93,8 @@ namespace NPOI.XSSF.Model
                     Assert.IsNotNull(cell,
                             "Missing cell " + ref1 +" in " + whatWorkbook);
 
-                    ThemeElement themeElem = ThemeElement.ById(rn - startRN);
+                    int expectedThemeIdx = rn - startRN;
+                    ThemeElement themeElem = ThemeElement.ById(expectedThemeIdx);
                     Assert.AreEqual(themeElem.name.ToLower(), cell.StringCellValue,
                             "Wrong theme at " + ref1 +" in " + whatWorkbook);
 
@@ -111,10 +111,9 @@ namespace NPOI.XSSF.Model
                     // Theme colours aren't tinted
                     Assert.AreEqual(color.HasTint, false);
                     // Check the RGB part (no tint)
-                    Assert.AreEqual(rgbExpected[rn], HexDump.ToHex(color.RGB),
+                    Assert.AreEqual(rgbExpected[expectedThemeIdx], HexDump.ToHex(color.RGB),
                             "Wrong theme colour " + themeElem.name + " on " + whatWorkbook);
-                    // Check the Theme ID
-                    int expectedThemeIdx = rn - startRN;
+                    
                     long themeIdx = font.GetCTFont().GetColorArray(0).theme;
                     Assert.AreEqual(expectedThemeIdx, themeIdx,
                             "Wrong theme index " + expectedThemeIdx + " on " + whatWorkbook
@@ -136,6 +135,108 @@ namespace NPOI.XSSF.Model
                     fos.Close();
                 }
             }
+        }
+
+        /**
+         * Ensure that, for a file with themes, we can correctly
+         *  read both the themed and non-themed colours back.
+         * Column A = Theme Foreground
+         * Column B = Theme Foreground
+         * Column C = Explicit Colour Foreground
+         * Column E = Explicit Colour Background, Black Foreground
+         * Column G = Conditional Formatting Backgrounds
+         * (Row 4 = White by Lt2)
+         * 
+         * Note - Grey Row has an odd way of doing the styling... 
+         */
+        [Test]
+        public void ThemedAndNonThemedColours()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook(testFileComplex);
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFCellStyle style;
+            XSSFColor color;
+            XSSFCell cell;
+
+            String[] names = { "White", "Black", "Grey", "Dark Blue", "Blue", "Red", "Green" };
+            String[] explicitFHexes = { "FFFFFFFF", "FF000000", "FFC0C0C0", "FF002060",
+                                    "FF0070C0", "FFFF0000", "FF00B050" };
+            String[] explicitBHexes = { "FFFFFFFF", "FF000000", "FFC0C0C0", "FF002060",
+                                    "FF0000FF", "FFFF0000", "FF00FF00" };
+            Assert.AreEqual(7, names.Length);
+
+            // Check the non-CF colours in Columns A, B, C and E
+            for (int rn = 1; rn < 8; rn++)
+            {
+                int idx = rn - 1;
+                XSSFRow row = sheet.GetRow(rn) as XSSFRow;
+                Assert.IsNotNull(row, "Missing row " + rn);
+
+                // Theme cells come first
+                XSSFCell themeCell = row.GetCell(0) as XSSFCell;
+                ThemeElement themeElem = ThemeElement.ById(idx);
+                assertCellContents(themeElem.name, themeCell);
+                // Sanity check names
+                assertCellContents(names[idx], row.GetCell(1));
+                assertCellContents(names[idx], row.GetCell(2));
+                assertCellContents(names[idx], row.GetCell(4));
+
+                // Check the colours
+
+                //  A: Theme Based, Foreground
+                style = themeCell.CellStyle as XSSFCellStyle;
+                color = style.GetFont().GetXSSFColor();
+                Assert.AreEqual(true, color.IsThemed);
+                Assert.AreEqual(idx, color.Theme);
+                Assert.AreEqual(rgbExpected[idx], HexDump.ToHex(color.RGB));
+                //  B: Theme Based, Foreground
+                cell = row.GetCell(1) as XSSFCell;
+                style = cell.CellStyle as XSSFCellStyle;
+                color = style.GetFont().GetXSSFColor();
+                Assert.AreEqual(true, color.IsThemed);
+                // TODO Fix the grey theme color in Column B
+                if (idx != 2)
+                {
+                    Assert.AreEqual(true, color.IsThemed);
+                    Assert.AreEqual(idx, color.Theme);
+                    Assert.AreEqual(rgbExpected[idx], HexDump.ToHex(color.RGB));
+                }
+                else
+                {
+                    Assert.AreEqual(1, color.Theme);
+                    Assert.AreEqual(0.50, color.Tint, 0.001);
+                }
+
+                //  C: Explicit, Foreground
+                cell = row.GetCell(2) as XSSFCell;
+                style = cell.CellStyle as XSSFCellStyle;
+                color = style.GetFont().GetXSSFColor();
+                Assert.AreEqual(false, color.IsThemed);
+                Assert.AreEqual(explicitFHexes[idx], color.ARGBHex);
+
+                // E: Explicit Background, Foreground all Black
+                cell = row.GetCell(4) as XSSFCell;
+                style = cell.CellStyle as XSSFCellStyle;
+
+                color = style.GetFont().GetXSSFColor();
+                Assert.AreEqual(true, color.IsThemed);
+                Assert.AreEqual("FF000000", color.ARGBHex);
+
+                color = style.FillForegroundXSSFColor;
+                Assert.AreEqual(false, color.IsThemed);
+                Assert.AreEqual(explicitBHexes[idx], color.ARGBHex);
+                color = style.FillBackgroundColorColor as XSSFColor;
+                Assert.AreEqual(false, color.IsThemed);
+                Assert.AreEqual(null, color.ARGBHex);
+            }
+
+            // Check the CF colours
+            // TODO
+        }
+        private static void assertCellContents(String expected, ICell cell)
+        {
+            Assert.IsNotNull(cell);
+            Assert.AreEqual(expected.ToLower(), cell.StringCellValue.ToLower());
         }
 
 
