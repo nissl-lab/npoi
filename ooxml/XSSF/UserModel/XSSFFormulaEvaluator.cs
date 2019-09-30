@@ -183,18 +183,18 @@ namespace NPOI.XSSF.UserModel
          */
         public ICell EvaluateInCell(ICell cell)
         {
-            if (cell == null)
-            {
-                return null;
-            }
-            XSSFCell result = (XSSFCell)cell;
+            DoEvaluateInCell(cell);
+            return cell;
+        }
+        protected void DoEvaluateInCell(ICell cell)
+        {
+            if (cell == null) return;
             if (cell.CellType == CellType.Formula)
             {
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellType(cell, cv); // cell will no longer be a formula cell
                 SetCellValue(cell, cv);
             }
-            return result;
         }
         private static void SetCellType(ICell cell, CellValue cv)
         {
