@@ -949,7 +949,26 @@ namespace NPOI.XSSF.Streaming
             if (!allFlushed) FlushRows();
             return _writer.Dispose();
         }
-
+        /**
+         * Are all rows flushed to disk?
+         */
+        public bool AllRowsFlushed
+        {
+            get
+            {
+                return allFlushed;
+            }
+        }
+        /**
+         * @return Last row number to be flushed to disk, or -1 if none flushed yet
+         */
+        public int LastFlushedRowNum
+        {
+            get
+            {
+                return lastFlushedRowNumber;
+            }
+        }
         /**
          * Specifies how many rows can be accessed at most via getRow().
          * The exeeding rows (if any) are flushed to the disk while rows

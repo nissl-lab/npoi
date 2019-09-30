@@ -284,17 +284,25 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+	     * Turns a XSSFCell into a XSSFEvaluationCell
+	     */
+        protected virtual IEvaluationCell ToEvaluationCell(ICell cell)
+        {
+            if (!(cell is XSSFCell)){
+                throw new ArgumentException("Unexpected type of cell: " + cell.GetType().Name + "." +
+                        " Only XSSFCells can be evaluated.");
+            }
+
+            return new XSSFEvaluationCell((XSSFCell)cell);
+        }
+
+        /**
          * Returns a CellValue wrapper around the supplied ValueEval instance.
          */
         private CellValue EvaluateFormulaCellValue(ICell cell)
         {
-            if (!(cell is XSSFCell))
-            {
-                throw new ArgumentException("Unexpected type of cell: " + cell.GetType() + "." +
-                        " Only XSSFCells can be Evaluated.");
-            }
-
-            ValueEval eval = _bookEvaluator.Evaluate(new XSSFEvaluationCell((XSSFCell)cell));
+            IEvaluationCell evalCell = ToEvaluationCell(cell);
+            ValueEval eval = _bookEvaluator.Evaluate(evalCell);
             if (eval is NumberEval)
             {
                 NumberEval ne = (NumberEval)eval;

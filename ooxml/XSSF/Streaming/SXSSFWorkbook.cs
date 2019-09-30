@@ -119,7 +119,11 @@ namespace NPOI.XSSF.Streaming
 
 
         #region Constructors
-
+        public SXSSFWorkbook(int rowAccessWindowSize)
+            : this(null /*workbook*/, rowAccessWindowSize)
+        {
+            
+        }
         public SXSSFWorkbook() : this(null)
         {
 

@@ -43,12 +43,12 @@ namespace NPOI.XSSF.Streaming
             this.wb = workbook;
         }
 
-        public static SXSSFFormulaEvaluator create(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        public static SXSSFFormulaEvaluator Create(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             return new SXSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
 
-        protected IEvaluationCell toEvaluationCell(ICell cell)
+        protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
             if (!(cell is SXSSFCell))
             {
@@ -59,7 +59,7 @@ namespace NPOI.XSSF.Streaming
             return new SXSSFEvaluationCell((SXSSFCell)cell);
         }
 
-        public SXSSFCell EvaluateInCell(ICell cell)
+        public new SXSSFCell EvaluateInCell(ICell cell)
         {
             return (SXSSFCell)base.EvaluateInCell(cell);
         }
@@ -103,7 +103,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public void EvaluateAll()
+        public new void EvaluateAll()
         {
             // Have the evaluation done, with exceptions
             EvaluateAllFormulaCells((SXSSFWorkbook)wb, false);
