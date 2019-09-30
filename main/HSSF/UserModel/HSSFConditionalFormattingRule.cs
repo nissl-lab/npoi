@@ -184,6 +184,43 @@ namespace NPOI.HSSF.UserModel
             return GetPatternFormatting(true);
         }
 
+        private HSSFDataBarFormatting GetDataBarFormatting(bool create)
+        {
+            CFRule12Record cfRule12Record = GetCFRule12Record(create);
+            DataBarFormatting databarFormatting = cfRule12Record.DataBarFormatting;
+            if (databarFormatting != null)
+            {
+                return new HSSFDataBarFormatting(cfRule12Record, sheet);
+            }
+            else if (create)
+            {
+                databarFormatting = cfRule12Record.CreateDataBarFormatting();
+                return new HSSFDataBarFormatting(cfRule12Record, sheet);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        /**
+         * @return databar / data-bar formatting object if defined, <code>null</code> otherwise
+         */
+        public IDataBarFormatting DataBarFormatting
+        {
+            get
+            {
+                return GetDataBarFormatting(false);
+            }
+        }
+        /**
+         * create a new databar / data-bar formatting object if it does not exist,
+         * otherwise just return the existing object.
+         */
+        public HSSFDataBarFormatting CreateDataBarFormatting()
+        {
+            return GetDataBarFormatting(true);
+        }
+
         private HSSFIconMultiStateFormatting GetMultiStateFormatting(bool create)
         {
             CFRule12Record cfRule12Record = GetCFRule12Record(create);
@@ -313,9 +350,6 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
         }
-
-        public IDataBarFormatting DataBarFormatting => throw new NotImplementedException();
-
 
         protected internal String ToFormulaString(Ptg[] ParsedExpression)
         {

@@ -6287,6 +6287,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.colorScale;
         }
 
+        public bool IsSetDataBar()
+        {
+            return dataBar != null;
+        }
+
+        public CT_DataBar AddNewDataBar()
+        {
+            this.dataBar = new CT_DataBar();
+            return dataBar;
+        }
+
         [XmlElement]
         public List<string> formula
         {
@@ -6951,7 +6962,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            CT_Cfvo val = new CT_Cfvo();
+            if(cfvo==null)
+                cfvo = new List<CT_Cfvo>();
+            cfvo.Add(val);
+            return val;
+        }
 
+        public bool IsSetShowValue()
+        {
+            return this.showValueField;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {

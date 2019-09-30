@@ -246,6 +246,7 @@
     <Compile Include="XSSF\UserModel\XSSFConditionalFormattingThreshold.cs" />
     <Compile Include="XSSF\UserModel\XSSFConnector.cs" />
     <Compile Include="XSSF\UserModel\XSSFCreationHelper.cs" />
+    <Compile Include="XSSF\UserModel\XSSFDataBarFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataFormat.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidation.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidationConstraint.cs" />

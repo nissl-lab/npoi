@@ -52,11 +52,11 @@ namespace NPOI.SS.UserModel
         /**
          * The threshold that defines "everything from here down is minimum"
          */
-        IConditionalFormattingThreshold GetMinThreshold();
+        IConditionalFormattingThreshold MinThreshold { get; }
         /**
          * The threshold that defines "everything from here up is maximum"
          */
-        IConditionalFormattingThreshold GetMaxThreshold();
+        IConditionalFormattingThreshold MaxThreshold { get; }
     }
 
 }

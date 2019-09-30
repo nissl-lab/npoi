@@ -229,6 +229,7 @@
     <Compile Include="HSSF\UserModel\HSSFColorScaleFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFConditionalFormattingThreshold.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataBarFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFExtendedColor.cs" />
     <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />

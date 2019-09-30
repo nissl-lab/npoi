@@ -699,11 +699,7 @@ namespace TestCases.SS.UserModel
             cf = sheetCF.GetConditionalFormattingAt(2);
             Assert.AreEqual(1, cf.GetFormattingRanges().Length);
             Assert.AreEqual("E2:E17", cf.GetFormattingRanges()[0].FormatAsString());
-
-            Assert.AreEqual(1, cf.NumberOfRules);
-            cr = cf.GetRule(0);
-            Assert.AreEqual(ConditionType.DataBar, cr.ConditionTypeType);
-            // TODO Support Data Bars, then check the rest of this rule
+            assertDataBar(cf, "FF63C384");
 
 
             // Colours Red->Yellow->Green - Column F
@@ -824,6 +820,40 @@ namespace TestCases.SS.UserModel
 
 
         }
+
+        private void assertDataBar(IConditionalFormatting cf, String color)
+        {
+            Assert.AreEqual(1, cf.NumberOfRules);
+            IConditionalFormattingRule cr = cf.GetRule(0);
+            assertDataBar(cr, color);
+        }
+        private void assertDataBar(IConditionalFormattingRule cr, String color)
+        {
+            Assert.AreEqual(ConditionType.DataBar, cr.ConditionTypeType);
+            Assert.AreEqual(ComparisonOperator.NoComparison, cr.ComparisonOperation);
+            Assert.AreEqual(null, cr.Formula1);
+            Assert.AreEqual(null, cr.Formula2);
+
+            IDataBarFormatting databar = cr.DataBarFormatting;
+            Assert.IsNotNull(databar);
+            Assert.AreEqual(false, databar.IsIconOnly);
+            Assert.AreEqual(true, databar.IsLeftToRight);
+            Assert.AreEqual(0, databar.WidthMin);
+            Assert.AreEqual(100, databar.WidthMax);
+
+            AssertColour(color, databar.Color);
+
+            IConditionalFormattingThreshold th;
+            th = databar.MinThreshold;
+            Assert.AreEqual(RangeType.MIN, th.RangeType);
+            Assert.AreEqual(null, th.Value);
+            Assert.AreEqual(null, th.Formula);
+            th = databar.MaxThreshold;
+            Assert.AreEqual(RangeType.MAX, th.RangeType);
+            Assert.AreEqual(null, th.Value);
+            Assert.AreEqual(null, th.Formula);
+        }
+
 
         private void assertIconSetPercentages(IConditionalFormatting cf, IconSet iconset, params double[] vals)
         {

@@ -160,7 +160,13 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFConditionalFormattingRule CreateConditionalFormattingRule(XSSFColor color)
         {
-            throw new NotImplementedException("Not Implemented Yet!"); // TODO Implement
+            XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+
+            // Have it setup, with suitable defaults
+            rule.CreateDataBarFormatting(color);
+
+            // All done!
+            return rule;
         }
         public IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color)
         {

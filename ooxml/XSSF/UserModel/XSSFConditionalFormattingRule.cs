@@ -206,6 +206,54 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public XSSFDataBarFormatting CreateDataBarFormatting(XSSFColor color)
+        {
+            // Is it already there?
+            if (_cfRule.IsSetDataBar() && _cfRule.type == ST_CfType.dataBar)
+                return DataBarFormatting as XSSFDataBarFormatting;
+
+            // Mark it as being a Data Bar
+            _cfRule.type = ST_CfType.dataBar;
+
+            // Ensure the right element
+            CT_DataBar bar = null;
+            if (_cfRule.IsSetDataBar())
+            {
+                bar = _cfRule.dataBar;
+            }
+            else
+            {
+                bar = _cfRule.AddNewDataBar();
+            }
+            // Set the color
+            bar.color = (color.GetCTColor());
+
+            // Add the default thresholds
+            CT_Cfvo min = bar.AddNewCfvo();
+            min.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MIN.name);
+            CT_Cfvo max = bar.AddNewCfvo();
+            max.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MAX.name);
+
+            // Wrap and return
+            return new XSSFDataBarFormatting(bar);
+        }
+        public IDataBarFormatting DataBarFormatting
+        {
+            get
+            {
+                if (_cfRule.IsSetDataBar())
+                {
+                    CT_DataBar bar = _cfRule.dataBar;
+                    return new XSSFDataBarFormatting(bar);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            
+        }
+
         public XSSFIconMultiStateFormatting CreateMultiStateFormatting(IconSet iconSet)
         {
             // Is it already there?
@@ -414,8 +462,6 @@ namespace NPOI.XSSF.UserModel
                 return _cfRule.SizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
             }
         }
-
-        public IDataBarFormatting DataBarFormatting => throw new NotImplementedException();
 
     }
 }
