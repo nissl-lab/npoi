@@ -56,7 +56,7 @@ namespace TestCases.POIFS.FileSystem
 
             try
             {
-                new POIFSFileSystem(in1);
+                new POIFSFileSystem(in1).Close();
                 Assert.Fail("expected exception was not thrown");
             }
             catch (OfficeXmlFileException e)
@@ -101,5 +101,41 @@ namespace TestCases.POIFS.FileSystem
             }
 
         }
+        [Test]
+        public void TestFileCorruption()
+        {
+
+            // create test InputStream
+            byte[] testData = { (byte)1, (byte)2, (byte)3 };
+            InputStream testInput = new ByteArrayInputStream(testData);
+
+            // detect header
+            InputStream in1 = new PushbackInputStream(testInput, 10);
+            Assert.IsFalse(POIFSFileSystem.HasPOIFSHeader(in1));
+
+            // check if InputStream is still intact
+            byte[] test = new byte[3];
+            in1.Read(test);
+            Assert.IsTrue(Arrays.Equals(testData, test));
+            Assert.AreEqual(-1, in1.Read());
+        }
+        [Test]
+        public void testFileCorruptionOPOIFS()
+        {
+
+            // create test InputStream
+            byte[] testData = { (byte)1, (byte)2, (byte)3 };
+            InputStream testInput = new ByteArrayInputStream(testData);
+
+            // detect header
+            InputStream in1 = new PushbackInputStream(testInput, 10);
+            Assert.IsFalse(OPOIFSFileSystem.HasPOIFSHeader(in1));
+            // check if InputStream is still intact
+            byte[] test = new byte[3];
+            in1.Read(test);
+            Assert.IsTrue(Arrays.Equals(testData, test));
+            Assert.AreEqual(-1, in1.Read());
+        }
+
     }
 }

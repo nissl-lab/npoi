@@ -355,13 +355,13 @@ namespace NPOI.POIFS.FileSystem
             //inp.Mark(8);
 
             byte[] header = new byte[8];
-            IOUtils.ReadFully(inp, header);
+            int bytesRead = IOUtils.ReadFully(inp, header);
             LongField signature = new LongField(HeaderBlockConstants._signature_offset, header);
 
             // Wind back those 8 bytes
             if (inp is PushbackInputStream) {
                 PushbackInputStream pin = (PushbackInputStream)inp;
-                pin.Unread(header);
+                pin.Unread(header, 0, bytesRead);
             } else {
                 inp.Position = 0;
             }

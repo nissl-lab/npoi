@@ -129,13 +129,14 @@ namespace NPOI
             // We want to peek at the first 4 bytes
 
             byte[] header = new byte[4];
-            IOUtils.ReadFully(inp, header);
+            int bytesRead = IOUtils.ReadFully(inp, header);
 
             // Wind back those 4 bytes
             if (inp is PushbackStream)
             {
                 PushbackStream pin = (PushbackStream)inp;
                 pin.Position = pin.Position - 4;
+                //pin.unread(header, 0, bytesRead);
             }
             else
             {
@@ -144,10 +145,11 @@ namespace NPOI
 
             // Did it match the ooxml zip signature?
             return (
-                    header[0] == POIFSConstants.OOXML_FILE_HEADER[0] &&
-                    header[1] == POIFSConstants.OOXML_FILE_HEADER[1] &&
-                    header[2] == POIFSConstants.OOXML_FILE_HEADER[2] &&
-                    header[3] == POIFSConstants.OOXML_FILE_HEADER[3]
+                bytesRead == 4 &&
+                header[0] == POIFSConstants.OOXML_FILE_HEADER[0] &&
+                header[1] == POIFSConstants.OOXML_FILE_HEADER[1] &&
+                header[2] == POIFSConstants.OOXML_FILE_HEADER[2] &&
+                header[3] == POIFSConstants.OOXML_FILE_HEADER[3]
             );
         }
 
