@@ -398,12 +398,13 @@ namespace TestCases.SS.UserModel
             double widthManual = ComputeCellWidthManually(cell0, font);
             double widthBeforeCell = SheetUtil.GetCellWidth(cell0, 8, null, false);
             double widthBeforeCol = SheetUtil.GetColumnWidth(sheet, 0, false);
-            Assert.IsTrue(widthManual > 0, "Expected to have cell width > 0 when computing manually, but had " + widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
-                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue));
-            Assert.IsTrue(widthBeforeCell > 0, "Expected to have cell width > 0 BEFORE auto-size, but had " + widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
-                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue));
-            Assert.IsTrue(widthBeforeCol > 0, "Expected to have column width > 0 BEFORE auto-size, but had " + widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
-                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue));
+            String info = widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
+                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "w") + "/" +
+                ComputeCellWidthFixed(font, "1w") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue);
+
+            Assert.IsTrue(widthManual > 0, "Expected to have cell width > 0 when computing manually, but had " + info);
+            Assert.IsTrue(widthBeforeCell > 0, "Expected to have cell width > 0 BEFORE auto-size, but had " + info);
+            Assert.IsTrue(widthBeforeCol > 0, "Expected to have column width > 0 BEFORE auto-size, but had " + info);
 
             sheet.AutoSizeColumn(0);
 
