@@ -104,6 +104,26 @@ namespace NPOI.HSSF.UserModel
         }
 
         /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link HSSFDataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link HSSFDataBarFormatting#getMaxThreshold()}
+         */
+        public HSSFConditionalFormattingRule CreateConditionalFormattingRule(HSSFExtendedColor color)
+        {
+            CFRule12Record rr = CFRule12Record.Create(_sheet, color.ExtendedColor);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
+        }
+        public IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color)
+        {
+            return CreateConditionalFormattingRule((HSSFExtendedColor)color);
+        }
+
+        /**
          * Create a Color Scale / Color Gradient conditional formatting rule.
          * <p>The thresholds and colours for it will be created, but will be 
          *  empty and require configuring with 
@@ -119,22 +139,6 @@ namespace NPOI.HSSF.UserModel
             return new HSSFConditionalFormattingRule(_sheet, rr);
         }
 
-        /**
-         * Create a Databar conditional formatting rule.
-         * <p>The thresholds and colour for it will be created, but will be 
-         *  empty and require configuring with 
-         *  {@link HSSFConditionalFormattingRule#getDataBarFormatting()}
-         *  then
-         *  {@link HSSFDataBarFormatting#getMinThreshold()}
-         *  and 
-         *  {@link HSSFDataBarFormatting#getMaxThreshold()}
-         *  and
-         *  {@link HSSFDataBarFormatting#getColor()}
-         */
-        public IConditionalFormattingRule CreateConditionalFormattingDataBarRule()
-        {
-            throw new NotImplementedException("Not Implemented Yet!"); // TODO Implement
-        }
 
         /// <summary>
         /// Adds a copy of HSSFConditionalFormatting object to the sheet

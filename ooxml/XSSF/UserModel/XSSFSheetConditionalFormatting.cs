@@ -148,7 +148,24 @@ namespace NPOI.XSSF.UserModel
             // All done!
             return rule;
         }
-
+        /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link XSSFDataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link XSSFDataBarFormatting#getMaxThreshold()}
+         */
+        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(XSSFColor color)
+        {
+            throw new NotImplementedException("Not Implemented Yet!"); // TODO Implement
+        }
+        public IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color)
+        {
+            return CreateConditionalFormattingRule((XSSFColor)color);
+        }
         /**
          * Create a Color Scale / Color Gradient conditional formatting rule.
          * <p>The thresholds and colours for it will be created, but will be 
@@ -170,22 +187,6 @@ namespace NPOI.XSSF.UserModel
             return rule;
         }
 
-        /**
-         * Create a Databar conditional formatting rule.
-         * <p>The thresholds and colour for it will be created, but will be 
-         *  empty and require configuring with 
-         *  {@link XSSFConditionalFormattingRule#getDataBarFormatting()}
-         *  then
-         *  {@link XSSFDataBarFormatting#getMinThreshold()}
-         *  and 
-         *  {@link XSSFDataBarFormatting#getMaxThreshold()}
-         *  and
-         *  {@link XSSFDataBarFormatting#getColor()}
-         */
-        public IConditionalFormattingRule CreateConditionalFormattingDataBarRule()
-        {
-            throw new NotImplementedException("Not Implemented Yet!"); // TODO Implement
-        }
 
         public int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules)
         {
