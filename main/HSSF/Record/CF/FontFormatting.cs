@@ -389,7 +389,7 @@ namespace NPOI.HSSF.Record.CF
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
-            buffer.Append("	[Font Formatting]\n");
+            buffer.Append("    [Font Formatting]\n");
 
             buffer.Append("	.font height = ").Append(FontHeight).Append(" twips\n");
 
@@ -462,7 +462,7 @@ namespace NPOI.HSSF.Record.CF
             }
             buffer.Append("	.color index = ").Append("0x" + StringUtil.ToHexString(FontColorIndex).ToUpper()).Append("\n");
 
-            buffer.Append("	[/Font Formatting]\n");
+            buffer.Append("    [/Font Formatting]\n");
             return buffer.ToString();
         }
 
