@@ -216,22 +216,20 @@ namespace NPOI.XSSF.Streaming
 
             set
             {
-                throw new NotImplementedException();
-                //if (Hyperlink == null)
-                //{
-                //    RemoveHyperlink();
-                //    return;
-                //}
+                if (value == null)
+                {
+                    RemoveHyperlink();
+                    return;
+                }
+                SetProperty(Property.HYPERLINK, value);
 
-                //SetProperty(Property.HYPERLINK, Hyperlink);
+                XSSFHyperlink xssfobj = (XSSFHyperlink)value;
+                // Assign to us
+                CellReference reference = new CellReference(RowIndex, ColumnIndex);
+                xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
 
-                //XSSFHyperlink xssfobj = (XSSFHyperlink)Hyperlink;
-                //// Assign to us
-                //CellReference reference = new CellReference(RowIndex, ColumnIndex);
-                //xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
-
-                //// Add to the lists
-                //Sheet._sh.addHyperlink(xssfobj);
+                // Add to the lists
+                ((SXSSFSheet)Sheet)._sh.AddHyperlink(xssfobj);
             }
         }
 
@@ -359,10 +357,8 @@ namespace NPOI.XSSF.Streaming
         //TODO: implement correctly
         public void RemoveHyperlink()
         {
-            throw new NotImplementedException();
-            //RemoveProperty(Property.HYPERLINK);
-
-            //Sheet.RemoveHyperlink(getRowIndex(), getColumnIndex());
+            RemoveProperty(Property.HYPERLINK);
+            ((SXSSFSheet)Sheet)._sh.RemoveHyperlink(RowIndex, ColumnIndex);
         }
 
         public void SetAsActiveCell()
@@ -785,7 +781,7 @@ namespace NPOI.XSSF.Streaming
 
         public void SetCellValue(DateTime value)
         {
-            throw new NotImplementedException();
+            SetCellValue((DateTime?)value);
         }
     }
 }

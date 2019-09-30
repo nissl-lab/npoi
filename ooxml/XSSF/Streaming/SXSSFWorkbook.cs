@@ -261,7 +261,7 @@ namespace NPOI.XSSF.Streaming
                         if (xSheet != null)
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
-                            var xis = sxSheet.getWorksheetXMLInputStream();
+                            var xis = sxSheet.GetWorksheetXMLInputStream();
                             try
                             {
                                 CopyStreamAndInjectWorksheet(inputStream, zos, xis);
@@ -496,7 +496,7 @@ namespace NPOI.XSSF.Streaming
             // Clean up temporary resources
             try
             {
-                sxSheet.dispose();
+                sxSheet.Dispose();
             }
             catch (IOException e)
             {
@@ -576,7 +576,7 @@ namespace NPOI.XSSF.Streaming
         {
             foreach (SXSSFSheet sheet in _xFromSxHash.Values)
             {
-                sheet.flushRows();
+                sheet.FlushRows();
             }
         }
 
@@ -592,7 +592,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    success = sheet.dispose() && success;
+                    success = sheet.Dispose() && success;
                 }
                 catch (IOException e)
                 {
@@ -681,7 +681,10 @@ namespace NPOI.XSSF.Streaming
         {
             return new SXSSFCreationHelper(this);
         }
-
+        protected bool IsDate1904()
+        {
+            return XssfWorkbook.IsDate1904();
+        }
         public bool IsSheetHidden(int sheetIx)
         {
             return XssfWorkbook.IsSheetHidden(sheetIx);

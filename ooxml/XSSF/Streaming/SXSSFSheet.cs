@@ -558,7 +558,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    flushRows(_randomAccessWindowSize);
+                    FlushRows(_randomAccessWindowSize);
                 }
                 catch (IOException ioe)
                 {
@@ -937,36 +937,36 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
-        public void changeRowNum(SXSSFRow row, int newRowNum)
+        public void ChangeRowNum(SXSSFRow row, int newRowNum)
         {
 
             RemoveRow(row);
             _rows.Add(newRowNum, row);
         }
 
-        public bool dispose()
+        public bool Dispose()
         {
-            if (!allFlushed) flushRows();
+            if (!allFlushed) FlushRows();
             return _writer.Dispose();
         }
 
         /**
- * Specifies how many rows can be accessed at most via getRow().
- * The exeeding rows (if any) are flushed to the disk while rows
- * with lower index values are flushed first.
- */
-        private void flushRows(int remaining)
+         * Specifies how many rows can be accessed at most via getRow().
+         * The exeeding rows (if any) are flushed to the disk while rows
+         * with lower index values are flushed first.
+         */
+        private void FlushRows(int remaining)
         {
-            while (_rows.Count > remaining) flushOneRow();
+            while (_rows.Count > remaining) FlushOneRow();
             if (remaining == 0) allFlushed = true;
         }
 
-        public void flushRows()
+        public void FlushRows()
         {
-            flushRows(0);
+            FlushRows(0);
         }
 
-        private void flushOneRow()
+        private void FlushOneRow()
         {
 
             int firstRowNum = _rows.FirstOrDefault().Key;
@@ -983,15 +983,15 @@ namespace NPOI.XSSF.Streaming
         }
 
         /* Gets "<sheetData>" document fragment*/
-        public Stream getWorksheetXMLInputStream()
+        public Stream GetWorksheetXMLInputStream()
         {
             // flush all remaining data and close the temp file writer
-            flushRows(0);
+            FlushRows(0);
             _writer.Close();
             return _writer.GetWorksheetXmlInputStream();
         }
 
-        public SheetDataWriter getSheetDataWriter()
+        public SheetDataWriter GetSheetDataWriter()
         {
             return _writer;
         }
