@@ -23,7 +23,7 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SXSSFFormulaEvaluator : XSSFFormulaEvaluator
+    public class SXSSFFormulaEvaluator : BaseXSSFFormulaEvaluator
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFFormulaEvaluator));
 
@@ -33,12 +33,14 @@ namespace NPOI.XSSF.Streaming
         {
         }
 
-        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder) : this(workbook, new WorkbookEvaluator(SXSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder))
+        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder) 
+            : this(workbook, new WorkbookEvaluator(SXSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder))
         {
 
         }
 
-        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, WorkbookEvaluator bookEvaluator) : base(bookEvaluator)
+        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, WorkbookEvaluator bookEvaluator) 
+            : base(bookEvaluator)
         {
             this.wb = workbook;
         }
@@ -59,9 +61,10 @@ namespace NPOI.XSSF.Streaming
             return new SXSSFEvaluationCell((SXSSFCell)cell);
         }
 
-        public new SXSSFCell EvaluateInCell(ICell cell)
+        public override ICell EvaluateInCell(ICell cell)
         {
-            return (SXSSFCell)base.EvaluateInCell(cell);
+            DoEvaluateInCell(cell);
+            return cell;
         }
 
         public static void EvaluateAllFormulaCells(SXSSFWorkbook wb, bool skipOutOfWindow)
@@ -103,7 +106,14 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public new void EvaluateAll()
+        /**
+         * Loops over rows and cells, evaluating formula cells there.
+         * If any sheets are inactive, or any cells outside of the window,
+         *  will give an Exception.
+         * For SXSSF, you generally don't want to use this method, instead
+         *  evaluate your formulas as you go before they leave the window.
+         */
+        public override void EvaluateAll()
         {
             // Have the evaluation done, with exceptions
             EvaluateAllFormulaCells((SXSSFWorkbook)wb, false);
