@@ -1208,7 +1208,52 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(10d, clrFmt.Thresholds[1].Value);
             Assert.AreEqual(null, clrFmt.Thresholds[2].Value);
         }
+        [Test]
+        public void TestCreateDataBarFormatting()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            String colorHex = "FFFFEB84";
+            ExtendedColor color = workbook.GetCreationHelper().CreateExtendedColor();
+            color.ARGBHex = (colorHex);
+            ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            IConditionalFormattingRule rule1 =
+                    sheetCF.CreateConditionalFormattingRule(color);
+            IDataBarFormatting dbFmt = rule1.DataBarFormatting;
 
+            Assert.AreEqual(false, dbFmt.IsIconOnly);
+            Assert.AreEqual(true, dbFmt.IsLeftToRight);
+            Assert.AreEqual(0, dbFmt.WidthMin);
+            Assert.AreEqual(100, dbFmt.WidthMax);
+            AssertColour(colorHex, dbFmt.Color);
+
+            dbFmt.MinThreshold.RangeType = (RangeType.MIN);
+            dbFmt.MaxThreshold.RangeType = (RangeType.MAX);
+
+            CellRangeAddress[] regions = { CellRangeAddress.ValueOf("A1:A5") };
+            sheetCF.AddConditionalFormatting(regions, rule1);
+
+            // Save, re-load and re-check
+            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            sheetCF = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
+
+            IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual(1, cf.NumberOfRules);
+            rule1 = cf.GetRule(0);
+            dbFmt = rule1.DataBarFormatting;
+            Assert.AreEqual(ConditionType.DataBar, rule1.ConditionTypeType);
+
+            Assert.AreEqual(false, dbFmt.IsIconOnly);
+            Assert.AreEqual(true, dbFmt.IsLeftToRight);
+            Assert.AreEqual(0, dbFmt.WidthMin);
+            Assert.AreEqual(100, dbFmt.WidthMax);
+            AssertColour(colorHex, dbFmt.Color);
+            Assert.AreEqual(RangeType.MIN, dbFmt.MinThreshold.RangeType);
+            Assert.AreEqual(RangeType.MAX, dbFmt.MaxThreshold.RangeType);
+            Assert.AreEqual(null, dbFmt.MinThreshold.Value);
+            Assert.AreEqual(null, dbFmt.MaxThreshold.Value);
+        }
 
         [Test]
         public void TestBug55380()

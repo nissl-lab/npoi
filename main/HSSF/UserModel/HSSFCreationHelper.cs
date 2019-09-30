@@ -68,6 +68,11 @@ namespace NPOI.HSSF.UserModel
         {
             return new HSSFClientAnchor();
         }
+
+        public ExtendedColor CreateExtendedColor()
+        {
+            return new HSSFExtendedColor(new NPOI.HSSF.Record.Common.ExtendedColor());
+        }
     }
 }
 
