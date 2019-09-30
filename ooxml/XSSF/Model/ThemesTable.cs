@@ -34,6 +34,15 @@ namespace NPOI.XSSF.Model
     {
         private ThemeDocument theme;
         /**
+     * Create a new, empty ThemesTable
+     */
+        public ThemesTable() :
+            base()
+        {
+            theme = new ThemeDocument();
+            theme.AddNewTheme().AddNewThemeElements();
+        }
+        /**
          * Construct a ThemesTable.
          * @param part A PackagePart.
          * @param rel A PackageRelationship.
@@ -43,7 +52,7 @@ namespace NPOI.XSSF.Model
         {
 
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
-                
+
             try
             {
                 theme = ThemeDocument.Parse(xmldoc, NamespaceManager);
@@ -135,6 +144,27 @@ namespace NPOI.XSSF.Model
             color.GetCTColor().SetRgb(themeColor.GetCTColor().GetRgb());
 
             // All done
+        }
+
+        /**
+         * Write this table out as XML.
+         * 
+         * @param out The stream to write to.
+         * @throws IOException if an error occurs while writing.
+         */
+        public void writeTo(Stream out1)
+        {
+            //XmlOptions options = new XmlOptions(DEFAULT_XML_OPTIONS);
+
+            theme.Save(out1);
+        }
+
+        protected internal override void Commit()
+        {
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            writeTo(out1);
+            out1.Close();
         }
     }
 

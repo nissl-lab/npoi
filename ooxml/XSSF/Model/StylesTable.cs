@@ -55,6 +55,7 @@ namespace NPOI.XSSF.Model
         private static int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
 
         private StyleSheetDocument doc;
+        private XSSFWorkbook workbook;
         private ThemesTable theme;
 
         /**
@@ -76,7 +77,10 @@ namespace NPOI.XSSF.Model
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
             ReadFrom(xmldoc);
         }
-
+        public void SetWorkbook(XSSFWorkbook wb)
+        {
+            this.workbook = wb;
+        }
         public ThemesTable GetTheme()
         {
             return theme;
@@ -98,6 +102,17 @@ namespace NPOI.XSSF.Model
             }
         }
 
+        /**
+         * If there isn't currently a {@link ThemesTable} for the
+         *  current Workbook, then creates one and sets it up.
+         * After this, calls to {@link #getTheme()} won't give null
+         */
+        public void EnsureThemesTable()
+        {
+            if (theme != null) return;
+
+            theme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
+        }
         /**
          * Read this shared styles table from an XML file.
          *

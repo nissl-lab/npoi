@@ -30,7 +30,8 @@ namespace NPOI.XSSF.Model
         private String testFile = "Themes.xlsx";
 
         [Test]
-        public void TestThemesTableColors() {
+        public void TestThemesTableColors()
+        {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
             String[] rgbExpected = new string[] {
             "ffffff", // Lt1
@@ -47,16 +48,39 @@ namespace NPOI.XSSF.Model
             "800080"  // FolHlink
             };
             int i = 0;
-            foreach (IRow row in workbook.GetSheetAt(0)) {
+            foreach (IRow row in workbook.GetSheetAt(0))
+            {
                 XSSFFont font = (XSSFFont)row.GetCell(0).CellStyle.GetFont(workbook);
 
                 XSSFColor color = ((XSSFFont)font).GetXSSFColor();
-                Assert.AreEqual(rgbExpected[i], BitConverter.ToString(color.GetRgb()).Replace("-","").ToLower(), "Failed color theme " + i);
+                Assert.AreEqual(rgbExpected[i], BitConverter.ToString(color.GetRgb()).Replace("-", "").ToLower(), "Failed color theme " + i);
                 long themeIdx = font.GetCTFont().color[0].theme;
                 Assert.AreEqual(i, themeIdx, "Failed color theme " + i);
                 i++;
             }
 
+        }
+
+
+        [Test]
+        public void TestAddNew()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
+            Assert.AreEqual(null, wb.GetTheme());
+
+            StylesTable styles = wb.GetStylesSource();
+            Assert.AreEqual(null, styles.GetTheme());
+
+            styles.EnsureThemesTable();
+
+            Assert.IsNotNull(styles.GetTheme());
+            Assert.IsNotNull(wb.GetTheme());
+
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            styles = wb.GetStylesSource();
+            Assert.IsNotNull(styles.GetTheme());
+            Assert.IsNotNull(wb.GetTheme());
         }
     }
 }

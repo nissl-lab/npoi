@@ -107,8 +107,6 @@ namespace NPOI.XSSF.UserModel
          */
         private StylesTable stylesSource;
 
-        private ThemesTable theme;
-
         /**
          * The locator of user-defined functions.
          * By default includes functions from the Excel Analysis Toolpack
@@ -324,6 +322,7 @@ namespace NPOI.XSSF.UserModel
                 doc = WorkbookDocument.Parse(xmldoc, NamespaceManager);
                 this.workbook = doc.Workbook;
 
+                ThemesTable theme = null;
                 Dictionary<String, XSSFSheet> shIdMap = new Dictionary<String, XSSFSheet>();
                 Dictionary<String, ExternalLinksTable> elIdMap = new Dictionary<String, ExternalLinksTable>();
                 foreach (POIXMLDocumentPart p in GetRelations())
@@ -357,6 +356,7 @@ namespace NPOI.XSSF.UserModel
                         stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
                     }
                 }
+                stylesSource.SetWorkbook(this);
                 stylesSource.SetTheme(theme);
 
                 if (sharedStringSource == null)
@@ -449,6 +449,7 @@ namespace NPOI.XSSF.UserModel
 
             sharedStringSource = (SharedStringsTable)CreateRelationship(XSSFRelation.SHARED_STRINGS, XSSFFactory.GetInstance());
             stylesSource = (StylesTable)CreateRelationship(XSSFRelation.STYLES, XSSFFactory.GetInstance());
+            stylesSource.SetWorkbook(this);
 
             namedRanges = new List<XSSFName>();
             sheets = new List<XSSFSheet>();
@@ -1599,7 +1600,8 @@ namespace NPOI.XSSF.UserModel
          */
         public ThemesTable GetTheme()
         {
-            return theme;
+            if (stylesSource == null) return null;
+            return stylesSource.GetTheme();
         }
 
         /**

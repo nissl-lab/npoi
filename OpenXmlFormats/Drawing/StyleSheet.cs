@@ -510,6 +510,12 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("</a:theme>"));
         }
 
+        public void AddNewThemeElements()
+        {
+            this.themeElementsField = new CT_BaseStyles();
+            //return this.themeElementsField;
+        }
+
         [XmlElement]
         public CT_BaseStyles themeElements
         {
