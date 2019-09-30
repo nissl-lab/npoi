@@ -66,6 +66,14 @@ namespace NPOI.HSSF.UserModel
             return new HSSFConditionalFormattingRule(_sheet, rr);
         }
 
+        public IConditionalFormattingRule CreateConditionalFormattingRule(
+            ComparisonOperator comparisonOperation,
+            String formula1)
+        {
+            CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, null);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
+        }
+
         /// <summary>
         /// A factory method allowing to Create a conditional formatting rule with a formula.
         /// The formatting rules are applied by Excel when the value of the formula not equal to 0.
@@ -78,13 +86,56 @@ namespace NPOI.HSSF.UserModel
             CFRuleRecord rr = CFRuleRecord.Create(_sheet, formula);
             return new HSSFConditionalFormattingRule(_sheet, rr);
         }
+
+        /**
+         * A factory method allowing the creation of conditional formatting
+         *  rules using an Icon Set / Multi-State formatting.
+         * The thresholds for it will be created, but will be empty
+         *  and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getMultiStateFormatting()}
+         *  then
+         *  {@link HSSFIconMultiStateFormatting#getThresholds()}
+         */
         public IConditionalFormattingRule CreateConditionalFormattingRule(
-            ComparisonOperator comparisonOperation,
-            String formula1)
+                IconSet iconSet)
         {
-            CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, null);
+            CFRule12Record rr = CFRule12Record.Create(_sheet, iconSet);
             return new HSSFConditionalFormattingRule(_sheet, rr);
         }
+
+        /**
+         * Create a Color Scale / Color Gradient conditional formatting rule.
+         * <p>The thresholds and colours for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getColorScaleFormatting()}
+         *  then
+         *  {@link HSSFColorScaleFormatting#getThresholds()}
+         *  and
+         *  {@link HSSFColorScaleFormatting#getColors()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingColorScaleRule()
+        {
+            CFRule12Record rr = CFRule12Record.CreateColorScale(_sheet);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
+        }
+
+        /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link HSSFDataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link HSSFDataBarFormatting#getMaxThreshold()}
+         *  and
+         *  {@link HSSFDataBarFormatting#getColor()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingDataBarRule()
+        {
+            throw new NotImplementedException("Not Implemented Yet!"); // TODO Implement
+        }
+
         /// <summary>
         /// Adds a copy of HSSFConditionalFormatting object to the sheet
         /// This method could be used to copy HSSFConditionalFormatting object

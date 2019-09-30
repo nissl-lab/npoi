@@ -138,7 +138,7 @@ namespace NPOI.XSSF.UserModel
          *  then
          *  {@link XSSFIconMultiStateFormatting#getThresholds()}
          */
-        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(IconSet iconSet)
+        public IConditionalFormattingRule CreateConditionalFormattingRule(IconSet iconSet)
         {
             XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
 
@@ -147,6 +147,44 @@ namespace NPOI.XSSF.UserModel
 
             // All done!
             return rule;
+        }
+
+        /**
+         * Create a Color Scale / Color Gradient conditional formatting rule.
+         * <p>The thresholds and colours for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getColorScaleFormatting()}
+         *  then
+         *  {@link XSSFColorScaleFormatting#getThresholds()}
+         *  and
+         *  {@link XSSFColorScaleFormatting#getColors()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingColorScaleRule()
+        {
+            XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+
+            // Have it setup, with suitable defaults
+            rule.CreateColorScaleFormatting();
+
+            // All done!
+            return rule;
+        }
+
+        /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link XSSFDataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link XSSFDataBarFormatting#getMaxThreshold()}
+         *  and
+         *  {@link XSSFDataBarFormatting#getColor()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingDataBarRule()
+        {
+            throw new NotImplementedException("Not Implemented Yet!"); // TODO Implement
         }
 
         public int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules)

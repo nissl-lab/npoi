@@ -1118,6 +1118,7 @@ namespace TestCases.SS.UserModel
             IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
             Assert.AreEqual(1, cf.NumberOfRules);
             rule1 = cf.GetRule(0);
+            Assert.AreEqual(ConditionType.IconSet, rule1.ConditionTypeType);
             iconFmt = rule1.MultiStateFormatting as IconMultiStateFormatting;
 
             Assert.AreEqual(IconSet.GYRB_4_TRAFFIC_LIGHTS, iconFmt.IconSet);
@@ -1132,6 +1133,50 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(10d, iconFmt.Thresholds[1].Value);
             Assert.AreEqual(75d, iconFmt.Thresholds[2].Value);
             Assert.AreEqual(null, iconFmt.Thresholds[3].Value);
+        }
+
+        [Test]
+        public void TestCreateColorScaleFormatting()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            IConditionalFormattingRule rule1 =
+                    sheetCF.CreateConditionalFormattingColorScaleRule();
+            IColorScaleFormatting clrFmt = rule1.ColorScaleFormatting;
+
+            Assert.AreEqual(3, clrFmt.NumControlPoints);
+            Assert.AreEqual(3, clrFmt.Colors.Length);
+            Assert.AreEqual(3, clrFmt.Thresholds.Length);
+
+            clrFmt.Thresholds[0].RangeType = (RangeType.MIN);
+            clrFmt.Thresholds[1].RangeType = (RangeType.NUMBER);
+            clrFmt.Thresholds[1].Value = (10d);
+            clrFmt.Thresholds[2].RangeType = (RangeType.MAX);
+
+            CellRangeAddress[] regions = { CellRangeAddress.ValueOf("A1:A5") };
+            sheetCF.AddConditionalFormatting(regions, rule1);
+
+            // Save, re-load and re-check
+            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            sheetCF = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
+
+            IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
+            Assert.AreEqual(1, cf.NumberOfRules);
+            rule1 = cf.GetRule(0);
+            clrFmt = rule1.ColorScaleFormatting;
+            Assert.AreEqual(ConditionType.ColorScale, rule1.ConditionTypeType);
+
+            Assert.AreEqual(3, clrFmt.NumControlPoints);
+            Assert.AreEqual(3, clrFmt.Colors.Length);
+            Assert.AreEqual(3, clrFmt.Thresholds.Length);
+            Assert.AreEqual(RangeType.MIN, clrFmt.Thresholds[0].RangeType);
+            Assert.AreEqual(RangeType.NUMBER, clrFmt.Thresholds[1].RangeType);
+            Assert.AreEqual(RangeType.MAX, clrFmt.Thresholds[2].RangeType);
+            Assert.AreEqual(null, clrFmt.Thresholds[0].Value);
+            Assert.AreEqual(10d, clrFmt.Thresholds[1].Value);
+            Assert.AreEqual(null, clrFmt.Thresholds[2].Value);
         }
 
 
