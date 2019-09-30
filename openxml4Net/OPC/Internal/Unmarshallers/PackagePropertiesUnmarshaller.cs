@@ -424,10 +424,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
                             + ":type' attribute present !");
 
                 // Check for the attribute value => 'dcterms:W3CDTF'
-                if (!typeAtt.Value.Equals("dcterms:W3CDTF"))
+                if (!typeAtt.Value.Equals(el.Prefix + ":W3CDTF"))
                     throw new InvalidFormatException("The element '" + elName
                             + "' must have the '" + nsmgr.LookupPrefix(namespaceXSI)
-                            + ":type' attribute with the value 'dcterms:W3CDTF' !");
+                            + ":type' attribute with the value '" + el.Prefix + ":W3CDTF', but had '" + typeAtt.Value + "' !");
             }
 
             // Check its children

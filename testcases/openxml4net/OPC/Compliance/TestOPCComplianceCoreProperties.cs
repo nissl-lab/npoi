@@ -234,7 +234,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestLimitedXSITypeAttribute_PresentWithUnauthorizedValue()
         {
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_PresentWithUnauthorizedValueFAIL.docx");
-            Assert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF' !", msg);
+            Assert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF', but had 'W3CDTF' !", msg);
         }
 
         /**

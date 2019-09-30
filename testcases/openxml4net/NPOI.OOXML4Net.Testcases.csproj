@@ -110,6 +110,7 @@
     <Compile Include="TestPackageThumbnail.cs" />
     <Compile Include="TestPackagingURIHelper.cs" />
     <Compile Include="TestRelationships.cs" />
+    <Compile Include="TestZipPackage.cs" />
     <Compile Include="ZipFileAssert.cs" />
   </ItemGroup>
   <ItemGroup>
