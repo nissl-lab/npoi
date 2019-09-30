@@ -55,19 +55,6 @@ namespace NPOI.XSSF.UserModel
             _bookEvaluator = bookEvaluator;
         }
 
-
-        /**
-         * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
-         * for the (conservative) assumption that any cell may have its defInition Changed After
-         * Evaluation begins.
-         * @deprecated (Sep 2009) (reduce overloading) use {@link #Create(XSSFWorkbook, NPOI.ss.formula.IStabilityClassifier, NPOI.ss.formula.udf.UDFFinder)}
-         */
-
-        public XSSFFormulaEvaluator(XSSFWorkbook workbook, IStabilityClassifier stabilityClassifier)
-        {
-            _bookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, null);
-            _book = workbook;
-        }
         private XSSFFormulaEvaluator(XSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             _bookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder);
