@@ -47,7 +47,19 @@ namespace NPOI
         protected POIXMLDocument(OPCPackage pkg)
             : base(pkg)
         {
+            init(pkg);
+        }
+
+        protected POIXMLDocument(OPCPackage pkg, String coreDocumentRel)
+            : base(pkg, coreDocumentRel)
+        {
+            init(pkg);
+        }
+
+        private void init(OPCPackage pkg)
+        {
             this.pkg = pkg;
+
         }
 
         /**

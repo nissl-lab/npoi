@@ -143,7 +143,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IColor color = BottomBorderColorColor ;
+                XSSFColor color = BottomBorderColorColor as XSSFColor;
                 if (color == null) return 0;
                 return color.Indexed;
             }
@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IColor color = DiagonalBorderColorColor;
+                XSSFColor color = DiagonalBorderColorColor as XSSFColor;
                 if (color == null) return 0;
                 return color.Indexed;
             }
@@ -177,7 +177,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IColor color = LeftBorderColorColor;
+                XSSFColor color = LeftBorderColorColor as XSSFColor;
                 if (color == null) return 0;
                 return color.Indexed;
             }
@@ -194,7 +194,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IColor color = RightBorderColorColor;
+                XSSFColor color = RightBorderColorColor as XSSFColor;
                 if (color == null) return 0;
                 return color.Indexed;
             }
@@ -211,7 +211,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IColor color = RightBorderColorColor;
+                XSSFColor color = RightBorderColorColor as XSSFColor;
                 if (color == null) return 0;
                 return color.Indexed;
             }

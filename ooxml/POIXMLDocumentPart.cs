@@ -37,8 +37,8 @@ using System.Xml;
     public class POIXMLDocumentPart
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIXMLDocumentPart));
+        private String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
 
- 
         private PackagePart packagePart;
         private PackageRelationship packageRel;
         private POIXMLDocumentPart parent;
@@ -71,8 +71,18 @@ using System.Xml;
          * Construct POIXMLDocumentPart representing a "core document" namespace part.
          */
         public POIXMLDocumentPart(OPCPackage pkg)
+            : this(pkg, PackageRelationshipTypes.CORE_DOCUMENT)
         {
-            PackageRelationship coreRel = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT).GetRelationship(0);
+        }
+
+        /**
+         * Construct POIXMLDocumentPart representing a custom "core document" package part.
+         */
+        public POIXMLDocumentPart(OPCPackage pkg, String coreDocumentRel)
+        {
+            this.coreDocumentRel = coreDocumentRel;
+
+            PackageRelationship coreRel = pkg.GetRelationshipsByType(this.coreDocumentRel).GetRelationship(0);
             if (coreRel == null)
             {
                 coreRel = pkg.GetRelationshipsByType(PackageRelationshipTypes.STRICT_CORE_DOCUMENT).GetRelationship(0);
@@ -136,11 +146,11 @@ using System.Xml;
         protected void Rebase(OPCPackage pkg)
         {
             PackageRelationshipCollection cores =
-                packagePart.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
+                packagePart.GetRelationshipsByType(coreDocumentRel);
             if (cores.Size != 1)
             {
                 throw new InvalidOperationException(
-                    "Tried to rebase using " + PackageRelationshipTypes.CORE_DOCUMENT +
+                    "Tried to rebase using " + coreDocumentRel +
                     " but found " + cores.Size + " parts of the right type"
                 );
             }
