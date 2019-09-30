@@ -47,6 +47,21 @@ namespace NPOI.XSSF.UserModel
             _comment = comment;
             _comments = comments;
             _vmlShape = vmlShape;
+
+            // we potentially need to adjust the column/row information in the shape
+            // the same way as we do in setRow()/setColumn()
+            if (vmlShape != null && vmlShape.SizeOfClientDataArray() > 0)
+            {
+                CellReference ref1 = new CellReference(comment.@ref);
+                vmlShape.GetClientDataArray(0).SetRowArray(0, ref1.Row);
+
+                vmlShape.GetClientDataArray(0).SetColumnArray(0, ref1.Col);
+
+                // There is a very odd xmlbeans bug when changing the row
+                //  arrays which can lead to corrupt pointer
+                // This call seems to fix them again... See bug #50795
+                //vmlShape.GetClientDataList().ToString();
+            }
         }
 
         /**

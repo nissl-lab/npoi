@@ -16,12 +16,14 @@
 ==================================================================== */
 
 using System;
+using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.Model;
+using NPOI.XSSF.Streaming;
 using NUnit.Framework;
 using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
@@ -177,8 +179,123 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", comment.Author);
             Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
         }
+
+        [Test]
+        public void testBug58175()
+        {
+            IWorkbook wb = new SXSSFWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+                IRow row = sheet.CreateRow(1);
+                ICell cell = row.CreateCell(3);
+                cell.SetCellValue("F4");
+                ICreationHelper factory = wb.GetCreationHelper();
+                // When the comment box is visible, have it show in a 1x3 space
+                IClientAnchor anchor = factory.CreateClientAnchor();
+                anchor.Col1 = (cell.ColumnIndex);
+                anchor.Col2 = (cell.ColumnIndex + 1);
+                anchor.Row1 = (row.RowNum);
+                anchor.Row2 = (row.RowNum + 3);
+                XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
+                // create comments and vmlDrawing parts if they don't exist
+                CommentsTable comments = (((SXSSFWorkbook)wb).XssfWorkbook
+                        .GetSheetAt(0) as XSSFSheet).GetCommentsTable(true);
+                XSSFVMLDrawing vml = (((SXSSFWorkbook)wb).XssfWorkbook
+                        .GetSheetAt(0) as XSSFSheet).GetVMLDrawing(true);
+                CT_Shape vmlShape1 = vml.newCommentShape();
+                if (ca.IsSet())
+                {
+                    String position = ca.Col1 + ", 0, " + ca.Row1
+                            + ", 0, " + ca.Col2 + ", 0, " + ca.Row2
+                            + ", 0";
+                    vmlShape1.GetClientDataArray(0).SetAnchorArray(0, position);
+                }
+                // create the comment in two different ways and verify that there is no difference
+
+                XSSFComment shape1 = new XSSFComment(comments, comments.NewComment(), vmlShape1);
+                shape1.Column = (ca.Col1);
+                shape1.Row = (ca.Row1);
+                CT_Shape vmlShape2 = vml.newCommentShape();
+                if (ca.IsSet())
+                {
+                    String position = ca.Col1 + ", 0, " + ca.Row1
+                            + ", 0, " + ca.Col2 + ", 0, " + ca.Row2
+                            + ", 0";
+                    vmlShape2.GetClientDataArray(0).SetAnchorArray(0, position);
+                }
+
+                String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();
+                XSSFComment shape2 = new XSSFComment(comments, comments.NewComment(ref1), vmlShape2);
+
+                Assert.AreEqual(shape1.Author, shape2.Author);
+                Assert.AreEqual(shape1.ClientAnchor, shape2.ClientAnchor);
+                Assert.AreEqual(shape1.Column, shape2.Column);
+                Assert.AreEqual(shape1.Row, shape2.Row);
+                Assert.AreEqual(shape1.GetCTComment().ToString(), shape2.GetCTComment().ToString());
+                Assert.AreEqual(shape1.GetCTComment().@ref, shape2.GetCTComment().@ref);
+
+                /*CommentsTable table1 = shape1.CommentsTable;
+                CommentsTable table2 = shape2.CommentsTable;
+                Assert.AreEqual(table1.CTComments.toString(), table2.CTComments.toString());
+                Assert.AreEqual(table1.NumberOfComments, table2.NumberOfComments);
+                Assert.AreEqual(table1.Relations, table2.Relations);*/
+
+                Assert.AreEqual(vmlShape1.ToString().Replace("_x0000_s\\d+", "_x0000_s0000"), 
+                    vmlShape2.ToString().Replace("_x0000_s\\d+", "_x0000_s0000"),
+                    "The vmlShapes should have equal content afterwards");
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+        [Ignore("Used for manual testing with opening the resulting Workbook in Excel")]
+        [Test]
+        public void testBug58175a()
+        {
+            IWorkbook wb = new SXSSFWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+                IRow row = sheet.CreateRow(1);
+                ICell cell = row.CreateCell(3);
+                cell.SetCellValue("F4");
+                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                ICreationHelper factory = wb.GetCreationHelper();
+                // When the comment box is visible, have it show in a 1x3 space
+                IClientAnchor anchor = factory.CreateClientAnchor();
+                anchor.Col1 = (cell.ColumnIndex);
+                anchor.Col2 = (cell.ColumnIndex + 1);
+                anchor.Row1 = (row.RowNum);
+                anchor.Row2 = (row.RowNum + 3);
+                // Create the comment and set the text+author
+                IComment comment = drawing.CreateCellComment(anchor);
+                IRichTextString str = factory.CreateRichTextString("Hello, World!");
+                comment.String = (str);
+                comment.Author = ("Apache POI");
+                /* fixed the problem as well 
+                 * comment.setColumn(cell.ColumnIndex);
+                 * comment.setRow(cell.RowIndex);
+                 */
+                // Assign the comment to the cell
+                cell.CellComment = (comment);
+                FileStream out1 = new FileStream("C:\\temp\\58175.xlsx", FileMode.CreateNew, FileAccess.ReadWrite);
+                try
+                {
+                    wb.Write(out1);
+                }
+                finally
+                {
+                    out1.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
     }
-
-
-
+    
 }
