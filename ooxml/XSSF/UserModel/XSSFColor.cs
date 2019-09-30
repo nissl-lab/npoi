@@ -101,6 +101,19 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /**
+         * A boolean value indicating if the ctColor has a tint or not
+         */
+        public bool HasTint
+        {
+            get
+            {
+                if (!ctColor.IsSetRgb()) return false;
+                return ctColor.rgb.Length == 4;
+            }
+            
+        }
+
         public override short Index
         {
             get
