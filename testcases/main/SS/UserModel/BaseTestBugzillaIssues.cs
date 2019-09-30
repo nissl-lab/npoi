@@ -1184,7 +1184,63 @@ namespace TestCases.SS.UserModel
             value = cell.StringCellValue;
             Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
         }
+
+        /**
+         * Formulas with Nested Ifs, or If with text functions like
+         *  Mid in it, can give #VALUE in Excel
+         */
+        [Test]
+        public void Bug55747()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IFormulaEvaluator ev = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet s = wb.CreateSheet();
+
+            IRow row = s.CreateRow(0);
+            row.CreateCell(0).SetCellValue("abc");
+            row.CreateCell(1).SetCellValue("");
+            row.CreateCell(2).SetCellValue(3);
+            ICell cell = row.CreateCell(5);
+            cell.SetCellFormula("IF(A1<>\"\",MID(A1,1,2),\" \")");
+            ev.EvaluateAll();
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+            cell = row.CreateCell(6);
+            cell.SetCellFormula("IF(B1<>\"\",MID(A1,1,2),\"empty\")");
+            ev.EvaluateAll();
+            Assert.AreEqual("empty", cell.StringCellValue);
+
+            cell = row.CreateCell(7);
+            cell.SetCellFormula("IF(A1<>\"\",IF(C1<>\"\",MID(A1,1,2),\"c1\"),\"c2\")");
+            ev.EvaluateAll();
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+
+            // Write it back out, and re-read
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            ev = wb.GetCreationHelper().CreateFormulaEvaluator();
+            s = wb.GetSheetAt(0);
+            row = s.GetRow(0);
+
+            // Check read ok, and re-evaluate fine
+            cell = row.GetCell(5);
+            Assert.AreEqual("ab", cell.StringCellValue);
+            ev.EvaluateFormulaCell(cell);
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+            cell = row.GetCell(6);
+            Assert.AreEqual("empty", cell.StringCellValue);
+            ev.EvaluateFormulaCell(cell);
+            Assert.AreEqual("empty", cell.StringCellValue);
+
+            cell = row.GetCell(7);
+            Assert.AreEqual("ab", cell.StringCellValue);
+            ev.EvaluateFormulaCell(cell);
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+        }
+
     }
-    
+
 
 }
