@@ -300,19 +300,19 @@ namespace NPOI.XSSF.UserModel
             XSSFCellFill fg = wb.GetStylesSource().GetFillAt(2);
             Assert.AreEqual(0, fg.GetFillForegroundColor().Indexed);
             Assert.AreEqual(0.0, fg.GetFillForegroundColor().Tint);
-            Assert.AreEqual("FFFF0000", fg.GetFillForegroundColor().GetARGBHex());
+            Assert.AreEqual("FFFF0000", fg.GetFillForegroundColor().ARGBHex);
             Assert.AreEqual(64, fg.GetFillBackgroundColor().Indexed);
 
             // Now look higher up
             Assert.IsNotNull(cs.FillForegroundXSSFColor);
             Assert.AreEqual(0, cs.FillForegroundColor);
-            Assert.AreEqual("FFFF0000", cs.FillForegroundXSSFColor.GetARGBHex());
-            Assert.AreEqual("FFFF0000", (cs.FillForegroundColorColor as XSSFColor).GetARGBHex());
+            Assert.AreEqual("FFFF0000", cs.FillForegroundXSSFColor.ARGBHex);
+            Assert.AreEqual("FFFF0000", (cs.FillForegroundColorColor as XSSFColor).ARGBHex);
 
             Assert.IsNotNull(cs.FillBackgroundColor);
             Assert.AreEqual(64, cs.FillBackgroundColor);
-            Assert.AreEqual(null, cs.FillBackgroundXSSFColor.GetARGBHex());
-            Assert.AreEqual(null, (cs.FillBackgroundColorColor as XSSFColor).GetARGBHex());
+            Assert.AreEqual(null, cs.FillBackgroundXSSFColor.ARGBHex);
+            Assert.AreEqual(null, (cs.FillBackgroundColorColor as XSSFColor).ARGBHex);
         }
 
         /**
@@ -859,7 +859,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(42, cs.FillForegroundColor);
             Assert.AreEqual(42, (cs.FillForegroundColorColor as XSSFColor).Indexed);
             Assert.IsNotNull((cs.FillForegroundColorColor as XSSFColor).GetRgb());
-            Assert.AreEqual("FFCCFFCC", (cs.FillForegroundColorColor as XSSFColor).GetARGBHex());
+            Assert.AreEqual("FFCCFFCC", (cs.FillForegroundColorColor as XSSFColor).ARGBHex);
         }
 
         /**
@@ -880,7 +880,7 @@ namespace NPOI.XSSF.UserModel
             XSSFColor colorT = styleT.BottomBorderXSSFColor;
 
             Assert.AreEqual(5, colorT.Theme);
-            Assert.AreEqual("FFC0504D", colorT.GetARGBHex());
+            Assert.AreEqual("FFC0504D", colorT.ARGBHex);
 
             // Border from a style direct, red
             XSSFCell cellS = row.GetCell(1) as XSSFCell;
@@ -888,7 +888,7 @@ namespace NPOI.XSSF.UserModel
             XSSFColor colorS = styleS.BottomBorderXSSFColor;
 
             Assert.AreEqual(0, colorS.Theme);
-            Assert.AreEqual("FFFF0000", colorS.GetARGBHex());
+            Assert.AreEqual("FFFF0000", colorS.ARGBHex);
         }
 
         /**
@@ -919,7 +919,7 @@ namespace NPOI.XSSF.UserModel
             XSSFColor themeC = wb.GetTheme().GetThemeColor(colt.Theme);
             Assert.IsNotNull(themeC.GetRgb());
             Assert.IsNotNull(colt.GetRgb());
-            Assert.AreEqual(themeC.GetARGBHex(), colt.GetARGBHex()); // The same colour
+            Assert.AreEqual(themeC.ARGBHex, colt.ARGBHex); // The same colour
         }
 
         /**
@@ -1295,13 +1295,13 @@ namespace NPOI.XSSF.UserModel
 
             // Ensure we Get the right colours for these themes
             // TODO fix
-            //       Assert.AreEqual("FFEEECE1", wb.Theme.GetThemeColor(2).GetARGBHex());
-            //       Assert.AreEqual("FF1F497D", wb.Theme.GetThemeColor(3).GetARGBHex());
+            //       Assert.AreEqual("FFEEECE1", wb.Theme.GetThemeColor(2).ARGBHex);
+            //       Assert.AreEqual("FF1F497D", wb.Theme.GetThemeColor(3).ARGBHex);
 
             // Finally check the colours on the styles
             // TODO fix
-            //       Assert.AreEqual("FFEEECE1", cA4_EEECE1.CellStyle.GetFillForegroundXSSFColor().GetARGBHex());
-            //       Assert.AreEqual("FF1F497D", cA5_1F497D.CellStyle.GetFillForegroundXSSFColor().GetARGBHex());
+            //       Assert.AreEqual("FFEEECE1", cA4_EEECE1.CellStyle.GetFillForegroundXSSFColor().ARGBHex);
+            //       Assert.AreEqual("FF1F497D", cA5_1F497D.CellStyle.GetFillForegroundXSSFColor().ARGBHex);
         }
         [Test]
         public void Test51470()
@@ -2527,13 +2527,13 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(cellStyle.FillForegroundXSSFColor);
             XSSFColor fgColor = cellStyle.FillForegroundColorColor as XSSFColor;
             Assert.IsNotNull(fgColor);
-            Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+            Assert.AreEqual("FF00FFFF", fgColor.ARGBHex);
 
             Assert.AreEqual(0, cellStyle.FillBackgroundColor);
             Assert.IsNotNull(cellStyle.FillBackgroundXSSFColor);
             XSSFColor bgColor = cellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(bgColor);
-            Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+            Assert.AreEqual("FF00FFFF", fgColor.ARGBHex);
         }
 
         [Test]

@@ -34,11 +34,11 @@ namespace NPOI.XSSF.UserModel
             XSSFColor colour = (XSSFColor)actual;
             if (hexExpected.Length == 8)
             {
-                Assert.AreEqual(hexExpected, colour.GetARGBHex());
+                Assert.AreEqual(hexExpected, colour.ARGBHex);
             }
             else
             {
-                Assert.AreEqual(hexExpected, colour.GetARGBHex().Substring(2));
+                Assert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
             }
         }
 
