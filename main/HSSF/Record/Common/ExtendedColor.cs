@@ -83,7 +83,7 @@ namespace NPOI.HSSF.Record.Common
             tint = in1.ReadDouble();
         }
 
-        public int TypeEx
+        public int Type
         {
             get
             {

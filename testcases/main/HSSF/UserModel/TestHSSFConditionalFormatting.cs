@@ -38,8 +38,21 @@ namespace TestCases.HSSF.UserModel
         protected override void AssertColour(String hexExpected, IColor actual)
         {
             Assert.IsNotNull(actual, "Colour must be given");
-            HSSFColor colour = (HSSFColor)actual;
-            Assert.AreEqual(hexExpected, colour.GetHexString());
+
+            if (actual is HSSFColor) {
+                HSSFColor colour = (HSSFColor)actual;
+                Assert.AreEqual(hexExpected, colour.GetHexString());
+            } else {
+                HSSFExtendedColor colour = (HSSFExtendedColor)actual;
+                if (hexExpected.Length == 8)
+                {
+                    Assert.AreEqual(hexExpected, colour.ARGBHex);
+                }
+                else
+                {
+                    Assert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
+                }
+            }
         }
         [Test]
         public void TestReadOffice2007()

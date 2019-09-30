@@ -38,7 +38,7 @@ namespace NPOI.SS.UserModel
         /**
          * A bool value indicating the color is automatic
          */
-        public abstract bool IsAuto { get; }
+        public abstract bool IsAuto { get; set; }
 
         /**
          * A bool value indicating the color is indexed
@@ -63,7 +63,7 @@ namespace NPOI.SS.UserModel
         /**
          * Index of Theme color, if {@link #isThemed()} is true
          */
-        public abstract int Theme { get; }
+        public abstract int Theme { get; set; }
 
         /**
          * Standard Red Green Blue ctColor value (RGB).
@@ -135,6 +135,10 @@ namespace NPOI.SS.UserModel
          * Return the ARGB value in hex format, eg FF00FF00.
          * Works for both regular and indexed colours.
          */
+        /**
+        * Sets the ARGB value from hex format, eg FF0077FF.
+        * Only works for regular (non-indexed) colours
+        */
         public String ARGBHex
         {
             get
@@ -174,15 +178,6 @@ namespace NPOI.SS.UserModel
                     throw new ArgumentException("Must be of the form 112233 or FFEEDDCC");
                 }
             }
-        }
-
-        /**
-         * Sets the ARGB value from hex format, eg FF0077FF.
-         * Only works for regular (non-indexed) colours
-         */
-        public void SetARGBHex(String argb)
-        {
-            
         }
 
         private static byte ApplyTint(int lum, double tint)

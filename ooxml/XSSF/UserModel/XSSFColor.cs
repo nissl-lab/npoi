@@ -27,7 +27,7 @@ namespace NPOI.XSSF.UserModel
     /**
      * Represents a color in SpreadsheetML
      */
-    public class XSSFColor : IColor
+    public class XSSFColor : ExtendedColor
     {
 
         private CT_Color ctColor;
@@ -65,7 +65,7 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         ///A bool value indicating the ctColor is automatic and system ctColor dependent.
         /// </summary>
-        public bool IsAuto
+        public override bool IsAuto
         {
             get
             {
@@ -77,8 +77,37 @@ namespace NPOI.XSSF.UserModel
                 ctColor.autoSpecified = true;
             }
         }
+        public override bool IsIndexed
+        {
+            get
+            {
+                return ctColor.IsSetIndexed();
+            }
+            
+        }
+        public override bool IsRGB
+        {
+            get
+            {
+                return ctColor.IsSetRgb();
+            }
+        }
 
+        public override bool IsThemed
+        {
+            get
+            {
+                return ctColor.IsSetTheme();
+            }
+        }
 
+        public override short Index
+        {
+            get
+            {
+                return ctColor.indexedSpecified ? (short)ctColor.indexed : (short)0;
+            }
+        }
         /**
          * Indexed ctColor value. Only used for backwards compatibility. References a ctColor in indexedColors.
          */
@@ -86,7 +115,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return ctColor.indexedSpecified ? (short)ctColor.indexed : (short)0;
+                return Index;
             }
             set 
             {
@@ -95,16 +124,25 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-
+        [Obsolete("use property RGB")]
         public byte[] GetRgb()
         { 
             return this.RGB;
+        }
+
+        protected override byte[] StoredRBG
+        {
+            get
+            {
+                return ctColor.rgb;
+            }
+            
         }
         /**
          * Standard Red Green Blue ctColor value (RGB).
          * If there was an A (Alpha) value, it will be stripped.
          */
-        public byte[] RGB
+        public override byte[] RGB
         {
             get
             {
@@ -123,59 +161,48 @@ namespace NPOI.XSSF.UserModel
                     return rgb;
                 }
             }
+            set
+            {
+                ctColor.SetRgb((value));
+            }
         }
-
         /**
-         * Standard Alpha Red Green Blue ctColor value (ARGB).
-         */
-        public byte[] GetARgb()
+        * Standard Alpha Red Green Blue ctColor value (ARGB).
+        */
+        public override byte[] ARGB
         {
-            byte[] rgb = GetRGBOrARGB();
-            if (rgb == null) return null;
-
-            if (rgb.Length == 3)
+            get
             {
-                // Pad with the default Alpha
-                byte[] tmp = new byte[4];
-                tmp[0] = 255;
-                Array.Copy(rgb, 0, tmp, 1, 3);
-                return tmp;
-            }
-            else
-            {
-                return rgb;
-            }
-        }
+                byte[] rgb = GetRGBOrARGB();
+                if (rgb == null) return null;
 
-        private byte[] GetRGBOrARGB()
-        {
-            byte[] rgb = null;
-
-            if (ctColor.indexedSpecified && ctColor.indexed > 0)
-            {
-                HSSFColor indexed = (HSSFColor)HSSFColor.GetIndexHash()[(int)ctColor.indexed];
-                if (indexed != null)
+                if (rgb.Length == 3)
                 {
-                    rgb = new byte[3];
-                    rgb[0] = (byte)indexed.GetTriplet()[0];
-                    rgb[1] = (byte)indexed.GetTriplet()[1];
-                    rgb[2] = (byte)indexed.GetTriplet()[2];
+                    // Pad with the default Alpha
+                    byte[] tmp = new byte[4];
+                    unchecked
+                    {
+                        tmp[0] = (byte)-1;
+                    }
+                    Array.Copy(rgb, 0, tmp, 1, 3);
+                    return tmp;
+                }
+                else
+                {
                     return rgb;
                 }
             }
-
-            if (!ctColor.IsSetRgb())
-            {
-                // No colour is available, sorry
-                return null;
-            }
-
-            // Grab the colour
-            rgb = ctColor.GetRgb();
-
-            // Correct it as needed, and return
-            return (rgb);
+            
         }
+        /**
+         * Standard Alpha Red Green Blue ctColor value (ARGB).
+         */
+        [Obsolete("use property ARGB")]
+        public byte[] GetARgb()
+        {
+            return ARGB;
+        }
+
 
         /**
          * Standard Red Green Blue ctColor value (RGB) with applied tint.
@@ -200,30 +227,6 @@ namespace NPOI.XSSF.UserModel
             return rgb;
         }
 
-        /**
-         * Return the ARGB value in hex format, eg FF00FF00.
-         * Works for both regular and indexed colours. 
-         */
-        public String GetARGBHex()
-        {
-            StringBuilder sb = new StringBuilder();
-            byte[] rgb = GetARgb();
-            if (rgb == null)
-            {
-                return null;
-            }
-            foreach (byte c in rgb)
-            {
-                int i = c & 0xff;
-                String cs = StringUtil.ToHexString(i);
-                if (cs.Length == 1)
-                {
-                    sb.Append('0');
-                }
-                sb.Append(cs);
-            }
-            return sb.ToString().ToUpper();
-        }
 
         private static byte ApplyTint(int lum, double tint)
         {
@@ -254,7 +257,7 @@ namespace NPOI.XSSF.UserModel
          * Index into the <clrScheme> collection, referencing a particular <sysClr> or
          *  <srgbClr> value expressed in the Theme part.
          */
-        public int Theme
+        public override int Theme
         {
             get
             {
@@ -308,7 +311,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the tint value
          */
-        public double Tint
+        public override double Tint
         {
             get
             {
@@ -320,48 +323,6 @@ namespace NPOI.XSSF.UserModel
                 ctColor.tintSpecified = true;
             }
         }
-
-        /**
-         * Specifies the tint value applied to the ctColor.
-         *
-         * <p>
-         * If tint is supplied, then it is applied to the RGB value of the ctColor to determine the final
-         * ctColor applied.
-         * </p>
-         * <p>
-         * The tint value is stored as a double from -1.0 .. 1.0, where -1.0 means 100% darken and
-         * 1.0 means 100% lighten. Also, 0.0 means no Change.
-         * </p>
-         * <p>
-         * In loading the RGB value, it is Converted to HLS where HLS values are (0..HLSMAX), where
-         * HLSMAX is currently 255.
-         * </p>
-         * Here are some examples of how to apply tint to ctColor:
-         * <blockquote>
-         * <pre>
-         * If (tint &lt; 0)
-         * Lum' = Lum * (1.0 + tint)
-         *
-         * For example: Lum = 200; tint = -0.5; Darken 50%
-         * Lum' = 200 * (0.5) =&gt; 100
-         * For example: Lum = 200; tint = -1.0; Darken 100% (make black)
-         * Lum' = 200 * (1.0-1.0) =&gt; 0
-         * If (tint &gt; 0)
-         * Lum' = Lum * (1.0-tint) + (HLSMAX - HLSMAX * (1.0-tint))
-         * For example: Lum = 100; tint = 0.75; Lighten 75%
-         *
-         * Lum' = 100 * (1-.75) + (HLSMAX - HLSMAX*(1-.75))
-         * = 100 * .25 + (255 - 255 * .25)
-         * = 25 + (255 - 63) = 25 + 192 = 217
-         * For example: Lum = 100; tint = 1.0; Lighten 100% (make white)
-         * Lum' = 100 * (1-1) + (HLSMAX - HLSMAX*(1-1))
-         * = 100 * 0 + (255 - 255 * 0)
-         * = 0 + (255 - 0) = 255
-         * </pre>
-         * </blockquote>
-         *
-         * @param tint the tint value
-         */
 
         /**
          * Returns the underlying XML bean

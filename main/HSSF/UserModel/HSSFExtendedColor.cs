@@ -55,7 +55,13 @@ namespace NPOI.HSSF.UserModel
             {
                 return color.type == RecordExtendedColor.TYPE_AUTO;
             }
-
+            set
+            {
+                if (value)
+                    color.type = RecordExtendedColor.TYPE_AUTO;
+                else
+                    color.type = RecordExtendedColor.TYPE_UNSET;
+            }
         }
         public override bool IsIndexed
         {
@@ -91,6 +97,10 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 return color.ThemeIndex;
+            }
+            set
+            {
+                color.ThemeIndex = value;
             }
         }
 
