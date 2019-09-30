@@ -147,7 +147,7 @@ namespace NPOI.XWPF.Model
             int i = GetRelationIndex(relation);
             HdrDocument hdrDoc = new HdrDocument();
             XWPFHeader wrapper = (XWPFHeader)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
-
+            wrapper.SetXWPFDocument(doc);
             CT_HdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
             wrapper.SetHeaderFooter(hdr);
 
@@ -173,7 +173,7 @@ namespace NPOI.XWPF.Model
             int i = GetRelationIndex(relation);
             FtrDocument ftrDoc = new FtrDocument();
             XWPFFooter wrapper = (XWPFFooter)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
-
+            wrapper.SetXWPFDocument(doc);
             CT_HdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
             wrapper.SetHeaderFooter(ftr);
 

@@ -64,8 +64,8 @@ namespace NPOI.XWPF.UserModel
             XWPFDocument readBack = XWPFTestDataSamples.WriteOutAndReadBack(sampleDoc);
             verifyOneHeaderPicture(readBack);
         }
-
-        public void FIXMEtestCreateHeaderPicture()
+        [Test]
+        public void TestCreateHeaderPicture()
         { // TODO Fix
             XWPFDocument doc = new XWPFDocument();
 
@@ -76,15 +76,13 @@ namespace NPOI.XWPF.UserModel
             // Add a default header
             policy = doc.CreateHeaderFooterPolicy();
 
-            XWPFParagraph[] hparas = new XWPFParagraph[] {
-                new XWPFParagraph(new CT_P(), doc)
-        };
-            hparas[0].CreateRun().SetText("Header Hello World!");
-            XWPFHeader header = policy.CreateHeader(XWPFHeaderFooterPolicy.DEFAULT, hparas);
+            XWPFHeader header = policy.CreateHeader(XWPFHeaderFooterPolicy.DEFAULT);
+            header.Paragraphs[0].CreateRun().SetText("Hello, Header World!");
+            header.CreateParagraph().CreateRun().SetText("Paragraph 2");
             Assert.AreEqual(0, header.AllPictures.Count);
-            Assert.AreEqual(1, header.Paragraphs.Count);
+            Assert.AreEqual(2, header.Paragraphs.Count);
 
-            // Add a picture to it
+            // Add a picture to  the first paragraph
             header.Paragraphs[0].Runs[0].AddPicture(
                     new ByteArrayInputStream(new byte[] { 1, 2, 3, 4 }),
                     (int)PictureType.JPEG, "test.jpg", 2, 2);

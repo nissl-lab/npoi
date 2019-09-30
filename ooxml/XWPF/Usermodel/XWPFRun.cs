@@ -1053,11 +1053,25 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height)
         {
-            XWPFDocument doc = parent.Document;
+            String relationId;
+            XWPFPictureData picData;
 
-            // Add the picture + relationship
-            String relationId = doc.AddPictureData(pictureData, pictureType);
-            XWPFPictureData picData = (XWPFPictureData)doc.GetRelationById(relationId);
+            // Work out what to add the picture to, then add both the
+            //  picture and the relationship for it
+            // TODO Should we have an interface for this sort of thing?
+            if (parent.Part is XWPFHeaderFooter)
+            {
+                XWPFHeaderFooter headerFooter = (XWPFHeaderFooter)parent.Part;
+                relationId = headerFooter.AddPictureData(pictureData, pictureType);
+                picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
+            }
+            else
+            {
+                XWPFDocument doc = parent.Document;
+                relationId = doc.AddPictureData(pictureData, pictureType);
+                picData = (XWPFPictureData)doc.GetRelationById(relationId);
+            }
+
 
             // Create the Drawing entry for it
             CT_Drawing Drawing = run.AddNewDrawing();
