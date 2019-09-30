@@ -140,6 +140,15 @@ namespace NPOI.XWPF.UserModel
 
                     }
                 }
+                if (o is CT_SimpleField) {
+                    CT_SimpleField field = (CT_SimpleField)o;
+                    foreach (CT_R r in field.GetRList())
+                    {
+                        XWPFFieldRun fr = new XWPFFieldRun(field, r, this);
+                        runs.Add(fr);
+                        iRuns.Add(fr);
+                    }
+                }
                 if (o is CT_SdtBlock)
                 {
                     XWPFSDT cc = new XWPFSDT((CT_SdtBlock)o, part);
@@ -154,16 +163,7 @@ namespace NPOI.XWPF.UserModel
                 {
                     foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
                     {
-                        XWPFRun cr = new XWPFRun(r, this);
-                        runs.Add(cr);
-                        iRuns.Add(cr);
-                    }
-                }
-                if (o is CT_SimpleField)
-                {
-                    foreach (CT_R r in ((CT_SimpleField)o).GetRList())
-                    {
-                        XWPFRun cr = new XWPFRun(r, this);
+                        XWPFRun cr = new XWPFRun(r, (IRunBody)this);
                         runs.Add(cr);
                         iRuns.Add(cr);
                     }
@@ -1360,7 +1360,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFRun CreateRun()
         {
-            XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), this);
+            XWPFRun xwpfRun = new XWPFRun(paragraph.AddNewR(), (IRunBody)this);
             runs.Add(xwpfRun);
             iRuns.Add(xwpfRun);
             return xwpfRun;
@@ -1388,7 +1388,7 @@ namespace NPOI.XWPF.UserModel
             if (pos >= 0 && pos <= paragraph.SizeOfRArray())
             {
                 CT_R ctRun = paragraph.InsertNewR(pos);
-                XWPFRun newRun = new XWPFRun(ctRun, this);
+                XWPFRun newRun = new XWPFRun(ctRun, (IRunBody)this);
 
                 // To update the iRuns, find where we're going
                 // in the normal Runs, and go in there
@@ -1461,6 +1461,12 @@ namespace NPOI.XWPF.UserModel
             {
                 // Remove the run from our high level lists
                 XWPFRun run = runs[(pos)];
+                if (run is XWPFHyperlinkRun || run is XWPFFieldRun)
+                {
+                    // TODO Add support for removing these kinds of nested runs,
+                    //  which aren't on the CTP -> R array, but CTP -> XXX -> R array
+                    throw new ArgumentException("Removing Field or Hyperlink runs not yet supported");
+                }
                 runs.RemoveAt(pos);
                 iRuns.Remove(run);
                 // Remove the run from the low-level XML

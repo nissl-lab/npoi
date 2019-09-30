@@ -516,7 +516,28 @@ namespace NPOI.XWPF.UserModel
 
             Assert.IsTrue(p.RemoveRun(0));
         }
+
         [Test]
+        public void TestFieldRuns()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("FldSimple.docx");
+            IList<XWPFParagraph> ps = doc.Paragraphs;
+            Assert.AreEqual(1, ps.Count);
+
+            XWPFParagraph p = ps[0];
+            Assert.AreEqual(1, p.Runs.Count);
+            Assert.AreEqual(1, p.IRuns.Count);
+
+            XWPFRun r = p.Runs[0];
+            Assert.AreEqual(typeof(XWPFFieldRun), r.GetType());
+
+            XWPFFieldRun fr = (XWPFFieldRun)r;
+            Assert.AreEqual(" FILENAME   \\* MERGEFORMAT ", fr.FieldInstruction);
+            Assert.AreEqual("FldSimple.docx", fr.Text);
+            Assert.AreEqual("FldSimple.docx", p.Text);
+        }
+
+    [Test]
         public void TestRuns()
         {
             XWPFDocument doc = new XWPFDocument();

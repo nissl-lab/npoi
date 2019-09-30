@@ -38,30 +38,30 @@ namespace NPOI.XWPF.UserModel
             return hyperlink;
         }
 
-        public String GetAnchor()
+        public string Anchor
         {
-            return hyperlink.anchor;
+            get
+            {
+                return hyperlink.anchor;
+            }
         }
 
         /**
          * Returns the ID of the hyperlink, if one is Set.
          */
-        public String GetHyperlinkId()
+        public string HyperlinkId
         {
-            return hyperlink.id;
+            get { return hyperlink.id; }
+            set { hyperlink.id = (value); }
         }
-        public void SetHyperlinkId(String id)
-        {
-            hyperlink.id = (id);
-        }
-
+        
         /**
          * If this Hyperlink is an external reference hyperlink,
          *  return the object for it.
          */
         public XWPFHyperlink GetHyperlink(XWPFDocument document)
         {
-            String id = GetHyperlinkId();
+            String id = HyperlinkId;
             if (id == null)
                 return null;
 
