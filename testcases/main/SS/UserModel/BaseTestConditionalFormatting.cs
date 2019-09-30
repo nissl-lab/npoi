@@ -870,36 +870,35 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(null, cr.Formula2);
 
             // TODO Implement
-            /*
-                    ColorScaleFormatting color = cr.ColorScaleFormatting;
-                    assertNotNull(color);
-                    assertNotNull(color.Colors);
-                    assertNotNull(color.Thresholds);
-                    Assert.AreEqual(colors.length, color.NumControlPoints);
-                    Assert.AreEqual(colors.length, color.Colors.length);
-                    Assert.AreEqual(colors.length, color.Thresholds.length);
+            if (cr is HSSFConditionalFormattingRule) return;
+            IColorScaleFormatting color = cr.ColorScaleFormatting;
+            Assert.IsNotNull(color);
+            Assert.IsNotNull(color.Colors);
+            Assert.IsNotNull(color.Thresholds);
+            Assert.AreEqual(colors.Length, color.NumControlPoints);
+            Assert.AreEqual(colors.Length, color.Colors.Length);
+            Assert.AreEqual(colors.Length, color.Thresholds.Length);
 
-                    // Thresholds should be Min / (evenly spaced) / Max
-                    int steps = 100 / (colors.length-1);
-                    for (int i=0; i<colors.length; i++) {
-                        ConditionalFormattingThreshold th = color.Thresholds[i];
-                        if (i == 0) {
-                            Assert.AreEqual(RangeType.MIN, th.RangeType);
-                        } else if (i == colors.length-1) {
-                            Assert.AreEqual(RangeType.MAX, th.RangeType);
-                        } else {
-                            Assert.AreEqual(RangeType.PERCENT, th.RangeType);
-                            Assert.AreEqual(steps*i, th.Value);
-                        }
-                        Assert.AreEqual(null, th.Formula);
-                    }
+            // Thresholds should be Min / (evenly spaced) / Max
+            int steps = 100 / (colors.Length-1);
+            for (int i=0; i<colors.Length; i++) {
+                IConditionalFormattingThreshold th = color.Thresholds[i];
+                if (i == 0) {
+                    Assert.AreEqual(RangeType.MIN, th.RangeType);
+                } else if (i == colors.Length-1) {
+                    Assert.AreEqual(RangeType.MAX, th.RangeType);
+                } else {
+                    Assert.AreEqual(RangeType.PERCENTILE, th.RangeType);
+                    Assert.AreEqual(steps*i, (int)th.Value.Value);
+                }
+                Assert.AreEqual(null, th.Formula);
+            }
 
-                    // Colors should match
-                    for (int i=0; i<colors.length; i++) {
-                        Color c = color.Colors[i];
-                        Assert.AreEqual(colors[i], c.toString());
-                    }
-            */
+            // Colors should match
+            for (int i=0; i<colors.Length; i++) {
+                AssertColour(colors[i], color.Colors[i]);
+            }
+            
         }
         [Test]
         public void TestCreateFontFormatting()

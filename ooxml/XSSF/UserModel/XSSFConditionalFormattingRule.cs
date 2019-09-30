@@ -263,8 +263,44 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFColorScaleFormatting CreateColorScaleFormatting()
         {
-            // TODO Implement
-            return null;
+            // Is it already there?
+            if (_cfRule.IsSetColorScale() && _cfRule.type == ST_CfType.colorScale)
+                return ColorScaleFormatting as XSSFColorScaleFormatting;
+
+            // Mark it as being a Color Scale
+            _cfRule.type = (ST_CfType.colorScale);
+
+            // Ensure the right element
+            CT_ColorScale scale = null;
+            if (_cfRule.IsSetColorScale())
+            {
+                scale = _cfRule.colorScale;
+            }
+            else
+            {
+                scale = _cfRule.AddNewColorScale();
+            }
+
+            // Add a default set of thresholds and colors
+            if (scale.SizeOfCfvoArray() == 0)
+            {
+                CT_Cfvo cfvo;
+                cfvo = scale.AddNewCfvo();
+                cfvo.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MIN.name);
+                cfvo = scale.AddNewCfvo();
+                cfvo.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.PERCENTILE.name);
+                cfvo.val = ("50");
+                cfvo = scale.AddNewCfvo();
+                cfvo.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MAX.name);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    scale.AddNewColor();
+                }
+            }
+
+            // Wrap and return
+            return new XSSFColorScaleFormatting(scale);
         }
         public IColorScaleFormatting ColorScaleFormatting
         {

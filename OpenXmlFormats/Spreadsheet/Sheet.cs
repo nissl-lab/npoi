@@ -6281,6 +6281,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.colorScale != null;
         }
 
+        public CT_ColorScale AddNewColorScale()
+        {
+            this.colorScale = new CT_ColorScale();
+            return this.colorScale;
+        }
+
         [XmlElement]
         public List<string> formula
         {
