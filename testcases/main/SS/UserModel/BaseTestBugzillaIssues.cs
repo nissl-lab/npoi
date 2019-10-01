@@ -1244,15 +1244,15 @@ namespace TestCases.SS.UserModel
         {
             //Create workbook and worksheet
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet worksheet = wb.CreateSheet("sample");
+            //ISheet worksheet = wb.CreateSheet("sample");
             //Loop through and add all values from array list
             // use a fixed seed to always produce the same file which makes comparing stuff easier
-            Random rnd = new Random(4352345);
+            //Random rnd = new Random(4352345);
             int maxStyles = (wb is HSSFWorkbook) ? 4009 : 64000;
             for (int i = 0; i < maxStyles; i++)
             {
                 //Create new row
-                IRow row = worksheet.CreateRow(i);
+                //IRow row = worksheet.CreateRow(i);
                 //Create cell style
                 ICellStyle style;
                 try
@@ -1277,11 +1277,11 @@ namespace TestCases.SS.UserModel
                     Assert.AreEqual(i + 1, style.Index & 0xffff);
                 }
                 //Create cell
-                ICell cell = row.CreateCell(0);
+                //ICell cell = row.CreateCell(0);
                 //Set cell style
-                cell.CellStyle = (style);
+                //cell.CellStyle = (style);
                 //Set cell value
-                cell.SetCellValue("r" + rnd.Next());
+                //cell.SetCellValue("r" + rnd.Next());
             }
             // should Assert.Fail if we try to add more now
             try

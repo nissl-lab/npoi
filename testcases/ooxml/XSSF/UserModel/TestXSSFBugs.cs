@@ -2005,7 +2005,7 @@ namespace NPOI.XSSF.UserModel
             // XSSF Workbook gives helpful error
             try
             {
-                new XSSFWorkbook(pkg);
+                new XSSFWorkbook(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
             catch (XLSBUnsupportedException e)
@@ -2564,7 +2564,7 @@ namespace NPOI.XSSF.UserModel
             Console.WriteLine("long time test, run over 1 minute.");
             int numStyles = 33000;
             XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
+            //XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
             XSSFDataFormat fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
             for (int i = 1; i < numStyles; i++)
             {
@@ -2575,9 +2575,9 @@ namespace NPOI.XSSF.UserModel
                 XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
                 Assert.AreEqual(i, style.UIndex);
                 style.DataFormat = (/*setter*/df);
-                XSSFCell c = s.CreateRow(i).CreateCell(0, CellType.Numeric) as XSSFCell;
-                c.CellStyle = (/*setter*/style);
-                c.SetCellValue(i);
+                //XSSFCell c = s.CreateRow(i).CreateCell(0, CellType.Numeric) as XSSFCell;
+                //c.CellStyle = (/*setter*/style);
+                //c.SetCellValue(i);
             }
 
             //wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
@@ -2588,12 +2588,12 @@ namespace NPOI.XSSF.UserModel
             fos.Close();
 
             wb.Close();
-            fmt = null; s = null; wb = null;
+            fmt = null; /*s = null;*/ wb = null;
             // System.gc();
 
             wb = new XSSFWorkbook(tmp.FullName);
             fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
-            s = wb.GetSheetAt(0) as XSSFSheet;
+            //s = wb.GetSheetAt(0) as XSSFSheet;
             for (int i = 1; i < numStyles; i++)
             {
                 XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;
