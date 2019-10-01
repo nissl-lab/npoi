@@ -2846,6 +2846,22 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test53105()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53105.xlsx");
+            Assert.IsNotNull(wb);
+
+            // Act
+            // evaluate SUM('Skye Lookup Input'!A4:XFD4), cells in range each contain "1"
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            double numericValue = evaluator.Evaluate(wb.GetSheetAt(0).GetRow(1).GetCell(0)).NumberValue;
+            // Assert
+            Assert.AreEqual(16384.0, numericValue, 0.0);
+
+            wb.Close();
+        }
+
     }
 
 }
