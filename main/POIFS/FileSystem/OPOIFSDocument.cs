@@ -352,8 +352,8 @@ namespace NPOI.POIFS.FileSystem
         {
             get
             {
-                string message;
-                object[] objArray = new object[1];
+                String result = "<NO DATA>";
+
                 try
                 {
                     using (MemoryStream stream = new MemoryStream())
@@ -369,38 +369,22 @@ namespace NPOI.POIFS.FileSystem
                         }
                         if (blocks != null)
                         {
-                            for (int i = 0; i < blocks.Length; i++)
+
+                            ByteArrayOutputStream output = new ByteArrayOutputStream();
+                            foreach (BlockWritable bw in blocks)
                             {
-                                blocks[i].WriteBlocks(stream);
+                                bw.WriteBlocks(output);
                             }
-                            byte[] sourceArray = stream.ToArray();
-                            if (sourceArray.Length > this._property.Size)
-                            {
-                                byte[] buffer2 = new byte[this._property.Size];
-                                Array.Copy(sourceArray, 0, buffer2, 0, buffer2.Length);
-                                sourceArray = buffer2;
-                            }
-                            using (MemoryStream ms = new MemoryStream())
-                            {
-                                HexDump.Dump(sourceArray, 0L, ms, 0);
-                                byte[] buffer = ms.GetBuffer();
-                                char[] destinationArray = new char[(int)ms.Length];
-                                Array.Copy(buffer, 0, destinationArray, 0, destinationArray.Length);
-                                message = new string(destinationArray);
-                            }
-                        }
-                        else
-                        {
-                            message = "<NO DATA>";
+                            int length = (int)Math.Min(output.Length, _property.Size);
+                            result = HexDump.Dump(output.ToByteArray(), 0, 0, length);
                         }
                     }
                 }
                 catch (IOException exception)
                 {
-                    message = exception.Message;
+                    result = exception.Message;
                 }
-                objArray[0] = message;
-                return objArray;
+                return new String[] { result };
             }
         }
 

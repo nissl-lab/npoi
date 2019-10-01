@@ -36,97 +36,105 @@ namespace TestCases.SS.Util
         {
 
             IWorkbook workbook = new HSSFWorkbook();
-            String sheetName;
-            if (dates)
+            try
             {
-                if (times)
-                {
-                    sheetName = "DateTimes";
-                }
-                else
-                {
-                    sheetName = "Dates";
-                }
-            }
-            else
-            {
-                sheetName = "Times";
-            }
-            ISheet sheet = workbook.CreateSheet(sheetName);
-            IRow header = sheet.CreateRow(0);
-            header.CreateCell(0).SetCellValue("locale");
-            header.CreateCell(1).SetCellValue("DisplayName");
-            header.CreateCell(2).SetCellValue("Excel " + styleName);
-            header.CreateCell(3).SetCellValue("java.text.DateFormat");
-            header.CreateCell(4).SetCellValue("Equals");
-            header.CreateCell(5).SetCellValue("Java pattern");
-            header.CreateCell(6).SetCellValue("Excel pattern");
-
-            int rowNum = 1;
-            foreach (CultureInfo locale in CultureInfo.GetCultures(CultureTypes.AllCultures))
-            {
-                if (string.IsNullOrEmpty(locale.ToString()))
-                    continue;
-                IRow row = sheet.CreateRow(rowNum++);
-
-                row.CreateCell(0).SetCellValue(locale.ToString());
-                row.CreateCell(1).SetCellValue(locale.DisplayName);
-
-                string csharpDateFormatPattern;
+                String sheetName;
                 if (dates)
                 {
                     if (times)
                     {
-                        csharpDateFormatPattern = DateFormat.GetDateTimePattern(style, style, locale);
+                        sheetName = "DateTimes";
                     }
                     else
                     {
-                        csharpDateFormatPattern = DateFormat.GetDatePattern(style, locale);
+                        sheetName = "Dates";
                     }
                 }
                 else
                 {
-                    csharpDateFormatPattern = DateFormat.GetTimePattern(style, locale);
+                    sheetName = "Times";
+                }
+                ISheet sheet = workbook.CreateSheet(sheetName);
+                IRow header = sheet.CreateRow(0);
+                header.CreateCell(0).SetCellValue("locale");
+                header.CreateCell(1).SetCellValue("DisplayName");
+                header.CreateCell(2).SetCellValue("Excel " + styleName);
+                header.CreateCell(3).SetCellValue("java.text.DateFormat");
+                header.CreateCell(4).SetCellValue("Equals");
+                header.CreateCell(5).SetCellValue("Java pattern");
+                header.CreateCell(6).SetCellValue("Excel pattern");
+
+                int rowNum = 1;
+                foreach (CultureInfo locale in CultureInfo.GetCultures(CultureTypes.AllCultures))
+                {
+                    if (string.IsNullOrEmpty(locale.ToString()))
+                        continue;
+                    IRow row = sheet.CreateRow(rowNum++);
+
+                    row.CreateCell(0).SetCellValue(locale.ToString());
+                    row.CreateCell(1).SetCellValue(locale.DisplayName);
+
+                    string csharpDateFormatPattern;
+                    if (dates)
+                    {
+                        if (times)
+                        {
+                            csharpDateFormatPattern = DateFormat.GetDateTimePattern(style, style, locale);
+                        }
+                        else
+                        {
+                            csharpDateFormatPattern = DateFormat.GetDatePattern(style, locale);
+                        }
+                    }
+                    else
+                    {
+                        csharpDateFormatPattern = DateFormat.GetTimePattern(style, locale);
+                    }
+
+                    //Excel Date Value
+                    ICell cell = row.CreateCell(2);
+
+                    cell.SetCellValue(date);
+                    ICellStyle cellStyle = row.Sheet.Workbook.CreateCellStyle();
+
+                    //String csharpDateFormatPattern = locale.DateTimeFormat.LongDatePattern;
+                    String excelFormatPattern = DateFormatConverter.Convert(locale, csharpDateFormatPattern);
+
+                    IDataFormat poiFormat = row.Sheet.Workbook.CreateDataFormat();
+                    cellStyle.DataFormat = (poiFormat.GetFormat(excelFormatPattern));
+                    cell.CellStyle = (cellStyle);
+
+                    //C# Date value
+                    row.CreateCell(3).SetCellValue(date.ToString(csharpDateFormatPattern, locale.DateTimeFormat));
+
+
+
+                    // the formula returns TRUE is the formatted date in column C equals to the string in column D
+                    row.CreateCell(4).SetCellFormula("TEXT(C" + rowNum + ",G" + rowNum + ")=D" + rowNum);
+                    //C# pattern
+                    row.CreateCell(5).SetCellValue(csharpDateFormatPattern);
+                    //excel pattern
+                    row.CreateCell(6).SetCellValue(excelFormatPattern);
                 }
 
-                //Excel Date Value
-                ICell cell = row.CreateCell(2);
-
-                cell.SetCellValue(date);
-                ICellStyle cellStyle = row.Sheet.Workbook.CreateCellStyle();
-
-                //String csharpDateFormatPattern = locale.DateTimeFormat.LongDatePattern;
-                String excelFormatPattern = DateFormatConverter.Convert(locale, csharpDateFormatPattern);
-
-                IDataFormat poiFormat = row.Sheet.Workbook.CreateDataFormat();
-                cellStyle.DataFormat = (poiFormat.GetFormat(excelFormatPattern));
-                cell.CellStyle = (cellStyle);
-
-                //C# Date value
-                row.CreateCell(3).SetCellValue(date.ToString(csharpDateFormatPattern, locale.DateTimeFormat));
-
-                
-
-                // the formula returns TRUE is the formatted date in column C equals to the string in column D
-                row.CreateCell(4).SetCellFormula("TEXT(C" + rowNum + ",G" + rowNum + ")=D" + rowNum);
-                //C# pattern
-                row.CreateCell(5).SetCellValue(csharpDateFormatPattern);
-                //excel pattern
-                row.CreateCell(6).SetCellValue(excelFormatPattern);
-            }
-
-            //FileInfo outputFile = TempFile.CreateTempFile("Locale" + sheetName + styleName, ".xlsx");
-            string filename = "Locale" + sheetName + styleName + ".xls";
-            FileStream outputStream = new FileStream(filename, FileMode.Create);
-            try
-            {
-                workbook.Write(outputStream);
+                //FileInfo outputFile = TempFile.CreateTempFile("Locale" + sheetName + styleName, ".xlsx");
+                string filename = "Locale" + sheetName + styleName + ".xls";
+                FileStream outputStream = new FileStream(filename, FileMode.Create);
+                try
+                {
+                    workbook.Write(outputStream);
+                }
+                finally
+                {
+                    outputStream.Close();
+                }
+                System.Console.WriteLine("Open " + filename + " in Excel");
             }
             finally
             {
-                outputStream.Close();
+                workbook.Close();
             }
-            System.Console.WriteLine("Open " + filename + " in Excel");
+            
 
         }
         [Test]

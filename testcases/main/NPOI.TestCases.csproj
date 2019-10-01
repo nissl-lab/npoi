@@ -239,6 +239,7 @@
     <Compile Include="SS\UserModel\TestDateUtil.cs" />
     <Compile Include="SS\UserModel\TestFractionFormat.cs" />
     <Compile Include="SS\Util\TestAreaReference.cs" />
+    <Compile Include="SS\Util\TestDateFormatConverter.cs" />
     <Compile Include="SS\Util\TestSheetUtil.cs" />
     <Compile Include="TestPOIDocumentMain.cs" />
     <Compile Include="Util\TestBitField.cs" />
