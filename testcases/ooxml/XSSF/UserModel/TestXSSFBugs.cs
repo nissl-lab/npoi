@@ -2755,6 +2755,53 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(expectedResultOrNull, eval.Evaluate(intF).FormatAsString());
         }
 
+        [Test]
+        public void Test48962()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48962.xlsx");
+            ISheet sh = wb.GetSheetAt(0);
+            IRow row = sh.GetRow(1);
+            ICell cell = row.GetCell(0);
+
+            ICellStyle style = cell.CellStyle;
+            Assert.IsNotNull(style);
+
+            // color index
+            Assert.AreEqual(64, style.FillBackgroundColor);
+            XSSFColor color = ((XSSFCellStyle)style).FillBackgroundXSSFColor;
+            Assert.IsNotNull(color);
+
+            // indexed color
+            Assert.AreEqual(64, color.Indexed);
+            Assert.AreEqual(64, color.Index);
+
+            // not an RGB color
+            Assert.IsFalse(color.IsRGB);
+            Assert.IsNotNull(color.RGB);
+        }
+
+        [Test]
+        public void Test50755_workday_formula_example()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50755_workday_formula_example.xlsx");
+            ISheet sheet = wb.GetSheet("Sheet1");
+            foreach (IRow aRow in sheet)
+            {
+                ICell cell = aRow.GetCell(1);
+                if (cell.CellType == CellType.Formula)
+                {
+                    String formula = cell.CellFormula;
+                    //System.out.println("formula: " + formula);
+                    Assert.IsNotNull(formula);
+                    Assert.IsTrue(formula.Contains("WORKDAY"));
+                }
+                else
+                {
+                    Assert.IsNotNull(cell.ToString());
+                }
+            }
+        }
+
     }
 
 }
