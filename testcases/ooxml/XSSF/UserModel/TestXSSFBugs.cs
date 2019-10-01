@@ -2725,6 +2725,36 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57181.xlsm");
             Assert.AreEqual(9, wb.NumberOfSheets);
         }
+
+        [Test]
+        public void Bug52111()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("Intersection-52111-xssf.xlsx");
+            ISheet s = wb.GetSheetAt(0);
+            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4.0");
+            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!11:11", "5.0");
+            assertFormula(wb, s.GetRow(8).GetCell(0), "Tabelle2!E:F Tabelle2!11:12", null);
+        }
+
+        private void assertFormula(IWorkbook wb, ICell intF, String expectedFormula, String expectedResultOrNull)
+        {
+            Assert.AreEqual(CellType.Formula, intF.CellType);
+            if (null == expectedResultOrNull)
+            {
+                Assert.AreEqual(CellType.Error, intF.CachedFormulaResultType);
+                expectedResultOrNull = "#VALUE!";
+            }
+            else
+            {
+                Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+            }
+
+            Assert.AreEqual(expectedFormula, intF.CellFormula);
+            // Check we can evaluate it correctly
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual(expectedResultOrNull, eval.Evaluate(intF).FormatAsString());
+        }
+
     }
 
 }

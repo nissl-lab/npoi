@@ -639,7 +639,7 @@ namespace TestCases.HSSF.Model
         }
 
         /* package */
-        public static Ptg[] ConfirmTokenClasses(String formula, Type[] expectedClasses)
+        public static Ptg[] ConfirmTokenClasses(String formula, params Type[] expectedClasses)
         {
             Ptg[] ptgs = ParseFormula(formula);
             Assert.AreEqual(expectedClasses.Length, ptgs.Length);
@@ -858,7 +858,6 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestParserErrors()
         {
-            ParseExpectedException("1 2");
             ParseExpectedException(" 12 . 345  ");
             ParseExpectedException("1 .23  ");
 
@@ -1321,7 +1320,69 @@ namespace TestCases.HSSF.Model
             );
             MemFuncPtg mf = (MemFuncPtg)ptgs[0];
             Assert.AreEqual(45, mf.LenRefSubexpression);
+
+            // We don't check the type of the operands.
+            ConfirmTokenClasses("1,2", typeof(MemAreaPtg), typeof(IntPtg), typeof(IntPtg), typeof(UnionPtg));
         }
+
+        [Test]
+        public void TestIntersection()
+        {
+            String formula = "Sheet1!$B$2:$C$3 OFFSET(Sheet1!$E$2:$E$4, 1,Sheet1!$A$1) Sheet1!$D$6";
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
+            ConfirmTokenClasses(ptgs,
+                    // TODO - AttrPtg.class, // Excel prepends this
+                typeof(MemFuncPtg),
+                typeof(Area3DPtg),
+                typeof(Area3DPtg),
+                typeof(IntPtg),
+                typeof(Ref3DPtg),
+                typeof(FuncVarPtg),
+                typeof(IntersectionPtg),
+                typeof(Ref3DPtg),
+                typeof(IntersectionPtg)
+        );
+            MemFuncPtg mf = (MemFuncPtg)ptgs[0];
+            Assert.AreEqual(45, mf.LenRefSubexpression);
+            // This used to be an error but now parses.  Union has the same behaviour.
+            ConfirmTokenClasses("1 2", typeof(MemAreaPtg), typeof(IntPtg), typeof(IntPtg), typeof(IntersectionPtg));
+        }
+        [Test]
+        public void TestComparisonInParen()
+        {
+            ConfirmTokenClasses("(A1 > B2)",
+                typeof(RefPtg),
+                typeof(RefPtg),
+                typeof(GreaterThanPtg),
+                typeof(ParenthesisPtg)
+            );
+        }
+        [Test]
+        public void TestUnionInParen()
+        {
+            ConfirmTokenClasses("(A1:B2,B2:C3)",
+              typeof(MemAreaPtg),
+                  typeof(AreaPtg),
+                  typeof(AreaPtg),
+                  typeof(UnionPtg),
+                  typeof(ParenthesisPtg)
+                );
+        }
+        [Test]
+        public void TestIntersectionInParen()
+        {
+            ConfirmTokenClasses("(A1:B2 B2:C3)",
+                typeof(MemAreaPtg),
+                    typeof(AreaPtg),
+                    typeof(AreaPtg),
+                    typeof(IntersectionPtg),
+                    typeof(ParenthesisPtg)
+                );
+        }
+    
+
         /** Named ranges with backslashes, e.g. 'POI\\2009' */
         [Test]
         public void TestBackSlashInNames()

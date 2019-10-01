@@ -808,13 +808,13 @@ namespace TestCases.OPC
             //if (e is InvocationTargetException) {
             //    InvocationTargetException t = (InvocationTargetException)e;
             //    IOException t2 = (IOException)t.getTargetException();
-            //    if ("Zip bomb detected! Exiting.".Equals(t2.Message))
+            //    if (t2.Message.StartsWith("Zip bomb detected!"))
             //    {
             //        return;
             //    }
             //}
 
-            if ("Zip bomb detected! Exiting.".Equals(e.Message))
+            if (e.Message.StartsWith("Zip bomb detected! Exiting."))
             {
                 return;
             }

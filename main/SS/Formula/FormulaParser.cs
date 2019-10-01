@@ -62,7 +62,6 @@ namespace NPOI.SS.Formula
         private String formulaString;
         private int formulaLength;
         private int _pointer;
-        private static SpreadsheetVersion _ssVersion;
 
         private ParseNode _rootNode;
 
@@ -76,7 +75,14 @@ namespace NPOI.SS.Formula
          */
         private char look;
 
+        /**
+         * Tracks whether the run of whitespace preceeding "look" could be an
+         * intersection operator.  See GetChar.
+         */
+        private bool _inIntersection = false;
+
         private IFormulaParsingWorkbook _book;
+        private static SpreadsheetVersion _ssVersion;
 
         private int _sheetIndex;
 
@@ -137,6 +143,19 @@ namespace NPOI.SS.Formula
         /** Read New Character From Input Stream */
         private void GetChar()
         {
+            // The intersection operator is a space.  We track whether the run of 
+            // whitespace preceeding "look" counts as an intersection operator.  
+            if (IsWhite(look))
+            {
+                if (look == ' ')
+                {
+                    _inIntersection = true;
+                }
+            }
+            else
+            {
+                _inIntersection = false;
+            }
             // Check To see if we've walked off the end of the string.
             if (_pointer > formulaLength)
             {
@@ -151,6 +170,7 @@ namespace NPOI.SS.Formula
                 // Just return if so and reset 'look' To something To keep
                 // SkipWhitespace from spinning
                 look = (char)0;
+                _inIntersection = false;
             }
             _pointer++;
             //Console.WriteLine("Got char: "+ look);
@@ -1411,7 +1431,7 @@ namespace NPOI.SS.Formula
                     return ParseUnary(true);
                 case '(':
                     Match('(');
-                    ParseNode inside = ComparisonExpression();
+                    ParseNode inside = UnionExpression();
                     Match(')');
                     return new ParseNode(ParenthesisPtg.instance, inside);
                 case '"':
@@ -1929,7 +1949,7 @@ namespace NPOI.SS.Formula
         }
         private ParseNode UnionExpression()
         {
-            ParseNode result = ComparisonExpression();
+            ParseNode result = IntersectionExpression();
             bool hasUnions = false;
             while (true)
             {
@@ -1939,7 +1959,7 @@ namespace NPOI.SS.Formula
                     case ',':
                         GetChar();
                         hasUnions = true;
-                        ParseNode other = ComparisonExpression();
+                        ParseNode other = IntersectionExpression();
                         result = new ParseNode(UnionPtg.instance, result, other);
                         continue;
                 }
@@ -1950,7 +1970,28 @@ namespace NPOI.SS.Formula
                 return result;
             }
         }
-
+        private ParseNode IntersectionExpression()
+        {
+            ParseNode result = ComparisonExpression();
+            bool hasIntersections = false;
+            while (true)
+            {
+                SkipWhite();
+                if (_inIntersection)
+                {
+                    // Don't getChar() as the space has already been eaten and recorded by SkipWhite().
+                    hasIntersections = true;
+                    ParseNode other = ComparisonExpression();
+                    result = new ParseNode(IntersectionPtg.instance, result, other);
+                    continue;
+                }
+                if (hasIntersections)
+                {
+                    return AugmentWithMemPtg(result);
+                }
+                return result;
+            }
+        }
 
         private Ptg[] GetRPNPtg(FormulaType formulaType)
         {

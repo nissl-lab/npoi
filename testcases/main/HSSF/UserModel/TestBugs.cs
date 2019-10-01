@@ -3202,17 +3202,29 @@ namespace TestCases.HSSF.UserModel
         {
             IWorkbook wb = OpenSample("Intersection-52111.xls");
             ISheet s = wb.GetSheetAt(0);
+            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4.0");
+            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!$A11:$IV11", "5.0");
+            assertFormula(wb, s.GetRow(8).GetCell(0), "Tabelle2!E:F Tabelle2!$A11:$IV12", null);
+        }
 
-            // Check we can read it correctly
-            ICell intF = s.GetRow(2).GetCell(0);
+        private void assertFormula(IWorkbook wb, ICell intF, String expectedFormula, String expectedResultOrNull)
+        {
             Assert.AreEqual(CellType.Formula, intF.CellType);
-            Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+            if (null == expectedResultOrNull)
+            {
+                Assert.AreEqual(CellType.Error, intF.CachedFormulaResultType);
+                expectedResultOrNull = "#VALUE!";
+            }
+            else
+            {
+                Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+            }
 
-            Assert.AreEqual("(C2:D3 D3:E4)", intF.CellFormula);
+            Assert.AreEqual(expectedFormula, intF.CellFormula);
 
-            // Check we can Evaluate it correctly
+            // Check we can evaluate it correctly
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
-            Assert.AreEqual("4", eval.Evaluate(intF).FormatAsString());
+            Assert.AreEqual(expectedResultOrNull, eval.Evaluate(intF).FormatAsString());
         }
         [Test]
         public void Bug42016()
