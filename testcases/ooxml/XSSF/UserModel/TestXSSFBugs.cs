@@ -2802,6 +2802,50 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        [Test]
+        public void Test51626()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51626.xlsx");
+            Assert.IsNotNull(wb);
+            wb.Close();
+
+            Stream stream = HSSFTestDataSamples.OpenSampleFileStream("51626.xlsx");
+            wb = WorkbookFactory.Create(stream);
+            stream.Close();
+            wb.Close();
+
+            wb = XSSFTestDataSamples.OpenSampleWorkbook("51626_contact.xlsx");
+            Assert.IsNotNull(wb);
+            wb.Close();
+
+            stream = HSSFTestDataSamples.OpenSampleFileStream("51626_contact.xlsx");
+            wb = WorkbookFactory.Create(stream);
+            stream.Close();
+            wb.Close();
+        }
+
+        [Test]
+        public void Test51451()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sh = wb.CreateSheet();
+
+            IRow row = sh.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue(239827342);
+
+            ICellStyle style = wb.CreateCellStyle();
+            //style.setHidden(false);
+            IDataFormat excelFormat = wb.CreateDataFormat();
+            style.DataFormat = (excelFormat.GetFormat("#,##0"));
+            sh.SetDefaultColumnStyle(0, style);
+            //        FileOutputStream out = new FileOutputStream("/tmp/51451.xlsx");
+            //        wb.write(out);
+            //        out.close();
+
+            wb.Close();
+        }
+
     }
 
 }
