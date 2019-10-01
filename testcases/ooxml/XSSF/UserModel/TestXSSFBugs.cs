@@ -22,6 +22,7 @@ namespace NPOI.XSSF.UserModel
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Text;
     using NPOI.HSSF.UserModel;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Spreadsheet;
@@ -2584,9 +2585,15 @@ namespace NPOI.XSSF.UserModel
             // using temp file instead of ByteArrayOutputStream because of OOM in gump run
             FileInfo tmp = TempFile.CreateTempFile("poi-test", ".bug57880");
             FileStream fos = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
-            wb.Write(fos);
-            fos.Close();
-
+            try
+            {
+                wb.Write(fos);
+            }
+            finally
+            {
+                fos.Close();
+            }
+            
             wb.Close();
             fmt = null; /*s = null;*/ wb = null;
             // System.gc();
@@ -2859,6 +2866,27 @@ namespace NPOI.XSSF.UserModel
             // Assert
             Assert.AreEqual(16384.0, numericValue, 0.0);
 
+            wb.Close();
+        }
+
+        [Test]
+        public void Test58315()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58315.xlsx");
+            ICell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            Assert.IsNotNull(cell);
+            StringBuilder tmpCellContent = new StringBuilder(cell.StringCellValue);
+            XSSFRichTextString richText = (XSSFRichTextString)cell.RichStringCellValue;
+            for (int i = richText.Length - 1; i >= 0; i--)
+            {
+                IFont f = richText.GetFontAtIndex(i);
+                if (f != null && f.IsStrikeout)
+                {
+                    tmpCellContent.Remove(i, 1);
+                }
+            }
+            String result = tmpCellContent.ToString();
+            Assert.AreEqual("320 350", result);
             wb.Close();
         }
 

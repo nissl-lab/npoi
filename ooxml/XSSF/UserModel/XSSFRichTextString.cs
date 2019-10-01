@@ -541,7 +541,11 @@ namespace NPOI.XSSF.UserModel
         protected static CT_Font ToCTFont(CT_RPrElt pr)
         {
             CT_Font ctFont = new CT_Font();
-
+            // Bug 58315: there are files where there is no pr-entry for a RichTextString
+            if (pr == null)
+            {
+                return ctFont;
+            }
             if (pr.SizeOfBArray() > 0) ctFont.AddNewB().val = (pr.GetBArray(0).val);
             if (pr.SizeOfUArray() > 0) ctFont.AddNewU().val = (pr.GetUArray(0).val);
             if (pr.SizeOfIArray() > 0) ctFont.AddNewI().val = (pr.GetIArray(0).val);

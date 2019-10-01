@@ -268,7 +268,8 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsTrue(!"555.47431".Equals(fmtval));
 
                 // check we found the time properly
-                Assert.IsTrue(fmtval.IndexOf("11:23") > -1, "Format came out incorrect - " + fmt);
+                Assert.IsTrue(fmtval.IndexOf("11:23") > -1,
+                    "Format came out incorrect - " + fmt + ": " + fmtval + ", but expected to find '11:23'");
             }
 
             // Test number formats
