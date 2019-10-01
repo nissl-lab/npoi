@@ -32,6 +32,55 @@ namespace TestCases.SS.Util
     public class TestCellReference
     {
         [Test]
+        public void TestConstructors()
+        {
+            CellReference cellReference;
+            String sheet = "Sheet1";
+            String cellRef = "A1";
+            int row = 0;
+            int col = 0;
+            bool absRow = true;
+            bool absCol = false;
+
+            cellReference = new CellReference(row, col);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(row, col, absRow, absCol);
+            Assert.AreEqual("A$1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(row, (short)col);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(cellRef);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(sheet, row, col, absRow, absCol);
+            Assert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
+        }
+
+        [Test]
+        public void TestFormatAsString()
+        {
+            CellReference cellReference;
+
+            cellReference = new CellReference(null, 0, 0, false, false);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            //absolute references
+            cellReference = new CellReference(null, 0, 0, true, false);
+            Assert.AreEqual("A$1", cellReference.FormatAsString());
+
+            //sheet name with no spaces
+            cellReference = new CellReference("Sheet1", 0, 0, true, false);
+            Assert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
+
+            //sheet name with spaces
+            cellReference = new CellReference("Sheet 1", 0, 0, true, false);
+            Assert.AreEqual("'Sheet 1'!A$1", cellReference.FormatAsString());
+        }
+
+
+        [Test]
         public void TestGetCellRefParts()
         {
             CellReference cellReference;
