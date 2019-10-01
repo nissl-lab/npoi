@@ -258,13 +258,13 @@ namespace NPOI.XSSF.Streaming
             }
             string cellRef = new CellReference(RowNum, columnIndex).FormatAsString();
             WriteAsBytes(OutputStream, "<c r=\"" + cellRef + "\"");
-
-            if (cell.CellStyle.Index != 0)
+            ICellStyle cellStyle = cell.CellStyle;
+            if (cellStyle.Index != 0)
             {
                 // need to convert the short to unsigned short as the indexes can be up to 64k
                 // ideally we would use int for this index, but that would need changes to some more 
                 // APIs
-                WriteAsBytes(OutputStream, " s=\"" + (cell.CellStyle.Index & 0xffff) + "\"");
+                WriteAsBytes(OutputStream, " s=\"" + (cellStyle.Index & 0xffff) + "\"");
             }
             switch (cell.CellType)
             {

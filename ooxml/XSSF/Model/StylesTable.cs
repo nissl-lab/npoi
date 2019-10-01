@@ -647,11 +647,11 @@ namespace NPOI.XSSF.Model
 
         public XSSFCellStyle CreateCellStyle()
         {
-            int xfSize = styleXfs.Count;
-            if (xfSize > MAXIMUM_STYLE_ID)
+            if (NumCellStyles > MAXIMUM_STYLE_ID)
                 throw new InvalidOperationException("The maximum number of Cell Styles was exceeded. " +
                           "You can define up to " + MAXIMUM_STYLE_ID + " style in a .xlsx Workbook");
-        
+
+            int xfSize = styleXfs.Count;
             CT_Xf ctXf = new CT_Xf();
             ctXf.numFmtId = 0;
             ctXf.fontId = 0;

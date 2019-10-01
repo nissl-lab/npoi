@@ -831,8 +831,7 @@ namespace TestCases.SS.UserModel
 
 
             // References to try
-            String ext = "xls";
-            if (!(wb is HSSFWorkbook)) ext += "x";
+            String ext = _testDataProvider.StandardFileNameExtension;
             String refLocal = "'[test." + ext + "]Sheet1'!$A$2";
             String refHttp = "'[http://example.com/test." + ext + "]Sheet1'!$A$2";
             String otherCellText = "In Another Workbook";
@@ -1240,7 +1239,80 @@ namespace TestCases.SS.UserModel
 
         }
 
+        [Test]
+        public void bug58260()
+        {
+            //Create workbook and worksheet
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet worksheet = wb.CreateSheet("sample");
+            //Loop through and add all values from array list
+            // use a fixed seed to always produce the same file which makes comparing stuff easier
+            Random rnd = new Random(4352345);
+            int maxStyles = (wb is HSSFWorkbook) ? 4009 : 64000;
+            for (int i = 0; i < maxStyles; i++)
+            {
+                //Create new row
+                IRow row = worksheet.CreateRow(i);
+                //Create cell style
+                ICellStyle style;
+                try
+                {
+                    style = wb.CreateCellStyle();
+                }
+                catch (InvalidOperationException e)
+                {
+                    throw new InvalidOperationException("Failed for row " + i, e);
+                }
+                style.Alignment = HorizontalAlignment.Right;
+                if ((wb is HSSFWorkbook))
+                {
+                    // there are some predefined styles
+                    Assert.AreEqual(i + 21, style.Index);
+                }
+                else
+                {
+                    // getIndex() returns short, which is not sufficient for > 32767
+                    // we should really change the API to be "int" for getIndex() but
+                    // that needs API changes
+                    Assert.AreEqual(i + 1, style.Index & 0xffff);
+                }
+                //Create cell
+                ICell cell = row.CreateCell(0);
+                //Set cell style
+                cell.CellStyle = (style);
+                //Set cell value
+                cell.SetCellValue("r" + rnd.Next());
+            }
+            // should Assert.Fail if we try to add more now
+            try
+            {
+                wb.CreateCellStyle();
+                Assert.Fail("Should Assert.Fail after " + maxStyles + " styles, but did not Assert.Fail");
+            }
+            catch (InvalidOperationException e)
+            {
+                // expected here
+            }
+
+            /*//add column width for appearance sake
+            worksheet.setColumnWidth(0, 5000);
+
+            // Write the output to a file       
+            System.out.println("Writing...");
+            OutputStream fileOut = new FileOutputStream("C:\\temp\\58260." + _testDataProvider.StandardFileNameExtension);
+
+            // the resulting file can be compressed nicely, so we need to disable the zip bomb detection here
+            double before = ZipSecureFile.MinInflateRatio;
+            try {
+                ZipSecureFile.setMinInflateRatio(0.00001);
+                wb.write(fileOut);
+            } finally { 
+                fileOut.close();
+                ZipSecureFile.setMinInflateRatio(before);
+            }*/
+
+            wb.Close();
+        }
+
     }
-
-
 }
