@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using NPOI.HSSF.Record.Crypto;
 using NPOI.HSSF.UserModel;
+using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.POIFS.Crypt;
 using NPOI.POIFS.FileSystem;
@@ -166,7 +167,7 @@ namespace NPOI.SS.UserModel
             {
                 return new XSSFWorkbook(OPCPackage.Open(inputStream));
             }
-            throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
+            throw new InvalidFormatException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
         public static IWorkbook Create(string file)
         {

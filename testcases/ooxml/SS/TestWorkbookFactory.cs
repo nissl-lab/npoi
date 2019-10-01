@@ -27,6 +27,7 @@ namespace NPOI.SS
     using TestCases.HSSF;
     using System.Configuration;
     using System.IO;
+    using NPOI.OpenXml4Net.Exceptions;
 
     [TestFixture]
     public class TestWorkbookFactory
@@ -136,7 +137,7 @@ namespace NPOI.SS
                 }
                 Assert.Fail();
             }
-            catch (ArgumentException e)
+            catch (InvalidFormatException e)
             {
                 // Good
             }
