@@ -87,7 +87,12 @@ namespace TestCases.SS.Formula.Atp
             StringEval stringEval = new StringEval(startDate);
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
                 stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+
+            Assert.AreEqual(41544.0, numberValue);
+
+            DateTime date = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(new DateTime(113, 8, 27), date);
+            Assert.AreEqual(expectedWorkDay, formatter.Format(date));
         }
 
         [Test]
@@ -99,7 +104,12 @@ namespace TestCases.SS.Formula.Atp
             StringEval stringEval = new StringEval(startDate);
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
                 stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+
+            Assert.AreEqual(41547.0, numberValue);
+
+            DateTime date = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(new DateTime(113, 8, 30), date);
+            Assert.AreEqual(expectedWorkDay, formatter.Format(date));
         }
 
         [Test]
@@ -111,7 +121,12 @@ namespace TestCases.SS.Formula.Atp
             StringEval stringEval = new StringEval(startDate);
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
                 stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+
+            Assert.AreEqual(41554.0, numberValue);
+
+            DateTime date = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(new DateTime(113, 9, 7), date);
+            Assert.AreEqual(expectedWorkDay, formatter.Format(date));
         }
 
         [Test]
@@ -124,6 +139,12 @@ namespace TestCases.SS.Formula.Atp
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
                 stringEval, new NumberEval(days) }, EC)).NumberValue;
             Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+
+            Assert.AreEqual(41551.0, numberValue);
+
+            DateTime date = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(new DateTime(113, 9, 4), date);
+            Assert.AreEqual(expectedWorkDay, formatter.Format(date));
         }
         [Test]
         public void TestReturnWorkdaysWithDaysTruncated()
