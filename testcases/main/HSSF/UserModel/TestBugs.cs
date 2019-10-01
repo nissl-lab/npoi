@@ -24,6 +24,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System.Text;
     using System.Collections;
+    using System.Linq;
     using NUnit.Framework;
 
     using TestCases.HSSF;
@@ -1745,8 +1746,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test46664()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("new_sheet");
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet sheet = wb1.CreateSheet("new_sheet");
             IRow row = sheet.CreateRow((short)0);
             row.CreateCell(0).SetCellValue(new HSSFRichTextString("Column A"));
             row.CreateCell(1).SetCellValue(new HSSFRichTextString("Column B"));
@@ -1756,7 +1757,7 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(5).SetCellValue(new HSSFRichTextString("Column F"));
 
             //set print area from column a to column c (on first row)
-            wb.SetPrintArea(
+            wb1.SetPrintArea(
                     0, //sheet index
                     0, //start column
                     2, //end column
@@ -1764,11 +1765,12 @@ namespace TestCases.HSSF.UserModel
                     0  //end row
             );
 
-            wb = WriteOutAndReadBack(wb);
+            HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
+            wb1.Close();
 
             // Ensure the tab index
             TabIdRecord tr = null;
-            foreach (Record r in wb.Workbook.Records)
+            foreach (Record r in wb2.Workbook.Records)
             {
                 if (r is TabIdRecord)
                 {
@@ -1780,21 +1782,23 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, tr._tabids[0]);
 
             // Ensure the print setup
-            Assert.AreEqual("new_sheet!$A$1:$C$1", wb.GetPrintArea(0));
-            Assert.AreEqual("new_sheet!$A$1:$C$1", wb.GetName("Print_Area").RefersToFormula);
+            Assert.AreEqual("new_sheet!$A$1:$C$1", wb2.GetPrintArea(0));
+            Assert.AreEqual("new_sheet!$A$1:$C$1", wb2.GetName("Print_Area").RefersToFormula);
 
             // Needs reference not value
-            NameRecord nr = wb.Workbook.GetNameRecord(
-                  wb.GetNameIndex("Print_Area")
+            NameRecord nr = wb2.Workbook.GetNameRecord(
+                  wb2.GetNameIndex("Print_Area")
             );
             Assert.AreEqual("Print_Area", nr.NameText);
             Assert.AreEqual(1, nr.NameDefinition.Length);
             Assert.AreEqual(
                   "new_sheet!$A$1:$C$1",
-                  ((Area3DPtg)nr.NameDefinition[0]).ToFormulaString(HSSFEvaluationWorkbook.Create(wb))
+                  ((Area3DPtg)nr.NameDefinition[0]).ToFormulaString(HSSFEvaluationWorkbook.Create(wb2))
             );
-            // TODO - fix me to be Reference not Value!
-            //Assert.AreEqual('R', nr.NameDefinition[0].RVAType);
+
+            Assert.AreEqual('R', nr.NameDefinition[0].RVAType);
+
+            wb2.Close();
         }
         /**
          * Odd POIFS blocks issue:
@@ -2108,68 +2112,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0xff, rotated.CellStyle.Rotation);
             Assert.AreEqual(0xff, nc.CellStyle.Rotation);
         }
-
-        /**
-         * Setting the user style name on custom styles
-         */
-        /*        public void Test49689()
-                {
-                    HSSFWorkbook wb = new HSSFWorkbook();
-                    Sheet s = wb.CreateSheet("Test");
-                    Row r = s.CreateRow(0);
-                    Cell c = r.CreateCell(0);
-
-                    CellStyle cs1 = wb.CreateCellStyle();
-                    CellStyle cs2 = wb.CreateCellStyle();
-                    CellStyle cs3 = wb.CreateCellStyle();
-
-                    Assert.AreEqual(21, cs1.Index);
-                    cs1.setUserStyleName("Testing");
-
-                    Assert.AreEqual(22, cs2.Index);
-                    cs2.setUserStyleName("Testing 2");
-
-                    Assert.AreEqual(23, cs3.Index);
-                    cs3.setUserStyleName("Testing 3");
-
-                    // Set one
-                    c.setCellStyle(cs1);
-
-                    // Write out and read back
-                    wb = WriteOutAndReadBack(wb);
-
-                    // Re-check
-                    Assert.AreEqual("Testing", wb.GetCellStyleAt((short)21).GetUserStyleName());
-                    Assert.AreEqual("Testing 2", wb.GetCellStyleAt((short)22).GetUserStyleName());
-                    Assert.AreEqual("Testing 3", wb.GetCellStyleAt((short)23).GetUserStyleName());
-                }
-
-                public void Test49751()
-                {
-                    HSSFWorkbook wb = OpenSample("49751.xls");
-                    short numCellStyles = wb.NumCellStyles;
-                    List<String> namedStyles = new List<string>(new string[]{
-                        "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
-                        "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4", 
-                        "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
-                        "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
-                        "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
-                        "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
-                        "Neutral", "Note", "Output", "Title", "Total", "Warning Text"});
-
-                    List<String> collecteddStyles = new List<String>();
-                    for (short i = 0; i < numCellStyles; i++)
-                    {
-                        ICellStyle cellStyle = wb.GetCellStyleAt(i);
-                        String styleName = cellStyle.GetUserStyleName();
-                        if (styleName != null)
-                        {
-                            collecteddStyles.Add(styleName);
-                        }
-                    }
-                    Assert.IsTrue(namedStyles.ContainsAll(collecteddStyles));
-                }
-        */
+        
         /**
          * Regression with the PageSettingsBlock
          */
@@ -2538,14 +2481,14 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test49689()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet("Test");
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet s = wb1.CreateSheet("Test");
             IRow r = s.CreateRow(0);
             ICell c = r.CreateCell(0);
 
-            HSSFCellStyle cs1 = (HSSFCellStyle)wb.CreateCellStyle();
-            HSSFCellStyle cs2 = (HSSFCellStyle)wb.CreateCellStyle();
-            HSSFCellStyle cs3 = (HSSFCellStyle)wb.CreateCellStyle();
+            HSSFCellStyle cs1 = (HSSFCellStyle)wb1.CreateCellStyle();
+            HSSFCellStyle cs2 = (HSSFCellStyle)wb1.CreateCellStyle();
+            HSSFCellStyle cs3 = (HSSFCellStyle)wb1.CreateCellStyle();
 
             Assert.AreEqual(21, cs1.Index);
             cs1.UserStyleName = ("Testing");
@@ -2560,12 +2503,14 @@ namespace TestCases.HSSF.UserModel
             c.CellStyle = (cs1);
 
             // Write out and read back
-            wb = WriteOutAndReadBack(wb);
+            HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
 
             // Re-check
-            Assert.AreEqual("Testing", ((HSSFCellStyle)wb.GetCellStyleAt((short)21)).UserStyleName);
-            Assert.AreEqual("Testing 2", ((HSSFCellStyle)wb.GetCellStyleAt((short)22)).UserStyleName);
-            Assert.AreEqual("Testing 3", ((HSSFCellStyle)wb.GetCellStyleAt((short)23)).UserStyleName);
+            Assert.AreEqual("Testing", ((HSSFCellStyle)wb2.GetCellStyleAt((short)21)).UserStyleName);
+            Assert.AreEqual("Testing 2", ((HSSFCellStyle)wb2.GetCellStyleAt((short)22)).UserStyleName);
+            Assert.AreEqual("Testing 3", ((HSSFCellStyle)wb2.GetCellStyleAt((short)23)).UserStyleName);
+
+            wb2.Close();
         }
         [Test]
         public void Test49751()
@@ -2936,21 +2881,24 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test53432()
         {
-            IWorkbook wb = new HSSFWorkbook(); //or new HSSFWorkbook();
-            wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
-            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+            IWorkbook wb1 = new HSSFWorkbook(); //or new HSSFWorkbook();
+            wb1.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
+            Assert.AreEqual(wb1.GetAllPictures().Count, 1);
+            wb1.Close();
 
-            wb.Close();
-            wb = new HSSFWorkbook();
-            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
-            Assert.AreEqual(wb.GetAllPictures().Count, 0);
-            wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
-            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+            wb1.Close();
+            wb1 = new HSSFWorkbook();
+            IWorkbook wb2 = WriteOutAndReadBack((HSSFWorkbook)wb1);
+            wb1.Close();
+            Assert.AreEqual(wb2.GetAllPictures().Count, 0);
+            wb2.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
+            Assert.AreEqual(wb2.GetAllPictures().Count, 1);
 
-            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
-            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+            IWorkbook wb3 = WriteOutAndReadBack((HSSFWorkbook)wb2);
+            wb2.Close();
+            Assert.AreEqual(wb3.GetAllPictures().Count, 1);
 
-            wb.Close();
+            wb3.Close();
         }
         [Test]
         public void Test46250()
@@ -3065,33 +3013,38 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Bug56325()
         {
-            HSSFWorkbook wb;
+            HSSFWorkbook wb1;
 
             FileInfo file = HSSFTestDataSamples.GetSampleFile("56325.xls");
             Stream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
             try
             {
                 POIFSFileSystem fs = new POIFSFileSystem(stream);
-                wb = new HSSFWorkbook(fs);
+                wb1 = new HSSFWorkbook(fs);
             }
             finally
             {
                 stream.Close();
             }
 
-            Assert.AreEqual(3, wb.NumberOfSheets);
-            wb.RemoveSheetAt(0);
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            Assert.AreEqual(3, wb1.NumberOfSheets);
+            wb1.RemoveSheetAt(0);
+            Assert.AreEqual(2, wb1.NumberOfSheets);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(2, wb.NumberOfSheets);
-            wb.RemoveSheetAt(0);
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            wb.RemoveSheetAt(0);
-            Assert.AreEqual(0, wb.NumberOfSheets);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(0, wb.NumberOfSheets);
+            Assert.AreEqual(2, wb2.NumberOfSheets);
+            wb2.RemoveSheetAt(0);
+            Assert.AreEqual(1, wb2.NumberOfSheets);
+            wb2.RemoveSheetAt(0);
+            Assert.AreEqual(0, wb2.NumberOfSheets);
+
+            HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            wb2.Close();
+
+            Assert.AreEqual(0, wb3.NumberOfSheets);
+            wb3.Close();
         }
 
         [Test]
