@@ -226,16 +226,22 @@ namespace NPOI.XSSF.UserModel
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[0], xssfFont.GetXSSFColor().GetRgb()[0]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[1], xssfFont.GetXSSFColor().GetRgb()[1]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().GetRgb()[2]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().GetRgb()[3]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[0], xssfFont.GetXSSFColor().RGB[0]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[1], xssfFont.GetXSSFColor().RGB[1]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().RGB[2]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().RGB[3]);
 
-            //Integer.toHexString(0xF1F1F1).getBytes() = [102, 49, 102, 49, 102, 49]
-            color.SetRgb(Encoding.ASCII.GetBytes("f1f1f1"));
+            xssfFont.Color = ((short)23);
+
+            byte[] bytes = Encoding.ASCII.GetBytes(HexDump.ToHex(0xF1F1F1));
+            color.rgb = (bytes);
+
             XSSFColor newColor = new XSSFColor(color);
             xssfFont.SetColor(newColor);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.GetRgb()[2]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.RGB[2]);
+
+            CollectionAssert.AreEqual(bytes, xssfFont.GetXSSFColor().RGB);
+            Assert.AreEqual(0, xssfFont.Color);
         }
         [Test]
         public void TestThemeColor()

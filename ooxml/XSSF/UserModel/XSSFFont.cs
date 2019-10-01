@@ -499,6 +499,10 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? _ctFont.AddNewColor() : _ctFont.GetColorArray(0);
+                if (ctColor.IsSetIndexed())
+                {
+                    ctColor.UnsetIndexed();
+                }
                 ctColor.SetRgb(color.RGB);
             }
         }

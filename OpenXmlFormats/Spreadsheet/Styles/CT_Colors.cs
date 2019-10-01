@@ -390,6 +390,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
             return res;
         }
+
+        public void UnsetIndexed()
+        {
+            this.indexedField = 0;
+            this.indexedSpecifiedField = false;
+        }
     }
 
 }
