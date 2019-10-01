@@ -30,11 +30,19 @@ namespace NPOI.SS.Formula.Functions
      */
     public class DStarRunner : Function3Arg
     {
-        private IDStarAlgorithm algorithm;
 
-        public DStarRunner(IDStarAlgorithm algorithm)
+        public enum DStarAlgorithmEnum
         {
-            this.algorithm = algorithm;
+            DGET,
+            DMIN,
+            // DMAX, // DMAX is not yet implemented
+        }
+
+        private DStarAlgorithmEnum algoType;
+
+        public DStarRunner(DStarAlgorithmEnum algorithm)
+        {
+            this.algoType = algorithm;
         }
 
         public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
@@ -74,8 +82,13 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.VALUE_INVALID;
             }
 
-            // Reset algorithm.
-            algorithm.Reset();
+            // Create an algorithm runner.
+            IDStarAlgorithm algorithm = null;
+            switch (algoType)
+            {
+                case DStarAlgorithmEnum.DGET: algorithm = new DGet(); break;
+                case DStarAlgorithmEnum.DMIN: algorithm = new DMin(); break;
+            }
 
             // Iterate over all db entries.
             for (int row = 1; row < db.Height; ++row)

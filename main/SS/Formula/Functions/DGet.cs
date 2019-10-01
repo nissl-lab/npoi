@@ -31,11 +31,6 @@ namespace NPOI.SS.Formula.Functions
     {
         private ValueEval result;
 
-        public void Reset()
-        {
-            result = null;
-        }
-
         public bool ProcessMatch(ValueEval eval)
         {
             if (result == null) // First match, just Set the value.
