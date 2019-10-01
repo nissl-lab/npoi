@@ -58,7 +58,7 @@ namespace NPOI.HSSF.Record.Aggregates
                             continue;
                         }
                         throw new InvalidDataException(
-                                "Found more than one PageSettingsBlock in chart sub-stream");
+                                "Found more than one PageSettingsBlock in chart sub-stream, had sid: " + rs.PeekNextSid());
                     }
                     _psBlock = new PageSettingsBlock(rs);
                     temp.Add(_psBlock);
