@@ -182,6 +182,7 @@
     <Compile Include="RunSerialyAndSweepTmpFilesAttribute.cs" />
     <Compile Include="SS\Format\CellFormatTestBase.cs" />
     <Compile Include="SS\Format\TestCellFormat.cs" />
+    <Compile Include="SS\Format\TestCellFormatResult.cs" />
     <Compile Include="SS\Formula\Atp\TestDateParser.cs" />
     <Compile Include="SS\Formula\Atp\TestIfError.cs" />
     <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
