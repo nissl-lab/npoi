@@ -38,17 +38,24 @@ namespace TestCases.SS.Formula.Functions
         /** greater than or equal to */
         private static NumberEval MATCH_SMALLEST_GTE = new NumberEval(-1);
 
+        private static StringEval MATCH_INVALID = new StringEval("blabla");
 
         private static ValueEval invokeMatch(ValueEval Lookup_value, ValueEval Lookup_array, ValueEval match_type)
         {
             ValueEval[] args = { Lookup_value, Lookup_array, match_type, };
             return new Match().Evaluate(args, -1, (short)-1);
         }
+
+        private static ValueEval invokeMatch(ValueEval lookup_value, ValueEval lookup_array)
+        {
+            ValueEval[] args = { lookup_value, lookup_array, };
+            return new Match().Evaluate(args, -1, (short)-1);
+        }
         private static void ConfirmInt(int expected, ValueEval actualEval)
         {
             if (!(actualEval is NumericValueEval))
             {
-                Assert.Fail("Expected numeric result");
+                Assert.Fail("Expected numeric result but had " + actualEval);
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
             Assert.AreEqual(expected, nve.NumberValue, 0);
@@ -68,6 +75,7 @@ namespace TestCases.SS.Formula.Functions
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
             ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
+            ConfirmInt(2, invokeMatch(new NumberEval(5), ae));
             ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_EXACT));
             ConfirmInt(4, invokeMatch(new NumberEval(10), ae, MATCH_LARGEST_LTE));
             ConfirmInt(3, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
@@ -92,6 +100,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(2, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
             ConfirmInt(4, invokeMatch(new NumberEval(9), ae, MATCH_SMALLEST_GTE));
             ConfirmInt(1, invokeMatch(new NumberEval(20), ae, MATCH_SMALLEST_GTE));
+            ConfirmInt(5, invokeMatch(new NumberEval(3), ae, MATCH_SMALLEST_GTE));
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
             Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(26), ae, MATCH_SMALLEST_GTE));
         }
@@ -258,6 +267,25 @@ namespace TestCases.SS.Formula.Functions
                 // some other error ??
                 throw e;
             }
+        }
+
+        [Test]
+        public void TestInvalidMatchType()
+        {
+
+            ValueEval[] values = {
+            new NumberEval(4),
+            new NumberEval(5),
+            new NumberEval(10),
+            new NumberEval(10),
+            new NumberEval(25),
+        };
+
+            AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
+
+            ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
+
+            Assert.AreEqual(ErrorEval.REF_INVALID, invokeMatch(new StringEval("Ben"), ae, MATCH_INVALID), "Should return #REF! for invalid match type");
         }
     }
 
