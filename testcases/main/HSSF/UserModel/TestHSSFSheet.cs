@@ -746,6 +746,14 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(sheet3.GetColumnWidth(0) <= maxWithRow1And2);
         }
         [Test]
+        public void TestNoMergedRegionsIsEmptyList()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet s = wb.CreateSheet("Sheet1") as HSSFSheet;
+            Assert.IsTrue(s.MergedRegions.Count == 0);
+        }
+
+        [Test]
         public void TestAutoSizeDate()
         {
             IWorkbook wb = new HSSFWorkbook();

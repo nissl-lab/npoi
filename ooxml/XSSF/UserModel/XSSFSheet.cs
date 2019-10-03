@@ -1226,10 +1226,10 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CT_MergeCells ctMergeCells = worksheet.mergeCells;
-                if (ctMergeCells == null) throw new NullReferenceException("This worksheet does not contain merged regions");
-
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
+                CT_MergeCells ctMergeCells = worksheet.mergeCells;
+                if (ctMergeCells == null) return addresses;
+
                 foreach (CT_MergeCell ctMergeCell in ctMergeCells.mergeCell)
                 {
                     String ref1 = ctMergeCell.@ref;
