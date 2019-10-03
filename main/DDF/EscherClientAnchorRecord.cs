@@ -52,7 +52,7 @@ namespace NPOI.DDF
         private short field_7_dx2;
         private short field_8_row2;
         private short field_9_dy2;
-        private byte[] remainingData;
+        private byte[] remainingData = new byte[0];
         private bool shortRecord = false;
 
         /// <summary>
@@ -325,7 +325,19 @@ namespace NPOI.DDF
         public byte[] RemainingData
         {
             get { return remainingData; }
-            set { remainingData = value; }
+            set
+            {
+                if (value == null)
+                {
+                    this.remainingData = new byte[0];
+                }
+                else
+                {
+                    remainingData = new byte[value.Length];
+                    if (value.Length > 0)
+                        Array.Copy(value, remainingData, value.Length);
+                }
+            }
         }
 
     }

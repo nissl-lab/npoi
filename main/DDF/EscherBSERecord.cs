@@ -47,7 +47,7 @@ namespace NPOI.DDF
 
         private byte field_1_blipTypeWin32;
         private byte field_2_blipTypeMacOS;
-        private byte[] field_3_uid;  // 16 bytes
+        private byte[] field_3_uid = new byte[16];  // 16 bytes
         private short field_4_tag;
         private int field_5_size;
         private int field_6_ref;
@@ -58,7 +58,7 @@ namespace NPOI.DDF
         private byte field_11_unused3;
         private EscherBlipRecord field_12_blipRecord;
 
-        private byte[] _remainingData;
+        private byte[] _remainingData = new byte[0];
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -118,7 +118,7 @@ namespace NPOI.DDF
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
-            if (_remainingData == null) _remainingData = new byte[0];
+            
             int blipSize = field_12_blipRecord == null ? 0 : field_12_blipRecord.RecordSize;
             int remainingBytes = _remainingData.Length + 36 + blipSize;
             LittleEndian.PutInt(data, offset + 4, remainingBytes);
@@ -140,8 +140,7 @@ namespace NPOI.DDF
             {
                 bytesWritten = field_12_blipRecord.Serialize(offset + 44, data);
             }
-            if (_remainingData == null)
-                _remainingData = new byte[0];
+
             Array.Copy(_remainingData, 0, data, offset + 44 + bytesWritten, _remainingData.Length);
             int pos = offset + 8 + 36 + _remainingData.Length + bytesWritten;
 
@@ -211,7 +210,14 @@ namespace NPOI.DDF
         public byte[] UID
         {
             get { return field_3_uid; }
-            set { field_3_uid = value; }
+            set
+            {
+                if (value == null || value.Length != 16)
+                {
+                    throw new ArgumentException("uid must be byte[16]");
+                }
+                Array.Copy(value, 0, field_3_uid, 0, field_3_uid.Length);
+            }
         }
 
         /// <summary>
@@ -312,7 +318,19 @@ namespace NPOI.DDF
         public byte[] RemainingData
         {
             get { return _remainingData; }
-            set { _remainingData = value; }
+            set
+            {
+                if (value == null)
+                {
+                    _remainingData = new byte[0];
+                }
+                else
+                {
+                    _remainingData = new byte[value.Length];
+                    if (value.Length > 0)
+                        Array.Copy(value, _remainingData, value.Length);
+                }
+            }
         }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

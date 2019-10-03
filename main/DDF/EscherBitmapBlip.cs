@@ -35,7 +35,7 @@ namespace NPOI.DDF
 
         private const int HEADER_SIZE = 8;
 
-        private byte[] field_1_UID;
+        private byte[] field_1_UID  = new byte[0];
         private byte field_2_marker = (byte)0xFF;
 
 
@@ -101,7 +101,14 @@ namespace NPOI.DDF
         public byte[] UID
         {
             get { return field_1_UID; }
-            set { this.field_1_UID = value; }
+            set
+            {
+                if (value == null || value.Length != 16)
+                {
+                    throw new ArgumentException("uid must be byte[16]");
+                }
+                Array.Copy(field_1_UID, 0, this.field_1_UID, 0, 16);
+            }
         }
 
         /// <summary>
