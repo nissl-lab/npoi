@@ -63,7 +63,8 @@ namespace NPOI.POIFS.FileSystem
         /// doSomethingElse(is);
         /// </example>
         /// <returns></returns>
-        public static Stream CreateNonClosingInputStream(Stream stream) {
+        public static Stream CreateNonClosingInputStream(Stream stream)
+        {
             return new CloseIgnoringInputStream(stream);
         }
 
@@ -71,9 +72,9 @@ namespace NPOI.POIFS.FileSystem
         /// <summary>
         /// Initializes a new instance of the <see cref="POIFSFileSystem"/> class.  intended for writing
         /// </summary>
-        public POIFSFileSystem():base()
+        public POIFSFileSystem() : base()
         {
-            
+
         }
 
         /// <summary>
@@ -86,9 +87,24 @@ namespace NPOI.POIFS.FileSystem
         public POIFSFileSystem(Stream stream)
             : base(stream)
         {
-            
-        }
 
+        }
+        /**
+         * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
+         *  creating from an <tt>InputStream</tt>. The File will be opened read-only</p>
+         *  
+         * <p>Note that with this constructor, you will need to call {@link #close()}
+         *  when you're done to have the underlying file closed, as the file is
+         *  kept open during normal operation to read the data out.</p> 
+         *  
+         * @param file the File from which to read the data
+         *
+         * @exception IOException on errors reading, or on invalid data
+         */
+        public POIFSFileSystem(FileInfo file)
+            : base(file)
+        {
+        }
         /// <summary>
         /// Checks that the supplied Stream(which MUST
         /// support mark and reset, or be a PushbackInputStream)
@@ -101,7 +117,8 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// 	<c>true</c> if [has POIFS header] [the specified inp]; otherwise, <c>false</c>.
         /// </returns>
-        public static new bool HasPOIFSHeader(Stream inp){
+        public static new bool HasPOIFSHeader(Stream inp)
+        {
 
             return NPOIFSFileSystem.HasPOIFSHeader(inp);
         }

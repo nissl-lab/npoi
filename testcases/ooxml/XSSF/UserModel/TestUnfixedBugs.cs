@@ -10,6 +10,7 @@ using System.IO;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.HSSF.UserModel;
 using System.Globalization;
+using NPOI.XSSF.Streaming;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -36,11 +37,17 @@ namespace NPOI.XSSF.UserModel
             verifyBug54084Unicode(wbWritten);
 
             // finally also write it out via the streaming interface and verify that we still can read it back in
-            //Workbook wbStreamingWritten = SXSSFITestDataProvider.instance.WriteOutAndReadBack(new SXSSFWorkbook(wb));
-            //verifyBug54084Unicode(wbStreamingWritten);
+            SXSSFWorkbook swb = new SXSSFWorkbook(wb);
+            IWorkbook wbStreamingWritten = SXSSFITestDataProvider.instance.WriteOutAndReadBack(swb);
+            verifyBug54084Unicode(wbStreamingWritten);
+
+            wbWritten.Close();
+            swb.Close();
+            wbStreamingWritten.Close();
+            wb.Close();
         }
 
-        private void verifyBug54084Unicode(XSSFWorkbook wb)
+        private void verifyBug54084Unicode(IWorkbook wb)
         {
             // expected data is stored in UTF-8 in a text-file
             byte[] data = HSSFTestDataSamples.GetTestDataFileContent("54084 - Greek - beyond BMP.txt");
@@ -85,6 +92,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+            workbook.Close();
         }
         [Ignore("test")]
         public void Test54071Simple()
@@ -165,6 +173,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+            wb.Close();
         }
     }
 }

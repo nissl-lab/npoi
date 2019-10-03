@@ -32,17 +32,26 @@ namespace NPOI
     [TestFixture]
     public class TestPOIXMLProperties
     {
+        private XWPFDocument sampleDoc;
         private POIXMLProperties _props;
         private CoreProperties _coreProperties;
 
         [SetUp]
         public void SetUp()
         {
-            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
+            sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
             _props = sampleDoc.GetProperties();
             _coreProperties = _props.CoreProperties;
             Assert.IsNotNull(_props);
         }
+
+
+        [TearDown]
+        public void closeResources()
+        {
+            sampleDoc.Close();
+        }
+
         [Test]
         public void TestWorkbookExtendedProperties()
         {
@@ -69,7 +78,7 @@ namespace NPOI
 
             XSSFWorkbook newWorkbook =
                     (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-
+            workbook.Close();
             Assert.IsTrue(workbook != newWorkbook);
 
 
@@ -88,7 +97,7 @@ namespace NPOI
             Assert.AreEqual(application, newCtProps.Application);
             Assert.AreEqual(appVersion, newCtProps.AppVersion);
 
-
+            newWorkbook.Close();
         }
 
 
@@ -98,9 +107,9 @@ namespace NPOI
         [Test]
         public void TestCustomProperties()
         {
-            POIXMLDocument wb = new XSSFWorkbook();
+            POIXMLDocument wb1 = new XSSFWorkbook();
 
-            CustomProperties customProps = wb.GetProperties().CustomProperties;
+            CustomProperties customProps = wb1.GetProperties().CustomProperties;
             customProps.AddProperty("test-1", "string val");
             customProps.AddProperty("test-2", 1974);
             customProps.AddProperty("test-3", 36.6);
@@ -116,9 +125,11 @@ namespace NPOI
             }
             customProps.AddProperty("test-4", true);
 
-            wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb);
+            POIXMLDocument wb2 = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb1);
+            wb1.Close();
+
             CT_CustomProperties ctProps =
-                    wb.GetProperties().CustomProperties.GetUnderlyingProperties();
+                    wb2.GetProperties().CustomProperties.GetUnderlyingProperties();
             Assert.AreEqual(6, ctProps.sizeOfPropertyArray());
             CT_Property p;
 
@@ -155,6 +166,8 @@ namespace NPOI
             //Assert.AreEqual("Generator Version", p.name);
             //Assert.AreEqual("2.0.9", p.Item);
             //Assert.AreEqual(7, p.pid);
+
+            wb2.Close();
         }
         [Ignore("test")]
         public void TestDocumentProperties()
@@ -184,11 +197,13 @@ namespace NPOI
             cp.Created = new DateTime(2010, 6, 15, 10, 0, 0);
             Assert.AreEqual(dateCreated.ToString(), cp.Created.ToString());
 
-            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFDocument doc2 = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            doc.Close();
             cp = doc.GetProperties().CoreProperties;
             DateTime? dt3 = cp.Created;
             Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
+            doc2.Close();
         }
         [Ignore("test")]
         public void TestGetSetRevision()

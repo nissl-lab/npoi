@@ -85,6 +85,8 @@ namespace TestCases.HSSF.UserModel
                 existing.Close();
                 Console.Error.WriteLine("Existing file for bug #44636 written to " + existing.ToString());
             }
+
+            wb.Close();
             // Now, do a new file from scratch
             wb = new HSSFWorkbook();
             sheet = wb.CreateSheet();
@@ -108,6 +110,8 @@ namespace TestCases.HSSF.UserModel
                 scratch.Close();
                 Console.Error.WriteLine("New file for bug #44636 written to " + scratch.ToString());
             }
+
+            wb.Close();
         }
 
         /**
@@ -174,6 +178,8 @@ namespace TestCases.HSSF.UserModel
             cell = row.GetCell(0);
             Assert.AreEqual("-1000000-3000000", cell.CellFormula);
             Assert.AreEqual(-4000000, eva.Evaluate(cell).NumberValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -237,6 +243,8 @@ namespace TestCases.HSSF.UserModel
             ICell cellSUM2D = rowSUM2D.GetCell(0);
             Assert.AreEqual("SUM(C:D)", cellSUM2D.CellFormula);
             Assert.AreEqual(66, eva.Evaluate(cellSUM2D).NumberValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -263,6 +271,8 @@ namespace TestCases.HSSF.UserModel
                 Assert.Fail("Identified bug 44508");
             }
             Assert.AreEqual(true, cell.BooleanCellValue);
+
+            wb.Close();
         }
         [Test]
         public void TestClassCast_bug44861()
@@ -290,6 +300,8 @@ namespace TestCases.HSSF.UserModel
                     }
                 }
             }
+
+            wb.Close();
         }
         [Test]
         public void TestEvaluateInCellWithErrorCode_bug44950()
@@ -308,9 +320,13 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.StartsWith("Cannot get a error value from"))
                 {
-                    throw new AssertionException("Identified bug 44950 b");
+                    Assert.Fail("Identified bug 44950 b");
                 }
                 throw;
+            }
+            finally
+            {
+                wb.Close();
             }
         }
 
@@ -399,6 +415,8 @@ namespace TestCases.HSSF.UserModel
 
             // confirm the evaluation result too
             Assert.AreEqual(ErrorEval.NA, ve);
+
+            wb.Close();
         }
         [Test]
         public void TestDateWithNegativeParts_bug48528()
@@ -442,6 +460,8 @@ namespace TestCases.HSSF.UserModel
             cell.CellFormula = ("DATE(2012,2-12,1+4)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40579.0, fe.Evaluate(cell).NumberValue);
+
+            wb.Close();
         }
 
         [Test]

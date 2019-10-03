@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula.Function
 {
     using System;
     using System.Collections;
-
+    using System.Collections.Generic;
 
     /**
      * Temporarily collects <c>FunctionMetadata</c> instances for creation of a
@@ -30,17 +30,17 @@ namespace NPOI.SS.Formula.Function
     class FunctionDataBuilder
     {
         private int _maxFunctionIndex;
-        private Hashtable _functionDataByName;
-        private Hashtable _functionDataByIndex;
+        private Dictionary<string, FunctionMetadata> _functionDataByName;
+        private Dictionary<int, FunctionMetadata> _functionDataByIndex;
         /** stores indexes of all functions with footnotes (i.e. whose definitions might Change) */
-        private ArrayList _mutatingFunctionIndexes;
+        private HashSet<int> _mutatingFunctionIndexes;
 
         public FunctionDataBuilder(int sizeEstimate)
         {
             _maxFunctionIndex = -1;
-            _functionDataByName = new Hashtable(sizeEstimate * 3 / 2);
-            _functionDataByIndex = new Hashtable(sizeEstimate * 3 / 2);
-            _mutatingFunctionIndexes = new ArrayList();
+            _functionDataByName = new Dictionary<string, FunctionMetadata>(sizeEstimate * 3 / 2);
+            _functionDataByIndex = new Dictionary<int, FunctionMetadata>(sizeEstimate * 3 / 2);
+            _mutatingFunctionIndexes = new HashSet<int>();
         }
 
         public void Add(int functionIndex, String functionName, int minParams, int maxParams,
@@ -58,7 +58,7 @@ namespace NPOI.SS.Formula.Function
             }
             // allow function definitions to Change only if both previous and the new items have footnotes
             FunctionMetadata prevFM;
-            prevFM = (FunctionMetadata)_functionDataByName[functionName];
+            prevFM = _functionDataByName[functionName];
             if (prevFM != null)
             {
                 if (!hasFootnote || !_mutatingFunctionIndexes.Contains(indexKey))
@@ -67,7 +67,7 @@ namespace NPOI.SS.Formula.Function
                 }
                 _functionDataByIndex.Remove(prevFM.Index);
             }
-            prevFM = (FunctionMetadata)_functionDataByIndex[indexKey];
+            prevFM = _functionDataByIndex[indexKey];
             if (prevFM != null)
             {
                 if (!hasFootnote || !_mutatingFunctionIndexes.Contains(indexKey))

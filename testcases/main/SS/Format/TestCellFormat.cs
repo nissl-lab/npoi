@@ -178,6 +178,8 @@ namespace TestCases.SS.Format
             cell4.SetCellValue("abc");
             CellFormatResult result4 = cf.Apply(cell4);
             Assert.AreEqual("abc", result4.Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -219,6 +221,8 @@ namespace TestCases.SS.Format
             cell4.SetCellValue("abc");
             CellFormatResult result4 = cf.Apply(cell4);
             Assert.AreEqual("abc", result4.Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -242,6 +246,8 @@ namespace TestCases.SS.Format
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
             Assert.AreEqual(_255_POUND_SIGNS, result1.Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -258,6 +264,8 @@ namespace TestCases.SS.Format
             cell.SetCellValue(DateUtil.ConvertTime("03:04:05"));
             CellFormatResult result = cf.Apply(cell);
             Assert.AreEqual("03:04", result.Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -281,6 +289,8 @@ namespace TestCases.SS.Format
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
             Assert.AreEqual("(1)", result1.Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -310,6 +320,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -345,6 +357,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("TRUE");
             Assert.AreEqual("TRUE", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -377,6 +391,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -411,6 +427,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -440,6 +458,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -469,6 +489,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -498,6 +520,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -527,6 +551,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("abc", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -561,6 +587,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue("abc");
             Assert.AreEqual("~~abc~~", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -596,6 +624,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue(true);
             Assert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         [Test]
@@ -628,6 +658,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue(true);
             Assert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         /*
@@ -692,6 +724,8 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue(-1);
             Assert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
+
+            wb.Close();
         }
 
         /*
@@ -725,12 +759,20 @@ namespace TestCases.SS.Format
             CellFormat cf1 = CellFormat.GetInstance("# ?/?");
             // Create a workbook, row and cell to test with
             IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.SetCellValue(123456.6);
-            //System.out.println(cf1.apply(cell).text);
-            Assert.AreEqual("123456 3/5", cf1.Apply(cell).Text);
+
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue(123456.6);
+                //System.out.println(cf1.apply(cell).text);
+                Assert.AreEqual("123456 3/5", cf1.Apply(cell).Text);
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
     }
 }

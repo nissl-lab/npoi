@@ -143,6 +143,7 @@ namespace TestCases.HPSF.Basic
                 }
                 finally
                 {
+                    poiFs.Close();
                     out1.Close();
                 }
             }
@@ -193,6 +194,8 @@ namespace TestCases.HPSF.Basic
                 POIFSReader reader3 = new POIFSReader();
                 reader3.StreamReaded += new POIFSReaderEventHandler(reader3_StreamReaded);
                 reader3.Read(file);
+
+                poiFs.Close();
                 file.Close();
                 //File.Delete(dataDir + POI_FS);
             }
@@ -255,6 +258,7 @@ namespace TestCases.HPSF.Basic
             poiFs.CreateDocument(ps.ToInputStream(),
                                  SummaryInformation.DEFAULT_STREAM_NAME);
             poiFs.WriteFileSystem(out1);
+            poiFs.Close();
             //out1.Close();
             file.Position = 0;
 
@@ -334,6 +338,7 @@ namespace TestCases.HPSF.Basic
 
             poiFs.CreateDocument(ps.ToInputStream(), STREAM_NAME);
             poiFs.WriteFileSystem(out1);
+            poiFs.Close();
             //out1.Close();
 
             /* Read the POIFS: */
@@ -738,6 +743,7 @@ namespace TestCases.HPSF.Basic
                                      psf1[i].GetName());
                 poiFs.WriteFileSystem(out1);
             }
+            poiFs.Close();
 
             /* Read the property Set streams from the POI filesystem just
              * Created. */
@@ -781,6 +787,7 @@ namespace TestCases.HPSF.Basic
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                 poiFs.WriteFileSystem(copy);
+                poiFs.Close();
 
                 /* Read back: */
                 POIFile[] psf = Util.ReadPropertySets(copy);
@@ -1014,10 +1021,9 @@ namespace TestCases.HPSF.Basic
                     poiFs.WriteFileSystem(copy);
                     Assert.Fail("This Testcase did not detect the invalid codepage value.");
                 }
-                catch (IllegalPropertySetDataException)
+                finally
                 {
-                        
-                    Assert.IsTrue(true);
+                    poiFs.Close();
                 }
             }
             

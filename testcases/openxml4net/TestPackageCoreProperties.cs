@@ -58,8 +58,7 @@ namespace TestCases.OPC
 
             // Open namespace
             OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
-            try
-            {
+
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
                 DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
 
@@ -80,31 +79,17 @@ namespace TestCases.OPC
                 props.SetTitleProperty("MyTitle");
                 props.SetSubjectProperty("MySubject");
                 props.SetVersionProperty("2");
+                p.Revert();
 
-                using (FileStream fs = outputFile.OpenWrite())
-                {
-                    // Save the namespace in the output directory
-                    p.Save(fs);
-                }
 
                 // Open the newly Created file to check core properties saved values.
                 OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
-                try
-                {
+        
                     CompareProperties(p2);
                     p2.Revert();
-                }
-                finally
-                {
-                    p2.Close();
-                }
+        
                 outputFile.Delete();
-            }
-            finally
-            {
-                // use revert to not re-write the input file
-                p.Revert();
-            }
+
         }
 
         private void CompareProperties(OPCPackage p)
@@ -201,10 +186,12 @@ namespace TestCases.OPC
             MemoryStream out1 = new MemoryStream();
             pkg1.Save(out1);
             out1.Close();
+            pkg1.Close();
 
             OPCPackage pkg2 = OPCPackage.Open(new MemoryStream(out1.ToArray()));
             PackageProperties props2 = pkg2.GetPackageProperties();
             props2.SetTitleProperty("Bug 51444 fixed");
+            pkg2.Close();
         }
         [Test]
         public void TestEntitiesInCoreProps_56164()
@@ -233,6 +220,8 @@ namespace TestCases.OPC
 
             // Check
             Assert.AreEqual("Stefan Kopf", props.GetCreatorProperty());
+
+            p.Close();
         }
 
         [Test]

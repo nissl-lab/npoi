@@ -447,11 +447,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        public Rectangle GetClipRect()
-        {
-           return ClipBounds;
-        }
-
         public Color Color
         {
             get
@@ -475,15 +470,14 @@ namespace NPOI.HSSF.UserModel
 
         public void SetClip(int x, int y, int width, int height)
         {
-            throw new NotImplementedException();
-            //SetClip(((new Rectangle(x, y, width, height))));
+            SetClip(((new Rectangle(x, y, width, height))));
         }
 
-        //public void SetClip(Shape shape)
-        //{
-        //    // ignore... not implemented
-        //    throw new NotImplementedException();
-        //}
+        public void SetClip(Rectangle shape)
+        {
+            // ignore... not implemented
+            throw new NotImplementedException();
+        }
 
         public void SetColor(Color color)
         {
