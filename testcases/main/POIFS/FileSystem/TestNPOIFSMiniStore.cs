@@ -124,6 +124,11 @@ namespace TestCases.POIFS.FileSystem
                 }
                 fs.Close();
             }
+
+            fsD.Close();
+            fsC.Close();
+            fsB.Close();
+            fsA.Close();
         }
 
 
@@ -193,6 +198,11 @@ namespace TestCases.POIFS.FileSystem
 
                 fs.Close();
             }
+
+            fsD.Close();
+            fsC.Close();
+            fsB.Close();
+            fsA.Close();
         }
 
         [Test]
@@ -418,7 +428,8 @@ namespace TestCases.POIFS.FileSystem
             byte[] rdata = new byte[data.Length];
             dis = new DocumentInputStream(entry);
             IOUtils.ReadFully(dis, rdata);
-            Assert.AreEqual(data, rdata);
+            CollectionAssert.AreEqual(data, rdata);
+            
             dis.Close();
 
             entry = (DocumentEntry)fs.Root.GetEntry("mini2");
@@ -426,7 +437,7 @@ namespace TestCases.POIFS.FileSystem
             rdata = new byte[data.Length];
             dis = new DocumentInputStream(entry);
             IOUtils.ReadFully(dis, rdata);
-            Assert.AreEqual(data, rdata);
+            CollectionAssert.AreEqual(data, rdata);
             dis.Close();
 
             // Done
@@ -488,13 +499,15 @@ namespace TestCases.POIFS.FileSystem
             DocumentInputStream dis = fs.CreateDocumentInputStream("mini1");
             IOUtils.ReadFully(dis, r1);
             dis.Close();
-            Assert.AreEqual(data1B, r1);
+            CollectionAssert.AreEqual(data1B, r1);
 
             byte[] r2 = new byte[data2B.Length];
             dis = fs.CreateDocumentInputStream("mini2");
             IOUtils.ReadFully(dis, r2);
             dis.Close();
-            Assert.AreEqual(data2B, r2);
+            CollectionAssert.AreEqual(data2B, r2);
+
+            fs.Close();
         }
     }
 }
