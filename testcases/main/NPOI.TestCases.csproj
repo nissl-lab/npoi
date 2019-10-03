@@ -146,6 +146,7 @@
     <Compile Include="HSSF\Record\Chart\TestFontXRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestShtPropsRecord.cs" />
+    <Compile Include="HSSF\Record\Crypto\TestXorEncryption.cs" />
     <Compile Include="HSSF\Record\TestDConRefRecord.cs" />
     <Compile Include="HSSF\Record\TestPLVRecord.cs" />
     <Compile Include="HSSF\Record\TestUnicodeString.cs" />

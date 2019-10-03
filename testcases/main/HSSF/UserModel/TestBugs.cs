@@ -62,7 +62,11 @@ namespace TestCases.HSSF.UserModel
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
-
+        [TearDown]
+        public void ResetPassword()
+        {
+            Biff8EncryptionKey.CurrentUserPassword = (null);
+        }
 
         private static HSSFWorkbook OpenSample(String sampleFileName)
         {

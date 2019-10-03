@@ -33,7 +33,11 @@ namespace TestCases.HSSF.Record
     [TestFixture]
     public class TestRecordFactoryInputStream
     {
-
+        [TearDown]
+        public void ResetPassword()
+        {
+            Biff8EncryptionKey.CurrentUserPassword = (null);
+        }
         /**
          * Hex dump of a BOF record and most of a FILEPASS record.
          * A 16 byte saltHash should be Added to complete the second record

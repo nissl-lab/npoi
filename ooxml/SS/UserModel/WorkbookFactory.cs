@@ -121,9 +121,14 @@ namespace NPOI.SS.UserModel
             {
                 Biff8EncryptionKey.CurrentUserPassword = (password);
             }
-            IWorkbook wb = new HSSFWorkbook(root, true);
-            Biff8EncryptionKey.CurrentUserPassword = (null);
-            return wb;
+            try
+            {
+                return new HSSFWorkbook(root, true);
+            }
+            finally
+            {
+                Biff8EncryptionKey.CurrentUserPassword = (null);
+            }
         }
         /// <summary>
         /// Creates an XSSFWorkbook from the given OOXML Package
