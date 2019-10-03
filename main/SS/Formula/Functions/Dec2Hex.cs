@@ -127,7 +127,7 @@ namespace NPOI.SS.Formula.Functions
             }
             else
             {
-                hex = String.Format("{0:X}", (int)number1);
+                hex = String.Format("{0:X}", (long)number1);
             }
             if (number1 < 0)
             {
