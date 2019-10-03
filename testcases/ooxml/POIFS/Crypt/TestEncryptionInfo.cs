@@ -41,6 +41,8 @@ namespace NPOI.POIFS.Crypt
             Assert.AreEqual(32, info.Verifier.EncryptedVerifierHash.Length);
             Assert.AreEqual(CipherProvider.aes, info.Header.CipherProvider);
             Assert.AreEqual("Microsoft Enhanced RSA and AES Cryptographic Provider", info.Header.CspName);
+
+            fs.Close();
         }
 
         [Test]
@@ -59,6 +61,8 @@ namespace NPOI.POIFS.Crypt
             Assert.AreEqual(64, info.Verifier.EncryptedVerifierHash.Length);
             Assert.AreEqual(CipherProvider.aes, info.Header.CipherProvider);
             //        Assert.AreEqual("Microsoft Enhanced RSA and AES Cryptographic Provider", info.Header.CspName);
+
+            fs.Close();
         }
     }
 }

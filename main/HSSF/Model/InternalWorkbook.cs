@@ -29,6 +29,7 @@ namespace NPOI.HSSF.Model
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
     using System.Security;
+    using NPOI.POIFS.Crypt;
 
 
     /**
@@ -2982,7 +2983,8 @@ namespace NPOI.HSSF.Model
             FileSharingRecord frec = FileSharing;
             WriteAccessRecord waccess = WriteAccess;
             frec.ReadOnly=((short)1);
-            frec.Password=(FileSharingRecord.HashPassword(password));
+            //frec.Password=(FileSharingRecord.HashPassword(password));
+            frec.Password = (short)CryptoFunctions.CreateXorVerifier1(password);
             frec.Username=(username);
             waccess.Username=(username);
         }
