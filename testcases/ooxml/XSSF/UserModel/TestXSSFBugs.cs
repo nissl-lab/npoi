@@ -3056,6 +3056,33 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test55406()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55406_Conditional_formatting_sample.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+            ICell cellA1 = sheet.GetRow(0).GetCell(0);
+            ICell cellA2 = sheet.GetRow(1).GetCell(0);
+
+            Assert.AreEqual(0, cellA1.CellStyle.FillForegroundColor);
+            Assert.AreEqual("FFFDFDFD", ((XSSFColor)cellA1.CellStyle.FillForegroundColorColor).ARGBHex);
+            Assert.AreEqual(0, cellA2.CellStyle.FillForegroundColor);
+            Assert.AreEqual("FFFDFDFD", ((XSSFColor)cellA2.CellStyle.FillForegroundColorColor).ARGBHex);
+
+            ISheetConditionalFormatting cond = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(2, cond.NumConditionalFormattings);
+            Assert.AreEqual(1, cond.GetConditionalFormattingAt(0).NumberOfRules);
+            Assert.AreEqual(64, cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColor);
+            Assert.AreEqual("ISEVEN(ROW())", cond.GetConditionalFormattingAt(0).GetRule(0).Formula1);
+            Assert.IsNull(((XSSFColor)cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
+            Assert.AreEqual(1, cond.GetConditionalFormattingAt(1).NumberOfRules);
+            Assert.AreEqual(64, cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColor);
+            Assert.AreEqual("ISEVEN(ROW())", cond.GetConditionalFormattingAt(1).GetRule(0).Formula1);
+            Assert.IsNull(((XSSFColor)cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
+
+            wb.Close();
+        }
+
     }
 
 }
