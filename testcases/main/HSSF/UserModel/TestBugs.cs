@@ -3321,6 +3321,22 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
+        [Test]
+        public void Test57925() {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("57925.xls");
 
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            for (int i = 0; i < wb.NumberOfSheets; i++) {
+                ISheet sheet = wb.GetSheetAt(i);
+                foreach (IRow row in sheet) {
+                    foreach (ICell cell in row) {
+                        new DataFormatter().FormatCellValue(cell);
+                    }
+                }
+            }
+
+            wb.Close();
+        }
     }
 }
