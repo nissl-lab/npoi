@@ -29,6 +29,8 @@ using NPOI.Util;
 using NPOI.HSSF.Record;
 using TestCases.SS.UserModel;
 using TestCases.HSSF;
+using NPOI.SS;
+
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -979,6 +981,13 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3u, xrow[2].r);
 
         }
+
+        [Test]
+        public void CreateRowAfterLastRow()
+        {
+            createRowAfterLastRow(SpreadsheetVersion.EXCEL2007);
+        }
+
         [Test]
         public void TestSetAutoFilter()
         {

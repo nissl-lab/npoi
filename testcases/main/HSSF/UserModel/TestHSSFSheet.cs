@@ -38,6 +38,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NUnit.Framework;
+    using NPOI.SS;
 
     /**
      * Tests NPOI.SS.UserModel.Sheet.  This Test case is very incomplete at the moment.
@@ -53,6 +54,12 @@ namespace TestCases.HSSF.UserModel
             : base(HSSFITestDataProvider.Instance)
         {
 
+        }
+
+        [Test]
+        public void CreateRowAfterLastRow()
+        {
+            createRowAfterLastRow(SpreadsheetVersion.EXCEL97);
         }
         /**
      * Test for Bugzilla #29747.

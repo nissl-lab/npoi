@@ -83,6 +83,41 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(100.0, row2_ovrewritten_ref.GetCell(0).NumericCellValue, 0.0);
         }
 
+
+        [Test]
+        public void CreateRowBeforeFirstRow()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sh = workbook.CreateSheet();
+            sh.CreateRow(0);
+            try
+            {
+                sh.CreateRow(-1);
+                Assert.Fail("Negative rows not allowed");
+            }
+            catch (ArgumentException e)
+            {
+                // expected
+            }
+        }
+
+        protected void createRowAfterLastRow(SpreadsheetVersion version)
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sh = workbook.CreateSheet();
+            sh.CreateRow(version.LastRowIndex);
+            try
+            {
+                sh.CreateRow(version.LastRowIndex + 1);
+                Assert.Fail("Row number must be between 0 and " + version.LastColumnIndex);
+            }
+            catch (ArgumentException e)
+            {
+                // expected
+            }
+        }
+
+
         [Test]
         public void TestRemoveRow()
         {
