@@ -895,5 +895,23 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+
+        [Test]
+        public void TestBug54399()
+        {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("54399.xlsx");
+
+            //System.out.println("sheets:" + workbook.getNumberOfSheets());
+
+            for (int i = 0; i < workbook.NumberOfSheets; i++)
+            {
+                //System.out.println("i:" + i);
+                workbook.SetSheetName(i, "SheetRenamed" + (i + 1));
+            }
+
+            //        FileOutputStream fileOutputStream = new FileOutputStream("/tmp/54399.xlsx"); 
+            //        workbook.write(fileOutputStream);
+            //        fileOutputStream.close();  
+        }
     }
 }
