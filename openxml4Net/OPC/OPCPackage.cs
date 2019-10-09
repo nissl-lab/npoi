@@ -204,7 +204,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static OPCPackage Open(FileInfo file, PackageAccess access)
         {
             if (file == null)
-                throw new ArgumentException("'file' must be given");
+                throw new ArgumentNullException("'file' must be given");
             if (new DirectoryInfo(file.FullName).Exists)
                 throw new ArgumentException("file must not be a directory");
 

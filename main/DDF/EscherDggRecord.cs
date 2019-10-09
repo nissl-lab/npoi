@@ -267,7 +267,7 @@ using System.Collections.Generic;
         public FileIdCluster[] FileIdClusters
         {
             get { return field_5_fileIdClusters; }
-            set { field_5_fileIdClusters = value; }
+            set { field_5_fileIdClusters = (FileIdCluster[])value.Clone(); }
         }
 
         /// <summary>

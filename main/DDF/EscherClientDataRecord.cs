@@ -135,7 +135,10 @@ namespace NPOI.DDF
         public byte[] RemainingData
         {
             get { return remainingData; }
-            set { this.remainingData = value; }
+            set
+            {
+                this.remainingData = (value == null) ? new byte[0] : (byte[])value.Clone();
+            }
         }
     }
 }

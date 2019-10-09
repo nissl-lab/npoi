@@ -45,11 +45,11 @@ namespace NPOI.DDF
 
         private const int HEADER_SIZE = 8;
 
-        private byte[] field_1_UID;
+        private byte[] field_1_UID = new byte[16];
         /**
          * The primary UID is only saved to disk if (blip_instance ^ blip_signature == 1)
          */
-        private byte[] field_2_UID;
+        private byte[] field_2_UID = new byte[16];
         private int field_2_cb;
         private int field_3_rcBounds_x1;
         private int field_3_rcBounds_y1;
@@ -78,11 +78,9 @@ namespace NPOI.DDF
             int bytesAfterHeader = ReadHeader( data, offset );
             int pos = offset + HEADER_SIZE;
 
-            field_1_UID = new byte[16];
             Array.Copy( data, pos, field_1_UID, 0, 16 ); pos += 16;
 
             if((Options ^ Signature) == 0x10){
-                field_2_UID = new byte[16];
                 Array.Copy( data, pos, field_2_UID, 0, 16 ); pos += 16;
             }
 
@@ -221,7 +219,14 @@ namespace NPOI.DDF
         public byte[] UID
         {
             get { return field_1_UID; }
-            set { this.field_1_UID = value; }
+            set
+            {
+                if (value == null || value.Length != 16)
+                {
+                    throw new ArgumentException("uid must be byte[16]");
+                }
+                Array.Copy(value, 0, field_1_UID, 0, field_1_UID.Length);
+            }
         }
 
         /// <summary>
@@ -231,7 +236,14 @@ namespace NPOI.DDF
         public byte[] PrimaryUID
         {
             get{return field_2_UID;}
-            set { this.field_2_UID = value; }
+            set
+            {
+                if (value == null || value.Length != 16)
+                {
+                    throw new ArgumentException("primaryUID must be byte[16]");
+                }
+                Array.Copy(value, 0, field_2_UID, 0, field_2_UID.Length);
+            }
         }
 
 
