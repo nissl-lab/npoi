@@ -44,6 +44,9 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Extractor;
     using NPOI.HSSF.Record.Crypto;
     using NPOI.HSSF;
+    using System.Drawing;
+    using System.Net;
+    using System.Drawing.Imaging;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -3342,5 +3345,50 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
+
+
+        [Test]
+        public void Test46515()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("46515.xls");
+            // Get structure from webservice
+            String urlString = "http://poi.apache.org/resources/images/project-logo.jpg";
+            Uri structURL = new Uri(urlString);
+            Image bimage;
+            try
+            {
+                WebClient client = new WebClient();
+                MemoryStream ms = new MemoryStream(client.DownloadData(structURL));
+                bimage = Bitmap.FromStream(ms);
+                ms.Close();
+            }
+            catch (IOException e)
+            {
+                //Assume.assumeNoException("Downloading a jpg from poi.apache.org should work", e);
+                Assert.Fail("Downloading a jpg from poi.apache.org should work");
+                return;
+            }
+            // Convert BufferedImage to byte[]
+            ByteArrayOutputStream imageBAOS = new ByteArrayOutputStream();
+            //ImageIO.write(bimage, "jpeg", imageBAOS);
+            bimage.Save(imageBAOS, ImageFormat.Jpeg);
+            imageBAOS.Flush();
+            byte[] imageBytes = imageBAOS.ToByteArray();
+            imageBAOS.Close();
+            // Pop structure into Structure HSSFSheet
+            int pict = wb.AddPicture(imageBytes, PictureType.JPEG);
+            ISheet sheet = wb.GetSheet("Structure");
+            Assert.IsNotNull(sheet, "Did not find sheet");
+            HSSFPatriarch patriarch = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
+            HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short)1, 1, (short)10, 22);
+            anchor.AnchorType = AnchorType.MoveDontResize; //(2);
+            patriarch.CreatePicture(anchor, pict);
+            // Write out destination file
+            //        FileOutputStream fileOut = new FileOutputStream("/tmp/46515.xls");
+            //        wb.write(fileOut);
+            //        fileOut.close();
+            wb.Close();
+        }
+
     }
 }
