@@ -30,8 +30,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class FontBasisRecord
-       : StandardRecord
+    public class FontBasisRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1060;
         private short field_1_xBasis;

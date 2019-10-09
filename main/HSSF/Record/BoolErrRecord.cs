@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class BoolErrRecord : CellRecord
+    public class BoolErrRecord : CellRecord, ICloneable
     {
         public const short sid = 0x205;
         private int _value;

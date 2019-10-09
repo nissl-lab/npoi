@@ -36,14 +36,13 @@ namespace NPOI.HSSF.Record.Chart
     /// The FontX record specifies the font for a given text element. 
     /// The Font record referenced by iFont can exist in this chart sheet substream or the workbook.
     /// </summary>
-    public class FontXRecord
-       : StandardRecord
+    public class FontIndexRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1026;
         private short field_1_fontIndex;
 
 
-        public FontXRecord()
+        public FontIndexRecord()
         {
 
         }
@@ -54,7 +53,7 @@ namespace NPOI.HSSF.Record.Chart
          * @param in the RecordInputstream to Read the record from
          */
 
-        public FontXRecord(RecordInputStream in1)
+        public FontIndexRecord(RecordInputStream in1)
         {
             field_1_fontIndex = in1.ReadShort();
         }
@@ -94,7 +93,7 @@ namespace NPOI.HSSF.Record.Chart
 
         public override Object Clone()
         {
-            FontXRecord rec = new FontXRecord();
+            FontIndexRecord rec = new FontIndexRecord();
 
             rec.field_1_fontIndex = field_1_fontIndex;
             return rec;

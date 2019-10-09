@@ -39,7 +39,8 @@ namespace NPOI.HSSF.Record
      *  {@link #CONDITION_TYPE_CELL_VALUE_IS} or {@link #CONDITION_TYPE_FORMULA},
      *  this is only used for the other types
      */
-    public class CFRule12Record : CFRuleBase, IFutureRecord {
+    public class CFRule12Record : CFRuleBase, IFutureRecord, ICloneable
+    {
         public static short sid = 0x087A;
 
         private FtrHeader futureHeader;

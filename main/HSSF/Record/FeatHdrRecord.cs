@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record
      * The collection of data (Globals Substream ABNF, macro sheet substream 
      *  ABNF or worksheet substream ABNF) specifies Shared Feature data.
      */
-    public class FeatHdrRecord : StandardRecord
+    public class FeatHdrRecord : StandardRecord, ICloneable
     {
         /**
          * Specifies the enhanced protection type. Used to protect a 

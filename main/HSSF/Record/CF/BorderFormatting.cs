@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record.CF
      * @author Dmitriy Kumshayev
      */
 
-    public class BorderFormatting
+    public class BorderFormatting : ICloneable
     {
         public BorderFormatting()
         {

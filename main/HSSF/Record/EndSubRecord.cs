@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      * @author Glen Stampoultzis (glens at apache.org)
      */
     public class EndSubRecord
-       : SubRecord
+       : SubRecord, ICloneable
     {
         public const short sid = 0x00;
         private const int ENCODED_SIZE = 0;

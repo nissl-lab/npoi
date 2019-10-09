@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Common
      *  style record, which includes extra attributes above and
      *  beyond those of a traditional record. 
      */
-    public class FtrHeader
+    public class FtrHeader : ICloneable
     {
         /** This MUST match the type on the Containing record */
         private short recordType;

@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record
      * Used to describe a {@link CFRuleRecord}.
      * @see CFHeader12Record
      */
-    public class CFHeaderRecord : CFHeaderBase
+    public class CFHeaderRecord : CFHeaderBase, ICloneable
     {
         public static short sid = 0x01B0;
 

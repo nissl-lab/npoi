@@ -33,16 +33,19 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class FormatRecord
-       : StandardRecord
+    public class FormatRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x41e;
         private int field_1_index_code;
-
-        //private short field_3_unicode_len;      // Unicode string Length
-        //private bool field_3_unicode_flag;     // it Is not Undocumented - it Is Unicode flag
         private bool field_3_hasMultibyte;
         private String field_4_formatstring;
+
+        private FormatRecord(FormatRecord other)
+        {
+            field_1_index_code = other.field_1_index_code;
+            field_3_hasMultibyte = other.field_3_hasMultibyte;
+            field_4_formatstring = other.field_4_formatstring;
+        }
 
         public FormatRecord(int indexCode, String fs)
         {
@@ -147,7 +150,7 @@ namespace NPOI.HSSF.Record
         public override Object Clone()
         {
             // immutable
-            return this;
+            return new FormatRecord(this);
         }
     }
 }

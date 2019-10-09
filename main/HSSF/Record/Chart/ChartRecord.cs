@@ -31,8 +31,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class ChartRecord
-       : StandardRecord
+    public class ChartRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1002;
         private int field_1_x;

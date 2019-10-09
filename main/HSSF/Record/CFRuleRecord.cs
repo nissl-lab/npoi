@@ -32,7 +32,8 @@ namespace NPOI.HSSF.Record
      *  new-style (Excel 2007+) also make use of {@link CFRule12Record}
      *  and {@link CFExRuleRecord} for their rules.
      */
-    public class CFRuleRecord : CFRuleBase {
+    public class CFRuleRecord : CFRuleBase, ICloneable
+    {
         public static short sid = 0x01B1;
 
         /** Creates new CFRuleRecord */

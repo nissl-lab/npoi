@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
 
-    public class BeginRecord : StandardRecord
+    public class BeginRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1033;
         public static BeginRecord instance = new BeginRecord();

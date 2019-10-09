@@ -58,8 +58,7 @@ namespace NPOI.HSSF.Record.Chart
     /// 
     /// Excel Binary File Format (.xls) Structure Specification 
     /// </summary>
-    public class AxisLineFormatRecord
-       : StandardRecord
+    public class AxisLineFormatRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1021;
         private short field_1_axisType;

@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
      * @author      Mark Hissink Muller <a href="mailto:mark@hissinkmuller.nl">mark@hissinkmuller.nl</a>
      * @author      Yegor Kozlov (yegor at apache dot org)
      */
-    public class HyperlinkRecord : StandardRecord
+    public class HyperlinkRecord : StandardRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HyperlinkRecord));
         /**

@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace NPOI.HSSF.Record
 {
-    public class LbsDataSubRecord : SubRecord
+    public class LbsDataSubRecord : SubRecord, ICloneable
     {
 
         public const int sid = 0x0013;

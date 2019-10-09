@@ -35,7 +35,8 @@ namespace NPOI.HSSF.Record
      *  new-style (Excel 2007+) also make use of {@link CFRule12Record}
      *  and {@link CFExRuleRecord} for their rules.
      */
-    public abstract class CFRuleBase : StandardRecord {
+    public abstract class CFRuleBase : StandardRecord, ICloneable
+    {
         public static class ComparisonOperator {
             public static byte NO_COMPARISON = 0;
             public static byte BETWEEN = 1;

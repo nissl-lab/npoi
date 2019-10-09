@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.CF
      * Icon / Multi-State specific Threshold / value (CFVO),
      *  for Changes in Conditional Formatting
      */
-    public class IconMultiStateThreshold : Threshold
+    public class IconMultiStateThreshold : Threshold, ICloneable
     {
         /**
          * Cell values that are equal to the threshold value do not pass the threshold

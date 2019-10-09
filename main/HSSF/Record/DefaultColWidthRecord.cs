@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class DefaultColWidthRecord : StandardRecord
+    public class DefaultColWidthRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x55;
         private int field_1_col_width;

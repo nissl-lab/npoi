@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Record
      * @author Daniel Noll
      */
     public class EmbeddedObjectRefSubRecord
-       : SubRecord
+       : SubRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(EmbeddedObjectRefSubRecord));
         public const short sid = 0x9;

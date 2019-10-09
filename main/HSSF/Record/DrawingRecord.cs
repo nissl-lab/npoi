@@ -23,7 +23,7 @@ namespace NPOI.HSSF.Record
      * DrawingRecord (0x00EC)<p/>
      *
      */
-    public class DrawingRecord : StandardRecord
+    public class DrawingRecord : StandardRecord, ICloneable
     {
         public const short sid = 0xEC;
         private static byte[] EMPTY_BYTE_ARRAY = { };

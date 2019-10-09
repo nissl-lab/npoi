@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record
      * This record specifies Shared Features data. It is normally paired
      *  up with a {@link FeatHdrRecord}.
      */
-    public class FeatRecord : StandardRecord
+    public class FeatRecord : StandardRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(FeatRecord));
         public const short sid = 0x0868;

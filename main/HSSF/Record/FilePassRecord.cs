@@ -33,8 +33,7 @@ namespace NPOI.HSSF.Record
      * @version 3.0-pre
      */
 
-    public class FilePassRecord
-       : StandardRecord
+    public class FilePassRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x2F;
         private int _encryptionType;

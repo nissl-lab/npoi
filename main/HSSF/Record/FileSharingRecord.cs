@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      * REFERENCE:  PG 314 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)<p/>
      * @author Andrew C. Oliver (acoliver at apache dot org)
      */
-    public class FileSharingRecord : StandardRecord
+    public class FileSharingRecord : StandardRecord, ICloneable
     {
 
         public const short sid = 0x5b;

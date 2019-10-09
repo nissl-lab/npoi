@@ -68,8 +68,7 @@ namespace NPOI.HSSF.Record
         MicrosoftOfficeDrawing = 30,
     }
 
-    public class CommonObjectDataSubRecord
-       : SubRecord
+    public class CommonObjectDataSubRecord : SubRecord, ICloneable
     {
         public const short sid = 0x15;
         private short field_1_objectType;

@@ -28,7 +28,7 @@ namespace NPOI.DDF
     /// to define methods for serialization/deserialization and for determining the record size.
     /// @author Glen Stampoultzis
     /// </summary>
-    abstract public class EscherRecord : ICloneable
+    abstract public class EscherRecord
     {
         private static BitField fInstance = BitFieldFactory.GetInstance(0xfff0);
         private static BitField fVersion = BitFieldFactory.GetInstance(0x000f);
@@ -198,9 +198,9 @@ namespace NPOI.DDF
         /// <returns>
         /// A new object that is a copy of this instance.
         /// </returns>
-        public object Clone()
+        public virtual object Clone()
         {
-            throw new Exception("The class " + this.GetType().Name + " needs to define a clone method");
+            throw new NotSupportedException("The class " + this.GetType().Name + " needs to define a clone method");
         }
         
         /// <summary>

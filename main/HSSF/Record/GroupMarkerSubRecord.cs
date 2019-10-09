@@ -1,3 +1,4 @@
+
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) Under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -15,77 +16,57 @@
    limitations Under the License.
 ==================================================================== */
 
+
+
 namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
     using NPOI.Util;
 
+
+
     /**
-     * Represents a NoteStructure (0xD) sub record.
-     *
-     * 
-     * The docs say nothing about it. The Length of this record is always 26 bytes.
-     * 
-     *
-     * @author Yegor Kozlov
+     * The Group marker record is used as a position holder for Groups.
+
+     * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class NoteStructureSubRecord: SubRecord
+    public class GroupMarkerSubRecord : SubRecord, ICloneable
     {
-        public const short sid = 0x0D;
-        private const int ENCODED_SIZE = 22;
+        public const short sid = 0x06;
 
-        private byte[] reserved;
+        private byte[] reserved;    // would really love to know what goes in here.
+        private static byte[] EMPTY_BYTE_ARRAY = { };
 
-        /**
-         * Construct a new <c>NoteStructureSubRecord</c> and
-         * Fill its data with the default values
-         */
-        public NoteStructureSubRecord()
+        public GroupMarkerSubRecord()
         {
-            //all we know is that the the Length of <c>NoteStructureSubRecord</c> is always 22 bytes
-            reserved = new byte[ENCODED_SIZE];
+            reserved = EMPTY_BYTE_ARRAY;
         }
 
         /**
-         * Constructs a NoteStructureSubRecord and Sets its fields appropriately.
+         * Constructs a Group marker record and Sets its fields appropriately.
          *
+         * @param in the RecordInputstream to Read the record from
          */
-        public NoteStructureSubRecord(ILittleEndianInput in1, int size)
+
+        public GroupMarkerSubRecord(ILittleEndianInput in1, int size)
         {
-            if (size != ENCODED_SIZE) {
-                throw new RecordFormatException("Unexpected size (" + size + ")");
-            }
-            //just grab the raw data
             byte[] buf = new byte[size];
             in1.ReadFully(buf);
             reserved = buf;
         }
 
-        /**
-         * Convert this record to string.
-         * Used by BiffViewer and other utulities.
-         */
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
 
             String nl = Environment.NewLine;
-            buffer.Append("[ftNts ]" + nl);
-            buffer.Append("  size     = ").Append(DataSize).Append(nl);
+            buffer.Append("[ftGmo]" + nl);
             buffer.Append("  reserved = ").Append(HexDump.ToHex(reserved)).Append(nl);
-            buffer.Append("[/ftNts ]" + nl);
+            buffer.Append("[/ftGmo]" + nl);
             return buffer.ToString();
         }
 
-        /**
-         * Serialize the record data into the supplied array of bytes
-         *
-         * @param offset offset in the <c>data</c>
-         * @param data the data to Serialize into
-         *
-         * @return size of the record
-         */
         public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(sid);
@@ -94,16 +75,13 @@ namespace NPOI.HSSF.Record
         }
 
         /**
-         * Size of record
+         * Size of record (exluding 4 byte header)
          */
         public override int DataSize
         {
             get { return reserved.Length; }
         }
 
-        /**
-         * @return id of this record.
-         */
         public override short Sid
         {
             get { return sid; }
@@ -111,13 +89,14 @@ namespace NPOI.HSSF.Record
 
         public override Object Clone()
         {
-            NoteStructureSubRecord rec = new NoteStructureSubRecord();
-            byte[] recdata = new byte[reserved.Length];
-            Array.Copy(reserved, 0, recdata, 0, recdata.Length);
-            rec.reserved = recdata;
+            GroupMarkerSubRecord rec = new GroupMarkerSubRecord();
+            rec.reserved = new byte[reserved.Length];
+            for (int i = 0; i < reserved.Length; i++)
+                rec.reserved[i] = reserved[i];
             return rec;
         }
 
-    }
 
+
+    }
 }

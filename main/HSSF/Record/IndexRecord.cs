@@ -35,8 +35,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class IndexRecord
-       : StandardRecord
+    public class IndexRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x20B;
         //public const int DBCELL_CAPACITY = 30;

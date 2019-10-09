@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.CF
      * Color Gradient / Color Scale specific Threshold / value (CFVO),
      *  for Changes in Conditional Formatting
      */
-    public class ColorGradientThreshold : Threshold
+    public class ColorGradientThreshold : Threshold, ICloneable
     {
         private double position;
 

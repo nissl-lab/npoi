@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record.Common
      *  Formatting, Sheet Extensions), this XSSF-style color record 
      *  can be used.
      */
-    public class ExtendedColor {
+    public class ExtendedColor: ICloneable {
         public static int TYPE_AUTO = 0;
         public static int TYPE_INDEXED = 1;
         public static int TYPE_RGB = 2;

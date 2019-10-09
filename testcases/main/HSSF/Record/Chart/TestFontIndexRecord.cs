@@ -34,13 +34,13 @@ namespace TestCases.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    public class TestFontXRecord
+    public class TestFontIndexRecord
     {
         byte[] data = new byte[] {
         (byte)0x05,(byte)0x00
     };
 
-        public TestFontXRecord()
+        public TestFontIndexRecord()
         {
 
         }
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
 
-            FontXRecord record = new FontXRecord(TestcaseRecordInputStream.Create((short)0x1026, data));
+            FontIndexRecord record = new FontIndexRecord(TestcaseRecordInputStream.Create((short)0x1026, data));
             Assert.AreEqual(5, record.FontIndex);
 
 
@@ -57,7 +57,7 @@ namespace TestCases.HSSF.Record.Chart
         [Test]
         public void TestStore()
         {
-            FontXRecord record = new FontXRecord();
+            FontIndexRecord record = new FontIndexRecord();
             record.FontIndex = ((short)5);
 
 

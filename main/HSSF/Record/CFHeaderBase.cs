@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record
      * Parent of Conditional Formatting Header records,
      *  {@link CFHeaderRecord} and {@link CFHeader12Record}.
      */
-    public abstract class CFHeaderBase : StandardRecord
+    public abstract class CFHeaderBase : StandardRecord, ICloneable
     {
         private int field_1_numcf;
         private int field_2_need_recalculation_and_id;

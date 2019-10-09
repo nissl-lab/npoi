@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.CF
      * 
      * @author Dmitriy Kumshayev
      */
-    public class FontFormatting
+    public class FontFormatting : ICloneable
     {
         private byte[] _rawData;
 

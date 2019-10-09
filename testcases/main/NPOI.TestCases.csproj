@@ -143,7 +143,7 @@
     <Compile Include="HSSF\Record\Chart\TestBRAIRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestCatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDefaultTextRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestFontXRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFontIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestShtPropsRecord.cs" />
     <Compile Include="HSSF\Record\Crypto\TestXorEncryption.cs" />

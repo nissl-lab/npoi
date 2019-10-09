@@ -24,7 +24,7 @@ namespace NPOI.HSSF.Record.CF
      * Data Bar specific Threshold / value (CFVO),
      *  for Changes in Conditional Formatting
      */
-    public class DataBarThreshold : Threshold
+    public class DataBarThreshold : Threshold, ICloneable
     {
         public DataBarThreshold() : base()
         {

@@ -23,39 +23,41 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Model;
     using System.Globalization;
+    using System.Collections.Generic;
 
 
     /// <summary>
     /// @author Glen Stampoultzis
     /// </summary>
-    public class ColumnInfoRecordsAggregate : RecordAggregate
+    public class ColumnInfoRecordsAggregate : RecordAggregate, ICloneable
     {
-        private class CIRComparator : IComparer
+        private class CIRComparator : IComparer<ColumnInfoRecord>
         {
-            public static IComparer instance = new CIRComparator();
+            public static IComparer<ColumnInfoRecord> instance = new CIRComparator();
             private CIRComparator()
             {
                 // enforce singleton
-            }
-            public int Compare(Object a, Object b)
-            {
-                return CompareColInfos((ColumnInfoRecord)a, (ColumnInfoRecord)b);
             }
             public static int CompareColInfos(ColumnInfoRecord a, ColumnInfoRecord b)
             {
                 return a.FirstColumn - b.FirstColumn;
             }
+
+            public int Compare(ColumnInfoRecord x, ColumnInfoRecord y)
+            {
+                return CompareColInfos(x, y);
+            }
         }
 
         //    int     size     = 0;
-        ArrayList records = null;
+        List<ColumnInfoRecord> records = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ColumnInfoRecordsAggregate"/> class.
         /// </summary>
         public ColumnInfoRecordsAggregate()
         {
-            records = new ArrayList();
+            records = new List<ColumnInfoRecord>();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="ColumnInfoRecordsAggregate"/> class.
@@ -123,7 +125,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /**
          * Performs a deep Clone of the record
          */
-        public Object Clone()
+        public object Clone()
         {
             ColumnInfoRecordsAggregate rec = new ColumnInfoRecordsAggregate();
             for (int k = 0; k < records.Count; k++)
@@ -634,6 +636,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /// Collapses the col info records.
         /// </summary>
         /// <param name="columnIdx">The column index.</param>
+        [Obsolete("Not found in poi")]
         public void CollapseColInfoRecords(int columnIdx)
         {
             if (columnIdx == 0)
@@ -652,7 +655,7 @@ namespace NPOI.HSSF.Record.Aggregates
             if (columnsMatch)
             {
                 previousCol.LastColumn = currentCol.LastColumn;
-                records.Remove(columnIdx);
+                records.RemoveAt(columnIdx);
             }
         }
 

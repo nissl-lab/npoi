@@ -129,7 +129,7 @@ namespace NPOI.HSSF.Model
         /// <returns></returns>
         public InternalSheet CloneSheet()
         {
-            List<RecordBase> clonedRecords = new List<RecordBase>(this.records.Count);
+            List<Record> clonedRecords = new List<Record>(this.records.Count);
             for (int i = 0; i < this.records.Count; i++)
             {
                 RecordBase rb = (RecordBase)this.records[i];
@@ -146,10 +146,16 @@ namespace NPOI.HSSF.Model
                      */
                     rb = new DrawingRecord();
                 }
-                Record rec = (Record)((Record)rb).Clone();
-                clonedRecords.Add(rec);
+                try
+                {
+                    Record rec = (Record)((Record)rb).Clone();
+                    clonedRecords.Add(rec);
+                }
+                catch (NotSupportedException e)
+                {
+                    throw new RuntimeException(e);
+                }
 
-                
             }
             return CreateSheet(new RecordStream(clonedRecords, 0));
         }
@@ -185,15 +191,23 @@ namespace NPOI.HSSF.Model
 
         private class RecordCloner : RecordVisitor
         {
-            private IList _destList;
+            private IList<Record> _destList;
 
-            public RecordCloner(IList destList)
+            public RecordCloner(IList<Record> destList)
             {
                 _destList = destList;
             }
             public void VisitRecord(Record r)
             {
-                _destList.Add(r.Clone());
+                try
+                {
+                    _destList.Add((Record)r.Clone());
+                }
+                catch (NotSupportedException e)
+                {
+                    throw new RuntimeException(e);
+                }
+                
             }
         }
 

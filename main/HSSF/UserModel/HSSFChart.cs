@@ -727,9 +727,9 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private FontXRecord CreateFontIndexRecord(int index)
+        private FontIndexRecord CreateFontIndexRecord(int index)
         {
-            FontXRecord r = new FontXRecord();
+            FontIndexRecord r = new FontIndexRecord();
             r.FontIndex = ((short)index);
             return r;
         }
