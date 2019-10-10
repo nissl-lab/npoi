@@ -536,24 +536,20 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          * @throws InvalidFormatException
          *             Throws if the date format isnot valid.
          */
-        private Nullable<DateTime> SetDateValue(String s) {
-            if (s == null || s.Equals(""))
+        private Nullable<DateTime> SetDateValue(String dateStr) {
+            if (dateStr == null || dateStr.Equals(""))
             {
                 return new Nullable<DateTime>();
             }
-                
-            if (!s.EndsWith("Z"))
-            {
-                s += "Z";
-            }
-            
+            String dateTzStr = dateStr.EndsWith("Z") ? dateStr : (dateStr + "Z");
+
             SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATEFORMAT);
-            DateTime d = (DateTime)df.ParseObject(s, 0);
+            DateTime d = (DateTime)df.ParseObject(dateTzStr, 0);
             if (d == null)
             {
                 df = new SimpleDateFormat(ALTERNATIVE_DATEFORMAT);
                 //df.setTimeZone(LocaleUtil.TIMEZONE_UTC);
-                d = (DateTime)df.ParseObject(s, 0);
+                d = (DateTime)df.ParseObject(dateTzStr, 0);
             }
             if (d == null)
             {

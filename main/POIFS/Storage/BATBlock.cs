@@ -325,18 +325,20 @@ namespace NPOI.POIFS.Storage
         public static BATBlockAndIndex GetBATBlockAndIndex(int offset, HeaderBlock header, List<BATBlock> bats)
         {
             POIFSBigBlockSize bigBlockSize = header.BigBlockSize;
+            int entriesPerBlock = bigBlockSize.GetBATEntriesPerBlock();
 
-            int whichBAT = (int)Math.Floor(1.0*offset / bigBlockSize.GetBATEntriesPerBlock());
-            int index = offset % bigBlockSize.GetBATEntriesPerBlock();
+            int whichBAT = (int)Math.Floor(1.0*offset / entriesPerBlock);
+            int index = offset % entriesPerBlock;
             return new BATBlockAndIndex(index, bats[whichBAT]);
         }
 
         public static BATBlockAndIndex GetSBATBlockAndIndex(int offset, HeaderBlock header, List<BATBlock> sbats)
         {
             POIFSBigBlockSize bigBlockSize = header.BigBlockSize;
+            int entriesPerBlock = bigBlockSize.GetBATEntriesPerBlock();
 
-            int whichSBAT = (int)Math.Floor(1.0*offset / bigBlockSize.GetBATEntriesPerBlock());
-            int index = offset % bigBlockSize.GetBATEntriesPerBlock();
+            int whichSBAT = (int)Math.Floor(1.0*offset / entriesPerBlock);
+            int index = offset % entriesPerBlock;
 
             return new BATBlockAndIndex(index, sbats[whichSBAT]);
         }
