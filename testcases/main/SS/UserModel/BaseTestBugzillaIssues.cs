@@ -1314,5 +1314,19 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test50319()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Test");
+            sheet.CreateRow(0);
+            sheet.GroupRow(0, 0);
+            sheet.SetRowGroupCollapsed(0, true);
+
+            sheet.GroupColumn(0, 0);
+            sheet.SetColumnGroupCollapsed(0, true);
+
+            wb.Close();
+        }
     }
 }

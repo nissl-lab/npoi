@@ -382,7 +382,7 @@ namespace NPOI.HSSF.Record.Aggregates
             RowRecord rowRecord = this.GetRow(row);
             int level = rowRecord.OutlineLevel;
             int currentRow = row;
-            while (this.GetRow(currentRow) != null)
+            while (currentRow >= 0 && this.GetRow(currentRow) != null)
             {
                 rowRecord = this.GetRow(currentRow);
                 if (rowRecord.OutlineLevel < level)
