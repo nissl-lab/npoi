@@ -274,8 +274,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IRichTextString str = this.RichStringCellValue;
-                return str == null ? null : str.String;
+                return this.RichStringCellValue.String;
             }
         }
 

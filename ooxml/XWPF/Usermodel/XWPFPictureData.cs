@@ -117,8 +117,6 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 String name = GetPackagePart().PartName.Name;
-                if (name == null)
-                    return null;
                 return name.Substring(name.LastIndexOf('/') + 1);
             }
         }

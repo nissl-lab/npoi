@@ -448,8 +448,6 @@ namespace NPOI.HPSF
                 s = (String)dictionary[pid];
             if (s == null)
                 s = SectionIDMap.GetPIDString(FormatID.Bytes, pid);
-            if (s == null)
-                s = SectionIDMap.UNDEFINED;
             return s;
         }
 
