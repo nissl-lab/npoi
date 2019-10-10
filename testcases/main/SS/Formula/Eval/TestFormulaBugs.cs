@@ -185,5 +185,35 @@ namespace TestCases.SS.Formula.Eval
         {
             sheet.CreateRow(rowIx).CreateCell(colIx).SetCellValue(value);
         }
+
+        [Test]
+        public void Test55032()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("input");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(1);
+
+            checkFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, ,0)", -59777.14585);
+            checkFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, ,)", -59777.14585);
+            checkFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, 500,)", -59878.6315455);
+
+            checkFormulaValue(wb, cell, "FV(0.08/12, 20*12, 500, ,)", -294510.2078107270);
+            checkFormulaValue(wb, cell, "PMT(0.08/12, 20*12, 500, ,)", -4.1822003450);
+            checkFormulaValue(wb, cell, "NPER(0.08/12, 20*12, 500, ,)", -2.0758873434);
+
+            wb.Close();
+        }
+
+        private void checkFormulaValue(IWorkbook wb, ICell cell, String formula, double expectedValue)
+        {
+            cell.SetCellFormula(formula);
+
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            CellValue value = evaluator.Evaluate(cell);
+
+            Assert.AreEqual(expectedValue, value.NumberValue, 0.0001);
+        }
     }
 }
