@@ -3083,6 +3083,38 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test51998()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51998.xlsx");
+
+            HashSet<String> sheetNames = new HashSet<String>();
+
+            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            {
+                sheetNames.Add(wb.GetSheetName(sheetNum));
+            }
+
+            foreach (String sheetName in sheetNames)
+            {
+                int sheetIndex = wb.GetSheetIndex(sheetName);
+
+                wb.RemoveSheetAt(sheetIndex);
+
+                ISheet newSheet = wb.CreateSheet();
+                //Sheet newSheet = wb.createSheet(sheetName);
+                int newSheetIndex = wb.GetSheetIndex(newSheet);
+                //System.out.println(newSheetIndex);
+                wb.SetSheetName(newSheetIndex, sheetName);
+                wb.SetSheetOrder(sheetName, sheetIndex);
+            }
+
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
+
+            Assert.IsNotNull(wbBack);
+            wbBack.Close();
+        }
     }
 
 }
