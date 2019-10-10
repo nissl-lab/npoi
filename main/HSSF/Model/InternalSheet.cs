@@ -153,7 +153,7 @@ namespace NPOI.HSSF.Model
                 }
                 catch (NotSupportedException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new RecordFormatException(e);
                 }
 
             }
@@ -205,7 +205,7 @@ namespace NPOI.HSSF.Model
                 }
                 catch (NotSupportedException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new RecordFormatException(e);
                 }
                 
             }
@@ -227,7 +227,7 @@ namespace NPOI.HSSF.Model
 
             if (rs.PeekNextSid() != BOFRecord.sid)
             {
-                throw new RuntimeException("BOF record expected");
+                throw new RecordFormatException("BOF record expected");
             }
             BOFRecord bof = (BOFRecord)rs.GetNext();
             if (bof.Type == BOFRecordType.Worksheet)
@@ -423,7 +423,7 @@ namespace NPOI.HSSF.Model
             }
             if (windowTwo == null)
             {
-                throw new InvalidOperationException("WINDOW2 was not found");
+                throw new RecordFormatException("WINDOW2 was not found");
             }
             if (_dimensions == null)
             {

@@ -97,7 +97,7 @@ namespace NPOI.POIFS.FileSystem
         public ChainLoopDetector(long rawSize, BlockStore blockStore)
             {
             this.blockStore = blockStore;
-            int numBlocks = (int)Math.Ceiling(1.0 * (rawSize / blockStore.GetBlockStoreBlockSize()));
+            int numBlocks = (int)Math.Ceiling(((double)rawSize) / blockStore.GetBlockStoreBlockSize());
                 used_blocks = new bool[numBlocks];
             }
 

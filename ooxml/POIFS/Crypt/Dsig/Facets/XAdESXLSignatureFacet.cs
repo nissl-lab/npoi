@@ -26,6 +26,7 @@ namespace NPOI.POIFS.Crypt.Dsig.Facets
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Xml;
 
     /**
@@ -266,23 +267,35 @@ namespace NPOI.POIFS.Crypt.Dsig.Facets
             //return c14nValue.ToByteArray();
         }
 
-        //private Bigint GetCrlNumber(X509CRL crl) {
-        //    try {
-        //        byte[] crlNumberExtensionValue = crl.GetExtensionValue(Extension.cRLNumber.Id);
-        //        if (null == crlNumberExtensionValue) {
-        //            return null;
-        //        }
+        //private BigInteger getCrlNumber(X509CRL crl)
+        //{
+        //    byte[] crlNumberExtensionValue = crl.getExtensionValue(Extension.cRLNumber.getId());
+        //    if (null == crlNumberExtensionValue)
+        //    {
+        //        return null;
+        //    }
 
-        //        @SuppressWarnings("resource")
-        //        ASN1InputStream asn1InputStream = new ASN1InputStream(crlNumberExtensionValue);
-        //        ASN1OctetString octetString = (ASN1OctetString)asn1InputStream.ReadObject();
-        //        byte[] octets = octetString.Octets;
-        //        asn1InputStream = new ASN1InputStream(octets);
-        //        ASN1int integer = (ASN1int)asn1InputStream.ReadObject();
-        //        Bigint crlNumber = integer.PositiveValue;
-        //        return crlNumber;
-        //    } catch (Exception e) {
-        //        throw new Exception("I/O error: " + e.Message, e);
+        //    try
+        //    {
+        //        ASN1InputStream asn1IS1 = null, asn1IS2 = null;
+        //        try
+        //        {
+        //            asn1IS1 = new ASN1InputStream(crlNumberExtensionValue);
+        //            ASN1OctetString octetString = (ASN1OctetString)asn1IS1.readObject();
+        //            byte[] octets = octetString.getOctets();
+        //            asn1IS2 = new ASN1InputStream(octets);
+        //            ASN1Integer integer = (ASN1Integer)asn1IS2.readObject();
+        //            return integer.getPositiveValue();
+        //        }
+        //        finally
+        //        {
+        //            asn1IS2.close();
+        //            asn1IS1.close();
+        //        }
+        //    }
+        //    catch (IOException e)
+        //    {
+        //        throw new RuntimeException("I/O error: " + e.getMessage(), e);
         //    }
         //}
 

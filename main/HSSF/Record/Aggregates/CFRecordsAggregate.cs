@@ -26,6 +26,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using System.Collections.Generic;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
 
     /// <summary>
     /// 
@@ -64,6 +65,10 @@ namespace NPOI.HSSF.Record.Aggregates
                     + "No more than " + MAX_97_2003_CONDTIONAL_FORMAT_RULES
                     + " rules may be specified, " + pRules.Length + " were found,"
                     + " this file will cause problems with old Excel versions");
+            }
+            if (pRules.Length != pHeader.NumberOfConditionalFormats)
+            {
+                throw new RecordFormatException("Mismatch number of rules");
             }
             header = pHeader;
             rules = new List<CFRuleBase>(pRules.Length);

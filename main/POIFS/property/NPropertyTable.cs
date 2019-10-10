@@ -86,7 +86,7 @@ namespace NPOI.POIFS.Properties
             {
                 int size = _properties.Count * POIFSConstants.PROPERTY_SIZE;
                 
-                return (int)Math.Ceiling(1.0*size/_bigBigBlockSize.GetBigBlockSize());
+                return (int)Math.Ceiling(((double)size)/_bigBigBlockSize.GetBigBlockSize());
             }
         }
         /**
