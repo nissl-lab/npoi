@@ -383,7 +383,7 @@ namespace NPOI.HSSF.UserModel
          */
 
         public HSSFWorkbook(Stream s, bool preserveNodes)
-            : this(new POIFSFileSystem(s), preserveNodes)
+            : this(new NPOIFSFileSystem(s).Root, preserveNodes)
         {
 
         }

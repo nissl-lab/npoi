@@ -30,6 +30,7 @@ namespace NPOI.SS.Formula.Function
     class FunctionDataBuilder
     {
         private int _maxFunctionIndex;
+
         private Dictionary<string, FunctionMetadata> _functionDataByName;
         private Dictionary<int, FunctionMetadata> _functionDataByIndex;
         /** stores indexes of all functions with footnotes (i.e. whose definitions might Change) */
@@ -58,7 +59,7 @@ namespace NPOI.SS.Formula.Function
             }
             // allow function definitions to Change only if both previous and the new items have footnotes
             FunctionMetadata prevFM;
-            prevFM = _functionDataByName[functionName];
+            _functionDataByName.TryGetValue(functionName, out prevFM);
             if (prevFM != null)
             {
                 if (!hasFootnote || !_mutatingFunctionIndexes.Contains(indexKey))
@@ -67,7 +68,8 @@ namespace NPOI.SS.Formula.Function
                 }
                 _functionDataByIndex.Remove(prevFM.Index);
             }
-            prevFM = _functionDataByIndex[indexKey];
+            //prevFM = _functionDataByIndex[indexKey];
+            _functionDataByIndex.TryGetValue(indexKey, out prevFM);
             if (prevFM != null)
             {
                 if (!hasFootnote || !_mutatingFunctionIndexes.Contains(indexKey))

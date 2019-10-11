@@ -140,7 +140,7 @@
     <Compile Include="HSSF\Record\Chart\TestAxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxesUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestBRAIRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestLinkedDataRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestCatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDefaultTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestFontIndexRecord.cs" />

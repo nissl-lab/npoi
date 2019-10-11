@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         private PosRecord pos = null;
         private FontIndexRecord fontX = null;
         private AlRunsRecord alRuns = null;
-        private BRAIRecord brai = null;
+        private LinkedDataRecord brai = null;
         private SeriesTextRecord seriesText = null;
         private FrameAggregate frame = null;
         private ObjectLinkRecord objectLink = null;
@@ -69,7 +69,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             {
                 alRuns = (AlRunsRecord)rs.GetNext();
             }
-            brai = (BRAIRecord)rs.GetNext();
+            brai = (LinkedDataRecord)rs.GetNext();
             if (rs.PeekNextChartSid() == SeriesTextRecord.sid)
             {
                 seriesText = (SeriesTextRecord)rs.GetNext();

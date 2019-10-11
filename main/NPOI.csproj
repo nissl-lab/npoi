@@ -182,7 +182,6 @@
     <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CategorySeriesAxisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Chart3DBarShapeRecord.cs" />

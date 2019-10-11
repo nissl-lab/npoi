@@ -257,7 +257,6 @@ namespace NPOI.HSSF.Record
                 typeof(BeginRecord),
                 typeof(BopPopCustomRecord),
                 typeof(BopPopRecord),
-                typeof(BRAIRecord),
                 typeof(CatLabRecord),
                 typeof(CatSerRangeRecord),
                 typeof(Chart3DBarShapeRecord),
