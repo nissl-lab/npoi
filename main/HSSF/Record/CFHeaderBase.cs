@@ -76,14 +76,17 @@ namespace NPOI.HSSF.Record
             get
             {
                 // Held on the 1st bit
-                return field_2_need_recalculation_and_id % 2 == 1;
+                return (field_2_need_recalculation_and_id & 1) == 1;
             }
             set
             {
                 // held on the first bit
-                if (value == NeedRecalculation) return;
-                if (value) field_2_need_recalculation_and_id++;
-                else field_2_need_recalculation_and_id--;
+                if (value == NeedRecalculation)
+                    return;
+                if (value)
+                    field_2_need_recalculation_and_id++;
+                else
+                    field_2_need_recalculation_and_id--;
             }
         }
 
@@ -99,7 +102,8 @@ namespace NPOI.HSSF.Record
                 // Remaining 15 bits of field 2
                 bool needsRecalc = NeedRecalculation;
                 field_2_need_recalculation_and_id = (value << 1);
-                if (needsRecalc) field_2_need_recalculation_and_id++;
+                if (needsRecalc)
+                    field_2_need_recalculation_and_id++;
             }
         }
 

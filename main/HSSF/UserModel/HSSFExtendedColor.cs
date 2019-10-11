@@ -136,6 +136,7 @@ namespace NPOI.HSSF.UserModel
                     value[3] = a;
                     color.RGBA = (/*setter*/value);
                 }
+                color.Type = Record.Common.ExtendedColor.TYPE_RGB;
             }
         }
         public override byte[] ARGB

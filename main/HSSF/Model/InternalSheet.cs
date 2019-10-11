@@ -260,7 +260,7 @@ namespace NPOI.HSSF.Model
             {
                 int recSid = rs.PeekNextSid();
 
-                if (recSid == CFHeaderRecord.sid)
+                if (recSid == CFHeaderRecord.sid || recSid == CFHeader12Record.sid)
                 {
                     condFormatting = new ConditionalFormattingTable(rs);
                     records.Add(condFormatting);
