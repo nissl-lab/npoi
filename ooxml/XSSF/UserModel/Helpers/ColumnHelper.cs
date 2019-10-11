@@ -15,9 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
+using NPOI.Util;
 using NPOI.XSSF.Util;
 namespace NPOI.XSSF.UserModel.Helpers
 {
@@ -31,7 +33,7 @@ namespace NPOI.XSSF.UserModel.Helpers
     {
 
         private CT_Worksheet worksheet;
-        private CT_Cols newCols;
+        //private CT_Cols newCols;
 
         public ColumnHelper(CT_Worksheet worksheet)
         {
@@ -41,37 +43,158 @@ namespace NPOI.XSSF.UserModel.Helpers
         }
         public void CleanColumns()
         {
-            this.newCols = new CT_Cols();
-
-            CT_Cols aggregateCols = new CT_Cols();
-            List<CT_Cols> colsList = worksheet.GetColsList();
-            if (colsList == null)
+            TreeSet<CT_Col> trackedCols = new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
+            CT_Cols newCols = new CT_Cols();
+            CT_Cols[] colsArray = worksheet.GetColsList().ToArray();
+            int i = 0;
+            for (i = 0; i < colsArray.Length; i++)
             {
-                return;
-            }
-
-            foreach (CT_Cols cols in colsList)
-            {
-                foreach (CT_Col col in cols.GetColList())
+                CT_Cols cols = colsArray[i];
+                CT_Col[] colArray = cols.GetColList().ToArray();
+                foreach (CT_Col col in colArray)
                 {
-                    CloneCol(aggregateCols, col);
+                    addCleanColIntoCols(newCols, col, trackedCols);
                 }
             }
-
-            SortColumns(aggregateCols);
-
-            CT_Col[] colArray = aggregateCols.GetColList().ToArray();
-            SweepCleanColumns(newCols, colArray, null);
-
-            int i = colsList.Count;
             for (int y = i - 1; y >= 0; y--)
             {
                 worksheet.RemoveCols(y);
             }
+
+            newCols.SetColArray(trackedCols.ToArray(new CT_Col[trackedCols.Count]));
             worksheet.AddNewCols();
             worksheet.SetColsArray(0, newCols);
+            //this.newCols = new CT_Cols();
+
+            //CT_Cols aggregateCols = new CT_Cols();
+            //List<CT_Cols> colsList = worksheet.GetColsList();
+            //if (colsList == null)
+            //{
+            //    return;
+            //}
+
+            //foreach (CT_Cols cols in colsList)
+            //{
+            //    foreach (CT_Col col in cols.GetColList())
+            //    {
+            //        CloneCol(aggregateCols, col);
+            //    }
+            //}
+
+            //SortColumns(aggregateCols);
+
+            //CT_Col[] colArray = aggregateCols.GetColList().ToArray();
+            //SweepCleanColumns(newCols, colArray, null);
+
+            //int i = colsList.Count;
+            //for (int y = i - 1; y >= 0; y--)
+            //{
+            //    worksheet.RemoveCols(y);
+            //}
+            //worksheet.AddNewCols();
+            //worksheet.SetColsArray(0, newCols);
         }
-        
+
+        public CT_Cols addCleanColIntoCols(CT_Cols cols, CT_Col newCol)
+        {
+            // Performance issue. If we encapsulated management of min/max in this
+            // class then we could keep trackedCols as state,
+            // making this log(N) rather than Nlog(N). We do this for the initial
+            // read above.
+            TreeSet<CT_Col> trackedCols = new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
+            trackedCols.AddAll(cols.GetColList());
+            addCleanColIntoCols(cols, newCol, trackedCols);
+            cols.SetColArray(trackedCols.ToArray(new CT_Col[0]));
+            return cols;
+        }
+
+        private void addCleanColIntoCols(CT_Cols cols, CT_Col newCol, TreeSet<CT_Col> trackedCols)
+        {
+            List<CT_Col> overlapping = getOverlappingCols(newCol, trackedCols);
+            if (overlapping.Count == 0)
+            {
+                trackedCols.Add(CloneCol(cols, newCol));
+                return;
+            }
+
+            trackedCols.RemoveAll(overlapping);
+            foreach (CT_Col existing in overlapping)
+            {
+                // We add up to three columns for each existing one: non-overlap
+                // before, overlap, non-overlap after.
+                long[] overlap = getOverlap(newCol, existing);
+
+                CT_Col overlapCol = cloneCol(cols, existing, overlap);
+                SetColumnAttributes(newCol, overlapCol);
+                trackedCols.Add(overlapCol);
+
+                CT_Col beforeCol = existing.min < newCol.min ? existing
+                        : newCol;
+                long[] before = new long[] {
+                    Math.Min(existing.min, newCol.min),
+                    overlap[0] - 1 };
+                if (before[0] <= before[1])
+                {
+                    trackedCols.Add(cloneCol(cols, beforeCol, before));
+                }
+
+                CT_Col afterCol = existing.max > newCol.max ? existing
+                        : newCol;
+                long[] after = new long[] { overlap[1] + 1,
+                    Math.Max(existing.max, newCol.max) };
+                if (after[0] <= after[1])
+                {
+                    trackedCols.Add(cloneCol(cols, afterCol, after));
+                }
+            }
+        }
+
+        private CT_Col cloneCol(CT_Cols cols, CT_Col col, long[] newRange)
+        {
+            CT_Col cloneCol = CloneCol(cols, col);
+            cloneCol.min = (uint)(newRange[0]);
+            cloneCol.max = (uint)(newRange[1]);
+            return cloneCol;
+        }
+
+        private long[] getOverlap(CT_Col col1, CT_Col col2)
+        {
+            return getOverlappingRange(col1, col2);
+        }
+
+        private List<CT_Col> getOverlappingCols(CT_Col newCol, TreeSet<CT_Col> trackedCols)
+        {
+            CT_Col lower = trackedCols.Lower(newCol);
+            TreeSet<CT_Col> potentiallyOverlapping = lower == null ? trackedCols : trackedCols.TailSet(lower, overlaps(lower, newCol));
+            List<CT_Col> overlapping = new List<CT_Col>();
+            foreach (CT_Col existing in potentiallyOverlapping)
+            {
+                if (overlaps(newCol, existing))
+                {
+                    overlapping.Add(existing);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return overlapping;
+        }
+
+        private bool overlaps(CT_Col col1, CT_Col col2)
+        {
+            return NumericRanges.GetOverlappingType(toRange(col1), toRange(col2)) != NumericRanges.NO_OVERLAPS;
+        }
+
+        private long[] getOverlappingRange(CT_Col col1, CT_Col col2)
+        {
+            return NumericRanges.GetOverlappingRange(toRange(col1), toRange(col2));
+        }
+
+        private long[] toRange(CT_Col col)
+        {
+            return new long[] { col.min, col.max };
+        }
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public static void SortColumns(CT_Cols newCols)
@@ -151,11 +274,14 @@ namespace NPOI.XSSF.UserModel.Helpers
             cols.SetColArray(colArray);
             return returnCols;
         }
+
         public class TreeSet<T>
         {
             private SortedList<T, object> innerObj;
+            private IComparer<T> comparer;
             public TreeSet(IComparer<T> comparer)
             {
+                this.comparer = comparer;
                 innerObj = new SortedList<T, object>(comparer);
             }
             public T First()
@@ -199,6 +325,85 @@ namespace NPOI.XSSF.UserModel.Helpers
             public IEnumerator<T> GetEnumerator()
             {
                 return this.innerObj.Keys.GetEnumerator();
+            }
+
+            public T[] ToArray(T[] a)
+            {
+                List<T> ts = new List<T>();
+                ts.AddRange(this.innerObj.Keys);
+                if (a.Length < Count)
+                {
+                    // Make a new array of a's runtime type, but my contents:
+                    return ts.ToArray();
+                }
+
+                Array.Copy(ts.ToArray(), 0, a, 0, Count);
+                if (a.Length > Count)
+                    a[Count] = default(T);
+                return a;
+            }
+
+            internal void AddAll(List<T> list)
+            {
+                foreach(var item in list)
+                {
+                    if (!this.innerObj.ContainsKey(item))
+                        this.innerObj.Add(item, null);
+                }
+            }
+
+            internal void RemoveAll(List<T> list)
+            {
+                foreach (var item in list)
+                    this.innerObj.Remove(item);
+            }
+
+            internal T Lower(T element)
+            {
+                IEnumerator<T> enumerator = this.innerObj.Keys.GetEnumerator();
+                T prevElement = default(T);
+                while (enumerator.MoveNext())
+                {
+                    if (this.innerObj.Comparer.Compare(enumerator.Current, element) >= 0)
+                    {
+                        return prevElement;
+                    }
+                    prevElement = enumerator.Current;
+                }
+                return default(T);
+            }
+
+            /// <summary>
+            /// Returns a view of the portion of this map whose keys are greater than (or
+            /// equal to, if inclusive is true) fromKey. 
+            /// </summary>
+            /// <param name="fromElement"></param>
+            /// <param name="inclusive"></param>
+            /// <returns></returns>
+            internal TreeSet<T> TailSet(T fromElement, bool inclusive)
+            {
+                TreeSet<T> set = new TreeSet<T>(comparer);
+
+                IEnumerator<T> enumerator = this.innerObj.Keys.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (inclusive)
+                    {
+                        if (this.innerObj.Comparer.Compare(enumerator.Current, fromElement) >= 0)
+                        {
+                            set.Add(enumerator.Current);
+                        }
+                    }
+                    else
+                    {
+                        if (this.innerObj.Comparer.Compare(enumerator.Current, fromElement) > 0)
+                        {
+                            set.Add(enumerator.Current);
+                        }
+                    }
+                }
+
+                return set;
             }
         }
         /**
