@@ -146,6 +146,7 @@ namespace NPOI.XSSF.streaming
                 sheet.CreateRow(2);
             } finally {
                 wb.Close();
+                template.Close();
             }
         }
 

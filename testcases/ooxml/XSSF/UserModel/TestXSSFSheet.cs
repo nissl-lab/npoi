@@ -30,6 +30,8 @@ using NPOI.HSSF.Record;
 using TestCases.SS.UserModel;
 using TestCases.HSSF;
 using NPOI.SS;
+using NPOI.POIFS.Crypt;
+using System.Globalization;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -57,12 +59,12 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestExistingHeaderFooter()
         {
-            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("45540_classic_Header.xlsx");
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("45540_classic_Header.xlsx");
             XSSFOddHeader hdr;
             XSSFOddFooter ftr;
 
             // Sheet 1 has a header with center and right text
-            XSSFSheet s1 = (XSSFSheet)workbook.GetSheetAt(0);
+            XSSFSheet s1 = (XSSFSheet)wb1.GetSheetAt(0);
             Assert.IsNotNull(s1.Header);
             Assert.IsNotNull(s1.Footer);
             hdr = (XSSFOddHeader)s1.Header;
@@ -80,7 +82,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", ftr.Right);
 
             // Sheet 2 has a footer, but it's empty
-            XSSFSheet s2 = (XSSFSheet)workbook.GetSheetAt(1);
+            XSSFSheet s2 = (XSSFSheet)wb1.GetSheetAt(1);
             Assert.IsNotNull(s2.Header);
             Assert.IsNotNull(s2.Footer);
             hdr = (XSSFOddHeader)s2.Header;
@@ -98,10 +100,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", ftr.Right);
 
             // Save and reload
-            IWorkbook wb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            IWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
-            hdr = (XSSFOddHeader)wb.GetSheetAt(0).Header;
-            ftr = (XSSFOddFooter)wb.GetSheetAt(0).Footer;
+            hdr = (XSSFOddHeader)wb2.GetSheetAt(0).Header;
+            ftr = (XSSFOddFooter)wb2.GetSheetAt(0).Footer;
 
             Assert.AreEqual("", hdr.Left);
             Assert.AreEqual("testdoc", hdr.Center);
@@ -110,6 +113,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("", ftr.Left);
             Assert.AreEqual("", ftr.Center);
             Assert.AreEqual("", ftr.Right);
+
+            wb2.Close();
         }
         [Test]
         public void TestGetAllHeadersFooters()
@@ -150,6 +155,8 @@ namespace NPOI.XSSF.UserModel
             // Defaults are odd
             Assert.AreEqual("odd footer left", sheet.Footer.Left);
             Assert.AreEqual("odd header center", sheet.Header.Center);
+
+            workbook.Close();
         }
         [Test]
         public void TestAutoSizeColumn()
@@ -163,6 +170,8 @@ namespace NPOI.XSSF.UserModel
             ColumnHelper columnHelper = sheet.GetColumnHelper();
             CT_Col col = columnHelper.GetColumn(13, false);
             Assert.IsTrue(col.bestFit);
+
+            workbook.Close();
         }
 
         
@@ -183,6 +192,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("A1", ctComments.commentList.GetCommentArray(0).@ref);
             comment.Author = ("test A1 author");
             Assert.AreEqual("test A1 author", comments.GetAuthor((int)ctComments.commentList.GetCommentArray(0).authorId));
+
+            workbook.Close();
         }
         [Test]
         public void TestGetActiveCell()
@@ -192,6 +203,8 @@ namespace NPOI.XSSF.UserModel
             sheet.SetActiveCell("R5");
 
             Assert.AreEqual("R5", sheet.ActiveCell);
+
+            workbook.Close();
 
         }
         [Test]
@@ -211,6 +224,8 @@ namespace NPOI.XSSF.UserModel
             sheet.CreateSplitPane(4, 8, 12, 12, PanePosition.LowerRight);
             Assert.AreEqual(8.0, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.ySplit);
             Assert.AreEqual(ST_Pane.bottomRight, ctWorksheet.sheetViews.GetSheetViewArray(0).pane.activePane);
+
+            workbook.Close();
         }
 
         [Test]
@@ -235,6 +250,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, sheet.NumMergedRegions);
             Assert.IsNull(sheet.GetCTWorksheet().mergeCells, " CTMergeCells should be deleted After removing the last merged " +
                     "region on the sheet.");
+
+            workbook.Close();
         }
         [Test]
         public void TestSetDefaultColumnStyle()
@@ -260,6 +277,8 @@ namespace NPOI.XSSF.UserModel
 
             sheet.SetDefaultColumnStyle(3, cellStyle);
             Assert.AreEqual(1u, ctWorksheet.GetColsArray(0).GetColArray(0).style);
+
+            workbook.Close();
         }
 
         [Test]
@@ -305,6 +324,8 @@ namespace NPOI.XSSF.UserModel
             colArray = cols.GetColList();
             Assert.AreEqual(4, colArray.Count);
             Assert.AreEqual(2, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelCol);
+
+            workbook.Close();
         }
 
         [Test]
@@ -341,12 +362,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3, sheet.PhysicalNumberOfRows);
 
             Assert.AreEqual(1, sheet.GetCTWorksheet().sheetFormatPr.outlineLevelRow);
+
+            workbook.Close();
         }
         [Test]
         public void TestSetZoom()
         {
-            XSSFWorkbook workBook = new XSSFWorkbook();
-            XSSFSheet sheet1 = (XSSFSheet)workBook.CreateSheet("new sheet");
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet1 = (XSSFSheet)workbook.CreateSheet("new sheet");
             sheet1.SetZoom(3, 4);   // 75 percent magnification
             long zoom = sheet1.GetCTWorksheet().sheetViews.GetSheetViewArray(0).zoomScale;
             Assert.AreEqual(zoom, 75);
@@ -363,6 +386,10 @@ namespace NPOI.XSSF.UserModel
             catch (ArgumentException e)
             {
                 Assert.AreEqual("Valid scale values range from 10 to 400", e.Message);
+            }
+            finally
+            {
+                workbook.Close();
             }
         }
 
@@ -597,6 +624,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(14, cols.GetColArray(5).min); // 1 based
             Assert.AreEqual(14, cols.GetColArray(5).max); // 1 based
 
+            wb.Close();
         }
 
         /**
@@ -678,6 +706,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
             Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
             Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
+
+            wb.Close();
         }
 
         /**
@@ -727,6 +757,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(4u, col.max);
             Assert.AreEqual(33.0, col.width, 0.0);
             Assert.IsTrue(col.customWidth);
+
+            workbook.Close();
         }
 
         /**
@@ -789,6 +821,8 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(cw[i] * 256, sheet.GetColumnWidth(i));
                 Assert.AreEqual(cw[i], cols.GetColArray(i).width, 0.0);
             }
+
+            wb.Close();
         }
 
         /**
@@ -861,6 +895,8 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(sheet.IsColumnHidden(3));
             Assert.IsFalse(sheet.IsColumnHidden(4));
             Assert.IsFalse(sheet.IsColumnHidden(5));
+
+            wb.Close();
         }
         [Test]
         public void TestCommentsTable()
@@ -897,6 +933,8 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(comment1);
             Assert.AreEqual("/xl/comments1.xml", comment1.GetPackageRelationship().TargetUri.ToString());
             Assert.AreSame(comment1, sheet1.GetCommentsTable(true));
+
+            workbook.Close();
         }
 
         /**
@@ -980,6 +1018,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, xrow[2].SizeOfCArray());
             Assert.AreEqual(3u, xrow[2].r);
 
+            workbook.Close();
         }
 
         [Test]
@@ -1005,46 +1044,72 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, nm.GetCTName().hidden);
             Assert.AreEqual("_xlnm._FilterDatabase", nm.GetCTName().name);
             Assert.AreEqual("'new sheet'!$A$1:$D$100", nm.GetCTName().Value);
+
+            wb.Close();
         }
-        //[Test]
-        //public void TestProtectSheet_lowlevel()
-        //{
+        [Test]
+        public void TestProtectSheet_lowlevel()
+        {
 
-        //    XSSFWorkbook wb = new XSSFWorkbook();
-        //    XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
-        //    CT_SheetProtection pr = sheet.GetCTWorksheet().sheetProtection;
-        //    Assert.IsNull(pr, "CTSheetProtection should be null by default");
-        //    String password = "Test";
-        //    sheet.ProtectSheet(password);
-        //    pr = sheet.GetCTWorksheet().sheetProtection;
-        //    Assert.IsNotNull(pr, "CTSheetProtection should be not null");
-        //    Assert.IsTrue(pr.sheet, "sheet protection should be on");
-        //    Assert.IsTrue(pr.objects, "object protection should be on");
-        //    Assert.IsTrue(pr.scenarios, "scenario protection should be on");
-        //    String hash = HexDump.ShortToHex(PasswordRecord.HashPassword(password)).ToString().Substring(2);
-        //    Assert.AreEqual(hash, pr.xgetPassword().StringValue, "well known value for top secret hash should be " + hash);
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
+            CT_SheetProtection pr = sheet.GetCTWorksheet().sheetProtection;
+            Assert.IsNull(pr, "CTSheetProtection should be null by default");
+            String password = "Test";
+            sheet.ProtectSheet(password);
+            pr = sheet.GetCTWorksheet().sheetProtection;
+            Assert.IsNotNull(pr, "CTSheetProtection should be not null");
+            Assert.IsTrue(pr.sheet, "sheet protection should be on");
+            Assert.IsTrue(pr.objects, "object protection should be on");
+            Assert.IsTrue(pr.scenarios, "scenario protection should be on");
+            int hashVal = CryptoFunctions.CreateXorVerifier1(password);
+            int actualVal = int.Parse(pr.password, NumberStyles.HexNumber);
+            Assert.AreEqual(hashVal, actualVal, "well known value for top secret hash should match");
 
-        //    sheet.ProtectSheet(null);
-        //    Assert.IsNull(sheet.GetCTWorksheet().sheetProtection, "protectSheet(null) should unset CTSheetProtection");
-        //}
+
+            sheet.ProtectSheet(null);
+            Assert.IsNull(sheet.GetCTWorksheet().sheetProtection, "protectSheet(null) should unset CTSheetProtection");
+
+            wb.Close();
+        }
+
+        [Test]
+        public void ProtectSheet_lowlevel_2013()
+        {
+            String password = "test";
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet xs = wb.CreateSheet() as XSSFSheet;
+            //xs.SetSheetPassword(password, HashAlgorithm.sha384);
+            //wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            //Assert.IsTrue(wb.GetSheetAt(0).validateSheetPassword(password));
+
+            //wb = XSSFTestDataSamples.OpenSampleWorkbook("workbookProtection-sheet_password-2013.xlsx");
+            //Assert.IsTrue(wb.GetSheetAt(0).ValidateSheetPassword("pwd"));
+
+            wb.Close();
+            throw new NotImplementedException();
+        }
 
         [Test]
         public void Test49966()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49966.xlsx");
-            CalculationChain calcChain = wb.GetCalculationChain();
-            Assert.IsNotNull(wb.GetCalculationChain());
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("49966.xlsx");
+            CalculationChain calcChain = wb1.GetCalculationChain();
+            Assert.IsNotNull(wb1.GetCalculationChain());
             Assert.AreEqual(3, calcChain.GetCTCalcChain().SizeOfCArray());
 
-            ISheet sheet = wb.GetSheetAt(0);
+            ISheet sheet = wb1.GetSheetAt(0);
             IRow row = sheet.GetRow(0);
 
             sheet.RemoveRow(row);
             Assert.AreEqual(0, calcChain.GetCTCalcChain().SizeOfCArray(), "XSSFSheet#RemoveRow did not clear calcChain entries");
 
             //calcChain should be gone 
-            wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.IsNull(wb.GetCalculationChain());
+            XSSFWorkbook wb2 = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+            Assert.IsNull(wb2.GetCalculationChain());
+
+            wb2.Close();
         }
 
         /**
@@ -1074,6 +1139,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, s2.GetTables().Count);
             XSSFSheet s3 = (XSSFSheet)wb.GetSheetAt(2);
             Assert.AreEqual(0, s3.GetTables().Count);
+
+            wb.Close();
         }
 
         /**
@@ -1082,8 +1149,8 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestSetForceFormulaRecalculation()
         {
-            XSSFWorkbook workbook = new XSSFWorkbook();
-            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)wb1.CreateSheet("Sheet 1");
 
             Assert.IsFalse(sheet.ForceFormulaRecalculation);
 
@@ -1092,7 +1159,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, sheet.ForceFormulaRecalculation);
 
             // calcMode="manual" is unset when forceFormulaRecalculation=true
-            CT_CalcPr calcPr = workbook.GetCTWorkbook().AddNewCalcPr();
+            CT_CalcPr calcPr = wb1.GetCTWorkbook().AddNewCalcPr();
             calcPr.calcMode = (ST_CalcMode.manual);
             sheet.ForceFormulaRecalculation = (true);
             Assert.AreEqual(ST_CalcMode.auto, calcPr.calcMode);
@@ -1103,9 +1170,13 @@ namespace NPOI.XSSF.UserModel
 
 
             // Save, re-load, and re-check
-            workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            sheet = (XSSFSheet)workbook.GetSheet("Sheet 1");
+            XSSFWorkbook wb2 = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = (XSSFSheet)wb2.GetSheet("Sheet 1");
             Assert.AreEqual(false, sheet.ForceFormulaRecalculation);
+
+            wb2.Close();
         }
         [Test]
         public void Bug54607()
@@ -1140,7 +1211,7 @@ namespace NPOI.XSSF.UserModel
                 Assert.IsNotNull(sh.SheetName);
                 Assert.AreEqual(topRows[si], sh.TopRow, "Did not match for sheet " + si);
             }
-
+            Assert.Warn("test about SXSSFWorkbook was commented");
             // for XSSF also test with SXSSF
             //if (isXSSF)
             //{
@@ -1179,6 +1250,7 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(topRows[si], sh.LeftCol, "Did not match for sheet " + si);
             }
 
+            Assert.Warn("test about SXSSFWorkbook was commented");
             // for XSSF also test with SXSSF
             //if (isXSSF)
             //{
@@ -1211,6 +1283,8 @@ namespace NPOI.XSSF.UserModel
             }*/
             Assert.AreEqual(8, tables.Count, "Sheet should contain 8 tables");
             Assert.IsNotNull(sheet.GetCommentsTable(false), "Sheet should contain a comments table");
+
+            wb.Close();
         }
 
         [Test]
@@ -1239,6 +1313,8 @@ namespace NPOI.XSSF.UserModel
             name = wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, 0);
             Assert.IsNotNull(name);
             Assert.AreEqual("Sheet0!$B:$C", name.RefersToFormula);
+
+            wb.Close();
         }
 
         [Test]
@@ -1288,6 +1364,8 @@ namespace NPOI.XSSF.UserModel
             XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("L5"), sheet);
             Assert.IsNotNull(pivotTable2);
             Assert.IsTrue(wb.PivotTables.Count > 1);
+
+            wb.Close();
         }
 
         [Test]
@@ -1306,6 +1384,8 @@ namespace NPOI.XSSF.UserModel
             XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"), sheet);
             Assert.IsNotNull(pivotTable2);
             Assert.IsTrue(wb.PivotTables.Count > 1);
+
+            wb.Close();
         }
 
         [Test]
@@ -1319,6 +1399,8 @@ namespace NPOI.XSSF.UserModel
             XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
             Assert.IsNotNull(pivotTable);
             Assert.IsTrue(wb.PivotTables.Count > 0);
+
+            wb.Close();
         }
 
         [Test]
@@ -1335,6 +1417,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, wb.PivotTables.Count);
             Assert.AreEqual(0, sheet1.GetPivotTables().Count);
             Assert.AreEqual(1, sheet2.GetPivotTables().Count);
+
+            wb.Close();
         }
 
         [Test]
@@ -1347,6 +1431,8 @@ namespace NPOI.XSSF.UserModel
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable
                     (new AreaReference(sheet.SheetName + "!A$1:B$2"), new CellReference("H5"));
             Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
+
+            wb.Close();
         }
 
         [Test]
@@ -1356,15 +1442,13 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
 
-            try
-            {
-                sheet2.CreatePivotTable(new AreaReference(sheet.SheetName + "!A$1:B$2"), new CellReference("H5"), sheet2);
-            }
-            catch (ArgumentException)
-            {
-                return;
-            }
-            Assert.Fail();
+            Assert.Throws<ArgumentException>(() => {
+                sheet2.CreatePivotTable(
+                    new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007), 
+                    new CellReference("H5"), 
+                    sheet2);
+            });
+            wb.Close();
         }
 
         [Test]
@@ -1373,15 +1457,9 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
 
-            try
-            {
-                sheet.OnDocumentRead();
-                Assert.Fail("Throws exception because we cannot read here");
-            }
-            catch (POIXMLException e)
-            {
-                // expected here
-            }
+            Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
+
+            wb.Close();
         }
 
         [Test]
@@ -1390,6 +1468,8 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
             Assert.IsNotNull(sheet.CreateComment());
+
+            wb.Close();
         }
 
         [Test]
@@ -1398,6 +1478,8 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
             Assert.IsTrue(sheet.MergedRegions.Count == 0);
+
+            wb.Close();
         }
     }
 }

@@ -61,7 +61,8 @@ namespace TestCases.HSSF
             using (MemoryStream baos = new MemoryStream(4096))
             {
                 original.Write(baos);
-                return new HSSFWorkbook(baos);
+                MemoryStream bais = new MemoryStream(baos.ToArray());
+                return new HSSFWorkbook(bais);
             }
         }
 

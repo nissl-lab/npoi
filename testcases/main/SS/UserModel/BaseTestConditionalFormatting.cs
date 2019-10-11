@@ -123,6 +123,8 @@ namespace TestCases.SS.UserModel
             {
                 Assert.IsTrue(e.Message.StartsWith("Number of rules must not exceed 3"));
             }
+
+            wb.Close();
         }
 
         /**
@@ -163,6 +165,8 @@ namespace TestCases.SS.UserModel
             CellRangeAddress[] ranges2 = sheetCF.GetConditionalFormattingAt(formatIndex2).GetFormattingRanges();
             Assert.AreEqual(1, ranges2.Length);
             Assert.AreEqual("B1:B3", ranges2[0].FormatAsString());
+
+            wb.Close();
         }
         [Test]
         public void TestSingleFormulaConditions()
@@ -235,6 +239,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("0", rule9.Formula1);
             Assert.AreEqual("5", rule9.Formula2);
             Assert.AreEqual(ComparisonOperator.NotBetween, rule9.ComparisonOperation);
+
+            wb.Close();
         }
         [Test]
         public void TestCopy()
@@ -274,6 +280,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("15", sheet2cf.GetRule(1).Formula1);
             Assert.AreEqual(ComparisonOperator.NotEqual, sheet2cf.GetRule(1).ComparisonOperation);
             Assert.AreEqual(ConditionType.CellValueIs.Id, sheet2cf.GetRule(1).ConditionType);
+
+            wb.Close();
         }
         [Test]
         public void TestRemove()
@@ -322,6 +330,8 @@ namespace TestCases.SS.UserModel
             {
                 Assert.IsTrue(e.Message.StartsWith("Specified CF index 0 is outside the allowable range"));
             }
+
+            wb.Close();
         }
         [Test]
         public void TestCreateCF()
@@ -402,6 +412,8 @@ namespace TestCases.SS.UserModel
             rule2 = cf.GetRule(1);
             Assert.AreEqual("2", rule2.Formula2);
             Assert.AreEqual("1", rule2.Formula1);
+
+            workbook.Close();
         }
         [Test]
         public void TestClone()
@@ -437,6 +449,7 @@ namespace TestCases.SS.UserModel
             try
             {
                 wb.CloneSheet(0);
+                Assert.AreEqual(2, wb.NumberOfSheets);
             }
             catch (Exception e)
             {
@@ -446,7 +459,10 @@ namespace TestCases.SS.UserModel
                 }
                 throw e;
             }
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            finally
+            {
+                wb.Close();
+            }
         }
         [Test]
         public void TestShiftRows()
@@ -502,6 +518,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("SUM(A10:A21)", cf2.GetRule(0).Formula1);
             Assert.AreEqual("1+SUM(#REF!)", cf2.GetRule(0).Formula2);
 
+            wb.Close();
         }
         //
 
@@ -590,9 +607,11 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(ComparisonOperator.Between, rule5.ComparisonOperation);
             Assert.AreEqual("\"A\"", rule5.Formula1);
             Assert.AreEqual("\"AAA\"", rule5.Formula2);
+
+            wb.Close();
         }
 
-        protected void testReadOffice2007(String filename)
+        public void testReadOffice2007(String filename)
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(filename);
             ISheet s = wb.GetSheet("CF");
@@ -818,7 +837,7 @@ namespace TestCases.SS.UserModel
             // Mixed icons - Column U
             // TODO Support EXT formattings
 
-
+            wb.Close();
         }
 
         private void assertDataBar(IConditionalFormatting cf, String color)
@@ -997,6 +1016,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(FontUnderlineType.Double, r1fp.UnderlineType);
             Assert.AreEqual(HSSFColor.Blue.Index, r1fp.FontColorIndex);
 
+            workbook.Close();
         }
         [Test]
         public void TestCreatePatternFormatting()
@@ -1049,6 +1069,8 @@ namespace TestCases.SS.UserModel
             {
                 Assert.AreEqual(FillPattern.Bricks, r1fp.FillPattern);
             }
+
+            workbook.Close();
         }
         [Test]
         public void TestCreateBorderFormatting()
@@ -1112,13 +1134,14 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(BorderStyle.Thin, r1fp.BorderLeft);
             Assert.AreEqual(BorderStyle.Hair, r1fp.BorderRight);
 
+            workbook.Close();
         }
 
         [Test]
         public void TestCreateIconFormatting()
         {
-            IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            ISheet sheet = workbook.CreateSheet();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
             ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
             IConditionalFormattingRule rule1 =
                     sheetCF.CreateConditionalFormattingRule(IconSet.GYRB_4_TRAFFIC_LIGHTS.name);
@@ -1141,7 +1164,10 @@ namespace TestCases.SS.UserModel
             sheetCF.AddConditionalFormatting(regions, rule1);
 
             // Save, re-load and re-check
-            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
             sheetCF = sheet.SheetConditionalFormatting;
             Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
 
@@ -1163,13 +1189,15 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(10d, iconFmt.Thresholds[1].Value);
             Assert.AreEqual(75d, iconFmt.Thresholds[2].Value);
             Assert.AreEqual(null, iconFmt.Thresholds[3].Value);
+
+            wb2.Close();
         }
 
         [Test]
         public void TestCreateColorScaleFormatting()
         {
-            IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            ISheet sheet = workbook.CreateSheet();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
             ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
             IConditionalFormattingRule rule1 =
                     sheetCF.CreateConditionalFormattingColorScaleRule();
@@ -1188,7 +1216,10 @@ namespace TestCases.SS.UserModel
             sheetCF.AddConditionalFormatting(regions, rule1);
 
             // Save, re-load and re-check
-            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
             sheetCF = sheet.SheetConditionalFormatting;
             Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
 
@@ -1205,16 +1236,18 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(RangeType.NUMBER, clrFmt.Thresholds[1].RangeType);
             Assert.AreEqual(RangeType.MAX, clrFmt.Thresholds[2].RangeType);
             Assert.AreEqual(null, clrFmt.Thresholds[0].Value);
-            Assert.AreEqual(10d, clrFmt.Thresholds[1].Value);
+            Assert.AreEqual(10d, clrFmt.Thresholds[1].Value, 0);
             Assert.AreEqual(null, clrFmt.Thresholds[2].Value);
+
+            wb2.Close();
         }
         [Test]
         public void TestCreateDataBarFormatting()
         {
-            IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            ISheet sheet = workbook.CreateSheet();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
             String colorHex = "FFFFEB84";
-            ExtendedColor color = workbook.GetCreationHelper().CreateExtendedColor();
+            ExtendedColor color = wb1.GetCreationHelper().CreateExtendedColor();
             color.ARGBHex = (colorHex);
             ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
             IConditionalFormattingRule rule1 =
@@ -1234,7 +1267,10 @@ namespace TestCases.SS.UserModel
             sheetCF.AddConditionalFormatting(regions, rule1);
 
             // Save, re-load and re-check
-            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
             sheetCF = sheet.SheetConditionalFormatting;
             Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
 
@@ -1253,6 +1289,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(RangeType.MAX, dbFmt.MaxThreshold.RangeType);
             Assert.AreEqual(null, dbFmt.MinThreshold.Value);
             Assert.AreEqual(null, dbFmt.MaxThreshold.Value);
+
+            wb2.Close();
         }
 
         [Test]
@@ -1261,10 +1299,12 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
             CellRangeAddress[] ranges = new CellRangeAddress[] {
-            CellRangeAddress.ValueOf("C9:D30"), CellRangeAddress.ValueOf("C7:C31")
-        };
+                CellRangeAddress.ValueOf("C9:D30"), CellRangeAddress.ValueOf("C7:C31")
+            };
             IConditionalFormattingRule rule = sheet.SheetConditionalFormatting.CreateConditionalFormattingRule("$A$1>0");
             sheet.SheetConditionalFormatting.AddConditionalFormatting(ranges, rule);
+
+            wb.Close();
         }
     }
 

@@ -64,8 +64,7 @@ namespace TestCases.HSSF.UserModel
         public void Test53691()
         {
             ISheetConditionalFormatting cf;
-            IWorkbook wb;
-            wb = HSSFITestDataProvider.Instance.OpenSampleWorkbook("53691.xls");
+            IWorkbook wb = HSSFITestDataProvider.Instance.OpenSampleWorkbook("53691.xls");
             /*
             FileInputStream s = new FileInputStream("C:\\temp\\53691bbadfixed.xls");
             try {
@@ -105,6 +104,8 @@ namespace TestCases.HSSF.UserModel
             RemoveConditionalFormatting(sheet);
             RemoveConditionalFormatting(wb.GetSheetAt(0));
             WriteTemp53691(wb, "fgood");
+
+            wb.Close();
         }
 
         private void RemoveConditionalFormatting(ISheet sheet)
@@ -121,14 +122,7 @@ namespace TestCases.HSSF.UserModel
             // assert that we can Write/read it in memory
             IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
             Assert.IsNotNull(wbBack);
-
-            /* Just necessary for local testing... */
-            /*OutputStream out1 = new FileOutputStream("C:\\temp\\53691" + suffix + ".xls");
-            try {
-                wb.Write(out1);
-            } finally {
-                out1.Close();
-            }*/
+            wbBack.Close();
         }
 
     }

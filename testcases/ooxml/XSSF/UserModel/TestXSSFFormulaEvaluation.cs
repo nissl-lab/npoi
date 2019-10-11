@@ -57,14 +57,16 @@ namespace NPOI.XSSF.UserModel
 
             // Get B3 and Evaluate it in the cell
             ICell b3 = sheet.GetRow(2).GetCell(1);
-            Assert.AreEqual(result, Evaluator.EvaluateInCell(b3).NumericCellValue);
+            Assert.AreEqual(result, Evaluator.EvaluateInCell(b3).NumericCellValue, 0);
 
             //at this point the master formula is gone, but we are still able to Evaluate dependent cells
             ICell c3 = sheet.GetRow(2).GetCell(2);
-            Assert.AreEqual(result, Evaluator.EvaluateInCell(c3).NumericCellValue);
+            Assert.AreEqual(result, Evaluator.EvaluateInCell(c3).NumericCellValue, 0);
 
             ICell d3 = sheet.GetRow(2).GetCell(3);
-            Assert.AreEqual(result, Evaluator.EvaluateInCell(d3).NumericCellValue);
+            Assert.AreEqual(result, Evaluator.EvaluateInCell(d3).NumericCellValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -95,9 +97,10 @@ namespace NPOI.XSSF.UserModel
 
                 CellValue cv_noformula = Evaluator.Evaluate(cell_noformula);
                 CellValue cv_formula = Evaluator.Evaluate(cell_formula);
-                Assert.AreEqual(cv_noformula.NumberValue, cv_formula.NumberValue, "Wrong Evaluation result in " + ref_formula.FormatAsString());
+                Assert.AreEqual(cv_noformula.NumberValue, cv_formula.NumberValue, 0, "Wrong Evaluation result in " + ref_formula.FormatAsString());
             }
 
+            wb.Close();
         }
 
         /**
@@ -123,7 +126,7 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual("Hello!", cXSLX_cell.StringCellValue);
             Assert.AreEqual("Test A1", cXSLX_sNR.StringCellValue);
-            Assert.AreEqual(142.0, cXSLX_gNR.NumericCellValue);
+            Assert.AreEqual(142.0, cXSLX_gNR.NumericCellValue, 0);
 
             // References to a .xls file
             IRow rXSL = s.GetRow(4);
@@ -136,7 +139,7 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual("Hello!", cXSL_cell.StringCellValue);
             Assert.AreEqual("Test A1", cXSL_sNR.StringCellValue);
-            Assert.AreEqual(142.0, cXSL_gNR.NumericCellValue);
+            Assert.AreEqual(142.0, cXSL_gNR.NumericCellValue, 0);
 
             // Try to Evaluate without references, won't work
             // (At least, not unit we fix bug #56752 that is1)
@@ -224,7 +227,7 @@ namespace NPOI.XSSF.UserModel
             {
                 alt.Close();
             }
-
+            wb.Close();
         }
 
         /**
@@ -249,11 +252,10 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestMultiSheetReferencesHSSFandXSSF()
         {
-            IWorkbook[] wbs = new IWorkbook[] {
-                HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls"),
-                XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx")
-        };
-            foreach (IWorkbook wb in wbs)
+            IWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls");
+            IWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx");
+
+            foreach (IWorkbook wb in new IWorkbook[] { wb1, wb2 })
             {
                 IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
                 ISheet s1 = wb.GetSheetAt(0);
@@ -304,6 +306,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual("COUNTA(Sheet1:Sheet3!E1)", countA_3F.CellFormula);
                 Assert.AreEqual("3", Evaluator.Evaluate(countA_3F).FormatAsString());
             }
+
+            wb2.Close();
+            wb1.Close();
         }
         /**
          * A handful of functions (such as SUM, COUNTA, MIN) support
@@ -315,11 +320,10 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestMultiSheetAreasHSSFandXSSF()
         {
-            IWorkbook[] wbs = new IWorkbook[] {
-                HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls"),
-                XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx")
-        };
-            foreach (IWorkbook wb in wbs)
+            IWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls");
+            IWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx");
+
+            foreach (IWorkbook wb in new IWorkbook[] { wb1, wb2 })
             {
                 IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
                 ISheet s1 = wb.GetSheetAt(0);
@@ -354,6 +358,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual("4", Evaluator.Evaluate(countFA).FormatAsString());
 
             }
+
+            wb2.Close();
+            wb1.Close();
         }
 
         [Test]
@@ -399,10 +406,10 @@ namespace NPOI.XSSF.UserModel
                 wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
                 cell = sheet1.GetRow(1).GetCell(0) as XSSFCell;
-                Assert.AreEqual(3.0, cell.NumericCellValue);
+                Assert.AreEqual(3.0, cell.NumericCellValue, 0);
 
                 cell = sheet1.GetRow(2).GetCell(0) as XSSFCell;
-                Assert.AreEqual(4.0, cell.NumericCellValue);
+                Assert.AreEqual(4.0, cell.NumericCellValue, 0);
             }
             finally
             {
