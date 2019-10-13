@@ -115,10 +115,11 @@ namespace NPOI.SS.UserModel
             invalidDateTimeString = buf.ToString();
         }
         /** <em>General</em> FormatBase for whole numbers. */
-        private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
+        //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
+        private FormatBase generalNumberFormat;
 
         /** <em>General</em> FormatBase for decimal numbers. */
-        private static DecimalFormat generalDecimalNumFormat = new DecimalFormat("0.##########");
+        //private static DecimalFormat generalDecimalNumFormat = new DecimalFormat("0.##########");
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
@@ -260,11 +261,7 @@ namespace NPOI.SS.UserModel
             // Is it one of the special built in types, General or @?
             if (formatStr.Equals("General", StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
             {
-                if (DataFormatter.IsWholeNumber(cellValue))
-                {
-                    return generalWholeNumFormat;
-                }
-                return generalDecimalNumFormat;
+                return generalNumberFormat;
             }
 
             // Build a formatter, and cache it
@@ -328,11 +325,7 @@ namespace NPOI.SS.UserModel
 
             if ("General".Equals(formatStr, StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
             {
-                if (IsWholeNumber(cellValue))
-                {
-                    return generalWholeNumFormat;
-                }
-                return generalDecimalNumFormat;
+                return generalNumberFormat;
             }
 
 
@@ -671,16 +664,6 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * Return true if the double value represents a whole number
-         * @param d the double value to check
-         * @return <c>true</c> if d is a whole number
-         */
-        private static bool IsWholeNumber(double d)
-        {
-            return d == Math.Floor(d);
-        }
-
-        /**
          * Returns a default FormatBase for a cell.
          * @param cell The cell
          * @return a default FormatBase
@@ -698,11 +681,7 @@ namespace NPOI.SS.UserModel
 
                 // otherwise use general FormatBase
             }
-            if (IsWholeNumber(cellValue))
-            {
-                return generalWholeNumFormat;
-            }
-            return generalDecimalNumFormat;
+            return generalNumberFormat;
         }
 
         /**
@@ -742,7 +721,10 @@ namespace NPOI.SS.UserModel
             {
                 return d.ToString(currentCulture);
             }
-            return numberFormat.Format(d, currentCulture);
+            //return numberFormat.Format(d, currentCulture);
+            String formatted = numberFormat.Format(d);
+            //return formatted.ReplaceFirst("E(\\d)", "E+$1"); // to match Excel's E-notation
+            return Regex.Replace(formatted, "E(\\d)", "E+$1");
         }
 
         /**
@@ -925,8 +907,7 @@ namespace NPOI.SS.UserModel
             while (itr.MoveNext())
             {
                 string key = (string)itr.Current;
-                if (formats[key] == generalDecimalNumFormat
-                        || formats[key] == generalWholeNumFormat)
+                if (formats[key] == generalNumberFormat)
                 {
                     formats[key] = format;
                 }
@@ -951,5 +932,42 @@ namespace NPOI.SS.UserModel
         }
 
         // Some custom Formats
+
+        /**
+     * Update formats when locale has been changed
+     *
+     * @param observable usually this is our own Observable instance
+     * @param localeObj only reacts on Locale objects
+     */
+        public void Update(IObservable<object> observable, object localeObj)
+        {
+            if (!(localeObj is CultureInfo))  return;
+            CultureInfo newLocale = (CultureInfo)localeObj;
+            if (newLocale.Equals(currentCulture)) return;
+
+            currentCulture = newLocale;
+
+            //dateSymbols = DateFormatSymbols.getInstance(currentCulture);
+            //decimalSymbols = DecimalFormatSymbols.getInstance(currentCulture);
+            generalNumberFormat = new ExcelGeneralNumberFormat(currentCulture);
+
+            // init built-in formats
+
+            formats.Clear();
+            FormatBase zipFormat = ZipPlusFourFormat.instance;
+            AddFormat("00000\\-0000", zipFormat);
+            AddFormat("00000-0000", zipFormat);
+
+            FormatBase phoneFormat = PhoneFormat.instance;
+            // allow for format string variations
+            AddFormat("[<=9999999]###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
+            AddFormat("[<=9999999]###-####;(###) ###-####", phoneFormat);
+            AddFormat("###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
+            AddFormat("###-####;(###) ###-####", phoneFormat);
+
+            FormatBase ssnFormat = SSNFormat.instance;
+            AddFormat("000\\-00\\-0000", ssnFormat);
+            AddFormat("000-00-0000", ssnFormat);
+        }
     }
 }

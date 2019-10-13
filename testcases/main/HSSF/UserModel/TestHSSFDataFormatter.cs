@@ -163,7 +163,9 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < badNumPatterns.Length; i++)
             {
                 ICell cell = row.CreateCell(i);
-                cell.SetCellValue(1234567890.12345);
+                //cell.SetCellValue(1234567890.12345);
+                // If the '.' is any later, ExcelGeneralNumberFormat will render an integer, as Excel does.
+                cell.SetCellValue(12345678.9012345);
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.DataFormat = (/*setter*/format.GetFormat(badNumPatterns[i]));
                 cell.CellStyle = (/*setter*/cellStyle);
@@ -279,10 +281,11 @@ namespace TestCases.HSSF.UserModel
             while (it.MoveNext())
             {
                 ICell cell = (ICell)it.Current;
-                log(formatter.FormatCellValue(cell));
+                string formatted = formatter.FormatCellValue(cell);
+                log(formatted);
 
-                // should not be equal to "1234567890.12345"
-                Assert.IsTrue(!"1234567890.12345".Equals(formatter.FormatCellValue(cell)));
+                // should not include "12345678" - note that the input value was negative
+                Assert.IsTrue(formatted != null && !formatted.Contains("12345678"));
             }
 
             // Test bad number formats
@@ -293,10 +296,9 @@ namespace TestCases.HSSF.UserModel
             {
                 ICell cell = (ICell)it.Current;
                 log(formatter.FormatCellValue(cell));
-                // should be equal to "1234567890.12345" 
                 // in some locales the the decimal delimiter is a comma, not a dot
                 string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                Assert.AreEqual("1234567890" + decimalSeparator + "12345", formatter.FormatCellValue(cell));
+                Assert.AreEqual("12345678" + decimalSeparator + "9", formatter.FormatCellValue(cell));
             }
 
             // Test Zip+4 format

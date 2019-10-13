@@ -763,6 +763,7 @@
     <Compile Include="SS\UserModel\ConditionType.cs" />
     <Compile Include="SS\UserModel\DataBarFormatting.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
+    <Compile Include="SS\UserModel\ExcelGeneralNumberFormat.cs" />
     <Compile Include="SS\UserModel\ExtendedColor.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
