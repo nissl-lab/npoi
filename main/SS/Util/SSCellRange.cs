@@ -84,7 +84,7 @@ namespace NPOI.SS.Util
 
             public ArrayIterator(D[] array)
             {
-                _array = array;
+                _array = (D[])array.Clone();
                 _index = 0;
             }
 

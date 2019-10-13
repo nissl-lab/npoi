@@ -62,6 +62,8 @@ namespace TestCases.SS.UserModel
             Assert.IsNotNull(row2);
             Assert.AreEqual(formula, row2.GetCell(0).CellFormula);
             Assert.AreEqual(formula, row2.GetCell(1).CellFormula);
+
+            workbook.Close();
         }
         /**
          *  Set Single-cell array formula
@@ -100,6 +102,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(range.FormatAsString(), cell.ArrayFormulaRange.FormatAsString());
             //check the formula
             Assert.AreEqual("SUM(C11:C12*D11:D12)", cell.CellFormula);
+            workbook.Close();
         }
 
         /**
@@ -134,6 +137,7 @@ namespace TestCases.SS.UserModel
                 //retrieve the range and check it is the same
                 Assert.AreEqual(range.FormatAsString(), acell.ArrayFormulaRange.FormatAsString());
             }
+            workbook.Close();
         }
 
         /**
@@ -156,6 +160,7 @@ namespace TestCases.SS.UserModel
             {
                 //expected exception
             }
+            workbook.Close();
         }
 
         /**
@@ -189,6 +194,8 @@ namespace TestCases.SS.UserModel
             {
                 Assert.AreEqual("Cell A1 is not part of an array formula.", e.Message);
             }
+
+            workbook.Close();
         }
 
         /**
@@ -231,6 +238,8 @@ namespace TestCases.SS.UserModel
                     Assert.AreEqual("Cell " + ref1 + " is not part of an array formula.", e.Message);
                 }
             }
+
+            workbook.Close();
         }
 
         /**
@@ -241,20 +250,22 @@ namespace TestCases.SS.UserModel
         {
             ICell[] cells;
 
-            IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            ISheet sheet1 = workbook.CreateSheet();
+            IWorkbook workbook1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = workbook1.CreateSheet();
             cells = sheet1.SetArrayFormula("SUM(A1:A3*B1:B3)", CellRangeAddress.ValueOf("C4:C6")).FlattenedCells;
             Assert.AreEqual(3, cells.Length);
 
             cells = sheet1.SetArrayFormula("MAX(A1:A3*B1:B3)", CellRangeAddress.ValueOf("A4:A6")).FlattenedCells;
             Assert.AreEqual(3, cells.Length);
 
-            ISheet sheet2 = workbook.CreateSheet();
+            ISheet sheet2 = workbook1.CreateSheet();
             cells = sheet2.SetArrayFormula("MIN(A1:A3*B1:B3)", CellRangeAddress.ValueOf("D2:D4")).FlattenedCells;
             Assert.AreEqual(3, cells.Length);
 
-            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
-            sheet1 = workbook.GetSheetAt(0);
+            IWorkbook workbook2 = _testDataProvider.WriteOutAndReadBack(workbook1);
+            workbook1.Close();
+
+            sheet1 = workbook2.GetSheetAt(0);
             for (int rownum = 3; rownum <= 5; rownum++)
             {
                 ICell cell1 = sheet1.GetRow(rownum).GetCell(2);
@@ -264,12 +275,13 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(cell2.IsPartOfArrayFormulaGroup);
             }
 
-            sheet2 = workbook.GetSheetAt(1);
+            sheet2 = workbook2.GetSheetAt(1);
             for (int rownum = 1; rownum <= 3; rownum++)
             {
                 ICell cell1 = sheet2.GetRow(rownum).GetCell(3);
                 Assert.IsTrue(cell1.IsPartOfArrayFormulaGroup);
             }
+            workbook2.Close();
         }
 
         /**
@@ -286,9 +298,9 @@ namespace TestCases.SS.UserModel
                     sheet.SetArrayFormula("SUM(A4:A6,B4:B6)", CellRangeAddress.ValueOf("B5"));
             ICell scell = srange.TopLeftCell;
             Assert.AreEqual(CellType.Formula, scell.CellType);
-            Assert.AreEqual(0.0, scell.NumericCellValue);
+            Assert.AreEqual(0.0, scell.NumericCellValue, 0);
             scell.SetCellValue(1.1);
-            Assert.AreEqual(1.1, scell.NumericCellValue);
+            Assert.AreEqual(1.1, scell.NumericCellValue, 0);
 
             //multi-cell array formula
             ICellRange<ICell> mrange =
@@ -296,11 +308,12 @@ namespace TestCases.SS.UserModel
             foreach (ICell mcell in mrange)
             {
                 Assert.AreEqual(CellType.Formula, mcell.CellType);
-                Assert.AreEqual(0.0, mcell.NumericCellValue);
+                Assert.AreEqual(0.0, mcell.NumericCellValue, 0);
                 double fmlaResult = 1.2;
                 mcell.SetCellValue(fmlaResult);
-                Assert.AreEqual(fmlaResult, mcell.NumericCellValue);
+                Assert.AreEqual(fmlaResult, mcell.NumericCellValue, 0);
             }
+            workbook.Close();
         }
         [Test]
         public void TestModifyArrayCells_setCellType()
@@ -314,7 +327,7 @@ namespace TestCases.SS.UserModel
                     sheet.SetArrayFormula("SUM(A4:A6,B4:B6)", CellRangeAddress.ValueOf("B5"));
             ICell scell = srange.TopLeftCell;
             Assert.AreEqual(CellType.Formula, scell.CellType);
-            Assert.AreEqual(0.0, scell.NumericCellValue);
+            Assert.AreEqual(0.0, scell.NumericCellValue, 0);
             scell.SetCellType(CellType.String);
             Assert.AreEqual(CellType.String, scell.CellType);
             scell.SetCellValue("string cell");
@@ -342,6 +355,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(CellType.Formula, mcell.CellType);
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
             }
+            workbook.Close();
         }
         [Test]
         public void TestModifyArrayCells_setCellFormula()
@@ -361,9 +375,9 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(scell.IsPartOfArrayFormulaGroup);
             Assert.AreEqual(CellType.Formula, scell.CellType);
             //check that Setting formula result works
-            Assert.AreEqual(0.0, scell.NumericCellValue);
+            Assert.AreEqual(0.0, scell.NumericCellValue, 0);
             scell.SetCellValue(33.0);
-            Assert.AreEqual(33.0, scell.NumericCellValue);
+            Assert.AreEqual(33.0, scell.NumericCellValue, 0);
 
             //multi-cell array formula
             ICellRange<ICell> mrange =
@@ -388,6 +402,8 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual("A1:A3*B1:B3", mcell.CellFormula);
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
             }
+
+            workbook.Close();
         }
         [Test]
         public void TestModifyArrayCells_RemoveCell()
@@ -435,6 +451,8 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
                 Assert.AreEqual(CellType.Formula, mcell.CellType);
             }
+
+            workbook.Close();
         }
         [Test]
         public void TestModifyArrayCells_RemoveRow()
@@ -473,7 +491,7 @@ namespace TestCases.SS.UserModel
                 }
                 catch (InvalidOperationException)
                 {
-                    String msg = "Row[rownum=" + mrow.RowNum + "] Contains cell(s) included in a multi-cell array formula. You cannot change part of an array.";
+                    // String msg = "Row[rownum=" + mrow.RowNum + "] Contains cell(s) included in a multi-cell array formula. You cannot change part of an array.";
                     //Assert.AreEqual(msg, e.Message);
                 }
                 // a failed invocation of Row.RemoveCell leaves the row
@@ -483,6 +501,8 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(mcell.IsPartOfArrayFormulaGroup);
                 Assert.AreEqual(CellType.Formula, mcell.CellType);
             }
+
+            workbook.Close();
         }
         [Test]
         public void TestModifyArrayCells_mergeCells()
@@ -517,6 +537,7 @@ namespace TestCases.SS.UserModel
             }
             //the number of merged regions remains the same
             Assert.AreEqual(1, sheet.NumMergedRegions);
+            workbook.Close();
         }
         [Test]
         public void TestModifyArrayCells_ShiftRows()
@@ -561,6 +582,8 @@ namespace TestCases.SS.UserModel
             }
 
             */
+
+            workbook.Close();
         }
     }
 
