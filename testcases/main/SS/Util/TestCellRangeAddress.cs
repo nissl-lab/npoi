@@ -230,6 +230,50 @@ namespace TestCases.SS.Util
             ref1 = new CellRangeAddress(-1, -1, -1, -1);
             Assert.AreEqual(":", ref1.FormatAsString());
         }
+        [Test]
+        public void TestEquals()
+        {
+            CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
+            CellRangeAddress ref2 = new CellRangeAddress(1, 2, 3, 4);
+            Assert.AreEqual(ref1, ref2);
+
+            // Invert first/last row, but refer to same area
+            ref2.FirstRow = (2);
+            ref2.LastRow = (1);
+            Assert.AreEqual(ref1, ref2);
+
+            // Invert first/last column, but refer to same area
+            ref2.FirstColumn = (4);
+            ref2.LastColumn = (3);
+            Assert.AreEqual(ref1, ref2);
+
+            // Refer to a different area
+            Assert.AreNotEqual(ref1, new CellRangeAddress(3, 4, 1, 2));
+        }
+        [Test]
+        public void TestGetMinMaxRow()
+        {
+            CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
+            Assert.AreEqual(1, ref1.MinRow);
+            Assert.AreEqual(2, ref1.MaxRow);
+
+            ref1.FirstRow = (10);
+            //now ref is CellRangeAddress(10, 2, 3, 4)
+            Assert.AreEqual(2, ref1.MinRow);
+            Assert.AreEqual(10, ref1.MaxRow);
+        }
+        [Test]
+        public void TestGetMinMaxColumn()
+        {
+            CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
+            Assert.AreEqual(3, ref1.MinColumn);
+            Assert.AreEqual(4, ref1.MaxColumn);
+
+            ref1.FirstColumn = (10);
+            //now ref is CellRangeAddress(1, 2, 10, 4)
+            Assert.AreEqual(4, ref1.MinColumn);
+            Assert.AreEqual(10, ref1.MaxColumn);
+        }
 
     }
 }

@@ -98,7 +98,7 @@
         {
             get
             {
-                return (_firstRow == 0 && _lastRow ==SpreadsheetVersion.EXCEL97.LastRowIndex)
+                return (_firstRow == 0 && _lastRow == SpreadsheetVersion.EXCEL97.LastRowIndex)
                     || (_firstRow == -1 && _lastRow == -1);
             }
         }
@@ -174,6 +174,56 @@
             CellReference crA = new CellReference(_firstRow, _firstCol);
             CellReference crB = new CellReference(_lastRow, _lastCol);
             return GetType().Name + " [" + crA.FormatAsString() + ":" + crB.FormatAsString() + "]";
+        }
+
+        // In case _firstRow > _lastRow or _firstCol > _lastCol
+        public int MinRow
+        {
+            get
+            {
+                return Math.Min(_firstRow, _lastRow);
+            }
+        }
+        public int MaxRow
+        {
+            get
+            {
+                return Math.Max(_firstRow, _lastRow);
+            }
+        }
+        public int MinColumn
+        {
+            get
+            {
+                return Math.Min(_firstCol, _lastCol);
+            }
+
+        }
+        public int MaxColumn
+        {
+            get
+            {
+                return Math.Max(_firstCol, _lastCol);
+            }
+        }
+
+
+        public override bool Equals(Object other)
+        {
+            if (other is CellRangeAddressBase) {
+                CellRangeAddressBase o = (CellRangeAddressBase)other;
+                return ((MinRow == o.MinRow) &&
+                        (MaxRow == o.MaxRow) &&
+                        (MinColumn == o.MinColumn) &&
+                        (MaxColumn == o.MaxColumn));
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int[] values = new int[] { MinRow, MaxRow, MinColumn, MaxColumn };
+            return values.GetHashCode();
         }
     }
 }
