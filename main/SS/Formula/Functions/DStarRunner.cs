@@ -262,26 +262,33 @@ namespace NPOI.SS.Formula.Functions
 
 
                     if (!(targetHeader is StringValueEval))
-                        columnCondition = false;
-                    else if (GetColumnForName(targetHeader, db) == -1)
+                    {
+                        throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                    }
+                        
+                    if (GetColumnForName(targetHeader, db) == -1)
                         // No column found, it's again a special column that accepts formulas.
                         columnCondition = false;
 
                     if (columnCondition == true)
                     { // normal column condition
                         // Should not throw, Checked above.
-                        ValueEval target = db.GetValue(
+                        ValueEval value = db.GetValue(
                                 row, GetColumnForName(targetHeader, db));
                         // Must be a string.
                         String conditionString = GetStringFromValueEval(condition);
-                        if (!testNormalCondition(target, conditionString))
-                        {
+                        if (!testNormalCondition(value, condition))
+                        { 
                             matches = false;
                             break;
                         }
                     }
                     else
                     { // It's a special formula condition.
+                        if (string.IsNullOrEmpty(GetStringFromValueEval(condition)))
+                        {
+                            throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                        }
                         throw new NotImplementedException(
                                 "D* function with formula conditions");
                     }
@@ -302,52 +309,110 @@ namespace NPOI.SS.Formula.Functions
          * @return Whether the condition holds.
          * @If comparison operator and operands don't match.
          */
-        private static bool testNormalCondition(ValueEval value, String condition)
-            {
-        if(condition.StartsWith("<")) { // It's a </<= condition.
-            String number = condition.Substring(1);
-            if(number.StartsWith("=")) {
-                number = number.Substring(1);
-                return testNumericCondition(value, Operator.smallerEqualThan, number);
-            } else {
-                return testNumericCondition(value, Operator.smallerThan, number);
-            }
-        }
-        else if(condition.StartsWith(">")) { // It's a >/>= condition.
-            String number = condition.Substring(1);
-            if(number.StartsWith("=")) {
-                number = number.Substring(1);
-                return testNumericCondition(value, Operator.largerEqualThan, number);
-            } else {
-                return testNumericCondition(value, Operator.largerThan, number);
-            }
-        }
-        else if(condition.StartsWith("=")) { // It's a = condition.
-            String stringOrNumber = condition.Substring(1);
-            // Distinguish between string and number.
-            bool itsANumber = false;
-            try {
-                Int32.Parse(stringOrNumber);
-                itsANumber = true;
-            } catch (FormatException) { // It's not an int.
-                try {
-                    Double.Parse(stringOrNumber);
-                    itsANumber = true;
-                } catch (FormatException) { // It's a string.
-                    itsANumber = false;
+        private static bool testNormalCondition(ValueEval value, ValueEval condition)
+        {
+            if (condition is StringEval) {
+                String conditionString = ((StringEval)condition).StringValue;
+
+                if (conditionString.StartsWith("<"))
+                { // It's a </<= condition.
+                    String number = conditionString.Substring(1);
+                    if (number.StartsWith("="))
+                    {
+                        number = number.Substring(1);
+                        return testNumericCondition(value, Operator.smallerEqualThan, number);
+                    }
+                    else
+                    {
+                        return testNumericCondition(value, Operator.smallerThan, number);
+                    }
+                }
+                else if (conditionString.StartsWith(">"))
+                { // It's a >/>= condition.
+                    String number = conditionString.Substring(1);
+                    if (number.StartsWith("="))
+                    {
+                        number = number.Substring(1);
+                        return testNumericCondition(value, Operator.largerEqualThan, number);
+                    }
+                    else
+                    {
+                        return testNumericCondition(value, Operator.largerThan, number);
+                    }
+                }
+                else if (conditionString.StartsWith("="))
+                { // It's a = condition.
+                    String stringOrNumber = conditionString.Substring(1);
+
+                    if (string.IsNullOrEmpty(stringOrNumber))
+                    {
+                        return value is BlankEval;
+                    }
+                    // Distinguish between string and number.
+                    bool itsANumber = false;
+                    try
+                    {
+                        int.Parse(stringOrNumber);
+                        itsANumber = true;
+                    }
+                    catch (FormatException e)
+                    { // It's not an int.
+                        try
+                        {
+                            Double.Parse(stringOrNumber);
+                            itsANumber = true;
+                        }
+                        catch (FormatException e2)
+                        { // It's a string.
+                            itsANumber = false;
+                        }
+                    }
+                    if (itsANumber)
+                    {
+                        return testNumericCondition(value, Operator.equal, stringOrNumber);
+                    }
+                    else
+                    { // It's a string.
+                        String valueString = value is BlankEval ? "" : GetStringFromValueEval(value);
+                        return stringOrNumber.Equals(valueString);
+                    }
+                }
+                else
+                { // It's a text starts-with condition.
+                    if (string.IsNullOrEmpty(conditionString))
+                    {
+                        return value is StringEval;
+                    }
+                    else
+                    {
+                        String valueString = value is BlankEval ? "" : GetStringFromValueEval(value);
+                        return valueString.StartsWith(conditionString);
+                    }
                 }
             }
-            if(itsANumber) {
-                return testNumericCondition(value, Operator.equal, stringOrNumber);
-            } else { // It's a string.
-                String valueString = GetStringFromValueEval(value);
-                return stringOrNumber.Equals(valueString);
+            else if (condition is NumericValueEval) {
+                double conditionNumber = ((NumericValueEval)condition).NumberValue;
+                Double? valueNumber = GetNumerFromValueEval(value);
+                if (valueNumber == null)
+                {
+                    return false;
+                }
+
+                return conditionNumber == valueNumber;
             }
-        } else { // It's a text starts-with condition.
-            String valueString = GetStringFromValueEval(value);
-            return valueString.StartsWith(condition);
+            else if (condition is ErrorEval) {
+                if (value is ErrorEval) {
+                    return ((ErrorEval)condition).ErrorCode == ((ErrorEval)value).ErrorCode;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+            
         }
-    }
 
         /**
          * Test whether a value matches a numeric condition.
@@ -401,6 +466,29 @@ namespace NPOI.SS.Formula.Functions
             return false; // Can not be reached.
         }
 
+        private static Double? GetNumerFromValueEval(ValueEval value)
+        {
+            if (value is NumericValueEval)
+            {
+                return ((NumericValueEval)value).NumberValue;
+            }
+            else if (value is StringValueEval)
+            {
+                String stringValue = ((StringValueEval)value).StringValue;
+                try
+                {
+                    return Double.Parse(stringValue);
+                }
+                catch (FormatException e2)
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
         /**
          * Takes a ValueEval and tries to retrieve a String value from it.
          * It tries to resolve references if there are any.
