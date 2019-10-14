@@ -190,7 +190,7 @@ namespace NPOI.POIFS.Crypt.Dsig.Facets
             //            ResponderIDType responderId = ocspIdentifier.AddNewResponderID();
 
             //            RespID respId = basicOcspResp.ResponderId;
-            //            ResponderID ocspResponderId = respId.ToASN1Object();
+            //            ResponderID ocspResponderId = respId.ToASN1Primitive();
             //            DERTaggedObject derTaggedObject = (DERTaggedObject)ocspResponderId.ToASN1Primitive();
             //            if (2 == derTaggedObject.TagNo) {
             //                ASN1OctetString keyHashOctetString = (ASN1OctetString)derTaggedObject.Object;

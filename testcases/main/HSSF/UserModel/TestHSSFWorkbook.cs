@@ -127,20 +127,7 @@ namespace TestCases.HSSF.UserModel
             c.CreateSheet("Sheet4");
 
         }
-        [Test]
-        public void WindowOneDefaults()
-        {
-            HSSFWorkbook b = new HSSFWorkbook();
-            try
-            {
-                Assert.AreEqual(b.ActiveSheetIndex, 0);
-                Assert.AreEqual(b.FirstVisibleTab, 0);
-            }
-            catch (NullReferenceException)
-            {
-                Assert.Fail("WindowOneRecord in Workbook is probably not initialized");
-            }
-        }
+
         [Test]
         public new void TestSheetSelection()
         {

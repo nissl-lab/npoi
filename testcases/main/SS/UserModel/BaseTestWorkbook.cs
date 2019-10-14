@@ -23,6 +23,8 @@ namespace TestCases.SS.UserModel
     using TestCases.SS;
     using NPOI.SS.UserModel;
     using System.Text;
+    using System.IO;
+    using NPOI.Util;
 
     /**
      * @author Yegor Kozlov
@@ -718,6 +720,92 @@ namespace TestCases.SS.UserModel
             {
                 Assert.AreEqual(sheets[i], wb.GetSheetAt(i).SheetName, "Had: " + sheetNames.ToString());
             }
+        }
+
+
+        protected class NullOutputStream : OutputStream
+        {
+            public NullOutputStream()
+            {
+            }
+
+            public override bool CanRead => throw new NotImplementedException();
+
+            public override bool CanSeek => throw new NotImplementedException();
+
+            public override bool CanWrite => throw new NotImplementedException();
+
+            public override long Length => throw new NotImplementedException();
+
+            public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+            public override void Flush()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void SetLength(long value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Write(int b)
+            {
+            }
+        }
+
+        [Test]
+        public void Test58499()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            for (int i = 0; i < 900; i++)
+            {
+                IRow r = sheet.CreateRow(i);
+                ICell c = r.CreateCell(0);
+                ICellStyle cs = workbook.CreateCellStyle();
+                c.CellStyle = (cs);
+                c.SetCellValue("AAA");
+            }
+            OutputStream os = new NullOutputStream();
+            try
+            {
+                workbook.Write(os);
+            }
+            finally
+            {
+                os.Close();
+            }
+            //workbook.dispose();
+            workbook.Close();
+        }
+
+
+        [Test]
+        public void WindowOneDefaults()
+        {
+            IWorkbook b = _testDataProvider.CreateWorkbook();
+            try
+            {
+                Assert.AreEqual(b.ActiveSheetIndex, 0);
+                Assert.AreEqual(b.FirstVisibleTab, 0);
+            }
+            catch (NullReferenceException)
+            {
+                Assert.Fail("WindowOneRecord in Workbook is probably not initialized");
+            }
+
+            b.Close();
         }
     }
 

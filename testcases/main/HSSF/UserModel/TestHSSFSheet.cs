@@ -790,15 +790,6 @@ namespace TestCases.HSSF.UserModel
             wb2.Close();
             wb1.Close();
         }
-        [Test]
-        public void TestNoMergedRegionsIsEmptyList()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet s = wb.CreateSheet("Sheet1") as HSSFSheet;
-            Assert.IsTrue(s.MergedRegions.Count == 0);
-
-            wb.Close();
-        }
 
         [Test]
         public void TestAutoSizeDate()

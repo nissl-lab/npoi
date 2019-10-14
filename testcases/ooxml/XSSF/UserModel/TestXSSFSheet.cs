@@ -1471,15 +1471,5 @@ namespace NPOI.XSSF.UserModel
 
             wb.Close();
         }
-
-        [Test]
-        public void TestNoMergedRegionsIsEmptyList()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            Assert.IsTrue(sheet.MergedRegions.Count == 0);
-
-            wb.Close();
-        }
     }
 }

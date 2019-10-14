@@ -95,10 +95,11 @@ namespace TestCases.SS.UserModel
             try
             {
                 //Negative rows not allowed
-                Assert.Throws<ArgumentException>(() => {
+                Assert.Throws<ArgumentException>(() =>
+                {
                     sh.CreateRow(-1);
                 });
-                
+
             }
             finally
             {
@@ -158,7 +159,8 @@ namespace TestCases.SS.UserModel
 
             IRow row3 = sheet1.CreateRow(3);
             ISheet sheet2 = workbook.CreateSheet();
-            ArgumentException e = Assert.Throws<ArgumentException>(() => {
+            ArgumentException e = Assert.Throws<ArgumentException>(() =>
+            {
                 sheet2.RemoveRow(row3);
             });
             Assert.AreEqual("Specified row does not belong to this sheet", e.Message);
@@ -1120,6 +1122,14 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestNoMergedRegionsIsEmptyList()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            Assert.IsTrue(sheet.MergedRegions.Count ==0 );
+            wb.Close();
+        }
     }
 
 }
