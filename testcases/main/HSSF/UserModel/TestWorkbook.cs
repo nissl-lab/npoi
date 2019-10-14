@@ -239,6 +239,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(format, workbook.CreateDataFormat());
 
             stream.Close();
+            workbook.Close();
+            wb.Close();
         }
 
         /**
@@ -485,6 +487,7 @@ namespace TestCases.HSSF.UserModel
             wb.BackupFlag = (false);
             Assert.AreEqual(0, record.Backup);
             Assert.IsFalse(wb.BackupFlag);
+            wb.Close();
         }
 
         private class RecordCounter : RecordVisitor
@@ -527,6 +530,7 @@ namespace TestCases.HSSF.UserModel
             RecordCounter rc = new RecordCounter();
             sheet.Sheet.VisitContainedRecords(rc, 0);
             Assert.AreEqual(1, rc.GetCount());
+            workbook.Close();
         }
 
         [Test]
@@ -580,6 +584,8 @@ namespace TestCases.HSSF.UserModel
             fileOut.Close();
 
             Assert.IsTrue(File.Exists(filepath), "file exists");
+
+            workbook.Close();
         }
 
         [Test]
@@ -616,10 +622,11 @@ namespace TestCases.HSSF.UserModel
             workbook.Write(fileOut);
             fileOut.Close();
             Assert.IsTrue(file.Exists, "file exists");
+            workbook.Close();
         }
 
         [Test]
-        public void testAddMergedRegionWithRegion()
+        public void TestAddMergedRegionWithRegion()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet s = wb.CreateSheet();
@@ -649,6 +656,82 @@ namespace TestCases.HSSF.UserModel
 
             ConfirmRegion(new CellRangeAddress(0, 0, 10, 10), r1);
             ConfirmRegion(new CellRangeAddress(30, 40, 5, 15), r2);
+
+            wb.Close();
+        }
+
+
+        [Test]
+        public void TestBug58085RemoveSheetWithNames()
+        {
+            reReadWithRemovedSheetWithName(WriteWithRemovedSheetWithName());
+        }
+
+        private static HSSFWorkbook WriteWithRemovedSheetWithName()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet1 = workbook.CreateSheet("sheet1");
+            ISheet sheet2 = workbook.CreateSheet("sheet2");
+            ISheet sheet3 = workbook.CreateSheet("sheet3");
+
+            sheet1.CreateRow(0).CreateCell((short)0).SetCellValue("val1");
+            sheet2.CreateRow(0).CreateCell((short)0).SetCellValue("val2");
+            sheet3.CreateRow(0).CreateCell((short)0).SetCellValue("val3");
+
+            IName namedCell1 = workbook.CreateName();
+            namedCell1.NameName = (/*setter*/"name1");
+            String reference1 = "sheet1!$A$1";
+            namedCell1.RefersToFormula = (/*setter*/reference1);
+
+            IName namedCell2 = workbook.CreateName();
+            namedCell2.NameName = (/*setter*/"name2");
+            String reference2 = "sheet2!$A$1";
+            namedCell2.RefersToFormula = (/*setter*/reference2);
+
+            IName namedCell3 = workbook.CreateName();
+            namedCell3.NameName = (/*setter*/"name3");
+            String reference3 = "sheet3!$A$1";
+            namedCell3.RefersToFormula = (/*setter*/reference3);
+
+            return workbook;
+        }
+
+        private static void reReadWithRemovedSheetWithName(HSSFWorkbook workbookBefore)
+        {
+            IWorkbook workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbookBefore);
+
+            Console.WriteLine("Before removing sheet1...");
+
+            IName nameCell = workbook.GetName("name1");
+            Console.WriteLine("name1: " + nameCell.RefersToFormula);
+
+            nameCell = workbook.GetName("name2");
+            Console.WriteLine("name2: " + nameCell.RefersToFormula);
+
+            nameCell = workbook.GetName("name3");
+            Console.WriteLine("name3: " + nameCell.RefersToFormula);
+
+            workbook.RemoveSheetAt(workbook.GetSheetIndex("sheet1"));
+
+            /*FileOutputStream fos = new FileOutputStream(AFTER_FILE);
+            try {
+                workbook.Write(fos);
+            } finally {
+                fos.Close();
+            }*/
+
+            Console.WriteLine("\nAfter removing sheet1...");
+
+            nameCell = workbook.GetName("name1");
+            Console.WriteLine("name1: " + nameCell.RefersToFormula);
+
+            nameCell = workbook.GetName("name2");
+            Console.WriteLine("name2: " + nameCell.RefersToFormula);
+
+            nameCell = workbook.GetName("name3");
+            Console.WriteLine("name3: " + nameCell.RefersToFormula);
+
+            workbook.Close();
         }
     }
 }

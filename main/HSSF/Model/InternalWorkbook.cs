@@ -898,10 +898,10 @@ namespace NPOI.HSSF.Model
             if (linkTable != null)
             {
                 // also tell the LinkTable about the removed sheet
-                // +1 because we already removed it from the count of sheets!
-                for (int i = sheetIndex + 1; i < NumSheets + 1; i++)
+                //index hasn't change in the linktable
+                //if (linkTable != null)
                 {
-                    linkTable.RemoveSheet(i);
+                    linkTable.RemoveSheet(sheetIndex);
                 }
             }
         }
