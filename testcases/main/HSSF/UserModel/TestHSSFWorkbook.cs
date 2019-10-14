@@ -1279,35 +1279,42 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestRewriteFileBug58480()
         {
-            FileInfo file = new FileInfo(
-                "HSSFWorkbookTest-testWriteScenario.xls");
-
-            // create new workbook
+            FileInfo file = TempFile.CreateTempFile("TestHSSFWorkbook", ".xls");
+            try
             {
-                IWorkbook workbook = new HSSFWorkbook();
-                ISheet sheet = workbook.CreateSheet("foo");
-                IRow row = sheet.CreateRow(1);
-                row.CreateCell(1).SetCellValue("bar");
-
-                writeAndCloseWorkbook(workbook, file);
-            }
-
-            // edit the workbook
-            {
-                NPOIFSFileSystem fs = new NPOIFSFileSystem(file, false);
-                try
+                // create new workbook
                 {
-                    DirectoryNode root = fs.Root;
-                    IWorkbook workbook = new HSSFWorkbook(root, true);
-                    ISheet sheet = workbook.GetSheet("foo");
-                    sheet.GetRow(1).CreateCell(2).SetCellValue("baz");
+                    IWorkbook workbook = new HSSFWorkbook();
+                    ISheet sheet = workbook.CreateSheet("foo");
+                    IRow row = sheet.CreateRow(1);
+                    row.CreateCell(1).SetCellValue("bar");
 
                     writeAndCloseWorkbook(workbook, file);
                 }
-                finally
+
+                // edit the workbook
                 {
-                    fs.Close();
+                    NPOIFSFileSystem fs = new NPOIFSFileSystem(file, false);
+                    try
+                    {
+                        DirectoryNode root = fs.Root;
+                        IWorkbook workbook = new HSSFWorkbook(root, true);
+                        ISheet sheet = workbook.GetSheet("foo");
+                        sheet.GetRow(1).CreateCell(2).SetCellValue("baz");
+
+                        writeAndCloseWorkbook(workbook, file);
+                    }
+                    finally
+                    {
+                        fs.Close();
+                    }
                 }
+            }
+            finally
+            {
+                Assert.IsTrue(file.Exists);
+                file.Delete();
+                Assert.IsTrue(!File.Exists(file.FullName));
             }
         }
 
@@ -1320,7 +1327,7 @@ namespace TestCases.HSSF.UserModel
             byte[] byteArray = bytesOut.ToByteArray();
             bytesOut.Close();
 
-            FileStream fileOut = new FileStream(file.FullName, FileMode.Create, FileAccess.ReadWrite);
+            FileStream fileOut = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             fileOut.Write(byteArray, 0, byteArray.Length);
             fileOut.Close();
 
