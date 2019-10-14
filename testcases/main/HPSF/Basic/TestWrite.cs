@@ -815,7 +815,6 @@ namespace TestCases.HPSF.Basic
          * Tests that when using NPOIFS, we can do an in-place write
          *  without needing to stream in + out the whole kitchen sink
          */
-        [Ignore("poi ignore")]
         [Test]
         public void TestInPlaceNPOIFSWrite()
         {

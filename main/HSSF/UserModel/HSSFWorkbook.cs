@@ -1319,60 +1319,64 @@ namespace NPOI.HSSF.UserModel
         /// <param name="stream">the java OutputStream you wish to Write the XLS to</param>
         public override void Write(Stream stream)
         {
-            byte[] bytes = GetBytes();
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
-
-            if (this.DocumentSummaryInformation == null)
+            try
             {
-                this.DocumentSummaryInformation = HPSF.PropertySetFactory.CreateDocumentSummaryInformation();
-            }
-            NPOI.HPSF.CustomProperties cp = this.DocumentSummaryInformation.CustomProperties;
-            if(cp==null)
-            {
-                cp= new NPOI.HPSF.CustomProperties();
-            }
-            cp.Put("Generator", "NPOI");
-            cp.Put("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
-            this.DocumentSummaryInformation.CustomProperties = cp;
-            if (this.SummaryInformation == null)
-            {
-                this.SummaryInformation = HPSF.PropertySetFactory.CreateSummaryInformation();
-            }            
-            this.SummaryInformation.ApplicationName = "NPOI";
-
-            // For tracking what we've written out, used if we're
-            //  going to be preserving nodes
-            List<string> excepts = new List<string>(1);
-
-            using (MemoryStream newMemoryStream = new MemoryStream(bytes))
-            {
-                // Write out the Workbook stream
-                fs.CreateDocument(newMemoryStream, "Workbook");
-
-                // Write out our HPFS properties, if we have them
-                WriteProperties(fs, excepts);
-
-                if (preserveNodes)
+                if (this.DocumentSummaryInformation == null)
                 {
-                    // Don't Write out the old Workbook, we'll be doing our new one
-                    // If the file had an "incorrect" name for the workbook stream,
-                    // don't write the old one as we'll use the correct name shortly
-                    excepts.AddRange(WORKBOOK_DIR_ENTRY_NAMES);
-
-                    // Copy over all the other nodes to our new poifs
-                    EntryUtils.CopyNodes(
-                            new FilteringDirectoryNode(this.directory, excepts)
-                            , new FilteringDirectoryNode(fs.Root, excepts)
-                    );
-                    // YK: preserve StorageClsid, it is important for embedded workbooks,
-                    // see Bugzilla 47920
-                    fs.Root.StorageClsid = (this.directory.StorageClsid);
+                    this.DocumentSummaryInformation = HPSF.PropertySetFactory.CreateDocumentSummaryInformation();
                 }
-                fs.WriteFileSystem(stream);
+                NPOI.HPSF.CustomProperties cp = this.DocumentSummaryInformation.CustomProperties;
+                if (cp == null)
+                {
+                    cp = new NPOI.HPSF.CustomProperties();
+                }
+                cp.Put("Generator", "NPOI");
+                cp.Put("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+                this.DocumentSummaryInformation.CustomProperties = cp;
+                if (this.SummaryInformation == null)
+                {
+                    this.SummaryInformation = HPSF.PropertySetFactory.CreateSummaryInformation();
+                }
+                this.SummaryInformation.ApplicationName = "NPOI";
 
+                // For tracking what we've written out, used if we're
+                //  going to be preserving nodes
+                List<string> excepts = new List<string>(1);
+
+                using (MemoryStream newMemoryStream = new MemoryStream(GetBytes()))
+                {
+                    // Write out the Workbook stream
+                    fs.CreateDocument(newMemoryStream, "Workbook");
+
+                    // Write out our HPFS properties, if we have them
+                    WriteProperties(fs, excepts);
+
+                    if (preserveNodes)
+                    {
+                        // Don't Write out the old Workbook, we'll be doing our new one
+                        // If the file had an "incorrect" name for the workbook stream,
+                        // don't write the old one as we'll use the correct name shortly
+                        excepts.AddRange(WORKBOOK_DIR_ENTRY_NAMES);
+
+                        // Copy over all the other nodes to our new poifs
+                        EntryUtils.CopyNodes(
+                                new FilteringDirectoryNode(this.directory, excepts)
+                                , new FilteringDirectoryNode(fs.Root, excepts)
+                        );
+                        // YK: preserve StorageClsid, it is important for embedded workbooks,
+                        // see Bugzilla 47920
+                        fs.Root.StorageClsid = (this.directory.StorageClsid);
+                    }
+                    fs.WriteFileSystem(stream);
+
+                }
+            }
+            finally
+            {
+                fs.Close();
             }
             
-            bytes = null;
         }
 
         /// <summary>

@@ -1269,10 +1269,61 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(found, "Should find some images via Client or Child anchors, but did not find any at all");
         }
 
-	    [Test]
-	    public void Bug47245()
-	    {
-		    Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("47245_test.xls"));
-	    }
-	}
+        [Test]
+        [Ignore("not found in poi 3.14")]
+        public void Bug47245()
+        {
+            Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("47245_test.xls"));
+        }
+
+        [Test]
+        public void TestRewriteFileBug58480()
+        {
+            FileInfo file = new FileInfo(
+                "HSSFWorkbookTest-testWriteScenario.xls");
+
+            // create new workbook
+            {
+                IWorkbook workbook = new HSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("foo");
+                IRow row = sheet.CreateRow(1);
+                row.CreateCell(1).SetCellValue("bar");
+
+                writeAndCloseWorkbook(workbook, file);
+            }
+
+            // edit the workbook
+            {
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(file, false);
+                try
+                {
+                    DirectoryNode root = fs.Root;
+                    IWorkbook workbook = new HSSFWorkbook(root, true);
+                    ISheet sheet = workbook.GetSheet("foo");
+                    sheet.GetRow(1).CreateCell(2).SetCellValue("baz");
+
+                    writeAndCloseWorkbook(workbook, file);
+                }
+                finally
+                {
+                    fs.Close();
+                }
+            }
+        }
+
+        private void writeAndCloseWorkbook(IWorkbook workbook, FileInfo file)
+        {
+            ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+            workbook.Write(bytesOut);
+            workbook.Close();
+
+            byte[] byteArray = bytesOut.ToByteArray();
+            bytesOut.Close();
+
+            FileStream fileOut = new FileStream(file.FullName, FileMode.Create, FileAccess.ReadWrite);
+            fileOut.Write(byteArray, 0, byteArray.Length);
+            fileOut.Close();
+
+        }
+    }
 }
