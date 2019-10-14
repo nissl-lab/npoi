@@ -137,7 +137,7 @@ namespace NPOI.SS.Formula
                 case ShiftMode.Row:
                     return AdjustPtgDueToRowMove(ptg, currentExternSheetIx);
                 case ShiftMode.Sheet:
-                    return AdjustPtgDueToShiftMove(ptg);
+                    return AdjustPtgDueToSheetMove(ptg);
                 default:
                     throw new InvalidOperationException("Unsupported shift mode: " + _mode);
             }
@@ -214,7 +214,7 @@ namespace NPOI.SS.Formula
             }
             return null;
         }
-        private Ptg AdjustPtgDueToShiftMove(Ptg ptg)
+        private Ptg AdjustPtgDueToSheetMove(Ptg ptg)
         {
             Ptg updatedPtg = null;
             if (ptg is Ref3DPtg)
