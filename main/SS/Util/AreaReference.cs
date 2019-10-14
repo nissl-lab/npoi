@@ -31,15 +31,16 @@ namespace NPOI.SS.Util
         private const char CELL_DELIMITER = ':';
         /** The Char (') used to quote sheet names when they contain special Chars */
         private const char SPECIAL_NAME_DELIMITER = '\'';
+        private static SpreadsheetVersion DEFAULT_SPREADSHEET_VERSION = SpreadsheetVersion.EXCEL97;
 
         private CellReference _firstCell;
         private CellReference _lastCell;
         private bool _isSingleCell;
-        private SpreadsheetVersion _version;
+        private SpreadsheetVersion _version; // never null
 
         [Obsolete]
         public AreaReference(String reference)
-            : this(reference, SpreadsheetVersion.EXCEL97)
+            : this(reference, DEFAULT_SPREADSHEET_VERSION)
         {
             
         }
@@ -50,7 +51,7 @@ namespace NPOI.SS.Util
          */
         public AreaReference(String reference, SpreadsheetVersion version)
         {
-            _version = version;
+            _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
             if (!IsContiguous(reference))
             {
                 throw new ArgumentException(
@@ -123,11 +124,19 @@ namespace NPOI.SS.Util
         }
         public static AreaReference GetWholeRow(SpreadsheetVersion version, String start, String end)
         {
+            if (null == version)
+            {
+                version = DEFAULT_SPREADSHEET_VERSION;
+            }
             return new AreaReference("$A" + start + ":$" + version.LastColumnName + end, version);
         }
 
         public static AreaReference GetWholeColumn(SpreadsheetVersion version, String start, String end)
         {
+            if (null == version)
+            {
+                version = DEFAULT_SPREADSHEET_VERSION;
+            }
             return new AreaReference(start + "$1:" + end + "$" + version.MaxRows, version);
         }
 
@@ -137,9 +146,7 @@ namespace NPOI.SS.Util
          */
         public AreaReference(CellReference topLeft, CellReference botRight)
         {
-            //_firstCell = topLeft;
-            //_lastCell = botRight;
-            //_isSingleCell = false;
+            _version = DEFAULT_SPREADSHEET_VERSION;
 
             bool swapRows = topLeft.Row > botRight.Row;
             bool swapCols = topLeft.Col > botRight.Col;
