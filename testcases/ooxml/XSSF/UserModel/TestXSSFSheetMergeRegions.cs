@@ -32,26 +32,46 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57893-many-merges.xlsx");
             try
             {
-                XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                //long start = System.CurrentTimeMillis();
-                List<CellRangeAddress> mergedRegions = sheet.MergedRegions;
-                Assert.AreEqual(50000, mergedRegions.Count);
-                foreach (CellRangeAddress cellRangeAddress in mergedRegions)
+                long millis = long.MaxValue;
+
+                // in order to reduce the number of false positives we run it a few times before we fail, 
+                // sometimes it fails on machines that are busy at the moment.  
+                for (int i = 0; i < 5; i++)
                 {
-                    Assert.AreEqual(cellRangeAddress.FirstRow, cellRangeAddress.LastRow);
-                    Assert.AreEqual(2, cellRangeAddress.NumberOfCells);
+                    millis = runTest(wb);
+                    if (millis < 2000)
+                    {
+                        break;
+                    }
+                    System.Console.WriteLine("Retry " + i + " because run-time is too high: " + millis);
                 }
-                //long millis = System.CurrentTimeMillis() - start;
-                stopwatch.Stop();
-                long millis = stopwatch.ElapsedMilliseconds;
-                // This time is typically ~800ms, versus ~7800ms to iterate GetMergedRegion(int).
+
+                // This time is typically ~800ms, versus ~7800ms to iterate getMergedRegion(int).
                 Assert.IsTrue(millis < 2000, "Should have taken <2000 ms to iterate 50k merged regions but took " + millis);
             }
             finally
             {
                 wb.Close();
             }
+        }
+
+        private long runTest(XSSFWorkbook wb)
+        {
+            //long start = System.currentTimeMillis();
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            List<CellRangeAddress> mergedRegions = sheet.MergedRegions;
+            Assert.AreEqual(50000, mergedRegions.Count);
+            foreach (CellRangeAddress cellRangeAddress in mergedRegions)
+            {
+                Assert.AreEqual(cellRangeAddress.FirstRow, cellRangeAddress.LastRow);
+                Assert.AreEqual(2, cellRangeAddress.NumberOfCells);
+            }
+            //long millis = System.CurrentTimeMillis() - start;
+            stopwatch.Stop();
+            long millis = stopwatch.ElapsedMilliseconds;
+            return millis;
         }
     }
 }
