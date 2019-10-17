@@ -1004,7 +1004,7 @@ namespace NPOI.XSSF.UserModel
             try
             {
                 // as the file is written to, we make a copy before actually working on it
-                FileHelper.CopyFile("test-data/spreadsheet/56957.xlsx", file.FullName);
+                FileHelper.CopyFile(HSSFTestDataSamples.GetSampleFile("56957.xlsx"), file);
 
                 Assert.IsTrue(file.Exists);
 
