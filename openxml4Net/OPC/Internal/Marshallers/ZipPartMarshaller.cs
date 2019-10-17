@@ -34,6 +34,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 // exception
             }
 
+            // check if there is anything to save for some parts. We don't do this for all parts as some code
+            // might depend on empty parts being saved, e.g. some unit tests verify this currently.
+            if (part.Size == 0 && part.PartName.Name.Equals("/xl/sharedStrings.xml"))
+            {
+                return true;
+            }
+
             ZipOutputStream zos = (ZipOutputStream)os;
             string name = ZipHelper
                     .GetZipItemNameFromOPCName(part.PartName.URI

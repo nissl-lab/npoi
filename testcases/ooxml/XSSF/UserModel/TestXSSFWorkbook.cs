@@ -913,5 +913,129 @@ namespace NPOI.XSSF.UserModel
             //        workbook.write(fileOutputStream);
             //        fileOutputStream.close();  
         }
+
+        [Test]
+        /**
+         *  Iterator<XSSFSheet> XSSFWorkbook.iterator was committed in r700472 on 2008-09-30
+         *  and has been replaced with Iterator<Sheet> XSSFWorkbook.iterator
+         * 
+         *  In order to make code for looping over sheets in workbooks standard, regardless
+         *  of the type of workbook (HSSFWorkbook, XSSFWorkbook, SXSSFWorkbook), the previously
+         *  available Iterator<XSSFSheet> iterator and Iterator<XSSFSheet> sheetIterator
+         *  have been replaced with Iterator<Sheet>  {@link #iterator} and
+         *  Iterator<Sheet> {@link #sheetIterator}. This makes iterating over sheets in a workbook
+         *  similar to iterating over rows in a sheet and cells in a row.
+         *  
+         *  Note: this breaks backwards compatibility! Existing codebases will need to
+         *  upgrade their code with either of the following options presented in this test case.
+         *  
+         */
+        public void Bug58245_XSSFSheetIterator()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                wb.CreateSheet();
+
+                // =====================================================================
+                // Case 1: Existing code uses XSSFSheet for-each loop
+                // =====================================================================
+                // Original code (no longer valid)
+                /*
+                for (XSSFSheet sh : wb) {
+                    sh.createRow(0);
+                }
+                */
+
+                // Option A:
+                foreach (XSSFSheet sh in wb)
+                {
+                    sh.CreateRow(0);
+                }
+
+                // Option B (preferred for new code):
+                foreach (ISheet sh in wb)
+                {
+                    sh.CreateRow(0);
+                }
+
+                // =====================================================================
+                // Case 2: Existing code creates an iterator variable
+                // =====================================================================
+                // Original code (no longer valid)
+                /*
+                Iterator<XSSFSheet> it = wb.iterator();
+                XSSFSheet sh = it.next();
+                sh.createRow(0);
+                */
+
+                // Option A:
+                {
+                    IEnumerator<XSSFSheet> it = wb.GetEnumerator() as IEnumerator<XSSFSheet>;
+                    XSSFSheet sh = it.Current;
+                    sh.CreateRow(0);
+                }
+
+                // Option B:
+                {
+                    //IEnumerator<XSSFSheet> it = wb.XssfSheetIterator();
+                    //XSSFSheet sh = it.Current;
+                    //sh.CreateRow(0);
+                }
+
+                // Option C (preferred for new code):
+                {
+                    IEnumerator<ISheet> it = wb.GetEnumerator() as IEnumerator<ISheet>;
+                    ISheet sh = it.Current;
+                    sh.CreateRow(0);
+                }
+            }
+            finally
+            {
+                IOUtils.CloseQuietly(wb);
+            }
+        }
+
+        [Test]
+        public void testBug56957CloseWorkbook()
+        {
+            FileInfo file = TempFile.CreateTempFile("TestBug56957_", ".xlsx");
+
+            try
+            {
+                // as the file is written to, we make a copy before actually working on it
+                FileHelper.CopyFile("test-data/spreadsheet/56957.xlsx", file.FullName);
+
+                Assert.IsTrue(file.Exists);
+
+                // read-only mode works!
+                IWorkbook workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
+                //System.out.println(workbook.getSheetAt(0).getRow(0).getCell(0, Row.CREATE_NULL_AS_BLANK).getDateCellValue().toString());
+                workbook.Close();
+                workbook = null;
+
+                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
+                //System.out.println(workbook.getSheetAt(0).getRow(0).getCell(0, Row.CREATE_NULL_AS_BLANK).getDateCellValue().toString());
+                workbook.Close();
+                workbook = null;
+
+                // now check read/write mode
+                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE));
+                //System.out.println(workbook.getSheetAt(0).getRow(0).getCell(0, Row.CREATE_NULL_AS_BLANK).getDateCellValue().toString());
+                workbook.Close();
+                workbook = null;
+
+                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE));
+                //System.out.println(workbook.getSheetAt(0).getRow(0).getCell(0, Row.CREATE_NULL_AS_BLANK).getDateCellValue().toString());
+                workbook.Close();
+                workbook = null;
+            }
+            finally
+            {
+                Assert.IsTrue(file.Exists);
+                file.Delete();
+                Assert.IsTrue(!file.Exists);
+            }
+        }
     }
 }
