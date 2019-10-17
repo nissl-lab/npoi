@@ -637,20 +637,28 @@ namespace NPOI.XSSF.UserModel
             StringBuilder buf = new StringBuilder();
             MatchCollection mc = utfPtrn.Matches(value);
             int idx = 0;
-            for (int i = 0; i < mc.Count;i++ )
+            for (int i = 0; i < mc.Count; i++)
             {
-                    int pos = mc[i].Index;
-                    if (pos > idx)
-                    {
-                        buf.Append(value.Substring(idx, pos-idx));
-                    }
-
-                    String code = mc[i].Groups[1].Value;
-                    int icode = Int32.Parse(code, System.Globalization.NumberStyles.AllowHexSpecifier);
-                    buf.Append((char)icode);
-
-                    idx = mc[i].Index+mc[i].Length;
+                int pos = mc[i].Index;
+                if (pos > idx)
+                {
+                    buf.Append(value.Substring(idx, pos - idx));
                 }
+
+                String code = mc[i].Groups[1].Value;
+                int icode = Int32.Parse(code, System.Globalization.NumberStyles.AllowHexSpecifier);
+                buf.Append((char)icode);
+
+                idx = mc[i].Index + mc[i].Length;
+            }
+
+            // small optimization: don't go via StringBuilder if not necessary, 
+            // the encodings are very rare, so we should almost always go via this shortcut. 
+            if (idx == 0)
+            {
+                return value;
+            }
+
             buf.Append(value.Substring(idx));
             return buf.ToString();
         }
