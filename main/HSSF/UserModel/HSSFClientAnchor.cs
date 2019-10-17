@@ -19,6 +19,7 @@
 namespace NPOI.HSSF.UserModel
 {
     using NPOI.DDF;
+    using NPOI.SS;
     using NPOI.SS.UserModel;
     using System;
 
@@ -30,6 +31,9 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFClientAnchor : HSSFAnchor, IClientAnchor
     {
+        public static int MAX_COL = SpreadsheetVersion.EXCEL97.LastColumnIndex;
+        public static int MAX_ROW = SpreadsheetVersion.EXCEL97.LastRowIndex;
+
         private EscherClientAnchorRecord _escherClientAnchor;
         public HSSFClientAnchor(EscherClientAnchorRecord escherClientAnchorRecord)
         {
@@ -69,15 +73,15 @@ namespace NPOI.HSSF.UserModel
             CheckRange(dx2, 0, 1023, "dx2");
             CheckRange(dy1, 0, 255, "dy1");
             CheckRange(dy2, 0, 255, "dy2");
-            CheckRange(col1, 0, 255, "col1");
-            CheckRange(col2, 0, 255, "col2");
-            CheckRange(row1, 0, 255 * 256, "row1");
-            CheckRange(row2, 0, 255 * 256, "row2");
+            CheckRange(col1, 0, MAX_COL, "col1");
+            CheckRange(col2, 0, MAX_COL, "col2");
+            CheckRange(row1, 0, MAX_ROW, "row1");
+            CheckRange(row2, 0, MAX_ROW, "row2");
 
-            Col1=((short)Math.Min(col1, col2));
-            Col2=((short)Math.Max(col1, col2));
-            Row1=((short)Math.Min(row1, row2));
-            Row2=((short)Math.Max(row1, row2));
+            Col1 = ((short)Math.Min(col1, col2));
+            Col2 = ((short)Math.Max(col1, col2));
+            Row1 = Math.Min(row1, row2);
+            Row2 = Math.Max(row1, row2);
 
             if (col1 > col2)
             {
@@ -143,7 +147,7 @@ namespace NPOI.HSSF.UserModel
             get { return _escherClientAnchor.Col1; }
             set
             {
-                CheckRange(value, 0, 255, "col1");
+                CheckRange(value, 0, MAX_COL, "col1");
                 _escherClientAnchor.Col1 = (short)value;
             }
         }
@@ -157,7 +161,7 @@ namespace NPOI.HSSF.UserModel
             get { return _escherClientAnchor.Col2; }
             set
             {
-                CheckRange(value, 0, 255, "col2");
+                CheckRange(value, 0, MAX_COL, "col2");
                 _escherClientAnchor.Col2 = (short)value;
             }
         }
@@ -168,10 +172,10 @@ namespace NPOI.HSSF.UserModel
         /// <value>The row1.</value>
         public int Row1
         {
-            get { return _escherClientAnchor.Row1; }
+            get { return unsignedValue(_escherClientAnchor.Row1); }
             set
             {
-                CheckRange(value, 0, 256 * 256, "row1");
+                CheckRange(value, 0, MAX_ROW, "row1");
                 _escherClientAnchor.Row1 = (short)value; 
             }
         }
@@ -182,10 +186,10 @@ namespace NPOI.HSSF.UserModel
         /// <value>The row2.</value>
         public int Row2
         {
-            get { return _escherClientAnchor.Row2; }
+            get { return unsignedValue(_escherClientAnchor.Row2); }
             set
             {
-                CheckRange(value, 0, 256 * 256, "row2");
+                CheckRange(value, 0, MAX_ROW, "row2");
                 _escherClientAnchor.Row2 = (short)value;
             }
         }
@@ -212,10 +216,10 @@ namespace NPOI.HSSF.UserModel
             CheckRange(x2, 0, 1023, "dx2");
             CheckRange(y1, 0, 255, "dy1");
             CheckRange(y2, 0, 255, "dy2");
-            CheckRange(col1, 0, 255, "col1");
-            CheckRange(col2, 0, 255, "col2");
-            CheckRange(row1, 0, 255 * 256, "row1");
-            CheckRange(row2, 0, 255 * 256, "row2");
+            CheckRange(col1, 0, MAX_COL, "col1");
+            CheckRange(col2, 0, MAX_COL, "col2");
+            CheckRange(row1, 0, MAX_ROW, "row1");
+            CheckRange(row2, 0, MAX_ROW, "row2");
 
             this.Col1 = col1;
             this.Row1 = row1;
@@ -287,6 +291,17 @@ namespace NPOI.HSSF.UserModel
         protected override void CreateEscherAnchor()
         {
             _escherClientAnchor = new EscherClientAnchorRecord();
+        }
+
+        /**
+         * Given a 16-bit unsigned integer stored in a short, return the unsigned value.
+         *
+         * @param s A 16-bit value intended to be interpreted as an unsigned integer.
+         * @return The value represented by <code>s</code>.
+         */
+        private static int unsignedValue(short s)
+        {
+            return (s < 0 ? 0x10000 + s : s);
         }
 
         public override bool Equals(Object obj)
