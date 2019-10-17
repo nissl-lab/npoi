@@ -146,6 +146,42 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(exp3dp, fmt.FormatCellValue(r.GetCell(3), eval), "Wrong formatting of " + value + " for row " + rn);
             }
         }
+
+        /**
+         * Localised accountancy formats
+         */
+         [Test]
+        public void Test58536()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            DataFormatter formatter = new DataFormatter();
+            IDataFormat fmt = wb.CreateDataFormat();
+            ISheet sheet = wb.CreateSheet();
+            IRow r = sheet.CreateRow(0);
+
+            char pound = '\u00A3';
+            String formatUK = "_-[$" + pound + "-809]* #,##0_-;\\-[$" + pound + "-809]* #,##0_-;_-[$" + pound + "-809]* \"-\"??_-;_-@_-";
+
+            ICellStyle cs = wb.CreateCellStyle();
+            cs.DataFormat = (fmt.GetFormat(formatUK));
+
+            ICell pve = r.CreateCell(0);
+            pve.SetCellValue(12345);
+            pve.CellStyle = (cs);
+
+            ICell nve = r.CreateCell(1);
+            nve.SetCellValue(-12345);
+            nve.CellStyle = (cs);
+
+            ICell zero = r.CreateCell(2);
+            zero.SetCellValue(0);
+            zero.CellStyle = (cs);
+
+            Assert.AreEqual(pound + "   12,345", formatter.FormatCellValue(pve));
+            Assert.AreEqual("-" + pound + "   12,345", formatter.FormatCellValue(nve));
+            // TODO Fix this to not have an extra 0 at the end
+            //assertEquals(pound+"   -  ", formatter.formatCellValue(zero)); 
+        }
     }
 }
 

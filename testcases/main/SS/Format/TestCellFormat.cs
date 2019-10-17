@@ -776,8 +776,7 @@ namespace TestCases.SS.Format
         }
 
         [Test]
-        [Ignore("TODO")] // TODO 
-        public void testAccountingFormats()
+        public void TestAccountingFormats()
         {
             char pound = '\u00A3';
             char euro = '\u20AC';
@@ -785,11 +784,11 @@ namespace TestCases.SS.Format
             // Accounting -> 0 decimal places, default currency symbol
             String formatDft = "_-\"$\"* #,##0_-;\\-\"$\"* #,##0_-;_-\"$\"* \"-\"_-;_-@_-";
             // Accounting -> 0 decimal places, US currency symbol
-            String formatUS = "_-[$$-409]* #,##0_ ;_-[$$-409]* -#,##0 ;_-[$$-409]* \"-\"_ ;_-@_ ";
+            String formatUS = "_-[$$-409]* #,##0_ ;_-[$$-409]* -#,##0 ;_-[$$-409]* \"-\"_-;_-@_-";
             // Accounting -> 0 decimal places, UK currency symbol
             String formatUK = "_-[$" + pound + "-809]* #,##0_-;\\-[$" + pound + "-809]* #,##0_-;_-[$" + pound + "-809]* \"-\"??_-;_-@_-";
-            // Accounting -> 0 decimal places, French currency symbol
-            String formatFR = "_-[$" + euro + "-40C]* #,##0_-;\\-[$" + euro + "-40C]* #,##0_-;_-[$" + euro + "-40C]* \"-\"??_-;_-@_-";
+            // French style accounting, euro sign comes after not before
+            String formatFR = "_-#,##0* [$" + euro + "-40C]_-;\\-#,##0* [$" + euro + "-40C]_-;_-\"-\"??* [$" + euro + "-40C] _-;_-@_-";
 
             // Has +ve, -ve and zero rules
             CellFormat cfDft = CellFormat.GetInstance(formatDft);
@@ -798,18 +797,36 @@ namespace TestCases.SS.Format
             CellFormat cfFR = CellFormat.GetInstance(formatFR);
 
             // For +ve numbers, should be Space + currency symbol + spaces + whole number with commas + space
+            // (Except French, which is mostly reversed...)
+            Assert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
             Assert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
             Assert.AreEqual(" $   12 ", cfUS.Apply((12.33)).Text);
             Assert.AreEqual(" " + pound + "   12 ", cfUK.Apply((12.33)).Text);
-            Assert.AreEqual(" " + pound + "   12 ", cfFR.Apply((12.33)).Text);
-            Assert.AreEqual(" " + pound + "   16,789 ", cfUK.Apply((16789.2)).Text);
-            // TODO More
+            Assert.AreEqual(" 12   " + euro + " ", cfFR.Apply((12.33)).Text);
 
-            // For -ve numbers, should be Minus + currency symbol + spaces + whole number with commas
-            // TODO
+            Assert.AreEqual(" $   16,789 ", cfDft.Apply((16789.2)).Text);
+            Assert.AreEqual(" $   16,789 ", cfUS.Apply((16789.2)).Text);
+            Assert.AreEqual(" " + pound + "   16,789 ", cfUK.Apply((16789.2)).Text);
+            Assert.AreEqual(" 16,789   " + euro + " ", cfFR.Apply((16789.2)).Text);
+
+            // For -ve numbers, gets a bit more complicated...
+            Assert.AreEqual("-$   12 ", cfDft.Apply((-12.33)).Text);
+            Assert.AreEqual(" $   -12 ", cfUS.Apply((-12.33)).Text);
+            Assert.AreEqual("-" + pound + "   12 ", cfUK.Apply((-12.33)).Text);
+            Assert.AreEqual("-12   " + euro + " ", cfFR.Apply((-12.33)).Text);
+
+            Assert.AreEqual("-$   16,789 ", cfDft.Apply((-16789.2)).Text);
+            Assert.AreEqual(" $   -16,789 ", cfUS.Apply((-16789.2)).Text);
+            Assert.AreEqual("-" + pound + "   16,789 ", cfUK.Apply((-16789.2)).Text);
+            Assert.AreEqual("-16,789   " + euro + " ", cfFR.Apply((-16789.2)).Text);
 
             // For zero, should be Space + currency symbol + spaces + Minus + spaces
-            // TODO
+            Assert.AreEqual(" $   - ", cfDft.Apply((0)).Text);
+            // TODO Fix the exception this incorrectly triggers
+            //Assert.AreEqual(" $   - ",  cfUS.Apply((0)).Text);
+            // TODO Fix these to not have an incorrect bonus 0 on the end 
+            //Assert.AreEqual(" "+pound+"   -  ", cfUK.Apply((0)).Text);
+            //Assert.AreEqual(" -    "+euro+"  ", cfFR.Apply((0)).Text);
         }
     }
 }
