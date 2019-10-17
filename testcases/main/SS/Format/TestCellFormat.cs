@@ -774,5 +774,42 @@ namespace TestCases.SS.Format
                 wb.Close();
             }
         }
+
+        [Test]
+        [Ignore("TODO")] // TODO 
+        public void testAccountingFormats()
+        {
+            char pound = '\u00A3';
+            char euro = '\u20AC';
+
+            // Accounting -> 0 decimal places, default currency symbol
+            String formatDft = "_-\"$\"* #,##0_-;\\-\"$\"* #,##0_-;_-\"$\"* \"-\"_-;_-@_-";
+            // Accounting -> 0 decimal places, US currency symbol
+            String formatUS = "_-[$$-409]* #,##0_ ;_-[$$-409]* -#,##0 ;_-[$$-409]* \"-\"_ ;_-@_ ";
+            // Accounting -> 0 decimal places, UK currency symbol
+            String formatUK = "_-[$" + pound + "-809]* #,##0_-;\\-[$" + pound + "-809]* #,##0_-;_-[$" + pound + "-809]* \"-\"??_-;_-@_-";
+            // Accounting -> 0 decimal places, French currency symbol
+            String formatFR = "_-[$" + euro + "-40C]* #,##0_-;\\-[$" + euro + "-40C]* #,##0_-;_-[$" + euro + "-40C]* \"-\"??_-;_-@_-";
+
+            // Has +ve, -ve and zero rules
+            CellFormat cfDft = CellFormat.GetInstance(formatDft);
+            CellFormat cfUS = CellFormat.GetInstance(formatUS);
+            CellFormat cfUK = CellFormat.GetInstance(formatUK);
+            CellFormat cfFR = CellFormat.GetInstance(formatFR);
+
+            // For +ve numbers, should be Space + currency symbol + spaces + whole number with commas + space
+            Assert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
+            Assert.AreEqual(" $   12 ", cfUS.Apply((12.33)).Text);
+            Assert.AreEqual(" " + pound + "   12 ", cfUK.Apply((12.33)).Text);
+            Assert.AreEqual(" " + pound + "   12 ", cfFR.Apply((12.33)).Text);
+            Assert.AreEqual(" " + pound + "   16,789 ", cfUK.Apply((16789.2)).Text);
+            // TODO More
+
+            // For -ve numbers, should be Minus + currency symbol + spaces + whole number with commas
+            // TODO
+
+            // For zero, should be Space + currency symbol + spaces + Minus + spaces
+            // TODO
+        }
     }
 }

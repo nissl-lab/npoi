@@ -67,8 +67,33 @@ namespace NPOI.SS.UserModel
      * default FormatBase will only be used when a FormatBase cannot be Created from the
      * cell's data FormatBase string.
      *
-     * @author James May (james dot may at fmr dot com)
-     *
+     * <p>
+     * Note that by default formatted numeric values are trimmed.
+     * Excel formats can contain spacers and padding and the default behavior is to strip them off.
+     * </p>
+     * <p>Example:</p>
+     * <p>
+     * Consider a numeric cell with a value <code>12.343</code> and format <code>"##.##_ "</code>.
+     *  The trailing underscore and space ("_ ") in the format adds a space to the end and Excel formats this cell as <code>"12.34 "</code>,
+     *  but <code>DataFormatter</code> trims the formatted value and returns <code>"12.34"</code>.
+     * </p>
+     * You can enable spaces by passing the <code>emulateCsv=true</code> flag in the <code>DateFormatter</code> cosntructor.
+     * If set to true, then the output tries to conform to what you get when you take an xls or xlsx in Excel and Save As CSV file:
+     * <ul>
+     *  <li>returned values are not trimmed</li>
+     *  <li>Invalid dates are formatted as  255 pound signs ("#")</li>
+     *  <li>simulate Excel's handling of a format string of all # when the value is 0.
+     *   Excel will output "", <code>DataFormatter</code> will output "0".</li>
+     * </ul>
+     * <p>
+     *  Some formats are automatically "localised" by Excel, eg show as mm/dd/yyyy when
+     *   loaded in Excel in some Locales but as dd/mm/yyyy in others. These are always
+     *   returned in the "default" (US) format, as stored in the file. 
+     *  Some format strings request an alternate locale, eg 
+     *   <code>[$-809]d/m/yy h:mm AM/PM</code> which explicitly requests UK locale.
+     *   These locale directives are (currently) ignored.
+     *  You can use {@link DateFormatConverter} to do some of this localisation if
+     *   you need it. 
      */
     public class DataFormatter
     {
@@ -86,10 +111,10 @@ namespace NPOI.SS.UserModel
         private static string localePatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
 
         /*
-     * A regex to match the colour formattings rules.
-     * Allowed colours are: Black, Blue, Cyan, Green,
-     *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
-     */
+         * A regex to match the colour formattings rules.
+         * Allowed colours are: Black, Blue, Cyan, Green,
+         *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
+         */
         private static Regex colorPattern = new Regex("(\\[BLACK\\])|(\\[BLUE\\])|(\\[CYAN\\])|(\\[GREEN\\])|" +
             "(\\[MAGENTA\\])|(\\[RED\\])|(\\[WHITE\\])|(\\[YELLOW\\])|" +
             "(\\[COLOR\\s*\\d\\])|(\\[COLOR\\s*[0-5]\\d\\])", RegexOptions.IgnoreCase);
@@ -238,7 +263,7 @@ namespace NPOI.SS.UserModel
                         cellValueO = DateUtil.GetJavaDate(cellValue);
                     }
                     // Wrap and return (non-cachable - CellFormat does that)
-                    return new CellFormatResultWrapper(cfmt.Apply(cellValueO));
+                    return new CellFormatResultWrapper(cfmt.Apply(cellValueO), emulateCsv);
                 }
                 catch (Exception e)
                 {
@@ -1009,13 +1034,22 @@ namespace NPOI.SS.UserModel
         private class CellFormatResultWrapper : FormatBase
         {
             private CellFormatResult result;
-            internal CellFormatResultWrapper(CellFormatResult result)
+            private bool emulateCsv;
+            internal CellFormatResultWrapper(CellFormatResult result, bool emulateCsv)
             {
+                this.emulateCsv = emulateCsv;
                 this.result = result;
             }
             public override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
             {
-                return toAppendTo.Append(result.Text);
+                if (emulateCsv)
+                {
+                    return toAppendTo.Append(result.Text);
+                }
+                else
+                {
+                    return toAppendTo.Append(result.Text.Trim());
+                }
             }
 
             public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
