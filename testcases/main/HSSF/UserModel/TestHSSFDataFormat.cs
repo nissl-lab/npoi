@@ -38,32 +38,12 @@ namespace TestCases.HSSF.UserModel
 
         }
         /**
-* [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
-*/
+        * [Bug 49928] formatCellValue returns incorrect value for \u00a3 formatted cells
+        */
         [Test]
         public new void Test49928()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49928.xls");
-            //string poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
-            //DataFormatter df = new DataFormatter();
-
-            //ISheet sheet = wb.GetSheetAt(0);
-            //ICell cell = sheet.GetRow(0).GetCell(0);
-            //ICellStyle style = cell.CellStyle;
-
-            //// not expected normally, id of a custom format should be greater 
-            //// than BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX
-            //short poundFmtIdx = 6;
-
-            //Assert.AreEqual(poundFmt, style.GetDataFormatString());
-            //Assert.AreEqual(poundFmtIdx, style.DataFormat);
-            //Assert.AreEqual("\u00a31", df.FormatCellValue(cell));
-
-
-            //IDataFormat dataFormat = wb.CreateDataFormat();
-            //Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
-            //Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
-
             doTest49928Core(wb);
 
             // an attempt to register an existing format returns its index
@@ -77,8 +57,17 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("\u00a3##.00[Yellow]", dataFormat.GetFormat(customFmtIdx));
         }
         /**
-     * Bug 51378: GetDataFormatString method call crashes when Reading the test file
-     */
+         * [Bug 58532] Handle formats that go numnum, numK, numM etc 
+         */
+        [Test]
+        public void test58532()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xls");
+            doTest58532Core(wb);
+        }
+        /**
+         * Bug 51378: GetDataFormatString method call crashes when Reading the test file
+         */
         [Test]
         public void Test51378()
         {

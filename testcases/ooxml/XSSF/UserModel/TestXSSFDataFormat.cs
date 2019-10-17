@@ -53,6 +53,16 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(customFmtIdx > BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
             Assert.AreEqual("\u00a3##.00[Yellow]", dataFormat.GetFormat(customFmtIdx));
         }
+
+        /**
+         * [Bug 58532] Handle formats that go numnum, numK, numM etc 
+         */
+        [Test]
+        public void Test58532()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xlsx");
+            doTest58532Core(wb);
+        }
     }
 
 }

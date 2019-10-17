@@ -24,6 +24,7 @@ namespace NPOI.SS.UserModel
 
     using NPOI.SS.Util;
     using System.Globalization;
+    using NPOI.SS.Format;
 
 
 
@@ -216,6 +217,35 @@ namespace NPOI.SS.UserModel
             //      String formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
 
             String formatStr = formatStrIn;
+
+            // Excel supports 3+ part conditional data formats, eg positive/negative/zero,
+            //  or (>1000),(>0),(0),(negative). As Java doesn't handle these kinds
+            //  of different formats for different ranges, just +ve/-ve, we need to 
+            //  handle these ourselves in a special way.
+            // For now, if we detect 3+ parts, we call out to CellFormat to handle it
+            // TODO Going forward, we should really merge the logic between the two classes
+            if (formatStr.IndexOf(";") != -1 &&
+                    formatStr.IndexOf(';') != formatStr.LastIndexOf(';'))
+            {
+                try
+                {
+                    // Ask CellFormat to get a formatter for it
+                    CellFormat cfmt = CellFormat.GetInstance(formatStr);
+                    // CellFormat requires callers to identify date vs not, so do so
+                    object cellValueO = (cellValue);
+                    if (DateUtil.IsADateFormat(formatIndex, formatStr))
+                    {
+                        cellValueO = DateUtil.GetJavaDate(cellValue);
+                    }
+                    // Wrap and return (non-cachable - CellFormat does that)
+                    return new CellFormatResultWrapper(cfmt.Apply(cellValueO));
+                }
+                catch (Exception e)
+                {
+                    //logger.log(POILogger.WARN, "Formatting failed as " + formatStr + ", falling back", e);
+                }
+            }
+
             // Excel supports positive/negative/zero, but java
             // doesn't, so we need to do it specially
             int firstAt = formatStr.IndexOf(';');
@@ -266,7 +296,7 @@ namespace NPOI.SS.UserModel
 
             // Build a formatter, and cache it
             format = CreateFormat(cellValue, formatIndex, formatStr);
-            formats[formatStr] = format;
+            //formats[formatStr] = format;
             return format;
         }
 
@@ -350,7 +380,7 @@ namespace NPOI.SS.UserModel
                     //take the first match
                     if (fractionMatcher.Success)
                     {
-                        String wholePart = (fractionMatcher.Groups[1] == null||!fractionMatcher.Groups[1].Success) ? "" : defaultFractionWholePartFormat;
+                        String wholePart = (fractionMatcher.Groups[1] == null || !fractionMatcher.Groups[1].Success) ? "" : defaultFractionWholePartFormat;
                         return new FractionFormat(wholePart, fractionMatcher.Groups[3].Value);
                     }
                 }
@@ -791,10 +821,12 @@ namespace NPOI.SS.UserModel
             // original method.
             String result;
             String textValue = NumberToTextConverter.ToText(value);
-            if (textValue.IndexOf('E') > -1) {
+            if (textValue.IndexOf('E') > -1)
+            {
                 result = numberFormat.Format(value);
             }
-            else {
+            else
+            {
                 result = numberFormat.Format(textValue);
             }
             // Complete scientific notation by adding the missing +.
@@ -941,7 +973,7 @@ namespace NPOI.SS.UserModel
      */
         public void Update(IObservable<object> observable, object localeObj)
         {
-            if (!(localeObj is CultureInfo))  return;
+            if (!(localeObj is CultureInfo)) return;
             CultureInfo newLocale = (CultureInfo)localeObj;
             if (newLocale.Equals(currentCulture)) return;
 
@@ -968,6 +1000,33 @@ namespace NPOI.SS.UserModel
             FormatBase ssnFormat = SSNFormat.instance;
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
+        }
+
+        /**
+         * Workaround until we merge {@link DataFormatter} with {@link CellFormat}.
+         * Constant, non-cachable wrapper around a {@link CellFormatResult} 
+         */
+        private class CellFormatResultWrapper : FormatBase
+        {
+            private CellFormatResult result;
+            internal CellFormatResultWrapper(CellFormatResult result)
+            {
+                this.result = result;
+            }
+            public override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
+            {
+                return toAppendTo.Append(result.Text);
+            }
+
+            public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override Object ParseObject(String source, int pos)
+            {
+                return null; // Not supported
+            }
         }
     }
 }

@@ -103,6 +103,49 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
             Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
         }
+
+        public void doTest58532Core(IWorkbook wb)
+        {
+            ISheet s = wb.GetSheetAt(0);
+            DataFormatter fmt = new DataFormatter();
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            // Column A is the raw values
+            // Column B is the ##/#K/#M values
+            // Column C is strings of what they should look like
+            // Column D is the #.##/#.#K/#.#M values
+            // Column E is strings of what they should look like
+
+            String formatKMWhole = "[>999999]#,,\"M\";[>999]#,\"K\";#";
+            String formatKM3dp = "[>999999]#.000,,\"M\";[>999]#.000,\"K\";#.000";
+
+            // Check the formats are as expected
+            IRow headers = s.GetRow(0);
+            Assert.IsNotNull(headers);
+            Assert.AreEqual(formatKMWhole, headers.GetCell(1).StringCellValue);
+            Assert.AreEqual(formatKM3dp, headers.GetCell(3).StringCellValue);
+
+            IRow r2 = s.GetRow(1);
+            Assert.IsNotNull(r2);
+            Assert.AreEqual(formatKMWhole, r2.GetCell(1).CellStyle.GetDataFormatString());
+            Assert.AreEqual(formatKM3dp, r2.GetCell(3).CellStyle.GetDataFormatString());
+
+            // For all of the contents rows, check that DataFormatter is able
+            //  to format the cells to the same value as the one next to it
+            for (int rn = 1; rn < s.LastRowNum; rn++)
+            {
+                IRow r = s.GetRow(rn);
+                if (r == null) break;
+
+                double value = r.GetCell(0).NumericCellValue;
+
+                String expWhole = r.GetCell(2).StringCellValue;
+                String exp3dp = r.GetCell(4).StringCellValue;
+
+                Assert.AreEqual(expWhole, fmt.FormatCellValue(r.GetCell(1), eval), "Wrong formatting of " + value + " for row " + rn);
+                Assert.AreEqual(exp3dp, fmt.FormatCellValue(r.GetCell(3), eval), "Wrong formatting of " + value + " for row " + rn);
+            }
+        }
     }
 }
 

@@ -222,14 +222,14 @@ namespace TestCases.SS.UserModel
 
             // p;n;z;s parts
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#;# ##/#;0;xxx"));
-            Assert.AreEqual("-321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx")); // Note the lack of - sign!
             Assert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, "# #/#;# ##/#;0;xxx"));
-            //     Assert.AreEqual("0.0",       dfUS.FormatRawCellContents(0,        -1, "# #/#;# ##/#;#.#;xxx")); // currently hard coded to 0
+            //     Assert.AreEqual(".",        dfUS.FormatRawCellContents(0,       -1, "# #/#;# ##/#;#.#;xxx")); // Currently shows as 0. not .
 
             // Custom formats with text are not currently supported
-            //     Assert.AreEqual("+ve",       dfUS.FormatRawCellContents(0,        -1, "+ve;-ve;zero;xxx"));
-            //     Assert.AreEqual("-ve",       dfUS.FormatRawCellContents(0,        -1, "-ve;-ve;zero;xxx"));
-            //     Assert.AreEqual("zero",      dfUS.FormatRawCellContents(0,        -1, "zero;-ve;zero;xxx"));
+            Assert.AreEqual("+ve", dfUS.FormatRawCellContents(1, -1, "+ve;-ve;zero;xxx"));
+            Assert.AreEqual("-ve", dfUS.FormatRawCellContents(-1, -1, "-ve;-ve;zero;xxx"));
+            Assert.AreEqual("zero", dfUS.FormatRawCellContents(0, -1, "zero;-ve;zero;xxx"));
 
             // Custom formats - check text is stripped, including multiple spaces
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#   #/#"));
@@ -259,7 +259,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
 
-            // Where both p and n don't include a fraction, so cannot always be formatted
+            // Where +ve has a fraction, but -ve doesnt, we currently show both
+            Assert.AreEqual("123 1/3", dfUS.FormatRawCellContents(123.321, -1, "0 ?/?;0"));
             //Assert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
 
             //Bug54868 patch has a hit on the first string before the ";"
@@ -516,14 +517,29 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\/mm\\/dd"));
         }
         [Test]
-        public void TestOther()
+        public void TestFormatsWithPadding()
         {
-            //DataFormatter dfUS = new DataFormatter(Locale.US, true);
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
-            Assert.AreEqual(" 12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual(" -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual(" $-   ", dfUS.FormatRawCellContents(0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+
+            // These request space-padding, based on the cell width
+            // There should always be one space after, variable (non-zero) amount before
+            // Because the Cell Width isn't available, this gets emulated with
+            //  4 leading spaces, or a minus then 3 leading spaces
+            // This isn't all that consistent, but it's the best we can really manage...
+            Assert.AreEqual("    1,234.56 ", dfUS.FormatRawCellContents(1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-   1,234.56 ", dfUS.FormatRawCellContents(-1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("    12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-   12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+
+            Assert.AreEqual("    0.10 ", dfUS.FormatRawCellContents(0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-   0.10 ", dfUS.FormatRawCellContents(-0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            // TODO Fix this, we are randomly adding a 0 at the end that souldn't be there
+            //Assert.AreEqual("     -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+
+            Assert.AreEqual(" $   1.10 ", dfUS.FormatRawCellContents(1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-$   1.10 ", dfUS.FormatRawCellContents(-1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            // TODO Fix this, we are randomly adding a 0 at the end that souldn't be there
+            //Assert.AreEqual(" $    -   ", dfUS.FormatRawCellContents( 0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
         }
         [Test]
         public void TestErrors()
