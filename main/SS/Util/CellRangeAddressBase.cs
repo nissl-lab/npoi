@@ -1,13 +1,15 @@
 ﻿namespace NPOI.SS.Util
 {
     using System;
+    using System.Drawing;
+
     /**
-     * See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'<p/>
-     * 
-     * Common subclass of 8-bit and 16-bit versions
-     * 
-     * @author Josh Micich
-     */
+* See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'<p/>
+* 
+* Common subclass of 8-bit and 16-bit versions
+* 
+* @author Josh Micich
+*/
     public abstract class CellRangeAddressBase
     {
 
@@ -110,6 +112,52 @@
                     || (_firstCol == -1 && _lastCol == -1);
             }
         }
+
+
+        /**
+         * Determines whether or not this CellRangeAddress and the specified CellRangeAddress intersect.
+         *
+         * @param other
+         * @return
+         */
+        public bool Intersects(CellRangeAddressBase other)
+        {
+            // see java.awt.Rectangle.intersects
+            // http://stackoverflow.com/questions/13390333/two-rectangles-intersection
+
+            // TODO: Replace with an intersection code that doesn't rely on java.awt
+            return GetRectangle().IntersectsWith(other.GetRectangle());
+        }
+
+        // TODO: Replace with an intersection code that doesn't rely on java.awt
+        // Don't let this temporary implementation detail leak outside of this class
+        private Rectangle GetRectangle()
+        {
+            int firstRow, firstCol, lastRow, lastCol;
+
+            if (!IsFullColumnRange)
+            {
+                firstRow = Math.Min(_firstRow, _lastRow);
+                lastRow = Math.Max(_firstRow, _lastRow);
+            }
+            else
+            {
+                firstRow = 0;
+                lastRow = int.MaxValue;
+            }
+            if (!IsFullRowRange)
+            {
+                firstCol = Math.Min(_firstCol, _lastCol);
+                lastCol = Math.Max(_firstCol, _lastCol);
+            }
+            else
+            {
+                firstCol = 0;
+                lastCol = int.MaxValue;
+            }
+            return new Rectangle(firstRow, firstCol, lastRow - firstRow + 1, lastCol - firstCol + 1);
+        }
+
 
         /**
          * @return column number for the upper left hand corner

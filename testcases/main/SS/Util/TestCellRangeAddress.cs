@@ -275,5 +275,36 @@ namespace TestCases.SS.Util
             Assert.AreEqual(10, ref1.MaxColumn);
         }
 
+        [Test]
+        public void TestIntersects()
+        {
+            CellRangeAddress baseRegion = new CellRangeAddress(0, 1, 0, 1);
+
+            CellRangeAddress duplicateRegion = new CellRangeAddress(0, 1, 0, 1);
+            assertIntersects(baseRegion, duplicateRegion);
+
+            CellRangeAddress partiallyOverlappingRegion = new CellRangeAddress(1, 2, 1, 2);
+            assertIntersects(baseRegion, partiallyOverlappingRegion);
+
+            CellRangeAddress subsetRegion = new CellRangeAddress(0, 1, 0, 0);
+            assertIntersects(baseRegion, subsetRegion);
+
+            CellRangeAddress supersetRegion = new CellRangeAddress(0, 2, 0, 2);
+            assertIntersects(baseRegion, supersetRegion);
+
+            CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
+            assertNotIntersects(baseRegion, disjointRegion);
+        }
+
+        private static void assertIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
+        {
+            Assert.IsTrue(regionA.Intersects(regionB));
+            Assert.IsTrue(regionB.Intersects(regionA));
+        }
+        private static void assertNotIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
+        {
+            Assert.IsFalse(regionA.Intersects(regionB));
+            Assert.IsFalse(regionB.Intersects(regionA));
+        }
     }
 }

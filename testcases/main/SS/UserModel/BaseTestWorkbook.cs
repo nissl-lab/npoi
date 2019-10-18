@@ -406,7 +406,7 @@ namespace TestCases.SS.UserModel
             sheet.CreateRow(0).CreateCell(0).SetCellValue("Test");
             sheet.CreateRow(1).CreateCell(0).SetCellValue(36.6);
             sheet.AddMergedRegion(new CellRangeAddress(0, 1, 0, 2));
-            sheet.AddMergedRegion(new CellRangeAddress(1, 2, 0, 2));
+            sheet.AddMergedRegion(new CellRangeAddress(2, 3, 0, 2));
             Assert.IsTrue(sheet.IsSelected);
 
             ISheet ClonedSheet = book.CloneSheet(0);
@@ -415,16 +415,16 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, ClonedSheet.NumMergedRegions);
             Assert.IsFalse(ClonedSheet.IsSelected);
 
-            //Cloned sheet is a deep copy, Adding rows in the original does not affect the clone
+            //Cloned sheet is a deep copy, Adding rows or merged regions in the original does not affect the clone
             sheet.CreateRow(2).CreateCell(0).SetCellValue(1);
-            sheet.AddMergedRegion(new CellRangeAddress(0, 2, 0, 2));
+            sheet.AddMergedRegion(new CellRangeAddress(4, 5, 0, 2));
             Assert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
-            Assert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
+            Assert.AreEqual(2, ClonedSheet.NumMergedRegions);
 
             ClonedSheet.CreateRow(2).CreateCell(0).SetCellValue(1);
             ClonedSheet.AddMergedRegion(new CellRangeAddress(0, 2, 0, 2));
             Assert.AreEqual(3, ClonedSheet.PhysicalNumberOfRows);
-            Assert.AreEqual(3, ClonedSheet.PhysicalNumberOfRows);
+            Assert.AreEqual(3, ClonedSheet.NumMergedRegions);
 
         }
 

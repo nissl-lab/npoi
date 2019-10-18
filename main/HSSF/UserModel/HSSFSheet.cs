@@ -629,31 +629,22 @@ namespace NPOI.HSSF.UserModel
             set { _sheet.IsGridsPrinted = (value); }
         }
 
-
-        /// <summary>
-        /// Adds a merged region of cells (hence those cells form one)
-        /// </summary>
-        /// <param name="region">The region (rowfrom/colfrom-rowto/colto) to merge.</param>
-        /// <returns>index of this region</returns>
-        [Obsolete]
-        public int AddMergedRegion(NPOI.SS.Util.Region region)
-        {
-            return _sheet.AddMergedRegion(region.RowFrom,
-                    region.ColumnFrom,
-                    region.RowTo,
-                    region.ColumnTo);
-        }
         /// <summary>
         /// adds a merged region of cells (hence those cells form one)
         /// </summary>
         /// <param name="region">region (rowfrom/colfrom-rowto/colto) to merge</param>
         /// <returns>index of this region</returns>
-        public int AddMergedRegion(NPOI.SS.Util.CellRangeAddress region)
+        /// <exception cref="System.InvalidOperationException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
+        public int AddMergedRegion(CellRangeAddress region)
         {
             region.Validate(SpreadsheetVersion.EXCEL97);
             // throw IllegalStateException if the argument CellRangeAddress intersects with
             // a multi-cell array formula defined in this sheet
             ValidateArrayFormulas(region);
+            // Throw IllegalStateException if the argument CellRangeAddress intersects with
+            // a merged region already in this sheet
+            ValidateMergedRegions(region);
 
             return _sheet.AddMergedRegion(region.FirstRow,
                     region.FirstColumn,
@@ -692,6 +683,19 @@ namespace NPOI.HSSF.UserModel
             }
 
         }
+
+        private void ValidateMergedRegions(CellRangeAddress candidateRegion)
+        {
+            foreach (CellRangeAddress existingRegion in MergedRegions)
+            {
+                if (existingRegion.Intersects(candidateRegion))
+                {
+                    throw new InvalidOperationException("Cannot add merged region " + candidateRegion.FormatAsString() +
+                            " to sheet because it overlaps with an existing merged region (" + existingRegion.FormatAsString() + ").");
+                }
+            }
+        }
+
         /// <summary>
         /// Whether a record must be Inserted or not at generation to indicate that
         /// formula must be recalculated when _workbook is opened.

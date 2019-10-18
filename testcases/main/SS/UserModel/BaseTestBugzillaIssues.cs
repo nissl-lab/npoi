@@ -129,14 +129,14 @@ namespace TestCases.SS.UserModel
          * Merged regions were being Removed from the parent in Cloned sheets
          */
         [Test]
-        public void Test22720()
+        public void TestBug22720()
         {
             IWorkbook workBook = _testDataProvider.CreateWorkbook();
             workBook.CreateSheet("TEST");
             ISheet template = workBook.GetSheetAt(0);
 
             template.AddMergedRegion(new CellRangeAddress(0, 1, 0, 2));
-            template.AddMergedRegion(new CellRangeAddress(1, 2, 0, 2));
+            template.AddMergedRegion(new CellRangeAddress(2, 3, 0, 2));
 
             ISheet clone = workBook.CloneSheet(0);
             int originalMerged = template.NumMergedRegions;
@@ -159,7 +159,7 @@ namespace TestCases.SS.UserModel
 
         }
         [Test]
-        public void Test28031()
+        public void TestBug28031()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();

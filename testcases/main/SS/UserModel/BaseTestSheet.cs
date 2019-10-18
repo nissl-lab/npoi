@@ -274,6 +274,64 @@ namespace TestCases.SS.UserModel
             wb2.Close();
         }
 
+
+        /**
+         * Dissallow creating wholly or partially overlapping merged regions
+         * as this results in a corrupted workbook
+         */
+        [Test]
+        public void AddOverlappingMergedRegions()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            CellRangeAddress baseRegion = new CellRangeAddress(0, 1, 0, 1);
+            sheet.AddMergedRegion(baseRegion);
+
+            try
+            {
+                CellRangeAddress duplicateRegion = new CellRangeAddress(0, 1, 0, 1);
+                sheet.AddMergedRegion(duplicateRegion);
+                Assert.Fail("Should not be able to add a merged region if sheet already contains the same merged region");
+            }
+            catch (InvalidOperationException)
+            {
+            } //expected
+
+            try
+            {
+                CellRangeAddress partiallyOverlappingRegion = new CellRangeAddress(1, 2, 1, 2);
+                sheet.AddMergedRegion(partiallyOverlappingRegion);
+                Assert.Fail("Should not be able to add a merged region if it partially overlaps with an existing merged region");
+            }
+            catch (InvalidOperationException)
+            {
+            } //expected
+
+            try
+            {
+                CellRangeAddress subsetRegion = new CellRangeAddress(0, 1, 0, 0);
+                sheet.AddMergedRegion(subsetRegion);
+                Assert.Fail("Should not be able to add a merged region if it is a formal subset of an existing merged region");
+            }
+            catch (InvalidOperationException)
+            {
+            } //expected
+
+            try
+            {
+                CellRangeAddress supersetRegion = new CellRangeAddress(0, 2, 0, 2);
+                sheet.AddMergedRegion(supersetRegion);
+                Assert.Fail("Should not be able to add a merged region if it is a formal superset of an existing merged region");
+            }
+            catch (InvalidOperationException)
+            {
+            } //expected
+
+            CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
+            sheet.AddMergedRegion(disjointRegion); //allowed
+        }
+
         /**
          * Test Adding merged regions. If the region's bounds are outside of the allowed range
          * then an ArgumentException should be thrown
@@ -337,13 +395,13 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             CellRangeAddress region = new CellRangeAddress(0, 1, 0, 1);
             sheet.AddMergedRegion(region);
-            region = new CellRangeAddress(1, 2, 0, 1);
+            region = new CellRangeAddress(2, 3, 0, 1);
             sheet.AddMergedRegion(region);
 
             sheet.RemoveMergedRegion(0);
 
             region = sheet.GetMergedRegion(0);
-            Assert.AreEqual(1, region.FirstRow, "Left over region should be starting at row 1");
+            Assert.AreEqual(2, region.FirstRow, "Left over region should be starting at row 2");
 
             sheet.RemoveMergedRegion(0);
 
