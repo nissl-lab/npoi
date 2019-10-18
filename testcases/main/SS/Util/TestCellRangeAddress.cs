@@ -298,13 +298,21 @@ namespace TestCases.SS.Util
 
         private static void assertIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
         {
-            Assert.IsTrue(regionA.Intersects(regionB));
-            Assert.IsTrue(regionB.Intersects(regionA));
+            if (!(regionA.Intersects(regionB) && regionB.Intersects(regionA)))
+            {
+                String A = regionA.FormatAsString();
+                String B = regionB.FormatAsString();
+                Assert.Fail("expected: regions " + A + " and " + B + " intersect");
+            }
         }
         private static void assertNotIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
         {
-            Assert.IsFalse(regionA.Intersects(regionB));
-            Assert.IsFalse(regionB.Intersects(regionA));
+            if ((regionA.Intersects(regionB) || regionB.Intersects(regionA)))
+            {
+                String A = regionA.FormatAsString();
+                String B = regionB.FormatAsString();
+                Assert.Fail("expected: regions " + A + " and " + B + " do not intersect");
+            }
         }
     }
 }
