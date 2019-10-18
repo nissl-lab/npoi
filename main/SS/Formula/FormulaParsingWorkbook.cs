@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula
     using System;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
     /**
@@ -41,7 +42,13 @@ namespace NPOI.SS.Formula
         IEvaluationName GetName(String name, int sheetIndex);
 
         /// <summary>
-        /// Gets the name XPTG.
+        /// Return the underlying workbook
+        /// </summary>
+        /// <returns></returns>
+        IName CreateName();
+
+        /// <summary>
+        /// Return an external name (named range, function, user-defined function) Ptg
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sheet"></param>

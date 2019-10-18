@@ -135,7 +135,16 @@ namespace NPOI.XSSF.UserModel
                 return fileName;
             }
         }
-
+        /// <summary>
+        /// Return EvaluationName wrapper around the matching XSSFName (named range)
+        /// </summary>
+        /// <param name="name">case-aware but case-insensitive named range in workbook</param>
+        /// <param name="sheetIndex">index of sheet if named range scope is limited to one sheet
+        ///   if named range scope is global to the workbook, sheetIndex is -1.</param>
+        /// <returns>If name is a named range in the workbook, returns
+        /// EvaluationName corresponding to that named range 
+        /// Returns null if there is no named range with the same name and scope in the workbook
+        /// </returns>
         public IEvaluationName GetName(String name, int sheetIndex)
         {
             for (int i = 0; i < _uBook.NumberOfNames; i++)
@@ -146,7 +155,7 @@ namespace NPOI.XSSF.UserModel
                 if (name.Equals(nameText, StringComparison.CurrentCultureIgnoreCase) &&
                        (nameSheetindex == -1 || nameSheetindex == sheetIndex))
                 {
-                    return new Name(_uBook.GetNameAt(i) as XSSFName, i, this);
+                    return new Name(nm, i, this);
                 }
             }
             return sheetIndex == -1 ? null : GetName(name, -1);
@@ -196,6 +205,12 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        /// <summary>
+        /// Return an external name (named range, function, user-defined function) Pxg
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
         public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             // First, try to find it as a User Defined Function
@@ -338,6 +353,10 @@ namespace NPOI.XSSF.UserModel
         {
             int ix = namePtg.Index;
             return new Name(_uBook.GetNameAt(ix) as XSSFName, ix, this);
+        }
+        public IName CreateName()
+        {
+            return _uBook.CreateName();
         }
 
         public UDFFinder GetUDFFinder()

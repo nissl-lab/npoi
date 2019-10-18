@@ -55,6 +55,11 @@ using NPOI.Util;
             _iBook = book.Workbook;
         }
 
+        public IName CreateName()
+        {
+            return _uBook.CreateName();
+        }
+
         public int GetExternalSheetIndex(String sheetName)
         {
             int sheetIndex = _uBook.GetSheetIndex(sheetName);
@@ -84,6 +89,13 @@ using NPOI.Util;
             int extIx = GetSheetExtIx(sheet);
             return new Area3DPtg(areaRef, extIx);
         }
+
+        /// <summary>
+        /// Return an external name (named range, function, user-defined function) Ptg
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
         public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             int sheetRefIndex = GetSheetExtIx(sheet);
