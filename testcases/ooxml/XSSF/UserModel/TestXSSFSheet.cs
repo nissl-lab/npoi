@@ -1358,10 +1358,10 @@ namespace NPOI.XSSF.UserModel
 
             Assert.IsNotNull(wb);
             Assert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
             Assert.IsNotNull(pivotTable);
             Assert.IsTrue(wb.PivotTables.Count > 0);
-            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("L5"), sheet);
+            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("L5"), sheet);
             Assert.IsNotNull(pivotTable2);
             Assert.IsTrue(wb.PivotTables.Count > 1);
 
@@ -1376,12 +1376,12 @@ namespace NPOI.XSSF.UserModel
 
             Assert.IsNotNull(wb);
             Assert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
             Assert.IsNotNull(pivotTable);
             Assert.IsTrue(wb.PivotTables.Count > 0);
             Assert.IsNotNull(wb);
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
-            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"), sheet);
+            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"), sheet);
             Assert.IsNotNull(pivotTable2);
             Assert.IsTrue(wb.PivotTables.Count > 1);
 
@@ -1396,7 +1396,7 @@ namespace NPOI.XSSF.UserModel
 
             Assert.IsNotNull(wb);
             Assert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
             Assert.IsNotNull(pivotTable);
             Assert.IsTrue(wb.PivotTables.Count > 0);
 
@@ -1411,7 +1411,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
 
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable
-                    (new AreaReference("A1:B2"), new CellReference("H5"), sheet1);
+                    (new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"), sheet1);
             Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
             Assert.AreEqual(1, wb.PivotTables.Count);
@@ -1426,10 +1426,11 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = SetupSheet();
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
-            XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
+            XSSFSheet sheet2 = wb.CreateSheet("TEST") as XSSFSheet;
 
-            XSSFPivotTable pivotTable = sheet2.CreatePivotTable
-                    (new AreaReference(sheet.SheetName + "!A$1:B$2"), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet2.CreatePivotTable(
+                new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007), 
+                new CellReference("H5"));
             Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
             wb.Close();
@@ -1440,7 +1441,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = SetupSheet();
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
-            XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
+            XSSFSheet sheet2 = wb.CreateSheet("TEST") as XSSFSheet;
 
             Assert.Throws<ArgumentException>(() => {
                 sheet2.CreatePivotTable(
