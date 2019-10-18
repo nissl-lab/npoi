@@ -114,12 +114,11 @@
         }
 
 
-        /**
-         * Determines whether or not this CellRangeAddress and the specified CellRangeAddress intersect.
-         *
-         * @param other
-         * @return
-         */
+        /// <summary>
+        /// Determines whether or not this CellRangeAddress and the specified CellRangeAddress intersect.
+        /// </summary>
+        /// <param name="other">a candidate cell range address to check for intersection with this range</param>
+        /// <returns>returns true if this range and other range have at least 1 cell in common</returns>
         public bool Intersects(CellRangeAddressBase other)
         {
             // see java.awt.Rectangle.intersects

@@ -142,9 +142,15 @@ namespace NPOI.SS.Formula
                     throw new InvalidOperationException("Unsupported shift mode: " + _mode);
             }
         }
-        /**
-         * @return <c>true</c> if this Ptg needed to be changed
-         */
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ptg"></param>
+        /// <param name="currentExternSheetIx"></param>
+        /// <returns>in-place modified ptg (if row move would cause Ptg to change),
+        /// deleted ref ptg (if row move causes an error),
+        /// or null (if no Ptg change is needed)</returns>
         private Ptg AdjustPtgDueToRowMove(Ptg ptg, int currentExternSheetIx)
         {
             if (ptg is RefPtg)
