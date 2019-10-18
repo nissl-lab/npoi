@@ -32,8 +32,8 @@ namespace NPOI.XSSF.UserModel
     {
         private HyperlinkType _type;
         private PackageRelationship _externalRel;
-        private CT_Hyperlink _ctHyperlink;
-        private String _location;
+        private CT_Hyperlink _ctHyperlink; //contains a reference to the cell where the hyperlink is anchored, getRef()
+        private String _location; //what the hyperlink refers to
 
         /**
          * Create a new XSSFHyperlink. This method is protected to be used only by XSSFCreationHelper
@@ -151,7 +151,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (HyperlinkType)_type;
+                return _type;
             }
         }
 
@@ -239,7 +239,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Assigns this hyperlink to the given cell reference
          */
-        internal void SetCellReference(String ref1)
+        public void SetCellReference(String ref1)
         {
             _ctHyperlink.@ref = ref1;
         }

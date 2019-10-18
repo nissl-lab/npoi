@@ -691,6 +691,12 @@ namespace NPOI.XSSF.UserModel
                     vml == null ? null : vml.FindCommentShape(row, column));
         }
 
+        /// <summary>
+        /// Get a Hyperlink in this sheet anchored at row, column
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
         public XSSFHyperlink GetHyperlink(int row, int column)
         {
             String ref1 = new CellReference(row, column).FormatAsString();
@@ -702,6 +708,15 @@ namespace NPOI.XSSF.UserModel
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Get a list of Hyperlinks in this sheet
+        /// </summary>
+        /// <returns></returns>
+        public List<XSSFHyperlink> GetHyperlinkList()
+        {
+            return (hyperlinks);
         }
 
         /**
@@ -2813,6 +2828,7 @@ namespace NPOI.XSSF.UserModel
                     rowsToRemove.Add(rowDict.Key);
 
                     commentsToRemove.Clear();
+                    // FIXME: (performance optimization) this should be moved outside the for-loop so that comments only needs to be iterated over once.
                     // also remove any comments associated with this row
                     if (sheetComments != null)
                     {
@@ -2836,6 +2852,20 @@ namespace NPOI.XSSF.UserModel
                         sheetComments.RemoveComment(comment.@ref);
                         CellReference ref1 = new CellReference(comment.@ref);
                         vml.RemoveCommentShape(ref1.Row, ref1.Col);
+                    }
+
+                    // FIXME: (performance optimization) this should be moved outside the for-loop so that hyperlinks only needs to be iterated over once.
+                    // also remove any hyperlinks associated with this row
+                    if (hyperlinks != null)
+                    {
+                        foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
+                        {
+                            CellReference ref1 = new CellReference(link.GetCellRef());
+                            if (ref1.Row == rownum)
+                            {
+                                hyperlinks.Remove(link);
+                            }
+                        }
                     }
                 }
             }
@@ -2907,13 +2937,14 @@ namespace NPOI.XSSF.UserModel
 
             int sheetIndex = Workbook.GetSheetIndex(this);
             String sheetName = Workbook.GetSheetName(sheetIndex);
-            FormulaShifter Shifter = FormulaShifter.CreateForRowShift(
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(
                                        sheetIndex, sheetName, startRow, endRow, n);
 
-            rowShifter.UpdateNamedRanges(Shifter);
-            rowShifter.UpdateFormulas(Shifter);
+            rowShifter.UpdateNamedRanges(shifter);
+            rowShifter.UpdateFormulas(shifter);
             rowShifter.ShiftMerged(startRow, endRow, n);
-            rowShifter.UpdateConditionalFormatting(Shifter);
+            rowShifter.UpdateConditionalFormatting(shifter);
+            rowShifter.UpdateHyperlinks(shifter);
 
             //rebuild the _rows map
             SortedList<int, XSSFRow> map = new SortedList<int, XSSFRow>();
@@ -2954,32 +2985,33 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-    private int ShiftedRowNum(int startRow, int endRow, int n, int rownum) {
-        // no change if before any affected row
-        if(rownum < startRow && (n > 0 || (startRow - rownum) > n)) {
-            return rownum;
+        private int ShiftedRowNum(int startRow, int endRow, int n, int rownum)
+        {
+            // no change if before any affected row
+            if (rownum < startRow && (n > 0 || (startRow - rownum) > n)) {
+                return rownum;
+            }
+
+            // no change if After any affected row
+            if (rownum > endRow && (n < 0 || (rownum - endRow) > n)) {
+                return rownum;
+            }
+
+            // row before and things are Moved up
+            if (rownum < startRow) {
+                // row is Moved down by the Shifting
+                return rownum + (endRow - startRow);
+            }
+
+            // row is After and things are Moved down
+            if (rownum > endRow) {
+                // row is Moved up by the Shifting
+                return rownum - (endRow - startRow);
+            }
+
+            // row is part of the Shifted block
+            return rownum + n;
         }
-        
-        // no change if After any affected row
-        if(rownum > endRow && (n < 0 || (rownum - endRow) > n)) {
-            return rownum;
-        }
-        
-        // row before and things are Moved up
-        if(rownum < startRow) {
-            // row is Moved down by the Shifting
-            return rownum + (endRow - startRow);
-        }
-        
-        // row is After and things are Moved down
-        if(rownum > endRow) {
-            // row is Moved up by the Shifting
-            return rownum - (endRow - startRow);
-        }
-        
-        // row is part of the Shifted block
-        return rownum + n;
-    }
 
         /**
          * Location of the top left visible cell Location of the top left visible cell in the bottom right
@@ -3129,6 +3161,9 @@ namespace NPOI.XSSF.UserModel
          */
         public void RemoveHyperlink(int row, int column)
         {
+            // CTHyperlinks is regenerated from scratch when writing out the spreadsheet
+            // so don't worry about maintaining hyperlinks and CTHyperlinks in parallel.
+            // only maintain hyperlinks
             String ref1 = new CellReference(row, column).FormatAsString();
             for (int index = 0; index < hyperlinks.Count; index++)
             {
