@@ -28,6 +28,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.Constant;
     using NPOI.SS.Formula.Function;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
     /// <summary>
@@ -117,6 +118,7 @@ namespace NPOI.SS.Formula
 
         /**
          * Parse a formula into a array of tokens
+         * Side effect: creates name (Workbook.createName) if formula contains unrecognized names (names are likely UDFs)
          *
          * @param formula	 the formula to parse
          * @param workbook	the parent workbook
@@ -782,10 +784,10 @@ namespace NPOI.SS.Formula
 
 
         /**
-  * Parses out a potential LHS or RHS of a ':' intended to produce a plain AreaRef.  Normally these are
-  * proper cell references but they could also be row or column refs like "$AC" or "10"
-  * @return <code>null</code> (and leaves {@link #_pointer} unchanged if a proper range part does not parse out
-  */
+          * Parses out a potential LHS or RHS of a ':' intended to produce a plain AreaRef.  Normally these are
+          * proper cell references but they could also be row or column refs like "$AC" or "10"
+          * @return <code>null</code> (and leaves {@link #_pointer} unchanged if a proper range part does not parse out
+          */
         private SimpleRangePart ParseSimpleRangePart()
         {
             int ptr = _pointer - 1; // TODO avoid StringIndexOutOfBounds
@@ -903,8 +905,8 @@ namespace NPOI.SS.Formula
             return null;
         }
         /**
-     * A1, $A1, A$1, $A$1, A, 1
-     */
+         * A1, $A1, A$1, $A$1, A, 1
+         */
         private class SimpleRangePart
         {
             public enum PartType
@@ -1180,6 +1182,8 @@ namespace NPOI.SS.Formula
          * Note - Excel Function names are 'case aware but not case sensitive'.  This method may end
          * up creating a defined name record in the workbook if the specified name is not an internal
          * Excel Function, and Has not been encountered before.
+         * 
+         * Side effect: creates workbook name if name is not recognized (name is probably a UDF)
          *
          * @param name case preserved Function name (as it was entered/appeared in the formula).
          */
@@ -1197,28 +1201,49 @@ namespace NPOI.SS.Formula
                     throw new InvalidOperationException("Need book to evaluate name '" + name + "'");
                 }
 
+                // Check to see if name is a named range in the workbook
                 IEvaluationName hName = _book.GetName(name, _sheetIndex);
-                if (hName == null)
-                {
-
-                    nameToken = _book.GetNameXPtg(name, null);
-                    if (nameToken == null)
-                    {
-                        throw new FormulaParseException("Name '" + name
-                                + "' is completely unknown in the current workbook");
-                    }
-                }
-                else
+                if (hName != null)
                 {
                     if (!hName.IsFunctionName)
                     {
-                        throw new FormulaParseException("Attempt To use name '" + name
-                                + "' as a Function, but defined name in workbook does not refer To a Function");
+                        throw new FormulaParseException("Attempt to use name '" + name
+                                + "' as a function, but defined name in workbook does not refer to a function");
                     }
 
-                    // calls To user-defined Functions within the workbook
-                    // Get a Name Token which points To a defined name record
+                    // calls to user-defined functions within the workbook
+                    // get a Name token which points to a defined name record
                     nameToken = hName.CreatePtg();
+                }
+                else
+                {
+                    // Check if name is an external names table
+                    nameToken = _book.GetNameXPtg(name, null);
+                    if (nameToken == null)
+                    {
+                        // name is not an internal or external name
+                        //if (log.check(POILogger.WARN))
+                        //{
+                        //    log.log(POILogger.WARN,
+                        //            "FormulaParser.function: Name '" + name + "' is completely unknown in the current workbook.");
+                        //}
+                        // name is probably the name of an unregistered User-Defined Function
+                        switch (_book.GetSpreadsheetVersion().Name)
+                        {
+                            case  "EXCEL97":
+                                // HSSFWorkbooks require a name to be added to Workbook defined names table
+                                AddName(name);
+                                hName = _book.GetName(name, _sheetIndex);
+                                nameToken = hName.CreatePtg();
+                                break;
+                            case "EXCEL2007":
+                                // XSSFWorkbooks store formula names as strings.
+                                nameToken = new NameXPxg(name);
+                                break;
+                            default:
+                                throw new Exception("Unexpected spreadsheet version: " + _book.GetSpreadsheetVersion().Name);
+                        }
+                    }
                 }
             }
 
@@ -1228,7 +1253,17 @@ namespace NPOI.SS.Formula
 
             return GetFunction(name, nameToken, args);
         }
-
+        /**
+	     * Adds a name (named range or user defined function) to underlying workbook's names table
+	     * @param functionName
+	     */
+        private void AddName(String functionName)
+        {
+            IName name = _book.CreateName();
+            name.SetFunction(true);
+            name.NameName = (functionName);
+            name.SheetIndex = (_sheetIndex);
+        }
         /**
          * Generates the variable Function ptg for the formula.
          * 

@@ -331,6 +331,56 @@ namespace TestCases.SS.UserModel
             cell.SetCellType(CellType.String);
             Assert.AreEqual("FALSE", cell.RichStringCellValue.String);
         }
+
+        /**
+	     * bug 58452: Copy cell formulas containing unregistered function names
+	     * Make sure that formulas with unknown/unregistered UDFs can be written to and read back from a file.
+	     *
+	     * @throws IOException
+	     */
+        [Test]
+        public void TestFormulaWithUnknownUDF()
+        {
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            IFormulaEvaluator evaluator1 = wb1.GetCreationHelper().CreateFormulaEvaluator();
+            try
+            {
+                ICell cell1 = wb1.CreateSheet().CreateRow(0).CreateCell(0);
+                String formula = "myFunc(\"arg\")";
+                cell1.SetCellFormula(formula);
+                confirmFormulaWithUnknownUDF(formula, cell1, evaluator1);
+
+                IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+                IFormulaEvaluator evaluator2 = wb2.GetCreationHelper().CreateFormulaEvaluator();
+                try
+                {
+                    ICell cell2 = wb2.GetSheetAt(0).GetRow(0).GetCell(0);
+                    confirmFormulaWithUnknownUDF(formula, cell2, evaluator2);
+                }
+                finally
+                {
+                    wb2.Close();
+                }
+            }
+            finally
+            {
+                wb1.Close();
+            }
+        }
+
+        private static void confirmFormulaWithUnknownUDF(String expectedFormula, ICell cell, IFormulaEvaluator evaluator)
+        {
+            Assert.AreEqual(expectedFormula, cell.CellFormula);
+            try
+            {
+                evaluator.Evaluate(cell);
+                Assert.Fail("Expected NotImplementedFunctionException/NotImplementedException");
+            }
+            catch (NotImplementedException) {
+                // expected
+            }
+        }
+
         [Test]
         public void TestChangeTypeBoolToString()
         {

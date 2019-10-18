@@ -30,6 +30,8 @@ namespace TestCases.HSSF.Model
     using TestCases.HSSF.UserModel;
     using TestCases.SS.Formula;
     using NPOI.SS.Formula.Constant;
+    using System.IO;
+    using System.Globalization;
 
     /**
      * Test the low level formula Parser functionality. High level Tests are to
@@ -126,19 +128,77 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestMacroFunction()
         {
-            // TestNames.xls contains a VB function called 'myFunc'
-            HSSFWorkbook w = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
-            HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(w);
+            // testNames.xls contains a VB function called 'myFunc'
+            String testFile = "testNames.xls";
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook(testFile);
+            try
+            {
+                HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(wb);
 
-            Ptg[] ptg = HSSFFormulaParser.Parse("myFunc()", w);
+                //Expected ptg stack: [NamePtg(myFunc), StringPtg(arg), (additional operands go here...), FunctionPtg(myFunc)]
+                Ptg[] ptg = FormulaParser.Parse("myFunc(\"arg\")", book, FormulaType.Cell, -1);
+                Assert.AreEqual(3, ptg.Length);
 
-            // the name Gets encoded as the first arg
-            NamePtg tname = (NamePtg)ptg[0];
-            Assert.AreEqual("myFunc", tname.ToFormulaString(book));
+                // the name gets encoded as the first operand on the stack
+                NamePtg tname = (NamePtg)ptg[0];
+                Assert.AreEqual("myFunc", tname.ToFormulaString(book));
 
-            AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[1];
-            Assert.IsTrue(tfunc.IsExternalFunction);
+                // the function's arguments are pushed onto the stack from left-to-right as OperandPtgs
+                StringPtg arg = (StringPtg)ptg[1];
+                Assert.AreEqual("arg", arg.Value);
+
+                // The external FunctionPtg is the last Ptg added to the stack
+                // During formula evaluation, this Ptg pops off the the appropriate number of
+                // arguments (getNumberOfOperands()) and pushes the result on the stack
+                AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[2]; //FuncVarPtg
+                Assert.IsTrue(tfunc.IsExternalFunction);
+
+                // confirm formula parsing is case-insensitive
+                FormulaParser.Parse("mYfUnC(\"arg\")", book, FormulaType.Cell, -1);
+
+                // confirm formula parsing doesn't care about argument count or type
+                // this should only throw an error when evaluating the formula.
+                FormulaParser.Parse("myFunc()", book, FormulaType.Cell, -1);
+                FormulaParser.Parse("myFunc(\"arg\", 0, TRUE)", book, FormulaType.Cell, -1);
+
+                // A completely unknown formula name (not saved in workbook) should still be parseable and renderable
+                // but will throw an NotImplementedFunctionException or return a #NAME? error value if evaluated.
+                FormulaParser.Parse("yourFunc(\"arg\")", book, FormulaType.Cell, -1);
+
+                // Verify that myFunc and yourFunc were successfully added to Workbook names
+                HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+                try
+                {
+                    // HSSFWorkbook/EXCEL97-specific side-effects user-defined function names must be added to Workbook's defined names in order to be saved.
+                    Assert.IsNotNull(wb2.GetName("myFunc"));
+                    assertEqualsIgnoreCase("myFunc", wb2.GetName("myFunc").NameName);
+                    Assert.IsNotNull(wb2.GetName("yourFunc"));
+                    assertEqualsIgnoreCase("yourFunc", wb2.GetName("yourFunc").NameName);
+
+                    // Manually check to make sure file isn't corrupted
+                    FileInfo fileIn = HSSFTestDataSamples.GetSampleFile(testFile);
+                    FileInfo reSavedFile = new FileInfo(fileIn.FullName.Replace(".xls", "-saved.xls"));
+                    FileStream fos = new FileStream(reSavedFile.FullName, FileMode.Create, FileAccess.ReadWrite);
+                    wb2.Write(fos);
+                    fos.Close();
+                }
+                finally
+                {
+                    wb2.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
+
+        private static void assertEqualsIgnoreCase(String expected, String actual)
+        {
+            CultureInfo cultureUS = CultureInfo.GetCultureInfo("en-US");
+            Assert.AreEqual(expected.ToLower(cultureUS), actual.ToLower(cultureUS));
+        }
+
         [Test]
         public void TestEmbeddedSlash()
         {
@@ -869,6 +929,13 @@ namespace TestCases.HSSF.Model
 
             ParseExpectedException("IF(TRUE)");
             ParseExpectedException("countif(A1:B5, C1, D1)");
+
+            ParseExpectedException("(");
+            ParseExpectedException(")");
+            ParseExpectedException("+");
+            ParseExpectedException("42+");
+
+            ParseExpectedException("IF(");
         }
 
         private static void ParseExpectedException(String formula)
@@ -876,7 +943,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 ParseFormula(formula);
-                throw new AssertionException("expected Parse exception");
+                throw new AssertionException("Expected FormulaParseException: " + formula);
             }
             catch (Exception e)
             {

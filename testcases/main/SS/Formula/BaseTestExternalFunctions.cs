@@ -51,6 +51,7 @@ namespace TestCases.SS.Formula
         public void TestExternalFunctions()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sh = wb.CreateSheet();
 
@@ -59,18 +60,33 @@ namespace TestCases.SS.Formula
             Assert.AreEqual("ISODD(1)+ISEVEN(2)", cell1.CellFormula);
 
             ICell cell2 = sh.CreateRow(1).CreateCell(0);
+            cell2.SetCellFormula("MYFUNC(\"B1\")"); //unregistered functions are parseable and renderable, but may not be evaluateable
+
             try
             {
-                //NPOI
-                //Run it twice in NUnit Gui Window, the first passed but the second failed.
-                //Maybe the function was cached. Ignore it.
-                cell2.CellFormula=("MYBASEEXTFUNC(\"B1\")");
-                Assert.Fail("Should fail because MYBASEEXTFUNC is an unknown function");
+                evaluator.Evaluate(cell2);
+                Assert.Fail("Expected NotImplementedFunctionException/NotImplementedException");
             }
-            catch (FormulaParseException)
+            catch (NotImplementedException e)
             {
-                ; //expected
+                if (!(e.InnerException is NotImplementedFunctionException))
+                    throw e;
+                // expected
+                // Alternatively, a future implementation of evaluate could return #NAME? error to align behavior with Excel
+                // assertEquals(ErrorEval.NAME_INVALID, ErrorEval.valueOf(evaluator.evaluate(cell2).getErrorValue()));
             }
+            //try
+            //{
+            //    //NPOI
+            //    //Run it twice in NUnit Gui Window, the first passed but the second failed.
+            //    //Maybe the function was cached. Ignore it.
+            //    cell2.CellFormula=("MYBASEEXTFUNC(\"B1\")");
+            //    Assert.Fail("Should fail because MYBASEEXTFUNC is an unknown function");
+            //}
+            //catch (FormulaParseException)
+            //{
+            //    ; //expected
+            //}
 
             wb.AddToolPack(customToolpack);
 

@@ -25,7 +25,7 @@ namespace NPOI.SS
          * <li>Length of text cell contents is 32767</li>
          * </ul>
          */
-        public static SpreadsheetVersion EXCEL97 = new SpreadsheetVersion("xls", 0x10000, 0x0100, 30, 3, 4000, 32767);
+        public static SpreadsheetVersion EXCEL97 = new SpreadsheetVersion("xls", 0x10000, 0x0100, 30, 3, 4000, 32767, "EXCEL97");
 
         /**
          * Excel2007
@@ -39,7 +39,7 @@ namespace NPOI.SS
          * <li>Length of text cell contents is unlimited </li>
          * </ul>
          */
-        public static SpreadsheetVersion EXCEL2007 = new SpreadsheetVersion("xlsx", 0x100000, 0x4000, 255, Int32.MaxValue, 64000, 32767);
+        public static SpreadsheetVersion EXCEL2007 = new SpreadsheetVersion("xlsx", 0x100000, 0x4000, 255, Int32.MaxValue, 64000, 32767, "EXCEL2007");
 
         private string _defaultExtension;
         private int _maxRows;
@@ -48,8 +48,10 @@ namespace NPOI.SS
         private int _maxCondFormats;
         private int _maxCellStyles;
         private int _maxTextLength;
+        private string _name;
 
-        private SpreadsheetVersion(string defaultExtension, int maxRows, int maxColumns, int maxFunctionArgs, int maxCondFormats, int maxCellStyles, int maxText)
+
+        private SpreadsheetVersion(string defaultExtension, int maxRows, int maxColumns, int maxFunctionArgs, int maxCondFormats, int maxCellStyles, int maxText, string name)
         {
             _defaultExtension = defaultExtension;
             _maxRows = maxRows;
@@ -58,6 +60,15 @@ namespace NPOI.SS
             _maxCondFormats = maxCondFormats;
             _maxCellStyles = maxCellStyles;
             _maxTextLength = maxText;
+            _name = name;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
         }
         
         /**
