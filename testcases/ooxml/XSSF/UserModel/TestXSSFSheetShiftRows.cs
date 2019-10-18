@@ -51,11 +51,13 @@ namespace NPOI.XSSF.UserModel
             sheet.ShiftRows(3, 5, -1);
 
             ICell cell = CellUtil.GetCell(sheet.GetRow(1), 0);
-            Assert.AreEqual(1.0, cell.NumericCellValue);
+            Assert.AreEqual(1.0, cell.NumericCellValue, 0);
             cell = CellUtil.GetCell(sheet.GetRow(2), 0);
             Assert.AreEqual("SUM(A2:A2)", cell.CellFormula);
             cell = CellUtil.GetCell(sheet.GetRow(3), 0);
             Assert.AreEqual("X", cell.StringCellValue);
+
+            workbook.Close();
         }
         [Test]
         public void TestBug53798()
@@ -86,6 +88,7 @@ namespace NPOI.XSSF.UserModel
 
             //saveReport(wb, new File("/tmp/53798.xlsx"));
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.IsNotNull(read);
 
             ISheet readSheet = read.GetSheetAt(0);
@@ -98,6 +101,7 @@ namespace NPOI.XSSF.UserModel
             verifyCellContent(readSheet, 6, null);
             verifyCellContent(readSheet, 7, "6.0");
             verifyCellContent(readSheet, 8, "7.0");
+            read.Close();
         }
 
         // CT_Rows should stay sorted in ascending order after a call to ShiftRows.
@@ -174,6 +178,7 @@ namespace NPOI.XSSF.UserModel
 
             //saveReport(wb, new File("/tmp/53798.xlsx"));
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.IsNotNull(read);
 
             ISheet readSheet = read.GetSheetAt(0);
@@ -186,6 +191,7 @@ namespace NPOI.XSSF.UserModel
             verifyCellContent(readSheet, 6, null);
             verifyCellContent(readSheet, 7, "6.0");
             verifyCellContent(readSheet, 8, "8.0");
+            read.Close();
         }
 
         [Test]
@@ -220,6 +226,7 @@ namespace NPOI.XSSF.UserModel
             //        }
 
             IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.IsNotNull(wbBack);
 
             ISheet sheetBack = wbBack.GetSheetAt(0);
@@ -233,6 +240,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(comment);
             Assert.AreEqual("Amdocs", comment.Author);
             Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+            wbBack.Close();
         }
 
         [Test]
@@ -244,12 +252,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, wb.ActiveSheetIndex);
 
             IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.AreEqual(0, wbRead.ActiveSheetIndex);
 
             wbRead.RemoveSheetAt(0);
             Assert.AreEqual(0, wbRead.ActiveSheetIndex);
 
             //wb.Write(new FileOutputStream("/tmp/57171.xls"));
+            wbRead.Close();
         }
 
         [Test]
@@ -261,6 +271,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(4, wb.ActiveSheetIndex);
 
             //wb.Write(new FileOutputStream("/tmp/57163.xls"));
+            wb.Close();
         }
 
         [Test]
@@ -310,6 +321,8 @@ namespace NPOI.XSSF.UserModel
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
             Assert.AreEqual(5, wb.ActiveSheetIndex);
+
+            wb.Close();
         }
 
         [Test]
@@ -356,6 +369,8 @@ namespace NPOI.XSSF.UserModel
 
             wb.RemoveSheetAt(0);
             Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            wb.Close();
         }
 
         // TODO: enable when bug 57165 is fixed
@@ -373,6 +388,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, wb.ActiveSheetIndex);
 
             //wb.Write(new FileOutputStream("/tmp/57165.xls"));
+            wb.Close();
         }
 
         //    public void Test57165b(){

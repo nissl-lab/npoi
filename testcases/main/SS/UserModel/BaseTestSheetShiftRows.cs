@@ -59,8 +59,8 @@ namespace TestCases.SS.UserModel
         {
             // Read Initial file in
             String sampleName = "SimpleMultiCell." + _testDataProvider.StandardFileNameExtension;
-            IWorkbook wb = _testDataProvider.OpenSampleWorkbook(sampleName);
-            ISheet s = wb.GetSheetAt(0);
+            IWorkbook wb1 = _testDataProvider.OpenSampleWorkbook(sampleName);
+            ISheet s = wb1.GetSheetAt(0);
 
             // Shift the second row down 1 and write to temp file
             s.ShiftRows(1, 1, 1);
@@ -70,10 +70,11 @@ namespace TestCases.SS.UserModel
                 Console.WriteLine(msg);
             }
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
             // Read from temp file and check the number of cells in each
             // row (in original file each row was unique)
-            s = wb.GetSheetAt(0);
+            s = wb2.GetSheetAt(0);
             {
                 var msg = string.Format("1b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
@@ -93,10 +94,11 @@ namespace TestCases.SS.UserModel
                 var msg = string.Format("2a {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
             }
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb3 = _testDataProvider.WriteOutAndReadBack(wb2);
+            wb2.Close();
 
             // Read and ensure things are where they should be
-            s = wb.GetSheetAt(0);
+            s = wb3.GetSheetAt(0);
             {
                 var msg = string.Format("2b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
@@ -108,9 +110,11 @@ namespace TestCases.SS.UserModel
             ConfirmEmptyRow(s, 4);
             Assert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
 
+            wb3.Close();
+
             // Read the first file again
-            wb = _testDataProvider.OpenSampleWorkbook(sampleName);
-            s = wb.GetSheetAt(0);
+            IWorkbook wb4 = _testDataProvider.OpenSampleWorkbook(sampleName);
+            s = wb4.GetSheetAt(0);
 
             // Shift rows 3 and 4 up and write to temp file
             s.ShiftRows(2, 3, -2);
@@ -119,8 +123,9 @@ namespace TestCases.SS.UserModel
                 var msg = string.Format("3a {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
             }
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            s = wb.GetSheetAt(0);
+            IWorkbook wb5 = _testDataProvider.WriteOutAndReadBack(wb4);
+            wb4.Close();
+            s = wb5.GetSheetAt(0);
             {
                 var msg = string.Format("3b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
@@ -130,6 +135,7 @@ namespace TestCases.SS.UserModel
             ConfirmEmptyRow(s, 2);
             ConfirmEmptyRow(s, 3);
             Assert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
+            wb5.Close();
         }
         private string GetRowValue(ISheet s, int rowIx)
         {
@@ -155,11 +161,12 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestShiftRow()
         {
-            IWorkbook b = _testDataProvider.CreateWorkbook();
-            ISheet s = b.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
             s.CreateRow(0).CreateCell(0).SetCellValue("TEST1");
             s.CreateRow(3).CreateCell(0).SetCellValue("TEST2");
             s.ShiftRows(0, 4, 1);
+            wb.Close();
         }
 
         /**
@@ -168,12 +175,13 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestActiveCell()
         {
-            IWorkbook b = _testDataProvider.CreateWorkbook();
-            ISheet s = b.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
 
             s.CreateRow(0).CreateCell(0).SetCellValue("TEST1");
             s.CreateRow(3).CreateCell(0).SetCellValue("TEST2");
             s.ShiftRows(0, 4, 1);
+            wb.Close();
         }
 
         /**
@@ -182,21 +190,22 @@ namespace TestCases.SS.UserModel
         [Test]
         public virtual void TestShiftRowBreaks()
         { // TODO - enable XSSF Test
-            IWorkbook b = _testDataProvider.CreateWorkbook();
-            ISheet s = b.CreateSheet();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
             IRow row = s.CreateRow(4);
             row.CreateCell(0).SetCellValue("test");
             s.SetRowBreak(4);
 
             s.ShiftRows(4, 4, 2);
             Assert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
+            wb.Close();
         }
         [Test]
         public void TestShiftWithComments()
         {
-            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("comments." + _testDataProvider.StandardFileNameExtension);
+            IWorkbook wb1 = _testDataProvider.OpenSampleWorkbook("comments." + _testDataProvider.StandardFileNameExtension);
 
-            ISheet sheet = wb.GetSheet("Sheet1");
+            ISheet sheet = wb1.GetSheet("Sheet1");
             Assert.AreEqual(3, sheet.LastRowNum);
 
             // Verify comments are in the position expected
@@ -234,8 +243,9 @@ namespace TestCases.SS.UserModel
 
             // Write out and read back in again
             // Ensure that the Changes were persisted
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheet("Sheet1");
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+            sheet = wb2.GetSheet("Sheet1");
             Assert.AreEqual(4, sheet.LastRowNum);
 
             // Verify comments are in the position expected After the shift
@@ -257,7 +267,7 @@ namespace TestCases.SS.UserModel
 
             // TODO: it seems HSSFSheet does not correctly remove comments from rows that are overwritten
             // by Shifting rows...
-            if (!(wb is HSSFWorkbook))
+            if (!(wb2 is HSSFWorkbook))
             {
                 Assert.AreEqual(2, sheet.LastRowNum);
 
@@ -272,7 +282,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(comment1, "comment top row3 (index2)\n");
             String comment2 = sheet.GetCellComment(2, 0).String.String;
             Assert.AreEqual(comment2, "comment top row4 (index3)\n");
-
+            wb2.Close();
         }
         [Test]
         public void TestShiftWithNames()
@@ -316,6 +326,7 @@ namespace TestCases.SS.UserModel
 
             name4 = wb.GetNameAt(3);
             Assert.AreEqual(name4.RefersToFormula, "A1");
+            wb.Close();
         }
         [Test]
         public void TestShiftWithMergedRegions()
@@ -333,6 +344,7 @@ namespace TestCases.SS.UserModel
             sheet.ShiftRows(0, 1, 2);
             region = sheet.GetMergedRegion(0);
             Assert.AreEqual("A3:C3", region.FormatAsString());
+            wb.Close();
         }
 
         /**
@@ -394,6 +406,7 @@ namespace TestCases.SS.UserModel
 
 
             // Note - named ranges formulas have not been updated
+            wb.Close();
         }
 
         private static void ConfirmRow(ISheet sheet, int rowIx, double valA, double valB, double valC,
@@ -471,7 +484,7 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(sheet.GetRow(28).GetCell(9).CellFormula, "SUM(G29:I29)");
             Assert.AreEqual(sheet.GetRow(29).GetCell(9).CellFormula, "SUM(G30:I30)");
-
+            wb.Close();
         }
 
         [Test]
