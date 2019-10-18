@@ -1047,7 +1047,8 @@ namespace NPOI.XSSF.UserModel
         public void TestBug56957CloseWorkbook()
         {
             FileInfo file = TempFile.CreateTempFile("TestBug56957_", ".xlsx");
-            String dateExp = "Sun Nov 09 00:00:00 CET 2014";
+            //String dateExp = "Sun Nov 09 00:00:00 CET 2014";
+            DateTime dateExp = LocaleUtil.GetLocaleCalendar(2014, 10, 9);
             try
             {
                 // as the file is written to, we make a copy before actually working on it
@@ -1057,27 +1058,27 @@ namespace NPOI.XSSF.UserModel
 
                 // read-only mode works!
                 IWorkbook workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                String str = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue.ToString();
-                Assert.AreEqual(dateExp, str);
+                DateTime dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
 
                 workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                str = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue.ToString();
-                Assert.AreEqual(dateExp, str);
+                dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
 
                 // now check read/write mode
                 workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE));
-                str = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue.ToString();
-                Assert.AreEqual(dateExp, str);
+                dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
 
                 workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE));
-                str = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue.ToString();
-                Assert.AreEqual(dateExp, str);
+                dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
             }
