@@ -118,11 +118,15 @@ namespace NPOI.SS.UserModel
                 XSSFTestDataSamples.WriteOutAndReadBack(wb).Close();
 
                 // Manually check to make sure file isn't corrupted
+                // TODO: develop a process for occasionally manually reviewing workbooks
+                // to verify workbooks are not corrupted
+                /*
                 FileInfo fileIn = XSSFTestDataSamples.GetSampleFile(testFile);
                 FileInfo reSavedFile = new FileInfo(fileIn.FullName.Replace(".xlsm", "-saved.xlsm"));
                 FileStream fos = new FileStream(reSavedFile.FullName, FileMode.Create, FileAccess.ReadWrite);
                 wb.Write(fos);
                 fos.Close();
+                */
             }
             finally
             {

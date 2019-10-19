@@ -176,11 +176,15 @@ namespace TestCases.HSSF.Model
                     assertEqualsIgnoreCase("yourFunc", wb2.GetName("yourFunc").NameName);
 
                     // Manually check to make sure file isn't corrupted
+                    // TODO: develop a process for occasionally manually reviewing workbooks
+                    // to verify workbooks are not corrupted
+                    /*
                     FileInfo fileIn = HSSFTestDataSamples.GetSampleFile(testFile);
                     FileInfo reSavedFile = new FileInfo(fileIn.FullName.Replace(".xls", "-saved.xls"));
                     FileStream fos = new FileStream(reSavedFile.FullName, FileMode.Create, FileAccess.ReadWrite);
                     wb2.Write(fos);
                     fos.Close();
+                    */
                 }
                 finally
                 {
