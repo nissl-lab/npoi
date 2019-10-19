@@ -103,6 +103,81 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Copy cell value, formula, and style, from srcCell per cell copy policy
+         * If srcCell is null, clears the cell value and cell style per cell copy policy
+         * @param srcCell
+         * @param policy
+         * @throws IllegalArgumentException if copy cell style and srcCell is from a different workbook
+         */
+        public void CopyCellFrom(ICell srcCell, CellCopyPolicy policy)
+        {
+            // Copy cell value (cell type is updated implicitly)
+            if (policy.IsCopyCellValue)
+            {
+                if (srcCell != null)
+                {
+                    CellType copyCellType = srcCell.CellType;
+                    if (copyCellType == CellType.Formula && !policy.IsCopyCellFormula)
+                    {
+                        // Copy formula result as value
+                        // FIXME: Cached value may be stale
+                        copyCellType = srcCell.CachedFormulaResultType;
+                    }
+                    switch (copyCellType)
+                    {
+                        case CellType.Boolean:
+                            SetCellValue(srcCell.BooleanCellValue);
+                            break;
+                        case CellType.Error:
+                            SetCellErrorValue(srcCell.ErrorCellValue);
+                            break;
+                        case CellType.Formula:
+                            SetCellFormula(srcCell.CellFormula);
+                            break;
+                        case CellType.Numeric:
+                            // DataFormat is not copied unless policy.isCopyCellStyle is true
+                            if (DateUtil.IsCellDateFormatted(srcCell))
+                            {
+                                SetCellValue(srcCell.DateCellValue);
+                            }
+                            else
+                            {
+                                SetCellValue(srcCell.NumericCellValue);
+                            }
+                            break;
+                        case CellType.String:
+                            SetCellValue(srcCell.StringCellValue);
+                            break;
+                        case CellType.Blank:
+                            SetBlank();
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid cell type " + srcCell.CellType);
+                    }
+                }
+                else
+                { //srcCell is null
+                    SetBlank();
+                }
+            }
+
+            // Copy CellStyle
+            if (policy.IsCopyCellStyle)
+            {
+                if (srcCell != null)
+                {
+                    CellStyle = (srcCell.CellStyle);
+                }
+                else
+                {
+                    // clear cell style
+                    CellStyle = (null);
+                }
+            }
+        }
+
+
+        /**
          * @return table of strings shared across this workbook
          */
         protected SharedStringsTable GetSharedStringSource()

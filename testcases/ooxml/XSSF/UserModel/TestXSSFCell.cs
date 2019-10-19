@@ -497,6 +497,69 @@ namespace NPOI.XSSF.UserModel
                 pos += SpreadsheetVersion.EXCEL97.MaxTextLength;
             }
         }
+
+        private XSSFCell srcCell, destCell; //used for testCopyCellFrom_CellCopyPolicy
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_default()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+
+            // default copy policy
+            CellCopyPolicy policy = new CellCopyPolicy();
+            destCell.CopyCellFrom(srcCell, policy);
+
+            Assert.AreEqual(CellType.Formula, destCell.CellType);
+            Assert.AreEqual("2+3", destCell.CellFormula);
+            Assert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
+        }
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_value()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+
+            // Paste values only
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.AreEqual(CellType.Numeric, destCell.CellType);
+            Console.WriteLine("ERROR: fix formula evaluation");
+        }
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_style()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+            srcCell.SetCellValue((String)null);
+
+            // Paste styles only
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CellValue(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
+
+            // Old cell value should not have been overwritten
+            Assert.AreNotEqual(CellType.Blank, destCell.CellType);
+            Assert.AreEqual(CellType.Boolean, destCell.CellType);
+            Assert.AreEqual(true, destCell.BooleanCellValue);
+        }
+        [SetUp]
+        private void setUp_testCopyCellFrom_CellCopyPolicy()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFRow row = wb.CreateSheet().CreateRow(0) as XSSFRow;
+            srcCell = row.CreateCell(0) as XSSFCell;
+            destCell = row.CreateCell(1) as XSSFCell;
+
+            srcCell.CellFormula = ("2+3");
+
+            ICellStyle style = wb.CreateCellStyle();
+            style.BorderTop = BorderStyle.Thick;
+            style.FillBackgroundColor = ((short)5);
+            srcCell.CellStyle = (style);
+
+            destCell.SetCellValue(true);
+        }
+
     }
 
 }

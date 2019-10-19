@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -1417,6 +1418,48 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
+
+        /**
+         * returns all rows between startRow and endRow, inclusive.
+         * Rows between startRow and endRow that haven't been created are not included
+         * in result unless createRowIfMissing is true
+         *
+         * @param startRow the first row number in this sheet to return
+         * @param endRow the last row number in this sheet to return
+         * @param createRowIfMissing
+         * @return
+         * @throws IllegalArgumentException if startRowNum and endRowNum are not in ascending order
+         */
+        private List<XSSFRow> GetRows(int startRowNum, int endRowNum, bool createRowIfMissing)
+        {
+            if (startRowNum > endRowNum)
+            {
+                throw new ArgumentException("getRows: startRowNum must be less than or equal to endRowNum");
+            }
+            List<XSSFRow> rows = new List<XSSFRow>();
+            if (createRowIfMissing)
+            {
+                for (int i = startRowNum; i <= endRowNum; i++)
+                {
+                    XSSFRow row = GetRow(i) as XSSFRow;
+                    if (row == null)
+                    {
+                        row = CreateRow(i) as XSSFRow;
+                    }
+                    rows.Add(row);
+                }
+            }
+            else
+            {
+                //rows.addAll(_rows.subMap(startRowNum, endRowNum + 1).values());
+                for (int i = startRowNum; i <= endRowNum; i++)
+                {
+                    rows.Add(_rows[i]);
+                }
+            }
+            return rows;
+        }
+
         /**
          * Horizontal page break information used for print layout view, page layout view, drawing print breaks in normal
          *  view, and for printing the worksheet.
@@ -2793,6 +2836,136 @@ namespace NPOI.XSSF.UserModel
                 throw new ArgumentException("Valid scale values range from 10 to 400");
             GetSheetTypeSheetView().zoomScale = (uint)scale;
         }
+
+        /**
+         * copyRows rows from srcRows to this sheet starting at destStartRow
+         *
+         * Additionally copies merged regions that are completely defined in these
+         * rows (ie. merged 2 cells on a row to be shifted).
+         * @param srcRows the rows to copy. Formulas will be offset by the difference
+         * in the row number of the first row in srcRows and destStartRow (even if srcRows
+         * are from a different sheet).
+         * @param destStartRow the row in this sheet to paste the first row of srcRows
+         * the remainder of srcRows will be pasted below destStartRow per the cell copy policy
+         * @param policy is the cell copy policy, which can be used to merge the source and destination
+         * when the source is blank, copy styles only, paste as value, etc
+         */
+
+        public void CopyRows(List<XSSFRow> srcRows, int destStartRow, CellCopyPolicy policy)
+        {
+            if (srcRows == null || srcRows.Count == 0)
+            {
+                throw new ArgumentException("No rows to copy");
+            }
+            IRow srcStartRow = srcRows[0];
+            IRow srcEndRow = srcRows[srcRows.Count - 1];
+
+            if (srcStartRow == null)
+            {
+                throw new ArgumentException("copyRows: First row cannot be null");
+            }
+
+            int srcStartRowNum = srcStartRow.RowNum;
+            int srcEndRowNum = srcEndRow.RowNum;
+
+            // check row numbers to make sure they are continuous and increasing (monotonic)
+            // and srcRows does not contain null rows
+            for (int index = 1; index < srcRows.Count; index++)
+            {
+                IRow prevRow = srcRows[(index - 1)];
+                IRow curRow = srcRows[(index)];
+                if (prevRow == null || curRow == null)
+                {
+                    throw new ArgumentException("srcRows may not contain null rows. Found null row at index " +
+                            index + " after Row " + prevRow.RowNum + ".");
+                    //} else if (curRow.RowNum != prevRow.RowNum + 1) {
+                    //    throw new IllegalArgumentException("srcRows must contain continuously increasing row numbers. " +
+                    //            "Got srcRows[" + (index-1) + "]=Row " + prevRow.RowNum + ", srcRows[" + index + "]=Row " + curRow.RowNum + ".");
+                    // FIXME: assumes row objects belong to non-null sheets and sheets belong to non-null workbooks.
+                }
+                else if (srcStartRow.Sheet.Workbook != curRow.Sheet.Workbook)
+                {
+                    throw new ArgumentException("All rows in srcRows must belong to the same sheet in the same workbook." +
+                            "Expected all rows from same workbook (" + srcStartRow.Sheet.Workbook + "). " +
+                            "Got srcRows[" + index + "] from different workbook (" + curRow.Sheet.Workbook + ").");
+                }
+                else if (srcStartRow.Sheet != curRow.Sheet)
+                {
+                    throw new ArgumentException("All rows in srcRows must belong to the same sheet. " +
+                            "Expected all rows from " + srcStartRow.Sheet.SheetName + ". " +
+                            "Got srcRows[" + index + "] from " + curRow.Sheet.SheetName);
+                }
+            }
+
+            // FIXME: is special behavior needed if srcRows and destRows belong to the same sheets and the regions overlap?
+
+            CellCopyPolicy options = policy.Clone();
+            // avoid O(N^2) performance scanning through all regions for each row
+            // merged regions will be copied after all the rows have been copied
+            options.IsCopyMergedRegions = (false);
+
+            // FIXME: if srcRows contains gaps or null values, clear out those rows that will be overwritten
+            // how will this work with merging (copy just values, leave cell styles in place?)
+
+            int r = destStartRow;
+            foreach (IRow srcRow in srcRows)
+            {
+                int destRowNum;
+                if (policy.IsCondenseRows)
+                {
+                    destRowNum = r++;
+                }
+                else
+                {
+                    int shift = (srcRow.RowNum - srcStartRowNum);
+                    destRowNum = destStartRow + shift;
+                }
+                //removeRow(destRowNum); //this probably clears all external formula references to destRow, causing unwanted #REF! errors
+                XSSFRow destRow = CreateRow(destRowNum) as XSSFRow;
+                destRow.copyRowFrom(srcRow, options);
+            }
+
+            // ======================
+            // Only do additional copy operations here that cannot be done with Row.copyFromRow(Row, options)
+            // reasons: operation needs to interact with multiple rows or sheets
+
+            // Copy merged regions that are contained within the copy region
+            if (policy.IsCopyMergedRegions)
+            {
+                // FIXME: is this something that rowShifter could be doing?
+                int shift = destStartRow - srcStartRowNum;
+                foreach (CellRangeAddress srcRegion in srcStartRow.Sheet.MergedRegions)
+                {
+                    if (srcStartRowNum <= srcRegion.FirstRow && srcRegion.LastRow <= srcEndRowNum)
+                    {
+                        // srcRegion is fully inside the copied rows
+                        CellRangeAddress destRegion = srcRegion.Copy();
+                        destRegion.FirstRow = (destRegion.FirstRow + shift);
+                        destRegion.LastRow = (destRegion.LastRow + shift);
+                        AddMergedRegion(destRegion);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Copies rows between srcStartRow and srcEndRow to the same sheet, starting at destStartRow
+         * Convenience function for {@link #copyRows(List, int, CellCopyPolicy)}
+         * 
+         * Equivalent to copyRows(getRows(srcStartRow, srcEndRow, false), destStartRow, cellCopyPolicy)
+         * 
+         * @param srcStartRow the index of the first row to copy the cells from in this sheet
+         * @param srcEndRow the index of the last row to copy the cells from in this sheet
+         * @param destStartRow the index of the first row to copy the cells to in this sheet
+         * @param cellCopyPolicy the policy to use to determine how cells are copied
+         */
+
+        public void CopyRows(int srcStartRow, int srcEndRow, int destStartRow, CellCopyPolicy cellCopyPolicy)
+        {
+            List<XSSFRow> srcRows = GetRows(srcStartRow, srcEndRow, false); //FIXME: should be false, no need to create rows where src is only to copy them to dest
+            CopyRows(srcRows, destStartRow, cellCopyPolicy);
+        }
+
 
         /**
          * Shifts rows between startRow and endRow n number of rows.

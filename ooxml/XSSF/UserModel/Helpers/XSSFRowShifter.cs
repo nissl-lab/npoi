@@ -150,11 +150,15 @@ namespace NPOI.XSSF.UserModel.Helpers
             foreach (IRow r in sh)
             {
                 XSSFRow row = (XSSFRow)r;
-                updateRowFormulas(row, Shifter);
+                UpdateRowFormulas(row, Shifter);
             }
         }
-
-        private void updateRowFormulas(XSSFRow row, FormulaShifter Shifter)
+        /// <summary>
+        /// Update the formulas in specified row using the formula shifting policy specified by shifter
+        /// </summary>
+        /// <param name="row">the row to update the formulas on</param>
+        /// <param name="Shifter">the formula shifting policy</param>
+        public void UpdateRowFormulas(XSSFRow row, FormulaShifter Shifter)
         {
             foreach (ICell c in row)
             {

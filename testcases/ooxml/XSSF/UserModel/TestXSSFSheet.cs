@@ -174,7 +174,7 @@ namespace NPOI.XSSF.UserModel
             workbook.Close();
         }
 
-        
+
         [Test]
         public void TestSetCellComment()
         {
@@ -1429,7 +1429,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet2 = wb.CreateSheet("TEST") as XSSFSheet;
 
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable(
-                new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007), 
+                new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
                 new CellReference("H5"));
             Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
@@ -1445,8 +1445,8 @@ namespace NPOI.XSSF.UserModel
 
             Assert.Throws<ArgumentException>(() => {
                 sheet2.CreatePivotTable(
-                    new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007), 
-                    new CellReference("H5"), 
+                    new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
+                    new CellReference("H5"),
                     sheet2);
             });
             wb.Close();
@@ -1472,5 +1472,364 @@ namespace NPOI.XSSF.UserModel
 
             wb.Close();
         }
+
+
+        protected void testCopyOneRow(String copyRowsTestWorkbook)
+        {
+            double FLOAT_PRECISION = 1e-9;
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(copyRowsTestWorkbook);
+            XSSFSheet sheet = workbook.GetSheetAt(0) as XSSFSheet;
+            CellCopyPolicy defaultCopyPolicy = new CellCopyPolicy();
+            sheet.CopyRows(1, 1, 6, defaultCopyPolicy);
+            IRow srcRow = sheet.GetRow(1);
+            IRow destRow = sheet.GetRow(6);
+            int col = 0;
+            ICell cell;
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual("Source row ->", cell.StringCellValue);
+            // Style
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual("Red", cell.StringCellValue, "[Style] B7 cell value");
+            Assert.AreEqual(CellUtil.GetCell(srcRow, 1).CellStyle, cell.CellStyle, "[Style] B7 cell style");
+            // Blank
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Blank, cell.CellType, "[Blank] C7 cell type");
+            // Error
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Error, cell.CellType, "[Error] D7 cell type");
+            FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
+            Assert.AreEqual(FormulaError.NA, error, "[Error] D7 cell value"); //FIXME: XSSFCell and HSSFCell expose different interfaces. getErrorCellString would be helpful here
+                                                                              // Date
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Date] E7 cell type");
+            DateTime date = new DateTime(2000, 1, 1);
+            Assert.AreEqual(date, cell.DateCellValue, "[Date] E7 cell value");
+            // Boolean
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Boolean, cell.CellType, "[Boolean] F7 cell type");
+            Assert.AreEqual(true, cell.BooleanCellValue, "[Boolean] F7 cell value");
+            // String
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.String, cell.CellType, "[String] G7 cell type");
+            Assert.AreEqual("Hello", cell.StringCellValue, "[String] G7 cell value");
+
+            // Int
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Int] H7 cell type");
+            Assert.AreEqual(15, (int)cell.NumericCellValue, "[Int] H7 cell value");
+
+            // Float
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Float] I7 cell type");
+            Assert.AreEqual(12.5, cell.NumericCellValue, FLOAT_PRECISION, "[Float] I7 cell value");
+
+            // Cell Formula
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual("J7", new CellReference(cell).FormatAsString());
+            Assert.AreEqual(CellType.Formula, cell.CellType, "[Cell Formula] J7 cell type");
+            Assert.AreEqual("[Cell Formula] J7 cell formula", "5+2", cell.CellFormula);
+            Console.WriteLine("Cell formula evaluation currently unsupported");
+
+            // Cell Formula with Reference
+            // Formula row references should be adjusted by destRowNum-srcRowNum
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual("K7", new CellReference(cell).FormatAsString());
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Reference] K7 cell type");
+            Assert.AreEqual("J7+H$2", cell.CellFormula,
+                "[Cell Formula with Reference] K7 cell formula");
+
+            // Cell Formula with Reference spanning multiple rows
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Reference spanning multiple rows] L7 cell type");
+            Assert.AreEqual("G7&\" \"&G8", cell.CellFormula,
+                "[Cell Formula with Reference spanning multiple rows] L7 cell formula");
+
+            // Cell Formula with Reference spanning multiple rows
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Area Reference] M7 cell type");
+            Assert.AreEqual("SUM(H7:I8)", cell.CellFormula,
+                "[Cell Formula with Area Reference] M7 cell formula");
+
+            // Array Formula
+            cell = CellUtil.GetCell(destRow, col++);
+            Console.WriteLine("Array formulas currently unsupported");
+            // FIXME: Array Formula set with Sheet.setArrayFormula() instead of cell.setFormula()
+            /*
+            Assert.AreEqual("[Array Formula] N7 cell type", CellType.Formula, cell.CellType);
+            Assert.AreEqual("[Array Formula] N7 cell formula", "{SUM(H7:J7*{1,2,3})}", cell.CellFormula);
+            */
+
+            // Data Format
+            cell = CellUtil.GetCell(destRow, col++);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Data Format] O7 cell type;");
+            Assert.AreEqual(100.20, cell.NumericCellValue, FLOAT_PRECISION, "[Data Format] O7 cell value");
+            //FIXME: currently Assert.Fails
+            String moneyFormat = "\"$\"#,##0.00_);[Red]\\(\"$\"#,##0.00\\)";
+            Assert.AreEqual(moneyFormat, cell.CellStyle.GetDataFormatString(), "[Data Format] O7 data format");
+
+            // Merged
+            cell = CellUtil.GetCell(destRow, col);
+            Assert.AreEqual("Merged cells", cell.StringCellValue,
+                "[Merged] P7:Q7 cell value");
+            Assert.IsTrue(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("P7:Q7")),
+                "[Merged] P7:Q7 merged region");
+
+            // Merged across multiple rows
+            // Microsoft Excel 2013 does not copy a merged region unless all rows of
+            // the source merged region are selected
+            // POI's behavior should match this behavior
+            col += 2;
+            cell = CellUtil.GetCell(destRow, col);
+            // Note: this behavior deviates from Microsoft Excel,
+            // which will not overwrite a cell in destination row if merged region extends beyond the copied row.
+            // The Excel way would require:
+            //Assert.AreEqual("[Merged across multiple rows] R7:S8 merged region", "Should NOT be overwritten", cell.StringCellValue);
+            //Assert.IsFalse("[Merged across multiple rows] R7:S8 merged region", 
+            //        sheet.MergedRegions.contains(CellRangeAddress.valueOf("R7:S8")));
+            // As currently implemented, cell value is copied but merged region is not copied
+            Assert.AreEqual("[Merged across multiple rows] R7:S8 cell value",
+                    "Merged cells across multiple rows", cell.StringCellValue);
+            Assert.IsFalse(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R7:S7")),
+                "[Merged across multiple rows] R7:S7 merged region (one row)"); //shouldn't do 1-row merge
+            Assert.IsFalse(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R7:S8")),
+                "[Merged across multiple rows] R7:S8 merged region"); //shouldn't do 2-row merge
+
+            // Make sure other rows are blank (off-by-one errors)
+            Assert.IsNull(sheet.GetRow(5));
+            Assert.IsNull(sheet.GetRow(7));
+        }
+
+        public void testCopyMultipleRows(String copyRowsTestWorkbook)
+        {
+            double FLOAT_PRECISION = 1e-9;
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(copyRowsTestWorkbook);
+            XSSFSheet sheet = workbook.GetSheetAt(0) as XSSFSheet;
+            CellCopyPolicy defaultCopyPolicy = new CellCopyPolicy();
+            sheet.CopyRows(0, 3, 8, defaultCopyPolicy);
+            IRow srcHeaderRow = sheet.GetRow(0);
+            IRow srcRow1 = sheet.GetRow(1);
+            IRow srcRow2 = sheet.GetRow(2);
+            IRow srcRow3 = sheet.GetRow(3);
+            IRow destHeaderRow = sheet.GetRow(8);
+            IRow destRow1 = sheet.GetRow(9);
+            IRow destRow2 = sheet.GetRow(10);
+            IRow destRow3 = sheet.GetRow(11);
+            int col = 0;
+            ICell cell;
+
+            // Header row should be copied
+            Assert.IsNotNull(destHeaderRow);
+
+            // Data rows
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual("Source row ->", cell.StringCellValue);
+
+            // Style
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual("Red", cell.StringCellValue, "[Style] B10 cell value");
+            Assert.AreEqual(CellUtil.GetCell(srcRow1, 1).CellStyle, cell.CellStyle, "[Style] B10 cell style");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual("Blue", cell.StringCellValue, "[Style] B11 cell value");
+            Assert.AreEqual(CellUtil.GetCell(srcRow2, 1).CellStyle, cell.CellStyle, "[Style] B11 cell style");
+
+            // Blank
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Blank, cell.CellType, "[Blank] C10 cell type");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Blank, cell.CellType, "[Blank] C11 cell type");
+
+            // Error
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Error, cell.CellType, "[Error] D10 cell type");
+            FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
+            Assert.AreEqual(FormulaError.NA, error, "[Error] D10 cell value"); //FIXME: XSSFCell and HSSFCell expose different interfaces. getErrorCellString would be helpful here
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Error, cell.CellType, "[Error] D11 cell type");
+            error = FormulaError.ForInt(cell.ErrorCellValue);
+            Assert.AreEqual(FormulaError.NAME, error, "[Error] D11 cell value"); //FIXME: XSSFCell and HSSFCell expose different interfaces. getErrorCellString would be helpful here
+
+            // Date
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Date] E10 cell type");
+            DateTime date = new DateTime(2000, 1, 1);
+            Assert.AreEqual(date, cell.DateCellValue, "[Date] E10 cell value");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Date] E11 cell type");
+            date = new DateTime(2000, 1, 2);
+            Assert.AreEqual(date, cell.DateCellValue, "[Date] E11 cell value");
+
+            // Boolean
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Boolean, cell.CellType, "[Boolean] F10 cell type");
+            Assert.AreEqual(true, cell.BooleanCellValue, "[Boolean] F10 cell value");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Boolean, cell.CellType, "[Boolean] F11 cell type");
+            Assert.AreEqual(false, cell.BooleanCellValue, "[Boolean] F11 cell value");
+
+            // String
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.String, cell.CellType, "[String] G10 cell type");
+            Assert.AreEqual("Hello", cell.StringCellValue, "[String] G10 cell value");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.String, cell.CellType, "[String] G11 cell type");
+            Assert.AreEqual("World", cell.StringCellValue, "[String] G11 cell value");
+
+            // Int
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Int] H10 cell type");
+            Assert.AreEqual(15, (int)cell.NumericCellValue, "[Int] H10 cell value");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Int] H11 cell type");
+            Assert.AreEqual(42, (int)cell.NumericCellValue, "[Int] H11 cell value");
+
+            // Float
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Float] I10 cell type");
+            Assert.AreEqual(12.5, cell.NumericCellValue, FLOAT_PRECISION, "[Float] I10 cell value");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Float] I11 cell type");
+            Assert.AreEqual(5.5, cell.NumericCellValue, FLOAT_PRECISION, "[Float] I11 cell value");
+
+            // Cell Formula
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType, "[Cell Formula] J10 cell type");
+            Assert.AreEqual("5+2", cell.CellFormula, "[Cell Formula] J10 cell formula");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType, "[Cell Formula] J11 cell type");
+            Assert.AreEqual("6+18", cell.CellFormula, "[Cell Formula] J11 cell formula");
+            // Cell Formula with Reference
+            col++;
+            // Formula row references should be adjusted by destRowNum-srcRowNum
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Reference] K10 cell type");
+            Assert.AreEqual("J10+H$2", cell.CellFormula,
+                "[Cell Formula with Reference] K10 cell formula");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Reference] K11 cell type");
+            Assert.AreEqual("J11+H$2", cell.CellFormula, "[Cell Formula with Reference] K11 cell formula");
+
+            // Cell Formula with Reference spanning multiple rows
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Reference spanning multiple rows] L10 cell type");
+            Assert.AreEqual("G10&\" \"&G11", cell.CellFormula,
+                "[Cell Formula with Reference spanning multiple rows] L10 cell formula");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Reference spanning multiple rows] L11 cell type");
+            Assert.AreEqual("G11&\" \"&G12", cell.CellFormula,
+                "[Cell Formula with Reference spanning multiple rows] L11 cell formula");
+
+            // Cell Formula with Area Reference
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Area Reference] M10 cell type");
+            Assert.AreEqual("SUM(H10:I11)", cell.CellFormula,
+                "[Cell Formula with Area Reference] M10 cell formula");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Formula, cell.CellType,
+                "[Cell Formula with Area Reference] M11 cell type");
+            Assert.AreEqual("SUM($H$3:I10)", cell.CellFormula,
+                "[Cell Formula with Area Reference] M11 cell formula"); //Also acceptable: SUM($H10:I$3), but this AreaReference isn't in ascending order
+
+            // Array Formula
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Console.WriteLine("Array formulas currently unsupported");
+            /*
+                // FIXME: Array Formula set with Sheet.setArrayFormula() instead of cell.setFormula()
+                Assert.AreEqual("[Array Formula] N10 cell type", CellType.Formula, cell.CellType);
+                Assert.AreEqual("[Array Formula] N10 cell formula", "{SUM(H10:J10*{1,2,3})}", cell.CellFormula);
+
+                cell = CellUtil.GetCell(destRow2, col);
+                // FIXME: Array Formula set with Sheet.setArrayFormula() instead of cell.setFormula() 
+                Assert.AreEqual("[Array Formula] N11 cell type", CellType.Formula, cell.CellType);
+                Assert.AreEqual("[Array Formula] N11 cell formula", "{SUM(H11:J11*{1,2,3})}", cell.CellFormula);
+             */
+
+            // Data Format
+            col++;
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual(CellType.Numeric, cell.CellType, "[Data Format] O10 cell type");
+            Assert.AreEqual(100.20, cell.NumericCellValue, FLOAT_PRECISION, "[Data Format] O10 cell value");
+            String moneyFormat = "\"$\"#,##0.00_);[Red]\\(\"$\"#,##0.00\\)";
+            Assert.AreEqual(moneyFormat, cell.CellStyle.GetDataFormatString(), "[Data Format] O10 cell data format");
+
+            // Merged
+            col++;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual("Merged cells", cell.StringCellValue, "[Merged] P10:Q10 cell value");
+            Assert.IsTrue(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("P10:Q10")),
+                "[Merged] P10:Q10 merged region");
+
+            cell = CellUtil.GetCell(destRow2, col);
+            Assert.AreEqual("Merged cells", cell.StringCellValue,
+                "[Merged] P11:Q11 cell value");
+            Assert.IsTrue(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("P11:Q11")),
+                "[Merged] P11:Q11 merged region");
+
+            // Should Q10/Q11 be checked?
+
+            // Merged across multiple rows
+            // Microsoft Excel 2013 does not copy a merged region unless all rows of
+            // the source merged region are selected
+            // POI's behavior should match this behavior
+            col += 2;
+            cell = CellUtil.GetCell(destRow1, col);
+            Assert.AreEqual("Merged cells across multiple rows", cell.StringCellValue,
+                "[Merged across multiple rows] R10:S11 cell value");
+            Assert.IsTrue(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R10:S11")), 
+                "[Merged across multiple rows] R10:S11 merged region");
+
+            // Row 3 (zero-based) was empty, so Row 11 (zero-based) should be empty too.
+            if (srcRow3 == null) {
+                Assert.IsNull(destRow3, "Row 3 was empty, so Row 11 should be empty");
+            }
+
+            // Make sure other rows are blank (off-by-one errors)
+            Assert.IsNull(sheet.GetRow(7), "Off-by-one lower edge case"); //one row above destHeaderRow
+            Assert.IsNull(sheet.GetRow(12), "Off-by-one upper edge case"); //one row below destRow3
+        }
+
+        [Test]
+        public void TestCopyOneRow()
+        {
+            testCopyOneRow("XSSFSheet.copyRows.xlsx");
+        }
+
+        [Test]
+        public void TestCopyMultipleRows()
+        {
+            testCopyMultipleRows("XSSFSheet.copyRows.xlsx");
+        }
+
     }
 }

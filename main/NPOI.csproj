@@ -750,6 +750,7 @@
     <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
+    <Compile Include="SS\UserModel\CellCopyPolicy.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartData.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />

@@ -25,6 +25,9 @@ using System.Collections.Generic;
 using NPOI.Util;
 using NPOI.SS;
 using System.Collections;
+using NPOI.XSSF.UserModel.Helpers;
+using NPOI.SS.Formula;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -608,6 +611,90 @@ namespace NPOI.XSSF.UserModel
             }
             RowNum = rownum;
         }
+
+
+        /**
+         * Copy the cells from srcRow to this row
+         * If this row is not a blank row, this will merge the two rows, overwriting
+         * the cells in this row with the cells in srcRow
+         * If srcRow is null, overwrite cells in destination row with blank values, styles, etc per cell copy policy
+         * srcRow may be from a different sheet in the same workbook
+         * @param srcRow the rows to copy from
+         * @param policy the policy to determine what gets copied
+         */
+
+        public void copyRowFrom(IRow srcRow, CellCopyPolicy policy)
+        {
+            if (srcRow == null)
+            {
+                // srcRow is blank. Overwrite cells with blank values, blank styles, etc per cell copy policy
+                foreach (ICell destCell in this)
+                {
+                    XSSFCell srcCell = null;
+                    // FIXME: remove type casting when copyCellFrom(Cell, CellCopyPolicy) is added to Cell interface
+                    ((XSSFCell)destCell).CopyCellFrom(srcCell, policy);
+                }
+                if (policy.IsCopyMergedRegions)
+                {
+                    // Remove MergedRegions in dest row
+                    int destRowNum = RowNum;
+                    int index = 0;
+                    NPOI.Util.Collections.HashSet<int> indices = new NPOI.Util.Collections.HashSet<int>();
+                    foreach (CellRangeAddress destRegion in Sheet.MergedRegions)
+                    {
+                        if (destRowNum == destRegion.FirstRow && destRowNum == destRegion.LastRow)
+                        {
+                            indices.Add(index);
+                        }
+                        index++;
+                    }
+                    (Sheet as XSSFSheet).RemoveMergedRegions(indices);
+                }
+                if (policy.IsCopyRowHeight)
+                {
+                    // clear row height
+                    Height = ((short)-1);
+                }
+            }
+            else
+            {
+                foreach (ICell c in srcRow)
+                {
+                    XSSFCell srcCell = (XSSFCell)c;
+                    XSSFCell destCell = CreateCell(srcCell.ColumnIndex, srcCell.CellType) as XSSFCell;
+                    destCell.CopyCellFrom(srcCell, policy);
+                }
+                XSSFRowShifter rowShifter = new XSSFRowShifter(_sheet);
+                int sheetIndex = _sheet.Workbook.GetSheetIndex(_sheet);
+                String sheetName = _sheet.Workbook.GetSheetName(sheetIndex);
+                int srcRowNum = srcRow.RowNum;
+                int destRowNum = RowNum;
+                int rowDifference = destRowNum - srcRowNum;
+                FormulaShifter shifter = FormulaShifter.CreateForRowCopy(sheetIndex, sheetName, srcRowNum, srcRowNum, rowDifference, SpreadsheetVersion.EXCEL2007);
+                rowShifter.UpdateRowFormulas(this, shifter);
+                // Copy merged regions that are fully contained on the row
+                // FIXME: is this something that rowShifter could be doing?
+                if (policy.IsCopyMergedRegions)
+                {
+                    foreach (CellRangeAddress srcRegion in srcRow.Sheet.MergedRegions)
+                    {
+                        if (srcRowNum == srcRegion.FirstRow && srcRowNum == srcRegion.LastRow)
+                        {
+                            CellRangeAddress destRegion = srcRegion.Copy();
+                            destRegion.FirstRow = (destRowNum);
+                            destRegion.LastRow = (destRowNum);
+                            Sheet.AddMergedRegion(destRegion);
+                        }
+                    }
+                }
+                if (policy.IsCopyRowHeight)
+                {
+                    Height = (srcRow.Height);
+                }
+            }
+        }
+
+
 
         #region IRow Members
 
