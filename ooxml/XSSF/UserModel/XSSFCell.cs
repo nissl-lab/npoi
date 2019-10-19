@@ -174,6 +174,31 @@ namespace NPOI.XSSF.UserModel
                     CellStyle = (null);
                 }
             }
+
+
+            if (policy.IsMergeHyperlink)
+            {
+                // if srcCell doesn't have a hyperlink and destCell has a hyperlink, don't clear destCell's hyperlink
+                IHyperlink srcHyperlink = srcCell.Hyperlink;
+                if (srcHyperlink != null)
+                {
+                    Hyperlink = (srcHyperlink.Clone());
+                }
+            }
+            else if (policy.IsCopyHyperlink)
+            {
+                // overwrite the hyperlink at dest cell with srcCell's hyperlink
+                // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
+                IHyperlink srcHyperlink = srcCell.Hyperlink;
+                if (srcHyperlink == null)
+                {
+                    Hyperlink = (null);
+                }
+                else
+                {
+                    Hyperlink = (srcHyperlink.Clone());
+                }
+            }
         }
 
 

@@ -25,6 +25,8 @@ using NPOI.SS.Util;
 using NPOI.SS;
 using TestCases.HSSF;
 using System.Text;
+using System.Collections.Generic;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -523,7 +525,6 @@ namespace NPOI.XSSF.UserModel
             CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(false).Build();
             destCell.CopyCellFrom(srcCell, policy);
             Assert.AreEqual(CellType.Numeric, destCell.CellType);
-            Console.WriteLine("ERROR: fix formula evaluation");
         }
 
         [Test]
@@ -542,6 +543,92 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(CellType.Boolean, destCell.CellType);
             Assert.AreEqual(true, destCell.BooleanCellValue);
         }
+
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_copyHyperlink()
+        {
+            //setUp_testCopyCellFrom_CellCopyPolicy();
+            IWorkbook wb = srcCell.Sheet.Workbook;
+            ICreationHelper createHelper = wb.GetCreationHelper();
+            srcCell.SetCellValue("URL LINK");
+            IHyperlink link = createHelper.CreateHyperlink(HyperlinkType.Url);
+            link.Address = ("http://poi.apache.org/");
+            srcCell.Hyperlink = (link);
+            // Set link cell style (optional)
+            ICellStyle hlinkStyle = wb.CreateCellStyle();
+            IFont hlinkFont = wb.CreateFont();
+            hlinkFont.Underline = FontUnderlineType.Single;
+            hlinkFont.Color = (IndexedColors.Blue.Index);
+            hlinkStyle.SetFont(hlinkFont);
+            srcCell.CellStyle = (hlinkStyle);
+            // Copy hyperlink
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CopyHyperlink(true).MergeHyperlink(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.IsNotNull(destCell.Hyperlink);
+            Assert.AreSame(srcCell.Sheet, destCell.Sheet,
+                "unit test assumes srcCell and destCell are on the same sheet");
+            List<IHyperlink> links = srcCell.Sheet.GetHyperlinkList();
+            Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
+            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(0)] as XSSFHyperlink).GetCellRef(),
+                "source hyperlink");
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(1)] as XSSFHyperlink).GetCellRef(),
+                "destination hyperlink");
+
+            wb.Close();
+        }
+
+        [Test]
+        public void testCopyCellFrom_CellCopyPolicy_mergeHyperlink()
+        {
+            //setUp_testCopyCellFrom_CellCopyPolicy();
+            IWorkbook wb = srcCell.Sheet.Workbook;
+            ICreationHelper createHelper = wb.GetCreationHelper();
+            srcCell.SetCellValue("URL LINK");
+            IHyperlink link = createHelper.CreateHyperlink(HyperlinkType.Url);
+            link.Address = ("http://poi.apache.org/");
+            destCell.Hyperlink = (link);
+            // Set link cell style (optional)
+            ICellStyle hlinkStyle = wb.CreateCellStyle();
+            IFont hlinkFont = wb.CreateFont();
+            hlinkFont.Underline = FontUnderlineType.Single;
+            hlinkFont.Color = (IndexedColors.Blue.Index);
+            hlinkStyle.SetFont(hlinkFont);
+            destCell.CellStyle = (hlinkStyle);
+
+            // Pre-condition assumptions. This test is broken if either of these Assert.Fail.
+            Assert.AreSame(srcCell.Sheet, destCell.Sheet,
+                "unit test assumes srcCell and destCell are on the same sheet");
+            Assert.IsNull(srcCell.Hyperlink);
+            // Merge hyperlink - since srcCell doesn't have a hyperlink, destCell's hyperlink is not overwritten (cleared).
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().MergeHyperlink(true).CopyHyperlink(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.IsNull(srcCell.Hyperlink);
+            Assert.IsNotNull(destCell.Hyperlink);
+            Assert.AreSame(link, destCell.Hyperlink);
+            List<IHyperlink> links;
+            links = srcCell.Sheet.GetHyperlinkList();
+            Assert.AreEqual(1, links.Count, "number of hyperlinks on sheet");
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).GetCellRef(),
+                "source hyperlink");
+
+            // Merge destCell's hyperlink to srcCell. Since destCell does have a hyperlink, this should copy destCell's hyperlink to srcCell.
+            srcCell.CopyCellFrom(destCell, policy);
+            Assert.IsNotNull(srcCell.Hyperlink);
+            Assert.IsNotNull(destCell.Hyperlink);
+
+            links = srcCell.Sheet.GetHyperlinkList();
+            Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).GetCellRef(),
+                "dest hyperlink");
+            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(1)] as XSSFHyperlink).GetCellRef(),
+                "source hyperlink");
+
+            wb.Close();
+        }
+
+
+
         [SetUp]
         private void setUp_testCopyCellFrom_CellCopyPolicy()
         {

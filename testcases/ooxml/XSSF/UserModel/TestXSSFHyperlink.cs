@@ -251,12 +251,12 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sh2 = wb2.GetSheetAt(0) as XSSFSheet;
 
             Assert.AreEqual(sh1.NumberOfComments, sh2.NumberOfComments);
-            XSSFHyperlink l1 = sh1.GetHyperlink(0, 1);
+            XSSFHyperlink l1 = sh1.GetHyperlink(0, 1) as XSSFHyperlink;
             Assert.AreEqual(HyperlinkType.Document, l1.Type);
             Assert.AreEqual("B1", l1.GetCellRef());
             Assert.AreEqual("Sort on Titel", l1.Tooltip);
 
-            XSSFHyperlink l2 = sh2.GetHyperlink(0, 1);
+            XSSFHyperlink l2 = sh2.GetHyperlink(0, 1) as XSSFHyperlink;
             Assert.AreEqual(l1.Tooltip, l2.Tooltip);
             Assert.AreEqual(HyperlinkType.Document, l2.Type);
             Assert.AreEqual("B1", l2.GetCellRef());
