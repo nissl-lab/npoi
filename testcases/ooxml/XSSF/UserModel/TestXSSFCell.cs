@@ -526,6 +526,19 @@ namespace NPOI.XSSF.UserModel
             destCell.CopyCellFrom(srcCell, policy);
             Assert.AreEqual(CellType.Numeric, destCell.CellType);
         }
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_formulaWithUnregisteredUDF()
+        {
+            //setUp_testCopyCellFrom_CellCopyPolicy();
+
+            srcCell.CellFormula = ("MYFUNC2(123, $A5, Sheet1!$B7)");
+
+            // Copy formula verbatim (no shifting). This is okay because copyCellFrom is Internal.
+            // Users should use higher-level copying functions to row- or column-shift formulas.
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(true).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.AreEqual("MYFUNC2(123, $A5, Sheet1!$B7)", destCell.CellFormula);
+        }
 
         [Test]
         public void TestCopyCellFrom_CellCopyPolicy_style()
@@ -579,7 +592,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void testCopyCellFrom_CellCopyPolicy_mergeHyperlink()
+        public void TestCopyCellFrom_CellCopyPolicy_mergeHyperlink()
         {
             //setUp_testCopyCellFrom_CellCopyPolicy();
             IWorkbook wb = srcCell.Sheet.Workbook;
