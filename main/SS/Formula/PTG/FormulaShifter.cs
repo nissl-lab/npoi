@@ -28,10 +28,10 @@ namespace NPOI.SS.Formula
      */
     public class FormulaShifter
     {
-        public enum ShiftMode
+        private enum ShiftMode
         {
-            Row,
-            Sheet
+            RowMove,
+            SheetMove
         }
         /**
          * Extern sheet index of sheet where moving is occurring
@@ -69,7 +69,7 @@ namespace NPOI.SS.Formula
              _firstMovedIndex = firstMovedIndex;
              _lastMovedIndex = lastMovedIndex;
              _amountToMove = amountToMove;
-             _mode = ShiftMode.Row;
+             _mode = ShiftMode.RowMove;
 
              _srcSheetIndex = _dstSheetIndex = -1;
          }
@@ -86,7 +86,7 @@ namespace NPOI.SS.Formula
 
             _srcSheetIndex = srcSheetIndex;
             _dstSheetIndex = dstSheetIndex;
-            _mode = ShiftMode.Sheet;
+            _mode = ShiftMode.SheetMove;
         }
         public static FormulaShifter CreateForRowShift(int externSheetIndex, String sheetName, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove)
         {
@@ -134,9 +134,9 @@ namespace NPOI.SS.Formula
             //return AdjustPtgDueToRowMove(ptg, currentExternSheetIx);
             switch (_mode)
             {
-                case ShiftMode.Row:
+                case ShiftMode.RowMove:
                     return AdjustPtgDueToRowMove(ptg, currentExternSheetIx);
-                case ShiftMode.Sheet:
+                case ShiftMode.SheetMove:
                     return AdjustPtgDueToSheetMove(ptg);
                 default:
                     throw new InvalidOperationException("Unsupported shift mode: " + _mode);
