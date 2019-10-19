@@ -22,6 +22,8 @@ using NPOI.SS.Formula;
 using System;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Linq;
+
 namespace NPOI.XSSF.UserModel.Helpers
 {
     /**
@@ -313,10 +315,11 @@ namespace NPOI.XSSF.UserModel.Helpers
         public void UpdateHyperlinks(FormulaShifter shifter)
         {
             int sheetIndex = sheet.GetWorkbook().GetSheetIndex(sheet);
-            List<XSSFHyperlink> hyperlinkList = sheet.GetHyperlinkList();
+            List<IHyperlink> hyperlinkList = sheet.GetHyperlinkList();
 
-            foreach (XSSFHyperlink hyperlink in hyperlinkList)
+            foreach (IHyperlink hyperlink1 in hyperlinkList)
             {
+                XSSFHyperlink hyperlink = hyperlink1 as XSSFHyperlink;
                 String cellRef = hyperlink.GetCellRef();
                 CellRangeAddress cra = CellRangeAddress.ValueOf(cellRef);
                 CellRangeAddress shiftedRange = ShiftRange(shifter, cra, sheetIndex);

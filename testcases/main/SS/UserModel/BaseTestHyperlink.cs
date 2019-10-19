@@ -18,6 +18,8 @@
 using TestCases.SS;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
+using System.Collections.Generic;
+
 namespace TestCases.SS.UserModel
 {
 
@@ -97,6 +99,45 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("mailto:poi@apache.org?subject=Hyperlinks", link.Address);
             link = sheet.GetRow(3).GetCell(0).Hyperlink;
             Assert.AreEqual("'Target Sheet'!A1", link.Address);
+        }
+
+
+        [Test]
+        public void TestClone()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICreationHelper createHelper = wb.GetCreationHelper();
+            ISheet sheet = wb.CreateSheet("Hyperlinks");
+            IRow row = sheet.CreateRow(0);
+            ICell cell1, cell2;
+            IHyperlink link1, link2;
+            //URL
+            cell1 = row.CreateCell(0);
+            cell2 = row.CreateCell(1);
+            cell1.SetCellValue("URL Link");
+            link1 = createHelper.CreateHyperlink(HyperlinkType.Url);
+            link1.Address = ("http://poi.apache.org/");
+            cell1.Hyperlink = (link1);
+
+            link2 = link1.Clone();
+
+            // Change address (type is not changeable)
+            link2.Address = ("http://apache.org/");
+            cell2.Hyperlink = (link2);
+
+            // Make sure hyperlinks were deep-copied, and modifying one does not modify the other. 
+            Assert.AreNotSame(link1, link2);
+            Assert.AreNotEqual(link1, link2);
+            Assert.AreEqual("http://poi.apache.org/", link1.Address);
+            Assert.AreEqual("http://apache.org/", link2.Address);
+            Assert.AreEqual(link1, cell1.Hyperlink);
+            Assert.AreEqual(link2, cell2.Hyperlink);
+
+            // Make sure both hyperlinks were added to the sheet
+            List<IHyperlink> actualHyperlinks = sheet.GetHyperlinkList();
+            Assert.AreEqual(2, actualHyperlinks.Count);
+            Assert.AreEqual(link1, actualHyperlinks[0]);
+            Assert.AreEqual(link2, actualHyperlinks[1]);
         }
     }
 

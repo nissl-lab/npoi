@@ -724,7 +724,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="row"></param>
         /// <param name="column"></param>
         /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
-        public XSSFHyperlink GetHyperlink(int row, int column)
+        public IHyperlink GetHyperlink(int row, int column)
         {
             String ref1 = new CellReference(row, column).FormatAsString();
             foreach (XSSFHyperlink hyperlink in hyperlinks)
@@ -741,9 +741,9 @@ namespace NPOI.XSSF.UserModel
         /// Get a list of Hyperlinks in this sheet
         /// </summary>
         /// <returns></returns>
-        public List<XSSFHyperlink> GetHyperlinkList()
+        public List<IHyperlink> GetHyperlinkList()
         {
-            return (hyperlinks);
+            return (hyperlinks.ToList<IHyperlink>());
         }
 
         /**

@@ -511,9 +511,33 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        /**
+         * Get a Hyperlink in this sheet anchored at row, column
+         *
+         * @param row
+         * @param column
+         * @return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null
+         */
+
+        public IHyperlink GetHyperlink(int row, int column)
+        {
+            return _sh.GetHyperlink(row, column);
+        }
+
+        /**
+         * Get a list of Hyperlinks in this sheet
+         *
+         * @return Hyperlinks for the sheet
+         */
+
+        public List<IHyperlink> GetHyperlinkList()
+        {
+            return _sh.GetHyperlinkList();
+        }
+
         public IDrawing CreateDrawingPatriarch()
         {
-            throw new NotImplementedException();
+            return _sh.CreateDrawingPatriarch();
         }
 
         public void CreateFreezePane(int colSplit, int rowSplit)
@@ -860,8 +884,8 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
- * @param rowIndex the zero based row index to find from
- */
+         * @param rowIndex the zero based row index to find from
+         */
         private int FindStartOfRowOutlineGroup(int rowIndex)
         {
             // Find the start of the group.

@@ -44,6 +44,7 @@ namespace NPOI.XSSF.UserModel
         {
             _type = type;
             _ctHyperlink = new CT_Hyperlink();
+            _externalRel = null;
         }
 
         /**
@@ -107,6 +108,13 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+        }
+
+        public IHyperlink Clone()
+        {
+            XSSFHyperlink clone = new XSSFHyperlink((CT_Hyperlink)_ctHyperlink.Copy(), _externalRel);
+            clone.Location = (_location);
+            return clone;
         }
 
         /**

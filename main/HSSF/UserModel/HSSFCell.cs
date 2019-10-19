@@ -1177,19 +1177,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                for (IEnumerator it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
-                {
-                    RecordBase rec = (RecordBase)it.Current;
-                    if (rec is HyperlinkRecord)
-                    {
-                        HyperlinkRecord link = (HyperlinkRecord)rec;
-                        if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
-                        {
-                            return new HSSFHyperlink(link);
-                        }
-                    }
-                }
-                return null;
+                return _sheet.GetHyperlink(_record.Row, _record.Column);
             }
             set
             {

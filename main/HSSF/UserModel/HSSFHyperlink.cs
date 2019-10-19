@@ -24,12 +24,12 @@ namespace NPOI.HSSF.UserModel
     /// Represents an Excel hyperlink.
     /// </summary>
     /// <remarks>@author Yegor Kozlov (yegor at apache dot org)</remarks>
-    public class HSSFHyperlink:IHyperlink
+    public class HSSFHyperlink : IHyperlink
     {
         /**
          * Low-level record object that stores the actual hyperlink data
          */
-        public HyperlinkRecord record = null;
+        public HyperlinkRecord record;
 
         /**
          * If we Create a new hypelrink remember its type
@@ -57,6 +57,19 @@ namespace NPOI.HSSF.UserModel
                     record.CreateDocumentLink();
                     break;
             }
+        }
+
+        public IHyperlink Clone()
+        {
+            return new HSSFHyperlink((HyperlinkRecord)record.Clone());
+            /*final HSSFHyperlink link = new HSSFHyperlink(link_type);
+            link.setLabel(getLabel());
+            link.setAddress(getAddress());
+            link.setFirstColumn(getFirstColumn());
+            link.setFirstRow(getFirstRow());
+            link.setLastColumn(getLastColumn());
+            link.setLastRow(getLastRow());
+            return link;*/
         }
 
         /// <summary>
@@ -165,6 +178,23 @@ namespace NPOI.HSSF.UserModel
         public HyperlinkType Type
         {
             get { return (HyperlinkType)link_type; }
+        }
+
+        /**
+         * @return whether the objects have the same HyperlinkRecord
+         */
+        public override bool Equals(Object other)
+        {
+            if (this == other) return true;
+            if (!(other is HSSFHyperlink)) return false;
+            HSSFHyperlink otherLink = (HSSFHyperlink)other;
+            return record == otherLink.record;
+        }
+
+
+        public override int GetHashCode()
+        {
+            return record.GetHashCode();
         }
     }
 }

@@ -824,6 +824,22 @@ namespace NPOI.SS.UserModel
         int GetColumnOutlineLevel(int columnIndex);
 
         bool IsDate1904();
+
+        /**
+         * Get a Hyperlink in this sheet anchored at row, column
+         *
+         * @param row
+         * @param column
+         * @return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null
+         */
+        IHyperlink GetHyperlink(int row, int column);
+
+        /**
+         * Get a list of Hyperlinks in this sheet
+         *
+         * @return Hyperlinks for the sheet
+         */
+        List<IHyperlink> GetHyperlinkList();
     }
 
 }

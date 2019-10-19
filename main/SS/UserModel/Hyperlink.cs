@@ -76,6 +76,12 @@ namespace NPOI.SS.UserModel
         /// the column of the last cell that Contains the hyperlink
         /// </summary>
         int LastColumn { get; set; }
+        /**
+         * Create a clone of this hyperlink
+         *
+         * @return clone of this Hyperlink
+         */
+        IHyperlink Clone();
 
         string TextMark { get; set; }
     }

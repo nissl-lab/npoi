@@ -1570,7 +1570,7 @@ namespace NPOI.HSSF.UserModel
             int sheetIndex = _workbook.GetSheetIndex(this);
             String sheetName = _workbook.GetSheetName(sheetIndex);
             int externSheetIndex = book.CheckExternSheet(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex,sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL97);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL97);
             _sheet.UpdateFormulasAfterCellShift(shifter, externSheetIndex);
 
             int nSheets = _workbook.NumberOfSheets;
@@ -1857,7 +1857,7 @@ namespace NPOI.HSSF.UserModel
 
             EscherAggregate r = (EscherAggregate)Sheet.FindFirstRecordBySid(EscherAggregate.sid);
             IList escherRecords = r.EscherRecords;
-            for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
+            for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext();)
             {
                 EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 if (fat)
@@ -2260,6 +2260,47 @@ namespace NPOI.HSSF.UserModel
         public IComment GetCellComment(int row, int column)
         {
             return FindCellComment(row, column);
+        }
+
+        /**
+         * Get a Hyperlink in this sheet anchored at row, column
+         *
+         * @param row
+         * @param column
+         * @return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null
+         */
+        public IHyperlink GetHyperlink(int row, int column)
+        {
+            foreach (RecordBase rec in _sheet.Records)
+            {
+                if (rec is HyperlinkRecord) {
+                    HyperlinkRecord link = (HyperlinkRecord)rec;
+                    if (link.FirstColumn == column && link.FirstRow == row)
+                    {
+                        return new HSSFHyperlink(link);
+                    }
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Get a list of Hyperlinks in this sheet
+         *
+         * @return Hyperlinks for the sheet
+         */
+
+        public List<IHyperlink> GetHyperlinkList()
+        {
+            List<IHyperlink> hyperlinkList = new List<IHyperlink>();
+            foreach (RecordBase rec in _sheet.Records)
+            {
+                if (rec is HyperlinkRecord){
+                    HyperlinkRecord link = (HyperlinkRecord)rec;
+                    hyperlinkList.Add(new HSSFHyperlink(link));
+                }
+            }
+            return hyperlinkList;
         }
 
         /// <summary>
