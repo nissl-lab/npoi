@@ -1570,7 +1570,7 @@ namespace NPOI.HSSF.UserModel
             int sheetIndex = _workbook.GetSheetIndex(this);
             String sheetName = _workbook.GetSheetName(sheetIndex);
             int externSheetIndex = book.CheckExternSheet(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex,sheetName, startRow, endRow, n);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex,sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL97);
             _sheet.UpdateFormulasAfterCellShift(shifter, externSheetIndex);
 
             int nSheets = _workbook.NumberOfSheets;

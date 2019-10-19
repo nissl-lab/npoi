@@ -2964,7 +2964,7 @@ namespace NPOI.XSSF.UserModel
             int sheetIndex = Workbook.GetSheetIndex(this);
             String sheetName = Workbook.GetSheetName(sheetIndex);
             FormulaShifter shifter = FormulaShifter.CreateForRowShift(
-                                       sheetIndex, sheetName, startRow, endRow, n);
+                                       sheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL2007);
 
             rowShifter.UpdateNamedRanges(shifter);
             rowShifter.UpdateFormulas(shifter);
@@ -3312,7 +3312,7 @@ namespace NPOI.XSSF.UserModel
             return sheetPr.IsSetPageSetUpPr() ? sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
         }
 
-        private bool ShouldRemoveRow(int startRow, int endRow, int n, int rownum)
+        private static bool ShouldRemoveRow(int startRow, int endRow, int n, int rownum)
         {
             if (rownum >= (startRow + n) && rownum <= (endRow + n))
             {

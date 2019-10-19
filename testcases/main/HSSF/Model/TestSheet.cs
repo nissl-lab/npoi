@@ -32,6 +32,7 @@ namespace TestCases.HSSF.Model
     using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.DDF;
+    using NPOI.SS;
 
     /**
      * Unit Test for the Sheet class.
@@ -688,7 +689,7 @@ namespace TestCases.HSSF.Model
             //Assert.AreEqual(23, sheetRecs.Count);
             Assert.AreEqual(24, sheetRecs.Count); //for SheetExtRecord
 
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0,"", 0, 0, 1);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0,"", 0, 0, 1, SpreadsheetVersion.EXCEL97);
             sheet.UpdateFormulasAfterCellShift(shifter, 0);
             if (sheetRecs.Count == 25 && sheetRecs[22] is ConditionalFormattingTable)
             {
