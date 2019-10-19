@@ -46,7 +46,6 @@ namespace NPOI.XSSF.streaming
             SXSSFITestDataProvider.instance.Cleanup();
         }
 
-
         /**
          * cloning of sheets is not supported in SXSSF
          */

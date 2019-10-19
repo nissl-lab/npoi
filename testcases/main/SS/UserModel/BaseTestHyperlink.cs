@@ -15,10 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-using TestCases.SS;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
+using System;
 
 namespace TestCases.SS.UserModel
 {
@@ -101,9 +101,9 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("'Target Sheet'!A1", link.Address);
         }
 
-
+        // copy a hyperlink via the copy constructor
         [Test]
-        public void TestClone()
+        public void TestCopyHyperlink()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICreationHelper createHelper = wb.GetCreationHelper();
@@ -119,7 +119,7 @@ namespace TestCases.SS.UserModel
             link1.Address = ("http://poi.apache.org/");
             cell1.Hyperlink = (link1);
 
-            link2 = link1.Clone();
+            link2 = CopyHyperlink(link1);
 
             // Change address (type is not changeable)
             link2.Address = ("http://apache.org/");
@@ -138,6 +138,11 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, actualHyperlinks.Count);
             Assert.AreEqual(link1, actualHyperlinks[0]);
             Assert.AreEqual(link2, actualHyperlinks[1]);
+        }
+
+        public virtual IHyperlink CopyHyperlink(IHyperlink link)
+        {
+            throw new NotImplementedException();
         }
     }
 

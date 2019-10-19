@@ -20,6 +20,9 @@ using System;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.OpenXml4Net.OPC;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.Util;
+
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -285,6 +288,28 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
         }
 
+        public XSSFHyperlink CopyHyperlink(IHyperlink link)
+        {
+            return new XSSFHyperlink(link);
+        }
+
+        [Test]
+        public void TestCopyHSSFHyperlink()
+        {
+            HSSFHyperlink hlink = new HSSFHyperlink(HyperlinkType.Url);
+            hlink.Address = ("http://poi.apache.org/");
+            hlink.FirstColumn = (3);
+            hlink.FirstRow = (2);
+            hlink.LastColumn = (5);
+            hlink.LastRow = (6);
+            hlink.Label = ("label");
+            XSSFHyperlink xlink = new XSSFHyperlink(hlink);
+
+            Assert.AreEqual("http://poi.apache.org/", xlink.Address);
+            Assert.AreEqual(new CellReference(2, 3), new CellReference(xlink.GetCellRef()));
+            // Are HSSFHyperlink.label and XSSFHyperlink.tooltip the same? If so, perhaps one of these needs renamed for a consistent Hyperlink interface
+            // Assert.AreEqual("label", xlink.Tooltip);
+        }
     }
 
 

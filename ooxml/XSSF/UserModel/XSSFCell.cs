@@ -185,7 +185,7 @@ namespace NPOI.XSSF.UserModel
                 IHyperlink srcHyperlink = srcCell.Hyperlink;
                 if (srcHyperlink != null)
                 {
-                    Hyperlink = (srcHyperlink.Clone());
+                    Hyperlink = new XSSFHyperlink(srcHyperlink);
                 }
             }
             else if (policy.IsCopyHyperlink)
@@ -199,7 +199,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    Hyperlink = (srcHyperlink.Clone());
+                    Hyperlink = new XSSFHyperlink(srcHyperlink);
                 }
             }
         }

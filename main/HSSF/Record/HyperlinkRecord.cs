@@ -612,6 +612,39 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
+        /**
+         * Based on the link options, is this a url?
+         */
+        public bool IsUrlLink
+        {
+            get
+            {
+                return (_linkOpts & HLINK_URL) > 0
+                && (_linkOpts & HLINK_ABS) > 0;
+            }
+        }
+        /**
+         * Based on the link options, is this a file?
+         */
+        public bool IsFileLink
+        {
+            get
+            {
+                return (_linkOpts & HLINK_URL) > 0
+                && (_linkOpts & HLINK_ABS) == 0;
+            }
+        }
+        /**
+         * Based on the link options, is this a document?
+         */
+        public bool IsDocumentLink
+        {
+            get
+            {
+                return (_linkOpts & HLINK_PLACE) > 0;
+            }
+        }
+
         /// <summary>
         /// Initialize a new url link
         /// </summary>        

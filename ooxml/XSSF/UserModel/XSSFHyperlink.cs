@@ -21,8 +21,6 @@ using NPOI.SS.Util;
 using NPOI.OpenXmlFormats.Spreadsheet;
 namespace NPOI.XSSF.UserModel
 {
-
-
     /**
      * XSSF Implementation of a Hyperlink.
      * Note - unlike with HSSF, many kinds of hyperlink
@@ -110,11 +108,31 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public IHyperlink Clone()
+        /**
+         * Create a new XSSFHyperlink. This method is for Internal use only.
+         * XSSFHyperlinks can be created by XSSFCreationHelper.
+         *
+         * @param type - the type of hyperlink to create, see {@link Hyperlink}
+         */
+        //FIXME: change to protected if/when SXSSFHyperlink class is created
+        public XSSFHyperlink(IHyperlink other)
         {
-            XSSFHyperlink clone = new XSSFHyperlink((CT_Hyperlink)_ctHyperlink.Copy(), _externalRel);
-            clone.Location = (_location);
-            return clone;
+            if (other is XSSFHyperlink)
+            {
+                XSSFHyperlink xlink = (XSSFHyperlink)other;
+                _type = xlink.Type;
+                _location = xlink._location;
+                _externalRel = xlink._externalRel;
+                _ctHyperlink = xlink._ctHyperlink.Copy();
+            }
+            else
+            {
+                _type = other.Type;
+                _location = other.Address;
+                _externalRel = null;
+                _ctHyperlink = new CT_Hyperlink();
+                SetCellReference(new CellReference(other.FirstRow, other.FirstColumn));
+            }
         }
 
         /**

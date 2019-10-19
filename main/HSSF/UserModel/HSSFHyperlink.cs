@@ -34,7 +34,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * If we Create a new hypelrink remember its type
          */
-        protected int link_type;
+        protected HyperlinkType link_type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFHyperlink"/> class.
@@ -42,7 +42,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="type">The type of hyperlink to Create.</param>
         public HSSFHyperlink(HyperlinkType type)
         {
-            this.link_type = (int)type;
+            this.link_type = type;
             record = new HyperlinkRecord();
             switch (type)
             {
@@ -59,19 +59,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        public IHyperlink Clone()
-        {
-            return new HSSFHyperlink((HyperlinkRecord)record.Clone());
-            /*final HSSFHyperlink link = new HSSFHyperlink(link_type);
-            link.setLabel(getLabel());
-            link.setAddress(getAddress());
-            link.setFirstColumn(getFirstColumn());
-            link.setFirstRow(getFirstRow());
-            link.setLastColumn(getLastColumn());
-            link.setLastRow(getLastRow());
-            return link;*/
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFHyperlink"/> class.
         /// </summary>
@@ -79,6 +66,52 @@ namespace NPOI.HSSF.UserModel
         public HSSFHyperlink(HyperlinkRecord record)
         {
             this.record = record;
+            link_type = getType(record);
+        }
+        private HyperlinkType getType(HyperlinkRecord record)
+        {
+            HyperlinkType link_type;
+            // Figure out the type
+            if (record.IsFileLink)
+            {
+                link_type = HyperlinkType.File;
+            }
+            else if (record.IsDocumentLink)
+            {
+                link_type = HyperlinkType.Document;
+            }
+            else
+            {
+                if (record.Address != null &&
+                        record.Address.StartsWith("mailto:"))
+                {
+                    link_type = HyperlinkType.Email;
+                }
+                else
+                {
+                    link_type = HyperlinkType.Url;
+                }
+            }
+            return link_type;
+        }
+
+        public HSSFHyperlink(IHyperlink other)
+        {
+            if (other is HSSFHyperlink)
+            {
+                HSSFHyperlink hlink = (HSSFHyperlink)other;
+                record = hlink.record.Clone() as HyperlinkRecord;
+                link_type = getType(record);
+            }
+            else
+            {
+                link_type = other.Type;
+                record = new HyperlinkRecord();
+                FirstRow = (other.FirstRow);
+                FirstColumn = (other.FirstColumn);
+                LastRow = (other.LastRow);
+                LastColumn = (other.LastColumn);
+            }
         }
 
         /// <summary>
