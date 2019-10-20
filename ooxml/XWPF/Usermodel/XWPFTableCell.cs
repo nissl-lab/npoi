@@ -322,7 +322,7 @@ namespace NPOI.XWPF.UserModel
         {
             XWPFVertAlign vAlign = XWPFVertAlign.TOP;
             CT_TcPr tcpr = ctTc.tcPr;
-            if (ctTc != null)
+            if (tcpr != null)
             {
                 CT_VerticalJc va = tcpr.vAlign;
                 vAlign = stVertAlignTypeMap[(va.val)];
@@ -602,12 +602,12 @@ namespace NPOI.XWPF.UserModel
             {
                 return null;
             }
-            XWPFTableRow tableRow = table.GetRow(row);
-            if (tableRow == null)
+            XWPFTableRow tr = table.GetRow(row);
+            if (tr == null)
             {
                 return null;
             }
-            return tableRow.GetTableCell(cell);
+            return tr.GetTableCell(cell);
         }
 
         public XWPFDocument GetXWPFDocument()
