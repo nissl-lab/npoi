@@ -759,6 +759,21 @@ namespace NPOI.XWPF.UserModel
             }
 
         }
+        public bool IsHighlighted
+        {
+            get
+            {
+                CT_RPr pr = run.rPr;
+                if (pr == null || !pr.IsSetHighlight())
+                    return false;
+                if (pr.highlight.val == ST_HighlightColor.none)
+                    return false;
+                return true;
+            }
+        }
+        // TODO Provide a wrapper round STHighlightColor, then expose getter/setter
+        //  for the highlight colour. Ideally also then add to CharacterRun interface
+
 
         public int CharacterSpacing
         {

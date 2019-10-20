@@ -4775,6 +4775,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.spacingField = new CT_SignedTwipsMeasure();
             return this.spacingField;
         }
+
+        public bool IsSetHighlight()
+        {
+            return this.highlightField != null;
+        }
+
+        internal CT_Highlight AddNewHighlight()
+        {
+            this.highlightField = new CT_Highlight();
+            return this.highlightField;
+        }
     }
 
 

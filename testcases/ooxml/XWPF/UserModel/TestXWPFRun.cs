@@ -411,6 +411,21 @@ namespace NPOI.XWPF.UserModel
         }
 
         [Test]
+        public void testSetGetHighlight()
+        {
+            XWPFRun run = p.CreateRun();
+            Assert.AreEqual(false, run.IsHighlighted);
+
+            // TODO Do this using XWPFRun methods
+            run.GetCTR().AddNewRPr().AddNewHighlight().val = (ST_HighlightColor.none);
+            Assert.AreEqual(false, run.IsHighlighted);
+            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.cyan);
+            Assert.AreEqual(true, run.IsHighlighted);
+            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.none);
+            Assert.AreEqual(false, run.IsHighlighted);
+        }
+
+        [Test]
         public void TestAddPicture()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
@@ -426,9 +441,9 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
         }
         /**
-     * Bugzilla #52288 - setting the font family on the
-     *  run mustn't NPE
-     */
+         * Bugzilla #52288 - setting the font family on the
+         *  run mustn't NPE
+         */
         [Test]
         public void TestSetFontFamily_52288()
         {
