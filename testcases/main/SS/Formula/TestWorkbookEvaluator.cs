@@ -167,14 +167,14 @@ namespace TestCases.SS.Formula
             ICell cell = row.CreateCell(0);
             cell.CellFormula = "1+IF(1,,)";
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            CellValue cv;
+            CellValue cv = null;
             try
             {
                 cv = fe.Evaluate(cell);
             }
             catch (Exception)
             {
-                throw new AssertionException("Missing arg result not being handled correctly.");
+                Assert.Fail("Missing arg result not being handled correctly.");
             }
 
             Assert.AreEqual(CellType.Numeric, cv.CellType);
@@ -223,13 +223,13 @@ namespace TestCases.SS.Formula
             {
                 if ("Specified row index (0) is outside the allowed range (1..4)".Equals(e.Message))
                 {
-                    throw new AssertionException("Identified bug in result dereferencing");
+                    Assert.Fail("Identified bug in result dereferencing");
                 }
                 throw;
             }
 
             Assert.AreEqual(CellType.Error, cv.CellType);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cv.ErrorValue);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, cv.ErrorValue);
 
             // verify circular refs are still detected properly
             fe.ClearAllCachedResultValues();
