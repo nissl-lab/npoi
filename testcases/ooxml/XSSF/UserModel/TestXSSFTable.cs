@@ -64,6 +64,35 @@ namespace NPOI.XSSF.UserModel
             }
             //Assert.IsTrue(outputFile.Delete());
         }
+        [Test]
+        public void TestCTTableStyleInfo()
+        {
+            XSSFWorkbook outputWorkbook = new XSSFWorkbook();
+            XSSFSheet sheet = outputWorkbook.CreateSheet() as XSSFSheet;
 
+            //Create
+            XSSFTable outputTable = sheet.CreateTable();
+            outputTable.DisplayName = ("Test");
+            CT_Table outputCTTable = outputTable.GetCTTable();
+
+            //Style configurations
+            CT_TableStyleInfo outputStyleInfo = outputCTTable.AddNewTableStyleInfo();
+            outputStyleInfo.name = ("TableStyleLight1");
+            outputStyleInfo.showColumnStripes = (false);
+            outputStyleInfo.showRowStripes = (true);
+
+            XSSFWorkbook inputWorkbook = XSSFTestDataSamples.WriteOutAndReadBack(outputWorkbook) as XSSFWorkbook;
+            List<XSSFTable> tables = (inputWorkbook.GetSheetAt(0) as XSSFSheet).GetTables();
+            Assert.AreEqual(1, tables.Count, "Tables number");
+
+            XSSFTable inputTable = tables[0];
+            Assert.AreEqual(outputTable.DisplayName, inputTable.DisplayName, "Table display name");
+
+            CT_TableStyleInfo inputStyleInfo = inputTable.GetCTTable().tableStyleInfo;
+            Assert.AreEqual(outputStyleInfo.name, inputStyleInfo.name, "Style name");
+            Assert.AreEqual(outputStyleInfo.showColumnStripes, inputStyleInfo.showColumnStripes, "Show column stripes");
+            Assert.AreEqual(outputStyleInfo.showRowStripes, inputStyleInfo.showRowStripes, "Show row stripes");
+
+        }
     }
 }
