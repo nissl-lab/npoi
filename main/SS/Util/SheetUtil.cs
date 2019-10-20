@@ -399,19 +399,48 @@ namespace NPOI.SS.Util
         {
             return GetColumnWidth(sheet, column, useMergedCells, sheet.FirstRowNum, sheet.LastRowNum);
         }
+        /**
+         * Compute width of a column based on a subset of the rows and return the result
+         *
+         * @param sheet the sheet to calculate
+         * @param column    0-based index of the column
+         * @param useMergedCells    whether to use merged cells
+         * @param firstRow  0-based index of the first row to consider (inclusive)
+         * @param lastRow   0-based index of the last row to consider (inclusive)
+         * @return  the width in pixels or -1 if cell is empty
+         */
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow)
         {
-            //AttributedString str;
-            //TextLayout layout;
-
-            IWorkbook wb = sheet.Workbook;
             DataFormatter formatter = new DataFormatter();
-            IFont defaultFont = wb.GetFontAt(0);
+            int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);
 
-            //str = new AttributedString((defaultChar));
+            double width = -1;
+            for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
+            {
+                IRow row = sheet.GetRow(rowIdx);
+                if (row != null)
+                {
+                    double cellWidth = GetColumnWidthForRow(row, column, defaultCharWidth, formatter, useMergedCells);
+                    width = Math.Max(width, cellWidth);
+                }
+            }
+            return width;
+        }
+
+        /**
+         * Get default character width
+         *
+         * @param wb the workbook to get the default character width from
+         * @return default character width
+         */
+        private static int GetDefaultCharWidth(IWorkbook wb)
+        {
+            IFont defaultFont = wb.GetFontAt((short)0);
+
+            //AttributedString str = new AttributedString(String.valueOf(defaultChar));
             //copyAttributes(defaultFont, str, 0, 1);
-            //layout = new TextLayout(str.Iterator, fontRenderContext);
-            //int defaultCharWidth = (int)layout.Advance;
+            //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
+            //int defaultCharWidth = (int)layout.getAdvance();
             int defaultCharWidth = 0;
             Font font = IFont2Font(defaultFont);
             using (var image = new Bitmap(1, 1))
@@ -422,25 +451,36 @@ namespace NPOI.SS.Util
                     defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue).Width;
                 }
             }
-            //DummyEvaluator dummyEvaluator = new DummyEvaluator();
+            return defaultCharWidth;
+        }
 
-            double width = -1;
-            for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
+        /**
+         * Compute width of a single cell in a row
+         * Convenience method for {@link getCellWidth}
+         *
+         * @param row the row that contains the cell of interest
+         * @param column the column number of the cell whose width is to be calculated
+         * @param defaultCharWidth the width of a single character
+         * @param formatter formatter used to prepare the text to be measured
+         * @param useMergedCells    whether to use merged cells
+         * @return  the width in pixels or -1 if cell is empty
+         */
+        private static double GetColumnWidthForRow(
+                IRow row, int column, int defaultCharWidth, DataFormatter formatter, bool useMergedCells)
+        {
+            if (row == null)
             {
-                IRow row = sheet.GetRow(rowIdx);
-                if (row != null)
-                {
-                    ICell cell = row.GetCell(column);
-
-                    if (cell == null)
-                    {
-                        continue;
-                    }
-                    double cellWidth = GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
-                    width = Math.Max(width, cellWidth);
-                }
+                return -1;
             }
-            return width;
+
+            ICell cell = row.GetCell(column);
+
+            if (cell == null)
+            {
+                return -1;
+            }
+
+            return GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
         }
 
         /**
@@ -604,19 +644,6 @@ namespace NPOI.SS.Util
             // If we Get here, then the cell isn't defined, and doesn't
             //  live within any merged regions
             return null;
-        }
-
-        public static int getDefaultCharWidth(IWorkbook wb)
-        {
-            //TODO: Implement!
-            return 1;
-            //throw new NotImplementedException();
-            //IFont defaultFont = wb.GetFontAt(0);
-
-            //IAttributedString str = new AttributedString(defaultChar.ToString());
-            //copyAttributes(defaultFont, str, 0, 1);
-            //ITextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
-            //return (int)layout.getAdvance();
         }
 
     }

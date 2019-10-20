@@ -288,7 +288,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
         }
 
-        public XSSFHyperlink CopyHyperlink(IHyperlink link)
+        public override IHyperlink CopyHyperlink(IHyperlink link)
         {
             return new XSSFHyperlink(link);
         }

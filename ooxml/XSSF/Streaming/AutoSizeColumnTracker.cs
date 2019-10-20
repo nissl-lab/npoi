@@ -84,15 +84,16 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
-     * AutoSizeColumnTracker constructor. Holds no reference to <code>sheet</code>
-     *
-     * @param sheet the sheet associated with this auto-size column tracker
-     * @since 3.14beta1
-     */
+         * AutoSizeColumnTracker constructor. Holds no reference to <code>sheet</code>
+         *
+         * @param sheet the sheet associated with this auto-size column tracker
+         * @since 3.14beta1
+         */
         public AutoSizeColumnTracker(ISheet sheet)
         {
             // If sheet needs to be saved, use a java.lang.ref.WeakReference to avoid garbage collector gridlock.
-            defaultCharWidth = SheetUtil.getDefaultCharWidth(sheet.Workbook);
+            //defaultCharWidth = SheetUtil.GetDefaultCharWidth(sheet.Workbook);
+            throw new NotImplementedException();
         }
 
         /**
@@ -103,7 +104,7 @@ namespace NPOI.XSSF.Streaming
          * @return a set of the indices of all tracked columns
          * @since 3.14beta1
          */
-        public SortedSet<int> getTrackedColumns()
+        public SortedSet<int> GetTrackedColumns()
         {
             throw new NotImplementedException();
             //var sorted = new ColumnHelper.TreeSet<int>(maxColumnWidths.Keys);

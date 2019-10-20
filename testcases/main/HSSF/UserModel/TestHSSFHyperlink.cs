@@ -294,7 +294,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("http://poi.apache.org/hssf/", link.Address);
         }
 
-        public HSSFHyperlink CopyHyperlink(IHyperlink link)
+        public override IHyperlink CopyHyperlink(IHyperlink link)
         {
             return new HSSFHyperlink(link);
         }
