@@ -118,6 +118,10 @@ namespace NPOI.POIFS.Crypt.Dsig.Facets
 
             //        // TODO: find a better way ...
             //        String partName = baseUri + relationship.TargetURI.ToString();
+                    //if (!partName.startsWith(baseUri))
+                    //{
+                    //    partName = baseUri + partName;
+                    //}
             //        try
             //        {
             //            partName = new URI(partName).normalize().Path.Replace('\\', '/');
