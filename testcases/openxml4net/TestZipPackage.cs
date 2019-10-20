@@ -19,9 +19,13 @@ namespace NPOI.Openxml4j.opc
 {
     using System;
     using System.IO;
+    using System.Xml;
     using NPOI.OpenXml4Net.OPC;
+    using NPOI.SS.UserModel;
+    using NPOI.XSSF;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
+    using TestCases.HSSF;
     using TestCases.OpenXml4Net;
 
     [TestFixture]
@@ -58,6 +62,139 @@ namespace NPOI.Openxml4j.opc
             Assert.IsFalse(foundDocument, "Document should not be found in " + p.GetParts());
             Assert.IsFalse(foundTheme1, "Theme1 should not found in " + p.GetParts());
         }
+
+        [Test]
+        public void TestZipEntityExpansionTerminates()
+        {
+            try
+            {
+                IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("poc-xmlbomb.xlsx");
+                wb.Close();
+                Assert.Fail("Should catch exception due to entity expansion limitations");
+            }
+            catch (POIXMLException e)
+            {
+                assertEntityLimitReached(e);
+            }
+        }
+        private void assertEntityLimitReached(Exception e)
+        {
+            //ByteArrayOutputStream str = new ByteArrayOutputStream();
+            //PrintWriter writer = new PrintWriter(new OutputStreamWriter(str, "UTF-8"));
+            try
+            {
+                //e.printStackTrace(writer);
+            }
+            finally
+            {
+                //writer.close();
+            }
+            //String string1 = new String(str.toByteArray(), "UTF-8");
+            String string1 = e.Message;
+            Assert.IsTrue(string1.Contains("Exceeded Entity dereference bytes limit"), "Had: " + string1);
+        }
+        [Test]
+        [Ignore("not implement class ExtractorFactory")]
+        public void TestZipEntityExpansionExceedsMemory()
+        {
+            try
+            {
+                IWorkbook wb = WorkbookFactory.Create(XSSFTestDataSamples.OpenSamplePackage("poc-xmlbomb.xlsx"));
+                wb.Close();
+                Assert.Fail("Should catch exception due to entity expansion limitations");
+            }
+            catch (POIXMLException e)
+            {
+                assertEntityLimitReached(e);
+            }
+            try
+            {
+                //POITextExtractor extractor = ExtractorFactory.CreateExtractor(HSSFTestDataSamples.GetSampleFile("poc-xmlbomb.xlsx"));
+                //try
+                //{
+                //    Assert.IsNotNull(extractor);
+
+                //    try
+                //    {
+                //        string tmp = extractor.Text;
+                //    }
+                //    catch (InvalidOperationException e)
+                //    {
+                //        // expected due to shared strings expansion
+                //    }
+                //}
+                //finally
+                //{
+                //    extractor.Close();
+                //}
+            }
+            catch (POIXMLException e)
+            {
+                assertEntityLimitReached(e);
+            }
+        }
+        [Test]
+        [Ignore("not implement class ExtractorFactory")]
+        public void TestZipEntityExpansionSharedStringTable()
+        {
+            IWorkbook wb = WorkbookFactory.Create(XSSFTestDataSamples.OpenSamplePackage("poc-shared-strings.xlsx"));
+            wb.Close();
+
+            //POITextExtractor extractor = ExtractorFactory.CreateExtractor(HSSFTestDataSamples.GetSampleFile("poc-shared-strings.xlsx"));
+            //try
+            //{
+            //    Assert.IsNotNull(extractor);
+            //    try
+            //    {
+            //        string tmp = extractor.Text;
+            //    }
+            //    catch (InvalidOperationException e)
+            //    {
+            //        // expected due to shared strings expansion
+            //    }
+            //}
+            //finally
+            //{
+            //    extractor.Close();
+            //}
+        }
+        [Test]
+        [Ignore("not implement class ExtractorFactory")]
+        public void TestZipEntityExpansionSharedStringTableEvents()
+        {
+            //bool before = ExtractorFactory.ThreadPrefersEventExtractors;
+            //ExtractorFactory.setThreadPrefersEventExtractors(true);
+            try
+            {
+                //POITextExtractor extractor = ExtractorFactory.CreateExtractor(HSSFTestDataSamples.GetSampleFile("poc-shared-strings.xlsx"));
+                //try
+                //{
+                //    Assert.IsNotNull(extractor);
+
+                //    try
+                //    {
+                //        string tmp = extractor.Text;
+                //    }
+                //    catch (InvalidOperationException e)
+                //    {
+                //        // expected due to shared strings expansion
+                //    }
+                //}
+                //finally
+                //{
+                //    extractor.Close();
+                //}
+            }
+            catch (XmlException e)
+            {
+                assertEntityLimitReached(e);
+            }
+            finally
+            {
+                //ExtractorFactory.setThreadPrefersEventExtractors(before);
+            }
+        }
+
     }
 
 }
