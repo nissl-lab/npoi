@@ -129,10 +129,17 @@ namespace NPOI.SS.UserModel
          * A regex to strip junk out of fraction formats
          */
         private static Regex fractionStripper = new Regex("(\"[^\"]*\")|([^ \\?#\\d\\/]+)");
+
         /**
-      * Cells formatted with a date or time format and which contain invalid date or time values
-     *  show 255 pound signs ("#").
-      */
+         * A regex to detect if an alternate grouping character is used
+         *  in a numeric format 
+         */
+        private static Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})");
+    
+        /**
+         * Cells formatted with a date or time format and which contain invalid date or time values
+         *  show 255 pound signs ("#").
+         */
         private static String invalidDateTimeString;
         static DataFormatter()
         {
@@ -140,6 +147,18 @@ namespace NPOI.SS.UserModel
             for (int i = 0; i < 255; i++) buf.Append('#');
             invalidDateTimeString = buf.ToString();
         }
+
+
+        /**
+         * The decimal symbols of the locale used for formatting values.
+         */
+        private NumberFormatInfo decimalSymbols;
+
+        /**
+         * The date symbols of the locale used for formatting values.
+         */
+        private DateTimeFormatInfo dateSymbols;
+
         /** <em>General</em> FormatBase for whole numbers. */
         //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
         private FormatBase generalNumberFormat;
@@ -705,8 +724,26 @@ namespace NPOI.SS.UserModel
         private FormatBase CreateNumberFormat(String formatStr, double cellValue)
         {
             String format = cleanFormatForNumber(formatStr);
+            NumberFormatInfo symbols = decimalSymbols;
+
+            // Do we need to change the grouping character?
+            // eg for a format like #'##0 which wants 12'345 not 12,345
+            Match agm = alternateGrouping.Match(format);
+            if (agm.Success)
+            {
+                symbols = currentCulture.NumberFormat;
+
+                char grouping = agm.Groups[2].Value[0];
+                symbols.NumberGroupSeparator = grouping.ToString();
+                String oldPart = agm.Groups[1].Value;
+                String newPart = oldPart.Replace(grouping, ',');
+                format = format.Replace(oldPart, newPart);
+            }
+
             try
             {
+                //DecimalFormat df = new DecimalFormat(format, symbols);
+                //setExcelStyleRoundingMode(df);
                 return new DecimalFormat(format);
             }
             catch (ArgumentException)

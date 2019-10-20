@@ -182,6 +182,45 @@ namespace TestCases.SS.UserModel
             // TODO Fix this to not have an extra 0 at the end
             //assertEquals(pound+"   -  ", formatter.formatCellValue(zero)); 
         }
+
+
+        /**
+         * Using a single quote (') instead of a comma (,) as
+         *  a number separator, eg 1000 -> 1'000 
+         */
+        [Test]
+        public void Test55265()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            DataFormatter formatter = new DataFormatter();
+            IDataFormat fmt = wb.CreateDataFormat();
+            ISheet sheet = wb.CreateSheet();
+            IRow r = sheet.CreateRow(0);
+
+            ICellStyle cs = wb.CreateCellStyle();
+            cs.DataFormat = (fmt.GetFormat("#'##0"));
+
+            ICell zero = r.CreateCell(0);
+            zero.SetCellValue(0);
+            zero.CellStyle = (cs);
+
+            ICell sml = r.CreateCell(1);
+            sml.SetCellValue(12);
+            sml.CellStyle = (cs);
+
+            ICell med = r.CreateCell(2);
+            med.SetCellValue(1234);
+            med.CellStyle = (cs);
+
+            ICell lge = r.CreateCell(3);
+            lge.SetCellValue(12345678);
+            lge.CellStyle = (cs);
+
+            Assert.AreEqual("0", formatter.FormatCellValue(zero));
+            Assert.AreEqual("12", formatter.FormatCellValue(sml));
+            Assert.AreEqual("1'234", formatter.FormatCellValue(med));
+            Assert.AreEqual("12'345'678", formatter.FormatCellValue(lge));
+        }
     }
 }
 
