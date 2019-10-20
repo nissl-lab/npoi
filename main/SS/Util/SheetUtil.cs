@@ -365,21 +365,26 @@ namespace NPOI.SS.Util
         private static double GetCellWidth(int defaultCharWidth, int colspan,
             ICellStyle style, double width, string str, Graphics g, Font windowsFont, ICell cell)
         {
+            //Rectangle bounds;
+            double actualWidth;
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
                 SizeF sf = g.MeasureString(str, windowsFont);
                 double x1 = Math.Abs(sf.Height * Math.Sin(angle));
                 double x2 = Math.Abs(sf.Width * Math.Cos(angle));
-                double w = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
-                width = Math.Max(width, (w / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
+                actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                //bounds = layout.getOutline(trans).getBounds();
             }
             else
             {
-
-                double w = Math.Round(g.MeasureString(str, windowsFont).Width, 0, MidpointRounding.ToEven);
-                width = Math.Max(width, (w / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
+                //bounds = layout.getBounds();
+                actualWidth = Math.Round(g.MeasureString(str, windowsFont).Width, 0, MidpointRounding.ToEven);                
             }
+            // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
+            //double frameWidth = bounds.getX() + bounds.getWidth();
+            //width = Math.max(width, ((frameWidth / colspan) / defaultCharWidth) + style.getIndention());
+            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
             return width;
         }
         // /**
