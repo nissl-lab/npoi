@@ -75,7 +75,7 @@ namespace TestCases.SS.Util
             IWorkbook wb = new HSSFWorkbook();
 
             // cannot check on result because on some machines we get back false here!
-            SheetUtil.CanComputeColumnWidht(wb.GetFontAt((short)0));
+            SheetUtil.CanComputeColumnWidth(wb.GetFontAt((short)0));
             wb.Close();
         }
         [Test]

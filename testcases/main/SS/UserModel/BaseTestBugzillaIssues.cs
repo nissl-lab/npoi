@@ -381,7 +381,7 @@ namespace TestCases.SS.UserModel
 
             // autoSize will fail if required fonts are not installed, skip this test then
             IFont font = wb.GetFontAt(cell0.CellStyle.FontIndex);
-            Assume.That(SheetUtil.CanComputeColumnWidht(font), 
+            Assume.That(SheetUtil.CanComputeColumnWidth(font), 
                 "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
 
             Assert.AreEqual(0, cell0.CellStyle.Indention, "Expecting no indentation in this test");
@@ -399,7 +399,7 @@ namespace TestCases.SS.UserModel
             double widthBeforeCell = SheetUtil.GetCellWidth(cell0, 8, null, false);
             double widthBeforeCol = SheetUtil.GetColumnWidth(sheet, 0, false);
             String info = widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
-                SheetUtil.CanComputeColumnWidht(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "w") + "/" +
+                SheetUtil.CanComputeColumnWidth(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "w") + "/" +
                 ComputeCellWidthFixed(font, "1w") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue);
 
             Assert.IsTrue(widthManual > 0, "Expected to have cell width > 0 when computing manually, but had " + info);

@@ -495,7 +495,7 @@ namespace NPOI.SS.Util
          * @param font The Font that is used in the Cell
          * @return true if computing the size for this Font will succeed, false otherwise
          */
-        public static bool CanComputeColumnWidht(IFont font)
+        public static bool CanComputeColumnWidth(IFont font)
         {
             //AttributedString str = new AttributedString("1w");
             //copyAttributes(font, str, 0, "1w".length());

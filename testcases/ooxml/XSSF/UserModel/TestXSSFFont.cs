@@ -305,7 +305,7 @@ namespace NPOI.XSSF.UserModel
             IWorkbook wb = new XSSFWorkbook();
 
             // cannot check on result because on some machines we get back false here!
-            SheetUtil.CanComputeColumnWidht(wb.GetFontAt((short)0));
+            SheetUtil.CanComputeColumnWidth(wb.GetFontAt((short)0));
 
             wb.Close();
         }
@@ -318,7 +318,7 @@ namespace NPOI.XSSF.UserModel
             font.FontName = ("some non existing font name");
 
             // Even with invalid fonts we still get back useful data most of the time... 
-            SheetUtil.CanComputeColumnWidht(font);
+            SheetUtil.CanComputeColumnWidth(font);
         }
     }
 }
