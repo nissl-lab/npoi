@@ -177,7 +177,7 @@ namespace NPOI.DDF
         public const short LINESTYLE__LINESTARTARROWHEAD = 464;
         public const short LINESTYLE__LINEENDARROWHEAD = 465;
         public const short LINESTYLE__LINESTARTARROWWIDTH = 466;
-        public const short LINESTYLE__LINEESTARTARROWLength = 467;
+        public const short LINESTYLE__LINESTARTARROWLENGTH = 467;
         public const short LINESTYLE__LINEENDARROWWIDTH = 468;
         public const short LINESTYLE__LINEENDARROWLength = 469;
         public const short LINESTYLE__LINEJOINSTYLE = 470;
@@ -487,7 +487,7 @@ namespace NPOI.DDF
                 AddProp(LINESTYLE__LINESTARTARROWHEAD, GetData("linestyle.linestartarrowhead"));
                 AddProp(LINESTYLE__LINEENDARROWHEAD, GetData("linestyle.lineendarrowhead"));
                 AddProp(LINESTYLE__LINESTARTARROWWIDTH, GetData("linestyle.linestartarrowwidth"));
-                AddProp(LINESTYLE__LINEESTARTARROWLength, GetData("linestyle.lineestartarrowlength"));
+                AddProp(LINESTYLE__LINESTARTARROWLENGTH, GetData("linestyle.linestartarrowlength"));
                 AddProp(LINESTYLE__LINEENDARROWWIDTH, GetData("linestyle.lineendarrowwidth"));
                 AddProp(LINESTYLE__LINEENDARROWLength, GetData("linestyle.lineendarrowlength"));
                 AddProp(LINESTYLE__LINEJOINSTYLE, GetData("linestyle.linejoinstyle"));
