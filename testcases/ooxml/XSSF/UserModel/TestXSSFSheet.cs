@@ -1462,13 +1462,21 @@ namespace NPOI.XSSF.UserModel
 
             wb.Close();
         }
-
+        /** 
+         * This would be better off as a testable example rather than a simple unit test
+         * since Sheet.createComment() was deprecated and removed.
+         * https://poi.apache.org/spreadsheet/quick-guide.html#CellComments
+         * Feel free to relocated or delete this unit test if it doesn't belong here.
+         */
         [Test]
         public void TestCreateComment()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
+            IClientAnchor anchor = wb.GetCreationHelper().CreateClientAnchor();
+
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            Assert.IsNotNull(sheet.CreateComment());
+            XSSFComment comment = sheet.CreateDrawingPatriarch().CreateCellComment(anchor) as XSSFComment;
+            Assert.IsNotNull(comment);
 
             wb.Close();
         }

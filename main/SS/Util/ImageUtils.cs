@@ -137,11 +137,11 @@ namespace NPOI.SS.Util
             w = sheet.GetColumnWidthInPixels(col2++);
             if (isHSSF)
             {
-                w *= 1 - anchor.Dx1 / 1024d;
+                w *= 1d - anchor.Dx1 / 1024d;
             }
             else
             {
-                w -= anchor.Dx1 / Units.EMU_PER_PIXEL;
+                w -= anchor.Dx1 / (double)Units.EMU_PER_PIXEL;
             }
 
             while (w < scaledWidth)

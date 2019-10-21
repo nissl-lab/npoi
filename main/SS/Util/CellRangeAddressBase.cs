@@ -269,8 +269,11 @@
 
         public override int GetHashCode()
         {
-            int[] values = new int[] { MinRow, MaxRow, MinColumn, MaxColumn };
-            return values.GetHashCode();
+            int code = (MinColumn +
+                (MaxColumn << 8) +
+                (MinRow << 16) +
+                (MaxRow << 24));
+            return code;
         }
     }
 }

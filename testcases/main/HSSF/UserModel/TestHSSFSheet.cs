@@ -123,8 +123,10 @@ namespace TestCases.HSSF.UserModel
             VCenterRecord record = sheet.PageSettings.VCenter;
 
             Assert.IsFalse(record.VCenter);
+            Assert.IsFalse(s.VerticallyCenter);
             s.VerticallyCenter = (true);
             Assert.IsTrue(record.VCenter);
+            Assert.IsTrue(s.VerticallyCenter);
 
             wb.Close();
         }
@@ -141,8 +143,10 @@ namespace TestCases.HSSF.UserModel
             HCenterRecord record = sheet.PageSettings.HCenter;
 
             Assert.IsFalse(record.HCenter);
+            Assert.IsFalse(s.HorizontallyCenter);
             s.HorizontallyCenter = (true);
             Assert.IsTrue(record.HCenter);
+            Assert.IsTrue(s.HorizontallyCenter);
 
             wb.Close();
         }

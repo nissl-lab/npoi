@@ -960,11 +960,6 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
-        public void ShowInPane(short toprow, short leftcol)
-        {
-            _sh.ShowInPane(toprow, leftcol);
-        }
-
         public void ShowInPane(int toprow, int leftcol)
         {
             _sh.ShowInPane(toprow, leftcol);

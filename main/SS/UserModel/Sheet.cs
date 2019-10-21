@@ -433,13 +433,6 @@ namespace NPOI.SS.UserModel
         /// <param name="toprow">the top row to show in desktop window pane</param>
         /// <param name="leftcol">the left column to show in desktop window pane</param>
         void ShowInPane(int toprow, int leftcol);
-        /// <summary>
-        /// Sets desktop window pane display area, when the
-        /// file is first opened in a viewer.
-        /// </summary>
-        /// <param name="toprow"> the top row to show in desktop window pane</param>
-        /// <param name="leftcol"> the left column to show in desktop window pane</param>
-        void ShowInPane(short toprow, short leftcol);
 
         /// <summary>
         /// Shifts rows between startRow and endRow n number of rows.

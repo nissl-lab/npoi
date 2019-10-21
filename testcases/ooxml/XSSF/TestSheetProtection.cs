@@ -79,11 +79,11 @@ namespace TestCases
         public void TestWriteAutoFilter()
         {
             Assert.IsFalse(sheet.IsAutoFilterLocked);
-            sheet.LockAutoFilter();
+            sheet.LockAutoFilter(true);
             Assert.IsFalse(sheet.IsAutoFilterLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsAutoFilterLocked);
-            sheet.UnlockAutoFilter();
+            sheet.LockAutoFilter(false);
             Assert.IsFalse(sheet.IsAutoFilterLocked);
         }
 
@@ -91,11 +91,11 @@ namespace TestCases
         public void TestWriteDeleteColumns()
         {
             Assert.IsFalse(sheet.IsDeleteColumnsLocked);
-            sheet.LockDeleteColumns();
+            sheet.LockDeleteColumns(true);
             Assert.IsFalse(sheet.IsDeleteColumnsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsDeleteColumnsLocked);
-            sheet.UnlockDeleteColumns();
+            sheet.LockDeleteColumns(false);
             Assert.IsFalse(sheet.IsDeleteColumnsLocked);
         }
 
@@ -103,11 +103,11 @@ namespace TestCases
         public void TestWriteDeleteRows()
         {
             Assert.IsFalse(sheet.IsDeleteRowsLocked);
-            sheet.LockDeleteRows();
+            sheet.LockDeleteRows(true);
             Assert.IsFalse(sheet.IsDeleteRowsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsDeleteRowsLocked);
-            sheet.UnlockDeleteRows();
+            sheet.LockDeleteRows(false);
             Assert.IsFalse(sheet.IsDeleteRowsLocked);
         }
 
@@ -115,11 +115,11 @@ namespace TestCases
         public void TestWriteFormatCells()
         {
             Assert.IsFalse(sheet.IsFormatCellsLocked);
-            sheet.LockFormatCells();
+            sheet.LockFormatCells(true);
             Assert.IsFalse(sheet.IsFormatCellsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsFormatCellsLocked);
-            sheet.UnlockFormatCells();
+            sheet.LockFormatCells(false);
             Assert.IsFalse(sheet.IsFormatCellsLocked);
         }
 
@@ -127,11 +127,11 @@ namespace TestCases
         public void TestWriteFormatColumns()
         {
             Assert.IsFalse(sheet.IsFormatColumnsLocked);
-            sheet.LockFormatColumns();
+            sheet.LockFormatColumns(true);
             Assert.IsFalse(sheet.IsFormatColumnsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsFormatColumnsLocked);
-            sheet.UnlockFormatColumns();
+            sheet.LockFormatColumns(false);
             Assert.IsFalse(sheet.IsFormatColumnsLocked);
         }
 
@@ -139,11 +139,11 @@ namespace TestCases
         public void TestWriteFormatRows()
         {
             Assert.IsFalse(sheet.IsFormatRowsLocked);
-            sheet.LockFormatRows();
+            sheet.LockFormatRows(true);
             Assert.IsFalse(sheet.IsFormatRowsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsFormatRowsLocked);
-            sheet.UnlockFormatRows();
+            sheet.LockFormatRows(false);
             Assert.IsFalse(sheet.IsFormatRowsLocked);
         }
 
@@ -151,11 +151,11 @@ namespace TestCases
         public void TestWriteInsertColumns()
         {
             Assert.IsFalse(sheet.IsInsertColumnsLocked);
-            sheet.LockInsertColumns();
+            sheet.LockInsertColumns(true);
             Assert.IsFalse(sheet.IsInsertColumnsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsInsertColumnsLocked);
-            sheet.UnlockInsertColumns();
+            sheet.LockInsertColumns(false);
             Assert.IsFalse(sheet.IsInsertColumnsLocked);
         }
 
@@ -163,11 +163,11 @@ namespace TestCases
         public void TestWriteInsertHyperlinks()
         {
             Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
-            sheet.LockInsertHyperlinks();
+            sheet.LockInsertHyperlinks(true);
             Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsInsertHyperlinksLocked);
-            sheet.UnlockInsertHyperlinks();
+            sheet.LockInsertHyperlinks(false);
             Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
         }
 
@@ -175,11 +175,11 @@ namespace TestCases
         public void TestWriteInsertRows()
         {
             Assert.IsFalse(sheet.IsInsertRowsLocked);
-            sheet.LockInsertRows();
+            sheet.LockInsertRows(true);
             Assert.IsFalse(sheet.IsInsertRowsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsInsertRowsLocked);
-            sheet.UnlockInsertRows();
+            sheet.LockInsertRows(false);
             Assert.IsFalse(sheet.IsInsertRowsLocked);
         }
 
@@ -187,11 +187,11 @@ namespace TestCases
         public void TestWritePivotTables()
         {
             Assert.IsFalse(sheet.IsPivotTablesLocked);
-            sheet.LockPivotTables();
+            sheet.LockPivotTables(true);
             Assert.IsFalse(sheet.IsPivotTablesLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsPivotTablesLocked);
-            sheet.UnlockPivotTables();
+            sheet.LockPivotTables(false);
             Assert.IsFalse(sheet.IsPivotTablesLocked);
         }
 
@@ -199,11 +199,11 @@ namespace TestCases
         public void TestWriteSort()
         {
             Assert.IsFalse(sheet.IsSortLocked);
-            sheet.LockSort();
+            sheet.LockSort(true);
             Assert.IsFalse(sheet.IsSortLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsSortLocked);
-            sheet.UnlockSort();
+            sheet.LockSort(false);
             Assert.IsFalse(sheet.IsSortLocked);
         }
 
@@ -211,11 +211,11 @@ namespace TestCases
         public void TestWriteObjects()
         {
             Assert.IsFalse(sheet.IsObjectsLocked);
-            sheet.LockObjects();
+            sheet.LockObjects(true);
             Assert.IsFalse(sheet.IsObjectsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsObjectsLocked);
-            sheet.UnlockObjects();
+            sheet.LockObjects(false);
             Assert.IsFalse(sheet.IsObjectsLocked);
         }
 
@@ -223,11 +223,11 @@ namespace TestCases
         public void TestWriteScenarios()
         {
             Assert.IsFalse(sheet.IsScenariosLocked);
-            sheet.LockScenarios();
+            sheet.LockScenarios(true);
             Assert.IsFalse(sheet.IsScenariosLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsScenariosLocked);
-            sheet.UnlockScenarios();
+            sheet.LockScenarios(false);
             Assert.IsFalse(sheet.IsScenariosLocked);
         }
 
@@ -235,11 +235,11 @@ namespace TestCases
         public void TestWriteSelectLockedCells()
         {
             Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
-            sheet.LockSelectLockedCells();
+            sheet.LockSelectLockedCells(true);
             Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsSelectLockedCellsLocked);
-            sheet.UnlockSelectLockedCells();
+            sheet.LockSelectLockedCells(false);
             Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
         }
 
@@ -247,11 +247,11 @@ namespace TestCases
         public void TestWriteSelectUnlockedCells()
         {
             Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
-            sheet.LockSelectUnlockedCells();
+            sheet.LockSelectUnlockedCells(true);
             Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
             sheet.EnableLocking();
             Assert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
-            sheet.UnlockSelectUnlockedCells();
+            sheet.LockSelectUnlockedCells(false);
             Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
         }
 

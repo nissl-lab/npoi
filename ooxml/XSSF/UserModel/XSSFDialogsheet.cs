@@ -439,11 +439,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        void ISheet.ShowInPane(short toprow, short leftcol)
-        {
-            throw new System.NotImplementedException();
-        }
-
         void ISheet.ShiftRows(int startRow, int endRow, int n)
         {
             throw new System.NotImplementedException();

@@ -27,8 +27,8 @@ namespace NPOI.SS.Util
      *
      * @author  Andrew C. Oliver acoliver at apache dot org
      */
-    [Obsolete]
-    public class Region
+    [Obsolete("deprecated (Aug-2008) use {@link CellRangeAddress}")]
+    public class Region : IComparable<Region>
     {
         private int rowFrom;
         private int colFrom;
@@ -144,6 +144,43 @@ namespace NPOI.SS.Util
         public static CellRangeAddress ConvertToCellRangeAddress(Region r)
         {
             return new CellRangeAddress(r.RowFrom, r.RowTo, r.ColumnFrom, r.ColumnTo);
+        }
+        public override bool Equals(Object o)
+        {
+            if (this is Region)
+                return Equals((Region)o);
+            else
+                return false;
+        }
+
+        public bool Equals(Region r)
+        {
+            return (CompareTo(r) == 0);
+        }
+
+
+        public override int GetHashCode()
+        {
+            //assert false : "hashCode not designed";
+            return 42; // any arbitrary constant will do
+        }
+        public int CompareTo(Region r)
+        {
+            if ((this.RowFrom == r.RowFrom)
+                && (this.ColumnFrom == r.ColumnFrom)
+                && (this.RowTo == r.RowTo)
+                && (this.ColumnTo == r.ColumnTo))
+            {
+                return 0;
+            }
+            if ((this.RowFrom < r.RowFrom)
+                    || (this.ColumnFrom < r.ColumnFrom)
+                    || (this.RowTo < r.RowTo)
+                    || (this.ColumnTo < r.ColumnTo))
+            {
+                return 1;
+            }
+            return -1;
         }
     }
 }

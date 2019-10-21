@@ -607,18 +607,6 @@ namespace NPOI.XSSF.UserModel
             sel.pane = (pane.activePane);
         }
 
-        /**
-         * Creates a new comment for this sheet. You still
-         *  need to assign it to a cell though
-         *
-         * @deprecated since Nov 2009 this method is not compatible with the common SS interfaces,
-         * use {@link NPOI.XSSF.usermodel.XSSFDrawing#CreateCellComment
-         *  (NPOI.SS.usermodel.ClientAnchor)} instead
-         */
-        public IComment CreateComment()
-        {
-            return CreateDrawingPatriarch().CreateCellComment(new XSSFClientAnchor());
-        }
         int GetLastKey(IList<int> keys)
         {
             int i = keys.Count;
@@ -1387,7 +1375,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return worksheet.IsSetSheetProtection() && sheetProtectionEnabled();
+                return IsSheetLocked;
             }
         }
 
@@ -2823,7 +2811,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Sets the zoom magnication for the sheet.  The zoom is expressed as a
+         * Sets the zoom magnification for the sheet.  The zoom is expressed as a
          * fraction.  For example to express a zoom of 75% use 3 for the numerator
          * and 4 for the denominator.
          *
@@ -2898,12 +2886,10 @@ namespace NPOI.XSSF.UserModel
             // and srcRows does not contain null rows
             for (int index = 1; index < srcRows.Count; index++)
             {
-                IRow prevRow = srcRows[(index - 1)];
                 IRow curRow = srcRows[(index)];
-                if (prevRow == null || curRow == null)
+                if (curRow == null)
                 {
-                    throw new ArgumentException("srcRows may not contain null rows. Found null row at index " +
-                            index + " after Row " + prevRow.RowNum + ".");
+                    throw new ArgumentException("srcRows may not contain null rows. Found null row at index " + index + ".");
                     //} else if (curRow.RowNum != prevRow.RowNum + 1) {
                     //    throw new IllegalArgumentException("srcRows must contain continuously increasing row numbers. " +
                     //            "Got srcRows[" + (index-1) + "]=Row " + prevRow.RowNum + ", srcRows[" + index + "]=Row " + curRow.RowNum + ".");
@@ -3237,20 +3223,6 @@ namespace NPOI.XSSF.UserModel
             return rownum + n;
         }
 
-        /**
-         * Location of the top left visible cell Location of the top left visible cell in the bottom right
-         * pane (when in Left-to-Right mode).
-         *
-         * @param toprow the top row to show in desktop window pane
-         * @param leftcol the left column to show in desktop window pane
-         */
-        public void ShowInPane(short toprow, short leftcol)
-        {
-            CellReference cellReference = new CellReference(toprow, leftcol);
-            String cellRef = cellReference.FormatAsString();
-            GetPane().topLeftCell = (cellRef);
-        }
-
         public void UngroupColumn(int fromColumn, int toColumn)
         {
             CT_Cols cols = worksheet.GetColsArray(0);
@@ -3347,23 +3319,6 @@ namespace NPOI.XSSF.UserModel
                     view.tabSelected = (value);
                 }
             }
-        }
-
-
-        /**
-         * Assign a cell comment to a cell region in this worksheet
-         *
-         * @param cellRef cell region
-         * @param comment the comment to assign
-         * @deprecated since Nov 2009 use {@link XSSFCell#SetCellComment(NPOI.SS.usermodel.Comment)} instead
-         */
-
-        public static void SetCellComment(String cellRef, XSSFComment comment)
-        {
-            CellReference cellReference = new CellReference(cellRef);
-
-            comment.Row = (cellReference.Row);
-            comment.Column = (cellReference.Col);
         }
 
         /**
@@ -3653,8 +3608,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.autoFilter;
+                return IsSheetLocked && SafeGetProtectionField().autoFilter;
             }
         }
 
@@ -3665,8 +3619,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.deleteColumns;
+                return IsSheetLocked && SafeGetProtectionField().deleteColumns;
             }
         }
 
@@ -3677,8 +3630,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.deleteRows;
+                return IsSheetLocked && SafeGetProtectionField().deleteRows;
             }
         }
 
@@ -3689,8 +3641,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.formatCells;
+                return IsSheetLocked && SafeGetProtectionField().formatCells;
             }
         }
 
@@ -3701,8 +3652,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.formatColumns;
+                return IsSheetLocked && SafeGetProtectionField().formatColumns;
             }
         }
 
@@ -3713,8 +3663,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.formatRows;
+                return IsSheetLocked && SafeGetProtectionField().formatRows;
             }
         }
 
@@ -3725,8 +3674,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.insertColumns;
+                return IsSheetLocked && SafeGetProtectionField().insertColumns;
             }
         }
 
@@ -3737,8 +3685,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.insertHyperlinks;
+                return IsSheetLocked && SafeGetProtectionField().insertHyperlinks;
             }
         }
 
@@ -3749,8 +3696,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.insertRows;
+                return IsSheetLocked && SafeGetProtectionField().insertRows;
             }
         }
 
@@ -3761,8 +3707,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.pivotTables;
+                return IsSheetLocked && SafeGetProtectionField().pivotTables;
             }
         }
 
@@ -3773,8 +3718,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.sort;
+                return IsSheetLocked && SafeGetProtectionField().sort;
             }
         }
 
@@ -3785,8 +3729,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.objects;
+                return IsSheetLocked && SafeGetProtectionField().objects;
             }
         }
 
@@ -3797,8 +3740,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.scenarios;
+                return IsSheetLocked && SafeGetProtectionField().scenarios;
             }
         }
 
@@ -3809,8 +3751,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.selectLockedCells;
+                return IsSheetLocked && SafeGetProtectionField().selectLockedCells;
             }
         }
 
@@ -3821,8 +3762,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && worksheet.sheetProtection.selectUnlockedCells;
+                return IsSheetLocked && SafeGetProtectionField().selectUnlockedCells;
             }
         }
 
@@ -3833,8 +3773,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CreateProtectionFieldIfNotPresent();
-                return sheetProtectionEnabled() && (bool)worksheet.sheetProtection.sheet;
+                return worksheet.IsSetSheetProtection() && SafeGetProtectionField().sheet;
             }
         }
 
@@ -3843,8 +3782,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void EnableLocking()
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.sheet = (true);
+            SafeGetProtectionField().sheet = true;
         }
 
         /**
@@ -3852,337 +3790,174 @@ namespace NPOI.XSSF.UserModel
          */
         public void DisableLocking()
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.sheet = (false);
+            SafeGetProtectionField().sheet = false;
         }
 
         /**
-         * Enable Autofilters locking.
+         * Enable or disable Autofilters locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockAutoFilter()
+        public void LockAutoFilter(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.autoFilter = (true);
+            SafeGetProtectionField().autoFilter = enabled;
         }
 
         /**
-         * Disable Autofilters locking.
+         * Enable or disable Deleting columns locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockAutoFilter()
+        public void LockDeleteColumns(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.autoFilter = (false);
+            SafeGetProtectionField().deleteColumns = enabled;
         }
 
         /**
-         * Enable Deleting columns locking.
+         * Enable or disable Deleting rows locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockDeleteColumns()
+        public void LockDeleteRows(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.deleteColumns = true;
+            SafeGetProtectionField().deleteRows = enabled;
         }
 
         /**
-         * Disable Deleting columns locking.
+         * Enable or disable Formatting cells locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockDeleteColumns()
+        public void LockFormatCells(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.deleteColumns = false;
+            SafeGetProtectionField().formatCells = enabled;
         }
 
         /**
-         * Enable Deleting rows locking.
+         * Enable or disable Formatting columns locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockDeleteRows()
+        public void LockFormatColumns(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.deleteRows = true;
+            SafeGetProtectionField().formatColumns = enabled;
         }
 
         /**
-         * Disable Deleting rows locking.
+         * Enable or disable Formatting rows locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockDeleteRows()
+        public void LockFormatRows(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.deleteRows = false;
+            SafeGetProtectionField().formatRows = enabled;
         }
 
         /**
-         * Enable Formatting cells locking.
+         * Enable or disable Inserting columns locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockFormatCells()
+        public void LockInsertColumns(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.formatCells = (true);
+            SafeGetProtectionField().insertColumns = enabled;
         }
 
         /**
-         * Disable Formatting cells locking.
+         * Enable or disable Inserting hyperlinks locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockFormatCells()
+        public void LockInsertHyperlinks(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.formatCells = (false);
+            SafeGetProtectionField().insertHyperlinks = enabled;
         }
 
         /**
-         * Enable Formatting columns locking.
+         * Enable or disable Inserting rows locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockFormatColumns()
+        public void LockInsertRows(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.formatColumns = (true);
+            SafeGetProtectionField().insertRows = enabled;
         }
 
         /**
-         * Disable Formatting columns locking.
+         * Enable or disable Pivot Tables locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockFormatColumns()
+        public void LockPivotTables(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.formatColumns = (false);
+            SafeGetProtectionField().pivotTables = enabled;
         }
 
         /**
-         * Enable Formatting rows locking.
+         * Enable or disable Sort locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockFormatRows()
+        public void LockSort(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.formatRows = (true);
+            SafeGetProtectionField().sort = enabled;
         }
 
         /**
-         * Disable Formatting rows locking.
+         * Enable or disable Objects locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockFormatRows()
+        public void LockObjects(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.formatRows = (false);
+            SafeGetProtectionField().objects = enabled;
         }
 
         /**
-         * Enable Inserting columns locking.
+         * Enable or disable Scenarios locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockInsertColumns()
+        public void LockScenarios(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.insertColumns = (true);
+            SafeGetProtectionField().scenarios = enabled;
         }
 
         /**
-         * Disable Inserting columns locking.
+         * Enable or disable Selection of locked cells locking.
          * This does not modify sheet protection status.
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void UnlockInsertColumns()
+        public void LockSelectLockedCells(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.insertColumns = (false);
+            SafeGetProtectionField().selectLockedCells = enabled;
         }
 
         /**
-         * Enable Inserting hyperlinks locking.
+         * Enable or disable Selection of unlocked cells locking.
          * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
+         * To enforce this un-/locking, call {@link #disableLocking()} or {@link #enableLocking()}
          */
-        public void LockInsertHyperlinks()
+        public void LockSelectUnlockedCells(bool enabled)
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.insertHyperlinks = (true);
+            SafeGetProtectionField().selectUnlockedCells = enabled;
         }
 
-        /**
-         * Disable Inserting hyperlinks locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockInsertHyperlinks()
+        private CT_SheetProtection SafeGetProtectionField()
         {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.insertHyperlinks = (false);
-        }
-
-        /**
-         * Enable Inserting rows locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockInsertRows()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.insertRows = (true);
-        }
-
-        /**
-         * Disable Inserting rows locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockInsertRows()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.insertRows = (false);
-        }
-
-        /**
-         * Enable Pivot Tables locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockPivotTables()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.pivotTables = (true);
-        }
-
-        /**
-         * Disable Pivot Tables locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockPivotTables()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.pivotTables = (false);
-        }
-
-        /**
-         * Enable Sort locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockSort()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.sort = (true);
-        }
-
-        /**
-         * Disable Sort locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockSort()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.sort = (false);
-        }
-
-        /**
-         * Enable Objects locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockObjects()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.objects = (true);
-        }
-
-        /**
-         * Disable Objects locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockObjects()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.objects = (false);
-        }
-
-        /**
-         * Enable Scenarios locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockScenarios()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.scenarios = (true);
-        }
-
-        /**
-         * Disable Scenarios locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockScenarios()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.scenarios = (false);
-        }
-
-        /**
-         * Enable Selection of locked cells locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockSelectLockedCells()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.selectLockedCells = (true);
-        }
-
-        /**
-         * Disable Selection of locked cells locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockSelectLockedCells()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.selectLockedCells = (false);
-        }
-
-        /**
-         * Enable Selection of unlocked cells locking.
-         * This does not modify sheet protection status.
-         * To enforce this locking, call {@link #enableLocking()}
-         */
-        public void LockSelectUnlockedCells()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.selectUnlockedCells = (true);
-        }
-
-        /**
-         * Disable Selection of unlocked cells locking.
-         * This does not modify sheet protection status.
-         */
-        public void UnlockSelectUnlockedCells()
-        {
-            CreateProtectionFieldIfNotPresent();
-            worksheet.sheetProtection.selectUnlockedCells = (false);
-        }
-
-        private void CreateProtectionFieldIfNotPresent()
-        {
-            if (worksheet.sheetProtection == null)
+            if (!IsSheetProtectionEnabled())
             {
-                worksheet.sheetProtection = new CT_SheetProtection();
+                return worksheet.AddNewSheetProtection();
             }
+            return worksheet.sheetProtection;
         }
 
-        private bool sheetProtectionEnabled()
+        /* package */
+        bool IsSheetProtectionEnabled()
         {
-            return (bool)worksheet.sheetProtection.sheet;
+            return (worksheet.IsSetSheetProtection());
         }
+
 
         /* namespace */
         internal bool IsCellInArrayFormulaContext(ICell cell)
