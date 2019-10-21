@@ -40,10 +40,19 @@ namespace NPOI.SS.Util
     }
 
     /**
-     *
-     * @author  Avik Sengupta
-     * @author  Dennis doubleday (patch to seperateRowColumns())
+     * <p>Common conversion functions between Excel style A1, C27 style
+     *  cell references, and POI usermodel style row=0, column=0
+     *  style references. Handles sheet-based and sheet-free references
+     *  as well, eg "Sheet1!A1" and "$B$72"</p>
+     *  
+     *  <p>Use <tt>CellReference</tt> when the concept of
+     * relative/absolute does apply (such as a cell reference in a formula).
+     * Use {@link CellAddress} when you want to refer to the location of a cell in a sheet
+     * when the concept of relative/absolute does not apply (such as the anchor location 
+     * of a cell comment).
+     * <tt>CellReference</tt>s have a concept of "sheet", while <tt>CellAddress</tt>es do not.</p>
      */
+
     public class CellReference
     {
         /** The character ($) that signifies a row or column value is absolute instead of relative */
@@ -65,9 +74,9 @@ namespace NPOI.SS.Util
          */
         private const string COLUMN_REF_PATTERN = @"^\$?([A-Za-z]+)$";
         /**
- * Matches a run of one or more digits.  The run of digits is group 1.
- * The text may optionally be prefixed with a single '$'.
- */
+         * Matches a run of one or more digits.  The run of digits is group 1.
+         * The text may optionally be prefixed with a single '$'.
+         */
         private const string ROW_REF_PATTERN = @"^\$?([0-9]+)$";
         /**
          * Named range names must start with a letter or underscore.  Subsequent characters may include
