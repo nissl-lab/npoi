@@ -92,16 +92,16 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                String oldRef = _comment.@ref;
+                CellAddress oldRef = new CellAddress(_comment.@ref);
 
-                CellReference ref1 = new CellReference(Row, value);
+                CellAddress ref1 = new CellAddress(Row, value);
                 _comment.@ref = (ref1.FormatAsString());
                 _comments.ReferenceUpdated(oldRef, _comment);
 
                 if (_vmlShape != null)
                 {
                     _vmlShape.GetClientDataArray(0).SetColumnArray(
-                          0,value
+                          0, value
                     );
 
                     // There is a very odd xmlbeans bug when changing the column
@@ -123,11 +123,10 @@ namespace NPOI.XSSF.UserModel
             }
             set 
             {
-                String oldRef = _comment.@ref;
+                CellAddress oldRef = new CellAddress(_comment.@ref);
 
-                String newRef =
-                    (new CellReference(value, Column)).FormatAsString();
-                _comment.@ref = (newRef);
+                CellAddress ref1 = new CellAddress(value, Column);
+                _comment.@ref = (ref1.FormatAsString());
                 _comments.ReferenceUpdated(oldRef, _comment);
 
                 if (_vmlShape != null)

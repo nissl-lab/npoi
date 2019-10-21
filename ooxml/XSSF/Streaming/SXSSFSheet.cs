@@ -597,9 +597,34 @@ namespace NPOI.XSSF.Streaming
             _sh.CreateSplitPane(xSplitPos, ySplitPos, leftmostColumn, topRow, activePane);
         }
 
+        /// <summary>
+        /// Returns cell comment for the specified row and column
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>cell comment or <code>null</code> if not found</returns>
+        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         public IComment GetCellComment(int row, int column)
         {
-            return _sh.GetCellComment(row, column);
+            return GetCellComment(new CellAddress(row, column));
+        }
+        /// <summary>
+        /// Returns cell comment for the specified location
+        /// </summary>
+        /// <param name="ref1">cell location</param>
+        /// <returns>return cell comment or null if not found</returns>
+        public IComment GetCellComment(CellAddress ref1)
+        {
+            return _sh.GetCellComment(ref1);
+        }
+
+        /// <summary>
+        /// Returns all cell comments on this sheet.
+        /// </summary>
+        /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
+        public Dictionary<CellAddress, IComment> GetCellComments()
+        {
+            return _sh.GetCellComments();
         }
 
         public int GetColumnOutlineLevel(int columnIndex)

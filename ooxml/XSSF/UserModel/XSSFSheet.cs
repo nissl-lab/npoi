@@ -701,21 +701,47 @@ namespace NPOI.XSSF.UserModel
             GetPane().state = (ST_PaneState.split);
             GetPane().activePane = (ST_Pane)(activePane);
         }
-
+        /// <summary>
+        /// Returns cell comment for the specified row and column
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>cell comment or <code>null</code> if not found</returns>
+        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         public IComment GetCellComment(int row, int column)
+        {
+            return GetCellComment(new CellAddress(row, column));
+        }
+        /// <summary>
+        /// Returns cell comment for the specified location
+        /// </summary>
+        /// <param name="address">cell location</param>
+        /// <returns>return cell comment or null if not found</returns>
+        public IComment GetCellComment(CellAddress address)
         {
             if (sheetComments == null)
             {
                 return null;
             }
 
-            String ref1 = new CellReference(row, column).FormatAsString();
+            int row = address.Row;
+            int column = address.Column;
+
+            CellAddress ref1 = new CellAddress(row, column);
             CT_Comment ctComment = sheetComments.GetCTComment(ref1);
             if (ctComment == null) return null;
 
             XSSFVMLDrawing vml = GetVMLDrawing(false);
             return new XSSFComment(sheetComments, ctComment,
                     vml == null ? null : vml.FindCommentShape(row, column));
+        }
+        /// <summary>
+        /// Returns all cell comments on this sheet.
+        /// </summary>
+        /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
+        public Dictionary<CellAddress, IComment> GetCellComments()
+        {
+            return sheetComments.GetCellComments();
         }
 
         /// <summary>
@@ -3006,7 +3032,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFVMLDrawing vml = GetVMLDrawing(false);
             List<int> rowsToRemove = new List<int>();
-            List<CT_Comment> commentsToRemove = new List<CT_Comment>();
+            List<CellAddress> commentsToRemove = new List<CellAddress>();
             List<CT_Row> ctRowsToRemove = new List<CT_Row>();
             // first remove all rows which will be overwritten
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
@@ -3035,22 +3061,21 @@ namespace NPOI.XSSF.UserModel
                         foreach (CT_Comment comment in lst.comment)
                         {
                             String strRef = comment.@ref;
-                            CellReference ref1 = new CellReference(strRef);
+                            CellAddress ref1 = new CellAddress(strRef);
 
                             // is this comment part of the current row?
                             if (ref1.Row == rownum)
                             {
                                 //sheetComments.RemoveComment(strRef);
                                 //vml.RemoveCommentShape(ref1.Row, ref1.Col);
-                                commentsToRemove.Add(comment);
+                                commentsToRemove.Add(ref1);
                             }
                         }
                     }
-                    foreach (CT_Comment comment in commentsToRemove)
+                    foreach (CellAddress ref1 in commentsToRemove)
                     {
-                        sheetComments.RemoveComment(comment.@ref);
-                        CellReference ref1 = new CellReference(comment.@ref);
-                        vml.RemoveCommentShape(ref1.Row, ref1.Col);
+                        sheetComments.RemoveComment(ref1);
+                        vml.RemoveCommentShape(ref1.Row, ref1.Column);
                     }
 
                     // FIXME: (performance optimization) this should be moved outside the for-loop so that hyperlinks only needs to be iterated over once.

@@ -147,8 +147,9 @@ namespace NPOI.XSSF.Model
          *
          * @param cellAddress the address of the cell to find a comment
          * @return cell comment if one exists, otherwise returns null
-         * @deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #findCellComment(CellAddress)} instead
+         * @
          */
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #findCellComment(CellAddress)} instead")]
         public XSSFComment FindCellComment(String cellRef)
         {
             return FindCellComment(new CellAddress(cellRef));
@@ -172,8 +173,9 @@ namespace NPOI.XSSF.Model
          *
          * @param cellRef the location of the cell comment
          * @return CTComment xmlbean if comment exists, otherwise return null.
-         * @deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link CommentsTable#getCTComment(CellAddress)} instead
+         * @
          */
+         [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link CommentsTable#getCTComment(CellAddress)} instead")]
         public CT_Comment GetCTComment(String ref1)
         {
             return GetCTComment(new CellAddress(ref1));
@@ -235,8 +237,8 @@ namespace NPOI.XSSF.Model
          *
          * @param ref the location to add the comment
          * @return a new CTComment located at ref with default author
-         * @deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #newComment(CellAddress)} instead
          */
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #newComment(CellAddress)} instead")]
         public CT_Comment NewComment(String ref1)
         {
             return NewComment(new CellAddress(ref1));
@@ -268,6 +270,7 @@ namespace NPOI.XSSF.Model
          * @return returns true if a comment was removed
          * @deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #removeComment(CellAddress)} instead
          */
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #removeComment(CellAddress)} instead")]
         public bool RemoveComment(String cellRef)
         {
             return RemoveComment(new CellAddress(cellRef));

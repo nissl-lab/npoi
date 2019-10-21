@@ -25,6 +25,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using System.Collections;
     using NPOI.HSSF.UserModel;
+    using System.Collections.Generic;
 
     /**
      * Common superclass for Testing {@link NPOI.xssf.UserModel.XSSFCell}  and
@@ -1107,17 +1108,72 @@ namespace TestCases.SS.UserModel
             comment.Author = (/*setter*/"test C10 author");
             cell.CellComment = (/*setter*/comment);
 
-            Assert.IsNotNull(sheet.GetCellComment(9, 2));
-            Assert.AreEqual("test C10 author", sheet.GetCellComment(9, 2).Author);
+            CellAddress ref1 = new CellAddress(9, 2);
+            Assert.IsNotNull(sheet.GetCellComment(ref1));
+            Assert.AreEqual("test C10 author", sheet.GetCellComment(ref1).Author);
 
             Assert.IsNotNull(_testDataProvider.WriteOutAndReadBack(workbook));
 
             workbook.Close();
         }
 
+        [Test]
+        public void GetCellComments()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("TEST");
+            IDrawing dg = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = workbook.GetCreationHelper().CreateClientAnchor();
+
+            int nRows = 5;
+            int nCols = 6;
+
+            for (int r = 0; r < nRows; r++)
+            {
+                sheet.CreateRow(r);
+                // Create columns in reverse order
+                for (int c = nCols - 1; c >= 0; c--)
+                {
+                    // When the comment box is visible, have it show in a 1x3 space
+                    anchor.Col1 = c;
+                    anchor.Col2 = c;
+                    anchor.Row1 = r;
+                    anchor.Row2 = r;
+
+                    // Create the comment and set the text-author
+                    IComment comment = dg.CreateCellComment(anchor);
+
+                    ICell cell = sheet.GetRow(r).CreateCell(c);
+                    comment.Author = ("Author " + r);
+                    IRichTextString text = workbook.GetCreationHelper().CreateRichTextString("Test comment at row=" + r + ", column=" + c);
+                    comment.String = (text);
+
+                    // Assign the comment to the cell
+                    cell.CellComment = (comment);
+                }
+            }
+
+            IWorkbook wb = _testDataProvider.WriteOutAndReadBack(workbook);
+            ISheet sh = wb.GetSheet("TEST");
+            Dictionary<CellAddress, IComment> cellComments = sh.GetCellComments();
+            Assert.AreEqual(nRows * nCols, cellComments.Count);
+
+            foreach (KeyValuePair<CellAddress, IComment> e in cellComments)
+            {
+                CellAddress ref1 = e.Key;
+                IComment aComment = e.Value;
+                Assert.AreEqual("Author " + ref1.Row, aComment.Author);
+                String text = "Test comment at row=" + ref1.Row + ", column=" + ref1.Column;
+                Assert.AreEqual(text, aComment.String.String);
+            }
+
+            workbook.Close();
+            wb.Close();
+        }
+
 
         [Test]
-        public void newMergedRegionAt()
+        public void NewMergedRegionAt()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();

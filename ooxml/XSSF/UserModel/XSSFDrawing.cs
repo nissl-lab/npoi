@@ -288,7 +288,7 @@ namespace NPOI.XSSF.UserModel
                         ca.Row2 + ", " + dy2Pixels;
                 vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
-            String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();
+            CellAddress ref1 = new CellAddress(ca.Row1, ca.Col1);
             if (comments.FindCellComment(ref1) != null)
             {
                 throw new ArgumentException("Multiple cell comments in one cell are not allowed, cell: " + ref1);

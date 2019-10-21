@@ -652,7 +652,7 @@ namespace NPOI.XSSF.UserModel
             String ref1 = _cell.r;
             if (ref1 == null)
             {
-                return new CellReference(this).FormatAsString();
+                return new CellAddress(this).FormatAsString();
             }
             return ref1;
         }
@@ -1061,7 +1061,7 @@ namespace NPOI.XSSF.UserModel
             IComment comment = this.CellComment;
             if (comment != null)
             {
-                String ref1 = GetReference();
+                CellAddress ref1 = new CellAddress(GetReference());
                 XSSFSheet sh = (XSSFSheet)Sheet;
                 sh.GetCommentsTable(false).RemoveComment(ref1);
                 sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);

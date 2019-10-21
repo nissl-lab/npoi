@@ -2257,9 +2257,20 @@ namespace NPOI.HSSF.UserModel
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
         /// <returns>cell comment or null if not found</returns>
+        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         public IComment GetCellComment(int row, int column)
         {
             return FindCellComment(row, column);
+        }
+
+        /// <summary>
+        /// Returns cell comment for the specified row and column
+        /// </summary>
+        /// <param name="ref1">cell location</param>
+        /// <returns>return cell comment or null if not found</returns>
+        public IComment GetCellComment(CellAddress ref1)
+        {
+            return FindCellComment(ref1.Row, ref1.Column);
         }
 
         /**
@@ -2448,6 +2459,51 @@ namespace NPOI.HSSF.UserModel
             }
             return null;
         }
+
+        /// <summary>
+        /// Returns all cell comments on this sheet.
+        /// </summary>
+        /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
+        public Dictionary<CellAddress, IComment> GetCellComments()
+        {
+            HSSFPatriarch patriarch = DrawingPatriarch as HSSFPatriarch;
+            if (null == patriarch)
+            {
+                patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
+            }
+
+            Dictionary<CellAddress, IComment> locations = new Dictionary<CellAddress, IComment>();
+            FindCellCommentLocations(patriarch, locations);
+            return locations;
+        }
+
+        /**
+         * Finds all cell comments in this sheet and adds them to the specified locations map
+         *
+         * @param container a container that may contain HSSFComments
+         * @param locations the map to store the HSSFComments in
+         */
+        private void FindCellCommentLocations(HSSFShapeContainer container, Dictionary<CellAddress, IComment> locations)
+        {
+            foreach (object obj in container.Children)
+            {
+                HSSFShape shape = (HSSFShape)obj;
+                if (shape is HSSFShapeGroup)
+                {
+                    FindCellCommentLocations((HSSFShapeGroup)shape, locations);
+                    continue;
+                }
+                if (shape is HSSFComment)
+                {
+                    HSSFComment comment = (HSSFComment)shape;
+                    if (comment.HasPosition)
+                    {
+                        locations.Add(new CellAddress(comment.Row, comment.Column), comment);
+                    }
+                }
+            }
+        }
+
         public CellRangeAddress RepeatingRows
         {
             get

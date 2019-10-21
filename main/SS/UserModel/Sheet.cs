@@ -679,7 +679,20 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
+        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         IComment GetCellComment(int row, int column);
+        /// <summary>
+        /// Returns cell comment for the specified location
+        /// </summary>
+        /// <param name="ref1">cell location</param>
+        /// <returns>return cell comment or null if not found</returns>
+        IComment GetCellComment(CellAddress ref1);
+
+        /// <summary>
+        /// Returns all cell comments on this sheet.
+        /// </summary>
+        /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
+        Dictionary<CellAddress, IComment> GetCellComments();
 
         /// <summary>
         /// Creates the top-level drawing patriarch.
