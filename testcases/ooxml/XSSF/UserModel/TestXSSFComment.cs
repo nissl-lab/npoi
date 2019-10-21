@@ -55,7 +55,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
             Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
 
-            CT_Comment ctComment = sheetComments.NewComment("A1");
+            CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
             CT_Shape vmlShape = new CT_Shape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
@@ -70,7 +70,7 @@ namespace NPOI.XSSF.UserModel
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
-            CT_Comment ctComment = sheetComments.NewComment("A1");
+            CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
             CT_Shape vmlShape = vml.newCommentShape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
@@ -89,7 +89,7 @@ namespace NPOI.XSSF.UserModel
         {
             CommentsTable sheetComments = new CommentsTable();
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
-            CT_Comment ctComment = sheetComments.NewComment("A1");
+            CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
             CT_Shape vmlShape = vml.newCommentShape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
@@ -165,7 +165,7 @@ namespace NPOI.XSSF.UserModel
         public void Author()
         {
             CommentsTable sheetComments = new CommentsTable();
-            CT_Comment ctComment = sheetComments.NewComment("A1");
+            CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
 
             Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
@@ -181,7 +181,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void testBug58175()
+        public void TestBug58175()
         {
             IWorkbook wb = new SXSSFWorkbook();
             try
@@ -213,7 +213,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 // create the comment in two different ways and verify that there is no difference
 
-                XSSFComment shape1 = new XSSFComment(comments, comments.NewComment(), vmlShape1);
+                XSSFComment shape1 = new XSSFComment(comments, comments.NewComment(CellAddress.A1), vmlShape1);
                 shape1.Column = (ca.Col1);
                 shape1.Row = (ca.Row1);
                 CT_Shape vmlShape2 = vml.newCommentShape();
@@ -225,7 +225,7 @@ namespace NPOI.XSSF.UserModel
                     vmlShape2.GetClientDataArray(0).SetAnchorArray(0, position);
                 }
 
-                String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();
+                CellAddress ref1 = new CellAddress(ca.Row1, ca.Col1);
                 XSSFComment shape2 = new XSSFComment(comments, comments.NewComment(ref1), vmlShape2);
 
                 Assert.AreEqual(shape1.Author, shape2.Author);
