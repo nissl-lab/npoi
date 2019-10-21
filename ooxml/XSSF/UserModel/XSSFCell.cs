@@ -1039,7 +1039,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return Sheet.GetCellComment(_row.RowNum, ColumnIndex);
+                return Sheet.GetCellComment(new CellAddress(this));
             }
             set 
             {
