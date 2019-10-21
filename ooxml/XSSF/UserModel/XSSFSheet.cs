@@ -2912,7 +2912,7 @@ namespace NPOI.XSSF.UserModel
 
             // FIXME: is special behavior needed if srcRows and destRows belong to the same sheets and the regions overlap?
 
-            CellCopyPolicy options = policy.Clone();
+            CellCopyPolicy options = new CellCopyPolicy(policy);
             // avoid O(N^2) performance scanning through all regions for each row
             // merged regions will be copied after all the rows have been copied
             options.IsCopyMergedRegions = (false);
