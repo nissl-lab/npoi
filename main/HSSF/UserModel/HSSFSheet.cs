@@ -1165,6 +1165,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="numerator">The numerator for the zoom magnification.</param>
         /// <param name="denominator">The denominator for the zoom magnification.</param>
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
         {
             if (numerator < 1 || numerator > 65535)
@@ -1177,6 +1178,29 @@ namespace NPOI.HSSF.UserModel
             sclRecord.Denominator = ((short)denominator);
             Sheet.SetSCLRecord(sclRecord);
         }
+
+        /**
+         * Window zoom magnification for current view representing percent values.
+         * Valid values range from 10 to 400. Horizontal & Vertical scale together.
+         *
+         * For example:
+         * <pre>
+         * 10 - 10%
+         * 20 - 20%
+         * ...
+         * 100 - 100%
+         * ...
+         * 400 - 400%
+         * </pre>
+         *
+         * @param scale window zoom magnification
+         * @throws IllegalArgumentException if scale is invalid
+         */   
+        public void SetZoom(int scale)
+        {
+            SetZoom(scale, 100);
+        }
+
         /// <summary>
         /// Sets the enclosed border of region.
         /// </summary>

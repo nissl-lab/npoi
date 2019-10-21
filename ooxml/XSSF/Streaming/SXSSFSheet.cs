@@ -944,10 +944,35 @@ namespace NPOI.XSSF.Streaming
             return rowIndex;
         }
 
-        [Obsolete("in poi 3.16")]
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
         {
             _sh.SetZoom(numerator, denominator);
+        }
+
+        /**
+         * Window zoom magnification for current view representing percent values.
+         * Valid values range from 10 to 400. Horizontal & Vertical scale together.
+         *
+         * For example:
+         * <pre>
+         * 10 - 10%
+         * 20 - 20%
+         * ...
+         * 100 - 100%
+         * ...
+         * 400 - 400%
+         * </pre>
+         *
+         * Current view can be Normal, Page Layout, or Page Break Preview.
+         *
+         * @param scale window zoom magnification
+         * @throws IllegalArgumentException if scale is invalid
+         */
+
+        public void SetZoom(int scale)
+        {
+            _sh.SetZoom(scale);
         }
 
         public void ShiftRows(int startRow, int endRow, int n)

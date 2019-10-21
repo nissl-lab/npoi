@@ -2819,6 +2819,7 @@ namespace NPOI.XSSF.UserModel
          * @param denominator   The denominator for the zoom magnification.
          * @see #SetZoom(int)
          */
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
         {
             int zoom = 100 * numerator / denominator;

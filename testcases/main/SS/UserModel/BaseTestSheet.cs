@@ -1010,7 +1010,7 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
 
             // here we can only verify that setting some zoom values works, range-checking is different between the implementations
-            sheet.SetZoom(3, 4);
+            sheet.SetZoom(75);
 
             wb.Close();
         }

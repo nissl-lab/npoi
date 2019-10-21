@@ -578,11 +578,10 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
             Assert.AreEqual(-1, sheet.Sheet.FindFirstRecordLocBySid(SCLRecord.sid));
-            sheet.SetZoom(3, 4);
+            sheet.SetZoom(75);
             Assert.IsTrue(sheet.Sheet.FindFirstRecordLocBySid(SCLRecord.sid) > 0);
             SCLRecord sclRecord = (SCLRecord)sheet.Sheet.FindFirstRecordBySid(SCLRecord.sid);
-            Assert.AreEqual(3, sclRecord.Numerator);
-            Assert.AreEqual(4, sclRecord.Denominator);
+            Assert.AreEqual(75, 100 * sclRecord.Numerator / sclRecord.Denominator);
 
             int sclLoc = sheet.Sheet.FindFirstRecordLocBySid(SCLRecord.sid);
             int window2Loc = sheet.Sheet.FindFirstRecordLocBySid(WindowTwoRecord.sid);
@@ -591,7 +590,7 @@ namespace TestCases.HSSF.UserModel
             // verify limits
             try
             {
-                sheet.SetZoom(0, 2);
+                sheet.SetZoom(0);
                 Assert.Fail("Should catch Exception here");
             }
             catch (ArgumentException e)
@@ -600,7 +599,7 @@ namespace TestCases.HSSF.UserModel
             }
             try
             {
-                sheet.SetZoom(65536, 2);
+                sheet.SetZoom(65536);
                 Assert.Fail("Should catch Exception here");
             }
             catch (ArgumentException e)

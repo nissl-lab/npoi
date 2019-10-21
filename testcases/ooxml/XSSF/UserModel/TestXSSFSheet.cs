@@ -370,7 +370,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet1 = (XSSFSheet)workbook.CreateSheet("new sheet");
-            sheet1.SetZoom(3, 4);   // 75 percent magnification
+            sheet1.SetZoom(75);   // 75 percent magnification
             long zoom = sheet1.GetCTWorksheet().sheetViews.GetSheetViewArray(0).zoomScale;
             Assert.AreEqual(zoom, 75);
 
