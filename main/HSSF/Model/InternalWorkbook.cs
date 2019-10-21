@@ -899,10 +899,7 @@ namespace NPOI.HSSF.Model
             {
                 // also tell the LinkTable about the removed sheet
                 //index hasn't change in the linktable
-                //if (linkTable != null)
-                {
-                    linkTable.RemoveSheet(sheetIndex);
-                }
+                linkTable.RemoveSheet(sheetIndex);
             }
         }
 
