@@ -2935,7 +2935,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 //removeRow(destRowNum); //this probably clears all external formula references to destRow, causing unwanted #REF! errors
                 XSSFRow destRow = CreateRow(destRowNum) as XSSFRow;
-                destRow.copyRowFrom(srcRow, options);
+                destRow.CopyRowFrom(srcRow, options);
             }
 
             // ======================

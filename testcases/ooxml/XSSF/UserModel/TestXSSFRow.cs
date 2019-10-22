@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel
             srcRow.CreateCell(0).SetCellValue("Hello");
             XSSFRow destRow = sheet.CreateRow(1) as XSSFRow;
 
-            destRow.copyRowFrom(srcRow, new CellCopyPolicy());
+            destRow.CopyRowFrom(srcRow, new CellCopyPolicy());
             Assert.IsNotNull(destRow.GetCell(0));
             Assert.AreEqual("Hello", destRow.GetCell(0).StringCellValue);
 
@@ -88,7 +88,7 @@ namespace NPOI.XSSF.UserModel
             srcRow.CreateCell(col++).CellFormula = ("SUM(other!B5:D$5)");
             //////////////////
             XSSFRow destRow = destSheet.CreateRow(1) as XSSFRow;
-            destRow.copyRowFrom(srcRow, new CellCopyPolicy());
+            destRow.CopyRowFrom(srcRow, new CellCopyPolicy());
 
             //////////////////
 
@@ -173,7 +173,7 @@ namespace NPOI.XSSF.UserModel
             externObserverRow.CreateCell(0).CellFormula = ("Sheet1!A2"); //Sheet2!A1 -> Sheet1!A2 -> 5.0
 
             // overwrite existing destRow with row-copy of srcRow
-            destRow.copyRowFrom(srcRow, new CellCopyPolicy());
+            destRow.CopyRowFrom(srcRow, new CellCopyPolicy());
 
             // copyRowFrom should update existing destRow, rather than creating a new row and reassigning the destRow pointer
             // to the new row (and allow the old row to be garbage collected)

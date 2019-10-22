@@ -205,6 +205,24 @@ namespace NPOI.XSSF.Streaming
             return thisRow.CompareTo(otherRow);
         }
 
+        public override bool Equals(Object obj)
+        {
+            if (!(obj is SXSSFRow))
+        {
+                return false;
+            }
+            SXSSFRow other = (SXSSFRow)obj;
+
+            return (this.RowNum == other.RowNum) &&
+                   (this.Sheet == other.Sheet);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Sheet.GetHashCode() << 16) + RowNum;
+        }
+
+
         public ICell CopyCell(int sourceIndex, int targetIndex)
         {
             throw new NotImplementedException();
@@ -283,18 +301,18 @@ namespace NPOI.XSSF.Streaming
 
         public void RemoveCell(ICell cell)
         {
-            int index = getCellIndex((SXSSFCell)cell);
+            int index = GetCellIndex((SXSSFCell)cell);
             _cells.Remove(index);
         }
         /**
- * Return the column number of a cell if it is in this row
- * Otherwise return -1
- *
- * @param cell the cell to get the index of
- * @return cell column index if it is in this row, -1 otherwise
- */
+         * Return the column number of a cell if it is in this row
+         * Otherwise return -1
+         *
+         * @param cell the cell to get the index of
+         * @return cell column index if it is in this row, -1 otherwise
+         */
         /*package*/
-        public int getCellIndex(SXSSFCell cell)
+        public int GetCellIndex(SXSSFCell cell)
         {
             foreach (var entry in _cells)
             {

@@ -161,7 +161,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _row.getCellIndex(this);
+                return _row.GetCellIndex(this);
             }
         }
 

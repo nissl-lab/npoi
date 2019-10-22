@@ -151,6 +151,23 @@ namespace NPOI.XSSF.UserModel
             return RowNum.CompareTo(other.RowNum);
         }
 
+        public override bool Equals(Object obj)
+        {
+            if (!(obj is XSSFRow))
+            {
+                return false;
+            }
+            XSSFRow other = (XSSFRow)obj;
+
+            return (this.RowNum == other.RowNum) &&
+                   (this.Sheet == other.Sheet);
+        }
+
+        public override int GetHashCode()
+        {
+            return _row.GetHashCode();
+        }
+
         /**
          * Use this to create new cells within the row and return it.
          * <p>
@@ -631,7 +648,7 @@ namespace NPOI.XSSF.UserModel
          * @param policy the policy to determine what gets copied
          */
 
-        public void copyRowFrom(IRow srcRow, CellCopyPolicy policy)
+        public void CopyRowFrom(IRow srcRow, CellCopyPolicy policy)
         {
             if (srcRow == null)
             {
