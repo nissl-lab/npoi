@@ -664,7 +664,7 @@ namespace NPOI.XSSF.UserModel
                     // Remove MergedRegions in dest row
                     int destRowNum = RowNum;
                     int index = 0;
-                    NPOI.Util.Collections.HashSet<int> indices = new NPOI.Util.Collections.HashSet<int>();
+                    HashSet<int> indices = new HashSet<int>();
                     foreach (CellRangeAddress destRegion in Sheet.MergedRegions)
                     {
                         if (destRowNum == destRegion.FirstRow && destRowNum == destRegion.LastRow)

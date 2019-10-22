@@ -49,7 +49,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         public List<CellRangeAddress> ShiftMerged(int startRow, int endRow, int n)
         {
             List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
-            NPOI.Util.Collections.HashSet<int> removedIndices = new NPOI.Util.Collections.HashSet<int>();
+            HashSet<int> removedIndices = new HashSet<int>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
             int size = sheet.NumMergedRegions;
             for (int i = 0; i < size; i++) 
