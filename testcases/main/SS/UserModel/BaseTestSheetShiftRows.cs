@@ -515,5 +515,129 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
-}
+
+        /**
+         * Unified test for:
+         * bug 46742: XSSFSheet.shiftRows should shift hyperlinks
+         * bug 52903: HSSFSheet.shiftRows should shift hyperlinks
+         *
+         * @throws IOException
+         */
+        [Test]
+        public void testBug46742_52903_shiftHyperlinks()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            IRow row = sheet.CreateRow(0);
+
+            // How to create hyperlinks
+            // https://poi.apache.org/spreadsheet/quick-guide.html#Hyperlinks
+            ICreationHelper helper = wb.GetCreationHelper();
+            ICellStyle hlinkStyle = wb.CreateCellStyle();
+            IFont hlinkFont = wb.CreateFont();
+            hlinkFont.Underline = FontUnderlineType.Single;
+            hlinkFont.Color = (IndexedColors.Blue.Index);
+            hlinkStyle.SetFont(hlinkFont);
+
+            // 3D relative document link
+            // CellAddress=A1, shifted to A4
+            ICell cell = row.CreateCell(0);
+            cell.CellStyle = (hlinkStyle);
+            createHyperlink(helper, cell, HyperlinkType.Document, "test!E1");
+
+            // URL
+            cell = row.CreateCell(1);
+            // CellAddress=B1, shifted to B4
+            cell.CellStyle = (hlinkStyle);
+            createHyperlink(helper, cell, HyperlinkType.Url, "http://poi.apache.org/");
+
+            // row0 will be shifted on top of row1, so this URL should be removed from the workbook
+            IRow overwrittenRow = sheet.CreateRow(3);
+            cell = overwrittenRow.CreateCell(2);
+            // CellAddress=C4, will be overwritten (deleted)
+            cell.CellStyle = (hlinkStyle);
+            createHyperlink(helper, cell, HyperlinkType.Email, "mailto:poi@apache.org");
+
+            // hyperlinks on this row are unaffected by the row shifting, so the hyperlinks should not move
+            IRow unaffectedRow = sheet.CreateRow(20);
+            cell = unaffectedRow.CreateCell(3);
+            // CellAddress=D21, will be unaffected
+            cell.CellStyle = (hlinkStyle);
+            createHyperlink(helper, cell, HyperlinkType.File, "54524.xlsx");
+
+            cell = wb.CreateSheet("other").CreateRow(0).CreateCell(0);
+            // CellAddress=Other!A1, will be unaffected
+            cell.CellStyle = (hlinkStyle);
+            createHyperlink(helper, cell, HyperlinkType.Url, "http://apache.org/");
+
+            int startRow = 0;
+            int endRow = 0;
+            int n = 3;
+            sheet.ShiftRows(startRow, endRow, n);
+
+            IWorkbook read = _testDataProvider.WriteOutAndReadBack(wb);
+            wb.Close();
+
+            ISheet sh = read.GetSheet("test");
+
+            IRow shiftedRow = sh.GetRow(3);
+
+            // document link anchored on a shifted cell should be moved
+            // Note that hyperlinks do not track what they point to, so this hyperlink should still refer to test!E1
+            verifyHyperlink(shiftedRow.GetCell(0), HyperlinkType.Document, "test!E1");
+
+            // URL, EMAIL, and FILE links anchored on a shifted cell should be moved
+            verifyHyperlink(shiftedRow.GetCell(1), HyperlinkType.Url, "http://poi.apache.org/");
+
+            // Make sure hyperlinks were moved and not copied
+            Assert.IsNull(sh.GetHyperlink(0, 0), "Document hyperlink should be moved, not copied");
+            Assert.IsNull(sh.GetHyperlink(0, 1), "URL hyperlink should be moved, not copied");
+
+            // Make sure hyperlink in overwritten row is deleted
+            //System.out.println(sh.getHyperlinkList());
+            Assert.AreEqual(3, sh.GetHyperlinkList().Count);
+            CellAddress unexpectedLinkAddress = new CellAddress("C4");
+            foreach (IHyperlink link in sh.GetHyperlinkList()) {
+                CellAddress linkAddress = new CellAddress(link.FirstRow, link.FirstColumn);
+                //System.out.println(linkAddress.formatAsString());
+                if (linkAddress.Equals(unexpectedLinkAddress)) {
+                    Assert.Fail("Row 4, including the hyperlink at C4, should have " +
+                         "been deleted when Row 1 was shifted on top of it.");
+                }
+            }
+
+            // Make sure unaffected rows are not shifted
+            ICell unaffectedCell = sh.GetRow(20).GetCell(3);
+            Assert.IsTrue(cellHasHyperlink(unaffectedCell));
+            verifyHyperlink(unaffectedCell, HyperlinkType.File, "54524.xlsx");
+
+            // Make sure cells on other sheets are not affected
+            unaffectedCell = read.GetSheet("other").GetRow(0).GetCell(0);
+            Assert.IsTrue(cellHasHyperlink(unaffectedCell));
+            verifyHyperlink(unaffectedCell, HyperlinkType.Url, "http://apache.org/");
+
+            read.Close();
+        }
+
+        private void createHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
+        {
+            cell.SetCellValue(ref1);
+            IHyperlink link = helper.CreateHyperlink(linkType);
+            link.Address = (ref1);
+            cell.Hyperlink = (link);
+        }
+
+        private void verifyHyperlink(ICell cell, HyperlinkType linkType, String ref1)
+        {
+            Assert.IsTrue(cellHasHyperlink(cell));
+            IHyperlink link = cell.Hyperlink;
+            Assert.AreEqual(linkType, link.Type);
+            Assert.AreEqual(ref1, link.Address);
+        }
+
+        private bool cellHasHyperlink(ICell cell)
+        {
+            return (cell != null) && (cell.Hyperlink != null);
+        }
+    }
 }

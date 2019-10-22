@@ -1434,6 +1434,10 @@ namespace NPOI.HSSF.UserModel
             bool copyRowHeight, bool resetOriginalRowHeight, bool moveComments)
         {
             int s, inc;
+            if (endRow < startRow)
+            {
+                throw new ArgumentException("startRow must be less than or equal to endRow. To shift rows up, use n<0.");
+            }
             if (n < 0)
             {
                 s = startRow;
@@ -1451,6 +1455,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             NoteRecord[] noteRecs;
+            // Shift comments
             if (moveComments)
             {
                 noteRecs = _sheet.GetNoteRecords();
@@ -1460,8 +1465,26 @@ namespace NPOI.HSSF.UserModel
                 noteRecs = NoteRecord.EMPTY_ARRAY;
             }
 
+            // Shift Merged Regions
             ShiftMerged(startRow, endRow, n, true);
+
+            // Shift Row Breaks
             _sheet.PageSettings.ShiftRowBreaks(startRow, endRow, n);
+
+            // Delete overwritten hyperlinks
+            int firstOverwrittenRow = startRow + n;
+            int lastOverwrittenRow = endRow + n;
+            foreach (HSSFHyperlink link in GetHyperlinkList())
+            {
+                // If hyperlink is fully contained in the rows that will be overwritten, delete the hyperlink
+                if (firstOverwrittenRow <= link.FirstRow &&
+                        link.FirstRow <= lastOverwrittenRow &&
+                        lastOverwrittenRow <= link.LastRow &&
+                        link.LastRow <= lastOverwrittenRow)
+                {
+                    RemoveHyperlink(link);
+                }
+            }
 
             for (int rowNum = s; rowNum >= startRow && rowNum <= endRow && rowNum >= 0 && rowNum < 65536; rowNum += inc)
             {
@@ -1478,7 +1501,7 @@ namespace NPOI.HSSF.UserModel
 
 
                 // Remove all the old cells from the row we'll
-                //  be writing too, before we start overwriting 
+                //  be writing to, before we start overwriting 
                 //  any cells. This avoids issues with cells 
                 //  changing type, and records not being correctly
                 //  overwritten
@@ -1505,12 +1528,12 @@ namespace NPOI.HSSF.UserModel
                 foreach (ICell cell in cells)
                 {
                     row.RemoveCell(cell);
+                    IHyperlink link = cell.Hyperlink;
                     CellValueRecordInterface cellRecord = ((HSSFCell)cell).CellValueRecord;
                     cellRecord.Row = (rowNum + n);
                     row2Replace.CreateCellFromRecord(cellRecord);
                     _sheet.AddValueRecord(rowNum + n, cellRecord);
 
-                    NPOI.SS.UserModel.IHyperlink link = cell.Hyperlink;
                     if (link != null)
                     {
                         link.FirstRow = (link.FirstRow + n);
@@ -2336,6 +2359,39 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             return hyperlinkList;
+        }
+
+        /**
+         * Remove the underlying HyperlinkRecord from this sheet.
+         * If multiple HSSFHyperlinks refer to the same HyperlinkRecord, all HSSFHyperlinks will be removed.
+         *
+         * @param link the HSSFHyperlink wrapper around the HyperlinkRecord to remove
+         */
+        protected void RemoveHyperlink(HSSFHyperlink link) {
+            RemoveHyperlink(link.record);
+        }
+
+        /**
+         * Remove the underlying HyperlinkRecord from this sheet
+         *
+         * @param link the underlying HyperlinkRecord to remove from this sheet
+         */
+        protected void RemoveHyperlink(HyperlinkRecord link)
+        {
+            for (int i = 0; i < _sheet.Records.Count; i++)
+            {
+                RecordBase rec = _sheet.Records[i];
+                if (rec is HyperlinkRecord)
+                {
+                    HyperlinkRecord recLink = (HyperlinkRecord)rec;
+                    if (link == recLink)
+                    {
+                        _sheet.Records.RemoveAt(i);
+                        // if multiple HSSFHyperlinks refer to the same record
+                        return;
+                    }
+                }
+            }
         }
 
         /// <summary>
