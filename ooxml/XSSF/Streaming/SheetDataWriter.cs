@@ -40,9 +40,9 @@ namespace NPOI.XSSF.Streaming
         public int NumberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
 
         /**
- * Table of strings shared across this workbook.
- * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
- */
+         * Table of strings shared across this workbook.
+         * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
+         */
         private SharedStringsTable _sharedStringSource;
 
         public SheetDataWriter()
@@ -55,13 +55,13 @@ namespace NPOI.XSSF.Streaming
             _sharedStringSource = sharedStringsTable;
         }
         /**
- * Create a temp file to write sheet data. 
- * By default, temp files are created in the default temporary-file directory
- * with a prefix "poi-sxssf-sheet" and suffix ".xml".  Subclasses can override 
- * it and specify a different temp directory or filename or suffix, e.g. <code>.gz</code>
- * 
- * @return temp file to write sheet data
- */
+         * Create a temp file to write sheet data. 
+         * By default, temp files are created in the default temporary-file directory
+         * with a prefix "poi-sxssf-sheet" and suffix ".xml".  Subclasses can override 
+         * it and specify a different temp directory or filename or suffix, e.g. <code>.gz</code>
+         * 
+         * @return temp file to write sheet data
+         */
        
         public virtual FileInfo CreateTempFile()
         {
@@ -201,8 +201,9 @@ namespace NPOI.XSSF.Streaming
             EndRow();
         }
 
-        private void BeginRow(int rownum, IRow row)
+        private void BeginRow(int rownum, IRow row1)
         {
+            SXSSFRow row = row1 as SXSSFRow;
             WriteAsBytes(OutputStream, "<row r=\"" + (rownum + 1) + "\"");
 
             if (row.HasCustomHeight())
@@ -217,7 +218,7 @@ namespace NPOI.XSSF.Streaming
             }
             if (row.IsFormatted)
             {
-                WriteAsBytes(OutputStream, " s=\"" + row.RowStyle.Index + "\"");
+                WriteAsBytes(OutputStream, " s=\"" + row.RowStyleIndex + "\"");
 
                 WriteAsBytes(OutputStream, " customFormat=\"1\"");
 

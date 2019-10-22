@@ -41,7 +41,7 @@ namespace NPOI.XSSF.Streaming
             _sheet = sheet;
         }
 
-        public IEnumerator<ICell> allCellsIterator()
+        public IEnumerator<ICell> AllCellsIterator()
         {
             return new CellIterator(LastCellNum, null);
         }
@@ -119,12 +119,22 @@ namespace NPOI.XSSF.Streaming
 
         public int RowNum
         {
-            get { throw new NotImplementedException();/*return Sheet.GetRow(this);*/ }
+            get
+            {
+                return _sheet.GetRowNum(this);
+            }
 
             set
             {
-                throw new NotImplementedException();
+                _sheet.ChangeRowNum(this, value);
+            }
+        }
 
+        internal int RowStyleIndex
+        {
+            get
+            {
+                return _style;
             }
         }
 

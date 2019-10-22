@@ -1005,7 +1005,15 @@ namespace NPOI.XSSF.Streaming
         {
             throw new NotImplementedException();
         }
-
+        public int GetRowNum(SXSSFRow row)
+        {
+            foreach (KeyValuePair<int, SXSSFRow> entry in _rows)
+            {
+                if (entry.Value == row)
+                    return entry.Key;
+            }
+            return -1;
+        }
         public void ChangeRowNum(SXSSFRow row, int newRowNum)
         {
 
