@@ -172,6 +172,27 @@ namespace NPOI.XSSF.Streaming
             set { _zHeight = value; }
         }
 
+        /**
+         * Compares two <code>SXSSFRow</code> objects.  Two rows are equal if they belong to the same worksheet and
+         * their row indexes are equal.
+         *
+         * @param   other   the <code>SXSSFRow</code> to be compared.
+         * @return  <ul>
+         *      <li>
+         *      the value <code>0</code> if the row number of this <code>SXSSFRow</code> is
+         *      equal to the row number of the argument <code>SXSSFRow</code>
+         *      </li>
+         *      <li>
+         *      a value less than <code>0</code> if the row number of this this <code>SXSSFRow</code> is
+         *      numerically less than the row number of the argument <code>SXSSFRow</code>
+         *      </li>
+         *      <li>
+         *      a value greater than <code>0</code> if the row number of this this <code>SXSSFRow</code> is
+         *      numerically greater than the row number of the argument <code>SXSSFRow</code>
+         *      </li>
+         *      </ul>
+         * @throws IllegalArgumentException if the argument row belongs to a different worksheet
+         */
         public int CompareTo(SXSSFRow other)
         {
             if (this.Sheet != other.Sheet)

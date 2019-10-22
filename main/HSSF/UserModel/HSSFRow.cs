@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public class HSSFRow : IComparable, IRow
+    public class HSSFRow : IRow, IComparable<HSSFRow>
     {
         /// <summary>
         /// used for collections
@@ -782,7 +782,7 @@ namespace NPOI.HSSF.UserModel
 
         //    public bool MoveNext()
         //    {
-                
+
         //        FindNext();
         //        return nextId < cells.Length;
         //    }
@@ -824,38 +824,29 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
         /// </summary>
-        /// <param name="obj">An object to compare with this instance.</param>
+        /// <param name="other">An object to compare with this instance.</param>
         /// <returns>
         /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has these meanings:
         /// Value
         /// Meaning
         /// Less than zero
-        /// This instance is less than <paramref name="obj"/>.
+        /// This instance is less than <paramref name="other"/>.
         /// Zero
-        /// This instance is equal to <paramref name="obj"/>.
+        /// This instance is equal to <paramref name="other"/>.
         /// Greater than zero
-        /// This instance is greater than <paramref name="obj"/>.
+        /// This instance is greater than <paramref name="other"/>.
         /// </returns>
         /// <exception cref="T:System.ArgumentException">
-        /// 	<paramref name="obj"/> is not the same type as this instance.
+        /// 	<paramref name="other"/> is not the same type as this instance.
         /// </exception>
-        public int CompareTo(Object obj)
+        public int CompareTo(HSSFRow other)
         {
-            HSSFRow loc = (HSSFRow)obj;
+            if (this.Sheet != other.Sheet)
+            {
+                throw new ArgumentException("The compared rows must belong to the same sheet");
+            }
 
-            if (this.RowNum == loc.RowNum)
-            {
-                return 0;
-            }
-            if (this.RowNum < loc.RowNum)
-            {
-                return -1;
-            }
-            if (this.RowNum > loc.RowNum)
-            {
-                return 1;
-            }
-            return -1;
+            return this.RowNum.CompareTo(other.RowNum);
         }
 
         /// <summary>
@@ -874,13 +865,10 @@ namespace NPOI.HSSF.UserModel
             {
                 return false;
             }
-            HSSFRow loc = (HSSFRow)obj;
+            HSSFRow other = (HSSFRow)obj;
 
-            if (this.RowNum == loc.RowNum)
-            {
-                return true;
-            }
-            return false;
+            return (this.RowNum == other.RowNum) &&
+                   (this.Sheet == other.Sheet);
         }
 
         /// <summary>
@@ -888,7 +876,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public override int GetHashCode ()
         {
-            return RowNum;
+            return row.GetHashCode();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

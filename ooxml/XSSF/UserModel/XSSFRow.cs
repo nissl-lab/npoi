@@ -122,25 +122,33 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Compares two <code>XSSFRow</code> objects.  Two rows are equal if they belong to the same worksheet and
-         * their row indexes are Equal.
+         * their row indexes are equal.
          *
-         * @param   row   the <code>XSSFRow</code> to be Compared.
-         * @return	the value <code>0</code> if the row number of this <code>XSSFRow</code> is
-         * 		equal to the row number of the argument <code>XSSFRow</code>; a value less than
-         * 		<code>0</code> if the row number of this this <code>XSSFRow</code> is numerically less
-         * 		than the row number of the argument <code>XSSFRow</code>; and a value greater
-         * 		than <code>0</code> if the row number of this this <code>XSSFRow</code> is numerically
-         * 		 greater than the row number of the argument <code>XSSFRow</code>.
-         * @throws ArgumentException if the argument row belongs to a different worksheet
+         * @param   row   the <code>XSSFRow</code> to be compared.
+         * @return  <ul>
+         *      <li>
+         *      the value <code>0</code> if the row number of this <code>XSSFRow</code> is
+         *      equal to the row number of the argument <code>XSSFRow</code>
+         *      </li>
+         *      <li>
+         *      a value less than <code>0</code> if the row number of this this <code>XSSFRow</code> is
+         *      numerically less than the row number of the argument <code>XSSFRow</code>
+         *      </li>
+         *      <li>
+         *      a value greater than <code>0</code> if the row number of this this <code>XSSFRow</code> is
+         *      numerically greater than the row number of the argument <code>XSSFRow</code>
+         *      </li>
+         *      </ul>
+         * @throws IllegalArgumentException if the argument row belongs to a different worksheet
          */
-        public int CompareTo(XSSFRow row)
+        public int CompareTo(XSSFRow other)
         {
-            int thisVal = this.RowNum;
-            if (row.Sheet != Sheet) 
-                throw new ArgumentException("The Compared rows must belong to the same XSSFSheet");
+            if (this.Sheet != other.Sheet)
+            {
+                throw new ArgumentException("The compared rows must belong to the same sheet");
+            }
 
-            int anotherVal = row.RowNum;
-            return (thisVal < anotherVal ? -1 : (thisVal == anotherVal ? 0 : 1));
+            return RowNum.CompareTo(other.RowNum);
         }
 
         /**
