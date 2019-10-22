@@ -46,12 +46,12 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestBasicTypes()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ICreationHelper CreateHelper = wb.GetCreationHelper();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ICreationHelper CreateHelper = wb1.GetCreationHelper();
 
             ICell cell;
             IHyperlink link;
-            ISheet sheet = wb.CreateSheet("Hyperlinks");
+            ISheet sheet = wb1.CreateSheet("Hyperlinks");
 
             //URL
             cell = sheet.CreateRow(0).CreateCell((short)0);
@@ -78,7 +78,7 @@ namespace TestCases.SS.UserModel
             //link to a place in this workbook
 
             //create a target sheet and cell
-            ISheet sheet2 = wb.CreateSheet("Target Sheet");
+            ISheet sheet2 = wb1.CreateSheet("Target Sheet");
             sheet2.CreateRow(0).CreateCell((short)0).SetCellValue("Target Cell");
 
             cell = sheet.CreateRow(3).CreateCell((short)0);
@@ -87,9 +87,9 @@ namespace TestCases.SS.UserModel
             link.Address = ("'Target Sheet'!A1");
             cell.Hyperlink = (link);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
 
-            sheet = wb.GetSheetAt(0);
+            sheet = wb2.GetSheetAt(0);
             link = sheet.GetRow(0).GetCell(0).Hyperlink;
 
             Assert.AreEqual("http://poi.apache.org/", link.Address);
@@ -99,6 +99,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("mailto:poi@apache.org?subject=Hyperlinks", link.Address);
             link = sheet.GetRow(3).GetCell(0).Hyperlink;
             Assert.AreEqual("'Target Sheet'!A1", link.Address);
+
+            wb2.Close();
         }
 
         // copy a hyperlink via the copy constructor
@@ -138,6 +140,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, actualHyperlinks.Count);
             Assert.AreEqual(link1, actualHyperlinks[0]);
             Assert.AreEqual(link2, actualHyperlinks[1]);
+
+            wb.Close();
         }
 
         public virtual IHyperlink CopyHyperlink(IHyperlink link)

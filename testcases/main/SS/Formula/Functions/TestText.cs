@@ -54,9 +54,9 @@ namespace TestCases.SS.Formula.Functions
             //char groupSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetGroupingSeparator();
             //char decimalSeparator = new DecimalFormatSymbols(Locale.GetDefault()).GetDecimalSeparator();
             
-            System.Globalization.CultureInfo ci =  System.Globalization.CultureInfo.InstalledUICulture;
-            string groupSeparator = ci.NumberFormat.NumberGroupSeparator;
-            string decimalSeparator = ci.NumberFormat.NumberDecimalSeparator; ;
+            NumberFormatInfo fs = CultureInfo.GetCultureInfo("en-US").NumberFormat;
+            string groupSeparator = fs.NumberGroupSeparator;
+            string decimalSeparator = fs.NumberDecimalSeparator; ;
 
             ValueEval testResult = new StringEval("321" + groupSeparator + "321" + decimalSeparator + "32100");
             Assert.AreEqual(testResult.ToString(), result.ToString());
