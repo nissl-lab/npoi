@@ -3126,5 +3126,22 @@ namespace NPOI.HSSF.UserModel
         {
             throw new NotImplementedException();
         }
+
+        public CellAddress ActiveCell
+        {
+            get
+            {
+                int row = _sheet.ActiveCellRow;
+                int col = _sheet.ActiveCellCol;
+                return new CellAddress(row, col);
+            }
+            set
+            {
+                int row = value.Row;
+                short col = (short)value.Column;
+                _sheet.ActiveCellRow = row;
+                _sheet.ActiveCellCol = col;
+            }
+        }
     }
 }

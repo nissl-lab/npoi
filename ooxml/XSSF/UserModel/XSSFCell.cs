@@ -656,7 +656,13 @@ namespace NPOI.XSSF.UserModel
             }
             return ref1;
         }
-
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(this);
+            }
+        }
         /// <summary>
         /// Return the cell's style.
         /// </summary>
@@ -850,7 +856,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         public void SetAsActiveCell()
         {
-            ((XSSFSheet)Sheet).SetActiveCell(GetReference());
+            Sheet.ActiveCell = Address;
         }
 
         /// <summary>

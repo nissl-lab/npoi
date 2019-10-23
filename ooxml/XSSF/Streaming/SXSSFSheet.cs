@@ -1251,5 +1251,17 @@ namespace NPOI.XSSF.Streaming
         {
             return _writer;
         }
+
+        public CellAddress ActiveCell
+        {
+            get
+            {
+                return _sh.ActiveCell;
+            }
+            set
+            {
+                _sh.ActiveCell = value;
+            }
+        }
     }
 }

@@ -84,7 +84,7 @@ namespace NPOI.HSSF.Model
         //protected IList mergedRecords = new ArrayList();
 
         [NonSerialized]
-        protected SelectionRecord selection = null;
+        protected SelectionRecord _selection = null;
         //protected ColumnInfoRecordsAggregate columns = null;
         //protected ValueRecordsAggregate cells = null;
         /*package*/
@@ -404,7 +404,7 @@ namespace NPOI.HSSF.Model
                 }
                 else if (recSid == SelectionRecord.sid)
                 {
-                    selection = (SelectionRecord)rec;
+                    _selection = (SelectionRecord)rec;
                 }
                 else if (recSid == WindowTwoRecord.sid)
                 {
@@ -528,8 +528,8 @@ namespace NPOI.HSSF.Model
             records.Add(_rowsAggregate);
             // 'Sheet View Settings'
             records.Add(windowTwo = CreateWindowTwo());
-            selection = CreateSelection();
-            records.Add(selection);
+            _selection = CreateSelection();
+            records.Add(_selection);
 
             records.Add(_mergedCellsTable); // MCT comes after 'Sheet View Settings'
             sheetext = new SheetExtRecord();
@@ -1494,10 +1494,10 @@ namespace NPOI.HSSF.Model
         /// <param name="activeColumn">The active column in the active range</param>
         public void SetActiveCellRange(List<CellRangeAddress8Bit> cellranges, int activeRange, int activeRow, int activeColumn)
         {
-            this.selection.ActiveCellCol = activeColumn;
-            this.selection.ActiveCellRow = activeRow;
-            this.selection.ActiveCellRef = activeRange;
-            this.selection.CellReferences = cellranges.ToArray();
+            this._selection.ActiveCellCol = activeColumn;
+            this._selection.ActiveCellRow = activeRow;
+            this._selection.ActiveCellRef = activeRange;
+            this._selection.CellReferences = cellranges.ToArray();
 
         }
 
@@ -1510,11 +1510,19 @@ namespace NPOI.HSSF.Model
         {
             get
             {
-                if (selection == null)
+                if (_selection == null)
                 {
                     return 0;
                 }
-                return selection.ActiveCellRow;
+                return _selection.ActiveCellRow;
+            }
+            set
+            {
+                //shouldn't have a sheet w/o a SelectionRecord, but best to guard anyway
+                if (_selection != null)
+                {
+                    _selection.ActiveCellRow = value;
+                }
             }
         }
 
@@ -1528,11 +1536,19 @@ namespace NPOI.HSSF.Model
         {
             get
             {
-                if (selection == null)
+                if (_selection == null)
                 {
                     return 0;
                 }
-                return selection.ActiveCellCol;
+                return _selection.ActiveCellCol;
+            }
+            set
+            {
+                //shouldn't have a sheet w/o a SelectionRecord, but best to guard anyway
+                if (_selection != null)
+                {
+                    _selection.ActiveCellCol = value;
+                }
             }
         }
 
@@ -1853,9 +1869,9 @@ namespace NPOI.HSSF.Model
         {
             get
             {
-                return selection;
+                return _selection;
             }
-            set { this.selection = value; }
+            set { this._selection = value; }
         }
         /**
  * creates a Password record with password set to 00.

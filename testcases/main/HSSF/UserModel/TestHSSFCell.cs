@@ -56,49 +56,6 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-         * Test that Boolean and Error types (BoolErrRecord) are supported properly.
-         */
-        //[Test]
-        //public void TestBoolErr()
-        //{
-
-        //    HSSFWorkbook wb = new HSSFWorkbook();
-        //    NPOI.SS.UserModel.Sheet s = wb.CreateSheet("TestSheet1");
-        //    Row r = null;
-        //    Cell c = null;
-        //    r = s.CreateRow(0);
-        //    c = r.CreateCell(1);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Boolean);
-        //    c.SetCellValue(true);
-
-        //    c = r.CreateCell(2);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Boolean);
-        //    c.SetCellValue(false);
-
-        //    r = s.CreateRow(1);
-        //    c = r.CreateCell(1);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Error);
-        //    c.SetCellErrorValue((byte)0);
-
-        //    c = r.CreateCell(2);
-        //    //c.SetCellType(NPOI.SS.UserModel.CellType.Error);
-        //    c.SetCellErrorValue((byte)7);
-
-        //    wb = WriteOutAndReadBack(wb);
-        //    s = wb.GetSheetAt(0);
-        //    r = s.GetRow(0);
-        //    c = r.GetCell(1);
-        //    Assert.IsTrue(c.BooleanCellValue, "boolean value 0,1 = true");
-        //    c = r.GetCell(2);
-        //    Assert.IsTrue(c.BooleanCellValue == false, "boolean value 0,2 = false");
-        //    r = s.GetRow(1);
-        //    c = r.GetCell(1);
-        //    Assert.IsTrue(c.ErrorCellValue == 0, "boolean value 0,1 = 0");
-        //    c = r.GetCell(2);
-        //    Assert.IsTrue(c.ErrorCellValue == 7, "boolean value 0,2 = 7");
-        //}
-
-        /**
          * Checks that the recognition of files using 1904 date windowing
          *  is working properly. Conversion of the date is also an issue,
          *  but there's a separate unit Test for that.
@@ -494,8 +451,6 @@ namespace TestCases.HSSF.UserModel
 
             // cover some deprecated methods and other smaller stuff...
             Assert.AreEqual(wb.Workbook, cell.BoundWorkbook);
-            //cell.getCellNum();
-            //cell.setCellNum((short)0);
 
             try
             {

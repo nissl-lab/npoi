@@ -214,6 +214,13 @@ namespace NPOI.SS.UserModel
         /// </summary>
         void SetAsActiveCell();
 
+        /**
+         * Gets the address of this cell
+         *
+         * @return <code>A1</code> style address of this cell
+         * @since 3.14beta2
+         */
+        CellAddress Address { get; }
         /// <summary>
         /// comment associated with this cell
         /// </summary>

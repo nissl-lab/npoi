@@ -53,7 +53,7 @@ namespace NPOI.XSSF
             return swb;
         }
 
-        public XSSFWorkbook WriteOutAndReadBack(IWorkbook wb)
+        public IWorkbook WriteOutAndReadBack(IWorkbook wb)
         {
             if (!(wb is SXSSFWorkbook))
             {

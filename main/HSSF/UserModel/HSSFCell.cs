@@ -514,13 +514,13 @@ namespace NPOI.HSSF.UserModel
             SetCellValue(str);
         }
         /**
- * set a error value for the cell
- *
- * @param errorCode the error value to set this cell to.  For formulas we'll set the
- *        precalculated value , for errors we'll set
- *        its value. For other types we will change the cell to an error
- *        cell and set its value.
- */
+         * set a error value for the cell
+         *
+         * @param errorCode the error value to set this cell to.  For formulas we'll set the
+         *        precalculated value , for errors we'll set
+         *        its value. For other types we will change the cell to an error
+         *        cell and set its value.
+         */
         public void SetCellErrorValue(byte errorCode)
         {
             int row = _record.Row;
@@ -1148,6 +1148,15 @@ namespace NPOI.HSSF.UserModel
                 return _record.Column & 0xFFFF;
             }
         }
+
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(this);
+            }
+        }
+
         /**
          * Updates the cell record's idea of what
          *  column it belongs in (0 based)

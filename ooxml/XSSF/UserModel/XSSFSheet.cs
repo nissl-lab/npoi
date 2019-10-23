@@ -3360,13 +3360,26 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the location of the active cell.
          */
-        public String ActiveCell
+        public CellAddress ActiveCell
         {
             get
             {
-                return GetSheetTypeSelection().activeCell;
+                String address = GetSheetTypeSelection().activeCell;
+                if (address == null)
+                {
+                    return null;
+                }
+                return new CellAddress(address);
+            }
+            set
+            {
+                String ref1 = value.FormatAsString();
+                CT_Selection ctsel = GetSheetTypeSelection();
+                ctsel.activeCell = (ref1);
+                ctsel.SetSqref(new string[] { ref1 });
             }
         }
+        [Obsolete("deprecated 3.14beta2 (circa 2015-12-05). Use {@link #setActiveCell(CellAddress)} instead.")]
         public void SetActiveCell(string cellref)
         {
             CT_Selection ctsel = GetSheetTypeSelection();
@@ -3374,11 +3387,11 @@ namespace NPOI.XSSF.UserModel
                 ctsel.SetSqref(new string[] { cellref }); 
         }
 
-        public void SetActiveCell(int row, int column)
-        {
-            CellReference cellref = new CellReference(row, column);
-            SetActiveCell(cellref.FormatAsString());
-        }
+        //public void SetActiveCell(int row, int column)
+        //{
+        //    CellReference cellref = new CellReference(row, column);
+        //    SetActiveCell(cellref.FormatAsString());
+        //}
         /**
          * Does this sheet have any comments on it? We need to know,
          *  so we can decide about writing it to disk or not

@@ -568,7 +568,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
-        void SetActiveCell(int row, int column);
+        //void SetActiveCell(int row, int column);
 
         /// <summary>
         /// Sets the active cell range.
@@ -864,6 +864,14 @@ namespace NPOI.SS.UserModel
          * @return Hyperlinks for the sheet
          */
         List<IHyperlink> GetHyperlinkList();
+
+        /**
+         * Return location of the active cell, e.g. <code>A1</code>.
+         *
+         * @return the location of the active cell.
+         * @since 3.14beta2
+         */
+        CellAddress ActiveCell { get; set; }
     }
 
 }

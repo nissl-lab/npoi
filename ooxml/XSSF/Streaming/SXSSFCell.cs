@@ -305,7 +305,13 @@ namespace NPOI.XSSF.Streaming
                 return _row.RowNum;
             }
         }
-
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(this);
+            }
+        }
         public ISheet Sheet
         {
             get
@@ -363,9 +369,7 @@ namespace NPOI.XSSF.Streaming
 
         public void SetAsActiveCell()
         {
-            //TODO: 
-            throw new NotImplementedException();
-           // Sheet.SetActiveCell(CellAddress);
+            Sheet.ActiveCell = Address;
         }
 
         public void SetCellErrorValue(byte value)

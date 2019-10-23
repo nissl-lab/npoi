@@ -949,6 +949,21 @@ namespace TestCases.SS.UserModel
             }
             wb.Close();
         }
-
+        /**
+         * Tests that the setAsActiveCell and getActiveCell function pairs work together
+         */
+        [Test]
+        public void SetAsActiveCell()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell A1 = row.CreateCell(0);
+            ICell B1 = row.CreateCell(1);
+            A1.SetAsActiveCell();
+            Assert.AreEqual(A1.Address, sheet.ActiveCell);
+            B1.SetAsActiveCell();
+            Assert.AreEqual(B1.Address, sheet.ActiveCell);
+        }
     }
 }

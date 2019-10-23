@@ -1249,6 +1249,29 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(sheet.MergedRegions.Count ==0 );
             wb.Close();
         }
+        /**
+         * Tests that the setAsActiveCell and getActiveCell function pairs work together
+         */
+        [Test]
+        public void SetActiveCell()
+        {
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
+            CellAddress B42 = new CellAddress("B42");
+
+            // active cell behavior is undefined if not set.
+            // HSSFSheet defaults to A1 active cell, while XSSFSheet defaults to null.
+            if (sheet.ActiveCell != null && !sheet.ActiveCell.Equals(CellAddress.A1))
+            {
+                Assert.Fail("If not set, active cell should default to null or A1");
+            }
+            sheet.ActiveCell = (B42);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            Assert.AreEqual(B42, sheet.ActiveCell);
+            wb1.Close();
+            wb2.Close();
+        }
+
     }
 
 }

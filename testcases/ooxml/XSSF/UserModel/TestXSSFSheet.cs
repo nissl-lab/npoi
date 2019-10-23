@@ -200,9 +200,10 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
-            sheet.SetActiveCell("R5");
+            CellAddress R5 = new CellAddress("R5");
+            sheet.ActiveCell = R5;
 
-            Assert.AreEqual("R5", sheet.ActiveCell);
+            Assert.AreEqual(R5, sheet.ActiveCell);
 
             workbook.Close();
 

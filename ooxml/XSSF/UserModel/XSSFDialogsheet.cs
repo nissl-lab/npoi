@@ -537,11 +537,6 @@ namespace NPOI.XSSF.UserModel
             get { throw new System.NotImplementedException(); }
         }
 
-        void ISheet.SetActiveCell(int row, int column)
-        {
-            throw new System.NotImplementedException();
-        }
-
         void ISheet.SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
             throw new System.NotImplementedException();
