@@ -158,6 +158,7 @@
     <Compile Include="XSSF\Streaming\TestSXSSFFormulaEvaluation.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFSheet.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFSheetAutoSizeColumn.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFWorkbook.cs" />
     <Compile Include="XSSF\SXSSFITestDataProvider.cs" />
     <Compile Include="XSSF\TestSheetProtection.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />

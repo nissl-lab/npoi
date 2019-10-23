@@ -132,6 +132,13 @@ namespace NPOI.XSSF.Streaming
 
         }
 
+        public FileInfo TempFileInfo
+        {
+            get
+            {
+                return TemporaryFileInfo;
+            }
+        }
         /**
          * @return a stream to read temp file with the sheet data
          */

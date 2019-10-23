@@ -19,6 +19,9 @@ using System;
 using System.Text;
 using NUnit.Framework;
 using System.Collections.Generic;
+using NPOI.Util;
+using System.Reflection;
+
 namespace TestCases
 {
 
@@ -87,6 +90,21 @@ namespace TestCases
                 return;
             }
             Assert.Fail("Unable to find " + needle + " in " + haystack);
+        }
+
+        public static R GetFieldValue<R, T>(Type clazz, T instance, Type fieldType, String fieldName)
+        {
+            Assert.IsTrue(clazz.Name.StartsWith("NPOI"), "Reflection of private fields is only allowed for POI classes.");
+            try
+            {
+                FieldInfo fieldInfo = clazz.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.GetField);
+                return (R)fieldInfo.GetValue(instance);
+
+            }
+            catch (Exception pae)
+            {
+                throw new RuntimeException("Cannot access field '" + fieldName + "' of class " + clazz, pae.InnerException);
+            }
         }
     }
 }

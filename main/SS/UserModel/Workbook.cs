@@ -425,5 +425,13 @@ namespace NPOI.SS.UserModel
         void Close();
 
         bool Dispose();
+
+        /**
+         * Returns the spreadsheet version of this workbook
+         * 
+         * @return SpreadsheetVersion enum
+         * @since 3.14 beta 2
+         */
+        SpreadsheetVersion SpreadsheetVersion { get; }
     }
 }

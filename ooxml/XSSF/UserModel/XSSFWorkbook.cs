@@ -33,6 +33,7 @@ using NPOI.SS.Formula.Udf;
 using NPOI.OpenXmlFormats;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
+using NPOI.SS;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -2047,6 +2048,15 @@ namespace NPOI.XSSF.UserModel
             CT_CalcPr calcPr = ctWorkbook.calcPr;
             return calcPr != null && calcPr.calcId != 0;
         }
+
+        public SpreadsheetVersion SpreadsheetVersion
+        {
+            get
+            {
+                return SpreadsheetVersion.EXCEL2007;
+            }
+        }
+
         public void SetActiveSheet(int sheetIndex)
         {
             ValidateSheetIndex(sheetIndex);

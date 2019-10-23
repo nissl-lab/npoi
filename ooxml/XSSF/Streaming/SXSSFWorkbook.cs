@@ -23,6 +23,7 @@ using System.IO;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.OpenXml4Net.Util;
+using NPOI.SS;
 using NPOI.SS.Formula.Udf;
 using NPOI.SS.UserModel;
 using NPOI.Util;
@@ -227,6 +228,32 @@ namespace NPOI.XSSF.Streaming
         private SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
             return _xFromSxHash[sheet];
+        }
+
+        /**
+         * Set whether temp files should be compressed.
+         * <p>
+         *   SXSSF writes sheet data in temporary files (a temp file per-sheet)
+         *   and the size of these temp files can grow to to a very large size,
+         *   e.g. for a 20 MB csv data the size of the temp xml file become few GB large.
+         *   If the "compress" flag is set to <code>true</code> then the temporary XML is gzipped.
+         * </p>
+         * <p>
+         *     Please note the the "compress" option may cause performance penalty.
+         * </p>
+         * @param compress whether to compress temp files
+         */
+        public bool CompressTempFiles
+        {
+            get
+            {
+                return _compressTmpFiles;
+            }
+            set
+            {
+                _compressTmpFiles = value;
+            }
+            
         }
 
         public SheetDataWriter CreateSheetDataWriter()
@@ -735,6 +762,14 @@ namespace NPOI.XSSF.Streaming
             // Tell the base workbook to close, does nothing if 
             //  it's a newly created one
             XssfWorkbook.Close();
+        }
+
+        public SpreadsheetVersion SpreadsheetVersion
+        {
+            get
+            {
+                return SpreadsheetVersion.EXCEL2007;
+            }
         }
 
         //TODO: missing methods from POI 3.16 setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion

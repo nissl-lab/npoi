@@ -30,6 +30,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
+    using NPOI.SS;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Udf;
     using NPOI.SS.UserModel;
@@ -2170,6 +2171,14 @@ namespace NPOI.HSSF.UserModel
                 InternalWorkbook iwb = Workbook;
                 RecalcIdRecord recalc = (RecalcIdRecord)iwb.FindFirstRecordBySid(RecalcIdRecord.sid);
                 return recalc != null && recalc.EngineId != 0;
+            }
+        }
+
+        public SpreadsheetVersion SpreadsheetVersion
+        {
+            get
+            {
+                return SpreadsheetVersion.EXCEL97;
             }
         }
 

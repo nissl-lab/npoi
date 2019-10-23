@@ -26,6 +26,7 @@ namespace TestCases.SS.UserModel
     using System.Text;
     using System.IO;
     using NPOI.Util;
+    using NPOI.SS;
 
     /**
      * @author Yegor Kozlov
@@ -490,7 +491,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void TestCloneSheet()
+        public void CloneSheet()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             ISheet sheet = book.CreateSheet("TEST");
@@ -907,6 +908,19 @@ namespace TestCases.SS.UserModel
             }
 
             b.Close();
+        }
+
+        [Test]
+        public virtual void GetSpreadsheetVersion()
+        {
+
+        }
+
+        protected void verifySpreadsheetVersion(SpreadsheetVersion expected)
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            Assert.AreEqual(expected, wb.SpreadsheetVersion);
+            wb.Close();
         }
     }
 

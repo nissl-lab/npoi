@@ -1247,9 +1247,12 @@ namespace NPOI.XSSF.Streaming
             return _writer.GetWorksheetXmlInputStream();
         }
 
-        public SheetDataWriter GetSheetDataWriter()
+        public SheetDataWriter SheetDataWriter
         {
-            return _writer;
+            get
+            {
+                return _writer;
+            }
         }
 
         public CellAddress ActiveCell
