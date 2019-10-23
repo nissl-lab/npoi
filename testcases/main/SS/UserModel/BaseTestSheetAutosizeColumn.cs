@@ -47,7 +47,10 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
-
+        protected virtual void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
+        {
+            // do nothing for Sheet base class. This will be overridden for SXSSFSheets.
+        }
         [Test]
         public void NumericCells()
         {
@@ -57,6 +60,7 @@ namespace TestCases.SS.UserModel
             FixFonts(workbook);
             IDataFormat df = workbook.GetCreationHelper().CreateDataFormat();
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
 
             IRow row = sheet.CreateRow(0);
             row.CreateCell(0).SetCellValue(0); // GetCachedFormulaResult() returns 0 for not Evaluated formula cells
@@ -99,6 +103,7 @@ namespace TestCases.SS.UserModel
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
 
             IRow row = sheet.CreateRow(0);
             row.CreateCell(0).SetCellValue(0); // GetCachedFormulaResult() returns 0 for not Evaluated formula cells
@@ -131,6 +136,7 @@ namespace TestCases.SS.UserModel
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
             IDataFormat df = workbook.GetCreationHelper().CreateDataFormat();
 
             ICellStyle style1 = workbook.CreateCellStyle();
@@ -199,6 +205,7 @@ namespace TestCases.SS.UserModel
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
             IRow row = sheet.CreateRow(0);
 
             IFont defaultFont = workbook.GetFontAt((short)0);
@@ -233,6 +240,7 @@ namespace TestCases.SS.UserModel
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
             IRow row = sheet.CreateRow(0);
 
             ICellStyle style1 = workbook.CreateCellStyle();
@@ -260,6 +268,7 @@ namespace TestCases.SS.UserModel
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
 
             IRow row = sheet.CreateRow(0);
             sheet.AddMergedRegion(CellRangeAddress.ValueOf("A1:B1"));
@@ -289,6 +298,7 @@ namespace TestCases.SS.UserModel
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             FixFonts(workbook);
             ISheet sheet = workbook.CreateSheet();
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
 
             IRow r0 = sheet.CreateRow(0);
             r0.CreateCell(0).SetCellValue("I am ROW 0");

@@ -17,6 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using NPOI.SS;
@@ -450,12 +451,55 @@ namespace NPOI.XSSF.Streaming
         {
             _sh.AddValidationData(dataValidation);
         }
-
+        /**
+         * Adjusts the column width to fit the contents.
+         *
+         * <p>
+         * This process can be relatively slow on large sheets, so this should
+         *  normally only be called once per column, at the end of your
+         *  processing.
+         * </p>
+         * You can specify whether the content of merged cells should be considered or ignored.
+         *  Default is to ignore merged cells.
+         *  
+         *  <p>
+         *  Special note about SXSSF implementation: You must register the columns you wish to track with
+         *  the SXSSFSheet using {@link #trackColumnForAutoSizing(int)} or {@link #trackAllColumnsForAutoSizing()}.
+         *  This is needed because the rows needed to compute the column width may have fallen outside the
+         *  random access window and been flushed to disk.
+         *  Tracking columns is required even if all rows are in the random access window.
+         *  </p>
+         *  <p><i>New in POI 3.14 beta 1: auto-sizes columns using cells from current and flushed rows.</i></p>
+         *
+         * @param column the column index to auto-size
+         */
         public void AutoSizeColumn(int column)
         {
             AutoSizeColumn(column, false);
         }
 
+        /**
+         * Adjusts the column width to fit the contents.
+         * <p>
+         * This process can be relatively slow on large sheets, so this should
+         *  normally only be called once per column, at the end of your
+         *  processing.
+         * </p>
+         * You can specify whether the content of merged cells should be considered or ignored.
+         *  Default is to ignore merged cells.
+         *  
+         *  <p>
+         *  Special note about SXSSF implementation: You must register the columns you wish to track with
+         *  the SXSSFSheet using {@link #trackColumnForAutoSizing(int)} or {@link #trackAllColumnsForAutoSizing()}.
+         *  This is needed because the rows needed to compute the column width may have fallen outside the
+         *  random access window and been flushed to disk.
+         *  Tracking columns is required even if all rows are in the random access window.
+         *  </p>
+         *  <p><i>New in POI 3.14 beta 1: auto-sizes columns using cells from current and flushed rows.</i></p>
+         *
+         * @param column the column index to auto-size
+         * @param useMergedCells whether to use the contents of merged cells when calculating the width of the column
+         */
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
             // Multiple calls to autoSizeColumn need to look up the best-fit width
@@ -474,7 +518,7 @@ namespace NPOI.XSSF.Streaming
             try
             {
                 // get the best fit width of rows already flushed to disk
-                flushedWidth = _autoSizeColumnTracker.getBestFitColumnWidth(column, useMergedCells);
+                flushedWidth = _autoSizeColumnTracker.GetBestFitColumnWidth(column, useMergedCells);
             }
             catch (Exception e)
             {
@@ -859,6 +903,121 @@ namespace NPOI.XSSF.Streaming
             _sh.SetDefaultColumnStyle(column, style);
         }
 
+
+        /**
+         * Track a column in the sheet for auto-sizing.
+         * Note this has undefined behavior if a column is tracked after one or more rows are written to the sheet.
+         * If <code>column</code> is already tracked, this call does nothing.
+         *
+         * @param column the column to track for autosizing
+         * @since 3.14beta1
+         * @see #trackColumnsForAutoSizing(Collection)
+         * @see #trackAllColumnsForAutoSizing()
+         */
+        public void TrackColumnForAutoSizing(int column)
+        {
+            _autoSizeColumnTracker.TrackColumn(column);
+        }
+
+        /**
+         * Track several columns in the sheet for auto-sizing.
+         * Note this has undefined behavior if columns are tracked after one or more rows are written to the sheet.
+         * Any column in <code>columns</code> that are already tracked are ignored by this call.
+         *
+         * @param columns the columns to track for autosizing
+         * @since 3.14beta1
+         */
+        public void TrackColumnsForAutoSizing(ICollection<int> columns)
+        {
+            _autoSizeColumnTracker.TrackColumns(columns);
+        }
+
+        /**
+         * Tracks all columns in the sheet for auto-sizing. If this is called, individual columns do not need to be tracked.
+         * Because determining the best-fit width for a cell is expensive, this may affect the performance.
+         * @since 3.14beta1
+         */
+        public void TrackAllColumnsForAutoSizing()
+        {
+            _autoSizeColumnTracker.TrackAllColumns();
+        }
+
+        /**
+         * Removes a column that was previously marked for inclusion in auto-size column tracking.
+         * When a column is untracked, the best-fit width is forgotten.
+         * If <code>column</code> is not tracked, it will be ignored by this call.
+         *
+         * @param column the index of the column to track for auto-sizing
+         * @return true if column was tracked prior to being untracked, false if no action was taken
+         */
+        /**
+         * 
+         *
+         * @param column the index of the column to track for auto-sizing
+         * @return true if column was tracked prior to this call, false if no action was taken
+         * @since 3.14beta1
+         * @see #untrackColumnsForAutoSizing(Collection)
+         * @see #untrackAllColumnsForAutoSizing(int)
+         */
+        public bool UntrackColumnForAutoSizing(int column)
+        {
+            return _autoSizeColumnTracker.UntrackColumn(column);
+        }
+
+        /**
+         * Untracks several columns in the sheet for auto-sizing.
+         * When a column is untracked, the best-fit width is forgotten.
+         * Any column in <code>columns</code> that is not tracked will be ignored by this call.
+         *
+         * @param columns the indices of the columns to track for auto-sizing
+         * @return true if one or more columns were untracked as a result of this call
+         *
+         * @param columns the columns to track for autosizing
+         * @since 3.14beta1
+         */
+        public bool UntrackColumnsForAutoSizing(ICollection<int> columns)
+        {
+            return _autoSizeColumnTracker.UntrackColumns(columns);
+        }
+
+        /**
+         * Untracks all columns in the sheet for auto-sizing. Best-fit column widths are forgotten.
+         * If this is called, individual columns do not need to be untracked.
+         * @since 3.14beta1
+         */
+        public void UntrackAllColumnsForAutoSizing()
+        {
+            _autoSizeColumnTracker.UntrackAllColumns();
+        }
+
+        /**
+         * Returns true if column is currently tracked for auto-sizing.
+         *
+         * @param column the index of the column to check
+         * @return true if column is tracked
+         * @since 3.14beta1
+         */
+        public bool IsColumnTrackedForAutoSizing(int column)
+        {
+            return _autoSizeColumnTracker.IsColumnTracked(column);
+        }
+
+        /**
+         * Get the currently tracked columns for auto-sizing.
+         * Note if all columns are tracked, this will only return the columns that have been explicitly or implicitly tracked,
+         * which is probably only columns containing 1 or more non-blank values
+         *
+         * @return a set of the indices of all tracked columns
+         * @since 3.14beta1
+         */
+        public ISet<int> TrackedColumnsForAutoSizing
+        {
+            get
+            {
+                return _autoSizeColumnTracker.TrackedColumns;
+            }
+        }
+
         public void SetMargin(MarginType margin, double size)
         {
             _sh.SetMargin(margin, size);
@@ -1064,14 +1223,15 @@ namespace NPOI.XSSF.Streaming
 
         private void FlushOneRow()
         {
-
-            int firstRowNum = _rows.FirstOrDefault().Key;
-            if (firstRowNum != null)
+            KeyValuePair<int, SXSSFRow> firstRow = _rows.FirstOrDefault();
+            //KeyValuePair is struct, so check value instead of key
+            if (firstRow.Value != null)
             {
+                int firstRowNum = firstRow.Key;
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];
                 // Update the best fit column widths for auto-sizing just before the rows are flushed
-                // _autoSizeColumnTracker.UpdateColumnWidths(row);
+                _autoSizeColumnTracker.UpdateColumnWidths(row);
                 _writer.WriteRow(rowIndex, row);
                 _rows.Remove(firstRowNum);
                 lastFlushedRowNumber = rowIndex;

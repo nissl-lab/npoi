@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-namespace NPOI.XSSF.streaming
+namespace NPOI.OOXML.Testcases.XSSF.Streaming
 {
     using System;
 
@@ -44,6 +44,12 @@ namespace NPOI.XSSF.streaming
         [TearDown]
         public void TearDown() {
             SXSSFITestDataProvider.instance.Cleanup();
+        }
+
+        protected override void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
+        {
+            SXSSFSheet sxSheet = (SXSSFSheet)sheet;
+            sxSheet.TrackAllColumnsForAutoSizing();
         }
 
         /**

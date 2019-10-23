@@ -438,7 +438,7 @@ namespace NPOI.SS.Util
          * @param wb the workbook to get the default character width from
          * @return default character width
          */
-        private static int GetDefaultCharWidth(IWorkbook wb)
+        public static int GetDefaultCharWidth(IWorkbook wb)
         {
             IFont defaultFont = wb.GetFontAt((short)0);
 

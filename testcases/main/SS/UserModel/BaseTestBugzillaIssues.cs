@@ -49,6 +49,11 @@ namespace TestCases.SS.UserModel
             _testDataProvider = TestDataProvider;
         }
 
+        protected virtual void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
+        {
+            // do nothing for Sheet base class. This will be overridden for SXSSFSheets.
+        }
+
         public static void assertAlmostEquals(double expected, double actual, float factor)
         {
             double diff = Math.Abs(expected - actual);

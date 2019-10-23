@@ -43,6 +43,11 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = TestDataProvider;
         }
+
+        protected virtual void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
+        {
+            // do nothing for Sheet base class. This will be overridden for SXSSFSheets.
+        }
         [Test]
         public void TestCreateRow()
         {
