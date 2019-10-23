@@ -508,7 +508,7 @@ namespace NPOI.SS.Formula
                         bool evaluatedPredicate;
                         try
                         {
-                            evaluatedPredicate = If.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
+                            evaluatedPredicate = IfFunc.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
                         }
                         catch (EvaluationException e)
                         {

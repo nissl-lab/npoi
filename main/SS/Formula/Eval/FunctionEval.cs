@@ -90,15 +90,17 @@ namespace NPOI.SS.Formula.Eval
             }
             return result;
         }
-
+        /**
+         * @see https://www.openoffice.org/sc/excelfileformat.pdf
+         */
         private static Function[] ProduceFunctions()
         {
             Function[] retval = new Function[368];
             retval[0] = new Count(); // COUNT
-            retval[FunctionID.IF] = new If(); // IF
+            retval[FunctionID.IF] = new IfFunc(); //nominally 1
             retval[2] = LogicalFunction.ISNA; // IsNA
             retval[3] = LogicalFunction.ISERROR; // IsERROR
-            retval[FunctionID.SUM] = AggregateFunction.SUM; // SUM
+            retval[FunctionID.SUM] = AggregateFunction.SUM; //nominally 4
             retval[5] = AggregateFunction.AVERAGE; // AVERAGE
             retval[6] = AggregateFunction.MIN; // MIN
             retval[7] = AggregateFunction.MAX; // MAX
@@ -171,7 +173,7 @@ namespace NPOI.SS.Formula.Eval
             retval[75] = new NotImplementedFunction("AREAS"); // AREAS
             retval[76] = new Rows(); // ROWS
             retval[77] = new Columns(); // COLUMNS
-            retval[FunctionID.OFFSET] = new Offset(); // Offset.Evaluate has a different signature
+            retval[FunctionID.OFFSET] = new Offset();  //nominally 78
             retval[79] = new NotImplementedFunction("ABSREF"); // ABSREF
             retval[80] = new NotImplementedFunction("RELREF"); // RELREF
             retval[81] = new NotImplementedFunction("ARGUMENT"); // ARGUMENT
@@ -193,7 +195,7 @@ namespace NPOI.SS.Formula.Eval
             retval[97] = NumericFunction.ATAN2; // ATAN2
             retval[98] = NumericFunction.ASIN; // ASIN
             retval[99] = NumericFunction.ACOS; // ACOS
-            retval[FunctionID.CHOOSE] = new Choose();
+            retval[FunctionID.CHOOSE] = new Choose(); //nominally 100
             retval[101] = new Hlookup(); // HLOOKUP
             retval[102] = new Vlookup(); // VLOOKUP
             retval[103] = new NotImplementedFunction("LINKS"); // LINKS
@@ -441,8 +443,8 @@ namespace NPOI.SS.Formula.Eval
             retval[359] = new Hyperlink(); // HYPERLINK
             retval[360] = new NotImplementedFunction("PHONETIC"); // PHONETIC
             retval[361] = new NotImplementedFunction("AVERAGEA"); // AVERAGEA
-            retval[362] = new Maxa(); // MAXA
-            retval[363] = new Mina(); // MINA
+            retval[362] = MinaMaxa.MAXA; // MAXA
+            retval[363] = MinaMaxa.MINA; // MINA
             retval[364] = new NotImplementedFunction("STDEVPA"); // STDEVPA
             retval[365] = new NotImplementedFunction("VARPA"); // VARPA
             retval[366] = new NotImplementedFunction("STDEVA"); // STDEVA

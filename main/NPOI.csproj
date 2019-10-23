@@ -995,7 +995,7 @@
     <Compile Include="SS\Formula\Functions\Function4Arg.cs" />
     <Compile Include="SS\Formula\Functions\Fv.cs" />
     <Compile Include="SS\Formula\Functions\Hlookup.cs" />
-    <Compile Include="SS\Formula\Functions\If.cs" />
+    <Compile Include="SS\Formula\Functions\IfFunc.cs" />
     <Compile Include="SS\Formula\Functions\Index.cs" />
     <Compile Include="SS\Formula\Functions\Indirect.cs" />
     <Compile Include="SS\Formula\Functions\Int.cs" />
