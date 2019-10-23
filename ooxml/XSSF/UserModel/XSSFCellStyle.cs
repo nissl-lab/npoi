@@ -157,6 +157,10 @@ namespace NPOI.XSSF.UserModel
                         CT_Fill fill = CT_Fill.Parse(src.GetCTFill().ToString());
                         AddFill(fill);
 
+                        // bug 58084: set borders correctly
+                        CT_Border border = CT_Border.Parse(src.GetCTBorder().ToString());
+                        AddBorder(border);
+
                         if (src._cellStyleXf.applyBorder)
                         {
                             _cellStyleXf.borderId = FindAddBorder(src.GetCTBorder());
@@ -207,6 +211,15 @@ namespace NPOI.XSSF.UserModel
             _cellXf.fillId = (uint)(idx);
             _cellXf.applyFill = (true);
         }
+
+        private void AddBorder(CT_Border border)
+        {
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(border, _theme));
+
+            _cellXf.borderId = (uint)(idx);
+            _cellXf.applyBorder = (true);
+        }
+
         private uint FindAddBorder(CT_Border border)
         {
             //Find an existing border that matches this one, if not add a copy to the current source and update the reference.

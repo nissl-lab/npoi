@@ -1052,5 +1052,50 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        public static void copyStyles(IWorkbook reference, IWorkbook target)
+        {
+            short numberOfStyles = reference.NumCellStyles;
+            for (short i = 0; i < numberOfStyles; i++)
+            {
+                ICellStyle referenceStyle = reference.GetCellStyleAt(i);
+                if (i == 0)
+                {
+                    continue;
+                }
+                ICellStyle targetStyle = target.CreateCellStyle();
+                targetStyle.CloneStyleFrom(referenceStyle);
+            }
+            /*System.out.println("Reference : "+reference.NumCellStyles);
+            System.out.println("Target    : "+target.NumCellStyles);*/
+        }
+        [Test]
+        public void Test58084()
+        {
+            IWorkbook reference = XSSFTestDataSamples.OpenSampleWorkbook("template.xlsx");
+            IWorkbook target = new XSSFWorkbook();
+            copyStyles(reference, target);
+
+            Assert.AreEqual(reference.NumCellStyles, target.NumCellStyles);
+            ISheet sheet = target.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            int col = 0;
+            for (short i = 1; i < target.NumCellStyles; i++)
+            {
+                ICell cell = row.CreateCell(col++);
+                cell.SetCellValue("Coucou" + i);
+                cell.CellStyle = (target.GetCellStyleAt(i));
+            }
+            /*OutputStream out = new FileOutputStream("C:\\temp\\58084.xlsx");
+            target.write(out);
+            out.close();*/
+            IWorkbook copy = XSSFTestDataSamples.WriteOutAndReadBack(target);
+            // previously this Assert.Failed because the border-element was not copied over 
+            var xxx = copy.GetCellStyleAt((short)1).BorderBottom;
+
+            copy.Close();
+
+            target.Close();
+            reference.Close();
+        }
     }
 }
