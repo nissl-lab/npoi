@@ -144,46 +144,83 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-         * test that Boolean and Error types (BoolErrRecord) are supported properly.
-         */
+	 * test that Boolean (BoolErrRecord) are supported properly.
+	 * @see testErr
+	 */
         [Test]
-        public void TestBoolErr()
+        public void TestBool()
         {
-
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet s = wb.CreateSheet("testSheet1");
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet s = wb1.CreateSheet("testSheet1");
             IRow r;
             ICell c;
+            // B1
             r = s.CreateRow(0);
             c = r.CreateCell(1);
-            //c.SetCellType(HSSFCellType.Boolean);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(1, c.ColumnIndex);
             c.SetCellValue(true);
-
+            // C1
             c = r.CreateCell(2);
-            //c.SetCellType(HSSFCellType.Boolean);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(2, c.ColumnIndex);
             c.SetCellValue(false);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
+            s = wb2.GetSheet("testSheet1");
+            r = s.GetRow(0);
+            Assert.AreEqual(2, r.PhysicalNumberOfCells, "Row 1 should have 2 cells");
+
+            c = r.GetCell(1);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(1, c.ColumnIndex);
+            Assert.AreEqual(CellType.Boolean, c.CellType);
+            Assert.AreEqual(true, c.BooleanCellValue, "B1 value");
+
+            c = r.GetCell(2);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(2, c.ColumnIndex);
+            Assert.AreEqual(CellType.Boolean, c.CellType);
+            Assert.AreEqual(false, c.BooleanCellValue, "C1 value");
+
+            wb2.Close();
+        }
+
+        /**
+         * test that Error types (BoolErrRecord) are supported properly.
+         * @see testBool
+         */
+        [Test]
+        public void TestErr()
+        {
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet s = wb1.CreateSheet("testSheet1");
+            IRow r;
+            ICell c;
+            // B1
             r = s.CreateRow(1);
             c = r.CreateCell(1);
-            //c.SetCellType(HSSFCellType.Error);
-            c.SetCellErrorValue((byte)0);
-
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(1, c.ColumnIndex);
+            c.SetCellErrorValue(FormulaError.NULL.Code);
+            // C1
             c = r.CreateCell(2);
-            //c.SetCellType(HSSFCellType.Error);
-            c.SetCellErrorValue((byte)7);
-
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            s = wb.GetSheetAt(0);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(2, c.ColumnIndex);
+            c.SetCellErrorValue(FormulaError.DIV0.Code);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+            s = wb2.GetSheet("testSheet1");
             r = s.GetRow(0);
+            Assert.AreEqual(2, r.PhysicalNumberOfCells, "Row 1 should have 2 cells");
             c = r.GetCell(1);
-            Assert.IsTrue(c.BooleanCellValue, "bool value 0,1 = true");
+            Assert.AreEqual(CellType.Error, c.CellType);
+            Assert.AreEqual(FormulaError.NULL.Code, c.ErrorCellValue, "B2 value == #NULL!");
             c = r.GetCell(2);
-            Assert.IsTrue(c.BooleanCellValue == false, "bool value 0,2 = false");
-            r = s.GetRow(1);
-            c = r.GetCell(1);
-            Assert.IsTrue(c.ErrorCellValue == 0, "bool value 0,1 = 0");
-            c = r.GetCell(2);
-            Assert.IsTrue(c.ErrorCellValue == 7, "bool value 0,2 = 7");
+            Assert.AreEqual(CellType.Error, c.CellType);
+            Assert.AreEqual(FormulaError.DIV0.Code, c.ErrorCellValue, "C2 value == #DIV/0!");
+            wb2.Close();
         }
 
         /**
