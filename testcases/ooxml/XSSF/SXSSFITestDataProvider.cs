@@ -53,14 +53,14 @@ namespace NPOI.XSSF
             return swb;
         }
 
-        public IWorkbook WriteOutAndReadBack(IWorkbook wb)
+        public XSSFWorkbook WriteOutAndReadBack(IWorkbook wb)
         {
             if (!(wb is SXSSFWorkbook))
             {
                 throw new ArgumentException("Expected an instance of SXSSFWorkbook");
             }
 
-            IWorkbook result;
+            XSSFWorkbook result;
             try
             {
                 MemoryStream baos = new MemoryStream(8192);

@@ -40,7 +40,7 @@ namespace NPOI.XSSF.Streaming
         {
             _sheet = sheet;
         }
-
+        
         public IEnumerator<ICell> AllCellsIterator()
         {
             return new CellIterator(LastCellNum, null);
@@ -61,7 +61,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    return (short) _cells.Keys.First();
+                    return (short) _cells.First().Key;
                 }
                 catch
                 {
@@ -219,7 +219,7 @@ namespace NPOI.XSSF.Streaming
 
         public override int GetHashCode()
         {
-            return (Sheet.GetHashCode() << 16) + RowNum;
+            return _cells.GetHashCode();// (Sheet.GetHashCode() << 16) + RowNum;
         }
 
 
@@ -330,13 +330,13 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
-* Create an iterator over the cells from [0, getLastCellNum()).
-* Includes blank cells, excludes empty cells
-* 
-* Returns an iterator over all filled cells (created via Row.createCell())
-* Throws ConcurrentModificationException if cells are added, moved, or
-* removed after the iterator is created.
-*/
+        * Create an iterator over the cells from [0, getLastCellNum()).
+        * Includes blank cells, excludes empty cells
+        * 
+        * Returns an iterator over all filled cells (created via Row.createCell())
+        * Throws ConcurrentModificationException if cells are added, moved, or
+        * removed after the iterator is created.
+        */
         public class FilledCellIterator : IEnumerator<ICell>
         {
             private SortedDictionary<int, SXSSFCell> _cells;
@@ -420,7 +420,7 @@ namespace NPOI.XSSF.Streaming
                 throw new NotImplementedException();
             }
 
-            public bool hasNext()
+            public bool HasNext()
             {
                 return pos < maxColumn;
             }
@@ -430,15 +430,15 @@ namespace NPOI.XSSF.Streaming
                 throw new NotImplementedException();
             }
 
-            public ICell next()
+            public ICell Next()
             {
-                if (hasNext())
+                if (HasNext())
                     return _cells[pos++];
                 else
                     throw new NullReferenceException();
             }
 
-            public void remove()
+            public void Remove()
             {
                 throw new InvalidOperationException();
             }
