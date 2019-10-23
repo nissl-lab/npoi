@@ -144,9 +144,9 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-	 * test that Boolean (BoolErrRecord) are supported properly.
-	 * @see testErr
-	 */
+	     * test that Boolean (BoolErrRecord) are supported properly.
+	     * @see testErr
+	     */
         [Test]
         public void TestBool()
         {
@@ -160,11 +160,16 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, c.RowIndex);
             Assert.AreEqual(1, c.ColumnIndex);
             c.SetCellValue(true);
+            Assert.AreEqual(true, c.BooleanCellValue, "B1 value");
+
             // C1
             c = r.CreateCell(2);
             Assert.AreEqual(0, c.RowIndex);
             Assert.AreEqual(2, c.ColumnIndex);
             c.SetCellValue(false);
+            Assert.AreEqual(false, c.BooleanCellValue, "C1 value");
+
+            // Make sure values are saved and re-read correctly.
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
             wb1.Close();
 
@@ -204,22 +209,32 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, c.RowIndex);
             Assert.AreEqual(1, c.ColumnIndex);
             c.SetCellErrorValue(FormulaError.NULL.Code);
+            Assert.AreEqual(FormulaError.NULL.Code, c.ErrorCellValue, "B1 value == #NULL!");
+
             // C1
             c = r.CreateCell(2);
             Assert.AreEqual(0, c.RowIndex);
             Assert.AreEqual(2, c.ColumnIndex);
             c.SetCellErrorValue(FormulaError.DIV0.Code);
+            Assert.AreEqual(FormulaError.DIV0.Code, c.ErrorCellValue, "C1 value == #DIV/0!");
+
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
             wb1.Close();
             s = wb2.GetSheet("testSheet1");
             r = s.GetRow(0);
             Assert.AreEqual(2, r.PhysicalNumberOfCells, "Row 1 should have 2 cells");
+
             c = r.GetCell(1);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(1, c.ColumnIndex);
             Assert.AreEqual(CellType.Error, c.CellType);
-            Assert.AreEqual(FormulaError.NULL.Code, c.ErrorCellValue, "B2 value == #NULL!");
+            Assert.AreEqual(FormulaError.NULL.Code, c.ErrorCellValue, "B1 value == #NULL!");
+
             c = r.GetCell(2);
+            Assert.AreEqual(0, c.RowIndex);
+            Assert.AreEqual(2, c.ColumnIndex);
             Assert.AreEqual(CellType.Error, c.CellType);
-            Assert.AreEqual(FormulaError.DIV0.Code, c.ErrorCellValue, "C2 value == #DIV/0!");
+            Assert.AreEqual(FormulaError.DIV0.Code, c.ErrorCellValue, "C1 value == #DIV/0!");
             wb2.Close();
         }
 
