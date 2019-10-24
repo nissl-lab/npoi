@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -38,7 +39,7 @@ namespace NPOI.XSSF.Model
      */
     public class StylesTable : POIXMLDocumentPart
     {
-        private Dictionary<int, String> numberFormats = new Dictionary<int, String>();
+        private SortedDictionary<int, String> numberFormats = new SortedDictionary<int, String>();
         private bool[] usedNumberFormats = new bool[SpreadsheetVersion.EXCEL2007.MaxCellStyles];
         private List<XSSFFont> fonts = new List<XSSFFont>();
         private List<XSSFCellFill> fills = new List<XSSFCellFill>();
@@ -51,7 +52,13 @@ namespace NPOI.XSSF.Model
         /**
          * The first style id available for use as a custom style
          */
+        // Is this right? Number formats (XSSFDataFormat) and cell styles (XSSFCellStyle) are different.
+        // What's up with the plus 1?
         public static int FIRST_CUSTOM_STYLE_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX + 1;
+
+        private static int FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
+        private static int MAXIMUM_NUMBER_OF_DATA_FORMATS = SpreadsheetVersion.EXCEL2007.MaxCellStyles; //FIXME: should be 250
+
         private static int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
 
         private StyleSheetDocument doc;
@@ -124,7 +131,6 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                
                 doc = StyleSheetDocument.Parse(xmldoc, NamespaceManager);
 
                 CT_Stylesheet styleSheet = doc.GetStyleSheet();
@@ -137,7 +143,6 @@ namespace NPOI.XSSF.Model
                     {
                         int formatId = (int)nfmt.numFmtId;
                         numberFormats.Add(formatId, nfmt.formatCode);
-                        usedNumberFormats[formatId] = true;
                     }
                 }
 
@@ -211,6 +216,7 @@ namespace NPOI.XSSF.Model
          */
         public int PutNumberFormat(String fmt)
         {
+            // Check if number format already exists
             if (numberFormats.ContainsValue(fmt))
             {
                 // Find the key, and return that
@@ -224,19 +230,29 @@ namespace NPOI.XSSF.Model
                 throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
             }
 
-            // Find a spare key, and add that
-            for (int i = FIRST_CUSTOM_STYLE_ID; i < usedNumberFormats.Length; i++)
+            if (numberFormats.Count > MAXIMUM_NUMBER_OF_DATA_FORMATS)
             {
-                if (!usedNumberFormats[i])
-                {
-                    usedNumberFormats[i] = true;
-                    numberFormats.Add(i, fmt);
-                    return i;
-                }
+                throw new InvalidOperationException("The maximum number of Data Formats was exceeded. " +
+                        "You can define up to " + MAXIMUM_NUMBER_OF_DATA_FORMATS + " formats in a .xlsx Workbook.");
             }
 
-            throw new InvalidOperationException("The maximum number of Data Formats was exceeded. " +
-              "You can define up to " + usedNumberFormats.Length + " formats in a .xlsx Workbook");
+            // Find a spare key, and add that
+            int formatIndex;
+            if (numberFormats.Count == 0)
+            {
+                formatIndex = FIRST_USER_DEFINED_NUMBER_FORMAT_ID;
+            }
+            else
+            {
+                // get next-available numberFormat index.
+                // Assumption: there are never gaps in numberFormats indices
+                formatIndex = Math.Max(
+                        numberFormats.Keys.Last() + 1,
+                        FIRST_USER_DEFINED_NUMBER_FORMAT_ID);
+            }
+
+            numberFormats.Add(formatIndex, fmt);
+            return formatIndex;
         }
 
         public XSSFFont GetFontAt(int idx)
@@ -336,7 +352,7 @@ namespace NPOI.XSSF.Model
             return fonts.AsReadOnly();
         }
 
-        public Dictionary<int, String> GetNumberFormats()
+        public IDictionary<int, String> GetNumberFormats()
         {
             return numberFormats;
         }
@@ -457,23 +473,17 @@ namespace NPOI.XSSF.Model
             CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
             // Formats
-            CT_NumFmts ctFormats = new CT_NumFmts();
-            ctFormats.count = (uint)numberFormats.Count;
-            if (ctFormats.count > 0)
-                ctFormats.countSpecified = true;
+            CT_NumFmts formats = new CT_NumFmts();
+            formats.count = (uint)numberFormats.Count;
 
-            for (int fmtId = 0; fmtId < usedNumberFormats.Length; fmtId++)
+            foreach (KeyValuePair<int, String > entry in numberFormats)
             {
-                if (usedNumberFormats[fmtId])
-                {
-                    CT_NumFmt ctFmt = ctFormats.AddNewNumFmt();
-                    ctFmt.numFmtId = (uint)(fmtId);
-                    ctFmt.formatCode = (numberFormats[(fmtId)]);
-                }
+                CT_NumFmt ctFmt = formats.AddNewNumFmt();
+                ctFmt.numFmtId = (uint)entry.Key;
+                ctFmt.formatCode = entry.Value;
             }
 
-            if (ctFormats.count>0)
-                styleSheet.numFmts = ctFormats;
+            styleSheet.numFmts = formats;
 
             // Fonts
             CT_Fonts ctFonts = styleSheet.fonts;
