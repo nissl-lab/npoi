@@ -26,6 +26,7 @@ namespace TestCases.SS.UserModel
     using TestCases.SS;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.UserModel;
+    using System.Collections.Generic;
 
     /**
      * Tests row Shifting capabilities.
@@ -345,6 +346,44 @@ namespace TestCases.SS.UserModel
             region = sheet.GetMergedRegion(0);
             Assert.AreEqual("A3:C3", region.FormatAsString());
             wb.Close();
+        }
+        [Ignore("")]
+        [Test]
+        public void ShiftWithMergedRegions_bug56454()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            // populate sheet cells
+            for (int i = 0; i < 10; i++)
+            {
+                IRow row = sheet.CreateRow(i);
+
+                for (int j = 0; j < 10; j++)
+                {
+                    ICell cell = row.CreateCell(j, CellType.String);
+                    cell.SetCellValue(i + "x" + j);
+                }
+            }
+
+            CellRangeAddress A4_B7 = CellRangeAddress.ValueOf("A4:B7");
+            CellRangeAddress C4_D7 = CellRangeAddress.ValueOf("C4:D7");
+
+            sheet.AddMergedRegion(A4_B7);
+            sheet.AddMergedRegion(C4_D7);
+
+            Assume.That(sheet.LastRowNum > 8);
+
+            // Insert a row in the middle of both merged regions.
+            sheet.ShiftRows(4, sheet.LastRowNum, 1);
+
+            // all regions should still start at row 3, and elongate by 1 row
+            List<CellRangeAddress> expectedMergedRegions = new List<CellRangeAddress>();
+            CellRangeAddress A4_B8 = CellRangeAddress.ValueOf("A4:B8"); //A4:B7 should be elongated by 1 row
+            CellRangeAddress C4_D8 = CellRangeAddress.ValueOf("C4:D8"); //C4:B7 should be elongated by 1 row
+            expectedMergedRegions.Add(A4_B8);
+            expectedMergedRegions.Add(C4_D8);
+
+            Assert.AreEqual(expectedMergedRegions, sheet.MergedRegions);
         }
 
         /**
